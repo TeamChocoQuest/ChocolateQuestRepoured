@@ -1,0 +1,24 @@
+{
+    "type": "minecraft:crafting_shaped",
+    
+    "pattern":
+    [
+
+        "B B",
+        "B B"
+    ],
+       
+       "key":
+        {
+            "B":
+            {
+                "item": "cqrepoured:golden_feather"
+            }                    
+       },
+       
+       "result":
+       {
+            "item": "cqrepoured:cloud_boots",
+            "count": 1
+        }        
+}
