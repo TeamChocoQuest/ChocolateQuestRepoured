@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "state=0": { "model": "cqrepoured:table" },
+        "state=1": { "model": "cqrepoured:table_top" }
+    }
+}
