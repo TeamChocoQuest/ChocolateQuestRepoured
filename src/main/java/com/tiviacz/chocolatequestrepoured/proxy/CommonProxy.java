@@ -1,7 +1,6 @@
 package com.tiviacz.chocolatequestrepoured.proxy;
 
 import net.minecraft.item.Item;
-import net.minecraft.util.text.translation.I18n;
 
 public class CommonProxy 
 {

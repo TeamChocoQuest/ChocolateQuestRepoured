@@ -6,6 +6,39 @@ itemGroup.ChocolateQuestRepouredTab=Chocolate Quest Repoured Tab
 
 item.cloud_boots.name=Cloud Boots
 item.golden_feather.name=Golden Feather
+item.helmet_dragon.name=Dragon Helmet
+item.potion_healing.name=Healing Potion
+
+//Bull Armor
+item.helmet_bull.name=Bull Helmet
+item.chestplate_bull.name=Bull Chestplate
+item.leggings_bull.name=Bull Leggings
+item.boots_bull.name=Bull Boots
+item.sword_bull.name=Bull Greatsword
+item.leather_bull.name=Bull Leather
+
+//Turtle Armor
+item.helmet_turtle.name=Turtle Helmet
+item.chestplate_turtle.name=Turtle Chestplate
+item.leggings_turtle.name=Turtle Leggings
+item.boots_turtle.name=Turtle Boots
+item.sword_turtle.name=Turtle Sword
+item.scale_turtle.name=Turtle Scale
+
+//Slime Armor
+item.helmet_slime.name=Slime Helmet
+item.chestplate_slime.name=Slime Chestplate
+item.leggings_slime.name=Slime Leggings
+item.boots_slime.name=Slime Boots
+item.scale_slime.name=Slime Scale
+
+//Spider Armor
+item.helmet_spider.name=Spider Helmet
+item.chestplate_spider.name=Spider Chestplate
+item.leggings_spider.name=Spider Leggings
+item.boots_spider.name=Spider Boots
+item.sword_spider.name=Spider Sword
+item.leather_spider.name=Spider Leather
 
 tile.table.name=Table
 
@@ -18,3 +51,16 @@ tile.dungeon_bricks_6.name=Dungeon Bricks
 tile.dungeon_bricks_7.name=Dungeon Bricks
 tile.dungeon_bricks_8.name=Dungeon Bricks
 
+//Descriptions
+description.spider_armor.name=Wear full spider set to get climbing ability and bonus movement speed!
+description.spider_sword.name=Attack enemy to poison him!
+description.bull_armor.name=Wear full bull set to get bonus attack damage!
+description.bull_sword.name=Hold right click to make an explosion!
+description.turtle_armor.name=Wear full turtle set to get 4 extra hearts and ability to heal in time! Damage taken from back will be ignored.
+description.slime_armor.name=Wear full slime set to get extra 2 hearts. Everytime you get attacked you will drop a small slime, go and collect him to get your health back!
+description.cloud_boots.name=Extra movement speed and greater jumps! 
+description.dragon_helmet.name=5 Extra hearts and double attack damage with any weapon!
+description.click_shift.name=Click shift button for description
+description.charging.name=Charging...
+description.turtle_armor_charging.name=Ability on cooldown, Remaining time: 
+description.healing_potion.name=Refills 2 Hearts!

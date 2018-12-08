@@ -1,27 +1,19 @@
 package com.tiviacz.chocolatequestrepoured.objects.blocks;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
-import com.tiviacz.chocolatequestrepoured.init.ModBlocks;
 import com.tiviacz.chocolatequestrepoured.init.base.BlockBase;
 import com.tiviacz.chocolatequestrepoured.tileentity.TileEntityTable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -29,6 +21,7 @@ import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -41,6 +34,9 @@ public class BlockTable extends BlockBase implements ITileEntityProvider
 {
 	public static final PropertyBool TOP = PropertyBool.create("top");
 	
+	public static final AxisAlignedBB TABLE_AABB = new AxisAlignedBB(0D, 0.8125D, 0D, 1D, 1D, 1D);
+	public static final AxisAlignedBB TABLE_TOP_AABB = new AxisAlignedBB(0D, 0.0D, 0D, 1D, 1D, 1D);
+	
 	public BlockTable(String name, Material material) 
 	{
 		super(name, material);
@@ -52,27 +48,45 @@ public class BlockTable extends BlockBase implements ITileEntityProvider
 		setDefaultState(blockState.getBaseState().withProperty(TOP, false));
 	}
 	
+	@Override
 	public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
+	@Override
     public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
     
+    @Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
+    {
+        if(state.getValue(TOP) == true)
+        {
+        	return TABLE_AABB;
+        }
+        else
+        {
+        	return TABLE_TOP_AABB;
+        }
+    }
+    
+    @Override
     public IBlockState getStateFromMeta(int meta)
     {
         return this.getDefaultState().withProperty(TOP, ((meta & 1) != 0));
     }
 
+    @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer()
     {
         return BlockRenderLayer.CUTOUT;
     }
 
+    @Override
     public int getMetaFromState(IBlockState state)
     {
         if(state.getValue(TOP) == true)
@@ -85,11 +99,13 @@ public class BlockTable extends BlockBase implements ITileEntityProvider
         }
     }
 
+    @Override
     protected BlockStateContainer createBlockState()
     {
         return new BlockStateContainer(this, new IProperty[] {TOP});
     }
-    
+   
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face)
     {
         return BlockFaceShape.UNDEFINED;
