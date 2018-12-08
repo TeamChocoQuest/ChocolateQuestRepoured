@@ -10,14 +10,20 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class ClientProxy extends CommonProxy
+{
+	@Override
+	public void registerItemRenderer(Item item, int meta, String id)
 	{
-		public void registerItemRenderer(Item item, int meta, String id)
-	{
-			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
+		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
 	}
 	
 	public static void registerRenderers() 
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
+	}
+	
+	public String localize(String unlocalized, Object... args) 
+	{
+		return I18n.format(unlocalized, args);
 	}
 }

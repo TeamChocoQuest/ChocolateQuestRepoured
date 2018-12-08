@@ -4,23 +4,24 @@ import com.tiviacz.chocolatequestrepoured.CQRMain;
 import com.tiviacz.chocolatequestrepoured.init.ModItems;
 import com.tiviacz.chocolatequestrepoured.util.IHasModel;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemSword;
 
-public class ItemBase extends Item implements IHasModel 
+public class SwordBase extends ItemSword implements IHasModel
 {
-	public ItemBase(String name)
+	public SwordBase(String name, ToolMaterial material) 
 	{
+		super(material);
+		
 		setUnlocalizedName(name);
 		setRegistryName(name);
 		setCreativeTab(CQRMain.CQRTab);
 		
 		ModItems.ITEMS.add(this);
 	}
-
+		
 	@Override
-	public void registerModels() 	
-	{ 
-		CQRMain.proxy.registerItemRenderer(this, 0, "inventory");
+	public void registerModels()
+	{
+		CQRMain.proxy.registerItemRenderer(this, 0,"inventory");
 	}
 }

@@ -1,0 +1,28 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "cqrepoured:items/sword_bull"
+    },
+    "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 350, 92, 54 ],
+      "translation": [ 0.00, 11.00, 1.00 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 250, 92, 54 ],
+      "translation": [ 0.00, 11.00, -1.00 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    },
+    "firstperson_righthand": {
+      "rotation": [ -25, -90, 0 ],
+      "translation": [ 1.2, 3.20, 1.2 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    },
+    "firstperson_lefthand": {
+      "rotation": [ 25, -90, 0 ],
+      "translation": [ 1.2, 3.20, 1.2 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    }
+    }
+}
