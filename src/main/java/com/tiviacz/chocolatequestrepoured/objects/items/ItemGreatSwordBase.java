@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.mojang.realmsclient.dto.PlayerInfo;
+import com.tiviacz.chocolatequestrepoured.init.ModItems;
 import com.tiviacz.chocolatequestrepoured.init.base.SwordBase;
 
 import net.minecraft.client.resources.I18n;
@@ -20,12 +22,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -39,23 +41,28 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSwordBull extends SwordBase
+public class ItemGreatSwordBase extends SwordBase
 {
 	private int damageScaling = 0;
 	private boolean shouldScale = false;
-	private String IS = "isReady";
-	private String CD = "Cooldown";
+	private float damage;
+	private int cooldown;
+	private float attackSpeed;
 	
-	public ItemSwordBull(String name, ToolMaterial material)
+	public ItemGreatSwordBase(String name, ToolMaterial material, float damage, int cooldown, float attackSpeed)
 	{
 		super(name, material);
+		
+		this.damage = damage;
+		this.cooldown = cooldown;
+		this.attackSpeed = attackSpeed;
 	}
 	
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) 
 	{
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, -0.6);
+		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, attackSpeed);
 		return modifiers;
 	}
 	 
@@ -70,22 +77,15 @@ public class ItemSwordBull extends SwordBase
 			modifiers.remove(modifier); 
 			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
 	    }
-	} 
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-		if(stack.hasTagCompound())
-		{
-			if(!stack.getTagCompound().getBoolean(IS))
-			{
-				tooltip.add(TextFormatting.RED + I18n.format("description.charging.name"));
-			}
-		}
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
 		{
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.bull_sword.name"));
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.great_sword.name"));
 		}		
 		else
 		{
@@ -104,10 +104,6 @@ public class ItemSwordBull extends SwordBase
 		double may = entityLiving.posY + range;
 		double maz = entityLiving.posZ + range;
 		
-		double x = entityLiving.posX + itemRand.nextFloat() - 0.5D;
-		double y = entityLiving.posY + itemRand.nextFloat();
-		double z = entityLiving.posZ + itemRand.nextFloat() - 0.5D;
-		
 		AxisAlignedBB bb = new AxisAlignedBB(mx, my, mz, max, may, maz);
 		
 		List<EntityLiving> entitiesInAABB = worldIn.getEntitiesWithinAABB(EntityLiving.class, bb);
@@ -116,29 +112,40 @@ public class ItemSwordBull extends SwordBase
 		{
 			EntityLiving entityInAABB = entitiesInAABB.get(i);
 			
-			if(damageScaling <= 20)
+			if(damageScaling <= 30)
 			{
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), 1.0F);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage);
 			}
 			
-			if(damageScaling > 20 && damageScaling <= 60)
+			if(damageScaling > 30 && damageScaling <= 60)
 			{
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), 3.0F);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 3);
 			}
 			
 			if(damageScaling > 60)
 			{
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), 4.0F);
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 4);
 			}
 		}
 		
-		worldIn.playSound(x, y, z, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-		worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
-		stack.getTagCompound().setBoolean(IS, false);
-		stack.getTagCompound().setInteger(CD, 100);
+		if(entityLiving instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)entityLiving;
+			
+			float x = (float)-Math.sin(Math.toRadians(player.rotationYaw));
+			float z = (float)Math.cos(Math.toRadians(player.rotationYaw));
+			float y = (float)-Math.sin(Math.toRadians(player.rotationPitch));
+			x *= (1.0F - Math.abs(y));
+			z *= (1.0F - Math.abs(y));
+			
+			player.getCooldownTracker().setCooldown(stack.getItem(), cooldown);
+			player.swingArm(EnumHand.MAIN_HAND);
+			worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+			worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX + x, player.posY + y + 1.5D, player.posZ + z, 0D, 0D, 0D);
+			stack.damageItem(1, player);
+		}
 		shouldScale = false;
 		damageScaling = 0;
-		stack.setItemDamage(stack.getItemDamage() + 1);
 	}
 	
 	@Override
@@ -156,68 +163,18 @@ public class ItemSwordBull extends SwordBase
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
-		ItemStack itemstack = playerIn.getHeldItem(handIn);
-		
-		if(itemstack.getTagCompound().getBoolean(IS))
-		{
-			shouldScale = true;
-		    playerIn.setActiveHand(handIn);
-		    return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemstack);
-		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemstack);
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		shouldScale = true;
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
-    {
-		NBTTagCompound nbt = stack.getTagCompound();
-		
-		if(nbt == null)
-		{
-		    nbt = new NBTTagCompound();
-		    stack.setTagCompound(nbt);
-		}
-		
-		if(!nbt.hasKey(IS))
-		{
-			nbt.setBoolean(IS, false);
-		}
-		
-		if(!nbt.hasKey(CD))
-		{
-			nbt.setInteger(CD, 0);
-		}
-		
-		if(!nbt.getBoolean(IS))
-		{
-			if(nbt.getInteger(CD) > 0)
-			{
-				nbt.setInteger(CD, nbt.getInteger(CD) - 1);
-			}
-				
-			if(nbt.getInteger(CD) == 0)
-			{
-				nbt.setBoolean(IS, true);
-			}
-		}
-			
+    {	
 		if(shouldScale)
 		{
 			this.damageScaling++;
 		}
 	}
-	
-/*	@Override
-	@SideOnly(Side.CLIENT)
-    public boolean hasEffect(ItemStack stack)
-    {
-		if(stack.hasTagCompound())
-		{
-			if(stack.getTagCompound().getBoolean(IS))
-	        {
-	        	return true;
-	        }
-		}
-		return false;
-    } */
 }

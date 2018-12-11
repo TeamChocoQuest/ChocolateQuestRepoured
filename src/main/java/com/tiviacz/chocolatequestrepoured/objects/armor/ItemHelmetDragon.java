@@ -33,7 +33,7 @@ public class ItemHelmetDragon extends ArmorBase
 	{
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
 		
-		this.health = new AttributeModifier("DragonHelmetHealthModifier", 0.5D, 2);
+		this.health = new AttributeModifier("DragonHelmetHealthModifier", 10D, 0);
 		this.attackDamage = new AttributeModifier("DragonHelmetDamageModifier", 1D, 2);
 	}
 	

@@ -17,9 +17,11 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -85,8 +87,9 @@ public class ItemArmorSpider extends ArmorBase
 				}
 				player.onGround = true;
 			}
+			player.fallDistance = 0F;
+			player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 1, false, false));
 		}
-		player.fallDistance = 0F;
 	}
 	
 	private void createClimbingParticles(EntityPlayer player, World world)
@@ -207,5 +210,18 @@ public class ItemArmorSpider extends ArmorBase
                 }
         	}
         }
-    }  
+    } 
+	
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+    {
+		if(toRepair.getItem() == ModItems.HELMET_SPIDER || toRepair.getItem() == ModItems.CHESTPLATE_SPIDER || toRepair.getItem() == ModItems.LEGGINGS_SPIDER || toRepair.getItem() == ModItems.BOOTS_SPIDER)
+		{
+			if(repair.getItem() == ModItems.LEATHER_SPIDER)
+			{
+				return true;
+			}
+		}
+		return false;
+    }
 }

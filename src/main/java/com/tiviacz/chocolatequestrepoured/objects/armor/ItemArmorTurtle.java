@@ -383,4 +383,17 @@ public class ItemArmorTurtle extends ArmorBase
 		}
 		return "Error!";
 	}
+	
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+    {
+		if(toRepair.getItem() == ModItems.HELMET_TURTLE || toRepair.getItem() == ModItems.CHESTPLATE_TURTLE || toRepair.getItem() == ModItems.LEGGINGS_TURTLE || toRepair.getItem() == ModItems.BOOTS_TURTLE)
+		{
+			if(repair.getItem() == ModItems.SCALE_TURTLE)
+			{
+				return true;
+			}
+		}
+		return false;
+    }
 }
