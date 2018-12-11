@@ -4,25 +4,56 @@ The English US language file for Chocolate Quest Repoured Mod!
 //CreativeTab
 itemGroup.ChocolateQuestRepouredTab=Chocolate Quest Repoured Tab
 
-item.cloud_boots.name=Cloud Boots
-item.golden_feather.name=Golden Feather
-item.helmet_dragon.name=Dragon Helmet
+//Other
 item.potion_healing.name=Healing Potion
+item.teleport_stone.name=Teleport Stone
+
+//Dragon Items
+item.helmet_dragon.name=Dragon Helmet
+
+//Daggers
+item.dagger_iron.name=Iron Dagger
+item.dagger_diamond.name=Diamond Dagger
+item.dagger_monking.name=Monking Dagger
+item.dagger_ninja.name=Ninja Dagger
+
+//Swords
+item.sword_turtle.name=Turtle Sword
+item.sword_spider.name=Spider Sword
+item.battle_axe_bull.name=Bull Battle Axe
+
+//Great Swords
+item.great_sword_monking.name=Monking Great Sword
+item.great_sword_bull.name=Bull Greatsword
+item.great_sword_diamond.name=Diamond Greatsword
+item.great_sword_iron.name=Iron Greatsword
+
+//Cloud Items
+item.boots_cloud.name=Cloud Boots
+item.feather_golden.name=Golden Feather
+
+//Monking Items
+item.bone_monking.name=Monking Bone
+
+//Inquisition Armor
+item.helmet_inquisition.name=Inquisition Helmet
+item.chestplate_inquisition.name=Inquisition Chestplate
+item.leggings_inquisition.name=Inquisition Leggings
+item.boots_inquisition.name=Inquisition Boots
 
 //Bull Armor
 item.helmet_bull.name=Bull Helmet
 item.chestplate_bull.name=Bull Chestplate
 item.leggings_bull.name=Bull Leggings
 item.boots_bull.name=Bull Boots
-item.sword_bull.name=Bull Greatsword
 item.leather_bull.name=Bull Leather
+item.horn_bull.name=Bull Horn
 
 //Turtle Armor
 item.helmet_turtle.name=Turtle Helmet
 item.chestplate_turtle.name=Turtle Chestplate
 item.leggings_turtle.name=Turtle Leggings
 item.boots_turtle.name=Turtle Boots
-item.sword_turtle.name=Turtle Sword
 item.scale_turtle.name=Turtle Scale
 
 //Slime Armor
@@ -37,11 +68,22 @@ item.helmet_spider.name=Spider Helmet
 item.chestplate_spider.name=Spider Chestplate
 item.leggings_spider.name=Spider Leggings
 item.boots_spider.name=Spider Boots
-item.sword_spider.name=Spider Sword
 item.leather_spider.name=Spider Leather
 
-tile.table.name=Table
+//Heavy Diamond Armor
+item.helmet_heavy_diamond.name=Heavy Diamond Helmet
+item.chestplate_heavy_diamond.name=Heavy Diamond Chestplate
+item.leggings_heavy_diamond.name=Heavy Diamond Leggings
+item.boots_heavy_diamond.name=Heavy Diamond Boots
 
+//Heavy Iron Armor
+item.helmet_heavy_iron.name=Heavy Iron Helmet
+item.chestplate_heavy_iron.name=Heavy Iron Chestplate
+item.leggings_heavy_iron.name=Heavy Iron Leggings
+item.boots_heavy_iron.name=Heavy Iron Boots
+
+//Blocks
+tile.table.name=Table
 tile.dungeon_bricks_1.name=Dungeon Bricks
 tile.dungeon_bricks_2.name=Dungeon Bricks
 tile.dungeon_bricks_3.name=Dungeon Bricks
@@ -52,15 +94,21 @@ tile.dungeon_bricks_7.name=Dungeon Bricks
 tile.dungeon_bricks_8.name=Dungeon Bricks
 
 //Descriptions
-description.spider_armor.name=Wear full spider set to get climbing ability and bonus movement speed!
-description.spider_sword.name=Attack enemy to poison him!
-description.bull_armor.name=Wear full bull set to get bonus attack damage!
-description.bull_sword.name=Hold right click to make an explosion!
-description.turtle_armor.name=Wear full turtle set to get 4 extra hearts and ability to heal in time! Damage taken from back will be ignored.
-description.slime_armor.name=Wear full slime set to get extra 2 hearts. Everytime you get attacked you will drop a small slime, go and collect him to get your health back!
-description.cloud_boots.name=Extra movement speed and greater jumps! 
-description.dragon_helmet.name=5 Extra hearts and double attack damage with any weapon!
-description.click_shift.name=Click shift button for description
+description.spider_armor.name=Wearing full set grants bonus movement speed and the ability to climb walls
+description.spider_sword.name=Applies poison to attacked mobs
+description.bull_armor.name=Wearing the full set grants bonus attack damage
+description.great_sword.name=Hold right click to create an explosion
+description.turtle_armor.name=Wearing the full set grants 4 extra hearts and increased health regen! Damage dealt to your back is ignored
+description.slime_armor.name=Wearing the full set grants 2 extra hearts. Getting Damaged creates a small slime, which can be collected to regain lost health
+description.cloud_boots.name=Increases movement speed and jump height
+description.dragon_helmet.name=Grants 5 extra hearts and double attack damage
+description.dagger.name=Right click while moving to leap forward
+description.ninja_dagger.name=Right click while moving to leap forward. Sneak and right click to teleport in a range of 4 blocks and gain temporary invisibility
+description.bull_battle_axe.name=Right click to create an earthquake in your direction
+description.click_shift.name=Hold shift for item descriptions
+description.rear_damage.name=Rear Damage
 description.charging.name=Charging...
 description.turtle_armor_charging.name=Ability on cooldown, Remaining time: 
-description.healing_potion.name=Refills 2 Hearts!
+description.healing_potion.name=Refills 2 Hearts when drunk
+description.teleport_stone.name=Hold to set position. Right click to teleport to the set position! To delete previous saved position, press shift while held
+description.teleport_stone_position.name=Current Position:

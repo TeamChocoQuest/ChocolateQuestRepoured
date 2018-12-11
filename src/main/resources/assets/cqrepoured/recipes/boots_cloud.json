@@ -12,13 +12,13 @@
         {
             "B":
             {
-                "item": "cqrepoured:golden_feather"
+                "item": "cqrepoured:feather_golden"
             }                    
        },
        
        "result":
        {
-            "item": "cqrepoured:cloud_boots",
+            "item": "cqrepoured:boots_cloud",
             "count": 1
         }        
 }
