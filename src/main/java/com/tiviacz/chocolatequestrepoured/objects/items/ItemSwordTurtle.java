@@ -10,9 +10,13 @@ import net.minecraft.item.ItemStack;
 
 public class ItemSwordTurtle extends SwordBase
 {
+	private AttributeModifier knockBack;
+	
 	public ItemSwordTurtle(String name, ToolMaterial material) 
 	{
 		super(name, material);
+		
+		this.knockBack = new AttributeModifier("KnockbackModifier", 1.0D, 0);
 	}
 	
 	@Override
@@ -22,7 +26,7 @@ public class ItemSwordTurtle extends SwordBase
 
         if(equipmentSlot == EntityEquipmentSlot.MAINHAND)
         {
-            multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), new AttributeModifier("KnockbackModifier", 1.0D, 0));
+            multimap.put(SharedMonsterAttributes.KNOCKBACK_RESISTANCE.getName(), this.knockBack);
         }
         return multimap;
     }

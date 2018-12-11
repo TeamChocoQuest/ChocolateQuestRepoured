@@ -3,14 +3,15 @@ package com.tiviacz.chocolatequestrepoured.util.handlers;
 import com.tiviacz.chocolatequestrepoured.CQRMain;
 import com.tiviacz.chocolatequestrepoured.init.ModBlocks;
 import com.tiviacz.chocolatequestrepoured.init.ModItems;
-import com.tiviacz.chocolatequestrepoured.objects.armor.ItemArmorTurtle;
 import com.tiviacz.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.tiviacz.chocolatequestrepoured.objects.items.ItemGreatSwordBase;
 import com.tiviacz.chocolatequestrepoured.proxy.ClientProxy;
 import com.tiviacz.chocolatequestrepoured.util.IHasModel;
 import com.tiviacz.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -38,7 +39,6 @@ public class EventsHandler
 	{
 		ClientProxy.registerRenderers();
 		EntityHandler.registerEntity();
-		MinecraftForge.EVENT_BUS.register(ItemArmorTurtle.class);
 	}
 	
 	public static void initRegistries(FMLInitializationEvent event)
@@ -89,17 +89,17 @@ public class EventsHandler
 		{
 			EntityPlayer player = (EntityPlayer)event.getEntity();
 			
-			if(player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == ModItems.CLOUD_BOOTS)
+			if(player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == ModItems.BOOTS_CLOUD)
 			{
 				event.setDistance(0.0F);
 			}
 			
-			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.GOLDEN_FEATHER)
+			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.FEATHER_GOLDEN)
 			{
 				event.setDistance(0.0F);
 			}
 			
-			if(player.getHeldItem(EnumHand.OFF_HAND).getItem() == ModItems.GOLDEN_FEATHER)
+			if(player.getHeldItem(EnumHand.OFF_HAND).getItem() == ModItems.FEATHER_GOLDEN)
 			{
 				event.setDistance(0.0F);
 			}
@@ -112,7 +112,7 @@ public class EventsHandler
 	    EntityPlayer player = event.player;
 	    ItemStack offStack = player.getHeldItemOffhand();
 	    
-	    if(offStack.getItem() != ModItems.SWORD_BULL)
+	    if(!(offStack.getItem() instanceof ItemGreatSwordBase))
 	        return;
 	    
 	    if(!player.inventory.addItemStackToInventory(offStack) && !player.world.isRemote)
@@ -121,7 +121,7 @@ public class EventsHandler
 	    }
 	    
 	    player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-	}
+	} 
 	
 	@SubscribeEvent
 	public static void onHit(LivingHurtEvent event)

@@ -62,4 +62,17 @@ public class ItemArmorSlime extends ArmorBase
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
     }
+	
+	@Override
+	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair)
+    {
+		if(toRepair.getItem() == ModItems.HELMET_SLIME || toRepair.getItem() == ModItems.CHESTPLATE_SLIME || toRepair.getItem() == ModItems.LEGGINGS_SLIME || toRepair.getItem() == ModItems.BOOTS_SLIME)
+		{
+			if(repair.getItem() == ModItems.SCALE_SLIME)
+			{
+				return true;
+			}
+		}
+		return false;
+    }
 }

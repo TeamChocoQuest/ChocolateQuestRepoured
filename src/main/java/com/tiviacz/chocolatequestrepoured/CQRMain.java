@@ -23,7 +23,7 @@ public class CQRMain
 		@Override
 		public ItemStack getTabIconItem() 
 		{
-			return new ItemStack(ModItems.CLOUD_BOOTS);
+			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
 	
