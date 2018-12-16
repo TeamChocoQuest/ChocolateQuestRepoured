@@ -10,6 +10,7 @@ import com.tiviacz.chocolatequestrepoured.init.base.ItemBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -56,6 +57,7 @@ public class ItemTeleportStone extends ItemBase
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
+		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
@@ -67,28 +69,40 @@ public class ItemTeleportStone extends ItemBase
 		{
 			EntityPlayer player = (EntityPlayer)entityLiving;
 			
-			if(stack.hasTagCompound())
+			if(stack.hasTagCompound() && !player.isSneaking())
 			{
-				if(stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z))
+				if(stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z) && getMaxItemUseDuration(stack) - timeLeft >= 30)
 				{
 					player.setPosition(stack.getTagCompound().getDouble(X), stack.getTagCompound().getDouble(Y), stack.getTagCompound().getDouble(Z));
-					worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX, player.posY + 0.5D, player.posZ, 0D, 0D, 0D);
-					worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_SPAWN, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+					for(int i = 0; i < 30; i++)
+					{
+						worldIn.spawnParticle(EnumParticleTypes.PORTAL, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+					}
+					worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 					stack.setItemDamage(stack.getItemDamage() + 1);
 				}
 			}
 			
-			if(this.getPoint(stack) == null)
+			if(getPoint(stack) == null && getMaxItemUseDuration(stack) - timeLeft >= 30)
 			{
-				this.setPoint(stack, player);
-				worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX, player.posY + 0.5D, player.posZ, 0D, 0D, 0D);
+				setPoint(stack, player);
+				for(int i = 0; i < 10; i++)
+				{
+					worldIn.spawnParticle(EnumParticleTypes.FLAME, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+				}
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 			}
-			if(player.isSneaking() && stack.hasTagCompound())
+			
+			if(player.isSneaking() && stack.hasTagCompound() && getMaxItemUseDuration(stack) - timeLeft >= 30)
 			{
 				stack.getTagCompound().removeTag(X);
 				stack.getTagCompound().removeTag(Y);
 				stack.getTagCompound().removeTag(Z);
+				worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.BLOCK_END_PORTAL_FRAME_FILL, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+				for(int i = 0; i < 10; i++)
+				{
+					worldIn.spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX + worldIn.rand.nextDouble() - 0.5D, player.posY + 0.5D, player.posZ + worldIn.rand.nextDouble() - 0.5D, 0D, 0D, 0D);
+				}
 			}
 		}
 	}
@@ -103,10 +117,13 @@ public class ItemTeleportStone extends ItemBase
 			
 			if(stack.hasTagCompound())
 			{
-				tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone_position.name"));
-				tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int)stack.getTagCompound().getDouble(X)));
-				tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int)stack.getTagCompound().getDouble(Y)));
-				tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int)stack.getTagCompound().getDouble(Z)));
+				if(stack.getTagCompound().hasKey(X) && stack.getTagCompound().hasKey(Y) && stack.getTagCompound().hasKey(Z))
+				{
+					tooltip.add(TextFormatting.BLUE + I18n.format("description.teleport_stone_position.name"));
+					tooltip.add(TextFormatting.BLUE + I18n.format("X: " + (int)stack.getTagCompound().getDouble(X)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Y: " + (int)stack.getTagCompound().getDouble(Y)));
+					tooltip.add(TextFormatting.BLUE + I18n.format("Z: " + (int)stack.getTagCompound().getDouble(Z)));
+				}
 			}
 		}		
 		else

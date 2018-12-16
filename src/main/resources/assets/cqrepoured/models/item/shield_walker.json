@@ -1,0 +1,11 @@
+{
+    "parent": "cqrepoured:item/shield_walker_model",
+    "overrides": [
+        {
+            "predicate": {
+                "blocking": 1
+            },
+            "model": "cqrepoured:item/shield_walker_blocking"
+        }
+    ]
+}

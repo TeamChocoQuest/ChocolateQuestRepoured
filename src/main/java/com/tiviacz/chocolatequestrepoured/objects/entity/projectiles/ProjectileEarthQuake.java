@@ -1,50 +1,44 @@
-package com.tiviacz.chocolatequestrepoured.objects.entity;
+package com.tiviacz.chocolatequestrepoured.objects.entity.projectiles;
 
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.IThrowableEntity;
 
-public class EntityProjectileEarthQuake extends EntityThrowable
+public class ProjectileEarthQuake extends EntityThrowable
 {
 	private int lifeTime = 60;
 	private EntityLivingBase thrower;
 	
-	public EntityProjectileEarthQuake(World worldIn) 
+	public ProjectileEarthQuake(World worldIn) 
 	{
 		super(worldIn);
 	}
 	
-	public EntityProjectileEarthQuake(World worldIn, double x, double y, double z)
+	public ProjectileEarthQuake(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
     }
 
-    public EntityProjectileEarthQuake(World worldIn, EntityLivingBase throwerIn)
+    public ProjectileEarthQuake(World worldIn, EntityLivingBase throwerIn)
     {
     	super(worldIn, throwerIn);
     	this.thrower = throwerIn;
 
-    	this.posY -= 1.25D;
+    	this.posY -= 1.2D;
     	this.motionX = 0.1D;
-    	this.motionY = -1.0D;
+    	this.motionY = -2.0D;
     	this.motionZ = 0.1D;
     	this.isImmuneToFire = true;
     }
@@ -101,22 +95,6 @@ public class EntityProjectileEarthQuake extends EntityThrowable
 		{
 			iblockstate = Blocks.GLASS.getDefaultState();
 		}
-		
-		if(iblockstate.getMaterial() == Material.WOOD)
-		{
-			world.playSound(posX, posY, posZ, SoundEvents.BLOCK_WOOD_BREAK, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-		}
-		
-		if(iblockstate.getMaterial() == Material.ROCK)
-		{
-			world.playSound(posX, posY, posZ, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-		}
-		
-		if(iblockstate.getMaterial() == Material.CLOTH)
-		{
-			world.playSound(posX, posY, posZ, SoundEvents.BLOCK_CLOTH_BREAK, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-		}
-		
 			
 		double dist = 1.0D;
 		AxisAlignedBB var3 = getEntityBoundingBox().expand(dist, 2.0D, dist);
@@ -133,7 +111,7 @@ public class EntityProjectileEarthQuake extends EntityThrowable
 		
 		if(world.isRemote)
 		{
-			for(int i = 0; i < 8; i++)
+			for(int i = 0; i < 10; i++)
 			{
 				world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, posX + rand.nextFloat() - 0.5D, posY + rand.nextFloat() - 0.5D, posZ + rand.nextFloat() - 0.5D, rand.nextFloat() - 0.5F, rand.nextFloat(), rand.nextFloat() - 0.5F, Block.getStateId(iblockstate));
 			}

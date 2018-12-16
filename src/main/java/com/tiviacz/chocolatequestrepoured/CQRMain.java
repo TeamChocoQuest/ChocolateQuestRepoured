@@ -3,7 +3,6 @@ package com.tiviacz.chocolatequestrepoured;
 import com.tiviacz.chocolatequestrepoured.init.ModItems;
 import com.tiviacz.chocolatequestrepoured.proxy.CommonProxy;
 import com.tiviacz.chocolatequestrepoured.util.Reference;
-import com.tiviacz.chocolatequestrepoured.util.handlers.EventsHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
@@ -14,6 +13,8 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class CQRMain
@@ -28,26 +29,28 @@ public class CQRMain
 	};
 	
 	@Instance
-	public static CQRMain instance;
+	public static CQRMain INSTANCE;
+	
+	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("cqrepoured");
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static CommonProxy proxy;
 	
 	@EventHandler
-	public static void PreInit(FMLPreInitializationEvent event)
+	public void PreInit(FMLPreInitializationEvent event)
 	{
-		EventsHandler.PreInitRegistries(event);
+		proxy.preInit(event);
 	}
 	
 	@EventHandler
-	public static void init(FMLInitializationEvent event)
+	public void init(FMLInitializationEvent event)
 	{
-		EventsHandler.initRegistries(event);
+		proxy.init(event);
 	}
 	
 	@EventHandler
-	public static void PostInit(FMLPostInitializationEvent event)
+	public void PostInit(FMLPostInitializationEvent event)
 	{
-		EventsHandler.PostInitRegistries(event);
+		proxy.postInit(event);
 	}
 }

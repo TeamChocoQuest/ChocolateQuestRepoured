@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures": {
+        "layer0": "cqrepoured:items/musket_diamond"
+    }
+}

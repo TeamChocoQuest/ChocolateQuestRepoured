@@ -22,11 +22,29 @@ item.sword_turtle.name=Turtle Sword
 item.sword_spider.name=Spider Sword
 item.battle_axe_bull.name=Bull Battle Axe
 
+//Walker set
+item.sword_walker.name=Walker Sword
+item.shield_walker.name=Walker Shield
+
 //Great Swords
 item.great_sword_monking.name=Monking Great Sword
 item.great_sword_bull.name=Bull Greatsword
 item.great_sword_diamond.name=Diamond Greatsword
 item.great_sword_iron.name=Iron Greatsword
+
+//Staffs
+item.staff_fire.name=Fire Staff
+
+//Guns
+item.revolver.name=Revolver
+item.musket.name=Musket
+item.musket_iron.name=Musket with Iron Dagger
+item.musket_diamond.name=Musket with Diamond Dagger
+item.musket_monking.name=Musket with Monking Dagger
+item.bullet_iron.name=Iron Bullets
+item.bullet_gold.name=Gold Bullets
+item.bullet_diamond.name=Diamond Bullets
+item.bullet_fire.name=Fiery Bullets
 
 //Cloud Items
 item.boots_cloud.name=Cloud Boots
@@ -105,7 +123,13 @@ description.dragon_helmet.name=Grants 5 extra hearts and double attack damage
 description.dagger.name=Right click while moving to leap forward
 description.ninja_dagger.name=Right click while moving to leap forward. Sneak and right click to teleport in a range of 4 blocks and gain temporary invisibility
 description.bull_battle_axe.name=Right click to create an earthquake in your direction
-description.click_shift.name=Hold shift for item descriptions
+description.walker_set.name=Equip a Walker Sword and Shield to gain a special ability: If an enemy shoots you while your shield's up, you'll teleport to your attacker
+description.gun.name=Click right click to fire a bullet
+description.bullet_damage.name=Bullet Damage
+description.bullet_fire.name=Ignite on hit
+description.fire_rate.name=Fire Rate
+description.accuracy.name=Accuracy
+description.click_shift.name=Hold shift for item description
 description.rear_damage.name=Rear Damage
 description.charging.name=Charging...
 description.turtle_armor_charging.name=Ability on cooldown, Remaining time: 

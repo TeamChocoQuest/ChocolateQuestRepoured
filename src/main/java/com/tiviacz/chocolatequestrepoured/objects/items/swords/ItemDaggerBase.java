@@ -1,4 +1,4 @@
-package com.tiviacz.chocolatequestrepoured.objects.items;
+package com.tiviacz.chocolatequestrepoured.objects.items.swords;
 
 import java.util.List;
 
@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.tiviacz.chocolatequestrepoured.CQRMain;
 import com.tiviacz.chocolatequestrepoured.init.base.SwordBase;
+import com.tiviacz.chocolatequestrepoured.network.ParticlesMessageToClient;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -22,6 +24,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -85,7 +88,10 @@ public class ItemDaggerBase extends SwordBase
 		
 		if(angle > 130.0D)
 		{
-		//	attacker.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, target.posX, target.posY + 1.0D, target.posZ, 0,0,0);
+			Vec3d vec3d = target.getPositionVector();
+			
+			ParticlesMessageToClient packet = new ParticlesMessageToClient(vec3d, 9, 12);
+			CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(target));
 			
 			float damage = (float)attacker.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 			target.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)attacker), damage * 2F * (attacker.fallDistance > 0.0F ? 1.5F : 1.0F));

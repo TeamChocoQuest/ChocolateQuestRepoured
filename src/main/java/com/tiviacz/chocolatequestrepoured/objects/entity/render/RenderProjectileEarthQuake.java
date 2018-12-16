@@ -1,21 +1,21 @@
 package com.tiviacz.chocolatequestrepoured.objects.entity.render;
 
-import com.tiviacz.chocolatequestrepoured.objects.entity.EntityProjectileEarthQuake;
+import com.tiviacz.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderEntityProjectileEarthQuake extends Render<EntityProjectileEarthQuake>
+public class RenderProjectileEarthQuake extends Render<ProjectileEarthQuake>
 {
-	public RenderEntityProjectileEarthQuake(RenderManager renderManager) 
+	public RenderProjectileEarthQuake(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityProjectileEarthQuake entity) 
+	protected ResourceLocation getEntityTexture(ProjectileEarthQuake entity) 
 	{
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}

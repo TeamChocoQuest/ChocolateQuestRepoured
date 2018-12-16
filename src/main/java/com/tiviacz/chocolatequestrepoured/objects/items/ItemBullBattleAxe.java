@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.tiviacz.chocolatequestrepoured.init.base.SwordBase;
-import com.tiviacz.chocolatequestrepoured.objects.entity.EntityProjectileEarthQuake;
+import com.tiviacz.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -41,8 +41,8 @@ public class ItemBullBattleAxe extends SwordBase
 			
 			if(!worldIn.isRemote)
 			{
-				EntityProjectileEarthQuake quake = new EntityProjectileEarthQuake(worldIn, playerIn);
-				quake.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.17F, 1.0F);
+				ProjectileEarthQuake quake = new ProjectileEarthQuake(worldIn, playerIn);
+				quake.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.25F, 1.0F);
 				worldIn.spawnEntity(quake);
 				
 				playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItem(handIn).getItem(), 50);
