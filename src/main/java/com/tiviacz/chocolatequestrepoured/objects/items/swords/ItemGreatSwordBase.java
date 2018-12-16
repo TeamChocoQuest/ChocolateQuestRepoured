@@ -1,4 +1,4 @@
-package com.tiviacz.chocolatequestrepoured.objects.items;
+package com.tiviacz.chocolatequestrepoured.objects.items.swords;
 
 import java.util.Collection;
 import java.util.List;
@@ -43,8 +43,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemGreatSwordBase extends SwordBase
 {
-	private int damageScaling = 0;
-	private boolean shouldScale = false;
 	private float damage;
 	private int cooldown;
 	private float attackSpeed;
@@ -112,17 +110,17 @@ public class ItemGreatSwordBase extends SwordBase
 		{
 			EntityLiving entityInAABB = entitiesInAABB.get(i);
 			
-			if(damageScaling <= 30)
+			if(getMaxItemUseDuration(stack) - timeLeft <= 30)
 			{
 				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage);
 			}
 			
-			if(damageScaling > 30 && damageScaling <= 60)
+			if(getMaxItemUseDuration(stack) - timeLeft > 30 && getMaxItemUseDuration(stack) - timeLeft <= 60)
 			{
 				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 3);
 			}
 			
-			if(damageScaling > 60)
+			if(getMaxItemUseDuration(stack) - timeLeft > 60)
 			{
 				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 4);
 			}
@@ -138,14 +136,18 @@ public class ItemGreatSwordBase extends SwordBase
 			x *= (1.0F - Math.abs(y));
 			z *= (1.0F - Math.abs(y));
 			
+			if(player.onGround && getMaxItemUseDuration(stack) - timeLeft > 40)
+			{
+				player.posY += 0.1D;
+				player.motionY += 0.35D;
+			}
+			
 			player.getCooldownTracker().setCooldown(stack.getItem(), cooldown);
 			player.swingArm(EnumHand.MAIN_HAND);
 			worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 			worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX + x, player.posY + y + 1.5D, player.posZ + z, 0D, 0D, 0D);
 			stack.damageItem(1, player);
 		}
-		shouldScale = false;
-		damageScaling = 0;
 	}
 	
 	@Override
@@ -164,17 +166,32 @@ public class ItemGreatSwordBase extends SwordBase
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shouldScale = true;
 		playerIn.setActiveHand(handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 	
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
-    {	
-		if(shouldScale)
+    {
+		if(!worldIn.isRemote)
 		{
-			this.damageScaling++;
+			if(entityIn instanceof EntityPlayer)
+			{
+				EntityPlayer player = (EntityPlayer)entityIn;
+				
+				if(player.getHeldItemOffhand() == stack)
+				{
+					if(!player.inventory.addItemStackToInventory(player.getHeldItemOffhand()))
+				    {
+				        player.entityDropItem(player.getHeldItemOffhand(), 0F);
+				    }
+				    
+				    if(!player.capabilities.isCreativeMode)
+				    {
+				    	player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+				    }
+				}
+			}
 		}
 	}
 }

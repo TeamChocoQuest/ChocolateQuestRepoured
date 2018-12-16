@@ -10,4 +10,5 @@ public class Reference
 	public static final String COMMON_PROXY_CLASS = "com.tiviacz.chocolatequestrepoured.proxy.CommonProxy";
 	
 	public static final int ENTITY_SLIME_PART_ID = 44;
+	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
 }

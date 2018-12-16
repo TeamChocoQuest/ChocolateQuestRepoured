@@ -2,5 +2,17 @@
     "parent": "item/handheld",
     "textures": {
         "layer0": "cqrepoured:items/battle_axe_bull"
+    },
+    "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 350, 92, 54 ],
+      "translation": [ 0.00, 6.00, 2.00 ],
+      "scale": [ 1.25, 1.25, 1.25 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 250, 92, 54 ],
+      "translation": [ 0.00, 6.00, 1.00 ],
+      "scale": [ 1.25, 1.25, 1.25 ]
     }
+}
 }

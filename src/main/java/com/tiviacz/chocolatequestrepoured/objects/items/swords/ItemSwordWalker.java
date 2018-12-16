@@ -1,4 +1,4 @@
-package com.tiviacz.chocolatequestrepoured.objects.items;
+package com.tiviacz.chocolatequestrepoured.objects.items.swords;
 
 import java.util.List;
 
@@ -10,32 +10,18 @@ import com.tiviacz.chocolatequestrepoured.init.base.SwordBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSwordSpider extends SwordBase
+public class ItemSwordWalker extends SwordBase
 {
-	public ItemSwordSpider(String name, ToolMaterial material) 
+	public ItemSwordWalker(String name, ToolMaterial material) 
 	{
 		super(name, material);
 	}
-	
-	@Override
-	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
-	{
-        stack.damageItem(1, attacker); 
-        if(target instanceof EntityLivingBase)
-        {
-            target.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 100));
-        }
-        return true;
-    }
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -43,7 +29,7 @@ public class ItemSwordSpider extends SwordBase
     {
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
 		{
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.spider_sword.name"));
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.walker_set.name"));
 		}		
 		else
 		{

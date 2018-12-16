@@ -104,12 +104,12 @@ public class ItemArmorSpider extends ArmorBase
         {
         	if(k > 0)
         	{
-        		k = (int)player.posZ + 1;
+        		k += 1;
         	}
         	
         	if(i < 0)
         	{
-        		i = (int)player.posX - 1;
+        		i -= 1;
         	}
         	
         	BlockPos blockpos = new BlockPos(i, j, k);
@@ -128,17 +128,17 @@ public class ItemArmorSpider extends ArmorBase
         {
         	if(i > 0)
         	{
-        		i = (int)player.posX - 1;
+        		i -= 1;
         	}
         	
         	if(k < 0)
         	{
-        		k = (int)player.posZ - 1;
+        		k -= 1;
         	}
         	
         	if(i < 0)
         	{
-        		i = (int)player.posX - 2;
+        		i -= 2;
         	}
         	
         	BlockPos blockpos = new BlockPos(i, j, k);
@@ -157,17 +157,17 @@ public class ItemArmorSpider extends ArmorBase
         {
         	if(i < 0)
         	{
-        		i = (int)player.posX - 1;
+        		i -= 1;
         	}
         	
         	if(k > 0)
         	{
-        		k = (int)player.posZ - 1;
+        		k -= 1;
         	}
         	
         	if((i > 0 && k < 0) || (i < 0 && k < 0))
         	{
-        		k = (int)player.posZ - 2;
+        		k -= 2;
         	}
         	
         	BlockPos blockpos = new BlockPos(i, j, k);
@@ -186,17 +186,12 @@ public class ItemArmorSpider extends ArmorBase
         {
         	if(i > 0)
             {
-            	i = (int)player.posX + 1;
+            	i += 1;
             }
             
             if(k < 0)
             {
-            	k = (int)player.posX + 1;
-            }
-            
-            if(i < 0 && k < 0)
-            {
-            	k = (int)player.posZ - 1;
+            	k -= 1;
             }
             
         	BlockPos blockpos = new BlockPos(i, j, k);

@@ -3,54 +3,40 @@ package com.tiviacz.chocolatequestrepoured.util.handlers;
 import com.tiviacz.chocolatequestrepoured.CQRMain;
 import com.tiviacz.chocolatequestrepoured.init.ModBlocks;
 import com.tiviacz.chocolatequestrepoured.init.ModItems;
+import com.tiviacz.chocolatequestrepoured.network.ParticleMessageHandler;
+import com.tiviacz.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.tiviacz.chocolatequestrepoured.objects.entity.EntitySlimePart;
-import com.tiviacz.chocolatequestrepoured.objects.items.ItemGreatSwordBase;
 import com.tiviacz.chocolatequestrepoured.proxy.ClientProxy;
 import com.tiviacz.chocolatequestrepoured.util.IHasModel;
 import com.tiviacz.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.living.LivingFallEvent;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber 
 public class EventsHandler
 {
-	public static void PreInitRegistries(FMLPreInitializationEvent event)
-	{
-		ClientProxy.registerRenderers();
-		EntityHandler.registerEntity();
-	}
-	
-	public static void initRegistries(FMLInitializationEvent event)
-	{
-		TileEntityHandler.registerTileEntity();
-	}
-	
-	public static void PostInitRegistries(FMLPostInitializationEvent event)
-	{
-		
-	}
-	
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
@@ -81,47 +67,6 @@ public class EventsHandler
 			}
 		}
 	}
-	
-	@SubscribeEvent
-	public static void cancelPlayerFallDamage(LivingFallEvent event)
-	{
-		if(event.getEntity() instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer)event.getEntity();
-			
-			if(player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == ModItems.BOOTS_CLOUD)
-			{
-				event.setDistance(0.0F);
-			}
-			
-			if(player.getHeldItem(EnumHand.MAIN_HAND).getItem() == ModItems.FEATHER_GOLDEN)
-			{
-				event.setDistance(0.0F);
-			}
-			
-			if(player.getHeldItem(EnumHand.OFF_HAND).getItem() == ModItems.FEATHER_GOLDEN)
-			{
-				event.setDistance(0.0F);
-			}
-		}
-	}
-	
-	@SubscribeEvent
-	public static void dropGreatSword(PlayerTickEvent event)
-	{
-	    EntityPlayer player = event.player;
-	    ItemStack offStack = player.getHeldItemOffhand();
-	    
-	    if(!(offStack.getItem() instanceof ItemGreatSwordBase))
-	        return;
-	    
-	    if(!player.inventory.addItemStackToInventory(offStack) && !player.world.isRemote)
-	    {
-	        player.entityDropItem(offStack, 0F);
-	    }
-	    
-	    player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-	} 
 	
 	@SubscribeEvent
 	public static void onHit(LivingHurtEvent event)
@@ -175,6 +120,72 @@ public class EventsHandler
 							event.setCanceled(true);
 						}
 					}
+				}	
+			}
+		}
+    }
+	
+	@SubscribeEvent
+	public static void onDefense(LivingAttackEvent event)
+	{
+		boolean tep = false;
+		
+		if(event.getEntityLiving() instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
+			Entity attacker = event.getSource().getTrueSource();
+			float amount = event.getAmount();
+			World world = player.world;
+			
+			if(player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER || player.getHeldItemMainhand().getItem() != ModItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) 
+			{
+				return;
+			}
+			
+			double d = attacker.posX + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
+			double d1 = attacker.posY;
+			double d2 = attacker.posZ + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
+			
+			double d3 = player.posX;
+			double d4 = player.posY;
+			double d5 = player.posZ;
+			
+			int i = MathHelper.floor(d);
+			int j = MathHelper.floor(d1);
+			int k = MathHelper.floor(d2);
+			
+			BlockPos ep = new BlockPos(i, j, k);
+			BlockPos ep1 = new BlockPos(i, j + 1, k);
+			
+			if(world.getCollisionBoxes(player, player.getEntityBoundingBox()).size() == 0 && !world.containsAnyLiquid(attacker.getEntityBoundingBox()) && player.isActiveItemStackBlocking() && player.getDistanceSq(attacker) >= 25.0D)
+			{
+				if(world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1))
+				{
+					tep = true;
+				}
+				else
+				{
+					tep = false;
+					ParticlesMessageToClient packet = new ParticlesMessageToClient(player.getPositionVector(), 12, 12);
+					CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(player));
+				}
+			}
+			
+			if(tep)
+			{
+				if(world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1))
+				{		
+					if(player instanceof EntityPlayerMP)
+					{
+						EntityPlayerMP playerMP = (EntityPlayerMP)player;
+
+						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
+						ParticlesMessageToClient packet = new ParticlesMessageToClient(playerMP.getPositionVector(), 24, 12);
+						CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(playerMP));
+						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
+					}
+					event.setCanceled(true);
+					tep = false;
 				}
 			}
 		}

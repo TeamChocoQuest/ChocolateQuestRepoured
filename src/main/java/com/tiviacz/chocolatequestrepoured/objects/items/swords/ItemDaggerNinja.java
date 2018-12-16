@@ -1,4 +1,4 @@
-package com.tiviacz.chocolatequestrepoured.objects.items;
+package com.tiviacz.chocolatequestrepoured.objects.items.swords;
 
 import java.util.List;
 
@@ -75,21 +75,7 @@ public class ItemDaggerNinja extends ItemDaggerBase
 		}
 		else
 		{
-			if(playerIn.onGround && !playerIn.isSwingInProgress)
-	        {
-	        	float rot = playerIn.rotationYawHead * 3.1416F / 180.0F;
-	        	double mx = -Math.sin(rot);
-	        	double mz = Math.cos(rot);
-	        	playerIn.motionX += mx * playerIn.moveForward;
-	        	playerIn.motionZ += mz * playerIn.moveForward;
-	        	rot = (float)(rot - 1.57D);
-	        	mx = -Math.sin(rot);
-	        	mz = Math.cos(rot);
-	        	playerIn.motionX += mx * playerIn.moveStrafing;
-	        	playerIn.motionZ += mz * playerIn.moveStrafing;
-	        	playerIn.motionY = 0.2D;
-	        	stack.damageItem(1, playerIn);
-	        }
+			super.onItemRightClick(worldIn, playerIn, handIn);
 		}	
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }

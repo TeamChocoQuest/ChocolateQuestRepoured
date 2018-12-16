@@ -1,4 +1,4 @@
-package com.tiviacz.chocolatequestrepoured.objects.items;
+package com.tiviacz.chocolatequestrepoured.objects.items.swords;
 
 import com.google.common.collect.Multimap;
 import com.tiviacz.chocolatequestrepoured.init.base.SwordBase;

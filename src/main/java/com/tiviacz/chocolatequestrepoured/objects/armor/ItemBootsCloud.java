@@ -53,13 +53,27 @@ public class ItemBootsCloud extends ArmorBase
 			
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) 
-	{		
+	{
 		player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 4, false, false));
 	
 		if(!player.onGround)
-		{		            
+		{
 			player.jumpMovementFactor += 0.04F;
-			world.spawnParticle(EnumParticleTypes.CLOUD, player.getPosition().getX(), player.getPosition().getY() - 0.5F, player.getPosition().getZ(), 0, 0, 0);
+			
+			if(player.fallDistance >= 1.0F)
+			{
+				for(int i = 0; i < 3; i++)
+				{
+					world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
+				}
+					
+				player.fallDistance = 0F;
+			}
+		}
+		
+		if(player.isSprinting())
+		{
+			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
 		}
 	}
 	
