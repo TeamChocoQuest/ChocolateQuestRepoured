@@ -1,5 +1,6 @@
 package com.tiviacz.chocolatequestrepoured;
 
+import com.tiviacz.chocolatequestrepoured.init.ModBlocks;
 import com.tiviacz.chocolatequestrepoured.init.ModItems;
 import com.tiviacz.chocolatequestrepoured.proxy.CommonProxy;
 import com.tiviacz.chocolatequestrepoured.util.Reference;
@@ -19,12 +20,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class CQRMain
 {
-	public static CreativeTabs CQRTab = new CreativeTabs("ChocolateQuestRepouredTab")
+	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab")
 	{
 		@Override
 		public ItemStack getTabIconItem() 
 		{
 			return new ItemStack(ModItems.BOOTS_CLOUD);
+		}
+	};
+	
+	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab")
+	{
+		@Override
+		public ItemStack getTabIconItem() 
+		{
+			return new ItemStack(ModBlocks.TABLE);
 		}
 	};
 	

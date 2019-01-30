@@ -14,7 +14,7 @@ public class SwordBase extends ItemSword implements IHasModel
 		
 		setUnlocalizedName(name);
 		setRegistryName(name);
-		setCreativeTab(CQRMain.CQRTab);
+		setCreativeTab(CQRMain.CQRItemsTab);
 		
 		ModItems.ITEMS.add(this);
 	}
