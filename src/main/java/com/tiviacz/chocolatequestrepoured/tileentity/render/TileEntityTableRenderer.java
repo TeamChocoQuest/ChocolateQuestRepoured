@@ -25,7 +25,10 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 		
 		if(!stack.isEmpty())
 		{
-			if(stack.getItem() instanceof ItemBlock)
+			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
+			model = ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false);
+			
+			if(model.isGui3d())
 			{
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
@@ -35,9 +38,6 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5, y + 1.25, z + 0.5);
 				GlStateManager.scale(0.5F, 0.5F, 0.5F);
-		
-				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
-				model = ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false);
 		
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
@@ -58,9 +58,6 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 				GlStateManager.translate(x + 0.5, y + 1.02, z + 0.5);
 				GlStateManager.rotate(90F, 1, 0, 0);
 				GlStateManager.scale(0.7F, 0.7F, 0.7F);
-		
-				IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
-				model = ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false);
 		
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);

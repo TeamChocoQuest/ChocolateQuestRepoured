@@ -1,8 +1,9 @@
 The English US language file for Chocolate Quest Repoured Mod!
 
 
-//CreativeTab
-itemGroup.ChocolateQuestRepouredTab=Chocolate Quest Repoured Tab
+//CreativeTabs
+itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocks
+itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
 
 //Other
 item.potion_healing.name=Healing Potion
