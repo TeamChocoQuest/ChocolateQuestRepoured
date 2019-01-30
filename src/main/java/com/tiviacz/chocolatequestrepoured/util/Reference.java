@@ -11,4 +11,7 @@ public class Reference
 	
 	public static final int ENTITY_SLIME_PART_ID = 44;
 	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
+	
+	public static final int PROJECTILE_EARTH_QUAKE = 66;
+	public static final int PROJECTILE_BULLET = 67;
 }
