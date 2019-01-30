@@ -1,0 +1,6 @@
+{
+   "parent": "block/cube_all",
+   "textures": {
+       "all": "cqrepoured:blocks/dungeon_bricks_7"
+   }
+}

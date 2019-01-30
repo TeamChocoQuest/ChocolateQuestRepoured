@@ -1,0 +1,29 @@
+{
+    "type": "minecraft:crafting_shaped",
+    
+    "pattern":
+    [
+        "BBB",
+        "BXB",
+        "BBB"
+    ],
+       
+       "key":
+        {
+            "B":
+            {
+                "item": "minecraft:gold_ingot"
+            },
+            
+            "X":
+            {
+                "item": "minecraft:feather"
+            }          
+       },
+       
+       "result":
+       {
+            "item": "cqrepoured:feather_golden",
+            "count": 1
+        }        
+}

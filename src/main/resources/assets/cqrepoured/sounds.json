@@ -1,0 +1,7 @@
+{
+    "item.gun.shoot": 
+    {
+        "category": "item",
+        "sounds": [{"name" : "cqrepoured:item/gunshoot"}]
+     }
+}   
