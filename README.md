@@ -1,6 +1,6 @@
 # ChocolateQuestRepoured
 
-Links
+## Links
 
 [Discord](https://discord.gg/StWzzFw)
 
