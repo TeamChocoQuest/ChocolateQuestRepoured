@@ -21,6 +21,7 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 	@Override
 	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) 
 	{
+		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 		ItemStack stack = te.inventory.getStackInSlot(0);
 		float rotation = te.getRotation();
 		

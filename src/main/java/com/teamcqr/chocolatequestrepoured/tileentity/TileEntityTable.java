@@ -14,6 +14,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -50,6 +53,22 @@ public class TileEntityTable extends TileEntitySyncClient
 	{
 		return rotation;
 	}
+	
+	@Override
+    public ITextComponent getDisplayName()
+    {
+		Style style = new Style();
+		ITextComponent itemName = new TextComponentString(inventory.getStackInSlot(0).getDisplayName());
+		
+        if(inventory.getStackInSlot(0).hasDisplayName())
+        {
+        	return itemName.setStyle(style);
+        }
+        else
+        {
+        	return null;
+        }
+    }
 	
 	@Override
 	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
