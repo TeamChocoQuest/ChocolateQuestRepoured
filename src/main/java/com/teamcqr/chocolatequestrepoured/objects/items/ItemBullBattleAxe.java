@@ -1,11 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
@@ -14,7 +18,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -52,6 +60,31 @@ public class ItemBullBattleAxe extends SwordBase
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
     }
+	
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) 
+	{
+		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+	 
+		if(slot == EntityEquipmentSlot.MAINHAND) 
+	    {
+			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 0.6);
+		}
+		return modifiers;
+	}
+	    
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double multiplier) 
+	{
+		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+
+		if(modifierOptional.isPresent()) 
+		{ 
+	            final AttributeModifier modifier = modifierOptional.get();
+	            modifiers.remove(modifier); 
+	            modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() - multiplier, modifier.getOperation())); 
+	    }
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
