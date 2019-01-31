@@ -6,12 +6,15 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.base.ArmorBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -28,11 +31,26 @@ public class ItemArmorTurtle extends ArmorBase
 	private String CD = "Cooldown";
 	private String ON = "Enabled";
 	private int Cooldown = 3600;
+	private AttributeModifier health;
 	
 	public ItemArmorTurtle(String name, ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn) 
 	{
 		super(name, materialIn, renderIndexIn, equipmentSlotIn);
+		
+		this.health = new AttributeModifier("TurtleHealthModifier", 2D, 0);
 	}
+	
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack)
+    {
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+		
+		if((slot == EntityEquipmentSlot.FEET && stack.getItem() == ModItems.BOOTS_TURTLE) || (slot == EntityEquipmentSlot.CHEST && stack.getItem() == ModItems.CHESTPLATE_TURTLE) || (slot == EntityEquipmentSlot.LEGS && stack.getItem() == ModItems.LEGGINGS_TURTLE) || (slot == EntityEquipmentSlot.HEAD && stack.getItem() == ModItems.HELMET_TURTLE))
+		{
+			multimap.put(SharedMonsterAttributes.MAX_HEALTH.getName(), this.health);
+		}
+		return multimap;
+    }
 
 	@Override
 	public void onArmorTick(World worldIn, EntityPlayer player, ItemStack stack)
