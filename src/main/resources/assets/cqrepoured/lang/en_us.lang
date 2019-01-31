@@ -135,5 +135,5 @@ description.rear_damage.name=Rear Damage
 description.charging.name=Charging...
 description.turtle_armor_charging.name=Ability on cooldown, Remaining time: 
 description.healing_potion.name=Refills 2 Hearts when drunk
-description.teleport_stone.name=Hold to set position. Right click to teleport to the set position! To delete previous saved position, press shift while held
+description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
 description.teleport_stone_position.name=Current Position:
