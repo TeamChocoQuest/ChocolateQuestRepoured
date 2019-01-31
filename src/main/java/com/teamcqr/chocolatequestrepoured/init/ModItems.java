@@ -60,7 +60,7 @@ public class ModItems
 	public static final ToolMaterial TOOL_DIAMOND_DAGGER = EnumHelper.addToolMaterial("tool_diamond_dagger", 0, 1560, 0.0F, 1F, 10);  				
 	public static final ToolMaterial TOOL_MONKING_DAGGER = EnumHelper.addToolMaterial("tool_monking_dagger", 0, 1560, 0.0F, 3F, 10);   				
 	public static final ToolMaterial TOOL_NINJA_DAGGER = EnumHelper.addToolMaterial("tool_ninja_dagger", 0, 2048, 0.0F, 2F, 10);        			
-	public static final ToolMaterial TOOL_BULL_BATTLE_AXE = EnumHelper.addToolMaterial("tool_bull_battle_axe", 0, 1560, 0.0F, 3F, 10);  			
+	public static final ToolMaterial TOOL_BULL_BATTLE_AXE = EnumHelper.addToolMaterial("tool_bull_battle_axe", 0, 1560, 0.0F, 5F, 10);  			
 	public static final ToolMaterial TOOL_TURTLE_SWORD = EnumHelper.addToolMaterial("tool_turtle_sword", 0, 2048, 0.0F, 3F, 10);					
 	public static final ToolMaterial TOOL_SPIDER_SWORD = EnumHelper.addToolMaterial("tool_spider_sword", 0, 2048, 0.0F, 5F, 10);					
 	public static final ToolMaterial TOOL_WALKER_SWORD = EnumHelper.addToolMaterial("tool_walker_sword", 0, 2048, 0.0F, 3F, 10);					
