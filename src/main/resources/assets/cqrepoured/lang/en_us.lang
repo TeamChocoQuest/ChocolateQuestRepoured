@@ -102,7 +102,12 @@ item.leggings_heavy_iron.name=Heavy Iron Leggings
 item.boots_heavy_iron.name=Heavy Iron Boots
 
 //Blocks
-tile.table.name=Table
+tile.table_oak.name=Oak Table
+tile.table_spruce.name=Spruce Table
+tile.table_birch.name=Birch Table
+tile.table_jungle.name=Jungle Table
+tile.table_acacia.name=Acacia Table
+tile.table_dark.name=Dark Oak Table
 tile.dungeon_bricks_1.name=Dungeon Bricks
 tile.dungeon_bricks_2.name=Dungeon Bricks
 tile.dungeon_bricks_3.name=Dungeon Bricks

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "top=false": { "model": "cqrepoured:table_birch" },
+        "top=true": { "model": "cqrepoured:table_birch_top" }
+    }
+}
