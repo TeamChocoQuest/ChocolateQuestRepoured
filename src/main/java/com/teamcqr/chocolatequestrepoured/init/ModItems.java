@@ -47,7 +47,7 @@ public class ModItems
 	public static final ArmorMaterial ARMOR_DRAGON = EnumHelper.addArmorMaterial("armor_dragon", Reference.MODID + ":dragon", 2850, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_BULL = EnumHelper.addArmorMaterial("armor_bull", Reference.MODID + ":bull", 675, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_SPIDER = EnumHelper.addArmorMaterial("armor_spider", Reference.MODID + ":spider", 675, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-	public static final ArmorMaterial ARMOR_SLIME = EnumHelper.addArmorMaterial("armor_slime", Reference.MODID + ":slime", 675, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+	public static final ArmorMaterial ARMOR_SLIME = EnumHelper.addArmorMaterial("armor_slime", Reference.MODID + ":slime", 675, new int[] { 2, 5, 6, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_TURTLE = EnumHelper.addArmorMaterial("armor_turtle", Reference.MODID + ":turtle", 675, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = EnumHelper.addArmorMaterial("armor_heavy_diamond", Reference.MODID + ":heavy_diamond", 2115, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_HEAVY_IRON = EnumHelper.addArmorMaterial("armor_heavy_iron", Reference.MODID + ":heavy_iron", 1975, new int[] { 3, 6, 8, 3 }, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F);
@@ -62,7 +62,7 @@ public class ModItems
 	public static final ToolMaterial TOOL_NINJA_DAGGER = EnumHelper.addToolMaterial("tool_ninja_dagger", 0, 2048, 0.0F, 2F, 10);        			
 	public static final ToolMaterial TOOL_BULL_BATTLE_AXE = EnumHelper.addToolMaterial("tool_bull_battle_axe", 0, 1560, 0.0F, 5F, 10);  			
 	public static final ToolMaterial TOOL_TURTLE_SWORD = EnumHelper.addToolMaterial("tool_turtle_sword", 0, 2048, 0.0F, 3F, 10);					
-	public static final ToolMaterial TOOL_SPIDER_SWORD = EnumHelper.addToolMaterial("tool_spider_sword", 0, 2048, 0.0F, 5F, 10);					
+	public static final ToolMaterial TOOL_SPIDER_SWORD = EnumHelper.addToolMaterial("tool_spider_sword", 0, 2048, 0.0F, 3F, 10);					
 	public static final ToolMaterial TOOL_WALKER_SWORD = EnumHelper.addToolMaterial("tool_walker_sword", 0, 2048, 0.0F, 3F, 10);					
 	public static final ToolMaterial TOOL_MUSKET_IRON = EnumHelper.addToolMaterial("tool_musket_iron", 0, 300, 0.0F, 0.0F, 14);
 	public static final ToolMaterial TOOL_MUSKET_DIAMOND = EnumHelper.addToolMaterial("tool_musket_diamond", 0, 300, 0.0F, 1F, 10);
