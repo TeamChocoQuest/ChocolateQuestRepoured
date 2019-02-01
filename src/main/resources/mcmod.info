@@ -2,13 +2,13 @@
 {
   "modid": "cqrepoured",
   "name": "Chocolate Quest Repoured Mod",
-  "description": "",
+  "description": "A complete rewrite of the Chocolate Quest mod by Chocolatin, who disappeared. A lot of features are still to be implemented, so please follow updates.",
   "version": "0.0.1",
   "mcversion": "1.12.2",
-  "url": "",
+  "url": "https://github.com/TeamChocoQuest/ChocolateQuestRepoured",
   "updateUrl": "",
   "authorList": ["Tiviacz1337"],
-  "credits": "The Forge and FML guys, for making this example",
+  "credits": "Everyone who made textures, dungeons and other content, developers and ArloTheEpic",
   "logoFile": "",
   "screenshots": [],
   "dependencies": []
