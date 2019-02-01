@@ -4,4 +4,4 @@ CQ Repoured is a rewrite of the classic Chocolate Quest and Better Dungeons Mine
 
 [Discord](https://discord.gg/StWzzFw)
 
-[WIP Wiki](https://cq-repoured.wikia.com/wiki/Chocolate_Quest_Re-poured_Wiki)
+[VERY WIP Wiki](https://cq-repoured.wikia.com/wiki/Chocolate_Quest_Re-poured_Wiki)
