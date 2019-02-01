@@ -19,11 +19,13 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
 	public ProjectileBullet(World worldIn) 
 	{
 		super(worldIn);
+		this.setNoGravity(true);
 	}
 	
 	public ProjectileBullet(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
+        this.setNoGravity(true);
     }
 
     public ProjectileBullet(World worldIn, EntityLivingBase shooter, int type)
@@ -38,8 +40,8 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
     @Override
 	public void onUpdate()
 	{
-		motionX *= 1.05D;
-		motionZ *= 1.05D;
+		motionX *= 1.2D;
+		motionZ *= 1.2D;
 		
 		if(getThrower() != null && getThrower().isDead)
 		{
