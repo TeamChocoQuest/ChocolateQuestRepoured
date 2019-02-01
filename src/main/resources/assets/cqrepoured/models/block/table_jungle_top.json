@@ -1,0 +1,22 @@
+{
+    "parent": "block/block",
+    "credit": "Made with Blockbench",
+    "textures": {
+        "0": "blocks/planks_jungle",
+        "particle": "blocks/planks_jungle"
+    },
+    "elements": [
+        {
+            "from": [0, 13, 0],
+            "to": [16, 16, 16],
+            "faces": {
+                "north": {"uv": [0, 5, 16, 8], "texture": "#0"},
+                "east": {"uv": [0, 5, 16, 8], "texture": "#0"},
+                "south": {"uv": [0, 9, 16, 12], "texture": "#0"},
+                "west": {"uv": [0, 5, 16, 8], "texture": "#0"},
+                "up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+                "down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+            }
+        }
+    ]
+}

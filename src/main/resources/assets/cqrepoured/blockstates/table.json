@@ -1,6 +1,0 @@
-{
-    "variants": {
-        "top=false": { "model": "cqrepoured:table" },
-        "top=true": { "model": "cqrepoured:table_top" }
-    }
-}

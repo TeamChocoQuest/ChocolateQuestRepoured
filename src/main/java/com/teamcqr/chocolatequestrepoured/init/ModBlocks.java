@@ -32,5 +32,10 @@ public class ModBlocks
 	public static final Block DungeonBrick16 = new BlockDungeonBrick("dungeon_brick_16", Material.ROCK); */
 	
 	//Other
-	public static final Block TABLE = new BlockTable("table", Material.WOOD);
+	public static final Block TABLE_OAK = new BlockTable("table_oak", Material.WOOD);
+	public static final Block TABLE_SPRUCE = new BlockTable("table_spruce", Material.WOOD);
+	public static final Block TABLE_BIRCH = new BlockTable("table_birch", Material.WOOD);
+	public static final Block TABLE_JUNGLE = new BlockTable("table_jungle", Material.WOOD);
+	public static final Block TABLE_ACACIA = new BlockTable("table_acacia", Material.WOOD);
+	public static final Block TABLE_DARK = new BlockTable("table_dark", Material.WOOD);
 }

@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "top=false": { "model": "cqrepoured:table_acacia" },
+        "top=true": { "model": "cqrepoured:table_acacia_top" }
+    }
+}

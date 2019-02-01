@@ -34,7 +34,7 @@ public class CQRMain
 		@Override
 		public ItemStack getTabIconItem() 
 		{
-			return new ItemStack(ModBlocks.TABLE);
+			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
 	
