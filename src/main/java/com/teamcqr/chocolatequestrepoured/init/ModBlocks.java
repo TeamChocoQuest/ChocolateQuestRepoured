@@ -47,5 +47,5 @@ public class ModBlocks
 	public static final Block EXPORTER_CHEST_FOOD = new BlockBase("exporter_chest_food", Material.WOOD);
 	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockBase("exporter_chest_equipment", Material.WOOD);
 	public static final Block EXPORTER_CHEST_UTILITY = new BlockBase("exporter_chest_utility", Material.WOOD);
-	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.BARRIER);
+	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);
 }
