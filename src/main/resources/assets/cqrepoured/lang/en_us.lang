@@ -102,6 +102,12 @@ item.leggings_heavy_iron.name=Heavy Iron Leggings
 item.boots_heavy_iron.name=Heavy Iron Boots
 
 //Blocks
+tile.exporter.name=Exporter Block
+tile.exporter_chest_valuable.name=Exporter Chest Valuable
+tile.exporter_chest_food.name=Exporter Chest Food
+tile.exporter_chest_equipment.name=Exporter Chest Equipment
+tile.exporter_chest_utility.name=Exporter Chest Utility
+tile.null_block.name=Null Block
 tile.table_oak.name=Oak Table
 tile.table_spruce.name=Spruce Table
 tile.table_birch.name=Birch Table
