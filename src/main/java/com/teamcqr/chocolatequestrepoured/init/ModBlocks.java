@@ -3,7 +3,9 @@ package com.teamcqr.chocolatequestrepoured.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
 
 import net.minecraft.block.Block;
@@ -38,4 +40,12 @@ public class ModBlocks
 	public static final Block TABLE_JUNGLE = new BlockTable("table_jungle", Material.WOOD);
 	public static final Block TABLE_ACACIA = new BlockTable("table_acacia", Material.WOOD);
 	public static final Block TABLE_DARK = new BlockTable("table_dark", Material.WOOD);
+	
+	//Utility
+	public static final Block EXPORTER = new BlockBase("exporter", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VALUABLE = new BlockBase("exporter_chest_valuable", Material.WOOD);
+	public static final Block EXPORTER_CHEST_FOOD = new BlockBase("exporter_chest_food", Material.WOOD);
+	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockBase("exporter_chest_equipment", Material.WOOD);
+	public static final Block EXPORTER_CHEST_UTILITY = new BlockBase("exporter_chest_utility", Material.WOOD);
+	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.BARRIER);
 }
