@@ -96,6 +96,7 @@ public class ModItems
 	
 	//Guns
 	public static final Item REVOLVER = new ItemRevolver("revolver");
+	public static final Item CAPTAIN_REVOLVER = new ItemRevolver("captain_revolver");
 	public static final Item MUSKET = new ItemMusket("musket");
 	public static final Item MUSKET_IRON = new ItemMusketKnife("musket_iron", TOOL_MUSKET_IRON);
 	public static final Item MUSKET_DIAMOND = new ItemMusketKnife("musket_diamond", TOOL_MUSKET_DIAMOND);
@@ -155,7 +156,7 @@ public class ModItems
 	public static final Item SCALE_TURTLE = new ItemBase("scale_turtle");
 	public static final Item LEATHER_BULL = new ItemBase("leather_bull");
 	public static final Item HORN_BULL = new ItemBase("horn_bull");
-	public static final Item SCALE_SLIME = new ItemBase("scale_slime");
+	public static final Item BALL_SLIME = new ItemBase("ball_slime");
 	public static final Item LEATHER_SPIDER = new ItemBase("leather_spider");
 	public static final Item BONE_MONKING = new ItemBase("bone_monking");
 	public static final Item FEATHER_GOLDEN = new ItemGoldenFeather("feather_golden");

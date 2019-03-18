@@ -6,6 +6,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
 
 import net.minecraft.block.Block;
@@ -16,22 +17,23 @@ public class ModBlocks
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 	
 	//Dungeon Blocks
-	public static final Block DUNGEONBRICK1 = new BlockDungeonBrick("dungeon_bricks_1", Material.ROCK);
-	public static final Block DUNGEONBRICK2 = new BlockDungeonBrick("dungeon_bricks_2", Material.ROCK);
-	public static final Block DUNGEONBRICK3 = new BlockDungeonBrick("dungeon_bricks_3", Material.ROCK);
-	public static final Block DUNGEONBRICK4 = new BlockDungeonBrick("dungeon_bricks_4", Material.ROCK);
-	public static final Block DUNGEONBRICK5 = new BlockDungeonBrick("dungeon_bricks_5", Material.ROCK);
-	public static final Block DUNGEONBRICK6 = new BlockDungeonBrick("dungeon_bricks_6", Material.ROCK);
-	public static final Block DUNGEONBRICK7 = new BlockDungeonBrick("dungeon_bricks_7", Material.ROCK);
-	public static final Block DUNGEONBRICK8 = new BlockDungeonBrick("dungeon_bricks_8", Material.ROCK);
-/*	public static final Block DungeonBrick9 = new BlockDungeonBrick("dungeon_brick_9", Material.ROCK);
-	public static final Block DungeonBrick10 = new BlockDungeonBrick("dungeon_brick_10", Material.ROCK);
-	public static final Block DungeonBrick11 = new BlockDungeonBrick("dungeon_brick_11", Material.ROCK);
-	public static final Block DungeonBrick12 = new BlockDungeonBrick("dungeon_brick_12", Material.ROCK);
-	public static final Block DungeonBrick13 = new BlockDungeonBrick("dungeon_brick_13", Material.ROCK);
-	public static final Block DungeonBrick14 = new BlockDungeonBrick("dungeon_brick_14", Material.ROCK);
-	public static final Block DungeonBrick15 = new BlockDungeonBrick("dungeon_brick_15", Material.ROCK);
-	public static final Block DungeonBrick16 = new BlockDungeonBrick("dungeon_brick_16", Material.ROCK); */
+	//Andesite
+	public static final Block ANDESITE_CARVED = new BlockDungeonBrick("andesite_carved", Material.ROCK);
+	public static final Block ANDESITE_PILLAR = new BlockPillarDungeonBrick("andesite_pillar", Material.ROCK);
+	public static final Block ANDESITE_CUBE = new BlockDungeonBrick("andesite_cube", Material.ROCK);
+	public static final Block ANDESITE_SCALE = new BlockDungeonBrick("andesite_scale", Material.ROCK);
+	public static final Block ANDESITE_SQUARE = new BlockDungeonBrick("andesite_square", Material.ROCK);
+	public static final Block ANDESIDE_BRICK_SMALL = new BlockDungeonBrick("andesite_small", Material.ROCK);
+	public static final Block ANDESITE_BRICK_LARGE = new BlockDungeonBrick("andesite_large", Material.ROCK);
+	
+	//Diorite
+	public static final Block DIORITE_CARVED = new BlockDungeonBrick("diorite_carved", Material.ROCK);
+	public static final Block DIORITE_PILLAR = new BlockPillarDungeonBrick("diorite_pillar", Material.ROCK);
+	public static final Block DIORITE_CUBE = new BlockDungeonBrick("diorite_cube", Material.ROCK);
+	public static final Block DIORITE_SCALE = new BlockDungeonBrick("diorite_scale", Material.ROCK);
+	public static final Block DIORITE_SQUARE = new BlockDungeonBrick("diorite_square", Material.ROCK);
+	public static final Block DIORITE_BRICK_SMALL = new BlockDungeonBrick("diorite_small", Material.ROCK);
+	public static final Block DIORITE_BRICK_LARGE = new BlockDungeonBrick("diorite_large", Material.ROCK);
 	
 	//Other
 	public static final Block TABLE_OAK = new BlockTable("table_oak", Material.WOOD);
@@ -47,5 +49,5 @@ public class ModBlocks
 	public static final Block EXPORTER_CHEST_FOOD = new BlockBase("exporter_chest_food", Material.WOOD);
 	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockBase("exporter_chest_equipment", Material.WOOD);
 	public static final Block EXPORTER_CHEST_UTILITY = new BlockBase("exporter_chest_utility", Material.WOOD);
-	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);
+	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating 
 }

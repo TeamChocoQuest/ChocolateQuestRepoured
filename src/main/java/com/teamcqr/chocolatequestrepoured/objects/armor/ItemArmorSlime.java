@@ -68,7 +68,7 @@ public class ItemArmorSlime extends ArmorBase
     {
 		if(toRepair.getItem() == ModItems.HELMET_SLIME || toRepair.getItem() == ModItems.CHESTPLATE_SLIME || toRepair.getItem() == ModItems.LEGGINGS_SLIME || toRepair.getItem() == ModItems.BOOTS_SLIME)
 		{
-			if(repair.getItem() == ModItems.SCALE_SLIME)
+			if(repair.getItem() == ModItems.BALL_SLIME)
 			{
 				return true;
 			}

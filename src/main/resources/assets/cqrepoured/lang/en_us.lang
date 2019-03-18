@@ -38,6 +38,7 @@ item.staff_fire.name=Fire Staff
 
 //Guns
 item.revolver.name=Revolver
+item.captain_revolver.name=Captain Revolver
 item.musket.name=Musket
 item.musket_iron.name=Musket with Iron Dagger
 item.musket_diamond.name=Musket with Diamond Dagger
@@ -80,7 +81,7 @@ item.helmet_slime.name=Slime Helmet
 item.chestplate_slime.name=Slime Chestplate
 item.leggings_slime.name=Slime Leggings
 item.boots_slime.name=Slime Boots
-item.scale_slime.name=Slime Scale
+item.ball_slime.name=Slime Ball
 
 //Spider Armor
 item.helmet_spider.name=Spider Helmet
@@ -114,24 +115,20 @@ tile.table_birch.name=Birch Table
 tile.table_jungle.name=Jungle Table
 tile.table_acacia.name=Acacia Table
 tile.table_dark.name=Dark Oak Table
-tile.dungeon_bricks_1.name=Dungeon Bricks
-tile.dungeon_bricks_2.name=Dungeon Bricks
-tile.dungeon_bricks_3.name=Dungeon Bricks
-tile.dungeon_bricks_4.name=Dungeon Bricks
-tile.dungeon_bricks_5.name=Dungeon Bricks
-tile.dungeon_bricks_6.name=Dungeon Bricks
-tile.dungeon_bricks_7.name=Dungeon Bricks
-tile.dungeon_bricks_8.name=Dungeon Bricks
+
+//Andesite blocks
+tile.andesite_carved.name=Carved Andesite
+tile.andesite_pillar.name=Andesite Pillar
 
 //Descriptions
-description.spider_armor.name=Wearing full set grants bonus movement speed and the ability to climb walls
+description.spider_armor.name=Wearing full set grants ability to climb walls
 description.spider_sword.name=Applies poison to attacked mobs
-description.bull_armor.name=Wearing the full set grants bonus attack damage
+//description.bull_armor.name=Wearing the full set grants bonus attack damage
 description.great_sword.name=Hold right click to create an explosion
-description.turtle_armor.name=Wearing the full set grants 4 extra hearts and increased health regen! Damage dealt to your back is ignored
-description.slime_armor.name=Wearing the full set grants 2 extra hearts. Getting Damaged creates a small slime, which can be collected to regain lost health
+description.turtle_armor.name=Wearing full set grants increased health regeneration and damage dealt to you back is ignored
+description.slime_armor.name=Getting Damaged creates a small slime, which can be collected to regain lost health
 description.cloud_boots.name=Increases movement speed and jump height
-description.dragon_helmet.name=Grants 5 extra hearts and double attack damage
+//description.dragon_helmet.name=Grants 5 extra hearts and double attack damage
 description.dagger.name=Right click while moving to leap forward
 description.ninja_dagger.name=Right click while moving to leap forward. Sneak and right click to teleport in a range of 4 blocks and gain temporary invisibility
 description.bull_battle_axe.name=Right click to create an earthquake in your direction

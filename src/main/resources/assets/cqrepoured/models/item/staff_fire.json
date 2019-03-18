@@ -2,5 +2,18 @@
     "parent": "item/handheld",
     "textures": {
         "layer0": "cqrepoured:items/staff_fire"
+    },
+    "display": {
+    "thirdperson_righthand": {
+      "rotation": [ 350, 92, 54 ],
+      "translation": [ 0.00, 4.00, 1.00 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    },
+    "thirdperson_lefthand": {
+      "rotation": [ 250, 92, 54 ],
+      "translation": [ 0.00, 4.00, -1.00 ],
+      "scale": [ 1.5, 1.5, 1.5 ]
+    }
+    }
     }
 }
