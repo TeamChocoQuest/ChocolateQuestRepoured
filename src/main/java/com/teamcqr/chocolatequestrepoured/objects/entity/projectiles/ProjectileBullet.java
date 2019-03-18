@@ -2,11 +2,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -19,13 +21,11 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
 	public ProjectileBullet(World worldIn) 
 	{
 		super(worldIn);
-		this.setNoGravity(true);
 	}
 	
 	public ProjectileBullet(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
-        this.setNoGravity(true);
     }
 
     public ProjectileBullet(World worldIn, EntityLivingBase shooter, int type)
@@ -34,15 +34,17 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
     	this.shooter = shooter;
     	this.isImmuneToFire = true;
     	this.type = type;
-    	this.setNoGravity(true);
+    }
+    
+    @Override
+    public boolean hasNoGravity()
+    {
+        return true;
     }
     
     @Override
 	public void onUpdate()
 	{
-		motionX *= 1.2D;
-		motionZ *= 1.2D;
-		
 		if(getThrower() != null && getThrower().isDead)
 		{
 			setDead();

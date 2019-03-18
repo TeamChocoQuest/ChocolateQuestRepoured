@@ -62,14 +62,14 @@ public class ItemMusket extends ItemRevolver
 					if(flag && itemstack.isEmpty())
 					{
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.0F, 2F);
+						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 						player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 60);
 						worldIn.spawnEntity(bulletE);
 					}
 					else
 					{
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.0F, 2F);
+						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 						player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 60);
 						worldIn.spawnEntity(bulletE);
 						stack.damageItem(1, player);
@@ -77,6 +77,7 @@ public class ItemMusket extends ItemRevolver
 				}
 				
 				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+				entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
 						
 				if(!flag)
 	            {

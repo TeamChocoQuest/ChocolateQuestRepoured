@@ -93,6 +93,7 @@ public class ItemArmorSpider extends ArmorBase
 				player.onGround = true;
 			}
 			player.fallDistance = 0F;
+			player.jumpMovementFactor += 0.005;
 			player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 0, 1, false, false));
 		}
 	}
