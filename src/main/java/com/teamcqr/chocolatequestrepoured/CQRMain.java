@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -45,6 +46,8 @@ public class CQRMain
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static CommonProxy proxy;
+	
+	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
