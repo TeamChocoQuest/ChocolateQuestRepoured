@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
+import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class CQRMain
@@ -47,12 +49,15 @@ public class CQRMain
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static CommonProxy proxy;
 	
+	//Dungeon Registry instance, responsible for everything regarding dungeons
 	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
 	
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
 		proxy.preInit(event);
+		//Enables Dungeon generation in worlds, do not change the number (!)
+		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
 	}
 	
 	@EventHandler

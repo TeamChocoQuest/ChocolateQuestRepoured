@@ -10,13 +10,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Builds the volcano and after that the spire
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Generates the stronghold
 	}
 
 	@Override

@@ -10,19 +10,19 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Does nothing
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Simply puts the structure at x,y,z
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Does nothing here
 	}
 
 	@Override
