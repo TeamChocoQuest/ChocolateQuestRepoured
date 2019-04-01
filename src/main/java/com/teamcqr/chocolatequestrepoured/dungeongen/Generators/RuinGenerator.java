@@ -10,19 +10,19 @@ public class RuinGenerator implements IDungeonGenerator{
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Builds support platform
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Will generate the structure and will age the blocks and miss some and remove torches
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//creates random explosions
 	}
 
 	@Override

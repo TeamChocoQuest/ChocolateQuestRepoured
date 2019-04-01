@@ -10,19 +10,27 @@ public class StrongholdGenerator implements IDungeonGenerator{
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//Builds support platform for entry, then creates the spire down
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
+		//Will generate the structure
+		//Algorithm: while(genRooms < rooms && genFloors < maxFloors) do {
+		//while(genRoomsOnFloor < roomsPerFloor) {
+		//    choose structure, calculate next pos and chose next structure (System: structures in different folders named to where they may attach
+		//  build Staircase at next position
+		//  genFloors++
+		//build staircase to bossroom at next position, then build boss room
 		
+		//Structure gen information: stored in map with location and structure file
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
-		
+		//build all the structures in the map
 	}
 
 	@Override

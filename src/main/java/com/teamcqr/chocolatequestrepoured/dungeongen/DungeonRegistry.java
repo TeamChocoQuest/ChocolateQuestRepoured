@@ -11,14 +11,14 @@ public class DungeonRegistry {
 	private int dungeonSpawnChance = 20;
 	private int DungeonDistance = 125;
 	
-	private HashMap<Biome, List<StructureConfig>> biomeDungeonMap;
+	private HashMap<Biome, List<IDungeon>> biomeDungeonMap;
 	
 	
-	public List<StructureConfig> getDungeonsForBiome(Biome b) {
+	public List<IDungeon> getDungeonsForBiome(Biome b) {
 		if(b != null && biomeDungeonMap.containsKey(b) && !biomeDungeonMap.get(b).isEmpty()) {
 			return biomeDungeonMap.get(b);
 		}
-		return new ArrayList<StructureConfig>();
+		return new ArrayList<IDungeon>();
 	}
 	
 	public int getDungeonSpawnChance() {
@@ -27,7 +27,7 @@ public class DungeonRegistry {
 	
 	public void addBiomeEntryToMap(Biome b) {
 		if(!biomeDungeonMap.containsKey(b)) {
-			biomeDungeonMap.put(b, new ArrayList<StructureConfig>());
+			biomeDungeonMap.put(b, new ArrayList<IDungeon>());
 		}
 	}
 	
