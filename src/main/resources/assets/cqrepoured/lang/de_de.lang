@@ -1,0 +1,147 @@
+Die deutsche Übersetzungsdatei für die Chocolate Quest Repoured Mod!
+
+
+//CreativeTabs
+itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blöcke
+itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
+
+//Other
+item.potion_healing.name=Heiltrank
+item.teleport_stone.name=Teleportations Stein
+
+//Dragon Items
+item.helmet_dragon.name=Drachen Helm
+
+//Daggers
+item.dagger_iron.name=Eisen Dolch
+item.dagger_diamond.name=Diamant Dolch
+item.dagger_monking.name=Monking Dolch
+item.dagger_ninja.name=Ninja Dolch
+
+//Swords
+item.sword_turtle.name=Schildkröten Schwert
+item.sword_spider.name=Spinnen Schwert
+item.battle_axe_bull.name=Stier Kriegsaxt
+
+//Walker set
+item.sword_walker.name=Walker Schwert
+item.shield_walker.name=Walker Schild
+
+//Great Swords
+item.great_sword_monking.name=Monking Großschwert
+item.great_sword_bull.name=Stier Großschwert
+item.great_sword_diamond.name=Diamant Großschwert
+item.great_sword_iron.name=Eisen Großschwert
+
+//Staffs
+item.staff_fire.name=Feuerstab
+
+//Guns
+item.revolver.name=Revolver
+item.captain_revolver.name=Revolver des Käpt'n
+item.musket.name=Muskete
+item.musket_iron.name=Muskete mit Eisenbajonett
+item.musket_diamond.name=Muskete mit Diamantbajonett
+item.musket_monking.name=Muskete mit Monking-Bajonett
+item.bullet_iron.name=Eisenpatronen
+item.bullet_gold.name=Goldpatronen
+item.bullet_diamond.name=Diamantpatronen
+item.bullet_fire.name=Feurige Patronen
+
+//Cloud Items
+item.boots_cloud.name=Wolkenstiefel
+item.feather_golden.name=Goldene Feder
+
+//Monking Items
+item.bone_monking.name=Monking Knochen
+
+//Inquisition Armor
+item.helmet_inquisition.name=Inquisitions Helm
+item.chestplate_inquisition.name=Inquisitions Brustpanzer
+item.leggings_inquisition.name=Inquisitions Beinrüstung
+item.boots_inquisition.name=Inquisitions Stiefel
+
+//Bull Armor
+item.helmet_bull.name=Stierhelm
+item.chestplate_bull.name=Stier-Brustpanzer
+item.leggings_bull.name=Stier-Beinpanzer
+item.boots_bull.name=Stier-Stiefel
+item.leather_bull.name=Stierleder
+item.horn_bull.name=Stierhorn
+
+//Turtle Armor
+item.helmet_turtle.name=Turtle Helmet
+item.chestplate_turtle.name=Turtle Chestplate
+item.leggings_turtle.name=Turtle Leggings
+item.boots_turtle.name=Turtle Boots
+item.scale_turtle.name=Turtle Scale
+
+//Slime Armor
+item.helmet_slime.name=Slime Helmet
+item.chestplate_slime.name=Slime Chestplate
+item.leggings_slime.name=Slime Leggings
+item.boots_slime.name=Slime Boots
+item.ball_slime.name=Slime Ball
+
+//Spider Armor
+item.helmet_spider.name=Spider Helmet
+item.chestplate_spider.name=Spider Chestplate
+item.leggings_spider.name=Spider Leggings
+item.boots_spider.name=Spider Boots
+item.leather_spider.name=Spider Leather
+
+//Heavy Diamond Armor
+item.helmet_heavy_diamond.name=Heavy Diamond Helmet
+item.chestplate_heavy_diamond.name=Heavy Diamond Chestplate
+item.leggings_heavy_diamond.name=Heavy Diamond Leggings
+item.boots_heavy_diamond.name=Heavy Diamond Boots
+
+//Heavy Iron Armor
+item.helmet_heavy_iron.name=Heavy Iron Helmet
+item.chestplate_heavy_iron.name=Heavy Iron Chestplate
+item.leggings_heavy_iron.name=Heavy Iron Leggings
+item.boots_heavy_iron.name=Heavy Iron Boots
+
+//Blocks
+tile.exporter.name=Exporter Block
+tile.exporter_chest_valuable.name=Exporter-Kiste Wertvolles
+tile.exporter_chest_food.name=Exporter-Kiste Essen
+tile.exporter_chest_equipment.name=Exporter-Kiste Ausrüstung
+tile.exporter_chest_utility.name=Exporter-Kiste Utility
+tile.null_block.name=Null Block
+tile.table_oak.name=Eichen-Tisch
+tile.table_spruce.name=Fichten-Tisch
+tile.table_birch.name=Birken-Tisch
+tile.table_jungle.name=Tropenholz-Tisch
+tile.table_acacia.name=Akazien-Tisch
+tile.table_dark.name=Schwarzeichen-Tisch
+
+//Andesite blocks
+tile.andesite_carved.name=Gemeißelter Andesit
+tile.andesite_pillar.name=Andesit Säule
+
+//Descriptions
+description.spider_armor.name=Tragen des gesamten Sets ermöglicht des Erklimmen von Wänden
+description.spider_sword.name=Vergiftet geschlagene Gegner
+//description.bull_armor.name=Tragen des gesamten Sets verleiht zusätzlichen Schaden
+description.great_sword.name=Rechtsklick halten erzeugt eine Explosion
+description.turtle_armor.name=Wearing full set grants increased health regeneration and damage dealt to you back is ignored
+description.slime_armor.name=Getting Damaged creates a small slime, which can be collected to regain lost health
+description.cloud_boots.name=Erhöht Geschwindigkeit und Sprunghöhe
+//description.dragon_helmet.name=Verdoppelt Angriffsschaden und verleiht 5 extra Herzen
+description.dagger.name=Rechtsklick während Bewegung lässt dich vorwärts springen
+description.ninja_dagger.name=Right click while moving to leap forward. Sneak and right click to teleport in a range of 4 blocks and gain temporary invisibility
+description.bull_battle_axe.name=Rechtsklick erzeugt ein Erdbeben in deine Blickrichtung
+description.walker_set.name=Equip a Walker Sword and Shield to gain a special ability: If an enemy shoots you while your shield's up, you'll teleport to your attacker
+description.gun.name=Rechtsklick zum Schießen
+description.bullet_damage.name=Schaden
+description.bullet_fire.name=Entfacht Feuer beim Einschlag
+description.fire_rate.name=Feuerrate
+description.accuracy.name=Genauigkeit
+description.click_shift.name=Hold shift for item description
+description.rear_damage.name=Backstap Schaden
+description.charging.name=Lade auf...
+description.turtle_armor_charging.name=Fähigkeit lädt auf, Einsetzbar in: 
+description.healing_potion.name=Regeneriert 2 Herzen durch Trinken
+description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
+description.teleport_stone_position.name=Aktuelle Position:
