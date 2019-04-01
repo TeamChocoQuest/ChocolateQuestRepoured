@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileBullet extends Render<ProjectileBullet>
 {
+	@SuppressWarnings("unused")
 	private final float scale;
 	public ResourceLocation IRON = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_iron_single.png");
 	public ResourceLocation GOLD = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_gold_single.png");
@@ -35,9 +36,12 @@ public class RenderProjectileBullet extends Render<ProjectileBullet>
         GlStateManager.scale(.5F, .5F, .5F);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
-        float f = 1.0F;
-        float f1 = 0.5F;
-        float f2 = 0.25F;
+        @SuppressWarnings("unused")
+		float f = 1.0F;
+        @SuppressWarnings("unused")
+		float f1 = 0.5F;
+        @SuppressWarnings("unused")
+		float f2 = 0.25F;
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
 

@@ -92,6 +92,7 @@ public class ItemMusketKnife extends SwordBase
 		}
     }
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {

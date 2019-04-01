@@ -13,7 +13,6 @@ import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;

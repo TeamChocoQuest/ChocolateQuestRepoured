@@ -114,7 +114,8 @@ public class BlockTable extends BlockBase implements ITileEntityProvider
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos)
     {
-    	IBlockState blockstate = worldIn.getBlockState(pos);
+    	@SuppressWarnings("unused")
+		IBlockState blockstate = worldIn.getBlockState(pos);
     	state = this.getDefaultState();
     	
     	if(worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this)
