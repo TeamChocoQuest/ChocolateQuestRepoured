@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 public class ProjectileEarthQuake extends EntityThrowable
 {
 	private int lifeTime = 60;
+	@SuppressWarnings("unused")
 	private EntityLivingBase thrower;
 	
 	public ProjectileEarthQuake(World worldIn) 

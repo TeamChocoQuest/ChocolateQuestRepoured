@@ -3,12 +3,9 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
-import com.teamcqr.chocolatequestrepoured.proxy.ClientProxy;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -18,7 +15,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -28,11 +24,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 @EventBusSubscriber 
 public class EventsHandler
@@ -134,6 +126,7 @@ public class EventsHandler
 		{
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 			Entity attacker = event.getSource().getTrueSource();
+			@SuppressWarnings("unused")
 			float amount = event.getAmount();
 			World world = player.world;
 			
@@ -146,8 +139,11 @@ public class EventsHandler
 			double d1 = attacker.posY;
 			double d2 = attacker.posZ + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
 			
+			@SuppressWarnings("unused")
 			double d3 = player.posX;
+			@SuppressWarnings("unused")
 			double d4 = player.posY;
+			@SuppressWarnings("unused")
 			double d5 = player.posZ;
 			
 			int i = MathHelper.floor(d);

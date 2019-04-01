@@ -101,7 +101,8 @@ public class BlockNull extends BlockBase
         return BlockRenderLayer.CUTOUT;
     }
     
-    @Override
+    @SuppressWarnings("deprecation")
+	@Override
     @SideOnly(Side.CLIENT)
     public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {

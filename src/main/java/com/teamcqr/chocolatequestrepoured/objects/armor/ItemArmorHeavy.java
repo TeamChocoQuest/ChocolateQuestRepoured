@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 	
 public class ItemArmorHeavy extends ArmorBase
 {
+	@SuppressWarnings("unused")
 	private Item item;
 	private AttributeModifier movementSpeed;
 	private AttributeModifier knockbackResistance;

@@ -64,6 +64,7 @@ public class ItemRevolver extends ItemBase
 		}
     }
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
