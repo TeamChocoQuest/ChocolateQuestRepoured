@@ -65,7 +65,8 @@ public class CQRMain
 	public void PreInit(FMLPreInitializationEvent event)
 	{
 		proxy.preInit(event);
-		//Enables Dungeon generation in worlds, do not change the number (!)
+		
+		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
 	}
 	
