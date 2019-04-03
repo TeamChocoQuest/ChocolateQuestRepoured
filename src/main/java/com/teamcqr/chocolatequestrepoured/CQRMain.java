@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -38,6 +39,14 @@ public class CQRMain
 		public ItemStack getTabIconItem() 
 		{
 			return new ItemStack(ModBlocks.TABLE_OAK);
+		}
+	};
+	
+	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
+		
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
 	
