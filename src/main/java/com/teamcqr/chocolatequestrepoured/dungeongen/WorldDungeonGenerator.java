@@ -38,9 +38,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				rdm.setSeed(world.getSeed());
 				
 				int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
-				IDungeon chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
+				DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
 				
-				if(DungeonGenUtils.PercentageRandom(chosenStructure.getChance(), world.getSeed())) {
+				if(DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
 					boolean dimensionIsOK = false;
 					for(int dimID : chosenStructure.getAllowedDimensions()) {
 						if(world.provider.getDimension() == dimID) {
@@ -49,7 +49,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						}
 					}
 					if(dimensionIsOK) {
-						//TODO: Chose a structure and build it
+						//DONE: Choose a structure and build it --> Dungeon handles it self!
+						chosenStructure.generate(chunkX *16 +1, chunkZ *16 +1, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
 						//TODO: Check if dungeon is unique or every structure should generate once and then check if dungeon is already present
 					}
 				}
