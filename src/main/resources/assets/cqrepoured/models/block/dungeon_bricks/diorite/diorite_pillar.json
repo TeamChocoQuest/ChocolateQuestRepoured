@@ -1,0 +1,7 @@
+{
+    "parent": "block/cube_column",
+    "textures": {
+        "end": "cqrepoured:blocks/diorite_pillar_top",
+        "side": "cqrepoured:blocks/diorite_pillar"
+    }
+}
