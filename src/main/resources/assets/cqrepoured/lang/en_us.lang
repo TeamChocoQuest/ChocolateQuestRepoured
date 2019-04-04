@@ -119,6 +119,67 @@ tile.table_dark.name=Dark Oak Table
 //Andesite blocks
 tile.andesite_carved.name=Carved Andesite
 tile.andesite_pillar.name=Andesite Pillar
+tile.andesite_cube.name=Andesite Cube
+tile.andesite_scale.name=Andesite Scale
+tile.andesite_square.name=Andesite Square
+tile.andesite_small.name=Small Andesite Bricks
+tile.andesite_large.name=Large Andesite Bricks
+
+//Diorite blocks
+tile.diorite_carved.name=Carved Diorite
+tile.diorite_pillar.name=Diorite Pillar
+tile.diorite_cube.name=Diorite Cube
+tile.diorite_scale.name=Diorite Scale
+tile.diorite_square.name=Diorite Square
+tile.diorite_small.name=Small Diorite Bricks
+tile.diorite_large.name=Large Diorite Bricks
+
+//Diorite blocks
+tile.granite_carved.name=Carved Granite
+tile.granite_pillar.name=Granite Pillar
+tile.granite_cube.name=Granite Cube
+tile.granite_scale.name=Granite Scale
+tile.granite_square.name=Granite Square
+tile.granite_small.name=Small Granite Bricks
+tile.granite_large.name=Large Granite Bricks
+
+//Prismarine blocks
+tile.prismarine_carved.name=Carved Prismarine
+tile.prismarine_pillar.name=Prismarine Pillar
+tile.prismarine_cube.name=Prismarine Cube
+tile.prismarine_square.name=Prismarine Square
+tile.prismarine_small.name=Small Prismarine Bricks
+tile.prismarine_large.name=Large Prismarine Bricks
+
+//Endstone blocks
+tile.endstone_carved.name=Carved Endstone
+tile.endstone_pillar.name=Endstone Pillar
+tile.endstone_cube.name=Endstone Cube
+tile.endstone_scale.name=Endstone Scale
+tile.endstone_square.name=Endstone Square
+tile.endstone_small.name=Small Endstone Bricks
+
+//Purpur blocks
+tile.purpur_carved.name=Carved Purpur
+tile.purpur_cube.name=Purpur Cube
+tile.purpur_scale.name=Purpur Scale
+tile.purpur_small.name=Small Purpur Bricks
+tile.purpur_large.name=Large Purpur Bricks
+
+//Red Netherbrick blocks
+tile.red_netherbrick_carved.name=Carved Red Netherbrick
+tile.red_netherbrick_pillar.name=Red Netherbrick Pillar
+tile.red_netherbrick_cube.name=Red Netherbrick Cube
+tile.red_netherbrick_scale.name=Red Netherbrick Scale
+tile.red_netherbrick_square.name=Red Netherbrick Square
+tile.red_netherbrick_large.name=Large Red Netherbricks
+
+//Stone blocks
+tile.stone_pillar.name=Stone Pillar
+tile.stone_cube.name=Stone Cube
+tile.stone_scale.name=Stone Scale
+tile.stone_square.name=Stone Square
+tile.stone_small.name=Small Stone Bricks
 
 //Descriptions
 description.spider_armor.name=Wearing full set grants ability to climb walls

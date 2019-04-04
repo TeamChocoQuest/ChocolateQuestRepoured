@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "cqrepoured:dungeon_bricks/prismarine/prismarine_pillar" },
+        "axis=z": { "model": "cqrepoured:dungeon_bricks/prismarine/prismarine_pillar", "x": 90 },
+        "axis=x": { "model": "cqrepoured:dungeon_bricks/prismarine/prismarine_pillar", "x": 90, "y": 90 }
+    }
+}

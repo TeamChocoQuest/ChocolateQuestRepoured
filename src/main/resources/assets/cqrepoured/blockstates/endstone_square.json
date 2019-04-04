@@ -1,0 +1,5 @@
+{
+    "variants": {
+        "normal": { "model": "cqrepoured:dungeon_bricks/endstone/endstone_square" }
+    }
+}
