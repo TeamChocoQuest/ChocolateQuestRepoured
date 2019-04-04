@@ -9,13 +9,17 @@ import net.minecraft.world.chunk.Chunk;
 public class DungeonBase {
 	
 	protected IDungeonGenerator generator;
-	private String name;
+	protected String name;
 	private Item placeItem;
-	private int chance;
-	private int[] allowedDims = {0};
+	protected int chance;
+	protected int[] allowedDims = {0};
+	protected boolean unique = false;
 	
 	protected void generate(int x, int z, World world, Chunk chunk) {
 		
+	}
+	
+	public DungeonBase() {
 	}
 	
 	public DungeonBase load(Properties configFile) {
@@ -35,6 +39,9 @@ public class DungeonBase {
 	}
 	public int[] getAllowedDimensions() {
 		return this.allowedDims;
+	}
+	public boolean isUnique() {
+		return this.unique;
 	}
 
 }
