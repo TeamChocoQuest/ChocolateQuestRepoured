@@ -30,7 +30,9 @@ public class CommonProxy
 	{
 		//Fills the biomes of the biome-dungeonlist map
 		for(Biome b : ForgeRegistries.BIOMES.getValues()) {
-			CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
+			if(b != null) {
+				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
+			}
 		}
 	}
 	
