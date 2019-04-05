@@ -1,18 +1,31 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
+import java.util.Random;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class CavernGenerator implements IDungeonGenerator {
 	
 	public CavernGenerator() {};
 	
 	public CavernGenerator(CavernDungeon dungeon) {
-		
+		this.dungeon = dungeon;
 	}
+	
+	private CavernDungeon dungeon;
+	private Set<BlockPos> airBlocks = Sets.newHashSet();
+	private Set<BlockPos> floorBlocks = Sets.newHashSet();
 	
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
@@ -22,20 +35,42 @@ public class CavernGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
+		for(BlockPos bp : this.airBlocks) {
+			if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getAirBlock())) {
+				world.setBlockState(bp, this.dungeon.getAirBlock().getDefaultState());
+			}
+		}
+		for(BlockPos bp : this.floorBlocks) {
+			if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getFloorBlock())) {
+				world.setBlockState(bp, this.dungeon.getFloorBlock().getDefaultState());
+			}
+		}
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Generated " + this.dungeon.getDungeonName() + " at X: " + x + "  Y: " + y + "  Z: " + z);
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
+		BlockPos start = new BlockPos(x, y, z);
+		world.setBlockState(start, Blocks.CHEST.getDefaultState());
+		TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
+		switch(new Random().nextInt(4)) {
+			case 0: 
+				chest.setLootTable(LootTableList.CHESTS_ABANDONED_MINESHAFT, world.getSeed());
+				break;
+			case 1: 
+				chest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, world.getSeed());
+				break;
+			case 2: 
+				chest.setLootTable(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, world.getSeed());
+				break;
+			case 3: 
+				chest.setLootTable(LootTableList.CHESTS_VILLAGE_BLACKSMITH, world.getSeed());
+				break;
+		}
 	}
 
 	@Override

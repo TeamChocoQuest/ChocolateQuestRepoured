@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.common.collect.Lists;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
