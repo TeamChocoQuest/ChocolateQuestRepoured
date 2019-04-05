@@ -4,6 +4,7 @@ Die deutsche Übersetzungsdatei für die Chocolate Quest Repoured Mod!
 //CreativeTabs
 itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blöcke
 itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
+itemGroup.ChocolateQuestRepouredDungeonPlacers=Chocolate Quest Repoured Dungeon Spawner
 
 //Other
 item.potion_healing.name=Heiltrank
