@@ -182,7 +182,7 @@ tile.stone_square.name=Stone Square
 tile.stone_small.name=Small Stone Bricks
 
 //Descriptions
-description.spider_armor.name=Wearing full set grants ability to climb walls
+description.spider_armor.name=Wearing full set grants jump boost and ability to climb walls
 description.spider_sword.name=Applies poison to attacked mobs
 description.bull_armor.name=Wearing the full set grants bonus movement speed while running
 description.great_sword.name=Hold right click to create an explosion
