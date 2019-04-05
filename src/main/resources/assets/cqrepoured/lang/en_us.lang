@@ -184,9 +184,9 @@ tile.stone_small.name=Small Stone Bricks
 //Descriptions
 description.spider_armor.name=Wearing full set grants ability to climb walls
 description.spider_sword.name=Applies poison to attacked mobs
-//description.bull_armor.name=Wearing the full set grants bonus attack damage
+description.bull_armor.name=Wearing the full set grants bonus movement speed while running
 description.great_sword.name=Hold right click to create an explosion
-description.turtle_armor.name=Wearing full set grants increased health regeneration and damage dealt to you back is ignored
+description.turtle_armor.name=Wearing full set grants increased health regeneration and damage dealt to your back is ignored
 description.slime_armor.name=Getting Damaged creates a small slime, which can be collected to regain lost health
 description.cloud_boots.name=Increases movement speed and jump height
 //description.dragon_helmet.name=Grants 5 extra hearts and double attack damage
