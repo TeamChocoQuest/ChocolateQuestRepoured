@@ -92,9 +92,11 @@ public class ModBlocks
 	
 	//Utility
 	public static final Block EXPORTER = new BlockBase("exporter", Material.WOOD);
+	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating
+	
+	//Loot Chests
 	public static final Block EXPORTER_CHEST_VALUABLE = new BlockBase("exporter_chest_valuable", Material.WOOD);
 	public static final Block EXPORTER_CHEST_FOOD = new BlockBase("exporter_chest_food", Material.WOOD);
 	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockBase("exporter_chest_equipment", Material.WOOD);
 	public static final Block EXPORTER_CHEST_UTILITY = new BlockBase("exporter_chest_utility", Material.WOOD);
-	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating 
 }
