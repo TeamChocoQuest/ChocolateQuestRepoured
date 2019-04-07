@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 public enum ELootTable {
 	
@@ -73,6 +74,17 @@ public enum ELootTable {
 	}
 	public Block getAssignedExporterBlock() {
 		return this.block;
+	}
+	
+	public static ELootTable valueOf(Block b) {
+		if(DungeonGenUtils.isLootChest(b)) {
+			for(ELootTable elt : ELootTable.values()) {
+				if(Block.isEqualTo(b, elt.block)) {
+					return elt;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/*private static ResourceLocation registerChest(String id) {

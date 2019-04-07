@@ -14,7 +14,7 @@ class LootChestInfo {
 	private boolean isDoubleChest;
 	private boolean redstoneChest;
 	
-	public LootChestInfo(Block chestBlock, BlockPos position) {
+	public LootChestInfo(Block chestBlock, BlockPos position, int type) {
 		//TODO: Check if chest is double chest
 		//TODO: Check chests rotation
 		this.isDoubleChest = false;
@@ -22,7 +22,7 @@ class LootChestInfo {
 		this.rotation = 0;
 		this.position = position;
 		//TODO: Get Type of chest via comparing blocktypes and then set the type
-		this.type = 0;
+		this.type = type;
 	}
 	
 	public NBTTagCompound getAsNBTTag() {
@@ -67,6 +67,9 @@ class LootChestInfo {
 	
 	public int getLootType() {
 		return this.type;
+	}
+	public void setType(int type) {
+		this.type = type;
 	}
 	
 	
