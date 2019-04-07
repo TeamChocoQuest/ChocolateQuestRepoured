@@ -73,8 +73,8 @@ public class Structure extends Template {
 				//Chests
 				if(Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_EQUIPMENT) ||
 						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_FOOD) ||
-						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_UTILITY) ||
-						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_VALUABLE)
+						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_MATERIAL) ||
+						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_TREASURE)
 				) {
 					
 				}
