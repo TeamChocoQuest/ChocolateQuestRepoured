@@ -6,6 +6,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -13,7 +14,6 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class CavernGenerator implements IDungeonGenerator {
 	
@@ -59,16 +59,16 @@ public class CavernGenerator implements IDungeonGenerator {
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
 		switch(new Random().nextInt(4)) {
 			case 0: 
-				chest.setLootTable(LootTableList.CHESTS_ABANDONED_MINESHAFT, world.getSeed());
+				chest.setLootTable(ELootTable.CQ_VANILLA_MINESHAFT.getLootTable(), world.getSeed());
 				break;
 			case 1: 
-				chest.setLootTable(LootTableList.CHESTS_SIMPLE_DUNGEON, world.getSeed());
+				chest.setLootTable(ELootTable.CQ_VANILLA_DUNGEON.getLootTable(), world.getSeed());
 				break;
 			case 2: 
-				chest.setLootTable(LootTableList.CHESTS_STRONGHOLD_CORRIDOR, world.getSeed());
+				chest.setLootTable(ELootTable.CQ_VANILLA_STRONGHOLD_CORRIDOR.getLootTable(), world.getSeed());
 				break;
 			case 3: 
-				chest.setLootTable(LootTableList.CHESTS_VILLAGE_BLACKSMITH, world.getSeed());
+				chest.setLootTable(ELootTable.CQ_VANILLA_BLACKSMITH.getLootTable(), world.getSeed());
 				break;
 		}
 	}

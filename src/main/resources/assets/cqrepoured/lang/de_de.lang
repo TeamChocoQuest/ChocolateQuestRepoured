@@ -5,6 +5,7 @@ Die deutsche Übersetzungsdatei für die Chocolate Quest Repoured Mod!
 itemGroup.ChocolateQuestRepouredBlocksTab=CQR Blöcke
 itemGroup.ChocolateQuestRepouredItemsTab=CQR Items
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Spawner
+itemGroup.ChocolateQuestRepouredExporterChests=Exporter Loot
 
 //Other
 item.potion_healing.name=Heiltrank
@@ -105,10 +106,6 @@ item.boots_heavy_iron.name=Heavy Iron Boots
 
 //Blocks
 tile.exporter.name=Exporter Block
-tile.exporter_chest_valuable.name=Exporter-Kiste Wertvolles
-tile.exporter_chest_food.name=Exporter-Kiste Essen
-tile.exporter_chest_equipment.name=Exporter-Kiste Ausrüstung
-tile.exporter_chest_utility.name=Exporter-Kiste Utility
 tile.null_block.name=Null Block
 tile.table_oak.name=Eichen-Tisch
 tile.table_spruce.name=Fichten-Tisch
@@ -120,6 +117,26 @@ tile.table_dark.name=Schwarzeichen-Tisch
 //Andesite blocks
 tile.andesite_carved.name=Gemeißelter Andesit
 tile.andesite_pillar.name=Andesit Säule
+
+//Exporter chests
+tile.exporter_chest_valuable.name=Exporter Chest Valuable
+tile.exporter_chest_food.name=Exporter Chest Food
+tile.exporter_chest_equipment.name=Exporter Chest Equipment
+tile.exporter_chest_utility.name=Exporter Chest Utility
+tile.exporter_chest_vanilla_blacksmith.name=Exporter Chest - Village Blacksmith
+tile.exporter_chest_vanilla_bonus.name=Exporter Chest - Bonus Chest
+tile.exporter_chest_vanilla_dungeon.name=Exporter Chest - Dungeon
+tile.exporter_chest_vanilla_end_city.name=Exporter Chest - End City
+tile.exporter_chest_vanilla_igloo.name=Exporter Chest - Igloo
+tile.exporter_chest_vanilla_jungle.name=Exporter Chest - Jungle Chest
+tile.exporter_chest_vanilla_jungle_dispenser.name=Exporter Chest - Jungle Dispenser
+tile.exporter_chest_vanilla_mansion.name=Exporter Chest - Woodland Mansion
+tile.exporter_chest_vanilla_mineshaft.name=Exporter Chest - Mineshaft
+tile.exporter_chest_vanilla_nether.name=Exporter Chest - Nether Fortress
+tile.exporter_chest_vanilla_pyramid.name=Exporter Chest - Pyramid
+tile.exporter_chest_vanilla_stronghold.name=Exporter Chest - Stronghold Corridor
+tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold Library
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
 
 //Descriptions
 description.spider_armor.name=Tragen des gesamten Sets ermöglicht des Erklimmen von Wänden

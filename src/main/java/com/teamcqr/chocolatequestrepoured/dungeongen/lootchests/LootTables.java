@@ -14,6 +14,10 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 public class LootTables {
 	
+	//TODO: rewrite this as an enum and add ALL the extra  loot chests --> wait for textures being uploaded...
+	//TODO: place all loot chest into their own tab
+	//TODO: on loot table load: load in the configs!
+	
 	private static final Set<ResourceLocation> CQ_LOOT_TABLES = Sets.<ResourceLocation>newHashSet();
 	
 	//VANILLA LOOT
@@ -36,23 +40,23 @@ public class LootTables {
 	private static final List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
 	
 	/* ID = 14*/public static final ResourceLocation LOOT_TABLE_CQ_TREASURE = registerChest("treasure"); //DIAMOND
-	/* ID = 15*/public static final ResourceLocation LOOT_TABLE_CQ_BOSS_LOOT = registerChest("boss"); // EMERALD
-	/* ID = 16*/public static final ResourceLocation LOOT_TABLE_CQ_VALUEABLE = registerChest("valueable"); //GOLD INGOT
-	/* ID = 17*/public static final ResourceLocation LOOT_TABLE_CQ_ORE = registerChest("ore"); //IRON INGOT
-	/* ID = 18*/public static final ResourceLocation LOOT_TABLE_CQ_MUSIC = registerChest("music"); //MUSIC DISK
-	/* ID = 19*/public static final ResourceLocation LOOT_TABLE_CQ_MISC_FOOD = registerChest("misc_food"); //CAKE
-	/* ID = 20*/public static final ResourceLocation LOOT_TABLE_CQ_RAW_FOOD = registerChest("raw_food"); //POTATO
+	/* ID = 15*/public static final ResourceLocation LOOT_TABLE_CQ_BOSS_LOOT = registerChest("loot"); // EMERALD
+	/* ID = 16*/public static final ResourceLocation LOOT_TABLE_CQ_VALUEABLE = registerChest("custom_1"); //GOLD INGOT
+	/* ID = 17*/public static final ResourceLocation LOOT_TABLE_CQ_ORE = registerChest("material"); //IRON INGOT
+	/* ID = 18*/public static final ResourceLocation LOOT_TABLE_CQ_MUSIC = registerChest("custom_2"); //MUSIC DISK
+	/* ID = 19*/public static final ResourceLocation LOOT_TABLE_CQ_MISC_FOOD = registerChest("custom_3"); //CAKE
+	/* ID = 20*/public static final ResourceLocation LOOT_TABLE_CQ_RAW_FOOD = registerChest("custom_4"); //POTATO
 	/* ID = 21*/public static final ResourceLocation LOOT_TABLE_CQ_FOOD = registerChest("food"); //PORKCHOP
-	/* ID = 22*/public static final ResourceLocation LOOT_TABLE_CQ_MOB_LOOT = registerChest("mob_loot"); //ROTTEN FLESH
-	/* ID = 23*/public static final ResourceLocation LOOT_TABLE_CQ_ARMOR = registerChest("armor"); //IRON ARMOR
+	/* ID = 22*/public static final ResourceLocation LOOT_TABLE_CQ_MOB_LOOT = registerChest("custom_5"); //ROTTEN FLESH
+	/* ID = 23*/public static final ResourceLocation LOOT_TABLE_CQ_ARMOR = registerChest("custom_6"); //IRON ARMOR
 	/* ID = 24*/public static final ResourceLocation LOOT_TABLE_CQ_TOOLS = registerChest("tools"); //IRON PICKAXE
-	/* ID = 25*/public static final ResourceLocation LOOT_TABLE_CQ_CRAP_TOOLS = registerChest("crap_tools"); //WOOD PICKAXE
-	/* ID = 26*/public static final ResourceLocation LOOT_TABLE_CQ_MISC_TOOLS = registerChest("misc_tools"); //IRON HOE
-	/* ID = 27*/public static final ResourceLocation LOOT_TABLE_CQ_CRAP_MISC_TOOLS = registerChest("crap_misc_tools"); //FISHING ROD
-	/* ID = 28*/public static final ResourceLocation LOOT_TABLE_CQ_BOOKS = registerChest("books"); //BOOK
-	/* ID = 29*/public static final ResourceLocation LOOT_TABLE_CQ_BREWING = registerChest("brewing"); //BLAZE POWDER
-	/* ID = 30*/public static final ResourceLocation LOOT_TABLE_CQ_POTIONS = registerChest("potions"); //RED POTION
-	/* ID = 31*/public static final ResourceLocation LOOT_TABLE_CQ_MISC = registerChest("misc"); //FEATHER
+	/* ID = 25*/public static final ResourceLocation LOOT_TABLE_CQ_CRAP_TOOLS = registerChest("custom_7"); //WOOD PICKAXE
+	/* ID = 26*/public static final ResourceLocation LOOT_TABLE_CQ_MISC_TOOLS = registerChest("custom_8"); //IRON HOE
+	/* ID = 27*/public static final ResourceLocation LOOT_TABLE_CQ_CRAP_MISC_TOOLS = registerChest("custom_9"); //FISHING ROD
+	/* ID = 28*/public static final ResourceLocation LOOT_TABLE_CQ_BOOKS = registerChest("custom_10"); //BOOK
+	/* ID = 29*/public static final ResourceLocation LOOT_TABLE_CQ_BREWING = registerChest("custom_11"); //BLAZE POWDER
+	/* ID = 30*/public static final ResourceLocation LOOT_TABLE_CQ_POTIONS = registerChest("custom_12"); //RED POTION
+	/* ID = 31*/public static final ResourceLocation LOOT_TABLE_CQ_MISC = registerChest("custom_13"); //FEATHER
 	
 	//CQ FURNACE LOOT
 	private static final List<ResourceLocation> CQ_FURNACE_LOOT = new ArrayList<ResourceLocation>();
@@ -109,22 +113,15 @@ public class LootTables {
         }
 	}
 	
-	public static ResourceLocation getLootTablyForBlock(Block block) {
-		Random rdm = new Random();
+	public static ResourceLocation getLootTableForBlock(Block block) {
 		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_EQUIPMENT)) {
-			if(rdm.nextBoolean()) {
-				return getLootTableByID(23);
-			}
 			return getLootTableByID(24);
 		}
 		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_FOOD)) {
-			if(rdm.nextBoolean()) {
-				return getLootTableByID(20);
-			}
 			return getLootTableByID(21);
 		}
 		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_UTILITY)) {
-			return getLootTableByID(31);
+			return getLootTableByID(17);
 		}
 		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_VALUABLE)) {
 			return getLootTableByID(14);
