@@ -204,7 +204,7 @@ public class EventsHandler
 		if(!player.world.isRemote)
 		{
 			IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-			AttributeModifier bonusHealth = new AttributeModifier(bonusHealthUUID, "TurtleBonusHealthModifier", 2D, 0);
+			AttributeModifier bonusHealth = new AttributeModifier(bonusHealthUUID, "TurtleBonusHealthModifier", 4D, 0);
 			
 			if(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ModItems.HELMET_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == ModItems.CHESTPLATE_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() == ModItems.LEGGINGS_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == ModItems.BOOTS_SLIME)
 	    	{
