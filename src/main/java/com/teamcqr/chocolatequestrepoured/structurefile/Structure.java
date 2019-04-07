@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -29,6 +31,9 @@ public class Structure extends Template {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
+		this.banners.clear();
+		this.chests.clear();
+		this.spawners.clear();
 		super.takeBlocksFromWorld(worldIn, startPos, endPos, takeEntities, toIgnore);
 		
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
@@ -46,38 +51,49 @@ public class Structure extends Template {
 			}
 			//TODO: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
 			//after filtering, remove the entries and add them into their currect lists
-			int[] removeEntries;
-			int[] chestsIndexes;
-			int[] spawnerIndexes;
-			int[] bannerIndexes;
-			int[] wallBannerIndexes;
+			List<Integer> removeEntries = new ArrayList<Integer>();
 			for(int i = 0; i < blocks.size(); i++) {
 				Template.BlockInfo bi = blocks.get(i);
 				Block currentBlock = bi.blockState.getBlock();
 				//Banner - Floor
 				if(Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
-					
+					//TODO: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
+					if(DungeonGenUtils.isCQBanner()) {
+						BannerInfo bai = new BannerInfo(bi.pos);
+						this.banners.add(bai);
+					}
 				}
 				//Wallbanner
 				if(Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
-					
+					//TODO: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
+					if(DungeonGenUtils.isCQBanner()) {
+						BannerInfo bai = new BannerInfo(bi.pos);
+						this.banners.add(bai);
+					}
 				}
 				
 				//NULL Block
 				if(Block.isEqualTo(currentBlock, ModBlocks.NULL_BLOCK)) {
-					
+					//DONE: remove the block entry, so that blocks don't get replaced when pasting
+					removeEntries.add(i);
 				}
 				
 				//CQ-Spawners
+				//TODO: Wait for spawner block and tileentity
 				
 				//Chests
-				if(Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_EQUIPMENT) ||
-						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_FOOD) ||
-						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_UTILITY) ||
-						Block.isEqualTo(currentBlock, ModBlocks.EXPORTER_CHEST_VALUABLE)
-				) {
-					
+				if(DungeonGenUtils.isLootChest(currentBlock)) {
+					ELootTable elt = ELootTable.valueOf(currentBlock);
+					if(elt != null) {
+						removeEntries.add(i);
+						LootChestInfo lci = new LootChestInfo(currentBlock, bi.pos, elt.getID());
+						this.chests.add(lci);
+					}
 				}
+			}
+			//And now: remove all the entries we want to be gone.... 
+			for(int i = 0; i < removeEntries.size(); i++) {
+				blocks.remove(i);
 			}
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
@@ -149,15 +165,14 @@ public class Structure extends Template {
 			for(BannerInfo bi : this.banners) {
 				if(bi != null) {
 					BlockPos bannerPos = transformedBlockPos(placementIn, bi.getPos()).add(pos);
-					Block bannerBlock = Blocks.STANDING_BANNER;
-					if(bi.isOnWall()) {
-						bannerBlock = Blocks.WALL_BANNER;
+					try {
+						@SuppressWarnings("unused")
+						TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
+						//TODO: Set banner design
+						//banner.writeToNBT(compound)
+					} catch(ClassCastException ex) {
+					
 					}
-					worldIn.setBlockState(bannerPos, bannerBlock.getDefaultState());
-					@SuppressWarnings("unused")
-					TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
-					//TODO: Place Banner
-					//banner.writeToNBT(compound)					
 				}
 			}
 		}
