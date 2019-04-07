@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
+import java.util.UUID;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -10,6 +12,9 @@ import com.teamcqr.chocolatequestrepoured.util.IHasModel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -22,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -29,6 +35,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber 
 public class EventsHandler
 {
+	private static final UUID bonusHealthUUID = UUID.randomUUID();
+	
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
@@ -126,7 +134,6 @@ public class EventsHandler
 		{
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 			Entity attacker = event.getSource().getTrueSource();
-			@SuppressWarnings("unused")
 			float amount = event.getAmount();
 			World world = player.world;
 			
@@ -139,11 +146,8 @@ public class EventsHandler
 			double d1 = attacker.posY;
 			double d2 = attacker.posZ + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
 			
-			@SuppressWarnings("unused")
 			double d3 = player.posX;
-			@SuppressWarnings("unused")
 			double d4 = player.posY;
-			@SuppressWarnings("unused")
 			double d5 = player.posZ;
 			
 			int i = MathHelper.floor(d);
@@ -186,4 +190,41 @@ public class EventsHandler
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onLivingUpdate(LivingUpdateEvent event)
+	{
+		if(!(event.getEntity() instanceof EntityPlayer))
+		{
+			return;
+		}
+		
+		EntityPlayer player = (EntityPlayer)event.getEntity();
+		
+		if(!player.world.isRemote)
+		{
+			IAttributeInstance attribute = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			AttributeModifier bonusHealth = new AttributeModifier(bonusHealthUUID, "TurtleBonusHealthModifier", 2D, 0);
+			
+			if(player.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ModItems.HELMET_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == ModItems.CHESTPLATE_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem() == ModItems.LEGGINGS_SLIME && player.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == ModItems.BOOTS_SLIME)
+	    	{
+				if(attribute.hasModifier(bonusHealth))
+				{
+					return;
+				}
+				
+				else if(!attribute.hasModifier(bonusHealth))
+				{
+					attribute.applyModifier(bonusHealth);
+				} 
+	    	}
+			else
+			{
+				if(attribute.hasModifier(bonusHealth))
+				{
+					attribute.removeModifier(bonusHealth);
+				}
+			}
+		}
+	} 
 }
