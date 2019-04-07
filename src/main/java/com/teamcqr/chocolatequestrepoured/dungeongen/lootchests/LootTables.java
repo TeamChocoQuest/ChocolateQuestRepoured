@@ -120,10 +120,10 @@ public class LootTables {
 		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_FOOD)) {
 			return getLootTableByID(21);
 		}
-		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_UTILITY)) {
+		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_MATERIAL)) {
 			return getLootTableByID(17);
 		}
-		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_VALUABLE)) {
+		if(Block.isEqualTo(block, ModBlocks.EXPORTER_CHEST_TREASURE)) {
 			return getLootTableByID(14);
 		}
 		return null;

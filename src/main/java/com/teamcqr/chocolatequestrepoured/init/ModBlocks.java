@@ -96,6 +96,11 @@ public class ModBlocks
 	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating
 	
 	//Loot Chests
+	//standard
+	public static final Block EXPORTER_CHEST_TREASURE = new BlockExporterChestBase("exporter_chest_valuable", Material.WOOD);
+	public static final Block EXPORTER_CHEST_FOOD = new BlockExporterChestBase("exporter_chest_food", Material.WOOD);
+	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockExporterChestBase("exporter_chest_equipment", Material.WOOD);
+	public static final Block EXPORTER_CHEST_MATERIAL = new BlockExporterChestBase("exporter_chest_utility", Material.WOOD);
 	//Vanilla
 	public static final Block EXPORTER_CHEST_VANILLA_BLACKSMITH = new BlockExporterChestBase("exporter_chest_vanilla_blacksmith", Material.WOOD);
 	public static final Block EXPORTER_CHEST_VANILLA_BONUS = new BlockExporterChestBase("exporter_chest_vanilla_bonus", Material.WOOD);
@@ -111,13 +116,20 @@ public class ModBlocks
 	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD = new BlockExporterChestBase("exporter_chest_vanilla_stronghold", Material.WOOD);
 	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD_LIBRARY = new BlockExporterChestBase("exporter_chest_vanilla_stronghold_library", Material.WOOD);
 	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD_STOREROOM = new BlockExporterChestBase("exporter_chest_vanilla_stronghold_storeroom", Material.WOOD);
-	
-	//standard
-	public static final Block EXPORTER_CHEST_VALUABLE = new BlockExporterChestBase("exporter_chest_valuable", Material.WOOD);
-	public static final Block EXPORTER_CHEST_FOOD = new BlockExporterChestBase("exporter_chest_food", Material.WOOD);
-	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockExporterChestBase("exporter_chest_equipment", Material.WOOD);
-	public static final Block EXPORTER_CHEST_UTILITY = new BlockExporterChestBase("exporter_chest_utility", Material.WOOD);
-	
 	//custom / user
+	public static final Block EXPORTER_CHEST_CUSTOM_1 = new BlockExporterChestBase("exporter_chest_custom_1", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_2 = new BlockExporterChestBase("exporter_chest_custom_2", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_3 = new BlockExporterChestBase("exporter_chest_custom_3", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_4 = new BlockExporterChestBase("exporter_chest_custom_4", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_5 = new BlockExporterChestBase("exporter_chest_custom_5", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_6 = new BlockExporterChestBase("exporter_chest_custom_6", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_7 = new BlockExporterChestBase("exporter_chest_custom_7", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_8 = new BlockExporterChestBase("exporter_chest_custom_8", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_9 = new BlockExporterChestBase("exporter_chest_custom_9", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_10 = new BlockExporterChestBase("exporter_chest_custom_10", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_11 = new BlockExporterChestBase("exporter_chest_custom_11", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_12 = new BlockExporterChestBase("exporter_chest_custom_12", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_13 = new BlockExporterChestBase("exporter_chest_custom_13", Material.WOOD);
+	public static final Block EXPORTER_CHEST_CUSTOM_14 = new BlockExporterChestBase("exporter_chest_custom_14", Material.WOOD);
 	
 }
