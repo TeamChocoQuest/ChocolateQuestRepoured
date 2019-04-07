@@ -16,6 +16,7 @@ import net.minecraft.block.material.Material;
 public class ModBlocks 
 {
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
+	public static final List<Block> LOOT_CHEST_BLOCKS = new ArrayList<Block>();
 	
 	//Dungeon Blocks
 	//Andesite
