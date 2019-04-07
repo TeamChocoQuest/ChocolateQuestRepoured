@@ -21,6 +21,7 @@ public class BlockExporterChestBase extends Block implements IHasModel {
 		setCreativeTab(CQRMain.CQRExporterChestTab);
 		
 		ModBlocks.BLOCKS.add(this);
+		ModBlocks.LOOT_CHEST_BLOCKS.add(this);
 		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 	}
 

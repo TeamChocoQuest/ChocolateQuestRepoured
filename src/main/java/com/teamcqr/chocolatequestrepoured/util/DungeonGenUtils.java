@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.chunk.Chunk;
@@ -44,5 +46,19 @@ public class DungeonGenUtils {
 		max += 1;
 		int ret = min + rdm.nextInt(max);
 		return ret;
+	}
+	
+	public static boolean isLootChest(Block b) {
+		for(Block lc : ModBlocks.LOOT_CHEST_BLOCKS) {
+			if(Block.isEqualTo(b, lc)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static boolean isCQBanner() {
+		
+		return false;
 	}
 }

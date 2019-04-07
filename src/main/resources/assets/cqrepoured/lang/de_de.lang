@@ -119,7 +119,7 @@ tile.andesite_carved.name=Gemeißelter Andesit
 tile.andesite_pillar.name=Andesit Säule
 
 //Exporter chests
-tile.exporter_chest_valuable.name=Exporter Chest Valuable
+tile.exporter_chest_valuable.name=Exporter Chest Treasure
 tile.exporter_chest_food.name=Exporter Chest Food
 tile.exporter_chest_equipment.name=Exporter Chest Equipment
 tile.exporter_chest_utility.name=Exporter Chest Utility
@@ -137,6 +137,20 @@ tile.exporter_chest_vanilla_pyramid.name=Exporter Chest - Pyramid
 tile.exporter_chest_vanilla_stronghold.name=Exporter Chest - Stronghold Corridor
 tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold Library
 tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
+tile.exporter_chest_custom_1.name=Exporter Chest - Custom 1
+tile.exporter_chest_custom_2.name=Exporter Chest - Custom 2
+tile.exporter_chest_custom_3.name=Exporter Chest - Custom 3
+tile.exporter_chest_custom_4.name=Exporter Chest - Custom 4
+tile.exporter_chest_custom_5.name=Exporter Chest - Custom 5
+tile.exporter_chest_custom_6.name=Exporter Chest - Custom 6
+tile.exporter_chest_custom_7.name=Exporter Chest - Custom 7
+tile.exporter_chest_custom_8.name=Exporter Chest - Custom 8
+tile.exporter_chest_custom_9.name=Exporter Chest - Custom 9
+tile.exporter_chest_custom_10.name=Exporter Chest - Custom 10
+tile.exporter_chest_custom_11.name=Exporter Chest - Custom 11
+tile.exporter_chest_custom_12.name=Exporter Chest - Custom 12
+tile.exporter_chest_custom_13.name=Exporter Chest - Custom 13
+tile.exporter_chest_custom_14.name=Exporter Chest - Custom 14
 
 //Descriptions
 description.spider_armor.name=Tragen des gesamten Sets ermöglicht des Erklimmen von Wänden
