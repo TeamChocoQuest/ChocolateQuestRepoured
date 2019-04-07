@@ -50,6 +50,14 @@ public class CQRMain
 		}
 	};
 	
+	public static CreativeTabs CQRExporterChestTab = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
+		
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(Blocks.CHEST);
+		}
+	};
+	
 	@Instance
 	public static CQRMain INSTANCE;
 	

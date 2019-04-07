@@ -8,6 +8,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CavernGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
@@ -19,7 +20,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.storage.loot.LootTableList;
 
 public class CavernDungeon extends DungeonBase {
 	
@@ -123,7 +123,7 @@ public class CavernDungeon extends DungeonBase {
 			//BOSS CHEST
 			world.setBlockState(bossPos.down(), Blocks.CHEST.getDefaultState());
 			TileEntityChest bossChest = (TileEntityChest) world.getTileEntity(bossPos.down());
-			bossChest.setLootTable(LootTableList.CHESTS_END_CITY_TREASURE, world.getSeed());
+			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getLootTable(), world.getSeed());
 			
 			//BOSS SPAWNER
 		}

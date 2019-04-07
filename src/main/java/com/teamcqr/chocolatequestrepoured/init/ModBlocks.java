@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
+import com.teamcqr.chocolatequestrepoured.init.base.BlockExporterChestBase;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
@@ -95,8 +96,28 @@ public class ModBlocks
 	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating
 	
 	//Loot Chests
-	public static final Block EXPORTER_CHEST_VALUABLE = new BlockBase("exporter_chest_valuable", Material.WOOD);
-	public static final Block EXPORTER_CHEST_FOOD = new BlockBase("exporter_chest_food", Material.WOOD);
-	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockBase("exporter_chest_equipment", Material.WOOD);
-	public static final Block EXPORTER_CHEST_UTILITY = new BlockBase("exporter_chest_utility", Material.WOOD);
+	//Vanilla
+	public static final Block EXPORTER_CHEST_VANILLA_BLACKSMITH = new BlockExporterChestBase("exporter_chest_vanilla_blacksmith", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_BONUS = new BlockExporterChestBase("exporter_chest_vanilla_bonus", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_DUNGEON = new BlockExporterChestBase("exporter_chest_vanilla_dungeon", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_END_CITY = new BlockExporterChestBase("exporter_chest_vanilla_end_city", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_IGLOO = new BlockExporterChestBase("exporter_chest_vanilla_igloo", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_JUNGLE = new BlockExporterChestBase("exporter_chest_vanilla_jungle", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_JUNGLE_DISPENSER = new BlockExporterChestBase("exporter_chest_vanilla_jungle_dispenser", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_MANSION = new BlockExporterChestBase("exporter_chest_vanilla_mansion", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_MINESHAFT = new BlockExporterChestBase("exporter_chest_vanilla_mineshaft", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_NETHER = new BlockExporterChestBase("exporter_chest_vanilla_nether", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_PYRAMID = new BlockExporterChestBase("exporter_chest_vanilla_pyramid", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD = new BlockExporterChestBase("exporter_chest_vanilla_stronghold", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD_LIBRARY = new BlockExporterChestBase("exporter_chest_vanilla_stronghold_library", Material.WOOD);
+	public static final Block EXPORTER_CHEST_VANILLA_STRONGHOLD_STOREROOM = new BlockExporterChestBase("exporter_chest_vanilla_stronghold_storeroom", Material.WOOD);
+	
+	//standard
+	public static final Block EXPORTER_CHEST_VALUABLE = new BlockExporterChestBase("exporter_chest_valuable", Material.WOOD);
+	public static final Block EXPORTER_CHEST_FOOD = new BlockExporterChestBase("exporter_chest_food", Material.WOOD);
+	public static final Block EXPORTER_CHEST_EQUIPMENT = new BlockExporterChestBase("exporter_chest_equipment", Material.WOOD);
+	public static final Block EXPORTER_CHEST_UTILITY = new BlockExporterChestBase("exporter_chest_utility", Material.WOOD);
+	
+	//custom / user
+	
 }
