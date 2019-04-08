@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-public interface IDungeonGenerator {
+public interface IDungeonGenerator { 
 	
 	void preProcess(World world, Chunk chunk, int x, int y, int z);
 	void buildStructure(World world, Chunk chunk, int x, int y, int z);
