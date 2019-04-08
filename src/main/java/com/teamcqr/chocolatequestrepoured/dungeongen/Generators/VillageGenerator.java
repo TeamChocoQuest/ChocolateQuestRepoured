@@ -3,19 +3,24 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
+import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import scala.util.Random;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class VillageGenerator implements IDungeonGenerator{
 	
@@ -44,6 +49,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			Double degrees = ((Integer)new Random().nextInt(360)).doubleValue();
 			if(this.dungeon.placeInCircle()) {
 				degrees = 360.0 / this.chosenStructures.size();
+				degrees *= i;
 			}
 			v = VectorUtil.rotateVectorAroundY(v, degrees);
 			BlockPos newPos = start.add(v);
@@ -58,8 +64,38 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		//First, build all the support platforms
+		CQStructure centerDun = new CQStructure(this.centerStructure);
 		
+		PlateauBuilder platformCenter = new PlateauBuilder();
+		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
+		platformCenter.generate(new Random(), world, x, y, z, centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
+		
+		PlacementSettings plcmnt = new PlacementSettings();
+		plcmnt.setMirror(Mirror.NONE);
+		plcmnt.setRotation(Rotation.NONE);
+		plcmnt.setIntegrity(1.0f);
+		
+		centerDun.placeBlocksInWorld(world, new BlockPos(x, y, z).add(0, -this.dungeon.getUnderGroundOffset(), 0), plcmnt);
+		//First, build all the support platforms
+		for(int i = 0; i < this.structurePosList.size(); i++) {
+			if(i < this.chosenStructures.size()) {
+				//TODO: Load structures from file method   !!HIGH PRIORITY!!
+				CQStructure dungeon = new CQStructure(this.chosenStructures.get(i));
+				
+				if(dungeon != null) {
+					//Build the support platform...
+					BlockPos pos = this.structurePosList.get(i);
+					PlateauBuilder platform = new PlateauBuilder();
+					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
+					platform.generate(new Random(), world, pos.getX(), pos.getY(), pos.getZ(), dungeon.getSizeX() +8, dungeon.getSizeZ() +8);
+					
+					//Build the structure...
+					pos = pos.add(0, -this.dungeon.getUnderGroundOffset(), 0);
+					
+					dungeon.placeBlocksInWorld(world, pos, plcmnt);
+				}
+			}
+		}
 		//then build the paths...
 		if(this.structurePosList != null && !this.structurePosList.isEmpty() && this.startPos != null && this.dungeon.buildPaths()) {
 			for(BlockPos end : this.structurePosList) {
@@ -87,6 +123,10 @@ public class VillageGenerator implements IDungeonGenerator{
 		
 	}
 	
+	
+	
+	
+	//Functionality: Things and methods for generating the paths / streets...
 	public void addStructure(File f) {
 		if(!chosenStructures.contains(f)) {
 			chosenStructures.add(f);

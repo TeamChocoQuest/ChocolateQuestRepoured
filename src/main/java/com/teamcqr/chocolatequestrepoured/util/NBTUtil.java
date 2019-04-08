@@ -14,4 +14,12 @@ public class NBTUtil {
 		return posTag;
 	}
 	
+	public static BlockPos BlockPosFromNBT(NBTTagCompound posTag) {
+		int x = posTag.getInteger("x");
+		int y = posTag.getInteger("y");
+		int z = posTag.getInteger("z");
+		
+		return new BlockPos(x, y, z);
+	}
+	
 }

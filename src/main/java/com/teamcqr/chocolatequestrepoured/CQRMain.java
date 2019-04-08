@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured;
 
+import java.io.File;
+
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -10,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -24,6 +27,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
 public class CQRMain
 {
+	
+	public static File CQ_CONFIG_FOLDER = null;
+	public static File CQ_DUNGEON_FOLDER = null;
+	public static File CQ_CHEST_FOLDER = null;
+	
 	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab")
 	{
 		@Override
@@ -72,6 +80,21 @@ public class CQRMain
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
+		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
+		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
+		
+		File dungeonFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/dungeons/");
+		if(!dungeonFolder.exists()) {
+			dungeonFolder.mkdirs();
+		}
+		CQRMain.CQ_DUNGEON_FOLDER = dungeonFolder;
+		
+		File chestFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/lootconfigs/");
+		if(!chestFolder.exists()) {
+			chestFolder.mkdirs();
+		}
+		CQRMain.CQ_DUNGEON_FOLDER = chestFolder;
+		
 		proxy.preInit(event);
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
