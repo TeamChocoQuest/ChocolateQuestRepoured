@@ -28,6 +28,15 @@ public class Structure extends Template {
 	private List<SpawnerInfo> spawners = new ArrayList<SpawnerInfo>();
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
 	
+	private int part_id;
+	
+	public Structure() {
+	}
+	
+	public Structure(int part_id) {
+		this.setPart_id(part_id);
+	}
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
@@ -198,6 +207,14 @@ public class Structure extends Template {
 			}
 		}
 		//Done :D
+	}
+
+	public int getPart_id() {
+		return part_id;
+	}
+
+	public void setPart_id(int part_id) {
+		this.part_id = part_id;
 	}
 
 }

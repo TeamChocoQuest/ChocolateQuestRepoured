@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
