@@ -48,6 +48,13 @@ public class DungeonGenUtils {
 		return ret;
 	}
 	
+	public static int getIntBetweenBorders(int min, int max) {
+		Random rdm = new Random();
+		max += 1;
+		int ret = min + rdm.nextInt(max);
+		return ret;
+	}
+	
 	public static boolean isLootChest(Block b) {
 		for(Block lc : ModBlocks.LOOT_CHEST_BLOCKS) {
 			if(Block.isEqualTo(b, lc)) {
