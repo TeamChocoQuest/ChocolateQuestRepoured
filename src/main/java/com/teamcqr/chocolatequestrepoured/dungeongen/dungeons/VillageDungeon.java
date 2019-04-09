@@ -36,6 +36,11 @@ public class VillageDungeon extends DungeonBase {
 		return new VillageGenerator(this);
 	}
 	
+	
+	public VillageDungeon(File configFile) {
+		super(configFile);
+	}
+	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk) {
 		super.generate(x, z, world, chunk);
@@ -50,7 +55,8 @@ public class VillageDungeon extends DungeonBase {
 			}
 			((VillageGenerator)this.generator).setCenterStructure(building);
 		}
-		//TODO: add code xD
+		//Generating it...
+		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, false), z);
 	}
 	
 	private File getRandomBuilding(long seed) {

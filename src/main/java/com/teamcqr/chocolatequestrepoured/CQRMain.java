@@ -30,6 +30,7 @@ public class CQRMain
 	
 	public static File CQ_CONFIG_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;
+	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	
 	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab")
@@ -95,6 +96,12 @@ public class CQRMain
 		}
 		CQRMain.CQ_DUNGEON_FOLDER = chestFolder;
 		
+		File structureFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/structures/");
+		if(!structureFolder.exists()) {
+			structureFolder.mkdirs();
+		}
+		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
+		
 		proxy.preInit(event);
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
@@ -103,7 +110,7 @@ public class CQRMain
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event)
-	{
+	{		
 		proxy.init(event);
 	}
 	

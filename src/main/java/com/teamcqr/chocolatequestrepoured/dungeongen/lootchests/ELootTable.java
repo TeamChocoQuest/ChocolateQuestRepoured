@@ -87,6 +87,17 @@ public enum ELootTable {
 		return null;
 	}
 	
+	public static ELootTable valueOf(int ID) {
+		if(0 <= ID && ID < ELootTable.values().length) {
+			for(ELootTable elt : ELootTable.values()) {
+				if(elt.ID == ID) {
+					return elt;
+				}
+			}
+		}
+		return null;
+	}
+	
 	/*private static ResourceLocation registerChest(String id) {
 		ResourceLocation ret = register("chest/" + id);
 		/*if(ret != null) {

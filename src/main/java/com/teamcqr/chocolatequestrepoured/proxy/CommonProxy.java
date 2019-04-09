@@ -34,6 +34,7 @@ public class CommonProxy
 				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
 			}
 		}
+		CQRMain.dungeonRegistry.loadDungeonFiles();
 	}
 	
 	public void registerItemRenderer(Item item, int meta, String id) 
