@@ -1,8 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen;
 
-import java.util.Properties;
+import java.io.File;
 
 import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -16,19 +17,19 @@ public class DungeonBase {
 	protected int chance;
 	protected int[] allowedDims = {0};
 	protected boolean unique = false;
-	private Block supportBlock;
-	private Block supportTopBlock;
+	private Block supportBlock = Blocks.STONE;
+	private Block supportTopBlock = Blocks.GRASS;
 	
 	protected void generate(int x, int z, World world, Chunk chunk) {
 		
 	}
 	
-	public DungeonBase() {
+	public DungeonBase(File configFile) {
 	}
 	
-	public DungeonBase load(Properties configFile) {
+	/*public DungeonBase load(Properties configFile) {
 		return this;
-	}
+	}*/
 	public IDungeonGenerator getGenerator() {
 		return this.generator;
 	}
