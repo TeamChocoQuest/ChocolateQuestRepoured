@@ -5,6 +5,7 @@ import java.io.File;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -19,6 +20,8 @@ public class DungeonBase {
 	protected boolean unique = false;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
+	private BlockPos lockedPos = null;
+	private boolean isPosLocked = false;
 	
 	protected void generate(int x, int z, World world, Chunk chunk) {
 		
@@ -27,9 +30,6 @@ public class DungeonBase {
 	public DungeonBase(File configFile) {
 	}
 	
-	/*public DungeonBase load(Properties configFile) {
-		return this;
-	}*/
 	public IDungeonGenerator getGenerator() {
 		return this.generator;
 	}
@@ -59,6 +59,14 @@ public class DungeonBase {
 
 	public int getUnderGroundOffset() {
 		return underGroundOffset;
+	}
+
+	public BlockPos getLockedPos() {
+		return lockedPos;
+	}
+
+	public boolean isPosLocked() {
+		return isPosLocked;
 	}
 
 }

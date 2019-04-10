@@ -1,11 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 public class DungeonGenUtils {
@@ -67,5 +73,48 @@ public class DungeonGenUtils {
 	public static boolean isCQBanner() {
 		
 		return false;
+	}
+	
+	public static boolean isFarAwayEnoughFromSpawn(int chunkX, int chunkZ) {
+		if(Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnChance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnChance())) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world) {
+		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world);
+	}
+	
+	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world) {
+		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
+			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
+				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
+				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);
+				if(!(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < CQRMain.dungeonRegistry.getDungeonDistance())) {
+					return false;
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	public static List<DungeonBase> getLocSpecDungeonsForChunk(int chunkX, int chunkZ, World world) {
+		List<DungeonBase> ret = new ArrayList<DungeonBase>();
+		
+		for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
+			Chunk dunChun = world.getChunkFromBlockCoords(dunPos);
+			if(dunChun.x == chunkX && dunChun.z == chunkZ) {
+				for(DungeonBase db : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().get(dunPos)) {
+					ret.add(db);
+				}
+			}
+		}
+		
+		return ret;
+	}
+	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {
+		return getLocSpecDungeonsForChunk(chunk.x, chunk.z, world);
 	}
 }
