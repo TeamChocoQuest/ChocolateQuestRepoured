@@ -13,6 +13,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CavernGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CavernGenerator.EStairDirection;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -40,6 +41,7 @@ public class CavernDungeon extends DungeonBase {
 	private int maxRoomDistance = 18;
 	private int minRoomDistance = 10;
 	private int chestChancePerRoom = 20;
+	private boolean buildStaris = true;
 	
 	private boolean placeSpawners = false;
 	private boolean placeBoss = true;
@@ -92,6 +94,8 @@ public class CavernDungeon extends DungeonBase {
 			
 			this.maxRoomDistance = PropertyFileHelper.getIntProperty(prop, "maxRoomDistance", 20);
 			this.minRoomDistance = PropertyFileHelper.getIntProperty(prop, "minRoomDistance", 12);
+			
+			this.buildStaris = PropertyFileHelper.getBooleanProperty(prop, "buildStairs", false);
 			
 			this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 20);
 			
@@ -198,10 +202,11 @@ public class CavernDungeon extends DungeonBase {
 			currX = new Integer(end.getX());
 			currZ = new Integer(end.getZ());
 		}
-		
+		Random rdmCI = new Random();
+		int bossCaveIndx = rdmCI.nextInt(caves.size());
 		if(placeBoss) {
-			int caveIndx = new Random().nextInt(caves.size());
-			BlockPos bossPos = new BlockPos(xMap.get(caves.get(caveIndx)), y +1, zMap.get(caves.get(caveIndx)));
+			
+			BlockPos bossPos = new BlockPos(xMap.get(caves.get(bossCaveIndx)), y +1, zMap.get(caves.get(bossCaveIndx)));
 			world.setBlockToAir(bossPos.down());
 			
 			//BOSS CHEST
@@ -210,6 +215,13 @@ public class CavernDungeon extends DungeonBase {
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getLootTable(), world.getSeed());
 			
 			//BOSS SPAWNER
+		}
+		if(this.buildStaris) {
+			int entryCave = rdmCI.nextInt(caves.size());
+			while(entryCave == bossCaveIndx) {
+				entryCave = rdmCI.nextInt(caves.size());
+			}
+			caves.get(entryCave).buildLadder(EStairDirection.WEST, world);
 		}
 		
 	}
@@ -242,5 +254,10 @@ public class CavernDungeon extends DungeonBase {
 		String[] bossString = this.mobName.split(":");
 		
 		return new ResourceLocation(bossString[0], bossString[1]);
-	} 
+	}
+
+	public boolean doBuildStaris() {
+		return buildStaris;
+	}
+
 }
