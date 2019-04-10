@@ -7,6 +7,7 @@ import com.google.common.collect.Sets;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
@@ -30,6 +31,8 @@ public class CavernGenerator implements IDungeonGenerator {
 	private int sizeZ;
 	private int height;
 	
+	private BlockPos center;
+	
 	private CavernDungeon dungeon;
 	private Set<BlockPos> airBlocks = Sets.newHashSet();
 	private Set<BlockPos> floorBlocks = Sets.newHashSet();
@@ -39,6 +42,8 @@ public class CavernGenerator implements IDungeonGenerator {
 		//DONE: calculate air blocks
 		Perlin3D perlin1 = new Perlin3D(world.getSeed(), 4, new Random());
 		Perlin3D perlin2 = new Perlin3D(world.getSeed(), 32, new Random());
+		
+		this.center = new BlockPos(x, y, z);
 		
 		int centerX = this.sizeX / 2;
 		int centerY = this.height / 2;
@@ -163,6 +168,85 @@ public class CavernGenerator implements IDungeonGenerator {
 		this.sizeX = sX;
 		this.sizeZ = sZ;
 		this.height = h;
+	}
+	
+	public enum EStairDirection {
+		NORTH,
+		EAST,
+		SOUTH,
+		WEST;
+	}
+	
+	public void buildLadder(EStairDirection direction, World world) {
+		switch (direction) {
+		case EAST:
+			buildStairE(world);
+			break;
+		case NORTH:
+			buildStairN(world);
+			break;
+		case SOUTH:
+			buildStairS(world);
+			break;
+		case WEST:
+			buildStairW(world);
+			break;
+		default:
+			break;
+		}
+	}
+	
+	@SuppressWarnings("deprecation")
+	private void buildStairN(World world) {
+		BlockPos start = this.center.north(this.sizeZ - 2);
+		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
+		while(start.getY() <= highestY) {
+			/*if(Block.isEqualTo(world.getBlockState(start.south()).getBlock(), Blocks.AIR)) {
+				
+			}*/
+			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(0));
+			
+			start = start.up();
+		}
+	}
+	@SuppressWarnings("deprecation")
+	private void buildStairE(World world) {
+		BlockPos start = this.center.north(this.sizeX - 2);
+		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
+		while(start.getY() <= highestY) {
+			/*if(Block.isEqualTo(world.getBlockState(start.west()).getBlock(), Blocks.AIR)) {
+				
+			}*/
+			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(5));
+			
+			start = start.up();
+		}
+	}
+	@SuppressWarnings("deprecation")
+	private void buildStairS(World world) {
+		BlockPos start = this.center.north(this.sizeZ - 2);
+		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
+		while(start.getY() <= highestY) {
+			/*if(Block.isEqualTo(world.getBlockState(start.north()).getBlock(), Blocks.AIR)) {
+				
+			}*/
+			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(3));
+			
+			start = start.up();
+		}
+	}
+	@SuppressWarnings("deprecation")
+	private void buildStairW(World world) {
+		BlockPos start = this.center.north(this.sizeX - 2);
+		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
+		while(start.getY() <= highestY) {
+			/*if(Block.isEqualTo(world.getBlockState(start.east()).getBlock(), Blocks.AIR)) {
+				
+			}*/
+			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(10));
+			
+			start = start.up();
+		}
 	}
 
 }
