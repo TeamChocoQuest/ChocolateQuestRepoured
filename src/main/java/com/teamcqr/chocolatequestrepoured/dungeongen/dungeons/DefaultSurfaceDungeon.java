@@ -89,6 +89,11 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		settings.setIntegrity(1.0F);
 		
 		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		//For position locked dungeons, use the positions y
+		if(this.isPosLocked()) {
+			y = this.getLockedPos().getY();
+		}
+		
 		System.out.println("Placing dungeon: " + this.name);
 		System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		SimplePasteGenerator generator = new SimplePasteGenerator(this, dungeon, settings);

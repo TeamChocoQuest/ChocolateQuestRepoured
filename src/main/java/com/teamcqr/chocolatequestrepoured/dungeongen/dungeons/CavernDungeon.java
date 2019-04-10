@@ -145,6 +145,11 @@ public class CavernDungeon extends DungeonBase {
 		
 		int rooms = maxRooms <= minRooms ? minRooms : DungeonGenUtils.getIntBetweenBorders(minRooms, maxRooms, world.getSeed());
 		int y = DungeonGenUtils.getIntBetweenBorders(minY, maxY, world.getSeed());
+		
+		if(this.isPosLocked()) {
+			y = this.getLockedPos().getY();
+		}
+		
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		int roomIndex = 1;
 		

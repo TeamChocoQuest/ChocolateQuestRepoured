@@ -2,14 +2,36 @@ package com.teamcqr.chocolatequestrepoured.dungeongen;
 
 public enum EDungeonGenerator {
 
-	CAVERN,
-	VOLCANO,
-	PASTE,
-	VILLAGE,
-	OCEAN_FLOOR,
-	STRONGHOLD,
-	RUIN,
-	ABANDONED,
-	DEFAULT;
+	CAVERNS("caverns"),
+	ABANDONED("abandoned"),
+	RUIN("ruin"),
+	NETHER_CITY("nether_city"),
+	FLOATING_NETHER_CITY("floating_nether_city"),
+	TEMPLATE_SURFACE("template_surface"),
+	TEMPLATE_OCEAN_FLOOR("template_ocean_floor"),
+	STRONGHOLD("stronghold"),
+	VILLAGE("village"),
+	VOLCANO("volcano");
+	
+	private String name;
+	
+	EDungeonGenerator(String name) {
+		this.name = name;
+	}
+	
+	public String getName() {
+		return this.name;
+	}
+	
+	public static boolean isValidDungeonGenerator(String toTest) {
+		
+		for(EDungeonGenerator generator : EDungeonGenerator.values()) {
+			if(toTest.equalsIgnoreCase(generator.getName())) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 		
 }
