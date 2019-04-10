@@ -37,21 +37,42 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				Random rdm = new Random();
 				rdm.setSeed(world.getSeed());
 				
-				int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
-				DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-				
-				if(DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
-					boolean dimensionIsOK = false;
-					for(int dimID : chosenStructure.getAllowedDimensions()) {
-						if(world.provider.getDimension() == dimID) {
-							dimensionIsOK = true;
-							break;
+				if(DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world) && DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
+					int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
+					DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
+					
+					if(DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
+						boolean dimensionIsOK = false;
+						for(int dimID : chosenStructure.getAllowedDimensions()) {
+							if(world.provider.getDimension() == dimID) {
+								dimensionIsOK = true;
+								break;
+							}
+						}
+						if(dimensionIsOK) {
+							//DONE: Choose a structure and build it --> Dungeon handles it self!
+							chosenStructure.generate(chunkX *16 +1, chunkZ *16 +1, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+							//TODO: Check if dungeon is unique or every structure should generate once and then check if dungeon is already present
 						}
 					}
-					if(dimensionIsOK) {
-						//DONE: Choose a structure and build it --> Dungeon handles it self!
-						chosenStructure.generate(chunkX *16 +1, chunkZ *16 +1, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
-						//TODO: Check if dungeon is unique or every structure should generate once and then check if dungeon is already present
+				} else if(!DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world)){
+					//Generate the right location specific dungeon
+					if(DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null && DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world).size() > 0) {
+						for(DungeonBase dungeon : DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world)) {
+							boolean dimensionIsOK = false;
+							//Here we also need to check if the dimension fits
+							for(int dimID : dungeon.getAllowedDimensions()) {
+								if(world.provider.getDimension() == dimID) {
+									dimensionIsOK = true;
+									break;
+								}
+							}
+							
+							if(dimensionIsOK) {
+								dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+							}
+							
+						}
 					}
 				}
 			}

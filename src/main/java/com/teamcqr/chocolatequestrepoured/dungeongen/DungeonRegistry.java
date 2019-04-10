@@ -6,15 +6,17 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class DungeonRegistry {
 	
 	private int dungeonSpawnChance = 20;
 	private int DungeonDistance = 125;
+	private int DungeonSpawnDistance = 200;
 	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
-	
+	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
 	public void loadDungeonFiles() {
 		System.out.println("Loading dungeon configs...");
@@ -47,6 +49,13 @@ public class DungeonRegistry {
 	
 	public int getDungeonDistance() {
 		return DungeonDistance;
+	}
+	public int getDungeonSpawnDistance() {
+		return DungeonSpawnDistance;
+	}
+	
+	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {
+		return this.coordinateSpecificDungeons;
 	}
 
 }
