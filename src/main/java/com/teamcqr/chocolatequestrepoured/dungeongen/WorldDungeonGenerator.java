@@ -38,7 +38,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				}
 				
 				if(dimensionIsOK) {
-					dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+					Random rdm = new Random();
+					rdm.setSeed(getSeed(world, chunkX, chunkZ));
+					dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdm);
 				}
 				
 			}
@@ -67,7 +69,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 					DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
 					System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "! Calculating chance...");
 					
-					if(DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed()) || true) {
+					if(DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
 						boolean dimensionIsOK = false;
 						for(int dimID : chosenStructure.getAllowedDimensions()) {
 							if(world.provider.getDimension() == dimID) {
@@ -78,7 +80,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						if(dimensionIsOK) {
 							System.out.println("Generating dungeon " + chosenStructure.getDungeonName() + " at chunkX=" + chunkX + "  chunkZ=" + chunkZ);
 							//DONE: Choose a structure and build it --> Dungeon handles it self!
-							chosenStructure.generate(chunkX *16 +1, chunkZ *16 +1, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+							Random rdmGen = new Random();
+							rdm.setSeed(getSeed(world, chunkX, chunkZ));
+							chosenStructure.generate(chunkX *16 +1, chunkZ *16 +1, world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdmGen);
 							//TODO: Check if dungeon is unique or every structure should generate once and then check if dungeon is already present
 						}
 					}
@@ -86,5 +90,19 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			}
 		}
 	}
+	
+	private static long getSeed(World world, int chunkX, int chunkZ) {
+	    long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1094792450L;
+	    long result = xorShift64(mix);
+	    
+	    return world.getSeed() + result;
+	  }
+	  
+	  private static long xorShift64(long x) {
+	    x ^= x << 21;
+	    x ^= x >>> 35;
+	    x ^= x << 4;
+	    return x;
+	  }
 
 }

@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -31,7 +32,7 @@ public class DungeonBase {
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
 	
-	protected void generate(int x, int z, World world, Chunk chunk) {
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		
 	}
 	

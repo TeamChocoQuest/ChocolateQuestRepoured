@@ -27,8 +27,9 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 	}
 	
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk) {
-		File structure = pickStructure(world.getSeed());
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
+		File structure = pickStructure(random);
 		CQStructure dungeon = new CQStructure(structure);
 		
 		PlacementSettings settings = new PlacementSettings();
@@ -49,12 +50,12 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 		generator.generate(world, chunk, x, y, z);
 	}
 	
-	private File pickStructure(long worldSeed) {
-		Random rdm = new Random();
-		rdm.setSeed(worldSeed);
+	private File pickStructure(Random random) {
+		//Random rdm = new Random();
+		//rdm.setSeed(worldSeed);
 		File chosenStructure = this.structureFolderPath;
 		if(this.structureFolderPath.isDirectory()) {
-			chosenStructure = this.structureFolderPath.listFiles()[rdm.nextInt(this.structureFolderPath.listFiles().length)];
+			chosenStructure = this.structureFolderPath.listFiles()[random.nextInt(this.structureFolderPath.listFiles().length)];
 		}
 		if(chosenStructure != null) {
 			return chosenStructure;
