@@ -42,12 +42,12 @@ public class VillageDungeon extends DungeonBase {
 	}
 	
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk) {
-		super.generate(x, z, world, chunk);
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
 		
-		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, world.getSeed());
+		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, random);
 		for(int i = 0; i < buildings; i++) {
-			File building = getRandomBuilding(world.getSeed());
+			File building = getRandomBuilding(random);
 			((VillageGenerator)this.generator).addStructure(building);
 			building = this.centerStructureFolder;
 			if(this.centerStructureFolder.isDirectory()) {
@@ -59,11 +59,11 @@ public class VillageDungeon extends DungeonBase {
 		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, false), z);
 	}
 	
-	private File getRandomBuilding(long seed) {
-		Random rdm = new Random();
-		rdm.setSeed(seed);
+	private File getRandomBuilding(Random random) {
+		//Random rdm = new Random();
+		//rdm.setSeed(seed);
 		
-		int chance = rdm.nextInt(100) +1;
+		int chance = random.nextInt(100) +1;
 		List<Integer> indexes = new ArrayList<Integer>();
 		
 		for(Integer i : this.chanceFileMap.keySet()) {
@@ -72,10 +72,10 @@ public class VillageDungeon extends DungeonBase {
 			}
 		}
 		if(!indexes.isEmpty()) {
-			int i = indexes.get(rdm.nextInt(indexes.size()));
-			File f = this.chanceFileMap.get(i).get(rdm.nextInt(this.chanceFileMap.get(i).size()));
+			int i = indexes.get(random.nextInt(indexes.size()));
+			File f = this.chanceFileMap.get(i).get(random.nextInt(this.chanceFileMap.get(i).size()));
 			if(f.isDirectory()) {
-				return f.listFiles()[rdm.nextInt(f.listFiles().length)];
+				return f.listFiles()[random.nextInt(f.listFiles().length)];
 			}
 			return f;
 		}

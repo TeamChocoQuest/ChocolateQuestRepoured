@@ -136,15 +136,15 @@ public class CavernDungeon extends DungeonBase {
 	
 	//One block below starts y is the floor...
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk) {
-		super.generate(x, z, world, chunk);
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
 		
 		List<CavernGenerator> caves = new ArrayList<CavernGenerator>();
 		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
 		HashMap<CavernGenerator, Integer> zMap = new HashMap<CavernGenerator, Integer>();
 		
-		int rooms = DungeonGenUtils.getIntBetweenBorders(minRooms, maxRooms, world.getSeed());
-		int y = DungeonGenUtils.getIntBetweenBorders(minY, maxY, world.getSeed());
+		int rooms = DungeonGenUtils.getIntBetweenBorders(minRooms, maxRooms, random);
+		int y = DungeonGenUtils.getIntBetweenBorders(minY, maxY, random);
 		
 		if(this.isPosLocked()) {
 			y = this.getLockedPos().getY();
@@ -166,11 +166,11 @@ public class CavernDungeon extends DungeonBase {
 					
 			CavernGenerator cave = new CavernGenerator(this);
 			//Let the cave calculate its air blocks...
-			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, world.getSeed()), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, world.getSeed()), DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, world.getSeed()));
+			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random), DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, random));
 			cave.preProcess(world, chunk, x + distance.getX(), y, z + distance.getZ());
 			
 			distance = new Vec3i(0, 0, 0);
-			int vLength = DungeonGenUtils.getIntBetweenBorders(minRoomDistance, maxRoomDistance, world.getSeed());
+			int vLength = DungeonGenUtils.getIntBetweenBorders(minRoomDistance, maxRoomDistance, random);
 			distance = new Vec3i(vLength, 0, 0);
 			double angle = ((Integer)new Random().nextInt(360)).doubleValue();
 			distance = VectorUtil.rotateVectorAroundY(distance, angle);
@@ -182,24 +182,13 @@ public class CavernDungeon extends DungeonBase {
 			roomIndex++;
 		} while(roomIndex < rooms);
 		
-		//int currX = new Integer(OrigX);
-		//int currZ = new Integer(OrigZ);
 		for(int i = 0; i < caves.size(); i++) {
-			
 			CavernGenerator cave = caves.get(i);
-			
-			//BlockPos start = new BlockPos(currX, y, currZ);
-			//BlockPos end = new BlockPos(xMap.get(cave), y, zMap.get(cave));
-			
 			//Dig out the cave...
 			cave.buildStructure(world, chunk, xMap.get(cave), y -1, zMap.get(cave));
 			
 			//connect the tunnels
-			//cave.generateTunnel(start.add(0, 1, 0), end, world);
 			cave.generateTunnel(centerLoc.add(0, 1, 0), cave.getCenter(), world);
-			
-			//currX = new Integer(end.getX());
-			//currZ = new Integer(end.getZ());
 		}
 		for(int i = 0; i < caves.size(); i++) {
 			CavernGenerator cave = caves.get(i);

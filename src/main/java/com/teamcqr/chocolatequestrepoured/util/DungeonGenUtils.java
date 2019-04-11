@@ -34,9 +34,9 @@ public class DungeonGenUtils {
 		return y;
 	}
 	
-	public static boolean PercentageRandom(int number, long seed) {
-		Random rdm = new Random();
-		rdm.setSeed(seed);
+	public static boolean PercentageRandom(int number, Random rdm) {
+		//Random rdm = new Random();
+		//rdm.setSeed(seed);
 		int rdmNmbr = rdm.nextInt(100) +1;
 		if(number >= rdmNmbr) {
 			return true;
@@ -48,10 +48,10 @@ public class DungeonGenUtils {
 		return PercentageRandom(number *100, seed);
 	}
 	
-	public static int getIntBetweenBorders(int min, int max, long seed) {
-		if(min != max) {
-			Random rdm = new Random();
-			rdm.setSeed(seed);
+	public static int getIntBetweenBorders(int min, int max, Random rdm) {
+		if(min != max && rdm != null) {
+			//Random rdm = new Random();
+			//rdm.setSeed(seed);
 			max += 1;
 			int ret = min + rdm.nextInt(max - min);
 			return ret;

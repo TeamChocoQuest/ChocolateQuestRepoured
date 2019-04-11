@@ -229,9 +229,6 @@ public class CavernGenerator implements IDungeonGenerator {
 		int y = start.getY();
 		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
 		while(y <= highestY) {
-			/*if(Block.isEqualTo(world.getBlockState(start.south()).getBlock(), Blocks.AIR)) {
-				
-			}*/
 			world.setBlockState(start, Blocks.LADDER.getDefaultState());
 			
 			start = start.up();
