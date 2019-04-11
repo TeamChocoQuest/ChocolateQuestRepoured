@@ -153,8 +153,10 @@ public class CavernDungeon extends DungeonBase {
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		int roomIndex = 1;
 		
-		int OrigX = new Integer(x);
-		int OrigZ = new Integer(z);
+		BlockPos centerLoc = new BlockPos(x, y, z);
+		
+		//int OrigX = new Integer(x);
+		//int OrigZ = new Integer(z);
 		
 		Vec3i distance = new Vec3i(0, 0, 0);
 		
@@ -180,36 +182,38 @@ public class CavernDungeon extends DungeonBase {
 			roomIndex++;
 		} while(roomIndex < rooms);
 		
-		int currX = new Integer(OrigX);
-		int currZ = new Integer(OrigZ);
+		//int currX = new Integer(OrigX);
+		//int currZ = new Integer(OrigZ);
 		for(int i = 0; i < caves.size(); i++) {
 			
 			CavernGenerator cave = caves.get(i);
 			
-			BlockPos start = new BlockPos(currX, y, currZ);
-			BlockPos end = new BlockPos(xMap.get(cave), y, zMap.get(cave));
+			//BlockPos start = new BlockPos(currX, y, currZ);
+			//BlockPos end = new BlockPos(xMap.get(cave), y, zMap.get(cave));
 			
 			//Dig out the cave...
 			cave.buildStructure(world, chunk, xMap.get(cave), y -1, zMap.get(cave));
 			
 			//connect the tunnels
-			cave.generateTunnel(start.add(0, 1, 0), end, world);
+			//cave.generateTunnel(start.add(0, 1, 0), end, world);
+			cave.generateTunnel(centerLoc.add(0, 1, 0), cave.getCenter(), world);
 			
-			currX = new Integer(end.getX());
-			currZ = new Integer(end.getZ());
+			//currX = new Integer(end.getX());
+			//currZ = new Integer(end.getZ());
 		}
 		for(int i = 0; i < caves.size(); i++) {
 			CavernGenerator cave = caves.get(i);
 
 			//Place a loot chest....
 			if(lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
-				world.setBlockState(new BlockPos(xMap.get(cave), y, zMap.get(cave)), Blocks.CHEST.getDefaultState());
-				cave.fillChests(world, chunk, xMap.get(cave), y, zMap.get(cave));
+				world.setBlockState(cave.getCenter(), Blocks.CHEST.getDefaultState());
+				//cave.fillChests(world, chunk, xMap.get(cave), y, zMap.get(cave));
+				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() -4, cave.getCenter().getZ());
 			}
 			
 			//Place a spawner...
 			if(placeSpawners) {
-				cave.placeSpawners(world, chunk, xMap.get(cave), y +1, zMap.get(cave));
+				cave.placeSpawners(world, chunk, cave.getCenter().getX(), y, cave.getCenter().getZ());
 				/*world.setBlockState(start.add(0, 1, 0), Blocks.MOB_SPAWNER.getDefaultState());
 				TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(start.add(0, 1, 0));
 				//DONE: set spawner mob*/
@@ -234,7 +238,7 @@ public class CavernDungeon extends DungeonBase {
 			while(entryCave == bossCaveIndx) {
 				entryCave = rdmCI.nextInt(caves.size());
 			}
-			//caves.get(entryCave).buildLadder(world);
+			caves.get(entryCave).buildLadder(world);
 		}
 		
 	}

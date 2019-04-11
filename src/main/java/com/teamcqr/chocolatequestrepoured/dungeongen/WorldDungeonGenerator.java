@@ -42,7 +42,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				}
 				
 			}
-		} else if(DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(), world.getSeed()) || true) {
+		} else if(DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(), world.getSeed())) {
 			//Now check if any dungeons exist for this biome....
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX *16 +1, 100, chunkZ *16 +1));
 			//System.out.println("Searching dungeons for biome " + biome.getBiomeName() + "...");
@@ -56,12 +56,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			}
 			
 			//Now check if the dungeon is far away enough from the last one
-			if(chunkX % this.dungeonRegistry.getDungeonDistance() == 0 && chunkZ % this.dungeonRegistry.getDungeonDistance() == 0) {
-				System.out.println("Chunks are far away enough from last dungeon and from spawn!");
+			if(chunkX % this.dungeonRegistry.getDungeonDistance() == 0 && chunkZ % this.dungeonRegistry.getDungeonDistance() == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
+				//System.out.println("Chunks are far away enough from last dungeon and from spawn!");
 				Random rdm = new Random();
 				rdm.setSeed(world.getSeed());
 				
-				if((DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world) || this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty())&& DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
+				if(DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world) || this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
 					System.out.println("Location is fine! Choosing dungeon...");
 					int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 					DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);

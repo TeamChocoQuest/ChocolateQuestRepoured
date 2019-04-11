@@ -22,10 +22,12 @@ public class DungeonGenUtils {
 		if(ignoreWater) {
 			while(Block.isEqualTo(block, Blocks.AIR) || Block.isEqualTo(block, Blocks.WATER) || Block.isEqualTo(block, Blocks.FLOWING_WATER)) {
 				y--;
+				block = chunk.getBlockState(x, y, z).getBlock();
 			}
 		} else {
 			while(Block.isEqualTo(block, Blocks.AIR)) {
 				y--;
+				block = chunk.getBlockState(x, y, z).getBlock();
 			}
 		}
 		

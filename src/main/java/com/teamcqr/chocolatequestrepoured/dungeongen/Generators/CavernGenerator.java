@@ -30,6 +30,10 @@ public class CavernGenerator implements IDungeonGenerator {
 	private int sizeZ;
 	private int height;
 	
+	private int centerX;
+	private int centerZ;
+	private int centerY;
+	
 	private BlockPos center;
 	
 	private CavernDungeon dungeon;
@@ -47,6 +51,10 @@ public class CavernGenerator implements IDungeonGenerator {
 		int centerX = this.sizeX / 2;
 		int centerY = this.height / 2;
 		int centerZ = this.sizeZ / 2;
+		
+		this.centerX = centerX + x;
+		this.centerY = centerY + y;
+		this.centerZ = centerZ + z;
 		
 		int centerDistSquared = centerX*centerX + centerY*centerY + centerZ*centerZ;
 		
@@ -71,7 +79,7 @@ public class CavernGenerator implements IDungeonGenerator {
 					
 					double noise = (perlin1.getNoiseAt(x + iX, y + iY, z + iZ) + perlin2.getNoiseAt(x + iX, y + iY, z + iZ)) / 2.0D * (noiseAtPos * 2.5D);
 					
-					if(noise < 0.5D) {
+					if(noise < 0.75D) {
 						BlockPos block = new BlockPos(x + iX, y + iY, z + iZ);
 						this.airBlocks.add(block);
 						if(iY == 0) {
@@ -229,6 +237,10 @@ public class CavernGenerator implements IDungeonGenerator {
 			start = start.up();
 			y++;
 		}
+	}
+	
+	public BlockPos getCenter() {
+		return new BlockPos(this.centerX, this.centerY, this.centerZ);
 	}
 
 }
