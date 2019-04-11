@@ -24,7 +24,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class DefaultSurfaceDungeon extends DungeonBase {
 	
-	private File structureFolderPath; 
+	protected File structureFolderPath; 
 	
 	public DefaultSurfaceDungeon(File configFile) {
 		super(configFile);

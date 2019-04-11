@@ -84,22 +84,25 @@ public class CQRMain
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		
-		File dungeonFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/dungeons/");
+		File dungeonFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/dungeons//");
 		if(!dungeonFolder.exists()) {
 			dungeonFolder.mkdirs();
 		}
+		System.out.println("Dungeon Folder Path: " + dungeonFolder.getAbsolutePath());
 		CQRMain.CQ_DUNGEON_FOLDER = dungeonFolder;
 		
-		File chestFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/lootconfigs/");
+		File chestFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/lootconfigs//");
 		if(!chestFolder.exists()) {
 			chestFolder.mkdirs();
 		}
-		CQRMain.CQ_DUNGEON_FOLDER = chestFolder;
+		System.out.println("LootConfig Folder Path: " + chestFolder.getAbsolutePath());
+		CQRMain.CQ_CHEST_FOLDER = chestFolder;
 		
-		File structureFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/structures/");
+		File structureFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/structures//");
 		if(!structureFolder.exists()) {
 			structureFolder.mkdirs();
 		}
+		System.out.println("Structure Folder Path: " + structureFolder.getAbsolutePath());
 		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
 		
 		proxy.preInit(event);

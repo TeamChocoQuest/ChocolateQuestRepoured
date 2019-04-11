@@ -13,7 +13,6 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CavernGenerator;
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CavernGenerator.EStairDirection;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -31,21 +30,21 @@ import net.minecraft.world.chunk.Chunk;
 public class CavernDungeon extends DungeonBase {
 	
 	private int minRooms = 1;
-	private int maxRooms = 8;
-	private int minY = 30;
-	private int maxY = 60;
-	private int minCaveSize = 5;
-	private int maxCaveSize = 15;
-	private int minHeight = 4;
-	private int maxHeight = 8;
-	private int maxRoomDistance = 18;
+	private int maxRooms = 10;
+	private int minY = 10;
+	private int maxY = 40;
+	private int minCaveSize = 10;
+	private int maxCaveSize = 28;
+	private int minHeight = 6;
+	private int maxHeight = 12;
+	private int maxRoomDistance = 16;
 	private int minRoomDistance = 10;
-	private int chestChancePerRoom = 20;
+	private int chestChancePerRoom = 100;
 	private boolean buildStaris = true;
 	
-	private boolean placeSpawners = false;
+	private boolean placeSpawners = true;
 	private boolean placeBoss = true;
-	private boolean lootChests = false;
+	private boolean lootChests = true;
 	private String mobName = "minecraft:zombie";
 	private String bossMobName = "minecraft:wither";
 	private Block floorMaterial = Blocks.STONE;
@@ -75,10 +74,10 @@ public class CavernDungeon extends DungeonBase {
 			configFile = null;
 		}
 		if(prop != null && configFile != null && fis != null) {
-			super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
-			super.name = configFile.getName().replaceAll(".prop", "");
-			super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
-			super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+			//super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
+			//super.name = configFile.getName().replaceAll(".properties", "");
+			//super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
+			//super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			
 			this.minRooms = PropertyFileHelper.getIntProperty(prop, "minRooms", 1);
 			this.maxRooms = PropertyFileHelper.getIntProperty(prop, "maxRooms", 8);
@@ -95,11 +94,11 @@ public class CavernDungeon extends DungeonBase {
 			this.maxRoomDistance = PropertyFileHelper.getIntProperty(prop, "maxRoomDistance", 20);
 			this.minRoomDistance = PropertyFileHelper.getIntProperty(prop, "minRoomDistance", 12);
 			
-			this.buildStaris = PropertyFileHelper.getBooleanProperty(prop, "buildStairs", false);
+			this.buildStaris = PropertyFileHelper.getBooleanProperty(prop, "buildStairs", true);
 			
-			this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 20);
+			this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 50);
 			
-			this.placeBoss = PropertyFileHelper.getBooleanProperty(prop, "spawnBoss", true);
+			this.placeBoss = PropertyFileHelper.getBooleanProperty(prop, "spawnBoss", false);
 			this.placeSpawners = PropertyFileHelper.getBooleanProperty(prop, "placeSpawners", true);
 			this.lootChests = PropertyFileHelper.getBooleanProperty(prop, "lootchests", true);
 			
@@ -131,6 +130,7 @@ public class CavernDungeon extends DungeonBase {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			this.registeredSuccessful = true;
 		}
 	}
 	
@@ -143,7 +143,7 @@ public class CavernDungeon extends DungeonBase {
 		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
 		HashMap<CavernGenerator, Integer> zMap = new HashMap<CavernGenerator, Integer>();
 		
-		int rooms = maxRooms <= minRooms ? minRooms : DungeonGenUtils.getIntBetweenBorders(minRooms, maxRooms, world.getSeed());
+		int rooms = DungeonGenUtils.getIntBetweenBorders(minRooms, maxRooms, world.getSeed());
 		int y = DungeonGenUtils.getIntBetweenBorders(minY, maxY, world.getSeed());
 		
 		if(this.isPosLocked()) {
@@ -164,8 +164,10 @@ public class CavernDungeon extends DungeonBase {
 					
 			CavernGenerator cave = new CavernGenerator(this);
 			//Let the cave calculate its air blocks...
+			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, world.getSeed()), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, world.getSeed()), DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, world.getSeed()));
 			cave.preProcess(world, chunk, x + distance.getX(), y, z + distance.getZ());
 			
+			distance = new Vec3i(0, 0, 0);
 			int vLength = DungeonGenUtils.getIntBetweenBorders(minRoomDistance, maxRoomDistance, world.getSeed());
 			distance = new Vec3i(vLength, 0, 0);
 			double angle = ((Integer)new Random().nextInt(360)).doubleValue();
@@ -174,6 +176,8 @@ public class CavernDungeon extends DungeonBase {
 			caves.add(cave);
 			xMap.put(cave, x);
 			zMap.put(cave, z);
+			System.out.println("cave #" + roomIndex + "  @ x=" + x + "  z=" + z);
+			roomIndex++;
 		} while(roomIndex < rooms);
 		
 		int currX = new Integer(OrigX);
@@ -186,13 +190,20 @@ public class CavernDungeon extends DungeonBase {
 			BlockPos end = new BlockPos(xMap.get(cave), y, zMap.get(cave));
 			
 			//Dig out the cave...
-			cave.buildStructure(world, chunk, xMap.get(cave), y, zMap.get(cave));
+			cave.buildStructure(world, chunk, xMap.get(cave), y -1, zMap.get(cave));
 			
 			//connect the tunnels
-			cave.generateTunnel(start, end, world);
+			cave.generateTunnel(start.add(0, 1, 0), end, world);
 			
+			currX = new Integer(end.getX());
+			currZ = new Integer(end.getZ());
+		}
+		for(int i = 0; i < caves.size(); i++) {
+			CavernGenerator cave = caves.get(i);
+
 			//Place a loot chest....
 			if(lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
+				world.setBlockState(new BlockPos(xMap.get(cave), y, zMap.get(cave)), Blocks.CHEST.getDefaultState());
 				cave.fillChests(world, chunk, xMap.get(cave), y, zMap.get(cave));
 			}
 			
@@ -203,9 +214,6 @@ public class CavernDungeon extends DungeonBase {
 				TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(start.add(0, 1, 0));
 				//DONE: set spawner mob*/
 			}
-			
-			currX = new Integer(end.getX());
-			currZ = new Integer(end.getZ());
 		}
 		Random rdmCI = new Random();
 		int bossCaveIndx = rdmCI.nextInt(caves.size());
@@ -226,7 +234,7 @@ public class CavernDungeon extends DungeonBase {
 			while(entryCave == bossCaveIndx) {
 				entryCave = rdmCI.nextInt(caves.size());
 			}
-			caves.get(entryCave).buildLadder(EStairDirection.WEST, world);
+			//caves.get(entryCave).buildLadder(world);
 		}
 		
 	}

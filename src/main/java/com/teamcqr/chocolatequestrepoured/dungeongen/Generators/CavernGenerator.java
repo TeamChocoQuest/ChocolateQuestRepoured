@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
-import com.google.common.collect.Sets;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
@@ -15,7 +15,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -34,8 +33,8 @@ public class CavernGenerator implements IDungeonGenerator {
 	private BlockPos center;
 	
 	private CavernDungeon dungeon;
-	private Set<BlockPos> airBlocks = Sets.newHashSet();
-	private Set<BlockPos> floorBlocks = Sets.newHashSet();
+	private List<BlockPos> airBlocks = new ArrayList<BlockPos>();
+	private List<BlockPos> floorBlocks = new ArrayList<BlockPos>();
 	
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
@@ -114,7 +113,7 @@ public class CavernGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		BlockPos spawnerPos = new BlockPos(x, y +1, z);
+		BlockPos spawnerPos = new BlockPos(x, y, z);
 		world.setBlockState(spawnerPos, Blocks.MOB_SPAWNER.getDefaultState());
 		
 		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(spawnerPos);
@@ -123,45 +122,90 @@ public class CavernGenerator implements IDungeonGenerator {
 	}
 	
 	public void generateTunnel(BlockPos start, BlockPos end, World world) {
+		generateTunnel(new Random().nextBoolean(), start, end, world);
+	}
+	
+	private void generateTunnel(boolean xFirst, BlockPos start, BlockPos target, World world) {
+		if(start.getX() == target.getX() && start.getZ() == target.getZ()) {
+			return;
+		}
+		else if(start.getX() == target.getX() && xFirst) {
+			generateTunnel(false, start, target, world);
+		} 
+		else if(start.getZ() == target.getZ() && !xFirst) {
+			generateTunnel(true, start, target, world);
+		} 
+		else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) {
+			generateTunnel(!xFirst, start, target, world);
+		} 
+		else {
+			int v = 0;
+			buildSegment(start, world);
+			if(xFirst) {
+				v = start.getX() < target.getX() ? 1 : -1;
+				if(start.getX() == target.getX()) {
+					v = 0;
+				}
+				start = start.add(v, 0, 0);
+			} else {
+				v = start.getZ() < target.getZ() ? 1 : -1;
+				if(start.getZ() == target.getZ()) {
+					v = 0;
+				}
+				start = start.add(0, 0, v);
+			}
+			generateTunnel(xFirst, start, target, world);
+		}
+	}
+	
+	private void buildSegment(BlockPos pos, World world) {
 		Block airBlock = this.dungeon.getAirBlock();
 		Block floorMaterial = this.dungeon.getFloorBlock();
-		int vX = end.getX() - start.getX();
-		int vZ = end.getZ() - start.getZ();
 		
-		start.add(0, 1, 0);
+		world.setBlockState(pos, airBlock.getDefaultState());
+		world.setBlockState(pos.down(), airBlock.getDefaultState());
+		world.setBlockState(pos.down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.up(), airBlock.getDefaultState());
 		
-		double length = Math.sqrt(vX * vX + vZ * vZ);
-		Vec3d v = new Vec3d(vX /length , 0, vZ /length);
+		world.setBlockState(pos.north(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.north().up(), airBlock.getDefaultState());
 		
-		//Fills the tunnel with air using multiple 3x3x3 cubes and sets the floor material
-		for(int i = 0; i < ((Double)length).intValue(); i++) {
-			start = start.add(v.x * i, 0, v.z * i);
-			
-			world.setBlockState(start, airBlock.getDefaultState());
-			world.setBlockState(start.down(), airBlock.getDefaultState());
-			world.setBlockState(start.down().down(), floorMaterial.getDefaultState());
-			world.setBlockState(start.up(), airBlock.getDefaultState());
-			
-			world.setBlockState(start.north(), airBlock.getDefaultState());
-			world.setBlockState(start.north().down(), airBlock.getDefaultState());
-			world.setBlockState(start.north().down().down(), floorMaterial.getDefaultState());
-			world.setBlockState(start.north().up(), airBlock.getDefaultState());
-			
-			world.setBlockState(start.east(), airBlock.getDefaultState());
-			world.setBlockState(start.east().down(), airBlock.getDefaultState());
-			world.setBlockState(start.east().down().down(), floorMaterial.getDefaultState());
-			world.setBlockState(start.east().up(), airBlock.getDefaultState());
-			
-			world.setBlockState(start.south(), airBlock.getDefaultState());
-			world.setBlockState(start.south().down(), airBlock.getDefaultState());
-			world.setBlockState(start.south().down().down(), floorMaterial.getDefaultState());
-			world.setBlockState(start.south().up(), airBlock.getDefaultState());
-			
-			world.setBlockState(start.west(), airBlock.getDefaultState());
-			world.setBlockState(start.west().down(), airBlock.getDefaultState());
-			world.setBlockState(start.west().down().down(), floorMaterial.getDefaultState());
-			world.setBlockState(start.west().up(), airBlock.getDefaultState());
-		}
+		world.setBlockState(pos.north().east(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().east().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().east().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.north().east().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.north().west(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().west().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.north().west().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.north().west().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.east(), airBlock.getDefaultState());
+		world.setBlockState(pos.east().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.east().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.east().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.south(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.south().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.south().east(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().east().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().east().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.south().east().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.south().west(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().west().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.south().west().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.south().west().up(), airBlock.getDefaultState());
+		
+		world.setBlockState(pos.west(), airBlock.getDefaultState());
+		world.setBlockState(pos.west().down(), airBlock.getDefaultState());
+		world.setBlockState(pos.west().down().down(), floorMaterial.getDefaultState());
+		world.setBlockState(pos.west().up(), airBlock.getDefaultState());
 	}
 	
 	public void setSizeAndHeight(int sX, int sZ, int h) {
@@ -170,82 +214,20 @@ public class CavernGenerator implements IDungeonGenerator {
 		this.height = h;
 	}
 	
-	public enum EStairDirection {
-		NORTH,
-		EAST,
-		SOUTH,
-		WEST;
-	}
-	
-	public void buildLadder(EStairDirection direction, World world) {
-		switch (direction) {
-		case EAST:
-			buildStairE(world);
-			break;
-		case NORTH:
-			buildStairN(world);
-			break;
-		case SOUTH:
-			buildStairS(world);
-			break;
-		case WEST:
-			buildStairW(world);
-			break;
-		default:
-			break;
-		}
-	}
-	
-	@SuppressWarnings("deprecation")
-	private void buildStairN(World world) {
+	public void buildLadder(World world) {
+		System.out.println("Building exit at X: " + this.center.getX() + "  Y: " + this.center.getY() + "  Z: " + this.center.getZ() + "...");
+		
 		BlockPos start = this.center.north(this.sizeZ - 2);
+		int y = start.getY();
 		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
-		while(start.getY() <= highestY) {
+		while(y <= highestY) {
 			/*if(Block.isEqualTo(world.getBlockState(start.south()).getBlock(), Blocks.AIR)) {
 				
 			}*/
-			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(0));
+			world.setBlockState(start, Blocks.LADDER.getDefaultState());
 			
 			start = start.up();
-		}
-	}
-	@SuppressWarnings("deprecation")
-	private void buildStairE(World world) {
-		BlockPos start = this.center.north(this.sizeX - 2);
-		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
-		while(start.getY() <= highestY) {
-			/*if(Block.isEqualTo(world.getBlockState(start.west()).getBlock(), Blocks.AIR)) {
-				
-			}*/
-			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(5));
-			
-			start = start.up();
-		}
-	}
-	@SuppressWarnings("deprecation")
-	private void buildStairS(World world) {
-		BlockPos start = this.center.north(this.sizeZ - 2);
-		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
-		while(start.getY() <= highestY) {
-			/*if(Block.isEqualTo(world.getBlockState(start.north()).getBlock(), Blocks.AIR)) {
-				
-			}*/
-			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(3));
-			
-			start = start.up();
-		}
-	}
-	@SuppressWarnings("deprecation")
-	private void buildStairW(World world) {
-		BlockPos start = this.center.north(this.sizeX - 2);
-		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
-		while(start.getY() <= highestY) {
-			/*if(Block.isEqualTo(world.getBlockState(start.east()).getBlock(), Blocks.AIR)) {
-				
-			}*/
-			world.setBlockState(start, Blocks.LADDER.getStateFromMeta(10));
-			
-			start = start.up();
+			y++;
 		}
 	}
 

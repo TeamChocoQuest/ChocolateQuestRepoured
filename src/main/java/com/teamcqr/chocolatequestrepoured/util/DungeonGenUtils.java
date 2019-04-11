@@ -47,17 +47,20 @@ public class DungeonGenUtils {
 	}
 	
 	public static int getIntBetweenBorders(int min, int max, long seed) {
-		Random rdm = new Random();
-		rdm.setSeed(seed);
-		max += 1;
-		int ret = min + rdm.nextInt(max);
-		return ret;
+		if(min != max) {
+			Random rdm = new Random();
+			rdm.setSeed(seed);
+			max += 1;
+			int ret = min + rdm.nextInt(max - min);
+			return ret;
+		}
+		return min;
 	}
 	
 	public static int getIntBetweenBorders(int min, int max) {
 		Random rdm = new Random();
 		max += 1;
-		int ret = min + rdm.nextInt(max);
+		int ret = min + rdm.nextInt(max - min);
 		return ret;
 	}
 	
@@ -76,7 +79,7 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean isFarAwayEnoughFromSpawn(int chunkX, int chunkZ) {
-		if(Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnChance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnChance())) {
+		if(Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
 			return true;
 		}
 		return false;
