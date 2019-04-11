@@ -28,9 +28,9 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public class DungeonRegistry {
 	
-	private int dungeonSpawnChance = 80;
-	private int DungeonDistance = 10;
-	private int DungeonSpawnDistance = 40;
+	private int dungeonSpawnChance = 60;
+	private int DungeonDistance = 20;
+	private int DungeonSpawnDistance = 20;
 	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
