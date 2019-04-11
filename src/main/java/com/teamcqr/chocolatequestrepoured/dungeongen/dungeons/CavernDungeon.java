@@ -206,7 +206,7 @@ public class CavernDungeon extends DungeonBase {
 
 			//Place a loot chest....
 			if(lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
-				world.setBlockState(cave.getCenter(), Blocks.CHEST.getDefaultState());
+				world.setBlockState(cave.getCenter().add(0, -4, 0), Blocks.CHEST.getDefaultState());
 				//cave.fillChests(world, chunk, xMap.get(cave), y, zMap.get(cave));
 				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() -4, cave.getCenter().getZ());
 			}
