@@ -35,6 +35,7 @@ public class DungeonRegistry {
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
+	//TODO: Improve this method by splitting it into multiple smaller parts
 	public void loadDungeonFiles() {
 		System.out.println("Loading dungeon configs...");
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
