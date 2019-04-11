@@ -36,6 +36,27 @@ public class PropertyFileHelper {
 		}
 		return retIntArr;
 	}
+	public static String[] getStringArrayProperty(Properties file, String path, String[] defVal) {
+		String s = file.getProperty(path, null);
+		String[] retVal = null;
+		
+		if(s != null) {
+			String[] splitSTr = s.split(",");
+			retVal = new String[splitSTr.length];
+			for(int i = 0; i < splitSTr.length; i++) {
+				String tmp = splitSTr[i].trim();
+				retVal[i] = tmp;
+				if(tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
+					return new String[] {"*"};
+				}
+			}
+		}
+		if(retVal == null) {
+			retVal = defVal;
+		}
+		return retVal;
+		
+	}
 	
 	public static boolean getBooleanProperty(Properties file, String path, boolean defVal) {
 		String s = file.getProperty(path, "false");

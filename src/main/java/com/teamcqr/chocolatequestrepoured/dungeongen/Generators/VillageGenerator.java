@@ -150,6 +150,9 @@ public class VillageGenerator implements IDungeonGenerator{
 	private void buildX(BlockPos start, BlockPos end) {
 		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
 		int vX = end.getX() < start.getX() ? -1 : 1;
+		if(end.getX() == start.getX()) {
+			vX = 0;
+		}
 		int currX = start.getX();
 		int z = start.getZ();
 		int y = 0;
@@ -164,6 +167,9 @@ public class VillageGenerator implements IDungeonGenerator{
 	private void buildZ(BlockPos start, BlockPos end) {
 		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
 		int vZ = end.getZ() < start.getZ() ? -1 : 1;
+		if(end.getZ() == start.getZ()) {
+			vZ = 0;
+		}
 		int currZ = start.getZ();
 		int x = start.getX();
 		int y = 0;

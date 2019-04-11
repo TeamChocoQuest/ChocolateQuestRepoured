@@ -29,6 +29,7 @@ public class DungeonBase {
 	private Block supportTopBlock = Blocks.GRASS;
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
+	protected boolean registeredSuccessful = false;
 	
 	protected void generate(int x, int z, World world, Chunk chunk) {
 		
@@ -132,5 +133,8 @@ public class DungeonBase {
 	public void setLockPos(BlockPos pos, boolean locked) {
 		this.lockedPos = pos;
 		this.isPosLocked = locked;
+	}
+	public boolean isRegisteredSuccessful() {
+		return this.registeredSuccessful;
 	}
 }

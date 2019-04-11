@@ -24,12 +24,13 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.common.BiomeDictionary;
 
 public class DungeonRegistry {
 	
-	private int dungeonSpawnChance = 20;
-	private int DungeonDistance = 125;
-	private int DungeonSpawnDistance = 200;
+	private int dungeonSpawnChance = 80;
+	private int DungeonDistance = 10;
+	private int DungeonSpawnDistance = 40;
 	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
@@ -38,7 +39,7 @@ public class DungeonRegistry {
 		System.out.println("Loading dungeon configs...");
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
 			System.out.println("Found " + CQRMain.CQ_DUNGEON_FOLDER.listFiles().length + " dungeon configs. Loading...");
-			
+			System.out.println("Searching dungeons in " + CQRMain.CQ_DUNGEON_FOLDER.getAbsolutePath() );
 			for(File f : CQRMain.CQ_DUNGEON_FOLDER.listFiles()) {
 				System.out.println("Loading dungeon configuration " + f.getName() + "...");
 				Properties dungeonConfig = new Properties();
@@ -119,10 +120,41 @@ public class DungeonRegistry {
 						if(dungeon != null) {
 							//Position restriction stuff here
 							if(posLocked) {
+								System.out.println("Dungeon " + dungeon.getDungeonName() + " will spawn at X=" + lockedPos.getX() + " Y=" + lockedPos.getY() + " Z=" + lockedPos.getZ());
 								dungeon.setLockPos(lockedPos, posLocked);
 							}
-							//TODO: do biome map filling
+							//DONE: do biome map filling
 							//Biome map filling
+							String[] biomes = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[]{"PLAINS"});
+							System.out.println("Biomes where " + dungeon.getDungeonName() + " can spawn: ");
+							for(String b : biomes) {
+								System.out.println(" - " + b);
+								//Add the biome to the map
+								if(b.equalsIgnoreCase("*") || b.equalsIgnoreCase("ALL")) {
+									addDungeonToAllBiomes(dungeon);
+								} else {
+									if(getBiomeByName(b) != null) {
+										BiomeDictionary.Type biomeType = getBiomeByName(b);
+										System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
+										for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
+											if(this.biomeDungeonMap.containsKey(biome)) {
+												addDungeonToBiome(dungeon, biome);
+												System.out.println(" - " + biome.getBiomeName());
+											}
+										}
+										
+									}
+								}
+							}
+							
+							if(dungeon.isRegisteredSuccessful()) {
+								System.out.println("Successfully registered dungeon " + dungeon.getDungeonName() + "!");
+							} else {
+								System.out.println("Cant load dungeon " + dungeon.getDungeonName() + "!");
+							}
+							System.out.println(" ");
+							System.out.println(" ");
+							
 						}
 						
 					} else {
@@ -182,6 +214,31 @@ public class DungeonRegistry {
 	
 	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {
 		return this.coordinateSpecificDungeons;
+	}
+	
+	private void addDungeonToAllBiomes(DungeonBase dungeon) {
+		for(Biome biome : this.biomeDungeonMap.keySet()) {
+			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
+			if(!dungs.contains(dungeon)) {
+				this.biomeDungeonMap.get(biome).add(dungeon);
+			}
+		}
+	}
+	private void addDungeonToBiome(DungeonBase dungeon, Biome biome) {
+		if(this.biomeDungeonMap.containsKey(biome)) {
+			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
+			if(!dungs.contains(dungeon)) {
+				this.biomeDungeonMap.get(biome).add(dungeon);
+			}
+		}
+	}
+	private BiomeDictionary.Type getBiomeByName(String biomeName) {
+		for(BiomeDictionary.Type bType : BiomeDictionary.Type.getAll()) {
+			if(biomeName.equalsIgnoreCase(bType.getName()) || biomeName.equalsIgnoreCase(bType.toString())) {
+				return bType;
+			}
+		}
+		return null;
 	}
 
 }
