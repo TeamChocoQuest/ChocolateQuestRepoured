@@ -126,7 +126,9 @@ public class CavernGenerator implements IDungeonGenerator {
 		
 		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(spawnerPos);
 		
-		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getBossMob());
+		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
+		//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
+		spawner.updateContainingBlockInfo();
 		
 		spawner.update();
 	}
@@ -145,9 +147,9 @@ public class CavernGenerator implements IDungeonGenerator {
 		else if(start.getZ() == target.getZ() && !xFirst) {
 			generateTunnel(true, start, target, world);
 		} 
-		else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) {
+		/*else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) {
 			generateTunnel(!xFirst, start, target, world);
-		} 
+		} */
 		else {
 			int v = 0;
 			buildSegment(start, world);
