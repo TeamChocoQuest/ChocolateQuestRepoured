@@ -127,6 +127,8 @@ public class CavernGenerator implements IDungeonGenerator {
 		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(spawnerPos);
 		
 		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getBossMob());
+		
+		spawner.update();
 	}
 	
 	public void generateTunnel(BlockPos start, BlockPos end, World world) {

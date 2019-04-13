@@ -59,10 +59,7 @@ public class VillageDungeon extends DungeonBase {
 		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, false), z);
 	}
 	
-	private File getRandomBuilding(Random random) {
-		//Random rdm = new Random();
-		//rdm.setSeed(seed);
-		
+	private File getRandomBuilding(Random random) {	
 		int chance = random.nextInt(100) +1;
 		List<Integer> indexes = new ArrayList<Integer>();
 		

@@ -79,38 +79,4 @@ public class PlateauBuilder {
 		}
 	}
 
-	/**
-	 * public Schematic getSchematic(Random random, World world, int i, int j, int
-	 * k, int sizeX, int sizeZ) { int wallSize = 8; sizeX += wallSize * 2; sizeZ +=
-	 * wallSize * 2; i -= wallSize; k -= wallSize; int schematicHeight = 0; for (int
-	 * x = 0; x < sizeX; x++) { for (int z = 0; z < sizeZ; z++) { int maxHeight = j
-	 * - world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 100, z + k)).getY(); if
-	 * (maxHeight > schematicHeight) { schematicHeight = maxHeight; } } }
-	 * schematicHeight = Math.max(1, schematicHeight); Schematic schematic = new
-	 * Schematic(sizeX, schematicHeight, sizeZ, ChocolateQuest.emptyBlock);
-	 * 
-	 * 
-	 * 
-	 * Perlin3D p = new Perlin3D(world.getSeed(), 8, random); Perlin3D p2 = new
-	 * Perlin3D(world.getSeed(), 32, random); for (int x = 0; x < sizeX; x++) { for
-	 * (int z = 0; z < sizeZ; z++) { int maxHeight = j -
-	 * world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 100, z + k)).getY(); int
-	 * maxY = 0; for (int y = schematicHeight - maxHeight; y < schematicHeight; y++)
-	 * { if ((x > wallSize) && (z > wallSize) && (x < sizeX - wallSize) && (z <
-	 * sizeZ - wallSize)) { structureBlock.placeBlock(schematic, x, y, z, random);
-	 * maxY = y; } else { float noiseVar = (y - maxHeight) / (Math.max(1, maxHeight)
-	 * * 1.5F);
-	 * 
-	 * int tWallSize = wallSize; noiseVar += Math.max(0.0F, (tWallSize - x) /
-	 * wallSize); noiseVar += Math.max(0.0F, (tWallSize - (sizeX - x)) / wallSize);
-	 * 
-	 * noiseVar += Math.max(0.0F, (tWallSize - z) / wallSize); noiseVar +=
-	 * Math.max(0.0F, (tWallSize - (sizeZ - z)) / wallSize); double value =
-	 * (p.getNoiseAt(x + i, y, z + k) + p2.getNoiseAt(x + i, y, z + k) + noiseVar) /
-	 * 3.0D + y / schematicHeight * 0.25D; if (value < 0.5D) {
-	 * structureBlock.placeBlock(schematic, x, y, z, random); maxY = y; } } } if
-	 * (maxHeight <= j) structureTopBlock.placeBlock(schematic, x, maxY, z, random);
-	 * } } schematic.setPosition(i, j - schematicHeight, k); return schematic; }
-	 **/
-
 }
