@@ -40,7 +40,7 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		// TODO: Calculate positions of structures, then build the support platforms, then calculate 
+		// DONE: Calculate positions of structures, then build the support platforms, then calculate 
 		// !! IN BUILD STEP !!    PATH BUILDING: First: Chose wether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
 		BlockPos start = new BlockPos(x, y, z);
 		for(int i = 0; i < this.chosenStructures.size(); i++) {
@@ -68,18 +68,18 @@ public class VillageGenerator implements IDungeonGenerator{
 		
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-		platformCenter.generate(new Random(), world, x, y, z, centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
+		platformCenter.generate(new Random(), world, x - (centerDun.getSizeX() /2), y, z - (centerDun.getSizeZ() /2), centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
 		
 		PlacementSettings plcmnt = new PlacementSettings();
 		plcmnt.setMirror(Mirror.NONE);
 		plcmnt.setRotation(Rotation.NONE);
 		plcmnt.setIntegrity(1.0f);
 		
-		centerDun.placeBlocksInWorld(world, new BlockPos(x, y, z).add(0, -this.dungeon.getUnderGroundOffset(), 0), plcmnt);
+		centerDun.placeBlocksInWorld(world, new BlockPos(x - (centerDun.getSizeX() /2), y - this.dungeon.getUnderGroundOffset(), z - (centerDun.getSizeZ() /2)), plcmnt);
 		//First, build all the support platforms
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
-				//TODO: Load structures from file method   !!HIGH PRIORITY!!
+				//DONE: Load structures from file method   !!HIGH PRIORITY!!
 				CQStructure dungeon = new CQStructure(this.chosenStructures.get(i));
 				
 				if(dungeon != null) {
@@ -87,10 +87,10 @@ public class VillageGenerator implements IDungeonGenerator{
 					BlockPos pos = this.structurePosList.get(i);
 					PlateauBuilder platform = new PlateauBuilder();
 					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-					platform.generate(new Random(), world, pos.getX(), pos.getY(), pos.getZ(), dungeon.getSizeX() +8, dungeon.getSizeZ() +8);
+					platform.generate(new Random(), world, pos.getX() - (dungeon.getSizeX() /2), pos.getY(), pos.getZ() - (dungeon.getSizeZ() /2), dungeon.getSizeX() +8, dungeon.getSizeZ() +8);
 					
 					//Build the structure...
-					pos = pos.add(0, -this.dungeon.getUnderGroundOffset(), 0);
+					pos = pos.add(- dungeon.getSizeX() /2, -this.dungeon.getUnderGroundOffset(),  - dungeon.getSizeZ() /2);
 					
 					dungeon.placeBlocksInWorld(world, pos, plcmnt);
 				}
@@ -107,19 +107,16 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
 		
 	}
 	

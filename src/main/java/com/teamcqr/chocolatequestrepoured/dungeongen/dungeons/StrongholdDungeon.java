@@ -7,6 +7,11 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.StrongholdGenerator;
 
 public class StrongholdDungeon extends DungeonBase {
+	
+	private File stairFolder;
+	private File bossRoomFolder;
+	private File CorridorNSFolder;
+	private File CorridorEWFolder;
 
 	public StrongholdDungeon(File configFile) {
 		super(configFile);

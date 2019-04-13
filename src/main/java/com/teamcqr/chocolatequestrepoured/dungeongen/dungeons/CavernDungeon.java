@@ -19,13 +19,17 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class CavernDungeon extends DungeonBase {
 	
@@ -196,16 +200,12 @@ public class CavernDungeon extends DungeonBase {
 			//Place a loot chest....
 			if(lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
 				world.setBlockState(cave.getCenter().add(0, -4, 0), Blocks.CHEST.getDefaultState());
-				//cave.fillChests(world, chunk, xMap.get(cave), y, zMap.get(cave));
 				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() -4, cave.getCenter().getZ());
 			}
 			
 			//Place a spawner...
 			if(placeSpawners) {
 				cave.placeSpawners(world, chunk, cave.getCenter().getX(), y, cave.getCenter().getZ());
-				/*world.setBlockState(start.add(0, 1, 0), Blocks.MOB_SPAWNER.getDefaultState());
-				TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(start.add(0, 1, 0));
-				//DONE: set spawner mob*/
 			}
 		}
 		Random rdmCI = new Random();
@@ -221,6 +221,7 @@ public class CavernDungeon extends DungeonBase {
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getLootTable(), world.getSeed());
 			
 			//BOSS SPAWNER
+			//TODO: spawn the boss
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());
