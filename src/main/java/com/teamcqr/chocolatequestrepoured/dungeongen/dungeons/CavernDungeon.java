@@ -19,17 +19,13 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
 
 public class CavernDungeon extends DungeonBase {
 	
@@ -254,11 +250,15 @@ public class CavernDungeon extends DungeonBase {
 	
 	public ResourceLocation getBossMob() {
 		String[] bossString = this.bossMobName.split(":");
+		//System.out.println("Domain: " + bossString[0]);
+		//System.out.println("Path: " + bossString[1]);
 		
 		return new ResourceLocation(bossString[0], bossString[1]);
 	}
 	public ResourceLocation getMob() {
 		String[] bossString = this.mobName.split(":");
+		//System.out.println("Domain: " + bossString[0]);
+		//System.out.println("Path: " + bossString[1]);
 		
 		return new ResourceLocation(bossString[0], bossString[1]);
 	}

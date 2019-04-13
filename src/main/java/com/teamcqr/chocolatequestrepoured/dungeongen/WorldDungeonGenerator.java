@@ -50,22 +50,19 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		} else if (DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(), world.getSeed())) {
 			// Now check if any dungeons exist for this biome....
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
-			// System.out.println("Searching dungeons for biome " + biome.getBiomeName() +
-			// "...");
+			//System.out.println("Searching dungeons for biome " + biome.getBiomeName() + "...");
 			// No Dungeons for this biome -> ragequit
 			if (this.dungeonRegistry.getDungeonsForBiome(biome).isEmpty()) {
 				// System.out.println("No dungeons for biome " + biome.getBiomeName() + "!");
 				return;
 			} else {
-				// System.out.println("Found " +
-				// this.dungeonRegistry.getDungeonsForBiome(biome).size() + "dungeons for biome
-				// " + biome.getBiomeName() + "!");
-				// System.out.println("Checking location...");
+				//System.out.println("Found " + this.dungeonRegistry.getDungeonsForBiome(biome).size() + "dungeons for biome" + biome.getBiomeName() + "!");
+				//System.out.println("Checking location...");
 			}
 
 			// Now check if the dungeon is far away enough from the last one
-			if (chunkX % this.dungeonRegistry.getDungeonDistance() == 0
-					&& chunkZ % this.dungeonRegistry.getDungeonDistance() == 0
+			if ((chunkX % this.dungeonRegistry.getDungeonDistance() == 0
+					&& chunkZ % this.dungeonRegistry.getDungeonDistance() == 0)
 					&& DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
 				// System.out.println("Chunks are far away enough from last dungeon and from
 				// spawn!");
@@ -74,10 +71,10 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 				if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world)
 						|| this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
-					System.out.println("Location is fine! Choosing dungeon...");
+					//System.out.println("Location is fine! Choosing dungeon...");
 					int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 					DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-					System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "! Calculating chance...");
+					//System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "! Calculating chance...");
 
 					if (DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
 						boolean dimensionIsOK = false;

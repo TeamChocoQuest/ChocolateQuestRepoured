@@ -28,9 +28,9 @@ import net.minecraftforge.common.BiomeDictionary;
 
 public class DungeonRegistry {
 	
-	private int dungeonSpawnChance = 60;
+	private int dungeonSpawnChance = 100;
 	private int DungeonDistance = 20;
-	private int DungeonSpawnDistance = 20;
+	private int DungeonSpawnDistance = 5;
 	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
@@ -140,7 +140,6 @@ public class DungeonRegistry {
 										for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
 											if(this.biomeDungeonMap.containsKey(biome)) {
 												addDungeonToBiome(dungeon, biome);
-												System.out.println(" - " + biome.getBiomeName());
 											}
 										}
 										
@@ -218,11 +217,9 @@ public class DungeonRegistry {
 	}
 	
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
+		System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
 		for(Biome biome : this.biomeDungeonMap.keySet()) {
-			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
-			if(!dungs.contains(dungeon)) {
-				this.biomeDungeonMap.get(biome).add(dungeon);
-			}
+			addDungeonToBiome(dungeon, biome);
 		}
 	}
 	private void addDungeonToBiome(DungeonBase dungeon, Biome biome) {
@@ -230,6 +227,7 @@ public class DungeonRegistry {
 			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
 			if(!dungs.contains(dungeon)) {
 				this.biomeDungeonMap.get(biome).add(dungeon);
+				System.out.println(" - " + biome.getBiomeName());
 			}
 		}
 	}

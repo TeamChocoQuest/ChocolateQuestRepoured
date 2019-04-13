@@ -45,7 +45,10 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean PercentageRandom(double number, long seed) {
-		return PercentageRandom(number *100, seed);
+		Random rdm = new Random();
+		rdm.setSeed(seed);
+		number *= 100;
+		return PercentageRandom(((Double)number).intValue(), rdm);
 	}
 	
 	public static int getIntBetweenBorders(int min, int max, Random rdm) {
