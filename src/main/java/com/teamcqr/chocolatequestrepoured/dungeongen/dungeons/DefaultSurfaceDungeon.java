@@ -26,6 +26,8 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	
 	protected File structureFolderPath; 
 	
+	//TODO: add TOP BLOCK option
+	
 	public DefaultSurfaceDungeon(File configFile) {
 		super(configFile);
 		Properties prop = new Properties();
@@ -93,6 +95,10 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		//For position locked dungeons, use the positions y
 		if(this.isPosLocked()) {
 			y = this.getLockedPos().getY();
+		}
+		
+		if(this.getUnderGroundOffset() != 0) {
+			y -= this.getUnderGroundOffset();
 		}
 		
 		System.out.println("Placing dungeon: " + this.name);

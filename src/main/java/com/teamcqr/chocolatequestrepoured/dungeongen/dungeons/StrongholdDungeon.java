@@ -10,9 +10,12 @@ public class StrongholdDungeon extends DungeonBase {
 	
 	private File stairFolder;
 	private File bossRoomFolder;
-	private File CorridorNSFolder;
-	private File CorridorEWFolder;
+	private File entranceStairFolder;
+	private File entranceBuildingFolder;
+	private File roomFolder;
 
+	//Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
+	
 	public StrongholdDungeon(File configFile) {
 		super(configFile);
 	}

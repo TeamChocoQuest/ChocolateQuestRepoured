@@ -21,7 +21,7 @@ public class DungeonBase {
 	protected IDungeonGenerator generator;
 	protected String name;
 	private Item placeItem;
-	private int underGroundOffset = 0;
+	protected int underGroundOffset = 0;
 	protected int chance;
 	protected int[] allowedDims = {0};
 	protected boolean unique = false;
@@ -61,7 +61,7 @@ public class DungeonBase {
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 		
-			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "supportplatform", false);
+			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
 				this.supportBlock = Blocks.STONE;
 				try {
@@ -137,5 +137,8 @@ public class DungeonBase {
 	}
 	public boolean isRegisteredSuccessful() {
 		return this.registeredSuccessful;
+	}
+	public boolean doBuildSupportPlatform() {
+		return this.buildSupportPlatform;
 	}
 }

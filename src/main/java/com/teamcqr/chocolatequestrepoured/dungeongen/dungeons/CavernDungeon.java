@@ -105,6 +105,8 @@ public class CavernDungeon extends DungeonBase {
 			this.mobName = prop.getProperty("mobname", "minecraft:zombie");
 			this.bossMobName = prop.getProperty("bossmobname", "minecraft:pig");
 			
+			this.underGroundOffset = 0;
+			
 			this.floorMaterial = Blocks.STONE;
 			try {
 				Block tmp = Block.getBlockFromName(prop.getProperty("floorblock", "minecraft:stone"));
