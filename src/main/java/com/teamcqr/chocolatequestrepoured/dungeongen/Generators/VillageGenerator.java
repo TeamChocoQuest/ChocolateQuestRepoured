@@ -80,19 +80,23 @@ public class VillageGenerator implements IDungeonGenerator{
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
 				//DONE: Load structures from file method   !!HIGH PRIORITY!!
-				CQStructure dungeon = new CQStructure(this.chosenStructures.get(i));
+				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
 				
-				if(dungeon != null) {
+				if(dungeonToSpawn != null) {
 					//Build the support platform...
 					BlockPos pos = this.structurePosList.get(i);
 					PlateauBuilder platform = new PlateauBuilder();
 					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-					platform.generate(new Random(), world, pos.getX() - (dungeon.getSizeX() /2), pos.getY(), pos.getZ() - (dungeon.getSizeZ() /2), dungeon.getSizeX() +8, dungeon.getSizeZ() +8);
+					platform.generate(new Random(), world, pos.getX() - (dungeonToSpawn.getSizeX() /2), pos.getY(), pos.getZ() - (dungeonToSpawn.getSizeZ() /2), dungeonToSpawn.getSizeX() +8, dungeonToSpawn.getSizeZ() +8);
 					
 					//Build the structure...
-					pos = pos.add(- dungeon.getSizeX() /2, -this.dungeon.getUnderGroundOffset(),  - dungeon.getSizeZ() /2);
+					int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
+					int X = pos.getX() - (dungeonToSpawn.getSizeX() /2);
+					int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2);
+					//pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0,  - dungeonToSpawn.getSizeZ() /2);
+					pos = new BlockPos(X, Y, Z);
 					
-					dungeon.placeBlocksInWorld(world, pos, plcmnt);
+					dungeonToSpawn.placeBlocksInWorld(world, pos, plcmnt);
 				}
 			}
 		}
