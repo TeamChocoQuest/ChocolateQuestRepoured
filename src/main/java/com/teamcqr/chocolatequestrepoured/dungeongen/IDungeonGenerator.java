@@ -10,6 +10,7 @@ public interface IDungeonGenerator {
 	void postProcess(World world, Chunk chunk, int x, int y, int z);
 	void fillChests(World world, Chunk chunk, int x, int y, int z);
 	void placeSpawners(World world, Chunk chunk, int x, int y, int z);
+	void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z);
 	
 	default void generate(World world, Chunk chunk, int x, int y, int z) {
 		preProcess(world, chunk, x, y, z);
@@ -17,6 +18,7 @@ public interface IDungeonGenerator {
 		postProcess(world, chunk, x, y, z);
 		fillChests(world, chunk, x, y, z);
 		placeSpawners(world, chunk, x, y, z);
+		placeCoverBlocks(world, chunk, x, y, z);
 	}
 
 }

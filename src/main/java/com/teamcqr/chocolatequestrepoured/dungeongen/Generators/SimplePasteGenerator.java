@@ -55,4 +55,10 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 		//Also does nothing
 	}
 
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -28,6 +28,8 @@ public class DungeonBase {
 	protected boolean buildSupportPlatform = true;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
+	//TODO: add TOP BLOCK option
+	protected Block coverBlock = Blocks.AIR;
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
@@ -83,7 +85,15 @@ public class DungeonBase {
 					System.out.println("couldnt load supportblocktop block! using default value (air block)...");
 				}
 			}
-			
+			this.coverBlock = Blocks.AIR;
+			try {
+				Block tmp = Block.getBlockFromName(prop.getProperty("coverblock", "minecraft:air"));
+				if(tmp != null) {
+					this.coverBlock = tmp;
+				}
+			} catch(Exception ex) {
+				System.out.println("couldnt load cover block! using default value (air block)...");
+			}
 			try {
 				fis.close();
 			} catch (IOException e) {
@@ -140,5 +150,8 @@ public class DungeonBase {
 	}
 	public boolean doBuildSupportPlatform() {
 		return this.buildSupportPlatform;
+	}
+	public Block getCoverBlock() {
+		return this.coverBlock;
 	}
 }

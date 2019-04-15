@@ -244,4 +244,9 @@ public class CavernGenerator implements IDungeonGenerator {
 		return new BlockPos(this.centerX, this.centerY, this.centerZ);
 	}
 
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		//MAKES NO SENSE FOR A CAVE
+	}
+
 }

@@ -26,8 +26,6 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	
 	protected File structureFolderPath; 
 	
-	//TODO: add TOP BLOCK option
-	
 	public DefaultSurfaceDungeon(File configFile) {
 		super(configFile);
 		Properties prop = new Properties();
