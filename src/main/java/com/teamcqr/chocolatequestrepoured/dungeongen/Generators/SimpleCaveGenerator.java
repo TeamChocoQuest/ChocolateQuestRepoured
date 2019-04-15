@@ -45,4 +45,9 @@ public class SimpleCaveGenerator implements IDungeonGenerator {
 		//Place boss spawner
 	}
 
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		//MAKES NO SENSE FOR CAVES
+	}
+
 }

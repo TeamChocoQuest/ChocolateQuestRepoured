@@ -140,15 +140,15 @@ public class VillageGenerator implements IDungeonGenerator{
 	private void buildPath(BlockPos start, BlockPos end) {
 		boolean xfirst = new Random().nextBoolean(); 
 		if(xfirst) {
-			buildX(start, end); 
-			buildZ(start.add(end.getX() - start.getX(), 0, 0), end);
+			buildPathX(start, end); 
+			buildPathZ(start.add(end.getX() - start.getX(), 0, 0), end);
 		} else {
-			buildZ(start, end);
-			buildX(start.add(0, 0, end.getZ() - start.getZ()), end);
+			buildPathZ(start, end);
+			buildPathX(start.add(0, 0, end.getZ() - start.getZ()), end);
 		}
 	}
 	
-	private void buildX(BlockPos start, BlockPos end) {
+	private void buildPathX(BlockPos start, BlockPos end) {
 		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
 		int vX = end.getX() < start.getX() ? -1 : 1;
 		if(end.getX() == start.getX()) {
@@ -165,7 +165,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		} while(currX != end.getX());
 	}
 	
-	private void buildZ(BlockPos start, BlockPos end) {
+	private void buildPathZ(BlockPos start, BlockPos end) {
 		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
 		int vZ = end.getZ() < start.getZ() ? -1 : 1;
 		if(end.getZ() == start.getZ()) {
@@ -213,6 +213,15 @@ public class VillageGenerator implements IDungeonGenerator{
 		while(Block.isEqualTo(this.worldIn.getBlockState(tmpPos).getBlock(), Blocks.AIR)) {
 			this.worldIn.setBlockState(tmpPos, this.dungeon.getPathMaterial().getDefaultState());
 			tmpPos = tmpPos.down();
+		}
+	}
+
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		if(!Block.isEqualTo(this.dungeon.getCoverBlock(), Blocks.AIR)) {
+			for(int i = 0; i < this.chosenStructures.size(); i++) {
+				//TODO: Figure out how the support platform handles its placement, then do this...
+			}
 		}
 	}
 }

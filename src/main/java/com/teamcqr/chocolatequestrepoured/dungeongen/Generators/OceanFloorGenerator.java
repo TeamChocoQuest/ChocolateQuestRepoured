@@ -61,4 +61,9 @@ public class OceanFloorGenerator implements IDungeonGenerator{
 		
 	}
 
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		// MAKES NO SENSE HERE, COVER BLOCK WOULD BE AT WATER SURFACE
+	}
+
 }

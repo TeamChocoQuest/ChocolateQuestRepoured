@@ -45,4 +45,9 @@ public class StrongholdGenerator implements IDungeonGenerator{
 		
 	}
 
+	@Override
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
+	}
+
 }
