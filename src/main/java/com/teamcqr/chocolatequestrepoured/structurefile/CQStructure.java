@@ -100,7 +100,8 @@ public class CQStructure {
 		int partID = 1;
 		for(BlockPos offset : this.structures.keySet()) {
 			System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
-			BlockPos pastePos = pos.add(offset);
+			BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
+			BlockPos pastePos = pos.add(offsetVec);
 			this.structures.get(offset).addBlocksToWorld(worldIn, pastePos, settings);
 			partID++;
 		}
