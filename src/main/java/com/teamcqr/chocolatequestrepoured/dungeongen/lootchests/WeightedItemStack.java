@@ -1,0 +1,66 @@
+package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+public class WeightedItemStack {
+
+	private String itemName;
+	private int minCount;
+	private int maxCount;
+	private int weight;
+	private boolean enchant;
+	private boolean treasure;
+	private int minLvl;
+	private int maxLvl;
+	
+	public WeightedItemStack(String itemName, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure) {
+		this.itemName = itemName;
+		this.minCount = minItems;
+		this.maxCount = maxItems;
+		this.weight = weight;
+		this.enchant = enchant;
+		this.minLvl = minEnchantLevel;
+		this.maxLvl = maxEnchantLevel;
+		this.treasure = isTreasure;
+	}
+	
+	public JsonObject toJSON() {
+		JsonObject jsonObj = null;
+		
+		try {
+			jsonObj = new JsonObject();
+			jsonObj.addProperty("type", "item");
+			jsonObj.addProperty("name", this.itemName);
+			jsonObj.addProperty("weight", this.weight);
+			
+			JsonArray functions = new JsonArray();
+			
+			JsonObject countOBJ = new JsonObject();
+			countOBJ.addProperty("function", "set_count");
+			JsonObject countPROP = new JsonObject();
+			countPROP.addProperty("min", this.minCount);
+			countPROP.addProperty("max", this.maxCount);
+			countOBJ.add("count", countPROP);
+			
+			functions.add(countOBJ);
+			
+			if(this.enchant) {
+				JsonObject enchantOBJ = new JsonObject();
+				enchantOBJ.addProperty("function", "enchant_with_levels");
+				enchantOBJ.addProperty("treasure", this.treasure);
+				JsonObject levelOBJ = new JsonObject();
+				levelOBJ.addProperty("min", this.minLvl);
+				levelOBJ.addProperty("max", this.maxLvl);
+				enchantOBJ.add("levels", levelOBJ);
+				
+				functions.add(enchantOBJ);
+			}
+		} catch(Exception ex) {
+			System.out.println("Failed to create lootentry!");
+		}
+		
+		return jsonObj;
+	}
+
+}

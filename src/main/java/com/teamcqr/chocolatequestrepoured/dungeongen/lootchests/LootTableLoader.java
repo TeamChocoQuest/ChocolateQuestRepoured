@@ -40,5 +40,5 @@ public class LootTableLoader {
 		}
 		return false;
 	}
-
+	
 }
