@@ -14,7 +14,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 public class LootTables {
 	
 	//TODO: rewrite this as an enum and add ALL the extra  loot chests --> wait for textures being uploaded...
-	//TODO: place all loot chest into their own tab
+	//DONE: place all loot chest into their own tab
 	//TODO: on loot table load: load in the configs!
 	
 	private static final Set<ResourceLocation> CQ_LOOT_TABLES = Sets.<ResourceLocation>newHashSet();
