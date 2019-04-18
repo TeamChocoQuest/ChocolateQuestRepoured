@@ -11,11 +11,13 @@ public class WeightedItemStack {
 	private int weight;
 	private boolean enchant;
 	private boolean treasure;
+	private int damage;
 	private int minLvl;
 	private int maxLvl;
 	
-	public WeightedItemStack(String itemName, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure) {
+	public WeightedItemStack(String itemName, int damage, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure) {
 		this.itemName = itemName;
+		this.damage = damage;
 		this.minCount = minItems;
 		this.maxCount = maxItems;
 		this.weight = weight;
@@ -55,6 +57,13 @@ public class WeightedItemStack {
 				enchantOBJ.add("levels", levelOBJ);
 				
 				functions.add(enchantOBJ);
+			}
+			if(this.damage > 0) {
+				JsonObject damgOBJ = new JsonObject();
+				damgOBJ.addProperty("function", "set_data");
+				damgOBJ.addProperty("data", this.damage);
+				
+				functions.add(damgOBJ);
 			}
 		} catch(Exception ex) {
 			System.out.println("Failed to create lootentry!");
