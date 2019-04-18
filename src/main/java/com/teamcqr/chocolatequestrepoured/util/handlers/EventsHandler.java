@@ -134,6 +134,7 @@ public class EventsHandler
 		{
 			EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 			Entity attacker = event.getSource().getTrueSource();
+			@SuppressWarnings("unused")
 			float amount = event.getAmount();
 			World world = player.world;
 			
@@ -146,8 +147,11 @@ public class EventsHandler
 			double d1 = attacker.posY;
 			double d2 = attacker.posZ + (attacker.world.rand.nextDouble() - 0.5D) * 4.0D;
 			
+			@SuppressWarnings("unused")
 			double d3 = player.posX;
+			@SuppressWarnings("unused")
 			double d4 = player.posY;
+			@SuppressWarnings("unused")
 			double d5 = player.posZ;
 			
 			int i = MathHelper.floor(d);
