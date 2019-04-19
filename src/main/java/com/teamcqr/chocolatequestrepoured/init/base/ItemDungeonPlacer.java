@@ -20,6 +20,8 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	
 	//public static IForgeRegistry<Item> itemRegistry;
 	
+	private static final int HIGHEST_ICON_NUMBER = 15;
+	
 	private DungeonBase dungeon;
 	private int iconID = 0;
 	
@@ -48,7 +50,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	public void registerModels() {
 		//CQRMain.proxy.registerItemRenderer(this, 0, "inventory");
 		int textureID = Math.abs(this.iconID);
-		if(textureID > 15) {
+		if(textureID > HIGHEST_ICON_NUMBER) {
 			textureID = 0;
 		}
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("cqrepoured:dungeon_placer_d" + textureID, "normal"));
