@@ -48,7 +48,6 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	
 	@Override
 	public void registerModels() {
-		//CQRMain.proxy.registerItemRenderer(this, 0, "inventory");
 		int textureID = Math.abs(this.iconID);
 		if(textureID > HIGHEST_ICON_NUMBER) {
 			textureID = 0;
