@@ -5,7 +5,6 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
@@ -42,7 +41,7 @@ public class EventsHandler
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
-		ItemDungeonPlacer.itemRegistry = event.getRegistry();
+		//ItemDungeonPlacer.itemRegistry = event.getRegistry();
 	}
 	
 	@SubscribeEvent
@@ -54,6 +53,7 @@ public class EventsHandler
 	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent event)
 	{
+		System.out.println("Loading Item models...");
 		for(Item item : ModItems.ITEMS)
 		{
 			if(item instanceof IHasModel)
@@ -61,6 +61,15 @@ public class EventsHandler
 				((IHasModel)item).registerModels();
 			}
 		}
+		System.out.println("Loading Dungeon Placer models...");
+		for(Item item : ModItems.DUNGEON_PLACERS)
+		{
+			if(item instanceof IHasModel)
+			{
+				((IHasModel)item).registerModels();
+			}
+		}
+		System.out.println("Loading Block models");
 		for(Block block : ModBlocks.BLOCKS)
 		{
 			if(block instanceof IHasModel)
