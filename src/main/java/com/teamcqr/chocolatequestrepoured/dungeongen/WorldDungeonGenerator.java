@@ -101,7 +101,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 	}
 
-	private static long getSeed(World world, int chunkX, int chunkZ) {
+	public static long getSeed(World world, int chunkX, int chunkZ) {
 		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1094792450L;
 		long result = xorShift64(mix);
 

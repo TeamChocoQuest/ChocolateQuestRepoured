@@ -14,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -116,7 +117,17 @@ public class CavernGenerator implements IDungeonGenerator {
 		world.setBlockState(start, Blocks.CHEST.getDefaultState());
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
 		int eltID = new Random().nextInt(14) +4;
-		chest.setLootTable(ELootTable.valueOf(eltID).getLootTable(), world.getSeed());
+		if(chest != null) {
+			ResourceLocation resLoc = null;
+			try {
+				resLoc = ELootTable.valueOf(eltID).getLootTable();
+			} catch(Exception ex) {
+				ex.printStackTrace();
+			}
+			if(resLoc != null) {
+				chest.setLootTable(resLoc, world.getSeed());
+			}
+		}
 	}
 
 	@Override

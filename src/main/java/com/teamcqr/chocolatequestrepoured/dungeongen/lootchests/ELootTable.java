@@ -1,16 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
+import java.util.ArrayList;
+
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTableList;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import com.google.common.collect.Sets;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 public enum ELootTable {
 	
@@ -62,9 +60,6 @@ public enum ELootTable {
 	private String name;
 	private ResourceLocation loottable;
 	
-	private static final Set<ResourceLocation> CQ_LOOT_TABLES = Sets.<ResourceLocation>newHashSet();
-	private static final List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
-	
 	ELootTable(Block block, int id, String name, ResourceLocation loottable) {
 		this.block = block;
 		this.ID = id;
@@ -110,7 +105,7 @@ public enum ELootTable {
 	private static ResourceLocation registerChest(String id) {
 		ResourceLocation ret = register("chest/" + id);
 		if(ret != null) {
-			CQ_DUNGEON_LOOT.add(ret);
+			CQRMain.CQ_DUNGEON_LOOT.add(ret);
 		}
 		return ret;
 	}
@@ -118,7 +113,10 @@ public enum ELootTable {
 		return register(new ResourceLocation("cqrepoured", id));
 	}
 	private static ResourceLocation register(ResourceLocation id) {
-		if (CQ_LOOT_TABLES.add(id))
+		if(CQRMain.CQ_LOOT_TABLES == null) {
+			CQRMain.CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
+		}
+		if (id != null && CQRMain.CQ_LOOT_TABLES != null && CQRMain.CQ_LOOT_TABLES.add(id))
         {
             return id;
         }

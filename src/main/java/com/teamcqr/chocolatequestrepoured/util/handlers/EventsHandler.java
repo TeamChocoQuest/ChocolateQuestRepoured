@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
@@ -41,6 +42,7 @@ public class EventsHandler
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
 		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+		ItemDungeonPlacer.itemRegistry = event.getRegistry();
 	}
 	
 	@SubscribeEvent
