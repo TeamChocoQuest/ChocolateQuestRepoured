@@ -62,7 +62,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return this.dungeon.getDungeonName();
+		return "Dungeon Placer - " + this.dungeon.getDungeonName();
 	}
 	
 	@Override
