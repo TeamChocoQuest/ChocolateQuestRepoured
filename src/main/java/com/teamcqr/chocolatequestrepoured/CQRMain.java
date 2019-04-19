@@ -1,9 +1,12 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -12,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -32,6 +36,9 @@ public class CQRMain
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
+	
+	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
+	public static List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
 	
 	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab")
 	{
@@ -109,6 +116,16 @@ public class CQRMain
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
+		//Instantiating the ELootTable class
+		try {
+			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getLootTable();
+			if(resLoc != null) {
+				System.out.println("ELootTable instantiated successfully!");
+			}
+		} catch (Exception e) {
+			System.err.println("WARNING: Failed to instantiate the loot enum!!");
+			e.printStackTrace();
+		}
 	}
 	
 	@EventHandler

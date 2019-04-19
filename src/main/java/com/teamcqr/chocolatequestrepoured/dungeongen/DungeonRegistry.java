@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.StrongholdDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.init.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.util.math.BlockPos;
@@ -149,6 +150,7 @@ public class DungeonRegistry {
 							
 							if(dungeon.isRegisteredSuccessful()) {
 								System.out.println("Successfully registered dungeon " + dungeon.getDungeonName() + "!");
+								new ItemDungeonPlacer(dungeon);
 							} else {
 								System.out.println("Cant load dungeon " + dungeon.getDungeonName() + "!");
 							}

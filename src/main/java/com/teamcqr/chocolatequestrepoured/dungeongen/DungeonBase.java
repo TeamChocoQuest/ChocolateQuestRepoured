@@ -34,6 +34,13 @@ public class DungeonBase {
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
 	
+	public void generate(BlockPos pos, World world) {
+		Chunk chunk = world.getChunkFromBlockCoords(pos);
+		Random rdm = new Random();
+		rdm.setSeed(WorldDungeonGenerator.getSeed(world, chunk.x, chunk.z));
+		generate(pos.getX(), pos.getZ(), world, chunk, rdm);
+	}
+	
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		
 	}
