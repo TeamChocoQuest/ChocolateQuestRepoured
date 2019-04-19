@@ -17,6 +17,7 @@ public class CommonProxy
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		EntityHandler.registerEntity();
+		loadDungeons();
 	}
 	
 	public void init(FMLInitializationEvent event)
@@ -25,16 +26,9 @@ public class CommonProxy
 		SoundsHandler.registerSounds();
 	}
 	
-	@SuppressWarnings("deprecation")
 	public void postInit(FMLPostInitializationEvent event)
 	{
-		//Fills the biomes of the biome-dungeonlist map
-		for(Biome b : ForgeRegistries.BIOMES.getValues()) {
-			if(b != null) {
-				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
-			}
-		}
-		CQRMain.dungeonRegistry.loadDungeonFiles();
+		
 	}
 	
 	public void registerItemRenderer(Item item, int meta, String id) 
@@ -45,5 +39,15 @@ public class CommonProxy
 	public void registerRenderers()
 	{
 		
+	}
+	
+	private void loadDungeons() {
+		//Fills the biomes of the biome-dungeonlist map
+		for(Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
+			if(b != null) {
+				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
+			}
+		}
+		CQRMain.dungeonRegistry.loadDungeonFiles();
 	}
 }

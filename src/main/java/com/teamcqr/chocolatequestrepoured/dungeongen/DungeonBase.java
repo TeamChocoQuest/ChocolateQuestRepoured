@@ -26,6 +26,7 @@ public class DungeonBase {
 	protected int[] allowedDims = {0};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
+	private int iconID;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
 	//TODO: add TOP BLOCK option
@@ -69,6 +70,7 @@ public class DungeonBase {
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
@@ -146,6 +148,9 @@ public class DungeonBase {
 
 	public boolean isPosLocked() {
 		return isPosLocked;
+	}
+	public int getIconID() {
+		return this.iconID;
 	}
 
 	public void setLockPos(BlockPos pos, boolean locked) {
