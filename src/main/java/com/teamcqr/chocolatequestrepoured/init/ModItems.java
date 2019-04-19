@@ -41,7 +41,6 @@ import net.minecraftforge.common.util.EnumHelper;
 public class ModItems 
 {
 	public static final List<Item> ITEMS = new ArrayList<Item>();
-	public static final List<Item> DUNGEON_PLACERS = new ArrayList<Item>();
 	
 	//Materials #TODO Balance (done)?
 	public static final ArmorMaterial ARMOR_CLOUD = EnumHelper.addArmorMaterial("armor_cloud", Reference.MODID + ":cloud", 450, new int[]{4, 7, 9, 4}, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);

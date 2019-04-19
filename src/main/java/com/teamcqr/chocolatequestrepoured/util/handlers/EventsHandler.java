@@ -61,14 +61,6 @@ public class EventsHandler
 				((IHasModel)item).registerModels();
 			}
 		}
-		System.out.println("Loading Dungeon Placer models...");
-		for(Item item : ModItems.DUNGEON_PLACERS)
-		{
-			if(item instanceof IHasModel)
-			{
-				((IHasModel)item).registerModels();
-			}
-		}
 		System.out.println("Loading Block models");
 		for(Block block : ModBlocks.BLOCKS)
 		{

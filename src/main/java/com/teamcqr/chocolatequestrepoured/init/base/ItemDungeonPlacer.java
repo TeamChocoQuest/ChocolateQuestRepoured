@@ -35,7 +35,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 		
 		setMaxStackSize(1);
 		
-		ModItems.DUNGEON_PLACERS.add(this);
+		ModItems.ITEMS.add(this);
 
 		System.out.println("Created dungeon placer for dungeon: " + this.dungeon.getDungeonName() + "!");
 	}
@@ -54,10 +54,16 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 			textureID = 0;
 		}
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("cqrepoured:dungeon_placer_d" + textureID, "normal"));
+		System.out.println("Registered Model!");
 	}
 	
 	public DungeonBase getAssignedDungeon() {
 		return this.dungeon;
+	}
+	
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return this.dungeon.getDungeonName();
 	}
 	
 	@Override
