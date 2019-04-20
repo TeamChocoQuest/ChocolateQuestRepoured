@@ -7,6 +7,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -121,6 +122,8 @@ public class CQRMain
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getLootTable();
 			if(resLoc != null) {
 				System.out.println("ELootTable instantiated successfully!");
+				LootTableLoader ltl = new LootTableLoader();
+				ltl.loadConfigs();
 			}
 		} catch (Exception e) {
 			System.err.println("WARNING: Failed to instantiate the loot enum!!");

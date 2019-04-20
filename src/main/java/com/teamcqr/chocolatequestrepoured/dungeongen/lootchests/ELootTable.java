@@ -102,6 +102,17 @@ public enum ELootTable {
 		return null;
 	}
 	
+	public static ELootTable valueOf(ResourceLocation resLoc) {
+		if(resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("cqrepoured")) {
+			for(ELootTable elt : ELootTable.values()) {
+				if(elt.getLootTable().equals(resLoc)) {
+					return elt;
+				}
+			}
+		}
+		return null;
+	}
+	
 	private static ResourceLocation registerChest(String id) {
 		ResourceLocation ret = register("chest/" + id);
 		if(ret != null) {
