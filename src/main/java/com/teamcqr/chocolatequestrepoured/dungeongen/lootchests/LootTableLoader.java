@@ -2,28 +2,53 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import com.google.gson.stream.JsonWriter;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 public class LootTableLoader {
 	
 	//These are all valid file names for the chests!
-	String[] validFileNames = {"treasure_chest", "loot_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13"}; 
+	String[] validFileNames = {"treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13", "custom_14"}; 
 	
-	public void load(File config, int tableID, World world) {
+	public void loadConfigs() {
+		int files = -1;
+		if(CQRMain.CQ_CHEST_FOLDER != null && CQRMain.CQ_CHEST_FOLDER.exists()) {
+			files = CQRMain.CQ_CHEST_FOLDER.listFiles().length -1;
+		}
+		if(files > 0) {
+			System.out.println("Found " + files + " loot chest configs! Loading...");
+			for(File f : CQRMain.CQ_CHEST_FOLDER.listFiles()) {
+				if(f.isFile()) {
+					ELootTable table = null;
+					
+					table = getAssignedLootTable(f.getName());
+					
+					if(table != null) {
+						System.out.println("Loading loot config " + f.getName() + "...");
+						createJSONFile(f, table);
+					}
+				}
+			}
+		}
+	}
+	
+	private void createJSONFile(File config, ELootTable table) {
+		System.out.println("Checking existance of file " +config.getName() + "..."); 
 		if(config != null && config.exists()) {
+			System.out.println("File exists! Checking if name is valid...");
 			if(isFileNameValid(config)) {
-				ResourceLocation lootTableResFile = ELootTable.valueOf(tableID).getLootTable();
-				
+				System.out.println("Name is valid! Loading...");
 				Properties propFile = new Properties();
 				boolean success = false;
 				try {
@@ -38,6 +63,40 @@ public class LootTableLoader {
 					if(!items.isEmpty()) {
 						JsonObject json = getJSON(items);
 						//TODO: modify json file of resourcelocation
+						File jsonFileDir = new File(config.getParentFile().getAbsolutePath() + "/.generatedJSON/");
+						if(!jsonFileDir.exists()) {
+							jsonFileDir.mkdirs();
+						}
+						File jsonFile = new File(jsonFileDir.getAbsolutePath(), table.getName() + ".json");
+						if(jsonFile.exists()) {
+							jsonFile.delete();
+						}
+						if(!jsonFile.exists()) {
+							try {
+								jsonFile.createNewFile();
+							} catch (IOException e) {
+								System.err.println("Failed to create JSON file for chest " + config.getName() + "!");
+								e.printStackTrace();
+							}
+						}
+						Gson gson = new Gson();
+						
+						FileWriter fileWriter = null;
+						try {
+							fileWriter = new FileWriter(jsonFile);
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						if(fileWriter != null) {
+							JsonWriter jsonWriter = new JsonWriter(fileWriter);
+							gson.toJson(json, jsonWriter);
+							try {
+								jsonWriter.close();
+								fileWriter.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}					
 					}
 				}
 			}
@@ -111,21 +170,22 @@ public class LootTableLoader {
 			int max_lvl = 10;
 			boolean treasure = false;
 			
-			switch(tokenCount) {
-				default:
-					item = ((String)tokenizer.nextElement()).trim();
-					damage = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-					min_count = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-					max_count = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-					chance = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-				case 6:
-					enchant = Boolean.parseBoolean(((String)tokenizer.nextElement()).trim());
-					min_lvl = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-					max_lvl = Integer.parseInt(((String)tokenizer.nextElement()).trim());
-				case 9:
+			item = ((String)tokenizer.nextElement()).trim();
+			//System.out.println("Item: " + item);
+			damage = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+			min_count = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+			max_count = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+			chance = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+			
+			if(tokenCount >= 6) {
+				enchant = Boolean.parseBoolean(((String)tokenizer.nextElement()).trim());
+				min_lvl = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+				max_lvl = Integer.parseInt(((String)tokenizer.nextElement()).trim());
+				if(tokenCount >= 9) {
 					treasure = Boolean.parseBoolean(((String)tokenizer.nextElement()).trim());
-					break;
+				}
 			}
+
 			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure);
 			return itemstack;
 		} else {
@@ -135,7 +195,11 @@ public class LootTableLoader {
 	}
 	
 	private boolean isFileNameValid(File file) {
-		String fileName = file.getName().replaceAll(".properties", "");
+		return isNameValid(file.getName());
+	}
+	private boolean isNameValid(String fileName) {
+		fileName = fileName.replaceAll(".properties", "");
+		fileName = fileName.replaceAll(".prop", "");
 		fileName = fileName.toLowerCase();
 		for(int i = 0; i < validFileNames.length; i++) {
 			if(validFileNames[i].equalsIgnoreCase(fileName)) {
@@ -143,6 +207,52 @@ public class LootTableLoader {
 			}
 		}
 		return false;
+	}
+	
+	private ELootTable getAssignedLootTable(String fileName) {
+		if(isNameValid(fileName)) {
+			switch(fileName) {
+			default:
+				break;
+			case "treasure_chest":
+				return ELootTable.CQ_TREASURE;
+			case "material_chest":
+				return ELootTable.CQ_MATERIAL;
+			case "food_chest":
+				return ELootTable.CQ_FOOD;
+			case "tools_chest":
+				return ELootTable.CQ_EQUIPMENT;
+			case "custom_1":
+				return ELootTable.CQ_CUSTOM_1;
+			case "custom_2":
+				return ELootTable.CQ_CUSTOM_2;
+			case "custom_3":
+				return ELootTable.CQ_CUSTOM_3;
+			case "custom_4":
+				return ELootTable.CQ_CUSTOM_4;
+			case "custom_5":
+				return ELootTable.CQ_CUSTOM_5;
+			case "custom_6":
+				return ELootTable.CQ_CUSTOM_6;
+			case "custom_7":
+				return ELootTable.CQ_CUSTOM_7;
+			case "custom 8":
+				return ELootTable.CQ_CUSTOM_8;
+			case "custom_9":
+				return ELootTable.CQ_CUSTOM_9;
+			case "custom_10":
+				return ELootTable.CQ_CUSTOM_10;
+			case "custom_11":
+				return ELootTable.CQ_CUSTOM_11;
+			case "custom_12":
+				return ELootTable.CQ_CUSTOM_12;
+			case "custom_13":
+				return ELootTable.CQ_CUSTOM_13;
+			case "custom_14":
+				return ELootTable.CQ_CUSTOM_14;
+			}
+		}
+		return null;
 	}
 	
 }

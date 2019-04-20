@@ -65,6 +65,7 @@ public class WeightedItemStack {
 				
 				functions.add(damgOBJ);
 			}
+			jsonObj.add("functions", functions);
 		} catch(Exception ex) {
 			System.out.println("Failed to create lootentry!");
 		}

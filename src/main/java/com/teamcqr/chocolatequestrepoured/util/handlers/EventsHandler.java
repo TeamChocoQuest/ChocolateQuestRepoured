@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
@@ -20,11 +21,14 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
@@ -68,6 +72,16 @@ public class EventsHandler
 			{
 				((IHasModel)block).registerModels();
 			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onLootTableLoad(LootTableLoadEvent event) {
+		LootTable lootTable = event.getTable();
+		ResourceLocation resLoc = event.getName();
+		if(ELootTable.valueOf(resLoc) != null) {
+			lootTable = LootTable.EMPTY_LOOT_TABLE;
+			//TODO: Exchange loot tables...
 		}
 	}
 	
