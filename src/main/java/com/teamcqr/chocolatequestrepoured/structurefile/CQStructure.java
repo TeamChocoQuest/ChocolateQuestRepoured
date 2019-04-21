@@ -34,7 +34,7 @@ public class CQStructure {
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
 	
 	public CQStructure(String name) {
-		this.setDataFile(new File(CQRMain.CQ_DUNGEON_FOLDER, name + ".nbt"));
+		this.setDataFile(new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER, name + ".nbt"));
 	}
 	
 	public CQStructure(File file) {
@@ -108,37 +108,44 @@ public class CQStructure {
 	}
 	
 	public void save(World worldIn, BlockPos startPos, BlockPos endPos) {
-		int x = startPos.getX();
-		int z = startPos.getZ();
+		//int x = startPos.getX();
+		//int z = startPos.getZ();
 		
 		this.setSizeX(endPos.getX() - startPos.getX());
 		this.setSizeY(endPos.getY() - startPos.getY());
 		this.setSizeZ(endPos.getZ() - startPos.getZ());
 		
-		if(Math.abs(endPos.getX() - x) > 16 || Math.abs(endPos.getZ() - z) > 16) {
-			BlockPos start = startPos;
-			BlockPos end = start.add(16, 0, 16);
+		//TODO: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
+		
+		//if(Math.abs(endPos.getX() - x) > 16 || Math.abs(endPos.getZ() - z) > 16) {
+			/*BlockPos start = startPos;
+			BlockPos end = start.add(16, 0, 16);*/
 			int i = 0;
-			for(int iX = 0; iX < this.getSizeX() / 16; iX++) {
-				for(int iZ = 0; iZ < this.getSizeZ() / 16; iZ++) {
+			/*for(int iX = 0; iX < this.getSizeX() / 16; iX++) {
+				System.out.println("Executing X...");
+				for(int iZ = 0; iZ < this.getSizeZ() / 16; iZ++) {*/
+					System.out.println("Executing Z...");
 					Structure subPart = new Structure(i);
 					
-					start = startPos.add(iX * 16, 0, iZ *16);
-					end = start.add(15, 0, 15);
+					//start = startPos.add(iX * 16, 0, iZ *16);
+					//end = start.add(15, 0, 15);
 					
-					subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
-					this.structures.put(new BlockPos(iX * 16, 0, iZ * 16), subPart);
+					//subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
+					subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
+					
+					//this.structures.put(startPos.subtract(start), subPart);
+					this.structures.put(new BlockPos(0, 0, 0), subPart);
 					
 					i++;
-				}
-			}
+				//}
+			//}
 			this.parts = i +1;
-		} else {
+		/*} else {
 			Structure subPart = new Structure(0);
 			subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
 			this.structures.put(new BlockPos(0, 0, 0), subPart);
 			this.parts = 1;
-		}
+		}*/
 		
 		writeNBT();
 	}
@@ -157,19 +164,21 @@ public class CQStructure {
 		
 		root.setString("author", this.author);
 		
-		NBTTagCompound parts = new NBTTagCompound();
+		NBTTagCompound partsTag = new NBTTagCompound();
 		
+		int index = 0;
 		for(BlockPos offset : this.structures.keySet()) {
 			NBTTagCompound part = new NBTTagCompound();
-			this.structures.get(offset).writeToNBT(part);
+			part = this.structures.get(offset).writeToNBT(part);
 			NBTTagCompound offsetTag = new NBTTagCompound();
 			offsetTag = NBTUtil.BlockPosToNBTTag(offset);
 			part.setTag("offset", offsetTag);
 			
-			parts.setTag("p"+this.structures.get(offset).getPart_id(), part);
+			partsTag.setTag("p"+index, part);
+			index++;
 		}
 		
-		root.setTag("parts", parts);
+		root.setTag("parts", partsTag);
 		
 		try {
 			CompressedStreamTools.write(root, this.dataFile);
@@ -215,6 +224,13 @@ public class CQStructure {
 	}
 
 	public void setDataFile(File dataFile) {
+		if(!dataFile.exists()) {
+			try {
+				dataFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		this.dataFile = dataFile;
 	}
 

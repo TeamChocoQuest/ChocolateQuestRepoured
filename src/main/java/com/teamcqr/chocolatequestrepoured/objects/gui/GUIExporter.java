@@ -2,9 +2,13 @@ package com.teamcqr.chocolatequestrepoured.objects.gui;
 
 import java.io.IOException;
 
+import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 
 public class GUIExporter extends GuiScreen {
@@ -14,13 +18,14 @@ public class GUIExporter extends GuiScreen {
 	/*private int dimX, dimY, dimZ;
 	private String structureName;
 	private String authorName;*/
-	
+	private World world;
 	
 	private GuiButtonExt exportButton;
 	//private GuiLabel lblDimX, lblDimY, lblDimZ, lblName;
-	private GuiTextField edtName, edtX, edtY, edtZ, edtOffX, edtOffY, edtOffZ;
+	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	
-	public GUIExporter() {
+	public GUIExporter(World worldIn) {
+		this.world = worldIn;
 		//lblName = new GuiLabel(this.fontRenderer, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
 	}
 
@@ -33,19 +38,19 @@ public class GUIExporter extends GuiScreen {
 		
 		edtName = new GuiTextField(0, this.fontRenderer, width / 2 -70, height / 2 -70, 140, 20);
 		
-		edtX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 +10, 40, 20);
-		edtX.setText("0");
-		edtY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 +10, 40, 20);
-		edtY.setText("0");
-		edtZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 +10, 40, 20);
-		edtZ.setText("0");
+		edtEndX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 +10, 40, 20);
+		edtEndX.setText("0");
+		edtEndY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 +10, 40, 20);
+		edtEndY.setText("0");
+		edtEndZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 +10, 40, 20);
+		edtEndZ.setText("0");
 		
-		edtOffX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 -30, 40, 20);
-		edtOffX.setText("0");
-		edtOffY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 -30, 40, 20);
-		edtOffY.setText("0");
-		edtOffZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 -30, 40, 20);
-		edtOffZ.setText("0");
+		edtStartX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 -30, 40, 20);
+		edtStartX.setText("0");
+		edtStartY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 -30, 40, 20);
+		edtStartY.setText("0");
+		edtStartZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 -30, 40, 20);
+		edtStartZ.setText("0");
 		
 		exportButton = new GuiButtonExt(4, width / 2 -70, height / 2 +40, 140, 20, "Export");
 		buttonList.add(exportButton);
@@ -59,13 +64,13 @@ public class GUIExporter extends GuiScreen {
 		
 		//if(Character.isDigit(typedChar) || typedChar == '-' || keyCode == 37 || keyCode == 39) {
 		if(!Character.isAlphabetic(typedChar)) {
-			edtX.textboxKeyTyped(typedChar, keyCode);
-			edtY.textboxKeyTyped(typedChar, keyCode);
-			edtZ.textboxKeyTyped(typedChar, keyCode);
+			edtEndX.textboxKeyTyped(typedChar, keyCode);
+			edtEndY.textboxKeyTyped(typedChar, keyCode);
+			edtEndZ.textboxKeyTyped(typedChar, keyCode);
 			
-			edtOffX.textboxKeyTyped(typedChar, keyCode);
-			edtOffY.textboxKeyTyped(typedChar, keyCode);
-			edtOffZ.textboxKeyTyped(typedChar, keyCode);
+			edtStartX.textboxKeyTyped(typedChar, keyCode);
+			edtStartY.textboxKeyTyped(typedChar, keyCode);
+			edtStartZ.textboxKeyTyped(typedChar, keyCode);
 		}
 	}
 	
@@ -75,26 +80,26 @@ public class GUIExporter extends GuiScreen {
 		
 		edtName.mouseClicked(mouseX, mouseY, mouseButton);
 		
-		edtX.mouseClicked(mouseX, mouseY, mouseButton);
-		edtY.mouseClicked(mouseX, mouseY, mouseButton);
-		edtZ.mouseClicked(mouseX, mouseY, mouseButton);
+		edtEndX.mouseClicked(mouseX, mouseY, mouseButton);
+		edtEndY.mouseClicked(mouseX, mouseY, mouseButton);
+		edtEndZ.mouseClicked(mouseX, mouseY, mouseButton);
 		
-		edtOffX.mouseClicked(mouseX, mouseY, mouseButton);
-		edtOffY.mouseClicked(mouseX, mouseY, mouseButton);
-		edtOffZ.mouseClicked(mouseX, mouseY, mouseButton);
+		edtStartX.mouseClicked(mouseX, mouseY, mouseButton);
+		edtStartY.mouseClicked(mouseX, mouseY, mouseButton);
+		edtStartZ.mouseClicked(mouseX, mouseY, mouseButton);
 	}
 	
 	@Override
 	public void updateScreen() {
 		edtName.updateCursorCounter();
 		
-		edtX.updateCursorCounter();
-		edtY.updateCursorCounter();
-		edtZ.updateCursorCounter();
+		edtEndX.updateCursorCounter();
+		edtEndY.updateCursorCounter();
+		edtEndZ.updateCursorCounter();
 		
-		edtOffX.updateCursorCounter();
-		edtOffY.updateCursorCounter();
-		edtOffZ.updateCursorCounter();
+		edtStartX.updateCursorCounter();
+		edtStartY.updateCursorCounter();
+		edtStartZ.updateCursorCounter();
 		
 		super.updateScreen();
 	}
@@ -103,13 +108,13 @@ public class GUIExporter extends GuiScreen {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		edtName.drawTextBox();
 		
-		edtX.drawTextBox();
-		edtY.drawTextBox();
-		edtZ.drawTextBox();
+		edtEndX.drawTextBox();
+		edtEndY.drawTextBox();
+		edtEndZ.drawTextBox();
 		
-		edtOffX.drawTextBox();
-		edtOffY.drawTextBox();
-		edtOffZ.drawTextBox();
+		edtStartX.drawTextBox();
+		edtStartY.drawTextBox();
+		edtStartZ.drawTextBox();
 		
 		drawString(this.fontRenderer, "Structure Name", width / 2 -70, height / 2 -80, -1);
 		
@@ -133,7 +138,39 @@ public class GUIExporter extends GuiScreen {
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
 		if(button == exportButton) {
-			mc.displayInGameMenu();
+			int sX = 0;
+			int eX = 0;
+			int sY = 0;
+			int eY = 0;
+			int sZ = 0;
+			int eZ = 0;
+			
+			boolean fail = false;
+			try {
+				eX = Integer.parseInt(edtEndX.getText());
+				sX = Integer.parseInt(edtStartX.getText());
+				eY = Integer.parseInt(edtEndY.getText());
+				sY = Integer.parseInt(edtStartY.getText());
+				eZ = Integer.parseInt(edtEndZ.getText());
+				sZ = Integer.parseInt(edtStartZ.getText());
+			} catch(NumberFormatException ex) {
+				//ex.printStackTrace();
+				fail = true;
+			}
+			if(!fail) {
+				String structName = edtName.getText();
+				structName = structName.replaceAll(" ", "_");
+				if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
+					structName = "dungeon_export";
+				}
+				structName = "exports-" + structName;
+				BlockPos startPos = new BlockPos(sX, sY, sZ);
+				BlockPos endPos = new BlockPos(eX, eY, eZ);
+				
+				CQStructure structure = new CQStructure(structName);
+				structure.save(this.world, startPos, endPos);
+			}
 		}
 	}
+	
 }

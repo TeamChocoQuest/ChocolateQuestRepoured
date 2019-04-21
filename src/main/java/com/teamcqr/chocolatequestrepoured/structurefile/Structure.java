@@ -30,9 +30,11 @@ public class Structure extends Template {
 	private int part_id;
 	
 	public Structure() {
+		super();
 	}
 	
 	public Structure(int part_id) {
+		super();
 		this.setPart_id(part_id);
 	}
 	
