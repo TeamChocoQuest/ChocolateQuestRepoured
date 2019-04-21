@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileB
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.objects.gui.GuiExporterHandler;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.render.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -23,6 +24,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
@@ -31,6 +33,7 @@ public class ClientProxy extends CommonProxy
 	public void preInit(FMLPreInitializationEvent event)
 	{
 		super.preInit(event);
+		registerGUIs();
 		registerRenderers();
 		CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
 	}
@@ -57,7 +60,6 @@ public class ClientProxy extends CommonProxy
 	public void registerRenderers() 
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
-		
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, new IRenderFactory<ProjectileEarthQuake>() 
 		{
 			@Override
@@ -80,5 +82,9 @@ public class ClientProxy extends CommonProxy
 	public String localize(String unlocalized, Object... args) 
 	{
 		return I18n.format(unlocalized, args);
+	}
+	
+	private void registerGUIs() {
+		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiExporterHandler());
 	}
 }

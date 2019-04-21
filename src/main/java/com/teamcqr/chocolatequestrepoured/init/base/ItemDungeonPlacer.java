@@ -43,7 +43,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
     {
-        return 72000;
+        return 1;
     }
 	
 	@Override
@@ -53,7 +53,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 			textureID = 0;
 		}
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("cqrepoured:dungeon_placer_d" + textureID, "normal"));
-		System.out.println("Registered Model!");
+		//System.out.println("Registered Model!");
 	}
 	
 	public DungeonBase getAssignedDungeon() {
@@ -67,11 +67,11 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		this.dungeon.generate(playerIn.getPosition(), worldIn);
 		if (!worldIn.isRemote) {
 			playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItemMainhand().getItem(), 30);
 			playerIn.getCooldownTracker().setCooldown(this, 30);
 		}
+		this.dungeon.generate(playerIn.getPosition(), worldIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	

@@ -3,12 +3,12 @@ package com.teamcqr.chocolatequestrepoured.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.init.base.BlockExporterChestBase;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.exporter.BlockExporter;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -93,7 +93,8 @@ public class ModBlocks
 	public static final Block TABLE_DARK = new BlockTable("table_dark", Material.WOOD);
 	
 	//Utility
-	public static final Block EXPORTER = new BlockBase("exporter", Material.WOOD);
+	public static final Block EXPORTER = new BlockExporter("exporter", Material.ANVIL);
+	//public static final Block EXPORTER = new BlockBase("exporter", Material.WOOD);
 	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating
 	
 	//Loot Chests
