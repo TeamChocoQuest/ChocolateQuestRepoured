@@ -13,7 +13,7 @@ public class GuiExporterHandler implements IGuiHandler {
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if(ID == GUIExporter.GUIID) {
-			return new GUIExporter();
+			return new GUIExporter(world);
 		}
 		return null;
 	}
@@ -21,7 +21,7 @@ public class GuiExporterHandler implements IGuiHandler {
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if(ID == GUIExporter.GUIID) {
-			return new GUIExporter();
+			return new GUIExporter(world);
 		}
 		return null;
 	}
