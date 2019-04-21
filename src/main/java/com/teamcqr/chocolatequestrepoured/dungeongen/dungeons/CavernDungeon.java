@@ -139,7 +139,7 @@ public class CavernDungeon extends DungeonBase {
 	//One block below starts y is the floor...
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
+		//super.generate(x, z, world, chunk, random);
 		
 		List<CavernGenerator> caves = new ArrayList<CavernGenerator>();
 		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
