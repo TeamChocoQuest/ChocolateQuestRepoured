@@ -21,20 +21,15 @@ public class GUIExporter extends GuiScreen {
 	private World world;
 	
 	private GuiButtonExt exportButton;
-	//private GuiLabel lblDimX, lblDimY, lblDimZ, lblName;
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	
 	public GUIExporter(World worldIn) {
 		this.world = worldIn;
-		//lblName = new GuiLabel(this.fontRenderer, p_i45540_2_, p_i45540_3_, p_i45540_4_, p_i45540_5_, p_i45540_6_, p_i45540_7_)
 	}
 
 	@Override
 	public void initGui() {
-		//TODO: remake this thing, it doesnt look nice enough
-		//TODO: add "Offset" fields
 		//Has inputs for start and end locations
-		//setGuiSize(180, 220);
 		
 		edtName = new GuiTextField(0, this.fontRenderer, width / 2 -70, height / 2 -70, 140, 20);
 		
@@ -154,7 +149,6 @@ public class GUIExporter extends GuiScreen {
 				eZ = Integer.parseInt(edtEndZ.getText());
 				sZ = Integer.parseInt(edtStartZ.getText());
 			} catch(NumberFormatException ex) {
-				//ex.printStackTrace();
 				fail = true;
 			}
 			if(!fail) {
