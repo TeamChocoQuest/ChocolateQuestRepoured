@@ -37,6 +37,7 @@ item.great_sword_iron.name=Iron Greatsword
 
 //Staffs
 item.staff_fire.name=Fire Staff
+item.staff_spider.name=Spider Staff
 
 //Guns
 item.revolver.name=Revolver

@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStaffFire;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemStaffSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
@@ -93,6 +94,7 @@ public class ModItems
 	
 	//Staffs
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");			//Description #TODO
+	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES 
 	
 	//Guns
 	public static final Item REVOLVER = new ItemRevolver("revolver");

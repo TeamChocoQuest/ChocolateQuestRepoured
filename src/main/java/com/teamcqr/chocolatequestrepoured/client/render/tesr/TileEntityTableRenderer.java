@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.render;
+package com.teamcqr.chocolatequestrepoured.client.render.tesr;
 
 import org.lwjgl.opengl.GL11;
 
