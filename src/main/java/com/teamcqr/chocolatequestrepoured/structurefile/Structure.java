@@ -38,6 +38,7 @@ public class Structure extends Template {
 		this.setPart_id(part_id);
 	}
 	
+	//CONFIRMED WORKING
 	@SuppressWarnings("unchecked")
 	@Override
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
@@ -46,12 +47,15 @@ public class Structure extends Template {
 		this.chests.clear();
 		this.spawners.clear();
 		System.out.println("Super class scan....");
-		super.takeBlocksFromWorld(worldIn, startPos, endPos, takeEntities, toIgnore);
+		super.takeBlocksFromWorld(worldIn, startPos, endPos.subtract(startPos), takeEntities, toIgnore);
+		/*for(Field f : this.getClass().getSuperclass().getDeclaredFields()) {
+			System.out.println(" - " + f.getName());
+		}*/
 		System.out.println("Filling special lists...");
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
-			superBlockField = super.getClass().getDeclaredField("blocks");
+			superBlockField = this.getClass().getSuperclass().getDeclaredField("blocks");
 			
 			superBlockField.setAccessible(true);
 			try {
@@ -100,6 +104,7 @@ public class Structure extends Template {
 						removeEntries.add(i);
 						LootChestInfo lci = new LootChestInfo(currentBlock, bi.pos, elt.getID());
 						this.chests.add(lci);
+						removeEntries.add(i);
 					}
 				}
 			}
