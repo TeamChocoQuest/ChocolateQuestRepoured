@@ -41,11 +41,13 @@ public class Structure extends Template {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
+		System.out.println("Scanning blocks...");
 		this.banners.clear();
 		this.chests.clear();
 		this.spawners.clear();
+		System.out.println("Super class scan....");
 		super.takeBlocksFromWorld(worldIn, startPos, endPos, takeEntities, toIgnore);
-		
+		System.out.println("Filling special lists...");
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
@@ -110,6 +112,7 @@ public class Structure extends Template {
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Blocks scanned!");
 	}
 	
 	@Override

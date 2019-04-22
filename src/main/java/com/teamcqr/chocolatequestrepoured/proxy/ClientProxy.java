@@ -7,10 +7,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileB
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileEarthQuake;
-import com.teamcqr.chocolatequestrepoured.objects.gui.GuiExporterHandler;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.render.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
@@ -85,6 +85,6 @@ public class ClientProxy extends CommonProxy
 	}
 	
 	private void registerGUIs() {
-		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiExporterHandler());
+		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 	}
 }

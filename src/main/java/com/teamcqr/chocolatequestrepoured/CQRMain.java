@@ -36,6 +36,7 @@ public class CQRMain
 	public static File CQ_CONFIG_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
+	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	
 	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
@@ -112,6 +113,13 @@ public class CQRMain
 		}
 		System.out.println("Structure Folder Path: " + structureFolder.getAbsolutePath());
 		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
+		
+		File exportFolder = new File(CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() + "/exports//");
+		if(!exportFolder.exists()) {
+			exportFolder.mkdirs();
+		}
+		System.out.println("Export Folder Path: " + exportFolder.getAbsolutePath());
+		CQRMain.CQ_EXPORT_FILES_FOLDER = exportFolder;
 		
 		proxy.preInit(event);
 		
