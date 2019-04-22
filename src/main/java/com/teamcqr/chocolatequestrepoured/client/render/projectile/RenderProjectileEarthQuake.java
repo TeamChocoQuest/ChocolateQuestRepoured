@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.render;
+package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
