@@ -65,7 +65,7 @@ public class BlockUnlitTorch extends BlockBase
     private void lightUp(World worldIn, BlockPos pos, IBlockState state) {
     	if(worldIn instanceof WorldServer) {
     		((WorldServer)worldIn).playSound(pos.getX(), pos.getY(), pos.getZ(), new SoundEvent(new ResourceLocation("minecraft", "item.firecharge.use")), SoundCategory.BLOCKS, 1.0f, 1.0f, false);
-    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX(), pos.getY() -0.5D + 1.25, pos.getZ(), 15, 0.25D, 0.25D, 0.25D, 0.00125, new int[0]);
+    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() -0.25, pos.getY() -0.5D + 1.25, pos.getZ()-0.25, 15, 0.25D, 0.25D, 0.25D, 0.00125, new int[0]);
     	}
     	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
     }
