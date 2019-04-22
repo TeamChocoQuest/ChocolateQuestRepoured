@@ -36,20 +36,21 @@ public class GUIExporter extends GuiScreen {
 		//Has inputs for start and end locations
 		
 		edtName = new GuiTextField(0, this.fontRenderer, width / 2 -70, height / 2 -70, 140, 20);
+		edtName.setText(exporter.structureName);
 		
 		edtEndX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 +10, 40, 20);
-		edtEndX.setText("0");
+		edtEndX.setText(String.valueOf(exporter.endX));
 		edtEndY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 +10, 40, 20);
-		edtEndY.setText("0");
+		edtEndY.setText(String.valueOf(exporter.endY));
 		edtEndZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 +10, 40, 20);
-		edtEndZ.setText("0");
+		edtEndZ.setText(String.valueOf(exporter.endZ));
 		
 		edtStartX = new GuiTextField(1, this.fontRenderer, width / 2 -70, height / 2 -30, 40, 20);
-		edtStartX.setText("0");
+		edtStartX.setText(String.valueOf(exporter.startX));
 		edtStartY = new GuiTextField(2, this.fontRenderer, width / 2 -70 + 50, height / 2 -30, 40, 20);
-		edtStartY.setText("0");
+		edtStartY.setText(String.valueOf(exporter.startY));
 		edtStartZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 -30, 40, 20);
-		edtStartZ.setText("0");
+		edtStartZ.setText(String.valueOf(exporter.startZ));
 		
 		exportButton = new GuiButtonExt(4, width / 2 -70, height / 2 +40, 140, 20, "Export");
 		buttonList.add(exportButton);
