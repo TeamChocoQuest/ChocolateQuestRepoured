@@ -3,10 +3,12 @@ package com.teamcqr.chocolatequestrepoured.objects.gui;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
@@ -15,16 +17,18 @@ public class GUIExporter extends GuiScreen {
 
 	public static int GUIID = 1;
 	
-	/*private int dimX, dimY, dimZ;
-	private String structureName;
-	private String authorName;*/
+	
+	private String authorName;
 	private World world;
+	private TileEntityExporter exporter;
 	
 	private GuiButtonExt exportButton;
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	
-	public GUIExporter(World worldIn) {
+	public GUIExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) {
 		this.world = worldIn;
+		this.authorName = player.getName();
+		this.exporter = exporter;
 	}
 
 	@Override
@@ -157,11 +161,16 @@ public class GUIExporter extends GuiScreen {
 				if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
 					structName = "dungeon_export";
 				}
-				structName = "exports-" + structName;
+				structName = "export-" + structName;
 				BlockPos startPos = new BlockPos(sX, sY, sZ);
 				BlockPos endPos = new BlockPos(eX, eY, eZ);
 				
+				//Solution: move saving  a w a y  from GUI, move it into the tile entity section
+				exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
+				
 				CQStructure structure = new CQStructure(structName);
+				structure.setAuthor(this.authorName);
+				
 				structure.save(this.world, startPos, endPos);
 			}
 		}

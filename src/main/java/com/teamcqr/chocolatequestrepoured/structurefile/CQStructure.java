@@ -34,7 +34,7 @@ public class CQStructure {
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
 	
 	public CQStructure(String name) {
-		this.setDataFile(new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER, name + ".nbt"));
+		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
 	}
 	
 	public CQStructure(File file) {
@@ -116,6 +116,7 @@ public class CQStructure {
 		this.setSizeZ(endPos.getZ() - startPos.getZ());
 		
 		//TODO: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
+		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
 		
 		//if(Math.abs(endPos.getX() - x) > 16 || Math.abs(endPos.getZ() - z) > 16) {
 			/*BlockPos start = startPos;
@@ -124,9 +125,9 @@ public class CQStructure {
 			/*for(int iX = 0; iX < this.getSizeX() / 16; iX++) {
 				System.out.println("Executing X...");
 				for(int iZ = 0; iZ < this.getSizeZ() / 16; iZ++) {*/
-					System.out.println("Executing Z...");
+					System.out.println("Creating Structure Object...");
 					Structure subPart = new Structure(i);
-					
+					System.out.println("Created Object!");
 					//start = startPos.add(iX * 16, 0, iZ *16);
 					//end = start.add(15, 0, 15);
 					
@@ -134,6 +135,7 @@ public class CQStructure {
 					subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
 					
 					//this.structures.put(startPos.subtract(start), subPart);
+					System.out.println("Putting subPart into list....");
 					this.structures.put(new BlockPos(0, 0, 0), subPart);
 					
 					i++;
