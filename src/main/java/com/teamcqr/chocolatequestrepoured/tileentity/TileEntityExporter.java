@@ -5,13 +5,13 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityExporter extends TileEntity
 {
-	public int startX;
-	public int startY;
-	public int startZ;
-	public int endX;
-	public int endY;
-	public int endZ;
-	public String structureName;
+	public int startX = 0;
+	public int startY = 0;
+	public int startZ = 0;
+	public int endX = 0;
+	public int endY = 0;
+	public int endZ = 0;
+	public String structureName = "";
 	
 	public TileEntityExporter(){}
 	

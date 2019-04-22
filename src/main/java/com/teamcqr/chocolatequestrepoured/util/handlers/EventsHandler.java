@@ -77,6 +77,7 @@ public class EventsHandler
 	
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
+		@SuppressWarnings("unused")
 		LootTable lootTable = event.getTable();
 		ResourceLocation resLoc = event.getName();
 		if(ELootTable.valueOf(resLoc) != null) {
