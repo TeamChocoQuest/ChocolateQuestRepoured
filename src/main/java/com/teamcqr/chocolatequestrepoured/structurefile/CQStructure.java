@@ -28,9 +28,8 @@ public class CQStructure {
 	private int parts = 0;
 	private String author = "DerToaster98";
 	
-	//TODO: move structure origin to the center of it
+	//TODO: move structure origin to the center of it -> NOPE
 	
-	//private List<Structure> subStructures = new ArrayList<Structure>();
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
 	
 	public CQStructure(String name) {
