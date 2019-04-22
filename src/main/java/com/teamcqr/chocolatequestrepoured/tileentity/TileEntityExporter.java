@@ -51,13 +51,14 @@ public class TileEntityExporter extends TileEntity
 		startX = sX;
 		startY = sY;
 		startZ = sZ;
-		endX = eZ;
+		endX = eX;
 		endY = eY;
 		endZ = eZ;
 		structureName = structName;
 	}
 	
-	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) {
+	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
+	{
 		CQStructure structure = new CQStructure(this.structureName);
 		structure.setAuthor(authorName);
 		

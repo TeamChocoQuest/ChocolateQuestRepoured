@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.render.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
@@ -8,7 +9,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileE
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.render.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
-import com.teamcqr.chocolatequestrepoured.tileentity.render.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
@@ -84,7 +84,8 @@ public class ClientProxy extends CommonProxy
 		return I18n.format(unlocalized, args);
 	}
 	
-	private void registerGUIs() {
+	private void registerGUIs() 
+	{
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 	}
 }
