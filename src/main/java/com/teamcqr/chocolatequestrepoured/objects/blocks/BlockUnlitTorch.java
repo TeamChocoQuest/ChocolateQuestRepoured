@@ -22,12 +22,17 @@ import net.minecraft.item.Item;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -57,6 +62,14 @@ public class BlockUnlitTorch extends BlockBase
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
     }
     
+    private void lightUp(World worldIn, BlockPos pos, IBlockState state) {
+    	if(worldIn instanceof WorldServer) {
+    		((WorldServer)worldIn).playSound(pos.getX(), pos.getY(), pos.getZ(), new SoundEvent(new ResourceLocation("minecraft", "item.firecharge.use")), SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX(), pos.getY() -0.5D + 1.25, pos.getZ(), 15, 0.25D, 0.25D, 0.25D, 0.00125, new int[0]);
+    	}
+    	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+    }
+    
     @Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
@@ -64,7 +77,8 @@ public class BlockUnlitTorch extends BlockBase
     	{
     		if(playerIn.getHeldItem(hand).getItem() == Items.FLINT_AND_STEEL || playerIn.getHeldItem(hand).getItem() == Item.getItemFromBlock(Blocks.TORCH))
     		{
-    			worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+    			//worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+    			lightUp(worldIn, pos, state);
     			return true;
     		}
     	}
@@ -78,7 +92,8 @@ public class BlockUnlitTorch extends BlockBase
         {
             if(entityIn.isBurning())
             {
-            	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+            	//worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+            	lightUp(worldIn, pos, state);
             }
         }
     }
