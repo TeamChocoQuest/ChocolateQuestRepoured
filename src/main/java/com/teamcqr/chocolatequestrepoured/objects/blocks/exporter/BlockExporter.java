@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks.exporter;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.gui.GUIExporter;
 import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
-import com.teamcqr.chocolatequestrepoured.objects.gui.GUIExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.block.ITileEntityProvider;
@@ -17,9 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockExporter extends BlockBase implements ITileEntityProvider {
-
-	public BlockExporter(String name, Material material) {
+public class BlockExporter extends BlockBase implements ITileEntityProvider 
+{
+	public BlockExporter(String name, Material material) 
+	{
 		super(name, material);
 		
 		setBlockUnbreakable();
@@ -28,12 +29,11 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
+	{
 		playerIn.openGui(CQRMain.INSTANCE, GUIExporter.GUIID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		//return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 		return true;
-		
 	}
 	
 	@Override
@@ -46,5 +46,4 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	{
 		return (TileEntityExporter)world.getTileEntity(pos);
 	}
-
 }
