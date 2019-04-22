@@ -18,13 +18,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFlintAndSteel;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -62,10 +64,12 @@ public class BlockUnlitTorch extends BlockBase
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.UP));
     }
     
-    private void lightUp(World worldIn, BlockPos pos, IBlockState state) {
-    	if(worldIn instanceof WorldServer) {
-    		((WorldServer)worldIn).playSound(pos.getX(), pos.getY(), pos.getZ(), new SoundEvent(new ResourceLocation("minecraft", "item.firecharge.use")), SoundCategory.BLOCKS, 1.0f, 1.0f, false);
-    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() -0.25, pos.getY() -0.5D + 1.25, pos.getZ()-0.25, 15, 0.25D, 0.25D, 0.25D, 0.00125, new int[0]);
+    private void lightUp(World worldIn, BlockPos pos, IBlockState state) 
+    {
+    	if(worldIn instanceof WorldServer) 
+    	{
+    		((WorldServer)worldIn).playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
     	}
     	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
     }
@@ -75,9 +79,16 @@ public class BlockUnlitTorch extends BlockBase
 	{
     	if(!worldIn.isRemote)
     	{
-    		if(playerIn.getHeldItem(hand).getItem() == Items.FLINT_AND_STEEL || playerIn.getHeldItem(hand).getItem() == Item.getItemFromBlock(Blocks.TORCH))
+    		ItemStack heldItem = playerIn.getHeldItem(hand);
+    		Block heldBlock = Block.getBlockFromItem(heldItem.getItem());
+    		
+    		if(heldItem.getItem() instanceof ItemFlintAndSteel || heldBlock.getLightValue(heldBlock.getDefaultState(), worldIn, pos) > 0)
     		{
-    			//worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+    			if(heldItem.getItem().isDamageable())
+    			{
+    				heldItem.damageItem(1, playerIn);
+    			}
+    			
     			lightUp(worldIn, pos, state);
     			return true;
     		}
@@ -92,7 +103,6 @@ public class BlockUnlitTorch extends BlockBase
         {
             if(entityIn.isBurning())
             {
-            	//worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
             	lightUp(worldIn, pos, state);
             }
         }

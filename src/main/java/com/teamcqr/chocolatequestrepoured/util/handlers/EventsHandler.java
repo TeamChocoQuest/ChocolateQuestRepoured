@@ -39,7 +39,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @EventBusSubscriber 
 public class EventsHandler
 {
-	private static final UUID bonusHealthUUID = UUID.randomUUID();
+	private static final UUID bonusHealthUUID = UUID.fromString("684105d4-cf43-43b1-ae29-7e63e01970c2");
 	
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
