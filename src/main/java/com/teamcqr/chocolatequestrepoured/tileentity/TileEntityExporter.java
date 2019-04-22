@@ -1,7 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileEntityExporter extends TileEntity
 {
@@ -11,7 +15,7 @@ public class TileEntityExporter extends TileEntity
 	public int endX = 0;
 	public int endY = 0;
 	public int endZ = 0;
-	public String structureName = "";
+	public String structureName = "NoName";
 	
 	public TileEntityExporter(){}
 	
@@ -33,23 +37,30 @@ public class TileEntityExporter extends TileEntity
 	public void readFromNBT(NBTTagCompound compound)
 	{
 		super.readFromNBT(compound);
-		compound.getInteger("StartX");
-		compound.getInteger("StartY");
-		compound.getInteger("StartZ");
-		compound.getInteger("EndX");
-		compound.getInteger("EndY");
-		compound.getInteger("EndZ");
-		compound.getString("StructureName");
+		startX = compound.getInteger("StartX");
+		startY = compound.getInteger("StartY");
+		startZ = compound.getInteger("StartZ");
+		endX = compound.getInteger("EndX");
+		endY = compound.getInteger("EndY");
+		endZ = compound.getInteger("EndZ");
+		structureName = compound.getString("StructureName");
 	}
 	
 	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName)
 	{
-		sX = startX;
-		sY = startY;
-		sZ = startZ;
-		eX = endX;
-		eY = endY;
-		eZ = endZ;
-		structName = structureName;
+		startX = sX;
+		startY = sY;
+		startZ = sZ;
+		endX = eZ;
+		endY = eY;
+		endZ = eZ;
+		structureName = structName;
+	}
+	
+	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) {
+		CQStructure structure = new CQStructure(this.structureName);
+		structure.setAuthor(authorName);
+		
+		structure.save(this.world, startPos, endPos);
 	}
 }

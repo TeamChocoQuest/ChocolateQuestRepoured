@@ -107,6 +107,7 @@ public class CQStructure {
 		}
 	}
 	
+	//TODO: Split structure into 16x16 grid 
 	public void save(World worldIn, BlockPos startPos, BlockPos endPos) {
 		//int x = startPos.getX();
 		//int z = startPos.getZ();
@@ -115,8 +116,9 @@ public class CQStructure {
 		this.setSizeY(endPos.getY() - startPos.getY());
 		this.setSizeZ(endPos.getZ() - startPos.getZ());
 		
-		//TODO: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
+		//DONE: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
 		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
+		//Problem was not the reflection thing (however, it isnt working...), it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
 		
 		//if(Math.abs(endPos.getX() - x) > 16 || Math.abs(endPos.getZ() - z) > 16) {
 			/*BlockPos start = startPos;
@@ -141,7 +143,7 @@ public class CQStructure {
 					i++;
 				//}
 			//}
-			this.parts = i +1;
+			this.parts = i;
 		/*} else {
 			Structure subPart = new Structure(0);
 			subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);

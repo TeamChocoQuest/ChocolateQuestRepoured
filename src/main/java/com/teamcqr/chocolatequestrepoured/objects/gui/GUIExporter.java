@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.gui;
 
 import java.io.IOException;
 
-import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.gui.GuiButton;
@@ -20,6 +19,9 @@ public class GUIExporter extends GuiScreen {
 	
 	private String authorName;
 	private World world;
+	private boolean saveStructOnExit = false;
+	private BlockPos structureEndPos = null;
+	private BlockPos structureStartPos = null;
 	private TileEntityExporter exporter;
 	
 	private GuiButtonExt btnExport;
@@ -83,10 +85,15 @@ public class GUIExporter extends GuiScreen {
 			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
 				structName = "dungeon_export";
 			}
-			structName = "export-" + structName;
 			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
+			
+			if(this.saveStructOnExit) {
+				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
+				System.out.println("Saving structure...");
+			}
 		}
 		super.onGuiClosed();
+		
 	}
 	
 	@Override
@@ -207,10 +214,9 @@ public class GUIExporter extends GuiScreen {
 				//Solution: move saving  a w a y  from GUI, move it into the tile entity section
 				exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
 				
-				CQStructure structure = new CQStructure(structName);
-				structure.setAuthor(this.authorName);
-				
-				structure.save(this.world, startPos, endPos);
+				this.saveStructOnExit = true;
+				this.structureEndPos = endPos;
+				this.structureStartPos = startPos;
 			}
 		}
 	}
