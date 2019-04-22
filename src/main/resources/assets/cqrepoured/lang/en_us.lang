@@ -107,6 +107,7 @@ item.boots_heavy_iron.name=Heavy Iron Boots
 //Blocks
 tile.exporter.name=Exporter Block
 tile.null_block.name=Null Block
+tile.unlit_torch.name=Unlit Torch
 tile.table_oak.name=Oak Table
 tile.table_spruce.name=Spruce Table
 tile.table_birch.name=Birch Table
