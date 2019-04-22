@@ -22,7 +22,7 @@ public class GUIExporter extends GuiScreen {
 	private World world;
 	private TileEntityExporter exporter;
 	
-	private GuiButtonExt exportButton;
+	private GuiButtonExt btnExport;
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	
 	public GUIExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) {
@@ -52,8 +52,41 @@ public class GUIExporter extends GuiScreen {
 		edtStartZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 -30, 40, 20);
 		edtStartZ.setText(String.valueOf(exporter.startZ));
 		
-		exportButton = new GuiButtonExt(4, width / 2 -70, height / 2 +40, 140, 20, "Export");
-		buttonList.add(exportButton);
+		btnExport = new GuiButtonExt(4, width / 2 -70, height / 2 +40, 140, 20, "Export");
+		buttonList.add(btnExport);
+	}
+	
+	@Override
+	public void onGuiClosed() {
+		int sX = 0;
+		int eX = 0;
+		int sY = 0;
+		int eY = 0;
+		int sZ = 0;
+		int eZ = 0;
+		String structName = "";
+		
+		boolean fail = false;
+		try {
+			eX = Integer.parseInt(edtEndX.getText());
+			sX = Integer.parseInt(edtStartX.getText());
+			eY = Integer.parseInt(edtEndY.getText());
+			sY = Integer.parseInt(edtStartY.getText());
+			eZ = Integer.parseInt(edtEndZ.getText());
+			sZ = Integer.parseInt(edtStartZ.getText());
+		} catch(NumberFormatException ex) {
+			fail = true;
+		}
+		if(!fail) {
+			structName = edtName.getText();
+			structName = structName.replaceAll(" ", "_");
+			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
+				structName = "dungeon_export";
+			}
+			structName = "export-" + structName;
+			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
+		}
+		super.onGuiClosed();
 	}
 	
 	@Override
@@ -137,32 +170,37 @@ public class GUIExporter extends GuiScreen {
 	
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
-		if(button == exportButton) {
-			int sX = 0;
-			int eX = 0;
-			int sY = 0;
-			int eY = 0;
-			int sZ = 0;
-			int eZ = 0;
-			
-			boolean fail = false;
-			try {
-				eX = Integer.parseInt(edtEndX.getText());
-				sX = Integer.parseInt(edtStartX.getText());
-				eY = Integer.parseInt(edtEndY.getText());
-				sY = Integer.parseInt(edtStartY.getText());
-				eZ = Integer.parseInt(edtEndZ.getText());
-				sZ = Integer.parseInt(edtStartZ.getText());
-			} catch(NumberFormatException ex) {
-				fail = true;
+		int sX = 0;
+		int eX = 0;
+		int sY = 0;
+		int eY = 0;
+		int sZ = 0;
+		int eZ = 0;
+		String structName = "";
+		
+		boolean fail = false;
+		try {
+			eX = Integer.parseInt(edtEndX.getText());
+			sX = Integer.parseInt(edtStartX.getText());
+			eY = Integer.parseInt(edtEndY.getText());
+			sY = Integer.parseInt(edtStartY.getText());
+			eZ = Integer.parseInt(edtEndZ.getText());
+			sZ = Integer.parseInt(edtStartZ.getText());
+		} catch(NumberFormatException ex) {
+			fail = true;
+		}
+		if(!fail) {
+			structName = edtName.getText();
+			structName = structName.replaceAll(" ", "_");
+			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
+				structName = "dungeon_export";
 			}
-			if(!fail) {
-				String structName = edtName.getText();
-				structName = structName.replaceAll(" ", "_");
-				if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
-					structName = "dungeon_export";
-				}
-				structName = "export-" + structName;
+			structName = "export-" + structName;
+		}
+		
+		if(!fail) {
+			
+			if(button == btnExport) {
 				BlockPos startPos = new BlockPos(sX, sY, sZ);
 				BlockPos endPos = new BlockPos(eX, eY, eZ);
 				
