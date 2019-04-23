@@ -240,3 +240,4 @@ description.turtle_armor_charging.name=Ability on cooldown, Remaining time:
 description.healing_potion.name=Refills 2 Hearts when drunk
 description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
 description.teleport_stone_position.name=Current Position:
+description.gui_exporter.name=Exporter info

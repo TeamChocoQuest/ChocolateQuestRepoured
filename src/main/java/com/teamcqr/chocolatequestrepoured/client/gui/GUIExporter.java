@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -175,6 +176,11 @@ public class GUIExporter extends GuiScreen {
 		drawString(this.fontRenderer, "End X", width / 2 -70, height / 2, -1);
 		drawString(this.fontRenderer, "End Y", width / 2 -20, height / 2, -1);
 		drawString(this.fontRenderer, "End Z", width / 2 +30, height / 2, -1);
+		
+		if(this.chbxPartsMode.isMouseOver())
+		{
+			this.drawHoveringText(I18n.format("description.gui_exporter.name"), width / 2 - 170, height / 2 + 30);
+		}
 		
 		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
