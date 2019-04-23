@@ -16,6 +16,7 @@ public class TileEntityExporter extends TileEntity
 	public int endY = 0;
 	public int endZ = 0;
 	public String structureName = "NoName";
+	public boolean partModeUsing = false;
 	
 	public TileEntityExporter(){}
 	
@@ -46,7 +47,7 @@ public class TileEntityExporter extends TileEntity
 		structureName = compound.getString("StructureName");
 	}
 	
-	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName)
+	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode)
 	{
 		startX = sX;
 		startY = sY;
@@ -54,6 +55,7 @@ public class TileEntityExporter extends TileEntity
 		endX = eX;
 		endY = eY;
 		endZ = eZ;
+		partModeUsing = usePartMode;
 		structureName = structName;
 	}
 	

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiCheckBox;
 
 public class GUIExporter extends GuiScreen {
 
@@ -20,12 +21,15 @@ public class GUIExporter extends GuiScreen {
 	private String authorName;
 	private World world;
 	private boolean saveStructOnExit = false;
+	@SuppressWarnings("unused")
+	private boolean usePartsMode = false;
 	private BlockPos structureEndPos = null;
 	private BlockPos structureStartPos = null;
 	private TileEntityExporter exporter;
 	
 	private GuiButtonExt btnExport;
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
+	private GuiCheckBox chbxPartsMode;
 	
 	public GUIExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) {
 		this.world = worldIn;
@@ -54,7 +58,11 @@ public class GUIExporter extends GuiScreen {
 		edtStartZ = new GuiTextField(3, this.fontRenderer, width / 2 -70 +50 +50, height / 2 -30, 40, 20);
 		edtStartZ.setText(String.valueOf(exporter.startZ));
 		
-		btnExport = new GuiButtonExt(4, width / 2 -70, height / 2 +40, 140, 20, "Export");
+		chbxPartsMode = new GuiCheckBox(5, width / 2 -70, height /2 +40, "Use Part Mode", false);
+		
+		btnExport = new GuiButtonExt(4, width / 2 -70, height / 2 +60, 140, 20, "Export");
+		
+		buttonList.add(chbxPartsMode);
 		buttonList.add(btnExport);
 	}
 	
@@ -66,6 +74,7 @@ public class GUIExporter extends GuiScreen {
 		int eY = 0;
 		int sZ = 0;
 		int eZ = 0;
+		boolean useParts = false;
 		String structName = "";
 		
 		boolean fail = false;
@@ -85,7 +94,8 @@ public class GUIExporter extends GuiScreen {
 			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
 				structName = "dungeon_export";
 			}
-			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
+			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, useParts);
+			useParts = chbxPartsMode.isChecked();
 			
 			if(this.saveStructOnExit) {
 				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
@@ -182,6 +192,7 @@ public class GUIExporter extends GuiScreen {
 		int sY = 0;
 		int eY = 0;
 		int sZ = 0;
+		boolean useParts = false;
 		int eZ = 0;
 		String structName = "";
 		
@@ -203,6 +214,7 @@ public class GUIExporter extends GuiScreen {
 				structName = "dungeon_export";
 			}
 			structName = "export-" + structName;
+			useParts = chbxPartsMode.isChecked();
 		}
 		
 		if(!fail) {
@@ -212,9 +224,10 @@ public class GUIExporter extends GuiScreen {
 				BlockPos endPos = new BlockPos(eX, eY, eZ);
 				
 				//Solution: move saving  a w a y  from GUI, move it into the tile entity section
-				exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName);
+				exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, useParts);
 				
 				this.saveStructOnExit = true;
+				this.usePartsMode = useParts;
 				this.structureEndPos = endPos;
 				this.structureStartPos = startPos;
 			}
