@@ -38,6 +38,8 @@ item.great_sword_iron.name=Iron Greatsword
 //Staffs
 item.staff_fire.name=Fire Staff
 item.staff_spider.name=Spider Staff
+item.staff_gun.name=Gun Staff
+item.staff_healing.name=Healing Staff
 
 //Guns
 item.revolver.name=Revolver
@@ -50,6 +52,7 @@ item.bullet_iron.name=Iron Bullets
 item.bullet_gold.name=Gold Bullets
 item.bullet_diamond.name=Diamond Bullets
 item.bullet_fire.name=Fiery Bullets
+item.bullet_cannon.name=Cannon Bullet
 
 //Cloud Items
 item.boots_cloud.name=Cloud Boots
@@ -241,3 +244,7 @@ description.healing_potion.name=Refills 2 Hearts when drunk
 description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
 description.teleport_stone_position.name=Current Position:
 description.gui_exporter.name=Exporter info
+description.staff_fire.name=Missing
+description.staff_spider.name=Missing
+description.staff_gun.name=Missing
+description.staff_healing.name=Missing

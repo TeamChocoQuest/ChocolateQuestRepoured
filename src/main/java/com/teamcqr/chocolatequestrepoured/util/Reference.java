@@ -17,4 +17,5 @@ public class Reference
 	public static final int PROJECTILE_EARTH_QUAKE = 66;
 	public static final int PROJECTILE_BULLET = 67;
 	public static final int PROJECTILE_SPIDER_BALL = 68;
+	public static final int PROJECTILE_BULLET_CANNON = 69;
 }
