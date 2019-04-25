@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -18,5 +19,6 @@ public class EntityHandler
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_earth_quake"), ProjectileEarthQuake.class, "ProjectileEarthQuake", Reference.PROJECTILE_EARTH_QUAKE, CQRMain.INSTANCE, 64, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_bullet"), ProjectileBullet.class, "ProjectileBullet", Reference.PROJECTILE_BULLET, CQRMain.INSTANCE, 64, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_spider_ball"), ProjectileSpiderBall.class, "ProjectileSpiderBall", Reference.PROJECTILE_SPIDER_BALL, CQRMain.INSTANCE, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_bullet_cannon"), ProjectileBulletCannon.class, "ProjectileBulletCannon", Reference.PROJECTILE_BULLET_CANNON, CQRMain.INSTANCE, 64, 1, true);
 	}
 }

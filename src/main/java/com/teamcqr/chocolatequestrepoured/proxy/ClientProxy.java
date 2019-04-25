@@ -2,12 +2,14 @@ package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
@@ -86,6 +88,15 @@ public class ClientProxy extends CommonProxy
 			public Render<ProjectileSpiderBall> createRenderFor(RenderManager manager) 
 			{
 				return new RenderProjectileSpiderBall(manager, 1F);
+			}
+		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileBulletCannon.class, new IRenderFactory<ProjectileBulletCannon>() 
+		{
+			@Override
+			public Render<ProjectileBulletCannon> createRenderFor(RenderManager manager) 
+			{
+				return new RenderProjectileBulletCannon(manager, 1F);
 			}
 		});
 	}

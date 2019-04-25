@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,20 +11,20 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileSpiderBall extends Render<ProjectileSpiderBall>
+public class RenderProjectileBulletCannon extends Render<ProjectileBulletCannon>
 {
 	@SuppressWarnings("unused")
 	private final float scale;
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/spider_ball.png");
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_cannon.png");
 	
-	public RenderProjectileSpiderBall(RenderManager renderManager, float scaleIn) 
+	public RenderProjectileBulletCannon(RenderManager renderManager, float scaleIn) 
 	{
 		super(renderManager);
 		this.scale = scaleIn;
 	}
 	
 	@Override
-	public void doRender(ProjectileSpiderBall entity, double x, double y, double z, float entityYaw, float partialTicks)
+	public void doRender(ProjectileBulletCannon entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
     	GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
@@ -61,7 +61,7 @@ public class RenderProjectileSpiderBall extends Render<ProjectileSpiderBall>
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileSpiderBall entity) 
+	protected ResourceLocation getEntityTexture(ProjectileBulletCannon entity) 
 	{
 		return TEXTURE;
 	}

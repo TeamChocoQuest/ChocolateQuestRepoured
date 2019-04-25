@@ -16,13 +16,16 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemStaffFire;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemStaffSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerNinja;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemGreatSwordBase;
@@ -94,19 +97,22 @@ public class ModItems
 	
 	//Staffs
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");			//Description #TODO
-	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES 
+	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES && DESCRIPTION 
+	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES && DESCRIPTION 
+	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing"); //#TODO TEXTURES && DESCRIPTION
 	
 	//Guns
 	public static final Item REVOLVER = new ItemRevolver("revolver");
 	public static final Item CAPTAIN_REVOLVER = new ItemRevolver("captain_revolver");
 	public static final Item MUSKET = new ItemMusket("musket");
-	public static final Item MUSKET_IRON = new ItemMusketKnife("musket_iron", TOOL_MUSKET_IRON);
-	public static final Item MUSKET_DIAMOND = new ItemMusketKnife("musket_diamond", TOOL_MUSKET_DIAMOND);
-	public static final Item MUSKET_MONKING = new ItemMusketKnife("musket_monking", TOOL_MUSKET_MONKING);
+	public static final Item MUSKET_IRON = new ItemMusketKnife("musket_iron", TOOL_MUSKET_IRON);      //#TODO TEXTURES
+	public static final Item MUSKET_DIAMOND = new ItemMusketKnife("musket_diamond", TOOL_MUSKET_DIAMOND); //#TODO TEXTURES
+	public static final Item MUSKET_MONKING = new ItemMusketKnife("musket_monking", TOOL_MUSKET_MONKING); //#TODO TEXTURES
 	public static final Item BULLET_IRON = new ItemBullet("bullet_iron");
 	public static final Item BULLET_GOLD = new ItemBullet("bullet_gold");
 	public static final Item BULLET_DIAMOND = new ItemBullet("bullet_diamond");
 	public static final Item BULLET_FIRE = new ItemBullet("bullet_fire");
+	public static final Item BULLET_CANNON = new ItemBulletCannon("bullet_cannon");
 	
 	//Single Armor Items
 	public static final Item HELMET_DRAGON = new ItemHelmetDragon("helmet_dragon", ARMOR_DRAGON, 1, EntityEquipmentSlot.HEAD);   //#TODO Make model centered on head // Abandon for now

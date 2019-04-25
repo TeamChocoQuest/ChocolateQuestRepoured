@@ -74,7 +74,7 @@ public class ProjectileSpiderBall extends EntityThrowable
 						return;
 					}
 					
-					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 80, 1));
+					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 1));
 					entity.attackEntityFrom(DamageSource.MAGIC, damage);
 					setDead();
 				}

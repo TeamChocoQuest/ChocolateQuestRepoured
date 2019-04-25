@@ -3,5 +3,11 @@
     {
         "category": "item",
         "sounds": [{"name" : "cqrepoured:item/gunshoot"}]
-     }
+    },
+    
+    "item.magic": 
+    {
+        "category": "item",
+        "sounds": [{"name" : "cqrepoured:item/magic"}]
+    }
 }   
