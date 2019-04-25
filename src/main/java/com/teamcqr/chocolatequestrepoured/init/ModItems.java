@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
@@ -172,4 +173,5 @@ public class ModItems
 	//Other
 	public static final Item POTION_HEALING = new ItemPotionHealing("potion_healing");
 	public static final Item TELEPORT_STONE = new ItemTeleportStone("teleport_stone");
+	public static final Item SOUL_BOTTLE = new ItemSoulBottle("soul_bottle");
 }
