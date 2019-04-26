@@ -49,4 +49,68 @@ public class LinearDungeon extends DungeonBase {
 		}
 	}
 
+	public int getMinRooms() {
+		return minRooms;
+	}
+
+	public void setMinRooms(int minRooms) {
+		this.minRooms = minRooms;
+	}
+
+	public int getMinRoomsPerFloor() {
+		return minRoomsPerFloor;
+	}
+
+	public void setMinRoomsPerFloor(int minRoomsPerFloor) {
+		this.minRoomsPerFloor = minRoomsPerFloor;
+	}
+
+	public int getMaxRooms() {
+		return maxRooms;
+	}
+
+	public void setMaxRooms(int maxRooms) {
+		this.maxRooms = maxRooms;
+	}
+
+	public int getMaxRoomsPerFloor() {
+		return maxRoomsPerFloor;
+	}
+
+	public void setMaxRoomsPerFloor(int maxRoomsPerFloor) {
+		this.maxRoomsPerFloor = maxRoomsPerFloor;
+	}
+
+	public File getStairFolder() {
+		return stairFolder;
+	}
+
+	public void setStairFolder(File stairFolder) {
+		this.stairFolder = stairFolder;
+	}
+
+	public File getEntranceStairFolder() {
+		return entranceStairFolder;
+	}
+
+	public void setEntranceStairFolder(File entranceStairFolder) {
+		this.entranceStairFolder = entranceStairFolder;
+	}
+
+	public File getEntranceBuildingFolder() {
+		return entranceBuildingFolder;
+	}
+
+	public void setEntranceBuildingFolder(File entranceBuildingFolder) {
+		this.entranceBuildingFolder = entranceBuildingFolder;
+	}
+
+	public File getBossRoomFolder() {
+		return bossRoomFolder;
+	}
+
+	public void setBossRoomFolder(File bossRoomFolder) {
+		this.bossRoomFolder = bossRoomFolder;
+	}
+
 }
