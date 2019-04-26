@@ -24,4 +24,44 @@ public class StrongholdDungeon extends DungeonBase {
 	public IDungeonGenerator getGenerator() {
 		return new StrongholdGenerator();
 	}
+
+	public File getStairFolder() {
+		return stairFolder;
+	}
+
+	public void setStairFolder(File stairFolder) {
+		this.stairFolder = stairFolder;
+	}
+
+	public File getBossRoomFolder() {
+		return bossRoomFolder;
+	}
+
+	public void setBossRoomFolder(File bossRoomFolder) {
+		this.bossRoomFolder = bossRoomFolder;
+	}
+
+	public File getEntranceStairFolder() {
+		return entranceStairFolder;
+	}
+
+	public void setEntranceStairFolder(File entranceStairFolder) {
+		this.entranceStairFolder = entranceStairFolder;
+	}
+
+	public File getEntranceBuildingFolder() {
+		return entranceBuildingFolder;
+	}
+
+	public void setEntranceBuildingFolder(File entranceBuildingFolder) {
+		this.entranceBuildingFolder = entranceBuildingFolder;
+	}
+
+	public File getRoomFolder() {
+		return roomFolder;
+	}
+
+	public void setRoomFolder(File roomFolder) {
+		this.roomFolder = roomFolder;
+	}
 }

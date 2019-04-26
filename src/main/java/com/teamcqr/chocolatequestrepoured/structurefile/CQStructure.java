@@ -106,50 +106,79 @@ public class CQStructure {
 		}
 	}
 	
-	//TODO: Split structure into 16x16 grid 
-	public void save(World worldIn, BlockPos startPos, BlockPos endPos) {
+	//DONE?: Split structure into 16x16 grid 
+	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode) {
 		//int x = startPos.getX();
 		//int z = startPos.getZ();
+		BlockPos endPos = posEnd;
+		BlockPos startPos = posStart;
 		
-		this.setSizeX(endPos.getX() - startPos.getX());
-		this.setSizeY(endPos.getY() - startPos.getY());
-		this.setSizeZ(endPos.getZ() - startPos.getZ());
+		//Makes sure, that the end positions X and Z component is larger than the ones of the start pos
+		if(posEnd.getX() < posStart.getX()) {
+			endPos = new BlockPos(startPos.getX(), endPos.getY(), endPos.getZ());
+			startPos = new BlockPos(endPos.getX(), startPos.getY(), startPos.getZ());
+		}
+		if(posEnd.getZ() < posStart.getZ()) {
+			endPos = new BlockPos(endPos.getX(), endPos.getY(), startPos.getZ());
+			startPos = new BlockPos(startPos.getX(), startPos.getY(), endPos.getZ());
+		}
+		
+		this.setSizeX(endPos.getX() != startPos.getX() ? endPos.getX() - startPos.getX() : 1);
+		this.setSizeY(endPos.getY() != startPos.getY() ? endPos.getY() - startPos.getY() : 1);
+		this.setSizeZ(endPos.getZ() != startPos.getZ() ? endPos.getZ() - startPos.getZ() : 1);
 		
 		//DONE: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
 		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
-		//Problem was not the reflection thing (however, it isnt working...), it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
+		//Problem was not the reflection thing, it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
 		
-		//if(Math.abs(endPos.getX() - x) > 16 || Math.abs(endPos.getZ() - z) > 16) {
-			/*BlockPos start = startPos;
-			BlockPos end = start.add(16, 0, 16);*/
-			int i = 0;
-			/*for(int iX = 0; iX < this.getSizeX() / 16; iX++) {
-				System.out.println("Executing X...");
-				for(int iZ = 0; iZ < this.getSizeZ() / 16; iZ++) {*/
-					System.out.println("Creating Structure Object...");
-					Structure subPart = new Structure(i);
-					System.out.println("Created Object!");
-					//start = startPos.add(iX * 16, 0, iZ *16);
-					//end = start.add(15, 0, 15);
+		int distX = endPos.getX() - startPos.getX();
+		int distZ = endPos.getZ() - startPos.getZ();
+		
+		if((Math.abs(distX) > 32 && Math.abs(distZ) > 32) && usePartMode) {
+			//Use part mode and cut the structure into multiple smaller 16xHEIGHTx16 cubes
+			//boolean notDividableBySixTeen = (this.sizeX % 16 == 0 ? false: true) || (this.sizeZ % 16 == 0 ? false: true);
+			
+			int partIndx = 0;
+			
+			BlockPos start = new BlockPos(startPos);
+			BlockPos end = new BlockPos(start.add(16, this.sizeY, 16));
+			BlockPos offset = new BlockPos(0, 0, 0);
+			
+			int xIterations = this.sizeX / 16;
+			int zIterations = this.sizeZ / 16;
+			
+			for(int iX = 0; iX < xIterations; iX++) {
+				for(int iZ = 0; iZ < zIterations; iZ++) {
+					start = new BlockPos(startPos.add(16 *iX, 0, 16 *iZ));
+					start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
+					end = new BlockPos(start.add(16, this.sizeY, 16));
 					
-					//subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
-					subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
+					if((iX +1) == xIterations || (iZ +1) == zIterations) {
+						//This section is for parts standing out of the grid...
+						if((iX +1) == xIterations) {
+							end = new BlockPos(endPos.getX(), end.getY(), end.getZ());
+						}
+						if((iZ +1) == zIterations) {
+							end = new BlockPos(end.getX(), end.getY(), endPos.getZ());
+						}
+					}
+					offset = start.subtract(startPos);
 					
-					//this.structures.put(startPos.subtract(start), subPart);
-					System.out.println("Putting subPart into list....");
-					this.structures.put(new BlockPos(0, 0, 0), subPart);
+					Structure subPart = new Structure(partIndx);
+					subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
 					
-					i++;
-				//}
-			//}
-			this.parts = i;
-		/*} else {
-			Structure subPart = new Structure(0);
-			subPart.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
-			this.structures.put(new BlockPos(0, 0, 0), subPart);
+					this.structures.put(offset, subPart);
+					partIndx++;
+				}
+			}
+			this.parts = partIndx;
+		} else {
+			//Do not use the part mode -> Save as one huge block
 			this.parts = 1;
-		}*/
-		
+			Structure struct = new Structure(0);
+			struct.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
+			this.structures.put(new BlockPos(0,0,0), struct);
+		}	
 		writeNBT();
 	}
 	

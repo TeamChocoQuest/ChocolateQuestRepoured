@@ -64,6 +64,6 @@ public class TileEntityExporter extends TileEntity
 		CQStructure structure = new CQStructure(this.structureName);
 		structure.setAuthor(authorName);
 		
-		structure.save(this.world, startPos, endPos);
+		structure.save(this.world, startPos, endPos, this.partModeUsing);
 	}
 }
