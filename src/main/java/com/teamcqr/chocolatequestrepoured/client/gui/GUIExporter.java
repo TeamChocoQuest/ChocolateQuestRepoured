@@ -95,6 +95,7 @@ public class GUIExporter extends GuiScreen {
 			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
 				structName = "dungeon_export";
 			}
+			useParts = chbxPartsMode.isChecked();
 			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, useParts);
 			useParts = chbxPartsMode.isChecked();
 			

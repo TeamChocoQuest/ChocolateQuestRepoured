@@ -108,8 +108,6 @@ public class CQStructure {
 	
 	//DONE?: Split structure into 16x16 grid 
 	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode) {
-		//int x = startPos.getX();
-		//int z = startPos.getZ();
 		BlockPos endPos = posEnd;
 		BlockPos startPos = posStart;
 		
@@ -136,7 +134,6 @@ public class CQStructure {
 		
 		if((Math.abs(distX) > 32 && Math.abs(distZ) > 32) && usePartMode) {
 			//Use part mode and cut the structure into multiple smaller 16xHEIGHTx16 cubes
-			//boolean notDividableBySixTeen = (this.sizeX % 16 == 0 ? false: true) || (this.sizeZ % 16 == 0 ? false: true);
 			
 			int partIndx = 0;
 			
@@ -167,7 +164,7 @@ public class CQStructure {
 					Structure subPart = new Structure(partIndx);
 					subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
 					
-					this.structures.put(offset, subPart);
+					this.structures.put(new BlockPos(offset), subPart);
 					partIndx++;
 				}
 			}
@@ -183,6 +180,7 @@ public class CQStructure {
 	}
 	
 	private void writeNBT() {
+		System.out.println("Saving file " + this.dataFile.getName() +"...");
 		NBTTagCompound root = new NBTTagCompound();
 		root.setString("type", "CQ_Structure");
 		root.setInteger("partcount", this.parts);
@@ -209,11 +207,26 @@ public class CQStructure {
 			partsTag.setTag("p"+index, part);
 			index++;
 		}
-		
+		//System.out.println("Finishing NBT Compound...");
 		root.setTag("parts", partsTag);
-		
+		//System.out.println("Saving to file...");
+		//saveToFile(root);
+		Thread fileSaveThread = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				saveToFile(root);
+				System.out.println("DONE!");
+				System.out.println("Exported file " + dataFile.getName() + " successfully!");
+			}
+		});
+		fileSaveThread.setDaemon(true);
+		fileSaveThread.start();
+	}
+	
+	private void saveToFile(NBTTagCompound tag) {
 		try {
-			CompressedStreamTools.write(root, this.dataFile);
+			CompressedStreamTools.write(tag, this.dataFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
