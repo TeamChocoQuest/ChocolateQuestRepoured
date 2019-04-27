@@ -12,8 +12,9 @@ import net.minecraft.world.World;
 
 public class PlateauBuilder {
 
-	//Copied directly from old mod, should be ok, because it is just an implementation of perlin3D
-	
+	// Copied directly from old mod, should be ok, because it is just an
+	// implementation of perlin3D
+
 	public PlateauBuilder() {
 	}
 
@@ -63,7 +64,8 @@ public class PlateauBuilder {
 									this.structureBlock.getDefaultState());
 					}
 				}
-				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
+				maxHeight = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),
+						x + i, z + k, true);// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
 				if (maxHeight <= j) {
 					world.setBlockState(new BlockPos(i + x, maxHeight - 1, k + z),
 							this.structureTopBlock.getDefaultState());
