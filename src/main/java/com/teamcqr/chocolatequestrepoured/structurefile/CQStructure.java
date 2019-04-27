@@ -37,7 +37,8 @@ public class CQStructure {
 	}
 	
 	public CQStructure(File file) {
-		if(file.isFile() && file.getName().split(".")[1].equalsIgnoreCase("nbt")) {
+		//System.out.println(file.getName());
+		if(file.isFile() && file.getName().contains(".nbt")) {
 			//DONE: read nbt file and create the substructures
 			boolean failed = true;
 			InputStream stream = null;
@@ -52,6 +53,7 @@ public class CQStructure {
 					root = CompressedStreamTools.readCompressed(stream);
 				} catch(IOException ex) {
 					ex.printStackTrace();
+					root = null;
 				}
 				if(root != null) {
 					if(root.hasKey("type") && root.hasKey("parts")) {
@@ -95,14 +97,16 @@ public class CQStructure {
 	}
 	
 	public void placeBlocksInWorld(World worldIn, BlockPos pos, PlacementSettings settings) {
-		System.out.println("Generating structure: " + this.dataFile.getName() + "...");
-		int partID = 1;
-		for(BlockPos offset : this.structures.keySet()) {
-			System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
-			BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
-			BlockPos pastePos = pos.add(offsetVec);
-			this.structures.get(offset).addBlocksToWorld(worldIn, pastePos, settings);
-			partID++;
+		if(this.dataFile != null) {
+			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
+			int partID = 1;
+			for(BlockPos offset : this.structures.keySet()) {
+				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
+				BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
+				BlockPos pastePos = pos.add(offsetVec);
+				this.structures.get(offset).addBlocksToWorld(worldIn, pastePos, settings);
+				partID++;
+			}
 		}
 	}
 	
