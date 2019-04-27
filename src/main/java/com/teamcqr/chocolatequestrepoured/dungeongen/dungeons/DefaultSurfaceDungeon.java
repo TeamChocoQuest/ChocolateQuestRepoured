@@ -109,6 +109,9 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 			if(this.getUnderGroundOffset() != 0) {
 				y -= this.getUnderGroundOffset();
 			}
+			if(this.yOffset != 0) {
+				y += Math.abs(this.yOffset);
+			}
 			
 			System.out.println("Placing dungeon: " + this.name);
 			System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
