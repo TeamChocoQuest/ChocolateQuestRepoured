@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.tileentity;
 
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +18,8 @@ public class TileEntityExporter extends TileEntity
 	public int endZ = 0;
 	public String structureName = "NoName";
 	public boolean partModeUsing = false;
+	
+	private EntityPlayer user = null;
 	
 	public TileEntityExporter(){}
 	
@@ -59,11 +62,15 @@ public class TileEntityExporter extends TileEntity
 		structureName = structName;
 	}
 	
+	public void setUser(EntityPlayer player) {
+		this.user = player;
+	}
+	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
 	{
 		CQStructure structure = new CQStructure(this.structureName);
 		structure.setAuthor(authorName);
 		
-		structure.save(world, startPos, endPos, this.partModeUsing);
+		structure.save(world, startPos, endPos, this.partModeUsing, this.user);
 	}
 }

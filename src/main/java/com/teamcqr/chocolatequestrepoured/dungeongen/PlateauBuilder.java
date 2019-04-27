@@ -29,8 +29,9 @@ public class PlateauBuilder {
 	}
 
 	public void generate(Random random, World world, int i, int j, int k, int sizeX, int sizeZ) {
-		Perlin3D p = new Perlin3D(world.getSeed(), 8, random);
-		Perlin3D p2 = new Perlin3D(world.getSeed(), 32, random);
+		long seed = WorldDungeonGenerator.getSeed(world, i, k);
+		Perlin3D p = new Perlin3D(seed, 8, random);
+		Perlin3D p2 = new Perlin3D(seed, 32, random);
 
 		int wallSize = 8;
 		sizeX += wallSize * 2;
