@@ -41,9 +41,9 @@ public class PlateauBuilder {
 		for (int x = 0; x < sizeX; x++) {
 			for (int z = 0; z < sizeZ; z++) {
 				int maxHeight = j - 1 - DungeonGenUtils.getHighestYAt(
-						world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, false);
+						world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true);
 				int posY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),
-						x + i, z + k, false);
+						x + i, z + k, true);
 				for (int y = 0; y <= maxHeight; y++) {
 					if ((x > wallSize) && (z > wallSize) && (x < sizeX - wallSize) && (z < sizeZ - wallSize)) {
 						world.setBlockState(new BlockPos(i + x, posY, k + z), this.structureBlock.getDefaultState());
