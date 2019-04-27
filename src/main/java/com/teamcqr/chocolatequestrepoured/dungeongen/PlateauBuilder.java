@@ -34,7 +34,6 @@ public class PlateauBuilder {
 		int wallSize = 8;
 		sizeX += wallSize * 2;
 		sizeZ += wallSize * 2;
-		// int height = 32;
 
 		i -= wallSize;
 		k -= wallSize;
@@ -42,15 +41,11 @@ public class PlateauBuilder {
 		for (int x = 0; x < sizeX; x++) {
 			for (int z = 0; z < sizeZ; z++) {
 				int maxHeight = j - 1 - DungeonGenUtils.getHighestYAt(
-						world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, false);// world.getTopSolidOrLiquidBlock(new
-																											// BlockPos(x
-																											// + i, 255,
-																											// z + k));
+						world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, false);
 				int posY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),
-						x + i, z + k, false);// world.getTopSolidOrLiquidBlock(x + i, 0, z + k);
+						x + i, z + k, false);
 				for (int y = 0; y <= maxHeight; y++) {
 					if ((x > wallSize) && (z > wallSize) && (x < sizeX - wallSize) && (z < sizeZ - wallSize)) {
-						// structureBlock.placeBlock(world, i + x, posY + y, k + z, random);
 						world.setBlockState(new BlockPos(i + x, posY, k + z), this.structureBlock.getDefaultState());
 					} else {
 						float noiseVar = (y - maxHeight) / (Math.max(1, maxHeight) * 1.5F);
@@ -64,14 +59,12 @@ public class PlateauBuilder {
 						double value = (p.getNoiseAt(x + i, y, z + k) + p2.getNoiseAt(x + i, y, z + k) + noiseVar)
 								/ 3.0D;
 						if (value < 0.5D)
-							// structureBlock.placeBlock(world, i + x, posY + y, k + z, random);
 							world.setBlockState(new BlockPos(i + x, posY + y, k + z),
 									this.structureBlock.getDefaultState());
 					}
 				}
 				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
 				if (maxHeight <= j) {
-					// structureTopBlock.placeBlock(world, i + x, maxHeight - 1, k + z, random);
 					world.setBlockState(new BlockPos(i + x, maxHeight - 1, k + z),
 							this.structureTopBlock.getDefaultState());
 				}

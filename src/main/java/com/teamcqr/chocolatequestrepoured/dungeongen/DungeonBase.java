@@ -23,6 +23,7 @@ public class DungeonBase {
 	private Item placeItem;
 	protected int underGroundOffset = 0;
 	protected int chance;
+	protected int yOffset = 0;
 	protected int[] allowedDims = {0};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
@@ -71,6 +72,7 @@ public class DungeonBase {
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
+			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
