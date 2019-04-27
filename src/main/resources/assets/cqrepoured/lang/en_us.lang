@@ -54,6 +54,7 @@ item.bullet_gold.name=Gold Bullets
 item.bullet_diamond.name=Diamond Bullets
 item.bullet_fire.name=Fiery Bullets
 item.bullet_cannon.name=Cannon Bullet
+item.flamethrower.name=Flamethrower
 
 //Cloud Items
 item.boots_cloud.name=Cloud Boots
@@ -96,6 +97,7 @@ item.chestplate_spider.name=Spider Chestplate
 item.leggings_spider.name=Spider Leggings
 item.boots_spider.name=Spider Boots
 item.leather_spider.name=Spider Leather
+item.giant_spider_poison.name=Giant Spider Poison
 
 //Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Heavy Diamond Helmet
@@ -252,3 +254,4 @@ description.staff_healing.name=Missing #TODO
 description.contains.name=Contains:
 description.empty.name=Empty
 description.soul_bottle.name=Missing #TODO
+description.flamethrower.name=Missing #TODO
