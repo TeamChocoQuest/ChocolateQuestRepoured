@@ -12,10 +12,12 @@ import java.util.HashMap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
@@ -113,7 +115,7 @@ public class CQStructure {
 	}
 	
 	//DONE?: Split structure into 16x16 grid 
-	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode) {
+	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode, EntityPlayer placer) {
 		BlockPos endPos = posEnd;
 		BlockPos startPos = posStart;
 		
@@ -182,10 +184,10 @@ public class CQStructure {
 			struct.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
 			this.structures.put(new BlockPos(0,0,0), struct);
 		}	
-		writeNBT();
+		writeNBT(placer);
 	}
 	
-	private void writeNBT() {
+	private void writeNBT(EntityPlayer placer) {
 		System.out.println("Saving file " + this.dataFile.getName() +"...");
 		NBTTagCompound root = new NBTTagCompound();
 		root.setString("type", "CQ_Structure");
@@ -224,6 +226,9 @@ public class CQStructure {
 				saveToFile(root);
 				System.out.println("DONE!");
 				System.out.println("Exported file " + dataFile.getName() + " successfully!");
+				if(placer != null) {
+					placer.sendMessage(new TextComponentString("Exported " + dataFile.getName() + " successfully!"));
+				}
 			}
 		});
 		fileSaveThread.setDaemon(true);
