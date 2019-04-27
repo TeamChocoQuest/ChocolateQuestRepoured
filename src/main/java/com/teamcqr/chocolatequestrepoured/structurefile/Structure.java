@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.Lists;
+import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -200,7 +201,8 @@ public class Structure extends Template {
 					worldIn.setBlockState(chestPos, chestBlock.getDefaultState());
 					TileEntityChest chest = (TileEntityChest) worldIn.getTileEntity(chestPos);
 					//DONE: Wait for loot tables to be finished, get the right one and add it below
-					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getLootTable(), worldIn.getSeed());
+					long seed = WorldDungeonGenerator.getSeed(worldIn, chestPos.getX(), chestPos.getZ());
+					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getLootTable(), seed);
 				}
 			}
 		}
