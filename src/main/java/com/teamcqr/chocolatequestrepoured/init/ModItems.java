@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
@@ -96,7 +97,7 @@ public class ModItems
 	public static final Item GREAT_SWORD_BULL = new ItemGreatSwordBase("great_sword_bull", TOOL_BULL_GREAT_SWORD, 1F, 50, -0.6F);
 	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 25, -0.6F);
 	
-	//Staffs
+	//Staves
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");			//Description #TODO
 	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES && DESCRIPTION 
 	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES && DESCRIPTION 
@@ -114,6 +115,7 @@ public class ModItems
 	public static final Item BULLET_DIAMOND = new ItemBullet("bullet_diamond");
 	public static final Item BULLET_FIRE = new ItemBullet("bullet_fire");
 	public static final Item BULLET_CANNON = new ItemBulletCannon("bullet_cannon");
+	public static final Item FLAMETHROWER = new ItemFlamethrower("flamethrower");		//#TODO TEXTURES && DESCRIPTION
 	
 	//Single Armor Items
 	public static final Item HELMET_DRAGON = new ItemHelmetDragon("helmet_dragon", ARMOR_DRAGON, 1, EntityEquipmentSlot.HEAD);   //#TODO Make model centered on head // Abandon for now
@@ -168,6 +170,7 @@ public class ModItems
 	public static final Item BALL_SLIME = new ItemBase("ball_slime");
 	public static final Item LEATHER_SPIDER = new ItemBase("leather_spider");
 	public static final Item BONE_MONKING = new ItemBase("bone_monking");
+	public static final Item GIANT_SPIDER_POISON = new ItemBase("giant_spider_poison");
 	public static final Item FEATHER_GOLDEN = new ItemGoldenFeather("feather_golden");
 	
 	//Other
