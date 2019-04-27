@@ -159,10 +159,10 @@ public class CQStructure {
 					if((iX +1) == xIterations || (iZ +1) == zIterations) {
 						//This section is for parts standing out of the grid...
 						if((iX +1) == xIterations) {
-							end = new BlockPos(endPos.getX(), end.getY(), end.getZ());
+							end = new BlockPos(posEnd.getX(), end.getY(), end.getZ());
 						}
 						if((iZ +1) == zIterations) {
-							end = new BlockPos(end.getX(), end.getY(), endPos.getZ());
+							end = new BlockPos(end.getX(), end.getY(), posEnd.getZ());
 						}
 					}
 					offset = start.subtract(startPos);
