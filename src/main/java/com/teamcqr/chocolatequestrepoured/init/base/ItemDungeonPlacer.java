@@ -53,7 +53,6 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 			textureID = 0;
 		}
 		ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation("cqrepoured:dungeon_placer_d" + textureID, "normal"));
-		//System.out.println("Registered Model!");
 	}
 	
 	public DungeonBase getAssignedDungeon() {

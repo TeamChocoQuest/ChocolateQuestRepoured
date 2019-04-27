@@ -7,13 +7,13 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.DefaultGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.SimplePasteGenerator;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -45,14 +45,22 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 			configFile = null;
 		}
 		if(prop != null && configFile != null && fis != null) {
-			super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
-			super.name = configFile.getName().replaceAll(".prop", "");
-			super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
-			super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
-			this.structureFolderPath = new File(prop.getProperty("structurefolder", "defaultFolder"));
+			//super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
+			//super.name = configFile.getName().replaceAll(".prop", "");
+			//super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
+			//super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+			this.structureFolderPath = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
+
+			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
+				if(this.structureFolderPath.exists() && !this.structureFolderPath.isDirectory()) {
+					this.structureFolderPath.delete();
+				}
+				this.structureFolderPath.mkdirs();
+			}
 			
 			try {
 				fis.close();
+				this.registeredSuccessful = true;
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -69,7 +77,9 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		//rdm.setSeed(worldSeed);
 		File chosenStructure = this.structureFolderPath;
 		if(this.structureFolderPath.isDirectory()) {
-			chosenStructure = this.structureFolderPath.listFiles()[random.nextInt(this.structureFolderPath.listFiles().length)];
+			File[] files = this.structureFolderPath.listFiles();
+			int index = random.nextInt(files.length);
+			chosenStructure = files[index];
 		}
 		if(chosenStructure != null) {
 			return chosenStructure;
@@ -80,29 +90,31 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-		File structure = pickStructure(random);
-		CQStructure dungeon = new CQStructure(structure);
-		
-		PlacementSettings settings = new PlacementSettings();
-		settings.setMirror(Mirror.NONE);
-		settings.setRotation(Rotation.NONE);
-		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		settings.setIntegrity(1.0F);
-		
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
-		//For position locked dungeons, use the positions y
-		if(this.isPosLocked()) {
-			y = this.getLockedPos().getY();
+		File structure = pickStructure(new Random());
+		if(structure != null) {
+			CQStructure dungeon = new CQStructure(structure);
+			
+			PlacementSettings settings = new PlacementSettings();
+			settings.setMirror(Mirror.NONE);
+			settings.setRotation(Rotation.NONE);
+			settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
+			settings.setIntegrity(1.0F);
+			
+			int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+			//For position locked dungeons, use the positions y
+			if(this.isPosLocked()) {
+				y = this.getLockedPos().getY();
+			}
+			
+			if(this.getUnderGroundOffset() != 0) {
+				y -= this.getUnderGroundOffset();
+			}
+			
+			System.out.println("Placing dungeon: " + this.name);
+			System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
+			SimplePasteGenerator generator = new SimplePasteGenerator(this, dungeon, settings);
+			generator.generate(world, chunk, x, y, z);
 		}
-		
-		if(this.getUnderGroundOffset() != 0) {
-			y -= this.getUnderGroundOffset();
-		}
-		
-		System.out.println("Placing dungeon: " + this.name);
-		System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
-		SimplePasteGenerator generator = new SimplePasteGenerator(this, dungeon, settings);
-		generator.generate(world, chunk, x, y, z);
 	}
 	
 }
