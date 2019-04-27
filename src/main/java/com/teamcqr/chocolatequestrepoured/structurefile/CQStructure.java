@@ -3,8 +3,10 @@ package com.teamcqr.chocolatequestrepoured.structurefile;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -230,7 +232,10 @@ public class CQStructure {
 	
 	private void saveToFile(NBTTagCompound tag) {
 		try {
-			CompressedStreamTools.write(tag, this.dataFile);
+			OutputStream outStream = null;
+			outStream = new FileOutputStream(this.dataFile);
+			CompressedStreamTools.writeCompressed(tag, outStream);
+			outStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
