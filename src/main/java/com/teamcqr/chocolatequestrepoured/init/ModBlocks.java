@@ -5,11 +5,11 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.base.BlockExporterChestBase;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.exporter.BlockExporter;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;

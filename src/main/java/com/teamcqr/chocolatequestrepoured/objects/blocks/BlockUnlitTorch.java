@@ -65,33 +65,30 @@ public class BlockUnlitTorch extends BlockBase
     
     private void lightUp(World worldIn, BlockPos pos, IBlockState state) 
     {
-    	if(worldIn instanceof WorldServer) 
+    	if(!worldIn.isRemote)
     	{
-    		Random rdm = new Random();
-    		worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.MASTER, 4.0F, (1.0F + (rdm.nextFloat() - rdm.nextFloat()) * 0.2F) * 0.7F, false);
-    		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
+    		if(worldIn instanceof WorldServer) 
+        	{
+        		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
+        	}
+        	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
     	}
-    	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));
+    	
+    	Random rdm = new Random();
+    	worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.MASTER, 4.0F, (1.0F + (rdm.nextFloat() - rdm.nextFloat()) * 0.2F) * 0.7F, false);
     }
     
     @Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
-    	if(!worldIn.isRemote)
-    	{
-    		ItemStack heldItem = playerIn.getHeldItem(hand);
-    		Block heldBlock = Block.getBlockFromItem(heldItem.getItem());
+    	ItemStack heldItem = playerIn.getHeldItem(hand);
+    	Block heldBlock = Block.getBlockFromItem(heldItem.getItem());
     		
-    		if(heldItem.getItem() instanceof ItemFlintAndSteel || heldBlock.getLightValue(heldBlock.getDefaultState(), worldIn, pos) > 0)
-    		{
-    			if(heldItem.getItem().isDamageable())
-    			{
-    				heldItem.damageItem(1, playerIn);
-    			}
-    			
-    			lightUp(worldIn, pos, state);
-    			return true;
-    		}
+    	if(heldItem.getItem() instanceof ItemFlintAndSteel || heldBlock.getLightValue(heldBlock.getDefaultState(), worldIn, pos) > 0)
+    	{
+    		heldItem.damageItem(1, playerIn);	
+    		lightUp(worldIn, pos, state);
+    		return true;
     	}
     	return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}

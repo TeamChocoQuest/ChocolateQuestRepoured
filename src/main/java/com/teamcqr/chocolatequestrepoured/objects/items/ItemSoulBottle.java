@@ -52,13 +52,12 @@ public class ItemSoulBottle extends ItemBase
 		
 		NBTTagCompound entityTag = new NBTTagCompound();
 		
-		if(!bottle.hasKey(EntityIn) && entity.writeToNBTOptional(entityTag))
+		if(bottle.getTag(EntityIn) == null && entity.writeToNBTOptional(entityTag))
 		{
 			bottle.setTag(EntityIn, entityTag);
 			entity.setDead();
+			this.spawnAdditions(entity.world, entity);
 		}
-		
-		this.spawnAdditions(entity.world, entity);
 		
 		return true;
     }
@@ -69,25 +68,29 @@ public class ItemSoulBottle extends ItemBase
 		ItemStack stack = player.getHeldItem(hand);
 		NBTTagCompound bottle = stack.getTagCompound();
 
-		if(bottle.getTag(EntityIn) != null)
+		if(bottle != null)
 		{
-			NBTTagCompound entityTag = (NBTTagCompound)bottle.getTag(EntityIn);
-			Entity entity = this.createEntityFromNBT(entityTag, worldIn, pos.getX(), pos.getY(), pos.getZ());
-			entity.setUniqueId(MathHelper.getRandomUUID(new Random()));
-			
-			if(!worldIn.isRemote)
-			{	
-				if(entity != null)
-				{
-					worldIn.spawnEntity(entity);
+			if(bottle.getTag(EntityIn) != null)
+			{
+				NBTTagCompound entityTag = (NBTTagCompound)bottle.getTag(EntityIn);
+				Entity entity = this.createEntityFromNBT(entityTag, worldIn, pos.getX(), pos.getY(), pos.getZ());
+				entity.setUniqueId(MathHelper.getRandomUUID(new Random()));
+				
+				if(!worldIn.isRemote)
+				{	
+					if(entity != null)
+					{
+						worldIn.spawnEntity(entity);
+					}
+	
+					if(!player.isCreative() || player.isSpectator() || (player.isCreative() && player.isSneaking())) 
+					{
+						bottle.removeTag(EntityIn);
+					}
 				}
-
-				if(!(player.isCreative() || player.isSpectator())) {
-					bottle.removeTag(EntityIn);
-				}
+				
+		    	this.spawnAdditions(worldIn, entity);
 			}
-			
-	    	this.spawnAdditions(worldIn, entity);
 		}
         return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
     }
@@ -144,6 +147,10 @@ public class ItemSoulBottle extends ItemBase
 			{
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.contains.name") + " " + I18n.format("description.empty.name"));
 			}
+		}
+		else
+		{
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.contains.name") + " " + I18n.format("description.empty.name"));
 		}
     }
 	

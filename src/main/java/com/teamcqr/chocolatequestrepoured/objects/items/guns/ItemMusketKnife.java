@@ -39,6 +39,7 @@ public class ItemMusketKnife extends SwordBase
 	public ItemMusketKnife(String name, ToolMaterial material) 
 	{
 		super(name, material);
+		setMaxDamage(300);
 		setMaxStackSize(1);
 	}
 	
