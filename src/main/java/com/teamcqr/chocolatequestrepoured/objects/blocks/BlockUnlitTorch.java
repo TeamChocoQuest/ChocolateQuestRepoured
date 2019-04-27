@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
@@ -27,7 +29,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -66,8 +67,8 @@ public class BlockUnlitTorch extends BlockBase
     {
     	if(worldIn instanceof WorldServer) 
     	{
-    		((WorldServer)worldIn).playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvent.REGISTRY.getObject(SoundEvents.ITEM_FIRECHARGE_USE.getRegistryName()), SoundCategory.BLOCKS, 1.0f, 1.0f, false);
-    		worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvent.REGISTRY.getObject(SoundEvents.ITEM_FIRECHARGE_USE.getRegistryName()), SoundCategory.BLOCKS, 1.0f, 1.0f, false);
+    		Random rdm = new Random();
+    		worldIn.playSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.MASTER, 4.0F, (1.0F + (rdm.nextFloat() - rdm.nextFloat()) * 0.2F) * 0.7F, false);
     		((WorldServer)worldIn).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
     	}
     	worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, state.getValue(FACING)));

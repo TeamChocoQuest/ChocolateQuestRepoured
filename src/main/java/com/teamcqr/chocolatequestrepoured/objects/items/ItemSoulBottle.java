@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -22,6 +23,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -71,6 +73,7 @@ public class ItemSoulBottle extends ItemBase
 		{
 			NBTTagCompound entityTag = (NBTTagCompound)bottle.getTag(EntityIn);
 			Entity entity = this.createEntityFromNBT(entityTag, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			entity.setUniqueId(MathHelper.getRandomUUID(new Random()));
 			
 			if(!worldIn.isRemote)
 			{	
@@ -79,7 +82,9 @@ public class ItemSoulBottle extends ItemBase
 					worldIn.spawnEntity(entity);
 				}
 
-				bottle.removeTag(EntityIn);	
+				if(!(player.isCreative() || player.isSpectator())) {
+					bottle.removeTag(EntityIn);
+				}
 			}
 			
 	    	this.spawnAdditions(worldIn, entity);
