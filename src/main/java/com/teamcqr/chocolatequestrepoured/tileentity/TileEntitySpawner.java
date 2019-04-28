@@ -62,12 +62,6 @@ public class TileEntitySpawner extends TileEntity implements ITickable
             this.turnBackIntoEntity();
         }
     }
- 
-    @Override
-    public boolean onlyOpsCanSetNbt() 
-    {
-        return true;
-    }
    
     public void turnBackIntoEntity() 
     {
