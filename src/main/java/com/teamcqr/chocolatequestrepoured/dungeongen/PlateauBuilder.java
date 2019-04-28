@@ -29,8 +29,9 @@ public class PlateauBuilder {
 	}
 
 	public void generate(Random random, World world, int i, int j, int k, int sizeX, int sizeZ) {
-		Perlin3D p = new Perlin3D(world.getSeed(), 8, random);
-		Perlin3D p2 = new Perlin3D(world.getSeed(), 32, random);
+		long seed = WorldDungeonGenerator.getSeed(world, i, k);
+		Perlin3D p = new Perlin3D(seed, 8, random);
+		Perlin3D p2 = new Perlin3D(seed, 32, random);
 
 		int wallSize = 8;
 		sizeX += wallSize * 2;
@@ -43,8 +44,7 @@ public class PlateauBuilder {
 			for (int z = 0; z < sizeZ; z++) {
 				int maxHeight = j - 1 - DungeonGenUtils.getHighestYAt(
 						world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true);
-				int posY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),
-						x + i, z + k, true);
+				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x+i,0,z+k)).getY();//DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);
 				for (int y = 0; y <= maxHeight; y++) {
 					if ((x > wallSize) && (z > wallSize) && (x < sizeX - wallSize) && (z < sizeZ - wallSize)) {
 						world.setBlockState(new BlockPos(i + x, posY, k + z), this.structureBlock.getDefaultState());
@@ -64,8 +64,7 @@ public class PlateauBuilder {
 									this.structureBlock.getDefaultState());
 					}
 				}
-				maxHeight = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),
-						x + i, z + k, true);// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
+				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x+i,0,z+k)).getY();//DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
 				if (maxHeight <= j) {
 					world.setBlockState(new BlockPos(i + x, maxHeight - 1, k + z),
 							this.structureTopBlock.getDefaultState());
