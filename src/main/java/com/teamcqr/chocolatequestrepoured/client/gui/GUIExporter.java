@@ -34,7 +34,8 @@ public class GuiExporter extends GuiScreen
 		this.world = worldIn;
 		this.authorName = player.getName();
 		this.exporter = exporter;
-		if(this.exporter != null) {
+		if(this.exporter != null) 
+		{
 			this.exporter.setUser(player);
 		}
 	}
