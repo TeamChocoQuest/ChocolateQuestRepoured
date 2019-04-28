@@ -83,7 +83,7 @@ public class ItemSoulBottle extends ItemBase
 						worldIn.spawnEntity(entity);
 					}
 	
-					if(!player.isCreative() || player.isSpectator() || (player.isCreative() && player.isSneaking())) 
+					if(!(player.isCreative() || player.isSpectator()) || (player.isCreative() && player.isSneaking())) 
 					{
 						bottle.removeTag(EntityIn);
 					}

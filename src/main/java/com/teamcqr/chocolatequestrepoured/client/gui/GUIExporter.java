@@ -14,11 +14,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
-public class GUIExporter extends GuiScreen {
-
-	public static int GUIID = 1;
-	
-	
+public class GuiExporter extends GuiScreen 
+{
 	private String authorName;
 	private World world;
 	private boolean saveStructOnExit = false;
@@ -32,14 +29,16 @@ public class GUIExporter extends GuiScreen {
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	private GuiCheckBox chbxPartsMode;
 	
-	public GUIExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) {
+	public GuiExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) 
+	{
 		this.world = worldIn;
 		this.authorName = player.getName();
 		this.exporter = exporter;
 	}
 
 	@Override
-	public void initGui() {
+	public void initGui() 
+	{
 		//Has inputs for start and end locations
 		
 		edtName = new GuiTextField(0, this.fontRenderer, width / 2 -70, height / 2 -70, 140, 20);
@@ -68,7 +67,8 @@ public class GUIExporter extends GuiScreen {
 	}
 	
 	@Override
-	public void onGuiClosed() {
+	public void onGuiClosed() 
+	{
 		int sX = 0;
 		int eX = 0;
 		int sY = 0;
@@ -89,17 +89,23 @@ public class GUIExporter extends GuiScreen {
 		} catch(NumberFormatException ex) {
 			fail = true;
 		}
-		if(!fail) {
+		
+		if(!fail) 
+		{
 			structName = edtName.getText();
 			structName = structName.replaceAll(" ", "_");
-			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
+			
+			if(structName.isEmpty() || structName.equalsIgnoreCase("")) 
+			{
 				structName = "dungeon_export";
 			}
+			
 			useParts = chbxPartsMode.isChecked();
 			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, useParts);
 			useParts = chbxPartsMode.isChecked();
 			
-			if(this.saveStructOnExit) {
+			if(this.saveStructOnExit) 
+			{
 				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
 				System.out.println("Saving structure...");
 			}
@@ -109,13 +115,15 @@ public class GUIExporter extends GuiScreen {
 	}
 	
 	@Override
-	protected void keyTyped(char typedChar, int keyCode) throws IOException {
+	protected void keyTyped(char typedChar, int keyCode) throws IOException 
+	{
 		super.keyTyped(typedChar, keyCode);
 		
 		edtName.textboxKeyTyped(typedChar, keyCode);
 		
 		//if(Character.isDigit(typedChar) || typedChar == '-' || keyCode == 37 || keyCode == 39) {
-		if(!Character.isAlphabetic(typedChar)) {
+		if(!Character.isAlphabetic(typedChar)) 
+		{
 			edtEndX.textboxKeyTyped(typedChar, keyCode);
 			edtEndY.textboxKeyTyped(typedChar, keyCode);
 			edtEndZ.textboxKeyTyped(typedChar, keyCode);
@@ -127,7 +135,8 @@ public class GUIExporter extends GuiScreen {
 	}
 	
 	@Override
-	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
+	protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException 
+	{
 		super.mouseClicked(mouseX, mouseY, mouseButton);
 		
 		edtName.mouseClicked(mouseX, mouseY, mouseButton);
@@ -142,7 +151,8 @@ public class GUIExporter extends GuiScreen {
 	}
 	
 	@Override
-	public void updateScreen() {
+	public void updateScreen() 
+	{
 		edtName.updateCursorCounter();
 		
 		edtEndX.updateCursorCounter();
@@ -157,7 +167,8 @@ public class GUIExporter extends GuiScreen {
 	}
 	
 	@Override
-	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) 
+	{
 		edtName.drawTextBox();
 		
 		edtEndX.drawTextBox();
@@ -188,12 +199,14 @@ public class GUIExporter extends GuiScreen {
 	
 	
 	@Override
-	public boolean doesGuiPauseGame() {
+	public boolean doesGuiPauseGame() 
+	{
 		return false;
 	}
 	
 	@Override
-	protected void actionPerformed(GuiButton button) throws IOException {
+	protected void actionPerformed(GuiButton button) throws IOException 
+	{
 		int sX = 0;
 		int eX = 0;
 		int sY = 0;
@@ -214,19 +227,25 @@ public class GUIExporter extends GuiScreen {
 		} catch(NumberFormatException ex) {
 			fail = true;
 		}
-		if(!fail) {
+		
+		if(!fail) 
+		{
 			structName = edtName.getText();
 			structName = structName.replaceAll(" ", "_");
-			if(structName.isEmpty() || structName.equalsIgnoreCase("")) {
+			
+			if(structName.isEmpty() || structName.equalsIgnoreCase("")) 
+			{
 				structName = "dungeon_export";
 			}
+			
 			structName = "export-" + structName;
 			useParts = chbxPartsMode.isChecked();
 		}
 		
-		if(!fail) {
-			
-			if(button == btnExport) {
+		if(!fail) 
+		{
+			if(button == btnExport) 
+			{
 				BlockPos startPos = new BlockPos(sX, sY, sZ);
 				BlockPos endPos = new BlockPos(eX, eY, eZ);
 				
@@ -240,5 +259,4 @@ public class GUIExporter extends GuiScreen {
 			}
 		}
 	}
-	
 }

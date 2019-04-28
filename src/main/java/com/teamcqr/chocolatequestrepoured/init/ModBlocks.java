@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 
@@ -97,6 +98,7 @@ public class ModBlocks
 	public static final Block EXPORTER = new BlockExporter("exporter", Material.ANVIL);
 	public static final Block UNLIT_TORCH = new BlockUnlitTorch("unlit_torch", Material.WOOD);
 	public static final Block NULL_BLOCK = new BlockNull("null_block", Material.GLASS, true);  //#TODO implement one click deactivating
+	public static final Block SPAWNER = new BlockSpawner("spawner", Material.ROCK);
 	
 	//Loot Chests
 	//standard
