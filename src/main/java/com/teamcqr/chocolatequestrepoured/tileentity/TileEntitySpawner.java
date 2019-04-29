@@ -6,7 +6,6 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,12 +14,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -35,6 +30,7 @@ public class TileEntitySpawner extends TileEntity implements ITickable
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Nullable
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) 
@@ -56,8 +52,9 @@ public class TileEntitySpawner extends TileEntity implements ITickable
         compound.setTag("inventory", inventory.serializeNBT());
         return compound;
     }
-    
+
     @Nullable
+    @Override
     public ITextComponent getDisplayName()
     {
         return new TextComponentString(I18n.format("tile.spawner.name"));
@@ -76,20 +73,31 @@ public class TileEntitySpawner extends TileEntity implements ITickable
     {
     	Random rand = new Random();
     	
+    	boolean fail = false;
+    	
     	for(int x = 0; x < this.inventory.getSlots(); x++)
     	{
     		ItemStack stack = this.inventory.getStackInSlot(x);
-    		NBTTagCompound tag = stack.getTagCompound();
-    		
-    		NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
-    		Entity entity = this.createEntityFromNBT(entityTag, this.world, this.pos.getX() + (int)rand.nextFloat(), this.pos.getY(), this.pos.getZ() + (int)rand.nextFloat());
-    		entity.setUniqueId(MathHelper.getRandomUUID(rand));
-    				
-    		stack.shrink(1);
-    		this.world.spawnEntity(entity);
+    		if(!stack.isEmpty() && stack.getCount() >= 1) {
+    			try {
+        			NBTTagCompound tag = stack.getTagCompound();
+            		
+        			NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
+            		Entity entity = this.createEntityFromNBT(entityTag, this.world, this.pos.getX() + (int)rand.nextFloat(), this.pos.getY(), this.pos.getZ() + (int)rand.nextFloat());
+            		entity.setUniqueId(MathHelper.getRandomUUID(rand));
+            				
+            		stack.shrink(1);
+            		this.world.spawnEntity(entity);
+
+    			} catch(NullPointerException npe) {
+    				fail = true;
+    			}
+    		}
     	}
     	
-    	this.world.setBlockToAir(this.pos);
+    	if(!fail) {
+    		this.world.setBlockToAir(this.pos);
+    	}
     }
     
     private Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, int x, int y, int z)
