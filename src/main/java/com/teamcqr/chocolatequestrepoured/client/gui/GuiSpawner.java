@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.client.gui;
 
 import com.teamcqr.chocolatequestrepoured.objects.blocks.container.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,5 +37,11 @@ public class GuiSpawner extends GuiContainer
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		this.mc.getTextureManager().bindTexture(GUI_CHEST);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
+	}
+	public InventoryPlayer getPlayerInventory() {
+		return this.playerInventory;
+	}
+	public TileEntitySpawner getTileEntity() {
+		return this.te;
 	}
 }

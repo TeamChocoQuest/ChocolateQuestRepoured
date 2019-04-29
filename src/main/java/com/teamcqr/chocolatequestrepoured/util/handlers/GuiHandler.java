@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
-import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
+import com.teamcqr.chocolatequestrepoured.client.gui.GUIExporter;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.container.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
@@ -34,7 +34,7 @@ public class GuiHandler implements IGuiHandler
 		
 		if(ID == Reference.EXPORTER_GUI_ID) 
 		{
-			return new GuiExporter(world, player, (TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)));
+			return new GUIExporter(world, player, (TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)));
 		}
 		return null;
 	}
