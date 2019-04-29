@@ -72,20 +72,19 @@ public class TileEntitySpawner extends TileEntity implements ITickable
     	{
     		ItemStack stack = this.inventory.getStackInSlot(x);
     		if(!stack.isEmpty() && stack.getCount() >= 1) {
-    			NBTTagCompound tag = stack.getTagCompound();
-        		
-        		if(tag != null) {
+    			try {
+        			NBTTagCompound tag = stack.getTagCompound();
+            		
         			NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
             		Entity entity = this.createEntityFromNBT(entityTag, this.world, this.pos.getX() + (int)rand.nextFloat(), this.pos.getY(), this.pos.getZ() + (int)rand.nextFloat());
             		entity.setUniqueId(MathHelper.getRandomUUID(rand));
             				
             		stack.shrink(1);
             		this.world.spawnEntity(entity);
-        		} else {
-        			fail = true;
-        		}
-    		} else {
-    			fail = true;
+
+    			} catch(NullPointerException npe) {
+    				fail = true;
+    			}
     		}
     	}
     	
