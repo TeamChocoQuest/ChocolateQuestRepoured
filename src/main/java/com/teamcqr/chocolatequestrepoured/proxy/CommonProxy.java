@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.EntityHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
@@ -18,6 +19,7 @@ public class CommonProxy
 	{
 		EntityHandler.registerEntity();
 		loadDungeons();
+		ProtectionHandler.init();
 	}
 	
 	public void init(FMLInitializationEvent event)
