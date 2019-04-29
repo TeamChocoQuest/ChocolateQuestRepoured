@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.swords;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.SwordBase;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

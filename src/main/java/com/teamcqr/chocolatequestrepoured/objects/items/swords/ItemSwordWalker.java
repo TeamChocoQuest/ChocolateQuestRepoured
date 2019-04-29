@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.SwordBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

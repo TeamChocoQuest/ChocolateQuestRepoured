@@ -20,7 +20,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.StrongholdDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.init.base.ItemDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.objects.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.util.math.BlockPos;
