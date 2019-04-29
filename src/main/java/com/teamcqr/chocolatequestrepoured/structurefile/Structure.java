@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -215,8 +216,12 @@ public class Structure extends Template {
 		
 		//And at last, we place the spawners....
 		if(this.spawners != null && !this.spawners.isEmpty()) {
-			for(@SuppressWarnings("unused") SpawnerInfo si : this.spawners) {
-				//TODO: Place spawners
+			for(SpawnerInfo si : this.spawners) {
+				//DONE: Place spawners
+				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos().add(pos));
+				worldIn.setBlockState(spawnerPos, ModBlocks.SPAWNER.getDefaultState());
+				TileEntitySpawner tes = (TileEntitySpawner)worldIn.getTileEntity(spawnerPos);
+				tes.readFromNBT(si.getSpawnerData());
 			}
 		}
 		//Done :D

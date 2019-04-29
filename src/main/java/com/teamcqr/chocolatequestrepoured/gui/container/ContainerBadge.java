@@ -1,17 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.gui.container;
 
-import com.teamcqr.chocolatequestrepoured.gui.container.slot.SlotSpawner;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 public class ContainerBadge extends Container
 {
