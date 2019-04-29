@@ -11,7 +11,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.SwordBase;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 

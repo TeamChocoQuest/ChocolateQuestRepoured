@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -25,7 +25,7 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider
 		
 		setBlockUnbreakable();
 		setCreativeTab(CQRMain.CQRExporterChestTab);
-		setSoundType(SoundType.ANVIL);
+		setSoundType(SoundType.METAL);
 	}
 
 	@Override

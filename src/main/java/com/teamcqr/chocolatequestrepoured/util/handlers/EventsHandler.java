@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -16,11 +17,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -28,9 +33,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
@@ -248,5 +255,37 @@ public class EventsHandler
 				}
 			}
 		}
-	} 
+	}
+	
+	@SubscribeEvent
+	public static void onLivingDeath(LivingDeathEvent event)
+	{
+		Random rand = new Random();
+		Entity entity = event.getEntity();
+		NBTTagCompound tag = entity.getEntityData();
+		
+		if(tag.hasKey("Items"))
+		{
+			NBTTagList itemList = tag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+			
+			if(itemList == null)
+			{
+				return;
+			}
+			
+			for(int i = 0; i < itemList.tagCount(); i++)
+			{
+				NBTTagCompound entry = itemList.getCompoundTagAt(i);
+				ItemStack stack = new ItemStack(entry);
+				
+				if(stack != null)
+				{
+					if(!entity.world.isRemote)
+					{
+						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
+					}
+				}
+			}
+		}
+	}
 }
