@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.gui;
 
 import com.teamcqr.chocolatequestrepoured.gui.container.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
