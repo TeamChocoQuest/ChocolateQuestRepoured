@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.blocks.container.slot;
+package com.teamcqr.chocolatequestrepoured.gui.container.slot;
 
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 

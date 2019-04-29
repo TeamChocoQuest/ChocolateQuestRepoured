@@ -8,8 +8,8 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
+import com.teamcqr.chocolatequestrepoured.objects.base.SwordBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

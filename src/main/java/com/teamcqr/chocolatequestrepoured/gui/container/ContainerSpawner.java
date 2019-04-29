@@ -1,6 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.objects.blocks.container;
+package com.teamcqr.chocolatequestrepoured.gui.container;
 
-import com.teamcqr.chocolatequestrepoured.objects.blocks.container.slot.SlotSpawner;
+import com.teamcqr.chocolatequestrepoured.gui.container.slot.SlotSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
 import net.minecraft.entity.player.EntityPlayer;
