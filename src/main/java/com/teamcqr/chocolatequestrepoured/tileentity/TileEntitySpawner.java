@@ -81,7 +81,11 @@ public class TileEntitySpawner extends TileEntity implements ITickable
             				
             		stack.shrink(1);
             		this.world.spawnEntity(entity);
+        		} else {
+        			fail = true;
         		}
+    		} else {
+    			fail = true;
     		}
     	}
     	
