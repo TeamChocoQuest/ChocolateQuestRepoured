@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.init.base.ItemBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -83,7 +83,7 @@ public class ItemSoulBottle extends ItemBase
 						worldIn.spawnEntity(entity);
 					}
 	
-					if(!player.isCreative() || player.isSpectator() || (player.isCreative() && player.isSneaking())) 
+					if(!(player.isCreative() || player.isSpectator()) || (player.isCreative() && player.isSneaking())) 
 					{
 						bottle.removeTag(EntityIn);
 					}

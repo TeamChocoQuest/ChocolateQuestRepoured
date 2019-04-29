@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.client.gui.GUIExporter;
-import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
@@ -25,14 +25,13 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider
 		
 		setBlockUnbreakable();
 		setCreativeTab(CQRMain.CQRExporterChestTab);
-		setSoundType(SoundType.ANVIL);
+		setSoundType(SoundType.METAL);
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
-		playerIn.openGui(CQRMain.INSTANCE, GUIExporter.GUIID, worldIn, pos.getX(), pos.getY(), pos.getZ());
-		//return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
+		playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 	

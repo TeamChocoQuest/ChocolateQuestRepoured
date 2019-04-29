@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.init.base;
+package com.teamcqr.chocolatequestrepoured.objects.base;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
