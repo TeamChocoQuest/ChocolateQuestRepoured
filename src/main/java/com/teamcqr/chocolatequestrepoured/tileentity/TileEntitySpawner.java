@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +17,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.capabilities.Capability;
@@ -52,6 +55,12 @@ public class TileEntitySpawner extends TileEntity implements ITickable
         super.writeToNBT(compound);
         compound.setTag("inventory", inventory.serializeNBT());
         return compound;
+    }
+    
+    @Nullable
+    public ITextComponent getDisplayName()
+    {
+        return new TextComponentString(I18n.format("tile.spawner.name"));
     }
  
     @Override

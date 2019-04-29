@@ -5,7 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.base.ItemBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

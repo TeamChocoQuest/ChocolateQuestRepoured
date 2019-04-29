@@ -3,21 +3,22 @@ package com.teamcqr.chocolatequestrepoured.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.init.base.ArmorBase;
-import com.teamcqr.chocolatequestrepoured.init.base.ItemBase;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemArmorBull;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemArmorHeavy;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemArmorSlime;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemArmorSpider;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemArmorTurtle;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemBootsCloud;
-import com.teamcqr.chocolatequestrepoured.objects.armor.ItemHelmetDragon;
+import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSlime;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSpider;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
@@ -177,4 +178,5 @@ public class ModItems
 	public static final Item POTION_HEALING = new ItemPotionHealing("potion_healing");
 	public static final Item TELEPORT_STONE = new ItemTeleportStone("teleport_stone");
 	public static final Item SOUL_BOTTLE = new ItemSoulBottle("soul_bottle");
+	public static final Item BADGE = new ItemBadge("badge");
 }

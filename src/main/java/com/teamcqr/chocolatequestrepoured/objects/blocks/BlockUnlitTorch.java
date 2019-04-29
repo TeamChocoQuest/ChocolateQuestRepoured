@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.google.common.base.Predicate;
-import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;

@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.IHasModel;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -44,6 +45,7 @@ public class BlockSpawner extends BlockContainer implements IHasModel
 		
 		setBlockUnbreakable();
 		setResistance(6000000.0F);
+		setSoundType(SoundType.METAL);
 		
 		ModBlocks.BLOCKS.add(this);
 		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));

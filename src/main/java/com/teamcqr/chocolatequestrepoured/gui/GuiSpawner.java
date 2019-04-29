@@ -1,6 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.client.gui;
+package com.teamcqr.chocolatequestrepoured.gui;
 
-import com.teamcqr.chocolatequestrepoured.objects.blocks.container.ContainerSpawner;
+import com.teamcqr.chocolatequestrepoured.gui.container.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GuiSpawner extends GuiContainer
 {
-	private static final ResourceLocation GUI_CHEST = new ResourceLocation("textures/gui/container/dispenser.png");
+	private static final ResourceLocation GUI_SPAWNER = new ResourceLocation("textures/gui/container/dispenser.png");
 	private final InventoryPlayer playerInventory;
 	private final TileEntitySpawner te;
 	
@@ -28,15 +28,16 @@ public class GuiSpawner extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) 
 	{
-//		this.fontRenderer.drawString(this.te.getDisplayName().getUnformattedText(), 8, 6, 4210752);
-//		this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 92, 4210752);
+		String s = this.te.getDisplayName().getUnformattedText();
+        this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
 	}
 	
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY)
 	{
 		GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
-		this.mc.getTextureManager().bindTexture(GUI_CHEST);
+		this.mc.getTextureManager().bindTexture(GUI_SPAWNER);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 	}
 }

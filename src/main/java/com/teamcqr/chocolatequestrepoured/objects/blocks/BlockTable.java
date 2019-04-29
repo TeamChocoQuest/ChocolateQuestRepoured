@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
-import com.teamcqr.chocolatequestrepoured.init.base.BlockBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 
 import net.minecraft.block.Block;

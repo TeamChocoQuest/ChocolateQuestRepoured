@@ -13,6 +13,7 @@ public class Reference
 	
 	public static final int EXPORTER_GUI_ID = 1;
 	public static final int SPAWNER_GUI_ID = 2;
+	public static final int BADGE_GUI_ID = 3;
 	
 	public static final int ENTITY_SLIME_PART_ID = 44;
 	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
