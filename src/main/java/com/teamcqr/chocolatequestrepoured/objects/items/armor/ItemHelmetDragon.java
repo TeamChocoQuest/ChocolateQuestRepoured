@@ -1,8 +1,8 @@
-package com.teamcqr.chocolatequestrepoured.objects.armor;
+package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.base.ArmorBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;

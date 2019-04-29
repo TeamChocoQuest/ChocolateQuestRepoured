@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -93,13 +95,17 @@ public class Structure extends Template {
 				}
 				
 				//CQ-Spawners
-				//TODO: Wait for spawner block and tileentity
+				//DONE: Wait for spawner block and tileentity
+				if(Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
+					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn);
+					this.spawners.add(si);
+					removeEntries.add(i);
+				}
 				
 				//Chests
 				if(DungeonGenUtils.isLootChest(currentBlock)) {
 					ELootTable elt = ELootTable.valueOf(currentBlock);
 					if(elt != null) {
-						removeEntries.add(i);
 						LootChestInfo lci = new LootChestInfo(currentBlock, bi.pos, elt.getID());
 						this.chests.add(lci);
 						removeEntries.add(i);
@@ -133,8 +139,8 @@ public class Structure extends Template {
 		}
 		
 		NBTTagList spawnerTags = new NBTTagList();
-		for(@SuppressWarnings("unused") SpawnerInfo si : this.spawners) {
-			
+		for(SpawnerInfo si : this.spawners) {
+			spawnerTags.appendTag(si.getAsNBTTag());
 		}
 		
 		tag.setTag("banners", bannerTags);
@@ -158,9 +164,9 @@ public class Structure extends Template {
 		this.spawners.clear();
 		NBTTagList spawnerTag = compound.getTagList("spawners", 10);
 		for(int i = 0; i < spawnerTag.tagCount(); i++) {
-			@SuppressWarnings("unused")
 			NBTTagCompound tag = spawnerTag.getCompoundTagAt(i);
-			//TODO: Add functionaliy to spawner info
+			//DONE: Add functionaliy to spawner info
+			this.spawners.add(new SpawnerInfo(tag));
 		}
 		
 		this.chests.clear();
@@ -210,8 +216,12 @@ public class Structure extends Template {
 		
 		//And at last, we place the spawners....
 		if(this.spawners != null && !this.spawners.isEmpty()) {
-			for(@SuppressWarnings("unused") SpawnerInfo si : this.spawners) {
-				//TODO: Place spawners
+			for(SpawnerInfo si : this.spawners) {
+				//DONE: Place spawners
+				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos().add(pos));
+				worldIn.setBlockState(spawnerPos, ModBlocks.SPAWNER.getDefaultState());
+				TileEntitySpawner tes = (TileEntitySpawner)worldIn.getTileEntity(spawnerPos);
+				tes.readFromNBT(si.getSpawnerData());
 			}
 		}
 		//Done :D

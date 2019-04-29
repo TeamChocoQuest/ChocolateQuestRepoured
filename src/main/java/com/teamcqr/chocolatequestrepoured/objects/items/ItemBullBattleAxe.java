@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.init.base.SwordBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.SwordBase;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 
 import net.minecraft.block.material.Material;

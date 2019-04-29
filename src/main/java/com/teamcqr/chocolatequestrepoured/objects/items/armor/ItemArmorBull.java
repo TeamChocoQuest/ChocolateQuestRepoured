@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.armor;
+package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import java.util.List;
 
@@ -8,7 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.base.ArmorBase;
+import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;

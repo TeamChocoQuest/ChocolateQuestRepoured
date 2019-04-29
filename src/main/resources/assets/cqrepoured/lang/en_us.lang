@@ -7,10 +7,14 @@ itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
 itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 
+//Gui
+gui.drops.name=Drops
+
 //Other
 item.potion_healing.name=Healing Potion
 item.teleport_stone.name=Teleport Stone
 item.soul_bottle.name=Soul Bottle
+item.badge.name=Badge
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -113,6 +117,7 @@ item.boots_heavy_iron.name=Heavy Iron Boots
 
 //Blocks
 tile.exporter.name=Exporter Block
+tile.spawner.name=Spawner
 tile.null_block.name=Null Block
 tile.unlit_torch.name=Unlit Torch
 tile.table_oak.name=Oak Table
@@ -246,7 +251,7 @@ description.turtle_armor_charging.name=Ability on cooldown, Remaining time:
 description.healing_potion.name=Refills 2 Hearts when drunk
 description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
 description.teleport_stone_position.name=Current Position:
-description.gui_exporter.name=Exporter info
+description.gui_exporter.name=Missing #TODO
 description.staff_fire.name=Missing #TODO
 description.staff_spider.name=Missing #TODO
 description.staff_gun.name=Missing #TODO
@@ -255,3 +260,4 @@ description.contains.name=Contains:
 description.empty.name=Empty
 description.soul_bottle.name=Missing #TODO
 description.flamethrower.name=Missing #TODO
+description.badge.name=Missing #TODO
