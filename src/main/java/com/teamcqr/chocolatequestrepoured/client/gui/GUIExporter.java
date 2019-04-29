@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
-public class GuiExporter extends GuiScreen 
+public class GUIExporter extends GuiScreen 
 {
 	private String authorName;
 	private World world;
@@ -29,7 +29,7 @@ public class GuiExporter extends GuiScreen
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	private GuiCheckBox chbxPartsMode;
 	
-	public GuiExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) 
+	public GUIExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) 
 	{
 		this.world = worldIn;
 		this.authorName = player.getName();
