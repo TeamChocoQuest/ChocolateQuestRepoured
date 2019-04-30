@@ -1,26 +1,27 @@
 package com.teamcqr.chocolatequestrepoured.gui.inventory;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 
-public class InventoryBadge extends InventoryBasic
+public class InventoryBackpack extends InventoryBasic
 {
-	private Entity entity;
+	private ItemStack stack;
 	
-    public InventoryBadge(Entity entity)
-    {
-        super("gui.drops.name", false, 9);
-        
-        this.entity = entity;
-        this.readFromNBT();
-        this.writeToNBT();
-    }
-
-    @Override
+	public InventoryBackpack(ItemStack stack) 
+	{
+		super(I18n.format("gui.backpack.name"), false, 27);
+		
+		this.stack = stack;
+		this.readFromNBT();
+		this.writeToNBT();
+	}
+	
+	@Override
     public void markDirty()
     {
     	writeToNBT();
@@ -29,7 +30,7 @@ public class InventoryBadge extends InventoryBasic
     
     public void writeToNBT()
     {
-    	NBTTagCompound tag = this.entity.getEntityData();
+    	NBTTagCompound tag = this.getTagCompound(stack);
     	
     	NBTTagList itemList = new NBTTagList();
     	
@@ -50,7 +51,7 @@ public class InventoryBadge extends InventoryBasic
     
     public void readFromNBT()
     {
-    	NBTTagCompound tag = this.entity.getEntityData();
+    	NBTTagCompound tag = this.getTagCompound(stack);
     	
     	if(!tag.hasKey("Items"))
     	{
@@ -72,5 +73,16 @@ public class InventoryBadge extends InventoryBasic
     		int index = entry.getInteger("Index");
     		setInventorySlotContents(index, new ItemStack(entry));
     	}
+    }
+    
+    public NBTTagCompound getTagCompound(ItemStack stack)
+    {
+    	if(stack.getTagCompound() == null)
+    	{
+    		NBTTagCompound tag = new NBTTagCompound();
+    		stack.setTagCompound(tag);
+    	}
+    	
+    	return stack.getTagCompound();
     }
 }

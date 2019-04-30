@@ -9,12 +9,14 @@ itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 
 //Gui
 gui.drops.name=Drops
+gui.backpack.name=Backpack
 
 //Other
 item.potion_healing.name=Healing Potion
 item.teleport_stone.name=Teleport Stone
 item.soul_bottle.name=Soul Bottle
 item.badge.name=Badge
+item.backpack.name=Backpack
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -261,3 +263,4 @@ description.empty.name=Empty
 description.soul_bottle.name=Missing #TODO
 description.flamethrower.name=Missing #TODO
 description.badge.name=Missing #TODO
+description.backpack.name=Missing #TODO

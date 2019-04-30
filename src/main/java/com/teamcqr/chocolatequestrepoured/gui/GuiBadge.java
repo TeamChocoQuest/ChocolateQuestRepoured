@@ -13,11 +13,13 @@ public class GuiBadge extends GuiContainer
 {
 	private static final ResourceLocation GUI_BADGE = new ResourceLocation("textures/gui/container/dispenser.png");
 	private final InventoryPlayer playerInventory;
+	private final IInventory inventory;
 	
 	public GuiBadge(InventoryPlayer playerInventory, IInventory inventory) 
 	{
 		super(new ContainerBadge(playerInventory, inventory));
 		this.playerInventory = playerInventory;
+		this.inventory = inventory;
 		
 		this.xSize = 176;
 		this.ySize = 166;
@@ -26,9 +28,9 @@ public class GuiBadge extends GuiContainer
 	@Override
 	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) 
 	{
-		String s = I18n.format("gui.drops.name");
+		String s = this.inventory.getDisplayName().getUnformattedText();
         this.fontRenderer.drawString(s, this.xSize / 2 - this.fontRenderer.getStringWidth(s) / 2, 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 3, 4210752);
 	}
 	
 	@Override
