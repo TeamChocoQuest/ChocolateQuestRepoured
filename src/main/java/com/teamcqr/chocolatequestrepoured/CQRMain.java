@@ -8,6 +8,8 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
+import com.teamcqr.chocolatequestrepoured.event.CQREventHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -17,6 +19,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -137,6 +140,9 @@ public class CQRMain
 			System.err.println("WARNING: Failed to instantiate the loot enum!!");
 			e.printStackTrace();
 		}
+
+		//Registers event handler
+		MinecraftForge.EVENT_BUS.register(new CQREventHandler());
 	}
 	
 	@EventHandler
