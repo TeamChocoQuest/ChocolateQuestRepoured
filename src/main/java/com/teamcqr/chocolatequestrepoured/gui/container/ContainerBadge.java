@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.gui.container;
 
+import com.teamcqr.chocolatequestrepoured.gui.container.slot.SlotDisabled;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -14,11 +17,20 @@ public class ContainerBadge extends Container
 
 	public ContainerBadge(InventoryPlayer playerInv, IInventory inventory)
 	{
+		int currentItemIndex = playerInv.currentItem;
+		
 		for(int i = 0; i < this.numRows; ++i)
 	    {
 			for(int j = 0; j < this.numColumns; ++j)
 			{
-				this.addSlotToContainer(new Slot(inventory, j + i * 3, 62 + j * 18, 17 + i * 18));
+				this.addSlotToContainer(new Slot(inventory, j + i * 3, 62 + j * 18, 17 + i * 18)
+				{
+					@Override
+					public boolean isItemValid(ItemStack stack)
+				    {
+				        return stack.getItem() == ModItems.BADGE ? false : true;
+				    }
+				});
 			}
 	    }
 		
@@ -32,9 +44,15 @@ public class ContainerBadge extends Container
 		
 		for(int x = 0; x < 9; x++)
 		{
-			this.addSlotToContainer(new Slot(playerInv, x, 8 + x*18, 142));
-		}							
-		
+			if(x == currentItemIndex)
+			{
+				this.addSlotToContainer(new SlotDisabled(playerInv, x, 8 + x*18, 142));
+			}
+			else
+			{
+				this.addSlotToContainer(new Slot(playerInv, x, 8 + x*18, 142));
+			}
+		}								
 	}
 	
 	@Override

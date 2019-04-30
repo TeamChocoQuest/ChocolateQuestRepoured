@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSlime;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
@@ -59,6 +60,7 @@ public class ModItems
 	public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = EnumHelper.addArmorMaterial("armor_heavy_diamond", Reference.MODID + ":heavy_diamond", 2115, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
 	public static final ArmorMaterial ARMOR_HEAVY_IRON = EnumHelper.addArmorMaterial("armor_heavy_iron", Reference.MODID + ":heavy_iron", 1975, new int[] { 3, 6, 8, 3 }, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F);
 	public static final ArmorMaterial ARMOR_INQUISITION = EnumHelper.addArmorMaterial("armor_inquisition", Reference.MODID + ":inquisition", 675, new int[] { 3, 8, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+	public static final ArmorMaterial ARMOR_BACKPACK = EnumHelper.addArmorMaterial("armor_backpack", Reference.MODID + ":backpack", 1850, new int[] { 1, 3, 3, 1 }, 9, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, 0.0F);
 	public static final ToolMaterial TOOL_MONKING_GREAT_SWORD = EnumHelper.addToolMaterial("tool_monking_great_sword", 0, 1560, 0.0F, 6.0F, 10);   
 	public static final ToolMaterial TOOL_BULL_GREAT_SWORD = EnumHelper.addToolMaterial("tool_bull_great_sword", 0, 1560, 0.0F, 5F, 10);  			
 	public static final ToolMaterial TOOL_DIAMOND_GREAT_SWORD = EnumHelper.addToolMaterial("tool_diamond_great_sword", 0, 1560, 0.0F, 5F, 10);     
@@ -121,6 +123,7 @@ public class ModItems
 	//Single Armor Items
 	public static final Item HELMET_DRAGON = new ItemHelmetDragon("helmet_dragon", ARMOR_DRAGON, 1, EntityEquipmentSlot.HEAD);   //#TODO Make model centered on head // Abandon for now
 	public static final Item BOOTS_CLOUD = new ItemBootsCloud("boots_cloud", ARMOR_CLOUD, 1, EntityEquipmentSlot.FEET);
+	public static final Item BACKPACK = new ItemBackpack("backpack", ARMOR_BACKPACK, 1, EntityEquipmentSlot.CHEST); 	
 	
 	//Slime Armor Items
 	public static final Item HELMET_SLIME = new ItemArmorSlime("helmet_slime", ARMOR_SLIME, 1, EntityEquipmentSlot.HEAD);

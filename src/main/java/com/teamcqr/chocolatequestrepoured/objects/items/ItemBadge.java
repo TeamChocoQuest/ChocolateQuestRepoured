@@ -28,6 +28,7 @@ public class ItemBadge extends ItemBase
 	public ItemBadge(String name) 
 	{
 		super(name);
+		setMaxStackSize(1);
 	}
 	
 	@Override
