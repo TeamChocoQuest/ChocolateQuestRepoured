@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraftforge.common.MinecraftForge;
 
 public class VillageGenerator implements IDungeonGenerator{
 	
@@ -97,6 +99,9 @@ public class VillageGenerator implements IDungeonGenerator{
 					pos = new BlockPos(X, Y, Z);
 					
 					dungeonToSpawn.placeBlocksInWorld(world, pos, plcmnt);
+					
+					CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeY(), dungeonToSpawn.getSizeZ()));
+					MinecraftForge.EVENT_BUS.post(event);
 				}
 			}
 		}
