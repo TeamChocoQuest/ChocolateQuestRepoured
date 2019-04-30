@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -13,6 +14,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -21,6 +23,7 @@ public class DungeonBase {
 	protected IDungeonGenerator generator;
 	protected String name;
 	private Item placeItem;
+	private UUID dunID;
 	protected int underGroundOffset = 0;
 	protected int chance;
 	protected int yOffset = 0;
@@ -50,6 +53,7 @@ public class DungeonBase {
 	public DungeonBase(File configFile) {
 		//DONE: read values from file
 		Properties prop = new Properties();
+		this.dunID = MathHelper.getRandomUUID();
 		FileInputStream fis = null;
 		try {
 			fis = new FileInputStream(configFile);
@@ -167,5 +171,9 @@ public class DungeonBase {
 	}
 	public Block getCoverBlock() {
 		return this.coverBlock;
+	}
+
+	public UUID getDungeonID() {
+		return this.dunID;
 	}
 }
