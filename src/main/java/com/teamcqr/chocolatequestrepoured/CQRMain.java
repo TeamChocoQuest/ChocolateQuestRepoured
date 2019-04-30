@@ -8,8 +8,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
-import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
-import com.teamcqr.chocolatequestrepoured.event.CQREventHandler;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
@@ -142,7 +141,7 @@ public class CQRMain
 		}
 
 		//Registers event handler
-		MinecraftForge.EVENT_BUS.register(new CQREventHandler());
+		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
 	}
 	
 	@EventHandler
