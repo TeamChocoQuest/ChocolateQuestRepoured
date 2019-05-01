@@ -1,11 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.objects.banners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.item.ItemBanner;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraftforge.common.util.EnumHelper;
 
@@ -40,8 +47,52 @@ public class BannerHandler {
 		
 		final Class<?>[] paramTypes = {String.class, String.class, ItemStack.class};
 		final Object[] paramVals = {Reference.MODID + "_" + name, Reference.MODID + "." + name, craftingComponent};
-		return EnumHelper.addEnum(BannerPattern.class, name.toUpperCase(), paramTypes, paramVals);
+		BannerPattern pattern = EnumHelper.addEnum(BannerPattern.class, name.toUpperCase(), paramTypes, paramVals);
 		
+		return pattern;
+	}
+	
+	public static NBTTagList createPatternList (BannerLayer... layers) {
+
+        final NBTTagList patterns = new NBTTagList();
+
+        for (final BannerLayer layer : layers) {
+
+            final NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("Pattern", layer.getPattern().getHashname());
+            tag.setInteger("Color", layer.getColor().getDyeDamage());
+            patterns.appendTag(tag);
+        }
+
+        return patterns;
+    }
+	public static NBTTagList createPatternList (EnumDyeColor color, BannerLayer... layers) {
+
+        final NBTTagList patterns = new NBTTagList();
+
+        for (final BannerLayer layer : layers) {
+
+            final NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("Pattern", layer.getPattern().getHashname());
+            tag.setInteger("Color", layer.getColor() == EnumDyeColor.WHITE ? color.getDyeDamage() : layer.getColor().getDyeDamage());
+            patterns.appendTag(tag);
+        }
+
+        return patterns;
+    }
+	
+	public static ItemStack createBanner (EnumDyeColor baseColor, NBTTagList patterns) {
+
+        return ItemBanner.makeBanner(baseColor, patterns);
+    }
+	
+	public static List<ItemStack> addBannersToTabs() {
+		List<ItemStack> itemList = new ArrayList<ItemStack>();
+		for(BannerPattern bPattern : BannerPattern.values()) {
+			ItemStack bannr = createBanner(EnumDyeColor.WHITE, createPatternList(EnumDyeColor.WHITE, new BannerLayer(bPattern, EnumDyeColor.BLACK)));
+			itemList.add(bannr);
+		}
+		return itemList;
 	}
 	
 	public BannerHandler() {

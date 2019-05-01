@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -61,6 +62,21 @@ public class CQRMain
 		{
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
+	};
+	public static CreativeTabs CQRBannersTab = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
+		
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(Items.BANNER);
+		}
+		@Override
+		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> itemList) {
+			List<ItemStack> banners = new ArrayList<ItemStack>();
+			banners = BannerHandler.addBannersToTabs();
+			if(banners != null && !banners.isEmpty()) {
+				for(ItemStack stack : banners) itemList.add(stack);
+			}
+		};
 	};
 	
 	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
