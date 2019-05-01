@@ -30,6 +30,7 @@ public class DungeonBase {
 	protected int[] allowedDims = {0};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
+	protected boolean protectFromDestruction = false;
 	private int iconID;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
@@ -75,6 +76,7 @@ public class DungeonBase {
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 		
@@ -175,5 +177,8 @@ public class DungeonBase {
 
 	public UUID getDungeonID() {
 		return this.dunID;
+	}
+	public boolean isProtectedFromModifications() {
+		return this.protectFromDestruction;
 	}
 }

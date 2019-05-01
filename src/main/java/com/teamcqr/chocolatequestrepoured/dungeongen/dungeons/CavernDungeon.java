@@ -57,6 +57,7 @@ public class CavernDungeon extends DungeonBase {
 	
 	public CavernDungeon(File configFile) {
 		super(configFile);
+		this.protectFromDestruction = false;
 		Properties prop = new Properties();
 		FileInputStream fis = null;
 		try {

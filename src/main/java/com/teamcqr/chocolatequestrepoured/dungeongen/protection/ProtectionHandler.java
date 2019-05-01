@@ -1,12 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
+import java.util.ArrayList;
+
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
-
-import java.util.ArrayList;
 
 /**
  * Copyright (c) 29.04.2019
@@ -40,6 +40,11 @@ public class ProtectionHandler {
     public void checkSpawn(LivingSpawnEvent.CheckSpawn e) {
         for (ProtectedRegion r: regions) {
             r.checkSpawnEvent(e);
+        }
+    }
+    public void checkPortalSpawning(BlockEvent.PortalSpawnEvent e) {
+    	for (ProtectedRegion r: regions) {
+            r.checkPortalEvent(e);
         }
     }
 
