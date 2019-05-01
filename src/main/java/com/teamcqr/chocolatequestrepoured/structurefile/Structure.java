@@ -121,6 +121,15 @@ public class Structure extends Template {
 			for(int i = 0; i < removeEntries.size(); i++) {
 				blocks.remove(i);
 			}
+			//exchange the field values
+			try {
+				superBlockField.set(this, blocks);
+				superBlockField.setAccessible(false);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (SecurityException e) {
