@@ -4,7 +4,7 @@ public class Reference
 {
 	public static final String MODID = "cqrepoured";
 	public static final String NAME = "Chocolate Quest Repoured";
-	public static final String VERSION = "0.1.1";
+	public static final String VERSION = "0.1.2";
 	public static final String ACCEPTED_VERSIONS = "[1.12.2]";
 	public static final String CLIENT_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ClientProxy";
 	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.CommonProxy";
@@ -24,5 +24,5 @@ public class Reference
 	public static final int PROJECTILE_SPIDER_BALL = 68;
 	public static final int PROJECTILE_BULLET_CANNON = 69;
 	
-	public static final double SPAWNER_RANGE = 5.0D;
+	public static final double SPAWNER_RANGE = 25.0D;
 }
