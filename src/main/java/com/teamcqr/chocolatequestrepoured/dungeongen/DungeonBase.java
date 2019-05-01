@@ -26,6 +26,8 @@ import net.minecraft.world.chunk.Chunk;
 public class DungeonBase {
 	
 	protected IDungeonGenerator generator;
+	private boolean replaceBanners = false;
+	//private CQFaction owningFaction
 	protected String name;
 	private Item placeItem;
 	private UUID dunID;
