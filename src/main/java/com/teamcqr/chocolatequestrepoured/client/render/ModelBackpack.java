@@ -1,11 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.client.render;
 import net.minecraft.client.model.ModelBiped;
-
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ModelBackpack extends ModelBiped
 {
@@ -23,7 +20,9 @@ public class ModelBackpack extends ModelBiped
 	public ModelBackpack(float size)
 	{
 		super(size);
+		@SuppressWarnings("unused")
 		int textureSizeX = 128;
+		@SuppressWarnings("unused")
 		int textureSizeY = 64;
 		size = 0.5F;
 
