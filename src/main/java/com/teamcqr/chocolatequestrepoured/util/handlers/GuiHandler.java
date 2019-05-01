@@ -1,12 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
+import com.teamcqr.chocolatequestrepoured.gui.GuiAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.gui.GuiSpawner;
+import com.teamcqr.chocolatequestrepoured.gui.container.ContainerAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.gui.container.ContainerBackpack;
 import com.teamcqr.chocolatequestrepoured.gui.container.ContainerBadge;
 import com.teamcqr.chocolatequestrepoured.gui.container.ContainerSpawner;
+import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryBackpack;
 import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryBadge;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -39,6 +42,11 @@ public class GuiHandler implements IGuiHandler
 		{
 			return new ContainerBackpack(player.inventory, new InventoryBackpack(player.getHeldItemMainhand()));
 		}
+		
+		if(ID == Reference.ALCHEMY_BAG_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.ALCHEMY_BAG)
+		{
+			return new ContainerAlchemyBag(player.inventory, new InventoryAlchemyBag(player.getHeldItemMainhand()));
+		}
 		return null;
 	}
 
@@ -63,6 +71,11 @@ public class GuiHandler implements IGuiHandler
 		if(ID == Reference.BACKPACK_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.BACKPACK)
 		{
 			return new GuiBackpack(player.inventory, new InventoryBackpack(player.getHeldItemMainhand()));
+		}
+		
+		if(ID == Reference.ALCHEMY_BAG_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.ALCHEMY_BAG)
+		{
+			return new GuiAlchemyBag(player.inventory, new InventoryAlchemyBag(player.getHeldItemMainhand()));
 		}
 		return null;
 	}
