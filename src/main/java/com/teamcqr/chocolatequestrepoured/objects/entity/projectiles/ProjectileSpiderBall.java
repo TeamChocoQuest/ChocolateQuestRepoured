@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 public class ProjectileSpiderBall extends ProjectileBase
 {
 	private EntityLivingBase shooter;
+	protected float damage;
 	
 	public ProjectileSpiderBall(World worldIn) 
 	{
@@ -27,6 +28,7 @@ public class ProjectileSpiderBall extends ProjectileBase
     	super(worldIn, shooter);
     	this.shooter = shooter;
     	this.isImmuneToFire = false;
+    	this.damage = 4F;
     }
 
 	@Override
@@ -39,7 +41,6 @@ public class ProjectileSpiderBall extends ProjectileBase
 				if(result.entityHit instanceof EntityLivingBase)
 				{
 					EntityLivingBase entity = (EntityLivingBase)result.entityHit;
-					float damage = 4F;
 					
 					if(result.entityHit == shooter)
 					{

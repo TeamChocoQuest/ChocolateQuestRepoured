@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRenderer;
@@ -12,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
@@ -80,7 +82,7 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public Render<ProjectileBullet> createRenderFor(RenderManager manager) 
 			{
-				return new RenderProjectileBullet(manager, 1F);
+				return new RenderProjectileBullet(manager);
 			}
 		});
 	
@@ -89,7 +91,7 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public Render<ProjectileSpiderBall> createRenderFor(RenderManager manager) 
 			{
-				return new RenderProjectileSpiderBall(manager, 1F);
+				return new RenderProjectileSpiderBall(manager);
 			}
 		});
 		
@@ -98,7 +100,7 @@ public class ClientProxy extends CommonProxy
 			@Override
 			public Render<ProjectileBulletCannon> createRenderFor(RenderManager manager) 
 			{
-				return new RenderProjectileBulletCannon(manager, 1F);
+				return new RenderProjectileBulletCannon(manager);
 			}
 		});
 		
@@ -108,6 +110,15 @@ public class ClientProxy extends CommonProxy
 			public Render<ProjectileVampiricSpell> createRenderFor(RenderManager manager) 
 			{
 				return new RenderProjectileVampiricSpell(manager);
+			}
+		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, new IRenderFactory<ProjectilePoisonSpell>() 
+		{
+			@Override
+			public Render<ProjectilePoisonSpell> createRenderFor(RenderManager manager) 
+			{
+				return new RenderProjectilePoisonSpell(manager);
 			}
 		});
 	}

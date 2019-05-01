@@ -13,14 +13,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileSpiderBall extends Render<ProjectileSpiderBall>
 {
-	@SuppressWarnings("unused")
-	private final float scale;
 	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/spider_ball.png");
 	
-	public RenderProjectileSpiderBall(RenderManager renderManager, float scaleIn) 
+	public RenderProjectileSpiderBall(RenderManager renderManager) 
 	{
 		super(renderManager);
-		this.scale = scaleIn;
 	}
 	
 	@Override

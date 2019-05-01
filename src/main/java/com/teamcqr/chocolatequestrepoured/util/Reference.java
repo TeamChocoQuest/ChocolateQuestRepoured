@@ -17,7 +17,7 @@ public class Reference
 	public static final int BACKPACK_GUI_ID = 4;
 	public static final int ALCHEMY_BAG_GUI_ID = 5;
 	
-	public static final int ENTITY_SLIME_PART_ID = 44;
+	public static final int ENTITY_SLIME_PART = 44;
 	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
 	
 	public static final int PROJECTILE_EARTH_QUAKE = 66;
@@ -25,6 +25,7 @@ public class Reference
 	public static final int PROJECTILE_SPIDER_BALL = 68;
 	public static final int PROJECTILE_BULLET_CANNON = 69;
 	public static final int PROJECTILE_VAMPIRIC_SPELL = 70;
+	public static final int PROJECTILE_POISON_SPELL = 71;
 	
 	public static final double SPAWNER_RANGE = 25.0D;
 }

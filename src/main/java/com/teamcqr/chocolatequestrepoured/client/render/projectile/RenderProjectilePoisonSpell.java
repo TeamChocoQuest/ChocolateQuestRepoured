@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,26 +11,23 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileBullet extends Render<ProjectileBullet>
+public class RenderProjectilePoisonSpell extends Render<ProjectilePoisonSpell>
 {
-	public ResourceLocation IRON = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_iron_single.png");
-	public ResourceLocation GOLD = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_gold_single.png");
-	public ResourceLocation DIAMOND = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_diamond_single.png");
-	public ResourceLocation FIRE = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_fire_single.png");
-			
-	public RenderProjectileBullet(RenderManager renderManager) 
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/poison_spell.png");
+	
+	public RenderProjectilePoisonSpell(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}
 	
 	@Override
-	public void doRender(ProjectileBullet entity, double x, double y, double z, float entityYaw, float partialTicks)
+	public void doRender(ProjectilePoisonSpell entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
     	GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
         GlStateManager.translate((float)x, (float)y, (float)z);
         GlStateManager.enableRescaleNormal();
-        GlStateManager.scale(.5F, .5F, .5F);
+        GlStateManager.scale(.75F, .75F, .75F);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder bufferbuilder = tessellator.getBuffer();
         GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
@@ -61,33 +58,8 @@ public class RenderProjectileBullet extends Render<ProjectileBullet>
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileBullet entity) 
+	protected ResourceLocation getEntityTexture(ProjectilePoisonSpell entity) 
 	{
-		int type = entity.getType();
-		
-		if(type == 1)
-		{
-			return IRON;
-		}
-		
-		if(type == 2)
-		{
-			return GOLD;
-		}
-		
-		if(type == 3)
-		{
-			return DIAMOND;
-		}
-		
-		if(type == 4)
-		{
-			return FIRE;
-		}
-		else
-		{
-			System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			return null; //#SHOULD NEVER HAPPEN
-		}
+		return TEXTURE;
 	}
 }
