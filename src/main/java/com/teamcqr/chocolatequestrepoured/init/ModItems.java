@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
@@ -33,6 +34,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerNinja;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemGreatSwordBase;
+import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordMoonlightSunshine;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordWalker;
@@ -71,7 +73,8 @@ public class ModItems
 	public static final ToolMaterial TOOL_NINJA_DAGGER = EnumHelper.addToolMaterial("tool_ninja_dagger", 0, 2048, 0.0F, 2F, 10);        			
 	public static final ToolMaterial TOOL_BULL_BATTLE_AXE = EnumHelper.addToolMaterial("tool_bull_battle_axe", 0, 1560, 0.0F, 5F, 10);  			
 	public static final ToolMaterial TOOL_TURTLE_SWORD = EnumHelper.addToolMaterial("tool_turtle_sword", 0, 2048, 0.0F, 3F, 10);					
-	public static final ToolMaterial TOOL_SPIDER_SWORD = EnumHelper.addToolMaterial("tool_spider_sword", 0, 2048, 0.0F, 3F, 10);					
+	public static final ToolMaterial TOOL_SPIDER_SWORD = EnumHelper.addToolMaterial("tool_spider_sword", 0, 2048, 0.0F, 3F, 10);	
+	public static final ToolMaterial TOOL_MOONLIGHT_SUNSHINE_SWORD = EnumHelper.addToolMaterial("tool_moonlight_sunshine_sword", 0, 2048, 0.0F, 3F, 10);	
 	public static final ToolMaterial TOOL_WALKER_SWORD = EnumHelper.addToolMaterial("tool_walker_sword", 0, 2048, 0.0F, 3F, 10);					
 	public static final ToolMaterial TOOL_MUSKET_IRON = EnumHelper.addToolMaterial("tool_musket_iron", 0, 300, 0.0F, 0.0F, 14);
 	public static final ToolMaterial TOOL_MUSKET_DIAMOND = EnumHelper.addToolMaterial("tool_musket_diamond", 0, 300, 0.0F, 1F, 10);
@@ -86,6 +89,8 @@ public class ModItems
 	//Swords
 	public static final Item SWORD_TURTLE = new ItemSwordTurtle("sword_turtle", TOOL_TURTLE_SWORD);
 	public static final Item SWORD_SPIDER = new ItemSwordSpider("sword_spider", TOOL_SPIDER_SWORD);
+	public static final Item SWORD_MOONLIGHT = new ItemSwordMoonlightSunshine("sword_moonlight", TOOL_MOONLIGHT_SUNSHINE_SWORD, true);
+	public static final Item SWORD_SUNSHINE = new ItemSwordMoonlightSunshine("sword_sunshine", TOOL_MOONLIGHT_SUNSHINE_SWORD, false);
 	
 	//Battle Axes
 	public static final Item BATTLE_AXE_BULL = new ItemBullBattleAxe("battle_axe_bull", TOOL_BULL_BATTLE_AXE);
@@ -95,16 +100,16 @@ public class ModItems
 	public static final Item SHIELD_WALKER = new ItemShieldWalker("shield_walker", 2048);
 	
 	//Great Swords
-	public static final Item GREAT_SWORD_IRON = new ItemGreatSwordBase("great_sword_iron", TOOL_IRON_GREAT_SWORD, 0.8F, 100, -0.8F);
-	public static final Item GREAT_SWORD_DIAMOND = new ItemGreatSwordBase("great_sword_diamond", TOOL_DIAMOND_GREAT_SWORD, 0.9F, 75, -0.7F);
-	public static final Item GREAT_SWORD_BULL = new ItemGreatSwordBase("great_sword_bull", TOOL_BULL_GREAT_SWORD, 1F, 50, -0.6F);
-	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 25, -0.6F);
+	public static final Item GREAT_SWORD_IRON = new ItemGreatSwordBase("great_sword_iron", TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F);
+	public static final Item GREAT_SWORD_DIAMOND = new ItemGreatSwordBase("great_sword_diamond", TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F);
+	public static final Item GREAT_SWORD_BULL = new ItemGreatSwordBase("great_sword_bull", TOOL_BULL_GREAT_SWORD, 1F, 20, -0.6F);
+	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F);
 	
 	//Staves
-	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");			//Description #TODO
-	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES && DESCRIPTION 
-	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES && DESCRIPTION 
-	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing"); //#TODO TEXTURES && DESCRIPTION
+	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");		
+	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES
+	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES
+	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing"); //#TODO TEXTURES
 	
 	//Guns
 	public static final Item REVOLVER = new ItemRevolver("revolver");
@@ -118,7 +123,7 @@ public class ModItems
 	public static final Item BULLET_DIAMOND = new ItemBullet("bullet_diamond");
 	public static final Item BULLET_FIRE = new ItemBullet("bullet_fire");
 	public static final Item BULLET_CANNON = new ItemBulletCannon("bullet_cannon");
-	public static final Item FLAMETHROWER = new ItemFlamethrower("flamethrower");		//#TODO TEXTURES && DESCRIPTION
+	public static final Item FLAMETHROWER = new ItemFlamethrower("flamethrower");		//#TODO TEXTURES
 	
 	//Single Armor Items
 	public static final Item HELMET_DRAGON = new ItemHelmetDragon("helmet_dragon", ARMOR_DRAGON, 1, EntityEquipmentSlot.HEAD);   //#TODO Make model centered on head // Abandon for now
@@ -182,4 +187,5 @@ public class ModItems
 	public static final Item TELEPORT_STONE = new ItemTeleportStone("teleport_stone");
 	public static final Item SOUL_BOTTLE = new ItemSoulBottle("soul_bottle");
 	public static final Item BADGE = new ItemBadge("badge");
+	public static final Item ALCHEMY_BAG = new ItemAlchemyBag("alchemy_bag");
 }
