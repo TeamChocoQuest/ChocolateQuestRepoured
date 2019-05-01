@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.objects.banners.EBanner;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHandler;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -142,9 +142,7 @@ public class CQRMain
 		}
 		
 		try {
-			for(EBanner banner : EBanner.values()) {
-				banner.getBannerPattern();
-			}
+			BannerHandler.initPatterns();
 		} catch(Exception ex) {
 			System.err.println("WARNING: Failed to instantiate the banner enum!!");
 			ex.printStackTrace();
