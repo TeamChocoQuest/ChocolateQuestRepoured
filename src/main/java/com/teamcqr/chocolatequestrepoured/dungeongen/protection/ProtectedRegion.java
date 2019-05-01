@@ -8,6 +8,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.BlockEvent.PortalSpawnEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
@@ -123,4 +124,12 @@ public class ProtectedRegion {
             }
         }
     }
+
+	public void checkPortalEvent(PortalSpawnEvent e) {
+		if(enabled) {
+			if(isBlockInRegion(e.getPos())) {
+				e.setResult(Event.Result.DENY);
+			}
+		}
+	}
 }
