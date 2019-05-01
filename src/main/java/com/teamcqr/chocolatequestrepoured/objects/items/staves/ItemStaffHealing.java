@@ -34,7 +34,7 @@ public class ItemStaffHealing extends ItemBase
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity)
     {
-        if(entity instanceof EntityLivingBase)
+        if(entity instanceof EntityLivingBase && !player.getCooldownTracker().hasCooldown(stack.getItem()))
         {
         	((EntityLivingBase)entity).heal(2F);
         	
@@ -47,6 +47,7 @@ public class ItemStaffHealing extends ItemBase
         	}
         	entity.world.playSound(player.posX,player.posY, player.posZ, SoundsHandler.MAGIC, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 			stack.damageItem(1, player);
+			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
         	
         	return true;
         }

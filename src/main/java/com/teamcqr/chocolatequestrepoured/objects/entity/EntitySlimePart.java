@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.scoreboard.Team;
@@ -73,7 +74,7 @@ public class EntitySlimePart extends EntitySlime
 			
 			if(!entity.isOnSameTeam(this))
 			{
-				entity.addPotionEffect(new PotionEffect(Potion.getPotionById(2), 40, 1, false, false));
+				entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, false, false));
 			}
 			super.applyEntityCollision(entityIn);
 		}

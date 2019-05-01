@@ -20,10 +20,6 @@ public class ModelBackpack extends ModelBiped
 	public ModelBackpack(float size)
 	{
 		super(size);
-		@SuppressWarnings("unused")
-		int textureSizeX = 128;
-		@SuppressWarnings("unused")
-		int textureSizeY = 64;
 		size = 0.5F;
 
 		this.bipedBody = new ModelRenderer(this, 32, 16);

@@ -10,6 +10,7 @@ itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 //Gui
 gui.drops.name=Drops
 gui.backpack.name=Backpack
+gui.alchemy_bag.name=Alchemy Bag
 
 //Other
 item.potion_healing.name=Healing Potion
@@ -17,6 +18,7 @@ item.teleport_stone.name=Teleport Stone
 item.soul_bottle.name=Soul Bottle
 item.badge.name=Badge
 item.backpack.name=Backpack
+item.alchemy_bag.name=Alchemy Bag
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -31,6 +33,8 @@ item.dagger_ninja.name=Ninja Dagger
 item.sword_turtle.name=Turtle Sword
 item.sword_spider.name=Spider Sword
 item.battle_axe_bull.name=Bull Battle Axe
+item.sword_moonlight.name=Moonlight
+item.sword_sunshine.name=Sunshine
 
 //Walker set
 item.sword_walker.name=Walker Sword
@@ -103,8 +107,7 @@ item.chestplate_spider.name=Spider Chestplate
 item.leggings_spider.name=Spider Leggings
 item.boots_spider.name=Spider Boots
 item.leather_spider.name=Spider Leather
-item.gi
-_spider_poison.name=Giant Spider Poison
+item.giant_spider_poison.name=Giant Spider Poison
 
 //Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Heavy Diamond Helmet
@@ -258,19 +261,21 @@ description.gui_exporter.name=Creative only block for exporting dungeons. Select
 description.staff_fire.name=The flames consume those who cross your path, a simple right-click and they'll feel your wrath. Also lights torches.
 description.staff_spider.name=Right-click to shoot your goo, my dude.
 description.staff_gun.name=It's a gun on a stick. Man, those dwarves are geniuses.
-description.staff_healing.name=A right-click restores the health that you need, I don't actually remember what this does, but I had to make descriptions for all of these out of greed.
+description.staff_healing.name=A left-click restores the health that you need, I don't actually remember what this does, but I had to make descriptions for all of these out of greed.
 description.contains.name=Contains:
 description.empty.name=Empty
-description.soul_bottle.name=Creative only item. Right-click a mob to store it, right-click again to summon that mob. Can be turned into a spawner for that mob as well.
+description.soul_bottle.name=Left-click a mob to store it, right-click to summon that mob. Can be turned into a spawner for that mob as well.
 description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame expulsion unit. A right-mouse press should expel fire directly forwards. Internal Gel Cartridges should be able to extract slime from anywhere in the inventory. Current model requires regular reload, as no regenerating source of slime has been discovered. 
-description.badge.name=Creative only item. Right-click on a mob to open a GUI, items placed in this UI can be accessed later by right-clicking with a badge again, and will be dropped when the attached mob is killed.
+description.badge.name=Creative only item. Left-click on a mob to open a GUI, items placed in this UI can be accessed later by left-clicking with a badge again, and will be dropped when the attached mob is killed.
 description.backpack.name=Right-click to open.
-//description.alchemy_bag.name=Right-click to open. Only stores potions.
+description.alchemy_bag.name=Right-click to open. Only stores potions.
 //description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
 //description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 //description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 //description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 //description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 //description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-//description.moonlight.name=The inscription on the blade reads "My power can only be awakened in the light of the moon"
-//description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
+description.moonlight.name=The inscription on the blade reads "My power can only be awakened in the light of the moon"
+description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
+description.attack_damage_at_night.name=Attack Damage at Night
+description.attack_damage_at_day.name=Attack Damage at Day

@@ -51,7 +51,7 @@ public class ItemStaffGun extends ItemBase
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.setActiveHand(handIn);
-		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 	
@@ -62,7 +62,7 @@ public class ItemStaffGun extends ItemBase
 		{
 			EntityPlayer player = (EntityPlayer)entityLiving;
 			
-			if(getMaxItemUseDuration(stack) - timeLeft >= 30)
+			if(getMaxItemUseDuration(stack) - timeLeft >= 20)
 			{
 				worldIn.playSound(player.posX,player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 				
@@ -71,7 +71,6 @@ public class ItemStaffGun extends ItemBase
 					ProjectileBulletCannon ball = new ProjectileBulletCannon(worldIn, player);
 					ball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 0F);
 					worldIn.spawnEntity(ball);
-					player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 30);
 					stack.damageItem(1, player);
 				}
 			}
