@@ -19,9 +19,6 @@ public class GuiSpawner extends GuiContainer
 		super(new ContainerSpawner(playerInventory, tileInventory));
 		this.playerInventory = playerInventory;
 		this.te = tileInventory;
-
-		this.xSize = 176;
-		this.ySize = 166;
 	}
 
 	@Override

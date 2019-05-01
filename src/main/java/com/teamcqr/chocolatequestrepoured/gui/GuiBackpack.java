@@ -19,9 +19,6 @@ public class GuiBackpack extends GuiContainer
 		super(new ContainerBackpack(playerInventory, inventory));
 		this.playerInventory = playerInventory;
 		this.inventory = inventory;
-		
-		this.xSize = 176;
-		this.ySize = 166;
 	}
 	
 	@Override
