@@ -6,25 +6,25 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ProjectileBulletCannon extends ProjectileBase
+public class ProjectileVampiricSpell extends ProjectileBase
 {
 	private EntityLivingBase shooter;
 	
-	public ProjectileBulletCannon(World worldIn) 
+	public ProjectileVampiricSpell(World worldIn) 
 	{
 		super(worldIn);
 	}
 	
-	public ProjectileBulletCannon(World worldIn, double x, double y, double z)
+	public ProjectileVampiricSpell(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
     }
 
-    public ProjectileBulletCannon(World worldIn, EntityLivingBase shooter)
+    public ProjectileVampiricSpell(World worldIn, EntityLivingBase shooter)
     {
     	super(worldIn, shooter);
     	this.shooter = shooter;
-    	this.isImmuneToFire = true;
+    	this.isImmuneToFire = false;
     }
 
 	@Override
@@ -37,16 +37,20 @@ public class ProjectileBulletCannon extends ProjectileBase
 				if(result.entityHit instanceof EntityLivingBase)
 				{
 					EntityLivingBase entity = (EntityLivingBase)result.entityHit;
-					float damage = 5F;
+					float damage = 4F;
 					
 					if(result.entityHit == shooter)
 					{
 						return;
 					}
 					
-					damage += damage;
+					entity.attackEntityFrom(DamageSource.MAGIC, damage);
 					
-					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, entity), damage);
+					if(shooter.getHealth() < shooter.getMaxHealth())
+					{
+						shooter.heal(1.0F);
+					}
+					
 					setDead();
 				}
 			}
@@ -60,9 +64,9 @@ public class ProjectileBulletCannon extends ProjectileBase
 	{
 		if(world.isRemote)
 		{
-			if(ticksExisted < 10)
+			if(ticksExisted < 30)
 			{
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, posX, posY + 0.1D, posZ, 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.PORTAL, posX, posY + 0.1D, posZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

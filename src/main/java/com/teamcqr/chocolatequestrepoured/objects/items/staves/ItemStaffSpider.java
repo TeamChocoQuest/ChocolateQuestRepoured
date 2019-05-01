@@ -34,7 +34,7 @@ public class ItemStaffSpider extends ItemBase
 		setMaxStackSize(1);
 	}
 	
-	@Override
+/*	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
@@ -44,38 +44,50 @@ public class ItemStaffSpider extends ItemBase
     public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.BOW;
-    }
+    } */
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		playerIn.setActiveHand(handIn);
-		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
-        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		shoot(worldIn, playerIn, stack, handIn);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
     }
 	
-	@Override
+	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn)
+	{
+		worldIn.playSound(playerIn.posX,playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		playerIn.swingArm(handIn);
+		
+		if(!worldIn.isRemote)
+		{
+			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, playerIn);
+			ball.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 0F);
+			worldIn.spawnEntity(ball);
+			stack.damageItem(1, playerIn);
+			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
+		}
+	}
+	
+/*	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
 		if(entityLiving instanceof EntityPlayer)
 		{
 			EntityPlayer player = (EntityPlayer)entityLiving;
 			
-			if(getMaxItemUseDuration(stack) - timeLeft >= 20)
-			{
-				worldIn.playSound(player.posX,player.posY, player.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+			worldIn.playSound(player.posX,player.posY, player.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 				
-				if(!worldIn.isRemote)
-				{
-					ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, player);
-					ball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 0F);
-					worldIn.spawnEntity(ball);
-					stack.damageItem(1, player);
-				}
+			if(!worldIn.isRemote)
+			{
+				ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, player);
+				ball.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 1.5F, 0F);
+				worldIn.spawnEntity(ball);
+				stack.damageItem(1, player);
+				player.getCooldownTracker().setCooldown(stack.getItem(), 20);
 			}
 		}
-    }
+	} */
 	
 	@Override
 	@SideOnly(Side.CLIENT)
