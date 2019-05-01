@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
@@ -12,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileB
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
@@ -99,11 +101,15 @@ public class ClientProxy extends CommonProxy
 				return new RenderProjectileBulletCannon(manager, 1F);
 			}
 		});
-	}
-	
-	public String localize(String unlocalized, Object... args) 
-	{
-		return I18n.format(unlocalized, args);
+		
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, new IRenderFactory<ProjectileVampiricSpell>() 
+		{
+			@Override
+			public Render<ProjectileVampiricSpell> createRenderFor(RenderManager manager) 
+			{
+				return new RenderProjectileVampiricSpell(manager);
+			}
+		});
 	}
 	
 	private void registerGUIs() 

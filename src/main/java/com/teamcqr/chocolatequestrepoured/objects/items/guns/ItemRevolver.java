@@ -35,7 +35,7 @@ public class ItemRevolver extends ItemBase
 		setMaxStackSize(1);
 	}
 	
-	@Override
+/*	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
@@ -45,7 +45,7 @@ public class ItemRevolver extends ItemBase
     public EnumAction getItemUseAction(ItemStack stack)
     {
         return EnumAction.NONE;
-    }
+    } */
 	
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -73,17 +73,62 @@ public class ItemRevolver extends ItemBase
 
         if(!playerIn.capabilities.isCreativeMode && !flag && getBulletStack(stack, playerIn) == ItemStack.EMPTY)
         {
+        	if(flag)
+        	{
+        		shoot(stack, worldIn, playerIn);
+        	}
             return flag ? new ActionResult(EnumActionResult.PASS, stack) : new ActionResult(EnumActionResult.FAIL, stack);
         }
         
         else
         {
-            playerIn.setActiveHand(handIn);
+            shoot(stack, worldIn, playerIn);
             return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
         }
     }
 	
-	@Override
+	public void shoot(ItemStack stack, World worldIn, EntityPlayer player)
+	{
+		boolean flag = player.capabilities.isCreativeMode;
+		ItemStack itemstack = findAmmo(player);
+		
+		if(!itemstack.isEmpty() || flag)
+		{
+			if(!worldIn.isRemote)
+			{
+				if(flag && itemstack.isEmpty())
+				{
+					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
+					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
+					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 10);
+					worldIn.spawnEntity(bulletE);
+				}
+				else
+				{
+					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
+					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
+					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 10);
+					worldIn.spawnEntity(bulletE);
+					stack.damageItem(1, player);
+				}
+			}
+			
+			worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
+					
+			if(!flag)
+            {
+				itemstack.shrink(1);
+
+				if(itemstack.isEmpty())
+				{
+					player.inventory.deleteStack(itemstack);
+				}
+			}
+		}
+	}
+	
+/*	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
 		if(entityLiving instanceof EntityPlayer)
@@ -128,7 +173,7 @@ public class ItemRevolver extends ItemBase
 				}
 			}
 		}
-    }
+    } */
 	
 	protected boolean isBullet(ItemStack stack)
     {
