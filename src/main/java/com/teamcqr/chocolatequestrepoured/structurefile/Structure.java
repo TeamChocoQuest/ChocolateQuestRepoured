@@ -60,7 +60,7 @@ public class Structure extends Template {
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
-			superBlockField = Template.class.getDeclaredField("blocks");//this.getClass().getSuperclass().getDeclaredField("blocks");
+			superBlockField = Template.class.getDeclaredField("blocks");
 			
 			superBlockField.setAccessible(true);
 			try {
