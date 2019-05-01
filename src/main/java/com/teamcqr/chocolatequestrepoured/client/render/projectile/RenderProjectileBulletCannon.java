@@ -13,14 +13,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileBulletCannon extends Render<ProjectileBulletCannon>
 {
-	@SuppressWarnings("unused")
-	private final float scale;
 	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_cannon.png");
 	
-	public RenderProjectileBulletCannon(RenderManager renderManager, float scaleIn) 
+	public RenderProjectileBulletCannon(RenderManager renderManager) 
 	{
 		super(renderManager);
-		this.scale = scaleIn;
 	}
 	
 	@Override
