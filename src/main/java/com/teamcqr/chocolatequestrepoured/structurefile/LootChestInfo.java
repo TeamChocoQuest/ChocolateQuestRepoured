@@ -6,6 +6,11 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 class LootChestInfo {
 
 	private int type; //The "type" of the chest, e.g.: 0 = utility, 1 = food, 2 = weapons, 3 = armor, 4 = resources, 5 = bossloot, 6 = defaultLoot, 7 = endcity loot, 8 = jungle loot, ...  

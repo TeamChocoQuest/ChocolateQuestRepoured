@@ -3,6 +3,11 @@ package com.teamcqr.chocolatequestrepoured.dungeongen;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public interface IDungeonGenerator { 
 	
 	void preProcess(World world, Chunk chunk, int x, int y, int z);

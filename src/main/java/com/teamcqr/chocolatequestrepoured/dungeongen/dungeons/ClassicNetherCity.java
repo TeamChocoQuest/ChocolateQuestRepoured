@@ -7,6 +7,11 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class ClassicNetherCity extends DungeonBase {
 	
 	private int rowsX = 5;

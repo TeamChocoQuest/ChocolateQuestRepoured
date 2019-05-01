@@ -3,6 +3,11 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class WeightedItemStack {
 
 	private String itemName;

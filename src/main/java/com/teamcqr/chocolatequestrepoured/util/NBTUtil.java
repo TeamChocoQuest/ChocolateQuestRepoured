@@ -3,6 +3,11 @@ package com.teamcqr.chocolatequestrepoured.util;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class NBTUtil {
 
 	public static NBTTagCompound BlockPosToNBTTag(BlockPos pos) 
