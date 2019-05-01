@@ -20,7 +20,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -45,7 +44,7 @@ public class ItemStaffFire extends ItemBase
 		setMaxStackSize(1);
 	}
 	
-	@Override
+/*	@Override
 	public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
@@ -54,8 +53,8 @@ public class ItemStaffFire extends ItemBase
 	@Override
     public EnumAction getItemUseAction(ItemStack stack)
     {
-        return EnumAction.BOW;
-    }
+        return EnumAction.NONE;
+    } */
 	
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker)
@@ -76,27 +75,32 @@ public class ItemStaffFire extends ItemBase
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		playerIn.setActiveHand(handIn);
+		playerIn.swingArm(handIn);
+		shootFromEntity(playerIn);
+		changeTorch(worldIn);
+		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 	
-	@Override
+/*	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
-		if(getMaxItemUseDuration(stack) - timeLeft >= 20)
+		shootFromEntity(entityLiving);
+		changeTorch(worldIn);
+		stack.damageItem(1, entityLiving);
+			
+		if(entityLiving instanceof EntityPlayer)
 		{
-			shootFromEntity(entityLiving);
-			changeTorch(worldIn);
-			stack.damageItem(1, entityLiving);
+			((EntityPlayer)entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 20);
 		}
-    }
+    } */
 	
 	public void changeTorch(World worldIn)
 	{
 		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
 		
-		if(result != null)
+		if(result != null && !worldIn.isRemote)
 		{
 			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
 			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);

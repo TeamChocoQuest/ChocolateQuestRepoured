@@ -30,7 +30,10 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffPoison;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffSpider;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffVampiric;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffWind;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerNinja;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemGreatSwordBase;
@@ -106,10 +109,14 @@ public class ModItems
 	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F);
 	
 	//Staves
+	public static final Item STAFF = new ItemBase("staff").setMaxStackSize(1);
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");		
-	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");    //#TODO TEXTURES
+	public static final Item STAFF_VAMPIRIC = new ItemStaffVampiric("staff_vampiric");	//#TODO DESCRIPTION
+	public static final Item STAFF_WIND = new ItemStaffWind("staff_wind");				//#TODO	DESCRIPTION
+	public static final Item STAFF_POISON = new ItemStaffPoison("staff_poison"); 		//#TODO	DESCRIPTION
+	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing");
+	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");
 	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES
-	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing"); //#TODO TEXTURES
 	
 	//Guns
 	public static final Item REVOLVER = new ItemRevolver("revolver");
