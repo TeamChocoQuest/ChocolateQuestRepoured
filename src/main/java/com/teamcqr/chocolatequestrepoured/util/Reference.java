@@ -24,6 +24,7 @@ public class Reference
 	public static final int PROJECTILE_BULLET = 67;
 	public static final int PROJECTILE_SPIDER_BALL = 68;
 	public static final int PROJECTILE_BULLET_CANNON = 69;
+	public static final int PROJECTILE_VAMPIRIC_SPELL = 70;
 	
 	public static final double SPAWNER_RANGE = 25.0D;
 }

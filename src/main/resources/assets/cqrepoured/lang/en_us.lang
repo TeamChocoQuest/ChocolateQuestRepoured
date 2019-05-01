@@ -46,8 +46,12 @@ item.great_sword_bull.name=Bull Greatsword
 item.great_sword_diamond.name=Diamond Greatsword
 item.great_sword_iron.name=Iron Greatsword
 
-//Staffs
+//Staves
+item.staff.name=Staff
 item.staff_fire.name=Fire Staff
+item.staff_vampiric.name=Vampiric Staff
+item.staff_wind.name=Wind Staff
+item.staff_poison.name=Poison Staff
 item.staff_spider.name=Spider Staff
 item.staff_gun.name=Gun Staff
 item.staff_healing.name=Healing Staff
@@ -279,3 +283,6 @@ description.moonlight.name=The inscription on the blade reads "My power can only
 description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
 description.attack_damage_at_night.name=Attack Damage at Night
 description.attack_damage_at_day.name=Attack Damage at Day
+description.staff_vampiric.name=Missing #TODO
+description.staff_wind.name=Missing #TODO
+description.staff_poison.name=Missing #TODO

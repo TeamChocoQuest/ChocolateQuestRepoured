@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileB
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
@@ -20,5 +21,6 @@ public class EntityHandler
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_bullet"), ProjectileBullet.class, "ProjectileBullet", Reference.PROJECTILE_BULLET, CQRMain.INSTANCE, 64, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_spider_ball"), ProjectileSpiderBall.class, "ProjectileSpiderBall", Reference.PROJECTILE_SPIDER_BALL, CQRMain.INSTANCE, 64, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + ":projectile_bullet_cannon"), ProjectileBulletCannon.class, "ProjectileBulletCannon", Reference.PROJECTILE_BULLET_CANNON, CQRMain.INSTANCE, 64, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + "projectile_vampiric_spell"), ProjectileVampiricSpell.class, "ProjectileVampiricSpell", Reference.PROJECTILE_VAMPIRIC_SPELL, CQRMain.INSTANCE, 64, 1, true);
 	}
 }

@@ -4,16 +4,14 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-public class ProjectileBullet extends EntityThrowable implements IEntityAdditionalSpawnData
+public class ProjectileBullet extends ProjectileBase implements IEntityAdditionalSpawnData
 {
 	private int type;
 	private EntityLivingBase shooter;
@@ -35,32 +33,6 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
     	this.isImmuneToFire = true;
     	this.type = type;
     }
-    
-    @Override
-    public boolean hasNoGravity()
-    {
-        return true;
-    }
-    
-    @Override
-	public void onUpdate()
-	{
-		if(getThrower() != null && getThrower().isDead)
-		{
-			setDead();
-		}
-		
-		else
-		{
-			if(ticksExisted++ > 300)
-			{
-				setDead();
-			}
-			
-			this.onUpdateInAir();
-			super.onUpdate();
-		}
-	}
     
     public int getType()
     {
@@ -115,20 +87,13 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
 					setDead();
 				}
 			}
-			
-			if(result.typeOfHit == RayTraceResult.Type.BLOCK)
-			{
-				IBlockState state = world.getBlockState(result.getBlockPos());
-					
-				if(!state.getBlock().isPassable(world, result.getBlockPos()))
-				{
-					setDead();
-				}
-			} 
+
+			super.onImpact(result);
 		}
 	}
 	
-	private void onUpdateInAir()
+	@Override
+	protected void onUpdateInAir()
 	{
 		if(world.isRemote)
 		{
