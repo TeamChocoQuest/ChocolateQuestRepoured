@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -74,7 +77,14 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
 				if(result.entityHit instanceof EntityLivingBase)
 				{
 					EntityLivingBase entity = (EntityLivingBase)result.entityHit;
-					float damage = 5F;
+					
+					float damage = 5.0F;
+					
+					if(shooter.getHeldItemMainhand().getItem() instanceof ItemMusket || shooter.getHeldItemOffhand().getItem() instanceof ItemMusket
+							|| shooter.getHeldItemMainhand().getItem() instanceof ItemMusketKnife || shooter.getHeldItemOffhand().getItem() instanceof ItemMusketKnife)
+					{
+						damage += 2.5F;
+					}
 					
 					if(result.entityHit == shooter)
 					{
@@ -83,12 +93,12 @@ public class ProjectileBullet extends EntityThrowable implements IEntityAddition
 					
 					if(type == 1)
 					{
-						damage += damage * 0.5F;
+						damage += 2.5F;
 						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, entity), damage);
 					}
 					if(type == 2)
 					{
-						damage += damage * 0.75F;
+						damage += 3.75;
 						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, entity), damage);
 					}
 					if(type == 3)

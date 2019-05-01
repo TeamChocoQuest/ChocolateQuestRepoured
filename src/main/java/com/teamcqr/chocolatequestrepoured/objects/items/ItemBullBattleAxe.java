@@ -52,7 +52,7 @@ public class ItemBullBattleAxe extends SwordBase
 				quake.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 0.25F, 1.0F);
 				worldIn.spawnEntity(quake);
 				
-				playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItem(handIn).getItem(), 50);
+				playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItem(handIn).getItem(), 20);
 		        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 			}
 			playerIn.swingArm(handIn);

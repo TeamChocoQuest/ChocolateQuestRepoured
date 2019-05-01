@@ -6,23 +6,33 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -69,19 +79,36 @@ public class ItemStaffFire extends ItemBase
     {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.setActiveHand(handIn);
-		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 	
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
     {
-		if(getMaxItemUseDuration(stack) - timeLeft >= 30)
+		if(getMaxItemUseDuration(stack) - timeLeft >= 20)
 		{
 			shootFromEntity(entityLiving);
+			changeTorch(worldIn);
 			stack.damageItem(1, entityLiving);
 		}
     }
+	
+	public void changeTorch(World worldIn)
+	{
+		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
+		
+		if(result != null)
+		{
+			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
+			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
+			
+			if(blockStateLookingAt.getBlock() == ModBlocks.UNLIT_TORCH)
+			{
+				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockUnlitTorch.FACING)));
+			}
+		}
+	}
 	
 	public void shootFromEntity(EntityLivingBase shooter)
 	{

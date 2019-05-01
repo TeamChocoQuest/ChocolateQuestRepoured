@@ -33,7 +33,7 @@ public class ItemMusket extends ItemRevolver
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-		tooltip.add(TextFormatting.BLUE + "5.0 " + I18n.format("description.bullet_damage.name"));
+		tooltip.add(TextFormatting.BLUE + "7.5 " + I18n.format("description.bullet_damage.name"));
 		tooltip.add(TextFormatting.RED + "-60 " + I18n.format("description.fire_rate.name"));
 		tooltip.add(TextFormatting.RED + "-10" + "% " + I18n.format("description.accuracy.name"));
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
@@ -63,14 +63,14 @@ public class ItemMusket extends ItemRevolver
 					{
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
 						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 60);
+						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
 						worldIn.spawnEntity(bulletE);
 					}
 					else
 					{
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
 						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItemMainhand().getItem(), 60);
+						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
 						worldIn.spawnEntity(bulletE);
 						stack.damageItem(1, player);
 					}
