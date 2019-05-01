@@ -60,7 +60,7 @@ public class Structure extends Template {
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
-			superBlockField = this.getClass().getSuperclass().getDeclaredField("blocks");
+			superBlockField = Template.class.getDeclaredField("blocks");//this.getClass().getSuperclass().getDeclaredField("blocks");
 			
 			superBlockField.setAccessible(true);
 			try {
@@ -72,7 +72,7 @@ public class Structure extends Template {
 			}
 			//TODO: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
 			//after filtering, remove the entries and add them into their currect lists
-			List<Integer> removeEntries = new ArrayList<Integer>();
+			List<Template.BlockInfo> removeEntries = new ArrayList<Template.BlockInfo>();
 			for(int i = 0; i < blocks.size(); i++) {
 				Template.BlockInfo bi = blocks.get(i);
 				Block currentBlock = bi.blockState.getBlock();
@@ -96,7 +96,7 @@ public class Structure extends Template {
 				//NULL Block
 				if(Block.isEqualTo(currentBlock, ModBlocks.NULL_BLOCK)) {
 					//DONE: remove the block entry, so that blocks don't get replaced when pasting
-					removeEntries.add(i);
+					removeEntries.add(bi);
 				}
 				
 				//CQ-Spawners
@@ -104,7 +104,7 @@ public class Structure extends Template {
 				if(Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
 					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn);
 					this.spawners.add(si);
-					removeEntries.add(i);
+					removeEntries.add(bi);
 				}
 				
 				//Chests
@@ -113,13 +113,14 @@ public class Structure extends Template {
 					if(elt != null) {
 						LootChestInfo lci = new LootChestInfo(currentBlock, bi.pos, elt.getID());
 						this.chests.add(lci);
-						removeEntries.add(i);
+						removeEntries.add(bi);
 					}
 				}
 			}
 			//And now: remove all the entries we want to be gone.... 
 			for(int i = 0; i < removeEntries.size(); i++) {
-				blocks.remove(i);
+				//int index = removeEntries.get(i);
+				blocks.remove(removeEntries.get(i));
 			}
 			//exchange the field values
 			try {
