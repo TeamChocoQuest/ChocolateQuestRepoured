@@ -6,6 +6,11 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.StrongholdGenerator;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class StrongholdDungeon extends DungeonBase {
 	
 	private File stairFolder;

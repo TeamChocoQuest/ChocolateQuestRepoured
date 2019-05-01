@@ -12,6 +12,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class WorldDungeonGenerator implements IWorldGenerator {
 
 	private DungeonRegistry dungeonRegistry;

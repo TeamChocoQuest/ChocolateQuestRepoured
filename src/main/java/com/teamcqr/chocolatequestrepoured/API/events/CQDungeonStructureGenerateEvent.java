@@ -7,6 +7,12 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
+
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class CQDungeonStructureGenerateEvent extends Event {
 
 	private DungeonBase generatedDungeon;

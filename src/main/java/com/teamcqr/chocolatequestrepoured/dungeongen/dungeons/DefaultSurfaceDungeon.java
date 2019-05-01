@@ -22,6 +22,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class DefaultSurfaceDungeon extends DungeonBase {
 	
 	protected File structureFolderPath; 

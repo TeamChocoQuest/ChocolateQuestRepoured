@@ -16,6 +16,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class VillageDungeon extends DungeonBase {
 	
 	private HashMap<Integer, List<File>> chanceFileMap = new HashMap<Integer, List<File>>();

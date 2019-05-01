@@ -5,6 +5,11 @@ import java.io.File;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class LinearDungeon extends DungeonBase {
 
 	private File stairFolder;

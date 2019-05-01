@@ -2,6 +2,11 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import net.minecraft.util.math.Vec3i;
 
+/**
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
+ */
 public class VectorUtil {
 	
 	public static enum EAxis {
