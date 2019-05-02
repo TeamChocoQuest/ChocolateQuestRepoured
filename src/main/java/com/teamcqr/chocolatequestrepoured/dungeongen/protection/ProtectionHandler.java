@@ -1,12 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 
 /**
  * Copyright (c) 29.04.2019
@@ -32,14 +34,14 @@ public class ProtectionHandler {
     }
 
     public void check(BlockEvent.BreakEvent e) {
-        for (ProtectedRegion r: regions) {
-            r.checkBreakEvent(e);
+        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
+            it.next().checkBreakEvent(e);
         }
     }
 
     public void checkSpawn(LivingSpawnEvent.CheckSpawn e) {
-        for (ProtectedRegion r: regions) {
-            r.checkSpawnEvent(e);
+        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
+            it.next().checkSpawnEvent(e);
         }
     }
     public void checkPortalSpawning(BlockEvent.PortalSpawnEvent e) {
@@ -52,17 +54,30 @@ public class ProtectionHandler {
         PROTECTION_HANDLER = new ProtectionHandler();
     }
 
-    public synchronized void save(ChunkDataEvent.Save e) {
-        for(ProtectedRegion r:regions) {
-            if(e.getWorld().getChunkFromBlockCoords(r.getMin())==e.getChunk()) {
+    public void save(ChunkDataEvent.Save e) {
+
+        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
+            ProtectedRegion region = it.next();
+            if(e.getWorld().getChunkFromBlockCoords(region.getMin())==e.getChunk()) {
                 NBTTagList list = new NBTTagList();
-                list.appendTag(r.save());
+                list.appendTag(region.save());
                 e.getData().setTag("protectedRegions",list);
+                return;
             }
         }
     }
 
-    public synchronized void load(ChunkDataEvent.Load e) {
+    public void checkUnload(ChunkEvent.Unload e) {
+        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
+            ProtectedRegion region = it.next();
+            if(e.getWorld().getChunkFromBlockCoords(region.getMin())==e.getChunk()) {
+                removeRegion(region);
+                return;
+            }
+        }
+    }
+
+    public void load(ChunkDataEvent.Load e) {
         if(e.getData().hasKey("protectedRegions")) {
             NBTTagList list = e.getData().getTagList("protectedRegions", Constants.NBT.TAG_COMPOUND);
             for(int i = 0;i<list.tagCount();i++) {
