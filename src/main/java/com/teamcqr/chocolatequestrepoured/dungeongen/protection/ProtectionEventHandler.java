@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
+import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -20,9 +22,18 @@ public class ProtectionEventHandler {
     }
 
     @SubscribeEvent
+    public void blockBreak(BlockEvent.BreakEvent e) {
+        ProtectionHandler.PROTECTION_HANDLER.check(e);
+    }
+
+    @SubscribeEvent
+    public void unload(ChunkEvent.Unload e) {
+        ProtectionHandler.PROTECTION_HANDLER.checkUnload(e);
+    }
+
+    @SubscribeEvent
     public void save(ChunkDataEvent.Save e) {
         ProtectionHandler.PROTECTION_HANDLER.save(e);
-
     }
 
     @SubscribeEvent

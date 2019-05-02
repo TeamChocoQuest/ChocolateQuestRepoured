@@ -112,11 +112,6 @@ public class ProtectedRegion {
         return tag;
     }
 
-    public boolean canBeUnloaded(World world) {
-        WorldServer server = (WorldServer)world;
-        return !server.getChunkProvider().chunkExists(min.getX()/16,min.getY()/16) && !server.getChunkProvider().chunkExists(max.getX()/16,max.getY()/16);
-    }
-
     public void checkSpawnEvent(LivingSpawnEvent.CheckSpawn e) {
         if(enabled) {
             if(isEntityInRegion(e.getEntityLiving())) {
