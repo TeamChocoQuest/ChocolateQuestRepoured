@@ -28,17 +28,23 @@ public class ProtectionEventHandler {
 
     @SubscribeEvent
     public void unload(ChunkEvent.Unload e) {
-        ProtectionHandler.PROTECTION_HANDLER.checkUnload(e);
+        if(!e.getWorld().isRemote) {
+            ProtectionHandler.PROTECTION_HANDLER.checkUnload(e);
+        }
     }
 
     @SubscribeEvent
     public void save(ChunkDataEvent.Save e) {
-        ProtectionHandler.PROTECTION_HANDLER.save(e);
+        if(!e.getWorld().isRemote) {
+            ProtectionHandler.PROTECTION_HANDLER.save(e);
+        }
     }
 
     @SubscribeEvent
     public void load(ChunkDataEvent.Load e) {
-        ProtectionHandler.PROTECTION_HANDLER.load(e);
+        if(!e.getWorld().isRemote) {
+            ProtectionHandler.PROTECTION_HANDLER.load(e);
+        }
     }
 
     @SubscribeEvent

@@ -186,6 +186,6 @@ public class DungeonBase {
 		return this.dunID;
 	}
 	public boolean isProtectedFromModifications() {
-		return this.protectFromDestruction;
+		return true;
 	}
 }
