@@ -20,7 +20,6 @@ public class ModelBackpack extends ModelBiped
 	public ModelBackpack(float size)
 	{
 		super(size);
-		size = 0.5F;
 
 		this.bipedBody = new ModelRenderer(this, 32, 16);
 		this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 1.0F);

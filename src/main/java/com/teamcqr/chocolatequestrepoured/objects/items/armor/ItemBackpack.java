@@ -70,7 +70,8 @@ public class ItemBackpack extends ArmorBase
 			{
 				ModelBackpack model = new ModelBackpack();
 				
-				model.bipedHead.showModel = armorSlot == EntityEquipmentSlot.CHEST;
+				model.bipedBody.showModel = armorSlot == EntityEquipmentSlot.CHEST;
+				
 			    model.isChild = _default.isChild;
 			    model.isRiding = _default.isRiding;
 			    model.isSneak = _default.isSneak;
