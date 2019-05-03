@@ -14,6 +14,6 @@ public class TileEntityHandler
 	{
 		GameRegistry.registerTileEntity(TileEntityExporter.class, new ResourceLocation(Reference.MODID + ":TileEntityExporter"));
 		GameRegistry.registerTileEntity(TileEntityTable.class, new ResourceLocation(Reference.MODID + ":TileEntityTable"));
-		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID + "TileEntitySpawner"));
+		GameRegistry.registerTileEntity(TileEntitySpawner.class, new ResourceLocation(Reference.MODID + ":TileEntitySpawner"));
 	}
 }
