@@ -68,7 +68,7 @@ item.bullet_iron.name=Iron Bullets
 item.bullet_gold.name=Gold Bullets
 item.bullet_diamond.name=Diamond Bullets
 item.bullet_fire.name=Fiery Bullets
-item.bullet_cannon.name=Cannon Bullet
+item.bullet_cannon.name=Cannon Ball
 item.flamethrower.name=Flamethrower
 
 //Cloud Items
