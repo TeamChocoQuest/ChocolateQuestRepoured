@@ -106,6 +106,7 @@ public class VillageDungeon extends DungeonBase {
 					this.pathBlock = tmp;
 				}
 			} catch(Exception ex) {
+				this.pathBlock = Blocks.GRAVEL;
 				System.out.println("couldnt load path block! using default value (gravel block)...");
 			}
 			
@@ -150,7 +151,9 @@ public class VillageDungeon extends DungeonBase {
 			((VillageGenerator)this.generator).setCenterStructure(building);
 		}
 		//Generating it...
-		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, false), z);
+		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
+		this.generator.generate(world, chunk, x, y, z);
 	}
 	
 	private File getRandomBuilding(Random random) {	

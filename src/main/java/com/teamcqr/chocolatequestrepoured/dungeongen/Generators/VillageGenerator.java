@@ -51,6 +51,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		// !! IN BUILD STEP !!    PATH BUILDING: First: Chose wether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
 		BlockPos start = new BlockPos(x, y, z);
 		this.startPos = new BlockPos(start);
+		this.worldIn = world;
 		for(int i = 0; i < this.chosenStructures.size(); i++) {
 			int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 			Vec3i v = new Vec3i(vX, 0, 0);
@@ -87,6 +88,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		//First, build all the support platforms
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
+				System.out.println("Building house " + (i+1) + "...");
 				//DONE: Load structures from file method   !!HIGH PRIORITY!!
 				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
 				
@@ -113,9 +115,12 @@ public class VillageGenerator implements IDungeonGenerator{
 		}
 		//then build the paths...
 		if(this.structurePosList != null && !this.structurePosList.isEmpty() && this.startPos != null && this.dungeon.buildPaths()) {
+			System.out.println("Building " + this.structurePosList.size() + " roads...");
 			for(BlockPos end : this.structurePosList) {
+				System.out.println("Building road " + (this.structurePosList.indexOf(end) +1) + " of " + this.structurePosList.size() + "...");
 				this.buildPath(end, this.startPos);
 			}
+			System.out.println("Roads built!");
 		}
 		//And now, build all the structures...
 	}
@@ -174,6 +179,10 @@ public class VillageGenerator implements IDungeonGenerator{
 			currX += vX;
 			currChunk = this.worldIn.getChunkFromBlockCoords(new BlockPos(currX, y, z));
 		} while(currX != end.getX());
+		/*if(start.getZ() != end.getZ()) {
+			start = new BlockPos(end.getX(), start.getY(), start.getZ());
+			buildPathZ(start, end);
+		}*/
 	}
 	
 	private void buildPathZ(BlockPos start, BlockPos end) {
@@ -186,11 +195,15 @@ public class VillageGenerator implements IDungeonGenerator{
 		int x = start.getX();
 		int y = 0;
 		do {
-			y = DungeonGenUtils.getHighestYAt(currChunk, currZ, x, true);
-			buildPathSegmentZ(new BlockPos(currZ, y, x));
+			y = DungeonGenUtils.getHighestYAt(currChunk, x, currZ, true);
+			buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
 			currChunk = this.worldIn.getChunkFromBlockCoords(new BlockPos(x, y, currZ));
-		} while(currZ != end.getX());
+		} while(currZ != end.getZ());
+		/*if(start.getX() != end.getX()) {
+			start = new BlockPos(start.getX(), start.getY(), end.getZ());
+			buildPathZ(start, end);
+		}*/
 	}
 	
 	private void buildPathSegmentX(BlockPos pos) {
