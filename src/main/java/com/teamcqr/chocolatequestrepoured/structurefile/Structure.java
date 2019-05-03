@@ -102,7 +102,7 @@ public class Structure extends Template {
 				//CQ-Spawners
 				//DONE: Wait for spawner block and tileentity
 				if(Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
-					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn);
+					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn, bi.tileentityData);
 					this.spawners.add(si);
 					removeEntries.add(bi);
 				}
