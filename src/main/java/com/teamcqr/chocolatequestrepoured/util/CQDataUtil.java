@@ -16,7 +16,10 @@ public class CQDataUtil {
     public static final String DEFAULT_PATH = "data//CQR//";
 
     public static void createFolderInWorld(String path, World world) {
-        new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"\\"+path).mkdirs();
+        File f = new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"\\"+path);
+        if(!f.exists()) {
+            f.mkdirs();
+        }
     }
 
     public static NBTTagCompound loadFileInWorldFolder(String path,World world) {

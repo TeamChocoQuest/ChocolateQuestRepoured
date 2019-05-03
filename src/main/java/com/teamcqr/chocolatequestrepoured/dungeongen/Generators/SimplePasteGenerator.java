@@ -46,7 +46,7 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 		//Simply puts the structure at x,y,z
 		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings);
 		
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()));
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()),chunk.getPos());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
