@@ -19,10 +19,8 @@ public class CQDataUtil {
         new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"\\"+path).mkdirs();
     }
 
-
-
-    public static NBTTagCompound loadFile(String name,World world) {
-        File f = new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"//"+DEFAULT_PATH+name);
+    public static NBTTagCompound loadFileInWorldFolder(String path,World world) {
+        File f = new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"//"+path);
 
         if(f.exists()) {
             try {
@@ -35,8 +33,16 @@ public class CQDataUtil {
         return new NBTTagCompound();
     }
 
+    public static NBTTagCompound loadFile(String name,World world) {
+        return loadFileInWorldFolder(DEFAULT_PATH+name,world);
+    }
+
     public static void saveFile(NBTTagCompound tag,String name,World world) {
-        File f = new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"//"+DEFAULT_PATH+name);
+        saveFileInWorldFolder(tag,DEFAULT_PATH+name,world);
+    }
+
+    public static void saveFileInWorldFolder(NBTTagCompound tag,String path,World world) {
+        File f = new File(world.getSaveHandler().getWorldDirectory().getAbsolutePath()+"//"+path);
 
         try {
             CompressedStreamTools.write(tag,f);
