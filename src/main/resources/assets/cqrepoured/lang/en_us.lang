@@ -68,7 +68,7 @@ item.bullet_iron.name=Iron Bullets
 item.bullet_gold.name=Gold Bullets
 item.bullet_diamond.name=Diamond Bullets
 item.bullet_fire.name=Fiery Bullets
-item.bullet_cannon.name=Cannon Bullet
+item.bullet_cannon.name=Cannon Ball
 item.flamethrower.name=Flamethrower
 
 //Cloud Items
@@ -282,8 +282,8 @@ description.alchemy_bag.name=Right-click to open. Only stores potions.
 //description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 description.moonlight.name=The inscription on the blade reads "My power can only be awakened in the light of the moon"
 description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
-description.attack_damage_at_night.name=Attack Damage at Night
-description.attack_damage_at_day.name=Attack Damage at Day
-description.staff_vampiric.name=Missing #TODO
-description.staff_wind.name=Missing #TODO
-description.staff_poison.name=Missing #TODO
+description.attack_damage_at_night.name=Attack Damage during the Night
+description.attack_damage_at_day.name=Attack Damage during the Day
+description.staff_vampiric.name=This rod radiates dark energy, as you hold it in your hand. If you move it near your ear, you will hear its demand. Its call is simple: "Right-click with me" and when you do then you will see, a projectile it does emit. Though the damage is slight, if you land it just right, it will heal you when it does hit. 
+description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet. #TODO
+description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
