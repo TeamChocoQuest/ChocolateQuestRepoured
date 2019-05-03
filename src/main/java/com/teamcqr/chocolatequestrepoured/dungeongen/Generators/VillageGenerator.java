@@ -88,7 +88,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		//First, build all the support platforms
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
-				System.out.println("Building house " + (i+1) + "...");
+				System.out.println("Building support platform " + (i+1) + "...");
 				//DONE: Load structures from file method   !!HIGH PRIORITY!!
 				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
 				
@@ -131,12 +131,16 @@ public class VillageGenerator implements IDungeonGenerator{
 			plcmnt.setRotation(Rotation.NONE);
 			plcmnt.setIntegrity(1.0f);
 			
+			int index = 1;
 			for(CQStructure structure : this.toGenerate.keySet()) {
+				System.out.println("Building house " + index + "...");
 				BlockPos pos = this.toGenerate.get(structure);
 				structure.placeBlocksInWorld(world, pos, plcmnt);
 				
 				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()));
 				MinecraftForge.EVENT_BUS.post(event);
+				
+				index++;
 			}
 		}
 	}
