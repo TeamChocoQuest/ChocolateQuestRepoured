@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
 
 import net.minecraft.block.Block;
@@ -30,6 +31,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.client.event.ModelRegistryEvent;
@@ -40,6 +42,7 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -285,6 +288,15 @@ public class EventsHandler
 						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
 					}
 				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onWorldLoad(WorldEvent.Load e) {
+		if(!e.getWorld().isRemote) {
+			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
+				CQDataUtil.createFolderInWorld("data//CQR",e.getWorld());
 			}
 		}
 	}
