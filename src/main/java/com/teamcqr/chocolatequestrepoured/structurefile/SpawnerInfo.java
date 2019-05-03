@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -17,17 +15,15 @@ import net.minecraft.world.World;
 class SpawnerInfo {
 
 	private BlockPos position;
-	private TileEntitySpawner spawnerTile;
+	//private TileEntitySpawner spawnerTile;
 	private NBTTagCompound spawnerData = null;
 	
-	public SpawnerInfo(BlockSpawner spawnerBlock, BlockPos pos, World world) {
+	public SpawnerInfo(BlockSpawner spawnerBlock, BlockPos pos, World world, NBTTagCompound tileTag) {
 		this.position = pos;
-		if(world.getTileEntity(pos) != null) {
-			TileEntity tile = world.getTileEntity(pos);
-			if(tile instanceof TileEntitySpawner) {
-				this.spawnerTile = (TileEntitySpawner)tile;
-			}
-		}
+		//if(tileTag != null) {
+			this.spawnerData = tileTag;
+		//}
+			//TODO: Fix Spawner data not saving ....
 	}
 	
 	public SpawnerInfo(NBTTagCompound nbtTag) {
@@ -49,7 +45,8 @@ class SpawnerInfo {
 		appendPos(tag);
 		
 		NBTTagCompound spawnerTag = new NBTTagCompound();
-		spawnerTag = this.spawnerTile.writeToNBT(spawnerTag);
+		//spawnerTag = this.spawnerTile.writeToNBT(spawnerTag);
+		spawnerTag = this.spawnerData; //!= null ? spawnerTag : this.spawnerData;
 		
 		tag.setTag("data", spawnerTag);
 		
