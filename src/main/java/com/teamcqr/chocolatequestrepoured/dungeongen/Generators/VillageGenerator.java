@@ -50,6 +50,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate 
 		// !! IN BUILD STEP !!    PATH BUILDING: First: Chose wether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
 		BlockPos start = new BlockPos(x, y, z);
+		this.startPos = new BlockPos(start);
 		for(int i = 0; i < this.chosenStructures.size(); i++) {
 			int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 			Vec3i v = new Vec3i(vX, 0, 0);

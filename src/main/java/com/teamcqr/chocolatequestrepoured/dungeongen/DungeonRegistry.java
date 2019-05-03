@@ -233,7 +233,8 @@ public class DungeonRegistry {
 		if(this.biomeDungeonMap.containsKey(biome)) {
 			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
 			if(!dungs.contains(dungeon)) {
-				this.biomeDungeonMap.get(biome).add(dungeon);
+				dungs.add(dungeon);
+				this.biomeDungeonMap.replace(biome, dungs);
 				System.out.println(" - " + biome.getBiomeName());
 			}
 		}
