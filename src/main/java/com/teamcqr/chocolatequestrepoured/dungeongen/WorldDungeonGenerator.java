@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -89,7 +90,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 								break;
 							}
 						}
-						if (dimensionIsOK) {
+						
+						boolean flatPass = true;
+						if(world.getWorldType().equals(WorldType.FLAT) && !CQRMain.generateInFlat) {
+							flatPass = false;
+						}
+						
+						if (dimensionIsOK && flatPass) {
 							System.out.println("Generating dungeon " + chosenStructure.getDungeonName() + " at chunkX="
 									+ chunkX + "  chunkZ=" + chunkZ);
 							// DONE: Choose a structure and build it --> Dungeon handles it self!
