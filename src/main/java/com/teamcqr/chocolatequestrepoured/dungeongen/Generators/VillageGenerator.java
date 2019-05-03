@@ -105,7 +105,7 @@ public class VillageGenerator implements IDungeonGenerator{
 					
 					dungeonToSpawn.placeBlocksInWorld(world, pos, plcmnt);
 					
-					CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeY(), dungeonToSpawn.getSizeZ()));
+					CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeY(), dungeonToSpawn.getSizeZ()),chunk.getPos());
 					MinecraftForge.EVENT_BUS.post(event);
 				}
 			}

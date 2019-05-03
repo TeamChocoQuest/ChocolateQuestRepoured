@@ -1,11 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,35 +31,37 @@ public class ProtectionHandler {
 
     public static ProtectionHandler PROTECTION_HANDLER;
 
-    private ArrayList<ProtectedRegion> regions;
+    private HashMap<ChunkPos,ProtectedRegion> regions;
+    private HashMap<ChunkPos,ProtectedRegion> existingRegions;
 
     public ProtectionHandler() {
-        this.regions = new ArrayList<>();
-    }
-
-    public void addRegion(ProtectedRegion region) {
-        regions.listIterator(regions.size()).add(region);
-    }
-
-    public void removeRegion(ProtectedRegion region) {
-        regions.listIterator(regions.indexOf(region)).remove();
-        System.out.println("dddddd");
+        this.regions = new HashMap<>();
+        this.existingRegions = new HashMap<>();
     }
 
     public void check(BlockEvent.BreakEvent e) {
-        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
-            it.next().checkBreakEvent(e);
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            item.getValue().checkBreakEvent(e);
         }
     }
 
     public void checkSpawn(LivingSpawnEvent.CheckSpawn e) {
-        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
-            it.next().checkSpawnEvent(e);
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            item.getValue().checkSpawnEvent(e);
         }
     }
     public void checkPortalSpawning(BlockEvent.PortalSpawnEvent e) {
-    	for (ProtectedRegion r: regions) {
-            r.checkPortalEvent(e);
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            item.getValue().checkPortalEvent(e);
         }
     }
 
@@ -62,36 +69,53 @@ public class ProtectionHandler {
         PROTECTION_HANDLER = new ProtectionHandler();
     }
 
-    public void save(ChunkDataEvent.Save e) {
-        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
-            ProtectedRegion region = it.next();
-            if(e.getChunk().getPos().equals(new ChunkPos(region.getMax()))) {
-                NBTTagList list = new NBTTagList();
-                list.appendTag(region.save());
-                e.getData().setTag("protectedRegions",list);
-                break;
+    public void loadData(World world) {
+        NBTTagCompound tag = CQDataUtil.loadFile("cq_chunk_data.nbt",world);
+
+        for(String key:tag.getKeySet()) {
+            String[] array = key.split("_");
+            int x = Integer.parseInt(array[0]);
+            int z = Integer.parseInt(array[1]);
+
+            ChunkPos pos = new ChunkPos(x,z);
+
+            ProtectedRegion region = new ProtectedRegion(tag.getCompoundTag(key));
+
+            existingRegions.put(pos,region);
+        }
+    }
+
+    public void saveData(World world) {
+        NBTTagCompound tag = new NBTTagCompound();
+
+        for(ChunkPos key:existingRegions.keySet()) {
+            NBTTagCompound data = existingRegions.get(key).save();
+
+            tag.setTag(key.x+"_"+key.z,data);
+        }
+
+        CQDataUtil.saveFile(tag,"cq_chunk_data.nbt",world);
+    }
+
+    public void handleLoad(ChunkEvent.Load e) {
+        if(existingRegions.containsKey(e.getChunk().getPos())) {
+            if(e.getChunk().isLoaded()) {
+                regions.put(e.getChunk().getPos(),existingRegions.get(e.getChunk().getPos()));
+                System.out.println("load");
             }
         }
     }
 
-    public void checkUnload(ChunkEvent.Unload e) {
-        for(Iterator<ProtectedRegion> it = regions.iterator();it.hasNext();) {
-            ProtectedRegion region = it.next();
-            if(e.getChunk().getPos().equals(new ChunkPos(region.getMax()))) {
-                it.remove();
+    public void handleUnload(ChunkEvent.Unload e) {
+        if(regions.containsKey(e.getChunk().getPos())) {
+            if(!e.getChunk().isLoaded()) {
+                regions.remove(e.getChunk().getPos());
                 System.out.println("unload");
-                System.out.println(regions.size());
-                break;
             }
         }
     }
 
-    public void load(ChunkDataEvent.Load e) {
-        if(e.getData().getTagList("protectedRegions", Constants.NBT.TAG_COMPOUND) != null) {
-            NBTTagList list = e.getData().getTagList("protectedRegions", Constants.NBT.TAG_COMPOUND);
-            for(int i = 0;i<list.tagCount();i++) {
-                addRegion(new ProtectedRegion(list.getCompoundTagAt(i)));
-            }
-        }
+    public void addExistingRegion(ChunkPos pos,ProtectedRegion region) {
+        existingRegions.put(pos,region);
     }
 }

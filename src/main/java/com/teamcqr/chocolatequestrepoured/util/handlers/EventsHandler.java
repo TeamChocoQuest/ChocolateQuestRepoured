@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectedRegion;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
@@ -297,6 +299,17 @@ public class EventsHandler
 		if(!e.getWorld().isRemote) {
 			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
 				CQDataUtil.createFolderInWorld("data//CQR",e.getWorld());
+
+				ProtectionHandler.PROTECTION_HANDLER.loadData(e.getWorld());
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onWorldUnload(WorldEvent.Unload e) {
+		if(!e.getWorld().isRemote) {
+			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
+				ProtectionHandler.PROTECTION_HANDLER.saveData(e.getWorld());
 			}
 		}
 	}

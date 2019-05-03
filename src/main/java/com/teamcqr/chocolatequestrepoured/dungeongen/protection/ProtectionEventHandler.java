@@ -7,6 +7,7 @@ import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -19,7 +20,7 @@ public class ProtectionEventHandler {
     @SubscribeEvent
     public void dungeonGenerate(CQDungeonStructureGenerateEvent e) {
         if(e.getDungeon().isProtectedFromModifications()) {
-        	ProtectionHandler.PROTECTION_HANDLER.addRegion(new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos()));
+        	ProtectionHandler.PROTECTION_HANDLER.addExistingRegion(e.getChunkPos(),new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos()));
         }
     }
 
@@ -29,23 +30,16 @@ public class ProtectionEventHandler {
     }
 
     @SubscribeEvent
+    public void load(ChunkEvent.Load e) {
+        if(!e.getWorld().isRemote) {
+            ProtectionHandler.PROTECTION_HANDLER.handleLoad(e);
+        }
+    }
+
+    @SubscribeEvent
     public void unload(ChunkEvent.Unload e) {
         if(!e.getWorld().isRemote) {
-            ProtectionHandler.PROTECTION_HANDLER.checkUnload(e);
-        }
-    }
-
-    @SubscribeEvent
-    public void save(ChunkDataEvent.Save e) {
-        if(!e.getWorld().isRemote) {
-            ProtectionHandler.PROTECTION_HANDLER.save(e);
-        }
-    }
-
-    @SubscribeEvent
-    public void load(ChunkDataEvent.Load e) {
-        if(!e.getWorld().isRemote) {
-            ProtectionHandler.PROTECTION_HANDLER.load(e);
+            ProtectionHandler.PROTECTION_HANDLER.handleUnload(e);
         }
     }
 
