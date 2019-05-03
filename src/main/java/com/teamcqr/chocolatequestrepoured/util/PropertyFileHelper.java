@@ -64,7 +64,7 @@ public class PropertyFileHelper {
 	}
 	
 	public static boolean getBooleanProperty(Properties file, String path, boolean defVal) {
-		String s = file.getProperty(path, "false");
+		String s = file.getProperty(path, defVal ? "true" : "false");
 		if(s != null) {
 			s = s.trim();
 			if(s.equalsIgnoreCase("true")) {

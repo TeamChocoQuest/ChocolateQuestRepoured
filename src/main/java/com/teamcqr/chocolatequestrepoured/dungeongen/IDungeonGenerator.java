@@ -18,6 +18,17 @@ public interface IDungeonGenerator {
 	void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z);
 	
 	default void generate(World world, Chunk chunk, int x, int y, int z) {
+		/*int median = 0;
+		int cant = 0;
+		for(int iX = 0; iX < x; iX++) {
+			for(int iZ = 0; iZ < z; iZ++) {
+				int height = world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY();
+				median += height;
+				cant++;
+			}
+		}
+		y = median /cant;*/
+		
 		preProcess(world, chunk, x, y, z);
 		buildStructure(world, chunk, x, y, z);
 		postProcess(world, chunk, x, y, z);
