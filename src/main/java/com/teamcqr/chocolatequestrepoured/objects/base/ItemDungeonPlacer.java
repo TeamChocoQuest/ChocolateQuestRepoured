@@ -69,8 +69,8 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 		if (!worldIn.isRemote) {
 			playerIn.getCooldownTracker().setCooldown(playerIn.getHeldItemMainhand().getItem(), 30);
 			playerIn.getCooldownTracker().setCooldown(this, 30);
+			this.dungeon.generate(playerIn.getPosition(), worldIn);
 		}
-		this.dungeon.generate(playerIn.getPosition(), worldIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
