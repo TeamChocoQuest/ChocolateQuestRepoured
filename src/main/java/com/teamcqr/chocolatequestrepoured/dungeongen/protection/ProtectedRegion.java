@@ -1,11 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.PortalSpawnEvent;
@@ -126,5 +129,21 @@ public class ProtectedRegion {
 				e.setResult(Event.Result.DENY);
 			}
 		}
+	}
+	
+	public List<Chunk> getChunks(World world) {
+		List<Chunk> chunks = new ArrayList<Chunk>();
+		
+		BlockPos p1 = new BlockPos(this.min.getX(), 100, this.min.getZ());
+		BlockPos p2 = new BlockPos(this.max.getX(), 100, this.max.getZ());
+		
+		for(BlockPos blockpos : BlockPos.getAllInBox(p1, p2)) {
+			Chunk chunk = world.getChunkFromBlockCoords(blockpos);
+			if(chunks.isEmpty() || !chunks.contains(chunk)) {
+				chunks.add(chunk);
+			}
+		}
+		
+		return chunks;
 	}
 }
