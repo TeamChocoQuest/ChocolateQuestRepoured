@@ -173,6 +173,9 @@ public class GuiExporter extends GuiScreen
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) 
 	{
+		this.drawDefaultBackground();
+		this.drawCenteredString(this.fontRenderer, I18n.format("tile.exporter.name"), this.width / 2, 20, 16777215);
+		
 		edtName.drawTextBox();
 
 		edtEndX.drawTextBox();
@@ -183,15 +186,15 @@ public class GuiExporter extends GuiScreen
 		edtStartY.drawTextBox();
 		edtStartZ.drawTextBox();
 
-		drawString(this.fontRenderer, "Structure Name", width / 2 -70, height / 2 -80, -1);
+		drawString(this.fontRenderer, "Structure Name", width / 2 -70, height / 2 -80, 10526880);
 
-		drawString(this.fontRenderer, "Start X", width / 2 -70, height / 2 -40, -1);
-		drawString(this.fontRenderer, "Start Y", width / 2 -20, height / 2 -40, -1);
-		drawString(this.fontRenderer, "Start Z", width / 2 +30, height / 2 -40, -1);
+		drawString(this.fontRenderer, "Start X", width / 2 -70, height / 2 -40, 10526880);
+		drawString(this.fontRenderer, "Start Y", width / 2 -20, height / 2 -40, 10526880);
+		drawString(this.fontRenderer, "Start Z", width / 2 +30, height / 2 -40, 10526880);
 
-		drawString(this.fontRenderer, "End X", width / 2 -70, height / 2, -1);
-		drawString(this.fontRenderer, "End Y", width / 2 -20, height / 2, -1);
-		drawString(this.fontRenderer, "End Z", width / 2 +30, height / 2, -1);
+		drawString(this.fontRenderer, "End X", width / 2 -70, height / 2, 10526880);
+		drawString(this.fontRenderer, "End Y", width / 2 -20, height / 2, 10526880);
+		drawString(this.fontRenderer, "End Z", width / 2 +30, height / 2, 10526880);
 
 		if(this.chbxPartsMode.isMouseOver())
 		{
