@@ -56,6 +56,7 @@ item.staff_poison.name=Poison Staff
 item.staff_spider.name=Spider Staff
 item.staff_gun.name=Gun Staff
 item.staff_healing.name=Healing Staff
+item.staff_thunder.name=Thunder Staff
 
 //Guns
 item.revolver.name=Revolver
@@ -288,3 +289,4 @@ description.staff_vampiric.name=This rod radiates dark energy, as you hold it in
 description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
+description.staff_thunder.name=Missing #TODO
