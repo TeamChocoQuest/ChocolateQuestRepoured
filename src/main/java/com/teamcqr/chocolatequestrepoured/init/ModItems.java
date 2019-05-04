@@ -33,6 +33,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffPoison;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffSpider;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffThunder;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffVampiric;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffWind;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerBase;
@@ -116,6 +117,7 @@ public class ModItems
 	public static final Item STAFF_WIND = new ItemStaffWind("staff_wind");				//#TODO	DESCRIPTION
 	public static final Item STAFF_POISON = new ItemStaffPoison("staff_poison"); 		//#TODO	DESCRIPTION
 	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing");
+	public static final Item STAFF_THUNDER = new ItemStaffThunder("staff_thunder");
 	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");
 	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES
 	
