@@ -20,10 +20,10 @@ class SpawnerInfo {
 	
 	public SpawnerInfo(BlockSpawner spawnerBlock, BlockPos pos, World world, NBTTagCompound tileTag) {
 		this.position = pos;
-		//if(tileTag != null) {
-			this.spawnerData = tileTag;
-		//}
-			//TODO: Fix Spawner data not saving ....
+		if(!tileTag.hasNoTags()) {
+			this.spawnerData = tileTag.copy();
+		}
+			//DONE: Fix Spawner data not saving ....
 	}
 	
 	public SpawnerInfo(NBTTagCompound nbtTag) {
@@ -45,8 +45,7 @@ class SpawnerInfo {
 		appendPos(tag);
 		
 		NBTTagCompound spawnerTag = new NBTTagCompound();
-		//spawnerTag = this.spawnerTile.writeToNBT(spawnerTag);
-		spawnerTag = this.spawnerData; //!= null ? spawnerTag : this.spawnerData;
+		spawnerTag = this.spawnerData;
 		
 		tag.setTag("data", spawnerTag);
 		
