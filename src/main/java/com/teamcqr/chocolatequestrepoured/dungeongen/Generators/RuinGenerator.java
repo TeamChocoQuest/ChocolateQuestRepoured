@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 

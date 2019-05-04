@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
