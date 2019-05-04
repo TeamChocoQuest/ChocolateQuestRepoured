@@ -71,7 +71,7 @@ public class ItemFlamethrower extends ItemBase
 		}
 		else
 		{
-			int dist = 5;
+			int dist = 10;
 			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
 		
 			for(Entity e : list)
@@ -88,7 +88,7 @@ public class ItemFlamethrower extends ItemBase
 					if(Math.abs(rotDiff) < 30.0D) 
 					{
 						e.setFire(2);
-						e.attackEntityFrom(DamageSource.IN_FIRE, 1.0F);
+						e.attackEntityFrom(DamageSource.IN_FIRE, 2.5F);
 					}
 				}
 			}

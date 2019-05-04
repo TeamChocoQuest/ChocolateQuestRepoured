@@ -27,6 +27,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
@@ -109,7 +110,7 @@ public class ModItems
 	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F);
 	
 	//Staves
-	public static final Item STAFF = new ItemBase("staff").setMaxStackSize(1);
+	public static final Item STAFF = new ItemStaff("staff");
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");		
 	public static final Item STAFF_VAMPIRIC = new ItemStaffVampiric("staff_vampiric");	//#TODO DESCRIPTION
 	public static final Item STAFF_WIND = new ItemStaffWind("staff_wind");				//#TODO	DESCRIPTION
