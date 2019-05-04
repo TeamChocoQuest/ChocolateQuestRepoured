@@ -41,19 +41,25 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
+			try {
+				fis.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			prop = null;
 			configFile = null;
 		} catch (IOException e) {
 			System.out.println("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
+			try {
+				fis.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
 			prop = null;
 			configFile = null;
 		}
 		if(prop != null && configFile != null && fis != null) {
-			//super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
-			//super.name = configFile.getName().replaceAll(".prop", "");
-			//super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
-			//super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			this.structureFolderPath = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
 
 			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
@@ -77,7 +83,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		return new DefaultGenerator();
 	}
 	
-	private File pickStructure(Random random) {
+	protected File pickStructure(Random random) {
 		//Random rdm = new Random();
 		//rdm.setSeed(worldSeed);
 		File chosenStructure = this.structureFolderPath;
