@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/bullet_cannon"
+        "layer0": "cqrepoured:items/cannon_ball"
     }
 }

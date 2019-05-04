@@ -22,7 +22,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
-import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
@@ -129,7 +129,7 @@ public class ModItems
 	public static final Item BULLET_GOLD = new ItemBullet("bullet_gold");
 	public static final Item BULLET_DIAMOND = new ItemBullet("bullet_diamond");
 	public static final Item BULLET_FIRE = new ItemBullet("bullet_fire");
-	public static final Item BULLET_CANNON = new ItemBulletCannon("bullet_cannon");
+	public static final Item CANNON_BALL = new ItemCannonBall("cannon_ball");
 	public static final Item FLAMETHROWER = new ItemFlamethrower("flamethrower");		//#TODO TEXTURES
 	
 	//Single Armor Items

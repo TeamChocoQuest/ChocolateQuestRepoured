@@ -15,9 +15,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBulletCannon extends ItemBase
+public class ItemCannonBall extends ItemBase
 {
-	public ItemBulletCannon(String name)
+	public ItemCannonBall(String name)
 	{
 		super(name);
 	}
@@ -26,7 +26,7 @@ public class ItemBulletCannon extends ItemBase
 	@SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
     {
-		if(stack.getItem() == ModItems.BULLET_CANNON)
+		if(stack.getItem() == ModItems.CANNON_BALL)
 		{
 			tooltip.add(TextFormatting.BLUE + "+5 " + I18n.format("description.bullet_damage.name"));
 		}

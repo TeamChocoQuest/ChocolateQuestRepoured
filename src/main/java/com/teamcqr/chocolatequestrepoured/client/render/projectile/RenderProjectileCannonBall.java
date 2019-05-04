@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -11,17 +11,17 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileBulletCannon extends Render<ProjectileBulletCannon>
+public class RenderProjectileCannonBall extends Render<ProjectileCannonBall>
 {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/bullet_cannon.png");
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/ball_cannon.png");
 	
-	public RenderProjectileBulletCannon(RenderManager renderManager) 
+	public RenderProjectileCannonBall(RenderManager renderManager) 
 	{
 		super(renderManager);
 	}
 	
 	@Override
-	public void doRender(ProjectileBulletCannon entity, double x, double y, double z, float entityYaw, float partialTicks)
+	public void doRender(ProjectileCannonBall entity, double x, double y, double z, float entityYaw, float partialTicks)
     {
     	GlStateManager.pushMatrix();
         this.bindEntityTexture(entity);
@@ -58,7 +58,7 @@ public class RenderProjectileBulletCannon extends Render<ProjectileBulletCannon>
     }
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileBulletCannon entity) 
+	protected ResourceLocation getEntityTexture(ProjectileCannonBall entity) 
 	{
 		return TEXTURE;
 	}
