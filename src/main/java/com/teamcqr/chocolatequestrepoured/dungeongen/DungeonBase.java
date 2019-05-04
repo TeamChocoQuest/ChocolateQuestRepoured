@@ -55,7 +55,7 @@ public class DungeonBase {
 	}
 	
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		
+		this.dunID = MathHelper.getRandomUUID();
 	}
 	
 	public DungeonBase(File configFile) {
