@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.dungeons;
 
 import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.AbandonedGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 
 /**
  * Copyright (c) 29.04.2019

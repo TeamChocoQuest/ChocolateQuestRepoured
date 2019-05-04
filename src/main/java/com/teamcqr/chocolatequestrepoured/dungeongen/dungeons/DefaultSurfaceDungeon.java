@@ -9,8 +9,8 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.DefaultGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.SimplePasteGenerator;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;

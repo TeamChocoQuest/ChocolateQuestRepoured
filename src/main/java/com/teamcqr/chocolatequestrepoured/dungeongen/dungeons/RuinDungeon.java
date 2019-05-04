@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.DefaultGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.RuinGenerator;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
