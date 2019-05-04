@@ -1,10 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectilePoisonSpell extends ProjectileSpiderBall
@@ -37,4 +33,8 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall
     
     @Override
 	protected void onUpdateInAir() {}
+    
+    public EntityLivingBase getShooter() {
+    	return this.shooter;
+    }
 }
