@@ -6,21 +6,21 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ProjectileBulletCannon extends ProjectileBase
+public class ProjectileCannonBall extends ProjectileBase
 {
 	private EntityLivingBase shooter;
 	
-	public ProjectileBulletCannon(World worldIn) 
+	public ProjectileCannonBall(World worldIn) 
 	{
 		super(worldIn);
 	}
 	
-	public ProjectileBulletCannon(World worldIn, double x, double y, double z)
+	public ProjectileCannonBall(World worldIn, double x, double y, double z)
     {
         super(worldIn, x, y, z);
     }
 
-    public ProjectileBulletCannon(World worldIn, EntityLivingBase shooter)
+    public ProjectileCannonBall(World worldIn, EntityLivingBase shooter)
     {
     	super(worldIn, shooter);
     	this.shooter = shooter;

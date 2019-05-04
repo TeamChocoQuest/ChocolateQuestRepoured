@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.client.resources.I18n;
@@ -61,7 +61,7 @@ public class ItemStaffGun extends ItemBase
 		
 		if(!worldIn.isRemote)
 		{
-			ProjectileBulletCannon ball = new ProjectileBulletCannon(worldIn, playerIn);
+			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, playerIn);
 			ball.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 3.5F, 0F);
 			worldIn.spawnEntity(ball);
 			stack.damageItem(1, playerIn);
