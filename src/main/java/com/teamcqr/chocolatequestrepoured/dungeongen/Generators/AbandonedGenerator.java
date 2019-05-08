@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
-
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 

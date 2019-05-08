@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
