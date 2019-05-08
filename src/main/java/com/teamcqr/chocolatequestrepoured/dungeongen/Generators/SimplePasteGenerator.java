@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;

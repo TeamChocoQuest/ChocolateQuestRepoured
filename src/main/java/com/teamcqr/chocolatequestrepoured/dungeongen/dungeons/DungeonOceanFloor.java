@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.dungeons;
 import java.io.File;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.OceanFloorGenerator;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -33,7 +33,6 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
 		File structure = pickStructure(random);
 		CQStructure dungeon = new CQStructure(structure);
 		
@@ -55,16 +54,4 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 		generator.generate(world, chunk, x, y, z);
 	}
 	
-	private File pickStructure(Random random) {
-		//Random rdm = new Random();
-		//rdm.setSeed(worldSeed);
-		File chosenStructure = this.structureFolderPath;
-		if(this.structureFolderPath.isDirectory()) {
-			chosenStructure = this.structureFolderPath.listFiles()[random.nextInt(this.structureFolderPath.listFiles().length)];
-		}
-		if(chosenStructure != null) {
-			return chosenStructure;
-		}
-		return null;
-	}
 }
