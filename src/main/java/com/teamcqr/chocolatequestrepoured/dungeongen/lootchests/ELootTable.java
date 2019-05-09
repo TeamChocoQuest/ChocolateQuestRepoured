@@ -1,5 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -140,6 +145,54 @@ public enum ELootTable {
         {
             throw new IllegalArgumentException(id + " is already a registered built-in loot table");
         }
+	}
+	
+	public void exchangeFileInJar(File newFile, boolean isCustomChest) {
+		if(newFile != null && newFile.exists() && newFile.isFile()) {
+			URI fileURI = null;
+			boolean fail = false;
+			try {
+				String suffix = (isCustomChest ? "custom/" + newFile.getName()/*.replaceAll(".json", "")*/ : newFile.getName()/*.replaceAll(".json", "")*/);
+				URL fileURL = getClass().getResource("/assets/cqrepoured/loot_tables/chest/" + suffix);
+				if(fileURL != null) {
+					fileURI = fileURL.toURI();
+				} else {
+					fail = true;
+					fileURI = null; 
+				}
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+				fail = true;
+				fileURI = null;
+			}
+			
+			if(!fail) {
+				File FileInJar = new File(fileURI);
+				System.out.println("Filename: " + FileInJar.getName() + "  At: " + FileInJar.getAbsolutePath());
+				//TODO: Manipulate file in jar
+			}
+		}
+	}
+	
+	public File getJSONFile() {
+		File file = null;
+		
+		File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
+		if(!jsonFileDir.exists()) {
+			jsonFileDir.mkdirs();
+		}
+		
+		file = new File(jsonFileDir.getAbsolutePath(), getName() + ".json");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Failed to create JSON file for chest " + getName() + "!");
+				e.printStackTrace();
+			}
+		}
+		
+		return file;
 	}
 
 }
