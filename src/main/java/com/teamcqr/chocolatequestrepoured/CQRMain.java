@@ -153,9 +153,12 @@ public class CQRMain
 				System.out.println("ELootTable instantiated successfully!");
 				LootTableLoader ltl = new LootTableLoader();
 				ltl.loadConfigs();
+				System.out.println("Trying to replace files in jar....");
+				ltl.exchangeJarFiles();
+				System.out.println("Replaced files in jar!");
 			}
 		} catch (Exception e) {
-			System.err.println("WARNING: Failed to instantiate the loot enum!!");
+			System.err.println("WARNING: Failed to instantiate the loot enum or to exchange the files!!");
 			e.printStackTrace();
 		}
 		
