@@ -2,9 +2,6 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -13,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 
 /**
@@ -68,17 +66,19 @@ public enum ELootTable {
 	private Block block;
 	private int ID;
 	private String name;
-	private ResourceLocation loottable;
+	private ResourceLocation resourceLocation;
+	private LootTable loottable;
 	
 	ELootTable(Block block, int id, String name, ResourceLocation loottable) {
 		this.block = block;
 		this.ID = id;
 		this.name = name;
-		this.loottable = loottable;
+		this.resourceLocation = loottable;
+		this.loottable = null;
 	}
 	
 	public ResourceLocation getLootTable() {
-		return this.loottable;
+		return this.resourceLocation;
 	}
 	public String getName() {
 		return this.name;
@@ -149,28 +149,7 @@ public enum ELootTable {
 	
 	public void exchangeFileInJar(File newFile, boolean isCustomChest) {
 		if(newFile != null && newFile.exists() && newFile.isFile()) {
-			URI fileURI = null;
-			boolean fail = false;
-			try {
-				String suffix = (isCustomChest ? "custom/" + newFile.getName()/*.replaceAll(".json", "")*/ : newFile.getName()/*.replaceAll(".json", "")*/);
-				URL fileURL = getClass().getResource("/assets/cqrepoured/loot_tables/chest/" + suffix);
-				if(fileURL != null) {
-					fileURI = fileURL.toURI();
-				} else {
-					fail = true;
-					fileURI = null; 
-				}
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-				fail = true;
-				fileURI = null;
-			}
-			
-			if(!fail) {
-				File FileInJar = new File(fileURI);
-				System.out.println("Filename: " + FileInJar.getName() + "  At: " + FileInJar.getAbsolutePath());
-				//TODO: Manipulate file in jar
-			}
+			System.err.println("NYI: We need to find a way to either override the files in the mod's jar OR to generate loot tables from JSON files and override them when they are loaded OR we create the loot table object with the json file and use it instead");
 		}
 	}
 	
@@ -193,6 +172,14 @@ public enum ELootTable {
 		}
 		
 		return file;
+	}
+
+	public LootTable getLoottable() {
+		return loottable;
+	}
+
+	public void setLoottable(LootTable loottable) {
+		this.loottable = loottable;
 	}
 
 }
