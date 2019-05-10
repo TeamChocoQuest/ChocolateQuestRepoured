@@ -16,16 +16,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
-import net.minecraft.item.Item;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryItem;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTable.Serializer;
-import net.minecraft.world.storage.loot.conditions.LootCondition;
-import net.minecraft.world.storage.loot.functions.LootFunction;
-import net.minecraft.world.storage.loot.functions.LootFunctionManager;
-
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -134,9 +124,10 @@ public class LootTableLoader {
 		JsonObject json = new JsonObject();
 		
 		JsonArray pools = new JsonArray();
+		int index = 1;
 		for(WeightedItemStack wes : items) {
 			JsonObject poolForItem = new JsonObject();
-			poolForItem.addProperty("name", "CQ_Loot_" + wes.getItemName().replaceAll("minecraft:", ""));
+			poolForItem.addProperty("name", "CQ_Lootpool_" +index);
 			poolForItem.addProperty("rolls", 1);
 			
 			JsonArray entries = new JsonArray();
@@ -146,6 +137,7 @@ public class LootTableLoader {
 			poolForItem.add("entries", entries);
 			
 			pools.add(poolForItem);
+			index++;
 		}
 		json.add("pools", pools);
 		
