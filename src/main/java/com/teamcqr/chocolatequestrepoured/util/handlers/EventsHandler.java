@@ -94,6 +94,8 @@ public class EventsHandler
 		if(ELootTable.valueOf(resLoc) != null) {
 			lootTable = LootTable.EMPTY_LOOT_TABLE;
 			//TODO: Exchange loot tables...
+			//LootTable.Serializer sterializer = new Serializer();
+			//LootTable newTable = sterializer.deserialize(JSON_ELEMENT, TYPE, JsonDeserializationContext);
 		}
 	}
 	

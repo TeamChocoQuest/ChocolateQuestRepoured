@@ -16,6 +16,16 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
+import net.minecraft.item.Item;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.LootTable.Serializer;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.LootFunctionManager;
+
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -78,6 +88,7 @@ public class LootTableLoader {
 					List<WeightedItemStack> items = getItemList(propFile);
 					if(!items.isEmpty()) {
 						JsonObject json = getJSON(items);
+
 						//DONE: modify json file of resourcelocation --> exchangeJarFiles() method, is done by ELootTable class, but not finished!!
 						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
 						if(!jsonFileDir.exists()) {
@@ -118,7 +129,7 @@ public class LootTableLoader {
 			}
 		}
 	}
-	
+
 	private JsonObject getJSON(List<WeightedItemStack> items) {
 		JsonObject json = new JsonObject();
 		
@@ -136,7 +147,6 @@ public class LootTableLoader {
 			
 			pools.add(poolForItem);
 		}
-		
 		json.add("pools", pools);
 		
 		return json;
