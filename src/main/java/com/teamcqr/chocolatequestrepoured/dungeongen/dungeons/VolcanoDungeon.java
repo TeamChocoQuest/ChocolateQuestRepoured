@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.dungeons;
 
 import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.VolcanoGenerator;
 
 /**

@@ -1,17 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
-import net.minecraft.block.BlockFire;
-import net.minecraft.init.Blocks;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.entity.EntityEvent;
+
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -48,16 +41,7 @@ public class ProtectionEventHandler {
     }
 
     @SubscribeEvent
-    public void handleEnterChunk(EntityEvent.EnteringChunk e) {
-        if(!e.getEntity().getEntityWorld().isRemote) {
-            ProtectionHandler.PROTECTION_HANDLER.handleChunkEnter(e);
-        }
-    }
-    
-    @SubscribeEvent
     public void livingSpawn(LivingSpawnEvent.CheckSpawn e) {
-        if(!e.getWorld().isRemote) {
-            ProtectionHandler.PROTECTION_HANDLER.checkSpawn(e);
-        }
+        ProtectionHandler.PROTECTION_HANDLER.checkSpawn(e);
     }
 }

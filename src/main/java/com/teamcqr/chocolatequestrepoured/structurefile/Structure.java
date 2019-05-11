@@ -9,13 +9,13 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
@@ -102,7 +102,7 @@ public class Structure extends Template {
 				//CQ-Spawners
 				//DONE: Wait for spawner block and tileentity
 				if(Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
-					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn);
+					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn, bi.tileentityData);
 					this.spawners.add(si);
 					removeEntries.add(bi);
 				}
@@ -235,8 +235,17 @@ public class Structure extends Template {
 				//DONE: Place spawners
 				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos().add(pos));
 				worldIn.setBlockState(spawnerPos, ModBlocks.SPAWNER.getDefaultState());
-				TileEntitySpawner tes = (TileEntitySpawner)worldIn.getTileEntity(spawnerPos);
-				tes.readFromNBT(si.getSpawnerData());
+				TileEntity te = worldIn.getTileEntity(spawnerPos);
+				
+				//Problem is here: it somehow fails to properly "set" the data to the tile entity .... >:( --> solved
+				NBTTagCompound tileData = si.getSpawnerData();
+				tileData.setInteger("x", spawnerPos.getX());
+				tileData.setInteger("y", spawnerPos.getY());
+				tileData.setInteger("z", spawnerPos.getZ());
+				
+				te.readFromNBT(tileData);
+				te.mirror(placementIn.getMirror());
+				te.rotate(placementIn.getRotation());
 			}
 		}
 		//Done :D

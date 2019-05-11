@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
-import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBulletCannon;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRend
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
@@ -23,7 +23,6 @@ import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -95,12 +94,12 @@ public class ClientProxy extends CommonProxy
 			}
 		});
 		
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileBulletCannon.class, new IRenderFactory<ProjectileBulletCannon>() 
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, new IRenderFactory<ProjectileCannonBall>() 
 		{
 			@Override
-			public Render<ProjectileBulletCannon> createRenderFor(RenderManager manager) 
+			public Render<ProjectileCannonBall> createRenderFor(RenderManager manager) 
 			{
-				return new RenderProjectileBulletCannon(manager);
+				return new RenderProjectileCannonBall(manager);
 			}
 		});
 		

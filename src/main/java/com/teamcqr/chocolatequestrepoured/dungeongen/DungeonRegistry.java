@@ -42,6 +42,7 @@ public class DungeonRegistry {
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
 	//TODO: Improve this method by splitting it into multiple smaller parts
+	//TODO: It seems that choosing a random dungeon does not work how it should, rewrite this section or correct it
 	public void loadDungeonFiles() {
 		System.out.println("Loading dungeon configs...");
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
