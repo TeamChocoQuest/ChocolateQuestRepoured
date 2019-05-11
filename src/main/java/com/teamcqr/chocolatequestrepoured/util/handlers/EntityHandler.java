@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
@@ -22,7 +22,7 @@ public class EntityHandler
 		registerModEntity(":projectile_earth_quake", ProjectileEarthQuake.class, "ProjectileEarthQuake", Reference.PROJECTILE_EARTH_QUAKE);
 		registerModEntity(":projectile_bullet", ProjectileBullet.class, "ProjectileBullet", Reference.PROJECTILE_BULLET);
 		registerModEntity(":projectile_spider_ball", ProjectileSpiderBall.class, "ProjectileSpiderBall", Reference.PROJECTILE_SPIDER_BALL);
-		registerModEntity(":projectile_bullet_cannon", ProjectileBulletCannon.class, "ProjectileBulletCannon", Reference.PROJECTILE_BULLET_CANNON);
+		registerModEntity(":projectile_cannon_ball", ProjectileCannonBall.class, "ProjectileCannonBall", Reference.PROJECTILE_CANNON_BALL);
 		registerModEntity("projectile_vampiric_spell", ProjectileVampiricSpell.class, "ProjectileVampiricSpell", Reference.PROJECTILE_VAMPIRIC_SPELL);
 		registerModEntity(":projectile_poison_spell", ProjectilePoisonSpell.class, "ProjectilePoisonSpell", Reference.PROJECTILE_POISON_SPELL);
 	}

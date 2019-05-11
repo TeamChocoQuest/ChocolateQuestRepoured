@@ -23,6 +23,8 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
  */
 public class LootTableLoader {
 	
+	private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
+	
 	//These are all valid file names for the chests!
 	String[] validFileNames = {"treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13", "custom_14"}; 
 	
@@ -48,6 +50,15 @@ public class LootTableLoader {
 		}
 	}
 	
+	public void exchangeJarFiles() {
+		for(ELootTable table : ELootTable.values()) {
+			if(table.getID() < 4 || table.getID() > 17) {
+				File jsonFile = table.getJSONFile();
+				table.exchangeFileInJar(jsonFile, table.getID() > 17);
+			}
+		}
+	}
+	
 	private void createJSONFile(File config, ELootTable table) {
 		System.out.println("Checking existance of file " +config.getName() + "..."); 
 		if(config != null && config.exists()) {
@@ -67,8 +78,9 @@ public class LootTableLoader {
 					List<WeightedItemStack> items = getItemList(propFile);
 					if(!items.isEmpty()) {
 						JsonObject json = getJSON(items);
-						//TODO: modify json file of resourcelocation
-						File jsonFileDir = new File(config.getParentFile().getAbsolutePath() + "/.generatedJSON/");
+
+						//DONE: modify json file of resourcelocation --> exchangeJarFiles() method, is done by ELootTable class, but not finished!!
+						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
 						if(!jsonFileDir.exists()) {
 							jsonFileDir.mkdirs();
 						}
@@ -107,43 +119,32 @@ public class LootTableLoader {
 			}
 		}
 	}
-	
+
 	private JsonObject getJSON(List<WeightedItemStack> items) {
 		JsonObject json = new JsonObject();
 		
 		JsonArray pools = new JsonArray();
-		JsonObject poolOBJ = new JsonObject();
-		
-		JsonObject rollEntry = new JsonObject();
-		//TODO: add config option for min and max rolls / chest items
-		rollEntry.addProperty("min", 6);
-		rollEntry.addProperty("max", 12);
-		
-		poolOBJ.add("rolls", rollEntry);
-		
-		JsonArray entries = createEntryArray(items);
-		
-		poolOBJ.add("entries", entries);
-		
-		pools.add(poolOBJ);
-		
+		int index = 1;
+		for(WeightedItemStack wes : items) {
+			JsonObject poolForItem = new JsonObject();
+			poolForItem.addProperty("name", "CQ_Lootpool_" +index);
+			poolForItem.addProperty("rolls", 1);
+			
+			JsonArray entries = new JsonArray();
+			entries.add(wes.toJSON());
+			entries.add(getAirEntry(100-wes.getWeight()).toJSON());
+			
+			poolForItem.add("entries", entries);
+			
+			pools.add(poolForItem);
+			index++;
+		}
 		json.add("pools", pools);
 		
 		return json;
 	}
-	
-	private JsonArray createEntryArray(List<WeightedItemStack> items) {
-		JsonArray entryARR = new JsonArray();
-		
-		for(WeightedItemStack item : items) {
-			if(item != null) {
-				JsonObject itemJSON = item.toJSON();
-				if(itemJSON != null) {
-					entryARR.add(itemJSON);
-				}
-			}
-		}
-		return entryARR;
+	private WeightedItemStack getAirEntry(int chance) {
+		return airEntryBase.setChance(chance);
 	}
 	
 	private List<WeightedItemStack> getItemList(Properties propFile) {
@@ -200,12 +201,13 @@ public class LootTableLoader {
 	}
 	
 	private boolean isFileNameValid(File file) {
-		return isNameValid(file.getName());
+		String name = file.getName();
+		name = name.replaceAll(".properties", "");
+		name = name.replaceAll(".prop", "");
+		name = name.toLowerCase();
+		return isNameValid(name);
 	}
 	private boolean isNameValid(String fileName) {
-		fileName = fileName.replaceAll(".properties", "");
-		fileName = fileName.replaceAll(".prop", "");
-		fileName = fileName.toLowerCase();
 		for(int i = 0; i < validFileNames.length; i++) {
 			if(validFileNames[i].equalsIgnoreCase(fileName)) {
 				return true;
@@ -215,10 +217,13 @@ public class LootTableLoader {
 	}
 	
 	private ELootTable getAssignedLootTable(String fileName) {
+		fileName = fileName.replaceAll(".properties", "");
+		fileName = fileName.replaceAll(".prop", "");
+		fileName = fileName.toLowerCase();
+		
 		if(isNameValid(fileName)) {
+			System.out.println("Name is valid, getting enum...");
 			switch(fileName) {
-			default:
-				break;
 			case "treasure_chest":
 				return ELootTable.CQ_TREASURE;
 			case "material_chest":
@@ -241,7 +246,7 @@ public class LootTableLoader {
 				return ELootTable.CQ_CUSTOM_6;
 			case "custom_7":
 				return ELootTable.CQ_CUSTOM_7;
-			case "custom 8":
+			case "custom_8":
 				return ELootTable.CQ_CUSTOM_8;
 			case "custom_9":
 				return ELootTable.CQ_CUSTOM_9;
@@ -255,8 +260,11 @@ public class LootTableLoader {
 				return ELootTable.CQ_CUSTOM_13;
 			case "custom_14":
 				return ELootTable.CQ_CUSTOM_14;
+			default:
+				break;
 			}
 		}
+		//System.out.println("File does not exist");
 		return null;
 	}
 	

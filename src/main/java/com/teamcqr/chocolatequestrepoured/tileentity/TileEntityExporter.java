@@ -4,11 +4,10 @@ import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityExporter extends TileEntity
+public class TileEntityExporter extends TileEntitySyncClient
 {
 	public int startX = 0;
 	public int startY = 0;

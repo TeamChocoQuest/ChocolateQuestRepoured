@@ -11,7 +11,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.VillageGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;

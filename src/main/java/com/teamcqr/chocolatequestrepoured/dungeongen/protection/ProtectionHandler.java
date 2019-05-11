@@ -1,29 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
-import net.minecraft.entity.player.EntityPlayer;
+
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ChunkCoordComparator;
-import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
-import net.minecraftforge.event.world.ChunkWatchEvent;
 
 /**
  * Copyright (c) 29.04.2019
@@ -114,16 +102,6 @@ public class ProtectionHandler {
             if(!e.getChunk().isLoaded()) {
                 regions.remove(e.getChunk().getPos());
                 System.out.println("unload");
-            }
-        }
-    }
-
-    private ChunkPos enter;
-
-    public void handleChunkEnter(EntityEvent.EnteringChunk e) {
-        if(e.getEntity() instanceof EntityPlayer) {
-            if(regions.containsKey(enter = new ChunkPos(e.getNewChunkX(),e.getNewChunkZ()))) {
-                MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(regions.get(enter),enter,(EntityPlayer)e.getEntity()));
             }
         }
     }

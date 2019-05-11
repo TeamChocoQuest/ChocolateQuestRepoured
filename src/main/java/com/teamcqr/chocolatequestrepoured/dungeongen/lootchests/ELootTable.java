@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -8,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 
 /**
@@ -63,17 +66,19 @@ public enum ELootTable {
 	private Block block;
 	private int ID;
 	private String name;
-	private ResourceLocation loottable;
+	private ResourceLocation resourceLocation;
+	private LootTable loottable;
 	
 	ELootTable(Block block, int id, String name, ResourceLocation loottable) {
 		this.block = block;
 		this.ID = id;
 		this.name = name;
-		this.loottable = loottable;
+		this.resourceLocation = loottable;
+		this.loottable = null;
 	}
 	
 	public ResourceLocation getLootTable() {
-		return this.loottable;
+		return this.resourceLocation;
 	}
 	public String getName() {
 		return this.name;
@@ -140,6 +145,41 @@ public enum ELootTable {
         {
             throw new IllegalArgumentException(id + " is already a registered built-in loot table");
         }
+	}
+	
+	public void exchangeFileInJar(File newFile, boolean isCustomChest) {
+		if(newFile != null && newFile.exists() && newFile.isFile()) {
+			System.err.println("NYI: We need to find a way to either override the files in the mod's jar OR to generate loot tables from JSON files and override them when they are loaded OR we create the loot table object with the json file and use it instead");
+		}
+	}
+	
+	public File getJSONFile() {
+		File file = null;
+		
+		File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
+		if(!jsonFileDir.exists()) {
+			jsonFileDir.mkdirs();
+		}
+		
+		file = new File(jsonFileDir.getAbsolutePath(), getName() + ".json");
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				System.err.println("Failed to create JSON file for chest " + getName() + "!");
+				e.printStackTrace();
+			}
+		}
+		
+		return file;
+	}
+
+	public LootTable getLoottable() {
+		return loottable;
+	}
+
+	public void setLoottable(LootTable loottable) {
+		this.loottable = loottable;
 	}
 
 }

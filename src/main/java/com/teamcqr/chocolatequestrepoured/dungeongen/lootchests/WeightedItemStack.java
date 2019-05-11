@@ -77,5 +77,19 @@ public class WeightedItemStack {
 		
 		return jsonObj;
 	}
+	public int getWeight() {
+		return this.weight;
+	}
+	
+	public WeightedItemStack setChance(int chance) {
+		if(chance != this.weight) {
+			this.weight = Math.abs(chance);
+		}
+		return this;
+	}
+	
+	public String getItemName() {
+		return this.itemName;
+	}
 
 }

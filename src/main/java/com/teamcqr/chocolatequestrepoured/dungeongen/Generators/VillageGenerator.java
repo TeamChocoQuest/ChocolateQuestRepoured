@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.dungeongen.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
@@ -160,9 +159,9 @@ public class VillageGenerator implements IDungeonGenerator{
 	
 	//Functionality: Things and methods for generating the paths / streets...
 	public void addStructure(File f) {
-		if(!chosenStructures.contains(f)) {
+		//if(!chosenStructures.contains(f)) {
 			chosenStructures.add(f);
-		}
+		//}
 	}
 	public void setCenterStructure(File f) {
 		this.centerStructure = f;

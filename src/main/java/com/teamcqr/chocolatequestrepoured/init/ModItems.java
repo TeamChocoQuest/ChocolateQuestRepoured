@@ -22,16 +22,18 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
-import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBulletCannon;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffPoison;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffSpider;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffThunder;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffVampiric;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffWind;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerBase;
@@ -109,12 +111,13 @@ public class ModItems
 	public static final Item GREAT_SWORD_MONKING = new ItemGreatSwordBase("great_sword_monking", TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F);
 	
 	//Staves
-	public static final Item STAFF = new ItemBase("staff").setMaxStackSize(1);
+	public static final Item STAFF = new ItemStaff("staff");
 	public static final Item STAFF_FIRE = new ItemStaffFire("staff_fire");		
 	public static final Item STAFF_VAMPIRIC = new ItemStaffVampiric("staff_vampiric");	//#TODO DESCRIPTION
 	public static final Item STAFF_WIND = new ItemStaffWind("staff_wind");				//#TODO	DESCRIPTION
 	public static final Item STAFF_POISON = new ItemStaffPoison("staff_poison"); 		//#TODO	DESCRIPTION
 	public static final Item STAFF_HEALING = new ItemStaffHealing("staff_healing");
+	public static final Item STAFF_THUNDER = new ItemStaffThunder("staff_thunder");
 	public static final Item STAFF_SPIDER = new ItemStaffSpider("staff_spider");
 	public static final Item STAFF_GUN = new ItemStaffGun("staff_gun");				//#TODO TEXTURES
 	
@@ -129,7 +132,7 @@ public class ModItems
 	public static final Item BULLET_GOLD = new ItemBullet("bullet_gold");
 	public static final Item BULLET_DIAMOND = new ItemBullet("bullet_diamond");
 	public static final Item BULLET_FIRE = new ItemBullet("bullet_fire");
-	public static final Item BULLET_CANNON = new ItemBulletCannon("bullet_cannon");
+	public static final Item CANNON_BALL = new ItemCannonBall("cannon_ball");
 	public static final Item FLAMETHROWER = new ItemFlamethrower("flamethrower");		//#TODO TEXTURES
 	
 	//Single Armor Items
