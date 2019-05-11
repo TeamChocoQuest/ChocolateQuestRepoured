@@ -4,11 +4,15 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -108,5 +112,15 @@ public class ProtectionHandler {
 
     public void addExistingRegion(ChunkPos pos,ProtectedRegion region) {
         existingRegions.put(pos,region);
+    }
+
+    private ChunkPos enter;
+
+    public void handleChunkEnter(EntityEvent.EnteringChunk e) {
+        if(e.getEntity() instanceof EntityPlayer) {
+            if(regions.containsKey(enter = new ChunkPos(e.getNewChunkX(),e.getNewChunkZ()))) {
+                MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(regions.get(enter),enter,(EntityPlayer)e.getEntity()));
+            }
+        }
     }
 }
