@@ -1,10 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.API.events;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectedRegion;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
