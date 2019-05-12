@@ -36,7 +36,7 @@ public class Perlin3D {
 	}
 
 	private float cosineInterpolate(float a, float b, float x) {
-		float f = (float) ((1.0D - Math.cos(x * 3.141592653589793D)) * 0.5D);
+		float f = (float) ((1.0D - Math.cos(x * Math.PI)) * 0.5D);
 		return a * (1.0F - f) + b * f;
 	}
 

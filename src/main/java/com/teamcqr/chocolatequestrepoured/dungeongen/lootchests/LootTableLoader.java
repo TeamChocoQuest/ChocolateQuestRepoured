@@ -264,7 +264,6 @@ public class LootTableLoader {
 				break;
 			}
 		}
-		//System.out.println("File does not exist");
 		return null;
 	}
 	
