@@ -22,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
@@ -34,9 +35,9 @@ import net.minecraftforge.common.BiomeDictionary;
  */
 public class DungeonRegistry {
 	
-	private int dungeonSpawnChance = 100;
-	private int DungeonDistance = 20;
-	private int DungeonSpawnDistance = 5;
+	//private int dungeonSpawnChance = 100;
+	//private int DungeonDistance = 20;
+	//private int DungeonSpawnDistance = 5;
 	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
@@ -201,9 +202,9 @@ public class DungeonRegistry {
 		return new ArrayList<DungeonBase>();
 	}
 	
-	public int getDungeonSpawnChance() {
+	/*public int getDungeonSpawnChance() {
 		return dungeonSpawnChance;
-	}
+	}*/
 	
 	public void addBiomeEntryToMap(Biome b) {
 		if(biomeDungeonMap != null) {
@@ -214,10 +215,10 @@ public class DungeonRegistry {
 	}
 	
 	public int getDungeonDistance() {
-		return DungeonDistance;
+		return Reference.CONFIG_HELPER.getDungeonDistance();
 	}
 	public int getDungeonSpawnDistance() {
-		return DungeonSpawnDistance;
+		return Reference.CONFIG_HELPER.getDungeonSpawnDistance();
 	}
 	
 	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {

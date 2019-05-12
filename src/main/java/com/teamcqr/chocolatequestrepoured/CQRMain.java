@@ -37,7 +37,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 public class CQRMain
 {
 	
-	public static boolean generateInFlat = false;
+	//public static boolean generateInFlat = false;
 	
 	public static File CQ_CONFIG_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;

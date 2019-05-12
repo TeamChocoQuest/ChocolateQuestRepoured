@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,8 +32,21 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			IChunkProvider chunkProvider) {
 		// Check if Dugneon "can" spawn (decided via a chance)
 		// System.out.println("Trying to generate dungeon at ChunkX=" + chunkX + "
-		// ChunkZ=" + chunkZ + "...");
-		if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
+		// ChunkZ=" + chunkZ + "..."); 
+		
+		boolean flatPass = true;
+		if(world.getWorldType().equals(WorldType.FLAT) && !Reference.CONFIG_HELPER.generateDungeonsInFlat()) {
+			flatPass = false;
+		}
+		
+		if(Reference.CONFIG_HELPER.buildWall() && chunkZ < 0 && Math.abs(chunkZ) >= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) +6)) {
+			//BUILD THE FUCKING WALL
+			//I left some space between the wall so that no dungeon can "clip" inside it :D
+			if(Math.abs(chunkZ) >= Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
+				
+			}
+		
+		} else if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
 				&& DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world).size() > 0) {
 			System.out.println("Found location specific Dungeons for ChunkX=" + chunkX + " ChunkZ=" + chunkZ + "!");
 			for (DungeonBase dungeon : DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world)) {
@@ -45,7 +59,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 					}
 				}
 
-				if (dimensionIsOK) {
+				if (dimensionIsOK && flatPass) {
 					Random rdm = new Random();
 					rdm.setSeed(getSeed(world, chunkX, chunkZ));
 					dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world,
@@ -53,7 +67,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				}
 
 			}
-		} else if (DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(), world.getSeed())) {
+		} else /*if (DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(), world.getSeed()))*/ {
 			// Now check if any dungeons exist for this biome....
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
 			//System.out.println("Searching dungeons for biome " + biome.getBiomeName() + "...");
@@ -73,7 +87,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				// System.out.println("Chunks are far away enough from last dungeon and from
 				// spawn!");
 				Random rdm = new Random();
-				rdm.setSeed(world.getSeed());
+				rdm.setSeed(getSeed(world, chunkX, chunkZ));
 
 				if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world)
 						|| this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
@@ -89,11 +103,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 								dimensionIsOK = true;
 								break;
 							}
-						}
-						
-						boolean flatPass = true;
-						if(world.getWorldType().equals(WorldType.FLAT) && !CQRMain.generateInFlat) {
-							flatPass = false;
 						}
 						
 						if (dimensionIsOK && flatPass) {
