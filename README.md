@@ -8,4 +8,4 @@ To use, please head to our Jenkins and download the latest stable build
 
 [VERY WIP Wiki](https://cq-repoured.wikia.com/wiki/Chocolate_Quest_Re-poured_Wiki)
 
-[Jenkins](http://jenkins.thechocolatequest.gq:8080/job/TheChocolateQuest)
+[Jenkins](http://jenkins.thechocolatequest.gq:8080/job/The%20Chocolate%20Quest/)
