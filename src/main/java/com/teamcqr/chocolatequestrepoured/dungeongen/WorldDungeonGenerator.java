@@ -93,12 +93,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						|| this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
 					//System.out.println("Location is fine! Choosing dungeon...");
 					int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
-					DungeonBase chosenStructure = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
+					DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
 					//System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "! Calculating chance...");
 
-					if (DungeonGenUtils.PercentageRandom(chosenStructure.getSpawnChance(), world.getSeed())) {
+					if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), world.getSeed())) {
 						boolean dimensionIsOK = false;
-						for (int dimID : chosenStructure.getAllowedDimensions()) {
+						for (int dimID : chosenDungeon.getAllowedDimensions()) {
 							if (world.provider.getDimension() == dimID) {
 								dimensionIsOK = true;
 								break;
@@ -106,12 +106,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						}
 						
 						if (dimensionIsOK && flatPass) {
-							System.out.println("Generating dungeon " + chosenStructure.getDungeonName() + " at chunkX="
+							System.out.println("Generating dungeon " + chosenDungeon.getDungeonName() + " at chunkX="
 									+ chunkX + "  chunkZ=" + chunkZ);
 							// DONE: Choose a structure and build it --> Dungeon handles it self!
 							Random rdmGen = new Random();
 							rdm.setSeed(getSeed(world, chunkX, chunkZ));
-							chosenStructure.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world,
+							chosenDungeon.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world,
 									world.getChunkFromChunkCoords(chunkX, chunkZ), rdmGen);
 							// TODO: Check if dungeon is unique or every structure should generate once and
 							// then check if dungeon is already present

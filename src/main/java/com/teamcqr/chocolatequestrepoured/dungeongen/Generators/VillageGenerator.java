@@ -128,6 +128,9 @@ public class VillageGenerator implements IDungeonGenerator{
 			PlacementSettings plcmnt = new PlacementSettings();
 			plcmnt.setMirror(Mirror.NONE);
 			plcmnt.setRotation(Rotation.NONE);
+			if(this.dungeon.rotateBuildingsRandomly()) {
+				plcmnt.setRotation(getRandomRotation());
+			}
 			plcmnt.setIntegrity(1.0f);
 			
 			int index = 1;
@@ -251,6 +254,22 @@ public class VillageGenerator implements IDungeonGenerator{
 		while(Block.isEqualTo(this.worldIn.getBlockState(tmpPos).getBlock(), Blocks.AIR)) {
 			this.worldIn.setBlockState(tmpPos, this.dungeon.getPathMaterial().getDefaultState());
 			tmpPos = tmpPos.down();
+		}
+	}
+	
+	private Rotation getRandomRotation() {
+		int index = new Random().nextInt(4);
+		switch(index) {
+		case 0:
+			return Rotation.CLOCKWISE_90;
+		case 1:
+			return Rotation.CLOCKWISE_180;
+		case 2:
+			return Rotation.COUNTERCLOCKWISE_90;
+		case 4:
+			return Rotation.NONE;
+		default:
+			return Rotation.NONE;
 		}
 	}
 
