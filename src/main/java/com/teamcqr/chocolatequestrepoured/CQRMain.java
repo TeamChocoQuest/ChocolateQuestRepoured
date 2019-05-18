@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventHandler;
+import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHandler;
@@ -146,6 +147,9 @@ public class CQRMain
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
+		if(Reference.CONFIG_HELPER.buildWall()) {
+			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 100);
+		}
 		//Instantiating the ELootTable class
 		try {
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getLootTable();
