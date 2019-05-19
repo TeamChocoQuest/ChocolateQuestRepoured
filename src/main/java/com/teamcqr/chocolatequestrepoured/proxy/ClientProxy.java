@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.render.mob.RenderCQRZombie;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
@@ -10,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
@@ -67,12 +69,21 @@ public class ClientProxy extends CommonProxy
 	public void registerRenderers() 
 	{
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, new IRenderFactory<ProjectileEarthQuake>() 
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, new IRenderFactory<ProjectileEarthQuake>()
 		{
 			@Override
 			public Render<ProjectileEarthQuake> createRenderFor(RenderManager manager) 
 			{
 				return new RenderProjectileEarthQuake(manager);
+			}
+		});
+
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, new IRenderFactory<EntityCQRZombie>()
+		{
+			@Override
+			public Render<EntityCQRZombie> createRenderFor(RenderManager manager)
+			{
+				return new RenderCQRZombie(manager);
 			}
 		});
 		
