@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
@@ -25,10 +26,18 @@ public class EntityHandler
 		registerModEntity(":projectile_cannon_ball", ProjectileCannonBall.class, "ProjectileCannonBall", Reference.PROJECTILE_CANNON_BALL);
 		registerModEntity("projectile_vampiric_spell", ProjectileVampiricSpell.class, "ProjectileVampiricSpell", Reference.PROJECTILE_VAMPIRIC_SPELL);
 		registerModEntity(":projectile_poison_spell", ProjectilePoisonSpell.class, "ProjectilePoisonSpell", Reference.PROJECTILE_POISON_SPELL);
+
+		registerModEntity(":mob_cqrzombie", EntityCQRZombie.class, "EntityCQRZombie", Reference.ENTITY_CQRZOMBIE, 3289650, 000000);
+
 	}
 	
 	public static void registerModEntity(String path, Class<? extends Entity> entityClass, String entityName, int id)
 	{
 		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + path), entityClass, entityName, id, CQRMain.INSTANCE, 64, 1, true);
+	}
+
+	public static void registerModEntity(String path, Class<? extends Entity> entityClass, String entityName, int id, int color1, int color2)
+	{
+		EntityRegistry.registerModEntity(new ResourceLocation(Reference.MODID + path), entityClass, entityName, id, CQRMain.INSTANCE, 64, 1, true, color1, color2);
 	}
 }

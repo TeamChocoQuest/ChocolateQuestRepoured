@@ -26,7 +26,9 @@ public class Reference
 	public static final int PROJECTILE_CANNON_BALL = 69;
 	public static final int PROJECTILE_VAMPIRIC_SPELL = 70;
 	public static final int PROJECTILE_POISON_SPELL = 71;
-	
+
+	public static final int ENTITY_CQRZOMBIE = 120;
+
 	public static final double SPAWNER_RANGE = 25.0D;
 	
 	public static final ConfigFileHelper CONFIG_HELPER = new ConfigFileHelper();

@@ -290,3 +290,6 @@ description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
+
+// Mobs
+entity.EntityCQRZombie.name=Zombie(CQR)
