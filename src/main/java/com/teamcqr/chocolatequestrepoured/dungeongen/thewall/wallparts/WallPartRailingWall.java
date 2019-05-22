@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-class WallPartRailingWall implements IWallPart {
+public class WallPartRailingWall implements IWallPart {
 
 	public WallPartRailingWall() {
 		// TODO Auto-generated constructor stub

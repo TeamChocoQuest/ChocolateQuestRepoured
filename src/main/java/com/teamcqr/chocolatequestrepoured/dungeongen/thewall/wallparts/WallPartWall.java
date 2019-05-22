@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-class WallPartWall implements IWallPart {
+public class WallPartWall implements IWallPart {
 
 	public WallPartWall() {
 		// I dont think this needs a constructor
