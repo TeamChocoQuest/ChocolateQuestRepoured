@@ -5,9 +5,9 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
-class WallPartRailing implements IWallPart {
+public class WallPartRailingTower implements IWallPart {
 
-	public WallPartRailing() {
+	public WallPartRailingTower() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -21,5 +21,4 @@ class WallPartRailing implements IWallPart {
 		// TODO Auto-generated method stub
 		
 	}
-
 }
