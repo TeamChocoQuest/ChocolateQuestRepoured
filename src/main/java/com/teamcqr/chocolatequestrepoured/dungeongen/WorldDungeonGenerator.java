@@ -38,8 +38,10 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			flatPass = false;
 		}
 
+		//TODO: Adjust this check so, that dungeons before and beyond the wall are generated!!!
 		if (!(Reference.CONFIG_HELPER.buildWall() && chunkZ < 0
-				&& Math.abs(chunkZ) >= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) + 6))) {
+				&& Math.abs(chunkZ) >= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) + 6)) ||
+				chunkZ <= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) - 6)) {
 			// BUILD THE FUCKING WALL
 			// WALL GENERATION IS IN AN OWN GENERATOR -> WallBuilder
 			// I left some space between the wall so that no dungeon can "clip" inside it :D
