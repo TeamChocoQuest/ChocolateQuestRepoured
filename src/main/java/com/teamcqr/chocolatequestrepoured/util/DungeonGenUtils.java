@@ -58,8 +58,6 @@ public class DungeonGenUtils {
 	
 	public static int getIntBetweenBorders(int min, int max, Random rdm) {
 		if(min != max && rdm != null) {
-			//Random rdm = new Random();
-			//rdm.setSeed(seed);
 			max += 1;
 			int ret = min + rdm.nextInt(max - min);
 			return ret;
@@ -101,7 +99,7 @@ public class DungeonGenUtils {
 	}
 	//IMPORTANT: pos is a CHUNKPOS!!!
 	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world) {
-		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
+		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap() != null && CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
 			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
 				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
 				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);

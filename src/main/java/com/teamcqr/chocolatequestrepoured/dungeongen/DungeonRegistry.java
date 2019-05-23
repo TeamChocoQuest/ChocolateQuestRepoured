@@ -35,15 +35,11 @@ import net.minecraftforge.common.BiomeDictionary;
  */
 public class DungeonRegistry {
 	
-	//private int dungeonSpawnChance = 100;
-	//private int DungeonDistance = 20;
-	//private int DungeonSpawnDistance = 5;
-	
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
 	//TODO: Improve this method by splitting it into multiple smaller parts
-	//TODO: It seems that choosing a random dungeon does not work how it should, rewrite this section or correct it
+	//DONE: It seems that choosing a random dungeon does not work how it should, rewrite this section or correct it
 	public void loadDungeonFiles() {
 		System.out.println("Loading dungeon configs...");
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
@@ -201,10 +197,6 @@ public class DungeonRegistry {
 		}
 		return new ArrayList<DungeonBase>();
 	}
-	
-	/*public int getDungeonSpawnChance() {
-		return dungeonSpawnChance;
-	}*/
 	
 	public void addBiomeEntryToMap(Biome b) {
 		if(biomeDungeonMap != null) {
