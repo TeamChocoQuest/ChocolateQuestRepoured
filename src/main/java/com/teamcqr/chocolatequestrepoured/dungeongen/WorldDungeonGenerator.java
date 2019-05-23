@@ -94,7 +94,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						// System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "!
 						// Calculating chance...");
 
-						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), world.getSeed())) {
+						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), getSeed(world, chunkX, chunkZ))) {
 							boolean dimensionIsOK = false;
 							for (int dimID : chosenDungeon.getAllowedDimensions()) {
 								if (world.provider.getDimension() == dimID) {
