@@ -126,6 +126,10 @@ public class DungeonGenUtils {
 			}
 		}
 		
+		if(ret.isEmpty()) {
+			return null;
+		}
+		
 		return ret;
 	}
 	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {

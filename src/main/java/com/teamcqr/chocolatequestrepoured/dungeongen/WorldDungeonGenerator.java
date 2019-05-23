@@ -38,21 +38,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			flatPass = false;
 		}
 
-		//TODO: Adjust this check so, that dungeons before and beyond the wall are generated!!!
-		if (!(Reference.CONFIG_HELPER.buildWall() && chunkZ < 0
-				&& Math.abs(chunkZ) >= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) + 6)) ||
-				chunkZ <= (Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance()) - 6)) {
+		//DONE: Adjust this check so, that dungeons before and beyond the wall are generated!!!
+		if (notInWallRange(chunkX, chunkZ, world)) {
 			// BUILD THE FUCKING WALL
 			// WALL GENERATION IS IN AN OWN GENERATOR -> WallBuilder
 			// I left some space between the wall so that no dungeon can "clip" inside it :D
-			/*
-			 * if(Math.abs(chunkZ) >=
-			 * Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
-			 * 
-			 * }
-			 * 
-			 * } else
-			 */if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
+			boolean canBuildRandomDungeons = true;
+			 if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
 					&& DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world).size() > 0) {
 				System.out.println("Found location specific Dungeons for ChunkX=" + chunkX + " ChunkZ=" + chunkZ + "!");
 				for (DungeonBase dungeon : DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world)) {
@@ -70,14 +62,12 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						rdm.setSeed(getSeed(world, chunkX, chunkZ));
 						dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world,
 								world.getChunkFromChunkCoords(chunkX, chunkZ), rdm);
+						canBuildRandomDungeons = false;
 					}
 
 				}
-			} else /*
-					 * if
-					 * (DungeonGenUtils.PercentageRandom(this.dungeonRegistry.getDungeonSpawnChance(
-					 * ), world.getSeed()))
-					 */ {
+			} 
+			 if(canBuildRandomDungeons) {
 				// Now check if any dungeons exist for this biome....
 				Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
 				// System.out.println("Searching dungeons for biome " + biome.getBiomeName() +
@@ -86,13 +76,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				if (this.dungeonRegistry.getDungeonsForBiome(biome).isEmpty()) {
 					// System.out.println("No dungeons for biome " + biome.getBiomeName() + "!");
 					return;
-				} else {
-					// System.out.println("Found " +
-					// this.dungeonRegistry.getDungeonsForBiome(biome).size() + "dungeons for biome"
-					// + biome.getBiomeName() + "!");
-					// System.out.println("Checking location...");
 				}
-
 				// Now check if the dungeon is far away enough from the last one
 				if ((chunkX % this.dungeonRegistry.getDungeonDistance() == 0
 						&& chunkZ % this.dungeonRegistry.getDungeonDistance() == 0)
@@ -135,6 +119,33 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				}
 			}
 		}
+	}
+
+	//A method to check if a dungeon is in an area where it can spawn to not "clip" into the wall
+	private boolean notInWallRange(int chunkX, int chunkZ, World world) {
+		//If the wall is even enabled -> continue
+		if(!Reference.CONFIG_HELPER.buildWall()) {
+			return true;
+		}
+		//Wall is enabled -> check farther
+		//Now check if the world is the overworld...
+		if(world.provider.getDimension() != 0) {
+			return true;
+		}
+		//The world is the overworld....
+		//Now check the coordinates...
+		if(chunkZ >= 0) {
+			return true;
+		}
+		//z is < 0 --> north
+		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +6))) {
+			return true;
+		}
+		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -6))) {
+			return true;
+		}
+		//It is in the region of the wall
+		return false;
 	}
 
 	public static long getSeed(World world, int chunkX, int chunkZ) {
