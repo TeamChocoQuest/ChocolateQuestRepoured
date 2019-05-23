@@ -5,6 +5,10 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
+ * https://github.com/DerToaster98
+ */
 public class WallPartRailingWall implements IWallPart {
 
 	public WallPartRailingWall() {

@@ -4,6 +4,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
+ * https://github.com/DerToaster98
+ */
 public interface IWallPart {
 	
 	int getTopY();
