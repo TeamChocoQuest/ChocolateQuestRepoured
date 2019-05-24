@@ -27,27 +27,31 @@ public class WorldWallGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		//Check if it is the wall region
-		if(isWallRegion(chunkX, chunkZ, world)) {
+		// Check if it is the wall region
+		if (isWallRegion(chunkX, chunkZ, world)) {
+		}
+		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
+			//System.out.println("Constructing wall part...");
 			IWallPart wallPart = null;
 			IWallPart railingPart = null;
-			//GENERATE THE WALL
-			if(chunkX % Reference.CONFIG_HELPER.getWallTowerDistance() == 0) {
-				//Build tower
+			// GENERATE THE WALL
+			if (chunkX % Reference.CONFIG_HELPER.getWallTowerDistance() == 0) {
+				// Build tower
 				wallPart = new WallPartTower();
 				railingPart = new WallPartRailingTower();
 			} else {
-				//Build wall
+				// Build wall
 				wallPart = new WallPartWall();
 				railingPart = new WallPartRailingWall();
 			}
-			if(wallPart != null) {
+			if (wallPart != null) {
 				wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
 			}
-			if(railingPart != null) {
+			if (railingPart != null) {
 				railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
 			}
 		}
+
 	}
 	
 	private boolean isWallRegion(int chunkX, int chunkZ, World world) {
@@ -67,11 +71,11 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		//z is < 0 --> north
 		//Check if the coords are farther south than the wall
-		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +6))) {
+		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -8))) {
 			return false;
 		}
 		//Check if the coords are farther north than the wall
-		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -6))) {
+		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +8))) {
 			return false;
 		}
 		//It is in the region of the wall

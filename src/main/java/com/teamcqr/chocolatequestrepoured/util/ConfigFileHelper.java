@@ -10,7 +10,7 @@ public class ConfigFileHelper {
 	private int wallTopY = 140;
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
 	private boolean dungeonsInFlat = false;
-	private boolean enableWallInTheNorth = false;
+	private boolean enableWallInTheNorth = true;
 	
 	public ConfigFileHelper() {
 		

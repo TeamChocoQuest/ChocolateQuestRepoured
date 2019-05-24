@@ -103,7 +103,7 @@ public class DungeonGenUtils {
 			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
 				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
 				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);
-				if(!(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) >= CQRMain.dungeonRegistry.getDungeonDistance())) {
+				if(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < CQRMain.dungeonRegistry.getDungeonDistance()) {
 					return false;
 				}
 			}

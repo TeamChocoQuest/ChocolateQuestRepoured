@@ -148,7 +148,7 @@ public class CQRMain
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
 		if(Reference.CONFIG_HELPER.buildWall()) {
-			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 100);
+			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 		//Instantiating the ELootTable class
 		try {
