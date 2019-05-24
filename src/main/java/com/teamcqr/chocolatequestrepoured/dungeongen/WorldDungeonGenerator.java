@@ -134,14 +134,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 		//The world is the overworld....
 		//Now check the coordinates...
-		if(chunkZ >= 0) {
+		if(chunkZ > 0) {
 			return true;
 		}
 		//z is < 0 --> north
-		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +6))) {
+		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -12))) {
 			return true;
 		}
-		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -6))) {
+		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +12))) {
 			return true;
 		}
 		//It is in the region of the wall

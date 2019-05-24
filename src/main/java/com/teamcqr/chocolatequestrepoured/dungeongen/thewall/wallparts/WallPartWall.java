@@ -38,10 +38,12 @@ public class WallPartWall implements IWallPart {
 		
 		//Calculates all the block positions
 		for(int y = getLowerY(world, chunk); y <= getTopY(); y++) {
-			for(int z = 4; z < 13; z++) {
+			for(int z = 4; z < 12; z++) {
 				for(int x = 0; x < 16; x++) {
 					BlockPos pos = new BlockPos(startX +x, y, startZ +z);
-					if((z >= 6 && z <= 9) || y == getTopY()) {
+					if(y == getTopY()) {
+						outerBlocks.add(pos);
+					}else if((z >= 6 && z <= 9)) {
 						innerBlocks.add(pos);
 					} else {
 						outerBlocks.add(pos);

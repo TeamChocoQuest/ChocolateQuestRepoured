@@ -14,7 +14,7 @@ public interface IWallPart {
 	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk);
 	
 	default int getLowerY(World world, Chunk chunk) {
-		int[] yValues = new int[] {256};
+		int[] yValues = new int[256];
 		int index = 0;
 		for(int x = 0; x < 16; x++) {
 			for(int z = 0; z < 16; z++) {
