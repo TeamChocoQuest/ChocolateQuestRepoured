@@ -32,38 +32,22 @@ public class WallPartRailingTower implements IWallPart {
 		int startZ = chunkZ *16;
 		
 		int[] xValues = new int[] {0,1,6,7};
+		int[] zValues = new int[] {2,3,12,13};
 		
+		//Normal railing
 		List<BlockPos> railingBlocks = new ArrayList<BlockPos>();
 		for(int y = 0; y <= 7; y++) {
-			//South Side 1
-			for(int z = 2; z <= 3; z++) {
+			for(int z : zValues) {
 				for(int x : xValues) {
 					if(isBiggerPart(x)) {
-						if(y < 3 && z == 3) {
+						if(y < 3 && z == (z > 3? 12:3)) {
 							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
 						} else if(y >= 3) {							
 							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
 						}
-					} else if(y >= 4 && z == 3 && y <= 6) {
-						railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
-						railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
-					}
-				}
-			}
-			//North Side
-			for(int z = 12; z <= 13; z++) {
-				for(int x : xValues) {
-					if(isBiggerPart(x)) {
-						if(y < 3 && z == 12) {
-							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
-							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
-						} else if(y >= 3) {							
-							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
-							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
-						}
-					} else if(y >= 4 && z == 12 && y <= 6) {
+					} else if(y >= 4 && z == (z > 3? 12:3) && y <= 6) {
 						railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 						railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
 					}
