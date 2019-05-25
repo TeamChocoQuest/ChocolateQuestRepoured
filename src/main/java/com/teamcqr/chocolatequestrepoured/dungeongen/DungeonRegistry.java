@@ -11,11 +11,13 @@ import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.AbandonedDungeon;
+import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.ClassicNetherCity;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DungeonOceanFloor;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.LinearDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.StrongholdDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
@@ -117,6 +119,18 @@ public class DungeonRegistry {
 							break;
 						case VOLCANO:
 							dungeon = new VolcanoDungeon(f);
+							break;
+						case CASTLE:
+							dungeon = new CastleDungeon(f);
+							break;
+						case CLASSIC_STRONGHOLD:
+							dungeon = new LinearDungeon(f);
+							break;
+						case JUNGLE_CAVE:
+							//TODO Jungle cave generator
+							break;
+						case SWAMP_CAVE:
+							//TODO SWAMP CAVE GENERATOR
 							break;
 						default:
 							break;

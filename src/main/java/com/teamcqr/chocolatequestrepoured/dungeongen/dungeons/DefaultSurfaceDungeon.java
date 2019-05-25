@@ -84,8 +84,6 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	}
 	
 	protected File pickStructure(Random random) {
-		//Random rdm = new Random();
-		//rdm.setSeed(worldSeed);
 		File chosenStructure = this.structureFolderPath;
 		if(this.structureFolderPath.isDirectory()) {
 			File[] files = this.structureFolderPath.listFiles();
