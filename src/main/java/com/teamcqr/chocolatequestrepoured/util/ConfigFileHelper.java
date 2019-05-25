@@ -14,6 +14,7 @@ public class ConfigFileHelper {
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
 	private boolean dungeonsInFlat = false;
 	private boolean enableWallInTheNorth = true;
+	private boolean wallHasObsiCore = true;
 	
 	public ConfigFileHelper() {
 		
@@ -60,6 +61,10 @@ public class ConfigFileHelper {
 		int yTmp = Math.abs(prop.getInt(140));
 		this.wallTopY = yTmp >= 255 ? 140:yTmp;
 		
+		// If the wall has a obsidian core
+		prop = config.get("wall", "obsidianCore", true);
+		this.wallHasObsiCore = prop.getBoolean(true);
+		
 		config.save();
 	}
 	
@@ -89,6 +94,9 @@ public class ConfigFileHelper {
 	}
 	public boolean generateDungeonsInFlat() {
 		return this.dungeonsInFlat;
+	}
+	public boolean wallHasObsiCore() {
+		return this.wallHasObsiCore;
 	}
 
 }

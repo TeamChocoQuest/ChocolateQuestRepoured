@@ -55,7 +55,7 @@ public class WallPartWall implements IWallPart {
 		if(!outerBlocks.isEmpty() && !innerBlocks.isEmpty()) {
 			//Inner Obsidian core
 			for(BlockPos pos : innerBlocks) {
-				world.setBlockState(pos, Blocks.OBSIDIAN.getDefaultState());
+				world.setBlockState(pos, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
 			}
 			//Outer Stoneblock cover
 			for(BlockPos pos : outerBlocks) {
