@@ -40,8 +40,6 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean PercentageRandom(int number, Random rdm) {
-		//Random rdm = new Random();
-		//rdm.setSeed(seed);
 		int rdmNmbr = rdm.nextInt(100) +1;
 		if(number >= rdmNmbr) {
 			return true;
@@ -93,7 +91,7 @@ public class DungeonGenUtils {
 		return false;
 	}
 	
-	//IMPORTANT: x and z are the CHUNK's x and z!!!!!!!
+	//IMPORTANT: x and z are the CHUNK's x and z!!
 	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world, int dungeonSeparation) {
 		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world, dungeonSeparation);
 	}
