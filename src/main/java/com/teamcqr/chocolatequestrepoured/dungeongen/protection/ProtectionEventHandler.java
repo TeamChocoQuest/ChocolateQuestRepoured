@@ -18,7 +18,7 @@ public class ProtectionEventHandler {
     @SubscribeEvent
     public void dungeonGenerate(CQDungeonStructureGenerateEvent e) {
         if(e.getDungeon().isProtectedFromModifications()) {
-        	ProtectionHandler.PROTECTION_HANDLER.addExistingRegion(e.getChunkPos(),new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos()));
+        	ProtectionHandler.PROTECTION_HANDLER.addExistingRegion(e.getChunkPos(),new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos(),e.getDungeonID()));
         }
     }
 

@@ -40,7 +40,7 @@ public class TileEntityForceFieldNexus extends TileEntity {
     }
 
     public void initUUIDRegion() {
-        this.region = ProtectionHandler.PROTECTION_HANDLER.getProtectedRegionWithhUUID(uuid);
+        this.region = ProtectionHandler.PROTECTION_HANDLER.getProtectedRegionWithUUID(uuid);
         if(region==null) {
 
         }
