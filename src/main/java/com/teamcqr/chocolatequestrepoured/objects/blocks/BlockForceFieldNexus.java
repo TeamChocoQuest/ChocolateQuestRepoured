@@ -42,4 +42,5 @@ public class BlockForceFieldNexus extends BlockContainer {
         TileEntityForceFieldNexus tile = new TileEntityForceFieldNexus();
         return tile;
     }
+    
 }
