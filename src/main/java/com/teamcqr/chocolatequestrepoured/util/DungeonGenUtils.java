@@ -94,16 +94,16 @@ public class DungeonGenUtils {
 	}
 	
 	//IMPORTANT: x and z are the CHUNK's x and z!!!!!!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world) {
-		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world);
+	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world, int dungeonSeparation) {
+		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world, dungeonSeparation);
 	}
 	//IMPORTANT: pos is a CHUNKPOS!!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world, int dungeonSeparation) {
 		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap() != null && CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
 			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
 				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
 				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);
-				if(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < CQRMain.dungeonRegistry.getDungeonDistance()) {
+				if(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < dungeonSeparation) {
 					return false;
 				}
 			}

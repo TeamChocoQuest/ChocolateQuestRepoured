@@ -29,22 +29,24 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
-		// Check if Dugneon "can" spawn (decided via a chance)
-		// System.out.println("Trying to generate dungeon at ChunkX=" + chunkX + "
-		// ChunkZ=" + chunkZ + "...");
 
+		// Check for flat worlds, if dungeons may spawn there
 		boolean flatPass = true;
 		if (world.getWorldType().equals(WorldType.FLAT) && !Reference.CONFIG_HELPER.generateDungeonsInFlat()) {
 			flatPass = false;
 		}
 
-		//DONE: Adjust this check so, that dungeons before and beyond the wall are generated!!!
+		// Checks if this chunk is in the "wall zone", if yes, abort
 		if (notInWallRange(chunkX, chunkZ, world)) {
-			// BUILD THE FUCKING WALL
-			// WALL GENERATION IS IN AN OWN GENERATOR -> WallBuilder
-			// I left some space between the wall so that no dungeon can "clip" inside it :D
+			int dungeonSeparation = this.dungeonRegistry.getDungeonDistance();
+
+			// Check wether the generated chunk is farther north than the wall...
+			if (chunkZ < 0 && Math.abs(chunkZ) > Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
+				dungeonSeparation /= 2;
+			}
+
 			boolean canBuildRandomDungeons = true;
-			 if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
+			if (DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world) != null
 					&& DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world).size() > 0) {
 				System.out.println("Found location specific Dungeons for ChunkX=" + chunkX + " ChunkZ=" + chunkZ + "!");
 				for (DungeonBase dungeon : DungeonGenUtils.getLocSpecDungeonsForChunk(chunkX, chunkZ, world)) {
@@ -66,36 +68,32 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 					}
 
 				}
-			} 
-			 if(canBuildRandomDungeons) {
+			}
+			if (canBuildRandomDungeons) {
 				// Now check if any dungeons exist for this biome....
 				Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
-				// System.out.println("Searching dungeons for biome " + biome.getBiomeName() +
-				// "...");
 				// No Dungeons for this biome -> ragequit
 				if (this.dungeonRegistry.getDungeonsForBiome(biome).isEmpty()) {
-					// System.out.println("No dungeons for biome " + biome.getBiomeName() + "!");
 					return;
 				}
 				// Now check if the dungeon is far away enough from the last one
-				if ((chunkX % this.dungeonRegistry.getDungeonDistance() == 0
-						&& chunkZ % this.dungeonRegistry.getDungeonDistance() == 0)
+				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0)
 						&& DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
-					// System.out.println("Chunks are far away enough from last dungeon and from
-					// spawn!");
 					Random rdm = new Random();
 					rdm.setSeed(getSeed(world, chunkX, chunkZ));
 
-					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world)
+					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world, dungeonSeparation)
 							|| this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
-						// System.out.println("Location is fine! Choosing dungeon...");
+						// Chooses a dungeon to generate //TODO: Add support for unique dungeons
 						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-						// System.out.println("Chose dungeon " + chosenStructure.getDungeonName() + "!
-						// Calculating chance...");
 
-						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), getSeed(world, chunkX, chunkZ))) {
+						// Checks, if the dungeon generates (calculated by the percentage chance the
+						// dungeon has...
+						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(),
+								getSeed(world, chunkX, chunkZ))) {
 							boolean dimensionIsOK = false;
+							// This checks the dimension the dungeon can spawn in
 							for (int dimID : chosenDungeon.getAllowedDimensions()) {
 								if (world.provider.getDimension() == dimID) {
 									dimensionIsOK = true;
@@ -103,6 +101,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 								}
 							}
 
+							// If the dimension is fine, if yes, it will generate the dungon
 							if (dimensionIsOK && flatPass) {
 								System.out.println("Generating dungeon " + chosenDungeon.getDungeonName()
 										+ " at chunkX=" + chunkX + "  chunkZ=" + chunkZ);
@@ -148,13 +147,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		return false;
 	}
 
+	// This is needed to calculate the seed, cause we need a new seed for every generation OR we'll have the same dungeon generating everytime
 	public static long getSeed(World world, int chunkX, int chunkZ) {
 		long mix = xorShift64(chunkX) + Long.rotateLeft(xorShift64(chunkZ), 32) + -1094792450L;
 		long result = xorShift64(mix);
 
 		return world.getSeed() + result;
 	}
-
+	// Needed for seed calculation and randomization
 	private static long xorShift64(long x) {
 		x ^= x << 21;
 		x ^= x >>> 35;
