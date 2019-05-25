@@ -41,7 +41,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			int dungeonSeparation = this.dungeonRegistry.getDungeonDistance();
 
 			// Check wether the generated chunk is farther north than the wall...
-			if (chunkZ < 0 && Math.abs(chunkZ) > Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
+			if (Reference.CONFIG_HELPER.buildWall() && chunkZ < 0 && Math.abs(chunkZ) > Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
 				dungeonSeparation /= 2;
 			}
 
