@@ -65,7 +65,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
     @Override
     public void update() 
     {
-        if(!this.world.isRemote && this.isNonCreativePlayerInRange((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D, Reference.SPAWNER_RANGE)) 
+        if(!this.world.isRemote && this.isNonCreativePlayerInRange((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D, Reference.CONFIG_HELPER.getSpawnerActivationDistance())) 
         {
             this.turnBackIntoEntity();
         }

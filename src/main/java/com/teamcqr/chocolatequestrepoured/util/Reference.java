@@ -9,7 +9,8 @@ public class Reference
 	public static final String CLIENT_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ClientProxy";
 	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.CommonProxy";
 	public static final String DUNGEON_REGISTRY = "com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry";
-	public static final String DUNGEON_TERRAIN_POPULATOIR = "com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator";
+	public static final String DUNGEON_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator";
+	public static final String WALL_TERRAIN_POPULATOR = "om.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator";
 	
 	public static final int EXPORTER_GUI_ID = 1;
 	public static final int SPAWNER_GUI_ID = 2;
@@ -29,7 +30,8 @@ public class Reference
 
 	public static final int ENTITY_CQRZOMBIE = 120;
 
-	public static final double SPAWNER_RANGE = 25.0D;
+	// Moved to CONFIG_HELPER
+	//public static final double SPAWNER_RANGE = 25.0D;
 	
 	public static final ConfigFileHelper CONFIG_HELPER = new ConfigFileHelper();
 }
