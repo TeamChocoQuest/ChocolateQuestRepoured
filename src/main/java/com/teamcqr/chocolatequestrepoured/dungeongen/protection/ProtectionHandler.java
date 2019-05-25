@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
