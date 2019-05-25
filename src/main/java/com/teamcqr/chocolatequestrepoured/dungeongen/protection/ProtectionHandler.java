@@ -3,8 +3,10 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
+import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
@@ -123,5 +125,18 @@ public class ProtectionHandler {
                 MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(regions.get(enter),enter,(EntityPlayer)e.getEntity()));
             }
         }
+    }
+
+    public ProtectedRegion getProtectedRegionWithhUUID(UUID uuid) {
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            if(item.getValue().getDungeonUUID().equals(uuid)) {
+                return item.getValue();
+            }
+        }
+
+        return null;
     }
 }
