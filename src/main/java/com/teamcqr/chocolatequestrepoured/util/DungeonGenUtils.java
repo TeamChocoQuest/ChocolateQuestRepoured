@@ -40,8 +40,6 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean PercentageRandom(int number, Random rdm) {
-		//Random rdm = new Random();
-		//rdm.setSeed(seed);
 		int rdmNmbr = rdm.nextInt(100) +1;
 		if(number >= rdmNmbr) {
 			return true;
@@ -58,8 +56,6 @@ public class DungeonGenUtils {
 	
 	public static int getIntBetweenBorders(int min, int max, Random rdm) {
 		if(min != max && rdm != null) {
-			//Random rdm = new Random();
-			//rdm.setSeed(seed);
 			max += 1;
 			int ret = min + rdm.nextInt(max - min);
 			return ret;
@@ -95,17 +91,17 @@ public class DungeonGenUtils {
 		return false;
 	}
 	
-	//IMPORTANT: x and z are the CHUNK's x and z!!!!!!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world) {
-		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world);
+	//IMPORTANT: x and z are the CHUNK's x and z!!
+	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world, int dungeonSeparation) {
+		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world, dungeonSeparation);
 	}
 	//IMPORTANT: pos is a CHUNKPOS!!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world) {
-		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
+	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world, int dungeonSeparation) {
+		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap() != null && CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
 			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
 				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
 				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);
-				if(!(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) >= CQRMain.dungeonRegistry.getDungeonDistance())) {
+				if(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < dungeonSeparation) {
 					return false;
 				}
 			}
@@ -124,6 +120,10 @@ public class DungeonGenUtils {
 					ret.add(db);
 				}
 			}
+		}
+		
+		if(ret.isEmpty()) {
+			return null;
 		}
 		
 		return ret;

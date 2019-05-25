@@ -42,7 +42,7 @@ public class DungeonBase {
 	private int iconID;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
-	//TODO: add TOP BLOCK option
+	//TODO: add functionality of "cover" blocks -.-
 	protected Block coverBlock = Blocks.AIR;
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
