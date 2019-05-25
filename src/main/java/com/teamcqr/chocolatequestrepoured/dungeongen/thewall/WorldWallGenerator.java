@@ -29,12 +29,14 @@ public class WorldWallGenerator implements IWorldGenerator {
 			IChunkProvider chunkProvider) {
 		// Check if it is the wall region
 		if (isWallRegion(chunkX, chunkZ, world)) {
+			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
 		}
+		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
-			//System.out.println("Constructing wall part...");
 			IWallPart wallPart = null;
 			IWallPart railingPart = null;
 			// GENERATE THE WALL
+			// Check wether it should construct a wall part or a tower
 			if (chunkX % Reference.CONFIG_HELPER.getWallTowerDistance() == 0) {
 				// Build tower
 				wallPart = new WallPartTower();
