@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,26 +26,30 @@ public class ProtectedRegion {
     private BlockPos min;
     private BlockPos max;
     private boolean enabled = true;
+    private UUID dungeonUUID;
 
-    public ProtectedRegion(BlockPos center, double width, double height, double depth) {
+    public ProtectedRegion(BlockPos center, double width, double height, double depth,UUID uuid) {
         this.center = center;
         this.boundingBox = new AxisAlignedBB(new BlockPos(center.getX()-width/2,center.getY()-height/2,center.getZ()-depth/2));
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
     }
 
-    public ProtectedRegion(BlockPos min, BlockPos max) {
+    public ProtectedRegion(BlockPos min, BlockPos max,UUID uuid) {
         this.boundingBox = new AxisAlignedBB(min,max);
         this.center = new BlockPos(boundingBox.getCenter());
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
     }
 
-    public ProtectedRegion(double width, double height, double depth, BlockPos min) {
+    public ProtectedRegion(double width, double height, double depth, BlockPos min,UUID uuid) {
         this.boundingBox = new AxisAlignedBB(min,new BlockPos(min.getX()+width,min.getY()+height,min.getZ()+depth));
         this.center = new BlockPos(boundingBox.getCenter());
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
     }
 
     public ProtectedRegion(NBTTagCompound tag) {
@@ -57,6 +62,7 @@ public class ProtectedRegion {
         this.boundingBox = new AxisAlignedBB(min,max);
         this.enabled = e;
         this.center = new BlockPos(boundingBox.getCenter());
+        this.dungeonUUID = tag.getUniqueId("dungeonUUID");
     }
 
     public AxisAlignedBB getBoundingBox() {
@@ -112,6 +118,8 @@ public class ProtectedRegion {
         tag.setDouble("max.z",max.getZ());
 
         tag.setBoolean("enabled",enabled);
+
+        tag.setUniqueId("dungeonUUID",dungeonUUID);
         return tag;
     }
 
@@ -146,4 +154,8 @@ public class ProtectedRegion {
 		
 		return chunks;
 	}
+
+    public UUID getDungeonUUID() {
+        return dungeonUUID;
+    }
 }
