@@ -10,6 +10,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+/**
+ * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
+ * https://github.com/DerToaster98
+ */
 public class WallPartWall implements IWallPart {
 
 	public WallPartWall() {
@@ -23,7 +27,6 @@ public class WallPartWall implements IWallPart {
 
 	@Override
 	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk) {
-		// TODO Put all this calculation and block placing into a separate thread...
 		
 		int startX = chunkX *16;
 		int startZ = chunkZ *16;
@@ -34,10 +37,12 @@ public class WallPartWall implements IWallPart {
 		
 		//Calculates all the block positions
 		for(int y = getLowerY(world, chunk); y <= getTopY(); y++) {
-			for(int z = 4; z < 13; z++) {
+			for(int z = 4; z < 12; z++) {
 				for(int x = 0; x < 16; x++) {
 					BlockPos pos = new BlockPos(startX +x, y, startZ +z);
-					if((z >= 6 && z <= 9) || y == getTopY()) {
+					if(y == getTopY()) {
+						outerBlocks.add(pos);
+					}else if((z >= 6 && z <= 9)) {
 						innerBlocks.add(pos);
 					} else {
 						outerBlocks.add(pos);
