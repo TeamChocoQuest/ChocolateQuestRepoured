@@ -127,7 +127,7 @@ public class ProtectionHandler {
         }
     }
 
-    public ProtectedRegion getProtectedRegionWithhUUID(UUID uuid) {
+    public ProtectedRegion getProtectedRegionWithUUID(UUID uuid) {
         Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
         while (it.hasNext())
         {
