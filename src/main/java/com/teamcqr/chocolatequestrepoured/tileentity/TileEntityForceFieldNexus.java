@@ -58,7 +58,7 @@ public class TileEntityForceFieldNexus extends TileEntity {
         return region;
     }
 
-    private boolean hasData() {
+    public boolean hasData() {
         return uuid != null;
     }
 
