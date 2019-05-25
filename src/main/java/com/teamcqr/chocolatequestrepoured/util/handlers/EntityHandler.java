@@ -27,7 +27,7 @@ public class EntityHandler
 		registerModEntity("projectile_vampiric_spell", ProjectileVampiricSpell.class, "ProjectileVampiricSpell", Reference.PROJECTILE_VAMPIRIC_SPELL);
 		registerModEntity(":projectile_poison_spell", ProjectilePoisonSpell.class, "ProjectilePoisonSpell", Reference.PROJECTILE_POISON_SPELL);
 
-		registerModEntity(":mob_cqrzombie", EntityCQRZombie.class, "EntityCQRZombie", Reference.ENTITY_CQRZOMBIE, 3289650, 000000);
+		registerModEntity(":mob_cqrzombie", EntityCQRZombie.class, "EntityCQRZombie", Reference.ENTITY_CQRZOMBIE_ID, 3289650, 000000);
 
 	}
 	
