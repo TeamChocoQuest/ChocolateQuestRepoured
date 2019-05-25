@@ -40,13 +40,16 @@ public class WallPartRailingTower implements IWallPart {
 			for(int z : zValues) {
 				for(int x : xValues) {
 					if(isBiggerPart(x)) {
+						//the check is needed to specify wether its the north or south side of the wall (greater than 3 is north side)
 						if(y < 3 && z == (z > 3? 12:3)) {
 							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
 						} else if(y >= 3) {							
+							//This is for the "thick" part of the bigger railing
 							railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 							railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
 						}
+						//This builds the lower pillars, again the check is needed to identify the side
 					} else if(y >= 4 && z == (z > 3? 12:3) && y <= 6) {
 						railingBlocks.add(new BlockPos(startX + x*2, getTopY() +y, startZ +z));
 						railingBlocks.add(new BlockPos(startX + x*2 +1, getTopY() +y, startZ +z));
@@ -63,6 +66,7 @@ public class WallPartRailingTower implements IWallPart {
 					if(y < 9) {
 						doorwayBlocks.add(new BlockPos(startX +x, getTopY() +y, startZ + z));
 					} else if(z == 7 || z == 8) {
+						//This is for the thinner gap at the top
 						doorwayBlocks.add(new BlockPos(startX +x, getTopY() +y, startZ + z));
 					}
 				}

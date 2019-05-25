@@ -27,7 +27,6 @@ public class WallPartWall implements IWallPart {
 
 	@Override
 	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk) {
-		// TODO Put all this calculation and block placing into a separate thread...
 		
 		int startX = chunkX *16;
 		int startZ = chunkZ *16;
