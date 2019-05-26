@@ -7,10 +7,13 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -96,18 +99,21 @@ public class ProtectionHandler {
         CQDataUtil.saveFile(tag,"cq_chunk_data.nbt",world);
     }
 
+    private ProtectedRegion region;
+
     public void handleLoad(ChunkEvent.Load e) {
-        if(existingRegions.containsKey(e.getChunk().getPos())) {
-            if(e.getChunk().isLoaded()) {
-                regions.put(e.getChunk().getPos(),existingRegions.get(e.getChunk().getPos()));
+        if(e.getChunk().isLoaded()) {
+            if((region = getRegionForChunkPos(e.getChunk().getPos()))!=null) {
+                regions.put(e.getChunk().getPos(),region);
+                initForceFieldNexus(e.getWorld(),region.getNexus());
                 System.out.println("load");
             }
         }
     }
 
     public void handleUnload(ChunkEvent.Unload e) {
-        if(regions.containsKey(e.getChunk().getPos())) {
-            if(!e.getChunk().isLoaded()) {
+        if(!e.getChunk().isLoaded()) {
+            if(regions.containsKey(e.getChunk().getPos())) {
                 regions.remove(e.getChunk().getPos());
                 System.out.println("unload");
             }
@@ -141,7 +147,20 @@ public class ProtectionHandler {
         return null;
     }
 
-    public void initForceFiledNexus(World world, BlockPos pos) {
+    public void initForceFieldNexus(World world, BlockPos pos) {
+        if(world.getBlockState(pos) == ModBlocks.FORCE_FIELD_NEXUS.getDefaultState()) {
+            TileEntityForceFieldNexus tile = (TileEntityForceFieldNexus)world.getTileEntity(pos);
+            tile.initUUIDRegion();
+        }
+    }
 
+    public ProtectedRegion getRegionForChunkPos(ChunkPos pos) {
+        for(ProtectedRegion region:existingRegions.values()) {
+            if(region.getChunksInRegion().contains(pos)) {
+                return region;
+            }
+        }
+
+        return null;
     }
 }

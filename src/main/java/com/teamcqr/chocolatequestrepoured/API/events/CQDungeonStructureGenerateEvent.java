@@ -52,7 +52,11 @@ public class CQDungeonStructureGenerateEvent extends Event {
 		return this.shieldCorePosition;
 	}
 	public void setShieldCorePosition(BlockPos pos) {
-		if(!this.shieldCorePosition.equals(pos)) {
+		if(this.shieldCorePosition != null) {
+			if(!this.shieldCorePosition.equals(pos)) {
+				this.shieldCorePosition = pos;
+			}
+		}else {
 			this.shieldCorePosition = pos;
 		}
 	}
