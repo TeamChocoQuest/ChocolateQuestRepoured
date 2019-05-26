@@ -67,7 +67,7 @@ public class TileEntityExporter extends TileEntitySyncClient
 	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
 	{
-		CQStructure structure = new CQStructure(this.structureName);
+		CQStructure structure = new CQStructure(this.structureName, true);
 		structure.setAuthor(authorName);
 		
 		structure.save(world, startPos, endPos, this.partModeUsing, this.user);
