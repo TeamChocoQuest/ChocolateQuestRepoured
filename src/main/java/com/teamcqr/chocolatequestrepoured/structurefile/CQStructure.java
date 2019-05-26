@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
@@ -109,11 +111,32 @@ public class CQStructure {
 		if(this.dataFile != null) {
 			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
 			int partID = 1;
+			HashMap<BlockPos, ForceFieldNexusInfo> fieldCoreMap = new HashMap<BlockPos, ForceFieldNexusInfo>();
 			for(BlockPos offset : this.structures.keySet()) {
 				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
 				BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
 				BlockPos pastePos = pos.add(offsetVec);
-				this.structures.get(offset).addBlocksToWorld(worldIn, pastePos, settings);
+				Structure structure = this.structures.get(offset);
+				structure.addBlocksToWorld(worldIn, pastePos, settings);
+				try {
+					if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
+						for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
+							fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+						}
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace();
+					fieldCoreMap = null;
+				}
+				try {
+					if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
+						BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
+						ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
+						// TODO: Place the block with attached information
+					}
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
 				partID++;
 			}
 		}

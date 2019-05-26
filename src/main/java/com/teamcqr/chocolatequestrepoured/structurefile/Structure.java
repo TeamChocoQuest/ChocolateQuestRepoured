@@ -34,6 +34,7 @@ public class Structure extends Template {
 	private List<BannerInfo> banners = new ArrayList<BannerInfo>();
 	private List<SpawnerInfo> spawners = new ArrayList<SpawnerInfo>();
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
+	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
 	
 	private int part_id;
 	
@@ -54,6 +55,7 @@ public class Structure extends Template {
 		this.banners.clear();
 		this.chests.clear();
 		this.spawners.clear();
+		this.forceFieldCores.clear();
 		//System.out.println("Super class scan....");
 		super.takeBlocksFromWorld(worldIn, startPos, endPos.subtract(startPos), takeEntities, toIgnore);
 		//System.out.println("Filling special lists...");
@@ -116,6 +118,13 @@ public class Structure extends Template {
 						removeEntries.add(bi);
 					}
 				}
+				
+				//Force Field cores
+				if(Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
+					ForceFieldNexusInfo ffni = new ForceFieldNexusInfo(bi.pos);
+					this.forceFieldCores.add(ffni);
+					removeEntries.add(bi);
+				}
 			}
 			//And now: remove all the entries we want to be gone.... 
 			for(int i = 0; i < removeEntries.size(); i++) {
@@ -158,9 +167,15 @@ public class Structure extends Template {
 			spawnerTags.appendTag(si.getAsNBTTag());
 		}
 		
+		NBTTagList forcefieldcoreTags = new NBTTagList();
+		for(ForceFieldNexusInfo ffni : this.forceFieldCores) {
+			forcefieldcoreTags.appendTag(ffni.getAsNBTTag());
+		}
+		
 		tag.setTag("banners", bannerTags);
 		tag.setTag("chests", chestTags);
 		tag.setTag("spawners", spawnerTags);
+		tag.setTag("forcefieldcores", forcefieldcoreTags);
 		
 		return tag;
 	}
@@ -189,6 +204,13 @@ public class Structure extends Template {
 		for(int i = 0; i < chestTag.tagCount(); i++) {
 			NBTTagCompound tag = chestTag.getCompoundTagAt(i);
 			this.chests.add(new LootChestInfo(tag));
+		}
+		
+		this.forceFieldCores.clear();
+		NBTTagList coresTag = compound.hasKey("forcefieldcores") ? compound.getTagList("forcefieldcores", 10) : new NBTTagList();
+		for(int i = 0; i < coresTag.tagCount(); i++) {
+			NBTTagCompound tag = coresTag.getCompoundTagAt(i);
+			this.forceFieldCores.add(new ForceFieldNexusInfo(tag));
 		}
 	}
 	
@@ -257,6 +279,10 @@ public class Structure extends Template {
 
 	public void setPart_id(int part_id) {
 		this.part_id = part_id;
+	}
+	
+	public List<ForceFieldNexusInfo> getFieldCores() {
+		return new ArrayList<ForceFieldNexusInfo>(this.forceFieldCores);
 	}
 
 }
