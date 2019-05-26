@@ -49,6 +49,7 @@ public class OceanFloorGenerator implements IDungeonGenerator{
 		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings);
 		
 		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()),chunk.getPos());
+		event.setShieldCorePosition(this.structure.getShieldCorePosition());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 

@@ -10,6 +10,8 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
@@ -37,6 +39,9 @@ public class CQStructure {
 	
 	private int parts = 0;
 	private String author = "DerToaster98";
+	
+	@Nullable
+	private BlockPos shieldCorePosition = null;
 	
 	//TODO: move structure origin to the center of it -> NOPE
 	
@@ -136,6 +141,7 @@ public class CQStructure {
 						if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
 							BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
 							ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
+							this.shieldCorePosition = key;
 							// TODO: Place the block with attached information
 						}
 					} catch(Exception ex) {
@@ -313,6 +319,11 @@ public class CQStructure {
 
 	public File getDataFile() {
 		return dataFile;
+	}
+	
+	@Nullable
+	public BlockPos getShieldCorePosition() {
+		return this.shieldCorePosition;
 	}
 
 	public void setDataFile(File dataFile) {
