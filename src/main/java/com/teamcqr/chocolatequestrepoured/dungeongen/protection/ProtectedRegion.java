@@ -197,11 +197,6 @@ public class ProtectedRegion {
                 chunksInRegion.add(new ChunkPos(minC.x + i,minC.z + ii));
             }
         }
-
-        System.out.println("NEW REGION");
-        for(ChunkPos pos:chunksInRegion) {
-            System.out.println(pos.x + " " + pos.z);
-        }
     }
 
     public ArrayList<ChunkPos> getChunksInRegion() {
