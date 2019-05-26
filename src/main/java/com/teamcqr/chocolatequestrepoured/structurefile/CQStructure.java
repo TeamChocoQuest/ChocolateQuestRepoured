@@ -7,7 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -119,7 +121,7 @@ public class CQStructure {
 		if(this.dataFile != null) {
 			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
 			int partID = 1;
-			HashMap<BlockPos, ForceFieldNexusInfo> fieldCoreMap = new HashMap<BlockPos, ForceFieldNexusInfo>();
+			List<BlockPos> shieldCorePosList = new ArrayList<BlockPos>();
 			for(BlockPos offset : this.structures.keySet()) {
 				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
 				BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
@@ -130,17 +132,21 @@ public class CQStructure {
 					try {
 						if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
 							for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
-								fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+								//fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+								shieldCorePosList.add(new BlockPos(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos()))));
 							}
 						}
 					} catch(Exception ex) {
 						ex.printStackTrace();
-						fieldCoreMap = null;
+						//fieldCoreMap = null;
+						shieldCorePosList = null;
 					}
 					try {
-						if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
-							BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
-							ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
+						//if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
+						if(shieldCorePosList != null && !shieldCorePosList.isEmpty()) {
+							//BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
+							BlockPos key = shieldCorePosList.get(new Random().nextInt(shieldCorePosList.size()));
+							//ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
 							this.shieldCorePosition = key;
 							// TODO: Place the block with attached information
 						}
