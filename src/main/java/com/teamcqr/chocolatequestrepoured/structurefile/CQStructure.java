@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -42,12 +41,16 @@ public class CQStructure {
 	//TODO: move structure origin to the center of it -> NOPE
 	
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
+
+	private boolean buildShieldCore;
 	
-	public CQStructure(String name) {
+	public CQStructure(String name, boolean hasShield) {
+		this.buildShieldCore = hasShield;
 		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
 	}
 	
-	public CQStructure(File file) {
+	public CQStructure(File file, boolean hasShield) {
+		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {
 			//DONE: read nbt file and create the substructures
@@ -118,24 +121,26 @@ public class CQStructure {
 				BlockPos pastePos = pos.add(offsetVec);
 				Structure structure = this.structures.get(offset);
 				structure.addBlocksToWorld(worldIn, pastePos, settings);
-				try {
-					if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
-						for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
-							fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+				if(this.buildShieldCore) {
+					try {
+						if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
+							for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
+								fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+							}
 						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
+						fieldCoreMap = null;
 					}
-				} catch(Exception ex) {
-					ex.printStackTrace();
-					fieldCoreMap = null;
-				}
-				try {
-					if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
-						BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
-						ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
-						// TODO: Place the block with attached information
+					try {
+						if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
+							BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
+							ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
+							// TODO: Place the block with attached information
+						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
 					}
-				} catch(Exception ex) {
-					ex.printStackTrace();
 				}
 				partID++;
 			}
