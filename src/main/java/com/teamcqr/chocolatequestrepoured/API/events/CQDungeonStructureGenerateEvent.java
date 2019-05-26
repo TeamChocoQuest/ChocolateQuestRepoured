@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 
@@ -24,12 +25,14 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	private ChunkPos chunkPos;
+	private World world;
 	
-	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, ChunkPos chunkPos) {
+	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, ChunkPos chunkPos, World world) {
 		this.generatedDungeon = dungeon;
 		this.dunPosition = position;
 		this.dunSize = size;
 		this.chunkPos = chunkPos;
+		this.world = world;
 	}
 	
 	public DungeonBase getDungeon() {
@@ -56,5 +59,9 @@ public class CQDungeonStructureGenerateEvent extends Event {
 
 	public ChunkPos getChunkPos() {
 		return chunkPos;
+	}
+
+	public World getWorld() {
+		return world;
 	}
 }
