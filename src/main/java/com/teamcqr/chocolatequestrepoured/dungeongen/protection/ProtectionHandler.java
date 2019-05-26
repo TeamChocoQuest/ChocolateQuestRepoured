@@ -106,7 +106,6 @@ public class ProtectionHandler {
             if((region = getRegionForChunkPos(e.getChunk().getPos()))!=null) {
                 regions.put(e.getChunk().getPos(),region);
                 initForceFieldNexus(e.getWorld(),region.getNexus());
-                System.out.println("load");
             }
         }
     }
@@ -115,7 +114,6 @@ public class ProtectionHandler {
         if(!e.getChunk().isLoaded()) {
             if(regions.containsKey(e.getChunk().getPos())) {
                 regions.remove(e.getChunk().getPos());
-                System.out.println("unload");
             }
         }
     }
