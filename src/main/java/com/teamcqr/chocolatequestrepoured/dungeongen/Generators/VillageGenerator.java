@@ -139,7 +139,7 @@ public class VillageGenerator implements IDungeonGenerator{
 				BlockPos pos = this.toGenerate.get(structure);
 				structure.placeBlocksInWorld(world, pos, plcmnt);
 				
-				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos());
+				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos(),world);
 				event.setShieldCorePosition(this.structure.getShieldCorePosition());
 				MinecraftForge.EVENT_BUS.post(event);
 				
