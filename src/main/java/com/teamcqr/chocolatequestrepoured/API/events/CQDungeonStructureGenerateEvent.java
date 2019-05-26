@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.API.events;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 
 import net.minecraft.util.math.BlockPos;
@@ -19,6 +21,8 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	private DungeonBase generatedDungeon;
 	private BlockPos dunPosition;
 	private BlockPos dunSize;
+	@Nullable
+	private BlockPos shieldCorePosition = null;
 	private ChunkPos chunkPos;
 	
 	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, ChunkPos chunkPos) {
@@ -39,6 +43,15 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	}
 	public UUID getDungeonID() {
 		return this.generatedDungeon.getDungeonID();
+	}
+	@Nullable
+	public BlockPos getShieldCorePosition() {
+		return this.shieldCorePosition;
+	}
+	public void setShieldCorePosition(BlockPos pos) {
+		if(!this.shieldCorePosition.equals(pos)) {
+			this.shieldCorePosition = pos;
+		}
 	}
 
 	public ChunkPos getChunkPos() {
