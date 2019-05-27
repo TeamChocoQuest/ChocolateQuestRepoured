@@ -84,8 +84,6 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	}
 	
 	protected File pickStructure(Random random) {
-		//Random rdm = new Random();
-		//rdm.setSeed(worldSeed);
 		File chosenStructure = this.structureFolderPath;
 		if(this.structureFolderPath.isDirectory()) {
 			File[] files = this.structureFolderPath.listFiles();
@@ -103,7 +101,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		super.generate(x, z, world, chunk, random);
 		File structure = pickStructure(new Random());
 		if(structure != null) {
-			CQStructure dungeon = new CQStructure(structure);
+			CQStructure dungeon = new CQStructure(structure, this.protectFromDestruction);
 			
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);

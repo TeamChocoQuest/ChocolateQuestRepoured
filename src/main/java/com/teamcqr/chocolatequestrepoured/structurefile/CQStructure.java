@@ -7,7 +7,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
@@ -37,15 +42,22 @@ public class CQStructure {
 	private int parts = 0;
 	private String author = "DerToaster98";
 	
+	@Nullable
+	private BlockPos shieldCorePosition = null;
+	
 	//TODO: move structure origin to the center of it -> NOPE
 	
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
+
+	private boolean buildShieldCore;
 	
-	public CQStructure(String name) {
+	public CQStructure(String name, boolean hasShield) {
+		this.buildShieldCore = hasShield;
 		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
 	}
 	
-	public CQStructure(File file) {
+	public CQStructure(File file, boolean hasShield) {
+		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {
 			//DONE: read nbt file and create the substructures
@@ -109,11 +121,39 @@ public class CQStructure {
 		if(this.dataFile != null) {
 			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
 			int partID = 1;
+			List<BlockPos> shieldCorePosList = new ArrayList<BlockPos>();
 			for(BlockPos offset : this.structures.keySet()) {
 				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
 				BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
 				BlockPos pastePos = pos.add(offsetVec);
-				this.structures.get(offset).addBlocksToWorld(worldIn, pastePos, settings);
+				Structure structure = this.structures.get(offset);
+				structure.addBlocksToWorld(worldIn, pastePos, settings);
+				if(this.buildShieldCore) {
+					try {
+						if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
+							for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
+								//fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
+								shieldCorePosList.add(new BlockPos(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos()))));
+							}
+						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
+						//fieldCoreMap = null;
+						shieldCorePosList = null;
+					}
+					try {
+						//if(fieldCoreMap != null && !fieldCoreMap.isEmpty()) {
+						if(shieldCorePosList != null && !shieldCorePosList.isEmpty()) {
+							//BlockPos key = (BlockPos) fieldCoreMap.keySet().toArray()[new Random().nextInt(fieldCoreMap.keySet().toArray().length)];
+							BlockPos key = shieldCorePosList.get(new Random().nextInt(shieldCorePosList.size()));
+							//ForceFieldNexusInfo shieldCore = fieldCoreMap.get(key);
+							this.shieldCorePosition = key;
+							// TODO: Place the block with attached information
+						}
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
+				}
 				partID++;
 			}
 		}
@@ -285,6 +325,11 @@ public class CQStructure {
 
 	public File getDataFile() {
 		return dataFile;
+	}
+	
+	@Nullable
+	public BlockPos getShieldCorePosition() {
+		return this.shieldCorePosition;
 	}
 
 	public void setDataFile(File dataFile) {

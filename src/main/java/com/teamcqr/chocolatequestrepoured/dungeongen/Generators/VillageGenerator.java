@@ -75,7 +75,7 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		CQStructure centerDun = new CQStructure(this.centerStructure);
+		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon.isProtectedFromModifications());
 		
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -89,7 +89,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			if(i < this.chosenStructures.size()) {
 				System.out.println("Building support platform " + (i+1) + "...");
 				//DONE: Load structures from file method   !!HIGH PRIORITY!!
-				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
+				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i), this.dungeon.isProtectedFromModifications());
 				
 				if(dungeonToSpawn != null) {
 					//Build the support platform...
@@ -138,8 +138,9 @@ public class VillageGenerator implements IDungeonGenerator{
 				System.out.println("Building house " + index + "...");
 				BlockPos pos = this.toGenerate.get(structure);
 				structure.placeBlocksInWorld(world, pos, plcmnt);
-				
-				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos());
+
+				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos(),world);
+				event.setShieldCorePosition(structure.getShieldCorePosition());
 				MinecraftForge.EVENT_BUS.post(event);
 				
 				index++;

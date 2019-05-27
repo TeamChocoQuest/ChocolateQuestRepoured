@@ -2,11 +2,13 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -25,31 +27,50 @@ public class ProtectedRegion {
     private BlockPos min;
     private BlockPos max;
     private boolean enabled = true;
+    private UUID dungeonUUID;
+    private ArrayList<ChunkPos> chunksInRegion;
+    private BlockPos nexus;
 
-    public ProtectedRegion(BlockPos center, double width, double height, double depth) {
+    public ProtectedRegion(BlockPos center, double width, double height, double depth,UUID uuid,BlockPos nexus) {
         this.center = center;
         this.boundingBox = new AxisAlignedBB(new BlockPos(center.getX()-width/2,center.getY()-height/2,center.getZ()-depth/2));
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
+
+        this.chunksInRegion = new ArrayList<>();
+        this.nexus = nexus;
+        insertChunksForRegion();
     }
 
-    public ProtectedRegion(BlockPos min, BlockPos max) {
+    public ProtectedRegion(BlockPos min, BlockPos max,UUID uuid,BlockPos nexus) {
         this.boundingBox = new AxisAlignedBB(min,max);
         this.center = new BlockPos(boundingBox.getCenter());
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
+
+        this.chunksInRegion = new ArrayList<>();
+        this.nexus = nexus;
+        insertChunksForRegion();
     }
 
-    public ProtectedRegion(double width, double height, double depth, BlockPos min) {
+    public ProtectedRegion(double width, double height, double depth, BlockPos min,UUID uuid,BlockPos nexus) {
         this.boundingBox = new AxisAlignedBB(min,new BlockPos(min.getX()+width,min.getY()+height,min.getZ()+depth));
         this.center = new BlockPos(boundingBox.getCenter());
         this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
         this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
+        this.dungeonUUID = uuid;
+
+        this.chunksInRegion = new ArrayList<>();
+        this.nexus = nexus;
+        insertChunksForRegion();
     }
 
     public ProtectedRegion(NBTTagCompound tag) {
         BlockPos min = new BlockPos(tag.getDouble("min.x"),tag.getDouble("min.y"),tag.getDouble("min.z"));
         BlockPos max = new BlockPos(tag.getDouble("max.x"),tag.getDouble("max.y"),tag.getDouble("max.z"));
+        BlockPos nexus = new BlockPos(tag.getDouble("nexus.x"),tag.getDouble("nexus.y"),tag.getDouble("nexus.z"));
         boolean e = tag.getBoolean("enabled");
 
         this.max = max;
@@ -57,6 +78,10 @@ public class ProtectedRegion {
         this.boundingBox = new AxisAlignedBB(min,max);
         this.enabled = e;
         this.center = new BlockPos(boundingBox.getCenter());
+        this.dungeonUUID = tag.getUniqueId("dungeonUUID");
+        this.chunksInRegion = new ArrayList<>();
+        this.nexus = nexus;
+        insertChunksForRegion();
     }
 
     public AxisAlignedBB getBoundingBox() {
@@ -111,7 +136,13 @@ public class ProtectedRegion {
         tag.setDouble("max.y",max.getY());
         tag.setDouble("max.z",max.getZ());
 
+        tag.setDouble("nexus.x",nexus.getX());
+        tag.setDouble("nexus.y",nexus.getY());
+        tag.setDouble("nexus.z",nexus.getZ());
+
         tag.setBoolean("enabled",enabled);
+
+        tag.setUniqueId("dungeonUUID",dungeonUUID);
         return tag;
     }
 
@@ -146,4 +177,33 @@ public class ProtectedRegion {
 		
 		return chunks;
 	}
+
+    public UUID getDungeonUUID() {
+        return dungeonUUID;
+    }
+
+    private void insertChunksForRegion() {
+
+        ChunkPos minC = new ChunkPos(min);
+
+        float width = max.getX() - min.getX();
+        float depth = max.getZ() - min.getZ();
+
+        double chunksX = Math.ceil((width / 16));
+        double chunksZ = Math.ceil((depth / 16));
+
+        for(int i = 0;i<chunksX;i++) {
+            for(int ii = 0;ii<chunksZ;ii++) {
+                chunksInRegion.add(new ChunkPos(minC.x + i,minC.z + ii));
+            }
+        }
+    }
+
+    public ArrayList<ChunkPos> getChunksInRegion() {
+        return chunksInRegion;
+    }
+
+    public BlockPos getNexus() {
+        return nexus;
+    }
 }
