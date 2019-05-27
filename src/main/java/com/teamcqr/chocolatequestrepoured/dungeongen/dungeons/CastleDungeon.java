@@ -23,14 +23,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 25.05.2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
  */
 public class CastleDungeon extends DungeonBase {
 	private int sizeX = 10;
 	private int sizeY = 10;
 	private int sizeZ = 10;
+	private int roomSize = 10;
 	private Block mainBlock = Blocks.STONE;
 
 
@@ -66,8 +67,9 @@ public class CastleDungeon extends DungeonBase {
 			this.sizeX = PropertyFileHelper.getIntProperty(prop, "sizeX", 10);
 			this.sizeY = PropertyFileHelper.getIntProperty(prop, "sizeY", 10);
 			this.sizeZ = PropertyFileHelper.getIntProperty(prop, "sizeZ", 10);
+			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 
-			this.mainBlock = Blocks.STONE;
+			this.mainBlock = Blocks.STONEBRICK;
 			try {
 				Block tmp = Block.getBlockFromName(prop.getProperty("floorblock", "minecraft:stone"));
 				if(tmp != null) {
@@ -107,5 +109,6 @@ public class CastleDungeon extends DungeonBase {
 	public int getSizeX() {return this.sizeX;}
 	public int getSizeY() {return this.sizeY;}
 	public int getSizeZ() {return this.sizeZ;}
+	public int getRoomSize() {return this.roomSize;}
 
 }

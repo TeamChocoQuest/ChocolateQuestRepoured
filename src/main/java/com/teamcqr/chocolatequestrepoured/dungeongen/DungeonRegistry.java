@@ -10,16 +10,7 @@ import java.util.List;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.AbandonedDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.ClassicNetherCity;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DungeonOceanFloor;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.FloatingNetherCity;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.RuinDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.StrongholdDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
-import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.*;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -90,6 +81,9 @@ public class DungeonRegistry {
 						switch(generator) {
 						case ABANDONED:
 							dungeon = new AbandonedDungeon(f);
+							break;
+						case CASTLE:
+							dungeon = new CastleDungeon(f);
 							break;
 						case CAVERNS:
 							dungeon = new CavernDungeon(f);

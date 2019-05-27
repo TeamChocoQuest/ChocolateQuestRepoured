@@ -18,9 +18,9 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 25.05.2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
  */
 public class CastleGenerator implements IDungeonGenerator{
 
@@ -31,12 +31,12 @@ public class CastleGenerator implements IDungeonGenerator{
     private int roomSize;
 
 
-	public CastleGenerator(CastleDungeon dun) {
-		this.dungeon = dun;
-		this.sizeX = 10;
-		this.sizeZ = 10;
+	public CastleGenerator(CastleDungeon dungeon) {
+		this.dungeon = dungeon;
+		this.sizeX = this.dungeon.getSizeX();
+		this.sizeZ = this.dungeon.getSizeZ();
 		this.floors = 5;
-		this.roomSize = 5;
+		this.roomSize = this.dungeon.getRoomSize();
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		int lastRoomOffsetX = sizeX - roomsX * roomSizeX;
 		int lastRoomOffsetZ = sizeZ - roomsZ * roomSizeZ;
 		int currentY = y;
-		int floorHeight = 7;
+		int floorHeight = 10;
 		IBlockState currentBlockType;
 
 		// build the first floor
@@ -119,7 +119,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		for (int currentfloor = 0; currentfloor <= floors; currentfloor++)
 		{
 			// over the entire x/z area
-			for (int i = 0; i <= sizeX; i++)
+			for (int i = 0; i < sizeX; i++)
 			{
 				for (int j = 0; j < sizeZ; j++)
 				{
@@ -141,10 +141,10 @@ public class CastleGenerator implements IDungeonGenerator{
 			currentY++;
 
 			// Build two sides of walls
-			for (int i = 0; i <= sizeX; i++)
+			for (int i = 0; i < sizeX; i++)
 			{
 				// for the height of the floor
-				for (int j = -1; j <= floorHeight; j++)
+				for (int j = 0; j < floorHeight; j++)
 				{
                     placeBlock(world, x + i, currentY + j, z,  currentBlockType);
                     placeBlock(world, x + i, currentY + j, (z + sizeZ - 1),  currentBlockType);
@@ -156,9 +156,9 @@ public class CastleGenerator implements IDungeonGenerator{
 			}
 
 			// Generate the other two walls
-			for (int i = 0; i <= sizeZ; i++)
+			for (int i = 0; i < sizeZ; i++)
 			{
-				for (int j = -1; j <= floorHeight; j++)
+				for (int j = 0; j < floorHeight; j++)
 				{
                     placeBlock(world, x, currentY + j, z + i,  currentBlockType);
                     placeBlock(world, (x + sizeX - 1), currentY + j, z + i,  currentBlockType);
