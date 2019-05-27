@@ -136,6 +136,9 @@ public class VillageGenerator implements IDungeonGenerator{
 			int index = 1;
 			for(CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
+				if(this.dungeon.rotateBuildingsRandomly()) {
+					plcmnt.setRotation(getRandomRotation());
+				}
 				BlockPos pos = this.toGenerate.get(structure);
 				structure.placeBlocksInWorld(world, pos, plcmnt);
 
@@ -267,8 +270,6 @@ public class VillageGenerator implements IDungeonGenerator{
 			return Rotation.CLOCKWISE_180;
 		case 2:
 			return Rotation.COUNTERCLOCKWISE_90;
-		case 4:
-			return Rotation.NONE;
 		default:
 			return Rotation.NONE;
 		}
