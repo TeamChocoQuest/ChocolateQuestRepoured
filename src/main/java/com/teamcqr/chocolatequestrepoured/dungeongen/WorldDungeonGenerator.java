@@ -35,7 +35,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if (world.getWorldType().equals(WorldType.FLAT) && !Reference.CONFIG_HELPER.generateDungeonsInFlat()) {
 			flatPass = false;
 		}
-
+		
 		// Checks if this chunk is in the "wall zone", if yes, abort
 		if (notInWallRange(chunkX, chunkZ, world)) {
 			int dungeonSeparation = this.dungeonRegistry.getDungeonDistance();

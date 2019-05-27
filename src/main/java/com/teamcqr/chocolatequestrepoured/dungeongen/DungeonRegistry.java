@@ -112,6 +112,15 @@ public class DungeonRegistry {
 						case VOLCANO:
 							dungeon = new VolcanoDungeon(f);
 							break;
+						case CLASSIC_STRONGHOLD:
+							dungeon = new LinearDungeon(f);
+							break;
+						case JUNGLE_CAVE:
+							//TODO Jungle cave generator
+							break;
+						case SWAMP_CAVE:
+							//TODO SWAMP CAVE GENERATOR
+							break;
 						default:
 							break;
 						}

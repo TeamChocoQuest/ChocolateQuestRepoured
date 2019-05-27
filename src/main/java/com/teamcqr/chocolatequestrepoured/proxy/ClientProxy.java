@@ -1,14 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.client.render.mob.RenderCQRZombie;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRZombie;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
-import com.teamcqr.chocolatequestrepoured.client.render.tesr.TileEntityTableRenderer;
+import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;

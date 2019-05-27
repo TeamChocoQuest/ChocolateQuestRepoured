@@ -3,12 +3,19 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
+import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
@@ -92,20 +99,21 @@ public class ProtectionHandler {
         CQDataUtil.saveFile(tag,"cq_chunk_data.nbt",world);
     }
 
+    private ProtectedRegion region;
+
     public void handleLoad(ChunkEvent.Load e) {
-        if(existingRegions.containsKey(e.getChunk().getPos())) {
-            if(e.getChunk().isLoaded()) {
-                regions.put(e.getChunk().getPos(),existingRegions.get(e.getChunk().getPos()));
-                System.out.println("load");
+        if(e.getChunk().isLoaded()) {
+            if((region = getRegionForChunkPos(e.getChunk().getPos()))!=null) {
+                regions.put(e.getChunk().getPos(),region);
+                initForceFieldNexus(e.getWorld(),region.getNexus());
             }
         }
     }
 
     public void handleUnload(ChunkEvent.Unload e) {
-        if(regions.containsKey(e.getChunk().getPos())) {
-            if(!e.getChunk().isLoaded()) {
+        if(!e.getChunk().isLoaded()) {
+            if(regions.containsKey(e.getChunk().getPos())) {
                 regions.remove(e.getChunk().getPos());
-                System.out.println("unload");
             }
         }
     }
@@ -122,5 +130,35 @@ public class ProtectionHandler {
                 MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(regions.get(enter),enter,(EntityPlayer)e.getEntity()));
             }
         }
+    }
+
+    public ProtectedRegion getProtectedRegionWithUUID(UUID uuid) {
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = regions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            if(item.getValue().getDungeonUUID().equals(uuid)) {
+                return item.getValue();
+            }
+        }
+
+        return null;
+    }
+
+    public void initForceFieldNexus(World world, BlockPos pos) {
+        if(world.getBlockState(pos) == ModBlocks.FORCE_FIELD_NEXUS.getDefaultState()) {
+            TileEntityForceFieldNexus tile = (TileEntityForceFieldNexus)world.getTileEntity(pos);
+            tile.initUUIDRegion();
+        }
+    }
+
+    public ProtectedRegion getRegionForChunkPos(ChunkPos pos) {
+        for(ProtectedRegion region:existingRegions.values()) {
+            if(region.getChunksInRegion().contains(pos)) {
+                return region;
+            }
+        }
+
+        return null;
     }
 }

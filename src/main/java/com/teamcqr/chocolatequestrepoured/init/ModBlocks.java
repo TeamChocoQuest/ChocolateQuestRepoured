@@ -4,13 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.objects.base.BlockExporterChestBase;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.*;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -138,5 +132,7 @@ public class ModBlocks
 	public static final Block EXPORTER_CHEST_CUSTOM_12 = new BlockExporterChestBase("exporter_chest_custom_12", Material.WOOD);
 	public static final Block EXPORTER_CHEST_CUSTOM_13 = new BlockExporterChestBase("exporter_chest_custom_13", Material.WOOD);
 	public static final Block EXPORTER_CHEST_CUSTOM_14 = new BlockExporterChestBase("exporter_chest_custom_14", Material.WOOD);
-	
+
+	//Protected recgion
+	public static final Block FORCE_FIELD_NEXUS = new BlockForceFieldNexus("force_field_nexus", Material.IRON);
 }
