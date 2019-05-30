@@ -81,7 +81,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		platformCenter.generate(new Random(), world, x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/, centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
 		
-		BlockPos cenPos = new BlockPos(x - (centerDun.getSizeX() /2), y - this.dungeon.getUnderGroundOffset(), z - (centerDun.getSizeZ() /2));
+		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/);
 		
 		this.toGenerate.put(centerDun, cenPos);
 		//First, build all the support platforms
