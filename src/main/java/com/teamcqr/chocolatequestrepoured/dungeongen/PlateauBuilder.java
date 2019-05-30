@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -20,7 +21,7 @@ public class PlateauBuilder {
 	Block structureBlock = Blocks.STONE;
 	Block structureTopBlock = Blocks.GRASS;
 
-	public int wallSize = 8;
+	public int wallSize = Reference.CONFIG_HELPER.getSupportHillWallSize();
 
 	public void load(Block support, Block top) {
 		structureBlock = support;
@@ -30,10 +31,9 @@ public class PlateauBuilder {
 	public void generate(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
-		Perlin3D p = new Perlin3D(world.getSeed(), 8, random);
-		Perlin3D p2 = new Perlin3D(world.getSeed(), 32, random);
+		Perlin3D p = new Perlin3D(world.getSeed(), wallSize, random);
+		Perlin3D p2 = new Perlin3D(world.getSeed(), wallSize *4, random);
 
-		int wallSize = 8;
 		sizeX += wallSize * 2;
 		sizeZ += wallSize * 2;
 

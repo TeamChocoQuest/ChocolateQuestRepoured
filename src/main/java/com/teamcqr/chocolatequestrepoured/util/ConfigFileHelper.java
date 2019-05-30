@@ -12,6 +12,7 @@ public class ConfigFileHelper {
 	private int wallDistance = 500;  //Measured in chunks  500 = 8000 blocks
 	private int wallTopY = 140;
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
+	private int supportHillWallSize = 8;
 	private boolean dungeonsInFlat = false;
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
@@ -42,6 +43,10 @@ public class ConfigFileHelper {
 		// Spawn dungeons in flat
 		prop = config.get("general", "dungeonsInFlat", false);
 		this.dungeonsInFlat = prop.getBoolean(false);
+		
+		//Dungeons
+		prop = config.get("general", "supportHillWallSize", 8);
+		this.supportHillWallSize = prop.getInt(8);
 		
 		// Wall
 		// enabled
@@ -97,6 +102,9 @@ public class ConfigFileHelper {
 	}
 	public boolean wallHasObsiCore() {
 		return this.wallHasObsiCore;
+	}
+	public int getSupportHillWallSize() {
+		return supportHillWallSize;
 	}
 
 }
