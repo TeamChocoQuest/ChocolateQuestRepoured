@@ -31,6 +31,8 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class VillageGenerator implements IDungeonGenerator{
 	
+	//TODO remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
+	
 	private VillageDungeon dungeon;
 
 	private List<File> chosenStructures = new ArrayList<File>();
@@ -81,9 +83,12 @@ public class VillageGenerator implements IDungeonGenerator{
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		platformCenter.generate(new Random(), world, x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/, centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
 		
-		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/);
+		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y, z /*- (centerDun.getSizeZ() /2)*/);
 		
 		this.toGenerate.put(centerDun, cenPos);
+		
+		PlateauBuilder platform = new PlateauBuilder();
+		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		//First, build all the support platforms
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
@@ -94,8 +99,7 @@ public class VillageGenerator implements IDungeonGenerator{
 				if(dungeonToSpawn != null) {
 					//Build the support platform...
 					BlockPos pos = this.structurePosList.get(i);
-					PlateauBuilder platform = new PlateauBuilder();
-					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
+					
 					platform.generate(new Random(), world, pos.getX() /*- (dungeonToSpawn.getSizeX() /2)*/, pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() /*- (dungeonToSpawn.getSizeZ() /2)*/, dungeonToSpawn.getSizeX() +8, dungeonToSpawn.getSizeZ() +8);
 					
 					//Build the structure...
@@ -114,7 +118,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			System.out.println("Building " + this.structurePosList.size() + " roads...");
 			for(BlockPos end : this.structurePosList) {
 				System.out.println("Building road " + (this.structurePosList.indexOf(end) +1) + " of " + this.structurePosList.size() + "...");
-				this.buildPath(end, this.startPos);
+				this.buildPath(end, cenPos /*this.startPos*/);
 			}
 			System.out.println("Roads built!");
 		}
