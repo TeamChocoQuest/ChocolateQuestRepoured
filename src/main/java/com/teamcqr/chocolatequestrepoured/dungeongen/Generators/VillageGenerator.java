@@ -79,7 +79,7 @@ public class VillageGenerator implements IDungeonGenerator{
 		
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-		platformCenter.generate(new Random(), world, x - (centerDun.getSizeX() /2), y, z - (centerDun.getSizeZ() /2), centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
+		platformCenter.generate(new Random(), world, x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/, centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
 		
 		BlockPos cenPos = new BlockPos(x - (centerDun.getSizeX() /2), y - this.dungeon.getUnderGroundOffset(), z - (centerDun.getSizeZ() /2));
 		
@@ -96,14 +96,14 @@ public class VillageGenerator implements IDungeonGenerator{
 					BlockPos pos = this.structurePosList.get(i);
 					PlateauBuilder platform = new PlateauBuilder();
 					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-					platform.generate(new Random(), world, pos.getX() - (dungeonToSpawn.getSizeX() /2), pos.getY(), pos.getZ() - (dungeonToSpawn.getSizeZ() /2), dungeonToSpawn.getSizeX() +8, dungeonToSpawn.getSizeZ() +8);
+					platform.generate(new Random(), world, pos.getX() /*- (dungeonToSpawn.getSizeX() /2)*/, pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() /*- (dungeonToSpawn.getSizeZ() /2)*/, dungeonToSpawn.getSizeX() +8, dungeonToSpawn.getSizeZ() +8);
 					
 					//Build the structure...
-					int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
+					/*int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
 					int X = pos.getX() - (dungeonToSpawn.getSizeX() /2);
 					int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2);
 					//pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0,  - dungeonToSpawn.getSizeZ() /2);
-					pos = new BlockPos(X, Y, Z);
+					pos = new BlockPos(X, Y, Z);*/
 					
 					this.toGenerate.put(dungeonToSpawn, pos);
 				}
