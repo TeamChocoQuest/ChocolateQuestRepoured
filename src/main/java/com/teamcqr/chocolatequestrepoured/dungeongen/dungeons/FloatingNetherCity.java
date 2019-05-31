@@ -35,7 +35,7 @@ public class FloatingNetherCity extends ClassicNetherCity {
 	
 	//Code i used in a plugin to generate a round platform.... i may recycle parts of it....
 	//On each step downwards, the radius gets smaller by decrement, decrement increases per step down and it starts by 1
-	//It stops going down, when decremt *2 is greater than or equals the current decremented radius
+	//It stops going down, when decremt *2 is greater than the current decremented radius
 	/**private int radius;
 	@SuppressWarnings("unused")
 	private int platformThickness;
