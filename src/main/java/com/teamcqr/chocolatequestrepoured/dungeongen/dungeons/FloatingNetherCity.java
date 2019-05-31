@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.dungeons;
 import java.io.File;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -13,7 +14,7 @@ import net.minecraft.init.Blocks;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class FloatingNetherCity extends ClassicNetherCity {
+public class FloatingNetherCity extends DungeonBase {
 
 	private int minBuildings = 6;
 	private int maxBuildings = 12;
@@ -23,14 +24,16 @@ public class FloatingNetherCity extends ClassicNetherCity {
 	private Block chainBlock = Blocks.OBSIDIAN;
 	private Block bridgeBlock = Blocks.NETHER_BRICK;
 	private int bridgeChance = 20;
+	private int posY = 50; //lava level is 32 in the nether
 	private boolean buildChains = true;
 	private boolean buildBridges = false;
+	private File structureFolder;
 	
 	public FloatingNetherCity(File configFile) {
 		super(configFile);
 	}
 	
-	//Generator: Radius of the island circle is the longer side (x or z) of the structure to spawn!!
+	//Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!
 	//IMPORTANT: Calculate the "center" of the structure and begin to draw the circle from there
 	
 	//Code i used in a plugin to generate a round platform.... i may recycle parts of it....
@@ -73,6 +76,22 @@ public class FloatingNetherCity extends ClassicNetherCity {
 		}
 		return false;
 	}**/
+	
+	public File pickStructure(Random random) {
+		if(this.structureFolder == null) {
+			return null;
+		}
+		File chosenStructure = this.structureFolder;
+		while(chosenStructure.isDirectory()) {
+			if(chosenStructure.listFiles().length <= 0) {
+				return null;
+			}
+			File[] files = chosenStructure.listFiles();
+			int index = random.nextInt(files.length);
+			chosenStructure = files[index];
+		}
+		return chosenStructure;
+	}
 	
 	public boolean doBuildChains() {
 		return this.buildChains;
