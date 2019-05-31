@@ -39,7 +39,7 @@ public class OceanFloorGenerator implements IDungeonGenerator{
 		if(this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.generate(new Random(), world, x, y, z, this.structure.getSizeX() + 16, this.structure.getSizeZ() + 16);
+			supportBuilder.generate(new Random(), world, x, y, z, this.structure.getSizeX(), this.structure.getSizeZ());
 		}
 	}
 

@@ -7,7 +7,9 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -67,7 +69,22 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
+		if(this.dungeon.isCoverBlockEnabled()) {
+			int startX = x - this.structure.getSizeX() /3;
+			int startZ = z - this.structure.getSizeZ() /3;
+			
+			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() /3;
+			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() /3;
+			
+			for(int iX = startX; iX <= endX; iX++) {
+				for(int iZ = startZ; iZ <= endZ; iZ++) {
+					BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+					if(!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+						world.setBlockState(pos, this.dungeon.getCoverBlock().getDefaultState());
+					}
+				}
+			}
+		}
 		
 	}
 

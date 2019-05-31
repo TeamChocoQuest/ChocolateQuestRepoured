@@ -281,9 +281,22 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		if(!Block.isEqualTo(this.dungeon.getCoverBlock(), Blocks.AIR)) {
-			for(int i = 0; i < this.chosenStructures.size(); i++) {
-				//TODO: Figure out how the support platform handles its placement, then do this...
+		if(this.dungeon.isCoverBlockEnabled()) {
+			for(CQStructure structure : this.toGenerate.keySet()) {
+				int startX = this.toGenerate.get(structure).getX() - structure.getSizeX() /3;
+				int startZ = this.toGenerate.get(structure).getZ() - structure.getSizeZ() /3;
+				
+				int endX = this.toGenerate.get(structure).getX() + structure.getSizeX() + structure.getSizeX() /3;
+				int endZ = this.toGenerate.get(structure).getZ() + structure.getSizeZ() + structure.getSizeZ() /3;
+				
+				for(int iX = startX; iX <= endX; iX++) {
+					for(int iZ = startZ; iZ <= endZ; iZ++) {
+						BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+						if(!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+							world.setBlockState(pos, this.dungeon.getCoverBlock().getDefaultState());
+						}
+					}
+				}
 			}
 		}
 	}
