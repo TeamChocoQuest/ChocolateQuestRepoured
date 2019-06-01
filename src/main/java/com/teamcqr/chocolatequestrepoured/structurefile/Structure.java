@@ -62,18 +62,22 @@ public class Structure extends Template {
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
+			boolean outsideOfDevEnv = false;
 			try {
 				superBlockField = Template.class.getDeclaredField("blocks");
 			} catch (NoSuchFieldException ex) {
 				//ex.printStackTrace();
+				outsideOfDevEnv = true;
 				System.out.println("It seems we're not in the dev environment... Using obfuscated field name...");
 				superBlockField = null;
 			}
-			try {
-				superBlockField = Template.class.getDeclaredField("field_186270_a");
-			} catch(NoSuchFieldException ex) {
-				ex.printStackTrace();
-				superBlockField = null;
+			if(outsideOfDevEnv) {
+				try {
+					superBlockField = Template.class.getDeclaredField("field_186270_a");
+				} catch(NoSuchFieldException ex) {
+					ex.printStackTrace();
+					superBlockField = null;
+				}
 			}
 			
 			if(superBlockField != null) {
@@ -260,7 +264,7 @@ public class Structure extends Template {
 					TileEntityChest chest = (TileEntityChest) worldIn.getTileEntity(chestPos);
 					//DONE: Wait for loot tables to be finished, get the right one and add it below
 					long seed = WorldDungeonGenerator.getSeed(worldIn, chestPos.getX(), chestPos.getZ());
-					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getLootTable(), seed);
+					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getResourceLocation(), seed);
 				}
 			}
 		}
