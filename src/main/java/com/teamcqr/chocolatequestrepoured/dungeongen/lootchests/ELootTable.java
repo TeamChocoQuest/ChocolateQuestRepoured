@@ -181,5 +181,56 @@ public enum ELootTable {
 	public void setLoottable(LootTable loottable) {
 		this.loottable = loottable;
 	}
+	
+	static ELootTable getAssignedLootTable(String fileName) {
+		fileName = fileName.replaceAll(".properties", "");
+		fileName = fileName.replaceAll(".prop", "");
+		fileName = fileName.toLowerCase();
+		
+		if(LootTableLoader.isNameValid(fileName)) {
+			System.out.println("Name is valid, getting enum...");
+			switch(fileName) {
+			case "treasure_chest":
+				return ELootTable.CQ_TREASURE;
+			case "material_chest":
+				return ELootTable.CQ_MATERIAL;
+			case "food_chest":
+				return ELootTable.CQ_FOOD;
+			case "tools_chest":
+				return ELootTable.CQ_EQUIPMENT;
+			case "custom_1":
+				return ELootTable.CQ_CUSTOM_1;
+			case "custom_2":
+				return ELootTable.CQ_CUSTOM_2;
+			case "custom_3":
+				return ELootTable.CQ_CUSTOM_3;
+			case "custom_4":
+				return ELootTable.CQ_CUSTOM_4;
+			case "custom_5":
+				return ELootTable.CQ_CUSTOM_5;
+			case "custom_6":
+				return ELootTable.CQ_CUSTOM_6;
+			case "custom_7":
+				return ELootTable.CQ_CUSTOM_7;
+			case "custom_8":
+				return ELootTable.CQ_CUSTOM_8;
+			case "custom_9":
+				return ELootTable.CQ_CUSTOM_9;
+			case "custom_10":
+				return ELootTable.CQ_CUSTOM_10;
+			case "custom_11":
+				return ELootTable.CQ_CUSTOM_11;
+			case "custom_12":
+				return ELootTable.CQ_CUSTOM_12;
+			case "custom_13":
+				return ELootTable.CQ_CUSTOM_13;
+			case "custom_14":
+				return ELootTable.CQ_CUSTOM_14;
+			default:
+				break;
+			}
+		}
+		return null;
+	}
 
 }
