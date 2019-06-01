@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
@@ -70,11 +71,11 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if(this.dungeon.isCoverBlockEnabled()) {
-			int startX = x - this.structure.getSizeX() /3;
-			int startZ = z - this.structure.getSizeZ() /3;
+			int startX = x - this.structure.getSizeX() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+			int startZ = z - this.structure.getSizeZ() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
 			
-			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() /3;
-			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() /3;
+			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
 			
 			for(int iX = startX; iX <= endX; iX++) {
 				for(int iZ = startZ; iZ <= endZ; iZ++) {
