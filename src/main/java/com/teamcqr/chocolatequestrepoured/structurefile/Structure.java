@@ -65,7 +65,8 @@ public class Structure extends Template {
 			try {
 				superBlockField = Template.class.getDeclaredField("blocks");
 			} catch (NoSuchFieldException ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
+				System.out.println("It seems we're not in the dev environment... Using obfuscated field name...");
 				superBlockField = null;
 			}
 			try {
