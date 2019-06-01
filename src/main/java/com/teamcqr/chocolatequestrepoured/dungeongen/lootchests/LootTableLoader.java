@@ -16,6 +16,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.FolderResourcePack;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -57,6 +62,22 @@ public class LootTableLoader {
 				table.exchangeFileInJar(jsonFile, table.getID() > 17);
 			}
 		}
+		
+		FolderResourcePack frp = new FolderResourcePack(new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/"));
+		
+		//Reflect
+		List<IResourcePack> defaultResourcepacks = null;
+		
+		try {
+			defaultResourcepacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks");
+			
+			defaultResourcepacks.add(frp);
+			
+			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), defaultResourcepacks, "defaultResourcePacks");
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 	private void createJSONFile(File config, ELootTable table) {
@@ -80,7 +101,8 @@ public class LootTableLoader {
 						JsonObject json = getJSON(items);
 
 						//DONE: modify json file of resourcelocation --> exchangeJarFiles() method, is done by ELootTable class, but not finished!!
-						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
+						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/" + "assets/cqrepoured/loot_tables.chest/" + (table.isCustomChest() ? "custom/" : ""));
+						
 						if(!jsonFileDir.exists()) {
 							jsonFileDir.mkdirs();
 						}
