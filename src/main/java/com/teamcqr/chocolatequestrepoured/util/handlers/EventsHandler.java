@@ -91,8 +91,6 @@ public class EventsHandler
 	public static void onLootTableLoad(LootTableLoadEvent event) {
 		LootTable lootTable = event.getTable();
 		ResourceLocation resLoc = event.getName();
-		//System.out.println(event.getName());
-		// Problem: this is only fired, when the MC loot tables load :/
 		if(ELootTable.valueOf(resLoc) != null) {
 			ELootTable table = ELootTable.valueOf(resLoc);
 			System.out.println("Loaded loottable is a cq one....");
