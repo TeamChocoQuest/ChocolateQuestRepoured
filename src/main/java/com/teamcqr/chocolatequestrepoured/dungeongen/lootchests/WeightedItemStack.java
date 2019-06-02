@@ -1,7 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import java.util.Random;
+
+import com.teamcqr.chocolatequestrepoured.util.LootUtils;
+
+import net.minecraft.item.Item;
+import net.minecraft.world.storage.loot.LootTable;
 
 /**
  * Copyright (c) 29.04.2019
@@ -15,7 +19,9 @@ public class WeightedItemStack {
 	private int maxCount;
 	private int weight;
 	private boolean enchant;
+	@SuppressWarnings("unused")
 	private boolean treasure;
+	@SuppressWarnings("unused")
 	private int damage;
 	private int minLvl;
 	private int maxLvl;
@@ -32,53 +38,22 @@ public class WeightedItemStack {
 		this.treasure = isTreasure;
 	}
 	
-	public JsonObject toJSON() {
-		JsonObject jsonObj = null;
-		
-		try {
-			jsonObj = new JsonObject();
-			jsonObj.addProperty("type", "item");
-			jsonObj.addProperty("name", this.itemName);
-			jsonObj.addProperty("weight", this.weight);
-			
-			JsonArray functions = new JsonArray();
-			
-			JsonObject countOBJ = new JsonObject();
-			countOBJ.addProperty("function", "set_count");
-			JsonObject countPROP = new JsonObject();
-			countPROP.addProperty("min", this.minCount);
-			countPROP.addProperty("max", this.maxCount);
-			countOBJ.add("count", countPROP);
-			
-			functions.add(countOBJ);
-			
-			if(this.enchant) {
-				JsonObject enchantOBJ = new JsonObject();
-				enchantOBJ.addProperty("function", "enchant_with_levels");
-				enchantOBJ.addProperty("treasure", this.treasure);
-				JsonObject levelOBJ = new JsonObject();
-				levelOBJ.addProperty("min", this.minLvl);
-				levelOBJ.addProperty("max", this.maxLvl);
-				enchantOBJ.add("levels", levelOBJ);
-				
-				functions.add(enchantOBJ);
-			}
-			if(this.damage > 0) {
-				JsonObject damgOBJ = new JsonObject();
-				damgOBJ.addProperty("function", "set_data");
-				damgOBJ.addProperty("data", this.damage);
-				
-				functions.add(damgOBJ);
-			}
-			jsonObj.add("functions", functions);
-		} catch(Exception ex) {
-			System.out.println("Failed to create lootentry!");
-		}
-		
-		return jsonObj;
-	}
+	
 	public int getWeight() {
 		return this.weight;
+	}
+	
+	public void addToTable(LootTable table) {
+		LootUtils.addItemToTable(table,
+				Item.getByNameOrId(this.itemName),
+				this.weight,
+				1 + new Random().nextInt(3),
+				((float) this.weight / 100.0F),
+				this.minCount,
+				this.maxCount,
+				this.enchant ? this.minLvl : 0,
+				this.enchant ? this.maxLvl : 0,
+				this.itemName);
 	}
 	
 	public WeightedItemStack setChance(int chance) {
