@@ -154,7 +154,7 @@ public class CQRMain
 		}
 		//Instantiating the ELootTable class
 		try {
-			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getLootTable();
+			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
 			if(resLoc != null) {
 				System.out.println("ELootTable instantiated successfully!");
 				LootTableLoader ltl = new LootTableLoader();

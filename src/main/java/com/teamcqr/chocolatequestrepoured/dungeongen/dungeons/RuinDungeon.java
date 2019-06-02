@@ -91,7 +91,7 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		File structure = pickStructure(new Random());
 		if(structure != null) {
-			CQStructure dungeon = new CQStructure(structure, this.protectFromDestruction);
+			CQStructure dungeonStructure = new CQStructure(structure, this.protectFromDestruction);
 			
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);
@@ -117,7 +117,7 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 			
 			System.out.println("Placing dungeon: " + this.name);
 			System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
-			RuinGenerator generator = new RuinGenerator(this, dungeon, settings);
+			RuinGenerator generator = new RuinGenerator(this, dungeonStructure, settings);
 			generator.generate(world, chunk, x, y, z);
 		}
 	}

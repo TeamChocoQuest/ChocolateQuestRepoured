@@ -222,7 +222,7 @@ public class CavernDungeon extends DungeonBase {
 			//BOSS CHEST
 			world.setBlockState(bossPos.down(), Blocks.CHEST.getDefaultState());
 			TileEntityChest bossChest = (TileEntityChest) world.getTileEntity(bossPos.down());
-			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getLootTable(), world.getSeed());
+			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
 			
 			//BOSS SPAWNER
 			//TODO: spawn the boss

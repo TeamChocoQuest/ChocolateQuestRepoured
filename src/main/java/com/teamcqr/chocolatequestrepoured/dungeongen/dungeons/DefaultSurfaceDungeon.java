@@ -84,16 +84,19 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	}
 	
 	protected File pickStructure(Random random) {
+		if(this.structureFolderPath == null) {
+			return null;
+		}
 		File chosenStructure = this.structureFolderPath;
-		if(this.structureFolderPath.isDirectory()) {
-			File[] files = this.structureFolderPath.listFiles();
+		while(chosenStructure.isDirectory()) {
+			if(chosenStructure.listFiles().length <= 0) {
+				return null;
+			}
+			File[] files = chosenStructure.listFiles();
 			int index = random.nextInt(files.length);
 			chosenStructure = files[index];
 		}
-		if(chosenStructure != null) {
-			return chosenStructure;
-		}
-		return null;
+		return chosenStructure;
 	}
 	
 	@Override

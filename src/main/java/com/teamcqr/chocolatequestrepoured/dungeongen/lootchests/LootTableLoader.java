@@ -16,6 +16,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.FolderResourcePack;
+import net.minecraft.client.resources.IResourcePack;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -26,7 +31,7 @@ public class LootTableLoader {
 	private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
 	
 	//These are all valid file names for the chests!
-	final String[] validFileNames = {"treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13", "custom_14"}; 
+	final static String[] validFileNames = {"treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13", "custom_14"}; 
 	
 	public void loadConfigs() {
 		int files = -1;
@@ -39,7 +44,7 @@ public class LootTableLoader {
 				if(f.isFile()) {
 					ELootTable table = null;
 					
-					table = getAssignedLootTable(f.getName());
+					table = ELootTable.getAssignedLootTable(f.getName());
 					
 					if(table != null) {
 						System.out.println("Loading loot config " + f.getName() + "...");
@@ -56,6 +61,22 @@ public class LootTableLoader {
 				File jsonFile = table.getJSONFile();
 				table.exchangeFileInJar(jsonFile, table.getID() > 17);
 			}
+		}
+		
+		FolderResourcePack frp = new FolderResourcePack(new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/"));
+		
+		//Reflect
+		List<IResourcePack> defaultResourcepacks = null;
+		
+		try {
+			defaultResourcepacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks");
+			
+			defaultResourcepacks.add(frp);
+			
+			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), defaultResourcepacks, "defaultResourcePacks");
+			
+		} catch(Exception ex) {
+			ex.printStackTrace();
 		}
 	}
 	
@@ -80,7 +101,8 @@ public class LootTableLoader {
 						JsonObject json = getJSON(items);
 
 						//DONE: modify json file of resourcelocation --> exchangeJarFiles() method, is done by ELootTable class, but not finished!!
-						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
+						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/" + "assets/cqrepoured/loot_tables.chest/" + (table.isCustomChest() ? "custom/" : ""));
+						
 						if(!jsonFileDir.exists()) {
 							jsonFileDir.mkdirs();
 						}
@@ -207,64 +229,13 @@ public class LootTableLoader {
 		name = name.toLowerCase();
 		return isNameValid(name);
 	}
-	private boolean isNameValid(String fileName) {
+	static boolean isNameValid(String fileName) {
 		for(int i = 0; i < validFileNames.length; i++) {
 			if(validFileNames[i].equalsIgnoreCase(fileName)) {
 				return true;
 			}
 		}
 		return false;
-	}
-	
-	private ELootTable getAssignedLootTable(String fileName) {
-		fileName = fileName.replaceAll(".properties", "");
-		fileName = fileName.replaceAll(".prop", "");
-		fileName = fileName.toLowerCase();
-		
-		if(isNameValid(fileName)) {
-			System.out.println("Name is valid, getting enum...");
-			switch(fileName) {
-			case "treasure_chest":
-				return ELootTable.CQ_TREASURE;
-			case "material_chest":
-				return ELootTable.CQ_MATERIAL;
-			case "food_chest":
-				return ELootTable.CQ_FOOD;
-			case "tools_chest":
-				return ELootTable.CQ_EQUIPMENT;
-			case "custom_1":
-				return ELootTable.CQ_CUSTOM_1;
-			case "custom_2":
-				return ELootTable.CQ_CUSTOM_2;
-			case "custom_3":
-				return ELootTable.CQ_CUSTOM_3;
-			case "custom_4":
-				return ELootTable.CQ_CUSTOM_4;
-			case "custom_5":
-				return ELootTable.CQ_CUSTOM_5;
-			case "custom_6":
-				return ELootTable.CQ_CUSTOM_6;
-			case "custom_7":
-				return ELootTable.CQ_CUSTOM_7;
-			case "custom_8":
-				return ELootTable.CQ_CUSTOM_8;
-			case "custom_9":
-				return ELootTable.CQ_CUSTOM_9;
-			case "custom_10":
-				return ELootTable.CQ_CUSTOM_10;
-			case "custom_11":
-				return ELootTable.CQ_CUSTOM_11;
-			case "custom_12":
-				return ELootTable.CQ_CUSTOM_12;
-			case "custom_13":
-				return ELootTable.CQ_CUSTOM_13;
-			case "custom_14":
-				return ELootTable.CQ_CUSTOM_14;
-			default:
-				break;
-			}
-		}
-		return null;
 	}
 	
 }

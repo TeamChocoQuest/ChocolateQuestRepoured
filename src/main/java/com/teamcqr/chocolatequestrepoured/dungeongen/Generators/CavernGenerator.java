@@ -124,7 +124,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		if(chest != null) {
 			ResourceLocation resLoc = null;
 			try {
-				resLoc = ELootTable.valueOf(eltID).getLootTable();
+				resLoc = ELootTable.valueOf(eltID).getResourceLocation();
 			} catch(Exception ex) {
 				ex.printStackTrace();
 			}
