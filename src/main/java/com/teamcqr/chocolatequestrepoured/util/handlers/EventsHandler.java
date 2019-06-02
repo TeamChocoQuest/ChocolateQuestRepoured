@@ -91,6 +91,8 @@ public class EventsHandler
 		@SuppressWarnings("unused")
 		LootTable lootTable = event.getTable();
 		ResourceLocation resLoc = event.getName();
+		//System.out.println(event.getName());
+		// Problem: this is only fired, when the MC loot tables load :/
 		if(ELootTable.valueOf(resLoc) != null) {
 			lootTable = LootTable.EMPTY_LOOT_TABLE;
 			//TODO: Exchange loot tables...

@@ -171,8 +171,8 @@ public class VillageDungeon extends DungeonBase {
 			//int i = indexes.get(random.nextInt(indexes.size()));
 			//File f = this.chanceFileMap.get(i).get(random.nextInt(this.chanceFileMap.get(i).size()));
 		File f = this.structureFolder.get(random.nextInt(this.structureFolder.size()));
-			if(f.isDirectory()) {
-				return f.listFiles()[random.nextInt(f.listFiles().length)];
+			while(f.isDirectory()) {
+				f = f.listFiles()[random.nextInt(f.listFiles().length)];
 			}
 			return f;
 		//}

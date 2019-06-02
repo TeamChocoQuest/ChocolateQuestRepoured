@@ -6,14 +6,11 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
-import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -146,7 +143,7 @@ public class ProtectionHandler {
     }
 
     public void initForceFieldNexus(World world, BlockPos pos) {
-        if(world.getBlockState(pos) == ModBlocks.FORCE_FIELD_NEXUS.getDefaultState()) {
+        if(world != null && pos != null && pos.getY() > 0 && pos.getY() < 256 && world.getBlockState(pos) != null && net.minecraft.block.Block.isEqualTo(world.getBlockState(pos).getBlock(), ModBlocks.FORCE_FIELD_NEXUS)) {
             TileEntityForceFieldNexus tile = (TileEntityForceFieldNexus)world.getTileEntity(pos);
             tile.initUUIDRegion();
         }

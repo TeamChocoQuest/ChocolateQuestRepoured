@@ -70,7 +70,10 @@ public class ProtectedRegion {
     public ProtectedRegion(NBTTagCompound tag) {
         BlockPos min = new BlockPos(tag.getDouble("min.x"),tag.getDouble("min.y"),tag.getDouble("min.z"));
         BlockPos max = new BlockPos(tag.getDouble("max.x"),tag.getDouble("max.y"),tag.getDouble("max.z"));
-        BlockPos nexus = new BlockPos(tag.getDouble("nexus.x"),tag.getDouble("nexus.y"),tag.getDouble("nexus.z"));
+        BlockPos nexus = null;
+        if(tag.hasKey("nexus")) {
+        	nexus = new BlockPos(tag.getDouble("nexus.x"),tag.getDouble("nexus.y"),tag.getDouble("nexus.z"));
+        }
         boolean e = tag.getBoolean("enabled");
 
         this.max = max;
@@ -80,7 +83,9 @@ public class ProtectedRegion {
         this.center = new BlockPos(boundingBox.getCenter());
         this.dungeonUUID = tag.getUniqueId("dungeonUUID");
         this.chunksInRegion = new ArrayList<>();
-        this.nexus = nexus;
+        if(nexus != null) {
+        	this.nexus = nexus;
+        }
         insertChunksForRegion();
     }
 
@@ -136,9 +141,11 @@ public class ProtectedRegion {
         tag.setDouble("max.y",max.getY());
         tag.setDouble("max.z",max.getZ());
 
-        tag.setDouble("nexus.x",nexus.getX());
-        tag.setDouble("nexus.y",nexus.getY());
-        tag.setDouble("nexus.z",nexus.getZ());
+        if(this.nexus != null) {
+        	tag.setDouble("nexus.x",nexus.getX());
+        	tag.setDouble("nexus.y",nexus.getY());
+        	tag.setDouble("nexus.z",nexus.getZ());
+        }
 
         tag.setBoolean("enabled",enabled);
 

@@ -62,15 +62,34 @@ public class Structure extends Template {
 		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
 		Field superBlockField;
 		try {
-			superBlockField = Template.class.getDeclaredField("blocks");
-			
-			superBlockField.setAccessible(true);
+			boolean outsideOfDevEnv = false;
 			try {
-				blocks = (List<BlockInfo>) superBlockField.get(this);
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				superBlockField = Template.class.getDeclaredField("blocks");
+			} catch (NoSuchFieldException ex) {
+				//ex.printStackTrace();
+				outsideOfDevEnv = true;
+				System.out.println("It seems we're not in the dev environment... Using obfuscated field name...");
+				superBlockField = null;
+			}
+			if(outsideOfDevEnv) {
+				try {
+					superBlockField = Template.class.getDeclaredField("field_186270_a");
+				} catch(NoSuchFieldException ex) {
+					ex.printStackTrace();
+					superBlockField = null;
+				}
+			}
+			
+			if(superBlockField != null) {
+				superBlockField.setAccessible(true);
+				
+				try {
+					blocks = (List<BlockInfo>) superBlockField.get(this);
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				}
 			}
 			//TODO: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
 			//after filtering, remove the entries and add them into their currect lists
@@ -133,15 +152,15 @@ public class Structure extends Template {
 			}
 			//exchange the field values
 			try {
-				superBlockField.set(this, blocks);
-				superBlockField.setAccessible(false);
+				if(superBlockField != null) {
+					superBlockField.set(this, blocks);
+					superBlockField.setAccessible(false);
+				}
 			} catch (IllegalArgumentException e) {
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-		} catch (NoSuchFieldException e) {
-			e.printStackTrace();
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		}
@@ -245,7 +264,7 @@ public class Structure extends Template {
 					TileEntityChest chest = (TileEntityChest) worldIn.getTileEntity(chestPos);
 					//DONE: Wait for loot tables to be finished, get the right one and add it below
 					long seed = WorldDungeonGenerator.getSeed(worldIn, chestPos.getX(), chestPos.getZ());
-					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getLootTable(), seed);
+					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getResourceLocation(), seed);
 				}
 			}
 		}

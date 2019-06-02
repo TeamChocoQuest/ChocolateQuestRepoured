@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
@@ -30,6 +31,8 @@ import net.minecraftforge.common.MinecraftForge;
  * GitHub: https://github.com/DerToaster98
  */
 public class VillageGenerator implements IDungeonGenerator{
+	
+	//TODO remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 	
 	private VillageDungeon dungeon;
 
@@ -79,11 +82,14 @@ public class VillageGenerator implements IDungeonGenerator{
 		
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-		platformCenter.generate(new Random(), world, x - (centerDun.getSizeX() /2), y, z - (centerDun.getSizeZ() /2), centerDun.getSizeX() +8, centerDun.getSizeZ() +8);
+		platformCenter.generate(new Random(), world, x /*- (centerDun.getSizeX() /2)*/, y + this.dungeon.getUnderGroundOffset(), z /*- (centerDun.getSizeZ() /2)*/, centerDun.getSizeX(), centerDun.getSizeZ());
 		
-		BlockPos cenPos = new BlockPos(x - (centerDun.getSizeX() /2), y - this.dungeon.getUnderGroundOffset(), z - (centerDun.getSizeZ() /2));
+		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y, z /*- (centerDun.getSizeZ() /2)*/);
 		
 		this.toGenerate.put(centerDun, cenPos);
+		
+		PlateauBuilder platform = new PlateauBuilder();
+		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		//First, build all the support platforms
 		for(int i = 0; i < this.structurePosList.size(); i++) {
 			if(i < this.chosenStructures.size()) {
@@ -94,16 +100,15 @@ public class VillageGenerator implements IDungeonGenerator{
 				if(dungeonToSpawn != null) {
 					//Build the support platform...
 					BlockPos pos = this.structurePosList.get(i);
-					PlateauBuilder platform = new PlateauBuilder();
-					platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-					platform.generate(new Random(), world, pos.getX() - (dungeonToSpawn.getSizeX() /2), pos.getY(), pos.getZ() - (dungeonToSpawn.getSizeZ() /2), dungeonToSpawn.getSizeX() +8, dungeonToSpawn.getSizeZ() +8);
+					
+					platform.generate(new Random(), world, pos.getX() /*- (dungeonToSpawn.getSizeX() /2)*/, pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() /*- (dungeonToSpawn.getSizeZ() /2)*/, dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeZ());
 					
 					//Build the structure...
-					int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
+					/*int Y = pos.getY() - this.dungeon.getUnderGroundOffset();
 					int X = pos.getX() - (dungeonToSpawn.getSizeX() /2);
 					int Z = pos.getZ() - (dungeonToSpawn.getSizeZ() /2);
 					//pos = pos.add(- dungeonToSpawn.getSizeX() /2, 0,  - dungeonToSpawn.getSizeZ() /2);
-					pos = new BlockPos(X, Y, Z);
+					pos = new BlockPos(X, Y, Z);*/
 					
 					this.toGenerate.put(dungeonToSpawn, pos);
 				}
@@ -114,7 +119,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			System.out.println("Building " + this.structurePosList.size() + " roads...");
 			for(BlockPos end : this.structurePosList) {
 				System.out.println("Building road " + (this.structurePosList.indexOf(end) +1) + " of " + this.structurePosList.size() + "...");
-				this.buildPath(end, this.startPos);
+				this.buildPath(end, cenPos /*this.startPos*/);
 			}
 			System.out.println("Roads built!");
 		}
@@ -277,9 +282,22 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		if(!Block.isEqualTo(this.dungeon.getCoverBlock(), Blocks.AIR)) {
-			for(int i = 0; i < this.chosenStructures.size(); i++) {
-				//TODO: Figure out how the support platform handles its placement, then do this...
+		if(this.dungeon.isCoverBlockEnabled()) {
+			for(CQStructure structure : this.toGenerate.keySet()) {
+				int startX = this.toGenerate.get(structure).getX() - structure.getSizeX() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				int startZ = this.toGenerate.get(structure).getZ() - structure.getSizeZ() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				
+				int endX = this.toGenerate.get(structure).getX() + structure.getSizeX() + structure.getSizeX() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				int endZ = this.toGenerate.get(structure).getZ() + structure.getSizeZ() + structure.getSizeZ() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				
+				for(int iX = startX; iX <= endX; iX++) {
+					for(int iZ = startZ; iZ <= endZ; iZ++) {
+						BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+						if(!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+							world.setBlockState(pos, this.dungeon.getCoverBlock().getDefaultState());
+						}
+					}
+				}
 			}
 		}
 	}
