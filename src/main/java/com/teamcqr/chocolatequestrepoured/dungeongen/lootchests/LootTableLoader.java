@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -10,16 +10,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.stream.JsonWriter;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.FolderResourcePack;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraft.world.storage.loot.LootTable;
 
 /**
  * Copyright (c) 29.04.2019
@@ -28,7 +21,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
  */
 public class LootTableLoader {
 	
-	private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
+	//private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
 	
 	//These are all valid file names for the chests!
 	final static String[] validFileNames = {"treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10", "custom_11", "custom_12", "custom_13", "custom_14"}; 
@@ -48,128 +41,13 @@ public class LootTableLoader {
 					
 					if(table != null) {
 						System.out.println("Loading loot config " + f.getName() + "...");
-						createJSONFile(f, table);
 					}
 				}
 			}
 		}
 	}
 	
-	public void exchangeJarFiles() {
-		for(ELootTable table : ELootTable.values()) {
-			if(table.getID() < 4 || table.getID() > 17) {
-				File jsonFile = table.getJSONFile();
-				table.exchangeFileInJar(jsonFile, table.getID() > 17);
-			}
-		}
-		
-		FolderResourcePack frp = new FolderResourcePack(new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/"));
-		
-		//Reflect
-		List<IResourcePack> defaultResourcepacks = null;
-		
-		try {
-			defaultResourcepacks = ReflectionHelper.getPrivateValue(Minecraft.class, Minecraft.getMinecraft(), "defaultResourcePacks");
-			
-			defaultResourcepacks.add(frp);
-			
-			ReflectionHelper.setPrivateValue(Minecraft.class, Minecraft.getMinecraft(), defaultResourcepacks, "defaultResourcePacks");
-			
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-	
-	private void createJSONFile(File config, ELootTable table) {
-		System.out.println("Checking existance of file " +config.getName() + "..."); 
-		if(config != null && config.exists()) {
-			System.out.println("File exists! Checking if name is valid...");
-			if(isFileNameValid(config)) {
-				System.out.println("Name is valid! Loading...");
-				Properties propFile = new Properties();
-				boolean success = false;
-				try {
-					FileInputStream inStream = new FileInputStream(config);
-					propFile.load(inStream);
-					success = true;
-				} catch(Exception ex) {
-					System.err.println("Failed to load file " + config.getAbsolutePath());
-				}
-				if(success) {
-					List<WeightedItemStack> items = getItemList(propFile);
-					if(!items.isEmpty()) {
-						JsonObject json = getJSON(items);
-
-						//DONE: modify json file of resourcelocation --> exchangeJarFiles() method, is done by ELootTable class, but not finished!!
-						File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/" + "assets/cqrepoured/loot_tables.chest/" + (table.isCustomChest() ? "custom/" : ""));
-						
-						if(!jsonFileDir.exists()) {
-							jsonFileDir.mkdirs();
-						}
-						File jsonFile = new File(jsonFileDir.getAbsolutePath(), table.getName() + ".json");
-						if(jsonFile.exists()) {
-							jsonFile.delete();
-						}
-						if(!jsonFile.exists()) {
-							try {
-								jsonFile.createNewFile();
-							} catch (IOException e) {
-								System.err.println("Failed to create JSON file for chest " + config.getName() + "!");
-								e.printStackTrace();
-							}
-						}
-						Gson gson = new Gson();
-						
-						FileWriter fileWriter = null;
-						try {
-							fileWriter = new FileWriter(jsonFile);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-						if(fileWriter != null) {
-							JsonWriter jsonWriter = new JsonWriter(fileWriter);
-							gson.toJson(json, jsonWriter);
-							try {
-								jsonWriter.close();
-								fileWriter.close();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}					
-					}
-				}
-			}
-		}
-	}
-
-	private JsonObject getJSON(List<WeightedItemStack> items) {
-		JsonObject json = new JsonObject();
-		
-		JsonArray pools = new JsonArray();
-		int index = 1;
-		for(WeightedItemStack wes : items) {
-			JsonObject poolForItem = new JsonObject();
-			poolForItem.addProperty("name", "CQ_Lootpool_" +index);
-			poolForItem.addProperty("rolls", 1);
-			
-			JsonArray entries = new JsonArray();
-			entries.add(wes.toJSON());
-			entries.add(getAirEntry(100-wes.getWeight()).toJSON());
-			
-			poolForItem.add("entries", entries);
-			
-			pools.add(poolForItem);
-			index++;
-		}
-		json.add("pools", pools);
-		
-		return json;
-	}
-	private WeightedItemStack getAirEntry(int chance) {
-		return airEntryBase.setChance(chance);
-	}
-	
-	private List<WeightedItemStack> getItemList(Properties propFile) {
+	private static List<WeightedItemStack> getItemList(Properties propFile) {
 		List<WeightedItemStack> items = new ArrayList<WeightedItemStack>();
 		Enumeration<Object> fileEntries = propFile.elements();
 		while(fileEntries.hasMoreElements()) {
@@ -182,7 +60,7 @@ public class LootTableLoader {
 		return items;
 	}
 	
-	private WeightedItemStack createWeightedItemStack(String entry) {
+	private static WeightedItemStack createWeightedItemStack(String entry) {
 		//		  1     2       3          4          5       6        7        8        9
 		//String format: ID = ITEM, DAMAGE, MIN_COUNT, MAX_COUNT, CHANCE, ENCHANT, MIN_LVL, MAX_LVL, TREASURE
 		StringTokenizer tokenizer = new StringTokenizer(entry, ",");
@@ -221,14 +99,7 @@ public class LootTableLoader {
 			return null;
 		}
 	}
-	
-	private boolean isFileNameValid(File file) {
-		String name = file.getName();
-		name = name.replaceAll(".properties", "");
-		name = name.replaceAll(".prop", "");
-		name = name.toLowerCase();
-		return isNameValid(name);
-	}
+
 	static boolean isNameValid(String fileName) {
 		for(int i = 0; i < validFileNames.length; i++) {
 			if(validFileNames[i].equalsIgnoreCase(fileName)) {
@@ -236,6 +107,46 @@ public class LootTableLoader {
 			}
 		}
 		return false;
+	}
+	
+	public static void fillLootTable(ELootTable whatTable, LootTable lootTable) {
+		Properties propFile = null;
+		
+		File file = null;
+		
+		try {
+			file = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath(), ELootTable.getAssignedFileName(whatTable));
+		} catch(Exception ex) {
+			file = null;
+			ex.printStackTrace();
+		}
+		if(file != null && file.exists()) {
+			propFile = new Properties();
+			
+			FileInputStream fis = null;
+			try {
+				fis = new FileInputStream(file);
+				propFile.load(fis);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+				propFile = null;
+				file = null;
+				fis = null;
+			} catch (IOException e) {
+				e.printStackTrace();
+				propFile = null;
+				file = null;
+				fis = null;
+			}
+			
+			if(propFile != null) {
+				List<WeightedItemStack> items = getItemList(propFile);
+				
+				for(WeightedItemStack wis : items) {
+					wis.addToTable(lootTable);
+				}
+			}
+		}
 	}
 	
 }

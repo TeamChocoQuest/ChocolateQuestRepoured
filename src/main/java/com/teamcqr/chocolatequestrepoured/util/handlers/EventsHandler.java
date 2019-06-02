@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -88,16 +89,21 @@ public class EventsHandler
 	
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
-		@SuppressWarnings("unused")
 		LootTable lootTable = event.getTable();
 		ResourceLocation resLoc = event.getName();
 		//System.out.println(event.getName());
 		// Problem: this is only fired, when the MC loot tables load :/
 		if(ELootTable.valueOf(resLoc) != null) {
-			lootTable = LootTable.EMPTY_LOOT_TABLE;
-			//TODO: Exchange loot tables...
-			//LootTable.Serializer sterializer = new Serializer();
-			//LootTable newTable = sterializer.deserialize(JSON_ELEMENT, TYPE, JsonDeserializationContext);
+			ELootTable table = ELootTable.valueOf(resLoc);
+			System.out.println("Loaded loottable is a cq one....");
+			System.out.println("Exchanging loot...");
+			
+			try {
+				LootTableLoader.fillLootTable(table, lootTable);
+			} catch(Exception ex) {
+				System.err.println("Unable to fill loot table " + event.getName());
+				ex.printStackTrace();
+			}
 		}
 	}
 	

@@ -158,9 +158,10 @@ public class CQRMain
 			if(resLoc != null) {
 				System.out.println("ELootTable instantiated successfully!");
 				LootTableLoader ltl = new LootTableLoader();
+				System.out.println("Loading the loot configs...");
 				ltl.loadConfigs();
 				System.out.println("Trying to replace files in jar....");
-				ltl.exchangeJarFiles();
+				//ltl.exchangeJarFiles();
 				System.out.println("Replaced files in jar!");
 			}
 		} catch (Exception e) {
