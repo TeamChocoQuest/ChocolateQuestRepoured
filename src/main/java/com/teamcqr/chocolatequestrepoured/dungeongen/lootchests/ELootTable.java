@@ -32,7 +32,7 @@ public enum ELootTable {
 	CQ_VANILLA_BLACKSMITH(ModBlocks.EXPORTER_CHEST_VANILLA_BLACKSMITH, 16, "vanilla_blacksmith", LootTableList.CHESTS_VILLAGE_BLACKSMITH, false),
 	CQ_VANILLA_WOODLAND_MANSION(ModBlocks.EXPORTER_CHEST_VANILLA_MANSION, 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
 	
-	//TODO: LOAD LOOT TABLES
+	//DONE: LOAD LOOT TABLES
 	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_TREASURE, 0, "cq_treasure", registerChest("cq_treasure"), false),
 	CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
 	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false),
@@ -71,7 +71,7 @@ public enum ELootTable {
 		this.ID = id;
 		this.name = name;
 		this.resourceLocation = loottable;
-		//if this is a new CQ loottable, we need to add it to the LootTableList
+		//if this is a new CQ loottable, we need to add it to the LootTableList so that MC/Forge know about it
 		if(id < 4 || id > 17) {
 			LootTableList.register(this.resourceLocation);
 		}
@@ -149,12 +149,6 @@ public enum ELootTable {
         {
             throw new IllegalArgumentException(id + " is already a registered built-in loot table");
         }
-	}
-	
-	public void exchangeResourceLocation(ResourceLocation newResLoc, boolean isCustomChest) {
-		if(newResLoc != null && !this.resourceLocation.equals(newResLoc)) {
-			this.resourceLocation = newResLoc;
-		}
 	}
 
 	static ELootTable getAssignedLootTable(String fileName) {
