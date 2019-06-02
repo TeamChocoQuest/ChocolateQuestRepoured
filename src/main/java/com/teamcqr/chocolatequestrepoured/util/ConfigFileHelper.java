@@ -9,6 +9,7 @@ public class ConfigFileHelper {
 	private int dungeonSpawnDistance = 25;
 	private double spawnerActivationDistance = 25.0;
 	private int turnBackIntoSpawnerDistance = 48;
+	private int maxLootTableRolls = 3;
 	private int wallDistance = 500;  //Measured in chunks  500 = 8000 blocks
 	private int wallTopY = 140;
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
@@ -47,6 +48,10 @@ public class ConfigFileHelper {
 		//Dungeons
 		prop = config.get("general", "supportHillWallSize", 8);
 		this.supportHillWallSize = prop.getInt(8);
+		
+		//Loot Table rolls
+		prop = config.get("general", "maxloottablepoolrolls", 3);
+		this.maxLootTableRolls = prop.getInt(3);
 		
 		// Wall
 		// enabled
@@ -105,6 +110,9 @@ public class ConfigFileHelper {
 	}
 	public int getSupportHillWallSize() {
 		return supportHillWallSize;
+	}
+	public int getMaxLootTablePoolRolls() {
+		return Math.abs(this.maxLootTableRolls);
 	}
 
 }

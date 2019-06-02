@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.util.LootUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootTable;
@@ -47,7 +48,7 @@ public class WeightedItemStack {
 		LootUtils.addItemToTable(table,
 				Item.getByNameOrId(this.itemName),
 				this.weight,
-				1 + new Random().nextInt(3),
+				1 + new Random().nextInt(Reference.CONFIG_HELPER.getMaxLootTablePoolRolls()),
 				((float) this.weight / 100.0F),
 				this.minCount,
 				this.maxCount,
