@@ -93,8 +93,8 @@ public class EventsHandler
 		ResourceLocation resLoc = event.getName();
 		if(ELootTable.valueOf(resLoc) != null) {
 			ELootTable table = ELootTable.valueOf(resLoc);
-			System.out.println("Loaded loottable is a cq one....");
-			System.out.println("Exchanging loot...");
+			//System.out.println("Loaded loottable is a cq one....");
+			//System.out.println("Exchanging loot...");
 			
 			try {
 				LootTableLoader.fillLootTable(table, lootTable);
