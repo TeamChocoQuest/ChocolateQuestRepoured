@@ -8,5 +8,7 @@ import net.minecraft.world.World;
  */
 public interface ICastlePart
 {
-    void generatePart(World world, int x, int y, int z, int sizeX, int sizeZ, int roomSize, int floors);
+    void generatePart(World world);
+
+    boolean isTower();
 }

@@ -20,10 +20,6 @@ import net.minecraft.world.chunk.Chunk;
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonGenUtils {
-	public enum Facing
-	{
-		NORTH, EAST, SOUTH, WEST;
-	}
 
 	public static int getHighestYAt(Chunk chunk, int x, int z, boolean ignoreWater) {
 		int y = 255;

@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.ICas
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -38,7 +39,6 @@ public class CastleGenerator implements IDungeonGenerator{
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		BlockPos start = new BlockPos(x, y, z);
 		//Builds the support hill;
 		if(this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
@@ -50,35 +50,115 @@ public class CastleGenerator implements IDungeonGenerator{
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z)
 	{
+		int sizeX;
+		int sizeZ;
+		int offsetX;
+		int offsetZ;
+		int quarterSizeX;
+		int quarterSizeZ;
+		int buildAreaX = maxSize;
+		int buildAreaZ = maxSize;
+		int floors = 2;
+
 		// Calculate random size based on maximum size
-		int quarterSizeX = maxSize / 4;
-		int quarterSizeZ = maxSize / 4;
-		int sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
-		int sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
-		int offsetX = random.nextInt(quarterSizeX);
-		int offsetZ = random.nextInt(quarterSizeZ);
-
-		// Size of building must be at least 1 room
-		sizeX = Math.max(roomSize, sizeX);
-		sizeZ = Math.max(roomSize, sizeZ);
-
-		// Apply the offset
-		x += offsetX;
-		z += offsetZ;
+		quarterSizeX = buildAreaX / 4;
+		quarterSizeZ = buildAreaZ / 4;
+		sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
+		sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
 
 		List<ICastlePart> parts = new ArrayList<>();
 
-		parts.add(new CastlePartSquare(false, this.dungeon));
+		while (Math.min(sizeX, sizeZ) > roomSize)
+		{
+			offsetX = random.nextInt(quarterSizeX);
+			offsetZ = random.nextInt(quarterSizeZ);
+
+			// Size of building must be at least 1 room
+			sizeX = Math.max(roomSize, sizeX);
+			sizeZ = Math.max(roomSize, sizeZ);
+
+			// Apply the offset
+			x += offsetX;
+			z += offsetZ;
+
+			// Add the main building
+			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, floors, this.dungeon, getRandomFacing()));
+
+			int subSizeX;
+			int subSizeZ;
+			int towerWidth;
+			int subX;
+			int subZ;
+			int roomToBuildX;
+			int roomToBuildZ;
+			EnumFacing facing;
+
+			facing = EnumFacing.NORTH;
+			roomToBuildX = sizeX;
+			roomToBuildZ = offsetZ;
+			// Add substructure to the north, if there is room
+			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			{
+				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+				subZ = z - subSizeZ;
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+			}
+
+			facing = EnumFacing.EAST;
+			roomToBuildX = buildAreaX - sizeX - offsetX;
+			roomToBuildZ = sizeZ;
+			// Add substructure to the east, if there is room
+			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			{
+				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+				subX = x + sizeX;
+				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+			}
+
+			facing = EnumFacing.SOUTH;
+			roomToBuildX = sizeX;
+			roomToBuildZ = buildAreaZ - sizeZ - offsetZ;
+			// Add substructure to the south, if there is room
+			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			{
+				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+				subZ = z + sizeZ;
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+			}
+
+			facing = EnumFacing.WEST;
+			roomToBuildX = offsetX;
+			roomToBuildZ = sizeZ;
+			// Add substructure to the west, if there is room
+			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			{
+				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+				subX = x - subSizeX;
+				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+			}
+
+			// Now try to build a new structure on top of this one
+			quarterSizeX = sizeX / 4;
+			quarterSizeZ = sizeZ / 4;
+			buildAreaX = sizeX;
+			buildAreaZ = sizeZ;
+			sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
+			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+			y += (floorHeight + 1) * floors;
+		}
 
 		for (ICastlePart part : parts)
 		{
-			part.generatePart(world, x, y, z, sizeX, sizeZ, roomSize, 2);
+			part.generatePart(world);
 		}
-		//generateSideStructure(world, x, y, z, sizeX, offsetZ, 1, Facing.NORTH);
-		//generateSideStructure(world, x + sizeX, y, z, maxSize - sizeX - offsetX, sizeZ, 1, Facing.EAST);
-		//generateSideStructure(world, x, y, z + sizeZ, sizeX, maxSize - sizeZ - offsetZ, 1, Facing.SOUTH);
-		//generateSideStructure(world, x , y, z, offsetX, sizeZ, 1, Facing.WEST);
-
 
 
 		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + sizeX, y, z + sizeZ), chunk.getPos(), world);
@@ -104,6 +184,23 @@ public class CastleGenerator implements IDungeonGenerator{
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private EnumFacing getRandomFacing()
+	{
+		int idx = random.nextInt(4);
+		switch (idx)
+		{
+			case 0:
+				return EnumFacing.NORTH;
+			case 1:
+				return EnumFacing.EAST;
+			case 2:
+				return EnumFacing.SOUTH;
+			case 3:
+			default:
+				return EnumFacing.WEST;
+		}
 	}
 
 }
