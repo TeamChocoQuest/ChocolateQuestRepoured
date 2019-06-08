@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.lootchests;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -10,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
 
 /**
@@ -35,7 +32,7 @@ public enum ELootTable {
 	CQ_VANILLA_BLACKSMITH(ModBlocks.EXPORTER_CHEST_VANILLA_BLACKSMITH, 16, "vanilla_blacksmith", LootTableList.CHESTS_VILLAGE_BLACKSMITH, false),
 	CQ_VANILLA_WOODLAND_MANSION(ModBlocks.EXPORTER_CHEST_VANILLA_MANSION, 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
 	
-	//TODO: LOAD LOOT TABLES
+	//DONE: LOAD LOOT TABLES
 	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_TREASURE, 0, "cq_treasure", registerChest("cq_treasure"), false),
 	CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
 	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false),
@@ -67,7 +64,6 @@ public enum ELootTable {
 	private int ID;
 	private String name;
 	private ResourceLocation resourceLocation;
-	private LootTable loottable;
 	private boolean isCustomChest;
 	
 	ELootTable(Block block, int id, String name, ResourceLocation loottable, boolean customChest) {
@@ -75,7 +71,10 @@ public enum ELootTable {
 		this.ID = id;
 		this.name = name;
 		this.resourceLocation = loottable;
-		this.loottable = null;
+		//if this is a new CQ loottable, we need to add it to the LootTableList so that MC/Forge know about it
+		if(id < 4 || id > 17) {
+			LootTableList.register(this.resourceLocation);
+		}
 		this.isCustomChest = customChest;
 	}
 	
@@ -151,42 +150,7 @@ public enum ELootTable {
             throw new IllegalArgumentException(id + " is already a registered built-in loot table");
         }
 	}
-	
-	public void exchangeFileInJar(File newFile, boolean isCustomChest) {
-		if(newFile != null && newFile.exists() && newFile.isFile()) {
-			System.err.println("NYI: We need to find a way to either override the files in the mod's jar OR to generate loot tables from JSON files and override them when they are loaded OR we create the loot table object with the json file and use it instead");
-		}
-	}
-	
-	public File getJSONFile() {
-		File file = null;
-		
-		File jsonFileDir = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath() + "/.generatedJSON/");
-		if(!jsonFileDir.exists()) {
-			jsonFileDir.mkdirs();
-		}
-		
-		file = new File(jsonFileDir.getAbsolutePath(), getName() + ".json");
-		if(!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				System.err.println("Failed to create JSON file for chest " + getName() + "!");
-				e.printStackTrace();
-			}
-		}
-		
-		return file;
-	}
 
-	public LootTable getLoottable() {
-		return loottable;
-	}
-
-	public void setLoottable(LootTable loottable) {
-		this.loottable = loottable;
-	}
-	
 	static ELootTable getAssignedLootTable(String fileName) {
 		fileName = fileName.replaceAll(".properties", "");
 		fileName = fileName.replaceAll(".prop", "");
@@ -236,6 +200,49 @@ public enum ELootTable {
 			}
 		}
 		return null;
+	}
+	
+	static String getAssignedFileName(ELootTable table) {
+		switch(table) {
+		case CQ_CUSTOM_1:
+			return "custom_1" + ".prop";
+		case CQ_CUSTOM_10:
+			return "custom_10" + ".prop";
+		case CQ_CUSTOM_11:
+			return "custom_11" + ".prop";
+		case CQ_CUSTOM_12:
+			return "custom_12" + ".prop";
+		case CQ_CUSTOM_13:
+			return "custom_13" + ".prop";
+		case CQ_CUSTOM_14:
+			return "custom_14" + ".prop";
+		case CQ_CUSTOM_2:
+			return "custom_2" + ".prop";
+		case CQ_CUSTOM_3:
+			return "custom_3" + ".prop";
+		case CQ_CUSTOM_4:
+			return "custom_4" + ".prop";
+		case CQ_CUSTOM_5:
+			return "custom_5" + ".prop";
+		case CQ_CUSTOM_6:
+			return "custom_6" + ".prop";
+		case CQ_CUSTOM_7:
+			return "custom_7" + ".prop";
+		case CQ_CUSTOM_8:
+			return "custom_8" + ".prop";
+		case CQ_CUSTOM_9:
+			return "custom_9" + ".prop";
+		case CQ_EQUIPMENT:
+			return "tools_chest" + ".prop";
+		case CQ_FOOD:
+			return "food_chest" + ".prop";
+		case CQ_MATERIAL:
+			return "material_chest" + ".prop";
+		case CQ_TREASURE:
+			return "treasure_chest" + ".prop";
+		default:
+			return null;
+		}
 	}
 
 }
