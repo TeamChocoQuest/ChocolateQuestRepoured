@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
@@ -28,12 +26,11 @@ import net.minecraft.world.chunk.Chunk;
  * GitHub: https://github.com/KalgogSmash
  */
 public class CastleDungeon extends DungeonBase {
-	private int sizeX = 10;
-	private int sizeY = 10;
-	private int sizeZ = 10;
+	private int maxSize = 10;
 	private int roomSize = 10;
-	private Block mainBlock = Blocks.STONE;
-
+	private int floorHeight = 8;
+	private Block wallBlock = Blocks.STONE;
+	private Block floorBlock = Blocks.WHITE_GLAZED_TERRACOTTA;
 
 	@Override
 	public IDungeonGenerator getGenerator() {
@@ -64,19 +61,35 @@ public class CastleDungeon extends DungeonBase {
 		}
 		if(prop != null && configFile != null && fis != null)
 		{
-			this.sizeX = PropertyFileHelper.getIntProperty(prop, "sizeX", 10);
-			this.sizeY = PropertyFileHelper.getIntProperty(prop, "sizeY", 10);
-			this.sizeZ = PropertyFileHelper.getIntProperty(prop, "sizeZ", 10);
+			this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
 			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
+			this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
-			this.mainBlock = Blocks.STONEBRICK;
-			try {
+			this.wallBlock = Blocks.STONEBRICK;
+			try
+			{
 				Block tmp = Block.getBlockFromName(prop.getProperty("floorblock", "minecraft:stone"));
-				if(tmp != null) {
-					this.mainBlock = tmp;
+				if(tmp != null)
+				{
+					this.wallBlock = tmp;
 				}
-			} catch(Exception ex) {
-				System.out.println("couldnt load floor block! using default value (stone block)...");
+			}
+			catch(Exception ex)
+			{
+				System.out.println("couldn't load wall block! using default value (stone bricks)...");
+			}
+
+			try
+			{
+				Block tmp = Block.getBlockFromName(prop.getProperty("wallblock", "minecraft:white_terracotta"));
+				if(tmp != null)
+				{
+					this.floorBlock = tmp;
+				}
+			}
+			catch(Exception ex)
+			{
+				System.out.println("couldn't load wall block! using default value (white clay)...");
 			}
 
 			try {
@@ -105,10 +118,10 @@ public class CastleDungeon extends DungeonBase {
 		this.generator.generate(world, chunk, x, y, z);
 	}
 
-	public Block getMainBlock() {return this.mainBlock;}
-	public int getSizeX() {return this.sizeX;}
-	public int getSizeY() {return this.sizeY;}
-	public int getSizeZ() {return this.sizeZ;}
+	public Block getWallBlock() {return this.wallBlock;}
+	public Block getFloorBlock() {return this.floorBlock;}
+	public int getMaxSize() {return this.maxSize;}
 	public int getRoomSize() {return this.roomSize;}
+	public int getFloorHeight() {return this.floorHeight;}
 
 }
