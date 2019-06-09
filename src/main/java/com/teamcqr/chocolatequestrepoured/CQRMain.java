@@ -112,6 +112,42 @@ public class CQRMain
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
+		initConfigFolder(event);
+		
+		proxy.preInit(event);
+		
+		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
+		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
+		if(Reference.CONFIG_HELPER.buildWall()) {
+			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
+		}
+		
+		//Instantiating the ELootTable class
+		try {
+			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
+			if(resLoc != null) {
+				System.out.println("ELootTable instantiated successfully!");
+				LootTableLoader ltl = new LootTableLoader();
+				System.out.println("Loading the loot configs...");
+				ltl.loadConfigs();
+			}
+		} catch (Exception e) {
+			System.err.println("WARNING: Failed to instantiate the loot enum or to exchange the files!!");
+			e.printStackTrace();
+		}
+		
+		try {
+			BannerHandler.initPatterns();
+		} catch(Exception ex) {
+			System.err.println("WARNING: Failed to instantiate the banner enum!!");
+			ex.printStackTrace();
+		}
+
+		//Registers event handler
+		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
+	}
+	
+	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
 		Reference.CONFIG_HELPER.loadValues(configFile);
 		
@@ -144,40 +180,6 @@ public class CQRMain
 		}
 		System.out.println("Export Folder Path: " + exportFolder.getAbsolutePath());
 		CQRMain.CQ_EXPORT_FILES_FOLDER = exportFolder;
-		
-		proxy.preInit(event);
-		
-		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
-		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if(Reference.CONFIG_HELPER.buildWall()) {
-			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
-		}
-		//Instantiating the ELootTable class
-		try {
-			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
-			if(resLoc != null) {
-				System.out.println("ELootTable instantiated successfully!");
-				LootTableLoader ltl = new LootTableLoader();
-				System.out.println("Loading the loot configs...");
-				ltl.loadConfigs();
-				System.out.println("Trying to replace files in jar....");
-				//ltl.exchangeJarFiles();
-				System.out.println("Replaced files in jar!");
-			}
-		} catch (Exception e) {
-			System.err.println("WARNING: Failed to instantiate the loot enum or to exchange the files!!");
-			e.printStackTrace();
-		}
-		
-		try {
-			BannerHandler.initPatterns();
-		} catch(Exception ex) {
-			System.err.println("WARNING: Failed to instantiate the banner enum!!");
-			ex.printStackTrace();
-		}
-
-		//Registers event handler
-		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
 	}
 	
 	@EventHandler
