@@ -140,4 +140,16 @@ public class CastlePartTower implements ICastlePart
     {
         return;
     }
+
+    @Override
+    public void setAsTopFloor()
+    {
+
+    }
+
+    @Override
+    public int getStartLayer()
+    {
+        return 0;
+    }
 }
