@@ -28,6 +28,12 @@ public class CastleGenerator implements IDungeonGenerator{
     private int roomSize;
     private int floorHeight;
     private Random random;
+	List<ICastlePart> parts;
+	private int totalX;
+	private int totalY;
+	private int totalZ;
+
+	private final static EnumFacing[] ExpansionDirections = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
 
 	public CastleGenerator(CastleDungeon dungeon) {
 		this.dungeon = dungeon;
@@ -35,6 +41,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		this.roomSize = this.dungeon.getRoomSize();
 		this.floorHeight = this.dungeon.getFloorHeight();
 		this.random = new Random();
+		this.parts = new ArrayList<>();
 	}
 
 	@Override
@@ -45,11 +52,7 @@ public class CastleGenerator implements IDungeonGenerator{
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 			supportBuilder.generate(new Random(), world, x, y + this.dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
 		}
-	}
 
-	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z)
-	{
 		int sizeX;
 		int sizeZ;
 		int offsetX;
@@ -58,31 +61,27 @@ public class CastleGenerator implements IDungeonGenerator{
 		int quarterSizeZ;
 		int buildAreaX = maxSize;
 		int buildAreaZ = maxSize;
+		int currentLayer = 0;
 		int floors = 2;
 
 		// Calculate random size based on maximum size
-		quarterSizeX = buildAreaX / 4;
-		quarterSizeZ = buildAreaZ / 4;
+		quarterSizeX = maxSize / 4;
+		quarterSizeZ = maxSize / 4;
 		sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 		sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
 
-		List<ICastlePart> parts = new ArrayList<>();
-
+		// Each iteration through this loop is one "layer" of castle - each layer is generated the same way, just with a shrinking build area
 		while (Math.min(sizeX, sizeZ) > roomSize)
 		{
-			offsetX = random.nextInt(quarterSizeX);
-			offsetZ = random.nextInt(quarterSizeZ);
-
-			// Size of building must be at least 1 room
-			sizeX = Math.max(roomSize, sizeX);
-			sizeZ = Math.max(roomSize, sizeZ);
+			offsetX = random.nextInt(buildAreaX - sizeX);
+			offsetZ = random.nextInt(buildAreaZ - sizeZ);
 
 			// Apply the offset
 			x += offsetX;
 			z += offsetZ;
 
 			// Add the main building
-			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, floors, this.dungeon, getRandomFacing()));
+			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, floors, this.dungeon, EnumFacing.UP, currentLayer));
 
 			int subSizeX;
 			int subSizeZ;
@@ -103,7 +102,7 @@ public class CastleGenerator implements IDungeonGenerator{
 				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
 				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
 				subZ = z - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
 			}
 
 			facing = EnumFacing.EAST;
@@ -116,7 +115,7 @@ public class CastleGenerator implements IDungeonGenerator{
 				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
 				subX = x + sizeX;
 				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
 			}
 
 			facing = EnumFacing.SOUTH;
@@ -129,7 +128,7 @@ public class CastleGenerator implements IDungeonGenerator{
 				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
 				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
 				subZ = z + sizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
 			}
 
 			facing = EnumFacing.WEST;
@@ -142,7 +141,7 @@ public class CastleGenerator implements IDungeonGenerator{
 				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
 				subX = x - subSizeX;
 				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing));
+				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
 			}
 
 			// Now try to build a new structure on top of this one
@@ -152,8 +151,29 @@ public class CastleGenerator implements IDungeonGenerator{
 			buildAreaZ = sizeZ;
 			sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+
 			y += (floorHeight + 1) * floors;
+			currentLayer++;
 		}
+
+		if (!parts.isEmpty())
+		{
+			int topLayer = parts.get(parts.size()-1).getStartLayer();
+			System.out.println("Top layer is  " + topLayer);
+			for (ICastlePart part : parts)
+			{
+				if (!part.isTower() && part.getStartLayer() == topLayer)
+				{
+					part.setAsTopFloor();
+					System.out.println("Set a top layer because its layer was  " + part.getStartLayer());
+				}
+			}
+		}
+	}
+
+	@Override
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z)
+	{
 
 		for (ICastlePart part : parts)
 		{
@@ -161,7 +181,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		}
 
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + sizeX, y, z + sizeZ), chunk.getPos(), world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), chunk.getPos(), world);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
