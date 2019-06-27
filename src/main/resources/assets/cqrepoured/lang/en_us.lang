@@ -12,6 +12,7 @@ itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 gui.drops.name=Drops
 gui.backpack.name=Backpack
 gui.alchemy_bag.name=Alchemy Bag
+description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
 
 //Other
 item.potion_healing.name=Healing Potion
@@ -263,7 +264,6 @@ description.turtle_armor_charging.name=Ability on cooldown, Remaining time:
 description.healing_potion.name=Drink to restore 2 hearts.
 description.teleport_stone.name=A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.
 description.teleport_stone_position.name=Current Position:
-description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
 description.staff_fire.name=The flames consume those who cross your path, a simple right-click and they'll feel your wrath. Also lights torches.
 description.staff_spider.name=Right-click to shoot your goo, my dude.
 description.staff_gun.name=It's a gun on a stick. Man, those dwarves are geniuses.
