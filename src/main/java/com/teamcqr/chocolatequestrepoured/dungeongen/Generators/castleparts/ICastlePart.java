@@ -11,4 +11,8 @@ public interface ICastlePart
     void generatePart(World world);
 
     boolean isTower();
+
+    void setAsTopFloor();
+
+    int getStartLayer();
 }
