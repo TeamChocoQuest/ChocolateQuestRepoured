@@ -1,0 +1,295 @@
+The English US language file for Chocolate Quest Repoured Mod!
+
+
+//CreativeTabs
+itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Bloki
+itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Itemy
+itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Spawnery Lochów
+itemGroup.ChocolateQuestRepouredBannerTab=Sztandary
+itemGroup.ChocolateQuestRepouredExporterChests=Skrzynie do eksportu
+
+//Gui
+gui.drops.name=Dropy
+gui.backpack.name=Plecak
+gui.alchemy_bag.name=Plecak Alchemiczny
+description.gui_exporter.name=Blok dostępny tylko w trybie creative, używany do eksportowania lochów.
+
+//Other
+item.potion_healing.name=Mikstura Uzdrawiania
+item.teleport_stone.name=Kamień Teleportacji
+item.soul_bottle.name=Butla Dusz
+item.badge.name=Odznaka
+item.backpack.name=Plecak
+item.alchemy_bag.name=Plecak Alchemiczny
+
+//Dragon Items
+item.helmet_dragon.name=Smoczy Hełm
+
+//Daggers
+item.dagger_iron.name=Żelazny Sztylet
+item.dagger_diamond.name=Diamentowy Sztylet
+item.dagger_monking.name=Sztylet Monkinga
+item.dagger_ninja.name=Sztylet Nindży
+
+//Swords
+item.sword_turtle.name=Miecz Żółwia
+item.sword_spider.name=Miecz Pająka
+item.battle_axe_bull.name=Bojowa Siekiera Byka
+item.sword_moonlight.name=Światło Księżyca
+item.sword_sunshine.name=Blask Słońca
+
+//Walker set
+item.sword_walker.name=Miecz Wędrowca
+item.shield_walker.name=Tarcza Wędrowca
+
+//Great Swords
+item.great_sword_monking.name=--Dwuręczny Miecz Monkinga
+item.great_sword_bull.name=--Dwuręczny Miecz Byka
+item.great_sword_diamond.name=--Diamentowy Dwuręczny Miecz
+item.great_sword_iron.name=--Żelazny Dwuręczny Miecz
+
+//Staves
+item.staff.name=Różdżka
+item.staff_fire.name=Różdżka Ognia
+item.staff_vampiric.name=Wampiryczna Różdżka
+item.staff_wind.name=Różdżka Wiatru
+item.staff_poison.name=Różdżka Trucizny
+item.staff_spider.name=Pajęcza Różdżka
+item.staff_gun.name=Różdżka Pociskowa
+item.staff_healing.name=Uzdrawiająca Różdżka
+item.staff_thunder.name=Różdżka Piorunu
+
+//Guns
+item.revolver.name=Rewolwer
+item.captain_revolver.name=Rewolwer Kapitana
+item.musket.name=Muszkiet
+item.musket_iron.name=Muszkiet z Żelaznym Sztyletem
+item.musket_diamond.name=Muszkiet z Diamentowym Sztyletem
+item.musket_monking.name=Muszkiet z Sztyletem Monkinga
+item.bullet_iron.name=Żelazne Naboje
+item.bullet_gold.name=Złote Naboje
+item.bullet_diamond.name=Diamentowe Naboje
+item.bullet_fire.name=Ogniste Naboje
+item.cannon_ball.name=Kula Armatnia
+item.flamethrower.name=Miotacz Płomieni
+
+//Cloud Items
+item.boots_cloud.name=Podniebne Sandały
+item.feather_golden.name=Złote Pióro
+
+//Monking Items
+item.bone_monking.name=Kość Monkinga
+
+//Inquisition Armor
+item.helmet_inquisition.name=Hełm Inkwizycji
+item.chestplate_inquisition.name=Napierśnik Inkwizycji
+item.leggings_inquisition.name=Nogawice Inkwizycji
+item.boots_inquisition.name=Buty Inkwizycji
+
+//Bull Armor
+item.helmet_bull.name=Hełm Byka
+item.chestplate_bull.name=Napierśnik Byka
+item.leggings_bull.name=Nogawice Byka
+item.boots_bull.name=Buty Byka
+item.leather_bull.name=Bycza Skóra
+item.horn_bull.name=Byczy Róg
+
+//Turtle Armor
+item.helmet_turtle.name=Hełm Żółwia
+item.chestplate_turtle.name=Napierśnik Żółwia
+item.leggings_turtle.name=Nogawice Żółwia
+item.boots_turtle.name=Buty Żółwia
+item.scale_turtle.name=Żółwia Łuska
+
+//Slime Armor
+item.helmet_slime.name=Hełm Szlamu
+item.chestplate_slime.name=Napierśnik Szlamu
+item.leggings_slime.name=Nogawice Szlamu
+item.boots_slime.name=Buty Szlamu
+item.ball_slime.name=Regenerująca Kula Szlamu
+
+//Spider Armor
+item.helmet_spider.name=Hełm Pająka
+item.chestplate_spider.name=Napierśnik Pająka
+item.leggings_spider.name=Nogawice Pająka
+item.boots_spider.name=Buty Pająka
+item.leather_spider.name=Pajęcza Skóra
+item.giant_spider_poison.name=Trucizna Gigantycznego Pająka
+
+//Heavy Diamond Armor
+item.helmet_heavy_diamond.name=Ciężki Diamentowy Hełm
+item.chestplate_heavy_diamond.name=Ciężki Diamentowy Napierśnik
+item.leggings_heavy_diamond.name=Ciężkie Diamentowe Nogawice
+item.boots_heavy_diamond.name=Ciężkie Diamentowe Buty
+
+//Heavy Iron Armor
+item.helmet_heavy_iron.name=Ciężki Żelazny Hełm
+item.chestplate_heavy_iron.name=Ciężki Żelazny Napierśnik
+item.leggings_heavy_iron.name=Ciężkie Żelazne Nogawice
+item.boots_heavy_iron.name=Ciężkie Żelazne Buty
+
+//Blocks
+tile.exporter.name=Blok Eksportowy
+tile.spawner.name=Spawner
+tile.null_block.name=Blok Pustki
+tile.unlit_torch.name=Niezapalona Pochodnia
+tile.table_oak.name=Dębowy Stół
+tile.table_spruce.name=Świerkowy Stół
+tile.table_birch.name=Brzozowy Stół
+tile.table_jungle.name=Tropikalny Stół
+tile.table_acacia.name=Akacjowy Stół
+tile.table_dark.name=Ciemnodębowy Stół
+
+//Andesite blocks
+tile.andesite_carved.name=Kuty Andezyt
+tile.andesite_pillar.name=Andezytowa Kolumna
+tile.andesite_cube.name=Andezytowa Kostka
+tile.andesite_scale.name=Andezytowa Łuska
+tile.andesite_square.name=Andezytowy Kwadrat
+tile.andesite_small.name=Małe Andezytowe Cegły
+tile.andesite_large.name=Duże Andezytowe Cegły
+
+//Diorite blocks
+tile.diorite_carved.name=Kuty Dioryt
+tile.diorite_pillar.name=Diorytowa Kolumna
+tile.diorite_cube.name=Diorytowa Kostka
+tile.diorite_scale.name=Diorytowa Łuska
+tile.diorite_square.name=Dioritowy Kwadrat
+tile.diorite_small.name=Małe Diorytowe Cegły
+tile.diorite_large.name=Duże Diorytowe Cegły
+
+//Granite blocks
+tile.granite_carved.name=Kuty Granit
+tile.granite_pillar.name=Granitowa Kolumna
+tile.granite_cube.name=Granitowa Kostka
+tile.granite_scale.name=Granitowa Łuska
+tile.granite_square.name=Granitowy Kwadrat
+tile.granite_small.name=Małe Granitowe Cegły
+tile.granite_large.name=Duże Granitowe Cegły
+
+//Prismarine blocks
+tile.prismarine_carved.name=Kuty Pryzmaryn
+tile.prismarine_pillar.name=Pryzmarynowa Kolumna
+tile.prismarine_cube.name=Pryzmarynowa Kostka
+tile.prismarine_square.name=Pryzmarynowy Kwadrat
+tile.prismarine_small.name=Małe Pryzmarynowe Cegły
+tile.prismarine_large.name=Duże Pryzmarynowe Cegły
+
+//Endstone blocks
+tile.endstone_carved.name=Kuty Kamień Endu
+tile.endstone_pillar.name=Kolumna z Kamienia Endu
+tile.endstone_cube.name=Kostka z Kamienia Endu
+tile.endstone_scale.name=Łuska z Kamienia Endu
+tile.endstone_square.name=Kwadrat z Kamienia Endu
+tile.endstone_small.name=Małe Cegły z Kamienia Endu
+
+//Purpur blocks
+tile.purpur_carved.name=Kuty Purpur
+tile.purpur_cube.name=Purpurowa Kostka
+tile.purpur_scale.name=Purpurowa Łuska
+tile.purpur_small.name=Small Purpurowe Cegły
+tile.purpur_large.name=Large Purpurowe Cegły
+
+//Red Netherbrick blocks
+tile.red_netherbrick_carved.name=Carved Red Netherbrick
+tile.red_netherbrick_pillar.name=Red Netherbrick Pillar
+tile.red_netherbrick_cube.name=Red Netherbrick Cube
+tile.red_netherbrick_scale.name=Red Netherbrick Scale
+tile.red_netherbrick_square.name=Red Netherbrick Square
+tile.red_netherbrick_large.name=Large Red Netherbricks
+
+//Stone blocks
+tile.stone_pillar.name=Kamienna Kolumna
+tile.stone_cube.name=Kamienna Kostka
+tile.stone_scale.name=Kamienna Łuska
+tile.stone_square.name=Kamienny Kwadrat
+tile.stone_small.name=Małe Kamienne Schody
+
+//Exporter chests
+tile.exporter_chest_valuable.name=Eksporter Skrzyni: Skarb
+tile.exporter_chest_food.name=Eksporter Skrzyni: Jedzenie
+tile.exporter_chest_equipment.name=Eksporter Skrzyni: Wyposażenie
+tile.exporter_chest_utility.name=Eksporter Skrzyni: Przydatne
+tile.exporter_chest_vanilla_blacksmith.name=Eksporter Skrzyni: Wioskowy Kowal
+tile.exporter_chest_vanilla_bonus.name=Eksporter Skrzyni: Bonusowa Skrzynia
+tile.exporter_chest_vanilla_dungeon.name=Eksporter Skrzyni: Loch
+tile.exporter_chest_vanilla_end_city.name=Eksporter Skrzyni: Miasto Kresu
+tile.exporter_chest_vanilla_igloo.name=Eksporter Skrzyni: Iglo
+tile.exporter_chest_vanilla_jungle.name=Eksporter Skrzyni: Skrzynia Dżungli
+tile.exporter_chest_vanilla_jungle_dispenser.name=Eksporter Skrzyni: Dispenser Dżungli
+tile.exporter_chest_vanilla_mansion.name=Eksporter Skrzyni: Leśny Dwór
+tile.exporter_chest_vanilla_mineshaft.name=Eksporter Skrzyni: Kopalnia
+tile.exporter_chest_vanilla_nether.name=Eksporter Skrzyni: Forteca Netherowa
+tile.exporter_chest_vanilla_pyramid.name=Eksporter Skrzyni: Piramida
+tile.exporter_chest_vanilla_stronghold.name=Eksporter Skrzyni: Korytarz Warowni
+tile.exporter_chest_vanilla_stronghold_library.name=Eksporter Skrzyni: Biblioteka Warowni
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Eksporter Skrzyni: Kopalnia Warowni
+tile.exporter_chest_custom_1.name=Eksporter Skrzyni: Własny 1
+tile.exporter_chest_custom_2.name=Eksporter Skrzyni: Własny 2
+tile.exporter_chest_custom_3.name=Eksporter Skrzyni: Własny 3
+tile.exporter_chest_custom_4.name=Eksporter Skrzyni: Własny 4
+tile.exporter_chest_custom_5.name=Eksporter Skrzyni: Własny 5
+tile.exporter_chest_custom_6.name=Eksporter Skrzyni: Własny 6
+tile.exporter_chest_custom_7.name=Eksporter Skrzyni: Własny 7
+tile.exporter_chest_custom_8.name=Eksporter Skrzyni: Własny 8
+tile.exporter_chest_custom_9.name=Eksporter Skrzyni: Własny 9
+tile.exporter_chest_custom_10.name=Eksporter Skrzyni: Własny 10
+tile.exporter_chest_custom_11.name=Eksporter Skrzyni: Własny 11
+tile.exporter_chest_custom_12.name=Eksporter Skrzyni: Własny 12
+tile.exporter_chest_custom_13.name=Eksporter Skrzyni: Własny 13
+tile.exporter_chest_custom_14.name=Eksporter Skrzyni: Własny 14
+
+//Descriptions
+description.spider_armor.name=Noś pająka by stać się pająkiem. Pełny rynsztunek pozwala na wspinaczkę po ścianach i wyżej skakać.
+description.spider_sword.name=Uskok przed pazurami uczynił ten prosty miecz ostrzem bohatera, trucizna Shelob nie może zostać unikniona jeśli twój nieprzyjaciel dostanie cios tą bronią.
+description.bull_armor.name=Noś byka by stać się bykiem. Pełny ekwipunek pozwala szarżować do przodu z wielką prędkością i niszczyć wszystko na twojej drodze.
+description.great_sword.name=Przytrzymaj PPM by uderyzć duży obszar.
+description.turtle_armor.name=Moc żółwia, jeśli zdołasz włożyć pełny rynsztunek z jego łuski, pozwoli Ci na szybszą regenerację. Łuska zapobiega też większości obrażeń od tyłu.
+description.slime_armor.name=W pełnym rynsztunku tej regenerującej mazi, czujesz jak twoje maksymalne zdrowie się przepełnia. Za każdym razem kiedy dostaniesz obrażenia, mały szlam może się pojawić i przywrócić Ci zdrowie jeśli tylko zdołasz go dosięgnąć.
+description.cloud_boots.name=Prorocy głoszą że ci którzy podążają do pieśni anielskiej nie mogą być w błędzie. Proste podskoczenie staje się potężnym skokiem, lekki trucht prześciga błyskawicę, żaden upadek nie zatrzyma tych niewielu wybranych, a te sandały włączają Cię w ich grono.
+//description.dragon_helmet.name=Czujesz smoczą moc pulsującą w twoich żyłach. Ataki będące nigdyś zagrożeniem są nic nie znaczące a twoje własne przysposobnione podwójną siłą!
+description.dagger.name=Przyciśnij PPM w trakcie ruchu by skoczyć do przodu
+description.ninja_dagger.name=Przyciśnij PPM w trakcie ruchu by skoczyć do przodu. Powiadają że właściciele tego sztyletu mogą znikać wedle żeczenia. Być może i tobie się to uda, przy pomocy skradania i PPM, lecz wiedz że nawet jeśli znikniesz z pola widzenia, daleko nie zajdziesz.
+description.bull_battle_axe.name=Grux PPM w ziemię. Robić trzęsienie ziemi. Iść do przodu. Dobrze bić wrogów. Grux lubić takie rzeczy. Jak ktoś bije Grux, zły uczynek. Jak Grux bije ktoś, dobry.
+description.walker_set.name=Legenda głosi że każdy kto wystrzelił w kierunku króla wędrowców wkrótce znalazł się z mieczem w plecach i królem za nim. Czy noszenie jego miecza i tarczy da Ci tą wyjątkową zdolność?
+description.gun.name=Przyciśnij PPM by strzelić, wymaga kul.
+description.bullet_damage.name=Obrażenia od Kuli
+description.bullet_fire.name=Zapłon przy uderzeniu
+description.fire_rate.name=Częstotliwość wystrzału
+description.accuracy.name=Celność
+description.click_shift.name=Przytrzymaj shift by zobaczyć opis
+description.rear_damage.name=Tylne Obrażenia
+description.charging.name=Ładowanie...
+description.turtle_armor_charging.name=Odnawianie zdolności, Pozostały czas: 
+description.healing_potion.name=Wypij by uzupełnić dwa serca.
+description.teleport_stone.name=Mistyczny artefajt stworzony przez starożytną rasę. Przytrzymaj PPM by ustawić pozycję, powtórz aby przeteleportować się do niej z powrotem. Pzytrzymując PPM podczas skradania usuwa tą pozycję.
+description.teleport_stone_position.name=Obecna pozycja:
+description.staff_fire.name=Prosty przcisk PPM a poczują twój gniew, "Mam różdżkę i nie zawacham się jej użyć!". Zapala również pochodnie.
+description.staff_spider.name=PPM by szczelić mazią gościu, te kocie ruchy.
+description.staff_gun.name=To broń na patyku. Ja cie, te krasnale to istne geniusze.
+description.staff_healing.name=LPM wraca Ci życie którego potrzebujesz, zdrówko!
+description.contains.name=Zawiera:
+description.empty.name=Pusty
+description.soul_bottle.name=LPM w moba aby go złapać, PPM by go przywołać. Może zostać zamienione w spawner tego moba.
+description.flamethrower.name=Łopatologiczny Prototyp Ognioptaka mk7 z lufą 22mm wyrzucającą płomienie (prosto przed siebie). Wbudowane pompy na żel powinny móc wydostać szlam z twojego ekwipunku. Obency model wymaga ręcznego przeładowywania, odnawiające źródło szlamu jeszcze nie zostało odkryte.
+description.badge.name=Przedmiot dostępny tylko na kreatywie. LPM na mobie by otworzyć GUI. Itemy włożone do GUI mogą później zostać odzyskane klikając odznaką LPM na moba ponownie. Zostaną wydropione jeśli mob umrze.
+description.backpack.name=PPM by otworzyć.
+description.alchemy_bag.name=PPM by otworzyć. Przechowuje tylko mikstury.
+//description.woodshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na drewno, zostaniesz do niego przyciągnięty.
+//description.hookshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
+//description.longshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
+//description.manualhook.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
+//description.spidershot.name=PPM by wystrzelić sieć. Jeśli sieć natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
+//description.hooksword.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
+description.moonlight.name=Napis na ostrzu głosi: "Moja moc budzi się tylko w świetle księżyca"
+description.sunshine.name=Napis na ostrzu głosi: "Moja moc budzi się tylko w świetle słońca"
+description.attack_damage_at_night.name=Obrażenia podczas Nocy
+description.attack_damage_at_day.name=Attack Obrażenia podczas Dnia
+description.staff_vampiric.name=Ta różdżka emanuje ciemną energią. Jeśli zbliżysz ją do ucha usłyszysz wołanie: "PPM mnie" a jeśli to zrobisz, różdżka wystrzeli. Jej strzały nie zadają dużych obrażeń ale uzdrwawiają cię jeśli trafią cel.
+description.staff_wind.name=Cokolwiek to robi, jeszcze nie działa. #TODO
+description.staff_poison.name=Cokolwiek to robi, jeszcze nie działa.. #TODO
+description.staff.name=Ni ma tu nic #TODO
+description.staff_thunder.name=Ni ma tu nic #TODO
+
+// Mobs
+entity.EntityCQRZombie.name=Zombi(CQR)
