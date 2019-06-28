@@ -1,0 +1,295 @@
+The English US language file for Chocolate Quest Repoured Mod!
+
+
+//CreativeTabs
+itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocks
+itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
+itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
+itemGroup.ChocolateQuestRepouredBannerTab=Banners
+itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
+
+//Gui
+gui.drops.name=掉落
+gui.backpack.name=背包
+gui.alchemy_bag.name=炼金之囊
+description.gui_exporter.name=仅用于导出地牢的创造模式专用块,选择要导出的区域，然后保存它.
+
+//Other
+item.potion_healing.name=回血药
+item.teleport_stone.name=传送石
+item.soul_bottle.name=魂瓶
+item.badge.name=勋章
+item.backpack.name=背包
+item.alchemy_bag.name=炼金之囊
+
+//Dragon Items
+item.helmet_dragon.name=龙之颅
+
+//Daggers
+item.dagger_iron.name=铁质匕首
+item.dagger_diamond.name=钻石匕首
+item.dagger_monking.name=头陀匕首
+item.dagger_ninja.name=忍者匕首
+
+//Swords
+item.sword_turtle.name=巨龟之剑
+item.sword_spider.name=蜘蛛之剑
+item.battle_axe_bull.name=猛牛战斧
+item.sword_moonlight.name=月影
+item.sword_sunshine.name=日光
+
+//Walker set
+item.sword_walker.name=漫游者之剑
+item.shield_walker.name=漫游盾
+
+//Great Swords
+item.great_sword_monking.name=头陀巨剑
+item.great_sword_bull.name=猛牛巨剑
+item.great_sword_diamond.name=钻石巨剑
+item.great_sword_iron.name=铁质巨剑
+
+//Staves
+item.staff.name=法杖
+item.staff_fire.name=燃烧法杖
+item.staff_vampiric.name=吸血鬼法杖
+item.staff_wind.name=风啸法杖
+item.staff_poison.name=剧毒法杖
+item.staff_spider.name=蜘蛛法杖
+item.staff_gun.name=枪杖
+item.staff_healing.name=治愈法杖
+item.staff_thunder.name=雷电法杖
+
+//Guns
+item.revolver.name=左轮
+item.captain_revolver.name=左轮-队长式样
+item.musket.name=滑膛枪
+item.musket_iron.name=铁刺刀滑膛枪
+item.musket_diamond.name=钻刺刀滑膛枪
+item.musket_monking.name=头陀刺刀滑膛枪
+item.bullet_iron.name=铁质弹药
+item.bullet_gold.name=金质弹药
+item.bullet_diamond.name=钻石弹药
+item.bullet_fire.name=燃烧弹药
+item.cannon_ball.name=加农炮炮弹
+item.flamethrower.name=火焰喷射器
+
+//Cloud Items
+item.boots_cloud.name=云靴
+item.feather_golden.name=黄金羽毛
+
+//Monking Items
+item.bone_monking.name=头陀之骨
+
+//Inquisition Armor
+item.helmet_inquisition.name=信仰头盔
+item.chestplate_inquisition.name=信仰胸甲
+item.leggings_inquisition.name=信仰腿甲
+item.boots_inquisition.name=信仰靴子
+
+//Bull Armor
+item.helmet_bull.name=猛牛头盔
+item.chestplate_bull.name=猛牛胸甲
+item.leggings_bull.name=猛牛护胫
+item.boots_bull.name=猛牛重靴
+item.leather_bull.name=猛牛的硬皮
+item.horn_bull.name=猛牛的尖角
+
+//Turtle Armor
+item.helmet_turtle.name=巨龟头盔
+item.chestplate_turtle.name=巨龟胸铠
+item.leggings_turtle.name=巨龟护胫
+item.boots_turtle.name=巨龟重靴
+item.scale_turtle.name=巨龟的鳞片
+
+//Slime Armor
+item.helmet_slime.name=史莱姆头套
+item.chestplate_slime.name=史莱姆之躯
+item.leggings_slime.name=史莱姆下着
+item.boots_slime.name=史莱姆之脚
+item.ball_slime.name=再生粘球
+
+//Spider Armor
+item.helmet_spider.name=猛蛛头盔
+item.chestplate_spider.name=猛蛛胸甲
+item.leggings_spider.name=猛蛛护腿
+item.boots_spider.name=猛蛛之靴
+item.leather_spider.name=巨猛蛛的韧皮
+item.giant_spider_poison.name=巨猛蛛的毒液
+
+//Heavy Diamond Armor
+item.helmet_heavy_diamond.name=钻石重盔
+item.chestplate_heavy_diamond.name=钻石重甲
+item.leggings_heavy_diamond.name=钻石裙甲
+item.boots_heavy_diamond.name=钻石重靴
+
+//Heavy Iron Armor
+item.helmet_heavy_iron.name=金属重盔
+item.chestplate_heavy_iron.name=金属重甲
+item.leggings_heavy_iron.name=金属裙甲
+item.boots_heavy_iron.name=金属重靴
+
+//Blocks
+tile.exporter.name=输出方块
+tile.spawner.name=刷怪器
+tile.null_block.name=空的块
+tile.unlit_torch.name=未燃的火炬
+tile.table_oak.name=橡木桌
+tile.table_spruce.name=云杉桌
+tile.table_birch.name=桦木桌
+tile.table_jungle.name=丛林桌
+tile.table_acacia.name=合欢木桌
+tile.table_dark.name=黑橡木桌
+
+//Andesite blocks
+tile.andesite_carved.name=錾制安山岩
+tile.andesite_pillar.name=安山岩石柱
+tile.andesite_cube.name=安山岩立方
+tile.andesite_scale.name=平滑安山岩
+tile.andesite_square.name=安山岩半砖
+tile.andesite_small.name=小型安山岩砖
+tile.andesite_large.name=大型安山岩砖
+
+//Diorite blocks
+tile.diorite_carved.name=錾制闪长岩
+tile.diorite_pillar.name=闪长岩石柱
+tile.diorite_cube.name=闪长岩立方
+tile.diorite_scale.name=平滑闪长岩
+tile.diorite_square.name=闪长岩半砖
+tile.diorite_small.name=小型闪长岩砖
+tile.diorite_large.name=大型闪长岩砖
+
+//Diorite blocks
+tile.granite_carved.name=錾制花岗岩
+tile.granite_pillar.name=花岗岩石柱
+tile.granite_cube.name=花岗岩立方
+tile.granite_scale.name=平滑花岗岩
+tile.granite_square.name=花岗岩半砖
+tile.granite_small.name=小型花岗岩砖
+tile.granite_large.name=大型花岗岩砖
+
+//Prismarine blocks
+tile.prismarine_carved.name=錾制海晶石
+tile.prismarine_pillar.name=海晶石柱
+tile.prismarine_cube.name=海晶石立方
+tile.prismarine_square.name=海晶石半砖
+tile.prismarine_small.name=小型海晶石砖
+tile.prismarine_large.name=大型海晶石砖
+
+//Endstone blocks
+tile.endstone_carved.name=錾制末地石
+tile.endstone_pillar.name=末地石柱
+tile.endstone_cube.name=末地石立方
+tile.endstone_scale.name=平滑末地石
+tile.endstone_square.name=末地石半砖
+tile.endstone_small.name=小型末地石砖
+
+//Purpur blocks
+tile.purpur_carved.name=錾制紫珀块
+tile.purpur_cube.name=紫珀块立方
+tile.purpur_scale.name=平滑紫珀块
+tile.purpur_small.name=小型紫珀块砖
+tile.purpur_large.name=大型紫珀块砖
+
+//Red Netherbrick blocks
+tile.red_netherbrick_carved.name=錾制下界砖块
+tile.red_netherbrick_pillar.name=下界块柱
+tile.red_netherbrick_cube.name=下界砖块立方
+tile.red_netherbrick_scale.name=平滑下界砖块
+tile.red_netherbrick_square.name=下界半砖
+tile.red_netherbrick_large.name=大型下界砖块
+
+//Stone blocks
+tile.stone_pillar.name=石柱
+tile.stone_cube.name=石立方
+tile.stone_scale.name=平滑石块
+tile.stone_square.name=石半砖
+tile.stone_small.name=小型石砖
+
+//Exporter chests
+tile.exporter_chest_valuable.name=输出箱 宝物
+tile.exporter_chest_food.name=输出箱 食物
+tile.exporter_chest_equipment.name=输出箱 装备
+tile.exporter_chest_utility.name=输出箱 多功能
+tile.exporter_chest_vanilla_blacksmith.name=输出箱 - 村庄铁匠铺
+tile.exporter_chest_vanilla_bonus.name=输出箱 - 奖励箱
+tile.exporter_chest_vanilla_dungeon.name=输出箱 - 地牢
+tile.exporter_chest_vanilla_end_city.name=输出箱 - 末地城
+tile.exporter_chest_vanilla_igloo.name=输出箱 - 冰屋
+tile.exporter_chest_vanilla_jungle.name=输出箱 - 丛林神庙箱子
+tile.exporter_chest_vanilla_jungle_dispenser.name=输出箱 - 丛林神庙发射器
+tile.exporter_chest_vanilla_mansion.name=输出箱 - 丛林宅邸
+tile.exporter_chest_vanilla_mineshaft.name=输出箱 - 放弃矿道
+tile.exporter_chest_vanilla_nether.name=输出箱 -下界要塞
+tile.exporter_chest_vanilla_pyramid.name=输出箱 - 沙漠神殿
+tile.exporter_chest_vanilla_stronghold.name=输出箱 - 要塞走廊
+tile.exporter_chest_vanilla_stronghold_library.name=输出箱 - 要塞图书馆
+tile.exporter_chest_vanilla_stronghold_storeroom.name=输出箱 - 要塞矿道
+tile.exporter_chest_custom_1.name=输出箱 - 自定义 1
+tile.exporter_chest_custom_2.name=输出箱 - 自定义 2
+tile.exporter_chest_custom_3.name=输出箱 - 自定义 3
+tile.exporter_chest_custom_4.name=输出箱 - 自定义 4
+tile.exporter_chest_custom_5.name=输出箱 - 自定义 5
+tile.exporter_chest_custom_6.name=输出箱 - 自定义 6
+tile.exporter_chest_custom_7.name=输出箱 - 自定义 7
+tile.exporter_chest_custom_8.name=输出箱 - 自定义 8
+tile.exporter_chest_custom_9.name=输出箱 - 自定义 9
+tile.exporter_chest_custom_10.name=输出箱 - 自定义 10
+tile.exporter_chest_custom_11.name=输出箱 - 自定义 11
+tile.exporter_chest_custom_12.name=输出箱 - 自定义 12
+tile.exporter_chest_custom_13.name=输出箱 - 自定义 13
+tile.exporter_chest_custom_14.name=输出箱 - 自定义 14
+
+//Descriptions
+description.spider_armor.name=穿上它成为蜘蛛.整套可以让你爬墙跳得更高.
+description.spider_sword.name=从使这把简单的剑成为英雄之刃的尖牙中涌出, 一旦你的敌人被这把剑咬住, 巨猛蛛流淌的毒液就无法止住.
+description.bull_armor.name=穿上猛牛成为猛男(笑). 全套可以让你高速前进, 以及摧毁途经的一切！？.
+description.great_sword.name=按住鼠标右键单击以打击大面积区域.
+description.turtle_armor.name=神龟的力量, 如果你用它的外壳做一套完整的衣服, 会让你更快地恢复生命值. 背壳还可以防止后部的大部分伤害.
+description.slime_armor.name=当一整套再生粘液接触到你的皮肤时, 你能感觉到你的最大生命值溢出, 当你受到伤害时, 一小型史莱姆可能会出现, 如果你能接触到它,它可以恢复你的健康.
+description.cloud_boots.name=那些信奉先知所说的天使之歌的人是不会错的. 一跃成一跃，轻快的行走会降低声音的速度, 没有一次跌倒能阻止被选中的人, 何况有了这双靴子，以及你自己. 
+//description.dragon_helmet.name=你能感觉到龙的力量在你的血管里流动. 曾经对你构成威胁的攻击现在似乎毫无意义, 而你自身的攻击力是原来的两倍!
+description.dagger.name=前进时单击鼠标右键
+description.ninja_dagger.name=前进时单击鼠标右键.他们说，这把匕首的使用者可以随意消失而不留痕迹. 你可以用鼠标右键来模仿这种行为, 但是当你从视线中消失的时候, 你不会走得太远. 
+description.bull_battle_axe.name=Grux 右键单击地面. 制造地震. 向前狂奔. 将敌人撞得粉碎的滋味太棒了. "咕噜..咕噜".
+description.walker_set.name=传说任何向漫游之王出箭的人，都会在背后发现一把剑,而王就在背后. 也许收集他的剑和盾可以让你拥有同样的能力?
+description.gun.name=右键发射, 需要弹药.
+description.bullet_damage.name=弹药伤害
+description.bullet_fire.name=命中即点燃
+description.fire_rate.name=射速
+description.accuracy.name=精准度
+description.click_shift.name=按住SHIFT键可查看说明
+description.rear_damage.name=背刺伤害
+description.charging.name=充能...
+description.turtle_armor_charging.name=冷却能力, 剩余时间: 
+description.healing_potion.name=喝下回复2心.
+description.teleport_stone.name=远古种族创造的神秘物体. 按住右键单击以设置位置，然后再次执行该操作以传送到那里.按住鼠标右键单击以删除保存的位置.
+description.teleport_stone_position.name=当前位置:
+description.staff_fire.name=火焰吞噬了那些穿过你的道路的人, 只要简单的右击 便让他们感受到你的怒火. 顺便点燃火把~~
+description.staff_spider.name=右键射击, 兄弟这不用教了吧.
+description.staff_gun.name=这是一支棍子上的枪, 兄弟, 那些矮人真是天才...
+description.staff_healing.name=左键点击可以恢复你所需要的生命值, 我真的不记得这是怎么回事, 但出于贪婪，我不得不对所有这些进行描述.
+description.contains.name=包含:
+description.empty.name=空的
+description.soul_bottle.name=左键单击一个生物来存储它，右键单击来召唤那个生物. 也能变成这种生物的刷怪笼.
+description.flamethrower.name=毁灭者原型机-Fyrbird - MK7 22mm喷嘴火焰喷射装置. 鼠标右键应直接向前推火. 内部的凝胶弹仓应该能够从库存中的任何地方提取煤泥. 目前的模型需要定期重新加载，因为还没有发现煤泥的再生来源. 
+description.badge.name=创造模式专属. 右键点击生物来打开GUI, 放置在此GUI中的物品稍后可以通过再次用徽章左键单击来访问，并且当附属的生物被杀死时将会掉落.
+description.backpack.name=右键打开.
+description.alchemy_bag.name=右键打开. 只能存放药水.
+//description.woodshot.name=右键发射抓钩. 当抓钩命中木质方块时, 你将被拉拽过去.
+//description.hookshot.name=右键发射抓钩. 当抓钩命中一个方块时, 你将被拉拽过去.
+//description.longshot.name=右键发射抓钩. 当抓钩命中一个方块时, 你将被拉拽过去.
+//description.manualhook.name=右键发射抓钩. 一旦钩子碰到一个方块，你可以按住右键以靠近它, 潜行使用将会远离它.
+//description.spidershot.name=右键发射网. 一旦网钩碰到一个方块，你可以按住右键单击以靠近它, 潜行使用将会远离它.
+//description.hooksword.name=右键发射抓钩. 一旦钩子碰到一个方块，你可以按住右键以靠近它, 潜行使用将会远离它.
+description.moonlight.name=刀刃上的铭文写着“我的力量只能在月亮的光中被唤醒”
+description.sunshine.name=刀刃上的铭文写着：“我的力量只能在阳光下唤醒”
+description.attack_damage_at_night.name=夜间攻击伤害
+description.attack_damage_at_day.name=白天攻击伤害
+description.staff_vampiric.name=当你拿着它的时候，这个棒子放射出暗能量. 如果你把它靠近耳朵，你就会听到它的要求. 它的使用很简单：“用鼠标右键单击我”，当你这样做的时候，你会看到它确实发射出的一个抛射物（译者：作者你是不是在调戏我们的智商）. 虽然伤害很轻微，但如果你正好着陆，它会在击中时治愈你. 
+description.staff_wind.name=不管这是做什么，它还不起作用. #TODO（在制品）
+description.staff_poison.name=不管这是做什么，它还不起作用. #TODO（在制品）
+description.staff.name=缺失 #TODO（在制品）
+description.staff_thunder.name=丢失 #TODO（在制品）
+
+// Mobs
+entity.EntityCQRZombie.name=僵尸兵(CQR)
