@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -29,7 +29,6 @@ public class CastlePartSquare implements ICastlePart
     private Random random;
     private int startLayer;
     private boolean isTopFloor;
-
 
     public CastlePartSquare(BlockPos origin, int sizeX, int sizeZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
     {
@@ -65,7 +64,7 @@ public class CastlePartSquare implements ICastlePart
         List<BlockPos> wallBlocks = new ArrayList<>();
         List<BlockPos> ceilingBlocks = new ArrayList<>();
         List<BlockPos> windowBlocks = new ArrayList<>();
-        List<BlockPos> roofBlocks = new ArrayList<>();
+        List<BlockInfo> roofBlocks = new ArrayList<>();
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors + ". Facing = " + facing.toString());
 
@@ -136,11 +135,11 @@ public class CastlePartSquare implements ICastlePart
         // Always make walkable if there is more castle above; otherwise 50% chance of walkable
         if (isTopFloor && random.nextBoolean())
         {
-            addSlantedRoof(wallBlocks, roofBlocks, x, currentY, z, sizeX + 1, sizeZ + 1);
+            addRoofPyramid(wallBlocks, roofBlocks, x, currentY, z, sizeX + 1, sizeZ + 1);
         }
         else
         {
-            addWalkableRoof(wallBlocks, x, currentY, z, sizeX, sizeZ);
+            addRoofWalkable(wallBlocks, x, currentY, z, sizeX, sizeZ);
         }
 
 
@@ -170,13 +169,13 @@ public class CastlePartSquare implements ICastlePart
         }
 
         if(!roofBlocks.isEmpty()) {
-            for(BlockPos pos : roofBlocks) {
-                world.setBlockState(pos, Blocks.SPRUCE_STAIRS.getDefaultState());
+            for(BlockInfo blockPlace : roofBlocks) {
+                world.setBlockState(blockPlace.position, blockPlace.state);
             }
         }
     }
 
-    private void addWalkableRoof(List<BlockPos> wallBlocks, int x, int y, int z, int lenX, int lenZ)
+    private void addRoofWalkable(List<BlockPos> wallBlocks, int x, int y, int z, int lenX, int lenZ)
     {
         for (int i = 0; i < lenX; i++)
         {
@@ -224,16 +223,16 @@ public class CastlePartSquare implements ICastlePart
         }
     }
 
-    private void addSlantedRoof(List<BlockPos> wallBlocks, List<BlockPos> roofBlocks, int x, int y, int z, int lenX, int lenZ)
+    private void addRoofPyramid(List<BlockPos> wallBlocks, List<BlockInfo> roofBlocks, int x, int y, int z, int lenX, int lenZ)
     {
         int roofX;
         int roofZ;
         int roofLenX;
         int roofLenZ;
+        IBlockState stairState;
 
         do
         {
-
             // Add the foundation under the roof
             for (int i = 0; i < lenX; i++)
             {
@@ -251,16 +250,53 @@ public class CastlePartSquare implements ICastlePart
             roofLenX = lenX + 2;
             roofLenZ = lenZ + 2;
 
-            //Add the roof blocks
+            //add the north row
             for (int i = 0; i < roofLenX; i++)
             {
-                roofBlocks.add(new BlockPos(roofX + i, y, roofZ));
-                roofBlocks.add(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1));
+                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ), Blocks.SPRUCE_STAIRS.getDefaultState());
+                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.SOUTH);
+
+                //Apply properties to corner pieces
+                if (i == 0)
+                {
+                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+                }
+                else if (i == roofLenX - 1)
+                {
+                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+                }
+
+                roofBlocks.add(bInfo);
             }
-            for (int j = 0; j < roofLenZ; j++)
+            //add the south row
+            for (int i = 0; i < roofLenX; i++)
             {
-                roofBlocks.add(new BlockPos(roofX, y, roofZ + j));
-                roofBlocks.add(new BlockPos(roofX + roofLenX - 1, y, roofZ + j));
+                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), Blocks.SPRUCE_STAIRS.getDefaultState());
+                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.NORTH);
+
+                //Apply properties to corner pieces
+                if (i == 0)
+                {
+                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
+                }
+                else if (i == roofLenX - 1)
+                {
+                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
+                }
+                roofBlocks.add(bInfo);
+            }
+
+            for (int i = 0; i < roofLenZ; i++)
+            {
+                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
+                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.EAST);
+
+                roofBlocks.add(bInfo);
+
+                bInfo = new BlockInfo(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
+                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.WEST);
+
+                roofBlocks.add(bInfo);
             }
 
             x++;
@@ -268,7 +304,7 @@ public class CastlePartSquare implements ICastlePart
             z++;
             lenX -= 2;
             lenZ -= 2;
-        } while (lenX >= 0 && lenX >= 0);
+        } while (lenX >= 0 && lenZ >= 0);
 
     }
 

@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.CastlePartSquare;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.CastlePartTower;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.ICastlePart;
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
@@ -29,9 +30,11 @@ public class CastleGenerator implements IDungeonGenerator{
     private int floorHeight;
     private Random random;
 	List<ICastlePart> parts;
+	List<CastlePartTower> towers;
 	private int totalX;
 	private int totalY;
 	private int totalZ;
+	private static final int MIN_TOWER_SIZE = 5;
 
 	private final static EnumFacing[] ExpansionDirections = {EnumFacing.NORTH, EnumFacing.EAST, EnumFacing.SOUTH, EnumFacing.WEST};
 
@@ -42,6 +45,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		this.floorHeight = this.dungeon.getFloorHeight();
 		this.random = new Random();
 		this.parts = new ArrayList<>();
+		this.towers = new ArrayList<>();
 	}
 
 	@Override
@@ -62,7 +66,8 @@ public class CastleGenerator implements IDungeonGenerator{
 		int buildAreaX = maxSize;
 		int buildAreaZ = maxSize;
 		int currentLayer = 0;
-		int floors = 2;
+		int layerFloors = 2;
+		int totalFloors = 0;
 
 		// Calculate random size based on maximum size
 		quarterSizeX = maxSize / 4;
@@ -81,7 +86,7 @@ public class CastleGenerator implements IDungeonGenerator{
 			z += offsetZ;
 
 			// Add the main building
-			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, floors, this.dungeon, EnumFacing.UP, currentLayer));
+			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, layerFloors, this.dungeon, EnumFacing.UP, currentLayer));
 
 			int subSizeX;
 			int subSizeZ;
@@ -96,52 +101,96 @@ public class CastleGenerator implements IDungeonGenerator{
 			roomToBuildX = sizeX;
 			roomToBuildZ = offsetZ;
 			// Add substructure to the north, if there is room
-			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			if (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 			{
-				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
-				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
-				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
-				subZ = z - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
+				if (roomToBuildX > roomSize && roomToBuildZ > roomSize)
+				{
+					subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+					subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+					subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+					subZ = z - subSizeZ;
+					parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, layerFloors, this.dungeon, facing, currentLayer));
+				}
+				else
+				{
+					subSizeX = Math.max(roomToBuildX, roomToBuildZ);
+					subSizeZ = subSizeX;
+					subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+					subZ = z - subSizeZ;
+					towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, this.dungeon, facing));
+				}
 			}
 
 			facing = EnumFacing.EAST;
 			roomToBuildX = buildAreaX - sizeX - offsetX;
 			roomToBuildZ = sizeZ;
 			// Add substructure to the east, if there is room
-			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			if (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 			{
-				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
-				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
-				subX = x + sizeX;
-				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
+				if (roomToBuildX > roomSize && roomToBuildZ > roomSize)
+				{
+					subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+					subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+					subX = x + sizeX;
+					subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+					parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, layerFloors, this.dungeon, facing, currentLayer));
+				}
+				else
+				{
+					subSizeX = Math.max(roomToBuildX, roomToBuildZ);
+					subSizeZ = subSizeX;
+					subX = x + sizeX;
+					subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+					towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, this.dungeon, facing));
+				}
 			}
 
 			facing = EnumFacing.SOUTH;
 			roomToBuildX = sizeX;
 			roomToBuildZ = buildAreaZ - sizeZ - offsetZ;
 			// Add substructure to the south, if there is room
-			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			if (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 			{
-				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
-				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
-				subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
-				subZ = z + sizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
+				if (roomToBuildX > roomSize && roomToBuildZ > roomSize)
+				{
+					subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+					subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+					subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+					subZ = z + sizeZ;
+					parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, layerFloors, this.dungeon, facing, currentLayer));
+				}
+				else
+				{
+					subSizeX = Math.max(roomToBuildX, roomToBuildZ);
+					subSizeZ = subSizeX;
+					subX = random.nextBoolean() ? x : x + sizeX - subSizeX;
+					subZ = z + sizeZ;
+					towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, this.dungeon, facing));
+				}
 			}
 
 			facing = EnumFacing.WEST;
 			roomToBuildX = offsetX;
 			roomToBuildZ = sizeZ;
 			// Add substructure to the west, if there is room
-			if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+			if (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 			{
-				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
-				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
-				subX = x - subSizeX;
-				subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
-				parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, floors, this.dungeon, facing, currentLayer));
+				if ((roomToBuildX > roomSize) && (roomToBuildZ > roomSize))
+				{
+					subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
+					subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+					subX = x - subSizeX;
+					subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+					parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, layerFloors, this.dungeon, facing, currentLayer));
+				}
+				else
+				{
+					subSizeX = Math.max(roomToBuildX, roomToBuildZ);
+					subSizeZ = subSizeX;
+					subX = x - subSizeX;
+					subZ = random.nextBoolean() ? z : z + sizeZ - subSizeZ;
+					towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, this.dungeon, facing));
+				}
 			}
 
 			// Now try to build a new structure on top of this one
@@ -152,7 +201,8 @@ public class CastleGenerator implements IDungeonGenerator{
 			sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
 
-			y += (floorHeight + 1) * floors;
+			totalFloors += layerFloors;
+			y += (floorHeight + 1) * layerFloors;
 			currentLayer++;
 		}
 
@@ -169,6 +219,13 @@ public class CastleGenerator implements IDungeonGenerator{
 				}
 			}
 		}
+		if (!towers.isEmpty())
+		{
+			for (CastlePartTower tower : towers)
+			{
+				tower.randomizeFloors(totalFloors); //make each tower a random height
+			}
+		}
 	}
 
 	@Override
@@ -178,6 +235,10 @@ public class CastleGenerator implements IDungeonGenerator{
 		for (ICastlePart part : parts)
 		{
 			part.generatePart(world);
+		}
+		for (ICastlePart tower : towers)
+		{
+			tower.generatePart(world);
 		}
 
 
