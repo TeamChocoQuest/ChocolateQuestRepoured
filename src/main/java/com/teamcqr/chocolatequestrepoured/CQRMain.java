@@ -14,12 +14,14 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHandler;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
+import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -121,7 +123,7 @@ public class CQRMain
 		if(Reference.CONFIG_HELPER.buildWall()) {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
-		
+
 		//Instantiating the ELootTable class
 		try {
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
@@ -145,6 +147,8 @@ public class CQRMain
 
 		//Registers event handler
 		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
+
+		SmeltingHandler.init();
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
