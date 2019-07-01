@@ -8,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
-import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventHandler;
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
