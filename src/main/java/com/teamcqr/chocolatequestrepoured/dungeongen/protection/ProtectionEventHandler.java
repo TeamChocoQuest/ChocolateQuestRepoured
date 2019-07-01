@@ -18,13 +18,13 @@ public class ProtectionEventHandler {
     @SubscribeEvent
     public void dungeonGenerate(CQDungeonStructureGenerateEvent e) {
         if(e.getDungeon().isProtectedFromModifications()) {
-        	ProtectionHandler.PROTECTION_HANDLER.addExistingRegion(e.getChunkPos(),new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos(),e.getDungeonID(),e.getShieldCorePosition()));
+        	ProtectionHandler.PROTECTION_HANDLER.addRegion(e.getChunkPos(),new ProtectedRegion(e.getSize().getX(),e.getSize().getY(),e.getSize().getZ(),e.getPos(),e.getDungeonID(),e.getShieldCorePosition()));
         }
     }
 
     @SubscribeEvent
     public void blockBreak(BlockEvent.BreakEvent e) {
-        ProtectionHandler.PROTECTION_HANDLER.check(e);
+        ProtectionHandler.PROTECTION_HANDLER.handleBlockBreak(e);
     }
 
     @SubscribeEvent
