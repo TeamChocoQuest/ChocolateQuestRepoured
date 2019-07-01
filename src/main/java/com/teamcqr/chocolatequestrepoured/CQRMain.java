@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventHandler;
+import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -145,8 +146,9 @@ public class CQRMain
 			ex.printStackTrace();
 		}
 
-		//Registers event handler
-		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
+		//Register event handling for dungeon protection system
+		ProtectionHandler.init();
+		MinecraftForge.EVENT_BUS.register(ProtectionHandler.PROTECTION_HANDLER);
 
 		SmeltingHandler.init();
 	}
