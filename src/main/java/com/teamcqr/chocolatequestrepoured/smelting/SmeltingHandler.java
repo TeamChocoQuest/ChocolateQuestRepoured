@@ -1,16 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.smelting;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 /**
  * Copyright (c) 30.06.2019
