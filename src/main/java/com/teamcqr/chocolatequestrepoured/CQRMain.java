@@ -58,7 +58,7 @@ public class CQRMain
 			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
-	
+	//Tab with all the blocks
 	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab")
 	{
 		@Override
@@ -67,6 +67,7 @@ public class CQRMain
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
+	//Tab that holds all banner designs loaded
 	public static CreativeTabs CQRBannersTab = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
 		
 		@Override
@@ -82,7 +83,7 @@ public class CQRMain
 			}
 		};
 	};
-	
+	//Tab that holds placers for all dungeons
 	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
 		
 		@Override
@@ -90,7 +91,7 @@ public class CQRMain
 			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
-	
+	//Tab that holds all dungeon building things (chests + exporter)
 	public static CreativeTabs CQRExporterChestTab = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
 		
 		@Override
@@ -127,20 +128,20 @@ public class CQRMain
 		try {
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
 			if(resLoc != null) {
-				System.out.println("ELootTable instantiated successfully!");
+				System.out.println("Loot tables instantiated successfully!");
 				LootTableLoader ltl = new LootTableLoader();
 				System.out.println("Loading the loot configs...");
 				ltl.loadConfigs();
 			}
 		} catch (Exception e) {
-			System.err.println("WARNING: Failed to instantiate the loot enum or to exchange the files!!");
+			System.err.println("WARNING: Failed to instantiate the loot tables or to exchange the files!!");
 			e.printStackTrace();
 		}
-		
+		//Instantiating the banners
 		try {
 			BannerHandler.initPatterns();
 		} catch(Exception ex) {
-			System.err.println("WARNING: Failed to instantiate the banner enum!!");
+			System.err.println("WARNING: Failed to instantiate the banners!!");
 			ex.printStackTrace();
 		}
 
