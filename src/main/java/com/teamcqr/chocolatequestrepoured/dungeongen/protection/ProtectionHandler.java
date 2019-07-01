@@ -56,8 +56,8 @@ public class ProtectionHandler {
 
     /* EVENT HANDLERS */
 
-    @SubscribeEvent
     // Handle forge block break event
+    @SubscribeEvent
     public void handleBlockBreak(BlockEvent.BreakEvent e) {
 
         for( Map.Entry<ChunkPos,ProtectedRegion> item : activeRegions.entrySet() ) {
@@ -67,6 +67,7 @@ public class ProtectionHandler {
     }
 
     // Handle forge LivingSpawnEvent
+    @SubscribeEvent
     public void checkSpawn(LivingSpawnEvent.CheckSpawn e) {
         Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
         while (it.hasNext())
@@ -77,6 +78,7 @@ public class ProtectionHandler {
     }
 
     // Handle portal spawning
+    @SubscribeEvent
     public void handlePortalSpawn(BlockEvent.PortalSpawnEvent e) {
         Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
         while (it.hasNext())
@@ -87,7 +89,7 @@ public class ProtectionHandler {
     }
 
     // Handle chunk load event
-
+    @SubscribeEvent
     public void handleLoad(ChunkEvent.Load e) {
 
         // Temp obj
@@ -103,6 +105,7 @@ public class ProtectionHandler {
     }
     
     // Handle chunk unload event
+    @SubscribeEvent
     public void handleUnload(ChunkEvent.Unload e) {
         // Remove relevant chunks from activeRegions variable under applicable circumstances
         if(!e.getChunk().isLoaded()) {
@@ -113,6 +116,7 @@ public class ProtectionHandler {
     }
 
     // Handle EnteringChunk event
+    @SubscribeEvent
     public void handleChunkEnter(EntityEvent.EnteringChunk e) {
 
         ChunkPos enter;
