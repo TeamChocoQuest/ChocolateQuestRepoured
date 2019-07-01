@@ -25,7 +25,7 @@ public class CastlePartSquare implements ICastlePart
     private int sizeZ;
     private int floors;
     private EnumFacing facing;
-    CastleDungeon dungeon;
+    private CastleDungeon dungeon;
     private Random random;
     private int startLayer;
     private boolean isTopFloor;
@@ -135,7 +135,7 @@ public class CastlePartSquare implements ICastlePart
         // Always make walkable if there is more castle above; otherwise 50% chance of walkable
         if (isTopFloor && random.nextBoolean())
         {
-            addRoofPyramid(wallBlocks, roofBlocks, x, currentY, z, sizeX + 1, sizeZ + 1);
+            addRoofPyramid(wallBlocks, roofBlocks, x, currentY, z, sizeX, sizeZ);
         }
         else
         {
@@ -187,7 +187,7 @@ public class CastlePartSquare implements ICastlePart
             {
                 wallBlocks.add(new BlockPos(x + i, y, z + lenZ - 1));
             }
-            if ((i == 0) || (i % 4 == 0) || ((i + 1) % 4 == 0))
+            if ((i % 4 == 0) || ((i + 1) % 4 == 0))
             {
                 if (this.facing != EnumFacing.SOUTH)
                 {
@@ -209,7 +209,7 @@ public class CastlePartSquare implements ICastlePart
             {
                 wallBlocks.add(new BlockPos(x + lenX - 1, y, z + i));
             }
-            if ((i == 0) || (i % 4 == 0) || ((i + 1) % 4 == 0))
+            if ((i % 4 == 0) || ((i + 1) % 4 == 0))
             {
                 if (this.facing != EnumFacing.EAST)
                 {
@@ -229,7 +229,6 @@ public class CastlePartSquare implements ICastlePart
         int roofZ;
         int roofLenX;
         int roofLenZ;
-        IBlockState stairState;
 
         do
         {

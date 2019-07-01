@@ -160,12 +160,28 @@ public class CastlePartTower implements ICastlePart
         int midZ = z + radius;
         //CircleCoord[][] towerGrid = new CircleCoord[sizeX][sizeX];
         Circle2D circle = new Circle2D(midX, midZ, radius);
-        Circle2D.CircleRegion[][] layout = circle.toArray(x, z, sizeX, sizeX);
+        //Circle2D.CircleRegion[][] layout = circle.toArray(x, z, sizeX, sizeX);
+
 
         for (int currentFloor = 0; currentFloor < floors; currentFloor++)
         {
             currentY = y + currentFloor * (floorHeight + 1);
 
+            ArrayList<Circle2D.Coord> wallCoords = circle.getEdgeCoords();
+            ArrayList<Circle2D.Coord> floorCoords = circle.getFillCoords();
+
+            for (Circle2D.Coord coord : floorCoords)
+            {
+                wallblocks.add(new BlockPos(coord.x, currentY, coord.z));
+                wallblocks.add(new BlockPos(coord.x, currentY + floorHeight, coord.z));
+            }
+            for (Circle2D.Coord coord : wallCoords)
+            {
+                for (int i = 0; i < floorHeight; i++)
+                {
+                    wallblocks.add(new BlockPos(coord.x, currentY + i, coord.z));
+                }
+            }
 
         }
     }

@@ -84,6 +84,12 @@ public class Circle2D
                 this.filled.add(new Coord(fillX, centerZ - z));
             }
 
+            for (int fillX = centerX - z; fillX <= centerX + z; fillX ++)
+            {
+                this.filled.add(new Coord(fillX, centerZ + x));
+                this.filled.add(new Coord(fillX, centerZ - x));
+            }
+
             if (P < 0)
             {
                 P += 2 * x + 1;
