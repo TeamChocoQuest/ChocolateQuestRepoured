@@ -61,7 +61,7 @@ public class ProtectionHandler {
     public void handleBlockBreak(BlockEvent.BreakEvent e) {
 
         for( Map.Entry<ChunkPos,ProtectedRegion> item : activeRegions.entrySet() ) {
-            item.getValue().checkBreakEvent(e);
+            item.getValue().checkBlockBreakEvent(e);
         }
 
     }
@@ -195,7 +195,7 @@ public class ProtectionHandler {
 
         // Loop through nbt data in allRegions var and add to temp obj
         for(ChunkPos key: allRegions.keySet()) {
-            NBTTagCompound data = allRegions.get(key).save();
+            NBTTagCompound data = allRegions.get(key).serializeToNBT();
 
             tag.setTag(key.x+"_"+key.z,data);
         }
