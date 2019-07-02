@@ -22,6 +22,8 @@ import net.minecraftforge.fml.common.eventhandler.Event;
  * GitHub: https://github.com/MrMarnic
  */
 public class ProtectedRegion {
+
+    // Variables
     private AxisAlignedBB boundingBox;
     private BlockPos center;
     private BlockPos min;
@@ -31,6 +33,7 @@ public class ProtectedRegion {
     private ArrayList<ChunkPos> chunksInRegion;
     private BlockPos nexus;
 
+    // Constructors
     public ProtectedRegion(BlockPos center, double width, double height, double depth,UUID uuid,BlockPos nexus) {
         this.center = center;
         this.boundingBox = new AxisAlignedBB(new BlockPos(center.getX()-width/2,center.getY()-height/2,center.getZ()-depth/2));
@@ -89,20 +92,13 @@ public class ProtectedRegion {
         insertChunksForRegion();
     }
 
+    // Getters
     public AxisAlignedBB getBoundingBox() {
         return boundingBox;
     }
 
     public BlockPos getCenter() {
         return center;
-    }
-
-    public boolean isBlockInRegion(BlockPos blockPos) {
-        return boundingBox.intersects(blockPos.getX(),blockPos.getY(),blockPos.getZ(),blockPos.getX()+1,blockPos.getY()+1,blockPos.getZ()+1);
-    }
-
-    public boolean isEntityInRegion(EntityLivingBase e) {
-        return boundingBox.intersects(e.getEntityBoundingBox());
     }
 
     public BlockPos getMax() {
@@ -113,44 +109,34 @@ public class ProtectedRegion {
         return min;
     }
 
-    public boolean isEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
+    public UUID getDungeonUUID() {
+        return dungeonUUID;
+    }
 
-    //Checks if block is in area and is breakable
-    public void checkBreakEvent(BlockEvent.BreakEvent e) {
+    public ArrayList<ChunkPos> getChunksInRegion() {
+        return chunksInRegion;
+    }
+
+    public BlockPos getNexus() {
+        return nexus;
+    }
+
+    // Setters
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    // Event Handlers
+    public void checkBlockBreakEvent(BlockEvent.BreakEvent e) {
         if(enabled && !e.getPlayer().isCreative()) {
             if(isBlockInRegion(e.getPos())) {
                 e.setCanceled(true);
             }
         }
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public NBTTagCompound save() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("min.x",min.getX());
-        tag.setDouble("min.y",min.getY());
-        tag.setDouble("min.z",min.getZ());
-
-        tag.setDouble("max.x",max.getX());
-        tag.setDouble("max.y",max.getY());
-        tag.setDouble("max.z",max.getZ());
-
-        if(this.nexus != null) {
-        	tag.setDouble("nexus.x",nexus.getX());
-        	tag.setDouble("nexus.y",nexus.getY());
-        	tag.setDouble("nexus.z",nexus.getZ());
-        }
-
-        tag.setBoolean("enabled",enabled);
-
-        tag.setUniqueId("dungeonUUID",dungeonUUID);
-        return tag;
     }
 
     public void checkSpawnEvent(LivingSpawnEvent.CheckSpawn e) {
@@ -161,32 +147,59 @@ public class ProtectedRegion {
         }
     }
 
-	public void checkPortalEvent(PortalSpawnEvent e) {
-		if(enabled) {
-			if(isBlockInRegion(e.getPos())) {
-				e.setResult(Event.Result.DENY);
-			}
-		}
-	}
-	
-	public List<Chunk> getChunks(World world) {
-		List<Chunk> chunks = new ArrayList<Chunk>();
-		
-		BlockPos p1 = new BlockPos(this.min.getX(), 100, this.min.getZ());
-		BlockPos p2 = new BlockPos(this.max.getX(), 100, this.max.getZ());
-		
-		for(BlockPos blockpos : BlockPos.getAllInBox(p1, p2)) {
-			Chunk chunk = world.getChunkFromBlockCoords(blockpos);
-			if(chunks.isEmpty() || !chunks.contains(chunk)) {
-				chunks.add(chunk);
-			}
-		}
-		
-		return chunks;
-	}
+    public void checkPortalEvent(PortalSpawnEvent e) {
+        if(enabled) {
+            if(isBlockInRegion(e.getPos())) {
+                e.setResult(Event.Result.DENY);
+            }
+        }
+    }
 
-    public UUID getDungeonUUID() {
-        return dungeonUUID;
+    // Util
+    public boolean isBlockInRegion(BlockPos blockPos) {
+        return boundingBox.intersects(blockPos.getX(),blockPos.getY(),blockPos.getZ(),blockPos.getX()+1,blockPos.getY()+1,blockPos.getZ()+1);
+    }
+
+    public boolean isEntityInRegion(EntityLivingBase e) {
+        return boundingBox.intersects(e.getEntityBoundingBox());
+    }
+
+    public NBTTagCompound serializeToNBT() {
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setDouble("min.x",min.getX());
+        tag.setDouble("min.y",min.getY());
+        tag.setDouble("min.z",min.getZ());
+
+        tag.setDouble("max.x",max.getX());
+        tag.setDouble("max.y",max.getY());
+        tag.setDouble("max.z",max.getZ());
+
+        if(this.nexus != null) {
+            tag.setDouble("nexus.x",nexus.getX());
+            tag.setDouble("nexus.y",nexus.getY());
+            tag.setDouble("nexus.z",nexus.getZ());
+        }
+
+        tag.setBoolean("enabled",enabled);
+
+        tag.setUniqueId("dungeonUUID",dungeonUUID);
+        return tag;
+    }
+
+    public List<Chunk> getChunks(World world) {
+        List<Chunk> chunks = new ArrayList<Chunk>();
+
+        BlockPos p1 = new BlockPos(this.min.getX(), 100, this.min.getZ());
+        BlockPos p2 = new BlockPos(this.max.getX(), 100, this.max.getZ());
+
+        for(BlockPos blockpos : BlockPos.getAllInBox(p1, p2)) {
+            Chunk chunk = world.getChunkFromBlockCoords(blockpos);
+            if(chunks.isEmpty() || !chunks.contains(chunk)) {
+                chunks.add(chunk);
+            }
+        }
+
+        return chunks;
     }
 
     private void insertChunksForRegion() {
@@ -204,13 +217,5 @@ public class ProtectedRegion {
                 chunksInRegion.add(new ChunkPos(minC.x + i,minC.z + ii));
             }
         }
-    }
-
-    public ArrayList<ChunkPos> getChunksInRegion() {
-        return chunksInRegion;
-    }
-
-    public BlockPos getNexus() {
-        return nexus;
     }
 }
