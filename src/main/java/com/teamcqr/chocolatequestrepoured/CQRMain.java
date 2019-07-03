@@ -12,7 +12,8 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventH
 import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHandler;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
 import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -77,7 +78,8 @@ public class CQRMain
 		@Override
 		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> itemList) {
 			List<ItemStack> banners = new ArrayList<ItemStack>();
-			banners = BannerHandler.addBannersToTabs();
+			//banners = BannerHandler.addBannersToTabs();
+			banners = BannerHelper.addBannersToTabs();
 			if(banners != null && !banners.isEmpty()) {
 				for(ItemStack stack : banners) itemList.add(stack);
 			}
@@ -139,7 +141,10 @@ public class CQRMain
 		}
 		//Instantiating the banners
 		try {
-			BannerHandler.initPatterns();
+			//BannerHandler.initPatterns();
+			for(EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
+				cqPattern.getPattern();
+			}
 		} catch(Exception ex) {
 			System.err.println("WARNING: Failed to instantiate the banners!!");
 			ex.printStackTrace();
