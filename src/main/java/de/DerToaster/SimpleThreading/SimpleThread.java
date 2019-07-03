@@ -2,7 +2,7 @@ package de.DerToaster.SimpleThreading;
 
 import java.util.Queue;
 
-public class SimpleThread extends Thread {
+class SimpleThread extends Thread {
 
 	private Thread mainThread;
 	
