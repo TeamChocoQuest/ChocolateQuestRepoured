@@ -1,17 +1,104 @@
-The English US language file for Chocolate Quest Repoured Mod!
+The Chinese(simple) language file for Chocolate Quest Repoured Mod!
 
 
 //CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocks
-itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
-itemGroup.ChocolateQuestRepouredBannerTab=Banners
-itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
+itemGroup.ChocolateQuestRepouredBlocksTab=寻找巧克力-重铸: 方块
+itemGroup.ChocolateQuestRepouredItemsTab=寻找巧克力-重铸：物品
+itemGroup.ChocolateQuestRepouredDungeonPlacers=地牢放置者
+itemGroup.ChocolateQuestRepouredBannerTab=旗帜
+itemGroup.ChocolateQuestRepouredExporterChests=输出箱
+
+//Banners
+block.minecraft.banner.cqrepoured_cq_wither_eyes.white=白眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.orange=橘眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.magenta=桃眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.light_blue=靛眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.yellow=黄眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.lime=翠眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.pink=粉眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.gray=灰眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.silver=银眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.cyan=青眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.purple=紫眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.blue=蓝眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.brown=棕眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.green=绿眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.red=红眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.black=黑眼凋灵旗
+
+block.minecraft.banner.cqrepoured_cq_wither_skull.white=白色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.orange=橘色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.magenta=桃色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.light_blue=淡蓝凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.yellow=黄色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.lime=淡绿凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.pink=粉红凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.gray=灰色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.silver=灰色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.cyan=青色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.purple=紫色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.blue=蓝色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.brown=棕色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.green=绿色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.red=Red凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.black=黑色凋灵旗
+
+block.minecraft.banner.cqrepoured_cq_fire.white=白色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.orange=橘色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.magenta=桃色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.light_blue=淡蓝火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.yellow=黄色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.lime=淡绿火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.pink=粉红火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.gray=灰色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.silver=银色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.cyan=青色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.purple=紫色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.blue=蓝色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.brown=棕色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.green=绿色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.red=红色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.black=黑色火焰旗
+
+block.minecraft.banner.cqrepoured_cq_emerald.white=白色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.orange=橘色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.magenta=桃色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.light_blue=淡蓝翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.yellow=黄色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.lime=淡绿翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.pink=粉红翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.gray=灰色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.silver=银色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.cyan=青色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.purple=紫色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.blue=蓝色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.brown=棕色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.green=绿色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.red=红色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.black=黑色翡翠旗
+
+block.minecraft.banner.cqrepoured_cq_bones.white=白色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.orange=橘色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.magenta=桃色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.light_blue=淡蓝死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.yellow=黄色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.lime=淡绿死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.pink=粉红死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.gray=灰色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.silver=银色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.cyan=青色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.purple=紫色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.blue=蓝色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.brown=棕色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.green=绿色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.red=红色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.black=黑色死骨旗
+
 
 //Gui
 gui.drops.name=掉落
 gui.backpack.name=背包
-gui.alchemy_bag.name=炼金之囊
+gui.alchemy_bag.name=炼金师之囊
 description.gui_exporter.name=仅用于导出地牢的创造模式专用块,选择要导出的区域，然后保存它.
 
 //Other
@@ -20,7 +107,7 @@ item.teleport_stone.name=传送石
 item.soul_bottle.name=魂瓶
 item.badge.name=勋章
 item.backpack.name=背包
-item.alchemy_bag.name=炼金之囊
+item.alchemy_bag.name=炼金师之囊
 
 //Dragon Items
 item.helmet_dragon.name=龙之颅
@@ -35,12 +122,12 @@ item.dagger_ninja.name=忍者匕首
 item.sword_turtle.name=巨龟之剑
 item.sword_spider.name=蜘蛛之剑
 item.battle_axe_bull.name=猛牛战斧
-item.sword_moonlight.name=月影
-item.sword_sunshine.name=日光
+item.sword_moonlight.name=月耀
+item.sword_sunshine.name=日冕
 
 //Walker set
 item.sword_walker.name=漫游者之剑
-item.shield_walker.name=漫游盾
+item.shield_walker.name=漫游者之盾
 
 //Great Swords
 item.great_sword_monking.name=头陀巨剑
