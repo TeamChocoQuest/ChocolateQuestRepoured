@@ -27,8 +27,16 @@ public class PlateauBuilder {
 		structureBlock = support;
 		structureTopBlock = top;
 	}
-
-	public void generate(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
+	/*
+	 * TODO: Write also a method, that digs a cave with two corners
+	 * TODO:
+	 *   - Pass calculation of block positions to a daemon thread
+	 *   - Let the daemon thread call a method that runs the block placement on the main Thread
+	 *   - Rewrite generators in that way, that they get a method that gets called by the calcThread to start block placement
+	 *   
+	 *   Note: Forge allows async threads modifying things of main thread
+	 */
+	public void generateHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
 		Perlin3D p = new Perlin3D(world.getSeed(), wallSize, random);
