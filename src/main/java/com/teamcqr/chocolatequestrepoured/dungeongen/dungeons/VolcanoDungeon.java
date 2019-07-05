@@ -11,6 +11,14 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.VolcanoGenerator
  * GitHub: https://github.com/DerToaster98
  */
 public class VolcanoDungeon extends StrongholdDungeon {
+	
+	private boolean buildStairwell = true;
+	private int minHeight = 100;
+	private int maxHeight = 130;
+	private double steepness = 0.075D;
+	private double lavaChance = 0.005D;
+	private double magmaChance = 0.1;
+	private int innerRadius = 6;
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -70,6 +71,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		
 		//Calculates all the "wall" blocks
 		//TODO Place lava
+		//TODO inner "cave" digs down to bedrock, volcano shape begins at minY!!
 		for(int iY = 0; iY < ((minY + this.maxHeight) < 256 ? this.maxHeight : (255 - minY)); iY++) {
 			//RADIUS = baseRAD - (level/steepness)^1/3
 			int radiusOuter = new Double(this.baseRadius - Math.pow((iY/this.steepness), new Double(1/3))).intValue();
@@ -148,11 +150,46 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				coverBlocks.add(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)));
 			}
 		}
-		//TODO Pass the list to a simplethread to place the blocks
-	}
-	
-	private void calculateBaseRadius() {
 		
+		Reference.threadController.addTask(new Runnable() {
+			
+			@Override
+			public void run() {
+				List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
+				int counter = 1;
+				for(BlockPos bp : coverBlocks) {
+					bplistTMP.add(bp);
+					if(counter % 10 == 0) {
+						Reference.threadController.addTask(new Runnable() {
+							
+							@Override
+							public void run() {
+								for(BlockPos b : bplistTMP) {
+									//TODO Set cover block
+									//world.setBlockState(b, )
+								}
+								
+							}
+						});
+						
+						bplistTMP.clear();
+					}
+					counter++;
+				}
+				Reference.threadController.addTask(new Runnable() {
+					
+					@Override
+					public void run() {
+						for(BlockPos b : bplistTMP) {
+							//TODO Set cover block
+							//world.setBlockState(b, )
+						}
+						
+					}
+				});
+			}
+		});
+		//DONE Pass the list to a simplethread to place the blocks
 	}
 	
 	private void calculateMinY() {
