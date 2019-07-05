@@ -37,5 +37,5 @@ public class Reference
 	
 	public static final ConfigFileHelper CONFIG_HELPER = new ConfigFileHelper();
 	
-	public static final MultiThreadController threadController = new MultiThreadController(0); 
+	public static final MultiThreadController BLOCK_PLACING_THREADS = new MultiThreadController(0); 
 }
