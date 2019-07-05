@@ -151,7 +151,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 		}
 		
-		Reference.threadController.addTask(new Runnable() {
+		Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -160,7 +160,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				for(BlockPos bp : coverBlocks) {
 					bplistTMP.add(bp);
 					if(counter % 10 == 0) {
-						Reference.threadController.addTask(new Runnable() {
+						Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
 							
 							@Override
 							public void run() {
@@ -176,7 +176,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 					}
 					counter++;
 				}
-				Reference.threadController.addTask(new Runnable() {
+				Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
 					
 					@Override
 					public void run() {
