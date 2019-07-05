@@ -158,7 +158,9 @@ public class CQRMain
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
+		
 		Reference.CONFIG_HELPER.loadValues(configFile);
+		Reference.threadController.resetThreads(Reference.CONFIG_HELPER.getBlockPlacerThreadCount());
 		
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		

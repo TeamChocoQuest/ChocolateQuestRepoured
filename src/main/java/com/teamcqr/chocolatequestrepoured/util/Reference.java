@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import de.DerToaster.SimpleThreading.MultiThreadController;
+
 public class Reference 
 {
 	public static final String MODID = "cqrepoured";
@@ -34,4 +36,6 @@ public class Reference
 	//public static final double SPAWNER_RANGE = 25.0D;
 	
 	public static final ConfigFileHelper CONFIG_HELPER = new ConfigFileHelper();
+	
+	public static final MultiThreadController threadController = new MultiThreadController(0); 
 }

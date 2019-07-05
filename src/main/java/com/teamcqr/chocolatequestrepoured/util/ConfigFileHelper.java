@@ -10,6 +10,7 @@ public class ConfigFileHelper {
 	private double spawnerActivationDistance = 25.0;
 	private int turnBackIntoSpawnerDistance = 48;
 	private int maxLootTableRolls = 3;
+	private int blockPlacerThreadCount = 4;
 	private int wallDistance = 500;  //Measured in chunks  500 = 8000 blocks
 	private int wallTopY = 140;
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
@@ -75,6 +76,10 @@ public class ConfigFileHelper {
 		prop = config.get("wall", "obsidianCore", true);
 		this.wallHasObsiCore = prop.getBoolean(true);
 		
+		// How many threads are used for block placing
+		prop = config.get("advanced", "threadCount", 4);
+		blockPlacerThreadCount = prop.getInt(4);
+		
 		config.save();
 	}
 	
@@ -113,6 +118,9 @@ public class ConfigFileHelper {
 	}
 	public int getMaxLootTablePoolRolls() {
 		return Math.abs(this.maxLootTableRolls);
+	}
+	public int getBlockPlacerThreadCount() {
+		return blockPlacerThreadCount;
 	}
 
 }

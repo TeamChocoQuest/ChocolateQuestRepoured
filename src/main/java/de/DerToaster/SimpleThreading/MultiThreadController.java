@@ -16,6 +16,13 @@ public class MultiThreadController {
 		}
 	}
 	
+	public void resetThreads(int newThreadCount) {
+		this.threads.clear();
+		for(int i = 0; i < (Math.abs(newThreadCount) > 0 ? Math.abs(newThreadCount):1); i++) {
+			this.threads.add(new SimpleThread(true));
+		}
+	}
+	
 	public void addTask(Runnable task) {
 		this.tasksToAdd.add(task);
 		
