@@ -1,12 +1,14 @@
 package de.DerToaster.SimpleThreading;
 
 import java.util.Queue;
+//TODO: Replace current queue with a queue that is thread safe!!! This will make the whole thing faster as it must not wait for the SimpleThread to unlock its queue
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 class SimpleThread extends Thread {
 
 	private Thread mainThread;
 	
-	private Queue<Runnable> tasks;
+	private Queue<Runnable> tasks = new ConcurrentLinkedQueue<>();
 	
 	private boolean queueLocked = true;
 	
@@ -52,7 +54,7 @@ class SimpleThread extends Thread {
 			unlockQueue();
 			
 			try {
-				sleep(10);
+				sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

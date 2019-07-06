@@ -73,16 +73,42 @@ public class WallPartRailingTower implements IWallPart {
 			}
 		}
 		if(!doorwayBlocks.isEmpty()) {
-			for(BlockPos pos : doorwayBlocks) {
+			/*for(BlockPos pos : doorwayBlocks) {
 				world.setBlockToAir(pos);
-			}
+			}*/
+			final List<BlockPos> posL = new ArrayList<BlockPos>(doorwayBlocks);
+			doorwayBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL) {
+						world.setBlockToAir(p);
+					}
+					
+				}
+			});
 		}
 		
 		
 		if(!railingBlocks.isEmpty()) {
-			for(BlockPos pos : railingBlocks) {
+			/*for(BlockPos pos : railingBlocks) {
 				world.setBlockState(pos, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE));
-			}
+			}*/
+			final List<BlockPos> posL = new ArrayList<BlockPos>(railingBlocks);
+			railingBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL) {
+						world.setBlockState(p, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE));
+					}
+					
+				}
+			});
 		}
 	}
 	
