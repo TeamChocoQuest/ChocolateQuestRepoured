@@ -1,7 +1,7 @@
 package de.DerToaster.SimpleThreading;
 
 import java.util.Queue;
-//TODO: Replace current queue with a queue that is thread safe!!! This will make the whole thing faster as it must not wait for the SimpleThread to unlock its queue
+//DONE: Replace current queue with a queue that is thread safe!!! This will make the whole thing faster as it must not wait for the SimpleThread to unlock its queue
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class SimpleThread extends Thread {
