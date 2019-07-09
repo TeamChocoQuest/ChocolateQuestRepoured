@@ -23,6 +23,10 @@ import net.minecraft.world.chunk.Chunk;
 public class VolcanoDungeon extends StrongholdDungeon {
 	
 	private boolean buildStairwell = true;
+	private boolean damagedVolcano = true;
+	private boolean ores = true;
+	private int oreConcentration = 5;
+	private int maxHoleSize = 9;
 	private int minHeight = 100;
 	private int maxHeight = 130;
 	private double steepness = 0.075D;
@@ -69,6 +73,10 @@ public class VolcanoDungeon extends StrongholdDungeon {
 			this.lavaChance = Math.abs(Double.valueOf(prop.getProperty("lavaChance", "0.005")));
 			this.magmaChance = Math.abs(Double.valueOf(prop.getProperty("magmaChance", "0.1")));
 			this.steepness = Math.abs(Double.valueOf(prop.getProperty("steepness", "0.075")));
+			this.damagedVolcano = PropertyFileHelper.getBooleanProperty(prop, "damagedVolcano", true);
+			this.maxHoleSize = Math.max(Math.abs(PropertyFileHelper.getIntProperty(prop, "maxHoleSize", 9)), 2);
+			this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
+			this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
 			try {
 				fis.close();
 			} catch (IOException e) {
@@ -127,5 +135,21 @@ public class VolcanoDungeon extends StrongholdDungeon {
 	
 	public boolean doBuildStairs() {
 		return this.buildStairwell;
+	}
+	
+	public boolean isVolcanoDamaged() {
+		return this.damagedVolcano;
+	}
+	
+	public int getMaxHoleSize() {
+		return this.maxHoleSize;
+	}
+	
+	public int getOreChance() {
+		return this.oreConcentration;
+	}
+	
+	public boolean generateOres() {
+		return this.ores;
 	}
 }
