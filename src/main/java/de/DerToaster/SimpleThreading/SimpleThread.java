@@ -53,11 +53,11 @@ class SimpleThread extends Thread {
 			
 			unlockQueue();
 			
-			try {
+			/*try {
 				sleep(1);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
+			}*/
 			this.run();
 		}
 	}
