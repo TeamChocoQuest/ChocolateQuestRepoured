@@ -159,8 +159,10 @@ public class CQRMain
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
+
 		Reference.CONFIG_HELPER.loadValues(configFile);
-		
+		Reference.BLOCK_PLACING_THREADS.resetThreads(Reference.CONFIG_HELPER.getBlockPlacerThreadCount());
+
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		
 		File dungeonFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/dungeons//");
