@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -26,153 +23,46 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * Copyright (c) 29.04.2019
  * Developed by MrMarnic
  * GitHub: https://github.com/MrMarnic
- */
-
-/*
- * Primary logic class for Dungeon Protection system
- * Prevents block break/place, natural entity spawning, etc.
+ *
+ * Copyright (c) 03.07.2019
+ * Expanded by jdawg3636
+ * GitHub: https://github.com/jdawg3636
  */
 public class ProtectionHandler {
-
-    /* VARIABLES */
 
     // Singleton instance
     public static ProtectionHandler PROTECTION_HANDLER;
 
-    // instance vars
-    private HashMap<ChunkPos,ProtectedRegion> activeRegions;
-    private HashMap<ChunkPos,ProtectedRegion> allRegions;
+    // Region Data
+    private ArrayList<ProtectedRegion> activeRegions;
 
-    /* INIT */
-
-    // Initialize singleton
-    public static void init() { PROTECTION_HANDLER = new ProtectionHandler(); }
-
-    // Constructor - initialize vars
+    // Constructor
     public ProtectionHandler() {
-        this.activeRegions = new HashMap<>();
-        this.allRegions = new HashMap<>();
+        this.activeRegions = new ArrayList<>();
     }
 
-    /* EVENT HANDLERS */
-
-    // Handle forge block break event
-    @SubscribeEvent
-    public void handleBlockBreak(BlockEvent.BreakEvent e) {
-
-        for( Map.Entry<ChunkPos,ProtectedRegion> item : activeRegions.entrySet() ) {
-            item.getValue().checkBlockBreakEvent(e);
-        }
-
+    // Accessors
+    public void registerRegion(ProtectedRegion region) {
+        activeRegions.add(region);
     }
 
-    // Handle forge LivingSpawnEvent
-    @SubscribeEvent
-    public void checkSpawn(LivingSpawnEvent.CheckSpawn e) {
-        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
-            item.getValue().checkSpawnEvent(e);
-        }
-    }
+    public ProtectedRegion getProtectedRegionFromUUID(UUID uuidToFind) {
 
-    // Handle portal spawning
-    @SubscribeEvent
-    public void handlePortalSpawn(BlockEvent.PortalSpawnEvent e) {
-        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
-            item.getValue().checkPortalEvent(e);
-        }
-    }
-
-    // Handle chunk load event
-    @SubscribeEvent
-    public void handleLoad(ChunkEvent.Load e) {
-
-        // Temp obj
-        ProtectedRegion region;
-
-        // If chunk contains protected region, add to activeRegions var
-        if(e.getChunk().isLoaded()) {
-            if((region = getRegionForChunkPos(e.getChunk().getPos()))!=null) {
-                activeRegions.put(e.getChunk().getPos(),region);
-                initForceFieldNexus(e.getWorld(),region.getNexus());
-            }
-        }
-    }
-    
-    // Handle chunk unload event
-    @SubscribeEvent
-    public void handleUnload(ChunkEvent.Unload e) {
-        // Remove relevant chunks from activeRegions variable under applicable circumstances
-        if(!e.getChunk().isLoaded()) {
-            if(activeRegions.containsKey(e.getChunk().getPos())) {
-                activeRegions.remove(e.getChunk().getPos());
-            }
-        }
-    }
-
-    // Handle EnteringChunk event
-    @SubscribeEvent
-    public void handleChunkEnter(EntityEvent.EnteringChunk e) {
-
-        ChunkPos enter;
-
-        if(e.getEntity() instanceof EntityPlayer) {
-            if(activeRegions.containsKey(enter = new ChunkPos(e.getNewChunkX(),e.getNewChunkZ()))) {
-                MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(activeRegions.get(enter),enter,(EntityPlayer)e.getEntity()));
-            }
-        }
-    }
-
-    /* UTILITY */
-
-    // Util - add region to allRegions variable
-    public void addRegion(ChunkPos pos, ProtectedRegion region) {
-        allRegions.put(pos,region);
-}
-
-    // Util - return UUID given region
-    public ProtectedRegion getProtectedRegionWithUUID(UUID uuid) {
-        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
-            if(item.getValue().getDungeonUUID().equals(uuid)) {
-                return item.getValue();
-            }
+        // Search
+        for( ProtectedRegion protectedRegion : activeRegions ) {
+            if(protectedRegion.getUUID() == uuidToFind) return protectedRegion;
         }
 
-        return null;
-    }
-
-    // Util - convert ChunkPos to ProtectedRegion
-    public ProtectedRegion getRegionForChunkPos(ChunkPos pos) {
-
-        for(ProtectedRegion region: allRegions.values()) {
-            if(region.getChunksInRegion().contains(pos)) {
-                return region;
-            }
-        }
-
+        // Default
         return null;
 
     }
 
-    // Util - call the initUUIDRegion method on a force field nexus at a given location in a given world
-    public void initForceFieldNexus(World world, BlockPos pos) {
-        if(world != null && pos != null && pos.getY() > 0 && pos.getY() < 256 && world.getBlockState(pos) != null && net.minecraft.block.Block.isEqualTo(world.getBlockState(pos).getBlock(), ModBlocks.FORCE_FIELD_NEXUS)) {
-            TileEntityForceFieldNexus tile = (TileEntityForceFieldNexus)world.getTileEntity(pos);
-            tile.initUUIDRegion();
-        }
-    }
-
-    // Util - extract x/z data from nbt file for given world and store into allRegions variable
-    public void loadData(World world) {
+    // Serialization
+    public void loadRegionDataFromFile(World world) {
         NBTTagCompound tag = CQDataUtil.loadFile("cq_chunk_data.nbt",world);
+
+        tag.
 
         for(String key:tag.getKeySet()) {
             String[] array = key.split("_");
@@ -187,8 +77,7 @@ public class ProtectionHandler {
         }
     }
 
-    // Util - save data contained in allRegions variable to nbt file
-    public void saveData(World world) {
+    public void saveRegionDataToFile(World world) {
 
         // Temp obj
         NBTTagCompound tag = new NBTTagCompound();
@@ -202,5 +91,76 @@ public class ProtectionHandler {
 
         // Save temp obj to file
         CQDataUtil.saveFile(tag,"cq_chunk_data.nbt",world);
+    }
+
+    // Event Handlers
+    @SubscribeEvent
+    public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
+
+        // @todo remove
+        System.out.println(activeRegions.entrySet().toString());
+        System.out.println(allRegions.entrySet().toString());
+
+        for( Map.Entry<ChunkPos,ProtectedRegion> item : activeRegions.entrySet() ) {
+            item.getValue().checkBlockBreakEvent(e);
+        }
+
+    }
+
+    @SubscribeEvent
+    public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            item.getValue().checkSpawnEvent(e);
+        }
+    }
+
+    @SubscribeEvent
+    public void eventHandlePortalSpawn(BlockEvent.PortalSpawnEvent e) {
+        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
+        while (it.hasNext())
+        {
+            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
+            item.getValue().checkPortalEvent(e);
+        }
+    }
+
+    @SubscribeEvent
+    public void eventHandleChunkLoad(ChunkEvent.Load e) {
+
+        // Temp obj
+        ProtectedRegion region;
+
+        // If chunk contains protected region, add to activeRegions var
+        if(e.getChunk().isLoaded()) {
+            if((region = getRegionForChunkPos(e.getChunk().getPos()))!=null) {
+                activeRegions.put(e.getChunk().getPos(),region);
+                initForceFieldNexus(e.getWorld(),region.getNexus());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void eventHandleChunkUnload(ChunkEvent.Unload e) {
+        // Remove relevant chunks from activeRegions variable under applicable circumstances
+        if(!e.getChunk().isLoaded()) {
+            if(activeRegions.containsKey(e.getChunk().getPos())) {
+                activeRegions.remove(e.getChunk().getPos());
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void eventHandleEntityEnterChunk(EntityEvent.EnteringChunk e) {
+
+        ChunkPos enter;
+
+        if(e.getEntity() instanceof EntityPlayer) {
+            if(activeRegions.containsKey(enter = new ChunkPos(e.getNewChunkX(),e.getNewChunkZ()))) {
+                MinecraftForge.EVENT_BUS.post(new CQProtectedRegionEnterEvent(activeRegions.get(enter),enter,(EntityPlayer)e.getEntity()));
+            }
+        }
     }
 }

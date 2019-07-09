@@ -1,221 +1,153 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
-import net.minecraft.entity.EntityLivingBase;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.PortalSpawnEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * Copyright (c) 03.07.2019
+ * Developed by jdawg3636
+ * GitHub: https://github.com/jdawg3636
  */
-public class ProtectedRegion {
+public class ProtectedRegion implements Serializable {
 
-    // Variables
-    private AxisAlignedBB boundingBox;
-    private BlockPos center;
-    private BlockPos min;
-    private BlockPos max;
-    private boolean enabled = true;
-    private UUID dungeonUUID;
-    private ArrayList<ChunkPos> chunksInRegion;
-    private BlockPos nexus;
+    // Region Data
+    private BlockPos SWCorner;
+    private BlockPos NECorner;
+    private UUID uuid;
+
+    // Dependencies (Things that will disable ProtectedRegion if destroyed)
+    private ArrayList<Entity> entityBossDependencies;
+    private ArrayList<TileEntityForceFieldNexus> nexusDependencies;
+
+    // Settings
+    private boolean blockSurvival;
+    private boolean blockCreative;
+    private boolean blockFire;
+    private boolean blockNaturalMobSpawn;
+    private boolean blockPortalSpawn;
 
     // Constructors
-    public ProtectedRegion(BlockPos center, double width, double height, double depth,UUID uuid,BlockPos nexus) {
-        this.center = center;
-        this.boundingBox = new AxisAlignedBB(new BlockPos(center.getX()-width/2,center.getY()-height/2,center.getZ()-depth/2));
-        this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
-        this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
-        this.dungeonUUID = uuid;
-
-        this.chunksInRegion = new ArrayList<>();
-        this.nexus = nexus;
-        insertChunksForRegion();
+    public ProtectedRegion(BlockPos SWCorner, BlockPos NECorner, UUID uuid, boolean blockSurvival, boolean blockCreative, boolean blockFire, boolean blockNaturalMobSpawn, boolean blockPortalSpawn) {
+        this.SWCorner = SWCorner;
+        this.NECorner = NECorner;
+        this.uuid = uuid;
+        this.entityBossDependencies = new ArrayList<Entity>();
+        this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
+        this.blockSurvival = blockSurvival;
+        this.blockCreative = blockCreative;
+        this.blockFire = blockFire;
+        this.blockNaturalMobSpawn = blockNaturalMobSpawn;
+        this.blockPortalSpawn = blockPortalSpawn;
     }
 
-    public ProtectedRegion(BlockPos min, BlockPos max,UUID uuid,BlockPos nexus) {
-        this.boundingBox = new AxisAlignedBB(min,max);
-        this.center = new BlockPos(boundingBox.getCenter());
-        this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
-        this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
-        this.dungeonUUID = uuid;
-
-        this.chunksInRegion = new ArrayList<>();
-        this.nexus = nexus;
-        insertChunksForRegion();
-    }
-
-    public ProtectedRegion(double width, double height, double depth, BlockPos min,UUID uuid,BlockPos nexus) {
-        this.boundingBox = new AxisAlignedBB(min,new BlockPos(min.getX()+width,min.getY()+height,min.getZ()+depth));
-        this.center = new BlockPos(boundingBox.getCenter());
-        this.min = new BlockPos(boundingBox.minX,boundingBox.minY,boundingBox.minZ);
-        this.max = new BlockPos(boundingBox.maxX,boundingBox.maxY,boundingBox.maxZ);
-        this.dungeonUUID = uuid;
-
-        this.chunksInRegion = new ArrayList<>();
-        this.nexus = nexus;
-        insertChunksForRegion();
-    }
-
-    public ProtectedRegion(NBTTagCompound tag) {
-        BlockPos min = new BlockPos(tag.getDouble("min.x"),tag.getDouble("min.y"),tag.getDouble("min.z"));
-        BlockPos max = new BlockPos(tag.getDouble("max.x"),tag.getDouble("max.y"),tag.getDouble("max.z"));
-        BlockPos nexus = null;
-        if(tag.hasKey("nexus")) {
-        	nexus = new BlockPos(tag.getDouble("nexus.x"),tag.getDouble("nexus.y"),tag.getDouble("nexus.z"));
-        }
-        boolean e = tag.getBoolean("enabled");
-
-        this.max = max;
-        this.min = min;
-        this.boundingBox = new AxisAlignedBB(min,max);
-        this.enabled = e;
-        this.center = new BlockPos(boundingBox.getCenter());
-        this.dungeonUUID = tag.getUniqueId("dungeonUUID");
-        this.chunksInRegion = new ArrayList<>();
-        if(nexus != null) {
-        	this.nexus = nexus;
-        }
-        insertChunksForRegion();
+    public ProtectedRegion(BlockPos SWCorner, BlockPos NECorner) {
+        this.SWCorner = SWCorner;
+        this.NECorner = NECorner;
+        this.uuid = UUID.randomUUID();
+        this.entityBossDependencies = new ArrayList<Entity>();
+        this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
+        this.blockSurvival = true;
+        this.blockCreative = false;
+        this.blockFire = true;
+        this.blockNaturalMobSpawn = true;
+        this.blockPortalSpawn = true;
     }
 
     // Getters
-    public AxisAlignedBB getBoundingBox() {
-        return boundingBox;
+    public BlockPos getSWCorner() {
+        return SWCorner;
     }
 
-    public BlockPos getCenter() {
-        return center;
+    public BlockPos getNECorner() {
+        return NECorner;
     }
 
-    public BlockPos getMax() {
-        return max;
+    public UUID getUUID() {
+        return uuid;
     }
 
-    public BlockPos getMin() {
-        return min;
+    /** @return blockSurvival, blockCreative, blockFire, blockNaturalMobSpawn, blockPortalSpawn */
+    public boolean[] getSettings() {
+        return new boolean[]{blockSurvival, blockCreative, blockFire, blockNaturalMobSpawn, blockPortalSpawn};
     }
 
-    public boolean getEnabled() {
-        return enabled;
+    // Setters & Manipulators
+    public void setSWCorner(BlockPos SWCorner) {
+        this.SWCorner = SWCorner;
     }
 
-    public UUID getDungeonUUID() {
-        return dungeonUUID;
+    public void setNECorner(BlockPos NECorner) {
+        this.NECorner = NECorner;
     }
 
-    public ArrayList<ChunkPos> getChunksInRegion() {
-        return chunksInRegion;
+    public void addEntityBossDependency(Entity entityBossDependency) {
+        this.entityBossDependencies.add(entityBossDependency);
     }
 
-    public BlockPos getNexus() {
-        return nexus;
+    public void clearEntityBossDependencies() {
+        this.entityBossDependencies.clear();
     }
 
-    // Setters
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void addNexusDependency(TileEntityForceFieldNexus nexusDependency) {
+        this.nexusDependencies.add(nexusDependency);
     }
 
-    // Event Handlers
-    public void checkBlockBreakEvent(BlockEvent.BreakEvent e) {
-        if(enabled && !e.getPlayer().isCreative()) {
-            if(isBlockInRegion(e.getPos())) {
-                e.setCanceled(true);
-            }
-        }
+    public void clearNexusDependencies() {
+        this.nexusDependencies.clear();
     }
 
-    public void checkSpawnEvent(LivingSpawnEvent.CheckSpawn e) {
-        if(enabled) {
-            if(isEntityInRegion(e.getEntityLiving())) {
-                e.setResult(Event.Result.DENY);
-            }
-        }
+    public void setBlockSurvival(boolean blockSurvival) {
+        this.blockSurvival = blockSurvival;
     }
 
-    public void checkPortalEvent(PortalSpawnEvent e) {
-        if(enabled) {
-            if(isBlockInRegion(e.getPos())) {
-                e.setResult(Event.Result.DENY);
-            }
-        }
+    public void setBlockCreative(boolean blockCreative) {
+        this.blockCreative = blockCreative;
+    }
+
+    public void setBlockFire(boolean blockFire) {
+        this.blockFire = blockFire;
+    }
+
+    public void setBlockNaturalMobSpawn(boolean blockNaturalMobSpawn) {
+        this.blockNaturalMobSpawn = blockNaturalMobSpawn;
+    }
+
+    public void setBlockPortalSpawn(boolean blockPortalSpawn) {
+        this.blockPortalSpawn = blockPortalSpawn;
     }
 
     // Util
-    public boolean isBlockInRegion(BlockPos blockPos) {
-        return boundingBox.intersects(blockPos.getX(),blockPos.getY(),blockPos.getZ(),blockPos.getX()+1,blockPos.getY()+1,blockPos.getZ()+1);
-    }
+    public NBTTagCompound getFieldsAsNBT() {
 
-    public boolean isEntityInRegion(EntityLivingBase e) {
-        return boundingBox.intersects(e.getEntityBoundingBox());
-    }
+        NBTTagCompound toReturn = new NBTTagCompound();
 
-    public NBTTagCompound serializeToNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        tag.setDouble("min.x",min.getX());
-        tag.setDouble("min.y",min.getY());
-        tag.setDouble("min.z",min.getZ());
+        toReturn.setInteger("SWX", SWCorner.getX());
+        toReturn.setInteger("SWY", SWCorner.getY());
+        toReturn.setInteger("SWZ", SWCorner.getZ());
 
-        tag.setDouble("max.x",max.getX());
-        tag.setDouble("max.y",max.getY());
-        tag.setDouble("max.z",max.getZ());
+        toReturn.setInteger("NEX", NECorner.getX());
+        toReturn.setInteger("NEY", NECorner.getY());
+        toReturn.setInteger("NEZ", NECorner.getZ());
 
-        if(this.nexus != null) {
-            tag.setDouble("nexus.x",nexus.getX());
-            tag.setDouble("nexus.y",nexus.getY());
-            tag.setDouble("nexus.z",nexus.getZ());
+        toReturn.setUniqueId("UUID", uuid);
+
+        try {
+            toReturn.setString("EntityBossDependencies", new OutputStream().writeObject(this));
+        } catch (Exception e) {
+            System.out.println("[CQR ERROR] EXCEPTION THROWN WHILST SERIALIZING ProtectedRegion:");
+            e.printStackTrace();
         }
 
-        tag.setBoolean("enabled",enabled);
-
-        tag.setUniqueId("dungeonUUID",dungeonUUID);
-        return tag;
+        ByteStre
+        return writeObject();
     }
 
-    public List<Chunk> getChunks(World world) {
-        List<Chunk> chunks = new ArrayList<Chunk>();
-
-        BlockPos p1 = new BlockPos(this.min.getX(), 100, this.min.getZ());
-        BlockPos p2 = new BlockPos(this.max.getX(), 100, this.max.getZ());
-
-        for(BlockPos blockpos : BlockPos.getAllInBox(p1, p2)) {
-            Chunk chunk = world.getChunkFromBlockCoords(blockpos);
-            if(chunks.isEmpty() || !chunks.contains(chunk)) {
-                chunks.add(chunk);
-            }
-        }
-
-        return chunks;
-    }
-
-    private void insertChunksForRegion() {
-
-        ChunkPos minC = new ChunkPos(min);
-
-        float width = max.getX() - min.getX();
-        float depth = max.getZ() - min.getZ();
-
-        double chunksX = Math.ceil((width / 16));
-        double chunksZ = Math.ceil((depth / 16));
-
-        for(int i = 0;i<chunksX;i++) {
-            for(int ii = 0;ii<chunksZ;ii++) {
-                chunksInRegion.add(new ChunkPos(minC.x + i,minC.z + ii));
-            }
-        }
-    }
 }
