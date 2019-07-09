@@ -1,15 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Copyright (c) 03.07.2019
@@ -19,8 +17,9 @@ import net.minecraft.util.math.BlockPos;
 public class ProtectedRegion implements Serializable {
 
     // Region Data
-    private BlockPos SWCorner;
-    private BlockPos NECorner;
+    private BlockPos NWCorner;
+    private BlockPos SECorner;
+    private World world;
     private UUID uuid;
 
     // Dependencies (Things that will disable ProtectedRegion if destroyed)
@@ -35,9 +34,10 @@ public class ProtectedRegion implements Serializable {
     private boolean blockPortalSpawn;
 
     // Constructors
-    public ProtectedRegion(BlockPos SWCorner, BlockPos NECorner, UUID uuid, boolean blockSurvival, boolean blockCreative, boolean blockFire, boolean blockNaturalMobSpawn, boolean blockPortalSpawn) {
-        this.SWCorner = SWCorner;
-        this.NECorner = NECorner;
+    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, UUID uuid, boolean blockSurvival, boolean blockCreative, boolean blockFire, boolean blockNaturalMobSpawn, boolean blockPortalSpawn) {
+        this.NWCorner = NWCorner;
+        this.SECorner = SECorner;
+        this.world = world;
         this.uuid = uuid;
         this.entityBossDependencies = new ArrayList<Entity>();
         this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
@@ -48,9 +48,10 @@ public class ProtectedRegion implements Serializable {
         this.blockPortalSpawn = blockPortalSpawn;
     }
 
-    public ProtectedRegion(BlockPos SWCorner, BlockPos NECorner) {
-        this.SWCorner = SWCorner;
-        this.NECorner = NECorner;
+    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world) {
+        this.NWCorner = NWCorner;
+        this.SECorner = SECorner;
+        this.world = world;
         this.uuid = UUID.randomUUID();
         this.entityBossDependencies = new ArrayList<Entity>();
         this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
@@ -62,12 +63,16 @@ public class ProtectedRegion implements Serializable {
     }
 
     // Getters
-    public BlockPos getSWCorner() {
-        return SWCorner;
+    public BlockPos getNWCorner() {
+        return NWCorner;
     }
 
-    public BlockPos getNECorner() {
-        return NECorner;
+    public BlockPos getSECorner() {
+        return SECorner;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public UUID getUUID() {
@@ -80,12 +85,16 @@ public class ProtectedRegion implements Serializable {
     }
 
     // Setters & Manipulators
-    public void setSWCorner(BlockPos SWCorner) {
-        this.SWCorner = SWCorner;
+    public void setNWCorner(BlockPos NWCorner) {
+        this.NWCorner = NWCorner;
     }
 
-    public void setNECorner(BlockPos NECorner) {
-        this.NECorner = NECorner;
+    public void setSECorner(BlockPos SECorner) {
+        this.SECorner = SECorner;
+    }
+
+    public void setWorld(World world) {
+        this.world = world;
     }
 
     public void addEntityBossDependency(Entity entityBossDependency) {
@@ -124,18 +133,19 @@ public class ProtectedRegion implements Serializable {
         this.blockPortalSpawn = blockPortalSpawn;
     }
 
+    /*
     // Util
     public NBTTagCompound getFieldsAsNBT() {
 
         NBTTagCompound toReturn = new NBTTagCompound();
 
-        toReturn.setInteger("SWX", SWCorner.getX());
-        toReturn.setInteger("SWY", SWCorner.getY());
-        toReturn.setInteger("SWZ", SWCorner.getZ());
+        toReturn.setInteger("SWX", NWCorner.getX());
+        toReturn.setInteger("SWY", NWCorner.getY());
+        toReturn.setInteger("SWZ", NWCorner.getZ());
 
-        toReturn.setInteger("NEX", NECorner.getX());
-        toReturn.setInteger("NEY", NECorner.getY());
-        toReturn.setInteger("NEZ", NECorner.getZ());
+        toReturn.setInteger("NEX", SECorner.getX());
+        toReturn.setInteger("NEY", SECorner.getY());
+        toReturn.setInteger("NEZ", SECorner.getZ());
 
         toReturn.setUniqueId("UUID", uuid);
 
@@ -148,6 +158,27 @@ public class ProtectedRegion implements Serializable {
 
         ByteStre
         return writeObject();
+    }
+    */
+
+    public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
+
+        // Check World
+        if(toCheck.getX() < NWCorner.getX()) return false;
+
+        // Check NW (min)
+        if(toCheck.getX() < NWCorner.getX()) return false;
+        if(toCheck.getY() < NWCorner.getY()) return false;
+        if(toCheck.getZ() < NWCorner.getZ()) return false;
+
+        // Check SE (max)
+        if(toCheck.getX() > SECorner.getX()) return false;
+        if(toCheck.getY() > SECorner.getY()) return false;
+        if(toCheck.getZ() > SECorner.getZ()) return false;
+
+        // Default (this means that all disqualifiers failed)
+        return true;
+
     }
 
 }
