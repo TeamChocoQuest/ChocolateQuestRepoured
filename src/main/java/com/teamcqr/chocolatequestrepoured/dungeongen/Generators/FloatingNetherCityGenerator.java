@@ -12,6 +12,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	private FloatingNetherCity generator;
 	private int islandCount = 1;
 	
+	//This needs to calculate async (island blocks, chain blocks, air blocks)
 	
 	public FloatingNetherCityGenerator(FloatingNetherCity generator) {
 		this.generator = generator;
@@ -20,15 +21,17 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		// Calculates the positions
+		// Calculates the positions and creates the island objects
 		// positions are the !!CENTERS!! of the platforms, the structures positions are calculated by the platforms themselves
+		// Radius = sqrt(((Longer side of building) / 2)^2 *2) +5
 		// Chain start pos: diagonal go (radius / 3) * 2 -1 blocks, here start building up the chains...
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Builds the platforms
-		// Builds the bridges and chains
+		// Builds the chains
+		
 	}
 
 	@Override

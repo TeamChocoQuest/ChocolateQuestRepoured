@@ -54,13 +54,39 @@ public class WallPartWall implements IWallPart {
 		//Places the blocks at the calculated positions
 		if(!outerBlocks.isEmpty() && !innerBlocks.isEmpty()) {
 			//Inner Obsidian core
-			for(BlockPos pos : innerBlocks) {
+			/*for(BlockPos pos : innerBlocks) {
 				world.setBlockState(pos, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
-			}
+			}*/
+			final List<BlockPos> posL = new ArrayList<BlockPos>(innerBlocks);
+			innerBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL) {
+						world.setBlockState(p, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+					}
+					
+				}
+			});
 			//Outer Stoneblock cover
-			for(BlockPos pos : outerBlocks) {
+			/*for(BlockPos pos : outerBlocks) {
 				world.setBlockState(pos, Blocks.STONEBRICK.getDefaultState());
-			}
+			}*/
+			final List<BlockPos> posL2 = new ArrayList<BlockPos>(outerBlocks);
+			outerBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL2) {
+						world.setBlockState(p, Blocks.STONEBRICK.getDefaultState());
+					}
+					
+				}
+			});
 		}
 		
 	}
