@@ -58,6 +58,7 @@ public class ProtectionHandler {
 
     }
 
+    /*
     // Serialization
     public void loadRegionDataFromFile(World world) {
         NBTTagCompound tag = CQDataUtil.loadFile("cq_chunk_data.nbt",world);
@@ -92,29 +93,29 @@ public class ProtectionHandler {
         // Save temp obj to file
         CQDataUtil.saveFile(tag,"cq_chunk_data.nbt",world);
     }
+    */
 
     // Event Handlers
     @SubscribeEvent
     public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
 
-        // @todo remove
-        System.out.println(activeRegions.entrySet().toString());
-        System.out.println(allRegions.entrySet().toString());
-
-        for( Map.Entry<ChunkPos,ProtectedRegion> item : activeRegions.entrySet() ) {
-            item.getValue().checkBlockBreakEvent(e);
+        // Check break pos against all regions and cancel if overlapping
+        for( ProtectedRegion region : activeRegions ) {
+            if(region.checkIfBlockPosInRegion( e.getPos() ))
+                e.setCanceled(true);
         }
 
     }
 
     @SubscribeEvent
     public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
-        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
-            item.getValue().checkSpawnEvent(e);
+
+        // Check spawn pos against all regions and cancel if overlapping
+        for( ProtectedRegion region : activeRegions ) {
+            if(region.checkIfBlockPosInRegion( e. ))
+                e.setCanceled(true);
         }
+
     }
 
     @SubscribeEvent
