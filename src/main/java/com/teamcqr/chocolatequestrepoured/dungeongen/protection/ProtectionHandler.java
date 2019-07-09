@@ -30,16 +30,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class ProtectionHandler {
 
-    // Singleton instance
-    public static ProtectionHandler PROTECTION_HANDLER;
+    // Singleton setup
+    private static ProtectionHandler PROTECTION_HANDLER = new ProtectionHandler;
+    private ProtectionHandler() { this.activeRegions = new ArrayList<>(); }
+    public static ProtectionHandler getInstance() { return this.PROTECTION_HANDLER; }
 
     // Region Data
     private ArrayList<ProtectedRegion> activeRegions;
-
-    // Constructor
-    public ProtectionHandler() {
-        this.activeRegions = new ArrayList<>();
-    }
 
     // Accessors
     public void registerRegion(ProtectedRegion region) {

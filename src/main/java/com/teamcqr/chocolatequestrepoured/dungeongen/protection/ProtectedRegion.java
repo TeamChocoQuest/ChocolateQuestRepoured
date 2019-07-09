@@ -14,7 +14,7 @@ import net.minecraft.world.World;
  * Developed by jdawg3636
  * GitHub: https://github.com/jdawg3636
  */
-public class ProtectedRegion implements Serializable {
+public class ProtectedRegion {
 
     // Region Data
     private BlockPos NWCorner;

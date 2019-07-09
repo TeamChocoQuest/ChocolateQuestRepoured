@@ -151,8 +151,7 @@ public class CQRMain
 		}
 
 		//Register event handling for dungeon protection system
-		ProtectionHandler.PROTECTION_HANDLER = new ProtectionHandler();
-		MinecraftForge.EVENT_BUS.register(ProtectionHandler.PROTECTION_HANDLER);
+		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		SmeltingHandler.init();
 	}
