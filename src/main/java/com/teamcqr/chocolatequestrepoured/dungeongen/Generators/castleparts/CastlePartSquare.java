@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
 import net.minecraft.block.BlockStairs;
@@ -34,7 +35,7 @@ public class CastlePartSquare implements ICastlePart
     {
         this.dungeon = dungeon;
         this.floors = floors;
-        this.random = new Random(origin.getX() + origin.getY() + origin.getZ());
+        this.random = this.dungeon.getRandom();
 
         this.start = origin;
         this.sizeX = sizeX;
@@ -59,12 +60,9 @@ public class CastlePartSquare implements ICastlePart
         int x = start.getX();
         int y = start.getY();
         int z = start.getZ();
+        IBlockState blockToBuild;
 
-        List<BlockPos> floorBlocks = new ArrayList<>();
-        List<BlockPos> wallBlocks = new ArrayList<>();
-        List<BlockPos> ceilingBlocks = new ArrayList<>();
-        List<BlockPos> windowBlocks = new ArrayList<>();
-        List<BlockInfo> roofBlocks = new ArrayList<>();
+        ArrayList<BlockInfo> buildList = new ArrayList<>();
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors + ". Facing = " + facing.toString());
 
@@ -79,9 +77,11 @@ public class CastlePartSquare implements ICastlePart
                 for (int j = 0; j < sizeZ; j++)
                 {
                     // place a floor
-                    floorBlocks.add(new BlockPos(x + i, currentY, z + j));
+                    blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
+                    buildList.add(new BlockInfo(x + i, currentY, z + j, blockToBuild));
                     // place a ceiling
-                    ceilingBlocks.add(new BlockPos(x + i, currentY + floorHeight, z + j));
+                    blockToBuild = this.dungeon.getWallBlock().getDefaultState();
+                    buildList.add(new BlockInfo(x + i, currentY + floorHeight, z + j, blockToBuild));
 
                 }
             }
@@ -97,13 +97,15 @@ public class CastlePartSquare implements ICastlePart
                             (i != sizeX - 1) &&
                             ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
                     {
-                        windowBlocks.add(new BlockPos(x + i, currentY + j, z));
-                        windowBlocks.add(new BlockPos(x + i, currentY + j, z + sizeZ - 1));
+                        blockToBuild = Blocks.GLASS_PANE.getDefaultState();
+                        buildList.add(new BlockInfo(x + i, currentY + j, z, blockToBuild));
+                        buildList.add(new BlockInfo(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
                     }
                     else
                     {
-                        wallBlocks.add(new BlockPos(x + i, currentY + j, z));
-                        wallBlocks.add(new BlockPos(x + i, currentY + j, z + sizeZ - 1));
+                        blockToBuild = dungeon.getWallBlock().getDefaultState();
+                        buildList.add(new BlockInfo(x + i, currentY + j, z, blockToBuild));
+                        buildList.add(new BlockInfo(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
                     }
                 }
             }
@@ -117,13 +119,15 @@ public class CastlePartSquare implements ICastlePart
                             (i != sizeX - 1) &&
                             ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
                     {
-                        windowBlocks.add(new BlockPos(x, currentY + j, z + i));
-                        windowBlocks.add(new BlockPos(x + sizeX - 1, currentY + j, z + i));
+                        blockToBuild = Blocks.GLASS_PANE.getDefaultState();
+                        buildList.add(new BlockInfo(x, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockInfo(x + sizeX - 1, currentY + j, z + i, blockToBuild));
                     }
                     else
                     {
-                        wallBlocks.add(new BlockPos(x, currentY + j, z + i));
-                        wallBlocks.add(new BlockPos(x + sizeX - 1, currentY + j, z + i));
+                        blockToBuild = dungeon.getWallBlock().getDefaultState();
+                        buildList.add(new BlockInfo(x, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockInfo(x + sizeX - 1, currentY + j, z + i, blockToBuild));
                     }
                 }
             }
@@ -133,178 +137,26 @@ public class CastlePartSquare implements ICastlePart
         currentY = y + floors * (floorHeight + 1);
 
         // Always make walkable if there is more castle above; otherwise 50% chance of walkable
+        CastleAddonRoof.RoofType roofType;
         if (isTopFloor && random.nextBoolean())
         {
-            addRoofPyramid(wallBlocks, roofBlocks, x, currentY, z, sizeX, sizeZ);
+            System.out.println("Adding 4 sided roof");
+            roofType = CastleAddonRoof.RoofType.FOURSIDED;
         }
         else
         {
-            addRoofWalkable(wallBlocks, x, currentY, z, sizeX, sizeZ);
+            System.out.println("Adding walkable roof");
+            roofType = CastleAddonRoof.RoofType.WALKABLE;
         }
+        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX, sizeZ, roofType, facing);
+        roof.generate(buildList);
 
 
-
-        if(!floorBlocks.isEmpty()) {
-            for(BlockPos pos : floorBlocks) {
-                world.setBlockState(pos, dungeon.getFloorBlock().getDefaultState());
-            }
-        }
-
-        if(!ceilingBlocks.isEmpty()) {
-            for(BlockPos pos : ceilingBlocks) {
-                world.setBlockState(pos, dungeon.getWallBlock().getDefaultState());
+        if(!buildList.isEmpty()) {
+            for(BlockInfo blockPlace : buildList) {
+                blockPlace.build(world);
             }
         }
-
-        if(!wallBlocks.isEmpty()) {
-            for(BlockPos pos : wallBlocks) {
-                world.setBlockState(pos, dungeon.getWallBlock().getDefaultState());
-            }
-        }
-
-        if(!windowBlocks.isEmpty()) {
-            for(BlockPos pos : windowBlocks) {
-                world.setBlockState(pos, Blocks.GLASS_PANE.getDefaultState());
-            }
-        }
-
-        if(!roofBlocks.isEmpty()) {
-            for(BlockInfo blockPlace : roofBlocks) {
-                world.setBlockState(blockPlace.position, blockPlace.state);
-            }
-        }
-    }
-
-    private void addRoofWalkable(List<BlockPos> wallBlocks, int x, int y, int z, int lenX, int lenZ)
-    {
-        for (int i = 0; i < lenX; i++)
-        {
-            if (this.facing != EnumFacing.SOUTH)
-            {
-                wallBlocks.add(new BlockPos(x + i, y, z));
-            }
-            if (this.facing != EnumFacing.NORTH)
-            {
-                wallBlocks.add(new BlockPos(x + i, y, z + lenZ - 1));
-            }
-            if ((i % 4 == 0) || ((i + 1) % 4 == 0))
-            {
-                if (this.facing != EnumFacing.SOUTH)
-                {
-                    wallBlocks.add(new BlockPos(x + i, y + 1, z));
-                }
-                if (this.facing != EnumFacing.NORTH)
-                {
-                    wallBlocks.add(new BlockPos(x + i, y + 1, z + lenZ - 1));
-                }
-            }
-        }
-        for (int i = 0; i < lenZ; i++)
-        {
-            if (this.facing != EnumFacing.EAST)
-            {
-                wallBlocks.add(new BlockPos(x, y, z + i));
-            }
-            if (this.facing != EnumFacing.WEST)
-            {
-                wallBlocks.add(new BlockPos(x + lenX - 1, y, z + i));
-            }
-            if ((i % 4 == 0) || ((i + 1) % 4 == 0))
-            {
-                if (this.facing != EnumFacing.EAST)
-                {
-                    wallBlocks.add(new BlockPos(x, y + 1, z + i));
-                }
-                if (this.facing != EnumFacing.WEST)
-                {
-                    wallBlocks.add(new BlockPos(x + lenX - 1, y + 1, z + i));
-                }
-            }
-        }
-    }
-
-    private void addRoofPyramid(List<BlockPos> wallBlocks, List<BlockInfo> roofBlocks, int x, int y, int z, int lenX, int lenZ)
-    {
-        int roofX;
-        int roofZ;
-        int roofLenX;
-        int roofLenZ;
-
-        do
-        {
-            // Add the foundation under the roof
-            for (int i = 0; i < lenX; i++)
-            {
-                wallBlocks.add(new BlockPos(x + i, y, z));
-                wallBlocks.add(new BlockPos(x + i, y, z + lenZ - 1));
-            }
-            for (int j = 0; j < lenZ; j++)
-            {
-                wallBlocks.add(new BlockPos(x, y, z + j));
-                wallBlocks.add(new BlockPos(x + lenX - 1, y, z + j));
-            }
-
-            roofX = x - 1;
-            roofZ = z - 1;
-            roofLenX = lenX + 2;
-            roofLenZ = lenZ + 2;
-
-            //add the north row
-            for (int i = 0; i < roofLenX; i++)
-            {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ), Blocks.SPRUCE_STAIRS.getDefaultState());
-                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.SOUTH);
-
-                //Apply properties to corner pieces
-                if (i == 0)
-                {
-                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
-                }
-                else if (i == roofLenX - 1)
-                {
-                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
-                }
-
-                roofBlocks.add(bInfo);
-            }
-            //add the south row
-            for (int i = 0; i < roofLenX; i++)
-            {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), Blocks.SPRUCE_STAIRS.getDefaultState());
-                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.NORTH);
-
-                //Apply properties to corner pieces
-                if (i == 0)
-                {
-                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
-                }
-                else if (i == roofLenX - 1)
-                {
-                    bInfo.applyProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
-                }
-                roofBlocks.add(bInfo);
-            }
-
-            for (int i = 0; i < roofLenZ; i++)
-            {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
-                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.EAST);
-
-                roofBlocks.add(bInfo);
-
-                bInfo = new BlockInfo(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
-                bInfo.applyProperty(BlockStairs.FACING, EnumFacing.WEST);
-
-                roofBlocks.add(bInfo);
-            }
-
-            x++;
-            y++;
-            z++;
-            lenX -= 2;
-            lenZ -= 2;
-        } while (lenX >= 0 && lenZ >= 0);
-
     }
 
     @Override

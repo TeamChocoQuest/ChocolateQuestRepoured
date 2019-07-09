@@ -29,6 +29,7 @@ public class CastleDungeon extends DungeonBase {
 	private int maxSize = 10;
 	private int roomSize = 10;
 	private int floorHeight = 8;
+	private Random random;
 	private Block wallBlock = Blocks.STONE;
 	private Block floorBlock = Blocks.WHITE_GLAZED_TERRACOTTA;
 
@@ -104,6 +105,8 @@ public class CastleDungeon extends DungeonBase {
 		if(success) {
 			this.registeredSuccessful = true;
 		}
+
+		this.random = new Random();
 	}
 
 	@Override
@@ -123,5 +126,6 @@ public class CastleDungeon extends DungeonBase {
 	public int getMaxSize() {return this.maxSize;}
 	public int getRoomSize() {return this.roomSize;}
 	public int getFloorHeight() {return this.floorHeight;}
+	public Random getRandom() {return this.random;}
 
 }
