@@ -21,10 +21,13 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class VolcanoGenerator implements IDungeonGenerator{
 
+	//BOss name: Volcovare Akvel
+	
 	/**
 	 * Generate: Given height, given base radius, given top inner radius
 	 * steepness: In % 
 	 * level begins at 0!!
+	 * DONE: Outer Radius -> make new function, current function dows not really work out
 	 * Outer Radius --> y=(level * steepness) * level^2 --> y = steepness *level^3 --> RADIUS = baseRAD - (level/steepness)^1/3
 	 * Inner Radius --> given, OR if (OuterRadius - (maxHeight - currHeight)) > given && (OuterRadius - (maxHeight - currHeight)) < maxInnerRad then use (OuterRadius - (maxHeight - currHeight))
 	 * Block placing: generate circles. Per outer layer, the probability to place a block is reduced, same for height. A block can only be placed if it has a support block 
@@ -54,7 +57,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private int maxHeight = 10;
 	private int minRadius = 1;
 	private double steepness = 0.0D;
+	@SuppressWarnings("unused")
+	private List<BlockPos> spawnersOnPath = new ArrayList<>();
+	@SuppressWarnings("unused")
+	private List<BlockPos> chestsOnPath = new ArrayList<>();
 	private BlockPos centerLoc = null;
+	
+	double oldProgress = -1.0;
 	
 	public VolcanoGenerator(VolcanoDungeon dungeon) {
 		this.dungeon = dungeon;
@@ -71,102 +80,130 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//X Y Z mark the C E N T E R / Middle of the crater!!!!
 		this.centerLoc = new BlockPos(x, y, z);
 		
-		minY = new Double(y - (0.1 *maxHeight)).intValue(); 
+		Random rdm = new Random();
 		
 		maxHeight += new Double(maxHeight *0.1).intValue();
+		this.baseRadius = new Double(this.minRadius + Math.cbrt(this.maxHeight/this.steepness)).intValue();
 		
-		//1) Calculate MinY -> TODO
-		//2) Calculate the base radius -> done
-		//3) Create a boolean[][] for marking wether a block is supported or not -> done
-		//4) calculate all block positions -> done
-		//5) Create a new SimpleThread that places all blocks -> DONE
-		//6) Place cover blocks -> calculate positions and let the thread place the blocks -> done
-		//Builds the volcano and after that the spire
+		//System.out.println("Calculating minY...");
+		minY = getMinY(centerLoc, baseRadius, world) - (new Double(0.1 * maxHeight).intValue());  //new Double(y - (0.1 *maxHeight)).intValue();
+		//System.out.println("MinY: " + minY);
 		
-		boolean[][] supportStatus = new boolean[this.baseRadius *2][this.baseRadius *2];
+		/**System.out.println("Max Height: " + maxHeight);
+		System.out.println("Steepness: " + steepness);
+		System.out.println("Min Radius: " + minRadius);
+		System.out.println("Base Radius: " + baseRadius);**/
 		
+		//1) Calculate MinY
+		//2) Calculate the base radius
+		//4) calculate all block positions
+		//5) Create a new SimpleThread that places all blocks
+		//6) Place cover blocks -> calculate positions and let the thread place the blocks
+		//7) Calculate the blocks for the spire
+		//8) Build the dungeon
+		
+		//System.out.println("Creating lists...");
 		List<BlockPos> blocks = new ArrayList<BlockPos>();
 		List<BlockPos> lava = new ArrayList<BlockPos>();
 		List<BlockPos> airBlocks = new ArrayList<BlockPos>();
 		List<BlockPos> magma = new ArrayList<BlockPos>();
+		//System.out.println("Created lists!");
+		
+		//DONE: Split generation of volcano into 4 threads (corners, means x- z- , x+ z- , x+ z+ , x- z+) IMPORTANT: They need to use the same variables (like the random) -> NOPE, problem was removin things from lists...
 		
 		//Calculates all the "wall" blocks
 		//DONE Place lava
-		//TODO inner "cave" digs down to bedrock, volcano shape begins at minY!!
-		for(int iY = 0; iY < ((minY + this.maxHeight) < 256 ? this.maxHeight : (255 - minY)); iY++) {
+		//TODO inner "cave" digs down to bedrock, volcano shape begins at minY and spreads below it to 0!!
+		
+		//System.out.println("Calculating block positions...");
+		int yMax = ((minY + this.maxHeight) < 256 ? this.maxHeight : (255 - minY));
+		for(int iY = 0; iY < yMax; iY++) {
 			//RADIUS = baseRAD - (level/steepness)^1/3
-			int radiusOuter = new Double(this.baseRadius - Math.pow((iY/this.steepness), new Double(1/3))).intValue();
-				//System.out.println("Outer Radius: " + radiusOuter);
+			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY/this.steepness)).intValue();
 			int innerRadius = this.minRadius; //TODO calculate minRadius
-				//System.out.println("Inner Radius: " + innerRadius);
 			
-			for(int iX = new Double(x - radiusOuter).intValue(); iX <= new Double(x + radiusOuter).intValue(); iX++) {
-				for(int iZ = new Double(z - radiusOuter).intValue(); iZ <= new Double(z + radiusOuter).intValue(); iZ++) {
+			for(int iX = -radiusOuter*2; iX <= radiusOuter*2; iX++) {
+				for(int iZ = -radiusOuter*2; iZ <= radiusOuter*2; iZ++) {
 					//First check if it is within the base radius...
-					if(isInsideCircle(iX, iZ, radiusOuter, centerLoc)) {
+					if(isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
 						//If it is at the bottom and also inside the inner radius -> lava
 						if(isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
 							if(iY == 0) {
-								lava.add(new BlockPos(iX, minY, iZ));
+								lava.add(new BlockPos(iX +x, minY, iZ +z));
+								lava.add(new BlockPos(iX +x, minY -1, iZ +z));
+								lava.add(new BlockPos(iX +x, minY -2, iZ +z));
+								lava.add(new BlockPos(iX +x, minY -3, iZ +z));
 							} else {
-								airBlocks.add(new BlockPos(iX, iY + minY, iZ));
+								airBlocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
 							}
 						} else {
 							//Else it is a wall block
-							double r = Math.sqrt((iX * iX) + (iZ * iZ));
-							System.out.println("Radius: " + r);
-							double blockProb = 1- (( (r - innerRadius) / (radiusOuter - innerRadius)) - (this.steepness * iY));
-							System.out.println("Probabality: " + blockProb);
-							
-							if(iY == 0 || supportStatus[iX][iZ]) {
-								if(DungeonGenUtils.PercentageRandom(blockProb, new Random().nextLong())) {
-									if(iY > 0) {
-										if(supportStatus[iX][iZ]) {
-											//Add blocks to list
-											if(DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), new Random().nextLong())) {
-												lava.add(new BlockPos(iX, iY + minY, iZ));
-											} else if(DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), new Random().nextLong())) {
-												magma.add(new BlockPos(iX, iY + minY, iZ));
-											} else {
-												blocks.add(new BlockPos(iX, iY + minY, iZ));
-											}
-										}
-									} else {
-										supportStatus[iX][iZ] = true;
-										//Add block to list
-										blocks.add(new BlockPos(iX, iY + minY, iZ));
-									}
-									//The block is not supported or probability says no
+							//SO now we decide what the wall is gonna be...
+							if(DungeonGenUtils.PercentageRandom(dungeon.getLavaChance(), rdm.nextLong())) {
+								//It is lava :D
+								lava.add(new BlockPos(iX +x, iY + minY, iZ +z));
+							} else if(DungeonGenUtils.PercentageRandom(dungeon.getMagmaChance(), rdm.nextLong())) {
+								//It is magma
+								magma.add(new BlockPos(iX +x, iY + minY, iZ +z));
+							} else {
+								//It is stone or ore
+								if(DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+									blocks.addAll(getSphereBlocks(new BlockPos(iX +x, iY + minY, iZ +z), rdm.nextInt(3) +1));
 								} else {
-									supportStatus[iX][iZ] = false;
+									blocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
 								}
 							}
 						}
 					}
 				}
 			}
+			
+			//System.out.println("Progress: " + iY + "/" + yMax + " layers calculated...");
+		}
+		
+		if(this.dungeon.isVolcanoDamaged()) {
+			//System.out.println("Generating damage / holes...");
+			generateHoles(blocks, airBlocks);
+			//System.out.println("Calculated air for holes!");
 		}
 		
 		passListWithBlocksToThreads(blocks, Blocks.STONE, world, 150);
-		passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 50);
-		/*for(BlockPos b : airBlocks) {
-			world.setBlockToAir(b);
-		}*/
-		passListWithBlocksToThreads(lava, Blocks.LAVA, world, 50);
-		passListWithBlocksToThreads(magma, Blocks.MAGMA, world, 50);
+		if(this.dungeon.generateOres()) {
+			//System.out.println("Generating ore...");
+			generateOres(world, blocks);
+			//-> Takes very long ??? weird. Problem was removing elements from lists....
+			//System.out.println("Ore generated!");
+		}
+		
+		//System.out.println("Placing blocks...");
+		passListWithBlocksToThreads(lava, Blocks.LAVA, world, 150);
+		passListWithBlocksToThreads(magma, Blocks.MAGMA, world, 150);
+		passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150);
+		//System.out.println("Blocks palced!");
 		
 		//DONE Pass the list to a simplethread to place the blocks
+		
+		//TIME
+		//All: About 2-3mins
+		//Calculating: 2min, 37 secs 
+		//Placing: about 1 min
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		//Generates the stronghold
-		//TODO: Generate stronghold -> like old stronghold, means linear
+		//TODO: Generate stronghold -> like a good old rogue dungeon
+		
+		//IMPORTANT: Entrance + Staircase: Same as original
 		
 		//1) Build entrance
 		//2) figure out direction
 		//3) choose a random number of rooms for layer
-		//4) connect a 
+		//4) create a "map" that knows the rooms locations
+		//5) check via warshall algorithm
+		//6) choose place for random staircase
+		//7) if there are still layers to build, goto 3)
+		//9) if all layers all build, generate a final layer with one to three rooms with weapons / healing / food and a final hallway that leads to the boss chamber
 	}
 
 	@Override
@@ -188,15 +225,17 @@ public class VolcanoGenerator implements IDungeonGenerator{
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		List<BlockPos> coverBlocks = new ArrayList<>();
-		
-		for(int iX = new Double(x - (this.baseRadius*1.25)).intValue(); iX <= new Double(x + (this.baseRadius*1.25)).intValue(); iX++) {
-			for(int iZ = new Double(z - (this.baseRadius*1.25)).intValue(); iZ <= new Double(z + (this.baseRadius*1.25)).intValue(); iZ++) {
-				coverBlocks.add(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)));
+		if(this.dungeon.isCoverBlockEnabled()) {
+			List<BlockPos> coverBlocks = new ArrayList<>();
+			
+			for(int iX = new Double(x - (this.baseRadius*1.25)).intValue(); iX <= new Double(x + (this.baseRadius*1.25)).intValue(); iX++) {
+				for(int iZ = new Double(z - (this.baseRadius*1.25)).intValue(); iZ <= new Double(z + (this.baseRadius*1.25)).intValue(); iZ++) {
+					coverBlocks.add(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)));
+				}
 			}
+			
+			passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
 		}
-		
-		passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
 		//DONE Pass the list to a simplethread to place the blocks
 	}
 	
@@ -241,20 +280,129 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 		});
 	}
-	//TODO: Fix this, it does not work how it should, always returns false....
-	private boolean isInsideCircle(int x, int z, int radius, BlockPos center) {
-		int xR = x - center.getX();
-		int zR = z - center.getZ();
-		
-		if((xR * xR + zR * zR) <= ((radius +1) * (radius +1))) {
-			double divResX = ((double)xR) / ((double)radius);
-			double divResZ = ((double)zR) / ((double)radius);
-			
-			if(divResX < 1.0D && divResZ < 1.0D) {
-				return true;
+	
+	private List<BlockPos> getSphereBlocks(BlockPos center, int radius) {
+		List<BlockPos> posList = new ArrayList<>();
+		for(int x = -radius; x <= radius; x++) {
+			for(int y = -radius; y <= radius; y++) {
+				for(int z = -radius; z <= radius; z++) {
+					BlockPos p = center.add(x, y, z);
+					if(isInsideSphere(p, center, radius)) {
+						posList.add(p);
+					}
+				}
 			}
 		}
+		return posList;
+	}
+	
+	//DONE: Fix this, it does not work how it should, always returns false....
+	private boolean isInsideCircle(int x, int z, int radius, BlockPos center) {
+		BlockPos newPos = new BlockPos(center.getX() +x, center.getY(), center.getZ() +z);
+		
+		return isInsideSphere(newPos, center, radius);
+	}
+	
+	private boolean isInsideSphere(BlockPos pos, BlockPos center, int radius) {
+		if(Math.abs(center.getDistance(pos.getX(), pos.getY(), pos.getZ())) < radius) {
+			return true;
+		}
 		return false;
+	}
+	
+	private void generateOres(World world, List<BlockPos> blocks) {
+		Random rdm = new Random();
+		
+		//System.out.println("Generating ore lists...");
+		List<BlockPos> coals = new ArrayList<>();
+		List<BlockPos> irons = new ArrayList<>();
+		List<BlockPos> golds = new ArrayList<>();
+		List<BlockPos> redstones = new ArrayList<>();
+		List<BlockPos> emeralds = new ArrayList<>();
+		List<BlockPos> diamonds = new ArrayList<>();
+		//System.out.println("Ore lists created!");
+		
+		List<Integer> usedIndexes = new ArrayList<>();
+		Double divisor = new Double((double)this.dungeon.getOreChance() / 100.0);
+		//System.out.println("Double: " + divisor);
+		//System.out.println("Block Count: " + blocks.size());
+		//System.out.println("Ore count: " + (new Double(divisor * blocks.size()).intValue()));
+		for(int i = 0; i < (new Double(divisor * blocks.size()).intValue()); i++) {
+			int blockIndex = rdm.nextInt(blocks.size());
+			while(usedIndexes.contains(blockIndex)) {
+				blockIndex = rdm.nextInt(blocks.size());
+			}
+			BlockPos p = blocks.get(blockIndex);
+			int chance = rdm.nextInt(100) +1;
+			
+			if(chance >= 95) {
+				//DIAMOND
+				diamonds.add(p);
+			} else
+			if(chance >= 90) {
+				//EMERALD
+				emeralds.add(p);
+			} else
+			if(chance >= 75) {
+				//GOLD
+				golds.add(p);
+			} else
+			if(chance >= 60) {
+				//REDSTONE
+				redstones.add(p);
+			} else
+			if(chance >=  55) {
+				//IRON
+				irons.add(p);
+			} else
+			if(chance >=35) {
+				//COAL
+				coals.add(p);
+			} 
+				
+		}
+		
+		//System.out.println("Coal: " + coals.size());
+		//System.out.println("Iron: " + irons.size());
+		//System.out.println("Gold: " + golds.size());
+		//System.out.println("Redstone: " + redstones.size());
+		//System.out.println("Emeralds: " + emeralds.size());
+		//System.out.println("Diamonds: " + diamonds.size());
+		
+		passListWithBlocksToThreads(coals, Blocks.COAL_ORE, world, coals.size());
+		passListWithBlocksToThreads(irons, Blocks.IRON_ORE, world, irons.size());
+		passListWithBlocksToThreads(golds, Blocks.GOLD_ORE, world, golds.size());
+		passListWithBlocksToThreads(redstones, Blocks.REDSTONE_ORE, world, redstones.size());
+		passListWithBlocksToThreads(emeralds, Blocks.EMERALD_ORE, world, emeralds.size());
+		passListWithBlocksToThreads(diamonds, Blocks.DIAMOND_ORE, world, diamonds.size());
+	}
+	
+	private void generateHoles(List<BlockPos> blocks, List<BlockPos> airBlocks) {
+		Random rdm = new Random();
+		//Makes random holes
+		for(int holeCount = 0; holeCount < maxHeight *1.5; holeCount++) {
+			BlockPos center = blocks.get(rdm.nextInt(blocks.size()));
+			
+			int radius = DungeonGenUtils.getIntBetweenBorders(1, this.dungeon.getMaxHoleSize());
+			
+			for(BlockPos p : getSphereBlocks(center, radius)) {
+				airBlocks.add(p);
+			}
+			
+		}
+	}
+	
+	private int getMinY(BlockPos center, int radius, World world) {
+		int median = 0;
+		int cant = 0;
+		for(int iX = -radius; iX <= radius; iX++) {
+			for(int iZ = -radius; iZ <= radius; iZ++) {
+				int height = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(center.add(iX, 0, iZ)), iX, iZ, true);//world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY();
+				median += height;
+				cant++;
+			}
+		}
+		return median /cant;
 	}
 
 }
