@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 /**
  * Copyright (c) 27.06.2019
@@ -22,9 +24,20 @@ public class BlockInfo
         this.state = state;
     }
 
+    public BlockInfo(int x, int y, int z, IBlockState state)
+    {
+        this.position = new BlockPos(x, y, z);
+        this.state = state;
+    }
+
     // Shortcut for modifying the block properties
     public <T extends Comparable<T>, V extends T> void applyProperty(IProperty<T> property, V value)
     {
         state = state.withProperty(property, value);
+    }
+
+    public void build(World world)
+    {
+        world.setBlockState(position, state);
     }
 }

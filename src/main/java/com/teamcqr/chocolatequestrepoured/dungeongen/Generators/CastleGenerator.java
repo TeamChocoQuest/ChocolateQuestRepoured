@@ -29,8 +29,8 @@ public class CastleGenerator implements IDungeonGenerator{
     private int roomSize;
     private int floorHeight;
     private Random random;
-	List<ICastlePart> parts;
-	List<CastlePartTower> towers;
+	private ArrayList<ICastlePart> parts;
+	private List<CastlePartTower> towers;
 	private int totalX;
 	private int totalY;
 	private int totalZ;
@@ -43,7 +43,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		this.maxSize = this.dungeon.getMaxSize();
 		this.roomSize = this.dungeon.getRoomSize();
 		this.floorHeight = this.dungeon.getFloorHeight();
-		this.random = new Random();
+		this.random = this.dungeon.getRandom();
 		this.parts = new ArrayList<>();
 		this.towers = new ArrayList<>();
 	}
@@ -88,10 +88,13 @@ public class CastleGenerator implements IDungeonGenerator{
 			// Add the main building
 			parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, layerFloors, this.dungeon, EnumFacing.UP, currentLayer));
 
-			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.NORTH, layerFloors, currentLayer);
-			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.EAST, layerFloors, currentLayer);
-			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.SOUTH, layerFloors, currentLayer);
-			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.WEST, layerFloors, currentLayer);
+			// Build out each of the side structures to the North, East, South, and West. The structures keep building out
+			// in that direction while there is room. It might be cool to eventually branch in all directions recursively
+			// while there is room, but it will require better tracking of the available space on a given layer.
+			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.NORTH, layerFloors, currentLayer, totalFloors);
+			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.EAST, layerFloors, currentLayer, totalFloors);
+			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.SOUTH, layerFloors, currentLayer, totalFloors);
+			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.WEST, layerFloors, currentLayer, totalFloors);
 
 			// Now try to build a new structure on top of this one
 			quarterSizeX = sizeX / 4;
@@ -106,6 +109,7 @@ public class CastleGenerator implements IDungeonGenerator{
 			currentLayer++;
 		}
 
+		// Figure out what the top later is since the top floor has slightly different build behavior
 		if (!parts.isEmpty())
 		{
 			int topLayer = parts.get(parts.size()-1).getStartLayer();
@@ -119,6 +123,8 @@ public class CastleGenerator implements IDungeonGenerator{
 				}
 			}
 		}
+
+		// Randomize the height of the towers to rise above the nearby structure areas
 		if (!towers.isEmpty())
 		{
 			for (CastlePartTower tower : towers)
@@ -129,7 +135,7 @@ public class CastleGenerator implements IDungeonGenerator{
 	}
 
 	private void buildSide(int x, int y, int z, int sizeX, int sizeZ, int offsetX, int offsetZ, int buildAreaX,
-						   int buildAreaZ, EnumFacing facing, int layerFloors, int currentLayer)
+						   int buildAreaZ, EnumFacing facing, int layerFloors, int currentLayer, int currentFloor)
 	{
 		int roomToBuildX;
 		int roomToBuildZ;
@@ -161,9 +167,10 @@ public class CastleGenerator implements IDungeonGenerator{
 		}
 
 		// Add substructure to the north, if there is room
-		if (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
+		while (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 		{
-			boolean buildSquarePart = (roomToBuildX > roomSize) && (roomToBuildZ > roomSize);
+			//boolean buildSquarePart = (roomToBuildX > roomSize) && (roomToBuildZ > roomSize);
+			boolean buildSquarePart = (roomToBuildX > roomSize && roomToBuildZ > roomSize);
 
 			if (buildSquarePart)
 			{
@@ -172,6 +179,7 @@ public class CastleGenerator implements IDungeonGenerator{
 			}
 			else
 			{
+				// building a tower
 				subSizeX = Math.min(roomToBuildX, roomToBuildZ);
 				subSizeZ = subSizeX;
 			}
@@ -185,11 +193,17 @@ public class CastleGenerator implements IDungeonGenerator{
 			}
 			else
 			{
-				towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, this.dungeon, facing));
+				towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, currentFloor, this.dungeon, facing));
 			}
+
+			roomToBuildX -= subSizeX;
+			roomToBuildZ -= subSizeZ;
+			x = subX;
+			z = subZ;
 		}
 	}
 
+	// Get the leftmost (lowest) X location of a side structure building
 	private int getSideStructureX(int x, int mainSizeX, int sideSizeX, EnumFacing facing)
 	{
 		switch (facing)
@@ -206,6 +220,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		}
 	}
 
+	// Get the topmost (lowest) Z location of a side structure building
 	private int getSideStructureZ(int z, int mainSizeZ, int sideSizeZ, EnumFacing facing)
 	{
 		switch (facing)

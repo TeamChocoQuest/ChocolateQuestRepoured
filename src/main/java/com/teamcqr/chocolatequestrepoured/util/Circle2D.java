@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import net.minecraft.util.math.BlockPos;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
@@ -18,6 +16,8 @@ import java.util.Objects;
 
 public class Circle2D
 {
+    public int radius;
+
     public enum CircleRegion
     {
         OUTSIDE,
@@ -27,8 +27,9 @@ public class Circle2D
 
     public class Coord
     {
-        public int x;
-        public int z;
+        public int x; // center x of the circle
+        public int z; // center y of the circle
+
 
         private Coord (int x, int z)
         {
@@ -52,98 +53,84 @@ public class Circle2D
             return Objects.hash(x, z);
         }
     }
-    private int radius;
-    private HashSet<Coord> perimeter;
-    private HashSet<Coord> filled;
+    // The circle is described by two underlying hash sets of unique points, representing either the border circle
+    // or the points that lie inside the border circle.
+    private HashSet<Coord> fill; // The points that make up the inside of the circle
+    private HashSet<Coord> border;
+
+    // Points along the insideEdge of the circle but not quite to the border border. Subset of fill.
+    private HashSet<Coord> insideEdge;
+
 
     public Circle2D(int centerX, int centerZ, int radius)
     {
         this.radius = radius;
-        this.perimeter = new HashSet<>();
-        this.filled = new HashSet<>();
-        int x = 0;
-        int z = radius;
+        int innerRadius = radius - 1;
+        int outerRadius = radius + 1;
+        this.fill = new HashSet<>();
+        this.insideEdge = new HashSet<>();
+        this.border = new HashSet<>();
 
-        int P = (5 - radius * 4) / 4;
-
-        do
+        for (int dX  = -outerRadius; dX < outerRadius; dX++)
         {
-            this.perimeter.add(new Coord(centerX + x, centerZ + z));
-            this.perimeter.add(new Coord(centerX - x, centerZ + z));
-            this.perimeter.add(new Coord(centerX + x, centerZ - z));
-            this.perimeter.add(new Coord(centerX - x, centerZ - z));
-            this.perimeter.add(new Coord(centerX + z, centerZ + x));
-            this.perimeter.add(new Coord(centerX - z, centerZ + x));
-            this.perimeter.add(new Coord(centerX + z, centerZ - x));
-            this.perimeter.add(new Coord(centerX - z, centerZ - x));
-
-            // fill all points in between the left and right edges
-            for (int fillX = centerX - x; fillX <= centerX + x; fillX ++)
+            for (int dZ = -outerRadius; dZ < outerRadius; dZ++)
             {
-                this.filled.add(new Coord(fillX, centerZ + z));
-                this.filled.add(new Coord(fillX, centerZ - z));
-            }
-
-            for (int fillX = centerX - z; fillX <= centerX + z; fillX ++)
-            {
-                this.filled.add(new Coord(fillX, centerZ + x));
-                this.filled.add(new Coord(fillX, centerZ - x));
-            }
-
-            if (P < 0)
-            {
-                P += 2 * x + 1;
-            }
-            else
-            {
-                P += 2 * (x - z) + 1;
-                z--;
-            }
-            x++;
-
-        } while (x <= z);
-    }
-
-    public CircleRegion[][] toArray(int startX, int startZ, int lenX, int lenZ)
-    {
-        Coord c = new Coord(startX, startZ);
-        CircleRegion[][] result = new CircleRegion[lenX][lenZ];
-        for (int i = 0; i < lenX; i++)
-        {
-            int edgesSeen = 0; //num edge blocks we have iterated past so far
-            for (int j = 0; j < lenZ; j++)
-            {
-                c.x = startX + i;
-                c.z = startZ + j;
-                if (perimeter.contains(c))
+                int distSq = dX * dX + dZ * dZ;
+                if (distSq < radius * radius)
                 {
-                    result[i][j] = CircleRegion.EDGE;
-                    edgesSeen++;
+                    fill.add(new Coord(centerX + dX, centerZ + dZ));
+                    if (distSq > innerRadius * innerRadius)
+                    {
+                        insideEdge.add(new Coord(centerX + dX, centerZ + dZ));
+                    }
                 }
-                else if (edgesSeen == 1)
+                else if (distSq < outerRadius * outerRadius)
                 {
-                    // if only one edge has been seen we must be within the circle
-                    result[i][j] = CircleRegion.INSIDE;
-                }
-                else
-                {
-                    // if 0 or 2+ edges have been seen then we are before or after the circle
-                    result[i][j] = CircleRegion.OUTSIDE;
+                    border.add(new Coord(centerX + dX, centerZ + dZ));
                 }
             }
         }
 
-        return result;
+
+    }
+
+    // Get an array of the (x,z) coordinates that make up the inside of this circle
+    public ArrayList<Coord> getFloorArray()
+    {
+        return new ArrayList<>(this.fill);
     }
 
     // Get an array of the (x,z) coordinates that make up the perimeter of this circle
-    public ArrayList<Coord> getEdgeCoords()
+    public ArrayList<Coord> getWallArray()
     {
-        return new ArrayList<>(this.perimeter);
+        return new ArrayList<>(this.border);
     }
 
-    public ArrayList<Coord> getFillCoords()
+    // Get an array of the (x,z) coordinates that fall on the egde of the inside and perimeter
+    public ArrayList<Coord> getEdgeArray()
     {
-        return new ArrayList<>(this.filled);
+        return new ArrayList<>(this.insideEdge);
     }
+
+    public boolean isCoordInFill(int x, int y)
+    {
+        return fill.contains(new Coord(x, y));
+    }
+
+    public boolean isCoordOnBorder(int x, int y)
+    {
+        return border.contains(new Coord(x, y));
+    }
+
+    public boolean isCoordOnInsideEdge(int x, int y)
+    {
+        return insideEdge.contains(new Coord(x, y));
+    }
+
+    public boolean isCoordInCircle(int x, int y)
+    {
+        Coord c = new Coord(x, y);
+        return fill.contains(c) || border.contains(c);
+    }
+
 }
