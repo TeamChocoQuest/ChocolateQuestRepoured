@@ -7,11 +7,15 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -23,6 +27,9 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class VolcanoGenerator implements IDungeonGenerator{
 
+	//DONE: Make chests and blocks (stoneMat, CobbleMat, lavaMat, magmaMat, pathMat) customisable
+	//DONE: Lower chest and spawner chance
+	
 	//BOss name: Volcovare Akvel
 	
 	/**
@@ -59,10 +66,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private int maxHeight = 10;
 	private int minRadius = 1;
 	private double steepness = 0.0D;
-	@SuppressWarnings("unused")
-	private List<BlockPos> spawnersOnPath = new ArrayList<>();
-	@SuppressWarnings("unused")
-	private List<BlockPos> chestsOnPath = new ArrayList<>();
+	private List<BlockPos> spawnersNChestsOnPath = new ArrayList<>();
 	private BlockPos centerLoc = null;
 	
 	double oldProgress = -1.0;
@@ -164,7 +168,15 @@ public class VolcanoGenerator implements IDungeonGenerator{
 					for(int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
 						if(isInsideCircle(iX, iZ, stairRadius +1, centerLoc) && !isInsideCircle(iX, iZ, stairRadius /2, centerLoc)) {
 							if(StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
-								stairBlocks.add(new BlockPos(iX +x, yStairCase, iZ +z));
+								BlockPos pos = new BlockPos(iX +x, yStairCase, iZ +z);
+								stairBlocks.add(pos);
+								//Spawners and chets, spawn only in a certain radius and only with 1% chance
+								if(isInsideCircle(iX, iZ, (stairRadius /2) + (stairRadius /4) + (stairRadius /6), centerLoc)) {
+									if(new Random().nextInt(this.dungeon.getChestChance() +1) >= (this.dungeon.getChestChance() -1)) {
+										spawnersNChestsOnPath.add(pos.add(0,1,0));
+									}
+								}
+								
 							}
 						}
 					}
@@ -224,7 +236,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			//System.out.println("Calculated air for holes!");
 		}
 		
-		passListWithBlocksToThreads(blocks, Blocks.STONE, world, 150);
+		passListWithBlocksToThreads(blocks, dungeon.getUpperMainBlock(), world, 150);
 		if(this.dungeon.generateOres()) {
 			//System.out.println("Generating ore...");
 			generateOres(world, blocks);
@@ -233,12 +245,12 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		}
 		
 		//System.out.println("Placing blocks...");
-		passListWithBlocksToThreads(lava, Blocks.LAVA, world, 150);
-		passListWithBlocksToThreads(magma, Blocks.MAGMA, world, 150);
+		passListWithBlocksToThreads(lava, dungeon.getLavaBlock(), world, 150);
+		passListWithBlocksToThreads(magma, dungeon.getMagmaBlock(), world, 150);
 		passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150);
-		passListWithBlocksToThreads(blocksLower, Blocks.COBBLESTONE, Blocks.MAGMA, new Double((this.dungeon.getMagmaChance() *100.0D) *2.0D).intValue(), world, 150);
+		passListWithBlocksToThreads(blocksLower, dungeon.getLowerMainBlock(),  dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() *100.0D) *2.0D).intValue(), world, 150);
 		if(this.dungeon.doBuildStairs()) {
-			passListWithBlocksToThreads(stairBlocks, Blocks.NETHERRACK, world, 150);
+			passListWithBlocksToThreads(stairBlocks, dungeon.getRampBlock(), world, 150);
 		}
 		//System.out.println("Blocks palced!");
 		
@@ -272,14 +284,42 @@ public class VolcanoGenerator implements IDungeonGenerator{
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Fill chests on path
-		
+		// DONE Fill chests on path
+		Random rdm = new Random();
+		for(BlockPos pos : spawnersNChestsOnPath) {
+			if(rdm.nextBoolean()) {
+				world.setBlockState(pos, Blocks.CHEST.getDefaultState());
+				TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
+				int eltID = dungeon.getChestIDs()[rdm.nextInt(dungeon.getChestIDs().length)];
+				if(chest != null) {
+					ResourceLocation resLoc = null;
+					try {
+						resLoc = ELootTable.valueOf(eltID).getResourceLocation();
+					} catch(Exception ex) {
+						ex.printStackTrace();
+					}
+					if(resLoc != null) {
+						chest.setLootTable(resLoc, world.getSeed());
+					}
+				}
+			}
+		}
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Place spawners for dwarves/golems/whatever on path
-		
+		// DONE Place spawners for dwarves/golems/whatever on path
+		for(BlockPos pos : spawnersNChestsOnPath) {
+			world.setBlockState(pos.add(0,1,0), Blocks.MOB_SPAWNER.getDefaultState());
+			
+			TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos.add(0,1,0));
+			
+			spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
+			//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
+			spawner.updateContainingBlockInfo();
+			
+			spawner.update();
+		}
 	}
 
 	@Override
@@ -482,5 +522,5 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		}
 		return minY -2;
 	}
-
+	
 }
