@@ -245,9 +245,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//DONE Pass the list to a simplethread to place the blocks
 		
 		//TIME
-		//All: About 2-3mins
-		//Calculating: 2min, 37 secs 
-		//Placing: about 1 min
+		//All: About 20 seconds
 	}
 
 	@Override
@@ -473,16 +471,6 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	}
 	
 	private int getMinY(BlockPos center, int radius, World world) {
-		/*int median = 0;
-		int cant = 0;
-		for(int iX = -radius; iX <= radius; iX++) {
-			for(int iZ = -radius; iZ <= radius; iZ++) {
-				int height = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(center.add(iX, 0, iZ)), iX, iZ, true);//world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY();
-				median += height;
-				cant++;
-			}
-		}
-		return median /cant;*/
 		int minY = 256;
 		for(int iX = -radius; iX <= radius; iX++) {
 			for(int iZ = -radius; iZ <= radius; iZ++) {
