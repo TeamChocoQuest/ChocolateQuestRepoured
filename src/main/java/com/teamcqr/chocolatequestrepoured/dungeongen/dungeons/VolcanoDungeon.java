@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.VolcanoGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.VolcanoGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 

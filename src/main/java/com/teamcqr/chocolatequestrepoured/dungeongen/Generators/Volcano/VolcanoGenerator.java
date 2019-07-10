@@ -1,9 +1,11 @@
-package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
+package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -86,13 +88,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		this.baseRadius = new Double(this.minRadius + Math.cbrt(this.maxHeight/this.steepness)).intValue();
 		
 		//System.out.println("Calculating minY...");
-		minY = getMinY(centerLoc, baseRadius, world) - (new Double(0.1 * maxHeight).intValue());  //new Double(y - (0.1 *maxHeight)).intValue();
+		minY = getMinY(centerLoc, baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
 		//System.out.println("MinY: " + minY);
 		
-		/**System.out.println("Max Height: " + maxHeight);
-		System.out.println("Steepness: " + steepness);
-		System.out.println("Min Radius: " + minRadius);
-		System.out.println("Base Radius: " + baseRadius);**/
+		//System.out.println("Max Height: " + maxHeight);
+		//System.out.println("Steepness: " + steepness);
+		//System.out.println("Min Radius: " + minRadius);
+		//System.out.println("Base Radius: " + baseRadius);
 		
 		//1) Calculate MinY
 		//2) Calculate the base radius
@@ -104,23 +106,78 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		
 		//System.out.println("Creating lists...");
 		List<BlockPos> blocks = new ArrayList<BlockPos>();
+		List<BlockPos> blocksLower = new ArrayList<BlockPos>();
 		List<BlockPos> lava = new ArrayList<BlockPos>();
 		List<BlockPos> airBlocks = new ArrayList<BlockPos>();
 		List<BlockPos> magma = new ArrayList<BlockPos>();
+		List<BlockPos> stairBlocks = new ArrayList<BlockPos>();
 		//System.out.println("Created lists!");
 		
 		//DONE: Split generation of volcano into 4 threads (corners, means x- z- , x+ z- , x+ z+ , x- z+) IMPORTANT: They need to use the same variables (like the random) -> NOPE, problem was removin things from lists...
 		
 		//Calculates all the "wall" blocks
 		//DONE Place lava
-		//TODO inner "cave" digs down to bedrock, volcano shape begins at minY and spreads below it to 0!!
+		//DONE inner "cave" digs down to bedrock, volcano shape begins at minY and spreads below it to 0!!
 		
 		//System.out.println("Calculating block positions...");
 		int yMax = ((minY + this.maxHeight) < 256 ? this.maxHeight : (255 - minY));
+		
+		//Lower "cave" part
+		int lowYMax = minY + (new Double(0.1 * maxHeight).intValue());
+		int[] radiusArr = new int[(int) (lowYMax *0.9)];
+		for(int iY = 0; iY <= lowYMax -2; iY++) {
+			int radius = new Double(Math.sqrt(-1.0 * new Double((iY - lowYMax) / (10.0 * this.dungeon.getSteepness()))) + (double)this.minRadius).intValue();
+			if(iY < radiusArr.length) {
+				radiusArr[iY] = radius;
+			}
+			for(int iX = -radius -2; iX <= radius +2; iX++) {
+				for(int iZ = -radius -2; iZ <= radius +2; iZ++) {
+					if(isInsideCircle(iX, iZ, radius, centerLoc)) {
+						if(isInsideCircle(iX, iZ, (radius -1), centerLoc)) {
+							if(iY < 2) {
+								//We're low enought, place lava
+								lava.add(new BlockPos(iX +x, iY +6, iZ +z));
+							} else {
+								//We're over the lava -> air
+								airBlocks.add(new BlockPos(iX +x, iY +6, iZ +z));
+							}
+						} else {
+							//System.out.println("SPHERE");
+							//We are in the outer wall -> random spheres to make it more cave
+							if(DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+								blocksLower.addAll(getSphereBlocks(new BlockPos(iX +x, iY +6, iZ +z), rdm.nextInt(3) +2));
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		//Infamous nether staircase
+		if(this.dungeon.doBuildStairs()) {
+			EStairSection currStairSection = StairCaseHelper.getRandomStartSection();
+			int yStairCase, stairRadius = 1;
+			for(int i = -3; i < radiusArr.length; i++) {
+				yStairCase = i >= 0 ? i +7 : 7;
+				stairRadius = i >= 0 ? radiusArr[i] : radiusArr[0];
+				for(int iX = -stairRadius; iX <= stairRadius; iX++) {
+					for(int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
+						if(isInsideCircle(iX, iZ, stairRadius +1, centerLoc) && !isInsideCircle(iX, iZ, stairRadius /2, centerLoc)) {
+							if(StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
+								stairBlocks.add(new BlockPos(iX +x, yStairCase, iZ +z));
+							}
+						}
+					}
+				}
+				currStairSection = currStairSection.getSuccessor();
+			}
+		}
+		
+		//Upper volcano part
 		for(int iY = 0; iY < yMax; iY++) {
 			//RADIUS = baseRAD - (level/steepness)^1/3
 			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY/this.steepness)).intValue();
-			int innerRadius = this.minRadius; //TODO calculate minRadius
+			int innerRadius = this.minRadius; //DONE calculate minRadius
 			
 			for(int iX = -radiusOuter*2; iX <= radiusOuter*2; iX++) {
 				for(int iZ = -radiusOuter*2; iZ <= radiusOuter*2; iZ++) {
@@ -128,14 +185,14 @@ public class VolcanoGenerator implements IDungeonGenerator{
 					if(isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
 						//If it is at the bottom and also inside the inner radius -> lava
 						if(isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
-							if(iY == 0) {
+							/*if(iY == 0) {
 								lava.add(new BlockPos(iX +x, minY, iZ +z));
 								lava.add(new BlockPos(iX +x, minY -1, iZ +z));
 								lava.add(new BlockPos(iX +x, minY -2, iZ +z));
 								lava.add(new BlockPos(iX +x, minY -3, iZ +z));
-							} else {
+							} else {*/
 								airBlocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
-							}
+							//}
 						} else {
 							//Else it is a wall block
 							//SO now we decide what the wall is gonna be...
@@ -179,6 +236,10 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		passListWithBlocksToThreads(lava, Blocks.LAVA, world, 150);
 		passListWithBlocksToThreads(magma, Blocks.MAGMA, world, 150);
 		passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150);
+		passListWithBlocksToThreads(blocksLower, Blocks.COBBLESTONE, Blocks.MAGMA, new Double((this.dungeon.getMagmaChance() *100.0D) *2.0D).intValue(), world, 150);
+		if(this.dungeon.doBuildStairs()) {
+			passListWithBlocksToThreads(stairBlocks, Blocks.NETHERRACK, world, 150);
+		}
 		//System.out.println("Blocks palced!");
 		
 		//DONE Pass the list to a simplethread to place the blocks
@@ -237,6 +298,25 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
 		}
 		//DONE Pass the list to a simplethread to place the blocks
+	}
+	
+	private void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block mainBlock, Block secondaryBlock, int chanceForSecondary, World world, int entriesPerPartList) {
+		List<BlockPos> mainBlocks = new ArrayList<>();
+		List<BlockPos> secBlocks = new ArrayList<>();
+		
+		//System.out.println("Chance: " + chanceForSecondary);
+		
+		for(BlockPos bp : blocksToPlace) {
+			if(DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 -chanceForSecondary)) {
+				secBlocks.add(bp);
+			} else {
+				mainBlocks.add(bp);
+			}
+		}
+		
+		passListWithBlocksToThreads(mainBlocks, mainBlock, world, entriesPerPartList);
+		passListWithBlocksToThreads(secBlocks, secondaryBlock, world, entriesPerPartList);
+		
 	}
 	
 	private void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
@@ -393,7 +473,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	}
 	
 	private int getMinY(BlockPos center, int radius, World world) {
-		int median = 0;
+		/*int median = 0;
 		int cant = 0;
 		for(int iX = -radius; iX <= radius; iX++) {
 			for(int iZ = -radius; iZ <= radius; iZ++) {
@@ -402,7 +482,17 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				cant++;
 			}
 		}
-		return median /cant;
+		return median /cant;*/
+		int minY = 256;
+		for(int iX = -radius; iX <= radius; iX++) {
+			for(int iZ = -radius; iZ <= radius; iZ++) {
+				int yTmp = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(center.add(iX, 0, iZ)), iX, iZ, true);
+				if(yTmp < minY) {
+					minY = yTmp;
+				}
+			}
+		}
+		return minY -2;
 	}
 
 }
