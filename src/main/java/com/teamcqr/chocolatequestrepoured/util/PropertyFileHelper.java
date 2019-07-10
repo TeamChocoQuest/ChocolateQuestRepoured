@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.Properties;
 
+import net.minecraft.block.Block;
+
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -73,6 +75,19 @@ public class PropertyFileHelper {
 			return false;
 		}
 		return defVal;
+	}
+	
+	public static Block getBlockProperty(Properties file, String path, Block defVal) {
+		Block retBlock = defVal;
+		try {
+			Block tmp = Block.getBlockFromName(file.getProperty(path, "minecraft:stone"));
+			if(tmp != null) {
+				retBlock = tmp;
+			}
+		} catch(Exception ex) {
+			System.out.println("couldnt load floor block! using default value (" + defVal.getUnlocalizedName() +")...");
+		}
+		return retBlock;
 	}
 
 }
