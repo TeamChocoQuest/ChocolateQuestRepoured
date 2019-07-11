@@ -300,24 +300,4 @@ public class EventsHandler
 			}
 		}
 	}
-
-	@SubscribeEvent
-	public static void onWorldLoad(WorldEvent.Load e) {
-		if(!e.getWorld().isRemote) {
-			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
-				CQDataUtil.createFolderInWorld("data//CQR",e.getWorld());
-
-				ProtectionHandler.PROTECTION_HANDLER.loadRegionDataFromFile(e.getWorld());
-			}
-		}
-	}
-
-	@SubscribeEvent
-	public static void onWorldUnload(WorldEvent.Unload e) {
-		if(!e.getWorld().isRemote) {
-			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
-				ProtectionHandler.PROTECTION_HANDLER.saveRegionDataToFile(e.getWorld());
-			}
-		}
-	}
 }
