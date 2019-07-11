@@ -12,6 +12,7 @@ public class BlockDungeonBrick extends BlockBase
 		super(name, material);
 		
 		setSoundType(SoundType.STONE);
+		setResistance(-1F);
 		setHardness(-1F);
 	}
 }
