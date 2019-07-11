@@ -115,6 +115,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		List<BlockPos> airBlocks = new ArrayList<BlockPos>();
 		List<BlockPos> magma = new ArrayList<BlockPos>();
 		List<BlockPos> stairBlocks = new ArrayList<BlockPos>();
+		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
 		//System.out.println("Created lists!");
 		
 		//DONE: Split generation of volcano into 4 threads (corners, means x- z- , x+ z- , x+ z+ , x- z+) IMPORTANT: They need to use the same variables (like the random) -> NOPE, problem was removin things from lists...
@@ -166,7 +167,14 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				stairRadius = i >= 0 ? radiusArr[i] : radiusArr[0];
 				for(int iX = -stairRadius; iX <= stairRadius; iX++) {
 					for(int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
+						//Pillars
+						if(dungeon.doBuildPillars() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
+							//System.out.println("Adding pillar pos");
+							pillarCenters.add(new BlockPos(iX +x, yStairCase -3, iZ +z));
+						}
+						//Stairwell -> check if it is in the volcano
 						if(isInsideCircle(iX, iZ, stairRadius +1, centerLoc) && !isInsideCircle(iX, iZ, stairRadius /2, centerLoc)) {
+							//Check that it is outside of the middle circle
 							if(StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
 								BlockPos pos = new BlockPos(iX +x, yStairCase, iZ +z);
 								stairBlocks.add(pos);
@@ -251,6 +259,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		passListWithBlocksToThreads(blocksLower, dungeon.getLowerMainBlock(),  dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() *100.0D) *2.0D).intValue(), world, 150);
 		if(this.dungeon.doBuildStairs()) {
 			passListWithBlocksToThreads(stairBlocks, dungeon.getRampBlock(), world, 150);
+		}
+		if(dungeon.doBuildPillars()) {
+			generatePillars(pillarCenters, lowYMax +10, world);
 		}
 		//System.out.println("Blocks palced!");
 		
@@ -508,6 +519,22 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 			
 		}
+	}
+	
+	private void generatePillars(List<BlockPos> centers, int maxY, World world) {
+		List<BlockPos> pillarBlocks = new ArrayList<BlockPos>();
+		for(BlockPos center : centers) {
+			for(int iY = 0; iY <= maxY; iY++) {
+				for(int iX = -3; iX <= 3; iX++) {
+					for(int iZ = -3; iZ <= 3; iZ++) {
+						if(isInsideCircle(iX, iZ, 3, center)) {
+							pillarBlocks.add(center.add(iX, iY, iZ));
+						}
+					}
+				}
+			}
+		}
+		passListWithBlocksToThreads(pillarBlocks, dungeon.getPillarBlock(), world, pillarBlocks.size());
 	}
 	
 	private int getMinY(BlockPos center, int radius, World world) {
