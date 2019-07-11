@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.VolcanoGenerator;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -26,6 +27,7 @@ import net.minecraft.world.chunk.Chunk;
 public class VolcanoDungeon extends StrongholdDungeon {
 	
 	private boolean buildStairwell = true;
+	private boolean buildPillars = false;
 	private boolean damagedVolcano = true;
 	private boolean ores = true;
 	private int oreConcentration = 5;
@@ -44,6 +46,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 	private Block magmaBlock = Blocks.MAGMA;
 	private Block rampBlock = Blocks.NETHERRACK;
 	private Block lowerStoneBlock = Blocks.COBBLESTONE;
+	private Block pillarBlock = ModBlocks.GRANITE_BRICK_LARGE;
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);
@@ -78,6 +81,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 		}
 		if(prop != null && configFile != null && fis != null) {
 			this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
+			this.buildPillars = PropertyFileHelper.getBooleanProperty(prop, "buildPillars", false);
 			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
 			this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", 130);
 			this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", 5);
@@ -96,6 +100,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 			this.lavaBlock = PropertyFileHelper.getBlockProperty(prop, "lavaBlock", Blocks.LAVA);
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
+			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_BRICK_LARGE);
 			try {
 				fis.close();
 			} catch (IOException e) {
@@ -156,6 +161,10 @@ public class VolcanoDungeon extends StrongholdDungeon {
 		return this.buildStairwell;
 	}
 	
+	public boolean doBuildPillars() {
+		return this.buildPillars;
+	}
+	
 	public boolean isVolcanoDamaged() {
 		return this.damagedVolcano;
 	}
@@ -192,10 +201,14 @@ public class VolcanoDungeon extends StrongholdDungeon {
 	public Block getRampBlock() {
 		return this.rampBlock;
 	}
+	public Block getPillarBlock() {
+		return this.pillarBlock;
+	}
 
 	public ResourceLocation getMob() {
 		String[] bossString = this.mobName.split(":");
 		
 		return new ResourceLocation(bossString[0], bossString[1]);
 	}
+	
 }

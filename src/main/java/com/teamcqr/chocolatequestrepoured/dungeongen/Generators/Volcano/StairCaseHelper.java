@@ -56,6 +56,19 @@ public class StairCaseHelper {
 		return EStairSection.NORTH_EAST;
 	}
 	
+	public static boolean isPillarCenterLocation(int x, int z, int radiusOfCircle) {
+		//SOUTH & NORTH
+		if(x == 0 && (Math.abs(z) == Math.abs(radiusOfCircle /2) )) {
+			return true;
+		}
+		//EAST & WEST
+		if(z == 0 && (Math.abs(x) == Math.abs(radiusOfCircle /2))) {
+			return true;
+		}
+	
+		return false;
+	}
+	
 	//X,Z begin at -radius and ends at radius
 	public static boolean isLocationFine(EStairSection section, int x, int z, int radiusOfCircle) {
 		switch (section) {
