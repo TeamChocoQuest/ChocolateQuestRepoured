@@ -9,7 +9,6 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCas
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -68,6 +67,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private double steepness = 0.0D;
 	private List<BlockPos> spawnersNChestsOnPath = new ArrayList<>();
 	private BlockPos centerLoc = null;
+	private BlockPos entranceStartPos = null;
+	private EStairSection entranceDirection = null; 
 	
 	double oldProgress = -1.0;
 	
@@ -159,8 +160,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		}
 		
 		//Infamous nether staircase
+		EStairSection currStairSection = StairCaseHelper.getRandomStartSection();
+		this.entranceDirection = currStairSection.getSuccessor();
 		if(this.dungeon.doBuildStairs()) {
-			EStairSection currStairSection = StairCaseHelper.getRandomStartSection();
 			int yStairCase, stairRadius = 1;
 			for(int i = -3; i < radiusArr.length; i++) {
 				yStairCase = i >= 0 ? i +7 : 7;
@@ -244,7 +246,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			//System.out.println("Calculated air for holes!");
 		}
 		
-		passListWithBlocksToThreads(blocks, dungeon.getUpperMainBlock(), world, 150);
+		DungeonGenUtils.passListWithBlocksToThreads(blocks, dungeon.getUpperMainBlock(), world, 150);
 		if(this.dungeon.generateOres()) {
 			//System.out.println("Generating ore...");
 			generateOres(world, blocks);
@@ -253,12 +255,12 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		}
 		
 		//System.out.println("Placing blocks...");
-		passListWithBlocksToThreads(lava, dungeon.getLavaBlock(), world, 150);
-		passListWithBlocksToThreads(magma, dungeon.getMagmaBlock(), world, 150);
-		passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150);
+		DungeonGenUtils.passListWithBlocksToThreads(lava, dungeon.getLavaBlock(), world, 150);
+		DungeonGenUtils.passListWithBlocksToThreads(magma, dungeon.getMagmaBlock(), world, 150);
+		DungeonGenUtils.passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150);
 		passListWithBlocksToThreads(blocksLower, dungeon.getLowerMainBlock(),  dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() *100.0D) *2.0D).intValue(), world, 150);
 		if(this.dungeon.doBuildStairs()) {
-			passListWithBlocksToThreads(stairBlocks, dungeon.getRampBlock(), world, 150);
+			DungeonGenUtils.passListWithBlocksToThreads(stairBlocks, dungeon.getRampBlock(), world, 150);
 		}
 		if(dungeon.doBuildPillars()) {
 			generatePillars(pillarCenters, lowYMax +10, world);
@@ -344,7 +346,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				}
 			}
 			
-			passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
+			DungeonGenUtils.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
 		}
 		//DONE Pass the list to a simplethread to place the blocks
 	}
@@ -363,51 +365,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 		}
 		
-		passListWithBlocksToThreads(mainBlocks, mainBlock, world, entriesPerPartList);
-		passListWithBlocksToThreads(secBlocks, secondaryBlock, world, entriesPerPartList);
+		DungeonGenUtils.passListWithBlocksToThreads(mainBlocks, mainBlock, world, entriesPerPartList);
+		DungeonGenUtils.passListWithBlocksToThreads(secBlocks, secondaryBlock, world, entriesPerPartList);
 		
-	}
-	
-	private void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
-		List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
-		int counter = 1;
-		for(BlockPos bp : blocksToPlace) {
-			bplistTMP.add(bp);
-			//One Task contains 50 blocks to place
-			if(counter % entriesPerPartList == 0) {
-				Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
-					
-					@Override
-					public void run() {
-						for(BlockPos b : bplistTMP) {
-							if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-								world.setBlockToAir(b);
-							} else {
-								world.setBlockState(b, blockToPlace.getDefaultState());
-							}
-						}
-						
-					}
-				});
-				
-				bplistTMP.clear();
-			}
-			counter++;
-		}
-		Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
-			
-			@Override
-			public void run() {
-				for(BlockPos b : bplistTMP) {
-					if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-						world.setBlockToAir(b);
-					} else {
-						world.setBlockState(b, blockToPlace.getDefaultState());
-					}
-				}
-				
-			}
-		});
 	}
 	
 	private List<BlockPos> getSphereBlocks(BlockPos center, int radius) {
@@ -498,12 +458,12 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//System.out.println("Emeralds: " + emeralds.size());
 		//System.out.println("Diamonds: " + diamonds.size());
 		
-		passListWithBlocksToThreads(coals, Blocks.COAL_ORE, world, coals.size());
-		passListWithBlocksToThreads(irons, Blocks.IRON_ORE, world, irons.size());
-		passListWithBlocksToThreads(golds, Blocks.GOLD_ORE, world, golds.size());
-		passListWithBlocksToThreads(redstones, Blocks.REDSTONE_ORE, world, redstones.size());
-		passListWithBlocksToThreads(emeralds, Blocks.EMERALD_ORE, world, emeralds.size());
-		passListWithBlocksToThreads(diamonds, Blocks.DIAMOND_ORE, world, diamonds.size());
+		DungeonGenUtils.passListWithBlocksToThreads(coals, Blocks.COAL_ORE, world, coals.size());
+		DungeonGenUtils.passListWithBlocksToThreads(irons, Blocks.IRON_ORE, world, irons.size());
+		DungeonGenUtils.passListWithBlocksToThreads(golds, Blocks.GOLD_ORE, world, golds.size());
+		DungeonGenUtils.passListWithBlocksToThreads(redstones, Blocks.REDSTONE_ORE, world, redstones.size());
+		DungeonGenUtils.passListWithBlocksToThreads(emeralds, Blocks.EMERALD_ORE, world, emeralds.size());
+		DungeonGenUtils.passListWithBlocksToThreads(diamonds, Blocks.DIAMOND_ORE, world, diamonds.size());
 	}
 	
 	private void generateHoles(List<BlockPos> blocks, List<BlockPos> airBlocks) {
@@ -534,7 +494,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				}
 			}
 		}
-		passListWithBlocksToThreads(pillarBlocks, dungeon.getPillarBlock(), world, pillarBlocks.size());
+		DungeonGenUtils.passListWithBlocksToThreads(pillarBlocks, dungeon.getPillarBlock(), world, pillarBlocks.size());
 	}
 	
 	private int getMinY(BlockPos center, int radius, World world) {
