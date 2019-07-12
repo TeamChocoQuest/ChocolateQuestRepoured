@@ -26,8 +26,10 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class VolcanoDungeon extends StrongholdDungeon {
 	
+	//For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
+	
 	private boolean buildStairwell = true;
-	private boolean buildPillars = false;
+	private boolean buildDungeon = false;
 	private boolean damagedVolcano = true;
 	private boolean ores = true;
 	private int oreConcentration = 5;
@@ -81,7 +83,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 		}
 		if(prop != null && configFile != null && fis != null) {
 			this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
-			this.buildPillars = PropertyFileHelper.getBooleanProperty(prop, "buildPillars", false);
+			this.buildDungeon = PropertyFileHelper.getBooleanProperty(prop, "buildDungeon", true);
 			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
 			this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", 130);
 			this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", 5);
@@ -161,8 +163,8 @@ public class VolcanoDungeon extends StrongholdDungeon {
 		return this.buildStairwell;
 	}
 	
-	public boolean doBuildPillars() {
-		return this.buildPillars;
+	public boolean doBuildDungeon() {
+		return this.buildDungeon;
 	}
 	
 	public boolean isVolcanoDamaged() {

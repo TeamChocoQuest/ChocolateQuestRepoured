@@ -2,6 +2,9 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano;
 
 import java.util.Random;
 
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
+
 public class StairCaseHelper {
 	
 	
@@ -40,17 +43,32 @@ public class StairCaseHelper {
 		public EStairSection getSuccessor() {
 			return EStairSection.valueOf(this.successorName);
 		}
+		
+		public EnumFacing getAsSkyDirection() {
+			switch(this) {
+			case EAST: case EAST_SEC:
+				return EnumFacing.EAST;
+			case NORTH: case NORTH_SEC:
+				return EnumFacing.NORTH;
+			case SOUTH: case SOUTH_SEC:
+				return EnumFacing.SOUTH;
+			case WEST: case WEST_SEC:
+				return EnumFacing.WEST;
+			default:
+				return null;
+			}
+		}
 	}
-	//N, S , W (is missing ?!?!): Kinda wrong....
+	
 	public static EStairSection getRandomStartSection() {
-		switch(new Random().nextInt(4)) {
+		switch(new Random().nextInt(3)) {
 		case 0:
 			return EStairSection.NORTH_EAST;
 		case 1:
 			return EStairSection.SOUTH_EAST;
+		/*case 2:
+			return EStairSection.SOUTH_WEST;*/
 		case 2:
-			return EStairSection.SOUTH_WEST;
-		case 3:
 			return EStairSection.NORTH_WEST;
 		}
 		return EStairSection.NORTH_EAST;
@@ -67,6 +85,75 @@ public class StairCaseHelper {
 		}
 	
 		return false;
+	}
+	
+	public static EnumFacing getFacingWithRotation(EnumFacing orig, Rotation rotation) {
+		EnumFacing ret = orig;
+		switch(orig) {
+		case EAST:
+			switch(rotation) {
+			case CLOCKWISE_180:
+				ret = EnumFacing.WEST;
+				break;
+			case CLOCKWISE_90:
+				ret = EnumFacing.SOUTH;
+				break;
+			case COUNTERCLOCKWISE_90:
+				ret = EnumFacing.NORTH;
+				break;
+			default:
+				break;
+			}
+			break;
+		case NORTH:
+			switch(rotation) {
+			case CLOCKWISE_180:
+				ret = EnumFacing.SOUTH;
+				break;
+			case CLOCKWISE_90:
+				ret = EnumFacing.EAST;
+				break;
+			case COUNTERCLOCKWISE_90:
+				ret = EnumFacing.WEST;
+				break;
+			default:
+				break;
+			}
+			break;
+		case SOUTH:
+			switch(rotation) {
+			case CLOCKWISE_180:
+				ret = EnumFacing.NORTH;
+				break;
+			case CLOCKWISE_90:
+				ret = EnumFacing.WEST;
+				break;
+			case COUNTERCLOCKWISE_90:
+				ret = EnumFacing.EAST;
+				break;
+			default:
+				break;
+			}
+			break;
+		case WEST:
+			switch(rotation) {
+			case CLOCKWISE_180:
+				ret = EnumFacing.EAST;
+				break;
+			case CLOCKWISE_90:
+				ret = EnumFacing.NORTH;
+				break;
+			case COUNTERCLOCKWISE_90:
+				ret = EnumFacing.SOUTH;
+				break;
+			default:
+				break;
+			}
+			break;
+		default:
+			break;
+		}
+		return ret;
 	}
 	
 	//X,Z begin at -radius and ends at radius
