@@ -27,6 +27,9 @@ public class WorldWallGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
+		if(world.isRemote) {
+			return;
+		}
 		// Check if it is the wall region
 		if (isWallRegion(chunkX, chunkZ, world)) {
 			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
