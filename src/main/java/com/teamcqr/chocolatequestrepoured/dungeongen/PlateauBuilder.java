@@ -27,6 +27,7 @@ public class PlateauBuilder {
 		structureBlock = support;
 		structureTopBlock = top;
 	}
+	
 	/*
 	 * TODO: Write also a method, that digs a cave with two corners
 	 * TODO:
@@ -36,7 +37,7 @@ public class PlateauBuilder {
 	 *   
 	 *   Note: Forge allows async threads modifying things of main thread
 	 */
-	public void generateHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
+	public void generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
 		Perlin3D p = new Perlin3D(world.getSeed(), wallSize, random);
