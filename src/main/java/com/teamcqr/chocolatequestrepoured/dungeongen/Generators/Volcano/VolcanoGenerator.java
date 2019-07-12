@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.BrickFortress.EntranceBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
