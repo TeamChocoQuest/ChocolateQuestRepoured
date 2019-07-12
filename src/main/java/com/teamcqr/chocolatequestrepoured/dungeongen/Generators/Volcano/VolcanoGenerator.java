@@ -64,6 +64,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private int minY = 1;
 	private int maxHeight = 10;
 	private int minRadius = 1;
+	private int entranceDistToWall = 10;
 	private double steepness = 0.0D;
 	private List<BlockPos> spawnersNChestsOnPath = new ArrayList<>();
 	private BlockPos centerLoc = null;
@@ -167,10 +168,35 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			for(int i = -3; i < radiusArr.length; i++) {
 				yStairCase = i >= 0 ? i +7 : 7;
 				stairRadius = i >= 0 ? radiusArr[i] : radiusArr[0];
+				
+				//Calculates the position of the entrance to the stronghold
+				if(dungeon.doBuildDungeon() && i == 0) {
+					entranceDistToWall = (radiusArr[i] /3); 
+					int vecI = radiusArr[i] - entranceDistToWall;
+					switch(entranceDirection) {
+					case EAST: case EAST_SEC:
+						entranceStartPos = new BlockPos(centerLoc.getX(), yStairCase, centerLoc.getZ()).add(vecI,0,0);
+						break;
+					case NORTH: case NORTH_SEC:
+						entranceStartPos = new BlockPos(centerLoc.getX(), yStairCase, centerLoc.getZ()).add(0,0,-vecI);
+						break;
+					case SOUTH: case SOUTH_SEC:
+						entranceStartPos = new BlockPos(centerLoc.getX(), yStairCase, centerLoc.getZ()).add(0,0,vecI);
+						break;
+					case WEST: case WEST_SEC:
+						entranceStartPos = new BlockPos(centerLoc.getX(), yStairCase, centerLoc.getZ()).add(-vecI,0,0);
+						break;
+					default:
+						break;
+					
+					}
+				}
+				
+				
 				for(int iX = -stairRadius; iX <= stairRadius; iX++) {
 					for(int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
 						//Pillars
-						if(dungeon.doBuildPillars() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
+						if(dungeon.doBuildDungeon() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
 							//System.out.println("Adding pillar pos");
 							pillarCenters.add(new BlockPos(iX +x, yStairCase -3, iZ +z));
 						}
@@ -262,7 +288,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		if(this.dungeon.doBuildStairs()) {
 			DungeonGenUtils.passListWithBlocksToThreads(stairBlocks, dungeon.getRampBlock(), world, 150);
 		}
-		if(dungeon.doBuildPillars()) {
+		if(dungeon.doBuildDungeon()) {
 			generatePillars(pillarCenters, lowYMax +10, world);
 		}
 		//System.out.println("Blocks palced!");
@@ -275,6 +301,12 @@ public class VolcanoGenerator implements IDungeonGenerator{
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+		if(dungeon.doBuildDungeon()) {
+			EntranceBuilder entranceBuilder = new EntranceBuilder(entranceStartPos, entranceDistToWall, dungeon, entranceDirection.getAsSkyDirection(), world);
+			entranceBuilder.generate();
+		}
+		
+		
 		//Generates the stronghold
 		//TODO: Generate stronghold -> like a good old rogue dungeon
 		
