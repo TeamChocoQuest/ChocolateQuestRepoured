@@ -29,6 +29,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
+		if(world.isRemote) {
+			return;
+		}
 
 		// Check for flat worlds, if dungeons may spawn there
 		boolean flatPass = true;
