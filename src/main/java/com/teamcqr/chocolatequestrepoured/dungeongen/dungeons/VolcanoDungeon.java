@@ -26,6 +26,8 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class VolcanoDungeon extends StrongholdDungeon {
 	
+	//For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
+	
 	private boolean buildStairwell = true;
 	private boolean buildDungeon = false;
 	private boolean damagedVolcano = true;

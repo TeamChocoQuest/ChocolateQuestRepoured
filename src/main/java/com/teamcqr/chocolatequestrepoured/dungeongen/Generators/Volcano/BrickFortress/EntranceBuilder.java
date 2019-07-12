@@ -1,5 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano;
+package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.BrickFortress;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
@@ -49,7 +50,7 @@ public class EntranceBuilder {
 		//DONE: Place fire pots and "porch"
 		BlockPos pos = startPos;//.add(expansionV);
 		
-		for(int i = 0; i < blocksRemainingToWall /3; i++) {
+		for(int i = 0; i < (blocksRemainingToWall /3) -1; i++) {
 			buildSegment(pos);
 			pos = pos.add(expansionVector);
 		}
@@ -114,14 +115,15 @@ public class EntranceBuilder {
 				world.setBlockToAir(airPos);
 			}
 			buildFloorAndCeiling(corner1, corner2, 5);
+			
 			//world.setBlockState(torch1, Blocks.RED_SHULKER_BOX.getDefaultState());
 			//Left torch -> Facing side: rotate right (90.0°)
+			buildPillar(pillar1);
 			world.setBlockState(torch1, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.COUNTERCLOCKWISE_90)));
 			//world.setBlockState(torch2, Blocks.GREEN_SHULKER_BOX.getDefaultState());
 			//Right torch -> Facing side: rotate left (-90.0°)
-			world.setBlockState(torch2, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)));
-			buildPillar(pillar1);
 			buildPillar(pillar2);
+			world.setBlockState(torch2, ModBlocks.UNLIT_TORCH.getDefaultState().withProperty(BlockUnlitTorch.FACING, StairCaseHelper.getFacingWithRotation(direction, Rotation.CLOCKWISE_90)));
 		}
 	}
 	
