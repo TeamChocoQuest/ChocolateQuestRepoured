@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 
 import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -50,7 +49,6 @@ public class EntranceBuilder {
 		//DONE: Place fire pots and "porch"
 		BlockPos pos = startPos;//.add(expansionV);
 		
-		buildFirePotPillar(pos.subtract(expansionVector));
 		for(int i = 0; i < blocksRemainingToWall /3; i++) {
 			buildSegment(pos);
 			pos = pos.add(expansionVector);
@@ -147,13 +145,6 @@ public class EntranceBuilder {
 		for(BlockPos p : BlockPos.getAllInBox(start.add(0,ceilingHeight +1, 0), endP.add(0,ceilingHeight +1, 0))) {
 			world.setBlockState(p, ModBlocks.GRANITE_SQUARE.getDefaultState());
 		}
-	}
-	
-	private void buildFirePotPillar(BlockPos bottom) {
-		world.setBlockState(bottom.add(0,1,0), ModBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
-		world.setBlockState(bottom.add(0,2,0), ModBlocks.GRANITE_PILLAR.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
-		world.setBlockState(bottom.add(0,3,0), Blocks.NETHERRACK.getDefaultState());
-		world.setBlockState(bottom.add(0,4,0), Blocks.FIRE.getDefaultState());
 	}
 
 }
