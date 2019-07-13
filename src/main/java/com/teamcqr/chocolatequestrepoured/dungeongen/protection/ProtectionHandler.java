@@ -60,8 +60,14 @@ public class ProtectionHandler {
     // Event Handlers
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
+
+        // Debug
         System.out.println(e.getPos());
         System.out.println(e.getSize());
+
+        // Temp
+        activeRegions.add(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
+
     }
 
     @SubscribeEvent
@@ -69,12 +75,11 @@ public class ProtectionHandler {
 
         // Check break pos against all regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
-            //if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) e.setCanceled(true);
+            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) e.setCanceled(true);
         }
 
-        if(e.getPos().getX() > 0) e.setCanceled(true);
-
-        CQRMain.dungeonRegistry.getCoordinateSpecificsMap();
+        //for testing only
+        //if(e.getPos().getX() > 0) e.setCanceled(true);
 
     }
 
@@ -83,8 +88,10 @@ public class ProtectionHandler {
 
         // Check spawn pos against all regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() ))
-                e.setCanceled(true);
+            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() )) {
+                // todo - fix this. checkspawn event not cancelable.
+                // e..setCanceled(true);
+            }
         }
 
     }
