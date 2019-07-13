@@ -1,25 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
-import java.util.*;
-
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.API.events.CQProtectedRegionEnterEvent;
-import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
-import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Written 12.07.2019 by jdawg3636
@@ -55,7 +44,7 @@ public class ProtectionHandler {
 
     }
 
-    // Event Handlers
+    // Detect Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
 
@@ -68,18 +57,55 @@ public class ProtectionHandler {
 
     }
 
+    // Handle Protection-Related Events
     @SubscribeEvent
     public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
 
-        // Check break pos against all regions and cancel if overlapping
+        // Check break pos against all active regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) e.setCanceled(true);
+            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
+                e.setCanceled(true);
+            }
         }
 
-        //for testing only
-        //if(e.getPos().getX() > 0) e.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public void eventHandleBlockPlace(BlockEvent.PlaceEvent e) {
+
+        // Check place pos against all active regions and cancel if overlapping
+        for( ProtectedRegion region : activeRegions ) {
+            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
+                e.setCanceled(true);
+            }
+        }
 
     }
+
+    /*
+    // Not preventing for the time being due to a limitation in Forge
+    // e.getExplosion().exploder has private access
+    @SubscribeEvent
+    public void eventHandleExplosion(ExplosionEvent.Start e) {
+
+        // Allow TNT, block all other exploders
+        if(e.getExplosion().exploder instanceof EntityTNTPrimed) {
+            e.setCanceled(true);
+        }
+
+    }
+    */
+
+    /*
+    // Not preventing for the time being due to a limitation in Forge
+    // https://www.minecraftforge.net/forum/topic/72896-1122-fire-tick-event/
+    @SubscribeEvent
+    public void eventHandleFireSpread(Event e) {
+
+        e.doStuff();
+
+    }
+    */
 
     @SubscribeEvent
     public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
@@ -87,26 +113,10 @@ public class ProtectionHandler {
         // Check spawn pos against all regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
             if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() )) {
-                // todo - fix this. checkspawn event not cancelable.
-                // e..setCanceled(true);
+                e.setResult(Event.Result.DENY);
             }
         }
 
     }
-/* //TODO implement
-    @SubscribeEvent
-    public void eventHandlePortalSpawn(BlockEvent.PortalSpawnEvent e) {
-        Iterator<Map.Entry<ChunkPos,ProtectedRegion>> it = activeRegions.entrySet().iterator();
-        while (it.hasNext())
-        {
-            Map.Entry<ChunkPos,ProtectedRegion> item = it.next();
-            item.getValue().checkPortalEvent(e);
-        }
-    }
-    */
 
-    @SubscribeEvent
-    public void eventHandleEntityEnterChunk(EntityEvent.EnteringChunk e) {
-        //TODO implement
-    }
 }
