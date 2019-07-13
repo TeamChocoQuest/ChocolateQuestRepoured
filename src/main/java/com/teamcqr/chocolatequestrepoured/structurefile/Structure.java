@@ -84,7 +84,7 @@ public class Structure extends Template {
 				superBlockField.setAccessible(true);
 				
 				try {
-					blocks = (List<BlockInfo>) superBlockField.get(this);
+					blocks = (List<Template.BlockInfo>) superBlockField.get(this);
 				} catch (IllegalArgumentException e) {
 					e.printStackTrace();
 				} catch (IllegalAccessException e) {
@@ -97,6 +97,7 @@ public class Structure extends Template {
 			for(int i = 0; i < blocks.size(); i++) {
 				Template.BlockInfo bi = blocks.get(i);
 				Block currentBlock = bi.blockState.getBlock();
+				//TODO: Fix bug: vanilla containers have no inventory?!?!
 				//Banner - Floor
 				if(Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
 					//TODO: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
