@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -20,11 +21,11 @@ public class TileEntityExporter extends TileEntitySyncClient
 	
 	private EntityPlayer user = null;
 	
-	public TileEntityExporter(){}
+	public TileEntityExporter() {}
 	
 	@Override
-	 public NBTTagCompound writeToNBT(NBTTagCompound compound)
-	 {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound)
+	{
 		 super.writeToNBT(compound);
 		 compound.setInteger("StartX", startX);
 		 compound.setInteger("StartY", startY);
@@ -71,5 +72,18 @@ public class TileEntityExporter extends TileEntitySyncClient
 		structure.setAuthor(authorName);
 		
 		structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+	}
+	
+	@Override
+	public double getMaxRenderDistanceSquared() {
+		return (128 + (endX - startX) + (endY - startY) + (endZ - startZ))^2; 
+	}
+	
+	public AxisAlignedBB getDimensionIndicatorBoudingBox() {
+		AxisAlignedBB aabb = super.getRenderBoundingBox();
+		aabb = aabb.offset(new BlockPos(startX, startY, startZ));
+		aabb = aabb.expand(endX, endY, endZ);
+		
+		return aabb;
 	}
 }

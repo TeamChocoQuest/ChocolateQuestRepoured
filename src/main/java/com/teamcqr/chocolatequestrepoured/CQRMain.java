@@ -122,7 +122,7 @@ public class CQRMain
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if(Reference.CONFIG_HELPER.buildWall()) {
+		if(Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
@@ -159,8 +159,8 @@ public class CQRMain
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
 		
-		Reference.CONFIG_HELPER.loadValues(configFile);
-		Reference.BLOCK_PLACING_THREADS.resetThreads(Reference.CONFIG_HELPER.getBlockPlacerThreadCount());
+		Reference.CONFIG_HELPER_INSTANCE.loadValues(configFile);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
 		
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		

@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQDataUtil;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
 
@@ -315,6 +316,18 @@ public class EventsHandler
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if(!e.getWorld().isRemote) {
+			//Stop export threads
+			if(!CQStructure.runningExportThreads.isEmpty()) {
+				for(Thread t : CQStructure.runningExportThreads) {
+					try {
+						t.stop();
+					} catch(Exception ex) {
+						
+					}
+				}
+				CQStructure.runningExportThreads.clear();
+			}
+			//Let the protection system save its stuff to the files
 			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
 				ProtectionHandler.PROTECTION_HANDLER.saveData(e.getWorld());
 			}

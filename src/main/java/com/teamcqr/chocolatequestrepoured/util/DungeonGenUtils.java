@@ -28,7 +28,7 @@ public class DungeonGenUtils {
 			bplistTMP.add(bp);
 			//One Task contains 50 blocks to place
 			if(counter % entriesPerPartList == 0) {
-				Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+				Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 					
 					@Override
 					public void run() {
@@ -47,7 +47,7 @@ public class DungeonGenUtils {
 			}
 			counter++;
 		}
-		Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 			
 			@Override
 			public void run() {
