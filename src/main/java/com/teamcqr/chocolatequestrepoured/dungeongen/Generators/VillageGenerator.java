@@ -32,7 +32,7 @@ import net.minecraftforge.common.MinecraftForge;
  */
 public class VillageGenerator implements IDungeonGenerator{
 	
-	//TODO remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
+	//DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 	
 	private VillageDungeon dungeon;
 
@@ -57,16 +57,32 @@ public class VillageGenerator implements IDungeonGenerator{
 		BlockPos start = new BlockPos(x, y, z);
 		this.startPos = new BlockPos(start);
 		this.worldIn = world;
+		int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 		for(int i = 0; i < this.chosenStructures.size(); i++) {
-			int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+			if(!dungeon.placeInCircle() && i > 0) {
+				vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
+			}
 			Vec3i v = new Vec3i(vX, 0, 0);
 			Double degrees = ((Integer)new Random().nextInt(360)).doubleValue();
 			if(this.dungeon.placeInCircle()) {
 				degrees = 360.0 / this.chosenStructures.size();
 				degrees *= i;
+				
+				//System.out.println("Angle: " + degrees);
 			}
 			v = VectorUtil.rotateVectorAroundY(v, degrees);
+			//System.out.println("Vector: " + v.toString());
 			BlockPos newPos = start.add(v);
+			while(positionConflicts(newPos) && i > 0 && !dungeon.placeInCircle()) {
+				degrees = ((Integer)new Random().nextInt(360)).doubleValue();
+				if(this.dungeon.placeInCircle()) {
+					degrees = 360.0 / this.chosenStructures.size();
+					degrees *= i;
+				}
+				v = VectorUtil.rotateVectorAroundY(v, degrees);
+				
+				newPos = start.add(v);
+			}
 			int yNew = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(newPos), newPos.getX(), newPos.getZ(), true);
 			
 			BlockPos calculatedPos = new BlockPos(newPos.getX(), yNew, newPos.getZ());
@@ -74,6 +90,15 @@ public class VillageGenerator implements IDungeonGenerator{
 				this.structurePosList.add(calculatedPos);
 			}
 		}
+	}
+
+	private boolean positionConflicts(BlockPos newPos) {
+		for(BlockPos pIn : structurePosList) {
+			if(Math.abs(pIn.getDistance(newPos.getX(), pIn.getY(), newPos.getZ())) < (new Double((new Integer(dungeon.getMinDistance()).doubleValue() *0.9D )))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
