@@ -23,7 +23,7 @@ public class WallPartTower implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER.getWallTopY();
+		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY();
 	}
 
 	@Override
@@ -74,13 +74,13 @@ public class WallPartTower implements IWallPart {
 			}*/
 			final List<BlockPos> posL = new ArrayList<BlockPos>(innerBlocks);
 			innerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {
 					
 					for(BlockPos p : posL) {
-						world.setBlockState(p, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, Reference.CONFIG_HELPER_INSTANCE.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
 					}
 					
 				}
@@ -91,7 +91,7 @@ public class WallPartTower implements IWallPart {
 			}*/
 			final List<BlockPos> posL2 = new ArrayList<BlockPos>(outerWallBlocks);
 			outerWallBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {
@@ -108,7 +108,7 @@ public class WallPartTower implements IWallPart {
 			}*/
 			final List<BlockPos> posL3 = new ArrayList<BlockPos>(outerTowerBlocks);
 			outerTowerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {

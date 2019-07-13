@@ -23,7 +23,7 @@ public class WallPartRailingWall implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER.getWallTopY() - 12;
+		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY() - 12;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class WallPartRailingWall implements IWallPart {
 			}*/
 			final List<BlockPos> posL = new ArrayList<BlockPos>(railingBlocks);
 			railingBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {

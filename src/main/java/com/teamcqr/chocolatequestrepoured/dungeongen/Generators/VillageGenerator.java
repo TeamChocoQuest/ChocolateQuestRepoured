@@ -309,11 +309,11 @@ public class VillageGenerator implements IDungeonGenerator{
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if(this.dungeon.isCoverBlockEnabled()) {
 			for(CQStructure structure : this.toGenerate.keySet()) {
-				int startX = this.toGenerate.get(structure).getX() - structure.getSizeX() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
-				int startZ = this.toGenerate.get(structure).getZ() - structure.getSizeZ() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				int startX = this.toGenerate.get(structure).getX() - structure.getSizeX() /3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
+				int startZ = this.toGenerate.get(structure).getZ() - structure.getSizeZ() /3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
 				
-				int endX = this.toGenerate.get(structure).getX() + structure.getSizeX() + structure.getSizeX() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
-				int endZ = this.toGenerate.get(structure).getZ() + structure.getSizeZ() + structure.getSizeZ() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+				int endX = this.toGenerate.get(structure).getX() + structure.getSizeX() + structure.getSizeX() /3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
+				int endZ = this.toGenerate.get(structure).getZ() + structure.getSizeZ() + structure.getSizeZ() /3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
 				
 				for(int iX = startX; iX <= endX; iX++) {
 					for(int iZ = startZ; iZ <= endZ; iZ++) {

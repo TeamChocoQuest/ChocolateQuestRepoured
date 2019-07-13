@@ -12,7 +12,7 @@ public class Reference
 	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.CommonProxy";
 	public static final String DUNGEON_REGISTRY = "com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry";
 	public static final String DUNGEON_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator";
-	public static final String WALL_TERRAIN_POPULATOR = "om.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator";
+	public static final String WALL_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator";
 	
 	public static final int EXPORTER_GUI_ID = 1;
 	public static final int SPAWNER_GUI_ID = 2;
@@ -35,7 +35,7 @@ public class Reference
 	// Moved to CONFIG_HELPER
 	//public static final double SPAWNER_RANGE = 25.0D;
 	
-	public static final ConfigFileHelper CONFIG_HELPER = new ConfigFileHelper();
+	public static final ConfigFileHelper CONFIG_HELPER_INSTANCE = new ConfigFileHelper();
 	
-	public static final MultiThreadController BLOCK_PLACING_THREADS = new MultiThreadController(0); 
+	public static final MultiThreadController BLOCK_PLACING_THREADS_INSTANCE = new MultiThreadController(0); 
 }
