@@ -10,9 +10,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 03.07.2019
- * Developed by jdawg3636
+ * Written 12.07.2019 by jdawg3636
  * GitHub: https://github.com/jdawg3636
+ *
+ * Original (Old) Version Copyright (c) 29.04.2019 MrMarnic
+ * GitHub: https://github.com/MrMarnic
  */
 public class ProtectedRegion {
 
