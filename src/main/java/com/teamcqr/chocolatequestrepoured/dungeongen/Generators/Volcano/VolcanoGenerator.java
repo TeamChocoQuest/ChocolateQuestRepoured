@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.BrickFortress.EntranceBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper.EStairSection;
@@ -345,7 +346,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 						ex.printStackTrace();
 					}
 					if(resLoc != null) {
-						chest.setLootTable(resLoc, world.getSeed());
+						long seed = WorldDungeonGenerator.getSeed(world, x +pos.getX(), z +pos.getZ());
+						chest.setLootTable(resLoc, seed);
 					}
 				}
 			}
@@ -457,15 +459,15 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			BlockPos p = blocks.get(blockIndex);
 			int chance = rdm.nextInt(100) +1;
 			
-			if(chance >= 95) {
+			if(chance >= 99) {
 				//DIAMOND
 				diamonds.add(p);
 			} else
-			if(chance >= 90) {
+			if(chance >= 95) {
 				//EMERALD
 				emeralds.add(p);
 			} else
-			if(chance >= 75) {
+			if(chance >= 90) {
 				//GOLD
 				golds.add(p);
 			} else
