@@ -45,7 +45,7 @@ public class CQStructure {
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	
-	//TODO: move structure origin to the center of it -> NOPE
+	//TODO: move structure origin to the center of it
 	
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
 
