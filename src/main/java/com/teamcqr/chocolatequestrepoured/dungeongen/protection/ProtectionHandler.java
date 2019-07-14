@@ -84,12 +84,11 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void eventHandleExplosion(ExplosionEvent.Start e) {
 
-        // Check explosion pos against all active regions and cancel if overlapping
+        // Check explosion pos against all active regions
         for( ProtectedRegion region : activeRegions ) {
-
             if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
 
-                // Allow TNT, block all other exploders
+                // Allow TNT, cancel if any other exploder
                 if ( !(ForgeReflectionHelper.safeGetFieldValue(e.getExplosion(), "exploder", "field_77283_e") instanceof EntityTNTPrimed ) ) {
                     e.setCanceled(true);
                 }
@@ -98,16 +97,11 @@ public class ProtectionHandler {
         }
 
     }
-
     /*
     // Not preventing for the time being due to a limitation in Forge
     // https://www.minecraftforge.net/forum/topic/72896-1122-fire-tick-event/
     @SubscribeEvent
-    public void eventHandleFireSpread(Event e) {
-
-        e.doStuff();
-
-    }
+    public void eventHandleFireSpread(Event e) {}
     */
 
     @SubscribeEvent
