@@ -1,9 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.util.ForgeReflectionHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -48,11 +52,6 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
 
-        // Debug
-        System.out.println(e.getPos());
-        System.out.println(e.getSize());
-
-        // Temp
         activeRegions.add(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
 
     }
@@ -82,19 +81,23 @@ public class ProtectionHandler {
 
     }
 
-    /*
-    // Not preventing for the time being due to a limitation in Forge
-    // e.getExplosion().exploder has private access
     @SubscribeEvent
     public void eventHandleExplosion(ExplosionEvent.Start e) {
 
-        // Allow TNT, block all other exploders
-        if(e.getExplosion().exploder instanceof EntityTNTPrimed) {
-            e.setCanceled(true);
+        // Check explosion pos against all active regions and cancel if overlapping
+        for( ProtectedRegion region : activeRegions ) {
+
+            if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
+
+                // Allow TNT, block all other exploders
+                if ( !(ForgeReflectionHelper.safeGetFieldValue(e.getExplosion(), "exploder", "field_77283_e") instanceof EntityTNTPrimed ) ) {
+                    e.setCanceled(true);
+                }
+
+            }
         }
 
     }
-    */
 
     /*
     // Not preventing for the time being due to a limitation in Forge
