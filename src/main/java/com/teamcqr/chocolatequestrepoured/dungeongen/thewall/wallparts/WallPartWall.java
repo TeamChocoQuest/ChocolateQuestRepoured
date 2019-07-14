@@ -22,7 +22,7 @@ public class WallPartWall implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER.getWallTopY() - 7;
+		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY() - 7;
 	}
 
 	@Override
@@ -59,13 +59,13 @@ public class WallPartWall implements IWallPart {
 			}*/
 			final List<BlockPos> posL = new ArrayList<BlockPos>(innerBlocks);
 			innerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {
 					
 					for(BlockPos p : posL) {
-						world.setBlockState(p, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, Reference.CONFIG_HELPER_INSTANCE.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
 					}
 					
 				}
@@ -76,7 +76,7 @@ public class WallPartWall implements IWallPart {
 			}*/
 			final List<BlockPos> posL2 = new ArrayList<BlockPos>(outerBlocks);
 			outerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS.addTask(new Runnable() {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 				
 				@Override
 				public void run() {

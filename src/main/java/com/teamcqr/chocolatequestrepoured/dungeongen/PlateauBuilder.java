@@ -21,7 +21,7 @@ public class PlateauBuilder {
 	Block structureBlock = Blocks.STONE;
 	Block structureTopBlock = Blocks.GRASS;
 
-	public int wallSize = Reference.CONFIG_HELPER.getSupportHillWallSize();
+	public int wallSize = Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize();
 
 	public void load(Block support, Block top) {
 		structureBlock = support;
