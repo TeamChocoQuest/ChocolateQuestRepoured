@@ -210,10 +210,10 @@ public class DungeonRegistry {
 	}
 	
 	public int getDungeonDistance() {
-		return Reference.CONFIG_HELPER.getDungeonDistance();
+		return Reference.CONFIG_HELPER_INSTANCE.getDungeonDistance();
 	}
 	public int getDungeonSpawnDistance() {
-		return Reference.CONFIG_HELPER.getDungeonSpawnDistance();
+		return Reference.CONFIG_HELPER_INSTANCE.getDungeonSpawnDistance();
 	}
 	
 	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {

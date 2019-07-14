@@ -71,11 +71,11 @@ public class SimplePasteGenerator implements IDungeonGenerator{
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if(this.dungeon.isCoverBlockEnabled()) {
-			int startX = x - this.structure.getSizeX() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
-			int startZ = z - this.structure.getSizeZ() /3 - Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+			int startX = x - this.structure.getSizeX() /3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
+			int startZ = z - this.structure.getSizeZ() /3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
 			
-			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
-			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() /3 + Reference.CONFIG_HELPER.getSupportHillWallSize() /2;
+			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() /3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
+			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() /3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() /2;
 			
 			for(int iX = startX; iX <= endX; iX++) {
 				for(int iZ = startZ; iZ <= endZ; iZ++) {
