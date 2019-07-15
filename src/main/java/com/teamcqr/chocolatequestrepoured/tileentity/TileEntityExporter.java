@@ -8,6 +8,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityExporter extends TileEntitySyncClient implements ITickable
 {
@@ -81,10 +83,12 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
 	{
-		CQStructure structure = new CQStructure(this.structureName, true);
-		structure.setAuthor(authorName);
-		
-		structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+		if(!world.isRemote) {
+			CQStructure structure = new CQStructure(this.structureName, true);
+			structure.setAuthor(authorName);
+			
+			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+		}
 	}
 	
 	@Override
