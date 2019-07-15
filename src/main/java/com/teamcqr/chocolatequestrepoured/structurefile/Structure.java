@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -37,10 +38,16 @@ public class Structure extends Template {
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
 	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
 	
+	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
+	
 	private int part_id;
 	
 	public Structure() {
 		super();
+	}
+	
+	public void setNewBannerPattern(EBanners pattern) {
+		this.newBannerPattern = pattern;
 	}
 	
 	public Structure(int part_id) {
@@ -246,7 +253,7 @@ public class Structure extends Template {
 		super.addBlocksToWorld(worldIn, pos, templateProcessor, placementIn, flags);
 		
 		//Now we want to place the banners first......
-		//TODO: Wait for banner patterns, then do this
+		//DONE: Wait for banner patterns, then do this
 		if(this.banners != null && !this.banners.isEmpty()) {
 			for(BannerInfo bi : this.banners) {
 				if(bi != null) {
@@ -255,6 +262,9 @@ public class Structure extends Template {
 						TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
 						if(BannerHelper.isCQBanner(banner)) {
 							//TODO: Place replaced banners
+							//TODO: "Clean" the banner
+							//DONE: Repaint the banner
+							banner.setItemValues(newBannerPattern.getBanner(), true);
 						}
 					} catch(ClassCastException ex) {
 					
