@@ -15,6 +15,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -44,6 +45,9 @@ public class CQStructure {
 	private int parts = 0;
 	private String author = "DerToaster98";
 	
+	//TODO: Add methods and fields to replace the old banners
+	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
+	
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	
@@ -56,6 +60,10 @@ public class CQStructure {
 	public CQStructure(String name, boolean hasShield) {
 		this.buildShieldCore = hasShield;
 		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
+	}
+	
+	public void setNewBannerPattern(EBanners pattern) {
+		this.newBannerPattern = pattern;
 	}
 	
 	public CQStructure(File file, boolean hasShield) {
@@ -100,6 +108,7 @@ public class CQStructure {
 									BlockPos offsetVector = NBTUtil.BlockPosFromNBT(part.getCompoundTag("offset"));
 									
 									Structure partStructure = new Structure();
+									partStructure.setNewBannerPattern(newBannerPattern);
 									partStructure.read(part);
 									
 									this.structures.put(offsetVector, partStructure);
