@@ -8,10 +8,98 @@ itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
 itemGroup.ChocolateQuestRepouredBannerTab=Banners
 itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 
+//Banners
+block.minecraft.banner.cqrepoured_cq_wither_eyes.white=White eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.orange=Orange eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.magenta=Magenta eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.light_blue=Light blue eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.yellow=Yellow eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.lime=Light green eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.pink=Pink eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.gray=Gray eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.silver=Silver eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.cyan=Cyan eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.purple=Purple eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.blue=Blue eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.brown=Brown eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.green=Green eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.red=Red eyes of the wither skull
+block.minecraft.banner.cqrepoured_cq_wither_eyes.black=Black eyes of the wither skull
+
+block.minecraft.banner.cqrepoured_cq_wither_skull.white=White wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.orange=Orange wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.magenta=Magenta wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.light_blue=Light blue wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.yellow=Yellow wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.lime=Light green wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.pink=Pink wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.gray=Gray wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.silver=Silver wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.cyan=Cyan wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.purple=Purple wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.blue=Blue wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.brown=Brown wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.green=Green wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.red=Red wither skull
+block.minecraft.banner.cqrepoured_cq_wither_skull.black=Black wither skull
+
+block.minecraft.banner.cqrepoured_cq_fire.white=White flames
+block.minecraft.banner.cqrepoured_cq_fire.orange=Orange flames
+block.minecraft.banner.cqrepoured_cq_fire.magenta=Magenta flames
+block.minecraft.banner.cqrepoured_cq_fire.light_blue=Light blue flames
+block.minecraft.banner.cqrepoured_cq_fire.yellow=Yellow flames
+block.minecraft.banner.cqrepoured_cq_fire.lime=Light green flames
+block.minecraft.banner.cqrepoured_cq_fire.pink=Pink flames
+block.minecraft.banner.cqrepoured_cq_fire.gray=Gray flames
+block.minecraft.banner.cqrepoured_cq_fire.silver=Silver flames
+block.minecraft.banner.cqrepoured_cq_fire.cyan=Cyan flames
+block.minecraft.banner.cqrepoured_cq_fire.purple=Purple flames
+block.minecraft.banner.cqrepoured_cq_fire.blue=Blue flames
+block.minecraft.banner.cqrepoured_cq_fire.brown=Brown flames
+block.minecraft.banner.cqrepoured_cq_fire.green=Green flames
+block.minecraft.banner.cqrepoured_cq_fire.red=Red flames
+block.minecraft.banner.cqrepoured_cq_fire.black=Black flames
+
+block.minecraft.banner.cqrepoured_cq_emerald.white=White emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.orange=Orange emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.magenta=Magenta emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.light_blue=Light blue emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.yellow=Yellow emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.lime=Light green emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.pink=Pink emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.gray=Gray emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.silver=Silver emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.cyan=Cyan emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.purple=Purple emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.blue=Blue emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.brown=Brown emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.green=Green emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.red=Red emerald gem
+block.minecraft.banner.cqrepoured_cq_emerald.black=Black emerald gem
+
+block.minecraft.banner.cqrepoured_cq_bones.white=White bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.orange=Orange bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.magenta=Magenta bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.light_blue=Light blue bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.yellow=Yellow bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.lime=Light green bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.pink=Pink bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.gray=Gray bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.silver=Silver bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.cyan=Cyan bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.purple=Purple bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.blue=Blue bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.brown=Brown bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.green=Green bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.red=Red bones of the dead
+block.minecraft.banner.cqrepoured_cq_bones.black=Black bones of the dead
+
+
 //Gui
 gui.drops.name=Drops
 gui.backpack.name=Backpack
 gui.alchemy_bag.name=Alchemy Bag
+description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
 
 //Other
 item.potion_healing.name=Healing Potion
@@ -263,7 +351,6 @@ description.turtle_armor_charging.name=Ability on cooldown, Remaining time:
 description.healing_potion.name=Drink to restore 2 hearts.
 description.teleport_stone.name=A mystical object created by an ancient race. Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right-click to remove the saved location.
 description.teleport_stone_position.name=Current Position:
-description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
 description.staff_fire.name=The flames consume those who cross your path, a simple right-click and they'll feel your wrath. Also lights torches.
 description.staff_spider.name=Right-click to shoot your goo, my dude.
 description.staff_gun.name=It's a gun on a stick. Man, those dwarves are geniuses.

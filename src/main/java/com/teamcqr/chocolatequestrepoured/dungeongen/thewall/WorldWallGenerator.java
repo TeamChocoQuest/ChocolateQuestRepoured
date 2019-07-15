@@ -27,17 +27,20 @@ public class WorldWallGenerator implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
 			IChunkProvider chunkProvider) {
+		if(world.isRemote) {
+			return;
+		}
 		// Check if it is the wall region
 		if (isWallRegion(chunkX, chunkZ, world)) {
 			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
 		}
 		// Z is the z value where the wall is -> generates the wall
-		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER.getWallSpawnDistance())) {
+		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance())) {
 			IWallPart wallPart = null;
 			IWallPart railingPart = null;
 			// GENERATE THE WALL
 			// Check wether it should construct a wall part or a tower
-			if (chunkX % Reference.CONFIG_HELPER.getWallTowerDistance() == 0) {
+			if (chunkX % Reference.CONFIG_HELPER_INSTANCE.getWallTowerDistance() == 0) {
 				// Build tower
 				wallPart = new WallPartTower();
 				railingPart = new WallPartRailingTower();
@@ -58,7 +61,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 	
 	private boolean isWallRegion(int chunkX, int chunkZ, World world) {
 		//If the wall is even enabled -> continue
-		if(!Reference.CONFIG_HELPER.buildWall()) {
+		if(!Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
 			return false;
 		}
 		//Wall is enabled -> check farther
@@ -73,11 +76,11 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		//z is < 0 --> north
 		//Check if the coords are farther south than the wall
-		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() -8))) {
+		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance() -8))) {
 			return false;
 		}
 		//Check if the coords are farther north than the wall
-		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER.getWallSpawnDistance() +8))) {
+		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance() +8))) {
 			return false;
 		}
 		//It is in the region of the wall

@@ -32,6 +32,8 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * GitHub: https://github.com/DerToaster98
  */
 public class CQStructure {
+	
+	public static List<Thread> runningExportThreads = new ArrayList<>();
 
 	private File dataFile;
 	
@@ -45,7 +47,7 @@ public class CQStructure {
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	
-	//TODO: move structure origin to the center of it -> NOPE
+	//TODO: move structure origin to the center of it
 	
 	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
 
@@ -264,7 +266,8 @@ public class CQStructure {
 		root.setTag("parts", partsTag);
 		//System.out.println("Saving to file...");
 		//saveToFile(root);
-		Thread fileSaveThread = new Thread(new Runnable() {
+		Thread fileSaveThread = null;
+		fileSaveThread = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
@@ -274,8 +277,12 @@ public class CQStructure {
 				if(placer != null) {
 					placer.sendMessage(new TextComponentString("Exported " + dataFile.getName() + " successfully!"));
 				}
+				if(CQStructure.runningExportThreads.contains(Thread.currentThread())) {
+					CQStructure.runningExportThreads.remove(Thread.currentThread());
+				}
 			}
 		});
+		CQStructure.runningExportThreads.add(fileSaveThread);
 		fileSaveThread.setDaemon(true);
 		fileSaveThread.start();
 	}

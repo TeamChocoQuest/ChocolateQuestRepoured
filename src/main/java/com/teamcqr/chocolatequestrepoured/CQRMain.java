@@ -12,8 +12,10 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionEventH
 import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHandler;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
+import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -57,7 +59,7 @@ public class CQRMain
 			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
-	
+	//Tab with all the blocks
 	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab")
 	{
 		@Override
@@ -66,6 +68,7 @@ public class CQRMain
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
+	//Tab that holds all banner designs loaded
 	public static CreativeTabs CQRBannersTab = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
 		
 		@Override
@@ -75,13 +78,14 @@ public class CQRMain
 		@Override
 		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> itemList) {
 			List<ItemStack> banners = new ArrayList<ItemStack>();
-			banners = BannerHandler.addBannersToTabs();
+			//banners = BannerHandler.addBannersToTabs();
+			banners = BannerHelper.addBannersToTabs();
 			if(banners != null && !banners.isEmpty()) {
 				for(ItemStack stack : banners) itemList.add(stack);
 			}
 		};
 	};
-	
+	//Tab that holds placers for all dungeons
 	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
 		
 		@Override
@@ -89,7 +93,7 @@ public class CQRMain
 			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
-	
+	//Tab that holds all dungeon building things (chests + exporter)
 	public static CreativeTabs CQRExporterChestTab = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
 		
 		@Override
@@ -118,38 +122,45 @@ public class CQRMain
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if(Reference.CONFIG_HELPER.buildWall()) {
+		if(Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
-		
+
 		//Instantiating the ELootTable class
 		try {
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
 			if(resLoc != null) {
-				System.out.println("ELootTable instantiated successfully!");
+				System.out.println("Loot tables instantiated successfully!");
 				LootTableLoader ltl = new LootTableLoader();
 				System.out.println("Loading the loot configs...");
 				ltl.loadConfigs();
 			}
 		} catch (Exception e) {
-			System.err.println("WARNING: Failed to instantiate the loot enum or to exchange the files!!");
+			System.err.println("WARNING: Failed to instantiate the loot tables or to exchange the files!!");
 			e.printStackTrace();
 		}
-		
+		//Instantiating the banners
 		try {
-			BannerHandler.initPatterns();
+			//BannerHandler.initPatterns();
+			for(EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
+				cqPattern.getPattern();
+			}
 		} catch(Exception ex) {
-			System.err.println("WARNING: Failed to instantiate the banner enum!!");
+			System.err.println("WARNING: Failed to instantiate the banners!!");
 			ex.printStackTrace();
 		}
 
 		//Registers event handler
 		MinecraftForge.EVENT_BUS.register(new ProtectionEventHandler());
+
+		SmeltingHandler.init();
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
-		Reference.CONFIG_HELPER.loadValues(configFile);
+		
+		Reference.CONFIG_HELPER_INSTANCE.loadValues(configFile);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
 		
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		

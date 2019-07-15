@@ -23,7 +23,7 @@ public class WallPartTower implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER.getWallTopY();
+		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY();
 	}
 
 	@Override
@@ -69,17 +69,56 @@ public class WallPartTower implements IWallPart {
 		//Places the blocks at the calculated positions
 		if(!outerWallBlocks.isEmpty() && !outerTowerBlocks.isEmpty() && !innerBlocks.isEmpty()) {
 			//Inner Obsidian core
-			for(BlockPos pos : innerBlocks) {
+			/*for(BlockPos pos : innerBlocks) {
 				world.setBlockState(pos, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
-			}
+			}*/
+			final List<BlockPos> posL = new ArrayList<BlockPos>(innerBlocks);
+			innerBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL) {
+						world.setBlockState(p, Reference.CONFIG_HELPER_INSTANCE.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+					}
+					
+				}
+			});
 			//Outer Stoneblock cover
-			for(BlockPos pos : outerWallBlocks) {
+			/*for(BlockPos pos : outerWallBlocks) {
 				world.setBlockState(pos, Blocks.STONEBRICK.getDefaultState());
-			}
+			}*/
+			final List<BlockPos> posL2 = new ArrayList<BlockPos>(outerWallBlocks);
+			outerWallBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL2) {
+						world.setBlockState(p, Blocks.STONEBRICK.getDefaultState());
+					}
+					
+				}
+			});
 			//Outer andesite blocks
-			for(BlockPos pos : outerTowerBlocks) {
+			/*for(BlockPos pos : outerTowerBlocks) {
 				world.setBlockState(pos, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH));
-			}
+			}*/
+			final List<BlockPos> posL3 = new ArrayList<BlockPos>(outerTowerBlocks);
+			outerTowerBlocks.clear();
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					
+					for(BlockPos p : posL3) {
+						world.setBlockState(p, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH));
+					}
+					
+				}
+			});
 		}
 	}
 
