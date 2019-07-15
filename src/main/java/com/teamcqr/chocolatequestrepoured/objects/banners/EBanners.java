@@ -9,10 +9,12 @@ import net.minecraft.tileentity.BannerPattern;
 
 public enum EBanners {
 	
+	//TODO: Move banner name to lang files
+	
 	//DONE: Add the cq-blank design to all!!
 	PIRATE_BANNER(EnumDyeColor.BLACK, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.SKULL}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.WHITE}, "Flag Of Piracy"),
 	WALKER_BANNER(EnumDyeColor.SILVER, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.BRICKS, EBannerPatternsCQ.WITHER_SKULL_EYES.getPattern(), EBannerPatternsCQ.WITHER_SKULL.getPattern(), EBannerPatternsCQ.WITHER_SKULL.getPattern()}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.GRAY, EnumDyeColor.CYAN, EnumDyeColor.BLACK, EnumDyeColor.BLACK}, "Nightwatch"),
-	PIGMAN_BANNER(EnumDyeColor.RED, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), EBannerPatternsCQ.FIRE.getPattern()}, new EnumDyeColor[] {EnumDyeColor.YELLOW}, "Combine"),
+	PIGMAN_BANNER(EnumDyeColor.RED, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), EBannerPatternsCQ.FIRE.getPattern()}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.YELLOW}, "Pigman"),
 	ENDERMEN_BANNER(EnumDyeColor.MAGENTA, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.TRIANGLE_BOTTOM, BannerPattern.TRIANGLE_TOP}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.BLACK, EnumDyeColor.BLACK}, "Enderman"),
 	ENDERMEN_BANNER2(EnumDyeColor.MAGENTA, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.SQUARE_TOP_RIGHT, BannerPattern.SQUARE_BOTTOM_LEFT}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.BLACK, EnumDyeColor.BLACK}, "Enderman"),
 	NPC_BANNER(EnumDyeColor.RED, new BannerPattern[] {EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.FLOWER, BannerPattern.STRIPE_CENTER, EBannerPatternsCQ.EMERALD.getPattern()}, new EnumDyeColor[] {EnumDyeColor.WHITE, EnumDyeColor.YELLOW, EnumDyeColor.RED, EnumDyeColor.LIME}, "Merchants"),
@@ -35,6 +37,7 @@ public enum EBanners {
 	}
 
 	public ItemStack getBanner() {
+		System.out.println("Creating banner item for banner: " + this.toString());
 		final NBTTagList patternList = new NBTTagList();
 		
 		for(int i = 0; i < this.patternList.length; i++) {
