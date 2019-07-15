@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.util.ForgeReflectionHelper;
-import net.minecraft.entity.Entity;
+import com.teamcqr.chocolatequestrepoured.util.intrusive.IntrusiveModificationHelper;
+import net.minecraft.block.BlockFire;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -89,7 +89,7 @@ public class ProtectionHandler {
             if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
 
                 // Allow TNT, cancel if any other exploder
-                if ( !(ForgeReflectionHelper.safeGetFieldValue(e.getExplosion(), "exploder", "field_77283_e") instanceof EntityTNTPrimed ) ) {
+                if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getExplosion(), "exploder", "field_77283_e") instanceof EntityTNTPrimed ) ) {
                     e.setCanceled(true);
                 }
 
@@ -97,12 +97,23 @@ public class ProtectionHandler {
         }
 
     }
-    /*
-    // Not preventing for the time being due to a limitation in Forge
-    // https://www.minecraftforge.net/forum/topic/72896-1122-fire-tick-event/
+
     @SubscribeEvent
-    public void eventHandleFireSpread(Event e) {}
-    */
+    public void eventHandleFireTick(BlockEvent.NeighborNotifyEvent e) {
+
+        // Check BlockPos against all active regions
+        for( ProtectedRegion region : activeRegions ) {
+            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
+
+                // Cancel if instanceof BlockFire
+                if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getState().getBlock(), "exploder", "field_77283_e") instanceof BlockFire) ) {
+                    e.setCanceled(true);
+                }
+
+            }
+        }
+
+    }
 
     @SubscribeEvent
     public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
