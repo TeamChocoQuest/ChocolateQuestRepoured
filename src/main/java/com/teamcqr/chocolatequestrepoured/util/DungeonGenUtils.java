@@ -141,9 +141,9 @@ public class DungeonGenUtils {
 	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world, int dungeonSeparation) {
 		if(CQRMain.dungeonRegistry.getCoordinateSpecificsMap() != null && CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
 			for(BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
-				Chunk chunk = world.getChunkFromBlockCoords(dunPos);
-				BlockPos chunkPos = new BlockPos(chunk.x, pos.getY(), chunk.z);
-				if(chunkPos.getDistance(pos.getX(), chunkPos.getY(), pos.getZ()) < dungeonSeparation) {
+				//Chunk chunk = world.getChunkFromBlockCoords(dunPos);
+				BlockPos chunkPos = new BlockPos(Math.abs(dunPos.getX() /16), 0, Math.abs(dunPos.getZ() /16));
+				if(Math.abs(chunkPos.getDistance(Math.abs(pos.getX()), 0, Math.abs(pos.getZ()))) < dungeonSeparation) {
 					return false;
 				}
 			}
