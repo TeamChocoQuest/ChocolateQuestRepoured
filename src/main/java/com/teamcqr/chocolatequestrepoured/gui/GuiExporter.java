@@ -110,8 +110,9 @@ public class GuiExporter extends GuiScreen
 
 			if(this.saveStructOnExit) 
 			{
-				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
 				System.out.println("Saving structure...");
+				//TODO: Rewrite this to be a container and to be server side
+				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
 			}
 		}
 		super.onGuiClosed();

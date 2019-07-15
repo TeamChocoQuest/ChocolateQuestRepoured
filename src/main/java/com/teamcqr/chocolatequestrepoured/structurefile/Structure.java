@@ -101,15 +101,54 @@ public class Structure extends Template {
 			}
 			//DONE: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
 			//after filtering, remove the entries and add them into their currect lists
+			
 			List<Template.BlockInfo> removeEntries = new ArrayList<Template.BlockInfo>();
 			for(int i = 0; i < blocks.size(); i++) {
 				Template.BlockInfo bi = blocks.get(i);
 				Block currentBlock = bi.blockState.getBlock();
+				
 				//TODO: Fix bug: vanilla containers have no inventory?!?!
+				//Problem: Does not even get the data from the super call ?!?!
+				//Cause of it: chests item map is empty ???
+				//Problem begins here: The chest tiledata's contents only contain air ?!?!
+				
+				/**
+				 * Fix: Rewrite the exporter tile to be a container and run this server side where it shoudl run!
+				 */
+				
+				//Tiles
+				/*if(bi.tileentityData != null) {
+					TileEntity tile = worldIn.getTileEntity(startPos.add(bi.pos));
+					//System.out.println("Pos + startPos: " + startPos.add(bi.pos).toString());
+					//System.out.println("Pos: " + bi.pos.toString());
+					NBTTagCompound nbttagcompound = tile.writeToNBT(new NBTTagCompound());
+                    nbttagcompound.removeTag("x");
+                    nbttagcompound.removeTag("y");
+                    nbttagcompound.removeTag("z");
+                    //bi.tileentityData = nbttagcompound;
+                    Field tagField = null;
+                    try {
+						tagField = Template.BlockInfo.class.getDeclaredField("tileentityData");
+					} catch (NoSuchFieldException e) {
+						try {
+							tagField = Template.BlockInfo.class.getDeclaredField("field_186244_c");
+						} catch (NoSuchFieldException e1) {
+							e1.printStackTrace();
+						}
+					}
+                    tagField.setAccessible(true);
+                    try {
+						tagField.set(bi, nbttagcompound);
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+					}
+                    tagField.setAccessible(false);
+				}*/
+				
 				//Banner - Floor
 				if(Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
 					//DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					TileEntity te = worldIn.getTileEntity(bi.pos);
+					TileEntity te = worldIn.getTileEntity(startPos.add(bi.pos));
 					if(te != null && te instanceof TileEntityBanner) {
 						if(DungeonGenUtils.isCQBanner((TileEntityBanner)te)) {
 							BannerInfo bai = new BannerInfo(bi.pos);
@@ -120,7 +159,7 @@ public class Structure extends Template {
 				//Wallbanner
 				if(Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
 					//DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					TileEntity te = worldIn.getTileEntity(bi.pos);
+					TileEntity te = worldIn.getTileEntity(startPos.add(bi.pos));
 					if(te != null && te instanceof TileEntityBanner) {
 						if(DungeonGenUtils.isCQBanner((TileEntityBanner)te)) {
 							BannerInfo bai = new BannerInfo(bi.pos);
@@ -261,8 +300,9 @@ public class Structure extends Template {
 					try {
 						TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
 						if(BannerHelper.isCQBanner(banner)) {
-							//TODO: Place replaced banners
-							//TODO: "Clean" the banner
+							//TODO: Set banners new base color
+							//DONE: Place replaced banners
+							//DONE: "Clean" the banner
 							//DONE: Repaint the banner
 							banner.setItemValues(newBannerPattern.getBanner(), true);
 						}
