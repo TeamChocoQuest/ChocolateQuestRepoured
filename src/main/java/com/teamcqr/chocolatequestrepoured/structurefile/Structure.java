@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -91,7 +92,7 @@ public class Structure extends Template {
 					e.printStackTrace();
 				}
 			}
-			//TODO: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
+			//DONE: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
 			//after filtering, remove the entries and add them into their currect lists
 			List<Template.BlockInfo> removeEntries = new ArrayList<Template.BlockInfo>();
 			for(int i = 0; i < blocks.size(); i++) {
@@ -100,18 +101,24 @@ public class Structure extends Template {
 				//TODO: Fix bug: vanilla containers have no inventory?!?!
 				//Banner - Floor
 				if(Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
-					//TODO: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					if(DungeonGenUtils.isCQBanner()) {
-						BannerInfo bai = new BannerInfo(bi.pos);
-						this.banners.add(bai);
+					//DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
+					TileEntity te = worldIn.getTileEntity(bi.pos);
+					if(te != null && te instanceof TileEntityBanner) {
+						if(DungeonGenUtils.isCQBanner((TileEntityBanner)te)) {
+							BannerInfo bai = new BannerInfo(bi.pos);
+							this.banners.add(bai);
+						}
 					}
 				}
 				//Wallbanner
 				if(Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
-					//TODO: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					if(DungeonGenUtils.isCQBanner()) {
-						BannerInfo bai = new BannerInfo(bi.pos);
-						this.banners.add(bai);
+					//DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
+					TileEntity te = worldIn.getTileEntity(bi.pos);
+					if(te != null && te instanceof TileEntityBanner) {
+						if(DungeonGenUtils.isCQBanner((TileEntityBanner)te)) {
+							BannerInfo bai = new BannerInfo(bi.pos);
+							this.banners.add(bai);
+						}
 					}
 				}
 				
@@ -245,10 +252,10 @@ public class Structure extends Template {
 				if(bi != null) {
 					BlockPos bannerPos = transformedBlockPos(placementIn, bi.getPos()).add(pos);
 					try {
-						@SuppressWarnings("unused")
 						TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
-						//TODO: Set banner design
-						//banner.writeToNBT(compound)
+						if(BannerHelper.isCQBanner(banner)) {
+							//TODO: Place replaced banners
+						}
 					} catch(ClassCastException ex) {
 					
 					}
