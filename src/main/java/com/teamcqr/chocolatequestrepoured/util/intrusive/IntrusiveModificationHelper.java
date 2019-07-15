@@ -1,23 +1,22 @@
-package com.teamcqr.chocolatequestrepoured.util;
+package com.teamcqr.chocolatequestrepoured.util.intrusive;
 
 import java.lang.reflect.Field;
 
 /**
- * Designed to help minimize repetitive code elsewhere in the mod to account
- * for name differences between dev environment and release environment when
- * using Java's reflection API
+ * Abstracts away the use of intrusive modding methods such as ASM or Reflection API
+ * At the moment this class has very limited functionality, all of which is based upon reflection. Much more is planned in this area.
  *
- * Use http://export.mcpbot.bspk.rs/stable/ for name reference
+ * Use http://export.mcpbot.bspk.rs/stable/ for name references
  * MCP Name = development environment
  * Searge Name = compiled/release environment
  *
  * @author jdawg3636
- * @version 12/07/2019
+ * @version 14/07/2019
  */
-public class ForgeReflectionHelper {
+public class IntrusiveModificationHelper {
 
-    // Prevent instantiation
-    private ForgeReflectionHelper() {}
+    // Prevent instantiation (all methods are static)
+    private IntrusiveModificationHelper() {}
 
     /**
      * Returns a field's value, regardless of accessibility status
@@ -31,12 +30,12 @@ public class ForgeReflectionHelper {
         // Attempt retrieval using MCP name
         try {
             field = instanceToAccess.getClass().getDeclaredField(mcpFieldName);
-        } catch(Exception ex) {}
+        } catch(Exception ignore) {}
 
         // Attempt retrieval using Searge name
         try {
             field = instanceToAccess.getClass().getDeclaredField(seargeFieldName);
-        } catch(Exception ex) {}
+        } catch(Exception ignore) {}
 
         // Access
         try {
