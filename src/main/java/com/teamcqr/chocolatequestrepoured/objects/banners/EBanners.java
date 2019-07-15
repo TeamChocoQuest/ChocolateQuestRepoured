@@ -9,6 +9,7 @@ import net.minecraft.tileentity.BannerPattern;
 
 public enum EBanners {
 	
+	//TODO: Add the cq-blank design to all!!
 	PIRATE_BANNER(EnumDyeColor.BLACK, new BannerPattern[] {BannerPattern.SKULL}, new EnumDyeColor[] {EnumDyeColor.WHITE}),
 	WALKER_BANNER(EnumDyeColor.SILVER, new BannerPattern[] {BannerPattern.BRICKS, EBannerPatternsCQ.WITHER_SKULL_EYES.getPattern(), EBannerPatternsCQ.WITHER_SKULL.getPattern(), EBannerPatternsCQ.WITHER_SKULL.getPattern()}, new EnumDyeColor[] {EnumDyeColor.GRAY, EnumDyeColor.CYAN, EnumDyeColor.BLACK, EnumDyeColor.BLACK}),
 	PIGMAN_BANNER(EnumDyeColor.RED, new BannerPattern[] {EBannerPatternsCQ.FIRE.getPattern()}, new EnumDyeColor[] {EnumDyeColor.YELLOW}),
