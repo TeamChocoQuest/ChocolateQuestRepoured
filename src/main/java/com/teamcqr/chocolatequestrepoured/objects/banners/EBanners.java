@@ -37,7 +37,7 @@ public enum EBanners {
 	}
 
 	public ItemStack getBanner() {
-		System.out.println("Creating banner item for banner: " + this.toString());
+		//System.out.println("Creating banner item for banner: " + this.toString());
 		final NBTTagList patternList = new NBTTagList();
 		
 		for(int i = 0; i < this.patternList.length; i++) {
