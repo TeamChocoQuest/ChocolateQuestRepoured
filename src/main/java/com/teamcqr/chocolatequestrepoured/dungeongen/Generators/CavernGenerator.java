@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -129,7 +130,8 @@ public class CavernGenerator implements IDungeonGenerator {
 				ex.printStackTrace();
 			}
 			if(resLoc != null) {
-				chest.setLootTable(resLoc, world.getSeed());
+				long seed = WorldDungeonGenerator.getSeed(world, x, z);
+				chest.setLootTable(resLoc, seed);
 			}
 		}
 	}

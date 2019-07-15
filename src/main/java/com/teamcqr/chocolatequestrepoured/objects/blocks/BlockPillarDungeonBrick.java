@@ -25,7 +25,10 @@ public class BlockPillarDungeonBrick extends BlockRotatedPillar implements IHasM
 		ModItems.ITEMS.add(new ItemBlock(this).setRegistryName(this.getRegistryName()));
 		
 		setSoundType(SoundType.STONE);
-		setHardness(-1F);
+		//setResistance(999999F);
+		setResistance(Float.MAX_VALUE);
+		//setHardness(999999F);
+		setHardness(Float.MAX_VALUE);
 	}
 	
 	@Override

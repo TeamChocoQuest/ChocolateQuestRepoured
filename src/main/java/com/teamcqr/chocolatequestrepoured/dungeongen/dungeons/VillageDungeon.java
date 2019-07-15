@@ -94,6 +94,7 @@ public class VillageDungeon extends DungeonBase {
 			this.maxBuilding = PropertyFileHelper.getIntProperty(prop, "maxbuildings", 10);
 			
 			this.minDistance = PropertyFileHelper.getIntProperty(prop, "mindistance", 20);
+			//System.out.println("Min Distance: " + minDistance);
 			this.maxDistance = PropertyFileHelper.getIntProperty(prop, "maxdistance", 40);
 			
 			this.placeInCircle = PropertyFileHelper.getBooleanProperty(prop, "circle", false);

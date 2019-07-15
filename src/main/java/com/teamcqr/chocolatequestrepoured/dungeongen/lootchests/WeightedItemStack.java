@@ -48,7 +48,7 @@ public class WeightedItemStack {
 		LootUtils.addItemToTable(table,
 				Item.getByNameOrId(this.itemName),
 				this.weight,
-				1 + new Random().nextInt(Reference.CONFIG_HELPER.getMaxLootTablePoolRolls()),
+				1 + new Random().nextInt(Reference.CONFIG_HELPER_INSTANCE.getMaxLootTablePoolRolls()),
 				((float) this.weight / 100.0F),
 				this.minCount,
 				this.maxCount,
