@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	
 	//TODO: rewrite as a container
-	//If that does not work, create a packet that tells the server to save the structure
+	//If that does not work, create a packet that tells the server to save the structure -> Saving bug fixed
 	public BlockExporter(String name, Material material) 
 	{
 		super(name, material);
