@@ -17,8 +17,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockExporter extends BlockBase implements ITileEntityProvider 
-{
+public class BlockExporter extends BlockBase implements ITileEntityProvider {
+	
+	//TODO: rewrite as a container
+	//If that does not work, create a packet that tells the server to save the structure
 	public BlockExporter(String name, Material material) 
 	{
 		super(name, material);

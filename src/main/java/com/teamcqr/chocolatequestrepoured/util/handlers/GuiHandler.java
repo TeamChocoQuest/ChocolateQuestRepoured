@@ -38,6 +38,10 @@ public class GuiHandler implements IGuiHandler
 			return new ContainerSpawner(player.inventory, (TileEntitySpawner)world.getTileEntity(new BlockPos(x,y,z)));
 		}
 		
+		if(ID == Reference.EXPORTER_GUI_ID) {
+			//TODO: Create ExporterContainer
+		}
+		
 		if(ID == Reference.BACKPACK_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.BACKPACK)
 		{
 			return new ContainerBackpack(player.inventory, new InventoryBackpack(player.getHeldItemMainhand()));
@@ -47,6 +51,7 @@ public class GuiHandler implements IGuiHandler
 		{
 			return new ContainerAlchemyBag(player.inventory, new InventoryAlchemyBag(player.getHeldItemMainhand()));
 		}
+		
 		return null;
 	}
 
@@ -77,6 +82,7 @@ public class GuiHandler implements IGuiHandler
 		{
 			return new GuiAlchemyBag(player.inventory, new InventoryAlchemyBag(player.getHeldItemMainhand()));
 		}
+		
 		return null;
 	}
 }
