@@ -107,46 +107,10 @@ public class Structure extends Template {
 				Template.BlockInfo bi = blocks.get(i);
 				Block currentBlock = bi.blockState.getBlock();
 				
-				//TODO: Fix bug: vanilla containers have no inventory?!?!
+				//DONE: Fix bug: vanilla containers have no inventory?!?!
 				//Problem: Does not even get the data from the super call ?!?!
 				//Cause of it: chests item map is empty ???
 				//Problem begins here: The chest tiledata's contents only contain air ?!?!
-				
-				/**
-				 * Fix: Rewrite the exporter tile to be a container and run this server side where it shoudl run!
-				 * --> Needs to run on server side, not client side!
-				 * 
-				 * Rewriting as a container should help
-				 */
-				
-				//Tiles
-				/*if(bi.tileentityData != null) {
-					TileEntity tile = worldIn.getTileEntity(startPos.add(bi.pos));
-					//System.out.println("Pos + startPos: " + startPos.add(bi.pos).toString());
-					//System.out.println("Pos: " + bi.pos.toString());
-					NBTTagCompound nbttagcompound = tile.writeToNBT(new NBTTagCompound());
-                    nbttagcompound.removeTag("x");
-                    nbttagcompound.removeTag("y");
-                    nbttagcompound.removeTag("z");
-                    //bi.tileentityData = nbttagcompound;
-                    Field tagField = null;
-                    try {
-						tagField = Template.BlockInfo.class.getDeclaredField("tileentityData");
-					} catch (NoSuchFieldException e) {
-						try {
-							tagField = Template.BlockInfo.class.getDeclaredField("field_186244_c");
-						} catch (NoSuchFieldException e1) {
-							e1.printStackTrace();
-						}
-					}
-                    tagField.setAccessible(true);
-                    try {
-						tagField.set(bi, nbttagcompound);
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
-					}
-                    tagField.setAccessible(false);
-				}*/
 				
 				//Banner - Floor
 				if(Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
