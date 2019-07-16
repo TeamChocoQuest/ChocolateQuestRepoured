@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
@@ -87,6 +90,9 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 			
 			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
 		}
+		System.out.println("Sending packet...");
+		CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+		System.out.println("Packet sent!");
 	}
 	
 	@Override

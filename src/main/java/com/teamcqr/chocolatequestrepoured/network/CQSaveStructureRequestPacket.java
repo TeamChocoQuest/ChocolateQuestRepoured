@@ -12,17 +12,18 @@ public class CQSaveStructureRequestPacket implements IMessage {
 	private String author;
 	private String structureName;
 	private boolean hasShield;
+	private boolean usePartMode;
 	
-	public CQSaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean hasShield) {
+	public CQSaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean hasShield, boolean partMode) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.author = authorName;
 		this.structureName = name;
 		this.hasShield = hasShield;
+		this.usePartMode = partMode;
 	}
 	
-	public CQSaveStructureRequestPacket() {
-	}
+	public CQSaveStructureRequestPacket() {}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
@@ -47,6 +48,9 @@ public class CQSaveStructureRequestPacket implements IMessage {
 		
 		//Shield Bool
 		hasShield = buf.readBoolean();
+		
+		//Part Mode
+		usePartMode = buf.readBoolean();
 	}
 
 	@Override
@@ -69,6 +73,28 @@ public class CQSaveStructureRequestPacket implements IMessage {
 		
 		//Shield bool
 		buf.writeBoolean(hasShield);
+		
+		//Part Mode
+		buf.writeBoolean(usePartMode);
 	}
 
+	public BlockPos getStartPos() {
+		return startPos;
+	}
+	public BlockPos getEndPos() {
+		return endPos;
+	}
+	public Boolean doesHaveShield() {
+		return hasShield;
+	}
+	public String getAuthor() {
+		return author;
+	}
+	public String getName() {
+		return structureName;
+	}
+	public Boolean usePartMode() {
+		return usePartMode;
+	}
+	
 }
