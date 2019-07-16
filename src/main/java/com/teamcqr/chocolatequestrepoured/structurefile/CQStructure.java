@@ -45,7 +45,7 @@ public class CQStructure {
 	private int parts = 0;
 	private String author = "DerToaster98";
 	
-	//TODO: Add methods and fields to replace the old banners
+	//DONE: Add methods and fields to replace the old banners
 	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
 	
 	@Nullable

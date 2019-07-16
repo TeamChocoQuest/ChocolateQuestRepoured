@@ -114,6 +114,9 @@ public class Structure extends Template {
 				
 				/**
 				 * Fix: Rewrite the exporter tile to be a container and run this server side where it shoudl run!
+				 * --> Needs to run on server side, not client side!
+				 * 
+				 * Rewriting as a container should help
 				 */
 				
 				//Tiles
