@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import java.util.ArrayList;
 
 /**
@@ -9,5 +9,5 @@ import java.util.ArrayList;
  */
 public interface ICastleAddon
 {
-    public void generate(ArrayList<BlockInfo> blocks);
+    public void generate(ArrayList<BlockPlacement> blocks);
 }

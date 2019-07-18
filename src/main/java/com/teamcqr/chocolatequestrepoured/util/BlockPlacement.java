@@ -13,18 +13,18 @@ import net.minecraft.world.World;
  *
  * Description: A helper class to store a block's position and state.
  */
-public class BlockInfo
+public class BlockPlacement
 {
     public BlockPos position;
     public IBlockState state;
 
-    public BlockInfo(BlockPos position, IBlockState state)
+    public BlockPlacement(BlockPos position, IBlockState state)
     {
         this.position = position;
         this.state = state;
     }
 
-    public BlockInfo(int x, int y, int z, IBlockState state)
+    public BlockPlacement(int x, int y, int z, IBlockState state)
     {
         this.position = new BlockPos(x, y, z);
         this.state = state;

@@ -51,10 +51,10 @@ public class CastleGenerator implements IDungeonGenerator{
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		//Builds the support hill;
-		if(this.dungeon.doBuildSupportPlatform()) {
+		if(dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
-			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.generateSupportHill(new Random(), world, x, y + this.dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
+			supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
+			supportBuilder.generateSupportHill(new Random(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
 		}
 
 		int sizeX;
@@ -74,6 +74,9 @@ public class CastleGenerator implements IDungeonGenerator{
 		quarterSizeZ = maxSize / 4;
 		sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 		sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+		//round down to nearest multiple of room size
+		sizeX -= (sizeX % dungeon.getRoomSize());
+		sizeZ -= (sizeZ % dungeon.getRoomSize());
 
 		// Each iteration through this loop is one "layer" of castle - each layer is generated the same way, just with a shrinking build area
 		while (Math.min(sizeX, sizeZ) > roomSize)
@@ -103,6 +106,8 @@ public class CastleGenerator implements IDungeonGenerator{
 			buildAreaZ = sizeZ;
 			sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+			sizeX = roundToRoomSize(sizeX);
+			sizeZ = roundToRoomSize(sizeZ);
 
 			totalFloors += layerFloors;
 			y += (floorHeight + 1) * layerFloors;
@@ -176,6 +181,8 @@ public class CastleGenerator implements IDungeonGenerator{
 			{
 				subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
 				subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
+				subSizeX = roundToRoomSize(subSizeX);
+				subSizeZ = roundToRoomSize(subSizeZ);
 			}
 			else
 			{
@@ -198,8 +205,10 @@ public class CastleGenerator implements IDungeonGenerator{
 
 			roomToBuildX -= subSizeX;
 			roomToBuildZ -= subSizeZ;
-			x = subX;
-			z = subZ;
+			sizeX = subSizeX;
+			sizeZ = subSizeZ;
+			x = (facing == EnumFacing.EAST) ? subX + subSizeX : subX;
+			z = (facing == EnumFacing.SOUTH) ? subZ + subSizeZ : subZ;
 		}
 	}
 
@@ -292,6 +301,11 @@ public class CastleGenerator implements IDungeonGenerator{
 			default:
 				return EnumFacing.WEST;
 		}
+	}
+
+	private int roundToRoomSize(int size)
+	{
+		return Math.max((size - (size % dungeon.getRoomSize())), 0);
 	}
 
 }

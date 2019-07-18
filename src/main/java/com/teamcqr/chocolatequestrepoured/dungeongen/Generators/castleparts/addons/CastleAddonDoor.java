@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
-import java.rmi.activation.ActivationGroup_Stub;
 import java.util.ArrayList;
 
 public class CastleAddonDoor implements ICastleAddon
@@ -28,7 +28,7 @@ public class CastleAddonDoor implements ICastleAddon
     private Orientation orientation;
     private DoorType type;
 
-    public CastleAddonDoor(int x, int y, int z, int width, int height, DoorType type)
+    public CastleAddonDoor(int x, int y, int z, int width, int height, DoorType type, boolean horizontal)
     {
         this.startX = x;
         this.startY = y;
@@ -36,15 +36,17 @@ public class CastleAddonDoor implements ICastleAddon
         this.width = width;
         this.height = height;
         this.type = type;
+        this.orientation = (horizontal) ? Orientation.HORIZONTAL : Orientation.VERTICAL;
     }
 
     @Override
-    public void generate(ArrayList<BlockInfo> blocks)
+    public void generate(ArrayList<BlockPlacement> blocks)
     {
         switch (type)
         {
             case FENCE_BORDER:
             {
+                generateFenceBorder(blocks);
                 break;
             }
             case EMPTY:
@@ -56,7 +58,7 @@ public class CastleAddonDoor implements ICastleAddon
         }
     }
 
-    private void generateEmpty(ArrayList<BlockInfo> blocks)
+    private void generateEmpty(ArrayList<BlockPlacement> blocks)
     {
         for (int i = 0; i < width; i++)
         {
@@ -64,11 +66,38 @@ public class CastleAddonDoor implements ICastleAddon
             {
                 if (orientation == Orientation.HORIZONTAL)
                 {
-                    blocks.add(new BlockInfo(startX + i, startY + j, startZ, Blocks.AIR.getDefaultState()));
+                    blocks.add(new BlockPlacement(startX + i, startY + j, startZ, Blocks.AIR.getDefaultState()));
                 }
                 else //vertical
                 {
-                    blocks.add(new BlockInfo(startX, startY + j, startZ + i, Blocks.AIR.getDefaultState()));
+                    blocks.add(new BlockPlacement(startX, startY + j, startZ + i, Blocks.AIR.getDefaultState()));
+                }
+            }
+        }
+    }
+
+    private void generateFenceBorder(ArrayList<BlockPlacement> blocks)
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                IBlockState blockToBuild;
+                if (i == 0 || i == width - 1 || j == height - 1)
+                {
+                    blockToBuild = Blocks.DARK_OAK_FENCE.getDefaultState();
+                }
+                else
+                {
+                    blockToBuild = Blocks.AIR.getDefaultState();
+                }
+                if (orientation == Orientation.HORIZONTAL)
+                {
+                    blocks.add(new BlockPlacement(startX + i, startY + j, startZ, blockToBuild));
+                }
+                else //vertical
+                {
+                    blocks.add(new BlockPlacement(startX, startY + j, startZ + i, blockToBuild));
                 }
             }
         }

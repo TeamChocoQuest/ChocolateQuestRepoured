@@ -1,9 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonRoof;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.ICastleAddon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
-import net.minecraft.block.BlockStairs;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -11,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -51,10 +51,6 @@ public class CastlePartSquare implements ICastlePart
     {
         int roomsX = Math.max(1, sizeX / dungeon.getRoomSize());
         int roomsZ = Math.max(1, sizeZ / dungeon.getRoomSize());
-        int roomSizeX = sizeX / roomsX;
-        int roomSizeZ = sizeZ / roomsZ;
-        //int lastRoomOffsetX = sizeX - roomsX * roomSizeX;
-        //int lastRoomOffsetZ = sizeZ - roomsZ * roomSizeZ;
         int currentY;
         int floorHeight = dungeon.getFloorHeight();
         int x = start.getX();
@@ -62,7 +58,8 @@ public class CastlePartSquare implements ICastlePart
         int z = start.getZ();
         IBlockState blockToBuild;
 
-        ArrayList<BlockInfo> buildList = new ArrayList<>();
+        ArrayList<BlockPlacement> buildList = new ArrayList<>();
+        ArrayList<ICastleAddon> addonList = new ArrayList<>();
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors + ". Facing = " + facing.toString());
 
@@ -78,10 +75,10 @@ public class CastlePartSquare implements ICastlePart
                 {
                     // place a floor
                     blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
-                    buildList.add(new BlockInfo(x + i, currentY, z + j, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY, z + j, blockToBuild));
                     // place a ceiling
                     blockToBuild = this.dungeon.getWallBlock().getDefaultState();
-                    buildList.add(new BlockInfo(x + i, currentY + floorHeight, z + j, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY + floorHeight, z + j, blockToBuild));
 
                 }
             }
@@ -98,17 +95,18 @@ public class CastlePartSquare implements ICastlePart
                             ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
                     {
                         blockToBuild = Blocks.GLASS_PANE.getDefaultState();
-                        buildList.add(new BlockInfo(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockInfo(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
                     }
                     else
                     {
                         blockToBuild = dungeon.getWallBlock().getDefaultState();
-                        buildList.add(new BlockInfo(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockInfo(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
                     }
                 }
             }
+
             //Add z walls
             for (int i = 0; i < sizeZ; i++)
             {
@@ -120,16 +118,24 @@ public class CastlePartSquare implements ICastlePart
                             ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
                     {
                         blockToBuild = Blocks.GLASS_PANE.getDefaultState();
-                        buildList.add(new BlockInfo(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockInfo(x + sizeX - 1, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x + sizeX - 1, currentY + j, z + i, blockToBuild));
                     }
                     else
                     {
                         blockToBuild = dungeon.getWallBlock().getDefaultState();
-                        buildList.add(new BlockInfo(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockInfo(x + sizeX - 1, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x + sizeX - 1, currentY + j, z + i, blockToBuild));
                     }
                 }
+            }
+
+            if (currentFloor == 0)
+            {
+                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ - 1, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+                addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+                addonList.add(new CastleAddonDoor(x + sizeX - 1, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
         }
 
@@ -149,14 +155,25 @@ public class CastlePartSquare implements ICastlePart
             roofType = CastleAddonRoof.RoofType.WALKABLE;
         }
         CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX, sizeZ, roofType, facing);
-        roof.generate(buildList);
+        addonList.add(roof);
+
+        if (!addonList.isEmpty())
+        {
+            for (ICastleAddon addon : addonList)
+            {
+                addon.generate(buildList);
+            }
+        }
 
 
-        if(!buildList.isEmpty()) {
-            for(BlockInfo blockPlace : buildList) {
+        if(!buildList.isEmpty())
+        {
+            for(BlockPlacement blockPlace : buildList)
+            {
                 blockPlace.build(world);
             }
         }
+
     }
 
     @Override

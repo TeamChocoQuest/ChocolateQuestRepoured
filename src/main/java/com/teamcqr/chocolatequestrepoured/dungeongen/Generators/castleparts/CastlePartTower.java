@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.Circle2D;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -10,7 +10,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class CastlePartTower implements ICastlePart
@@ -66,7 +65,7 @@ public class CastlePartTower implements ICastlePart
     @Override
     public void generatePart(World world)
     {
-        ArrayList<BlockInfo> buildList = new ArrayList<>();
+        ArrayList<BlockPlacement> buildList = new ArrayList<>();
 
         //System.out.println("Building a square tower at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors + ". Facing = " + facing.toString());
 
@@ -80,7 +79,7 @@ public class CastlePartTower implements ICastlePart
         }
 
         if(!buildList.isEmpty()) {
-            for(BlockInfo blockPlace : buildList) {
+            for(BlockPlacement blockPlace : buildList) {
                 blockPlace.build(world);
             }
         }
@@ -93,7 +92,7 @@ public class CastlePartTower implements ICastlePart
         return true;
     }
 
-    private void assembleSquare(ArrayList<BlockInfo> buildList)
+    private void assembleSquare(ArrayList<BlockPlacement> buildList)
     {
         int currentY;
         int floorHeight = dungeon.getFloorHeight();
@@ -115,8 +114,8 @@ public class CastlePartTower implements ICastlePart
                 for (int j = 0; j < sideLen; j++)
                 {
                     // place a floor
-                    buildList.add(new BlockInfo(x + i, currentY, z + j, blockToBuild));
-                    buildList.add(new BlockInfo(x + i, currentY + floorHeight, z + j, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY, z + j, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY + floorHeight, z + j, blockToBuild));
 
                 }
             }
@@ -125,8 +124,8 @@ public class CastlePartTower implements ICastlePart
             {
                 for (int j = 0; j < floorHeight; j++)
                 {
-                    buildList.add(new BlockInfo(x + i, currentY + j, z, blockToBuild));
-                    buildList.add(new BlockInfo(x + i, currentY + j, z + sideLen - 1, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
+                    buildList.add(new BlockPlacement(x + i, currentY + j, z + sideLen - 1, blockToBuild));
                 }
             }
             //Add z walls
@@ -134,8 +133,8 @@ public class CastlePartTower implements ICastlePart
             {
                 for (int j = 0; j < floorHeight; j++)
                 {
-                    buildList.add(new BlockInfo(x, currentY + j, z + i, blockToBuild));
-                    buildList.add(new BlockInfo(x + sideLen - 1, currentY + j, z + i, blockToBuild));
+                    buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
+                    buildList.add(new BlockPlacement(x + sideLen - 1, currentY + j, z + i, blockToBuild));
                 }
             }
         }
@@ -145,7 +144,7 @@ public class CastlePartTower implements ICastlePart
         roof.generate(buildList);
     }
 
-    private void assembleRound(ArrayList<BlockInfo> buildList)
+    private void assembleRound(ArrayList<BlockPlacement> buildList)
     {
         int currentY;
         int floorHeight = dungeon.getFloorHeight();
@@ -188,14 +187,14 @@ public class CastlePartTower implements ICastlePart
 
             for (Circle2D.Coord coord : floorCoords)
             {
-                buildList.add(new BlockInfo(coord.x, currentY, coord.z, blockToBuild));
-                buildList.add(new BlockInfo(coord.x, currentY + floorHeight, coord.z, blockToBuild));
+                buildList.add(new BlockPlacement(coord.x, currentY, coord.z, blockToBuild));
+                buildList.add(new BlockPlacement(coord.x, currentY + floorHeight, coord.z, blockToBuild));
             }
             for (Circle2D.Coord coord : wallCoords)
             {
                 for (int i = 0; i < floorHeight + 1; i++)
                 {
-                    buildList.add(new BlockInfo(coord.x, currentY + i, coord.z, blockToBuild));
+                    buildList.add(new BlockPlacement(coord.x, currentY + i, coord.z, blockToBuild));
                 }
             }
 
