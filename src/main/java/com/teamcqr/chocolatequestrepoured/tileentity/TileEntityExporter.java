@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -8,8 +10,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityExporter extends TileEntitySyncClient implements ITickable
 {
@@ -89,6 +89,9 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 			
 			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
 		}
+		System.out.println("Sending structure save request packet...");
+		CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+		System.out.println("Packet sent!");
 	}
 	
 	@Override
