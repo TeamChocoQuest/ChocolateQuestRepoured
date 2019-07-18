@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -48,7 +48,7 @@ public class CastleAddonRoof implements ICastleAddon
     }
 
     @Override
-    public void generate(ArrayList<BlockInfo> roofBlocks)
+    public void generate(ArrayList<BlockPlacement> roofBlocks)
     {
         switch (type)
         {
@@ -68,7 +68,7 @@ public class CastleAddonRoof implements ICastleAddon
         }
     }
 
-    private void generateWalkable(ArrayList<BlockInfo> roofBlocks)
+    private void generateWalkable(ArrayList<BlockPlacement> roofBlocks)
     {
         IBlockState state = Blocks.STONEBRICK.getDefaultState();
         int x = xStart;
@@ -79,21 +79,21 @@ public class CastleAddonRoof implements ICastleAddon
         {
             if (this.structFacing != EnumFacing.SOUTH)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x + i, y, z), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y, z), state));
             }
             if (this.structFacing != EnumFacing.NORTH)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x + i, y, z + sizeZ - 1), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y, z + sizeZ - 1), state));
             }
             if (i % 2 == 0 || i == sizeX - 1)
             {
                 if (this.structFacing != EnumFacing.SOUTH)
                 {
-                    roofBlocks.add(new BlockInfo(new BlockPos(x + i, y + 1, z), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y + 1, z), state));
                 }
                 if (this.structFacing != EnumFacing.NORTH)
                 {
-                    roofBlocks.add(new BlockInfo(new BlockPos(x + i, y + 1, z + sizeZ - 1), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y + 1, z + sizeZ - 1), state));
                 }
             }
         }
@@ -101,32 +101,32 @@ public class CastleAddonRoof implements ICastleAddon
         {
             if (this.structFacing != EnumFacing.EAST)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x, y, z + i), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x, y, z + i), state));
             }
             if (this.structFacing != EnumFacing.WEST)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x + sizeX - 1, y, z + i), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 1, y, z + i), state));
             }
             if (i % 2 == 0 || i == sizeZ - 1)
             {
                 if (this.structFacing != EnumFacing.EAST)
                 {
-                    roofBlocks.add(new BlockInfo(new BlockPos(x, y + 1, z + i), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x, y + 1, z + i), state));
                 }
                 if (this.structFacing != EnumFacing.WEST)
                 {
-                    roofBlocks.add(new BlockInfo(new BlockPos(x + sizeX - 1, y + 1, z + i), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 1, y + 1, z + i), state));
                 }
             }
         }
     }
 
-    private void generateTwoSided(ArrayList<BlockInfo> roofBlocks)
+    private void generateTwoSided(ArrayList<BlockPlacement> roofBlocks)
     {
 
     }
 
-    private void generateFourSided(ArrayList<BlockInfo> roofBlocks)
+    private void generateFourSided(ArrayList<BlockPlacement> roofBlocks)
     {
         int roofX;
         int roofZ;
@@ -144,13 +144,13 @@ public class CastleAddonRoof implements ICastleAddon
             IBlockState state = Blocks.STONEBRICK.getDefaultState();
             for (int i = 0; i < underLenX; i++)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x + i, y, z), state));
-                roofBlocks.add(new BlockInfo((new BlockPos(x + i, y, z + underLenZ - 1)), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y, z), state));
+                roofBlocks.add(new BlockPlacement((new BlockPos(x + i, y, z + underLenZ - 1)), state));
             }
             for (int j = 0; j < underLenZ; j++)
             {
-                roofBlocks.add(new BlockInfo(new BlockPos(x, y, z + j), state));
-                roofBlocks.add(new BlockInfo(new BlockPos(x + underLenX - 1, y, z + j), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x, y, z + j), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + underLenX - 1, y, z + j), state));
             }
 
             roofX = x - 1;
@@ -161,7 +161,7 @@ public class CastleAddonRoof implements ICastleAddon
             //add the north row
             for (int i = 0; i < roofLenX; i++)
             {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ), Blocks.SPRUCE_STAIRS.getDefaultState());
+                BlockPlacement bInfo = new BlockPlacement(new BlockPos(roofX + i, y, roofZ), Blocks.SPRUCE_STAIRS.getDefaultState());
                 bInfo.applyProperty(BlockStairs.FACING, EnumFacing.SOUTH);
 
                 //Apply properties to corner pieces
@@ -179,7 +179,7 @@ public class CastleAddonRoof implements ICastleAddon
             //add the south row
             for (int i = 0; i < roofLenX; i++)
             {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), Blocks.SPRUCE_STAIRS.getDefaultState());
+                BlockPlacement bInfo = new BlockPlacement(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), Blocks.SPRUCE_STAIRS.getDefaultState());
                 bInfo.applyProperty(BlockStairs.FACING, EnumFacing.NORTH);
 
                 //Apply properties to corner pieces
@@ -196,12 +196,12 @@ public class CastleAddonRoof implements ICastleAddon
 
             for (int i = 0; i < roofLenZ; i++)
             {
-                BlockInfo bInfo = new BlockInfo(new BlockPos(roofX, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
+                BlockPlacement bInfo = new BlockPlacement(new BlockPos(roofX, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
                 bInfo.applyProperty(BlockStairs.FACING, EnumFacing.EAST);
 
                 roofBlocks.add(bInfo);
 
-                bInfo = new BlockInfo(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
+                bInfo = new BlockPlacement(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), Blocks.SPRUCE_STAIRS.getDefaultState());
                 bInfo.applyProperty(BlockStairs.FACING, EnumFacing.WEST);
 
                 roofBlocks.add(bInfo);
