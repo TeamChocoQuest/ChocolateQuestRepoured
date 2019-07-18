@@ -15,8 +15,21 @@ import java.lang.reflect.Field;
  */
 public class IntrusiveModificationHelper {
 
+    /*
+     * Setup/Boiler Plate
+     *
+     * plz ignore
+     */
+
     // Prevent instantiation (all methods are static)
     private IntrusiveModificationHelper() {}
+
+    /*
+     * Reflection
+     *
+     * Uses more resources than standard methods, but shouldn't have any
+     * additional consequences in terms of compatibility or stability
+     */
 
     /**
      * Returns a field's value, regardless of accessibility status
@@ -49,5 +62,23 @@ public class IntrusiveModificationHelper {
         return null;
 
     }
+
+    /*
+     * Access Transformers
+     *
+     * Though relatively unintrusive, improper use could theoretically cause
+     * stability/compatibility issues.
+     */
+
+    // Not yet implemented
+
+    /*
+     * ASM
+     *
+     * Extremely intrusive. Can easily cause stability/compatibility issues in addition to the inherent performance penalties.
+     * Should be used only when no other option is available.
+     */
+
+    // Not yet implemented
 
 }
