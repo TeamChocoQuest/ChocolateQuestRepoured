@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.util.intrusive.IntrusiveModificationHelper;
+import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import net.minecraft.block.BlockFire;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
