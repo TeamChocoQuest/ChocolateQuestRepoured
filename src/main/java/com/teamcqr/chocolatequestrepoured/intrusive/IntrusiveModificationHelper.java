@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.intrusive;
+package com.teamcqr.chocolatequestrepoured.intrusive;
 
 import java.lang.reflect.Field;
 
@@ -6,19 +6,19 @@ import java.lang.reflect.Field;
  * Abstracts away the use of intrusive modding methods such as ASM or Reflection API
  * At the moment this class has very limited functionality, all of which is based upon reflection. Much more is planned in this area.
  *
+ * NOTE: In certain use cases, the Forge Access Transformer system can be a viable alternative to this utility.
+ *
  * Use http://export.mcpbot.bspk.rs/stable/ for name references
  * MCP Name = development environment
  * Searge Name = compiled/release environment
  *
  * @author jdawg3636
- * @version 14/07/2019
+ * @version 18/07/2019
  */
 public class IntrusiveModificationHelper {
 
     /*
-     * Setup/Boiler Plate
-     *
-     * plz ignore
+     * Boiler Plate - Please ignore
      */
 
     // Prevent instantiation (all methods are static)
@@ -27,8 +27,8 @@ public class IntrusiveModificationHelper {
     /*
      * Reflection
      *
-     * Uses more resources than standard methods, but shouldn't have any
-     * additional consequences in terms of compatibility or stability
+     * Uses more resources than usual, but shouldn't have any
+     * inherent consequences in terms of compatibility or stability
      */
 
     /**
@@ -64,19 +64,11 @@ public class IntrusiveModificationHelper {
     }
 
     /*
-     * Access Transformers
-     *
-     * Though relatively unintrusive, improper use could theoretically cause
-     * stability/compatibility issues.
-     */
-
-    // Not yet implemented
-
-    /*
      * ASM
      *
-     * Extremely intrusive. Can easily cause stability/compatibility issues in addition to the inherent performance penalties.
-     * Should be used only when no other option is available.
+     * Extremely intrusive and highly discouraged by Forge developers. Can easily
+     * cause stability/compatibility issues in addition to the inherent performance
+     * penalties. Should be used only when no other options are available.
      */
 
     // Not yet implemented
