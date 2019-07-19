@@ -9,7 +9,9 @@ import net.minecraftforge.fml.common.ModMetadata;
 import java.util.Collections;
 
 /**
- * FML: For use in Forge mod list
+ * Used by the CQR IntrusiveModificationHelper for ASM-related tasks
+ * Should not be interacted with directly unless you 1000% know what you're doing
+ * @author jdawg3636
  */
 public class CQRCoremodContainer extends DummyModContainer {
 
@@ -18,7 +20,7 @@ public class CQRCoremodContainer extends DummyModContainer {
     public static CQRCoremodContainer getInstance() { return COREMOD_CONTAINER; }
 
     /**
-     * Configure metadata
+     * Configure coremod metadata
      */
     private CQRCoremodContainer() {
 
