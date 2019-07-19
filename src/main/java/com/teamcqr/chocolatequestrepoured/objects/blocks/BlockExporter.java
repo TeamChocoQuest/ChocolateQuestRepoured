@@ -40,7 +40,9 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta)
 	{
-		return new TileEntityExporter();
+		TileEntity tile = new TileEntityExporter();
+		
+		return tile;
 	}
 	
 	public TileEntityExporter getTileEntity(IBlockAccess world, BlockPos pos) 
