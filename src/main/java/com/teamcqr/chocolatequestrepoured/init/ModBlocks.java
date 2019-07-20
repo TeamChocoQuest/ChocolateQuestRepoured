@@ -133,6 +133,6 @@ public class ModBlocks
 	public static final Block EXPORTER_CHEST_CUSTOM_13 = new BlockExporterChestBase("exporter_chest_custom_13", Material.WOOD);
 	public static final Block EXPORTER_CHEST_CUSTOM_14 = new BlockExporterChestBase("exporter_chest_custom_14", Material.WOOD);
 
-	//Protected recgion
+	//Protected region
 	public static final Block FORCE_FIELD_NEXUS = new BlockForceFieldNexus("force_field_nexus", Material.IRON);
 }

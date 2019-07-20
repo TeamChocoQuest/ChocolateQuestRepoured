@@ -15,9 +15,11 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,6 +27,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 /**
  * Copyright (c) 29.04.2019
@@ -44,6 +47,9 @@ public class CQStructure {
 	private int parts = 0;
 	private String author = "DerToaster98";
 	
+	//DONE: Add methods and fields to replace the old banners
+	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
+	
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	
@@ -56,6 +62,10 @@ public class CQStructure {
 	public CQStructure(String name, boolean hasShield) {
 		this.buildShieldCore = hasShield;
 		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
+	}
+	
+	public void setNewBannerPattern(EBanners pattern) {
+		this.newBannerPattern = pattern;
 	}
 	
 	public CQStructure(File file, boolean hasShield) {
@@ -100,6 +110,7 @@ public class CQStructure {
 									BlockPos offsetVector = NBTUtil.BlockPosFromNBT(part.getCompoundTag("offset"));
 									
 									Structure partStructure = new Structure();
+									partStructure.setNewBannerPattern(newBannerPattern);
 									partStructure.read(part);
 									
 									this.structures.put(offsetVector, partStructure);
@@ -276,6 +287,10 @@ public class CQStructure {
 				System.out.println("Exported file " + dataFile.getName() + " successfully!");
 				if(placer != null) {
 					placer.sendMessage(new TextComponentString("Exported " + dataFile.getName() + " successfully!"));
+				} else {
+					for(EntityPlayerMP playerMP : FMLCommonHandler.instance().getMinecraftServerInstance().getPlayerList().getPlayers()) {
+						playerMP.sendMessage(new TextComponentString("Exported " + dataFile.getName() + " successfully!"));
+					}
 				}
 				if(CQStructure.runningExportThreads.contains(Thread.currentThread())) {
 					CQStructure.runningExportThreads.remove(Thread.currentThread());
