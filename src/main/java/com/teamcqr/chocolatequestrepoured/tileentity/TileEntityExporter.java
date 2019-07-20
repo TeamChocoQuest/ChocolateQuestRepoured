@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -81,10 +83,15 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
 	{
-		CQStructure structure = new CQStructure(this.structureName, true);
-		structure.setAuthor(authorName);
-		
-		structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+		if(!world.isRemote) {
+			CQStructure structure = new CQStructure(this.structureName, true);
+			structure.setAuthor(authorName);
+			
+			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+		}
+		System.out.println("Sending structure save request packet...");
+		CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+		System.out.println("Packet sent!");
 	}
 	
 	@Override

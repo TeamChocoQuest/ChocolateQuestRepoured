@@ -43,7 +43,7 @@ public class BlockForceFieldNexus extends BlockBase implements ITileEntityProvid
         TileEntityForceFieldNexus tile = new TileEntityForceFieldNexus();
         return tile;
     }
-
+/* TODO implement nexus and determine if this is necessary
     @Override
     public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
         super.onBlockHarvested(worldIn, pos, state, player);
@@ -52,7 +52,7 @@ public class BlockForceFieldNexus extends BlockBase implements ITileEntityProvid
             nexus.getRegion().setEnabled(false);
         }
     }
-
+*/
     @Override
     public void registerModels() {
         CQRMain.proxy.registerItemRenderer(Item.getItemFromBlock(this), 0, "inventory");

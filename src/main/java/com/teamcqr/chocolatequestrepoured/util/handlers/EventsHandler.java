@@ -307,8 +307,6 @@ public class EventsHandler
 		if(!e.getWorld().isRemote) {
 			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
 				CQDataUtil.createFolderInWorld("data//CQR",e.getWorld());
-
-				ProtectionHandler.PROTECTION_HANDLER.loadData(e.getWorld());
 			}
 		}
 	}
@@ -322,14 +320,10 @@ public class EventsHandler
 					try {
 						t.stop();
 					} catch(Exception ex) {
-						
+
 					}
 				}
 				CQStructure.runningExportThreads.clear();
-			}
-			//Let the protection system save its stuff to the files
-			if(e.getWorld().provider.getDimensionType()== DimensionType.OVERWORLD) {
-				ProtectionHandler.PROTECTION_HANDLER.saveData(e.getWorld());
 			}
 		}
 	}

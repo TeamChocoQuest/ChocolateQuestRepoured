@@ -19,7 +19,6 @@ public class CommonProxy
 	{
 		EntityHandler.registerEntity();
 		loadDungeons();
-		ProtectionHandler.init();
 	}
 	
 	public void init(FMLInitializationEvent event)
