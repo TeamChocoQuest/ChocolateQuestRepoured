@@ -6,8 +6,6 @@ import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +30,7 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
+		 super.writeToNBT(compound);
 		 compound.setInteger("StartX", startX);
 		 compound.setInteger("StartY", startY);
 		 compound.setInteger("StartZ", startZ);
@@ -39,13 +38,13 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 		 compound.setInteger("EndY", endY);
 		 compound.setInteger("EndZ", endZ);
 		 compound.setString("StructureName", structureName);
-		 System.out.println("Wrote NBT!");
-		 return super.writeToNBT(compound);
+		 return compound;
 	} 
 
 	@Override
 	public void readFromNBT(NBTTagCompound compound)
 	{
+		super.readFromNBT(compound);
 		startX = compound.getInteger("StartX");
 		startY = compound.getInteger("StartY");
 		startZ = compound.getInteger("StartZ");
@@ -53,8 +52,6 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 		endY = compound.getInteger("EndY");
 		endZ = compound.getInteger("EndZ");
 		structureName = compound.getString("StructureName");
-		System.out.println("Read from NBT!");
-		super.readFromNBT(compound);
 	}
 	
 	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode)
@@ -74,16 +71,6 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 	}
 	
 	@Override
-	public void onLoad() {
-		super.onLoad();
-	}
-	
-	@Override
-	public boolean onlyOpsCanSetNbt() {
-		return false;
-	}
-	
-	@Override
 	public void update() {
 		//TODO: make fancy size display thingy
 		if(!world.isRemote && isPlayerInRange(pos.getX(), pos.getY(), pos.getZ(), getMaxRenderDistanceSquared())) {
@@ -92,11 +79,6 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 			//https://www.minecraftforge.net/forum/topic/41255-question-regarding-the-vertexbuffer-and-the-old-tesselator/
 			//http://jabelarminecraft.blogspot.com/p/minecraft-forge-172-quick-tips-gl11-and.html
 		}
-	}
-	
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		super.onDataPacket(net, pkt);
 	}
 	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 

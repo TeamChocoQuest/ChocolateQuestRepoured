@@ -29,8 +29,6 @@ public class GuiExporter extends GuiScreen
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	private GuiCheckBox chbxPartsMode;
 
-	//TODO: Send entered data via packet to the exporter tile
-	
 	public GuiExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) 
 	{
 		this.world = worldIn;
@@ -268,6 +266,5 @@ public class GuiExporter extends GuiScreen
 				this.structureStartPos = startPos;
 			}
 		}
-		
 	}
 } 
