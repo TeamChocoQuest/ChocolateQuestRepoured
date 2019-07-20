@@ -29,8 +29,7 @@ public enum EFaction {
 		return false;
 	}
 	
-	//TODO: Methods to check wether a faction is an ally or an enemy
-	
+	//DONE: Methods to check wether a faction is an ally or an enemy
 	public EReputationStateRough getRelation(ICQREntity e1, ICQREntity e2) {
 		
 		EFaction e1Fac = e1.getFaction();
