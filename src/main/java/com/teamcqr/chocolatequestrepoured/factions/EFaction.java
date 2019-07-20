@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.factions;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 
-public enum EFactions {
+public enum EFaction {
 	
 	UNDEAD(new String[] {"WALKERS", "VILLAGERS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
 	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
@@ -18,18 +18,31 @@ public enum EFactions {
 	;
 	
 	
-	private EFactions(String[] enemies, String[] allies, EReputationState startState) {
+	private EFaction(String[] enemies, String[] allies, EReputationState startState) {
 		//TODO: Create fields and fill them
+	}
+	
+	public boolean isEnemy(EFaction otherFac) {
+		return false;
+	}
+	public boolean isAlly(EFaction otherFac) {
+		return false;
 	}
 	
 	//TODO: Methods to check wether a faction is an ally or an enemy
 	
 	public EReputationStateRough getRelation(ICQREntity e1, ICQREntity e2) {
 		
-		EFactions e1Fac = e1.getFaction();
-		EFactions e2Fac = e2.getFaction();
+		EFaction e1Fac = e1.getFaction();
+		EFaction e2Fac = e2.getFaction();
 		
-		//TODO: Check for allies or enemy
+		if(e1Fac.isAlly(e2Fac) || e2Fac.isAlly(e1Fac)) {
+			return EReputationStateRough.ALLY;
+		}
+		
+		if(e1Fac.isEnemy(e2Fac) || e2Fac.isEnemy(e1Fac)) {
+			return EReputationStateRough.ENEMY;
+		}
 		
 		return EReputationStateRough.NEUTRAL;
 	}

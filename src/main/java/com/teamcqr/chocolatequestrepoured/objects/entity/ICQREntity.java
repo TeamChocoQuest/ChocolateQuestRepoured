@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity;
 
 import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFactions;
+import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 
 import net.minecraft.entity.Entity;
 
 public interface ICQREntity {
 	
-	public EFactions getFaction();
+	public EFaction getFaction();
 	
 	public UUID getUUID();
 	
