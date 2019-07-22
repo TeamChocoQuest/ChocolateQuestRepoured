@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import net.minecraft.block.BlockFire;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -35,12 +36,15 @@ public class ProtectionHandler {
     public void registerRegion(ProtectedRegion region) {
         activeRegions.add(region);
     }
+    public ArrayList<ProtectedRegion> getActiveRegions() {
+        return activeRegions;
+    }
 
     // Detect Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
 
-        activeRegions.add(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
+        registerRegion(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
 
     }
 
@@ -113,6 +117,30 @@ public class ProtectionHandler {
             }
         }
 
+    }
+
+    /*
+     * Util
+     */
+
+    public ArrayList<ProtectedRegion> getActiveRegionsContainingBlockPos(BlockPos position, World world) {
+
+        ArrayList<ProtectedRegion> toReturn = new ArrayList<>();
+
+        // Check all active regions
+        for (ProtectedRegion region : activeRegions) {
+            if(region.checkIfBlockPosInRegion(position, world)) toReturn.add(region);
+        }
+
+        // Return
+        return toReturn;
+
+    }
+
+    public int getLargerRegion(ProtectedRegion a, ProtectedRegion b) {
+        if(a.getRegionVolume() > b.getRegionVolume()) return 1;
+        if(a.getRegionVolume() < b.getRegionVolume()) return 2;
+        return 0; // 0 = Both sizes equal
     }
 
 }
