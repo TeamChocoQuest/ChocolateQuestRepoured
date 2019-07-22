@@ -12,14 +12,14 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
- * Written 12.07.2019 by jdawg3636
+ * Central class responsible for handling all activities related to the protection of regions containing dungeons
+ *
+ * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
- * Original (Old) Version Copyright (c) 29.04.2019 MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * @version 22.07.19
  */
 public class ProtectionHandler {
 
@@ -34,18 +34,6 @@ public class ProtectionHandler {
     // Accessors
     public void registerRegion(ProtectedRegion region) {
         activeRegions.add(region);
-    }
-
-    public ProtectedRegion getProtectedRegionFromUUID(UUID uuidToFind) {
-
-        // Search
-        for( ProtectedRegion protectedRegion : activeRegions ) {
-            if(protectedRegion.getUUID() == uuidToFind) return protectedRegion;
-        }
-
-        // Default
-        return null;
-
     }
 
     // Detect Dungeon Spawn Event

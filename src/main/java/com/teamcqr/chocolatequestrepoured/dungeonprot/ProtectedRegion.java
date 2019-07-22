@@ -1,166 +1,102 @@
 package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Written 12.07.2019 by jdawg3636
+ * Custom type for containing info about a protected region
+ * Intended for use by dungeons but can theoretically be anything
+ *
+ * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
- * Original (Old) Version Copyright (c) 29.04.2019 MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * @version 22.07.19
  */
 public class ProtectedRegion {
 
-    // Region Data
-    private BlockPos NWCorner;
-    private BlockPos SECorner;
-    private World world;
-    private UUID uuid;
+    /*
+     * Variables
+     */
 
-    // Dependencies (Things that will disable ProtectedRegion if destroyed)
-    private ArrayList<Entity> entityBossDependencies;
-    private ArrayList<TileEntityForceFieldNexus> nexusDependencies;
+    // Region Data - Immutable
+    private final BlockPos NWCorner;
+    private final BlockPos SECorner;
+    private final World world;
+
+    // Dependencies (Things that will disable ProtectedRegion if killed/destroyed)
+    private ArrayList<Entity> entityDependencies = new ArrayList<>(); // Likely a dungeon boss
+    private ArrayList<Block> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
 
     // Settings
-    private boolean blockSurvival;
-    private boolean blockCreative;
-    private boolean blockFire;
-    private boolean blockNaturalMobSpawn;
-    private boolean blockPortalSpawn;
+    public boolean preventBlockBreak = true;
+    public boolean preventBlockBreakCreative = false;
+    public boolean preventBlockPlace = true;
+    public boolean preventBlockPlaceCreative = false;
+    public boolean preventExplosionTNT = false;
+    public boolean preventExplosionOther = true;
+    public boolean preventFireSpread = true;
+    public boolean preventNaturalMobSpawn = true;
 
-    // Constructors
-    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, UUID uuid, boolean blockSurvival, boolean blockCreative, boolean blockFire, boolean blockNaturalMobSpawn, boolean blockPortalSpawn) {
+    /*
+     * Constructors
+     */
+
+    // Contains all available region settings
+    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, ArrayList<Entity> entityDependencies, ArrayList<Block> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
+        // Region Data
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
         this.world = world;
-        this.uuid = uuid;
-        this.entityBossDependencies = new ArrayList<Entity>();
-        this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
-        this.blockSurvival = blockSurvival;
-        this.blockCreative = blockCreative;
-        this.blockFire = blockFire;
-        this.blockNaturalMobSpawn = blockNaturalMobSpawn;
-        this.blockPortalSpawn = blockPortalSpawn;
+        // Dependencies
+        this.entityDependencies.addAll(entityDependencies);
+        this.blockDependencies.addAll(blockDependencies);
+        // Protection Settings
+        this.preventBlockBreak = preventBlockBreak;
+        this.preventBlockBreakCreative = preventBlockBreakCreative;
+        this.preventBlockPlace = preventBlockPlace;
+        this.preventBlockPlaceCreative = preventBlockPlaceCreative;
+        this.preventExplosionTNT = preventExplosionTNT;
+        this.preventExplosionOther = preventExplosionOther;
+        this.preventFireSpread = preventFireSpread;
+        this.preventNaturalMobSpawn = preventNaturalMobSpawn;
     }
 
+    // Contains only region data and uses default values for all dependency and protection settings
     public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world) {
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
         this.world = world;
-        this.uuid = UUID.randomUUID();
-        this.entityBossDependencies = new ArrayList<Entity>();
-        this.nexusDependencies = new ArrayList<TileEntityForceFieldNexus>();
-        this.blockSurvival = true;
-        this.blockCreative = false;
-        this.blockFire = true;
-        this.blockNaturalMobSpawn = true;
-        this.blockPortalSpawn = true;
-    }
-
-    // Getters
-    public BlockPos getNWCorner() {
-        return NWCorner;
-    }
-
-    public BlockPos getSECorner() {
-        return SECorner;
-    }
-
-    public World getWorld() {
-        return world;
-    }
-
-    public UUID getUUID() {
-        return uuid;
-    }
-
-    /** @return blockSurvival, blockCreative, blockFire, blockNaturalMobSpawn, blockPortalSpawn */
-    public boolean[] getSettings() {
-        return new boolean[]{blockSurvival, blockCreative, blockFire, blockNaturalMobSpawn, blockPortalSpawn};
-    }
-
-    // Setters & Manipulators
-    public void setNWCorner(BlockPos NWCorner) {
-        this.NWCorner = NWCorner;
-    }
-
-    public void setSECorner(BlockPos SECorner) {
-        this.SECorner = SECorner;
-    }
-
-    public void setWorld(World world) {
-        this.world = world;
-    }
-
-    public void addEntityBossDependency(Entity entityBossDependency) {
-        this.entityBossDependencies.add(entityBossDependency);
-    }
-
-    public void clearEntityBossDependencies() {
-        this.entityBossDependencies.clear();
-    }
-
-    public void addNexusDependency(TileEntityForceFieldNexus nexusDependency) {
-        this.nexusDependencies.add(nexusDependency);
-    }
-
-    public void clearNexusDependencies() {
-        this.nexusDependencies.clear();
-    }
-
-    public void setBlockSurvival(boolean blockSurvival) {
-        this.blockSurvival = blockSurvival;
-    }
-
-    public void setBlockCreative(boolean blockCreative) {
-        this.blockCreative = blockCreative;
-    }
-
-    public void setBlockFire(boolean blockFire) {
-        this.blockFire = blockFire;
-    }
-
-    public void setBlockNaturalMobSpawn(boolean blockNaturalMobSpawn) {
-        this.blockNaturalMobSpawn = blockNaturalMobSpawn;
-    }
-
-    public void setBlockPortalSpawn(boolean blockPortalSpawn) {
-        this.blockPortalSpawn = blockPortalSpawn;
     }
 
     /*
-    // Util
-    public NBTTagCompound getFieldsAsNBT() {
+     * Accessors
+     * Used to view and manipulate the values of private fields
+     */
 
-        NBTTagCompound toReturn = new NBTTagCompound();
-
-        toReturn.setInteger("SWX", NWCorner.getX());
-        toReturn.setInteger("SWY", NWCorner.getY());
-        toReturn.setInteger("SWZ", NWCorner.getZ());
-
-        toReturn.setInteger("NEX", SECorner.getX());
-        toReturn.setInteger("NEY", SECorner.getY());
-        toReturn.setInteger("NEZ", SECorner.getZ());
-
-        toReturn.setUniqueId("UUID", uuid);
-
-        try {
-            toReturn.setString("EntityBossDependencies", new OutputStream().writeObject(this));
-        } catch (Exception e) {
-            System.out.println("[CQR ERROR] EXCEPTION THROWN WHILST SERIALIZING ProtectedRegion:");
-            e.printStackTrace();
-        }
-
-        ByteStre
-        return writeObject();
+    public void addEntityDependency(Entity entity) {
+        entityDependencies.add(entity);
     }
-    */
+
+    public void addBlockDependency(Block block) {
+        blockDependencies.add(block);
+    }
+
+    public ArrayList<Entity> getEntityDependencies() {
+        return entityDependencies;
+    }
+
+    public ArrayList<Block> getBlockDependencies() {
+        return blockDependencies;
+    }
+
+    /*
+     * Util
+     * Convenience methods for performing common tasks
+     */
 
     public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
 
