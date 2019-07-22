@@ -1,24 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.dungeongen.protection.ProtectionHandler;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
-import com.teamcqr.chocolatequestrepoured.util.IHasModel;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockObsidian;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;

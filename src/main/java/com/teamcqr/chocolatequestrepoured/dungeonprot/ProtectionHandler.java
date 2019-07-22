@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
+package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
