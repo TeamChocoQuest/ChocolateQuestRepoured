@@ -73,8 +73,7 @@ public class ProtectedRegion {
     }
 
     /*
-     * Accessors
-     * Used to view and manipulate the values of private fields
+     * Private Field Accessors
      */
 
     public void addEntityDependency(Entity entity) {
@@ -95,7 +94,6 @@ public class ProtectedRegion {
 
     /*
      * Util
-     * Convenience methods for performing common tasks
      */
 
     public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
@@ -116,6 +114,11 @@ public class ProtectedRegion {
         // Default (this means that all disqualifiers failed)
         return true;
 
+    }
+
+    public int getRegionVolume() {
+        // Calculate deltas for x,y,z and multiply results
+        return ( this.SECorner.getX() - this.NWCorner.getX() ) * ( this.SECorner.getY() - this.NWCorner.getY() ) * ( this.SECorner.getZ() - this.NWCorner.getZ() );
     }
 
 }
