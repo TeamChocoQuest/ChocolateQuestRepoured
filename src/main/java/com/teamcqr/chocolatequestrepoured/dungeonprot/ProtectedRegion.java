@@ -99,7 +99,7 @@ public class ProtectedRegion {
     public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
 
         // Check World
-        if(toCheck.getX() < NWCorner.getX()) return false;
+        if(!world.equals(ofBlockPos)) return false;
 
         // Check NW (min)
         if(toCheck.getX() < NWCorner.getX()) return false;
