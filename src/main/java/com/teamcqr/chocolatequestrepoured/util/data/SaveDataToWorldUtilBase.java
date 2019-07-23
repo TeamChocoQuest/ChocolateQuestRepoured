@@ -1,11 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.util.data;
 
-import net.minecraft.nbt.CompressedStreamTools;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /**
  * Abstract class to be implemented by util classes for handling saving to world file for various file formats
