@@ -15,7 +15,8 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import java.util.ArrayList;
 
 /**
- * Central class responsible for handling all activities related to the protection of regions containing dungeons
+ * Central class responsible for handling all activities related to the protection of regions
+ * Intended for use on dungeons but can easily be used for other areas
  *
  * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
@@ -43,9 +44,7 @@ public class ProtectionHandler {
     // Detect Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
-
         registerRegion(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
-
     }
 
     // Handle Protection-Related Events
