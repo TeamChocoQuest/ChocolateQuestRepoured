@@ -6,7 +6,6 @@ import net.minecraft.world.World;
 
 import java.io.File;
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
 
 /**
  * Used to save data to world file in NBT format
