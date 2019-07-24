@@ -80,8 +80,10 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	 */
 	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk) {
 		int radius = structure.getSizeX() > structure.getSizeZ() ? structure.getSizeX() : structure.getSizeZ();
-		radius = Math.abs(radius);
-		radius *= 1.25;
+		
+		//r = sqrt(((Longer side of building) / 2)^2 *2) +5
+		radius = new Double(Math.sqrt(Math.pow((double)radius /2.0D, 2.0D) *2.0D) +5).intValue();
+		
 		BlockPos center = pos.add(-radius, 0, -radius);
 		
 		buildPlatform(center, radius, world);
@@ -103,6 +105,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 		event.setShieldCorePosition(structure.getShieldCorePosition());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
+	
 	private void buildPlatform(BlockPos center, int radius, World world) {
 		List<BlockPos> blocks = new ArrayList<>();
 		int decrementor = 0;
