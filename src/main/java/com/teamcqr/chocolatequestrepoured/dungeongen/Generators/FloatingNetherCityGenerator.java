@@ -4,12 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraftforge.common.MinecraftForge;
 
 public class FloatingNetherCityGenerator implements IDungeonGenerator {
 
@@ -70,6 +78,31 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	 *       ########        3    4
 	 *           
 	 */
+	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk) {
+		int radius = structure.getSizeX() > structure.getSizeZ() ? structure.getSizeX() : structure.getSizeZ();
+		radius = Math.abs(radius);
+		radius *= 1.25;
+		BlockPos center = pos.add(-radius, 0, -radius);
+		
+		buildPlatform(center, radius, world);
+		
+		//DONE: Dig out cave
+		PlateauBuilder builder = new PlateauBuilder();
+		builder.createCave(new Random(), pos, pos.add(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world.getSeed(), world);
+		
+		
+		PlacementSettings settings = new PlacementSettings();
+		settings.setMirror(Mirror.NONE);
+		settings.setRotation(Rotation.NONE);
+		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
+		settings.setIntegrity(1.0F);
+		
+		structure.placeBlocksInWorld(world, pos, settings);
+		
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos(),world);
+		event.setShieldCorePosition(structure.getShieldCorePosition());
+		MinecraftForge.EVENT_BUS.post(event);
+	}
 	private void buildPlatform(BlockPos center, int radius, World world) {
 		List<BlockPos> blocks = new ArrayList<>();
 		int decrementor = 0;
