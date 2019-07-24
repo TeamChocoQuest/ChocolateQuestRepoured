@@ -83,7 +83,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 		BlockPos retPos = new BlockPos(prevIslandPos);
 		
 		while(!structureMap.isEmpty() || !structureMap.containsKey(retPos) || locIsNotFine(retPos)) {
-			
+			//TODO: Calculate new position
 		}
 		
 		return retPos;
