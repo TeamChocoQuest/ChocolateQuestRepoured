@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -23,6 +25,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 
 	private FloatingNetherCity dungeon;
 	private int islandCount = 1;
+	private HashMap<BlockPos, File> structureMap = new HashMap<BlockPos, File>();
 	
 	//This needs to calculate async (island blocks, chain blocks, air blocks)
 	
@@ -37,6 +40,11 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 		// positions are the !!CENTERS!! of the platforms, the structures positions are calculated by the platforms themselves
 		// Radius = sqrt(((Longer side of building) / 2)^2 *2) +5
 		// Chain start pos: diagonal go (radius / 3) * 2 -1 blocks, here start building up the chains...
+		BlockPos nextIslandPos = new BlockPos(x, y, z);
+		
+		for(int i = 0; i < islandCount; i++) {
+			nextIslandPos = getNextIslandPos(nextIslandPos);
+		}
 	}
 
 	@Override
@@ -68,6 +76,27 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		// Unused  or maybe later implemented
 
+	}
+	
+	//calculates a fitting position for the next island
+	private BlockPos getNextIslandPos(BlockPos prevIslandPos) {
+		BlockPos retPos = new BlockPos(prevIslandPos);
+		
+		while(!structureMap.isEmpty() || !structureMap.containsKey(retPos) || locIsNotFine(retPos)) {
+			
+		}
+		
+		return retPos;
+	}
+	private boolean locIsNotFine(BlockPos pos) {
+		for(BlockPos p : structureMap.keySet()) {
+			double dist = pos.getDistance(p.getX(), pos.getY(), p.getZ());
+			dist = Math.abs(dist);
+			if(dist < dungeon.getMinIslandDistance() || dist > dungeon.getMaxIslandDistance() || p.equals(pos)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	//Constructs an Island in this shape:
