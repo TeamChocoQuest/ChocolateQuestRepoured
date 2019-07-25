@@ -261,7 +261,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		}
 
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), chunk.getPos(), world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
