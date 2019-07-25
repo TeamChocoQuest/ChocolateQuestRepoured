@@ -24,6 +24,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -363,6 +364,10 @@ public class CQStructure {
 			}
 		}
 		this.dataFile = dataFile;
+	}
+
+	public Vec3i getSizeAsVec() {
+		return new Vec3i(sizeX, sizeY, sizeZ);
 	}
 
 }
