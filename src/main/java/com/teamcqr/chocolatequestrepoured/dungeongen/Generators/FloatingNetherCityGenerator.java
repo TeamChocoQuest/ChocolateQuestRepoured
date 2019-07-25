@@ -51,7 +51,12 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Builds the platforms
 		// Builds the chains
-		
+		for(BlockPos bp : structureMap.keySet()) {
+			CQStructure structure = new CQStructure(structureMap.get(bp), dungeon.isProtectedFromModifications());
+			BlockPos pastePos = bp.subtract(structure.getSizeAsVec());
+			
+			buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp));
+		}
 	}
 
 	@Override
@@ -130,7 +135,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 		
 		structure.placeBlocksInWorld(world, pos, settings);
 		
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),chunk.getPos(),world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),world);
 		event.setShieldCorePosition(structure.getShieldCorePosition());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
