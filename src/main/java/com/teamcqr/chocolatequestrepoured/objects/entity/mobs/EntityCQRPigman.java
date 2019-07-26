@@ -9,12 +9,14 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
@@ -22,10 +24,14 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_IRON));
-		setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-		setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-		updateActiveHand();
+		this.setSize(1.0F, 2.3F);
+	}
+	
+	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_IRON));
+		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
 	}
 	
 	@Override
@@ -80,6 +86,13 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
     {
         return super.getDeathSound();
     }
+    
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+    	handleArmorBreaking(getHealth(), getMaxHealth(), this);
+    	
+    	return super.attackEntityFrom(source, amount);
+    }
 
 	@Override
 	public void spawnAt(int x, int y, int z) {
@@ -92,5 +105,14 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 			setPosition(x, y, z);
 		}
 	}
+	
+	@Override
+    public void onDeath(DamageSource cause) {
+    	super.onDeath(cause);
+    	
+    	if(cause.getTrueSource() instanceof EntityPlayer) {
+    		onKilled(cause.getTrueSource(), this);
+    	}
+    }
 	
 }

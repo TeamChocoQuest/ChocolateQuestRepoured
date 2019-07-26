@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -63,6 +64,22 @@ public interface ICQREntity {
 				}
 			}
 		}
+	}
+	
+	public default void handleArmorBreaking(float currHP, float maxHP, EntityLiving entityDamaged) {
+		//Armor breaking stuff
+    	//Only 1/4 of health left -> Loose chestplate?
+    	if(currHP / maxHP <= 0.25F) {
+    		
+    	} else 
+    	//Only 1/2 of health left -> Loose pants?
+    	if(currHP / maxHP <= 0.5F) {
+    		
+    	} else
+    	//Only 3/4 of health left -> loose helmet?
+    	if(currHP / maxHP <= 0.75F) {
+    		
+    	}
 	}
 
 	

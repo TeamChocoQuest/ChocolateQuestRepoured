@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
+import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
@@ -9,25 +10,37 @@ import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityVindicator;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
-
+	
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
-		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_PICKAXE, 1));
-		setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET, 1));
-		updateActiveHand();
+		this.setSize(0.55F, 1.4F);
 	}
 
+	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		Item[] pickaxes = new Item[] {Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE};
+		Item[] helmets = new Item[] {Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.CHAINMAIL_HELMET};
+		
+		Random rdm = new Random();
+		
+		this.setItemStackToSlot(rdm.nextBoolean() ? EntityEquipmentSlot.OFFHAND : EntityEquipmentSlot.MAINHAND, new ItemStack(pickaxes[rdm.nextInt(pickaxes.length)], 1));
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(helmets[rdm.nextInt(helmets.length)], 1));
+	}
+	
 	@Override
 	public EFaction getFaction() {
 		return EFaction.DWARVES_AND_GOLEMS;
@@ -91,6 +104,22 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
     protected SoundEvent getDeathSound()
     {
         return super.getDeathSound();
+    }
+    
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+    	handleArmorBreaking(getHealth(), getMaxHealth(), this);
+    	
+    	return super.attackEntityFrom(source, amount);
+    }
+    
+    @Override
+    public void onDeath(DamageSource cause) {
+    	super.onDeath(cause);
+    	
+    	if(cause.getTrueSource() instanceof EntityPlayer) {
+    		onKilled(cause.getTrueSource(), this);
+    	}
     }
 
 }
