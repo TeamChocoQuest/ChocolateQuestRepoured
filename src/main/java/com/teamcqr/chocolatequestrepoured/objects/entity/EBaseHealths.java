@@ -15,6 +15,7 @@ public enum EBaseHealths {
 	BEES(15.0D),
 	MOUNTS(25.0D),
 	SPECTRES(30.0D),
+	PIRATES(25.0D),
 	MANDRILS(30.0D);
 	
 	private double baseHealth;
