@@ -10,11 +10,14 @@ public class SoundsHandler
 {
 	public static SoundEvent GUN_SHOOT;
 	public static SoundEvent MAGIC;
+	public static SoundEvent CLASSIC_HURT;
 	
 	public static void registerSounds()
 	{
 		GUN_SHOOT = registerSound("item.gun.shoot");
 		MAGIC = registerSound("item.magic");
+		CLASSIC_HURT = registerSound("entity.player.classic_hurt");
+		
 	}
 	
 	private static SoundEvent registerSound(String name)
