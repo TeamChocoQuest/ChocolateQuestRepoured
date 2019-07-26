@@ -19,6 +19,10 @@ public class ConfigFileHelper {
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
 	
+	//Mobs
+	//health
+	private double baseHealthDistanceDivisor = 1000;
+	
 	public ConfigFileHelper() {
 		
 	}
@@ -80,6 +84,12 @@ public class ConfigFileHelper {
 		prop = config.get("advanced", "threadCount", 4);
 		blockPlacerThreadCount = prop.getInt(4);
 		
+		//Mobs
+		//Health
+		//Divisor of distance
+		prop = config.get("mobhealth", "distanceDivisor", 1000.0D);
+		baseHealthDistanceDivisor = prop.getDouble(1000.0D);
+		
 		config.save();
 	}
 	
@@ -121,6 +131,9 @@ public class ConfigFileHelper {
 	}
 	public int getBlockPlacerThreadCount() {
 		return blockPlacerThreadCount;
+	}
+	public double getHealthDistanceDivisor() {
+		return baseHealthDistanceDivisor;
 	}
 
 }
