@@ -67,18 +67,25 @@ public interface ICQREntity {
 	}
 	
 	public default void handleArmorBreaking(float currHP, float maxHP, EntityLiving entityDamaged) {
+		if((currHP / maxHP) > 0 && (currHP / maxHP) % 0.2F == 0) {
+			//TODO: Play breaking sound
+		}
 		//Armor breaking stuff
-    	//Only 1/4 of health left -> Loose chestplate?
-    	if(currHP / maxHP <= 0.25F) {
-    		
+    	//Only 1/5 of health left -> Loose chestplate
+    	if(currHP / maxHP <= 0.2F) {
+    		//TODO: remove chest
     	} else 
-    	//Only 1/2 of health left -> Loose pants?
-    	if(currHP / maxHP <= 0.5F) {
-    		
+    	//Only 2/5 of health left -> Loose pants
+    	if(currHP / maxHP <= 0.4F) {
+    		//TODO: remove pants
     	} else
-    	//Only 3/4 of health left -> loose helmet?
-    	if(currHP / maxHP <= 0.75F) {
-    		
+    	//Only 3/5 of health left -> loose boobs
+    	if(currHP / maxHP <= 0.6F) {
+    		//TODO: remove boobs
+    	} else
+    	//Only 4/5 of health left -> loose helmet
+    	if(currHP / maxHP <= 0.8F) {
+    		//TODO: Remove helmet
     	}
 	}
 
