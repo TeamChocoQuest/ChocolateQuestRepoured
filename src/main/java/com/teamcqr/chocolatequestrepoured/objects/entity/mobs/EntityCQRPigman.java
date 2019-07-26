@@ -1,0 +1,96 @@
+package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
+
+import java.util.UUID;
+
+import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
+public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
+
+	public EntityCQRPigman(World worldIn) {
+		super(worldIn);
+		
+		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_IRON));
+		setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+		setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+		updateActiveHand();
+	}
+	
+	@Override
+	public EFaction getFaction() {
+		return EFaction.UNDEAD;
+	}
+	
+	@Override
+	public float getBaseHealth() {
+		return EBaseHealths.PIGMEN.getValue();
+	}
+
+	@Override
+	public UUID getUUID() {
+		return getUniqueID();
+	}
+
+	@Override
+	public boolean isBoss() {
+		return false;
+	}
+
+	@Override
+	public boolean isRideable() {
+		return false;
+	}
+
+	@Override
+	public boolean isFriendlyTowardsPlayer() {
+		return false;
+	}
+
+	@Override
+	public boolean hasFaction() {
+		return true;
+	}
+	
+	@Override
+    protected SoundEvent getAmbientSound()
+    {
+        return super.getAmbientSound();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source)
+    {
+        return super.getHurtSound(source);
+    }
+
+    @Override
+    protected SoundEvent getDeathSound()
+    {
+        return super.getDeathSound();
+    }
+
+	@Override
+	public void spawnAt(int x, int y, int z) {
+		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
+			//sets the actual health
+			setHealth(getBaseHealth(new BlockPos(x,y,z)));
+			//changes the right attribute to apply
+			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(getBaseHealth(new BlockPos(x,y,z)));
+			
+			setPosition(x, y, z);
+		}
+	}
+	
+}

@@ -15,6 +15,7 @@ public enum EFaction {
 	INQUISITION(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	ILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	VILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	;
 	
 	
@@ -23,9 +24,11 @@ public enum EFaction {
 	}
 	
 	public boolean isEnemy(EFaction otherFac) {
+		//TODO work this out
 		return false;
 	}
 	public boolean isAlly(EFaction otherFac) {
+		//TODO work this out
 		return false;
 	}
 	

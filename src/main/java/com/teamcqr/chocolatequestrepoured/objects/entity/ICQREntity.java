@@ -6,7 +6,10 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public interface ICQREntity {
 	
@@ -20,10 +23,10 @@ public interface ICQREntity {
 	public boolean isFriendlyTowardsPlayer();
 	public boolean hasFaction();
 	
-	public double getBaseHealth();
+	public float getBaseHealth();
 	
-	public default double getHealth(BlockPos dungeonPos) {
-		double distance = Math.abs(dungeonPos.getX()) > Math.abs(dungeonPos.getZ()) ? Math.abs(dungeonPos.getX()) : Math.abs(dungeonPos.getZ());
+	public default float getBaseHealth(BlockPos dungeonPos) {
+		float distance = Math.abs(dungeonPos.getX()) > Math.abs(dungeonPos.getZ()) ? Math.abs(dungeonPos.getX()) : Math.abs(dungeonPos.getZ());
 		distance /= Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
 		distance /= 10;
 		distance = distance < 1 ? distance++ : distance;
@@ -32,7 +35,35 @@ public interface ICQREntity {
 	}
 	
 	public void spawnAt(int x, int y, int z);
-	public void onKilled(Entity killer);
+	public default void onKilled(Entity killer, Entity killed) {
+		World world = killer.getEntityWorld();
+		if(world != null && killer instanceof EntityPlayer && this.hasFaction()) {
+			AxisAlignedBB aabb = new AxisAlignedBB(killed.getPosition().add(
+						-Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius(), 
+						-Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius(), 
+						-Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius()
+					), 
+					killed.getPosition().add(
+							Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius(),
+							Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius(),
+							Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius()
+					)
+				);
+			for(Entity entity : world.getEntitiesInAABBexcluding(killed, aabb, null)) {
+				if(entity instanceof ICQREntity) {
+					ICQREntity CQRBaseEntity = (ICQREntity) entity;
+					//TODO: Faction repu change!!
+					if(this.getFaction().isEnemy(CQRBaseEntity.getFaction())) {
+						//The player gains repu in CQBaseEntity's faction
+						
+					} else if(this.getFaction().isAlly(CQRBaseEntity.getFaction())) {
+						//The player looses repu in the faction of CQBaseEntity's faction
+						
+					}
+				}
+			}
+		}
+	}
 
 	
 }
