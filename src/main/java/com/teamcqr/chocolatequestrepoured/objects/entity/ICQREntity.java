@@ -8,6 +8,10 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,25 +71,42 @@ public interface ICQREntity {
 	}
 	
 	public default void handleArmorBreaking(float currHP, float maxHP, EntityLiving entityDamaged) {
-		if((currHP / maxHP) > 0 && (currHP / maxHP) % 0.2F == 0) {
-			//TODO: Play breaking sound
-		}
 		//Armor breaking stuff
+		boolean armorBroke = false;
     	//Only 1/5 of health left -> Loose chestplate
-    	if(currHP / maxHP <= 0.2F) {
-    		//TODO: remove chest
-    	} else 
+		float hpPrcntg = currHP / maxHP;
+		//System.out.println("Hp %: " + hpPrcntg);
+    	if(hpPrcntg <= 0.2F && entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.CHEST) != null && !entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem().equals(Items.AIR)) {
+    		//DONE: remove chest
+    		entityDamaged.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.AIR, 1));
+    		
+    		armorBroke = true;
+    	}
     	//Only 2/5 of health left -> Loose pants
-    	if(currHP / maxHP <= 0.4F) {
-    		//TODO: remove pants
-    	} else
+    	if(hpPrcntg <= 0.4F && entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.LEGS) != null && !entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem().equals(Items.AIR)) {
+    		//DONE: remove pants
+    		entityDamaged.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(Items.AIR, 1));
+    		
+    		armorBroke = true;
+    	}
     	//Only 3/5 of health left -> loose boobs
-    	if(currHP / maxHP <= 0.6F) {
-    		//TODO: remove boobs
-    	} else
+    	if(hpPrcntg <= 0.6F && entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.FEET) != null && !entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem().equals(Items.AIR)) {
+    		//DONE: remove boobs
+    		entityDamaged.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(Items.AIR, 1));
+    		
+    		armorBroke = true;
+    	}
     	//Only 4/5 of health left -> loose helmet
-    	if(currHP / maxHP <= 0.8F) {
-    		//TODO: Remove helmet
+    	if(hpPrcntg <= 0.8F && entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null && !entityDamaged.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem().equals(Items.AIR)) {
+    		//DONE: Remove helmet
+    		entityDamaged.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.AIR, 1));
+    		
+    		armorBroke = true;
+    	}
+    	
+    	if(armorBroke && entityDamaged.getEntityWorld() != null/* && !entityDamaged.getEntityWorld().isRemote*/) {
+    		entityDamaged.playSound(SoundEvents.ENTITY_ITEM_BREAK, 1.75F, 0.8F);
+    		//System.out.println("Sound played!");
     	}
 	}
 
