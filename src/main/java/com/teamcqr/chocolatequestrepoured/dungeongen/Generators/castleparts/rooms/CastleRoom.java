@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import net.minecraft.block.BlockPlanks;
+import net.minecraft.block.BlockWoodSlab;
+import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -9,6 +12,15 @@ import java.util.ArrayList;
 
 public abstract class CastleRoom
 {
+    public enum RoomType
+    {
+        NONE,
+        HALLWAY,
+        KITCHEN,
+        STAIRCASE,
+        LANDING
+    }
+
     public enum RoomPosition
     {
         TOP_LEFT,
@@ -64,6 +76,7 @@ public abstract class CastleRoom
     protected boolean buildEastWall;
     protected boolean buildSouthWall;
     protected boolean buildWestWall;
+    protected RoomType roomType = RoomType.NONE;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height, RoomPosition position)
     {
@@ -167,6 +180,11 @@ public abstract class CastleRoom
         return position.toString();
     }
 
+    public RoomType getRoomType()
+    {
+        return roomType;
+    }
+
     private boolean isBottomRow()
     {
         return (position == RoomPosition.BOT_LEFT ||
@@ -179,5 +197,21 @@ public abstract class CastleRoom
         return (position == RoomPosition.TOP_RIGHT ||
                 position == RoomPosition.MID_RIGHT ||
                 position == RoomPosition.BOT_RIGHT);
+    }
+
+    private void roomDecoTable(BlockPos pos, ArrayList<BlockPlacement> blocks)
+    {
+        IBlockState legBlock = Blocks.OAK_FENCE.getDefaultState();
+        IBlockState topBlock = Blocks.WOODEN_SLAB.getDefaultState();
+        topBlock = topBlock.withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.OAK);
+        blocks.add(new BlockPlacement(pos, legBlock));
+        blocks.add(new BlockPlacement(pos.add(1, 0, 0), legBlock));
+        blocks.add(new BlockPlacement(pos.add(0, 0, 1), legBlock));
+        blocks.add(new BlockPlacement(pos.add(1, 0, 1), legBlock));
+
+        blocks.add(new BlockPlacement(pos.add(0, 1, 0), topBlock));
+        blocks.add(new BlockPlacement(pos.add(1, 1, 0), topBlock));
+        blocks.add(new BlockPlacement(pos.add(0, 1, 1), topBlock));
+        blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
     }
 }

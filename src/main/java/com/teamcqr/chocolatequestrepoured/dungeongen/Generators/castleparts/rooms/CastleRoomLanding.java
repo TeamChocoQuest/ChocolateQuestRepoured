@@ -1,20 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
-public class CastleRoomStaircase extends CastleRoom
+public class CastleRoomLanding extends CastleRoom
 {
-    private EnumFacing doorSide;
-
-    public CastleRoomStaircase(BlockPos startPos, int sideLength, int height, RoomPosition position)
+    public CastleRoomLanding(BlockPos startPos, int sideLength, int height, RoomPosition position)
     {
         super(startPos, sideLength, height, position);
-        this.roomType = RoomType.STAIRCASE;
-        this.doorSide = EnumFacing.NORTH;
+        this.roomType = RoomType.LANDING;
     }
 
     @Override
@@ -26,11 +22,6 @@ public class CastleRoomStaircase extends CastleRoom
     @Override
     public String getNameShortened()
     {
-        return "STR";
-    }
-
-    private void setDoorSide(EnumFacing side)
-    {
-        this.doorSide = side;
+        return "LAN";
     }
 }
