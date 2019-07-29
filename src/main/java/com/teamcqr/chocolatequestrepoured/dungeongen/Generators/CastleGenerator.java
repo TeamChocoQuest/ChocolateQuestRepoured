@@ -54,7 +54,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		if(dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
-			supportBuilder.generateSupportHill(new Random(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
+			supportBuilder.generateSupportHill(dungeon.getRandom(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
 		}
 
 		int sizeX;

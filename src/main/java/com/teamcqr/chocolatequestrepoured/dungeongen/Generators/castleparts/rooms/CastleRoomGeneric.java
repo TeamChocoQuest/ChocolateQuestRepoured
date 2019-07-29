@@ -17,9 +17,4 @@ public abstract class CastleRoomGeneric extends CastleRoom
         this.edgeClutter = new ArrayList<>();
         this.centerClutter = new ArrayList<>();
     }
-
-    public void generate(ArrayList<BlockPlacement> blocks)
-    {
-        return;
-    }
 }

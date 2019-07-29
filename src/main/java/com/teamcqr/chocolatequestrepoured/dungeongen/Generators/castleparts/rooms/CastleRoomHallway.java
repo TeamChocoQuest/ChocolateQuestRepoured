@@ -11,6 +11,7 @@ public class CastleRoomHallway extends CastleRoom
     public CastleRoomHallway(BlockPos startPos, int sideLength, int height, RoomPosition position, boolean vertical)
     {
         super(startPos, sideLength, height, position);
+        this.roomType = RoomType.HALLWAY;
         if (vertical)
         {
             buildNorthWall = false;

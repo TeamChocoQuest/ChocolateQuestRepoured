@@ -13,6 +13,7 @@ public class CastleRoomKitchen extends CastleRoomGeneric
     public CastleRoomKitchen(BlockPos startPos, int sideLength, int height, RoomPosition position)
     {
         super(startPos, sideLength, height, position);
+        this.roomType = RoomType.KITCHEN;
         this.edgeClutter.add(Blocks.FURNACE.getDefaultState());
         this.edgeClutter.add(Blocks.CAULDRON.getDefaultState());
         this.edgeClutter.add(Blocks.WOODEN_SLAB.getDefaultState());

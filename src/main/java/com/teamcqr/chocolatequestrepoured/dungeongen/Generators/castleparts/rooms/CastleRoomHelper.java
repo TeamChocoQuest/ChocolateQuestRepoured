@@ -18,14 +18,6 @@ public class CastleRoomHelper
     private boolean[][][] filled; //array to track if a room has been assigned
     private Random random;
 
-    public enum CastleRoomType
-    {
-        HALLWAY,
-        KITCHEN,
-        BEDROOM,
-        LIBRARY
-    }
-
     public CastleRoomHelper(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
         this.startPos = startPos;
