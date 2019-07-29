@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -95,15 +96,27 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
     	return res;
     }
 
-	@Override
+    @Override
+	public void setPosition(double x, double y, double z) {
+		super.setPosition(x, y, z);
+		
+		spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+	}
+    
+    @Override
 	public void spawnAt(int x, int y, int z) {
 		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
 			//sets the actual health
-			setHealth(getBaseHealth(new BlockPos(x,y,z)));
 			//changes the right attribute to apply
-			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(getBaseHealth(new BlockPos(x,y,z)));
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
+			//System.out.println("New HP: " + newHP);
+			if(attribute != null) {
+				attribute.setBaseValue(newHP);
+				setHealth(getMaxHealth());
+			}
 			
-			setPosition(x, y, z);
+			//setPosition(x, y, z);
 		}
 	}
 	

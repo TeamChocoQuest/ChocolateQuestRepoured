@@ -16,7 +16,10 @@ public enum EBaseHealths {
 	MOUNTS(25.0F),
 	SPECTRES(30.0F),
 	PIRATES(25.0F),
-	MANDRILS(30.0F);
+	MANDRILS(30.0F),
+	
+	NETHER_DRAGON(250.0F),
+	;
 	
 	private float baseHealth;
 	
@@ -25,7 +28,7 @@ public enum EBaseHealths {
 	}
 	
 	public float getValue() {
-		return baseHealth;
+		return this.baseHealth;
 	}
 
 }
