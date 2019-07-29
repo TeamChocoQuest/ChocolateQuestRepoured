@@ -9,5 +9,11 @@
     {
         "category": "item",
         "sounds": [{"name" : "cqrepoured:item/magic"}]
-    }
+    },
+	
+	"entity.player.classic_hurt":
+	{
+		"category": "neutral",
+		"sounds": [{"name": "cqrepoured:entity/player/classic_hurt"}]
+	}
 }   

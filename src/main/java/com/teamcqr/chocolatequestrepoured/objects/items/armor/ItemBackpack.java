@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.client.render.ModelBackpack;
+import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

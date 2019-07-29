@@ -81,6 +81,59 @@ public class PlateauBuilder {
 			}
 		}
 	}
+	
+	
+	//These methods are used to dig out random caves
+	public void createCave(Random random, BlockPos startPos, BlockPos endPos, long seed, World world) {
+		makeRandomBlob(random, Blocks.AIR, startPos, endPos, seed, world);
+	}
+	
+	public void createCave(Random random, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world) {
+		makeRandomBlob(random, Blocks.AIR, startPos, endPos, wallSize, seed, world);
+	}
+	
+	public void makeRandomBlob(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, long seed, World world) {
+		makeRandomBlob(random, fillBlock, startPos, endPos, 4, seed, world);
+	}
+	
+	public void makeRandomBlob(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world) {
+		Perlin3D perlinNoise1 = new Perlin3D(seed, 8, random);
+		Perlin3D perlinNoise2 = new Perlin3D(seed, 32, random);
+		
+		int sizeX = endPos.getX() - startPos.getX();
+		int sizeZ = endPos.getZ() - startPos.getZ();
+		int sizeY = endPos.getY() - startPos.getY();
+		
+		sizeX *= 1.25;
+		sizeZ *= 1.25;
+		sizeY *= 1.35;
+		
+		for(int iX = 0; iX < sizeX; ++iX) {
+			for(int iY = 0; iY < sizeY; ++iY) {
+				for(int iZ = 0; iZ < sizeZ; ++iZ) {
+					
+					float noise = Math.max(0.0F, 2.0F - (float) (sizeY - iY) / 4.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iX / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeX - iX) / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iZ / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeZ - iZ) / 2.0F);
+					
+					double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() +iX, startPos.getY() +iY, startPos.getZ() +iZ);
+					double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() +iX, startPos.getY() +iY, startPos.getZ() +iZ);
+					
+					if((perlin1 * perlin2 * (double) noise) < 0.5D) {
+						if(!Block.isEqualTo(world.getBlockState(startPos.add(iX, iY, iZ)).getBlock(), fillBlock)) {
+							if(Block.isEqualTo(fillBlock, Blocks.AIR)) {
+								world.setBlockToAir(startPos.add(iX, iY, iZ));
+							} else {
+								world.setBlockState(startPos.add(iX, iY, iZ), fillBlock.getDefaultState());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 
 
 }

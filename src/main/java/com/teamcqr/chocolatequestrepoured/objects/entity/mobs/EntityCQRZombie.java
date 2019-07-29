@@ -7,6 +7,7 @@ import net.minecraft.world.World;
 
 public class EntityCQRZombie extends EntityZombie
 {
+	//TODO: Rewrite using the interface
     public EntityCQRZombie(World worldIn)
     {
         super(worldIn);

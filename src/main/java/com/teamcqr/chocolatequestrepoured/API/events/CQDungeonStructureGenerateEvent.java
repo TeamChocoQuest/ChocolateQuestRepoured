@@ -24,14 +24,12 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	private BlockPos dunSize;
 	@Nullable
 	private BlockPos shieldCorePosition = null;
-	private ChunkPos chunkPos;
 	private World world;
 	
-	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, ChunkPos chunkPos, World world) {
+	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, World world) {
 		this.generatedDungeon = dungeon;
 		this.dunPosition = position;
 		this.dunSize = size;
-		this.chunkPos = chunkPos;
 		this.world = world;
 	}
 	
@@ -59,10 +57,6 @@ public class CQDungeonStructureGenerateEvent extends Event {
 		}else {
 			this.shieldCorePosition = pos;
 		}
-	}
-
-	public ChunkPos getChunkPos() {
-		return chunkPos;
 	}
 
 	public World getWorld() {

@@ -32,6 +32,8 @@ public class Reference
 	public static final int PROJECTILE_POISON_SPELL = 71;
 
 	public static final int ENTITY_CQRZOMBIE_ID = 120;
+	public static final int ENTITY_CQRPIGMAN_ID = 121;
+	public static final int ENTITY_CQRDWARF_ID = 122;
 
 	// Moved to CONFIG_HELPER
 	//public static final double SPAWNER_RANGE = 25.0D;

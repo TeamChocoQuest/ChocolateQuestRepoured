@@ -141,8 +141,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 			for(int iX = -radius -2; iX <= radius +2; iX++) {
 				for(int iZ = -radius -2; iZ <= radius +2; iZ++) {
-					if(isInsideCircle(iX, iZ, radius, centerLoc)) {
-						if(isInsideCircle(iX, iZ, (radius -1), centerLoc)) {
+					if(DungeonGenUtils.isInsideCircle(iX, iZ, radius, centerLoc)) {
+						if(DungeonGenUtils.isInsideCircle(iX, iZ, (radius -1), centerLoc)) {
 							if(iY < 2) {
 								//We're low enought, place lava
 								lava.add(new BlockPos(iX +x, iY +6, iZ +z));
@@ -203,13 +203,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 							pillarCenters.add(new BlockPos(iX +x, yStairCase -3, iZ +z));
 						}
 						//Stairwell -> check if it is in the volcano
-						if(isInsideCircle(iX, iZ, stairRadius +1, centerLoc) && !isInsideCircle(iX, iZ, stairRadius /2, centerLoc)) {
+						if(DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius +1, centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius /2, centerLoc)) {
 							//Check that it is outside of the middle circle
 							if(StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
 								BlockPos pos = new BlockPos(iX +x, yStairCase, iZ +z);
 								stairBlocks.add(pos);
 								//Spawners and chets, spawn only in a certain radius and only with 1% chance
-								if(isInsideCircle(iX, iZ, (stairRadius /2) + (stairRadius /4) + (stairRadius /6), centerLoc)) {
+								if(DungeonGenUtils.isInsideCircle(iX, iZ, (stairRadius /2) + (stairRadius /4) + (stairRadius /6), centerLoc)) {
 									if(new Random().nextInt(this.dungeon.getChestChance() +1) >= (this.dungeon.getChestChance() -1)) {
 										spawnersNChestsOnPath.add(pos.add(0,1,0));
 									}
@@ -232,9 +232,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			for(int iX = -radiusOuter*2; iX <= radiusOuter*2; iX++) {
 				for(int iZ = -radiusOuter*2; iZ <= radiusOuter*2; iZ++) {
 					//First check if it is within the base radius...
-					if(isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
+					if(DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
 						//If it is at the bottom and also inside the inner radius -> lava
-						if(isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
+						if(DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
 							/*if(iY == 0) {
 								lava.add(new BlockPos(iX +x, minY, iZ +z));
 								lava.add(new BlockPos(iX +x, minY -1, iZ +z));
@@ -411,27 +411,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			for(int y = -radius; y <= radius; y++) {
 				for(int z = -radius; z <= radius; z++) {
 					BlockPos p = center.add(x, y, z);
-					if(isInsideSphere(p, center, radius)) {
+					if(DungeonGenUtils.isInsideSphere(p, center, radius)) {
 						posList.add(p);
 					}
 				}
 			}
 		}
 		return posList;
-	}
-	
-	//DONE: Fix this, it does not work how it should, always returns false....
-	private boolean isInsideCircle(int x, int z, int radius, BlockPos center) {
-		BlockPos newPos = new BlockPos(center.getX() +x, center.getY(), center.getZ() +z);
-		
-		return isInsideSphere(newPos, center, radius);
-	}
-	
-	private boolean isInsideSphere(BlockPos pos, BlockPos center, int radius) {
-		if(Math.abs(center.getDistance(pos.getX(), pos.getY(), pos.getZ())) < radius) {
-			return true;
-		}
-		return false;
 	}
 	
 	private void generateOres(World world, List<BlockPos> blocks) {
@@ -522,7 +508,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			for(int iY = 0; iY <= maxY; iY++) {
 				for(int iX = -3; iX <= 3; iX++) {
 					for(int iZ = -3; iZ <= 3; iZ++) {
-						if(isInsideCircle(iX, iZ, 3, center)) {
+						if(DungeonGenUtils.isInsideCircle(iX, iZ, 3, center)) {
 							pillarBlocks.add(center.add(iX, iY, iZ));
 						}
 					}

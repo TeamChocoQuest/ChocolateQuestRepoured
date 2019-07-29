@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRPigman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRZombie;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -13,6 +15,8 @@ import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacketHandler;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
@@ -87,6 +91,22 @@ public class ClientProxy extends CommonProxy
 			public Render<EntityCQRZombie> createRenderFor(RenderManager manager)
 			{
 				return new RenderCQRZombie(manager);
+			}
+		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPigman.class, new IRenderFactory<EntityCQRPigman>() {
+			@Override
+			public Render<EntityCQRPigman> createRenderFor(RenderManager manager)
+			{
+				return new RenderCQRPigman(manager);
+			}
+		});
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, new IRenderFactory<EntityCQRDwarf>() {
+			@Override
+			public Render<EntityCQRDwarf> createRenderFor(RenderManager manager)
+			{
+				return new RenderCQRDwarf(manager);
 			}
 		});
 		

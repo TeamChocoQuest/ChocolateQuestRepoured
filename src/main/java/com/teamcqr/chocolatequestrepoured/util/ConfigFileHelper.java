@@ -15,9 +15,14 @@ public class ConfigFileHelper {
 	private int wallTopY = 140;
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
 	private int supportHillWallSize = 8;
+	private int factionKillRepuChangeRadius = 60;
 	private boolean dungeonsInFlat = false;
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
+	
+	//Mobs
+	//health
+	private double baseHealthDistanceDivisor = 1000;
 	
 	public ConfigFileHelper() {
 		
@@ -80,6 +85,16 @@ public class ConfigFileHelper {
 		prop = config.get("advanced", "threadCount", 4);
 		blockPlacerThreadCount = prop.getInt(4);
 		
+		//Mobs
+		//Health
+		//Divisor of distance
+		prop = config.get("mobs", "distanceDivisor", 1000.0D);
+		baseHealthDistanceDivisor = prop.getDouble(1000.0D);
+		
+		//radius of the faction repu that receives updates in a certain radius
+		prop = config.get("mobs", "factionUpdateRadius", 100);
+		factionKillRepuChangeRadius = prop.getInt(100);
+		
 		config.save();
 	}
 	
@@ -121,6 +136,12 @@ public class ConfigFileHelper {
 	}
 	public int getBlockPlacerThreadCount() {
 		return blockPlacerThreadCount;
+	}
+	public double getHealthDistanceDivisor() {
+		return baseHealthDistanceDivisor;
+	}
+	public int getFactionRepuChangeRadius() {
+		return factionKillRepuChangeRadius;
 	}
 
 }

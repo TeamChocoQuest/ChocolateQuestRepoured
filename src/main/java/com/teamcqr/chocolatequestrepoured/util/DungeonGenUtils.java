@@ -22,6 +22,19 @@ import net.minecraft.world.chunk.Chunk;
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonGenUtils {
+	
+	public static boolean isInsideCircle(int ix, int iz, int radius, BlockPos center) {
+		BlockPos newPos = new BlockPos(center.getX() +ix, center.getY(), center.getZ() +iz);
+		
+		return isInsideSphere(newPos, center, radius);
+	}
+	
+	public static boolean isInsideSphere(BlockPos pos, BlockPos center, int radius) {
+		if(Math.abs(center.getDistance(pos.getX(), pos.getY(), pos.getZ())) < radius) {
+			return true;
+		}
+		return false;
+	}
 
 	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
 		List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
