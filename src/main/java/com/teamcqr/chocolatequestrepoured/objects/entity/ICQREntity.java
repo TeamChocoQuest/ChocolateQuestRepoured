@@ -30,13 +30,26 @@ public interface ICQREntity {
 	
 	public float getBaseHealth();
 	
-	public default float getBaseHealth(BlockPos dungeonPos) {
+	public default float getBaseHealthForLocation(BlockPos dungeonPos, float defBaseHealth) {
+		if(dungeonPos == null) {
+			return defBaseHealth;
+		}
+		//System.out.println("Pos: " + dungeonPos.toString());
 		float distance = Math.abs(dungeonPos.getX()) > Math.abs(dungeonPos.getZ()) ? Math.abs(dungeonPos.getX()) : Math.abs(dungeonPos.getZ());
+		if(distance <= 0.0f) {
+			return defBaseHealth;
+		}
+		//System.out.println("Distance: " + distance);
 		distance /= Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		//System.out.println("Distance: " + distance);
 		distance /= 10;
+		//System.out.println("Distance: " + distance);
 		distance = distance < 1 ? distance++ : distance;
 		
-		return distance * this.getBaseHealth();
+		//System.out.println("Distance: " + distance);
+		//System.out.println("HP: " + (distance * defBaseHealth));
+		
+		return distance * getBaseHealth();
 	}
 	
 	public void spawnAt(int x, int y, int z);
@@ -55,13 +68,13 @@ public interface ICQREntity {
 					)
 				);
 			for(Entity entity : world.getEntitiesInAABBexcluding(killed, aabb, null)) {
-				if(entity instanceof ICQREntity) {
+				if(entity instanceof ICQREntity && (entity instanceof EntityLiving && (((EntityLiving) entity).getEntitySenses().canSee(killed) || ((EntityLiving) entity).getEntitySenses().canSee(killer)))) {
 					ICQREntity CQRBaseEntity = (ICQREntity) entity;
 					//TODO: Faction repu change!!
-					if(this.getFaction().isEnemy(CQRBaseEntity.getFaction())) {
+					if(((ICQREntity)killed).getFaction().isEnemy(CQRBaseEntity.getFaction())) {
 						//The player gains repu in CQBaseEntity's faction
 						
-					} else if(this.getFaction().isAlly(CQRBaseEntity.getFaction())) {
+					} else if(((ICQREntity)killed).getFaction().isAlly(CQRBaseEntity.getFaction())) {
 						//The player looses repu in the faction of CQBaseEntity's faction
 						
 					}
