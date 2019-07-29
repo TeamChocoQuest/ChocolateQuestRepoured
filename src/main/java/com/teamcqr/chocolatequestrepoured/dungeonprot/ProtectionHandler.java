@@ -1,10 +1,11 @@
-package com.teamcqr.chocolatequestrepoured.dungeongen.protection;
+package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import net.minecraft.block.BlockFire;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -12,14 +13,15 @@ import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
-import java.util.UUID;
 
 /**
- * Written 12.07.2019 by jdawg3636
+ * Central class responsible for handling all activities related to the protection of regions
+ * Intended for use on dungeons but can easily be used for other areas
+ *
+ * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
- * Original (Old) Version Copyright (c) 29.04.2019 MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * @version 22.07.19
  */
 public class ProtectionHandler {
 
@@ -35,25 +37,14 @@ public class ProtectionHandler {
     public void registerRegion(ProtectedRegion region) {
         activeRegions.add(region);
     }
-
-    public ProtectedRegion getProtectedRegionFromUUID(UUID uuidToFind) {
-
-        // Search
-        for( ProtectedRegion protectedRegion : activeRegions ) {
-            if(protectedRegion.getUUID() == uuidToFind) return protectedRegion;
-        }
-
-        // Default
-        return null;
-
+    public ArrayList<ProtectedRegion> getActiveRegions() {
+        return activeRegions;
     }
 
     // Detect Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
-
-        activeRegions.add(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
-
+        registerRegion(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
     }
 
     // Handle Protection-Related Events
@@ -125,6 +116,30 @@ public class ProtectionHandler {
             }
         }
 
+    }
+
+    /*
+     * Util
+     */
+
+    public ArrayList<ProtectedRegion> getActiveRegionsContainingBlockPos(BlockPos position, World world) {
+
+        ArrayList<ProtectedRegion> toReturn = new ArrayList<>();
+
+        // Check all active regions
+        for (ProtectedRegion region : activeRegions) {
+            if(region.checkIfBlockPosInRegion(position, world)) toReturn.add(region);
+        }
+
+        // Return
+        return toReturn;
+
+    }
+
+    public int getLargerRegion(ProtectedRegion a, ProtectedRegion b) {
+        if(a.getRegionVolume() > b.getRegionVolume()) return 1;
+        if(a.getRegionVolume() < b.getRegionVolume()) return 2;
+        return 0; // 0 = Both sizes equal
     }
 
 }
