@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -34,6 +35,42 @@ public class DungeonGenUtils {
 			return true;
 		}
 		return false;
+	}
+	
+	public static void passHashMapToThread(HashMap<BlockPos, Block> blocks, int entriesPerMap, World world, boolean async) {
+		if(async) {
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+
+				@Override
+				public void run() {
+					HashMap<BlockPos, Block> tmpMap = new HashMap<>();
+					int counter = 1;
+					for(BlockPos b : blocks.keySet()) {
+						if(counter == entriesPerMap) {
+							@SuppressWarnings("unchecked")
+							HashMap<BlockPos, Block> map = (HashMap<BlockPos, Block>) tmpMap.clone();
+							Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+								
+								@Override
+								public void run() {
+									for(BlockPos b : map.keySet()) {
+										world.setBlockState(b, map.get(b).getDefaultState());
+									}
+								}
+							});
+							tmpMap.clear();
+						}
+						tmpMap.put(b, blocks.get(b));
+						counter++;
+					}
+				}
+				
+			});
+		} else {
+			for(BlockPos b : blocks.keySet()) {
+				world.setBlockState(b, blocks.get(b).getDefaultState());
+			}
+		}
 	}
 
 	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
