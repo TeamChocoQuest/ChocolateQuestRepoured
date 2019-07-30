@@ -23,18 +23,18 @@ class SimpleThread extends Thread {
 	public void addTask(Runnable task) {
 		lockQueue();
 		
-		boolean runAfterAdd = false;
+		/*boolean runAfterAdd = false;
 		if(this.tasks.isEmpty()) {
 			runAfterAdd = true;
-		}
+		}*/
 		
 		tasks.add(task);
 		
 		unlockQueue();
 		
-		if(runAfterAdd) {
+		/*if(runAfterAdd) {
 			this.run();
-		}
+		}*/
 	}
 	
 	@Override
@@ -58,6 +58,8 @@ class SimpleThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}*/
+			this.run();
+		} else {
 			this.run();
 		}
 	}
