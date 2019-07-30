@@ -158,7 +158,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 			decrementor++;
 		}
 		
-		DungeonGenUtils.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100);
+		DungeonGenUtils.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100, true);
 	}
 
 }
