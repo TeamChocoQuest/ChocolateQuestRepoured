@@ -88,6 +88,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	//DONE: Rewrite all lists to one large hashMap<BlockPos, BLOCK>
 	//DONE: Reorganize the steps for map: It must first generate the top part and then the bottom part
 	//TODO: Merge the upper and lower part procedures to save calculation time and reduce O(n) runtime
+	//TODO: Move the map splitting out of the dungeonUtil and iniside here!!
 	//Also make sure to use multiple maps, otherwise it could take longer!!
 	
 	@Override
