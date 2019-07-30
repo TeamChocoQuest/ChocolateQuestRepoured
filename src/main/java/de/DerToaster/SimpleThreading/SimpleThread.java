@@ -5,6 +5,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 class SimpleThread extends Thread {
+	
+	private int rerunsTillStop = 20;
+	private boolean running = false;
 
 	private Thread mainThread;
 	
@@ -21,6 +24,8 @@ class SimpleThread extends Thread {
 	}
 	
 	public void addTask(Runnable task) {
+		//System.out.println("Adding task to CQ-Thread: " + this.getName() + "...");
+		
 		lockQueue();
 		
 		/*boolean runAfterAdd = false;
@@ -32,14 +37,19 @@ class SimpleThread extends Thread {
 		
 		unlockQueue();
 		
+		if(!this.running) {
+			this.start();
+		}
+		
 		/*if(runAfterAdd) {
 			this.run();
 		}*/
 	}
 	
 	@Override
-	public synchronized void start() {
+	public void start() {
 		if(!this.tasks.isEmpty()) {
+			this.running = true;
 			run();
 		}
 	}
@@ -60,7 +70,19 @@ class SimpleThread extends Thread {
 			}*/
 			this.run();
 		} else {
-			this.run();
+			try {
+				sleep(10);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			this.rerunsTillStop--;
+			if(this.rerunsTillStop <= 0) {
+				this.running = false;
+				this.rerunsTillStop = 20;
+			} else {
+				//System.out.println("CQ Thread: " + this.getName() + ": Remaing tasks: " + this.tasks.size());
+				this.run();
+			}
 		}
 	}
 	
