@@ -56,7 +56,7 @@ public class CQStructure {
 	
 	//TODO: move structure origin to the center of it
 	
-	private HashMap<BlockPos, Structure> structures = new HashMap<BlockPos, Structure>();
+	private HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
 
 	private boolean buildShieldCore;
 	
@@ -110,7 +110,7 @@ public class CQStructure {
 									
 									BlockPos offsetVector = NBTUtil.BlockPosFromNBT(part.getCompoundTag("offset"));
 									
-									Structure partStructure = new Structure();
+									CQStructurePart partStructure = new CQStructurePart();
 									partStructure.setNewBannerPattern(newBannerPattern);
 									partStructure.read(part);
 									
@@ -138,16 +138,16 @@ public class CQStructure {
 			List<BlockPos> shieldCorePosList = new ArrayList<BlockPos>();
 			for(BlockPos offset : this.structures.keySet()) {
 				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
-				BlockPos offsetVec = Structure.transformedBlockPos(settings, offset);
+				BlockPos offsetVec = CQStructurePart.transformedBlockPos(settings, offset);
 				BlockPos pastePos = pos.add(offsetVec);
-				Structure structure = this.structures.get(offset);
+				CQStructurePart structure = this.structures.get(offset);
 				structure.addBlocksToWorld(worldIn, pastePos, settings);
 				if(this.buildShieldCore) {
 					try {
 						if(structure.getFieldCores() != null && !structure.getFieldCores().isEmpty()) {
 							for(ForceFieldNexusInfo ffni : structure.getFieldCores()) {
 								//fieldCoreMap.put(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos())), ffni);
-								shieldCorePosList.add(new BlockPos(offsetVec.add(Structure.transformedBlockPos(settings, ffni.getPos()))));
+								shieldCorePosList.add(new BlockPos(offsetVec.add(CQStructurePart.transformedBlockPos(settings, ffni.getPos()))));
 							}
 						}
 					} catch(Exception ex) {
@@ -228,7 +228,7 @@ public class CQStructure {
 					}
 					offset = start.subtract(startPos);
 					
-					Structure subPart = new Structure(partIndx);
+					CQStructurePart subPart = new CQStructurePart(partIndx);
 					subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
 					
 					this.structures.put(new BlockPos(offset), subPart);
@@ -239,7 +239,7 @@ public class CQStructure {
 		} else {
 			//Do not use the part mode -> Save as one huge block
 			this.parts = 1;
-			Structure struct = new Structure(0);
+			CQStructurePart struct = new CQStructurePart(0);
 			struct.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
 			this.structures.put(new BlockPos(0,0,0), struct);
 		}	
