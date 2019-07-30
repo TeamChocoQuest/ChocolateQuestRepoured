@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.BrickFor
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -85,7 +86,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	}
 	
 	//DONE: Rewrite all lists to one large hashMap<BlockPos, BLOCK>
-	//TODO: Reorganize the steps for map: It must first generate the top part and then the bottom part
+	//DONE: Reorganize the steps for map: It must first generate the top part and then the bottom part
+	//TODO: Merge the upper and lower part procedures to save calculation time and reduce O(n) runtime
 	//Also make sure to use multiple maps, otherwise it could take longer!!
 	
 	@Override
@@ -113,6 +115,55 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
 		
 		int yMax = ((minY + this.maxHeight) < 256 ? this.maxHeight : (255 - minY));
+		
+		//Upper volcano part
+		for(int iY = 0; iY < yMax; iY++) {
+			//RADIUS = baseRAD - (level/steepness)^1/3
+			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY/this.steepness)).intValue();
+			int innerRadius = this.minRadius; //DONE calculate minRadius
+			
+			for(int iX = -radiusOuter*2; iX <= radiusOuter*2; iX++) {
+				for(int iZ = -radiusOuter*2; iZ <= radiusOuter*2; iZ++) {
+					//First check if it is within the base radius...
+					if(DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
+						//If it is at the bottom and also inside the inner radius -> lava
+						if(DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
+							volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), Blocks.AIR);
+						} else {
+							//Else it is a wall block
+							//SO now we decide what the wall is gonna be...
+							if(DungeonGenUtils.PercentageRandom(dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius +2, centerLoc)) {
+								//It is lava :D
+								volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getLavaBlock());
+							} else if(DungeonGenUtils.PercentageRandom(dungeon.getMagmaChance(), rdm.nextLong())) {
+								//It is magma
+								volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getMagmaBlock());
+							} else {
+								//It is stone or ore
+								if(DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+									for(BlockPos b : getSphereBlocks(new BlockPos(iX +x, iY + minY, iZ +z), rdm.nextInt(3) +1)) {
+										volcanoBlocks.put(b, dungeon.getUpperMainBlock());
+										stoneBlocks.add(b);
+									}
+								} else {
+									stoneBlocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
+									volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getUpperMainBlock());
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		//We dont want to interfere with the lower part, so we generate our holes and ours before it
+		//Add the ore blocks
+		if(this.dungeon.generateOres()) {
+			generateOresWithHashMap(volcanoBlocks, stoneBlocks);
+		}
+		//Then make holes
+		if(this.dungeon.isVolcanoDamaged()) {
+			generateHolesWithHashMap(volcanoBlocks, stoneBlocks);
+		}
 		
 		//Lower "cave" part
 		int lowYMax = minY + (new Double(0.1 * maxHeight).intValue());
@@ -211,63 +262,16 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				currStairSection = currStairSection.getSuccessor();
 			}
 		}
-		
-		//Upper volcano part
-		for(int iY = 0; iY < yMax; iY++) {
-			//RADIUS = baseRAD - (level/steepness)^1/3
-			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY/this.steepness)).intValue();
-			int innerRadius = this.minRadius; //DONE calculate minRadius
-			
-			for(int iX = -radiusOuter*2; iX <= radiusOuter*2; iX++) {
-				for(int iZ = -radiusOuter*2; iZ <= radiusOuter*2; iZ++) {
-					//First check if it is within the base radius...
-					if(DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
-						//If it is at the bottom and also inside the inner radius -> lava
-						if(DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
-							volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), Blocks.AIR);
-						} else {
-							//Else it is a wall block
-							//SO now we decide what the wall is gonna be...
-							if(DungeonGenUtils.PercentageRandom(dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius +2, centerLoc)) {
-								//It is lava :D
-								volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getLavaBlock());
-							} else if(DungeonGenUtils.PercentageRandom(dungeon.getMagmaChance(), rdm.nextLong())) {
-								//It is magma
-								volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getMagmaBlock());
-							} else {
-								//It is stone or ore
-								if(DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-									for(BlockPos b : getSphereBlocks(new BlockPos(iX +x, iY + minY, iZ +z), rdm.nextInt(3) +1)) {
-										volcanoBlocks.put(b, dungeon.getUpperMainBlock());
-										stoneBlocks.add(b);
-									}
-								} else {
-									stoneBlocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
-									volcanoBlocks.put(new BlockPos(iX +x, iY + minY, iZ +z), dungeon.getUpperMainBlock());
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		//Add the ore blocks
-		if(this.dungeon.generateOres()) {
-			generateOresWithHashMap(volcanoBlocks, stoneBlocks);
-		}
-		//Then make holes
-		if(this.dungeon.isVolcanoDamaged()) {
-			generateHolesWithHashMap(volcanoBlocks, stoneBlocks);
-		}
 		//Then build the pillars
 		if(dungeon.doBuildDungeon()) {
-			generatePillars(pillarCenters, lowYMax +10, world);
+			generatePillarsWithHashMap(volcanoBlocks, pillarCenters, lowYMax +10, world);
 		}
 		//DEBUG OUT
-		System.out.println("HashMap size: " + volcanoBlocks.size());
+		//System.out.println("HashMap size: " + volcanoBlocks.size());
 		//And finally let the threads place all the blocks
-		System.out.println("Blocks calculated! Beginning placement...");
-		DungeonGenUtils.passHashMapToThread(volcanoBlocks, 1000, world, false);
+		//System.out.println("Blocks calculated! Beginning placement...");
+		System.out.println("Waiting for forge to place all the blocks, then we are done...");
+		DungeonGenUtils.passHashMapToThread(volcanoBlocks, volcanoBlocks.size() / Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(), world, true);
 		
 	}
 
@@ -351,7 +355,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				}
 			}
 			
-			DungeonGenUtils.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50);
+			DungeonGenUtils.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 250, true);
 		}
 		//DONE Pass the list to a simplethread to place the blocks
 	}
@@ -426,20 +430,18 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		}
 	}
 	
-	private void generatePillars(List<BlockPos> centers, int maxY, World world) {
-		List<BlockPos> pillarBlocks = new ArrayList<BlockPos>();
+	private void generatePillarsWithHashMap(HashMap<BlockPos, Block> volcanoBlocks, List<BlockPos> centers, int maxY, World world) {
 		for(BlockPos center : centers) {
 			for(int iY = 0; iY <= maxY; iY++) {
 				for(int iX = -3; iX <= 3; iX++) {
 					for(int iZ = -3; iZ <= 3; iZ++) {
 						if(DungeonGenUtils.isInsideCircle(iX, iZ, 3, center)) {
-							pillarBlocks.add(center.add(iX, iY, iZ));
+							volcanoBlocks.put(center.add(iX, iY, iZ), dungeon.getPillarBlock());
 						}
 					}
 				}
 			}
 		}
-		DungeonGenUtils.passListWithBlocksToThreads(pillarBlocks, dungeon.getPillarBlock(), world, pillarBlocks.size());
 	}
 	
 	private int getMinY(BlockPos center, int radius, World world) {
