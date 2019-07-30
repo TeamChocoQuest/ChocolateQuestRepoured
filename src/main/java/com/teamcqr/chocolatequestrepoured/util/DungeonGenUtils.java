@@ -39,16 +39,18 @@ public class DungeonGenUtils {
 	
 	public static void passHashMapToThread(HashMap<BlockPos, Block> blocks, int entriesPerMap, World world, boolean async) {
 		if(async) {
+			//System.out.println("passing map to threads...");
 			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 
 				@Override
 				public void run() {
 					HashMap<BlockPos, Block> tmpMap = new HashMap<>();
-					int counter = 1;
+					int counter = 0;
 					for(BlockPos b : blocks.keySet()) {
-						if(counter == entriesPerMap) {
-							@SuppressWarnings("unchecked")
-							HashMap<BlockPos, Block> map = (HashMap<BlockPos, Block>) tmpMap.clone();
+						if(entriesPerMap > 0 && counter >= entriesPerMap) {
+							counter = 0;
+							//System.out.println("New map full! Passing to placement....");
+							HashMap<BlockPos, Block> map = new HashMap<>(tmpMap);
 							Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 								
 								@Override
@@ -63,6 +65,16 @@ public class DungeonGenUtils {
 						tmpMap.put(b, blocks.get(b));
 						counter++;
 					}
+					//System.out.println("New map full! Passing to placement....");
+					Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+						
+						@Override
+						public void run() {
+							for(BlockPos b : tmpMap.keySet()) {
+								world.setBlockState(b, tmpMap.get(b).getDefaultState());
+							}
+						}
+					});
 				}
 				
 			});
@@ -73,46 +85,56 @@ public class DungeonGenUtils {
 		}
 	}
 
-	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
-		List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
-		int counter = 1;
-		for(BlockPos bp : blocksToPlace) {
-			bplistTMP.add(bp);
-			//One Task contains 50 blocks to place
-			if(counter % entriesPerPartList == 0) {
-				Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-					
-					@Override
-					public void run() {
-						for(BlockPos b : bplistTMP) {
-							if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-								world.setBlockToAir(b);
-							} else {
-								world.setBlockState(b, blockToPlace.getDefaultState());
-							}
-						}
+	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList, boolean async) {
+		if(async) {
+			List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
+			int counter = 1;
+			for(BlockPos bp : blocksToPlace) {
+				bplistTMP.add(bp);
+				//One Task contains 50 blocks to place
+				if(counter % entriesPerPartList == 0) {
+					Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 						
-					}
-				});
-				
-				bplistTMP.clear();
-			}
-			counter++;
-		}
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-			
-			@Override
-			public void run() {
-				for(BlockPos b : bplistTMP) {
-					if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-						world.setBlockToAir(b);
-					} else {
-						world.setBlockState(b, blockToPlace.getDefaultState());
-					}
+						@Override
+						public void run() {
+							for(BlockPos b : bplistTMP) {
+								if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
+									world.setBlockToAir(b);
+								} else {
+									world.setBlockState(b, blockToPlace.getDefaultState());
+								}
+							}
+							
+						}
+					});
+					
+					bplistTMP.clear();
 				}
-				
+				counter++;
 			}
-		});
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+				
+				@Override
+				public void run() {
+					for(BlockPos b : bplistTMP) {
+						if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
+							world.setBlockToAir(b);
+						} else {
+							world.setBlockState(b, blockToPlace.getDefaultState());
+						}
+					}
+					
+				}
+			});
+		} else {
+			for(BlockPos bp : blocksToPlace) {
+				if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
+					world.setBlockToAir(bp);
+				} else {
+					world.setBlockState(bp, blockToPlace.getDefaultState());
+				}
+			}
+		}
 	}
 	
 	public static int getHighestYAt(Chunk chunk, int x, int z, boolean ignoreWater) {
