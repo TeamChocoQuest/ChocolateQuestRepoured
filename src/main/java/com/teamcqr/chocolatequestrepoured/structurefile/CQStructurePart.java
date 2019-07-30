@@ -31,7 +31,7 @@ import net.minecraft.world.gen.structure.template.Template;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class Structure extends Template {
+public class CQStructurePart extends Template {
 	
 	private List<BannerInfo> banners = new ArrayList<BannerInfo>();
 	private List<SpawnerInfo> spawners = new ArrayList<SpawnerInfo>();
@@ -42,7 +42,7 @@ public class Structure extends Template {
 	
 	private int part_id;
 	
-	public Structure() {
+	public CQStructurePart() {
 		super();
 	}
 	
@@ -50,7 +50,7 @@ public class Structure extends Template {
 		this.newBannerPattern = pattern;
 	}
 	
-	public Structure(int part_id) {
+	public CQStructurePart(int part_id) {
 		super();
 		this.setPart_id(part_id);
 	}
