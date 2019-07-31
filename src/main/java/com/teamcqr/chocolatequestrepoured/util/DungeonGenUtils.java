@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -37,50 +38,121 @@ public class DungeonGenUtils {
 		return false;
 	}
 	
-	public static void passHashMapToThread(HashMap<BlockPos, Block> blocks, int entriesPerMap, World world, boolean async) {
+	public static void passHashMapToThread(Map<BlockPos, Block> blocks, int entriesPerMap, World world, boolean async) {
 		if(async) {
 			//System.out.println("passing map to threads...");
 			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 
 				@Override
 				public void run() {
-					HashMap<BlockPos, Block> tmpMap = new HashMap<>();
+					Map<BlockPos, Block> tmpMap = new HashMap<>();
 					int counter = 0;
-					for(BlockPos b : blocks.keySet()) {
-						if(entriesPerMap > 0 && counter >= entriesPerMap) {
-							counter = 0;
-							//System.out.println("New map full! Passing to placement....");
-							HashMap<BlockPos, Block> map = new HashMap<>(tmpMap);
-							Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-								
-								@Override
-								public void run() {
-									for(BlockPos b : map.keySet()) {
-										world.setBlockState(b, map.get(b).getDefaultState());
+					if(entriesPerMap > 0) {
+						for(BlockPos b : blocks.keySet()) {
+							if(entriesPerMap > 0 && counter >= entriesPerMap) {
+								counter = 0;
+								//System.out.println("New map full! Passing to placement....");
+								Map<BlockPos, Block> map = new HashMap<>(tmpMap);
+								Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+									
+									@Override
+									public void run() {
+										for(BlockPos b : map.keySet()) {
+											world.setBlockState(b, map.get(b).getDefaultState());
+										}
 									}
-								}
-							});
-							tmpMap.clear();
-						}
-						tmpMap.put(b, blocks.get(b));
-						counter++;
-					}
-					//System.out.println("New map full! Passing to placement....");
-					Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-						
-						@Override
-						public void run() {
-							for(BlockPos b : tmpMap.keySet()) {
-								world.setBlockState(b, tmpMap.get(b).getDefaultState());
+								});
+								tmpMap.clear();
 							}
+							tmpMap.put(b, blocks.get(b));
+							counter++;
 						}
-					});
+						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+							
+							@Override
+							public void run() {
+								for(BlockPos b : tmpMap.keySet()) {
+									world.setBlockState(b, tmpMap.get(b).getDefaultState());
+								}
+							}
+						});
+					} else {
+						System.out.println("Scheduling task...");
+						//System.out.println("New map full! Passing to placement....");
+						Runnable runner = new Runnable() {
+							
+							@Override
+							public void run() {
+								for(BlockPos b : blocks.keySet()) {
+									world.setBlockState(b, blocks.get(b).getDefaultState());
+								}
+							}
+						};
+						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(runner);
+					}
 				}
 				
 			});
 		} else {
 			for(BlockPos b : blocks.keySet()) {
 				world.setBlockState(b, blocks.get(b).getDefaultState());
+			}
+		}
+	}
+	
+	public static void passHashMapToThreads(List<BlockPos> positionsToIterate, Map<BlockPos, Block> mapContainingBlockInformation, int entriesPerMap, World world, boolean async) {
+		if(async) {
+			if(entriesPerMap > 0) {
+				int counter = 0;
+				Map<BlockPos, Block> tmpMap = new HashMap<>();
+				for(BlockPos b : positionsToIterate) {
+					if(entriesPerMap > 0 && counter >= entriesPerMap) {
+						counter = 0;
+						//System.out.println("New map full! Passing to placement....");
+						Map<BlockPos, Block> map = new HashMap<>(tmpMap);
+						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+							
+							@Override
+							public void run() {
+								for(BlockPos b : map.keySet()) {
+									world.setBlockState(b, map.get(b).getDefaultState());
+								}
+							}
+						});
+						tmpMap.clear();
+					}
+					if(mapContainingBlockInformation.containsKey(b)) {
+						tmpMap.put(b, mapContainingBlockInformation.getOrDefault(b, Blocks.BEDROCK));
+					}
+					counter++;
+				}
+				Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+					
+					@Override
+					public void run() {
+						for(BlockPos b : tmpMap.keySet()) {
+							world.setBlockState(b, tmpMap.get(b).getDefaultState());
+						}
+					}
+				});
+			} else {
+				Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
+					
+					@Override
+					public void run() {
+						for(BlockPos p : positionsToIterate) {
+							if(mapContainingBlockInformation.containsKey(p)) {
+								world.setBlockState(p, mapContainingBlockInformation.getOrDefault(p, Blocks.BEDROCK).getDefaultState());
+							}
+						}
+					}
+				});
+			}
+		} else {
+			for(BlockPos p : positionsToIterate) {
+				if(mapContainingBlockInformation.containsKey(p)) {
+					world.setBlockState(p, mapContainingBlockInformation.getOrDefault(p, Blocks.BEDROCK).getDefaultState());
+				}
 			}
 		}
 	}
@@ -246,4 +318,5 @@ public class DungeonGenUtils {
 	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {
 		return getLocSpecDungeonsForChunk(chunk.x, chunk.z, world);
 	}
+	
 }
