@@ -13,20 +13,21 @@ class SimpleThread extends Thread {
 	
 	private Queue<Runnable> tasks = new ConcurrentLinkedQueue<>();
 	
-	private boolean queueLocked = true;
+	//private boolean queueLocked = true;
 	
 	public SimpleThread(boolean async) {
+		super();
 		this.mainThread = Thread.currentThread();
 		
 		this.setDaemon(async);
 		
-		this.queueLocked = false;
+		//this.queueLocked = false;
 	}
 	
 	public void addTask(Runnable task) {
 		//System.out.println("Adding task to CQ-Thread: " + this.getName() + "...");
 		
-		lockQueue();
+		//lockQueue();
 		
 		/*boolean runAfterAdd = false;
 		if(this.tasks.isEmpty()) {
@@ -35,7 +36,7 @@ class SimpleThread extends Thread {
 		
 		tasks.add(task);
 		
-		unlockQueue();
+		//unlockQueue();
 		
 		if(!this.running) {
 			this.start();
@@ -57,11 +58,11 @@ class SimpleThread extends Thread {
 	@Override
 	public void run() {
 		if(!this.tasks.isEmpty()) {
-			lockQueue();
+			//lockQueue();
 			
 			this.tasks.remove().run();
 			
-			unlockQueue();
+			//unlockQueue();
 			
 			/*try {
 				sleep(1);
@@ -88,7 +89,7 @@ class SimpleThread extends Thread {
 	
 	
 	
-	public boolean isQueueLocked() {
+	/*public boolean isQueueLocked() {
 		return this.queueLocked;
 	}
 	
@@ -98,7 +99,7 @@ class SimpleThread extends Thread {
 	
 	private void unlockQueue() {
 		this.queueLocked = false;
-	}
+	}*/
 	
 	public Thread getMainThread() {
 		return this.mainThread;
