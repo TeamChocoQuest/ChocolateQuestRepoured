@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -311,22 +312,24 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//DungeonGenUtils.passHashMapToThread(volcanoBlocks, volcanoBlocks.size() / Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(), world, true);
 		for(Map<BlockPos, Block> map : blockMaps) {
 			//DungeonGenUtils.passHashMapToThread(map, -1, world, true);
-			DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
-			/*Runnable runner = new Runnable() {
-				
-				@Override
-				public void run() {
-					for(BlockPos p : blocks) {
-						if(map.containsKey(p)) {
-							world.setBlockState(p, map.get(p).getDefaultState());
-						}
+			//DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
+			//System.out.println("beginning iterating list...");
+			for(BlockPos p : blocks) {
+				if(map.containsKey(p)) {
+					Block b = map.get(p);
+					if(!world.isRemote) {
+
+						Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+							
+							@Override
+							public void run() {
+								world.setBlockState(p, b.getDefaultState());
+							}
+						});
 					}
-					
 				}
-			};
-			Thread fred = new Thread(runner, "Volcano constructor thread");
-			fred.setDaemon(false);
-			fred.start();*/
+			}
+			//System.out.println("end of iterating list!");
 		}
 		System.out.println("Tasks added to threads! They should execute now...");
 		
@@ -433,46 +436,6 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	}
 	
 	private void generateOresWithHashMap(/*Map<BlockPos, Block> volcanoBlocks, */List<BlockPos> stoneBlocks) {
-		/*Random rdm = new Random();
-		
-		List<Integer> usedIndexes = new ArrayList<>();
-		Double divisor = new Double((double)this.dungeon.getOreChance() / 100.0);
-		for(int i = 0; i < (new Double(divisor * stoneBlocks.size()).intValue()); i++) {
-			int blockIndex = rdm.nextInt(stoneBlocks.size());
-			while(usedIndexes.contains(blockIndex)) {
-				blockIndex = rdm.nextInt(stoneBlocks.size());
-			}
-			BlockPos p = stoneBlocks.get(blockIndex);
-			if(volcanoBlocks.containsKey(p)) {
-				int chance = rdm.nextInt(200) +1;
-				
-				if(chance >= 190) {
-					//DIAMOND
-					volcanoBlocks.put(p, Blocks.DIAMOND_ORE);
-				} else
-				if(chance >= 180) {
-					//EMERALD
-					volcanoBlocks.put(p, Blocks.EMERALD_ORE);
-				} else
-				if(chance >= 170) {
-					//GOLD
-					volcanoBlocks.put(p, Blocks.GOLD_ORE);
-				} else
-				if(chance >= 140) {
-					//REDSTONE
-					volcanoBlocks.put(p, Blocks.REDSTONE_ORE);
-				} else
-				if(chance >=  120) {
-					//IRON
-					volcanoBlocks.put(p, Blocks.IRON_ORE);
-				} else
-				if(chance >=100) {
-					//COAL
-					volcanoBlocks.put(p, Blocks.COAL_ORE);
-				} 
-			}
-				
-		}*/
 		Random rdm = new Random();
 		
 		List<Integer> usedIndexes = new ArrayList<>();
@@ -515,18 +478,6 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private void generateHolesWithHashMap(/*Map<BlockPos, Block> volcanoBlocks,*/ List<BlockPos> stoneBlocks) {
 		Random rdm = new Random();
 		//Makes random holes
-		/*for(int holeCount = 0; holeCount < maxHeight *1.5; holeCount++) {
-			BlockPos center = stoneBlocks.get(rdm.nextInt(stoneBlocks.size()));
-			
-			int radius = DungeonGenUtils.getIntBetweenBorders(1, this.dungeon.getMaxHoleSize());
-			
-			for(BlockPos p : getSphereBlocks(center, radius)) {
-				if(volcanoBlocks.containsKey(p)) {
-					volcanoBlocks.put(p, Blocks.AIR);
-				}
-			}
-			
-		}*/
 		for(int holeCount = 0; holeCount < maxHeight *1.5; holeCount++) {
 			BlockPos center = stoneBlocks.get(rdm.nextInt(stoneBlocks.size()));
 			
@@ -549,6 +500,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				entryAlreadyIsInDifferentMap = true;
 			}
 		}
+		if(spawnersNChestsOnPath.contains(p)) {
+			entryAlreadyIsInDifferentMap = true;
+		}
 		//If this key is not already present in another map, add it
 		if(!entryAlreadyIsInDifferentMap) {
 			if(!blockMaps.get(nextMapsIndex).containsKey(p) || (blockMaps.get(nextMapsIndex).containsKey(p) && !skipIfAlreadyContained)) {
@@ -564,21 +518,6 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	}
 	
 	private void generatePillarsWithHashMap(/*Map<BlockPos, Block> volcanoBlocks, */List<BlockPos> centers, int maxY, World world) {
-		/*for(BlockPos center : centers) {
-			for(int iY = 0; iY <= maxY; iY++) {
-				for(int iX = -3; iX <= 3; iX++) {
-					for(int iZ = -3; iZ <= 3; iZ++) {
-						if(DungeonGenUtils.isInsideCircle(iX, iZ, 3, center)) {
-							//volcanoBlocks.put(center.add(iX, iY, iZ), dungeon.getPillarBlock());
-							BlockPos p = center.add(iX, iY, iZ);
-							if(volcanoBlocks.containsKey(p)) {
-								volcanoBlocks.put(p, dungeon.getPillarBlock());
-							}
-						}
-					}
-				}
-			}
-		}*/
 		for(BlockPos center : centers) {
 			for(int iY = 0; iY <= maxY; iY++) {
 				for(int iX = -3; iX <= 3; iX++) {
