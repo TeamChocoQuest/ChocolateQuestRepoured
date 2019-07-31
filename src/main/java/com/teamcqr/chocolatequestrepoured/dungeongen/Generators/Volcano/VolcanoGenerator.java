@@ -311,8 +311,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//DungeonGenUtils.passHashMapToThread(volcanoBlocks, volcanoBlocks.size() / Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(), world, true);
 		for(Map<BlockPos, Block> map : blockMaps) {
 			//DungeonGenUtils.passHashMapToThread(map, -1, world, true);
-			//DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
-			Runnable runner = new Runnable() {
+			DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
+			/*Runnable runner = new Runnable() {
 				
 				@Override
 				public void run() {
@@ -326,7 +326,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			};
 			Thread fred = new Thread(runner, "Volcano constructor thread");
 			fred.setDaemon(false);
-			fred.start();
+			fred.start();*/
 		}
 		System.out.println("Tasks added to threads! They should execute now...");
 		

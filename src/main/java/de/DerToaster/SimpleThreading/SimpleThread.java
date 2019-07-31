@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 class SimpleThread extends Thread {
 	
-	private int rerunsTillStop = 20;
-	private boolean running = false;
+	/*private int rerunsTillStop = 20;
+	private boolean running = false;*/
 
 	private Thread mainThread;
 	
@@ -38,9 +38,9 @@ class SimpleThread extends Thread {
 		
 		//unlockQueue();
 		
-		if(!this.running) {
+		/*if(!this.running) {
 			this.start();
-		}
+		}*/
 		
 		/*if(runAfterAdd) {
 			this.run();
@@ -50,7 +50,7 @@ class SimpleThread extends Thread {
 	@Override
 	public void start() {
 		if(!this.tasks.isEmpty()) {
-			this.running = true;
+			//this.running = true;
 			run();
 		}
 	}
@@ -72,18 +72,11 @@ class SimpleThread extends Thread {
 			this.run();
 		} else {
 			try {
-				sleep(10);
+				sleep(50);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			this.rerunsTillStop--;
-			if(this.rerunsTillStop <= 0) {
-				this.running = false;
-				this.rerunsTillStop = 20;
-			} else {
-				//System.out.println("CQ Thread: " + this.getName() + ": Remaing tasks: " + this.tasks.size());
 				this.run();
-			}
 		}
 	}
 	
