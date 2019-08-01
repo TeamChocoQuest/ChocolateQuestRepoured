@@ -2,6 +2,9 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
@@ -28,7 +31,9 @@ public class EntityHandler
 		registerModEntity(":projectile_poison_spell", ProjectilePoisonSpell.class, "ProjectilePoisonSpell", Reference.PROJECTILE_POISON_SPELL);
 
 		registerModEntity(":mob_cqrzombie", EntityCQRZombie.class, "EntityCQRZombie", Reference.ENTITY_CQRZOMBIE_ID, 3289650, 000000);
-
+		registerModEntity(":mob_cqrpigman", EntityCQRPigman.class, "EntityCQRPigman", Reference.ENTITY_CQRPIGMAN_ID, 3289650, 000000);
+		registerModEntity(":mob_cqrdwarf", EntityCQRDwarf.class, "EntityCQRDwarf", Reference.ENTITY_CQRDWARF_ID, 3289650, 000000);
+		registerModEntity(":boss_cqrnether_dragon", EntityCQRNetherDragon.class, "EntityCQRBossNetherDragon", Reference.ENTITY_BOSS_NETHER_DRAGON, 000000, 3289650);
 	}
 	
 	public static void registerModEntity(String path, Class<? extends Entity> entityClass, String entityName, int id)

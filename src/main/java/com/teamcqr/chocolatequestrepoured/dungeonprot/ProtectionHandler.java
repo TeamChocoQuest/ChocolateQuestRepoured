@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
+import java.util.ArrayList;
+
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
+
 import com.teamcqr.chocolatequestrepoured.util.dataIO.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.dataIO.FileIOUtil;
 import com.teamcqr.chocolatequestrepoured.util.dataIO.ObjectToCQONUtil;
@@ -13,8 +16,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.ArrayList;
 
 /**
  * Central class responsible for handling all activities related to the protection of regions

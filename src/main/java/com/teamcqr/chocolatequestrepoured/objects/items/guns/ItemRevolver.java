@@ -66,6 +66,7 @@ public class ItemRevolver extends ItemBase
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn)
     {
+		System.out.println("Hand: " + handIn.toString());
         ItemStack stack = playerIn.getHeldItem(handIn);
         boolean flag = !findAmmo(playerIn).isEmpty();
 
@@ -98,14 +99,14 @@ public class ItemRevolver extends ItemBase
 				{
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 10);
+					player.getCooldownTracker().setCooldown(stack.getItem(), 10);
 					worldIn.spawnEntity(bulletE);
 				}
 				else
 				{
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 10);
+					player.getCooldownTracker().setCooldown(stack.getItem(), 10);
 					worldIn.spawnEntity(bulletE);
 					stack.damageItem(1, player);
 				}
