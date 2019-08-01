@@ -17,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -323,13 +322,20 @@ public class VolcanoGenerator implements IDungeonGenerator{
 					Block b = map.get(p);
 					if(!world.isRemote) {
 
-						Minecraft.getMinecraft().addScheduledTask(new Runnable() {
+						Runnable runner = new Runnable() {
 							
 							@Override
 							public void run() {
-								world.setBlockState(p, b.getDefaultState());
+								if(Block.isEqualTo(b, Blocks.AIR)) {
+									world.setBlockToAir(p);
+								} else {
+									world.setBlockState(p, b.getDefaultState());
+								}
 							}
-						});
+						};
+						
+						/*Minecraft.getMinecraft().addScheduledTask(runner)*/
+						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(runner);
 					}
 				}
 			}
@@ -507,7 +513,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		for(int i = 0; i < blockMaps.size(); i++) {
 			if(i != nextMapsIndex && blockMaps.get(i).containsKey(p) && !skipIfAlreadyContained) {
 				blockMaps.get(i).put(p,b);
-				blocks.get(i).add(p);
+				//blocks.get(i).add(p);
 				entryAlreadyIsInDifferentMap = true;
 			}
 		}

@@ -75,14 +75,14 @@ class SimpleThread extends Thread {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			this.rerunsTillStop--;
+			/*this.rerunsTillStop--;
 			if(this.rerunsTillStop <= 0) {
 				this.running = false;
 				this.rerunsTillStop = 20;
-			} else {
+			} else {*/
 				//System.out.println("CQ Thread: " + this.getName() + ": Remaing tasks: " + this.tasks.size());
 				this.run();
-			}
+			//}
 		}
 	}
 	
