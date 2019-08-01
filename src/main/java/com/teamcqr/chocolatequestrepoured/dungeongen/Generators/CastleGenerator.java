@@ -54,7 +54,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		if(dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
-			supportBuilder.generateSupportHill(new Random(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
+			supportBuilder.generateSupportHill(dungeon.getRandom(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
 		}
 
 		int sizeX;
@@ -75,8 +75,8 @@ public class CastleGenerator implements IDungeonGenerator{
 		sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
 		sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
 		//round down to nearest multiple of room size
-		sizeX -= (sizeX % dungeon.getRoomSize());
-		sizeZ -= (sizeZ % dungeon.getRoomSize());
+		sizeX = roundToRoomSize(sizeX);
+		sizeZ = roundToRoomSize(sizeZ);
 
 		// Each iteration through this loop is one "layer" of castle - each layer is generated the same way, just with a shrinking build area
 		while (Math.min(sizeX, sizeZ) > roomSize)
@@ -100,14 +100,15 @@ public class CastleGenerator implements IDungeonGenerator{
 			buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.WEST, layerFloors, currentLayer, totalFloors);
 
 			// Now try to build a new structure on top of this one
-			quarterSizeX = sizeX / 4;
-			quarterSizeZ = sizeZ / 4;
+			quarterSizeX = sizeX / 2;
+			quarterSizeZ = sizeZ / 2;
 			buildAreaX = sizeX;
 			buildAreaZ = sizeZ;
-			sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
-			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+			sizeX = quarterSizeX + random.nextInt(quarterSizeX);
+			sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ);
 			sizeX = roundToRoomSize(sizeX);
 			sizeZ = roundToRoomSize(sizeZ);
+			System.out.println("Calculated next layer (x, z) size: (" + sizeX + ", " + sizeZ + ")");
 
 			totalFloors += layerFloors;
 			y += (floorHeight + 1) * layerFloors;
@@ -149,6 +150,8 @@ public class CastleGenerator implements IDungeonGenerator{
 		int subX;
 		int subZ;
 
+		//determine the available area to build a substructure, based on the total available build area
+		//of the main structure and where it was build within that area
 		switch (facing)
 		{
 			case NORTH:
@@ -171,10 +174,10 @@ public class CastleGenerator implements IDungeonGenerator{
 
 		}
 
-		// Add substructure to the north, if there is room
+		//While there is at least room for a tower
 		while (roomToBuildX > MIN_TOWER_SIZE && roomToBuildZ > MIN_TOWER_SIZE)
 		{
-			//boolean buildSquarePart = (roomToBuildX > roomSize) && (roomToBuildZ > roomSize);
+			//determine if there is room for an entire additional structure
 			boolean buildSquarePart = (roomToBuildX > roomSize && roomToBuildZ > roomSize);
 
 			if (buildSquarePart)
@@ -191,6 +194,7 @@ public class CastleGenerator implements IDungeonGenerator{
 				subSizeZ = subSizeX;
 			}
 
+			//determine the top left corner of this structure
 			subX = getSideStructureX(x, sizeX, subSizeX, facing);
 			subZ = getSideStructureZ(z, sizeZ, subSizeZ, facing);
 
@@ -201,14 +205,20 @@ public class CastleGenerator implements IDungeonGenerator{
 			else
 			{
 				towers.add(new CastlePartTower(new BlockPos(subX, y, subZ), subSizeX, currentFloor, this.dungeon, facing));
+				break; //don't want to build anything after a tower
 			}
 
-			roomToBuildX -= subSizeX;
-			roomToBuildZ -= subSizeZ;
+			//recalculate how much build room we have given the structure we just built
+			roomToBuildX = (facing.getAxis() == EnumFacing.Axis.X) ? (roomToBuildX - subSizeX) : (subSizeX);
+			roomToBuildZ = (facing.getAxis() == EnumFacing.Axis.Z) ? (roomToBuildZ - subSizeZ) : (subSizeZ);
+
+			//this structure is now considered the "main" structure as we build outwards
 			sizeX = subSizeX;
 			sizeZ = subSizeZ;
-			x = (facing == EnumFacing.EAST) ? subX + subSizeX : subX;
-			z = (facing == EnumFacing.SOUTH) ? subZ + subSizeZ : subZ;
+
+			//set the new top left corner
+			x = subX;
+			z = subZ;
 		}
 	}
 
@@ -261,7 +271,7 @@ public class CastleGenerator implements IDungeonGenerator{
 		}
 
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), chunk.getPos(), world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 

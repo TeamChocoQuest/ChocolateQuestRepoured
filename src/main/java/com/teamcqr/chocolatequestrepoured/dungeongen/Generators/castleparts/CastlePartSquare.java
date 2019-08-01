@@ -3,8 +3,10 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.ICastleAddon;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms.CastleRoomHelper;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -30,6 +32,7 @@ public class CastlePartSquare implements ICastlePart
     private Random random;
     private int startLayer;
     private boolean isTopFloor;
+    private CastleRoomHelper roomHelper;
 
     public CastlePartSquare(BlockPos origin, int sizeX, int sizeZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
     {
@@ -69,13 +72,13 @@ public class CastlePartSquare implements ICastlePart
             currentY = y + currentFloor * (floorHeight + 1);
 
             //over the entire x/z area
-            for (int i = 0; i < sizeX; i++)
+            for (int i = 0; i <= sizeX; i++)
             {
-                for (int j = 0; j < sizeZ; j++)
+                for (int j = 0; j <= sizeZ; j++)
                 {
                     // place a floor
-                    blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
-                    buildList.add(new BlockPlacement(x + i, currentY, z + j, blockToBuild));
+                    //blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
+                    //buildList.add(new BlockPlacement(x + i, currentY, z + j, blockToBuild));
                     // place a ceiling
                     blockToBuild = this.dungeon.getWallBlock().getDefaultState();
                     buildList.add(new BlockPlacement(x + i, currentY + floorHeight, z + j, blockToBuild));
@@ -85,7 +88,7 @@ public class CastlePartSquare implements ICastlePart
             //Build walls
 
             //Add x walls
-            for (int i = 0; i < sizeX; i++)
+            for (int i = 0; i <= sizeX; i++)
             {
                 for (int j = 0; j < floorHeight; j++)
                 {
@@ -96,19 +99,19 @@ public class CastlePartSquare implements ICastlePart
                     {
                         blockToBuild = Blocks.GLASS_PANE.getDefaultState();
                         buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ, blockToBuild));
                     }
                     else
                     {
                         blockToBuild = dungeon.getWallBlock().getDefaultState();
                         buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ - 1, blockToBuild));
+                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ, blockToBuild));
                     }
                 }
             }
 
             //Add z walls
-            for (int i = 0; i < sizeZ; i++)
+            for (int i = 0; i <= sizeZ; i++)
             {
                 for (int j = 0; j < floorHeight; j++)
                 {
@@ -119,13 +122,13 @@ public class CastlePartSquare implements ICastlePart
                     {
                         blockToBuild = Blocks.GLASS_PANE.getDefaultState();
                         buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockPlacement(x + sizeX - 1, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x + sizeX, currentY + j, z + i, blockToBuild));
                     }
                     else
                     {
                         blockToBuild = dungeon.getWallBlock().getDefaultState();
                         buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockPlacement(x + sizeX - 1, currentY + j, z + i, blockToBuild));
+                        buildList.add(new BlockPlacement(x + sizeX, currentY + j, z + i, blockToBuild));
                     }
                 }
             }
@@ -137,6 +140,12 @@ public class CastlePartSquare implements ICastlePart
                 addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
                 addonList.add(new CastleAddonDoor(x + sizeX - 1, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
+
+            BlockPos roomStart = start.add(1, 1, 1);
+            CastleRoomHelper roomHelper = new CastleRoomHelper(roomStart, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
+            roomHelper.fillRooms();
+            System.out.println(roomHelper.toString());
+            roomHelper.generateRooms(buildList);
         }
 
         //Build the roof
@@ -154,7 +163,7 @@ public class CastlePartSquare implements ICastlePart
             System.out.println("Adding walkable roof");
             roofType = CastleAddonRoof.RoofType.WALKABLE;
         }
-        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX, sizeZ, roofType, facing);
+        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX + 1, sizeZ + 1, roofType, facing);
         addonList.add(roof);
 
         if (!addonList.isEmpty())
@@ -164,7 +173,6 @@ public class CastlePartSquare implements ICastlePart
                 addon.generate(buildList);
             }
         }
-
 
         if(!buildList.isEmpty())
         {

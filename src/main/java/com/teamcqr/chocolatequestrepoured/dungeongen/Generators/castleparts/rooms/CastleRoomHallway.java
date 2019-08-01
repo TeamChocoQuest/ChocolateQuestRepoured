@@ -6,17 +6,22 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
-public class CastleRoomKitchen extends CastleRoomGeneric
+public class CastleRoomHallway extends CastleRoom
 {
-    public CastleRoomKitchen(BlockPos startPos, int sideLength, int height, RoomPosition position)
+    public CastleRoomHallway(BlockPos startPos, int sideLength, int height, RoomPosition position, boolean vertical)
     {
         super(startPos, sideLength, height, position);
-        this.roomType = RoomType.KITCHEN;
-        this.edgeClutter.add(Blocks.FURNACE.getDefaultState());
-        this.edgeClutter.add(Blocks.CAULDRON.getDefaultState());
-        this.edgeClutter.add(Blocks.WOODEN_SLAB.getDefaultState());
+        this.roomType = RoomType.HALLWAY;
+        if (vertical)
+        {
+            buildNorthWall = false;
+            buildSouthWall = false;
+        }
+        else
+        {
+            buildWestWall = false;
+            buildEastWall = false;
+        }
     }
 
     @Override
@@ -26,8 +31,8 @@ public class CastleRoomKitchen extends CastleRoomGeneric
         {
             for (int x = 0; x < sideLength - 1; x++)
             {
-                BlockPos pos = startPos.add( x, 0, z);
-                blocks.add(new BlockPlacement(pos, Blocks.PLANKS.getDefaultState()));
+                BlockPos pos = startPos.add(x, 0, z);
+                blocks.add(new BlockPlacement(pos, Blocks.WOOL.getDefaultState()));
             }
         }
         addWalls(blocks);
@@ -36,6 +41,6 @@ public class CastleRoomKitchen extends CastleRoomGeneric
     @Override
     public String getNameShortened()
     {
-        return "KIT";
+        return "HLL";
     }
 }
