@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -312,12 +313,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//System.out.println("Blocks calculated! Beginning placement...");
 		System.out.println("Waiting for forge to place all the blocks, then we are done...");
 		//DungeonGenUtils.passHashMapToThread(volcanoBlocks, volcanoBlocks.size() / Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(), world, true);
+		
 		for(int iM = 0; iM < blockMaps.size(); iM++) {
 			Map<BlockPos, Block> map = blockMaps.get(iM);
 			//DungeonGenUtils.passHashMapToThread(map, -1, world, true);
 			//DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
 			//System.out.println("beginning iterating list...");
-			for(BlockPos p : blocks.get(iM)) {
+			/*for(BlockPos p : blocks.get(iM)) {
 				if(map.containsKey(p)) {
 					Block b = map.get(p);
 					if(!world.isRemote) {
@@ -334,11 +336,11 @@ public class VolcanoGenerator implements IDungeonGenerator{
 							}
 						};
 						
-						/*Minecraft.getMinecraft().addScheduledTask(runner)*/
 						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(runner);
 					}
 				}
-			}
+			}*/
+			ThreadingUtil.passHashMapToThreads(blocks.get(iM), map, -1, world, true);
 			//System.out.println("end of iterating list!");
 		}
 		
@@ -432,7 +434,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 				}
 			}
 			
-			DungeonGenUtils.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 250, true);
+			ThreadingUtil.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 250, true);
 		}
 		//DONE Pass the list to a simplethread to place the blocks
 	}

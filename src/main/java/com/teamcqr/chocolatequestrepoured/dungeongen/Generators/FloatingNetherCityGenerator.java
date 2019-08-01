@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -158,7 +159,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 			decrementor++;
 		}
 		
-		DungeonGenUtils.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100, true);
+		ThreadingUtil.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100, true);
 	}
 
 }
