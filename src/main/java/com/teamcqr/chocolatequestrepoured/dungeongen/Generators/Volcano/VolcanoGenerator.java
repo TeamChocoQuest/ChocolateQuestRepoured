@@ -103,8 +103,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	//TODO: Merge the upper and lower part procedures to save calculation time and reduce O(n) runtime
 	//DONE: Move the map splitting out of the dungeonUtil and iniside here!!
 	//Also make sure to use multiple maps, otherwise it could take longer!!
-	//TODO: Move all block pos to a list, so that we dont have to iterate through the map
-	//TODO: Fix placement of magma blocks, maybe a separate lsit for the upper part?
+	//DONE: Move all block pos to a list, so that we dont have to iterate through the map
+	//DONE: Fix placement of magma blocks, maybe a separate lsit for the upper part?
 	
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) { 

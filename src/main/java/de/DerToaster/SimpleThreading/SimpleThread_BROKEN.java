@@ -6,7 +6,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 class SimpleThread_BROKEN extends Thread {
 	
-	private int rerunsTillStop = 20;
 	private boolean running = false;
 
 	private Thread mainThread;
