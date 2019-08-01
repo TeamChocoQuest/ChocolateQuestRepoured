@@ -16,6 +16,7 @@ public class MultiThreadController {
 			SimpleThread fred = new SimpleThread(true);
 			
 			fred.setName("CQ_Async_Block_Placer_Thread#" + (i+1));
+			fred.start();
 			
 			this.threads.add(new SimpleThread(true));
 		}
@@ -27,6 +28,7 @@ public class MultiThreadController {
 			SimpleThread fred = new SimpleThread(true);
 			
 			fred.setName("CQ_Async_Block_Placer_Thread#" + (i+1));
+			fred.start();
 			
 			this.threads.add(fred);
 		}
