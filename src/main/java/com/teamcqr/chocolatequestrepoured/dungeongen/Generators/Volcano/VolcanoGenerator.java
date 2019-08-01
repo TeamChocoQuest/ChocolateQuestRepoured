@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.Volcano.StairCaseHelper.EStairSection;
@@ -24,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Copyright (c) 29.04.2019
@@ -79,7 +81,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	private int nextMapsIndex = 0;
 	private List<Map<BlockPos, Block>> blockMaps = new ArrayList<Map<BlockPos, Block>>();
 	private Map<BlockPos, Boolean> lowerBlocks = new HashMap<>();
-	private List<BlockPos> blocks = new ArrayList<>(); 
+	private List<List<BlockPos>> blocks = new ArrayList<List<BlockPos>>(); 
 	
 	public VolcanoGenerator(VolcanoDungeon dungeon) {
 		this.dungeon = dungeon;
@@ -92,6 +94,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		
 		for(int i = 0; i < Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(); i++) {
 			blockMaps.add(new HashMap<BlockPos, Block>());
+			blocks.add(new ArrayList<BlockPos>());
 		}
 	}
 	
@@ -310,11 +313,12 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//System.out.println("Blocks calculated! Beginning placement...");
 		System.out.println("Waiting for forge to place all the blocks, then we are done...");
 		//DungeonGenUtils.passHashMapToThread(volcanoBlocks, volcanoBlocks.size() / Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount(), world, true);
-		for(Map<BlockPos, Block> map : blockMaps) {
+		for(int iM = 0; iM < blockMaps.size(); iM++) {
+			Map<BlockPos, Block> map = blockMaps.get(iM);
 			//DungeonGenUtils.passHashMapToThread(map, -1, world, true);
 			//DungeonGenUtils.passHashMapToThreads(blocks, map, -1, world, true);
 			//System.out.println("beginning iterating list...");
-			for(BlockPos p : blocks) {
+			for(BlockPos p : blocks.get(iM)) {
 				if(map.containsKey(p)) {
 					Block b = map.get(p);
 					if(!world.isRemote) {
@@ -331,6 +335,13 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			}
 			//System.out.println("end of iterating list!");
 		}
+		
+		//Protection for the volcano structure, not the dungeon itself
+		BlockPos lowerCorner = new BlockPos(x -(baseRadius*2), 0, z-(baseRadius*2));
+		BlockPos upperCorner = new BlockPos(2*(baseRadius*2), yMax +y, 2*(baseRadius*2));
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world);
+		MinecraftForge.EVENT_BUS.post(event);
+		
 		System.out.println("Tasks added to threads! They should execute now...");
 		
 	}
@@ -496,7 +507,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		for(int i = 0; i < blockMaps.size(); i++) {
 			if(i != nextMapsIndex && blockMaps.get(i).containsKey(p) && !skipIfAlreadyContained) {
 				blockMaps.get(i).put(p,b);
-				blocks.add(p);
+				blocks.get(i).add(p);
 				entryAlreadyIsInDifferentMap = true;
 			}
 		}
@@ -506,7 +517,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		//If this key is not already present in another map, add it
 		if(!entryAlreadyIsInDifferentMap) {
 			if(!blockMaps.get(nextMapsIndex).containsKey(p) || (blockMaps.get(nextMapsIndex).containsKey(p) && !skipIfAlreadyContained)) {
-				blocks.add(p);
+				blocks.get(nextMapsIndex).add(p);
 				blockMaps.get(nextMapsIndex).put(p,b);
 			}
 		}
