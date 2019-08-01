@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.util.data.SaveNBTToWorldUtil;
+import com.teamcqr.chocolatequestrepoured.util.dataIO.deprecated.SaveNBTToWorldUtil;
 import com.teamcqr.chocolatequestrepoured.util.IHasModel;
 
 import net.minecraft.block.Block;

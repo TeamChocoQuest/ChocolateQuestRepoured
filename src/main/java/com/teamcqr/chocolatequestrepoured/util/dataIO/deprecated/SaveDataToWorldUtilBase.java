@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.data;
+package com.teamcqr.chocolatequestrepoured.util.dataIO.deprecated;
 
 import net.minecraft.world.World;
 

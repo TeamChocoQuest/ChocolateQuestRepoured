@@ -2,8 +2,11 @@ package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import java.util.ArrayList;
 
+import com.google.gson.JsonElement;
+import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.IJsonSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -14,7 +17,7 @@ import net.minecraft.world.World;
  * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
- * @version 22.07.19
+ * @version 23.07.19
  */
 public class ProtectedRegion {
 
@@ -40,6 +43,11 @@ public class ProtectedRegion {
     public boolean preventExplosionOther = true;
     public boolean preventFireSpread = true;
     public boolean preventNaturalMobSpawn = true;
+
+    // Variable Names for Serialization
+    public String[] getCQONFieldNames() {
+        return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
+    }
 
     /*
      * Constructors

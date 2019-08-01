@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
-import net.minecraft.block.BlockFire;
+import com.teamcqr.chocolatequestrepoured.util.dataIO.ByteArrayManipulationUtil;
+import com.teamcqr.chocolatequestrepoured.util.dataIO.FileIOUtil;
+import com.teamcqr.chocolatequestrepoured.util.dataIO.ObjectToCQONUtil;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -44,7 +46,9 @@ public class ProtectionHandler {
     // Detect Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
-        registerRegion(new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld()));
+        ProtectedRegion toRegister = new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
+        registerRegion(toRegister);
+        FileIOUtil.saveToFile( FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon", ByteArrayManipulationUtil.convertArrayListByteToPrimByteArray(ObjectToCQONUtil.convertObjectToCQON(toRegister, ObjectToCQONUtil.getDefaultRelevancyLUT(), 7)));
     }
 
     // Handle Protection-Related Events
@@ -80,24 +84,7 @@ public class ProtectionHandler {
             if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
 
                 // Allow TNT, cancel if any other exploder
-                if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getExplosion(), "exploder", "field_77283_e") instanceof EntityTNTPrimed ) ) {
-                    e.setCanceled(true);
-                }
-
-            }
-        }
-
-    }
-
-    @SubscribeEvent
-    public void eventHandleFireTick(BlockEvent.NeighborNotifyEvent e) {
-
-        // Check BlockPos against all active regions
-        for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
-
-                // Cancel if instanceof BlockFire
-                if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getState().getBlock(), "exploder", "field_77283_e") instanceof BlockFire) ) {
+                if ( !(IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"})) instanceof EntityTNTPrimed ) ) {
                     e.setCanceled(true);
                 }
 
