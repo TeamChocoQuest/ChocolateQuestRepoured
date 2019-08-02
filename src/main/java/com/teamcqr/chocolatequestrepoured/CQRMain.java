@@ -164,33 +164,49 @@ public class CQRMain
 		
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 		
-		File dungeonFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/dungeons//");
+		boolean installCQ = false;
+		File CQFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/");
+		if(!CQFolder.exists() || (CQFolder.exists() && !CQFolder.isDirectory())) {
+			CQFolder.mkdirs();
+			//Install default files
+			installCQ = true;
+		}
+		
+		File dungeonFolder = new File(CQFolder.getAbsolutePath() + "/dungeons//");
 		if(!dungeonFolder.exists()) {
 			dungeonFolder.mkdirs();
 		}
 		System.out.println("Dungeon Folder Path: " + dungeonFolder.getAbsolutePath());
 		CQRMain.CQ_DUNGEON_FOLDER = dungeonFolder;
 		
-		File chestFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/lootconfigs//");
+		File chestFolder = new File(CQFolder.getAbsolutePath() + "/lootconfigs//");
 		if(!chestFolder.exists()) {
 			chestFolder.mkdirs();
 		}
 		System.out.println("LootConfig Folder Path: " + chestFolder.getAbsolutePath());
 		CQRMain.CQ_CHEST_FOLDER = chestFolder;
 		
-		File structureFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/structures//");
+		File structureFolder = new File(CQFolder.getAbsolutePath() + "/structures//");
 		if(!structureFolder.exists()) {
 			structureFolder.mkdirs();
 		}
 		System.out.println("Structure Folder Path: " + structureFolder.getAbsolutePath());
 		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
 		
-		File exportFolder = new File(CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() + "/exports//");
+		File exportFolder = new File(CQFolder.getAbsolutePath() + "/exports//");
 		if(!exportFolder.exists()) {
 			exportFolder.mkdirs();
 		}
 		System.out.println("Export Folder Path: " + exportFolder.getAbsolutePath());
 		CQRMain.CQ_EXPORT_FILES_FOLDER = exportFolder;
+		
+		if(installCQ) {
+			installDefaultFiles(CQFolder);
+		}
+	}
+	
+	private void installDefaultFiles(File folder) {
+		//TODO: Install the default stuff
 	}
 	
 	@EventHandler
