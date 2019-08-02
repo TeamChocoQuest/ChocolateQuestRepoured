@@ -91,9 +91,9 @@ public class ThreadingUtil {
 						public void run() {
 							for(BlockPos b : bplistTMP) {
 								if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-									//world.setBlockToAir(b);
+									world.setBlockToAir(b);
 								} else {
-									//world.setBlockState(b, blockToPlace.getDefaultState());
+									world.setBlockState(b, blockToPlace.getDefaultState());
 								}
 							}
 							
@@ -110,9 +110,9 @@ public class ThreadingUtil {
 				public void run() {
 					for(BlockPos b : bplistTMP) {
 						if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-							//world.setBlockToAir(b);
+							world.setBlockToAir(b);
 						} else {
-							//world.setBlockState(b, blockToPlace.getDefaultState());
+							world.setBlockState(b, blockToPlace.getDefaultState());
 						}
 					}
 					
@@ -121,9 +121,9 @@ public class ThreadingUtil {
 		} else {
 			for(BlockPos bp : blocksToPlace) {
 				if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-					//world.setBlockToAir(bp);
+					world.setBlockToAir(bp);
 				} else {
-					//world.setBlockState(bp, blockToPlace.getDefaultState());
+					world.setBlockState(bp, blockToPlace.getDefaultState());
 				}
 			}
 		}
