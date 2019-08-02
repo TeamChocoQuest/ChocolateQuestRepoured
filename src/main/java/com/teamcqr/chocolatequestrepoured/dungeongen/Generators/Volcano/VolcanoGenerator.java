@@ -87,7 +87,9 @@ public class VolcanoGenerator implements IDungeonGenerator{
 		this.baseRadius = new Double(this.minRadius + Math.pow(((this.maxHeight +1)/this.steepness), 1/3)).intValue();
 	}
 	
-	//TODO: Rewrite all lists to one large hashMap<BlockPos, BLOCK>
+	//TODO: Merge all parts
+	//DONE: Lower ore gen
+	//TODO: add noise in crater like in new version that is too slow
 	
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) { 
@@ -238,16 +240,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 					//First check if it is within the base radius...
 					if(DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter*2, centerLoc)) {
 						//If it is at the bottom and also inside the inner radius -> lava
-						if(DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
-							/*if(iY == 0) {
-								lava.add(new BlockPos(iX +x, minY, iZ +z));
-								lava.add(new BlockPos(iX +x, minY -1, iZ +z));
-								lava.add(new BlockPos(iX +x, minY -2, iZ +z));
-								lava.add(new BlockPos(iX +x, minY -3, iZ +z));
-							} else {*/
-								airBlocks.add(new BlockPos(iX +x, iY + minY, iZ +z));
-							//}
-						} else {
+						if(!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, centerLoc)) {
 							//Else it is a wall block
 							//SO now we decide what the wall is gonna be...
 							if(DungeonGenUtils.PercentageRandom(dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius +2, centerLoc)) {
