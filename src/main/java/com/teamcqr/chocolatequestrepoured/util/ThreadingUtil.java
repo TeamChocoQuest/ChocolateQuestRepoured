@@ -54,11 +54,14 @@ public class ThreadingUtil {
 					@Override
 					public void run() {
 						for(BlockPos p : positionsToIterate) {
-							if(mapContainingBlockInformation.get(p) == Blocks.AIR) {
-								world.setBlockToAir(p);
-							} else {
-								world.setBlockState(p, mapContainingBlockInformation.getOrDefault(p, Blocks.BEDROCK).getDefaultState());
-							}
+							Block block = mapContainingBlockInformation.get(p);
+							//if(!Block.isEqualTo(block, world.getBlockState(p).getBlock())) {
+								if(Block.isEqualTo(block, Blocks.AIR)) {
+									world.setBlockToAir(p);
+								} else {
+									world.setBlockState(p, mapContainingBlockInformation.get(p).getDefaultState());
+								}
+							//}
 						}
 					}
 				});
@@ -88,9 +91,9 @@ public class ThreadingUtil {
 						public void run() {
 							for(BlockPos b : bplistTMP) {
 								if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-									world.setBlockToAir(b);
+									//world.setBlockToAir(b);
 								} else {
-									world.setBlockState(b, blockToPlace.getDefaultState());
+									//world.setBlockState(b, blockToPlace.getDefaultState());
 								}
 							}
 							
@@ -107,9 +110,9 @@ public class ThreadingUtil {
 				public void run() {
 					for(BlockPos b : bplistTMP) {
 						if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-							world.setBlockToAir(b);
+							//world.setBlockToAir(b);
 						} else {
-							world.setBlockState(b, blockToPlace.getDefaultState());
+							//world.setBlockState(b, blockToPlace.getDefaultState());
 						}
 					}
 					
@@ -118,12 +121,31 @@ public class ThreadingUtil {
 		} else {
 			for(BlockPos bp : blocksToPlace) {
 				if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-					world.setBlockToAir(bp);
+					//world.setBlockToAir(bp);
 				} else {
-					world.setBlockState(bp, blockToPlace.getDefaultState());
+					//world.setBlockState(bp, blockToPlace.getDefaultState());
 				}
 			}
 		}
+	}
+	
+	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block mainBlock, Block secondaryBlock, int chanceForSecondary, World world, int entriesPerPartList) {
+		List<BlockPos> mainBlocks = new ArrayList<>();
+		List<BlockPos> secBlocks = new ArrayList<>();
+		
+		//System.out.println("Chance: " + chanceForSecondary);
+		
+		for(BlockPos bp : blocksToPlace) {
+			if(DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 -chanceForSecondary)) {
+				secBlocks.add(bp);
+			} else {
+				mainBlocks.add(bp);
+			}
+		}
+		
+		passListWithBlocksToThreads(mainBlocks, mainBlock, world, entriesPerPartList, true);
+		passListWithBlocksToThreads(secBlocks, secondaryBlock, world, entriesPerPartList, true);
+		
 	}
 
 }
