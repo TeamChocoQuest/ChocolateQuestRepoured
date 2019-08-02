@@ -38,19 +38,12 @@ public class DungeonGenUtils {
 	
 	
 	
-	public static int getHighestYAt(Chunk chunk, int x, int z, boolean ignoreWater) {
+	public static int getHighestYAt(Chunk chunk, int x, int z, boolean countWaterAsAir) {
 		int y = 255;
 		Block block = chunk.getBlockState(x, y, z).getBlock();
-		if(ignoreWater) {
-			while(Block.isEqualTo(block, Blocks.AIR) || Block.isEqualTo(block, Blocks.WATER) || Block.isEqualTo(block, Blocks.FLOWING_WATER)) {
-				y--;
-				block = chunk.getBlockState(x, y, z).getBlock();
-			}
-		} else {
-			while(Block.isEqualTo(block, Blocks.AIR)) {
-				y--;
-				block = chunk.getBlockState(x, y, z).getBlock();
-			}
+		while(Block.isEqualTo(block, Blocks.AIR) || (countWaterAsAir && (Block.isEqualTo(block, Blocks.WATER)  || Block.isEqualTo(block, Blocks.FLOWING_WATER)))) {
+			y--;
+			block = chunk.getBlockState(x, y, z).getBlock();
 		}
 		
 		return y;
