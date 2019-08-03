@@ -54,11 +54,14 @@ public class ThreadingUtil {
 					@Override
 					public void run() {
 						for(BlockPos p : positionsToIterate) {
-							if(mapContainingBlockInformation.get(p) == Blocks.AIR) {
-								world.setBlockToAir(p);
-							} else {
-								world.setBlockState(p, mapContainingBlockInformation.getOrDefault(p, Blocks.BEDROCK).getDefaultState());
-							}
+							Block block = mapContainingBlockInformation.get(p);
+							//if(!Block.isEqualTo(block, world.getBlockState(p).getBlock())) {
+								if(Block.isEqualTo(block, Blocks.AIR)) {
+									world.setBlockToAir(p);
+								} else {
+									world.setBlockState(p, mapContainingBlockInformation.get(p).getDefaultState());
+								}
+							//}
 						}
 					}
 				});
@@ -124,6 +127,25 @@ public class ThreadingUtil {
 				}
 			}
 		}
+	}
+	
+	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block mainBlock, Block secondaryBlock, int chanceForSecondary, World world, int entriesPerPartList) {
+		List<BlockPos> mainBlocks = new ArrayList<>();
+		List<BlockPos> secBlocks = new ArrayList<>();
+		
+		//System.out.println("Chance: " + chanceForSecondary);
+		
+		for(BlockPos bp : blocksToPlace) {
+			if(DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 -chanceForSecondary)) {
+				secBlocks.add(bp);
+			} else {
+				mainBlocks.add(bp);
+			}
+		}
+		
+		passListWithBlocksToThreads(mainBlocks, mainBlock, world, entriesPerPartList, true);
+		passListWithBlocksToThreads(secBlocks, secondaryBlock, world, entriesPerPartList, true);
+		
 	}
 
 }

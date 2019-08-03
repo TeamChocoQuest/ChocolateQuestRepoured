@@ -9,7 +9,11 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.wallparts.WallPartT
 import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.wallparts.WallPartWall;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomePlains;
+import net.minecraft.world.biome.BiomeSnow;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.common.IWorldGenerator;
@@ -36,6 +40,10 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance())) {
+			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
+			if(biome instanceof BiomePlains || biome instanceof BiomeSnow) {
+				//Flag for the gate
+			}
 			IWallPart wallPart = null;
 			IWallPart railingPart = null;
 			// GENERATE THE WALL
