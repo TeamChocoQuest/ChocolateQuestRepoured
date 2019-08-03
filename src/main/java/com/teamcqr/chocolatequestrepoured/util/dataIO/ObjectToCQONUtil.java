@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util.dataIO;
 
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -144,15 +145,17 @@ public class ObjectToCQONUtil {
                     return toReturn;
                 }
 
+                // Add new line
+                toReturn.addAll(ByteArrayManipulationUtil.convertStringToArrayListByte("\n"));
+
                 // For each nested field
-                for( Field f : IntrusiveModificationHelper.reflectGetAllFields(toConvert.get(origin)) ) {
+                for( Field f : IntrusiveModificationHelper.reflectGetAllFields(toConvert.getType()) ) {
+                    System.out.println(IntrusiveModificationHelper.reflectGetFieldName(f));
                     // that is listed in the current field's LUT
                     for( String s : fieldRelevancyLUT.get(toConvert.getType()) ) {
-                        if(toConvert.getName().equals(s)) {
-                            // Add new line
-                            toReturn.addAll(ByteArrayManipulationUtil.convertStringToArrayListByte("\n"));
+                        if(IntrusiveModificationHelper.reflectGetFieldName(f).equals(s)) {
                             // Passes current field as an object, then passes desired nested field and other constant data
-                            recursiveConvertFieldToCQON(toConvert.get(origin), f, fieldRelevancyLUT, currentRecursionDepth + 1, maxRecursionDepth);
+                            toReturn.addAll( recursiveConvertFieldToCQON(toConvert.get(origin), f, fieldRelevancyLUT, currentRecursionDepth + 1, maxRecursionDepth) );
                         }
                     }
                 }
