@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.intrusive;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Abstracts away the use of intrusive modding methods such as ASM or Reflection API
@@ -92,39 +93,53 @@ public class IntrusiveModificationHelper {
     }
 
     /**
-     * Returns all fields of a provided instance and sets their accessibility status to true
-     * @param instanceToAccess Instance to access
+     * Returns all fields of a provided Class object or instance thereof and sets their accessibility status to true
+     * USES RECURSION TO RETRIEVE SUPERCLASS FIELDS - USE SPARINGLY
      * @return Field[]
      */
-    public static Field[] reflectGetAllFields(Object instanceToAccess) {
+    public static Field[] reflectGetAllFields(Object instanceOrClassToAccess) {
 
-        Field[] fieldsFromInstance = instanceToAccess.getClass().getDeclaredFields();
+        // Variables
+        Class classToAccess;
+        Field[] fieldsFromClass = new Field[] {};
+        Field[] fieldsFromSuperclass = new Field[] {};
 
-        if(instanceToAccess.getClass().getSuperclass() != null && instanceToAccess.getClass().getSuperclass() != Object.class) {
-
-            // Recursive call
-            Field[] fieldsFromSuperclass = reflectGetAllFields(instanceToAccess.getClass().getSuperclass());
-            // Temp var
-            Field[] existingFields = fieldsFromInstance;
-
-            // Add temp var + recursive result to fieldsFromInstance
-            fieldsFromInstance = new Field[existingFields.length + fieldsFromSuperclass.length];
-            System.arraycopy(existingFields, 0, fieldsFromInstance, 0, existingFields.length);
-            System.arraycopy(fieldsFromSuperclass, 0, fieldsFromInstance, existingFields.length, fieldsFromSuperclass.length);
-
+        // Convert parameter to instance of Class
+        if(instanceOrClassToAccess instanceof Class) {
+            classToAccess = (Class) instanceOrClassToAccess;
+        } else {
+            classToAccess = instanceOrClassToAccess.getClass();
         }
 
-        try {
+        // Retrieve fields
+        fieldsFromClass = classToAccess.getDeclaredFields();
 
-            for( Field f : fieldsFromInstance ) {
-                f.setAccessible(true);
+        if(classToAccess.getSuperclass() != null && classToAccess.getSuperclass() != Object.class) {
+
+            // Recursive call
+            try {
+                fieldsFromSuperclass = reflectGetAllFields( classToAccess.getSuperclass() );
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
+            // Combine Arrays
+            ArrayList<Field> temp = new ArrayList<>(fieldsFromClass.length + fieldsFromSuperclass.length);
+            temp.addAll(Arrays.asList(fieldsFromClass));
+            temp.addAll(Arrays.asList(fieldsFromSuperclass));
+            fieldsFromClass = new Field[temp.size()];
+            for(int i = 0; i < fieldsFromClass.length; i++) fieldsFromClass[i] = temp.get(i);
+        }
+
+        // Remove accessibility limitations
+        try {
+            for( Field f : fieldsFromClass ) f.setAccessible(true);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return fieldsFromInstance;
+        // Return
+        return fieldsFromClass;
 
     }
 
