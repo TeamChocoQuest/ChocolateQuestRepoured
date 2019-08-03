@@ -1,8 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
+import java.util.ArrayList;
+
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
-import net.minecraft.block.BlockFire;
+
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -11,8 +13,6 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.ArrayList;
 
 /**
  * Central class responsible for handling all activities related to the protection of regions
@@ -97,9 +97,9 @@ public class ProtectionHandler {
             if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
 
                 // Cancel if instanceof BlockFire
-                if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getState().getBlock(), "exploder", "field_77283_e") instanceof BlockFire) ) {
+                /*if ( !(IntrusiveModificationHelper.safeGetFieldValue(e.getState().getBlock(), "exploder", "field_77283_e") instanceof BlockFire) ) {
                     e.setCanceled(true);
-                }
+                }*/
 
             }
         }

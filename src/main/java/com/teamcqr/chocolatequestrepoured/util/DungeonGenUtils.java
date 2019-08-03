@@ -35,62 +35,15 @@ public class DungeonGenUtils {
 		}
 		return false;
 	}
-
-	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList) {
-		List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
-		int counter = 1;
-		for(BlockPos bp : blocksToPlace) {
-			bplistTMP.add(bp);
-			//One Task contains 50 blocks to place
-			if(counter % entriesPerPartList == 0) {
-				Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-					
-					@Override
-					public void run() {
-						for(BlockPos b : bplistTMP) {
-							if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-								world.setBlockToAir(b);
-							} else {
-								world.setBlockState(b, blockToPlace.getDefaultState());
-							}
-						}
-						
-					}
-				});
-				
-				bplistTMP.clear();
-			}
-			counter++;
-		}
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-			
-			@Override
-			public void run() {
-				for(BlockPos b : bplistTMP) {
-					if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-						world.setBlockToAir(b);
-					} else {
-						world.setBlockState(b, blockToPlace.getDefaultState());
-					}
-				}
-				
-			}
-		});
-	}
 	
-	public static int getHighestYAt(Chunk chunk, int x, int z, boolean ignoreWater) {
+	
+	
+	public static int getHighestYAt(Chunk chunk, int x, int z, boolean countWaterAsAir) {
 		int y = 255;
 		Block block = chunk.getBlockState(x, y, z).getBlock();
-		if(ignoreWater) {
-			while(Block.isEqualTo(block, Blocks.AIR) || Block.isEqualTo(block, Blocks.WATER) || Block.isEqualTo(block, Blocks.FLOWING_WATER)) {
-				y--;
-				block = chunk.getBlockState(x, y, z).getBlock();
-			}
-		} else {
-			while(Block.isEqualTo(block, Blocks.AIR)) {
-				y--;
-				block = chunk.getBlockState(x, y, z).getBlock();
-			}
+		while(Block.isEqualTo(block, Blocks.AIR) || (countWaterAsAir && (Block.isEqualTo(block, Blocks.WATER)  || Block.isEqualTo(block, Blocks.FLOWING_WATER)))) {
+			y--;
+			block = chunk.getBlockState(x, y, z).getBlock();
 		}
 		
 		return y;
@@ -187,4 +140,5 @@ public class DungeonGenUtils {
 	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {
 		return getLocSpecDungeonsForChunk(chunk.x, chunk.z, world);
 	}
+	
 }
