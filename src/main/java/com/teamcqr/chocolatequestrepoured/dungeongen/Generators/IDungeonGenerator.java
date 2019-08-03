@@ -28,6 +28,9 @@ public interface IDungeonGenerator {
 			}
 		}
 		y = median /cant;*/
+		if(world.isRemote) {
+			return;
+		}
 		
 		preProcess(world, chunk, x, y, z);
 		buildStructure(world, chunk, x, y, z);
