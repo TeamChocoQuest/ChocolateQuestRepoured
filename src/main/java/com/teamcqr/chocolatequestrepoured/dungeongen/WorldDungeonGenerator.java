@@ -35,6 +35,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 		// Check for flat worlds, if dungeons may spawn there
 		boolean flatPass = true;
+		boolean behindWall = false;
 		if (world.getWorldType().equals(WorldType.FLAT) && !Reference.CONFIG_HELPER_INSTANCE.generateDungeonsInFlat()) {
 			flatPass = false;
 		}
@@ -46,6 +47,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			// Check wether the generated chunk is farther north than the wall...
 			if (Reference.CONFIG_HELPER_INSTANCE.buildWall() && chunkZ < 0 && Math.abs(chunkZ) > Math.abs(Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance())) {
 				dungeonSeparation /= 2;
+				behindWall = true;
 			}
 
 			boolean canBuildRandomDungeons = true;
@@ -91,6 +93,10 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						//TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
 						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
+						if(!behindWall && chosenDungeon.doesSpawnOnlyBehindWall()) {
+							strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
+							chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
+						}
 
 						// Checks, if the dungeon generates (calculated by the percentage chance the
 						// dungeon has...
@@ -105,8 +111,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 								}
 							}
 
+							boolean wallPass = true;
+							if(!behindWall && chosenDungeon.doesSpawnOnlyBehindWall()) {
+								wallPass = false;
+							}
+							
 							// If the dimension is fine, if yes, it will generate the dungon
-							if (dimensionIsOK && flatPass) {
+							if (dimensionIsOK && flatPass && wallPass) {
 								System.out.println("Generating dungeon " + chosenDungeon.getDungeonName()
 										+ " at chunkX=" + chunkX + "  chunkZ=" + chunkZ);
 								// DONE: Choose a structure and build it --> Dungeon handles it self!
