@@ -87,7 +87,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world, dungeonSeparation)
 							|| this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
-						// Chooses a dungeon to generate //TODO: Add support for unique dungeons
+						// Chooses a dungeon to generate 
+						//TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
 						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
 

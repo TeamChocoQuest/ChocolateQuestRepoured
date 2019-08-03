@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.roo
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.structure.StructureMineshaftPieces;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -14,9 +15,44 @@ public class CastleRoomHelper
     private int numFloors;
     private int numRoomsX;
     private int numRoomsZ;
-    private CastleRoom[][][] roomArray; //array to track which room goes where
-    private boolean[][][] filled; //array to track if a room has been assigned
+    private RoomGrid roomGrid;
     private Random random;
+
+    //helper class to track the rooms in a 3D grid
+    private class RoomGrid
+    {
+        private CastleRoom[][][] roomArray; //array to track which room goes where
+        private boolean [][][] filled; //array to track if a room has been assigned
+
+        private RoomGrid(int numFloors, int numRoomsX, int numRoomsZ)
+        {
+            this.roomArray = new CastleRoom[numFloors][numRoomsX][numRoomsZ];
+            this.filled = new boolean[numFloors][numRoomsX][numRoomsZ];
+        }
+
+        private void addRoomAt(CastleRoom room, int floor, int x, int z)
+        {
+            roomArray[floor][x][z] = room;
+            filled[floor][x][z] = true;
+        }
+
+        private CastleRoom getRoomAt(int floor, int x, int z)
+        {
+            if (filled[floor][x][z])
+            {
+                return (roomArray[floor][x][z]);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private boolean isRoomFilled(int floor, int x, int z)
+        {
+            return filled[floor][x][z] && (roomArray[floor][x][z] != null);
+        }
+    }
 
     public CastleRoomHelper(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
@@ -26,9 +62,8 @@ public class CastleRoomHelper
         this.numFloors = numFloors;
         this.numRoomsX = numRoomsX;
         this.numRoomsZ = numRoomsZ;
-        this.roomArray = new CastleRoom[numFloors][numRoomsX][numRoomsZ];
-        this.filled = new boolean[numFloors][numRoomsX][numRoomsZ];
         this.random = random;
+        this.roomGrid = new RoomGrid(numFloors, numRoomsX, numRoomsZ);
     }
 
     public void fillRooms()
@@ -38,16 +73,17 @@ public class CastleRoomHelper
             buildFloorHallway(floor);
         }
 
+        addStairCases();
+
         for (int floor = 0; floor < numFloors; floor++)
         {
             for (int z = 0; z < numRoomsZ; z++)
             {
                 for (int x = 0; x < numRoomsX; x++)
                 {
-                    if (!filled[floor][x][z])
+                    if (!roomGrid.isRoomFilled(floor, x, z))
                     {
-                        roomArray[floor][x][z] = new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z));
-                        filled[floor][x][z] = true;
+                        roomGrid.addRoomAt(new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z)), floor, x, z);
                     }
                 }
             }
@@ -76,12 +112,11 @@ public class CastleRoomHelper
             do
             {
                 hallStartX = random.nextInt(numRoomsX);
-            } while (filled[floor][hallStartX][0]);
+            } while (roomGrid.isRoomFilled(floor, hallStartX,0));
 
             for (int z = 0; z < numRoomsZ; z++)
             {
-                roomArray[floor][hallStartX][z] = new CastleRoomHallway(getRoomStart(floor, hallStartX, z), roomSize, floorHeight, getPositionFromIndex(hallStartX, z), true);
-                filled[floor][hallStartX][z] = true;
+                addRoomHallway(floor, hallStartX, z, true);
             }
         } else
         {
@@ -90,15 +125,72 @@ public class CastleRoomHelper
             do
             {
                 hallStartZ = random.nextInt(numRoomsZ);
-            } while (filled[floor][0][hallStartZ]);
+            } while (roomGrid.isRoomFilled(floor, 0, hallStartZ));
 
             for (int x = 0; x < numRoomsX; x++)
             {
-                roomArray[floor][x][hallStartZ] = new CastleRoomHallway(getRoomStart(floor, x, hallStartZ), roomSize, floorHeight, getPositionFromIndex(x, hallStartZ), false);
-                filled[floor][x][hallStartZ] = true;
+                addRoomHallway(floor, x, hallStartZ, false);
             }
         }
+    }
 
+    private void addStairCases()
+    {
+        //only iterate through floors thar aren't the top floor
+        for (int floor = 0; floor < numFloors - 1; floor++)
+        {
+            for (int z = 0; z < numRoomsZ; z++)
+            {
+                for (int x = 0; x < numRoomsX; x++)
+                {
+                    if (!roomGrid.isRoomFilled(floor, x, z) &&
+                            roomIsNextToHallway(floor, x, z) &&
+                            roomIsNextToHallway(floor + 1, x, z))
+                    {
+                        addRoomStaircase(floor, x, z);
+                        addRoomLanding(floor, x, z);
+                    }
+                }
+            }
+        }
+    }
+
+    private boolean roomIsNextToHallway(int floor, int x, int z)
+    {
+        CastleRoom neighborRoom;
+        if (x != 0)
+        {
+            neighborRoom = roomGrid.getRoomAt(floor, x - 1, z);
+            if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
+            {
+                return true;
+            }
+        }
+        if (z != 0)
+        {
+            neighborRoom = roomGrid.getRoomAt(floor, x, z - 1);
+            if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
+            {
+                return true;
+            }
+        }
+        if (x < numRoomsX - 1)
+        {
+            neighborRoom = roomGrid.getRoomAt(floor, x + 1, z);
+            if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
+            {
+                return true;
+            }
+        }
+        if (z < numRoomsZ - 1)
+        {
+            neighborRoom = roomGrid.getRoomAt(floor, x, z + 1);
+            if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getFloorCount()
@@ -162,6 +254,38 @@ public class CastleRoomHelper
         return startPos.add(x * roomSize, floor * floorHeight, z * roomSize);
     }
 
+    private void addRoomHallway(int floor, int x, int z, boolean vertical)
+    {
+        CastleRoom room = new CastleRoomHallway(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), vertical);
+        roomGrid.addRoomAt(room, floor, x, z);
+    }
+
+    private void addRoomStaircase(int floor, int x, int z)
+    {
+        CastleRoom room = new CastleRoomStaircase(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z));
+        roomGrid.addRoomAt(room, floor, x, z);
+    }
+
+    private void addRoomLanding(int floor, int x, int z)
+    {
+        CastleRoom room = new CastleRoomLanding(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z));
+        roomGrid.addRoomAt(room, floor, x, z);
+    }
+
+    private void addRoomUndirected(CastleRoom.RoomType type, int floor, int x, int z)
+    {
+        CastleRoom room;
+        switch (type)
+        {
+            case KITCHEN:
+                room = new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z));
+                roomGrid.addRoomAt(room, floor, x, z);
+                break;
+            default:
+                break;
+        }
+    }
+
     private ArrayList<CastleRoom> getRoomList()
     {
         ArrayList<CastleRoom> result = new ArrayList<>();
@@ -171,7 +295,7 @@ public class CastleRoomHelper
             {
                 for (int x = 0; x < numRoomsX; x++)
                 {
-                    result.add(roomArray[floor][x][z]);
+                    result.add(roomGrid.getRoomAt(floor,x, z));
                 }
             }
         }
@@ -191,9 +315,9 @@ public class CastleRoomHelper
             {
                 for (int x = 0; x < numRoomsX; x++)
                 {
-                    if (filled[floor][x][z] && roomArray[floor][x][z] != null)
+                    if (roomGrid.isRoomFilled(floor, x, z))
                     {
-                        result += "[" + roomArray[floor][x][z].getNameShortened() + "|" + roomArray[floor][x][z].getPositionString() + "] ";
+                        result += "[" + roomGrid.getRoomAt(floor, x, z).getNameShortened() + "|" + roomGrid.getRoomAt(floor, x, z).getPositionString() + "] ";
                     } else
                     {
                         result += "[NUL|--]";

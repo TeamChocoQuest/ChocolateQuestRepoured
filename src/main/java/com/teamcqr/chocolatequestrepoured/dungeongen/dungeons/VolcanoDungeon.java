@@ -126,11 +126,23 @@ public class VolcanoDungeon extends StrongholdDungeon {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
 		
-		System.out.println("Generating dungeon " + this.name + "...");
+		//This generator sadly is too slow for no reason so we use the old one *sigh*
+		/*System.out.println("Generating dungeon " + this.name + "... with maps");
+		
+		//this.generator = new VolcanoGenerator(this);
+		this.generator = new VolcanoGeneratorWithMaps(this);
+		
+		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, true), z);
+		
+		
+		System.out.println("Done!");*/
+		
+		System.out.println("Generating dungeon " + this.name + "... ");
 		
 		this.generator = new VolcanoGenerator(this);
 		
 		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, true), z);
+		
 		
 		System.out.println("Done!");
 	}

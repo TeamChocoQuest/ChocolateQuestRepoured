@@ -50,7 +50,7 @@ public class EntranceBuilder {
 		//DONE: Place fire pots and "porch"
 		BlockPos pos = startPos;//.add(expansionV);
 		
-		for(int i = 0; i < (blocksRemainingToWall /3) -1; i++) {
+		for(int i = 0; i < (blocksRemainingToWall /3) +2; i++) {
 			buildSegment(pos);
 			pos = pos.add(expansionVector);
 		}
