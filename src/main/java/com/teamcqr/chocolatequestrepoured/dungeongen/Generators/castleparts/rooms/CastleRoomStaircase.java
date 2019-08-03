@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -20,7 +21,7 @@ public class CastleRoomStaircase extends CastleRoom
     {
         super(startPos, sideLength, height, position);
         this.roomType = RoomType.STAIRCASE;
-        this.doorSide = EnumFacing.NORTH;
+        this.doorSide = EnumFacing.EAST;
 
         upperStairWidth = 0;
 
@@ -29,8 +30,8 @@ public class CastleRoomStaircase extends CastleRoom
         do
         {
             upperStairWidth++;
-            centerStairWidth = sideLength - upperStairWidth * 2;
-        } while ((centerStairWidth - 2) >= (sideLength + 1));
+            centerStairWidth = (sideLength - 1) - upperStairWidth * 2;
+        } while ((centerStairWidth - 2) >= (upperStairWidth + 1));
 
         //We need to ascend to height + 1 because of the ceiling. Each stair section should cover half the ascent
         upperStairLength = (height + 1) / 2;
@@ -41,9 +42,9 @@ public class CastleRoomStaircase extends CastleRoom
     public void generate(ArrayList<BlockPlacement> blocks)
     {
         IBlockState blockToBuild;
-        for (int x = 0; x < sideLength; x++)
+        for (int x = 0; x < sideLength - 1; x++)
         {
-            for (int z = 0; z < sideLength; z++)
+            for (int z = 0; z < sideLength - 1; z++)
             {
                 if (z < 2)
                 {
@@ -52,6 +53,10 @@ public class CastleRoomStaircase extends CastleRoom
                 else if (((x < upperStairWidth) || (x >= centerStairWidth + upperStairWidth)) && z < upperStairLength + 2)
                 {
                     buildUpperStair(x, z, blocks);
+                }
+                else if (((x >= upperStairWidth) || (x < centerStairWidth + upperStairWidth)) && z <= centerStairLength + 2)
+                {
+                    buildLowerStair(x, z, blocks);
                 }
             }
         }
@@ -76,17 +81,39 @@ public class CastleRoomStaircase extends CastleRoom
         {
             if (y < stairHeight)
             {
-                blockToBuild = Blocks.BRICK_BLOCK.getDefaultState();
+                blockToBuild = Blocks.STONEBRICK.getDefaultState();
             }
             else if (y == stairHeight)
             {
-                blockToBuild = Blocks.STONE_STAIRS.getDefaultState();
+                blockToBuild = Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
             }
             else
             {
                 blockToBuild = Blocks.AIR.getDefaultState();
             }
-            blocks.add(new BlockPlacement(startPos.add(x, y, z), blockToBuild));
+            blocks.add(new BlockPlacement(getRotatedPlacement(x, y, z), blockToBuild));
+        }
+    }
+
+    private void buildLowerStair(int x, int z, ArrayList<BlockPlacement> blocks)
+    {
+        int stairHeight = centerStairLength - (z - 1);
+        IBlockState blockToBuild;
+        for (int y = 0; y < height; y++)
+        {
+            if (y < stairHeight)
+            {
+                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+            }
+            else if (y == stairHeight)
+            {
+                blockToBuild = Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+            }
+            else
+            {
+                blockToBuild = Blocks.AIR.getDefaultState();
+            }
+            blocks.add(new BlockPlacement(getRotatedPlacement(x, y, z), blockToBuild));
         }
     }
 
@@ -99,13 +126,29 @@ public class CastleRoomStaircase extends CastleRoom
         {
             if (y < platformHeight)
             {
-                blockToBuild = Blocks.BRICK_BLOCK.getDefaultState();
+                blockToBuild = Blocks.STONEBRICK.getDefaultState();
             }
             else
             {
                 blockToBuild =  Blocks.AIR.getDefaultState();
             }
-            blocks.add(new BlockPlacement(startPos.add(x, y, z), blockToBuild));
+            blocks.add(new BlockPlacement(getRotatedPlacement(x, y, z), blockToBuild));
+        }
+    }
+
+    private BlockPos getRotatedPlacement(int x, int y, int z)
+    {
+        switch (doorSide)
+        {
+            case EAST:
+                return startPos.add(sideLength - 2 - z, y, x);
+            case WEST:
+                return startPos.add(z, y, sideLength - 2 - x);
+            case NORTH:
+                return startPos.add(sideLength - 2 - x, y, sideLength - 2 - z);
+            case SOUTH:
+            default:
+                return startPos.add(x, y, z);
         }
     }
 }
