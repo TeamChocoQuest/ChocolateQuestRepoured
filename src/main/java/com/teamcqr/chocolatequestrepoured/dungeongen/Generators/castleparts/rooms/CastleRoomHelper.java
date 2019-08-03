@@ -68,9 +68,12 @@ public class CastleRoomHelper
 
     public void fillRooms()
     {
+        boolean vertical = random.nextBoolean();
+
         for (int floor = 0; floor < numFloors; floor++)
         {
-            buildFloorHallway(floor);
+            buildFloorHallway(floor, vertical);
+            vertical = !vertical;
         }
 
         addStairCases();
@@ -99,10 +102,9 @@ public class CastleRoomHelper
         }
     }
 
-    private void buildFloorHallway(int floor)
+    private void buildFloorHallway(int floor, boolean vertical)
     {
         //fill the hallway - each floor must have at least 1 hallway
-        boolean vertical = random.nextBoolean();
 
         //start at a random z index that isn't already filled
         if (vertical)
@@ -136,19 +138,21 @@ public class CastleRoomHelper
 
     private void addStairCases()
     {
+        boolean stairsPlaced = false;
         //only iterate through floors thar aren't the top floor
-        for (int floor = 0; floor < numFloors - 1; floor++)
+        for (int floor = 0; (floor < numFloors - 1) && (!stairsPlaced); floor++)
         {
-            for (int z = 0; z < numRoomsZ; z++)
+            for (int z = 0; (z < numRoomsZ) && (!stairsPlaced); z++)
             {
-                for (int x = 0; x < numRoomsX; x++)
+                for (int x = 0; (x < numRoomsX) && (!stairsPlaced); x++)
                 {
                     if (!roomGrid.isRoomFilled(floor, x, z) &&
                             roomIsNextToHallway(floor, x, z) &&
                             roomIsNextToHallway(floor + 1, x, z))
                     {
                         addRoomStaircase(floor, x, z);
-                        addRoomLanding(floor, x, z);
+                        addRoomLanding(floor + 1, x, z);
+                        stairsPlaced = true;
                     }
                 }
             }
