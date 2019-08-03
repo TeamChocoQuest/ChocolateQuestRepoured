@@ -6,6 +6,11 @@ package com.teamcqr.chocolatequestrepoured.util.dataIO;
  * to be provided for each time the convertObjectToCQON
  * method is called.
  *
+ * Simplest implementation that saves every variable:
+ * public String[] getCQONFieldNames() {
+ *     return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
+ * }
+ *
  * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
