@@ -4,6 +4,8 @@ import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.PrimitiveManipulationUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.WorldInfo;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -44,6 +46,8 @@ public class CQONConversionUtil {
         HashMap<Class, String[]> toReturn = new HashMap<>();
 
         toReturn.put(BlockPos.class, new String[]{"x", "y", "z"});
+        toReturn.put(WorldServer.class, new String[]{"worldInfo"});
+        toReturn.put(WorldInfo.class, new String[]{"dimension", "levelName"});
 
         return toReturn;
 
