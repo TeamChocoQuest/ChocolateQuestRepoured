@@ -150,8 +150,8 @@ public class CQONConversionUtil {
                 }
                 // Add Indentation
                 for(int i = 0; i < currentRecursionDepth; i++) toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("\t") );
-                // Add closing bracket
-                toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("]") );
+                // Add closing bracket and new line
+                toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("]\n") );
             }
 
             // Otherwise add appropriate flag to output
