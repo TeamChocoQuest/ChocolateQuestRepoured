@@ -93,10 +93,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						//TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
 						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-						if(!behindWall && chosenDungeon.doesSpawnOnlyBehindWall()) {
-							strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
-							chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-						}
 
 						// Checks, if the dungeon generates (calculated by the percentage chance the
 						// dungeon has...
@@ -113,7 +109,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 							boolean wallPass = true;
 							if(!behindWall && chosenDungeon.doesSpawnOnlyBehindWall()) {
-								wallPass = false;
+								return;
 							}
 							
 							// If the dimension is fine, if yes, it will generate the dungon
