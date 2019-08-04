@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.dataIO.deprecated;
+package com.teamcqr.chocolatequestrepoured.util.data.IO.deprecated;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
