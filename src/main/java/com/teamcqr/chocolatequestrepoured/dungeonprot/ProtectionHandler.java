@@ -99,7 +99,7 @@ public class ProtectionHandler {
 
         // Check spawn pos against all regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() )) {
+            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() ) && !e.isSpawner()) {
                 e.setResult(Event.Result.DENY);
             }
         }
