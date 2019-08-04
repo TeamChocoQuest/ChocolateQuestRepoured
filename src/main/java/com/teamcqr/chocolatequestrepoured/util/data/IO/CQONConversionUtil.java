@@ -2,8 +2,6 @@ package com.teamcqr.chocolatequestrepoured.util.data.IO;
 
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.types.CQONLookUpTable;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.types.ICQONReady;
 import com.teamcqr.chocolatequestrepoured.util.data.PrimitiveManipulationUtil;
 import net.minecraft.util.math.BlockPos;
 

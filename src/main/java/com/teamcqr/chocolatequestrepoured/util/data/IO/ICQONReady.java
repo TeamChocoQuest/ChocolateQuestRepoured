@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.data.IO.types;
+package com.teamcqr.chocolatequestrepoured.util.data.IO;
 
 /**
  * Allows implementing classes to be serialized to CQON by
