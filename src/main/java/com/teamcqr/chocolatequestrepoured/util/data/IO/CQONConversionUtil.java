@@ -42,13 +42,13 @@ public class CQONConversionUtil {
      */
 
     // Must be manually applied
-    public static HashMap<Class, String[]> getDefaultRelevancyLUT() {
+    public static CQONLookUpTable getDefaultRelevancyLUT() {
 
-        HashMap<Class, String[]> toReturn = new HashMap<>();
+        CQONLookUpTable toReturn = new CQONLookUpTable();
 
-        toReturn.put(BlockPos.class, new String[]{"x", "y", "z"});
-        toReturn.put(WorldServer.class, new String[]{"worldInfo"});
-        toReturn.put(WorldInfo.class, new String[]{"dimension"});
+        toReturn.addEntry(BlockPos.class, new String[]{"x", "y", "z"});
+        toReturn.addEntry(WorldServer.class, new String[]{"worldInfo"});
+        toReturn.addEntry(WorldInfo.class, new String[]{"dimension"});
 
         return toReturn;
 
