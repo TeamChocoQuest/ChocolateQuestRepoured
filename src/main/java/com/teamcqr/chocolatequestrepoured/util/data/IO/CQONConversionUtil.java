@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util.data.IO;
 
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
+import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.PrimitiveManipulationUtil;
 import net.minecraft.util.math.BlockPos;
@@ -37,47 +38,20 @@ import java.util.*;
 public class CQONConversionUtil {
 
     /*
-     * User Util
+     * Util
      */
 
-    // Must be manually applied - provided for programmer convenience
+    // Must be manually applied
     public static HashMap<Class, String[]> getDefaultRelevancyLUT() {
 
         HashMap<Class, String[]> toReturn = new HashMap<>();
 
         toReturn.put(BlockPos.class, new String[]{"x", "y", "z"});
         toReturn.put(WorldServer.class, new String[]{"worldInfo"});
-        toReturn.put(WorldInfo.class, new String[]{"dimension", "levelName"});
+        toReturn.put(WorldInfo.class, new String[]{"dimension"});
 
         return toReturn;
 
-    }
-
-    /*
-     * Internal Util
-     * TODO Create a dedicated util class for this in a more sensible location
-     */
-
-    private static boolean checkIfArrayish(Object o) {
-        if(o instanceof Object[])
-            return true;
-        if(o instanceof AbstractCollection)
-            return true;
-        if(o instanceof AbstractMap)
-            return true;
-        return false;
-    }
-
-    private static Object[] convertArrayishToArray(Object o) {
-        // Cases for all Arrayish
-        if(o instanceof Object[])
-            return (Object[])o;
-        if(o instanceof AbstractCollection)
-            return ((AbstractCollection)o).toArray();
-        if(o instanceof AbstractMap)
-            return ((AbstractMap)o).entrySet().toArray();
-        // Safety in case param is not a supported array/collection/map
-        return new Object[] {o};
     }
 
     /*
@@ -123,11 +97,11 @@ public class CQONConversionUtil {
         }
 
         // Otherwise check if array
-        else if( checkIfArrayish(toSerialize) ) {
+        else if(ArrayCollectionMapManipulationUtil.checkIfArrayish(toSerialize) ) {
             // Add space, opening brace, and new line
             toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte(" {\n") );
             // Make recursive calls for each element in the array
-            Object[] array = convertArrayishToArray( toSerialize );
+            Object[] array = ArrayCollectionMapManipulationUtil.convertArrayishToArray( toSerialize );
             for(int i = 0; i < array.length; i++) convertObjectToCQON(array[i], toSerializeName + "[" + i + "]", LUT, currentRecursionDepth + 1);
             // Add Indentation
             for(int i = 0; i < currentRecursionDepth; i++) toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("\t") );
