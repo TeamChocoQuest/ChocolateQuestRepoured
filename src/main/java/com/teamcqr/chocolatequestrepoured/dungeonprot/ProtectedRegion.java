@@ -45,6 +45,7 @@ public class ProtectedRegion implements ICQONReady {
 
     // Variable Names for Serialization
     public String[] getCQONFieldNames() {
+        // Add every field
         return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
     }
 
