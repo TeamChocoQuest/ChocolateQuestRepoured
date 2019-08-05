@@ -2,11 +2,10 @@ package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import java.util.ArrayList;
 
-import com.google.gson.JsonElement;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
+import com.teamcqr.chocolatequestrepoured.util.data.IO.ICQONReady;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IJsonSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,7 +18,7 @@ import net.minecraft.world.World;
  *
  * @version 23.07.19
  */
-public class ProtectedRegion {
+public class ProtectedRegion implements ICQONReady {
 
     /*
      * Variables
@@ -46,6 +45,7 @@ public class ProtectedRegion {
 
     // Variable Names for Serialization
     public String[] getCQONFieldNames() {
+        // Add every field
         return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
     }
 

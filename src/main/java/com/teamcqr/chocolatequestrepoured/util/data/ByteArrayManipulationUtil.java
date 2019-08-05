@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.dataIO;
+package com.teamcqr.chocolatequestrepoured.util.data;
 
 import java.util.ArrayList;
 
