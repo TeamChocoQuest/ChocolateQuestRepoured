@@ -40,6 +40,7 @@ public class DungeonBase {
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
 	protected boolean useCoverBlock = false;
+	private boolean spawnBehindWall = false;
 	private int iconID;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
@@ -87,6 +88,7 @@ public class DungeonBase {
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", false);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
+			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 		
@@ -193,5 +195,8 @@ public class DungeonBase {
 	}
 	public boolean isCoverBlockEnabled() {
 		return this.useCoverBlock;
+	}
+	public boolean doesSpawnOnlyBehindWall() {
+		return this.spawnBehindWall;
 	}
 }
