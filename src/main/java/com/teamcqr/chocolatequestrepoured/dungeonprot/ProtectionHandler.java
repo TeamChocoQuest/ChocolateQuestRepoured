@@ -8,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.IO.CQONConversionUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.IO.FileIOUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.CQONLookUpTable;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

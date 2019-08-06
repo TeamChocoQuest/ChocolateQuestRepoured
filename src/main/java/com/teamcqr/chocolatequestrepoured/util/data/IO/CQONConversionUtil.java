@@ -4,6 +4,8 @@ import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.PrimitiveManipulationUtil;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
@@ -41,14 +43,19 @@ public class CQONConversionUtil {
      * Util
      */
 
-    // Must be manually applied
+    // Must be manually applied - only provides LUTs for classes in dependencies such as Forge, Minecraft, Java, etc.
+    // Any classes under our control should implement the ICQONReady interface to avoid the need for an entry here.
     public static CQONLookUpTable getDefaultRelevancyLUT() {
 
         CQONLookUpTable toReturn = new CQONLookUpTable();
 
-        toReturn.addEntry(BlockPos.class, new String[]{"x", "y", "z"});
-        toReturn.addEntry(WorldServer.class, new String[]{"worldInfo"});
-        toReturn.addEntry(WorldInfo.class, new String[]{"dimension"});
+        // Minecraft - MUST INCLUDE BOTH MCP AND SEARGE NAMING SCHEMES
+        toReturn.addEntry(BlockPos.class, new String[]{"x", "field_177962_a", "y", "field_177960_b", "z", "field_177961_c"});
+        toReturn.addEntry(WorldServer.class, new String[]{"worldInfo", "field_72986_A"});
+        toReturn.addEntry(WorldInfo.class, new String[]{"dimension", "field_76105_j"});
+        toReturn.addEntry(Entity.class, new String[]{"entityUniqueID", "field_96093_i"});
+        // Java
+        toReturn.addEntry(UUID.class, new String[]{"mostSigBits", "leastSigBits"});
 
         return toReturn;
 
