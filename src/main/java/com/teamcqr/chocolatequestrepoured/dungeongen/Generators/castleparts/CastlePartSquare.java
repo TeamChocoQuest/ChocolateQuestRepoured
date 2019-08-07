@@ -143,9 +143,12 @@ public class CastlePartSquare implements ICastlePart
 
             BlockPos roomStart = start.add(1, 1, 1);
             CastleRoomHelper roomHelper = new CastleRoomHelper(roomStart, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
-            roomHelper.fillRooms();
-            System.out.println(roomHelper.toString());
-            roomHelper.generateRooms(buildList);
+            if (roomsX >= 2 && roomsZ > 2)
+            {
+                roomHelper.fillRooms();
+                System.out.println(roomHelper.toString());
+                roomHelper.generateRooms(buildList);
+            }
         }
 
         //Build the roof

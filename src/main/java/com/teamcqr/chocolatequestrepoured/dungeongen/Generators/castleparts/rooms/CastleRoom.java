@@ -1,14 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockWoodSlab;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public abstract class CastleRoom
 {
@@ -72,11 +74,14 @@ public abstract class CastleRoom
     protected int countX;
     protected int countY;
     protected int countZ;
+    protected int maxSlotsUsed = 1;
     protected boolean buildNorthWall;
     protected boolean buildEastWall;
     protected boolean buildSouthWall;
     protected boolean buildWestWall;
+    protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
+    protected Random random = new Random();
 
     public CastleRoom(BlockPos startPos, int sideLength, int height, RoomPosition position)
     {
@@ -84,11 +89,27 @@ public abstract class CastleRoom
         this.sideLength = sideLength;
         this.height = height;
         this.position = position;
+        this.doors = new ArrayList<>();
         determineWalls(this.position);
     }
 
-    public abstract void generate(ArrayList<BlockPlacement> blocks);
+    public void generate(ArrayList<BlockPlacement> blocks)
+    {
+        generateRoom(blocks);
+        generateWalls(blocks);
+        generateDoors(blocks);
+    }
+
+    public abstract void generateRoom(ArrayList<BlockPlacement> blocks);
     public abstract String getNameShortened();
+
+    private void generateDoors(ArrayList<BlockPlacement> blocks)
+    {
+        for (CastleAddonDoor door : doors)
+        {
+            door.generate(blocks);
+        }
+    }
 
     private void determineWalls(RoomPosition position)
     {
@@ -120,7 +141,21 @@ public abstract class CastleRoom
         }
     }
 
-    protected void addWalls(ArrayList<BlockPlacement> blocks)
+    public void addDoorOnSide(EnumFacing side)
+    {
+        if (side == EnumFacing.SOUTH && buildSouthWall)
+        {
+            int xOffset = random.nextInt(sideLength - 1);
+            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, 4, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+        }
+        else if (side == EnumFacing.EAST && buildEastWall)
+        {
+            int zOffset = random.nextInt(sideLength - 1);
+            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, 4, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+        }
+    }
+
+    protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
 
@@ -213,5 +248,44 @@ public abstract class CastleRoom
         blocks.add(new BlockPlacement(pos.add(1, 1, 0), topBlock));
         blocks.add(new BlockPlacement(pos.add(0, 1, 1), topBlock));
         blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
+    }
+
+    protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation)
+    {
+        switch (rotation)
+        {
+            case EAST:
+                return startPos.add(sideLength - 2 - z, y, x);
+            case WEST:
+                return startPos.add(z, y, sideLength - 2 - x);
+            case NORTH:
+                return startPos.add(sideLength - 2 - x, y, sideLength - 2 - z);
+            case SOUTH:
+            default:
+                return startPos.add(x, y, z);
+        }
+    }
+
+    protected int getNumYRotationsFromStartToEndFacing(EnumFacing start, EnumFacing end)
+    {
+        int rotations = 0;
+        if (start.getAxis().isHorizontal() && end.getAxis().isHorizontal())
+        {
+            while (start != end)
+            {
+                start = start.rotateY();
+                rotations++;
+            }
+        }
+        return rotations;
+    }
+
+    protected EnumFacing rotateFacingNTimesAboutY(EnumFacing facing, int n)
+    {
+        for (int i = 0; i < n; i++)
+        {
+            facing = facing.rotateY();
+        }
+        return facing;
     }
 }

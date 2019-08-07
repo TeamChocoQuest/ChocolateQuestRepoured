@@ -6,8 +6,6 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
 public class CastleRoomKitchen extends CastleRoomGeneric
 {
     public CastleRoomKitchen(BlockPos startPos, int sideLength, int height, RoomPosition position)
@@ -17,20 +15,25 @@ public class CastleRoomKitchen extends CastleRoomGeneric
         this.edgeClutter.add(Blocks.FURNACE.getDefaultState());
         this.edgeClutter.add(Blocks.CAULDRON.getDefaultState());
         this.edgeClutter.add(Blocks.WOODEN_SLAB.getDefaultState());
+        this.maxSlotsUsed = 2;
     }
 
     @Override
-    public void generate(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(ArrayList<BlockPlacement> blocks)
     {
         for (int z = 0; z < sideLength - 1; z++)
         {
             for (int x = 0; x < sideLength - 1; x++)
             {
-                BlockPos pos = startPos.add( x, 0, z);
-                blocks.add(new BlockPlacement(pos, Blocks.PLANKS.getDefaultState()));
+                int yOffset = 0;
+                blocks.add(new BlockPlacement(startPos.add( x, yOffset, z), Blocks.PLANKS.getDefaultState()));
+                yOffset++;
+                if (x == 0 || z == 0 || x == sideLength - 1 || z == sideLength - 1)
+                {
+
+                }
             }
         }
-        addWalls(blocks);
     }
 
     @Override
