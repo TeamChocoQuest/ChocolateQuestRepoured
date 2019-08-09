@@ -30,9 +30,9 @@ public class CastleRoomLanding extends CastleRoom
     public void generateRoom(ArrayList<BlockPlacement> blocks)
     {
         IBlockState blockToBuild;
-        for (int x = 0; x < sideLength; x++)
+        for (int x = 0; x < sideLength - 1; x++)
         {
-            for (int z = 0; z < sideLength; z++)
+            for (int z = 0; z < sideLength - 1; z++)
             {
                 for (int y = 0; y < height; y++)
                 {

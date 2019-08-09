@@ -24,7 +24,7 @@ public class CastleRoomStaircase extends CastleRoom
         super(startPos, sideLength, height, position);
         this.roomType = RoomType.STAIRCASE;
         this.doorSide = facing;
-        this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
+        this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
 
         upperStairWidth = 0;
 
