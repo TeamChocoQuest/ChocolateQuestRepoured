@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 
-import com.teamcqr.chocolatequestrepoured.util.dataIO.ByteArrayManipulationUtil;
-import com.teamcqr.chocolatequestrepoured.util.dataIO.FileIOUtil;
-import com.teamcqr.chocolatequestrepoured.util.dataIO.ObjectToCQONUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.IO.CQONConversionUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.IO.FileIOUtil;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -49,7 +49,7 @@ public class ProtectionHandler {
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
         ProtectedRegion toRegister = new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
         registerRegion(toRegister);
-        FileIOUtil.saveToFile( FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon", ByteArrayManipulationUtil.convertArrayListByteToPrimByteArray(ObjectToCQONUtil.convertObjectToCQON(toRegister, ObjectToCQONUtil.getDefaultRelevancyLUT(), 7)));
+        FileIOUtil.saveToFile( FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon", ByteArrayManipulationUtil.convertArrayListByteToPrimByteArray(CQONConversionUtil.convertObjectToCQON(toRegister, e.getDungeonID().toString(), CQONConversionUtil.getDefaultRelevancyLUT(), 0)));
     }
 
     // Handle Protection-Related Events
@@ -99,7 +99,7 @@ public class ProtectionHandler {
 
         // Check spawn pos against all regions and cancel if overlapping
         for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() )) {
+            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() ) && !e.isSpawner()) {
                 e.setResult(Event.Result.DENY);
             }
         }

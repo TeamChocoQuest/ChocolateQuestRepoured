@@ -1,8 +1,8 @@
-package com.teamcqr.chocolatequestrepoured.util.dataIO;
+package com.teamcqr.chocolatequestrepoured.util.data.IO;
 
 /**
  * Allows implementing classes to be serialized to CQON by
- * ObjectToCQONUtil without the need for a valid LUT entry
+ * CQONConversionUtil without the need for a valid LUT entry
  * to be provided for each time the convertObjectToCQON
  * method is called.
  *

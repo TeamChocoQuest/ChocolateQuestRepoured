@@ -2,11 +2,9 @@ package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import java.util.ArrayList;
 
-import com.google.gson.JsonElement;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
-import net.minecraft.block.Block;
+import com.teamcqr.chocolatequestrepoured.util.data.IO.ICQONReady;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.IJsonSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -19,7 +17,7 @@ import net.minecraft.world.World;
  *
  * @version 23.07.19
  */
-public class ProtectedRegion {
+public class ProtectedRegion implements ICQONReady {
 
     /*
      * Variables
@@ -32,7 +30,7 @@ public class ProtectedRegion {
 
     // Dependencies (Things that will disable ProtectedRegion if killed/destroyed)
     private ArrayList<Entity> entityDependencies = new ArrayList<>(); // Likely a dungeon boss
-    private ArrayList<Block> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
+    private ArrayList<BlockPos> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
 
     // Settings
     public boolean preventBlockBreak = true;
@@ -46,6 +44,7 @@ public class ProtectedRegion {
 
     // Variable Names for Serialization
     public String[] getCQONFieldNames() {
+        // Add every field
         return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
     }
 
@@ -54,7 +53,7 @@ public class ProtectedRegion {
      */
 
     // Contains all available region settings
-    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, ArrayList<Entity> entityDependencies, ArrayList<Block> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
+    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, ArrayList<Entity> entityDependencies, ArrayList<BlockPos> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
         // Region Data
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
@@ -88,15 +87,15 @@ public class ProtectedRegion {
         entityDependencies.add(entity);
     }
 
-    public void addBlockDependency(Block block) {
-        blockDependencies.add(block);
+    public void addBlockDependency(BlockPos positionOfBlock) {
+        blockDependencies.add(positionOfBlock);
     }
 
     public ArrayList<Entity> getEntityDependencies() {
         return entityDependencies;
     }
 
-    public ArrayList<Block> getBlockDependencies() {
+    public ArrayList<BlockPos> getBlockDependencies() {
         return blockDependencies;
     }
 
