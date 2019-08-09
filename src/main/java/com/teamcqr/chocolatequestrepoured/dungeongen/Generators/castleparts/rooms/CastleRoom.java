@@ -143,15 +143,16 @@ public abstract class CastleRoom
 
     public void addDoorOnSide(EnumFacing side)
     {
+        final int DOOR_WIDTH = 4;
         if (side == EnumFacing.SOUTH && buildSouthWall)
         {
-            int xOffset = random.nextInt(sideLength - 1);
-            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, 4, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+            int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, true));
         }
         else if (side == EnumFacing.EAST && buildEastWall)
         {
-            int zOffset = random.nextInt(sideLength - 1);
-            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, 4, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+            int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, false));
         }
     }
 

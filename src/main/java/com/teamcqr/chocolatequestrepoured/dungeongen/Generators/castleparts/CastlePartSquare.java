@@ -140,15 +140,15 @@ public class CastlePartSquare implements ICastlePart
                 addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
                 addonList.add(new CastleAddonDoor(x + sizeX - 1, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
+        }
 
-            BlockPos roomStart = start.add(1, 1, 1);
-            CastleRoomHelper roomHelper = new CastleRoomHelper(roomStart, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
-            if (roomsX >= 2 && roomsZ > 2)
-            {
-                roomHelper.fillRooms();
-                System.out.println(roomHelper.toString());
-                roomHelper.generateRooms(buildList);
-            }
+        BlockPos roomStart = start.add(1, 1, 1);
+        CastleRoomHelper roomHelper = new CastleRoomHelper(roomStart, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
+        if (roomsX >= 2 && roomsZ > 2)
+        {
+            roomHelper.fillRooms();
+            System.out.println(roomHelper.toString());
+            roomHelper.generateRooms(buildList);
         }
 
         //Build the roof
