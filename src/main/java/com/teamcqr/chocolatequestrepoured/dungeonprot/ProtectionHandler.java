@@ -78,14 +78,14 @@ public class ProtectionHandler {
     }
 
     @SubscribeEvent
-    public void eventHandleExplosion(ExplosionEvent.Start e) {
+    public void eventHandleExplosion(ExplosionEvent e) {
 
         // Check explosion pos against all active regions
         for( ProtectedRegion region : activeRegions ) {
             if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
 
                 // Allow TNT, cancel if any other exploder
-                if ( !(IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"})) instanceof EntityTNTPrimed ) ) {
+                if ( !(IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"} ) ) instanceof EntityTNTPrimed ) ) {
                     e.setCanceled(true);
                 }
 

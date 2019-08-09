@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.PrimitiveManipulationUtil;
-import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
@@ -40,29 +39,7 @@ import java.util.*;
 public class CQONConversionUtil {
 
     /*
-     * Util
-     */
-
-    // Must be manually applied - only provides LUTs for classes in dependencies such as Forge, Minecraft, Java, etc.
-    // Any classes under our control should implement the ICQONReady interface to avoid the need for an entry here.
-    public static CQONLookUpTable getDefaultRelevancyLUT() {
-
-        CQONLookUpTable toReturn = new CQONLookUpTable();
-
-        // Minecraft - MUST INCLUDE BOTH MCP AND SEARGE NAMING SCHEMES
-        toReturn.addEntry(BlockPos.class, new String[]{"x", "field_177962_a", "y", "field_177960_b", "z", "field_177961_c"});
-        toReturn.addEntry(WorldServer.class, new String[]{"worldInfo", "field_72986_A"});
-        toReturn.addEntry(WorldInfo.class, new String[]{"dimension", "field_76105_j"});
-        toReturn.addEntry(Entity.class, new String[]{"entityUniqueID", "field_96093_i"});
-        // Java
-        toReturn.addEntry(UUID.class, new String[]{"mostSigBits", "leastSigBits"});
-
-        return toReturn;
-
-    }
-
-    /*
-     * Object --> CQON
+     * SERIALIZATION
      */
 
     /**
@@ -84,7 +61,19 @@ public class CQONConversionUtil {
         }
 
         // Add Indentation
-        for(int i = 0; i < currentRecursionDepth; i++) toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("\t") );
+        for(int i = 0; i < currentRecursionDepth; i++) {
+            toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("\t") );
+        }
+
+        // Check if null
+        try {
+            toSerialize.getClass();
+        } catch (NullPointerException e) {
+            // Add null flag and new line
+            toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("**NULL**\n") );
+            // Return
+            return toReturn;
+        }
 
         // Add Class Name
         toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte(toSerialize.getClass().getName()) );
@@ -107,9 +96,12 @@ public class CQONConversionUtil {
         else if(ArrayCollectionMapManipulationUtil.checkIfArrayish(toSerialize) ) {
             // Add space, opening brace, and new line
             toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte(" {\n") );
-            // Make recursive calls for each element in the array
+            // Iterate through each element in the array
             Object[] array = ArrayCollectionMapManipulationUtil.convertArrayishToArray( toSerialize );
-            for(int i = 0; i < array.length; i++) convertObjectToCQON(array[i], toSerializeName + "[" + i + "]", LUT, currentRecursionDepth + 1);
+            for(int i = 0; i < array.length; i++) {
+                // Make recursive call
+                toReturn.addAll( convertObjectToCQON(array[i], toSerializeName + "[" + i + "]", LUT, currentRecursionDepth + 1) );
+            }
             // Add Indentation
             for(int i = 0; i < currentRecursionDepth; i++) toReturn.addAll( ByteArrayManipulationUtil.convertStringToArrayListByte("\t") );
             // Add closing brace and new line
@@ -151,7 +143,7 @@ public class CQONConversionUtil {
     }
 
     /*
-     * CQON --> Object
+     * DESERIALIZATION
      */
 
     public static ArrayList<Field> convertCQONToObject(String fileNameIncludingPath, Object toLoadInto) {
@@ -159,6 +151,28 @@ public class CQONConversionUtil {
         // NOT YET IMPLEMENTED
 
         return null;
+
+    }
+
+    /*
+     * UTIL
+     */
+
+    // Must be manually applied - only provides LUTs for classes in dependencies such as Forge, Minecraft, Java, etc.
+    // Any classes under our control should implement the ICQONReady interface to avoid the need for an entry here.
+    public static CQONLookUpTable getDefaultRelevancyLUT() {
+
+        CQONLookUpTable toReturn = new CQONLookUpTable();
+
+        // Minecraft - MUST INCLUDE BOTH MCP AND SEARGE NAMING SCHEMES
+        toReturn.addEntry(BlockPos.class, new String[]{"x", "field_177962_a", "y", "field_177960_b", "z", "field_177961_c"});
+        toReturn.addEntry(WorldServer.class, new String[]{"worldInfo", "field_72986_A"});
+        toReturn.addEntry(WorldInfo.class, new String[]{"dimension", "field_76105_j"});
+        toReturn.addEntry(Entity.class, new String[]{"entityUniqueID", "field_96093_i"});
+        // Java
+        toReturn.addEntry(UUID.class, new String[]{"mostSigBits", "leastSigBits"});
+
+        return toReturn;
 
     }
 
