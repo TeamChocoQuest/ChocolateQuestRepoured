@@ -19,11 +19,11 @@ public class CastleRoomStaircase extends CastleRoom
     private int centerStairWidth;
     private int centerStairLength;
 
-    public CastleRoomStaircase(BlockPos startPos, int sideLength, int height, RoomPosition position, EnumFacing facing)
+    public CastleRoomStaircase(BlockPos startPos, int sideLength, int height, RoomPosition position, EnumFacing doorSide)
     {
         super(startPos, sideLength, height, position);
         this.roomType = RoomType.STAIRCASE;
-        this.doorSide = facing;
+        this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
 
         upperStairWidth = 0;
@@ -36,9 +36,9 @@ public class CastleRoomStaircase extends CastleRoom
             centerStairWidth = (sideLength - 1) - upperStairWidth * 2;
         } while ((centerStairWidth - 2) >= (upperStairWidth + 1));
 
-        //We need to ascend to height + 1 because of the ceiling. Each stair section should cover half the ascent
-        upperStairLength = (height + 1) / 2;
-        centerStairLength = (height + 1) - upperStairLength; //center section will either be same length or 1 more
+        //Each stair section should cover half the ascent
+        upperStairLength = height / 2;
+        centerStairLength = height + 1 - upperStairLength; //center section will either be same length or 1 more
     }
 
     @Override
@@ -49,6 +49,8 @@ public class CastleRoomStaircase extends CastleRoom
         {
             for (int z = 0; z < sideLength - 1; z++)
             {
+                buildFloorBlock(x, z, blocks);
+
                 if (z < 2)
                 {
                     buildPlatform(x, z, blocks);
@@ -96,12 +98,18 @@ public class CastleRoomStaircase extends CastleRoom
         return doorSide;
     }
 
+    private void buildFloorBlock(int x, int z, ArrayList<BlockPlacement> blocks)
+    {
+        IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
+        blocks.add(new BlockPlacement(startPos.add(x, 0, z), blockToBuild));
+    }
+
     private void buildUpperStair(int x, int z, ArrayList<BlockPlacement> blocks)
     {
         int stairHeight = centerStairLength + (z - PLATFORM_LENGTH);
         EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.SOUTH, numRotations);
         IBlockState blockToBuild;
-        for (int y = 0; y < height; y++)
+        for (int y = 1; y < height; y++)
         {
             if (y < stairHeight)
             {
@@ -124,7 +132,7 @@ public class CastleRoomStaircase extends CastleRoom
         int stairHeight = centerStairLength - (z - PLATFORM_LENGTH + 1);
         EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.NORTH, numRotations);
         IBlockState blockToBuild;
-        for (int y = 0; y < height; y++)
+        for (int y = 1; y < height; y++)
         {
             if (y < stairHeight)
             {
@@ -147,7 +155,7 @@ public class CastleRoomStaircase extends CastleRoom
         IBlockState blockToBuild;
         int platformHeight = centerStairLength; //the stair length is also the platform height
 
-        for (int y = 0; y < height; y++)
+        for (int y = 1; y < height; y++)
         {
             if (y < platformHeight)
             {

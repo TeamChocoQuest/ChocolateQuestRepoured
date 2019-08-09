@@ -30,6 +30,14 @@ public class CastleRoomHelper
         }
     }
 
+    public void generateRooms(ArrayList<BlockPlacement> blocks)
+    {
+        for (RoomSelection gridRoom : getRoomList())
+        {
+            gridRoom.room.generate(blocks);
+        }
+    }
+
     private void addRoomAt(CastleRoom room, int floor, int x, int z)
     {
         roomArray[floor][x][z] = new RoomSelection(room);
@@ -71,7 +79,28 @@ public class CastleRoomHelper
             {
                 for (int z = 0; z < roomArray[0][0].length; z++)
                 {
+                    if (roomArray[floor][x][z] != null)
+                    {
                         result.add(roomArray[floor][x][z]);
+                    }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private ArrayList<RoomSelection> getUnreachableRoomList()
+    {
+        ArrayList<RoomSelection> result = new ArrayList<>();
+        for (int floor = 0; floor < roomArray.length; floor++)
+        {
+            for (int x = 0; x < roomArray[0].length; x++)
+            {
+                for (int z = 0; z < roomArray[0][0].length; z++)
+                {
+                    if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].reachable)
+                    result.add(roomArray[floor][x][z]);
                 }
             }
         }
@@ -118,14 +147,6 @@ public class CastleRoomHelper
         }
 
         placeDoors();
-    }
-
-    public void generateRooms(ArrayList<BlockPlacement> blocks)
-    {
-        for (RoomSelection gridRoom : getRoomList())
-        {
-            gridRoom.room.generate(blocks);
-        }
     }
 
     private void buildFloorHallway(int floor, boolean vertical)
@@ -273,19 +294,18 @@ public class CastleRoomHelper
         return EnumFacing.DOWN;
     }
 
-    public int getFloorCount()
+    private void connectRooms()
     {
-        return numFloors;
+        ArrayList<RoomSelection> roomList = getUnreachableRoomList();
+        RoomSelection currentRoom;
+        currentRoom = roomList.get(random.nextInt(roomList.size()));
+
+
     }
 
-    public int getRoomCountX()
+    private void getDirectionOfNearestReachable(int floor, int x, int z)
     {
-        return numRoomsX;
-    }
 
-    public int getRoomCountZ()
-    {
-        return numRoomsZ;
     }
 
     //Translate the room's (x, z) position in the floor array to a RoomPosition enum
@@ -375,9 +395,23 @@ public class CastleRoomHelper
         }
     }
 
+    public int getFloorCount()
+    {
+        return numFloors;
+    }
+
+    public int getRoomCountX()
+    {
+        return numRoomsX;
+    }
+
+    public int getRoomCountZ()
+    {
+        return numRoomsZ;
+    }
+
     //print the room array in a grid, floor by floor
-    @Override
-    public String toString()
+    public String printGrid()
     {
         String result = "";
         for (int floor = 0; floor < numFloors; floor++)
