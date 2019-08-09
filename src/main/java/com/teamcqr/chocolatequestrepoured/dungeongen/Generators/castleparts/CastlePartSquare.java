@@ -136,9 +136,9 @@ public class CastlePartSquare implements ICastlePart
             if (currentFloor == 0)
             {
                 addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
-                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ - 1, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
                 addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
-                addonList.add(new CastleAddonDoor(x + sizeX - 1, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+                addonList.add(new CastleAddonDoor(x + sizeX, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
         }
 
@@ -147,7 +147,7 @@ public class CastlePartSquare implements ICastlePart
         if (roomsX >= 2 && roomsZ > 2)
         {
             roomHelper.fillRooms();
-            System.out.println(roomHelper.toString());
+            System.out.println(roomHelper.printGrid());
             roomHelper.generateRooms(buildList);
         }
 

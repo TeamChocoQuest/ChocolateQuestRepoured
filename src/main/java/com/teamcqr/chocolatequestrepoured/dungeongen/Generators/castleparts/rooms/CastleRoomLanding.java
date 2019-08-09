@@ -39,17 +39,19 @@ public class CastleRoomLanding extends CastleRoom
                     blockToBuild = Blocks.AIR.getDefaultState();
                     if (y == 0)
                     {
-                        if (z < 2 || z > stairZ)
+                        if (z > stairZ)
                         {
                             blockToBuild = Blocks.STONEBRICK.getDefaultState();
-                        } else if (x < openingWidth || ((x >= openingSeparation + openingWidth) && (x < openingSeparation + openingWidth * 2)))
+                        }
+                        else if (x < openingWidth || ((x >= openingSeparation + openingWidth) && (x < openingSeparation + openingWidth * 2)))
                         {
                             if (z == stairZ)
                             {
-                                EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.SOUTH, getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, stairStartSide));
+                                EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.SOUTH, getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, stairStartSide));
                                 blockToBuild = Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                             }
-                        } else
+                        }
+                        else
                         {
                             blockToBuild = Blocks.STONEBRICK.getDefaultState();
                         }

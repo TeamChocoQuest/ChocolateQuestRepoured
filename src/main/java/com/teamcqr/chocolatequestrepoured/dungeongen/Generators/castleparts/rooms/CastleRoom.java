@@ -256,9 +256,9 @@ public abstract class CastleRoom
         switch (rotation)
         {
             case EAST:
-                return startPos.add(sideLength - 2 - z, y, x);
-            case WEST:
                 return startPos.add(z, y, sideLength - 2 - x);
+            case WEST:
+                return startPos.add(sideLength - 2 - z, y, x);
             case NORTH:
                 return startPos.add(sideLength - 2 - x, y, sideLength - 2 - z);
             case SOUTH:
