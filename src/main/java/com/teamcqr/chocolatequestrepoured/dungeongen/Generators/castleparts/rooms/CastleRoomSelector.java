@@ -5,9 +5,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
-public class CastleRoomHelper
+public class CastleRoomSelector
 {
     private BlockPos startPos;
     private int floorHeight;
@@ -16,99 +17,9 @@ public class CastleRoomHelper
     private int numRoomsX;
     private int numRoomsZ;
     private Random random;
-    private RoomSelection[][][] roomArray;
+    private CastleRoomGrid roomGrid;
 
-    private class RoomSelection
-    {
-        private CastleRoom room;
-        private boolean reachable;
-
-        private RoomSelection(CastleRoom room)
-        {
-            this.room = room;
-            this.reachable = false;
-        }
-    }
-
-    public void generateRooms(ArrayList<BlockPlacement> blocks)
-    {
-        for (RoomSelection gridRoom : getRoomList())
-        {
-            gridRoom.room.generate(blocks);
-        }
-    }
-
-    private void addRoomAt(CastleRoom room, int floor, int x, int z)
-    {
-        roomArray[floor][x][z] = new RoomSelection(room);
-    }
-
-    private CastleRoom getRoomAt(int floor, int x, int z)
-    {
-        if (roomArray[floor][x][z] != null)
-        {
-            return (roomArray[floor][x][z].room);
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private boolean isRoomFilled(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z] != null && roomArray[floor][x][z].room != null;
-    }
-
-    private boolean isRoomReachable(int floor, int x, int z)
-    {
-           return roomArray[floor][x][z].reachable;
-    }
-
-    private void setRoomReachable(int floor, int x, int z)
-    {
-        roomArray[floor][x][z].reachable = true;
-    }
-
-    private ArrayList<RoomSelection> getRoomList()
-    {
-        ArrayList<RoomSelection> result = new ArrayList<>();
-        for (int floor = 0; floor < roomArray.length; floor++)
-        {
-            for (int x = 0; x < roomArray[0].length; x++)
-            {
-                for (int z = 0; z < roomArray[0][0].length; z++)
-                {
-                    if (roomArray[floor][x][z] != null)
-                    {
-                        result.add(roomArray[floor][x][z]);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private ArrayList<RoomSelection> getUnreachableRoomList()
-    {
-        ArrayList<RoomSelection> result = new ArrayList<>();
-        for (int floor = 0; floor < roomArray.length; floor++)
-        {
-            for (int x = 0; x < roomArray[0].length; x++)
-            {
-                for (int z = 0; z < roomArray[0][0].length; z++)
-                {
-                    if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].reachable)
-                    result.add(roomArray[floor][x][z]);
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public CastleRoomHelper(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
+    public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
         this.startPos = startPos;
         this.floorHeight = floorHeight;
@@ -117,7 +28,15 @@ public class CastleRoomHelper
         this.numRoomsX = numRoomsX;
         this.numRoomsZ = numRoomsZ;
         this.random = random;
-        this.roomArray = new RoomSelection[numFloors][numRoomsX][numRoomsZ];
+        this.roomGrid = new CastleRoomGrid(numFloors, numRoomsX, numRoomsZ, random);
+    }
+
+    public void generateRooms(ArrayList<BlockPlacement> blocks)
+    {
+        for (CastleRoom room : roomGrid.getRoomList())
+        {
+            room.generate(blocks);
+        }
     }
 
     public void fillRooms()
@@ -138,14 +57,15 @@ public class CastleRoomHelper
             {
                 for (int x = 0; x < numRoomsX; x++)
                 {
-                    if (!isRoomFilled(floor, x, z))
+                    if (!roomGrid.isRoomFilled(floor, x, z))
                     {
-                        addRoomAt(new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z)), floor, x, z);
+                        roomGrid.addRoomAt(new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z)), floor, x, z);
                     }
                 }
             }
         }
 
+        connectRooms();
         placeDoors();
     }
 
@@ -161,7 +81,7 @@ public class CastleRoomHelper
             do
             {
                 hallStartX = random.nextInt(numRoomsX);
-            } while (isRoomFilled(floor, hallStartX,0));
+            } while (roomGrid.isRoomFilled(floor, hallStartX,0));
 
             for (int z = 0; z < numRoomsZ; z++)
             {
@@ -174,7 +94,7 @@ public class CastleRoomHelper
             do
             {
                 hallStartZ = random.nextInt(numRoomsZ);
-            } while (isRoomFilled(floor, 0, hallStartZ));
+            } while (roomGrid.isRoomFilled(floor, 0, hallStartZ));
 
             for (int x = 0; x < numRoomsX; x++)
             {
@@ -191,7 +111,7 @@ public class CastleRoomHelper
             {
                 for (int x = 0; (x < numRoomsX); x++)
                 {
-                    CastleRoom room = getRoomAt(floor, x, z);
+                    CastleRoom room = roomGrid.getRoomAt(floor, x, z);
                     if (room != null && roomIsStaircaseOrLanding(room))
                     {
                         EnumFacing hallDirection = getAdjacentHallwayDirection(floor, x, z);
@@ -201,11 +121,11 @@ public class CastleRoomHelper
                         }
                         else if (hallDirection == EnumFacing.WEST)
                         {
-                            getRoomAt(floor, x - 1, z).addDoorOnSide(EnumFacing.EAST);
+                            roomGrid.getRoomAt(floor, x - 1, z).addDoorOnSide(EnumFacing.EAST);
                         }
                         else if (hallDirection == EnumFacing.NORTH)
                         {
-                            getRoomAt(floor, x, z - 1).addDoorOnSide(EnumFacing.SOUTH);
+                            roomGrid.getRoomAt(floor, x, z - 1).addDoorOnSide(EnumFacing.SOUTH);
                         }
                     }
                 }
@@ -239,7 +159,7 @@ public class CastleRoomHelper
             {
                 for (int x = 0; (x < numRoomsX) && (!stairsPlaced); x++)
                 {
-                    if (!isRoomFilled(floor, x, z) &&
+                    if (!roomGrid.isRoomFilled(floor, x, z) &&
                             roomBordersHallway(floor, x, z) &&
                             roomBordersHallway(floor + 1, x, z))
                     {
@@ -261,7 +181,7 @@ public class CastleRoomHelper
         CastleRoom neighborRoom;
         if (x != 0)
         {
-            neighborRoom = getRoomAt(floor, x - 1, z);
+            neighborRoom = roomGrid.getRoomAt(floor, x - 1, z);
             if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.WEST;
@@ -269,7 +189,7 @@ public class CastleRoomHelper
         }
         if (z != 0)
         {
-            neighborRoom = getRoomAt(floor, x, z - 1);
+            neighborRoom = roomGrid.getRoomAt(floor, x, z - 1);
             if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.NORTH;
@@ -277,7 +197,7 @@ public class CastleRoomHelper
         }
         if (x < numRoomsX - 1)
         {
-            neighborRoom = getRoomAt(floor, x + 1, z);
+            neighborRoom = roomGrid.getRoomAt(floor, x + 1, z);
             if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.EAST;
@@ -285,7 +205,7 @@ public class CastleRoomHelper
         }
         if (z < numRoomsZ - 1)
         {
-            neighborRoom = getRoomAt(floor, x, z + 1);
+            neighborRoom = roomGrid.getRoomAt(floor, x, z + 1);
             if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.SOUTH;
@@ -296,16 +216,25 @@ public class CastleRoomHelper
 
     private void connectRooms()
     {
+        /*
         ArrayList<RoomSelection> roomList = getUnreachableRoomList();
-        RoomSelection currentRoom;
-        currentRoom = roomList.get(random.nextInt(roomList.size()));
+        //while (!roomList.isEmpty())
+        //{
+            RoomSelection currentRoom;
+            EnumFacing directionToConnect;
 
+            currentRoom = roomList.get(random.nextInt(roomList.size()));
+            directionToConnect = getDirectionOfNearestReachable(currentRoom.gridLocation);
+            if (directionToConnect == EnumFacing.NORTH)
+            {
+                currentRoom.gridLocation
+            }
+            currentRoom.room.addDoorOnSide(directionToConnect);
+            currentRoom.reachable = true;
 
-    }
-
-    private void getDirectionOfNearestReachable(int floor, int x, int z)
-    {
-
+            roomList = getUnreachableRoomList();
+        //}
+        */
     }
 
     //Translate the room's (x, z) position in the floor array to a RoomPosition enum
@@ -357,28 +286,28 @@ public class CastleRoomHelper
     private void addRoomHallway(int floor, int x, int z, boolean vertical)
     {
         CastleRoom room = new CastleRoomHallway(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), vertical);
-        addRoomAt(room, floor, x, z);
+        roomGrid.addRoomAt(room, floor, x, z);
     }
 
     private void addStairCaseAndLanding(int stairFloor, int stairX, int stairZ)
     {
         addRoomStaircase(stairFloor, stairX, stairZ);
-        addRoomLanding(stairFloor + 1, stairX, stairZ, (CastleRoomStaircase) getRoomAt(stairFloor, stairX, stairZ));
+        addRoomLanding(stairFloor + 1, stairX, stairZ, (CastleRoomStaircase) roomGrid.getRoomAt(stairFloor, stairX, stairZ));
     }
 
     private void addRoomStaircase(int floor, int x, int z)
     {
         EnumFacing doorSide = getAdjacentHallwayDirection(floor, x, z);
         CastleRoom room = new CastleRoomStaircase(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), doorSide);
-        addRoomAt(room, floor, x, z);
-        setRoomReachable(floor, x, z);
+        roomGrid.addRoomAt(room, floor, x, z);
+        roomGrid.setRoomReachable(floor, x, z);
     }
 
     private void addRoomLanding(int floor, int x, int z, CastleRoomStaircase stairsBelow)
     {
         CastleRoom room = new CastleRoomLanding(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), stairsBelow);
-        addRoomAt(room, floor, x, z);
-        setRoomReachable(floor, x, z);
+        roomGrid.addRoomAt(room, floor, x, z);
+        roomGrid.setRoomReachable(floor, x, z);
     }
 
     private void addRoomUndirected(CastleRoom.RoomType type, int floor, int x, int z)
@@ -388,7 +317,7 @@ public class CastleRoomHelper
         {
             case KITCHEN:
                 room = new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z));
-                addRoomAt(room, floor, x, z);
+                roomGrid.addRoomAt(room, floor, x, z);
                 break;
             default:
                 break;
@@ -421,9 +350,9 @@ public class CastleRoomHelper
             {
                 for (int x = 0; x < numRoomsX; x++)
                 {
-                    if (isRoomFilled(floor, x, z))
+                    if (roomGrid.isRoomFilled(floor, x, z))
                     {
-                        result += "[" + getRoomAt(floor, x, z).getNameShortened() + "|" + getRoomAt(floor, x, z).getPositionString() + "] ";
+                        result += "[" + roomGrid.getRoomAt(floor, x, z).getNameShortened() + "|" + roomGrid.getRoomAt(floor, x, z).getPositionString() + "] ";
                     } else
                     {
                         result += "[NUL|--]";
