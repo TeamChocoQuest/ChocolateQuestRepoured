@@ -37,25 +37,28 @@ public class IntrusiveModificationHelper {
     /**
      * Returns requested Field with accessibility set to true
      * Accepts multiple potential names to handle variations between dev and release environments (MCP vs Searge naming)
+     *
+     * NOTE: This method intentionally uses the reflectGetAllFields utility method from this class, causing a minor
+     * performance loss when compared directly to the getField method of a class object. This is done to avoid
+     * recreating the recursive structure necessary to get all fields from superclasses using getDeclaredField(s)
+     * (the getField(s) methods don't return private fields, which defeats the entire purpose of this util). If being
+     * used in a situation where the performance penalty from this actually matters, this util should probably not be
+     * being used anyway.
+     *
      * @return requested Field or null
      */
     public static Field reflectGetField(Object instanceToAccess, String[] possibleNames) {
 
-        // Return var
-        Field toReturn;
+        // Get all fields
+        Field[] allFields = reflectGetAllFields(instanceToAccess);
 
-        // Attempt access for each provided name; return if valid
-        for(String name : possibleNames) {
-
-            // Try/catch must be recreated each time as exceptions are expected and would otherwise terminate block
-            try {
-
-                toReturn = instanceToAccess.getClass().getField(name);
-                toReturn.setAccessible(true);
-                return toReturn;
-
-            } catch (Exception ignored) {}
-
+        // Check each entry in both arrays and return if equal
+        for(Field field : allFields) {
+            for(String name : possibleNames) {
+                if(reflectGetFieldName(field).equals(name)) {
+                    return field;
+                }
+            }
         }
 
         // Default (no provided names were found)
@@ -83,12 +86,16 @@ public class IntrusiveModificationHelper {
         try {
             toGetValueOf.setAccessible(true); // Unnecessary if using solely this util; provided for compatibility
             return toGetValueOf.get(instance);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-
-        // Default - this means that something is wrong
-        return null;
+        // Thrown if value of field == null
+        catch (NullPointerException npe) {
+            return null;
+        }
+        // Catch-all exception for debug purposes - if this is called then something is wrong
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
 
     }
 
