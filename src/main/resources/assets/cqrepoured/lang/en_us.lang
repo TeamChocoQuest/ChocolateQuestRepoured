@@ -94,6 +94,76 @@ block.minecraft.banner.cqrepoured_cq_bones.green=Green bones of the dead
 block.minecraft.banner.cqrepoured_cq_bones.red=Red bones of the dead
 block.minecraft.banner.cqrepoured_cq_bones.black=Black bones of the dead
 
+block.minecraft.banner.cqrepoured_walker_black_bg.white=White flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.orange=Orange flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.magenta=Magenta flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.light_blue=Light blue flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.yellow=Yellow flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.lime=Lime flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.pink=Pink flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.gray=Gray flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.silver=Silver flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.cyan=Cyan flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.purple=Purple flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.blue=Blue flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.brown=Brown flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.green=Green flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.red=Red flag fabric
+block.minecraft.banner.cqrepoured_walker_black_bg.black=Black flag fabric
+
+
+block.minecraft.banner.cqrepoured_walker_border.white=White border sticking
+block.minecraft.banner.cqrepoured_walker_border.orange=Orange border sticking
+block.minecraft.banner.cqrepoured_walker_border.magenta=Magenta border sticking
+block.minecraft.banner.cqrepoured_walker_border.light_blue=Blue border sticking
+block.minecraft.banner.cqrepoured_walker_border.yellow=Yellow border sticking
+block.minecraft.banner.cqrepoured_walker_border.lime=Lime border sticking
+block.minecraft.banner.cqrepoured_walker_border.pink=Pink border sticking
+block.minecraft.banner.cqrepoured_walker_border.gray=Gray border sticking
+block.minecraft.banner.cqrepoured_walker_border.silver=Silver border sticking
+block.minecraft.banner.cqrepoured_walker_border.cyan=Cyan border sticking
+block.minecraft.banner.cqrepoured_walker_border.purple=Purple border sticking
+block.minecraft.banner.cqrepoured_walker_border.blue=Blue border sticking
+block.minecraft.banner.cqrepoured_walker_border.brown=Brown border sticking
+block.minecraft.banner.cqrepoured_walker_border.green=Green border sticking
+block.minecraft.banner.cqrepoured_walker_border.red=Red border sticking
+block.minecraft.banner.cqrepoured_walker_border.black=Black border sticking
+
+block.minecraft.banner.cqrepoured_walker_inner_border.white=White ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.orange=Orange ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.magenta=Magenta ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.light_blue=Light blue ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.yellow=Yellow ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.lime=Lime ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.pink=Pink ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.gray=Gray ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.silver=Silver ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.cyan=Cyan ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.purple=Purple ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.blue=Blue ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.brown=Brown ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.green=Green ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.red=Red ragged fabric
+block.minecraft.banner.cqrepoured_walker_inner_border.black=Black ragged fabric
+
+
+block.minecraft.banner.cqrepoured_walker_skull.white=White walker face
+block.minecraft.banner.cqrepoured_walker_skull.orange=Orange walker face
+block.minecraft.banner.cqrepoured_walker_skull.magenta=Magenta walker face
+block.minecraft.banner.cqrepoured_walker_skull.light_blue=Light blue walker face
+block.minecraft.banner.cqrepoured_walker_skull.yellow=Yellow walker face
+block.minecraft.banner.cqrepoured_walker_skull.lime=Lime walker face
+block.minecraft.banner.cqrepoured_walker_skull.pink=Pink walker face
+block.minecraft.banner.cqrepoured_walker_skull.gray=Gray walker face
+block.minecraft.banner.cqrepoured_walker_skull.silver=Silver walker face
+block.minecraft.banner.cqrepoured_walker_skull.cyan=Cyan walker face
+block.minecraft.banner.cqrepoured_walker_skull.purple=Purple walker face
+block.minecraft.banner.cqrepoured_walker_skull.blue=Blue walker face
+block.minecraft.banner.cqrepoured_walker_skull.brown=Brown walker face
+block.minecraft.banner.cqrepoured_walker_skull.green=Green walker face
+block.minecraft.banner.cqrepoured_walker_skull.red=Red walker face
+block.minecraft.banner.cqrepoured_walker_skull.black=Black walker face
+
 
 //Gui
 gui.drops.name=Drops

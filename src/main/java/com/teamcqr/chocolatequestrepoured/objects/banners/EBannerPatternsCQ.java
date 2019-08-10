@@ -2,8 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.banners;
 
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.BannerPattern;
 import net.minecraftforge.common.util.EnumHelper;
@@ -11,14 +9,20 @@ import net.minecraftforge.common.util.EnumHelper;
 public enum EBannerPatternsCQ {
 	
 	//TODO Wait for Artsquad to finish the textures
-	//TODO: Add 'blank' cq pattern
-	CQ_BLANK(addPattern("cq_blank", new ItemStack(Blocks.BARRIER, 0))),
-	WITHER_SKULL(addPattern("cq_wither_skull", new ItemStack(Items.SKULL))),
-	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", new ItemStack(Items.GHAST_TEAR, 0))),
-	FIRE(addPattern("cq_fire", new ItemStack(Items.FIRE_CHARGE))),
-	MAGIC_SMOKE(addPattern("cq_magic", new ItemStack(Items.BLAZE_POWDER))),
-	EMERALD(addPattern("cq_emerald", new ItemStack(Items.EMERALD))),
-	BONES(addPattern("cq_bones", new ItemStack(Items.BONE))),;
+	//DONE: Add 'blank' cq pattern
+	CQ_BLANK(addPattern("cq_blank", null)),
+	WITHER_SKULL(addPattern("cq_wither_skull", null)),
+	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", null)),
+	FIRE(addPattern("cq_fire", null)),
+	MAGIC_SMOKE(addPattern("cq_magic", null)),
+	EMERALD(addPattern("cq_emerald", null)),
+	BONES(addPattern("cq_bones", null)),
+	
+	WALKER_BACKGROUND(addPattern("walker_black_bg", null)),
+	WALKER_BORDER(addPattern("walker_border", null)),
+	//WALKER_EYES(addPattern("walker_eyes", null)),
+	WALKER_INNER_BORDER(addPattern("walker_inner_border", null)),
+	WALKER_SKULL(addPattern("walker_skull", null)),;
 	
 	private BannerPattern mcPattern;
 	
