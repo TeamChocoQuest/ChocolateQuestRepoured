@@ -160,6 +160,7 @@ public class CastleRoomSelector
                 for (int x = 0; (x < numRoomsX) && (!stairsPlaced); x++)
                 {
                     if (!roomGrid.isRoomFilled(floor, x, z) &&
+                            roomGrid.getRoomAt(floor, x, z).roomType != CastleRoom.RoomType.HALLWAY &&
                             roomBordersHallway(floor, x, z) &&
                             roomBordersHallway(floor + 1, x, z))
                     {
@@ -216,25 +217,20 @@ public class CastleRoomSelector
 
     private void connectRooms()
     {
-        /*
-        ArrayList<RoomSelection> roomList = getUnreachableRoomList();
-        //while (!roomList.isEmpty())
-        //{
-            RoomSelection currentRoom;
-            EnumFacing directionToConnect;
-
-            currentRoom = roomList.get(random.nextInt(roomList.size()));
-            directionToConnect = getDirectionOfNearestReachable(currentRoom.gridLocation);
-            if (directionToConnect == EnumFacing.NORTH)
+        System.out.println("Connecting rooms");
+        for (int floor = 0; floor < numFloors; floor++)
+        {
+            ArrayList<CastleRoomGrid.RoomSelection> roomList = roomGrid.getUnreachableRoomList(floor);
+            while (!roomList.isEmpty())
             {
-                currentRoom.gridLocation
-            }
-            currentRoom.room.addDoorOnSide(directionToConnect);
-            currentRoom.reachable = true;
+                CastleRoomGrid.RoomSelection currentRoom;
 
-            roomList = getUnreachableRoomList();
-        //}
-        */
+                currentRoom = roomList.get(random.nextInt(roomList.size()));
+                roomGrid.connectRoomToNearestReachable(currentRoom.gridLocation);
+
+                roomList = roomGrid.getUnreachableRoomList(floor);
+            }
+        }
     }
 
     //Translate the room's (x, z) position in the floor array to a RoomPosition enum
