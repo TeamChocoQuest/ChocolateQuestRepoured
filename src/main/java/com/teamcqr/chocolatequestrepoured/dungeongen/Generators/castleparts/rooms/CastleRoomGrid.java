@@ -20,7 +20,7 @@ public class CastleRoomGrid
         GridPosition gridLocation;
         private boolean reachable;
 
-        private RoomSelection(CastleRoom room, GridPosition gridLocation)
+        public RoomSelection(CastleRoom room, GridPosition gridLocation)
         {
             this.room = room;
             this.gridLocation = gridLocation;
@@ -30,9 +30,9 @@ public class CastleRoomGrid
 
     public class GridPosition
     {
-        int floor;
-        int x;
-        int z;
+        private int floor;
+        private int x;
+        private int z;
 
         private GridPosition(int floor, int x, int z)
         {
@@ -51,14 +51,59 @@ public class CastleRoomGrid
         this.random = random;
     }
 
+    public void connectRoomToNearestReachable(GridPosition gridPos)
+    {
+        int floor = gridPos.floor;
+        int x = gridPos.x;
+        int z = gridPos.z;
+        EnumFacing buildDirection = getDirectionOfNearestReachable(gridPos);
+
+        if (buildDirection != EnumFacing.DOWN)
+        {
+            while (withinGridBounds(x, z) && !isRoomReachable(floor, x, z))
+            {
+                CastleRoom room = getRoomAt(floor, x, z);
+                setRoomReachable(floor, x, z);
+
+                if (buildDirection == EnumFacing.SOUTH)
+                {
+                    z++;
+                    room.addDoorOnSide(buildDirection);
+                }
+                else if (buildDirection == EnumFacing.EAST)
+                {
+                    x++;
+                    room.addDoorOnSide(buildDirection);
+                }
+                else if (buildDirection == EnumFacing.NORTH)
+                {
+                    if (z != 0)
+                    {
+                        z--;
+                        CastleRoom roomNorth = getRoomAt(floor, x, z);
+                        roomNorth.addDoorOnSide(buildDirection.getOpposite());
+                    }
+                } else if (buildDirection == EnumFacing.WEST)
+                {
+                    if (x != 0)
+                    {
+                        x--;
+                        CastleRoom roomWest = getRoomAt(floor, x, z);
+                        roomWest.addDoorOnSide(buildDirection.getOpposite());
+                    }
+                }
+            }
+        }
+    }
+
     private EnumFacing getDirectionOfNearestReachable(GridPosition gridLocation)
     {
         EnumFacing result = EnumFacing.DOWN;
 
         class DirectionDistance
         {
-            EnumFacing direction;
-            int distance;
+            private EnumFacing direction;
+            private int distance;
 
             private DirectionDistance(EnumFacing direction, int distance)
             {
@@ -207,18 +252,15 @@ public class CastleRoomGrid
         roomArray[floor][x][z].reachable = true;
     }
 
-    private ArrayList<RoomSelection> getUnreachableRoomList()
+    public ArrayList<RoomSelection> getUnreachableRoomList(int floor)
     {
         ArrayList<RoomSelection> result = new ArrayList<>();
-        for (int floor = 0; floor < roomArray.length; floor++)
+        for (int x = 0; x < roomArray[0].length; x++)
         {
-            for (int x = 0; x < roomArray[0].length; x++)
+            for (int z = 0; z < roomArray[0][0].length; z++)
             {
-                for (int z = 0; z < roomArray[0][0].length; z++)
-                {
-                    if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].reachable)
+                if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].reachable)
                         result.add(roomArray[floor][x][z]);
-                }
             }
         }
 
@@ -248,6 +290,11 @@ public class CastleRoomGrid
     private RoomSelection selectionFromGridPosition(GridPosition gridPos)
     {
         return roomArray[gridPos.floor][gridPos.x][gridPos.z];
+    }
+
+    private boolean withinGridBounds(int x, int z)
+    {
+        return (x >= 0 && x < sizeX && z >= 0 && z < sizeZ);
     }
 
 }
