@@ -71,9 +71,9 @@ public class CastlePartSquare implements ICastlePart
             currentY = y + currentFloor * (floorHeight + 1);
 
             //over the entire x/z area
-            for (int i = 0; i <= sizeX; i++)
+            for (int i = 0; i < sizeX; i++)
             {
-                for (int j = 0; j <= sizeZ; j++)
+                for (int j = 0; j < sizeZ; j++)
                 {
                     // place a floor
                     //blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
@@ -86,6 +86,7 @@ public class CastlePartSquare implements ICastlePart
             }
             //Build walls
 
+            /*
             //Add x walls
             for (int i = 0; i <= sizeX; i++)
             {
@@ -139,10 +140,10 @@ public class CastlePartSquare implements ICastlePart
                 addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
                 addonList.add(new CastleAddonDoor(x + sizeX, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
+            */
         }
 
-        BlockPos roomStart = start.add(1, 1, 1);
-        CastleRoomSelector roomHelper = new CastleRoomSelector(roomStart, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
+        CastleRoomSelector roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
         if (roomsX >= 2 && roomsZ > 2)
         {
             roomHelper.fillRooms();

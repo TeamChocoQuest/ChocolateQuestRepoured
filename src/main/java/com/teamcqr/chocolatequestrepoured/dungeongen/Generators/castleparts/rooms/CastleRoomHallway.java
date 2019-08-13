@@ -14,13 +14,13 @@ public class CastleRoomHallway extends CastleRoom
         this.roomType = RoomType.HALLWAY;
         if (vertical)
         {
-            buildNorthWall = false;
-            buildSouthWall = false;
+            buildNorthWall = position.isTop();
+            buildSouthWall = position.isBottom();
         }
         else
         {
-            buildWestWall = false;
-            buildEastWall = false;
+            buildWestWall = position.isLeft();
+            buildEastWall = position.isRight();
         }
     }
 
