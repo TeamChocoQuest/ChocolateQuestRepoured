@@ -1,5 +1,5 @@
 The Chinese(simple) language file for Chocolate Quest Repoured Mod!
-
+//Author: Moko
 
 //CreativeTabs
 itemGroup.ChocolateQuestRepouredBlocksTab=寻找巧克力-重铸: 方块
@@ -40,7 +40,7 @@ block.minecraft.banner.cqrepoured_cq_wither_skull.purple=紫色凋灵旗
 block.minecraft.banner.cqrepoured_cq_wither_skull.blue=蓝色凋灵旗
 block.minecraft.banner.cqrepoured_cq_wither_skull.brown=棕色凋灵旗
 block.minecraft.banner.cqrepoured_cq_wither_skull.green=绿色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.red=Red凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.red=红色凋灵旗
 block.minecraft.banner.cqrepoured_cq_wither_skull.black=黑色凋灵旗
 
 block.minecraft.banner.cqrepoured_cq_fire.white=白色火焰旗
@@ -93,6 +93,74 @@ block.minecraft.banner.cqrepoured_cq_bones.brown=棕色死骨旗
 block.minecraft.banner.cqrepoured_cq_bones.green=绿色死骨旗
 block.minecraft.banner.cqrepoured_cq_bones.red=红色死骨旗
 block.minecraft.banner.cqrepoured_cq_bones.black=黑色死骨旗
+
+block.minecraft.banner.cqrepoured_walker_black_bg.white=白色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.orange=橙色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.magenta=洋红旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.light_blue=淡蓝旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.yellow=黄色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.lime=淡绿旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.pink=粉红旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.gray=灰色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.silver=银色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.cyan=青色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.purple=紫色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.blue=蓝色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.brown=棕色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.green=绿色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.red=红色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.black=黑色旗织物
+
+block.minecraft.banner.cqrepoured_walker_border.white=白色贴边
+block.minecraft.banner.cqrepoured_walker_border.orange=橙色贴边
+block.minecraft.banner.cqrepoured_walker_border.magenta=洋红贴边
+block.minecraft.banner.cqrepoured_walker_border.light_blue=淡蓝贴边
+block.minecraft.banner.cqrepoured_walker_border.yellow=黄色贴边
+block.minecraft.banner.cqrepoured_walker_border.lime=淡绿贴边
+block.minecraft.banner.cqrepoured_walker_border.pink=粉红贴边
+block.minecraft.banner.cqrepoured_walker_border.gray=灰色贴边
+block.minecraft.banner.cqrepoured_walker_border.silver=银色贴边
+block.minecraft.banner.cqrepoured_walker_border.cyan=青色贴边
+block.minecraft.banner.cqrepoured_walker_border.purple=紫色贴边
+block.minecraft.banner.cqrepoured_walker_border.blue=蓝色贴边
+block.minecraft.banner.cqrepoured_walker_border.brown=棕色贴边
+block.minecraft.banner.cqrepoured_walker_border.green=绿色贴边
+block.minecraft.banner.cqrepoured_walker_border.red=红色贴边
+block.minecraft.banner.cqrepoured_walker_border.black=黑色贴边
+
+block.minecraft.banner.cqrepoured_walker_inner_border.white=白色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.orange=橙色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.magenta=洋红粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.light_blue=淡蓝粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.yellow=黄色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.lime=淡绿粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.pink=粉红粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.gray=灰色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.silver=银色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.cyan=青色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.purple=紫色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.blue=蓝色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.brown=棕色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.green=绿色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.red=红色粗织物
+block.minecraft.banner.cqrepoured_walker_inner_border.black=黑色粗织物
+
+block.minecraft.banner.cqrepoured_walker_skull.white=白色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.orange=橙色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.magenta=洋红幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.light_blue=淡蓝幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.yellow=黄色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.lime=淡绿幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.pink=粉红幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.gray=灰色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.silver=银色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.cyan=青色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.purple=紫色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.blue=蓝色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.brown=棕色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.green=绿色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.red=红色幽谷脸
+block.minecraft.banner.cqrepoured_walker_skull.black=黑色幽谷脸
 
 
 //Gui
@@ -148,7 +216,7 @@ item.staff_thunder.name=雷电法杖
 
 //Guns
 item.revolver.name=左轮
-item.captain_revolver.name=左轮-队长式样
+item.captain_revolver.name=左轮-船长式样
 item.musket.name=滑膛枪
 item.musket_iron.name=铁刺刀滑膛枪
 item.musket_diamond.name=钻刺刀滑膛枪
