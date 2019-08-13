@@ -35,6 +35,32 @@ public abstract class CastleRoom
         BOT_MID,
         BOT_RIGHT;
 
+        public static final RoomPosition[] VALUES = new RoomPosition[6];
+
+        public boolean isTop()
+        {
+            return (this == TOP_LEFT || this == TOP_MID || this == TOP_RIGHT);
+        }
+
+        public boolean isLeft()
+        {
+            return (this == TOP_LEFT || this == MID_LEFT || this == BOT_LEFT);
+        }
+        public boolean isBottom()
+        {
+            return (this == BOT_LEFT || this == BOT_MID || this == BOT_RIGHT);
+        }
+
+        public boolean isRight()
+        {
+            return (this == TOP_RIGHT || this == MID_RIGHT || this == BOT_RIGHT);
+        }
+
+        public boolean isOuter()
+        {
+            return (this != MID);
+        }
+
         @Override
         public String toString()
         {
@@ -114,30 +140,17 @@ public abstract class CastleRoom
     private void determineWalls(RoomPosition position)
     {
         buildNorthWall = false;
-        buildEastWall = false;
-        buildSouthWall = false;
         buildWestWall = false;
+        buildSouthWall = true;
+        buildEastWall = true;
 
-        switch (position)
+        if (position.isTop())
         {
-            case TOP_LEFT:
-            case TOP_MID:
-            case MID_LEFT:
-            case MID:
-                buildEastWall = true;
-                buildSouthWall = true;
-                break;
-            case TOP_RIGHT:
-            case MID_RIGHT:
-                buildSouthWall = true;
-                break;
-            case BOT_LEFT:
-            case BOT_MID:
-                buildEastWall = true;
-                break;
-            case BOT_RIGHT:
-            default:
-                break;
+            buildNorthWall = true;
+        }
+        if (position.isLeft())
+        {
+            buildWestWall = true;
         }
     }
 
@@ -153,6 +166,16 @@ public abstract class CastleRoom
         {
             int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
             doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+        }
+        if (side == EnumFacing.NORTH && buildNorthWall)
+        {
+            int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+        }
+        else if (side == EnumFacing.WEST && buildWestWall)
+        {
+            int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, false));
         }
     }
 

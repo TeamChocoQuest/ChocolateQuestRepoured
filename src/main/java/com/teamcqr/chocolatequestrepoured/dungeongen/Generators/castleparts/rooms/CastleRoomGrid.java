@@ -1,10 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
+import java.util.function.Predicate;
 
 public class CastleRoomGrid
 {
@@ -198,6 +200,33 @@ public class CastleRoomGrid
         return result;
     }
 
+    public void addEntranceToSide(EnumFacing side)
+    {
+        ArrayList<RoomSelection> rooms = getRoomSelectionList();
+        rooms.removeIf(r -> r.gridLocation.floor > 0);
+        if (side == EnumFacing.NORTH)
+        {
+            rooms.removeIf(r -> r.gridLocation.z > 0);
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            rooms.removeIf(r -> r.gridLocation.z < sizeZ - 1);
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            rooms.removeIf(r -> r.gridLocation.x > 0);
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            rooms.removeIf(r -> r.gridLocation.x < sizeX - 1);
+        }
+
+        if (!rooms.isEmpty())
+        {
+            rooms.get(random.nextInt(rooms.size())).room.addDoorOnSide(side);
+        }
+    }
+
     public void addRoomAt(CastleRoom room, int floor, int x, int z)
     {
         roomArray[floor][x][z] = new RoomSelection(room, new GridPosition(floor, x, z));
@@ -269,7 +298,20 @@ public class CastleRoomGrid
 
     public ArrayList<CastleRoom> getRoomList()
     {
+        ArrayList<RoomSelection> rooms = getRoomSelectionList();
         ArrayList<CastleRoom> result = new ArrayList<>();
+
+        for (RoomSelection rs: rooms)
+        {
+            result.add(rs.room);
+        }
+
+        return result;
+    }
+
+    private ArrayList<RoomSelection> getRoomSelectionList()
+    {
+        ArrayList<RoomSelection> result = new ArrayList<>();
         for (int floor = 0; floor < roomArray.length; floor++)
         {
             for (int x = 0; x < roomArray[0].length; x++)
@@ -278,8 +320,25 @@ public class CastleRoomGrid
                 {
                     if (roomArray[floor][x][z] != null)
                     {
-                        result.add(roomArray[floor][x][z].room);
+                        result.add(roomArray[floor][x][z]);
                     }
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public ArrayList<CastleRoom> getAllRoomsOfType(CastleRoom.RoomType type, int floor)
+    {
+        ArrayList<CastleRoom> result = new ArrayList<>();
+        for (int x = 0; x < roomArray[0].length; x++)
+        {
+            for (int z = 0; z < roomArray[0][0].length; z++)
+            {
+                if (roomArray[floor][x][z] != null && roomArray[floor][x][z].room.roomType == type)
+                {
+                    result.add(roomArray[floor][x][z].room);
                 }
             }
         }

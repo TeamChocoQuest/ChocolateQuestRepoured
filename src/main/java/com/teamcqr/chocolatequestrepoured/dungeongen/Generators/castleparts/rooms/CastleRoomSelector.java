@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -65,6 +66,7 @@ public class CastleRoomSelector
             }
         }
 
+        addEntrances();
         connectRooms();
         placeDoors();
     }
@@ -160,7 +162,6 @@ public class CastleRoomSelector
                 for (int x = 0; (x < numRoomsX) && (!stairsPlaced); x++)
                 {
                     if (!roomGrid.isRoomFilled(floor, x, z) &&
-                            roomGrid.getRoomAt(floor, x, z).roomType != CastleRoom.RoomType.HALLWAY &&
                             roomBordersHallway(floor, x, z) &&
                             roomBordersHallway(floor + 1, x, z))
                     {
@@ -230,6 +231,14 @@ public class CastleRoomSelector
 
                 roomList = roomGrid.getUnreachableRoomList(floor);
             }
+        }
+    }
+
+    private void addEntrances()
+    {
+        for (EnumFacing side : EnumFacing.values())
+        {
+            roomGrid.addEntranceToSide(side);
         }
     }
 
