@@ -1,13 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.ICastleAddon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -144,12 +142,9 @@ public class CastlePartSquare implements ICastlePart
         }
 
         CastleRoomSelector roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
-        if (roomsX >= 2 && roomsZ > 2)
-        {
-            roomHelper.fillRooms();
-            System.out.println(roomHelper.printGrid());
-            roomHelper.generateRooms(buildList);
-        }
+        roomHelper.fillRooms();
+        System.out.println(roomHelper.printGrid());
+        roomHelper.generateRooms(buildList);
 
         //Build the roof
         currentY = y + floors * (floorHeight + 1);

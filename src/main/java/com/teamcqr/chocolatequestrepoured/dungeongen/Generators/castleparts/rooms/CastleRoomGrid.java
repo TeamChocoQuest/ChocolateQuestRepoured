@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
