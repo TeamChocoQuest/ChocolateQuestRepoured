@@ -1,12 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Random;
 
 public class CastleRoomSelector
@@ -44,13 +42,16 @@ public class CastleRoomSelector
     {
         boolean vertical = random.nextBoolean();
 
-        for (int floor = 0; floor < numFloors; floor++)
+        if (numRoomsX >= 2 && numRoomsZ >= 2)
         {
-            buildFloorHallway(floor, vertical);
-            vertical = !vertical;
-        }
+            for (int floor = 0; floor < numFloors; floor++)
+            {
+                buildFloorHallway(floor, vertical);
+                vertical = !vertical;
+            }
 
-        addStairCases();
+            addStairCases();
+        }
 
         for (int floor = 0; floor < numFloors; floor++)
         {
@@ -162,6 +163,7 @@ public class CastleRoomSelector
                 for (int x = 0; (x < numRoomsX) && (!stairsPlaced); x++)
                 {
                     if (!roomGrid.isRoomFilled(floor, x, z) &&
+                            !roomGrid.isRoomFilled(floor + 1, x, z) &&
                             roomBordersHallway(floor, x, z) &&
                             roomBordersHallway(floor + 1, x, z))
                     {
