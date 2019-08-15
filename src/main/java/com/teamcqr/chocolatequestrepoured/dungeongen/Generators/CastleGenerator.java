@@ -61,8 +61,8 @@ public class CastleGenerator implements IDungeonGenerator{
         int sizeZ;
         int offsetX;
         int offsetZ;
-        int quarterSizeX;
-        int quarterSizeZ;
+        int halfSizeX;
+        int halfSizeZ;
         int buildAreaX = maxSize;
         int buildAreaZ = maxSize;
         int currentLayer = 0;
@@ -70,10 +70,10 @@ public class CastleGenerator implements IDungeonGenerator{
         int totalFloors = 0;
 
         // Calculate random size based on maximum size
-        quarterSizeX = maxSize / 4;
-        quarterSizeZ = maxSize / 4;
-        sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
-        sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
+        halfSizeX = maxSize / 2;
+        halfSizeZ = maxSize / 2;
+        sizeX = halfSizeX + random.nextInt(halfSizeX);
+        sizeZ = halfSizeZ + random.nextInt(halfSizeZ);
         //round down to nearest multiple of room size
         sizeX = roundToRoomSize(sizeX);
         sizeZ = roundToRoomSize(sizeZ);
@@ -100,12 +100,12 @@ public class CastleGenerator implements IDungeonGenerator{
             buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.WEST, layerFloors, currentLayer, totalFloors);
 
             // Now try to build a new structure on top of this one
-            quarterSizeX = sizeX / 2;
-            quarterSizeZ = sizeZ / 2;
+            halfSizeX = sizeX / 2;
+            halfSizeZ = sizeZ / 2;
             buildAreaX = sizeX;
             buildAreaZ = sizeZ;
-            sizeX = quarterSizeX + random.nextInt(quarterSizeX);
-            sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ);
+            sizeX = halfSizeX + random.nextInt(halfSizeX);
+            sizeZ = halfSizeZ + random.nextInt(halfSizeZ);
             sizeX = roundToRoomSize(sizeX);
             sizeZ = roundToRoomSize(sizeZ);
             System.out.println("Calculated next layer (x, z) size: (" + sizeX + ", " + sizeZ + ")");
@@ -231,9 +231,9 @@ public class CastleGenerator implements IDungeonGenerator{
             case SOUTH:
                 return random.nextBoolean() ? x : x + mainSizeX - sideSizeX;
             case EAST:
-                return x + mainSizeX;
+                return x + mainSizeX - 1;
             case WEST:
-                return x - sideSizeX;
+                return x - sideSizeX + 1;
             default:
                 return x;
         }
@@ -245,9 +245,9 @@ public class CastleGenerator implements IDungeonGenerator{
         switch (facing)
         {
             case NORTH:
-                return z - sideSizeZ;
+                return z - sideSizeZ + 1;
             case SOUTH:
-                return z + mainSizeZ;
+                return z + mainSizeZ - 1;
             case EAST:
             case WEST:
                 return random.nextBoolean() ? z : z + mainSizeZ - sideSizeZ;
