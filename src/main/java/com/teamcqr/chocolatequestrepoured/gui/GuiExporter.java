@@ -106,7 +106,6 @@ public class GuiExporter extends GuiScreen
 
 			useParts = chbxPartsMode.isChecked();
 			exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, useParts);
-			useParts = chbxPartsMode.isChecked();
 
 			if(this.saveStructOnExit) 
 			{

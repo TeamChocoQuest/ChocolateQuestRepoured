@@ -44,7 +44,6 @@ public class DungeonBase {
 	private int iconID;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
-	//TODO: add functionality of "cover" blocks -.-
 	protected Block coverBlock = Blocks.AIR;
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
@@ -91,6 +90,7 @@ public class DungeonBase {
 			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
+			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
@@ -198,5 +198,8 @@ public class DungeonBase {
 	}
 	public boolean doesSpawnOnlyBehindWall() {
 		return this.spawnBehindWall;
+	}
+	public boolean replaceBanners() {
+		return this.replaceBanners;
 	}
 }
