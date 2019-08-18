@@ -17,7 +17,8 @@ public class CastleAddonDoor implements ICastleAddon
     public enum DoorType
     {
         EMPTY,
-        FENCE_BORDER
+        FENCE_SPRUCE_BORDER,
+        FENCE_OAK_BORDER
     }
 
     private int startX;
@@ -44,9 +45,14 @@ public class CastleAddonDoor implements ICastleAddon
     {
         switch (type)
         {
-            case FENCE_BORDER:
+            case FENCE_SPRUCE_BORDER:
             {
-                generateFenceBorder(blocks);
+                generateSpruceFenceBorder(blocks);
+                break;
+            }
+            case FENCE_OAK_BORDER:
+            {
+                generateOakFenceBorder(blocks);
                 break;
             }
             case EMPTY:
@@ -76,13 +82,22 @@ public class CastleAddonDoor implements ICastleAddon
         }
     }
 
-    private void generateFenceBorder(ArrayList<BlockPlacement> blocks)
+    private void generateOakFenceBorder(ArrayList<BlockPlacement> blocks)
+    {
+        generateFenceBorder(blocks, Blocks.DARK_OAK_FENCE.getDefaultState());
+    }
+    private void generateSpruceFenceBorder(ArrayList<BlockPlacement> blocks)
+    {
+        generateFenceBorder(blocks, Blocks.SPRUCE_FENCE.getDefaultState());
+    }
+
+
+    private void generateFenceBorder(ArrayList<BlockPlacement> blocks, IBlockState blockToBuild)
     {
         for (int i = 0; i < width; i++)
         {
             for (int j = 0; j < height; j++)
             {
-                IBlockState blockToBuild;
                 if (i == 0 || i == width - 1 || j == height - 1)
                 {
                     blockToBuild = Blocks.DARK_OAK_FENCE.getDefaultState();

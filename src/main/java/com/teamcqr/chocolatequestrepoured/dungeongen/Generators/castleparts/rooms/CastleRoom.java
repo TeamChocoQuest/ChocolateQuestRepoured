@@ -201,22 +201,22 @@ public abstract class CastleRoom
         if (side == EnumFacing.SOUTH && buildSouthWall)
         {
             int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
         }
         else if (side == EnumFacing.EAST && buildEastWall)
         {
             int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
         }
         if (side == EnumFacing.NORTH && buildNorthWall)
         {
             int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
         }
         else if (side == EnumFacing.WEST && buildWestWall)
         {
             int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-            doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+            doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
         }
     }
 
@@ -269,6 +269,26 @@ public abstract class CastleRoom
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
             }
+        }
+    }
+
+    public void removeWall(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            buildNorthWall = false;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            buildSouthWall = false;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            buildEastWall = false;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            buildWestWall = false;
         }
     }
 

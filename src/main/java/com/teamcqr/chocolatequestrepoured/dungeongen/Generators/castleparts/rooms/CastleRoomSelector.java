@@ -18,6 +18,9 @@ public class CastleRoomSelector
     private Random random;
     private CastleRoomGrid roomGrid;
 
+    private boolean singleSideEntrance;
+    private EnumFacing entranceSide;
+
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
         this.startPos = startPos;
@@ -28,6 +31,9 @@ public class CastleRoomSelector
         this.numRoomsZ = numRoomsZ;
         this.random = random;
         this.roomGrid = new CastleRoomGrid(numFloors, numRoomsX, numRoomsZ, random);
+
+        this.singleSideEntrance = false;
+        this.entranceSide = EnumFacing.DOWN;
     }
 
     public void generateRooms(ArrayList<BlockPlacement> blocks)
@@ -41,8 +47,9 @@ public class CastleRoomSelector
     public void fillRooms()
     {
         boolean vertical = random.nextBoolean();
+        boolean largeBuilding = (numRoomsX >= 2 && numRoomsZ >= 2);
 
-        if (numRoomsX >= 2 && numRoomsZ >= 2)
+        if (largeBuilding)
         {
             for (int floor = 0; floor < numFloors; floor++)
             {
@@ -238,9 +245,16 @@ public class CastleRoomSelector
 
     private void addEntrances()
     {
-        for (EnumFacing side : EnumFacing.values())
+        if (singleSideEntrance)
         {
-            roomGrid.addEntranceToSide(side);
+            roomGrid.addEntranceToSide(entranceSide);
+        }
+        else
+        {
+            for (EnumFacing side : EnumFacing.values())
+            {
+                roomGrid.addEntranceToSide(side);
+            }
         }
     }
 
@@ -401,6 +415,12 @@ public class CastleRoomSelector
     public int getRoomCountZ()
     {
         return numRoomsZ;
+    }
+
+    public void onlyBuildEntranceOnSide(EnumFacing side)
+    {
+        this.singleSideEntrance = true;
+        this.entranceSide = side;
     }
 
     //print the room array in a grid, floor by floor
