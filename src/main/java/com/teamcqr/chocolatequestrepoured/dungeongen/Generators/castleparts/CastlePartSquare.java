@@ -21,8 +21,9 @@ public class CastlePartSquare implements ICastlePart
 {
     private BlockPos start;
     private int sizeX;
-    private int sizeY;
     private int sizeZ;
+    private int roomsX;
+    private int roomsZ;
     private int floors;
     private EnumFacing facing;
     private CastleDungeon dungeon;
@@ -31,26 +32,33 @@ public class CastlePartSquare implements ICastlePart
     private boolean isTopFloor;
     private CastleRoomSelector roomHelper;
 
-    public CastlePartSquare(BlockPos origin, int sizeX, int sizeZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
+    public CastlePartSquare(BlockPos origin, int roomsX, int roomsZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
     {
         this.dungeon = dungeon;
         this.floors = floors;
         this.random = this.dungeon.getRandom();
+        this.roomsX = roomsX;
+        this.roomsZ = roomsZ;
 
         this.start = origin;
-        this.sizeX = sizeX;
-        this.sizeY = this.dungeon.getFloorHeight() * floors;
-        this.sizeZ = sizeZ;
+        this.sizeX = roomsX * dungeon.getRoomSize();
+        this.sizeZ = roomsZ * dungeon.getRoomSize();
         this.facing = facing;
         this.startLayer = startLayer;
         this.isTopFloor = false;
+
+        roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, roomsX, roomsZ, random);
+        roomHelper.fillRooms();
+        if (isSidebuilding())
+        {
+            roomHelper.removeWallsFromFacing(facing.getOpposite());
+        }
+        System.out.println(roomHelper.printGrid());
     }
 
     @Override
     public void generatePart(World world)
     {
-        int roomsX = Math.max(1, sizeX / dungeon.getRoomSize());
-        int roomsZ = Math.max(1, sizeZ / dungeon.getRoomSize());
         int currentY;
         int floorHeight = dungeon.getFloorHeight();
         int x = start.getX();
@@ -141,9 +149,6 @@ public class CastlePartSquare implements ICastlePart
             */
         }
 
-        CastleRoomSelector roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), floorHeight, floors, roomsX, roomsZ, random);
-        roomHelper.fillRooms();
-        System.out.println(roomHelper.printGrid());
         roomHelper.generateRooms(buildList);
 
         //Build the roof
@@ -180,6 +185,28 @@ public class CastlePartSquare implements ICastlePart
             }
         }
 
+    }
+
+    public void registerSideBuilding(EnumFacing side, int sideRoomsX, int sideRoomsZ, boolean alignedToFarSide)
+    {
+        int roomIndexMin = -1;
+        int numAdjacentRooms;
+        if (side.getAxis() == EnumFacing.Axis.Z)
+        {
+            roomIndexMin = alignedToFarSide ? roomsX - sideRoomsX : 0;
+            numAdjacentRooms = sideRoomsX;
+        }
+        else
+        {
+            roomIndexMin = alignedToFarSide ? roomsZ - sideRoomsZ : 0;
+            numAdjacentRooms = sideRoomsZ;
+        }
+        roomHelper.addExitToOuterRoom(roomIndexMin, numAdjacentRooms, side);
+    }
+
+    private boolean isSidebuilding()
+    {
+        return (this.facing != EnumFacing.UP);
     }
 
     @Override

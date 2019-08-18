@@ -285,6 +285,63 @@ public class CastleRoomSelector
         }
     }
 
+    public void addExitToSide(int roomIndexMin, int roomIndexMax, EnumFacing side)
+    {
+        int roomIndex = roomIndexMin + random.nextInt(roomIndexMax - roomIndexMin);
+        if (side == EnumFacing.NORTH && roomIndex < numRoomsX)
+        {
+            roomGrid.getRoomAt(numFloors - 1, roomIndex, 0).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.SOUTH && roomIndex < numRoomsX)
+        {
+            roomGrid.getRoomAt(numFloors - 1, roomIndex, numRoomsZ - 1).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.WEST && roomIndex < numRoomsZ)
+        {
+            roomGrid.getRoomAt(numFloors - 1, 0, roomIndex).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.EAST && roomIndex < numRoomsZ)
+        {
+            roomGrid.getRoomAt(numFloors - 1, numRoomsX - 1, roomIndex).addDoorOnSide(side);
+        }
+    }
+
+    public void removeWallsFromFacing(EnumFacing facing)
+    {
+        roomGrid.removeWallsFromRoomsOnSide(facing);
+    }
+
+    public void addExitToOuterRoom(int roomIndexMin, int numPossibleRooms, EnumFacing side)
+    {
+        int index = roomIndexMin + random.nextInt(numPossibleRooms);
+        int x = -1;
+        int z = -1;
+        if (side == EnumFacing.NORTH)
+        {
+            x = index;
+            z = 0;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            x = numRoomsX - 1;
+            z = index;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            x = index;
+            z = numRoomsZ - 1;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            x = 0;
+            z = index;
+        }
+        if (roomGrid.withinGridBounds(x, z))
+        {
+            roomGrid.addDoorToRoomAllFloors(x, z, side);
+        }
+    }
+
     private BlockPos getRoomStart(int floor, int x, int z)
     {
         return startPos.add(x * roomSize, floor * floorHeight, z * roomSize);
