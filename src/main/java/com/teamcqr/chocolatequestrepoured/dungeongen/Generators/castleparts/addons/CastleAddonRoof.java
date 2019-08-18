@@ -75,7 +75,7 @@ public class CastleAddonRoof implements ICastleAddon
         int y = yStart;
         int z = zStart;
 
-        for (int i = 0; i < sizeX; i++)
+        for (int i = 0; i < sizeX - 1; i++)
         {
             if (this.structFacing != EnumFacing.SOUTH)
             {
@@ -97,7 +97,7 @@ public class CastleAddonRoof implements ICastleAddon
                 }
             }
         }
-        for (int i = 0; i < sizeZ; i++)
+        for (int i = 0; i < sizeZ - 1; i++)
         {
             if (this.structFacing != EnumFacing.EAST)
             {

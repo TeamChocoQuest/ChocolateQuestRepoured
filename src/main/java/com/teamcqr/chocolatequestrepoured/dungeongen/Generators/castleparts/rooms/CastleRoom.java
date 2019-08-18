@@ -37,6 +37,27 @@ public abstract class CastleRoom
 
         public static final RoomPosition[] VALUES = new RoomPosition[6];
 
+        public boolean isOnSide(EnumFacing facing)
+        {
+            if (facing == EnumFacing.NORTH)
+            {
+                return isTop();
+            }
+            else if (facing == EnumFacing.EAST)
+            {
+                return isRight();
+            }
+            else if (facing == EnumFacing.SOUTH)
+            {
+                return isBottom();
+            }
+            else if (facing == EnumFacing.WEST)
+            {
+                return isLeft();
+            }
+            return false;
+        }
+
         public boolean isTop()
         {
             return (this == TOP_LEFT || this == TOP_MID || this == TOP_RIGHT);
@@ -154,6 +175,26 @@ public abstract class CastleRoom
         }
     }
 
+    public void disableWallOnSide(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            buildNorthWall = false;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            buildEastWall = false;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            buildSouthWall = false;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            buildWestWall = false;
+        }
+    }
+
     public void addDoorOnSide(EnumFacing side)
     {
         final int DOOR_WIDTH = 4;
@@ -182,10 +223,10 @@ public abstract class CastleRoom
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
+        int len = sideLength;
 
         if (buildNorthWall)
         {
-            int len = isRightRow() ? sideLength - 1 : sideLength;
             for (int x = 0; x < len; x++)
             {
                 for (int y = 0; y < height / 2; y++)
@@ -198,7 +239,6 @@ public abstract class CastleRoom
         }
         if (buildSouthWall)
         {
-            int len = isRightRow() ? sideLength - 1 : sideLength;
             for (int x = 0; x < len; x++)
             {
                 for (int y = 0; y < height / 2; y++)
@@ -210,7 +250,6 @@ public abstract class CastleRoom
         }
         if (buildWestWall)
         {
-            int len = isBottomRow() ? sideLength - 1 : sideLength;
             for (int z = 0; z < len; z++)
             {
                 for (int y = 0; y < height / 2; y++)
@@ -222,7 +261,6 @@ public abstract class CastleRoom
         }
         if (buildEastWall)
         {
-            int len = isBottomRow() ? sideLength - 1 : sideLength;
             for (int z = 0; z < len; z++)
             {
                 for (int y = 0; y < height / 2; y++)

@@ -61,53 +61,50 @@ public class CastleGenerator implements IDungeonGenerator{
         int sizeZ;
         int offsetX;
         int offsetZ;
-        int quarterSizeX;
-        int quarterSizeZ;
+        int numRoomsX;
+        int numRoomsZ;
         int buildAreaX = maxSize;
         int buildAreaZ = maxSize;
         int currentLayer = 0;
         int layerFloors = 2;
         int totalFloors = 0;
 
+        numRoomsX = randomizeNumRoomsFromSize(maxSize, 25);
+        numRoomsZ = randomizeNumRoomsFromSize(maxSize, 25);
         // Calculate random size based on maximum size
-        quarterSizeX = maxSize / 4;
-        quarterSizeZ = maxSize / 4;
-        sizeX = quarterSizeX + random.nextInt(quarterSizeX * 3);
-        sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ * 3);
-        //round down to nearest multiple of room size
-        sizeX = roundToRoomSize(sizeX);
-        sizeZ = roundToRoomSize(sizeZ);
+        sizeX = numRoomsX * roomSize;
+        sizeZ = numRoomsZ * roomSize;
 
         // Each iteration through this loop is one "layer" of castle - each layer is generated the same way, just with a shrinking build area
         while (Math.min(sizeX, sizeZ) > roomSize)
         {
-            offsetX = random.nextInt(buildAreaX - sizeX);
-            offsetZ = random.nextInt(buildAreaZ - sizeZ);
+            offsetX = roundToRoomSize(random.nextInt(buildAreaX - sizeX));
+            offsetZ = roundToRoomSize(random.nextInt(buildAreaZ - sizeZ));
 
             // Apply the offset
             x += offsetX;
             z += offsetZ;
 
             // Add the main building
-            parts.add(new CastlePartSquare(new BlockPos(x, y, z), sizeX, sizeZ, layerFloors, this.dungeon, EnumFacing.UP, currentLayer));
+            CastlePartSquare mainPart = new CastlePartSquare(new BlockPos(x, y, z), numRoomsX, numRoomsZ, layerFloors, this.dungeon, EnumFacing.UP, currentLayer);
 
             // Build out each of the side structures to the North, East, South, and West. The structures keep building out
             // in that direction while there is room. It might be cool to eventually branch in all directions recursively
             // while there is room, but it will require better tracking of the available space on a given layer.
-            buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.NORTH, layerFloors, currentLayer, totalFloors);
-            buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.EAST, layerFloors, currentLayer, totalFloors);
-            buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.SOUTH, layerFloors, currentLayer, totalFloors);
-            buildSide(x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, EnumFacing.WEST, layerFloors, currentLayer, totalFloors);
+            for (EnumFacing side : EnumFacing.HORIZONTALS)
+            {
+                buildSide(mainPart, x, y, z, sizeX, sizeZ, offsetX, offsetZ, buildAreaX, buildAreaZ, side, layerFloors, currentLayer, totalFloors);
+            }
+            parts.add(mainPart);
 
-            // Now try to build a new structure on top of this one
-            quarterSizeX = sizeX / 2;
-            quarterSizeZ = sizeZ / 2;
             buildAreaX = sizeX;
             buildAreaZ = sizeZ;
-            sizeX = quarterSizeX + random.nextInt(quarterSizeX);
-            sizeZ = quarterSizeZ + random.nextInt(quarterSizeZ);
-            sizeX = roundToRoomSize(sizeX);
-            sizeZ = roundToRoomSize(sizeZ);
+            // Now try to build a new structure on top of this one
+            numRoomsX = randomizeNumRoomsFromSize(sizeX, 50);
+            numRoomsZ = randomizeNumRoomsFromSize(sizeZ, 50);
+            // Calculate random size based on maximum size
+            sizeX = numRoomsX * roomSize;
+            sizeZ = numRoomsZ * roomSize;
             System.out.println("Calculated next layer (x, z) size: (" + sizeX + ", " + sizeZ + ")");
 
             totalFloors += layerFloors;
@@ -140,11 +137,13 @@ public class CastleGenerator implements IDungeonGenerator{
         }
     }
 
-    private void buildSide(int x, int y, int z, int sizeX, int sizeZ, int offsetX, int offsetZ, int buildAreaX,
+    private void buildSide(CastlePartSquare mainPart, int x, int y, int z, int sizeX, int sizeZ, int offsetX, int offsetZ, int buildAreaX,
                            int buildAreaZ, EnumFacing facing, int layerFloors, int currentLayer, int currentFloor)
     {
         int roomToBuildX;
         int roomToBuildZ;
+        int numRoomsX = 0;
+        int numRoomsZ = 0;
         int subSizeX;
         int subSizeZ;
         int subX;
@@ -182,10 +181,10 @@ public class CastleGenerator implements IDungeonGenerator{
 
             if (buildSquarePart)
             {
-                subSizeX = Math.max(random.nextInt(roomToBuildX), roomSize);
-                subSizeZ = Math.max(random.nextInt(roomToBuildZ), roomSize);
-                subSizeX = roundToRoomSize(subSizeX);
-                subSizeZ = roundToRoomSize(subSizeZ);
+                numRoomsX = randomizeNumRoomsFromSize(sizeX, 50);
+                numRoomsZ = randomizeNumRoomsFromSize(sizeZ, 50);
+                subSizeX = numRoomsX * roomSize;
+                subSizeZ = numRoomsZ * roomSize;
             }
             else
             {
@@ -195,12 +194,15 @@ public class CastleGenerator implements IDungeonGenerator{
             }
 
             //determine the top left corner of this structure
-            subX = getSideStructureX(x, sizeX, subSizeX, facing);
-            subZ = getSideStructureZ(z, sizeZ, subSizeZ, facing);
+            boolean alignToFarSide = random.nextBoolean();
+            subX = getSideStructureX(x, sizeX, subSizeX, facing, alignToFarSide);
+
+            subZ = getSideStructureZ(z, sizeZ, subSizeZ, facing, alignToFarSide);
 
             if (buildSquarePart)
             {
-                parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), subSizeX, subSizeZ, layerFloors, this.dungeon, facing, currentLayer));
+                parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), numRoomsX, numRoomsZ, layerFloors, this.dungeon, facing, currentLayer));
+                mainPart.registerSideBuilding(facing, numRoomsX, numRoomsZ, alignToFarSide);
             }
             else
             {
@@ -223,13 +225,13 @@ public class CastleGenerator implements IDungeonGenerator{
     }
 
     // Get the leftmost (lowest) X location of a side structure building
-    private int getSideStructureX(int x, int mainSizeX, int sideSizeX, EnumFacing facing)
+    private int getSideStructureX(int x, int mainSizeX, int sideSizeX, EnumFacing facing, boolean leftAligned)
     {
         switch (facing)
         {
             case NORTH:
             case SOUTH:
-                return random.nextBoolean() ? x : x + mainSizeX - sideSizeX;
+                return leftAligned ? x + mainSizeX - sideSizeX : x;
             case EAST:
                 return x + mainSizeX;
             case WEST:
@@ -240,7 +242,7 @@ public class CastleGenerator implements IDungeonGenerator{
     }
 
     // Get the topmost (lowest) Z location of a side structure building
-    private int getSideStructureZ(int z, int mainSizeZ, int sideSizeZ, EnumFacing facing)
+    private int getSideStructureZ(int z, int mainSizeZ, int sideSizeZ, EnumFacing facing, boolean bottomAligned)
     {
         switch (facing)
         {
@@ -250,7 +252,7 @@ public class CastleGenerator implements IDungeonGenerator{
                 return z + mainSizeZ;
             case EAST:
             case WEST:
-                return random.nextBoolean() ? z : z + mainSizeZ - sideSizeZ;
+                return bottomAligned ? z + mainSizeZ - sideSizeZ : z;
 
             default:
                 return z;
@@ -316,6 +318,21 @@ public class CastleGenerator implements IDungeonGenerator{
     private int roundToRoomSize(int size)
     {
         return Math.max((size - (size % dungeon.getRoomSize())), 0);
+    }
+
+    private int randomizeNumRoomsFromSize(int size, int minPercentOfSizeUsed)
+    {
+        int divisor = 100 / minPercentOfSizeUsed;
+        if (size < roomSize)
+        {
+            return 0;
+        }
+        else
+        {
+            int minSizeUsed = size / divisor;
+            int sizeUsed = minSizeUsed + random. nextInt(size - minSizeUsed);
+            return sizeUsed / roomSize;
+        }
     }
 
 }

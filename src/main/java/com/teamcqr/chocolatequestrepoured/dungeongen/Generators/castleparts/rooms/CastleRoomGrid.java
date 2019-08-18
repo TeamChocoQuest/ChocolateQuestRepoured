@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class CastleRoomGrid
 {
@@ -226,6 +227,12 @@ public class CastleRoomGrid
         }
     }
 
+    public void removeWallsFromRoomsOnSide(EnumFacing side)
+    {
+        Stream<CastleRoom> roomStream = getRoomList().stream().filter(r -> r.position.isOnSide(side));;
+        roomStream.forEach(r -> r.disableWallOnSide(side));
+    }
+
     public void addRoomAt(CastleRoom room, int floor, int x, int z)
     {
         roomArray[floor][x][z] = new RoomSelection(room, new GridPosition(floor, x, z));
@@ -245,6 +252,14 @@ public class CastleRoomGrid
         else
         {
             return null;
+        }
+    }
+
+    public void addDoorToRoomAllFloors(int x, int z, EnumFacing side)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            roomArray[floor][x][z].room.addDoorOnSide(side);
         }
     }
 
@@ -350,9 +365,8 @@ public class CastleRoomGrid
         return roomArray[gridPos.floor][gridPos.x][gridPos.z];
     }
 
-    private boolean withinGridBounds(int x, int z)
+    public boolean withinGridBounds(int x, int z)
     {
         return (x >= 0 && x < sizeX && z >= 0 && z < sizeZ);
     }
-
 }
