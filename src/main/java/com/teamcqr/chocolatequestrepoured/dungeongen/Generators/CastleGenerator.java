@@ -201,8 +201,11 @@ public class CastleGenerator implements IDungeonGenerator{
 
             if (buildSquarePart)
             {
-                parts.add(new CastlePartSquare(new BlockPos(subX, y, subZ), numRoomsX, numRoomsZ, layerFloors, this.dungeon, facing, currentLayer));
+                CastlePartSquare sidePart = new CastlePartSquare(new BlockPos(subX, y, subZ), numRoomsX, numRoomsZ, layerFloors, this.dungeon, facing, currentLayer);
+                parts.add(sidePart);
                 mainPart.registerSideBuilding(facing, numRoomsX, numRoomsZ, alignToFarSide);
+                mainPart = sidePart;
+
             }
             else
             {
