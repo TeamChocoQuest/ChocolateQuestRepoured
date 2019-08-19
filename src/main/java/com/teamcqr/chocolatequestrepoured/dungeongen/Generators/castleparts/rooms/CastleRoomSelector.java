@@ -237,7 +237,7 @@ public class CastleRoomSelector
                 CastleRoomGrid.RoomSelection currentRoom;
 
                 currentRoom = roomList.get(random.nextInt(roomList.size()));
-                roomGrid.connectRoomToNearestReachable(currentRoom.gridLocation);
+                roomGrid.connectRoomToNearestReachable(currentRoom);
 
                 roomList = roomGrid.getUnreachableRoomList(floor);
             }
