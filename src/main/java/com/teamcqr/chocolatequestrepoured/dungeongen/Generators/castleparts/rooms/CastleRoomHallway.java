@@ -27,9 +27,9 @@ public class CastleRoomHallway extends CastleRoom
     @Override
     public void generateRoom(ArrayList<BlockPlacement> blocks)
     {
-        for (int z = 0; z < (buildEastWall ? sideLength - 1 : sideLength); z++)
+        for (int z = 0; z < (buildSouthWall ? sideLength - 1 : sideLength); z++)
         {
-            for (int x = 0; x < (buildSouthWall ? sideLength - 1 : sideLength); x++)
+            for (int x = 0; x < (buildEastWall ? sideLength - 1 : sideLength); x++)
             {
                 BlockPos pos = startPos.add(x, 0, z);
                 blocks.add(new BlockPlacement(pos, Blocks.WOOL.getDefaultState()));

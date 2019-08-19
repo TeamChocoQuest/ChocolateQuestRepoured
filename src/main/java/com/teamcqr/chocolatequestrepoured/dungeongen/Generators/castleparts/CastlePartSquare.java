@@ -49,10 +49,6 @@ public class CastlePartSquare implements ICastlePart
 
         roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, roomsX, roomsZ, random);
         roomHelper.fillRooms();
-        if (isSidebuilding())
-        {
-            roomHelper.removeWallsFromFacing(facing.getOpposite());
-        }
         System.out.println(roomHelper.printGrid());
     }
 
@@ -185,28 +181,6 @@ public class CastlePartSquare implements ICastlePart
             }
         }
 
-    }
-
-    public void registerSideBuilding(EnumFacing side, int sideRoomsX, int sideRoomsZ, boolean alignedToFarSide)
-    {
-        int roomIndexMin = -1;
-        int numAdjacentRooms;
-        if (side.getAxis() == EnumFacing.Axis.Z)
-        {
-            roomIndexMin = alignedToFarSide ? roomsX - sideRoomsX : 0;
-            numAdjacentRooms = sideRoomsX;
-        }
-        else
-        {
-            roomIndexMin = alignedToFarSide ? roomsZ - sideRoomsZ : 0;
-            numAdjacentRooms = sideRoomsZ;
-        }
-        roomHelper.addExitToOuterRoom(roomIndexMin, numAdjacentRooms, side);
-    }
-
-    private boolean isSidebuilding()
-    {
-        return (this.facing != EnumFacing.UP);
     }
 
     @Override

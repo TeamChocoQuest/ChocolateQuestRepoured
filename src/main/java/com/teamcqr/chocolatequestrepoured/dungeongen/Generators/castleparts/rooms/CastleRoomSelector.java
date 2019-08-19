@@ -20,6 +20,7 @@ public class CastleRoomSelector
 
     private boolean singleSideEntrance;
     private EnumFacing entranceSide;
+    private boolean isMainStruct;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
@@ -323,37 +324,6 @@ public class CastleRoomSelector
     public void removeWallsFromFacing(EnumFacing facing)
     {
         roomGrid.removeWallsFromRoomsOnSide(facing);
-    }
-
-    public void addExitToOuterRoom(int roomIndexMin, int numPossibleRooms, EnumFacing side)
-    {
-        int index = roomIndexMin + random.nextInt(numPossibleRooms);
-        int x = -1;
-        int z = -1;
-        if (side == EnumFacing.NORTH)
-        {
-            x = index;
-            z = 0;
-        }
-        else if (side == EnumFacing.EAST)
-        {
-            x = numRoomsX - 1;
-            z = index;
-        }
-        else if (side == EnumFacing.SOUTH)
-        {
-            x = index;
-            z = numRoomsZ - 1;
-        }
-        else if (side == EnumFacing.WEST)
-        {
-            x = 0;
-            z = index;
-        }
-        if (roomGrid.withinGridBounds(x, z))
-        {
-            roomGrid.addDoorToRoomAllFloors(x, z, side);
-        }
     }
 
     private BlockPos getRoomStart(int floor, int x, int z)
