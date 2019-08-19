@@ -290,6 +290,14 @@ public class CastleRoomGrid
         return roomArray[floor][x][z].reachable;
     }
 
+    public void setRoomReachableAllFloors(int x, int z)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            setRoomReachable(floor, x, z);
+        }
+    }
+
     public void setRoomReachable(int floor, int x, int z)
     {
         roomArray[floor][x][z].reachable = true;
