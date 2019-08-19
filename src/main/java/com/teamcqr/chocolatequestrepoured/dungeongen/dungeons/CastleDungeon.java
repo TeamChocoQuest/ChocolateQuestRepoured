@@ -7,11 +7,9 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.VillageGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
