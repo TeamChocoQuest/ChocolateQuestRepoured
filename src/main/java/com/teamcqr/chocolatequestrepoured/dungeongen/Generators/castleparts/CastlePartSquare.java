@@ -21,7 +21,6 @@ public class CastlePartSquare implements ICastlePart
 {
     private BlockPos start;
     private int sizeX;
-    private int sizeY;
     private int sizeZ;
     private int roomsX;
     private int roomsZ;
@@ -33,25 +32,24 @@ public class CastlePartSquare implements ICastlePart
     private boolean isTopFloor;
     private CastleRoomSelector roomHelper;
 
-    public CastlePartSquare(BlockPos origin, int sizeX, int sizeZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
+    public CastlePartSquare(BlockPos origin, int roomsX, int roomsZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
     {
         this.dungeon = dungeon;
         this.floors = floors;
         this.random = this.dungeon.getRandom();
+        this.roomsX = roomsX;
+        this.roomsZ = roomsZ;
 
         this.start = origin;
-        this.sizeX = sizeX;
-        this.sizeY = this.dungeon.getFloorHeight() * floors;
-        this.sizeZ = sizeZ;
-
-        this.roomsX = Math.max(1, sizeX / dungeon.getRoomSize());
-        this.roomsZ = Math.max(1, sizeZ / dungeon.getRoomSize());
-
+        this.sizeX = roomsX * dungeon.getRoomSize();
+        this.sizeZ = roomsZ * dungeon.getRoomSize();
         this.facing = facing;
         this.startLayer = startLayer;
         this.isTopFloor = false;
 
-        this.roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, roomsX, roomsZ, random);
+        roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, roomsX, roomsZ, random);
+        roomHelper.fillRooms();
+        System.out.println(roomHelper.printGrid());
     }
 
     @Override
@@ -139,20 +137,14 @@ public class CastlePartSquare implements ICastlePart
 
             if (currentFloor == 0)
             {
-                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z, 5, 4, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ, 5, 4, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-                addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
-                addonList.add(new CastleAddonDoor(x + sizeX, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
+                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
+                addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
+                addonList.add(new CastleAddonDoor(x + sizeX, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
             }
             */
         }
 
-        if (isSideStructure())
-        {
-            roomHelper.onlyBuildEntranceOnSide(facing);
-        }
-        roomHelper.fillRooms();
-        System.out.println(roomHelper.printGrid());
         roomHelper.generateRooms(buildList);
 
         //Build the roof
@@ -207,10 +199,5 @@ public class CastlePartSquare implements ICastlePart
     public int getStartLayer()
     {
         return this.startLayer;
-    }
-
-    private boolean isSideStructure()
-    {
-        return (this.facing != EnumFacing.UP);
     }
 }
