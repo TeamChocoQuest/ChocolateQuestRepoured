@@ -37,6 +37,27 @@ public abstract class CastleRoom
 
         public static final RoomPosition[] VALUES = new RoomPosition[6];
 
+        public boolean isOnSide(EnumFacing facing)
+        {
+            if (facing == EnumFacing.NORTH)
+            {
+                return isTop();
+            }
+            else if (facing == EnumFacing.EAST)
+            {
+                return isRight();
+            }
+            else if (facing == EnumFacing.SOUTH)
+            {
+                return isBottom();
+            }
+            else if (facing == EnumFacing.WEST)
+            {
+                return isLeft();
+            }
+            return false;
+        }
+
         public boolean isTop()
         {
             return (this == TOP_LEFT || this == TOP_MID || this == TOP_RIGHT);
@@ -151,6 +172,26 @@ public abstract class CastleRoom
         if (position.isLeft())
         {
             buildWestWall = true;
+        }
+    }
+
+    public void disableWallOnSide(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            buildNorthWall = false;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            buildEastWall = false;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            buildSouthWall = false;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            buildWestWall = false;
         }
     }
 

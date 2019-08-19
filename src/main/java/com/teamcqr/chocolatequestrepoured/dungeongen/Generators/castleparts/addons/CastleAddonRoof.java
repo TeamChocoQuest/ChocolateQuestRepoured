@@ -75,7 +75,7 @@ public class CastleAddonRoof implements ICastleAddon
         int y = yStart;
         int z = zStart;
 
-        for (int i = 0; i < sizeX; i++)
+        for (int i = 0; i < sizeX - 1; i++)
         {
             if (this.structFacing != EnumFacing.SOUTH)
             {
@@ -83,7 +83,7 @@ public class CastleAddonRoof implements ICastleAddon
             }
             if (this.structFacing != EnumFacing.NORTH)
             {
-                roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y, z + sizeZ - 1), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y, z + sizeZ - 2), state));
             }
             if (i % 2 == 0 || i == sizeX - 1)
             {
@@ -93,11 +93,11 @@ public class CastleAddonRoof implements ICastleAddon
                 }
                 if (this.structFacing != EnumFacing.NORTH)
                 {
-                    roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y + 1, z + sizeZ - 1), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x + i, y + 1, z + sizeZ - 2), state));
                 }
             }
         }
-        for (int i = 0; i < sizeZ; i++)
+        for (int i = 0; i < sizeZ - 1; i++)
         {
             if (this.structFacing != EnumFacing.EAST)
             {
@@ -105,7 +105,7 @@ public class CastleAddonRoof implements ICastleAddon
             }
             if (this.structFacing != EnumFacing.WEST)
             {
-                roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 1, y, z + i), state));
+                roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 2, y, z + i), state));
             }
             if (i % 2 == 0 || i == sizeZ - 1)
             {
@@ -115,7 +115,7 @@ public class CastleAddonRoof implements ICastleAddon
                 }
                 if (this.structFacing != EnumFacing.WEST)
                 {
-                    roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 1, y + 1, z + i), state));
+                    roofBlocks.add(new BlockPlacement(new BlockPos(x + sizeX - 2, y + 1, z + i), state));
                 }
             }
         }

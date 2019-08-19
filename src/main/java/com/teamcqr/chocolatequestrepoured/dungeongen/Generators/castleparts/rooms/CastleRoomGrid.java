@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 public class CastleRoomGrid
 {
@@ -17,15 +18,25 @@ public class CastleRoomGrid
 
     public class RoomSelection
     {
-        private CastleRoom room;
-        GridPosition gridLocation;
+        private GridPosition gridLocation;
+        private boolean populated;
         private boolean reachable;
+        private CastleRoom room;
 
-        public RoomSelection(CastleRoom room, GridPosition gridLocation)
+        public RoomSelection(GridPosition gridLocation, CastleRoom room)
         {
-            this.room = room;
             this.gridLocation = gridLocation;
+            this.populated = true;
             this.reachable = false;
+            this.room = room;
+        }
+
+        public RoomSelection(GridPosition gridLocation)
+        {
+            this.gridLocation = gridLocation;
+            this.populated = false;
+            this.reachable = false;
+            this.room = null;
         }
     }
 
@@ -52,8 +63,9 @@ public class CastleRoomGrid
         this.random = random;
     }
 
-    public void connectRoomToNearestReachable(GridPosition gridPos)
+    public void connectRoomToNearestReachable(RoomSelection roomSelection)
     {
+        GridPosition gridPos = roomSelection.gridLocation;
         int floor = gridPos.floor;
         int x = gridPos.x;
         int z = gridPos.z;
@@ -226,14 +238,20 @@ public class CastleRoomGrid
         }
     }
 
+    public void removeWallsFromRoomsOnSide(EnumFacing side)
+    {
+        Stream<CastleRoom> roomStream = getRoomList().stream().filter(r -> r.position.isOnSide(side));;
+        roomStream.forEach(r -> r.disableWallOnSide(side));
+    }
+
     public void addRoomAt(CastleRoom room, int floor, int x, int z)
     {
-        roomArray[floor][x][z] = new RoomSelection(room, new GridPosition(floor, x, z));
+        roomArray[floor][x][z] = new RoomSelection(new GridPosition(floor, x, z), room);
     }
 
     public void addRoomAt(CastleRoom room, GridPosition gridPos)
     {
-        roomArray[gridPos.floor][gridPos.x][gridPos.z] = new RoomSelection(room, gridPos);
+        roomArray[gridPos.floor][gridPos.x][gridPos.z] = new RoomSelection(gridPos, room);
     }
 
     public CastleRoom getRoomAt(int floor, int x, int z)
@@ -245,6 +263,14 @@ public class CastleRoomGrid
         else
         {
             return null;
+        }
+    }
+
+    public void addDoorToRoomAllFloors(int x, int z, EnumFacing side)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            roomArray[floor][x][z].room.addDoorOnSide(side);
         }
     }
 
@@ -273,6 +299,14 @@ public class CastleRoomGrid
     public boolean isRoomReachable(int floor, int x, int z)
     {
         return roomArray[floor][x][z].reachable;
+    }
+
+    public void setRoomReachableAllFloors(int x, int z)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            setRoomReachable(floor, x, z);
+        }
     }
 
     public void setRoomReachable(int floor, int x, int z)
@@ -350,9 +384,8 @@ public class CastleRoomGrid
         return roomArray[gridPos.floor][gridPos.x][gridPos.z];
     }
 
-    private boolean withinGridBounds(int x, int z)
+    public boolean withinGridBounds(int x, int z)
     {
         return (x >= 0 && x < sizeX && z >= 0 && z < sizeZ);
     }
-
 }

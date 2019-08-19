@@ -20,6 +20,7 @@ public class CastleRoomSelector
 
     private boolean singleSideEntrance;
     private EnumFacing entranceSide;
+    private boolean isMainStruct;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numRoomsX, int numRoomsZ, Random random)
     {
@@ -236,7 +237,7 @@ public class CastleRoomSelector
                 CastleRoomGrid.RoomSelection currentRoom;
 
                 currentRoom = roomList.get(random.nextInt(roomList.size()));
-                roomGrid.connectRoomToNearestReachable(currentRoom.gridLocation);
+                roomGrid.connectRoomToNearestReachable(currentRoom);
 
                 roomList = roomGrid.getUnreachableRoomList(floor);
             }
@@ -297,6 +298,32 @@ public class CastleRoomSelector
         {
             return CastleRoom.RoomPosition.BOT_RIGHT;
         }
+    }
+
+    public void addExitToSide(int roomIndexMin, int roomIndexMax, EnumFacing side)
+    {
+        int roomIndex = roomIndexMin + random.nextInt(roomIndexMax - roomIndexMin);
+        if (side == EnumFacing.NORTH && roomIndex < numRoomsX)
+        {
+            roomGrid.getRoomAt(numFloors - 1, roomIndex, 0).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.SOUTH && roomIndex < numRoomsX)
+        {
+            roomGrid.getRoomAt(numFloors - 1, roomIndex, numRoomsZ - 1).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.WEST && roomIndex < numRoomsZ)
+        {
+            roomGrid.getRoomAt(numFloors - 1, 0, roomIndex).addDoorOnSide(side);
+        }
+        else if (side == EnumFacing.EAST && roomIndex < numRoomsZ)
+        {
+            roomGrid.getRoomAt(numFloors - 1, numRoomsX - 1, roomIndex).addDoorOnSide(side);
+        }
+    }
+
+    public void removeWallsFromFacing(EnumFacing facing)
+    {
+        roomGrid.removeWallsFromRoomsOnSide(facing);
     }
 
     private BlockPos getRoomStart(int floor, int x, int z)
