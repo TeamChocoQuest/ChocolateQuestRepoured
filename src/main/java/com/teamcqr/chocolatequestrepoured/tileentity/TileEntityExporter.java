@@ -6,12 +6,12 @@ import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ITickable;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityExporter extends TileEntitySyncClient implements ITickable
+public class TileEntityExporter extends TileEntitySyncClient
 {
 	public int startX = 0;
 	public int startY = 0;
@@ -64,21 +64,68 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 		endZ = eZ;
 		partModeUsing = usePartMode;
 		structureName = structName;
-	}
-	
-	public void setUser(EntityPlayer player) {
-		this.user = player;
+		
+		//if(!world.isRemote) {
+			markDirty();
+		//} else {
+			world.notifyBlockUpdate(this.getPos(), this.getBlockType().getDefaultState(), this.getBlockType().getDefaultState(), 2);
+		//}
 	}
 	
 	@Override
-	public void update() {
-		//TODO: make fancy size display thingy
-		if(!world.isRemote && isPlayerInRange(pos.getX(), pos.getY(), pos.getZ(), getMaxRenderDistanceSquared())) {
-			//TODO: Use Tesselator to draw a box that contains the structure (Box texture like worldborder, but not that bold?)
-			//https://www.minecraftforge.net/forum/topic/66168-1122-using-minecrafts-tessellator-and-bufferbuilder/
-			//https://www.minecraftforge.net/forum/topic/41255-question-regarding-the-vertexbuffer-and-the-old-tesselator/
-			//http://jabelarminecraft.blogspot.com/p/minecraft-forge-172-quick-tips-gl11-and.html
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		 return new SPacketUpdateTileEntity(this.pos, 7, this.getUpdateTag());
+	}
+	
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		if(world.isRemote) {
+			return writeToNBT(new NBTTagCompound());
 		}
+		return super.getUpdateTag();
+	}
+	
+	
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		if(!world.isRemote) {
+			super.handleUpdateTag(tag);
+			
+			startX = tag.getInteger("sX");
+			startY = tag.getInteger("sY");
+			startZ = tag.getInteger("sZ");
+
+			endX = tag.getInteger("eX");
+			endY = tag.getInteger("eY");
+			endZ = tag.getInteger("eZ");
+			
+			partModeUsing = tag.getBoolean("partmode");
+			
+			structureName = tag.getString("sName");
+		}
+	}
+	
+	/*@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		super.onDataPacket(net, pkt);
+		
+		NBTTagCompound tag = pkt.getNbtCompound();
+		
+		startX = tag.getInteger("sX");
+		startY = tag.getInteger("sY");
+		startZ = tag.getInteger("sZ");
+
+		endX = tag.getInteger("eX");
+		endY = tag.getInteger("eY");
+		endZ = tag.getInteger("eZ");
+		
+		partModeUsing = tag.getBoolean("partmode");
+		
+		structureName = tag.getString("sName");
+	}*/
+	
+	public void setUser(EntityPlayer player) {
+		this.user = player;
 	}
 	
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) 
@@ -99,7 +146,7 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
 		return (128 + (endX - startX) + (endY - startY) + (endZ - startZ))^2; 
 	}
 	
-	private boolean isPlayerInRange(double x, double y, double z, double range) 
+	/*private boolean isPlayerInRange(double x, double y, double z, double range) 
     {
         for(int i = 0; i < this.world.playerEntities.size(); ++i) 
         {
@@ -113,7 +160,7 @@ public class TileEntityExporter extends TileEntitySyncClient implements ITickabl
                 }
         }
         return false;
-    }
+    }*/
 	
 	public AxisAlignedBB getDimensionIndicatorBoudingBox() {
 		AxisAlignedBB aabb = super.getRenderBoundingBox();

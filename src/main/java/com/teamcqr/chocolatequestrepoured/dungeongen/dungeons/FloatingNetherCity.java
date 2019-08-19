@@ -117,7 +117,9 @@ public class FloatingNetherCity extends DungeonBase {
 	public Block getBridgeBlock() {
 		return this.bridgeBlock;
 	}
-
+	public int getPosY() {
+		return this.posY;
+	}
 	public int getMinIslandDistance() {
 		return this.minIslandDistance;
 	}
