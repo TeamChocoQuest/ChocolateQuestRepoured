@@ -17,7 +17,7 @@ import java.util.Random;
  * Copyright (c) 01.06.2019 Developed by KalgogSmash:
  * https://github.com/kalgogsmash
  */
-public class CastlePartSquare implements ICastlePart
+public class CastlePartMain implements ICastlePart
 {
     private BlockPos start;
     private int sizeX;
@@ -25,29 +25,27 @@ public class CastlePartSquare implements ICastlePart
     private int roomsX;
     private int roomsZ;
     private int floors;
-    private EnumFacing facing;
     private CastleDungeon dungeon;
     private Random random;
     private int startLayer;
     private boolean isTopFloor;
     private CastleRoomSelector roomHelper;
 
-    public CastlePartSquare(BlockPos origin, int roomsX, int roomsZ, int floors, CastleDungeon dungeon, EnumFacing facing, int startLayer)
+    public CastlePartMain(BlockPos origin, int maxRoomsX, int maxRoomsZ, int floors, CastleDungeon dungeon, int startLayer)
     {
         this.dungeon = dungeon;
         this.floors = floors;
         this.random = this.dungeon.getRandom();
-        this.roomsX = roomsX;
-        this.roomsZ = roomsZ;
+        this.roomsX = maxRoomsX;
+        this.roomsZ = maxRoomsZ;
 
         this.start = origin;
-        this.sizeX = roomsX * dungeon.getRoomSize();
-        this.sizeZ = roomsZ * dungeon.getRoomSize();
-        this.facing = facing;
+        this.sizeX = maxRoomsX * dungeon.getRoomSize();
+        this.sizeZ = maxRoomsZ * dungeon.getRoomSize();
         this.startLayer = startLayer;
         this.isTopFloor = false;
 
-        roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, roomsX, roomsZ, random);
+        roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, maxRoomsX, maxRoomsZ, random);
         roomHelper.fillRooms();
         System.out.println(roomHelper.printGrid());
     }
@@ -65,7 +63,7 @@ public class CastlePartSquare implements ICastlePart
         ArrayList<BlockPlacement> buildList = new ArrayList<>();
         ArrayList<ICastleAddon> addonList = new ArrayList<>();
 
-        System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors + ". Facing = " + facing.toString());
+        System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors);
 
         //for each floor
         for (int currentFloor = 0; currentFloor < floors; currentFloor++)
@@ -86,63 +84,6 @@ public class CastlePartSquare implements ICastlePart
 
                 }
             }
-            //Build walls
-
-            /*
-            //Add x walls
-            for (int i = 0; i <= sizeX; i++)
-            {
-                for (int j = 0; j < floorHeight; j++)
-                {
-                    if ((i % 4 == 0) &&
-                            (i != 0) &&
-                            (i != sizeX - 1) &&
-                            ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
-                    {
-                        blockToBuild = Blocks.GLASS_PANE.getDefaultState();
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ, blockToBuild));
-                    }
-                    else
-                    {
-                        blockToBuild = dungeon.getWallBlock().getDefaultState();
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z, blockToBuild));
-                        buildList.add(new BlockPlacement(x + i, currentY + j, z + sizeZ, blockToBuild));
-                    }
-                }
-            }
-
-            //Add z walls
-            for (int i = 0; i <= sizeZ; i++)
-            {
-                for (int j = 0; j < floorHeight; j++)
-                {
-                    if ((i % 4 == 0) &&
-                            (i != 0) &&
-                            (i != sizeX - 1) &&
-                            ((j == floorHeight / 2) || (j - 1 == floorHeight / 2)))
-                    {
-                        blockToBuild = Blocks.GLASS_PANE.getDefaultState();
-                        buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockPlacement(x + sizeX, currentY + j, z + i, blockToBuild));
-                    }
-                    else
-                    {
-                        blockToBuild = dungeon.getWallBlock().getDefaultState();
-                        buildList.add(new BlockPlacement(x, currentY + j, z + i, blockToBuild));
-                        buildList.add(new BlockPlacement(x + sizeX, currentY + j, z + i, blockToBuild));
-                    }
-                }
-            }
-
-            if (currentFloor == 0)
-            {
-                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
-                addonList.add(new CastleAddonDoor(x + sizeX / 2 - 2, currentY + 1, z + sizeZ, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, true));
-                addonList.add(new CastleAddonDoor(x, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
-                addonList.add(new CastleAddonDoor(x + sizeX, currentY + 1, z + sizeZ / 2 - 2, 5, 4, CastleAddonDoor.DoorType.FENCE_BORDER, false));
-            }
-            */
         }
 
         roomHelper.generateRooms(buildList);
@@ -162,8 +103,8 @@ public class CastlePartSquare implements ICastlePart
             System.out.println("Adding walkable roof");
             roofType = CastleAddonRoof.RoofType.WALKABLE;
         }
-        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX + 1, sizeZ + 1, roofType, facing);
-        addonList.add(roof);
+        //CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX + 1, sizeZ + 1, roofType, facing);
+        //addonList.add(roof);
 
         if (!addonList.isEmpty())
         {

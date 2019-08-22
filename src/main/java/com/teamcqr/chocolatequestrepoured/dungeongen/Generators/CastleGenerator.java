@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.CastlePartSquare;
+import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.CastlePartMain;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.CastlePartTower;
 import com.teamcqr.chocolatequestrepoured.dungeongen.Generators.castleparts.ICastlePart;
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
@@ -61,14 +61,21 @@ public class CastleGenerator implements IDungeonGenerator{
         int offsetZ;
         int numRoomsX;
         int numRoomsZ;
+        int maxRoomsX;
+        int maxRoomsZ;
         int buildAreaX = maxSize;
         int buildAreaZ = maxSize;
         int currentLayer = 0;
         int layerFloors = 2;
         int totalFloors = 0;
 
-        numRoomsX = randomizeNumRoomsFromSize(maxSize, 25);
-        numRoomsZ = randomizeNumRoomsFromSize(maxSize, 25);
+        //numRoomsX = randomizeNumRoomsFromSize(maxSize, 25);
+        //numRoomsZ = randomizeNumRoomsFromSize(maxSize, 25);
+        maxRoomsX = roundToRoomSize(maxSize);
+        maxRoomsZ = roundToRoomSize(maxSize);
+        numRoomsX = maxRoomsX / 2 + random.nextInt(maxRoomsX / 2);
+        numRoomsZ = maxRoomsZ / 2 + random.nextInt(maxRoomsZ / 2);
+
         // Calculate random size based on maximum size
         sizeX = numRoomsX * roomSize;
         sizeZ = numRoomsZ * roomSize;
@@ -84,7 +91,7 @@ public class CastleGenerator implements IDungeonGenerator{
             z += offsetZ;
 
             // Add the main building
-            CastlePartSquare mainPart = new CastlePartSquare(new BlockPos(x, y, z), numRoomsX, numRoomsZ, layerFloors, this.dungeon, EnumFacing.UP, currentLayer);
+            CastlePartMain mainPart = new CastlePartMain(new BlockPos(x, y, z), maxRoomsX, maxRoomsZ, layerFloors, this.dungeon, currentLayer);
             parts.add(mainPart);
 
             buildAreaX = sizeX;
@@ -139,7 +146,6 @@ public class CastleGenerator implements IDungeonGenerator{
         {
             tower.generatePart(world);
         }
-
 
         CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
         MinecraftForge.EVENT_BUS.post(event);
