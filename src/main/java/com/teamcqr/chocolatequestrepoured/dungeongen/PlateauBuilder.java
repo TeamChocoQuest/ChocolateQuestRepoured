@@ -28,6 +28,7 @@ public class PlateauBuilder {
 		structureTopBlock = top;
 	}
 	
+	//Coordinates are the N_W Corner!!
 	/*
 	 * TODO: Write also a method, that digs a cave with two corners
 	 * TODO:

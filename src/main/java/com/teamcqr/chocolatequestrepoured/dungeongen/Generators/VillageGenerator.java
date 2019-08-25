@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.VillageDungeon;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -170,7 +171,7 @@ public class VillageGenerator implements IDungeonGenerator{
 					plcmnt.setRotation(getRandomRotation());
 				}
 				BlockPos pos = this.toGenerate.get(structure);
-				structure.placeBlocksInWorld(world, pos, plcmnt);
+				structure.placeBlocksInWorld(world, pos, plcmnt, EPosType.DEFAULT);
 
 				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),world);
 				event.setShieldCorePosition(structure.getShieldCorePosition());
