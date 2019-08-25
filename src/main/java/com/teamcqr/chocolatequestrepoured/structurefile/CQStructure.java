@@ -145,13 +145,13 @@ public class CQStructure {
 			pastePos = pos.subtract(new Vec3i(sizeX /2, 0, sizeZ /2));
 			break;
 		case CORNER_NE:
-			pastePos = pos.add(new Vec3i(sizeX,0,0));
+			pastePos = pos.subtract(new Vec3i(sizeX,0,0));
 			break;
 		case CORNER_SE:
-			pastePos = pos.add(new Vec3i(0,0,sizeZ));
+			pastePos = pos.subtract(new Vec3i(sizeX,0,sizeZ));
 			break;
 		case CORNER_SW:
-			pastePos = pos.add(new Vec3i(sizeX,0,sizeZ));
+			pastePos = pos.subtract(new Vec3i(0,0,sizeZ));
 			break;
 		default:
 			break;

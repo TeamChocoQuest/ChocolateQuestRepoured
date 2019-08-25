@@ -2,12 +2,14 @@ package com.teamcqr.chocolatequestrepoured.dungeongen;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public class PlateauBuilder {
@@ -28,6 +30,27 @@ public class PlateauBuilder {
 		structureTopBlock = top;
 	}
 	
+	public void createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+		BlockPos pos = startPos;
+		switch(posType) {
+		case CENTER_XZ_LAYER:
+			pos = startPos.subtract(new Vec3i(sizeX /2, 0, sizeZ /2));
+			break;
+		case CORNER_NE:
+			pos = startPos.subtract(new Vec3i(sizeX, 0, 0));
+			break;
+		case CORNER_SE:
+			pos = startPos.subtract(new Vec3i(sizeX, 0, sizeZ));
+			break;
+		case CORNER_SW:
+			pos = startPos.subtract(new Vec3i(0, 0, sizeZ));
+			break;
+		default:
+			break;
+		}
+		generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
+	}
+	
 	//Coordinates are the N_W Corner!!
 	/*
 	 * TODO: Write also a method, that digs a cave with two corners
@@ -38,7 +61,7 @@ public class PlateauBuilder {
 	 *   
 	 *   Note: Forge allows async threads modifying things of main thread
 	 */
-	public void generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
+	private void generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
 		Perlin3D p = new Perlin3D(world.getSeed(), wallSize, random);
@@ -122,7 +145,7 @@ public class PlateauBuilder {
 					double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() +iX, startPos.getY() +iY, startPos.getZ() +iZ);
 					double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() +iX, startPos.getY() +iY, startPos.getZ() +iZ);
 					
-					if((perlin1 * perlin2 * (double) noise) < 0.5D) {
+					if((perlin1 * perlin2 * (double) noise) < 0.5D)  {
 						if(!Block.isEqualTo(world.getBlockState(startPos.add(iX, iY, iZ)).getBlock(), fillBlock)) {
 							if(Block.isEqualTo(fillBlock, Blocks.AIR)) {
 								world.setBlockToAir(startPos.add(iX, iY, iZ));
