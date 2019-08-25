@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
