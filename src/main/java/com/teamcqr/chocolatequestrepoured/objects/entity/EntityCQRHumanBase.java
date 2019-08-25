@@ -15,8 +15,11 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 public class EntityCQRHumanBase extends EntityCreature
 		implements ICQREntity, IEntityAdditionalSpawnData, IEntityOwnable {
 	
+	private int intelligence;
+	private boolean isDefending;
 	private boolean sitting;
 	private EntityLivingBase leader;
+	private double attackDistance;
 
 	public EntityCQRHumanBase(World worldIn) {
 		super(worldIn);
@@ -102,6 +105,21 @@ public class EntityCQRHumanBase extends EntityCreature
 
 	public EntityLivingBase getLeader() {
 		return leader;
+	}
+
+	public int getInteligence() {
+		return intelligence;
+	}
+	
+	public void setDefending(boolean flag) {
+		isDefending = flag;
+	}
+
+	public double getAttackDistance() {
+		return attackDistance;
+	}
+	public boolean getIsDefending() {
+		return isDefending;
 	}
 
 }
