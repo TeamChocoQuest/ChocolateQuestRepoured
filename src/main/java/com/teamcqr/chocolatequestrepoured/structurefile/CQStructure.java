@@ -131,7 +131,36 @@ public class CQStructure {
 		}
 	}
 	
-	public void placeBlocksInWorld(World worldIn, BlockPos pos, PlacementSettings settings) {
+	public void placeBlocksInWorld(World world, BlockPos pos, PlacementSettings settings, EPosType posType) {
+		//X and Z values are the lower ones of the positions ->
+		//N-S ->
+		//E-W ->
+		//N: -Z
+		//E: +X
+		//S: +Z
+		//W: -X
+		BlockPos pastePos = pos;
+		switch(posType) {
+		case CENTER_XZ_LAYER:
+			pastePos = pos.subtract(new Vec3i(sizeX /2, 0, sizeZ /2));
+			break;
+		case CORNER_NE:
+			pastePos = pos.add(new Vec3i(sizeX,0,0));
+			break;
+		case CORNER_SE:
+			pastePos = pos.add(new Vec3i(0,0,sizeZ));
+			break;
+		case CORNER_SW:
+			pastePos = pos.add(new Vec3i(sizeX,0,sizeZ));
+			break;
+		default:
+			break;
+		}
+		
+		placeBlocksInWorld(world, pastePos, settings);
+	}
+	
+	private void placeBlocksInWorld(World worldIn, BlockPos pos, PlacementSettings settings) {
 		if(this.dataFile != null) {
 			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
 			int partID = 1;

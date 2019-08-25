@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
@@ -134,7 +135,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
 		
-		structure.placeBlocksInWorld(world, pos, settings);
+		structure.placeBlocksInWorld(world, center, settings, EPosType.CENTER_XZ_LAYER);
 		
 		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),world);
 		event.setShieldCorePosition(structure.getShieldCorePosition());

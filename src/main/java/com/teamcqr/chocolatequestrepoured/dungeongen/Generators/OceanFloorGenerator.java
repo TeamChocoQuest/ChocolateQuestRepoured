@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.dungeongen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.dungeongen.dungeons.DungeonOceanFloor;
 import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structurefile.EPosType;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -46,7 +47,7 @@ public class OceanFloorGenerator implements IDungeonGenerator{
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		//Simply puts the structure at x,y,z
-		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings);
+		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
 		
 		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()),world);
 		event.setShieldCorePosition(this.structure.getShieldCorePosition());
