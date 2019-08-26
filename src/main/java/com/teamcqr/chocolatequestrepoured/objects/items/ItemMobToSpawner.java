@@ -5,8 +5,10 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,12 @@ public class ItemMobToSpawner extends ItemBase {
 	public ItemMobToSpawner(String name) {
 		super(name);
 		setMaxStackSize(1);
+	}
+	
+	@Override
+	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
+		IBlockState state = player.getEntityWorld().getBlockState(pos);
+		return !canHarvestBlock(state);
 	}
 	
 	@Override
@@ -57,13 +65,18 @@ public class ItemMobToSpawner extends ItemBase {
 					if(currStack == null || currStack.getItem() == Items.AIR) {
 						spawner.inventory.insertItem(i, bottleStack, false);
 						spawner.markDirty();
-						player.getCooldownTracker().setCooldown(this, 5);
-						return true;
+						player.getCooldownTracker().setCooldown(this, 10);
+						return false;
 					}
 				}
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean canHarvestBlock(IBlockState blockIn) {
+		return blockIn.getBlock() != ModBlocks.SPAWNER && blockIn.getBlock() != Blocks.MOB_SPAWNER;
 	}
 	
 	private void spawnAdditions(World worldIn, Entity entity)
