@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -52,36 +49,8 @@ public class VolcanoDungeon extends StrongholdDungeon {
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);
-		Properties prop = new Properties();
-		boolean success = true;
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			try {
-				fis.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			prop = null;
-			configFile = null;
-			success = false;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			try {
-				fis.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			prop = null;
-			configFile = null;
-			success = false;
-		}
-		if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		if(prop != null) {
 			this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
 			this.buildDungeon = PropertyFileHelper.getBooleanProperty(prop, "buildDungeon", true);
 			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
@@ -103,17 +72,10 @@ public class VolcanoDungeon extends StrongholdDungeon {
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_BRICK_LARGE);
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				success = false;
-			}
+			
+			closeConfigFile();
 		} else {
-			success = false;
-		}
-		if(success) {
-			this.registeredSuccessful = true;
+			registeredSuccessful = false;
 		}
 	}
 

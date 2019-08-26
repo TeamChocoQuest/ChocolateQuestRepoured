@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -43,23 +40,8 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 		super(configFile);
 		
 		if(super.registeredSuccessful) {
-			Properties prop = new Properties();
-			FileInputStream fis = null;
-			try {
-				fis = new FileInputStream(configFile);
-				prop.load(fis);
-			} catch(FileNotFoundException e) {
-				System.out.println("Unable to read config file: " + configFile.getName());
-				e.printStackTrace();
-				prop = null;
-				configFile = null;
-			} catch(IOException e) {
-				System.out.println("Unable to read config file: " + configFile.getName());
-				e.printStackTrace();
-				prop = null;
-				configFile = null;
-			}
-			if(prop != null && configFile != null && fis != null) {
+			Properties prop = loadConfig(configFile);
+			if(prop != null) {
 				this.turnFlowersIntoDeadBushes = PropertyFileHelper.getBooleanProperty(prop, "deadFlowers", true);
 				this.emptyFlowerPots = PropertyFileHelper.getBooleanProperty(prop, "emptyPots", true);
 				this.putOutTorches = PropertyFileHelper.getBooleanProperty(prop, "burntDownTorches", true);
@@ -72,12 +54,9 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 				this.flowerPotEmptyChance = PropertyFileHelper.getIntProperty(prop, "emptyPotChance", 30);
 				this.chestMissingChance = PropertyFileHelper.getIntProperty(prop, "lootchestMissingChance", 20);
 				
-				try {
-					fis.close();
-					this.registeredSuccessful = true;
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				closeConfigFile();
+			} else {
+				registeredSuccessful = false;
 			}
 		}
 	}

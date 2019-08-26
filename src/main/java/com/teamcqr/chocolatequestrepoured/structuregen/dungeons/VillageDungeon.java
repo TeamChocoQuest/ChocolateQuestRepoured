@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -50,26 +47,8 @@ public class VillageDungeon extends DungeonBase {
 	
 	public VillageDungeon(File configFile) {
 		super(configFile);
-		boolean success = true;
-		Properties prop = new Properties();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-			success = false;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-			success = false;
-		}
-		if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		if(prop != null) {
 			String structureFolderName = prop.getProperty("structurefolder", "village_buildings");
 			File structureFolder = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() + "/" + structureFolderName);
 			if(!structureFolder.exists() || structureFolder.isFile()) {
@@ -113,18 +92,11 @@ public class VillageDungeon extends DungeonBase {
 				System.out.println("couldnt load path block! using default value (gravel block)...");
 			}
 			
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-				success = false;
-			}
+			closeConfigFile();
 		} else {
-			success = false;
+			registeredSuccessful = false;
 		}
-		if(success) {
-			this.registeredSuccessful = true;
-		}
+		
 	}
 	
 	private void addFiles(File folder) {

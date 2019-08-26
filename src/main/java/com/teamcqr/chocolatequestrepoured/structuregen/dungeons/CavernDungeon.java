@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,23 +60,8 @@ public class CavernDungeon extends DungeonBase {
 	public CavernDungeon(File configFile) {
 		super(configFile);
 		this.protectFromDestruction = false;
-		Properties prop = new Properties();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		}
-		if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		if(prop != null) {
 			//super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
 			//super.name = configFile.getName().replaceAll(".properties", "");
 			//super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
@@ -133,12 +115,9 @@ public class CavernDungeon extends DungeonBase {
 				System.out.println("couldnt load cave block! using default value (air block)...");
 			}
 			
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			this.registeredSuccessful = true;
+			closeConfigFile();
+		} else {
+			registeredSuccessful = false;
 		}
 	}
 	
