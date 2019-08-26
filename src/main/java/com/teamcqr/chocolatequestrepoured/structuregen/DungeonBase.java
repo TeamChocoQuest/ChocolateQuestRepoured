@@ -42,6 +42,7 @@ public class DungeonBase {
 	protected boolean useCoverBlock = false;
 	private boolean spawnBehindWall = false;
 	private int iconID;
+	private FileInputStream fisConfigFile = null;
 	private Block supportBlock = Blocks.STONE;
 	private Block supportTopBlock = Blocks.GRASS;
 	protected Block coverBlock = Blocks.AIR;
@@ -62,7 +63,7 @@ public class DungeonBase {
 	
 	public DungeonBase(File configFile) {
 		//DONE: read values from file
-		Properties prop = new Properties();
+		Properties prop = loadConfig(configFile);/*new Properties();
 		this.dunID = MathHelper.getRandomUUID();
 		FileInputStream fis = null;
 		try {
@@ -78,8 +79,9 @@ public class DungeonBase {
 			e.printStackTrace();
 			prop = null;
 			configFile = null;
-		}
-		if(prop != null && configFile != null && fis != null) {
+		}*/
+		//if(prop != null && configFile != null && fis != null) {
+		if(prop != null) {
 			this.name = configFile.getName().replace(".properties", "");
 			this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 20);
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
@@ -123,14 +125,21 @@ public class DungeonBase {
 			} catch(Exception ex) {
 				System.out.println("couldnt load cover block! using default value (air block)...");
 			}
-			try {
-				fis.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			closeConfigFile();
+		} else {
+			registeredSuccessful = false;
 		}
 	}
 	
+	public void closeConfigFile() {
+		try {
+			fisConfigFile.close();
+		} catch (IOException e) {
+			registeredSuccessful = false;
+			e.printStackTrace();
+		}
+	}
+
 	public IDungeonGenerator getGenerator() {
 		return this.generator;
 	}
@@ -201,5 +210,42 @@ public class DungeonBase {
 	}
 	public boolean replaceBanners() {
 		return this.replaceBanners;
+	}
+	
+	public Properties loadConfig(File configFile) {
+		Properties prop = new Properties();
+		fisConfigFile = null;
+		registeredSuccessful = true;
+		try {
+			fisConfigFile = new FileInputStream(configFile);
+			prop.load(fisConfigFile);
+		} catch (FileNotFoundException e) {
+			System.out.println("Unable to read config file: " + configFile.getName());
+			e.printStackTrace();
+			try {
+				fisConfigFile.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			prop = null;
+			configFile = null;
+			registeredSuccessful = false;
+		} catch (IOException e) {
+			System.out.println("Unable to read config file: " + configFile.getName());
+			e.printStackTrace();
+			try {
+				fisConfigFile.close();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			prop = null;
+			configFile = null;
+			registeredSuccessful = false;
+		}
+		if(prop != null && configFile != null && fisConfigFile != null) {
+			return prop;
+		}
+		registeredSuccessful = false;
+		return null;
 	}
 }

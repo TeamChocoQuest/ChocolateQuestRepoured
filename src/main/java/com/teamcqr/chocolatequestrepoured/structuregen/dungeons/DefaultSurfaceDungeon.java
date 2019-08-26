@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
@@ -33,33 +30,8 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	
 	public DefaultSurfaceDungeon(File configFile) {
 		super(configFile);
-		Properties prop = new Properties();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			try {
-				fis.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			prop = null;
-			configFile = null;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			try {
-				fis.close();
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			}
-			prop = null;
-			configFile = null;
-		}
-		if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		if(prop != null) {
 			this.structureFolderPath = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
 
 			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
@@ -69,12 +41,9 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 				this.structureFolderPath.mkdirs();
 			}
 			
-			try {
-				fis.close();
-				this.registeredSuccessful = true;
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			closeConfigFile();
+		} else {
+			registeredSuccessful = false;
 		}
 	}
 	
