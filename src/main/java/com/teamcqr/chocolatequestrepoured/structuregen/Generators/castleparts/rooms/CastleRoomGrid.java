@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.rooms;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import net.minecraft.util.EnumFacing;
 

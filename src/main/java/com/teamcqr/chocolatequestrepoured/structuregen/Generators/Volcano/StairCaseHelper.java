@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.Volcano;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
 import java.util.Random;
 

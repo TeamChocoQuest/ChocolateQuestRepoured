@@ -7,9 +7,9 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.DefaultGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.RuinGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.RuinGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;

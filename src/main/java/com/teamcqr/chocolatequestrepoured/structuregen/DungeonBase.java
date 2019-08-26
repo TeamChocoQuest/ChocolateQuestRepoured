@@ -8,7 +8,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;

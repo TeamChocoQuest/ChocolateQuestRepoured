@@ -1,8 +1,8 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.addons.CastleAddonRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.addons.ICastleAddon;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.rooms.CastleRoomSelector;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.ICastleAddon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;

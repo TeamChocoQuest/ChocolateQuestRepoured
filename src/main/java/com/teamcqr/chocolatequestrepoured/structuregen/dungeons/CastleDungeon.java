@@ -8,8 +8,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.CastleGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 

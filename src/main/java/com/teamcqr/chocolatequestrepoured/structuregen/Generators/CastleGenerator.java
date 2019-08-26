@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.CastlePartSquare;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.CastlePartTower;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.ICastlePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastlePartSquare;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastlePartTower;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ICastlePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import net.minecraft.util.EnumFacing;
