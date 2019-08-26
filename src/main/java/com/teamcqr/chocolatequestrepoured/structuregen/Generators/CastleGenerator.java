@@ -6,10 +6,11 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastlePartSquare;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastlePartTower;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ICastlePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +53,7 @@ public class CastleGenerator implements IDungeonGenerator{
         if(dungeon.doBuildSupportPlatform()) {
             PlateauBuilder supportBuilder = new PlateauBuilder();
             supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
-            supportBuilder.generateSupportHill(dungeon.getRandom(), world, x, y + dungeon.getUnderGroundOffset(), z, maxSize, maxSize);
+            supportBuilder.createSupportHill(dungeon.getRandom(), world, new BlockPos(x, y + dungeon.getUnderGroundOffset(), z), maxSize, maxSize, EPosType.DEFAULT);
         }
 
         int sizeX;
