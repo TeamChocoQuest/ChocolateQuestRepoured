@@ -95,25 +95,9 @@ public class CavernDungeon extends DungeonBase {
 			
 			this.underGroundOffset = 0;
 			
-			this.floorMaterial = Blocks.STONE;
-			try {
-				Block tmp = Block.getBlockFromName(prop.getProperty("floorblock", "minecraft:stone"));
-				if(tmp != null) {
-					this.floorMaterial = tmp;
-				}
-			} catch(Exception ex) {
-				System.out.println("couldnt load floor block! using default value (stone block)...");
-			}
+			this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
 			
-			this.airBlock = Blocks.AIR;
-			try {
-				Block tmp = Block.getBlockFromName(prop.getProperty("airblock", "minecraft:air"));
-				if(tmp != null) {
-					this.airBlock = tmp;
-				}
-			} catch(Exception ex) {
-				System.out.println("couldnt load cave block! using default value (air block)...");
-			}
+			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "ariblock", Blocks.AIR);
 			
 			closeConfigFile();
 		} else {

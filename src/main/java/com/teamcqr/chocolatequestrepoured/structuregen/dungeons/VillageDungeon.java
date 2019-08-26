@@ -44,7 +44,7 @@ public class VillageDungeon extends DungeonBase {
 		return new VillageGenerator(this);
 	}
 	
-	
+	//TODO: Rewrite this whole file handling as it is unefficient and uses lots of memory which is unnecessary
 	public VillageDungeon(File configFile) {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
