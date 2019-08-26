@@ -1,6 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.addons.CastleAddonRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.Circle2D;

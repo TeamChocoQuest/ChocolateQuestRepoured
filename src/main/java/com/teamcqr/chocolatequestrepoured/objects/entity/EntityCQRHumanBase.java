@@ -20,6 +20,7 @@ public class EntityCQRHumanBase extends EntityCreature
 	private boolean sitting;
 	private EntityLivingBase leader;
 	private double attackDistance;
+	private int healingPotions = 2;
 
 	public EntityCQRHumanBase(World worldIn) {
 		super(worldIn);
@@ -120,6 +121,20 @@ public class EntityCQRHumanBase extends EntityCreature
 	}
 	public boolean getIsDefending() {
 		return isDefending;
+	}
+
+	public boolean isSuitableTargetAlly(EntityLivingBase entityliving) {
+		return false;
+	}
+
+	public void removePotion(int i) {
+		this.healingPotions--;
+		
+	}
+
+	@Override
+	public int getRemainingHealingPotions() {
+		return healingPotions;
 	}
 
 }

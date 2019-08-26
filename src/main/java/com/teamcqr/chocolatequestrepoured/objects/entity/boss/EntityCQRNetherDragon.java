@@ -281,4 +281,9 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 		}
 	}
 
+	@Override
+	public int getRemainingHealingPotions() {
+		return 0;
+	}
+
 }

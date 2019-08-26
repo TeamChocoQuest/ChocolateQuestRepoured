@@ -1,9 +1,9 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.Volcano.BrickFortress;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.Volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
 
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.util.EnumFacing;

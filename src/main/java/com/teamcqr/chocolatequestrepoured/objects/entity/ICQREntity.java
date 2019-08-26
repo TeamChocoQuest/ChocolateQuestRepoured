@@ -22,6 +22,8 @@ public interface ICQREntity {
 	
 	public UUID getUUID();
 	
+	public int getRemainingHealingPotions();
+	
 	public boolean isBoss();
 	public boolean isRideable();
 	//This overrides the faction!!

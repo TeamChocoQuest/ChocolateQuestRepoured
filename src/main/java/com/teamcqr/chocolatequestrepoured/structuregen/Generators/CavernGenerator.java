@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.ArrayList;
 import java.util.List;

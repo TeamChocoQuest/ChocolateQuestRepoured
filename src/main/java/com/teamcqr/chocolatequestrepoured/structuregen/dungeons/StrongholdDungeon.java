@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.StrongholdGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.StrongholdGenerator;
 
 /**
  * Copyright (c) 29.04.2019

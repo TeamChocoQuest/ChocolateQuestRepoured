@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
 import net.minecraft.world.World;
 

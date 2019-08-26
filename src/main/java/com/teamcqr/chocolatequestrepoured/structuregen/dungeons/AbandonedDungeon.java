@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.AbandonedGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.Generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbandonedGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 
 /**
  * Copyright (c) 29.04.2019

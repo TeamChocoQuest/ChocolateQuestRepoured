@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;

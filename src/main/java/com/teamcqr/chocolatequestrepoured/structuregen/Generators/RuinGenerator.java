@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;

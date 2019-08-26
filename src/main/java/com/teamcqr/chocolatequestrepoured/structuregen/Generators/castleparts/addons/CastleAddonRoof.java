@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.Generators.castleparts.addons;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.BlockStairs;
