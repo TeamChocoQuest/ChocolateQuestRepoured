@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.base.ArmorBase;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -196,6 +197,7 @@ public class ModItems
 	public static final Item POTION_HEALING = new ItemPotionHealing("potion_healing");
 	public static final Item TELEPORT_STONE = new ItemTeleportStone("teleport_stone");
 	public static final Item SOUL_BOTTLE = new ItemSoulBottle("soul_bottle");
+	public static final Item MOB_TO_SPAWNER = new ItemMobToSpawner("mob_to_spawner_tool"); //#TODO Textures
 	public static final Item BADGE = new ItemBadge("badge");
 	public static final Item ALCHEMY_BAG = new ItemAlchemyBag("alchemy_bag");
 }
