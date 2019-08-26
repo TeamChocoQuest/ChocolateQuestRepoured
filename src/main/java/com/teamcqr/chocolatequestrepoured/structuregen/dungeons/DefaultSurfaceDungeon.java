@@ -4,13 +4,13 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.SimplePasteGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -32,14 +32,14 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {
-			this.structureFolderPath = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
+			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");/*new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
 
 			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
 				if(this.structureFolderPath.exists() && !this.structureFolderPath.isDirectory()) {
 					this.structureFolderPath.delete();
 				}
 				this.structureFolderPath.mkdirs();
-			}
+			}*/
 			
 			closeConfigFile();
 		} else {
