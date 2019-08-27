@@ -8,11 +8,17 @@ import java.util.ArrayList;
 
 public class CastleRoomHallway extends CastleRoom
 {
-    public CastleRoomHallway(BlockPos startPos, int sideLength, int height, RoomPosition position, boolean vertical)
+    public enum Alignment
+    {
+        VERTICAL,
+        HORIZONTAL
+    }
+
+    public CastleRoomHallway(BlockPos startPos, int sideLength, int height, RoomPosition position, Alignment alignment)
     {
         super(startPos, sideLength, height, position);
         this.roomType = RoomType.HALLWAY;
-        if (vertical)
+        if (alignment == Alignment.VERTICAL)
         {
             buildNorthWall = position.isTop();
             buildSouthWall = position.isBottom();

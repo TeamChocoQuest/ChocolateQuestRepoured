@@ -47,7 +47,6 @@ public class CastlePartMain implements ICastlePart
 
         roomHelper = new CastleRoomSelector(start, dungeon.getRoomSize(), dungeon.getFloorHeight(), floors, maxRoomsX, maxRoomsZ, random);
         roomHelper.fillRooms();
-        System.out.println(roomHelper.printGrid());
     }
 
     @Override
@@ -61,58 +60,13 @@ public class CastlePartMain implements ICastlePart
         IBlockState blockToBuild;
 
         ArrayList<BlockPlacement> buildList = new ArrayList<>();
-        ArrayList<ICastleAddon> addonList = new ArrayList<>();
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors);
-
-        //for each floor
-        for (int currentFloor = 0; currentFloor < floors; currentFloor++)
-        {
-            currentY = y + currentFloor * (floorHeight + 1);
-
-            //over the entire x/z area
-            for (int i = 0; i < sizeX; i++)
-            {
-                for (int j = 0; j < sizeZ; j++)
-                {
-                    // place a floor
-                    //blockToBuild = this.dungeon.getFloorBlock().getDefaultState();
-                    //buildList.add(new BlockPlacement(x + i, currentY, z + j, blockToBuild));
-                    // place a ceiling
-                    blockToBuild = this.dungeon.getWallBlock().getDefaultState();
-                    buildList.add(new BlockPlacement(x + i, currentY + floorHeight, z + j, blockToBuild));
-
-                }
-            }
-        }
 
         roomHelper.generateRooms(buildList);
 
         //Build the roof
         currentY = y + floors * (floorHeight + 1);
-
-        // Always make walkable if there is more castle above; otherwise 50% chance of walkable
-        CastleAddonRoof.RoofType roofType;
-        if (isTopFloor && random.nextBoolean())
-        {
-            System.out.println("Adding 4 sided roof");
-            roofType = CastleAddonRoof.RoofType.FOURSIDED;
-        }
-        else
-        {
-            System.out.println("Adding walkable roof");
-            roofType = CastleAddonRoof.RoofType.WALKABLE;
-        }
-        //CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sizeX + 1, sizeZ + 1, roofType, facing);
-        //addonList.add(roof);
-
-        if (!addonList.isEmpty())
-        {
-            for (ICastleAddon addon : addonList)
-            {
-                addon.generate(buildList);
-            }
-        }
 
         if(!buildList.isEmpty())
         {
