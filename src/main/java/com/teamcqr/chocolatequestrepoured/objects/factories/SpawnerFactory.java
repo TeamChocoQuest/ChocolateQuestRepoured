@@ -47,6 +47,8 @@ public abstract class SpawnerFactory {
 				
 				
 				
+				spawnerTile.updateContainingBlockInfo();
+				spawnerTile.update();
 				spawnerTile.markDirty();
 				applySpawnerSettingsToSpawner(spawnerTile, spawnerSettings);
 			}
@@ -63,6 +65,9 @@ public abstract class SpawnerFactory {
 				for(int i = 0; i < entities.length; i++) {
 					spawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
 				}
+				
+				spawner.updateContainingBlockInfo();
+				spawner.update();
 				spawner.markDirty();
 			}
 		}
