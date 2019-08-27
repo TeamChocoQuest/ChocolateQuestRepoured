@@ -29,7 +29,7 @@ public class CastleGenerator implements IDungeonGenerator{
     private int roomSize;
     private int floorHeight;
     private Random random;
-    private ArrayList<ICastlePart> parts;
+    private List<ICastlePart> parts;
     private List<CastlePartTower> towers;
     private int totalX;
     private int totalY;
@@ -71,8 +71,8 @@ public class CastleGenerator implements IDungeonGenerator{
 
         //numRoomsX = randomizeNumRoomsFromSize(maxSize, 25);
         //numRoomsZ = randomizeNumRoomsFromSize(maxSize, 25);
-        maxRoomsX = roundToRoomSize(maxSize);
-        maxRoomsZ = roundToRoomSize(maxSize);
+        maxRoomsX = maxSize / roomSize;
+        maxRoomsZ = maxSize / roomSize;
         numRoomsX = maxRoomsX / 2 + random.nextInt(maxRoomsX / 2);
         numRoomsZ = maxRoomsZ / 2 + random.nextInt(maxRoomsZ / 2);
 
@@ -80,58 +80,18 @@ public class CastleGenerator implements IDungeonGenerator{
         sizeX = numRoomsX * roomSize;
         sizeZ = numRoomsZ * roomSize;
 
-        // Each iteration through this loop is one "layer" of castle - each layer is generated the same way, just with a shrinking build area
-        while (Math.min(sizeX, sizeZ) > roomSize)
-        {
-            offsetX = roundToRoomSize(random.nextInt(buildAreaX - sizeX));
-            offsetZ = roundToRoomSize(random.nextInt(buildAreaZ - sizeZ));
-
-            // Apply the offset
-            x += offsetX;
-            z += offsetZ;
-
-            // Add the main building
-            CastlePartMain mainPart = new CastlePartMain(new BlockPos(x, y, z), maxRoomsX, maxRoomsZ, layerFloors, this.dungeon, currentLayer);
-            parts.add(mainPart);
-
-            buildAreaX = sizeX;
-            buildAreaZ = sizeZ;
-            // Now try to build a new structure on top of this one
-            numRoomsX = randomizeNumRoomsFromSize(sizeX, 50);
-            numRoomsZ = randomizeNumRoomsFromSize(sizeZ, 50);
-            // Calculate random size based on maximum size
-            sizeX = numRoomsX * roomSize;
-            sizeZ = numRoomsZ * roomSize;
-            System.out.println("Calculated next layer (x, z) size: (" + sizeX + ", " + sizeZ + ")");
-
-            totalFloors += layerFloors;
-            y += (floorHeight + 1) * layerFloors;
-            currentLayer++;
-        }
-
-        // Figure out what the top later is since the top floor has slightly different build behavior
-        if (!parts.isEmpty())
-        {
-            int topLayer = parts.get(parts.size()-1).getStartLayer();
-            System.out.println("Top layer is  " + topLayer);
-            for (ICastlePart part : parts)
-            {
-                if (!part.isTower() && part.getStartLayer() == topLayer)
-                {
-                    part.setAsTopFloor();
-                    System.out.println("Set a top layer because its layer was  " + part.getStartLayer());
-                }
-            }
-        }
+        // Add the main building
+        CastlePartMain mainPart = new CastlePartMain(new BlockPos(x, y, z), maxRoomsX, maxRoomsZ, layerFloors, this.dungeon, currentLayer);
+        parts.add(mainPart);
 
         // Randomize the height of the towers to rise above the nearby structure areas
-        if (!towers.isEmpty())
-        {
-            for (CastlePartTower tower : towers)
-            {
-                tower.randomizeFloors(totalFloors); //make each tower a random height
-            }
-        }
+        //if (!towers.isEmpty())
+        //{
+        //    for (CastlePartTower tower : towers)
+        //    {
+        //        tower.randomizeFloors(totalFloors); //make each tower a random height
+        //    }
+        //}
     }
 
     @Override

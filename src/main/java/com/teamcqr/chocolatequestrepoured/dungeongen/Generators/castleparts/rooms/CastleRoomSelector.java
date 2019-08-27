@@ -10,32 +10,35 @@ import java.util.Random;
 
 public class CastleRoomSelector
 {
+    private static final int MAX_LAYERS = 5;
+
     private BlockPos startPos;
     private int floorHeight;
     private int roomSize;
-    private int numFloors;
+    private int floorsPerLayer;
+    private int maxFloors;
     private int numSlotsX;
     private int numSlotsZ;
     private Random random;
-    private RoomSelection[][][] roomArray;
+    private RoomGrid grid;
 
-    private boolean isMainStruct;
-
-    public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int numFloors, int numSlotsX, int numSlotsZ, Random random)
+    public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random)
     {
         this.startPos = startPos;
         this.floorHeight = floorHeight;
         this.roomSize = roomSize;
-        this.numFloors = numFloors;
+        this.floorsPerLayer = floorsPerLayer;
+        this.maxFloors = floorsPerLayer * MAX_LAYERS;
         this.numSlotsX = numSlotsX;
         this.numSlotsZ = numSlotsZ;
         this.random = random;
-        this.roomArray = new RoomSelection[numFloors][numSlotsX][numSlotsZ];
+
+        this.grid = new RoomGrid(maxFloors, numSlotsX, numSlotsZ, random);
     }
 
     public void generateRooms(ArrayList<BlockPlacement> blocks)
     {
-        for (CastleRoom room : getRoomList())
+        for (CastleRoom room : grid.getRooms())
         {
             room.generate(blocks);
         }
@@ -43,37 +46,41 @@ public class CastleRoomSelector
 
     public void fillRooms()
     {
+        addMainBuilding();
+
         boolean vertical = random.nextBoolean();
         boolean largeBuilding = (numSlotsX >= 2 && numSlotsZ >= 2);
 
         if (largeBuilding)
         {
-            for (int floor = 0; floor < numFloors; floor++)
+            for (int floor = 0; floor < maxFloors; floor++)
             {
-                buildFloorHallway(floor, vertical);
+                if (vertical)
+                {
+                    buildVerticalFloorHallway(floor);
+                }
+                else
+                {
+                    buildHorizontalFloorHallway(floor);
+                }
                 vertical = !vertical;
             }
 
-            addStairCases();
+            //addStairCases();
         }
 
-        for (int floor = 0; floor < numFloors; floor++)
+        ArrayList<RoomGridCell> unTyped = grid.getCellsWithoutAType();
+        for (RoomGridCell selection : unTyped)
         {
-            for (int z = 0; z < numSlotsZ; z++)
-            {
-                for (int x = 0; x < numSlotsX; x++)
-                {
-                    if (!isRoomFilled(floor, x, z))
-                    {
-                        addRoomAt(new CastleRoomKitchen(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z)), floor, x, z);
-                    }
-                }
-            }
+            selection.setRoom(new CastleRoomKitchen(getRoomStart(selection), roomSize,
+                    floorHeight, getPositionFromIndex(selection.getGridX(), selection.getGridZ())));
         }
 
-        addEntrances();
-        connectRooms();
-        placeDoors();
+        //addEntrances();
+        //connectRooms();
+        //placeDoors();
+
+        //System.out.println(grid.printGrid());
     }
 
     private void addMainBuilding()
@@ -82,10 +89,12 @@ public class CastleRoomSelector
         int halfZ = numSlotsZ / 2;
         int mainRoomsX = halfX + random.nextInt(halfX);
         int mainRoomsZ = halfZ + random.nextInt(halfZ);
-        int offsetX = getRandomXOffsetForRooms(mainRoomsX);
-        int offsetZ = getRandomZOffsetForRooms(mainRoomsZ);
+        int offsetX = grid.getRandomXOffsetForRooms(mainRoomsX);
+        int offsetZ = grid.getRandomZOffsetForRooms(mainRoomsZ);
 
-        for (int floor = 0; floor < numFloors; floor++)
+        setFirstLayerBuildable();
+
+        for (int floor = 0; floor < maxFloors; floor++)
         {
             for (int x = 0; x < mainRoomsX; x++)
             {
@@ -93,55 +102,62 @@ public class CastleRoomSelector
                 {
                     int xIndex = offsetX + x;
                     int zIndex = offsetZ + z;
-                    setRoomPopulated(floor, xIndex, zIndex);
+                    grid.selectRoomForBuilding(floor, xIndex, zIndex);
+                    grid.setRoomAsMainStruct(floor, xIndex, zIndex);
                 }
             }
         }
     }
 
-    private void buildFloorHallway(int floor, boolean vertical)
+    private void setFirstLayerBuildable()
     {
-        //fill the hallway - each floor must have at least 1 hallway
-
-        //start at a random z index that isn't already filled
-        if (vertical)
+        for (int floor = 0; floor < floorsPerLayer; floor++)
         {
-            int hallStartX = 0;
-            //TODO: Try the other side if this side filled already
-            do
-            {
-                hallStartX = random.nextInt(numSlotsX);
-            } while (isRoomFilled(floor, hallStartX,0));
-
-            for (int z = 0; z < numSlotsZ; z++)
-            {
-                addRoomHallway(floor, hallStartX, z, true);
-            }
-        } else
-        {
-            int hallStartZ = 0;
-            //TODO: Try the other side if this side filled already
-            do
-            {
-                hallStartZ = random.nextInt(numSlotsZ);
-            } while (isRoomFilled(floor, 0, hallStartZ));
-
             for (int x = 0; x < numSlotsX; x++)
             {
-                addRoomHallway(floor, x, hallStartZ, false);
+                for (int z = 0; z < numSlotsZ; z++)
+                {
+                    grid.setCellBuilable(floor, x, z);
+                }
             }
+        }
+    }
+
+    private void buildVerticalFloorHallway(int floor)
+    {
+        ArrayList<RoomGridCell> mainRooms = grid.getSelectedMainStructCells(floor);
+        RoomGridCell rootRoom = mainRooms.get(random.nextInt(mainRooms.size()));
+        ArrayList<RoomGridCell> hallwayRooms = grid.getSelectedCellsInColumn(floor, rootRoom.getGridX());
+
+        for (RoomGridCell selection : hallwayRooms)
+        {
+            selection.setRoom(new CastleRoomHallway(getRoomStart(selection), roomSize, floorHeight,
+                    getPositionFromIndex(selection.getGridX(), selection.getGridZ()), CastleRoomHallway.Alignment.VERTICAL));
+        }
+    }
+
+    private void buildHorizontalFloorHallway(int floor)
+    {
+        ArrayList<RoomGridCell> mainRooms = grid.getSelectedMainStructCells(floor);
+        RoomGridCell rootRoom = mainRooms.get(random.nextInt(mainRooms.size()));
+        ArrayList<RoomGridCell> hallwayRooms = grid.getSelectedCellsInRow(floor, rootRoom.getGridZ());
+
+        for (RoomGridCell selection : hallwayRooms)
+        {
+            selection.setRoom(new CastleRoomHallway(getRoomStart(selection), roomSize, floorHeight,
+                    getPositionFromIndex(selection.getGridX(), selection.getGridZ()), CastleRoomHallway.Alignment.HORIZONTAL));
         }
     }
 
     private void placeDoors()
     {
-        for (int floor = 0; (floor < numFloors); floor++)
+        for (int floor = 0; (floor < maxFloors); floor++)
         {
             for (int z = 0; (z < numSlotsZ); z++)
             {
                 for (int x = 0; (x < numSlotsX); x++)
                 {
-                    CastleRoom room = getRoomAt(floor, x, z);
+                    CastleRoom room = grid.getRoomAt(floor, x, z);
                     if (room != null && roomIsStaircaseOrLanding(room))
                     {
                         EnumFacing hallDirection = getAdjacentHallwayDirection(floor, x, z);
@@ -151,11 +167,11 @@ public class CastleRoomSelector
                         }
                         else if (hallDirection == EnumFacing.WEST)
                         {
-                            getRoomAt(floor, x - 1, z).addDoorOnSide(EnumFacing.EAST);
+                            grid.getRoomAt(floor, x - 1, z).addDoorOnSide(EnumFacing.EAST);
                         }
                         else if (hallDirection == EnumFacing.NORTH)
                         {
-                            getRoomAt(floor, x, z - 1).addDoorOnSide(EnumFacing.SOUTH);
+                            grid.getRoomAt(floor, x, z - 1).addDoorOnSide(EnumFacing.SOUTH);
                         }
                     }
                 }
@@ -183,14 +199,14 @@ public class CastleRoomSelector
     {
         boolean stairsPlaced = false;
         //only iterate through floors thar aren't the top floor
-        for (int floor = 0; (floor < numFloors - 1) && (!stairsPlaced); floor++)
+        for (int floor = 0; (floor < maxFloors - 1) && (!stairsPlaced); floor++)
         {
             for (int z = 0; (z < numSlotsZ) && (!stairsPlaced); z++)
             {
                 for (int x = 0; (x < numSlotsX) && (!stairsPlaced); x++)
                 {
-                    if (!isRoomFilled(floor, x, z) &&
-                            !isRoomFilled(floor + 1, x, z) &&
+                    if (!grid.isRoomFilled(floor, x, z) &&
+                            !grid.isRoomFilled(floor + 1, x, z) &&
                             roomBordersHallway(floor, x, z) &&
                             roomBordersHallway(floor + 1, x, z))
                     {
@@ -212,7 +228,7 @@ public class CastleRoomSelector
         CastleRoom neighborRoom;
         if (x != 0)
         {
-            neighborRoom = getRoomAt(floor, x - 1, z);
+            neighborRoom = grid.getRoomAt(floor, x - 1, z);
             if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.WEST;
@@ -220,7 +236,7 @@ public class CastleRoomSelector
         }
         if (z != 0)
         {
-            neighborRoom = getRoomAt(floor, x, z - 1);
+            neighborRoom = grid.getRoomAt(floor, x, z - 1);
             if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.NORTH;
@@ -228,7 +244,7 @@ public class CastleRoomSelector
         }
         if (x < numSlotsX - 1)
         {
-            neighborRoom = getRoomAt(floor, x + 1, z);
+            neighborRoom = grid.getRoomAt(floor, x + 1, z);
             if (neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.EAST;
@@ -236,7 +252,7 @@ public class CastleRoomSelector
         }
         if (z < numSlotsZ - 1)
         {
-            neighborRoom = getRoomAt(floor, x, z + 1);
+            neighborRoom = grid.getRoomAt(floor, x, z + 1);
             if (x != 0 && neighborRoom != null && neighborRoom.roomType == CastleRoom.RoomType.HALLWAY)
             {
                 return EnumFacing.SOUTH;
@@ -248,24 +264,24 @@ public class CastleRoomSelector
     private void connectRooms()
     {
         System.out.println("Connecting rooms");
-        for (int floor = 0; floor < numFloors; floor++)
+        for (int floor = 0; floor < maxFloors; floor++)
         {
-            ArrayList<RoomSelection> roomList = getUnreachableRoomList(floor);
+            ArrayList<RoomGridCell> roomList = grid.getUnreachableRoomList(floor);
             while (!roomList.isEmpty())
             {
-                RoomSelection currentRoom;
+                RoomGridCell currentRoom;
 
                 currentRoom = roomList.get(random.nextInt(roomList.size()));
                 connectRoomToNearestReachable(currentRoom);
 
-                roomList = getUnreachableRoomList(floor);
+                roomList = grid.getUnreachableRoomList(floor);
             }
         }
     }
 
-    public void connectRoomToNearestReachable(RoomSelection roomSelection)
+    public void connectRoomToNearestReachable(RoomGridCell roomGridCell)
     {
-        RoomGridPosition gridPos = roomSelection.getGridPosition();
+        RoomGridPosition gridPos = roomGridCell.getGridPosition();
         int floor = gridPos.getFloor();
         int x = gridPos.getX();
         int z = gridPos.getZ();
@@ -273,10 +289,10 @@ public class CastleRoomSelector
 
         if (buildDirection != EnumFacing.DOWN)
         {
-            while (withinGridBounds(x, z) && !isRoomReachable(floor, x, z))
+            while (grid.withinGridBounds(x, z) && !grid.isRoomReachable(floor, x, z))
             {
-                CastleRoom room = getRoomAt(floor, x, z);
-                setRoomReachable(floor, x, z);
+                CastleRoom room = grid.getRoomAt(floor, x, z);
+                grid.setRoomReachable(floor, x, z);
 
                 if (buildDirection == EnumFacing.SOUTH)
                 {
@@ -293,7 +309,7 @@ public class CastleRoomSelector
                     if (z != 0)
                     {
                         z--;
-                        CastleRoom roomNorth = getRoomAt(floor, x, z);
+                        CastleRoom roomNorth = grid.getRoomAt(floor, x, z);
                         roomNorth.addDoorOnSide(buildDirection.getOpposite());
                     }
                 } else if (buildDirection == EnumFacing.WEST)
@@ -301,7 +317,7 @@ public class CastleRoomSelector
                     if (x != 0)
                     {
                         x--;
-                        CastleRoom roomWest = getRoomAt(floor, x, z);
+                        CastleRoom roomWest = grid.getRoomAt(floor, x, z);
                         roomWest.addDoorOnSide(buildDirection.getOpposite());
                     }
                 }
@@ -362,7 +378,7 @@ public class CastleRoomSelector
             {
                 z--;
                 currentDistance++;
-                if (isRoomReachable(floor, x, z))
+                if (grid.isRoomReachable(floor, x, z))
                 {
                     result = currentDistance;
                     break;
@@ -375,7 +391,7 @@ public class CastleRoomSelector
             {
                 z++;
                 currentDistance++;
-                if (isRoomReachable(floor, x, z))
+                if (grid.isRoomReachable(floor, x, z))
                 {
                     result = currentDistance;
                     break;
@@ -388,7 +404,7 @@ public class CastleRoomSelector
             {
                 x--;
                 currentDistance++;
-                if (isRoomReachable(floor, x, z))
+                if (grid.isRoomReachable(floor, x, z))
                 {
                     result = currentDistance;
                     break;
@@ -401,28 +417,13 @@ public class CastleRoomSelector
             {
                 x++;
                 currentDistance++;
-                if (isRoomReachable(floor, x, z))
+                if (grid.isRoomReachable(floor, x, z))
                 {
                     result = currentDistance;
                     break;
                 }
             }
         }
-        return result;
-    }
-
-    private ArrayList<RoomSelection> getUnreachableRoomList(int floor)
-    {
-        ArrayList<RoomSelection> result = new ArrayList<>();
-        for (int x = 0; x < roomArray[0].length; x++)
-        {
-            for (int z = 0; z < roomArray[0][0].length; z++)
-            {
-                if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].isReachable())
-                    result.add(roomArray[floor][x][z]);
-            }
-        }
-
         return result;
     }
 
@@ -436,7 +437,7 @@ public class CastleRoomSelector
 
     private void addEntranceToSide(EnumFacing side)
     {
-        ArrayList<RoomSelection> rooms = getRoomSelectionList();
+        ArrayList<RoomGridCell> rooms = grid.getSelectionListCopy();
         rooms.removeIf(r -> r.getFloor() > 0);
         if (side == EnumFacing.NORTH)
         {
@@ -507,153 +508,43 @@ public class CastleRoomSelector
         return startPos.add(x * roomSize, floor * floorHeight, z * roomSize);
     }
 
-    private void addRoomHallway(int floor, int x, int z, boolean vertical)
+    private BlockPos getRoomStart(RoomGridCell selection)
     {
-        CastleRoom room = new CastleRoomHallway(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), vertical);
-        addRoomAt(room, floor, x, z);
+        int gridX = selection.getGridX();
+        int floor = selection.getFloor();
+        int gridZ = selection.getGridZ();
+        return startPos.add(gridX * roomSize, floor * floorHeight, gridZ * roomSize);
+    }
+
+    private void addRoomHallway(int floor, int x, int z, CastleRoomHallway.Alignment alignment)
+    {
+        CastleRoom room = new CastleRoomHallway(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), alignment);
+        grid.addRoomAt(room, floor, x, z);
     }
 
     private void addStairCaseAndLanding(int stairFloor, int stairX, int stairZ)
     {
         addRoomStaircase(stairFloor, stairX, stairZ);
-        addRoomLanding(stairFloor + 1, stairX, stairZ, (CastleRoomStaircase) getRoomAt(stairFloor, stairX, stairZ));
+        addRoomLanding(stairFloor + 1, stairX, stairZ, (CastleRoomStaircase)grid.getRoomAt(stairFloor, stairX, stairZ));
     }
 
     private void addRoomStaircase(int floor, int x, int z)
     {
         EnumFacing doorSide = getAdjacentHallwayDirection(floor, x, z);
         CastleRoom room = new CastleRoomStaircase(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), doorSide);
-        addRoomAt(room, floor, x, z);
-        setRoomReachable(floor, x, z);
+        grid.addRoomAt(room, floor, x, z);
+        grid.setRoomReachable(floor, x, z);
     }
 
     private void addRoomLanding(int floor, int x, int z, CastleRoomStaircase stairsBelow)
     {
         CastleRoom room = new CastleRoomLanding(getRoomStart(floor, x, z), roomSize, floorHeight, getPositionFromIndex(x, z), stairsBelow);
-        addRoomAt(room, floor, x, z);
-        setRoomReachable(floor, x, z);
+        grid.addRoomAt(room, floor, x, z);
+        grid.setRoomReachable(floor, x, z);
     }
 
-    private int getRandomXOffsetForRooms(int numRooms)
+    private int getLayerFromFloor(int floor)
     {
-        if (numRooms <= numSlotsX)
-        {
-            int maxOffset = numSlotsX - numRooms;
-            return random.nextInt(maxOffset + 1);
-        }
-        return -1;
+        return floor / floorsPerLayer;
     }
-
-    private int getRandomZOffsetForRooms(int numRooms)
-    {
-        if (numRooms <= numSlotsZ)
-        {
-            int maxOffset = numSlotsZ - numRooms;
-            return random.nextInt(maxOffset + 1);
-        }
-        return -1;
-    }
-
-    private void setRoomReachable(int floor, int x, int z)
-    {
-        roomArray[floor][x][z].setReachable();
-    }
-
-    private ArrayList<CastleRoom> getRoomList()
-    {
-        ArrayList<RoomSelection> rooms = getRoomSelectionList();
-        ArrayList<CastleRoom> result = new ArrayList<>();
-
-        for (RoomSelection rs: rooms)
-        {
-            result.add(rs.getRoom());
-        }
-
-        return result;
-    }
-
-    private ArrayList<RoomSelection> getRoomSelectionList()
-    {
-        ArrayList<RoomSelection> result = new ArrayList<>();
-        for (int floor = 0; floor < roomArray.length; floor++)
-        {
-            for (int x = 0; x < roomArray[0].length; x++)
-            {
-                for (int z = 0; z < roomArray[0][0].length; z++)
-                {
-                    if (roomArray[floor][x][z] != null)
-                    {
-                        result.add(roomArray[floor][x][z]);
-                    }
-                }
-            }
-        }
-
-        return result;
-    }
-
-    public void setRoomPopulated(int floor, int x, int z)
-    {
-        roomArray[floor][x][z].setPopulated();
-    }
-
-    private boolean isRoomFilled(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z] != null && roomArray[floor][x][z].getRoom() != null;
-    }
-
-    private boolean isRoomReachable(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z].isReachable();
-    }
-
-    private void addRoomAt(CastleRoom room, int floor, int x, int z)
-    {
-        roomArray[floor][x][z] = new RoomSelection(floor, x, z, room);
-    }
-
-
-    private CastleRoom getRoomAt(int floor, int x, int z)
-    {
-        if (roomArray[floor][x][z] != null)
-        {
-            return (roomArray[floor][x][z].getRoom());
-        }
-        else
-        {
-            return null;
-        }
-    }
-
-    private boolean withinGridBounds(int x, int z)
-    {
-        return (x >= 0 && x < numSlotsX && z >= 0 && z < numSlotsZ);
-    }
-
-    //print the room array in a grid, floor by floor
-    public String printGrid()
-    {
-        String result = "";
-        for (int floor = 0; floor < numFloors; floor++)
-        {
-            result += "\nFloor " + floor + "\n";
-            for (int z = 0; z < numSlotsZ; z++)
-            {
-                for (int x = 0; x < numSlotsX; x++)
-                {
-                    if (isRoomFilled(floor, x, z))
-                    {
-                        result += "[" + getRoomAt(floor, x, z).getNameShortened() + "|" + getRoomAt(floor, x, z).getPositionString() + "] ";
-                    } else
-                    {
-                        result += "[NUL|--]";
-                    }
-                }
-                result += "\n";
-            }
-        }
-        result += "----------------\n";
-        return result;
-    }
-
 }
