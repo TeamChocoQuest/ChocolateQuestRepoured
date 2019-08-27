@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -86,6 +87,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
             		
         			NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
             		Entity entity = this.createEntityFromNBT(entityTag, this.world, this.pos.getX() + (int)rand.nextFloat(), this.pos.getY(), this.pos.getZ() + (int)rand.nextFloat());
+            		if(entity instanceof EntityLiving && Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent()) {
+            			((EntityLiving)entity).enablePersistence();
+            		}
             		entity.setUniqueId(MathHelper.getRandomUUID(rand));
             				
             		stack.shrink(1);
