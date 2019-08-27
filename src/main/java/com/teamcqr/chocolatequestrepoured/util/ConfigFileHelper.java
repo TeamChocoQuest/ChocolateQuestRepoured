@@ -19,6 +19,7 @@ public class ConfigFileHelper {
 	private boolean dungeonsInFlat = false;
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
+	private boolean mobsSpawnedFromCQSpawnersArePersistent = true;
 	
 	//Mobs
 	//health
@@ -95,6 +96,9 @@ public class ConfigFileHelper {
 		prop = config.get("mobs", "factionUpdateRadius", 100);
 		factionKillRepuChangeRadius = prop.getInt(100);
 		
+		prop = config.get("general", "mobsFromCQSpawnersDontDespawn", true);
+		mobsSpawnedFromCQSpawnersArePersistent = prop.getBoolean(true);
+		
 		config.save();
 	}
 	
@@ -142,6 +146,9 @@ public class ConfigFileHelper {
 	}
 	public int getFactionRepuChangeRadius() {
 		return factionKillRepuChangeRadius;
+	}
+	public boolean areMobsFromCQSpawnersPersistent() {
+		return mobsSpawnedFromCQSpawnersArePersistent;
 	}
 
 }
