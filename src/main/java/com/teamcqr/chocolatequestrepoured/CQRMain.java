@@ -4,18 +4,18 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.dungeongen.DungeonRegistry;
-import com.teamcqr.chocolatequestrepoured.dungeongen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.ELootTable;
-import com.teamcqr.chocolatequestrepoured.dungeongen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.dungeonprot.ProtectionHandler;
-import com.teamcqr.chocolatequestrepoured.dungeongen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
 import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
+import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
+import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
