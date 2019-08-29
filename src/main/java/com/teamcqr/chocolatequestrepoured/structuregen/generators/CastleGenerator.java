@@ -30,7 +30,6 @@ public class CastleGenerator implements IDungeonGenerator
     private int floorHeight;
     private Random random;
     private List<ICastlePart> parts;
-    private List<CastlePartTower> towers;
     private int totalX;
     private int totalY;
     private int totalZ;
@@ -101,10 +100,6 @@ public class CastleGenerator implements IDungeonGenerator
         for (ICastlePart part : parts)
         {
             part.generatePart(world);
-        }
-        for (ICastlePart tower : towers)
-        {
-            tower.generatePart(world);
         }
 
         CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
