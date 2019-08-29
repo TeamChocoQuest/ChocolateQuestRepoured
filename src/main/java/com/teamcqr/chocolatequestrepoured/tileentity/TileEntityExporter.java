@@ -1,15 +1,26 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.gui.GuiExporter;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
+import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEntity
 {
@@ -93,6 +104,27 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		//} else {
 			world.notifyBlockUpdate(this.getPos(), this.getBlockType().getDefaultState(), this.getBlockType().getDefaultState(), 2);
 		//}
+	}
+
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound compound = getExporterData();
+		return new SPacketUpdateTileEntity(this.pos,1,compound);
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		NBTTagCompound compound = pkt.getNbtCompound();
+		setExporterData(compound);
+		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
+		if(screen instanceof GuiExporter) {
+			((GuiExporter)screen).sync();
+		}
+	}
+
+	public void requestSync() {
+		world.notifyBlockUpdate(this.pos, ModBlocks.EXPORTER.getDefaultState(),ModBlocks.EXPORTER.getDefaultState(),0);
 	}
 
 	//Not used anymore

@@ -3,12 +3,14 @@ package com.teamcqr.chocolatequestrepoured.gui;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.gui.container.ContainerExporter;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
@@ -16,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
 
-public class GuiExporter extends GuiScreen 
+public class GuiExporter extends GuiContainer
 {
 	private String authorName;
 	private World world;
@@ -31,8 +33,9 @@ public class GuiExporter extends GuiScreen
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
 	private GuiCheckBox chbxPartsMode;
 
-	public GuiExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter) 
+	public GuiExporter(World worldIn, EntityPlayer player, TileEntityExporter exporter, ContainerExporter exporterContainer)
 	{
+		super(exporterContainer);
 		this.world = worldIn;
 		this.authorName = player.getName();
 		this.exporter = exporter;
@@ -42,11 +45,25 @@ public class GuiExporter extends GuiScreen
 		}
 	}
 
+	public void sync() {
+		edtEndX.setText(String.valueOf(exporter.endX));
+		edtEndY.setText(String.valueOf(exporter.endY));
+		edtEndZ.setText(String.valueOf(exporter.endZ));
+		edtStartX.setText(String.valueOf(exporter.startX));
+		edtStartY.setText(String.valueOf(exporter.startY));
+		edtStartZ.setText(String.valueOf(exporter.startZ));
+		edtName.setText(exporter.structureName);
+	}
+
+	@Override
+	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
+
+	}
+
 	@Override
 	public void initGui() 
 	{
 		//Has inputs for start and end locations
-
 		edtName = new GuiTextField(0, this.fontRenderer, width / 2 -70, height / 2 -70, 140, 20);
 		edtName.setText(exporter.structureName);
 
@@ -270,4 +287,4 @@ public class GuiExporter extends GuiScreen
 			}
 		}
 	}
-} 
+}
