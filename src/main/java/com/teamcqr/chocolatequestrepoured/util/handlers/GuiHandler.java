@@ -5,10 +5,7 @@ import com.teamcqr.chocolatequestrepoured.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.gui.GuiSpawner;
-import com.teamcqr.chocolatequestrepoured.gui.container.ContainerAlchemyBag;
-import com.teamcqr.chocolatequestrepoured.gui.container.ContainerBackpack;
-import com.teamcqr.chocolatequestrepoured.gui.container.ContainerBadge;
-import com.teamcqr.chocolatequestrepoured.gui.container.ContainerSpawner;
+import com.teamcqr.chocolatequestrepoured.gui.container.*;
 import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryBackpack;
 import com.teamcqr.chocolatequestrepoured.gui.inventory.InventoryBadge;
@@ -38,10 +35,6 @@ public class GuiHandler implements IGuiHandler
 			return new ContainerSpawner(player.inventory, (TileEntitySpawner)world.getTileEntity(new BlockPos(x,y,z)));
 		}
 		
-		if(ID == Reference.EXPORTER_GUI_ID) {
-			//TODO: Create ExporterContainer
-		}
-		
 		if(ID == Reference.BACKPACK_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.BACKPACK)
 		{
 			return new ContainerBackpack(player.inventory, new InventoryBackpack(player.getHeldItemMainhand()));
@@ -50,6 +43,11 @@ public class GuiHandler implements IGuiHandler
 		if(ID == Reference.ALCHEMY_BAG_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.ALCHEMY_BAG)
 		{
 			return new ContainerAlchemyBag(player.inventory, new InventoryAlchemyBag(player.getHeldItemMainhand()));
+		}
+
+		if(ID == Reference.EXPORTER_GUI_ID)
+		{
+			return new ContainerExporter((TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)));
 		}
 		
 		return null;
@@ -70,7 +68,7 @@ public class GuiHandler implements IGuiHandler
 		
 		if(ID == Reference.EXPORTER_GUI_ID) 
 		{
-			return new GuiExporter(world, player, (TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)));
+			return new GuiExporter(world, player, (TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)),new ContainerExporter((TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z))));
 		}
 		
 		if(ID == Reference.BACKPACK_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.BACKPACK)

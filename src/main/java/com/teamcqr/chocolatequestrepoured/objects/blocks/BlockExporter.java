@@ -35,7 +35,7 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	{
 		//TODO: Send data on server to client, otherwise it wont work
 		if(!worldIn.isRemote) {
-			
+			((TileEntityExporter)worldIn.getTileEntity(pos)).requestSync();
 		}
 		playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;

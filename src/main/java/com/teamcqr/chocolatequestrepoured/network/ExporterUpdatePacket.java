@@ -8,6 +8,8 @@ package com.teamcqr.chocolatequestrepoured.network;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import net.minecraft.client.gui.inventory.GuiFurnace;
+import net.minecraft.inventory.ContainerFurnace;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
