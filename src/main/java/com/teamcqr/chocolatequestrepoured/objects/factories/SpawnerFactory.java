@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -45,7 +46,7 @@ public abstract class SpawnerFactory {
 			if(tile0 != null && tile0 instanceof TileEntityMobSpawner) {
 				TileEntityMobSpawner spawnerTile = (TileEntityMobSpawner) tile0;
 				
-				
+				//TODO: Change spawner to conditions and apply the settings
 				
 				spawnerTile.updateContainingBlockInfo();
 				spawnerTile.update();
@@ -150,6 +151,21 @@ public abstract class SpawnerFactory {
 		
 		spawner.markDirty();
 	}
+	
+	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
+		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
+	}
+	
+	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
+		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos);
+		
+		spawner.getSpawnerBaseLogic().setEntityId(entityResLoc);
+		
+		spawner.updateContainingBlockInfo();
+		spawner.update();
+	}
+	
 	
 	static Entity createEntityFromNBTWithoutSpawningIt(NBTTagCompound tag, World worldIn)
 	{
