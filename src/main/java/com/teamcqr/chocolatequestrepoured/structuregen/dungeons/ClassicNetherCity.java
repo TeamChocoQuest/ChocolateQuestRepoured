@@ -31,9 +31,20 @@ public class ClassicNetherCity extends DungeonBase {
 	private int posY = 31;
 	private double bridgeSizeMultiplier = 1.2D;
 	private boolean singleAirPocketsForHouses = false;
+	private boolean specialUseForCentralBuilding = false;
+	private boolean centralSpawnerIsSingleUse = true;
+	private boolean spawnersAboveBuildings = true;
+	private boolean spawnersAreSingleUse = true;
+	private boolean makeSpaceForBuildings = true;
 	private Block bridgeBlock = Blocks.NETHER_BRICK;
 	private Block floorBlock = Blocks.LAVA;
+	private Block airBlockForPocket = Blocks.AIR;
+	
+	private String spawnerMobName = "minecraft:ghast";
+	private String centralSpawnerMobName = "minecraft:wither_boss";
+	
 	protected File buildingFolder;
+	protected File centralBuildingsFolder;
 	
 	//Values for generator
 	private int longestSide = -1;
@@ -52,13 +63,23 @@ public class ClassicNetherCity extends DungeonBase {
 			heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 			
 			singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
+			spawnersAboveBuildings = PropertyFileHelper.getBooleanProperty(prop, "spawnersAboveBuildings", true);
+			makeSpaceForBuildings = PropertyFileHelper.getBooleanProperty(prop, "createAirPocket", true);
+			specialUseForCentralBuilding = PropertyFileHelper.getBooleanProperty(prop, "centralBuildingIsSpecial", true);
+			spawnersAreSingleUse = PropertyFileHelper.getBooleanProperty(prop, "spawnersAreSingleUse", false);
+			centralSpawnerIsSingleUse = PropertyFileHelper.getBooleanProperty(prop, "centralSpawnerIsSingleUse", true);
+			
+			spawnerMobName = prop.getProperty("spawnerMob", "minecraft:ghast");
+			centralSpawnerMobName = prop.getProperty("centralSpawnerMob", "minecraft:wither_boss");
 			
 			bridgeSizeMultiplier = PropertyFileHelper.getDoubleProperty(prop, "bridgelengthmultiplier", 1.2D);
 			
 			bridgeBlock = PropertyFileHelper.getBlockProperty(prop, "streetblock", Blocks.NETHER_BRICK);
 			floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.LAVA);
+			airBlockForPocket = PropertyFileHelper.getBlockProperty(prop, "airPocketBlock", Blocks.AIR);
 			
 			buildingFolder = PropertyFileHelper.getFileProperty(prop, "structurefolder", "nether_city_buildings");
+			centralBuildingsFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "nether_city_buildings");
 			
 			closeConfigFile();
 		} else {
@@ -100,6 +121,10 @@ public class ClassicNetherCity extends DungeonBase {
 		return this.floorBlock;
 	}
 	
+	public Block getAirPocketBlock() {
+		return this.airBlockForPocket;
+	}
+	
 	public int getXRows() {
 		return DungeonGenUtils.getIntBetweenBorders(minRowsX, maxRowsX);
 	}
@@ -117,5 +142,33 @@ public class ClassicNetherCity extends DungeonBase {
 	
 	public boolean useSingleAirPocketsForHouses() {
 		return this.singleAirPocketsForHouses;
+	}
+	
+	public boolean placeSpawnersAboveBuildings() {
+		return spawnersAboveBuildings;
+	}
+
+	public boolean centralBuildingIsSpecial() {
+		return specialUseForCentralBuilding;
+	}
+	
+	public boolean centralSpawnerIsSingleUse() {
+		return centralSpawnerIsSingleUse;
+	}
+	
+	public boolean spawnersAreSingleUse() {
+		return spawnersAreSingleUse;
+	}
+	
+	public boolean makeSpaceForBuildings() {
+		return makeSpaceForBuildings;
+	}
+	
+	public File getBuildingFolder() {
+		return buildingFolder;
+	}
+	
+	public File getCentralBuildingFolder() {
+		return centralBuildingsFolder;
 	}
 }
