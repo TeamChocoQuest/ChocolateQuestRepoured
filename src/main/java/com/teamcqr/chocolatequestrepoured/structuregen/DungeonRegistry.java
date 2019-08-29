@@ -232,8 +232,7 @@ public class DungeonRegistry {
 			if(!dungs.contains(dungeon)) {
 				dungs.add(dungeon);
 				this.biomeDungeonMap.replace(biome, dungs);
-				//System.out.println(" - " + biome.getBiomeName());
-				//Client Side Only
+				//System.out.println(" - " + biome.getRegistryName());
 			}
 		}
 	}
