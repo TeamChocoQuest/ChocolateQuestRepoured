@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.gui;
 
 import java.io.IOException;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.gui.GuiButton;
@@ -114,6 +116,8 @@ public class GuiExporter extends GuiScreen
 				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
 			}
 		}
+
+		CQRMain.NETWORK.sendToServer(new ExporterUpdatePacket(exporter));
 		super.onGuiClosed();
 
 	}
