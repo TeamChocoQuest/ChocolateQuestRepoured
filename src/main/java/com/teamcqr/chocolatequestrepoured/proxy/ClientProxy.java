@@ -13,10 +13,8 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
-import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
-import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacketHandler;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
@@ -54,7 +52,8 @@ public class ClientProxy extends CommonProxy
 		super.preInit(event);
 		registerGUIs();
 		registerRenderers();
-		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, CQSaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
+		
+		//PACKETS / MESSAGES
 		CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
 	}
 	
@@ -79,9 +78,11 @@ public class ClientProxy extends CommonProxy
 	@Override
 	public void registerRenderers() 
 	{
+		//TILE ENTITY RENDERERS
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 		
+		//ENTITY RENDERERS
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, new IRenderFactory<ProjectileEarthQuake>()
 		{
 			@Override

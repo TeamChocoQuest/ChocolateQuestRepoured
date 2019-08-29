@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.proxy;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacketHandler;
+import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacketHandler;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.EntityHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
@@ -21,6 +24,8 @@ public class CommonProxy
 	{
 		EntityHandler.registerEntity();
 		loadDungeons();
+		
+		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, CQSaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class,0, Side.SERVER);
 	}
 	
