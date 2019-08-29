@@ -7,11 +7,12 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class TileEntityExporter extends TileEntitySyncClient
+public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEntity
 {
 	public int startX = 0;
 	public int startY = 0;
@@ -26,7 +27,30 @@ public class TileEntityExporter extends TileEntitySyncClient
 	
 	public TileEntityExporter() {
 	}
-	
+
+	public NBTTagCompound getExporterData() {
+		NBTTagCompound compound = new NBTTagCompound();
+		compound.setInteger("StartX", startX);
+		compound.setInteger("StartY", startY);
+		compound.setInteger("StartZ", startZ);
+		compound.setInteger("EndX", endX);
+		compound.setInteger("EndY", endY);
+		compound.setInteger("EndZ", endZ);
+		compound.setString("StructureName", structureName);
+
+		return compound;
+	}
+
+	public void setExporterData(NBTTagCompound compound) {
+		startX = compound.getInteger("StartX");
+		startY = compound.getInteger("StartY");
+		startZ = compound.getInteger("StartZ");
+		endX = compound.getInteger("EndX");
+		endY = compound.getInteger("EndY");
+		endZ = compound.getInteger("EndZ");
+		structureName = compound.getString("StructureName");
+	}
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound)
 	{
@@ -71,12 +95,17 @@ public class TileEntityExporter extends TileEntitySyncClient
 			world.notifyBlockUpdate(this.getPos(), this.getBlockType().getDefaultState(), this.getBlockType().getDefaultState(), 2);
 		//}
 	}
-	
+
+	//Not used anymore
+	/*
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		 return new SPacketUpdateTileEntity(this.pos, 7, this.getUpdateTag());
 	}
-	
+	 */
+
+	//Not used anymore
+	/*
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		if(world.isRemote) {
@@ -84,13 +113,15 @@ public class TileEntityExporter extends TileEntitySyncClient
 		}
 		return super.getUpdateTag();
 	}
+	 */
 	
-	
+	//Not needed anymore succeeded by getExporterData
+	/*
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		if(!world.isRemote) {
 			super.handleUpdateTag(tag);
-			
+
 			startX = tag.getInteger("sX");
 			startY = tag.getInteger("sY");
 			startZ = tag.getInteger("sZ");
@@ -98,14 +129,17 @@ public class TileEntityExporter extends TileEntitySyncClient
 			endX = tag.getInteger("eX");
 			endY = tag.getInteger("eY");
 			endZ = tag.getInteger("eZ");
-			
+
 			partModeUsing = tag.getBoolean("partmode");
-			
+
 			structureName = tag.getString("sName");
 		}
 	}
-	
-	/*@Override
+	 */
+
+	//Not needed anymore succeeded by setExporterData
+	/*
+	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		super.onDataPacket(net, pkt);
 		
@@ -122,7 +156,9 @@ public class TileEntityExporter extends TileEntitySyncClient
 		partModeUsing = tag.getBoolean("partmode");
 		
 		structureName = tag.getString("sName");
-	}*/
+	}
+	*/
+
 	
 	public void setUser(EntityPlayer player) {
 		this.user = player;
