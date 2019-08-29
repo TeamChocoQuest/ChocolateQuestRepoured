@@ -6,11 +6,10 @@ package com.teamcqr.chocolatequestrepoured.network;
  */
 
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
-import net.minecraft.tileentity.TileEntity;
+
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ExporterUpdatePacketHandler implements IMessageHandler<ExporterUpdatePacket, IMessage> {
 

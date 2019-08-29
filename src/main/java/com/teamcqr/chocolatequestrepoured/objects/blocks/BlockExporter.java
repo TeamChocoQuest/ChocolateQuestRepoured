@@ -33,6 +33,10 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
+		//TODO: Send data on server to client, otherwise it wont work
+		if(!worldIn.isRemote) {
+			
+		}
 		playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
