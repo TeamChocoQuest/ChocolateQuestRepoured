@@ -42,7 +42,6 @@ public class CastleGenerator implements IDungeonGenerator
         this.floorHeight = this.dungeon.getFloorHeight();
         this.random = this.dungeon.getRandom();
         this.parts = new ArrayList<>();
-        this.towers = new ArrayList<>();
     }
 
     @Override
