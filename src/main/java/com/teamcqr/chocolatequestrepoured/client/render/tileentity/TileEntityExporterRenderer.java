@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -54,12 +53,9 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		// if(timerTillRenderUpdate >= 400) {
 		// timerTillRenderUpdate = 0;
 		
-		AxisAlignedBB aabb = te.getSelectionAABB();
-		
-		if(aabb.minX == aabb.maxX && aabb.minY == aabb.maxY && aabb.minZ ==
-		aabb.maxZ) { 
-			System.out.println("No Data on Client!"); 
-			return; 
+		if (te.startX == te.endX && te.startY == te.endY && te.startZ == te.endZ) {
+			// System.out.println("No Data on Client!");
+			return;
 		}
 		//super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 		
