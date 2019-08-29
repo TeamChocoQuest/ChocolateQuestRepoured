@@ -136,4 +136,9 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
     	}
     }
 
+	@Override
+	public int getRemainingHealingPotions() {
+		return 0;
+	}
+
 }

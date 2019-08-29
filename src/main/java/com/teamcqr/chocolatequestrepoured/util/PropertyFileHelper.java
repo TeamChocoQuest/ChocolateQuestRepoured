@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.io.File;
 import java.util.Properties;
+
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 import net.minecraft.block.Block;
 
@@ -25,6 +28,22 @@ public class PropertyFileHelper {
 			
 		}
 		return retInt;
+	}
+	
+	public static double getDoubleProperty(Properties file, String path, double defVal) {
+		String s = file.getProperty(path);
+		if(s == null) {
+			return defVal;
+		}
+		
+		double retDoubl = defVal;
+		try {
+			s = s.trim();
+			retDoubl = Double.parseDouble(s);
+		} finally {
+			
+		}
+		return retDoubl;
 	}
 	
 	public static int[] getIntArrayProperty(Properties file, String path, int[] defVal) {
@@ -88,6 +107,18 @@ public class PropertyFileHelper {
 			System.out.println("couldnt load floor block! using default value (" + defVal.getUnlocalizedName() +")...");
 		}
 		return retBlock;
+	}
+	
+	public static File getFileProperty(Properties prop, String path, String defVal) {
+		File fileTmp = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty(path, defVal));
+
+		if(!fileTmp.exists() || !fileTmp.isDirectory()) {
+			if(fileTmp.exists() && !fileTmp.isDirectory()) {
+				fileTmp.delete();
+			}
+			fileTmp.mkdirs();
+		}
+		return fileTmp;
 	}
 
 }

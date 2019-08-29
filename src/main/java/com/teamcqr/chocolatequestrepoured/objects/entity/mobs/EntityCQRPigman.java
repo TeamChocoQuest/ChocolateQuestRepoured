@@ -128,5 +128,10 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
     		onKilled(cause.getTrueSource(), this);
     	}
     }
+
+	@Override
+	public int getRemainingHealingPotions() {
+		return 0;
+	}
 	
 }

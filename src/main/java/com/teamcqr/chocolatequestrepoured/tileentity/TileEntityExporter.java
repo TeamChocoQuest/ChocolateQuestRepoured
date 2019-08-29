@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.tileentity;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
-import com.teamcqr.chocolatequestrepoured.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
