@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -170,5 +171,17 @@ public class ClassicNetherCity extends DungeonBase {
 	
 	public File getCentralBuildingFolder() {
 		return centralBuildingsFolder;
+	}
+	
+	public ResourceLocation getSpawnerMob() {
+		String[] bossString = this.spawnerMobName.split(":");
+		
+		return new ResourceLocation(bossString[0], bossString[1]);
+	}
+	
+	public ResourceLocation getCentralSpawnerMob() {
+		String[] bossString = this.centralSpawnerMobName.split(":");
+		
+		return new ResourceLocation(bossString[0], bossString[1]);
 	}
 }
