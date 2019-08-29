@@ -1,26 +1,23 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
 
 public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEntity
 {
@@ -200,12 +197,14 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		if(!world.isRemote) {
 			CQStructure structure = new CQStructure(this.structureName, true);
 			structure.setAuthor(authorName);
-			
+			System.out.println("Server is saving structure...");
 			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+			System.out.println("Done!");
+		} else {
+			System.out.println("Sending structure save request packet...");
+			CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+			System.out.println("Packet sent!");
 		}
-		System.out.println("Sending structure save request packet...");
-		CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
-		System.out.println("Packet sent!");
 	}
 	
 	@Override
@@ -229,11 +228,25 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
         return false;
     }*/
 	
-	public AxisAlignedBB getDimensionIndicatorBoudingBox() {
+	/*public AxisAlignedBB getDimensionIndicatorBoudingBox() {
 		AxisAlignedBB aabb = super.getRenderBoundingBox();
 		aabb = aabb.offset(new BlockPos(startX, startY, startZ));
 		aabb = aabb.expand(endX, endY, endZ);
 		
 		return aabb;
+	}*/
+	
+	
+
+	public AxisAlignedBB getSelectionAABB() {
+		
+		if(!world.isRemote) {
+			requestSync();
+		}
+		
+		BlockPos b1 = new BlockPos(startX, startY, startZ).subtract(this.getPos());
+		BlockPos b2 = new BlockPos(endX, endY, endZ).subtract(this.getPos()).subtract(b1);
+		
+		return new AxisAlignedBB(b1, b2);
 	}
 }

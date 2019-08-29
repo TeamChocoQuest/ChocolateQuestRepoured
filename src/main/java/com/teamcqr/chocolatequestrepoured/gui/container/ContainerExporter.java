@@ -7,13 +7,14 @@ package com.teamcqr.chocolatequestrepoured.gui.container;
  */
 
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 
 public class ContainerExporter extends Container {
 
-    private TileEntityExporter entityExporter;
+    @SuppressWarnings("unused")
+	private TileEntityExporter entityExporter;
 
     public ContainerExporter(TileEntityExporter entityExporter) {
         this.entityExporter = entityExporter;
