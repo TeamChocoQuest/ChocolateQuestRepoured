@@ -8,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
@@ -129,7 +128,7 @@ public class GuiExporter extends GuiContainer
 			if(this.saveStructOnExit) 
 			{
 				System.out.println("Saving structure...");
-				//TODO: Rewrite this to be a container and to be server side
+				//DONE: Rewrite this to be a container and to be server side
 				this.exporter.saveStructure(this.world, this.structureStartPos, this.structureEndPos, this.authorName);
 			}
 		}

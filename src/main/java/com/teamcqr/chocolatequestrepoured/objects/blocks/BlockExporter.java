@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 
 public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	
-	//TODO: rewrite as a container
+	//DONE: rewrite as a container
 	//If that does not work, create a packet that tells the server to save the structure -> Saving bug fixed
 	public BlockExporter(String name, Material material) 
 	{
@@ -33,7 +33,9 @@ public class BlockExporter extends BlockBase implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) 
 	{
-		//TODO: Send data on server to client, otherwise it wont work
+		//DONE: Send data on server to client, otherwise it wont work
+		
+		//When it is server side -> Request sync???
 		if(!worldIn.isRemote) {
 			((TileEntityExporter)worldIn.getTileEntity(pos)).requestSync();
 		}
