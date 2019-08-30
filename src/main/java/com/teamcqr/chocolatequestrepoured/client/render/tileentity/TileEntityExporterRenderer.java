@@ -98,7 +98,7 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
         buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
         buffer.pos(x2, y1, z1).color((float)cl2, (float)cl2, (float)cl2, 0.0F).endVertex();
         tessellator.draw();
-        GlStateManager.glLineWidth(1.5F);
+        GlStateManager.glLineWidth(2.0F);
     }
 	
 	@Override
