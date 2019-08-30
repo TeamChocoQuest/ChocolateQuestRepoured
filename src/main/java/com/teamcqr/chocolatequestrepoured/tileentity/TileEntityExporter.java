@@ -1,26 +1,25 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEntity
 {
@@ -33,9 +32,13 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 	public String structureName = "NoName";
 	public boolean partModeUsing = false;
 	
+	private BlockPos vecLowerCornerOfSelection = new BlockPos(0,0,0);
+	private BlockPos selectionSize = new BlockPos(0,0,0);
+
 	private EntityPlayer user = null;
 	
 	public TileEntityExporter() {
+
 	}
 
 	public NBTTagCompound getExporterData() {
@@ -59,6 +62,7 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		endY = compound.getInteger("EndY");
 		endZ = compound.getInteger("EndZ");
 		structureName = compound.getString("StructureName");
+		calculateSelectionVectors();
 	}
 
 	@Override
@@ -86,6 +90,7 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		endY = compound.getInteger("EndY");
 		endZ = compound.getInteger("EndZ");
 		structureName = compound.getString("StructureName");
+		calculateSelectionVectors();
 	}
 	
 	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode)
@@ -103,7 +108,33 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 			markDirty();
 		//} else {
 			world.notifyBlockUpdate(this.getPos(), this.getBlockType().getDefaultState(), this.getBlockType().getDefaultState(), 2);
+			calculateSelectionVectors();
 		//}
+	}
+
+	private void calculateSelectionVectors() {
+		int vSelX = startX < endX ? startX : endX;
+		//System.out.println("vSelX: " + vSelX);
+		int vSelSizeX = endX > startX ? endX - startX : startX - endX;
+		//System.out.println("vSelSizeX: " + vSelSizeX);
+		vSelX -= getPos().getX();
+		//System.out.println("vSelX2: " + vSelX);
+		//vSelSizeX -= getPos().getX();
+
+		int vSelY = startY < endY ? startY : endY;
+		int vSelSizeY = endY > startY ? endY - startY : startY - endY;
+		vSelY -= getPos().getY();
+		//vSelSizeY -= getPos().getY();
+
+		int vSelZ = startZ < endZ ? startZ : endZ;
+		int vSelSizeZ = endZ > startZ ? endZ - startZ : startZ - endZ;
+		vSelZ -= getPos().getZ();
+		//vSelSizeZ -= getPos().getZ();
+
+		if(vSelSizeX > 0 && vSelSizeY > 0 && vSelSizeZ > 0) {
+			vecLowerCornerOfSelection = new BlockPos(vSelX, vSelY, vSelZ);
+			selectionSize = new BlockPos(vSelSizeX, vSelSizeY, vSelSizeZ).add(1,1,1);
+		}
 	}
 
 	@Nullable
@@ -119,6 +150,7 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		setExporterData(compound);
 		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 		if(screen instanceof GuiExporter) {
+			calculateSelectionVectors();
 			((GuiExporter)screen).sync();
 		}
 	}
@@ -138,71 +170,8 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 
 	public void requestSync() {
 		world.notifyBlockUpdate(this.pos, ModBlocks.EXPORTER.getDefaultState(),ModBlocks.EXPORTER.getDefaultState(),0);
+		calculateSelectionVectors();
 	}
-
-	//Not used anymore
-	/*
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		 return new SPacketUpdateTileEntity(this.pos, 7, this.getUpdateTag());
-	}
-	 */
-
-	//Not used anymore
-	/*
-	@Override
-	public NBTTagCompound getUpdateTag() {
-		if(world.isRemote) {
-			return writeToNBT(new NBTTagCompound());
-		}
-		return super.getUpdateTag();
-	}
-	 */
-	
-	//Not needed anymore succeeded by getExporterData
-	/*
-	@Override
-	public void handleUpdateTag(NBTTagCompound tag) {
-		if(!world.isRemote) {
-			super.handleUpdateTag(tag);
-
-			startX = tag.getInteger("sX");
-			startY = tag.getInteger("sY");
-			startZ = tag.getInteger("sZ");
-
-			endX = tag.getInteger("eX");
-			endY = tag.getInteger("eY");
-			endZ = tag.getInteger("eZ");
-
-			partModeUsing = tag.getBoolean("partmode");
-
-			structureName = tag.getString("sName");
-		}
-	}
-	 */
-
-	//Not needed anymore succeeded by setExporterData
-	/*
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		super.onDataPacket(net, pkt);
-		
-		NBTTagCompound tag = pkt.getNbtCompound();
-		
-		startX = tag.getInteger("sX");
-		startY = tag.getInteger("sY");
-		startZ = tag.getInteger("sZ");
-
-		endX = tag.getInteger("eX");
-		endY = tag.getInteger("eY");
-		endZ = tag.getInteger("eZ");
-		
-		partModeUsing = tag.getBoolean("partmode");
-		
-		structureName = tag.getString("sName");
-	}
-	*/
-
 	
 	public void setUser(EntityPlayer player) {
 		this.user = player;
@@ -213,40 +182,38 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		if(!world.isRemote) {
 			CQStructure structure = new CQStructure(this.structureName, true);
 			structure.setAuthor(authorName);
-			
+			System.out.println("Server is saving structure...");
 			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+			System.out.println("Done!");
+		} else {
+			System.out.println("Sending structure save request packet...");
+			CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+			System.out.println("Packet sent!");
 		}
-		System.out.println("Sending structure save request packet...");
-		CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
-		System.out.println("Packet sent!");
 	}
-	
+
+	@SideOnly(Side.CLIENT)
+	public BlockPos getStructurePosVector() {
+		calculateSelectionVectors();
+
+		return vecLowerCornerOfSelection;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public BlockPos getStructureSize() {
+		calculateSelectionVectors();
+
+		return selectionSize;
+	}
+
 	@Override
-	public double getMaxRenderDistanceSquared() {
-		return (128 + (endX - startX) + (endY - startY) + (endZ - startZ))^2; 
-	}
-	
-	/*private boolean isPlayerInRange(double x, double y, double z, double range) 
-    {
-        for(int i = 0; i < this.world.playerEntities.size(); ++i) 
-        {
-            EntityPlayer player = this.world.playerEntities.get(i);
- 
-                double playerDistance = player.getDistanceSq(x, y, z);
- 
-                if(range < 0 || playerDistance < range * range) 
-                {
-                    return true;
-                }
-        }
-        return false;
-    }*/
-	
-	public AxisAlignedBB getDimensionIndicatorBoudingBox() {
+	public AxisAlignedBB getRenderBoundingBox() {
 		AxisAlignedBB aabb = super.getRenderBoundingBox();
-		aabb = aabb.offset(new BlockPos(startX, startY, startZ));
-		aabb = aabb.expand(endX, endY, endZ);
+
+		aabb.offset(startX, startY, startZ);
+		aabb.expand(endX, endY, endZ);
 		
 		return aabb;
 	}
+
 }
