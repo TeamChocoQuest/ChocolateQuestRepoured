@@ -4,10 +4,10 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -49,56 +49,30 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 	@Override
 	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage,
 			float alpha) {
-		// timerTillRenderUpdate++;
-		// if(timerTillRenderUpdate >= 400) {
-		// timerTillRenderUpdate = 0;
-		
-		if (te.startX == te.endX && te.startY == te.endY && te.startZ == te.endZ) {
+		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+
+		/*if (te.startX == te.endX && te.startY == te.endY && te.startZ == te.endZ) {
 			// System.out.println("No Data on Client!");
 			return;
-		}
-		//super.render(te, x, y, z, partialTicks, destroyStage, alpha);
+		}*/
+
+		//Both positions are relative coordinates, the first one is the vector from the block's position to the lower corner of the selection
+		//The second position is a vector from the lower corner to the upper corner of the selection -> structures size!
+		BlockPos startPos = te.getStructurePosVector();//new BlockPos(te.startX, te.startY, te.startZ).subtract(te.getPos());
+		BlockPos endPos = te.getStructureSize();//new BlockPos(te.endX, te.endY, te.endZ).subtract(te.getPos()).subtract(startPos);
 		
-		//Problem: This is CLIENT-SIDE, the data lies SERVER-SIDE -> No Data here
-		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-		GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
-		GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-		GlStateManager.glLineWidth(8.0F); GlStateManager.disableTexture2D();
-		GlStateManager.depthMask(false);
-		 
-		RenderGlobal.renderFilledBox(te.getSelectionAABB(), 0.0f, 0.0f, 1.0f, 0.5f);
-		 
-		GlStateManager.depthMask(true); 
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableBlend();
-		 
-
-		/*
-		 * System.out.println("x1: " + te.getSelectionAABB().minX);
-		 * System.out.println("y1: " + te.getSelectionAABB().minY);
-		 * System.out.println("z1: " + te.getSelectionAABB().minZ);
-		 */
-
-		// RenderGlobal.renderFilledBox(te.getSelectionAABB(), 0.0f, 0.0f, 1.0f, 0.5f);
-
-		// I could also use the RenderGlobal class ...
-		// }
-		/*super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-
-		if (te.startX == te.endX && te.startY == te.endY && te.startZ == te.endZ) {
-			// System.out.println("No Data on Client!");
+		if(endPos == null || startPos == null || !(endPos.getX() > 0 && endPos.getY() > 0 && endPos.getZ() > 0)) {
 			return;
 		}
-
-		BlockPos startPos = new BlockPos(te.startX, te.startY, te.startZ).subtract(te.getPos());
-		BlockPos endPos = new BlockPos(te.endX, te.endY, te.endZ).subtract(te.getPos()).subtract(startPos);
 		
 		//System.out.println("block: " + te.getPos().toString());
 		//System.out.println("start: " + startPos.toString());
 		//System.out.println("end: " + endPos.toString());
 		//System.out.println("X: " + x + "  Y: " + y + "  Z: " + z);
 
+		//System.out.println("Pos 1: " + startPos.toString());
+		//System.out.println("Pos 2: " + endPos.toString());
+		
 		double y1 = y + (double) startPos.getY() - 0.01D;
 		double y2 = y1 + (double) endPos.getY() - 0.02D;
 
@@ -122,49 +96,53 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 				GlStateManager.DestFactor.ZERO);
 		this.setLightmapDisabled(true);
 
-		this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2, 255, 223, 127);
-
+		this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2);
+		
 		this.setLightmapDisabled(false);
 		GlStateManager.glLineWidth(1.0F);
 		GlStateManager.enableLighting();
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
-		GlStateManager.enableFog();*/
+		GlStateManager.enableFog();
+		//GlStateManager.disableBlend();
 	}
 
-	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double minX, double minY, double minZ,
-			double maxX, double maxY, double maxZ, int clRed, int clGreen, int clBlue) {
-		float clAlpha = 0.0f;
-		GlStateManager.glLineWidth(2.0F);
-		buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(minX, minY, minZ).color((float) clGreen, (float) clGreen, (float) clGreen, clAlpha).endVertex();
-		clAlpha = clRed;
-		buffer.pos(minX, minY, minZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, minY, minZ).color(clGreen, clBlue, clBlue, clAlpha).endVertex();
-		buffer.pos(maxX, minY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, minY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, minY, minZ).color(clBlue, clBlue, clBlue, clAlpha).endVertex();
-		buffer.pos(minX, maxY, minZ).color(clBlue, clGreen, clBlue, clAlpha).endVertex();
-		buffer.pos(maxX, maxY, minZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, maxY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, maxY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, maxY, minZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, maxY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(minX, minY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, minY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, maxY, maxZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, maxY, minZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		buffer.pos(maxX, minY, minZ).color(clGreen, clGreen, clGreen, clAlpha).endVertex();
-		clAlpha = 0.0F;
-		buffer.pos(maxX, minY, minZ).color((float) clGreen, (float) clGreen, (float) clGreen, clAlpha).endVertex();
-		tessellator.draw();
-		GlStateManager.glLineWidth(1.0F);
-	}
+	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2)
+    {
+		int cl1 = 255;
+		int cl2 = 223;
+		int cl3 = 127;
+				
+        GlStateManager.glLineWidth(2.0F);
+        buffer.begin(3, DefaultVertexFormats.POSITION_COLOR);
+        buffer.pos(x1, y1, z1).color((float)cl2, (float)cl2, (float)cl2, 0.0F).endVertex();
+        buffer.pos(x1, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y1, z1).color(cl2, cl3, cl3, cl1).endVertex();
+        buffer.pos(x2, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y1, z1).color(cl3, cl3, cl2, cl1).endVertex();
+        buffer.pos(x1, y2, z1).color(cl3, cl2, cl3, cl1).endVertex();
+        buffer.pos(x2, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x1, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y1, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y2, z2).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y2, z1).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y1, z1).color(cl2, cl2, cl2, cl1).endVertex();
+        buffer.pos(x2, y1, z1).color((float)cl2, (float)cl2, (float)cl2, 0.0F).endVertex();
+        tessellator.draw();
+        GlStateManager.glLineWidth(1.5F);
+    }
 	
 	@Override
 	public boolean isGlobalRenderer(TileEntityExporter te) {
 		return true;
 	}
+	
+	
 
 }
