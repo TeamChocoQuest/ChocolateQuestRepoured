@@ -123,6 +123,19 @@ public class TileEntityExporter /*extends TileEntitySyncClient*/ extends TileEnt
 		}
 	}
 
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound data = super.getUpdateTag();
+		data.setTag("data",getExporterData());
+		return data;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound tag) {
+		super.handleUpdateTag(tag);
+		setExporterData(tag.getCompoundTag("data"));
+	}
+
 	public void requestSync() {
 		world.notifyBlockUpdate(this.pos, ModBlocks.EXPORTER.getDefaultState(),ModBlocks.EXPORTER.getDefaultState(),0);
 	}
