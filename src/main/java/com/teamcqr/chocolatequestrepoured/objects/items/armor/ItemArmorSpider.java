@@ -74,21 +74,23 @@ public class ItemArmorSpider extends ArmorBase
 		{
 			if(player.collidedHorizontally)
 			{
-				if(!player.isSneaking())
+				if (world.isRemote)
 				{
-					player.motionY = 0D;
-					
-					if(player.moveForward > 0F)
+					if (player.moveForward > 0)
 					{
-						player.motionY = 0.2D;  
+						player.motionY = 0.02D;
 						this.createClimbingParticles(player, world);
 					}
+					else if (player.isSneaking())
+					{
+						player.motionY = 0.0D;
+					}
+					else
+					{
+						player.motionY = -0.02D;
+					}
 				}
-				else
-				{
-					player.motionY = 0D;
-				}
-		
+				
 				player.onGround = true;
 			}
 			player.fallDistance = 0F;
