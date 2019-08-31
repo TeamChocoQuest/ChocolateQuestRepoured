@@ -78,7 +78,7 @@ public class ItemArmorSpider extends ArmorBase
 				{
 					if (player.moveForward > 0)
 					{
-						player.motionY = 0.02D;
+						player.motionY = 0.2D;
 						this.createClimbingParticles(player, world);
 					}
 					else if (player.isSneaking())
@@ -87,7 +87,7 @@ public class ItemArmorSpider extends ArmorBase
 					}
 					else
 					{
-						player.motionY = -0.02D;
+						player.motionY = -0.2D;
 					}
 				}
 				
