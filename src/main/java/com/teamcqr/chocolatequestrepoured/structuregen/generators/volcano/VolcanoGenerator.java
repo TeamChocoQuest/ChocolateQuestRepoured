@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -16,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -360,7 +360,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
 		// DONE Place spawners for dwarves/golems/whatever on path
 		for(BlockPos pos : spawnersNChestsOnPath) {
-			world.setBlockState(pos.add(0,1,0), Blocks.MOB_SPAWNER.getDefaultState());
+			/*world.setBlockState(pos.add(0,1,0), Blocks.MOB_SPAWNER.getDefaultState());
 			
 			TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos.add(0,1,0));
 			
@@ -368,7 +368,8 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
 			spawner.updateContainingBlockInfo();
 			
-			spawner.update();
+			spawner.update();*/
+			SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0,1,0), dungeon.getMob());
 		}
 	}
 
