@@ -17,6 +17,7 @@ public class CastleRoomSelector
     private int roomSize;
     private int floorsPerLayer;
     private int maxFloors;
+    private int usedFloors;
     private int numSlotsX;
     private int numSlotsZ;
     private Random random;
@@ -53,7 +54,7 @@ public class CastleRoomSelector
 
         if (largeBuilding)
         {
-            for (int floor = 0; floor < maxFloors; floor++)
+            for (int floor = 0; floor < usedFloors; floor++)
             {
                 if (vertical)
                 {
@@ -85,25 +86,47 @@ public class CastleRoomSelector
 
     private void addMainBuilding()
     {
-        int halfX = numSlotsX / 2;
-        int halfZ = numSlotsZ / 2;
-        int mainRoomsX = halfX + random.nextInt(halfX);
-        int mainRoomsZ = halfZ + random.nextInt(halfZ);
-        int offsetX = grid.getRandomXOffsetForRooms(mainRoomsX);
-        int offsetZ = grid.getRandomZOffsetForRooms(mainRoomsZ);
-
         setFirstLayerBuildable();
 
-        for (int floor = 0; floor < maxFloors; floor++)
+        for (int layer = 0; layer < MAX_LAYERS; layer++)
         {
-            for (int x = 0; x < mainRoomsX; x++)
+            int minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
+            int maxX = grid.getMaxBuildableXOnFloor(layer * floorsPerLayer);
+            int maxLenX = maxX - minX + 1;
+            int minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
+            int maxZ = grid.getMaxBuildableZOnFloor(layer * floorsPerLayer);
+            int maxLenZ = maxZ - minZ + 1;
+
+            if (Math.min(maxLenX, maxLenZ) < 2)
             {
-                for (int z = 0; z < mainRoomsZ; z++)
+                break;
+            }
+
+            int mainRoomsX = randomSubsectionLength(maxLenX);
+            int mainRoomsZ = randomSubsectionLength(maxLenZ);
+
+            int offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
+            int offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
+
+            for (int floor = 0; floor < floorsPerLayer; floor++)
+            {
+                usedFloors++;
+                for (int x = 0; x < mainRoomsX; x++)
                 {
-                    int xIndex = offsetX + x;
-                    int zIndex = offsetZ + z;
-                    grid.selectRoomForBuilding(floor, xIndex, zIndex);
-                    grid.setRoomAsMainStruct(floor, xIndex, zIndex);
+                    for (int z = 0; z < mainRoomsZ; z++)
+                    {
+                        int xIndex = minX + offsetX + x;
+                        int zIndex = minZ + offsetZ + z;
+                        int floorIndex = floor + (layer * floorsPerLayer);
+                        grid.selectRoomForBuilding(floorIndex, xIndex, zIndex);
+                        grid.setRoomAsMainStruct(floorIndex, xIndex, zIndex);
+
+                        int oneLayerUp = floorIndex + floorsPerLayer;
+                        if (oneLayerUp < maxFloors)
+                        {
+                            grid.setCellBuilable(oneLayerUp, xIndex, zIndex);
+                        }
+                    }
                 }
             }
         }
@@ -121,6 +144,13 @@ public class CastleRoomSelector
                 }
             }
         }
+    }
+
+    private int randomSubsectionLength(int mainLength)
+    {
+        int rounding = (mainLength % 2 != 0) ? 1 : 0;
+        int halfLen = mainLength / 2;
+        return halfLen + rounding + random.nextInt(mainLength);
     }
 
     private void buildVerticalFloorHallway(int floor)

@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -151,6 +149,70 @@ public class RoomGrid
             }
         }
         return result;
+    }
+
+    public int getMinBuildableXOnFloor(int floor)
+    {
+        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+                .filter(r -> r.getFloor() == floor)
+                .filter(r -> r.isBuildable())
+                .min(Comparator.comparingInt(RoomGridCell::getGridX));
+        if (result.isPresent())
+        {
+            return result.get().getGridX();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public int getMaxBuildableXOnFloor(int floor)
+    {
+        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+                .filter(r -> r.getFloor() == floor)
+                .filter(r -> r.isBuildable())
+                .max(Comparator.comparingInt(RoomGridCell::getGridX));
+        if (result.isPresent())
+        {
+            return result.get().getGridX();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public int getMinBuildableZOnFloor(int floor)
+    {
+        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+                .filter(r -> r.getFloor() == floor)
+                .filter(r -> r.isBuildable())
+                .min(Comparator.comparingInt(RoomGridCell::getGridZ));
+        if (result.isPresent())
+        {
+            return result.get().getGridZ();
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public int getMaxBuildableZOnFloor(int floor)
+    {
+        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+                .filter(r -> r.getFloor() == floor)
+                .filter(r -> r.isBuildable())
+                .max(Comparator.comparingInt(RoomGridCell::getGridZ));
+        if (result.isPresent())
+        {
+            return result.get().getGridZ();
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     public void setCellBuilable(int floor, int x, int z)
