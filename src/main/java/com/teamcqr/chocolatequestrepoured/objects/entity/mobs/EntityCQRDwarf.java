@@ -164,6 +164,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		this.home = new BlockPos(compound.getIntArray("home")[0], compound.getIntArray("home")[1], compound.getIntArray("home")[2]);
+		int[] i = compound.getIntArray("home");
+		this.home = new BlockPos(i[0], i[1], i[2]);
 	}
 }
