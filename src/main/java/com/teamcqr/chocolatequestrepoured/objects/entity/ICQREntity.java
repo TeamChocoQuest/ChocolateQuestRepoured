@@ -34,10 +34,16 @@ public interface ICQREntity {
 	
 	public BlockPos getHome();
 	
-	public default float getBaseHealthForLocation(BlockPos dungeonPos, float defBaseHealth) {
-		if(dungeonPos == null) {
-			return defBaseHealth;
+	public default float getBaseHealthForLocation(BlockPos dungeonPos, float health) {
+		if (dungeonPos != null) {
+			float x = (float) dungeonPos.getX();
+			float z = (float) dungeonPos.getZ();
+			float distance = (float) Math.sqrt(x * x + z * z);
+			
+			health *= 1.0F + distance / Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
 		}
+
+    /*
 		//System.out.println("Pos: " + dungeonPos.toString());
 		float distance = Math.abs(dungeonPos.getX()) > Math.abs(dungeonPos.getZ()) ? Math.abs(dungeonPos.getX()) : Math.abs(dungeonPos.getZ());
 		if(distance <= 0.0f) {
@@ -54,10 +60,12 @@ public interface ICQREntity {
 		//System.out.println("HP: " + (distance * defBaseHealth));
 		
 		return distance * defBaseHealth;
+    */
+    return health;
+
 	}
 	
 	public void spawnAt(int x, int y, int z);
-	
 	public default void onKilled(Entity killer, Entity killed) {
 		World world = killer.getEntityWorld();
 		if(world != null && killer instanceof EntityPlayer && this.hasFaction()) {
