@@ -91,6 +91,8 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			this.home = new BlockPos(x, y, z);
 			
 			spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+			
+			this.hasExisted = true;
 		}
 	}
 	
@@ -173,7 +175,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
 		}
 		if(this.hasExisted) {
-			compound.setBoolean("hasBeenInitialized", this.hasExisted);
+			compound.setBoolean("hasBeenInitialized", true);
 		}
 	}
 
