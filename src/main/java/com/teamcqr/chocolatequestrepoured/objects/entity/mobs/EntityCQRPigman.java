@@ -22,7 +22,9 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
-
+	
+	protected BlockPos home;
+	
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
@@ -134,6 +136,11 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	public int getRemainingHealingPotions() {
 		return 0;
+	}
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
 	}
 	
 	@Override
