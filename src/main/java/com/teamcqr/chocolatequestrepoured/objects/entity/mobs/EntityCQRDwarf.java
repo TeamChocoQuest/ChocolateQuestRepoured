@@ -32,7 +32,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		
 		this.setSize(0.55F, 1.4F);
 	}
-	
+
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		Item[] pickaxes = new Item[] {Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE};
