@@ -142,6 +142,12 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	}
 
 	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(5, new EntityAIMoveHome(this));
+	}
+	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
