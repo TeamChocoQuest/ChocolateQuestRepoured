@@ -24,9 +24,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
-	
-	protected BlockPos home;
-	
+
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
@@ -77,11 +75,6 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.DWARVES.getValue();
-	}
-
-	@Override
-	public BlockPos getHome() {
-		return home;
 	}
 
 	@Override
