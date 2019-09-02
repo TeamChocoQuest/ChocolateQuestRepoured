@@ -42,8 +42,27 @@ public interface ICQREntity {
 			
 			health *= 1.0F + distance / Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
 		}
+
+    /*
+		//System.out.println("Pos: " + dungeonPos.toString());
+		float distance = Math.abs(dungeonPos.getX()) > Math.abs(dungeonPos.getZ()) ? Math.abs(dungeonPos.getX()) : Math.abs(dungeonPos.getZ());
+		if(distance <= 0.0f) {
+			return defBaseHealth;
+		}
+		//System.out.println("Distance: " + distance);
+		distance /= Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		//System.out.println("Distance: " + distance);
+		distance /= 10;
+		//System.out.println("Distance: " + distance);
+		distance = distance < 1 ? distance+=1.0f : distance;
 		
-		return health;
+		//System.out.println("Distance: " + distance);
+		//System.out.println("HP: " + (distance * defBaseHealth));
+		
+		return distance * defBaseHealth;
+    */
+    return health;
+
 	}
 	
 	public void spawnAt(int x, int y, int z);
