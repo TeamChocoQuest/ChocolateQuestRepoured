@@ -26,6 +26,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	
+	protected BlockPos home;
+	
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
@@ -142,7 +144,12 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
+	}
+	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
