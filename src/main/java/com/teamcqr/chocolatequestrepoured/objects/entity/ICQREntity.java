@@ -57,6 +57,7 @@ public interface ICQREntity {
 	}
 	
 	public void spawnAt(int x, int y, int z);
+	
 	public default void onKilled(Entity killer, Entity killed) {
 		World world = killer.getEntityWorld();
 		if(world != null && killer instanceof EntityPlayer && this.hasFaction()) {
