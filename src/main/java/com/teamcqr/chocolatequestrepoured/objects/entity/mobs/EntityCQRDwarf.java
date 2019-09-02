@@ -25,12 +25,21 @@ import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	
+	protected BlockPos home;
+	
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
 		this.setSize(0.55F, 1.4F);
 	}
-
+	
+	public EntityCQRDwarf(World worldIn, BlockPos home) {
+		super(worldIn);
+		
+		this.setSize(0.55F, 1.4F);
+		this.home = home;
+	}
+	
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		Item[] pickaxes = new Item[] {Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE};
@@ -75,6 +84,11 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.DWARVES.getValue();
+	}
+
+	@Override
+	public BlockPos getHome() {
+		return home;
 	}
 
 	@Override
@@ -141,4 +155,15 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		return 0;
 	}
 
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		this.home = new BlockPos(compound.getIntArray("home")[0], compound.getIntArray("home")[1], compound.getIntArray("home")[2]);
+	}
 }
