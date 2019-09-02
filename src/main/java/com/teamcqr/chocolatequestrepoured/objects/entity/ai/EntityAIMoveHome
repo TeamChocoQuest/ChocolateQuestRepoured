@@ -1,0 +1,37 @@
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
+
+import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.ai.EntityAIBase;
+
+public class EntityAIMoveHome extends EntityAIBase {
+	
+	private final EntityCreature creature;
+	
+	public EntityAIMoveHome(EntityCreature creature) {
+		this.creature = creature;
+	}
+	
+	@Override
+	public boolean shouldExecute() {
+		if (creature.getAttackTarget() == null && creature instanceof ICQREntity) {
+			ICQREntity cqrentity = (ICQREntity) creature;
+			if (cqrentity.home != null && creature.getDistance(cqrentity.home.getX(), cqrentity.home.getY(), cqrentity.home.getZ()) > 20.0D) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	@Override
+	public void startExecuting() {
+		ICQREntity cqrentity = (ICQREntity) creature;
+		creature.getNavigator().tryMoveToXYZ(cqrentity.home.getX(), cqrentity.home.getY(), cqrentity.home.getZ(), 1.0D);
+	}
+	
+	@Override
+	public boolean shouldContinueExecuting() {
+		return !creature.getNavigator().noPath();
+	}
+	
+}
