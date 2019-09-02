@@ -24,7 +24,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
-
+	
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
