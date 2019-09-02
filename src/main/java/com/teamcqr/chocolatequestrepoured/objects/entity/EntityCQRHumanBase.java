@@ -92,6 +92,12 @@ public class EntityCQRHumanBase extends EntityCreature
 	}
 
 	@Override
+	public BlockPos getHome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
 	public void spawnAt(int x, int y, int z) {
 		// TODO Auto-generated method stub
 
