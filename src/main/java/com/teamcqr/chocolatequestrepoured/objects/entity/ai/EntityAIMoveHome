@@ -23,7 +23,8 @@ public class EntityAIMoveHome extends EntityAIBase {
 	
 	@Override
 	public void startExecuting() {
-		creature.getNavigator().tryMoveToXYZ(creature.home.getX(), creature.home.getY(), creature.home.getZ(), 1.0D);
+		ICQREntity cqrentity = (ICQREntity) creature;
+		creature.getNavigator().tryMoveToXYZ(cqrentity.home.getX(), cqrentity.home.getY(), cqrentity.home.getZ(), 1.0D);
 	}
 	
 	@Override
