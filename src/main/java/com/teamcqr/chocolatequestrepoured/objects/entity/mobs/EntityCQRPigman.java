@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 
@@ -99,6 +100,7 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
     @Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
+		this.home = new BlockPos(x, y, z);
 		
 		spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
 	}
