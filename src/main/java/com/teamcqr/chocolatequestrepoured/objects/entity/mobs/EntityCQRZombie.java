@@ -17,7 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityCQRZombie extends EntityZombie implements ICQREntity {
-
+	
+	protected BlockPos home;
+	
 	public EntityCQRZombie(World worldIn) {
         	super(worldIn);
 	}
@@ -101,7 +103,12 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 	protected SoundEvent getDeathSound() {
 		return super.getDeathSound();
 	}
-
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
+	}
+	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
