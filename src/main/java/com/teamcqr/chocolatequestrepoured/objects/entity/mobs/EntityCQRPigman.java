@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 
@@ -99,6 +100,7 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
     @Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
+		this.home = new BlockPos(x, y, z);
 		
 		spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
 	}
@@ -134,4 +136,30 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 		return 0;
 	}
 	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(3, new EntityAIMoveHome(this));
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		
+		boolean flag = this.home != null;
+		compound.setBoolean("hasHome", flag);
+		if (flag) {
+			compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+		}
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		
+		if (compound.getBoolean("hasHome")) {
+			int[] i = compound.getIntArray("home");
+			this.home = new BlockPos(i[0], i[1], i[2]);
+		}
+	}
 }
