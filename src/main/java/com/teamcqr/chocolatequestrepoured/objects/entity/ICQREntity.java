@@ -48,12 +48,12 @@ public interface ICQREntity {
 		//System.out.println("Distance: " + distance);
 		distance /= 10;
 		//System.out.println("Distance: " + distance);
-		distance = distance < 1 ? distance++ : distance;
+		distance = distance < 1 ? distance+=1.0f : distance;
 		
 		//System.out.println("Distance: " + distance);
 		//System.out.println("HP: " + (distance * defBaseHealth));
 		
-		return distance * getBaseHealth();
+		return distance * defBaseHealth;
 	}
 	
 	public void spawnAt(int x, int y, int z);
