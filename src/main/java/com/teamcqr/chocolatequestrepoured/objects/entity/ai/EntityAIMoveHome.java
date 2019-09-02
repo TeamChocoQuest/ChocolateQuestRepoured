@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityAIMoveHome extends EntityAIBase {
 	
@@ -15,8 +16,8 @@ public class EntityAIMoveHome extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		if (creature.getAttackTarget() == null && creature instanceof ICQREntity) {
-			ICQREntity cqrentity = (ICQREntity) creature;
-			if (cqrentity.home != null && creature.getDistance(cqrentity.home.getX(), cqrentity.home.getY(), cqrentity.home.getZ()) > 20.0D) {
+			BlockPos pos = ((ICQREntity) creature).getHome();
+			if (pos != null && creature.getDistance(pos.getX(), pos.getY(), pos.getZ()) > 20.0D) {
 				return true;
 			}
 		}
@@ -25,8 +26,8 @@ public class EntityAIMoveHome extends EntityAIBase {
 	
 	@Override
 	public void startExecuting() {
-		ICQREntity cqrentity = (ICQREntity) creature;
-		creature.getNavigator().tryMoveToXYZ(cqrentity.home.getX(), cqrentity.home.getY(), cqrentity.home.getZ(), 1.0D);
+		BlockPos pos = ((ICQREntity) creature).getHome();
+		creature.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
 	}
 	
 	@Override

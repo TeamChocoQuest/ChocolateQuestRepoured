@@ -4,9 +4,9 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -22,7 +23,9 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
-
+	
+	protected BlockPos home;
+	
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
@@ -134,6 +137,11 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	public int getRemainingHealingPotions() {
 		return 0;
+	}
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
 	}
 	
 	@Override

@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -17,7 +17,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityCQRZombie extends EntityZombie implements ICQREntity {
-
+	
+	protected BlockPos home;
+	
 	public EntityCQRZombie(World worldIn) {
         	super(worldIn);
 	}
@@ -101,7 +103,12 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 	protected SoundEvent getDeathSound() {
 		return super.getDeathSound();
 	}
-
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
+	}
+	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
