@@ -21,7 +21,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRangedAttackMob, IEntityMultiPart {
-	
+
+	protected BlockPos home;
+
 	private MultiPartEntityPart[] dragonBodyParts;
 	
 	private MultiPartEntityPart headPart = new MultiPartEntityPart(this, "head", 2.5F, 1.25F);
@@ -258,6 +260,11 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	}
 
 	@Override
+	public BlockPos getHome() {
+		return home;
+	}
+
+	@Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
 		
@@ -284,6 +291,19 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	@Override
 	public int getRemainingHealingPotions() {
 		return 0;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		int[] i = compound.getIntArray("home");
+		this.home = new BlockPos(i[0], i[1], i[2]);
 	}
 
 }
