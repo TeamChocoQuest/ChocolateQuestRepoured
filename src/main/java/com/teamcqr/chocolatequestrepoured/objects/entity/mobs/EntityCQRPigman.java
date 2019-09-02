@@ -22,6 +22,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 
+	protected BlockPos home;
+
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
@@ -43,6 +45,11 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.PIGMEN.getValue();
+	}
+
+	@Override
+	public BlockPos getHome() {
+		return home;
 	}
 
 	@Override
@@ -133,5 +140,17 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-	
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		int[] i = compound.getIntArray("home");
+		this.home = new BlockPos(i[0], i[1], i[2]);
+	}
 }
