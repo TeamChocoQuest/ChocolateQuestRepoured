@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
+import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -26,6 +27,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
+	
+	private boolean hasExisted = false;
 	
 	protected BlockPos home;
 	
@@ -84,9 +87,11 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
-		this.home = new BlockPos(x, y, z);
-		
-		spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+		if(!hasExisted) {
+			this.home = new BlockPos(x, y, z);
+			
+			spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+		}
 	}
 	
 	@Override
@@ -164,17 +169,19 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		boolean flag = this.home != null;
 		compound.setBoolean("hasHome", flag);
 		if (flag) {
-			compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
+		this.hasExisted = true;
+		
 		super.readEntityFromNBT(compound);
 		
 		if (compound.getBoolean("hasHome")) {
-			int[] i = compound.getIntArray("home");
-			this.home = new BlockPos(i[0], i[1], i[2]);
+			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
 		}
+		
 	}
 }
