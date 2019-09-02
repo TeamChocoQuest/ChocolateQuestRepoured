@@ -22,8 +22,6 @@ import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 
-	protected BlockPos home;
-
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
@@ -45,11 +43,6 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.PIGMEN.getValue();
-	}
-
-	@Override
-	public BlockPos getHome() {
-		return home;
 	}
 
 	@Override
