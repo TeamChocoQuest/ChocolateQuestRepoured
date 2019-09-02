@@ -14,6 +14,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -21,6 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRangedAttackMob, IEntityMultiPart {
+	
+	protected BlockPos home;
 	
 	private MultiPartEntityPart[] dragonBodyParts;
 	
@@ -285,7 +288,12 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-
+	
+	@Override
+	public BlockPos getHome() {
+		return this.home;
+	}
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
