@@ -32,7 +32,7 @@ public interface ICQREntity {
 	
 	public float getBaseHealth();
 	
-	public BlockPos getHome();
+	public BlockPos home = null;
 	
 	public default float getBaseHealthForLocation(BlockPos dungeonPos, float defBaseHealth) {
 		if(dungeonPos == null) {
