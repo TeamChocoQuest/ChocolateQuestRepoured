@@ -133,7 +133,7 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
