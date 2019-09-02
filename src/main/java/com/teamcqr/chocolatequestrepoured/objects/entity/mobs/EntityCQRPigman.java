@@ -135,6 +135,12 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	}
 	
 	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(3, new EntityAIMoveHome(this));
+	}
+	
+	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
