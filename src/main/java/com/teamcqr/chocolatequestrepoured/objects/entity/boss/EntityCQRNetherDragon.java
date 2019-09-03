@@ -5,6 +5,8 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.Entity;
@@ -16,6 +18,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -24,10 +28,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRangedAttackMob, IEntityMultiPart {
 
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
+	protected BlockPos home;
+	protected EntityLivingBase leader;
 
 	private MultiPartEntityPart[] dragonBodyParts;
 	
@@ -294,13 +296,8 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	}
 
 	@Override
-	public void setHome(BlockPos home) {
-		this.home = home;
-	}
-
-	@Override
-	public BlockPos getHome() {
-		return home;
+	public EntityLivingBase getLeader() {
+		return leader;
 	}
 
 	@Override
@@ -309,8 +306,13 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	}
 
 	@Override
-	public EntityLivingBase getLeader() {
-		return leader;
+	public BlockPos getHome() {
+		return home;
+	}
+
+	@Override
+	public void setHome(BlockPos home) {
+		this.home = home;
 	}
 
 	@Override
@@ -326,8 +328,8 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveToHome(this));
-		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(3, new EntityAIMoveToHome(this));
+		this.tasks.addTask(4, new EntityAIMoveToLeader(this));
 	}
 
 	@Override
@@ -349,8 +351,6 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		this.hasExisted = true;
-
 		super.readEntityFromNBT(compound);
 
 		if (compound.getBoolean("hasHome")) {
