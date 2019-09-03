@@ -6,7 +6,8 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -28,10 +29,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
+	protected BlockPos home;
+	protected EntityLivingBase leader;
 
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
@@ -147,23 +146,28 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	}
 
 	@Override
-	public void setHome(BlockPos home) {
-		this.home = home;
-	}
-
-	@Override
-	public BlockPos getHome() {
-		return home;
+	public EntityLivingBase getLeader() {
+		for (Entity entity : this.world.loadedEntityList) {
+			if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
+				return (EntityLivingBase) entity;
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
+		this.leaderUUID = leader.getPersistentID();
 	}
 
 	@Override
-	public EntityLivingBase getLeader() {
-		return leader;
+	public BlockPos getHome() {
+		return this.home;
+	}
+
+	@Override
+	public void setHome(BlockPos home) {
+		this.home = home;
 	}
 
 	@Override
@@ -179,8 +183,8 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveHome(this));
-		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(3, new EntityAIMoveToHome(this));
+		this.tasks.addTask(4, new EntityAIMoveToLeader(this));
 	}
 
 	@Override
@@ -190,28 +194,26 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 		boolean hasHome = this.home != null;
 		compound.setBoolean("hasHome", hasHome);
 		if (hasHome) {
-			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+			compound.setTag("home", NBTUtil.createPosTag(this.home));
 		}
 
-		boolean hasLeader = this.leader != null;
+		boolean hasLeader = this.leaderUUID != null;
 		compound.setBoolean("hasLeader", hasLeader);
 		if (hasLeader) {
-			compound.setInteger("leader", this.leader.getEntityId());
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		this.hasExisted = true;
-
 		super.readEntityFromNBT(compound);
 
 		if (compound.getBoolean("hasHome")) {
-			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
 		}
 
 		if (compound.getBoolean("hasLeader")) {
-			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 	}
 
