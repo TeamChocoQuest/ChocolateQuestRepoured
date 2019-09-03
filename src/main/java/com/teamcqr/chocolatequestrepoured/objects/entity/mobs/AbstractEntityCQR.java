@@ -32,6 +32,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
+		this.setSize(0.6F, 1.8F);
 	}
 
 	@Override
@@ -106,9 +107,9 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		x -= (double) spawn.getX();
 		z -= (double) spawn.getZ();
 		float distance = (float) Math.sqrt(x * x + z * z);
-		
+
 		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
-		
+
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
 	}
