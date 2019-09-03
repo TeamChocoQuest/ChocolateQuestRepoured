@@ -13,6 +13,13 @@ public class EntityCQRPigman extends AbstractEntityCQR {
 	}
 
 	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_IRON));
+		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+	}
+
+	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.PIGMEN.getValue();
 	}
