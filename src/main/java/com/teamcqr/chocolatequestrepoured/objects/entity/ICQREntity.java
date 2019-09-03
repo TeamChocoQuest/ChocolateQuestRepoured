@@ -65,6 +65,8 @@ public interface ICQREntity {
 
 	}
 	
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z);
+	
 	public void spawnAt(int x, int y, int z);
 	public default void onKilled(Entity killer, Entity killed) {
 		World world = killer.getEntityWorld();

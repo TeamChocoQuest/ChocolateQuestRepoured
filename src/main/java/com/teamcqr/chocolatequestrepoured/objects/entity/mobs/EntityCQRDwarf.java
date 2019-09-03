@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	
-	private boolean hasExisted = false;
+	//private boolean hasExisted = false;
 	
 	protected BlockPos home;
 	
@@ -43,7 +43,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		Item[] pickaxes = new Item[] {Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE};
 		Item[] helmets = new Item[] {Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.CHAINMAIL_HELMET};
 		
-		Random rdm = new Random();
+		Random rdm = this.rand;
 		
 		this.setItemStackToSlot(rdm.nextBoolean() ? EntityEquipmentSlot.OFFHAND : EntityEquipmentSlot.MAINHAND, new ItemStack(pickaxes[rdm.nextInt(pickaxes.length)], 1));
 		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(helmets[rdm.nextInt(helmets.length)], 1));
@@ -87,30 +87,18 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
-		if(!hasExisted) {
+		/*if(!hasExisted) {
 			this.home = new BlockPos(x, y, z);
 			
 			spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
 			
 			this.hasExisted = true;
-		}
+		}*/
 	}
 	
 	@Override
 	public void spawnAt(int x, int y, int z) {
-		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
-			//sets the actual health
-			//changes the right attribute to apply
-			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
-			//System.out.println("New HP: " + newHP);
-			if(attribute != null) {
-				attribute.setBaseValue(newHP);
-				setHealth(getMaxHealth());
-			}
-			
-			//setPosition(x, y, z);
-		}
+		
 	}
 	
 	@Override
@@ -174,9 +162,9 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			//compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
 			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
 		}
-		if(this.hasExisted) {
+		/*if(this.hasExisted) {
 			compound.setBoolean("hasBeenInitialized", true);
-		}
+		}*/
 	}
 
 	@Override
@@ -189,8 +177,27 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
 		}
 		
-		if(compound.getBoolean("hasBeenInitialized")) {
+		/*if(compound.getBoolean("hasBeenInitialized")) {
 			this.hasExisted = compound.getBoolean("hasBeenInitialized");
+		}*/
+	}
+
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
+			//sets the actual health
+			//changes the right attribute to apply
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
+			//System.out.println("New HP: " + newHP);
+			if(attribute != null) {
+				attribute.setBaseValue(newHP);
+				setHealth(getMaxHealth());
+			}
+			
+			this.home = new BlockPos(x, y, z);
+			
+			//setPosition(x, y, z);
 		}
 	}
 }

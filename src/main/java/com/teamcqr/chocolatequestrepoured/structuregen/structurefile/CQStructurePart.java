@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -308,6 +309,8 @@ public class CQStructurePart extends Template {
 				tileData.setInteger("x", spawnerPos.getX());
 				tileData.setInteger("y", spawnerPos.getY());
 				tileData.setInteger("z", spawnerPos.getZ());
+
+				((TileEntitySpawner)te).setDungeonSpawner();
 				
 				te.readFromNBT(tileData);
 				te.mirror(placementIn.getMirror());
