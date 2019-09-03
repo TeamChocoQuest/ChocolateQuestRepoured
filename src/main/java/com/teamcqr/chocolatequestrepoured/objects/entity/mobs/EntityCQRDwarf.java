@@ -1,3 +1,4 @@
+
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import java.util.Random;
@@ -147,9 +148,30 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	}
 	
 	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leader = leader;
+	}
+
+	@Override
+	public EntityLivingBase getLeader() {
+		return leader;
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateGround(this, worldIn) {
+			@Override
+			public float getPathSearchRange() {
+				return 128.0F;
+			}
+		};
+	}
+	
+	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(5, new EntityAIMoveHome(this));
+		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
 	
 	@Override
@@ -161,6 +183,11 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		if (flag) {
 			//compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
 			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+		}
+		boolean hasLeader = this.leader != null;
+		compound.setBoolean("hasLeader", hasLeader);
+		if (hasLeader) {
+			compound.setInteger("leader", this.leader.getEntityId());
 		}
 		/*if(this.hasExisted) {
 			compound.setBoolean("hasBeenInitialized", true);
@@ -175,6 +202,11 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			//int[] i = compound.getIntArray("home");
 			//this.home = new BlockPos(i[0], i[1], i[2]);
 			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+		}
+		
+		if (compound.getBoolean("hasLeader")) {
+			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+
 		}
 		
 		/*if(compound.getBoolean("hasBeenInitialized")) {
