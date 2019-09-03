@@ -75,6 +75,14 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.tasks.addTask(15, new EntityAIMoveToHome(this));
 	}
 
+	@Nullable
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
+		this.setEquipmentBasedOnDifficulty(difficulty);
+		this.setEnchantmentBasedOnDifficulty(difficulty);
+		return ientitylivingdata;
+	}
+
 	public EntityLivingBase getLeader() {
 		if (this.hasLeader()) {
 			for (Entity entity : this.world.loadedEntityList) {
