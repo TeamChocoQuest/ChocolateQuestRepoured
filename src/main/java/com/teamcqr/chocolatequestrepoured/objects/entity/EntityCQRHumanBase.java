@@ -144,4 +144,10 @@ public class EntityCQRHumanBase extends EntityCreature
 		return healingPotions;
 	}
 
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
