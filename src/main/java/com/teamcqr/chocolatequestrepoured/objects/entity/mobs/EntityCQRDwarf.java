@@ -1,3 +1,4 @@
+
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import java.util.Random;
@@ -10,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityVindicator;
@@ -20,6 +22,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -27,14 +31,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
-
-
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
-
-
+	
+	//private boolean hasExisted = false;
+	
+	protected BlockPos home;
+	private EntityLivingBase leader;
+	
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
@@ -46,7 +48,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		Item[] pickaxes = new Item[] {Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE};
 		Item[] helmets = new Item[] {Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.CHAINMAIL_HELMET};
 		
-		Random rdm = new Random();
+		Random rdm = this.rand;
 		
 		this.setItemStackToSlot(rdm.nextBoolean() ? EntityEquipmentSlot.OFFHAND : EntityEquipmentSlot.MAINHAND, new ItemStack(pickaxes[rdm.nextInt(pickaxes.length)], 1));
 		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(helmets[rdm.nextInt(helmets.length)], 1));
@@ -90,31 +92,18 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	@Override
 	public void setPosition(double x, double y, double z) {
 		super.setPosition(x, y, z);
-		if(!hasExisted) {
+		/*if(!hasExisted) {
 			this.home = new BlockPos(x, y, z);
 			
 			spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
-      
+			
 			this.hasExisted = true;
-
-		}
+		}*/
 	}
 	
 	@Override
 	public void spawnAt(int x, int y, int z) {
-		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
-			//sets the actual health
-			//changes the right attribute to apply
-			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
-			//System.out.println("New HP: " + newHP);
-			if(attribute != null) {
-				attribute.setBaseValue(newHP);
-				setHealth(getMaxHealth());
-			}
-			
-			//setPosition(x, y, z);
-		}
+		
 	}
 	
 	@Override
@@ -156,17 +145,12 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-
-	@Override
-	public void setHome(BlockPos home) {
-		this.home = home;
-	}
-
+	
 	@Override
 	public BlockPos getHome() {
-		return home;
+		return this.home;
 	}
-
+	
 	@Override
 	public void setLeader(EntityLivingBase leader) {
 		this.leader = leader;
@@ -186,46 +170,76 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			}
 		};
 	}
-
+	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(5, new EntityAIMoveHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-
-
-		boolean hasHome = this.home != null;
-		compound.setBoolean("hasHome", hasHome);
-		if (hasHome) {
+		
+		boolean flag = this.home != null;
+		compound.setBoolean("hasHome", flag);
+		if (flag) {
+			//compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
 			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
 		}
-
 		boolean hasLeader = this.leader != null;
 		compound.setBoolean("hasLeader", hasLeader);
 		if (hasLeader) {
 			compound.setInteger("leader", this.leader.getEntityId());
 		}
+		/*if(this.hasExisted) {
+			compound.setBoolean("hasBeenInitialized", true);
+		}*/
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		this.hasExisted = true;
-
 		super.readEntityFromNBT(compound);
-
+		
 		if (compound.getBoolean("hasHome")) {
-
+			//int[] i = compound.getIntArray("home");
+			//this.home = new BlockPos(i[0], i[1], i[2]);
 			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
 		}
-
+		
 		if (compound.getBoolean("hasLeader")) {
 			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
 
 		}
+		
+		/*if(compound.getBoolean("hasBeenInitialized")) {
+			this.hasExisted = compound.getBoolean("hasBeenInitialized");
+		}*/
+	}
+
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
+			//sets the actual health
+			//changes the right attribute to apply
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
+			//System.out.println("New HP: " + newHP);
+			if(attribute != null) {
+				attribute.setBaseValue(newHP);
+				setHealth(getMaxHealth());
+			}
+			
+			this.home = new BlockPos(x, y, z);
+			
+			//setPosition(x, y, z);
+		}
+	}
+
+	@Override
+	public void setHome(BlockPos home) {
+		// TODO Auto-generated method stub
+		
 	}
 }

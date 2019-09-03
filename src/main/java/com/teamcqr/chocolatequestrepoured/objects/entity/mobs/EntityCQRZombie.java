@@ -6,11 +6,15 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
+import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -118,16 +122,6 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 	}
 
 	@Override
-	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
-	}
-
-	@Override
-	public EntityLivingBase getLeader() {
-		return leader;
-	}
-
-	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		return new PathNavigateGround(this, worldIn) {
 			@Override
@@ -140,7 +134,7 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(5, new EntityAIMoveHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
 
@@ -174,5 +168,23 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 		if (compound.getBoolean("hasLeader")) {
 			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
 		}
+	}
+
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public EntityLivingBase getLeader() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		// TODO Auto-generated method stub
+		
 	}
 }
