@@ -134,24 +134,28 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		boolean armorBroke = false;
 		float hpPrcntg = this.getHealth() / this.getMaxHealth();
 
+		// below 80% health -> remove boobs
 		if (hpPrcntg <= 0.8F) {
 			if (!this.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty()) {
 				this.setItemStackToSlot(EntityEquipmentSlot.FEET, ItemStack.EMPTY);
 				armorBroke = true;
 			}
 
+			// below 60% health -> remove helmet
 			if (hpPrcntg <= 0.6F) {
 				if (!this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()) {
 					this.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
 					armorBroke = true;
 				}
 
+				// below 40% health -> remove leggings
 				if (hpPrcntg <= 0.4F) {
 					if (!this.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()) {
 						this.setItemStackToSlot(EntityEquipmentSlot.LEGS, ItemStack.EMPTY);
 						armorBroke = true;
 					}
 
+					// below 20% health -> remove chestplate
 					if (hpPrcntg <= 0.2F) {
 						if (!this.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()) {
 							this.setItemStackToSlot(EntityEquipmentSlot.CHEST, ItemStack.EMPTY);
