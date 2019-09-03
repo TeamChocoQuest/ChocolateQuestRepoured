@@ -15,11 +15,15 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 public class EntityCQRHumanBase extends EntityCreature
 		implements ICQREntity, IEntityAdditionalSpawnData, IEntityOwnable {
-	
+
+	private boolean hasExisted = false;
+
+	public BlockPos home;
+	public EntityLivingBase leader;
+
 	private int intelligence;
 	private boolean isDefending;
 	private boolean sitting;
-	private EntityLivingBase leader;
 	private double attackDistance;
 	private int healingPotions = 2;
 
@@ -107,12 +111,9 @@ public class EntityCQRHumanBase extends EntityCreature
 	public boolean isSitting() {
 		return sitting;
 	}
+
 	public void setSitting(boolean flag) {
 		sitting = flag;
-	}
-
-	public EntityLivingBase getLeader() {
-		return leader;
 	}
 
 	public int getInteligence() {
@@ -144,4 +145,72 @@ public class EntityCQRHumanBase extends EntityCreature
 		return healingPotions;
 	}
 
+	@Override
+	public void setHome(BlockPos home) {
+		this.home = home;
+	}
+
+	@Override
+	public BlockPos getHome() {
+		return home;
+	}
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leader = leader;
+	}
+
+	@Override
+	public EntityLivingBase getLeader() {
+		return leader;
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateGround(this, worldIn) {
+			@Override
+			public float getPathSearchRange() {
+				return 128.0F;
+			}
+		};
+	}
+
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+
+		boolean hasHome = this.home != null;
+		compound.setBoolean("hasHome", hasHome);
+		if (hasHome) {
+			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+		}
+
+		boolean hasLeader = this.leader != null;
+		compound.setBoolean("hasLeader", hasLeader);
+		if (hasLeader) {
+			compound.setInteger("leader", this.leader.getEntityId());
+		}
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		this.hasExisted = true;
+
+		super.readEntityFromNBT(compound);
+
+		if (compound.getBoolean("hasHome")) {
+			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+		}
+
+		if (compound.getBoolean("hasLeader")) {
+			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+		}
+	}
 }
