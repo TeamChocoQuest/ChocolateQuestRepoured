@@ -1,23 +1,22 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityAIMoveToHome extends EntityAIBase {
 
-	protected final EntityLiving entity;
+	protected final AbstractEntityCQR entity;
 
-	public EntityAIMoveToHome(EntityLiving entity) {
+	public EntityAIMoveToHome(AbstractEntityCQR entity) {
 		this.entity = entity;
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity instanceof ICQREntity && (((ICQREntity) this.entity).getLeader() == null || ((ICQREntity) this.entity).getLeader().isDead)) {
-			BlockPos pos = ((ICQREntity) this.entity).getHome();
+		if (!this.entity.hasLeader()) {
+			BlockPos pos = this.entity.getHomePosition();
 			if (pos != null) {
 				double x = pos.getX() - this.entity.posX;
 				double y = pos.getY() - this.entity.posY;
@@ -37,7 +36,7 @@ public class EntityAIMoveToHome extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		BlockPos pos = ((ICQREntity) this.entity).getHome();
+		BlockPos pos = this.entity.getHomePosition();
 		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
 	}
 }
