@@ -23,9 +23,12 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
-	
-	protected BlockPos home;
-	
+
+	private boolean hasExisted = false;
+
+	public BlockPos home;
+	public EntityLivingBase leader;
+
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
 		
@@ -138,36 +141,73 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-	
+
+	@Override
+	public void setHome(BlockPos home) {
+		this.home = home;
+	}
+
 	@Override
 	public BlockPos getHome() {
-		return this.home;
+		return home;
 	}
-	
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leader = leader;
+	}
+
+	@Override
+	public EntityLivingBase getLeader() {
+		return leader;
+	}
+
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateGround(this, worldIn) {
+			@Override
+			public float getPathSearchRange() {
+				return 128.0F;
+			}
+		};
+	}
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(3, new EntityAIMoveHome(this));
+		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		
-		boolean flag = this.home != null;
-		compound.setBoolean("hasHome", flag);
-		if (flag) {
-			compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
+
+		boolean hasHome = this.home != null;
+		compound.setBoolean("hasHome", hasHome);
+		if (hasHome) {
+			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+		}
+
+		boolean hasLeader = this.leader != null;
+		compound.setBoolean("hasLeader", hasLeader);
+		if (hasLeader) {
+			compound.setInteger("leader", this.leader.getEntityId());
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
+		this.hasExisted = true;
+
 		super.readEntityFromNBT(compound);
-		
+
 		if (compound.getBoolean("hasHome")) {
-			int[] i = compound.getIntArray("home");
-			this.home = new BlockPos(i[0], i[1], i[2]);
+			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+		}
+
+		if (compound.getBoolean("hasLeader")) {
+			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
 		}
 	}
 
