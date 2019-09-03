@@ -5,14 +5,16 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
-import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -22,10 +24,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
+	protected BlockPos home;
+	protected UUID leaderUUID;
 
 	public EntityCQRZombie(World worldIn) {
         	super(worldIn);
