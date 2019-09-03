@@ -73,6 +73,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(10, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(15, new EntityAIMoveToHome(this));
+
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 	}
 
 	@Nullable
