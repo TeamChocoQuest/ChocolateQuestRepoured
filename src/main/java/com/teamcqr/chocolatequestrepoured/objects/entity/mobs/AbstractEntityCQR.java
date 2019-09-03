@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
@@ -9,8 +11,10 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +26,7 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntityCQR extends EntityMob {
@@ -84,6 +89,9 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		return ientitylivingdata;
 	}
+
+	@Override
+	protected abstract void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty);
 
 	public EntityLivingBase getLeader() {
 		if (this.hasLeader()) {
