@@ -135,4 +135,10 @@ public class EntityCQRZombie extends EntityZombie implements ICQREntity {
 			this.home = new BlockPos(i[0], i[1], i[2]);
 		}
 	}
+
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		
+	}
 }
