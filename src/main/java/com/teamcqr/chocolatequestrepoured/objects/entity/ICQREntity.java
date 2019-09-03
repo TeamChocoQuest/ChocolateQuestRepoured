@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -137,6 +138,12 @@ public interface ICQREntity {
     		//System.out.println("Sound played!");
     	}
 	}
+
+	EntityLivingBase getLeader();
+
+	void setLeader(EntityLivingBase leader);
+
+	void setHome(BlockPos home);
 
 	
 }

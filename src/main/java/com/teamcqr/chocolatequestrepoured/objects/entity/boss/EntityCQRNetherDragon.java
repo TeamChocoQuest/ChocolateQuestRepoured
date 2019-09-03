@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -359,5 +360,11 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 		if (compound.getBoolean("hasLeader")) {
 			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
 		}
+	}
+
+	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		// TODO Auto-generated method stub
+		
 	}
 }

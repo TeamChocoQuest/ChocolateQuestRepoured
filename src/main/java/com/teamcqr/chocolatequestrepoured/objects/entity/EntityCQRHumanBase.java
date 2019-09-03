@@ -3,12 +3,17 @@ package com.teamcqr.chocolatequestrepoured.objects.entity;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
+import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -96,11 +101,6 @@ public class EntityCQRHumanBase extends EntityCreature
 		return 20.0F;
 	}
 
-	@Override
-	public BlockPos getHome() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void spawnAt(int x, int y, int z) {
@@ -184,7 +184,7 @@ public class EntityCQRHumanBase extends EntityCreature
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(5, new EntityAIMoveHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
 

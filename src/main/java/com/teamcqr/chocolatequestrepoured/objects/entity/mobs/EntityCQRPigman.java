@@ -7,7 +7,9 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
+import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.monster.EntityPigZombie;
@@ -16,6 +18,8 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -175,7 +179,7 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveToHome(this));
+		this.tasks.addTask(5, new EntityAIMoveHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
 
