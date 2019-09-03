@@ -231,27 +231,4 @@ public class EntityCQRHumanBase extends EntityCreature
 		}
 	}
 
-			compound.setTag("home", NBTUtil.createPosTag(this.home));
-		}
-
-		boolean hasLeader = this.leaderUUID != null;
-		compound.setBoolean("hasLeader", hasLeader);
-		if (hasLeader) {
-			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
-		}
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
-
-		if (compound.getBoolean("hasHome")) {
-			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
-		}
-
-		if (compound.getBoolean("hasLeader")) {
-			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
-		}
-	}
-
 }
