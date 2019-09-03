@@ -22,6 +22,7 @@ public class EntityHandler
 {
 	public static void registerEntity()
 	{
+		/*
 		registerModEntity(":slime_part", EntitySlimePart.class, "EntityPartSlime", Reference.ENTITY_SLIME_PART);
 		registerModEntity(":projectile_earth_quake", ProjectileEarthQuake.class, "ProjectileEarthQuake", Reference.PROJECTILE_EARTH_QUAKE);
 		registerModEntity(":projectile_bullet", ProjectileBullet.class, "ProjectileBullet", Reference.PROJECTILE_BULLET);
@@ -34,6 +35,7 @@ public class EntityHandler
 		registerModEntity(":mob_cqrpigman", EntityCQRPigman.class, "EntityCQRPigman", Reference.ENTITY_CQRPIGMAN_ID, 3289650, 000000);
 		registerModEntity(":mob_cqrdwarf", EntityCQRDwarf.class, "EntityCQRDwarf", Reference.ENTITY_CQRDWARF_ID, 3289650, 000000);
 		registerModEntity(":boss_cqrnether_dragon", EntityCQRNetherDragon.class, "EntityCQRBossNetherDragon", Reference.ENTITY_BOSS_NETHER_DRAGON, 000000, 3289650);
+		*/
 	}
 	
 	public static void registerModEntity(String path, Class<? extends Entity> entityClass, String entityName, int id)
