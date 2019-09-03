@@ -7,10 +7,11 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
-import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -22,6 +23,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -31,12 +33,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
-	
-	//private boolean hasExisted = false;
-	
+
 	protected BlockPos home;
-	private EntityLivingBase leader;
-	
+	protected UUID leaderUUID;
+
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
 		
@@ -145,20 +145,30 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	public int getRemainingHealingPotions() {
 		return 0;
 	}
-	
+
+	@Override
+	public EntityLivingBase getLeader() {
+		for (Entity entity : this.world.loadedEntityList) {
+			if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
+				return (EntityLivingBase) entity;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leaderUUID = leader.getPersistentID();
+	}
+
 	@Override
 	public BlockPos getHome() {
 		return this.home;
 	}
-	
-	@Override
-	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
-	}
 
 	@Override
-	public EntityLivingBase getLeader() {
-		return leader;
+	public void setHome(BlockPos home) {
+		this.home = home;
 	}
 
 	@Override
@@ -170,52 +180,42 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			}
 		};
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveHome(this));
+		this.tasks.addTask(5, new EntityAIMoveToHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		
-		boolean flag = this.home != null;
-		compound.setBoolean("hasHome", flag);
-		if (flag) {
-			//compound.setIntArray("home", new int[] {home.getX(), home.getY(), home.getZ()});
-			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+
+		boolean hasHome = this.home != null;
+		compound.setBoolean("hasHome", hasHome);
+		if (hasHome) {
+			compound.setTag("home", NBTUtil.createPosTag(this.home));
 		}
-		boolean hasLeader = this.leader != null;
+
+		boolean hasLeader = this.leaderUUID != null;
 		compound.setBoolean("hasLeader", hasLeader);
 		if (hasLeader) {
-			compound.setInteger("leader", this.leader.getEntityId());
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
-		/*if(this.hasExisted) {
-			compound.setBoolean("hasBeenInitialized", true);
-		}*/
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		
-		if (compound.getBoolean("hasHome")) {
-			//int[] i = compound.getIntArray("home");
-			//this.home = new BlockPos(i[0], i[1], i[2]);
-			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
-		}
-		
-		if (compound.getBoolean("hasLeader")) {
-			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
 
+		if (compound.getBoolean("hasHome")) {
+			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
 		}
-		
-		/*if(compound.getBoolean("hasBeenInitialized")) {
-			this.hasExisted = compound.getBoolean("hasBeenInitialized");
-		}*/
+
+		if (compound.getBoolean("hasLeader")) {
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
 	}
 
 	@Override
@@ -237,9 +237,4 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		}
 	}
 
-	@Override
-	public void setHome(BlockPos home) {
-		// TODO Auto-generated method stub
-		
-	}
 }
