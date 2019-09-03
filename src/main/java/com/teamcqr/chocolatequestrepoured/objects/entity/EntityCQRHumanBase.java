@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
-import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityOwnable;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.math.BlockPos;
@@ -21,10 +22,8 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 public class EntityCQRHumanBase extends EntityCreature
 		implements ICQREntity, IEntityAdditionalSpawnData, IEntityOwnable {
 
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
+	protected BlockPos home;
+	protected UUID leaderUUID;
 
 	private int intelligence;
 	private boolean isDefending;
