@@ -32,8 +32,12 @@ public interface ICQREntity {
 	public boolean hasFaction();
 	
 	public float getBaseHealth();
-	
+
+	public EntityLivingBase getLeader();
+	public void setLeader(EntityLivingBase leader);
+
 	public BlockPos getHome();
+	public void setHome(BlockPos home);
 	
 	public default float getBaseHealthForLocation(BlockPos dungeonPos, float health) {
 		if (dungeonPos != null) {
@@ -138,12 +142,5 @@ public interface ICQREntity {
     		//System.out.println("Sound played!");
     	}
 	}
-
-	EntityLivingBase getLeader();
-
-	void setLeader(EntityLivingBase leader);
-
-	void setHome(BlockPos home);
-
 	
 }

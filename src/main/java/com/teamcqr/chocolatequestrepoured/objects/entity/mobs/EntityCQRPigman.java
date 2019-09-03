@@ -6,9 +6,10 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveHome;
-import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
@@ -18,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -28,10 +30,8 @@ import net.minecraft.world.World;
 
 public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 
-	private boolean hasExisted = false;
-
-	public BlockPos home;
-	public EntityLivingBase leader;
+	protected BlockPos home;
+	protected UUID leaderUUID;
 
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
@@ -147,23 +147,43 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	}
 
 	@Override
-	public void setHome(BlockPos home) {
-		this.home = home;
-	}
-
-	@Override
-	public BlockPos getHome() {
-		return home;
-	}
-
-	@Override
-	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		if (!this.world.isRemote) {
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			
+			if (attribute != null) {
+				float newHP = getBaseHealthForLocation(new BlockPos(x, y, z), this.getBaseHealth());
+				attribute.setBaseValue(newHP);
+				this.setHealth(newHP);
+			}
+			
+			this.home = new BlockPos(x, y, z);
+		}
 	}
 
 	@Override
 	public EntityLivingBase getLeader() {
-		return leader;
+		for (Entity entity : this.world.loadedEntityList) {
+			if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
+				return (EntityLivingBase) entity;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leaderUUID = leader.getPersistentID();
+	}
+
+	@Override
+	public BlockPos getHome() {
+		return this.home;
+	}
+
+	@Override
+	public void setHome(BlockPos home) {
+		this.home = home;
 	}
 
 	@Override
@@ -179,8 +199,8 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveHome(this));
-		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(3, new EntityAIMoveToHome(this));
+		this.tasks.addTask(4, new EntityAIMoveToLeader(this));
 	}
 
 	@Override
@@ -190,34 +210,27 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 		boolean hasHome = this.home != null;
 		compound.setBoolean("hasHome", hasHome);
 		if (hasHome) {
-			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+			compound.setTag("home", NBTUtil.createPosTag(this.home));
 		}
 
-		boolean hasLeader = this.leader != null;
+		boolean hasLeader = this.leaderUUID != null;
 		compound.setBoolean("hasLeader", hasLeader);
 		if (hasLeader) {
-			compound.setInteger("leader", this.leader.getEntityId());
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		this.hasExisted = true;
-
 		super.readEntityFromNBT(compound);
 
 		if (compound.getBoolean("hasHome")) {
-			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
 		}
 
 		if (compound.getBoolean("hasLeader")) {
-			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 	}
 
-	@Override
-	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
-	}
 }
