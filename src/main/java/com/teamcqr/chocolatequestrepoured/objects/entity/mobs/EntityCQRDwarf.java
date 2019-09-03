@@ -13,6 +13,15 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	}
 
 	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		Item[] pickaxes = new Item[] { Items.STONE_PICKAXE, Items.IRON_PICKAXE, Items.GOLDEN_PICKAXE, Items.DIAMOND_PICKAXE };
+		Item[] helmets = new Item[] { Items.IRON_HELMET, Items.DIAMOND_HELMET, Items.CHAINMAIL_HELMET };
+
+		this.setItemStackToSlot(this.rand.nextBoolean() ? EntityEquipmentSlot.OFFHAND : EntityEquipmentSlot.MAINHAND, new ItemStack(pickaxes[this.rand.nextInt(pickaxes.length)]));
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(helmets[this.rand.nextInt(helmets.length)]));
+	}
+
+	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.DWARVES.getValue();
 	}
