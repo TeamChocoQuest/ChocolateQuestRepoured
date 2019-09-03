@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.resources.I18n;
@@ -26,6 +27,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 {
 	public ItemStackHandler inventory = new ItemStackHandler(9);
+	private boolean spawnedInDungeon = false;
    
     @Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) 
@@ -46,6 +48,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
     {
         super.readFromNBT(compound);
         this.inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+        if(compound.hasKey("isDungeonSpawner")) {
+        	spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
+        }
     }
  
     @Override
@@ -53,6 +58,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
     {
         super.writeToNBT(compound);
         compound.setTag("inventory", inventory.serializeNBT());
+        if(spawnedInDungeon) {
+        	compound.setBoolean("isDungeonSpawner", true);
+        }
         return compound;
     }
 
@@ -71,7 +79,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
             this.turnBackIntoEntity();
         }
     }
-   
+    
     public void turnBackIntoEntity() 
     {
     	Random rand = new Random();
@@ -89,6 +97,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
             		Entity entity = this.createEntityFromNBT(entityTag, this.world, this.pos.getX() + (int)rand.nextFloat(), this.pos.getY(), this.pos.getZ() + (int)rand.nextFloat());
             		if(entity instanceof EntityLiving && Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent()) {
             			((EntityLiving)entity).enablePersistence();
+            		}
+            		if(spawnedInDungeon && entity instanceof ICQREntity) {
+            			((ICQREntity)entity).onSpawnFromCQRSpawnerInDungeon(this.pos.getX(), this.pos.getY(), this.pos.getZ());
             		}
             		entity.setUniqueId(MathHelper.getRandomUUID(rand));
             				
@@ -139,4 +150,8 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
         }
         return false;
     }
+
+	public void setDungeonSpawner() {
+		spawnedInDungeon = true;
+	}
 }
