@@ -145,10 +145,18 @@ public class EntityCQRHumanBase extends EntityCreature
 	}
 
 	@Override
-
 	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
+		if (!this.world.isRemote) {
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			
+			if (attribute != null) {
+				float newHP = getBaseHealthForLocation(new BlockPos(x, y, z), this.getBaseHealth());
+				attribute.setBaseValue(newHP);
+				this.setHealth(newHP);
+			}
+			
+			this.home = new BlockPos(x, y, z);
+		}
 	}
 
 	@Override
@@ -168,7 +176,7 @@ public class EntityCQRHumanBase extends EntityCreature
 
 	@Override
 	public BlockPos getHome() {
-		return home;
+		return this.home;
 	}
 
 	@Override
@@ -200,6 +208,29 @@ public class EntityCQRHumanBase extends EntityCreature
 		boolean hasHome = this.home != null;
 		compound.setBoolean("hasHome", hasHome);
 		if (hasHome) {
+			compound.setTag("home", NBTUtil.createPosTag(this.home));
+		}
+
+		boolean hasLeader = this.leaderUUID != null;
+		compound.setBoolean("hasLeader", hasLeader);
+		if (hasLeader) {
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
+		}
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+
+		if (compound.getBoolean("hasHome")) {
+			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
+		}
+
+		if (compound.getBoolean("hasLeader")) {
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+	}
+
 			compound.setTag("home", NBTUtil.createPosTag(this.home));
 		}
 
