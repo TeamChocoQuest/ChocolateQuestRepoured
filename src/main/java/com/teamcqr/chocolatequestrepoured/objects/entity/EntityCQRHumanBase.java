@@ -152,8 +152,19 @@ public class EntityCQRHumanBase extends EntityCreature
 		
 	}
 
-	public void setHome(BlockPos home) {
-		this.home = home;
+	@Override
+	public EntityLivingBase getLeader() {
+		for (Entity entity : this.world.loadedEntityList) {
+			if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
+				return (EntityLivingBase) entity;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public void setLeader(EntityLivingBase leader) {
+		this.leaderUUID = leader.getPersistentID();
 	}
 
 	@Override
@@ -162,13 +173,8 @@ public class EntityCQRHumanBase extends EntityCreature
 	}
 
 	@Override
-	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
-	}
-
-	@Override
-	public EntityLivingBase getLeader() {
-		return leader;
+	public void setHome(BlockPos home) {
+		this.home = home;
 	}
 
 	@Override
@@ -184,7 +190,7 @@ public class EntityCQRHumanBase extends EntityCreature
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.tasks.addTask(5, new EntityAIMoveHome(this));
+		this.tasks.addTask(5, new EntityAIMoveToHome(this));
 		this.tasks.addTask(6, new EntityAIMoveToLeader(this));
 	}
 
@@ -195,28 +201,26 @@ public class EntityCQRHumanBase extends EntityCreature
 		boolean hasHome = this.home != null;
 		compound.setBoolean("hasHome", hasHome);
 		if (hasHome) {
-			compound.setTag("home", NBTUtil.BlockPosToNBTTag(this.home));
+			compound.setTag("home", NBTUtil.createPosTag(this.home));
 		}
 
-		boolean hasLeader = this.leader != null;
+		boolean hasLeader = this.leaderUUID != null;
 		compound.setBoolean("hasLeader", hasLeader);
 		if (hasLeader) {
-			compound.setInteger("leader", this.leader.getEntityId());
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		this.hasExisted = true;
-
 		super.readEntityFromNBT(compound);
 
 		if (compound.getBoolean("hasHome")) {
-			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
+			this.home = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
 		}
 
 		if (compound.getBoolean("hasLeader")) {
-			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 	}
 
