@@ -126,6 +126,10 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
     
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
+    	if (source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).isCreative()) {
+    		this.setLeader((EntityLivingBase) source.getTrueSource()); 
+    	}
+
     	boolean res = super.attackEntityFrom(source, amount); 
     	handleArmorBreaking(getHealth(), getMaxHealth(), this);
     	
