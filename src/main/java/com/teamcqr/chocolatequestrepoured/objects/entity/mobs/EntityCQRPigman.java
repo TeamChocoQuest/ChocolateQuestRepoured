@@ -146,6 +146,21 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 	}
 
 	@Override
+	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
+		if (!this.world.isRemote) {
+			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
+			
+			if (attribute != null) {
+				float newHP = getBaseHealthForLocation(new BlockPos(x, y, z), this.getBaseHealth());
+				attribute.setBaseValue(newHP);
+				this.setHealth(newHP);
+			}
+			
+			this.home = new BlockPos(x, y, z);
+		}
+	}
+
+	@Override
 	public EntityLivingBase getLeader() {
 		for (Entity entity : this.world.loadedEntityList) {
 			if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
@@ -217,9 +232,4 @@ public class EntityCQRPigman extends EntityPigZombie implements ICQREntity {
 		}
 	}
 
-	@Override
-	public void onSpawnFromCQRSpawnerInDungeon(int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
-	}
 }
