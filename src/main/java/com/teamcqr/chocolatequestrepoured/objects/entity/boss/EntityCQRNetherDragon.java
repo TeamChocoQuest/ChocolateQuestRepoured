@@ -11,6 +11,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityMultiPart, IRangedAttackMob {
@@ -137,6 +138,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	@Override
 	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
 		return false;
+	}
+
+	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+
 	}
 
 	@Override
