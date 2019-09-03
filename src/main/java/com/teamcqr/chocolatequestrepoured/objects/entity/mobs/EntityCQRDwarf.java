@@ -28,10 +28,12 @@ import net.minecraft.world.World;
 
 public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 
+
 	private boolean hasExisted = false;
 
 	public BlockPos home;
 	public EntityLivingBase leader;
+
 
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
@@ -92,6 +94,9 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 			this.home = new BlockPos(x, y, z);
 			
 			spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+      
+			this.hasExisted = true;
+
 		}
 	}
 	
@@ -193,6 +198,7 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 
+
 		boolean hasHome = this.home != null;
 		compound.setBoolean("hasHome", hasHome);
 		if (hasHome) {
@@ -213,11 +219,13 @@ public class EntityCQRDwarf extends EntityVindicator implements ICQREntity {
 		super.readEntityFromNBT(compound);
 
 		if (compound.getBoolean("hasHome")) {
+
 			this.home = NBTUtil.BlockPosFromNBT(compound.getCompoundTag("home"));
 		}
 
 		if (compound.getBoolean("hasLeader")) {
 			this.leader = (EntityLivingBase) this.world.getEntityByID(compound.getInteger("leader"));
+
 		}
 	}
 }
