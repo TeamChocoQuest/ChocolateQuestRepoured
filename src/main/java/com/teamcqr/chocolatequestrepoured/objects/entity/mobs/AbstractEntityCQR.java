@@ -36,6 +36,12 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	}
 
 	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+	}
+	
+	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		return new PathNavigateGround(this, worldIn) {
 			@Override
@@ -119,30 +125,26 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		float hpPrcntg = this.getHealth() / this.getMaxHealth();
 
 		if (hpPrcntg <= 0.8F) {
-			ItemStack feet = this.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-			if (!feet.isEmpty()) {
-				feet = ItemStack.EMPTY;
+			if (!this.getItemStackFromSlot(EntityEquipmentSlot.FEET).isEmpty()) {
+				this.setItemStackToSlot(EntityEquipmentSlot.FEET, ItemStack.EMPTY);
 				armorBroke = true;
 			}
 
 			if (hpPrcntg <= 0.6F) {
-				ItemStack head = this.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-				if (!head.isEmpty()) {
-					head = ItemStack.EMPTY;
+				if (!this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()) {
+					this.setItemStackToSlot(EntityEquipmentSlot.HEAD, ItemStack.EMPTY);
 					armorBroke = true;
 				}
 
 				if (hpPrcntg <= 0.4F) {
-					ItemStack legs = this.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-					if (!legs.isEmpty()) {
-						legs = ItemStack.EMPTY;
+					if (!this.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()) {
+						this.setItemStackToSlot(EntityEquipmentSlot.LEGS, ItemStack.EMPTY);
 						armorBroke = true;
 					}
 
 					if (hpPrcntg <= 0.2F) {
-						ItemStack chest = this.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-						if (!chest.isEmpty()) {
-							chest = ItemStack.EMPTY;
+						if (!this.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()) {
+							this.setItemStackToSlot(EntityEquipmentSlot.CHEST, ItemStack.EMPTY);
 							armorBroke = true;
 						}
 					}
