@@ -40,7 +40,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 	}
-	
+
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		return new PathNavigateGround(this, worldIn) {
