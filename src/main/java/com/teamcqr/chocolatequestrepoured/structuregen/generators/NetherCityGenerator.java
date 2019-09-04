@@ -95,8 +95,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world);
 				}
 			} else {
-				BlockPos cLower = new BlockPos(minX, y +1, minZ);
-				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ);
+				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
+				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(-dungeon.getDistanceBetweenBuildingCenters() /4, 0, -dungeon.getDistanceBetweenBuildingCenters() /4);
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
@@ -105,7 +105,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		
 		
 		//Build the roads / bridges and the floors
-		for(BlockPos lavaPos : BlockPos.getAllInBox(minX, y, minZ, maxX, y, maxZ)) {
+		for(BlockPos lavaPos : BlockPos.getAllInBox(minX - dungeon.getDistanceBetweenBuildingCenters(), y, minZ- dungeon.getDistanceBetweenBuildingCenters(), maxX + dungeon.getDistanceBetweenBuildingCenters(), y, maxZ + dungeon.getDistanceBetweenBuildingCenters())) {
 			lavaBlocks.add(lavaPos);
 		}
 		//Bridges from south to north
@@ -120,7 +120,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				//Tunnels if not big air pocket
 				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCE.up(n));
 						world.setBlockToAir(pCW.up(n));
@@ -140,7 +140,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				//Tunnels if not big air pocket
 				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCN.up(n));
 						world.setBlockToAir(pCS.up(n));
@@ -178,8 +178,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			}
 			
 			if(centralStructure != null) {
-				BlockPos cL = new BlockPos(x - centralStructure.getSizeX() /2, y, z - centralStructure.getSizeZ() /2);
-				BlockPos cU = cL.add(centralStructure.getSizeX(), 0, centralStructure.getSizeZ());
+				BlockPos cL = new BlockPos(x - (centralStructure.getSizeX() /2 +2), y, z - (centralStructure.getSizeZ() /2 +2));
+				BlockPos cU = cL.add(centralStructure.getSizeX() +4, 0, centralStructure.getSizeZ() +4);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override
@@ -202,8 +202,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			}
 			
 			if(structure != null) {
-				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2, 0, structure.getSizeZ() /2));
-				BlockPos cU = centerPos.add(structure.getSizeX() /2, 0, structure.getSizeZ() /2);
+				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2));
+				BlockPos cU = centerPos.add(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override
@@ -231,20 +231,28 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			//DONE: Place CQ spawners !!!
 			if(dungeon.centralBuildingIsSpecial()) {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
-				if(dungeon.centralSpawnerIsSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+				try {
+					if(dungeon.centralSpawnerIsSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPosCentral);
 				}
 			}
 			
 			for(BlockPos p : gridPositions) {
 				BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
 				
-				if(dungeon.spawnersAreSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPos);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+				try {
+					if(dungeon.spawnersAreSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world), false, null, world, spawnerPos);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPos);
 				}
 			}
 		}

@@ -90,6 +90,7 @@ public class ClassicNetherCity extends DungeonBase {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "  ...");
 		if(structCount != buildingFolder.listFiles().length) {
 			for(File f : buildingFolder.listFiles()) {
 				CQStructure cqs = new CQStructure(f, false);
@@ -108,6 +109,7 @@ public class ClassicNetherCity extends DungeonBase {
 		IDungeonGenerator generator = new NetherCityGenerator(this);
 		generator.generate(world, chunk, x, posY, z);
 		
+		System.out.println("Generated " + this.getDungeonName() + " at X: " + x + "  Y: " + posY + "  Z: " + z);
 	}
 	
 	public int getCaveHeight() {
