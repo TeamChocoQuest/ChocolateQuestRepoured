@@ -96,7 +96,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				}
 			} else {
 				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
-				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(-dungeon.getDistanceBetweenBuildingCenters() /2, 0, -dungeon.getDistanceBetweenBuildingCenters() /2);;
+				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(-dungeon.getDistanceBetweenBuildingCenters() /4, 0, -dungeon.getDistanceBetweenBuildingCenters() /4);
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
@@ -178,8 +178,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			}
 			
 			if(centralStructure != null) {
-				BlockPos cL = new BlockPos(x - centralStructure.getSizeX() /2, y, z - centralStructure.getSizeZ() /2);
-				BlockPos cU = cL.add(centralStructure.getSizeX(), 0, centralStructure.getSizeZ());
+				BlockPos cL = new BlockPos(x - (centralStructure.getSizeX() /2 +2), y, z - (centralStructure.getSizeZ() /2 +2));
+				BlockPos cU = cL.add(centralStructure.getSizeX() +4, 0, centralStructure.getSizeZ() +4);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override
@@ -202,8 +202,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			}
 			
 			if(structure != null) {
-				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2, 0, structure.getSizeZ() /2));
-				BlockPos cU = centerPos.add(structure.getSizeX() /2, 0, structure.getSizeZ() /2);
+				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2));
+				BlockPos cU = centerPos.add(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override

@@ -76,8 +76,11 @@ public class DungeonGenUtils {
 	public static int getIntBetweenBorders(int min, int max) {
 		Random rdm = new Random();
 		max += 1;
-		int ret = min + rdm.nextInt(max - min);
-		return ret;
+		try {
+			return min + rdm.nextInt(max - min);
+		} catch(IllegalArgumentException ex) {
+			return min;
+		}
 	}
 	
 	public static boolean isLootChest(Block b) {
