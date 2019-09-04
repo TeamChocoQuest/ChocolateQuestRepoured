@@ -186,14 +186,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-		// TODO Auto-generated method stub
-
+		//TODO: Shoot fireball OR spit fire if close enough
 	}
 
 	@Override
 	public void setSwingingArms(boolean swingingArms) {
-		// TODO Auto-generated method stub
-
+		//Unused?
 	}
 
 }
