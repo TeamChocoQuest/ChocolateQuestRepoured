@@ -36,12 +36,12 @@ public class DungeonRegistry {
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
 			System.out.println("Found " + CQRMain.CQ_DUNGEON_FOLDER.listFiles().length + " dungeon configs. Loading...");
 			System.out.println("Searching dungeons in " + CQRMain.CQ_DUNGEON_FOLDER.getAbsolutePath() );
-			for(File f : CQRMain.CQ_DUNGEON_FOLDER.listFiles()) {
-				System.out.println("Loading dungeon configuration " + f.getName() + "...");
+			for(File dungeonConfigurationFile : CQRMain.CQ_DUNGEON_FOLDER.listFiles()) {
+				System.out.println("Loading dungeon configuration " + dungeonConfigurationFile.getName() + "...");
 				Properties dungeonConfig = new Properties();
 				FileInputStream stream = null;
 				try {
-					stream = new FileInputStream(f);
+					stream = new FileInputStream(dungeonConfigurationFile);
 					
 					dungeonConfig.load(stream);
 					
@@ -74,56 +74,7 @@ public class DungeonRegistry {
 							}
 						}
 						
-						DungeonBase dungeon = null;
-						
-						EDungeonGenerator generator = EDungeonGenerator.valueOf(dunType.toUpperCase());
-						
-						switch(generator) {
-						case ABANDONED:
-							dungeon = new AbandonedDungeon(f);
-							break;
-						case CASTLE:
-							dungeon = new CastleDungeon(f);
-							break;
-						case CAVERNS:
-							dungeon = new CavernDungeon(f);
-							break;
-						case FLOATING_NETHER_CITY:
-							dungeon = new FloatingNetherCity(f);
-							break;
-						case NETHER_CITY:
-							dungeon = new ClassicNetherCity(f);
-							break;
-						case RUIN:
-							dungeon = new RuinDungeon(f);
-							break;
-						case STRONGHOLD:
-							dungeon = new StrongholdDungeon(f);
-							break;
-						case TEMPLATE_OCEAN_FLOOR:
-							dungeon = new DungeonOceanFloor(f);
-							break;
-						case TEMPLATE_SURFACE:
-							dungeon = new DefaultSurfaceDungeon(f);
-							break;
-						case VILLAGE:
-							dungeon = new VillageDungeon(f);
-							break;
-						case VOLCANO:
-							dungeon = new VolcanoDungeon(f);
-							break;
-						case CLASSIC_STRONGHOLD:
-							dungeon = new LinearDungeon(f);
-							break;
-						case JUNGLE_CAVE:
-							//TODO Jungle cave generator
-							break;
-						case SWAMP_CAVE:
-							//TODO SWAMP CAVE GENERATOR
-							break;
-						default:
-							break;
-						}
+						DungeonBase dungeon = getDungeonByType(dunType, dungeonConfigurationFile);
 						
 						if(dungeon != null) {
 							//Position restriction stuff here
@@ -166,7 +117,7 @@ public class DungeonRegistry {
 						}
 						
 					} else {
-						System.out.println("Cant load dungeon configuration " + f.getName() + "!");
+						System.out.println("Cant load dungeon configuration " + dungeonConfigurationFile.getName() + "!");
 						System.out.println("Dungeon generator " + dunType + " is not a valid dungeon generator!");
 					}
 					
@@ -179,7 +130,7 @@ public class DungeonRegistry {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
-					System.out.println("Failed to load dungeon configuration " + f.getName() + "!");
+					System.out.println("Failed to load dungeon configuration " + dungeonConfigurationFile.getName() + "!");
 				} finally {
 					try {
 						stream.close();
@@ -192,6 +143,45 @@ public class DungeonRegistry {
 		} else {
 			System.out.println("There are no dungeon configs :(");
 		}
+	}
+	
+	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
+		
+		switch(EDungeonGenerator.valueOf(dunType.toUpperCase())) {
+		case ABANDONED:
+			return new AbandonedDungeon(dungeonPropertiesFile);
+		case CASTLE:
+			return new CastleDungeon(dungeonPropertiesFile);
+		case CAVERNS:
+			return new CavernDungeon(dungeonPropertiesFile);
+		case FLOATING_NETHER_CITY:
+			return new FloatingNetherCity(dungeonPropertiesFile);
+		case NETHER_CITY:
+			return new ClassicNetherCity(dungeonPropertiesFile);
+		case RUIN:
+			return new RuinDungeon(dungeonPropertiesFile);
+		case STRONGHOLD:
+			return new StrongholdOpenDungeon(dungeonPropertiesFile);
+		case TEMPLATE_OCEAN_FLOOR:
+			return new DungeonOceanFloor(dungeonPropertiesFile);
+		case TEMPLATE_SURFACE:
+			return new DefaultSurfaceDungeon(dungeonPropertiesFile);
+		case VILLAGE:
+			return new VillageDungeon(dungeonPropertiesFile);
+		case VOLCANO:
+			return new VolcanoDungeon(dungeonPropertiesFile);
+		case CLASSIC_STRONGHOLD:
+			return new StrongholdLinearDungeon(dungeonPropertiesFile);
+		case JUNGLE_CAVE:
+			//TODO Jungle cave generator
+			break;
+		case SWAMP_CAVE:
+			//TODO SWAMP CAVE GENERATOR
+			break;
+		default:
+			return null;
+		}
+		return null;
 	}
 	
 	public List<DungeonBase> getDungeonsForBiome(Biome b) {
