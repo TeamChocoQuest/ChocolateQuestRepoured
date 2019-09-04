@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 public enum EFaction {
 	
@@ -33,7 +33,7 @@ public enum EFaction {
 	}
 	
 	//DONE: Methods to check wether a faction is an ally or an enemy
-	public EReputationStateRough getRelation(ICQREntity e1, ICQREntity e2) {
+	public EReputationStateRough getRelation(AbstractEntityCQR e1, AbstractEntityCQR e2) {
 		
 		EFaction e1Fac = e1.getFaction();
 		EFaction e2Fac = e2.getFaction();
