@@ -120,7 +120,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				//Tunnels if not big air pocket
 				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCE.up(n));
 						world.setBlockToAir(pCW.up(n));
@@ -140,7 +140,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				//Tunnels if not big air pocket
 				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCN.up(n));
 						world.setBlockToAir(pCS.up(n));
@@ -231,20 +231,28 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			//DONE: Place CQ spawners !!!
 			if(dungeon.centralBuildingIsSpecial()) {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
-				if(dungeon.centralSpawnerIsSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+				try {
+					if(dungeon.centralSpawnerIsSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPosCentral);
 				}
 			}
 			
 			for(BlockPos p : gridPositions) {
 				BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
 				
-				if(dungeon.spawnersAreSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPos);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+				try {
+					if(dungeon.spawnersAreSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world), false, null, world, spawnerPos);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPos);
 				}
 			}
 		}
