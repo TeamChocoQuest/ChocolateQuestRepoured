@@ -95,8 +95,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world);
 				}
 			} else {
-				BlockPos cLower = new BlockPos(minX, y +1, minZ);
-				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ);
+				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
+				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(-dungeon.getDistanceBetweenBuildingCenters() /2, 0, -dungeon.getDistanceBetweenBuildingCenters() /2);;
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
@@ -105,7 +105,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		
 		
 		//Build the roads / bridges and the floors
-		for(BlockPos lavaPos : BlockPos.getAllInBox(minX, y, minZ, maxX, y, maxZ)) {
+		for(BlockPos lavaPos : BlockPos.getAllInBox(minX - dungeon.getDistanceBetweenBuildingCenters(), y, minZ- dungeon.getDistanceBetweenBuildingCenters(), maxX + dungeon.getDistanceBetweenBuildingCenters(), y, maxZ + dungeon.getDistanceBetweenBuildingCenters())) {
 			lavaBlocks.add(lavaPos);
 		}
 		//Bridges from south to north
