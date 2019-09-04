@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VolcanoDungeon extends StrongholdDungeon {
+public class VolcanoDungeon extends StrongholdOpenDungeon {
 	
 	//For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
 	
