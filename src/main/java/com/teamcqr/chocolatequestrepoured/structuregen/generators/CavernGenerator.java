@@ -100,14 +100,18 @@ public class CavernGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		for(BlockPos bp : this.airBlocks) {
-			if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getAirBlock())) {
-				world.setBlockState(bp, this.dungeon.getAirBlock().getDefaultState());
-			}
+			//if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getAirBlock())) {
+				if(Block.isEqualTo(dungeon.getAirBlock(), Blocks.AIR)) {
+					world.setBlockToAir(bp);
+				} else {
+					world.setBlockState(bp, this.dungeon.getAirBlock().getDefaultState());
+				}
+			//}
 		}
 		for(BlockPos bp : this.floorBlocks) {
-			if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getFloorBlock())) {
+			//if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getFloorBlock())) {
 				world.setBlockState(bp, this.dungeon.getFloorBlock().getDefaultState());
-			}
+			//}
 		}
 	}
 

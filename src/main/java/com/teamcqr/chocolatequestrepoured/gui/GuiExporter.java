@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import org.lwjgl.input.Keyboard;
 
 public class GuiExporter extends GuiContainer
 {
@@ -141,7 +142,10 @@ public class GuiExporter extends GuiContainer
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException 
 	{
-		super.keyTyped(typedChar, keyCode);
+		if (keyCode == 1)
+		{
+			this.mc.player.closeScreen();
+		}
 
 		edtName.textboxKeyTyped(typedChar, keyCode);
 

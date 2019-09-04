@@ -97,7 +97,7 @@ public class CavernDungeon extends DungeonBase {
 			
 			this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
 			
-			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "ariblock", Blocks.AIR);
+			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
 			
 			closeConfigFile();
 		} else {
