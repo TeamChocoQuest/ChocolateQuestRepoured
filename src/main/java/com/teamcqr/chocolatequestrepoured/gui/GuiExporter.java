@@ -141,7 +141,7 @@ public class GuiExporter extends GuiContainer
 	@Override
 	protected void keyTyped(char typedChar, int keyCode) throws IOException 
 	{
-		super.keyTyped(typedChar, keyCode);
+		//super.keyTyped(typedChar, keyCode);
 
 		edtName.textboxKeyTyped(typedChar, keyCode);
 
