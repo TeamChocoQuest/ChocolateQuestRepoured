@@ -36,6 +36,7 @@ public class DungeonRegistry {
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
 			System.out.println("Found " + CQRMain.CQ_DUNGEON_FOLDER.listFiles().length + " dungeon configs. Loading...");
 			System.out.println("Searching dungeons in " + CQRMain.CQ_DUNGEON_FOLDER.getAbsolutePath() );
+			//TODO: Make config "search" recursive, so that it also search in sub folders
 			for(File dungeonConfigurationFile : CQRMain.CQ_DUNGEON_FOLDER.listFiles()) {
 				System.out.println("Loading dungeon configuration " + dungeonConfigurationFile.getName() + "...");
 				Properties dungeonConfig = new Properties();
@@ -141,7 +142,7 @@ public class DungeonRegistry {
 			}
 			
 		} else {
-			System.out.println("There are no dungeon configs :(");
+			System.err.println("There are no dungeon configs :( ");
 		}
 	}
 	
