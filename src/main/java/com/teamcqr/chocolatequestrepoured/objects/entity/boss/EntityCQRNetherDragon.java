@@ -35,6 +35,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	private MultiPartEntityPart body14 = new MultiPartEntityPart(this, "bodySegment14", 1.1F, 1.1F);
 	private MultiPartEntityPart body15 = new MultiPartEntityPart(this, "bodySegment15", 1.1F, 1.1F);
 	private MultiPartEntityPart body16 = new MultiPartEntityPart(this, "bodySegment16", 1.1F, 1.1F);
+	
+	/*
+	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
+	 * 
+	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them on fire
+	 * It will also break obsidian blocks, but not command blocks or structure blocks or bedrock
+	 */
 
 	public EntityCQRNetherDragon(World worldIn) {
 		super(worldIn);
