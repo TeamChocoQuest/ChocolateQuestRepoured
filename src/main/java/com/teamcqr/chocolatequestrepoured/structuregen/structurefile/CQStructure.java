@@ -54,7 +54,7 @@ public class CQStructure {
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	
-	//TODO: move structure origin to the center of it
+	//DONE: move structure origin to the center of it -> "Placing Config"
 	
 	private HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
 
@@ -162,11 +162,11 @@ public class CQStructure {
 	
 	private void placeBlocksInWorld(World worldIn, BlockPos pos, PlacementSettings settings) {
 		if(this.dataFile != null) {
-			System.out.println("Generating structure: " + this.dataFile.getName() + "...");
-			int partID = 1;
+			//System.out.println("Generating structure: " + this.dataFile.getName() + "...");
+			//int partID = 1;
 			List<BlockPos> shieldCorePosList = new ArrayList<BlockPos>();
 			for(BlockPos offset : this.structures.keySet()) {
-				System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
+				//System.out.println("building part " + partID + " of " + this.structures.keySet().size() + "...");
 				BlockPos offsetVec = CQStructurePart.transformedBlockPos(settings, offset);
 				BlockPos pastePos = pos.add(offsetVec);
 				CQStructurePart structure = this.structures.get(offset);
@@ -197,7 +197,7 @@ public class CQStructure {
 						ex.printStackTrace();
 					}
 				}
-				partID++;
+				//partID++;
 			}
 		}
 	}
