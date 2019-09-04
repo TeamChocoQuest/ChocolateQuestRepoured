@@ -11,17 +11,24 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.StrongholdGene
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class StrongholdDungeon extends DungeonBase {
+public class StrongholdOpenDungeon extends DungeonBase {
 	
 	private File stairFolder;
 	private File bossRoomFolder;
 	private File entranceStairFolder;
 	private File entranceBuildingFolder;
 	private File roomFolder;
+	
+	private int minFloors = 2;
+	private int maxFloors = 4;
+	private int minRoomsPerFloor = 7;
+	private int maxRoomsPerFloor = 10;
+	
+	//Important: All rooms must have the same dimensions!!!
 
 	//Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
 	
-	public StrongholdDungeon(File configFile) {
+	public StrongholdOpenDungeon(File configFile) {
 		super(configFile);
 	}
 

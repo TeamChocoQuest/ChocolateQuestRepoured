@@ -11,43 +11,38 @@ import net.minecraft.world.chunk.Chunk;
 public class LinearDungeonGenerator implements IDungeonGenerator {
 
 	public LinearDungeonGenerator() {
-		// TODO Auto-generated constructor stub
+		//Set floor count
+		//Set room per floor count
 	}
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//calculates the positions for rooms, stairs, bossroom, entrance, entrance stairs
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//places the structures
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//Places the entrance building or staircase
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//Unused
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//Unused
 	}
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		// TODO Auto-generated method stub
-		
+		//Only for entrance
 	}
 
 }
