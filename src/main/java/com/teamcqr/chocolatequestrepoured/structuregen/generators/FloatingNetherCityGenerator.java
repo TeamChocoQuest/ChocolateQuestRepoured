@@ -107,11 +107,11 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	}
 	
 	//Constructs an Island in this shape:
-	/*											Dec  Rad
-	 * # # # # # # # # # # # # # # # # # # # #  0    10
-	 *   # # # # # # # # # # # # # # # # # #   1    9
-	 *       # # # # # # # # # # # # # #     2    7
-	 *           # # # # # # # #        3    4
+	/*						Dec  Rad
+	 * ####################  0    10
+	 *  ##################   1    9
+	 *    ##############     2    7
+	 *       ########        3    4
 	 *           
 	 */
 	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk) {
