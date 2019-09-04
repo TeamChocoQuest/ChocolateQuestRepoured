@@ -41,9 +41,22 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		this.dragonBodyParts = new MultiPartEntityPart[] { this.headPart, this.body1, this.body2, this.body3,
 				this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
 				this.body12, this.body13, this.body14, this.body15, this.body16 };
-		this.setSize(15.5F, 1.8F);
+		this.setSize(2.0F, 2.0F);
 		this.noClip = true;
 		this.setNoGravity(true);
+		
+		allignPositionsOfBodySegments();
+	}
+	
+	private void allignPositionsOfBodySegments() {
+		//This is just for testing purposes, the final code to move the hitboxes will be in living update AND it will position the parts corresponding to the old rotation of the previous part
+		this.headPart.onUpdate();
+		this.headPart.setPositionAndRotation(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
+		
+		for(int i = 1; i < this.dragonBodyParts.length; i++) {
+			this.dragonBodyParts[i].onUpdate();
+			this.dragonBodyParts[i].setPositionAndRotation(i* this.posX, this.posY, i* this.posZ, 0.0F, 0.0F);
+		}
 	}
 
 	@Override
@@ -119,6 +132,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		this.body16.width = 1.1F;
 		this.body16.height = 1.1F;
 		this.body16.onUpdate();
+		
+		allignPositionsOfBodySegments();
 	}
 
 	@Override
