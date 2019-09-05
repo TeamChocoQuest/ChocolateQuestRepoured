@@ -8,26 +8,30 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class LinearDungeonGenerator implements IDungeonGenerator {
-
-	public LinearDungeonGenerator() {
-		//Set floor count
-		//Set room per floor count
-	}
+public class StrongholdOpenGenerator implements IDungeonGenerator{
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		//calculates the positions for rooms, stairs, bossroom, entrance, entrance stairs
+		//Builds support platform for entry, then creates the spire down
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		//places the structures
+		//Will generate the structure
+		//Algorithm: while(genRooms < rooms && genFloors < maxFloors) do {
+		//while(genRoomsOnFloor < roomsPerFloor) {
+		//    choose structure, calculate next pos and chose next structure (System: structures in different folders named to where they may attach
+		//  build Staircase at next position
+		//  genRoomsOnFloor++
+		//  genFloors++
+		//build staircase to bossroom at next position, then build boss room
+		
+		//Structure gen information: stored in map with location and structure file
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		//Places the entrance building or staircase
+		//build all the structures in the map
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public class LinearDungeonGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		//Only for entrance
+		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
 	}
 
 }
