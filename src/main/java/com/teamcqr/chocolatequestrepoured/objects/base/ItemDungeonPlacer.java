@@ -33,7 +33,7 @@ public class ItemDungeonPlacer extends Item implements IHasModel {
 		
 		setMaxStackSize(1);
 		
-		ModItems.ITEMS.add(this);
+		//ModItems.ITEMS.add(this);
 
 		System.out.println("Created dungeon placer for dungeon: " + this.dungeon.getDungeonName() + "!");
 	}
