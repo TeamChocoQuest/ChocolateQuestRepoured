@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CavernGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -16,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
@@ -188,7 +190,8 @@ public class CavernDungeon extends DungeonBase {
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
 			
 			//BOSS SPAWNER
-			//TODO: spawn the boss
+			//DONE: spawn the boss
+			SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(getBossMob(), world), false, null, world, bossPos);
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());
