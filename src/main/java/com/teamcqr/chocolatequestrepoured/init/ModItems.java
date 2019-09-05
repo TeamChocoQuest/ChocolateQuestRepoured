@@ -180,7 +180,6 @@ public class ModItems {
 	public static final Item ALCHEMY_BAG = Null();
 
 	public static final Item DUNGEON_PLACER = Null();
-	public static final Item DUNGEON_PLACER_2 = Null();
 	
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
@@ -278,8 +277,7 @@ public class ModItems {
 					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"),
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
-					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab),
-					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer_2", null)
+					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab)
 			};
 
 			IForgeRegistry<Item> registry = event.getRegistry();
