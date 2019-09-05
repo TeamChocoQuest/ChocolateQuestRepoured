@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 
 public abstract class AbstractEntityCQR extends EntityMob {
 
-	protected int healingPotions;
+	protected int healingPotions = 3;
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
 
@@ -110,6 +110,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		if (hasLeader) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
+		
+		compound.setInteger("healingPotions", healingPotions);
 	}
 
 	@Override
@@ -122,6 +124,10 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 		if (compound.getBoolean("hasLeader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+		
+		if(compound.hasKey("healingPotions")) {
+			this.healingPotions = compound.getInteger("healingPotions");
 		}
 	}
 
@@ -252,4 +258,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
 
+	public void removePotion() {
+		healingPotions--;
+	}
+	
 }

@@ -8,37 +8,41 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class DefaultGenerator implements IDungeonGenerator{
-	//This class has no actual use, it just floats around here for no reason, maybe because it can
+public class StrongholdLinearGenerator implements IDungeonGenerator {
+
+	public StrongholdLinearGenerator() {
+		//Set floor count
+		//Set room per floor count
+	}
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		
+		//calculates the positions for rooms, stairs, bossroom, entrance, entrance stairs
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		
+		//places the structures
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		
+		//Places the entrance building or staircase
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		
+		//Unused
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		
+		//Unused
 	}
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		
+		//Only for entrance
 	}
 
 }

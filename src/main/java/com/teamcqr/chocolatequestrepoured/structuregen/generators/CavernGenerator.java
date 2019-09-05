@@ -143,15 +143,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
 		BlockPos spawnerPos = new BlockPos(x, y, z);
-		/*world.setBlockState(spawnerPos, Blocks.MOB_SPAWNER.getDefaultState());
-		
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(spawnerPos);
-		
-		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
-		//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
-		spawner.updateContainingBlockInfo();
-		
-		spawner.update();*/
+
 		SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getMob());
 	}
 	
@@ -174,7 +166,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		} */
 		else {
 			int v = 0;
-			buildSegment(start, world);
+			buildTunnelSegment(start, world);
 			if(xFirst) {
 				v = start.getX() < target.getX() ? 1 : -1;
 				if(start.getX() == target.getX()) {
@@ -192,7 +184,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		}
 	}
 	
-	private void buildSegment(BlockPos pos, World world) {
+	private void buildTunnelSegment(BlockPos pos, World world) {
 		Block airBlock = this.dungeon.getAirBlock();
 		Block floorMaterial = this.dungeon.getFloorBlock();
 		
