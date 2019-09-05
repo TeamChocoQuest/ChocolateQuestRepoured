@@ -14,7 +14,6 @@ import java.util.Properties;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.AbandonedDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
@@ -41,6 +40,7 @@ import net.minecraftforge.common.BiomeDictionary;
  */
 public class DungeonRegistry {
 	
+	public List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
@@ -96,7 +96,7 @@ public class DungeonRegistry {
 							
 							if(dungeon.isRegisteredSuccessful()) {
 								System.out.println("Successfully registered dungeon " + dungeon.getDungeonName() + "!");
-								new ItemDungeonPlacer(dungeon);
+								this.dungeonList.add(dungeon);
 							} else {
 								System.out.println("Cant load dungeon " + dungeon.getDungeonName() + "!");
 							}
