@@ -50,6 +50,7 @@ public class ProtectionHandler {
         ProtectedRegion toRegister = new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
         registerRegion(toRegister);
         FileIOUtil.saveToFile( FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon", ByteArrayManipulationUtil.convertArrayListByteToPrimByteArray(CQONConversionUtil.convertObjectToCQON(toRegister, e.getDungeonID().toString(), CQONConversionUtil.getDefaultRelevancyLUT(), 0)));
+        System.out.println( ByteArrayManipulationUtil.convertArrayListByteToString( CQONConversionUtil.convertObjectToCQON( (ProtectedRegion)(CQONConversionUtil.convertCQONToObject( ByteArrayManipulationUtil.convertPrimByteArrayToArrayListByte( FileIOUtil.loadFromFile(FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon") ) ).values().toArray()[0]), e.getDungeonID().toString(), CQONConversionUtil.getDefaultRelevancyLUT(), 0 ) ) );
     }
 
     // Handle Protection-Related Events

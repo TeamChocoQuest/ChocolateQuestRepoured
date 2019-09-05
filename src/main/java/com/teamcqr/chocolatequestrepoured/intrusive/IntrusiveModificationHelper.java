@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.intrusive;
 
+import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -33,6 +36,30 @@ public class IntrusiveModificationHelper {
      * Uses more resources than usual, but shouldn't have any
      * inherent consequences in terms of compatibility or stability
      */
+
+    /**
+     * Returns an instance of thee provided class
+     * @return generated instance, or null if unsuccessful
+     */
+    public static Object getInstanceOfClass(Class c) {
+        try {
+            return c.newInstance();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a Class object when given its verbose name as a String
+     * @return requested Class, or null if unsuccessful
+     */
+    public static Class getClassFromName(String verboseTypeNameAsSting) {
+        try {
+            return Class.forName(verboseTypeNameAsSting);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     /**
      * Returns requested Field with accessibility set to true
@@ -100,6 +127,24 @@ public class IntrusiveModificationHelper {
     }
 
     /**
+     * Sets the value of the given field to the given value for the given instance
+     */
+    public static Object reflectSetFieldValue(Object instance, Field toSet, Object value) {
+
+        // Ensure accessible
+        toSet.setAccessible(true);
+        // Set
+        try {
+            toSet.set(instance, value);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return instance;
+
+    }
+
+    /**
      * Returns all fields of a provided Class object or instance thereof and sets their accessibility status to true
      * USES RECURSION TO RETRIEVE SUPERCLASS FIELDS - USE SPARINGLY
      * @return Field[]
@@ -131,11 +176,8 @@ public class IntrusiveModificationHelper {
             }
 
             // Combine Arrays
-            ArrayList<Field> temp = new ArrayList<>(fieldsFromClass.length + fieldsFromSuperclass.length);
-            temp.addAll(Arrays.asList(fieldsFromClass));
-            temp.addAll(Arrays.asList(fieldsFromSuperclass));
-            fieldsFromClass = new Field[temp.size()];
-            for(int i = 0; i < fieldsFromClass.length; i++) fieldsFromClass[i] = temp.get(i);
+            fieldsFromClass = (Field[])ArrayCollectionMapManipulationUtil.combineArrays(fieldsFromClass, fieldsFromSuperclass);
+
         }
 
         // Remove accessibility limitations
@@ -207,6 +249,62 @@ public class IntrusiveModificationHelper {
 
         return toReturn;
 
+    }
+
+    public static Object reflectMakeMethodPublic(Object instanceToAccess, Method toMakePublic) {
+
+        return instanceToAccess.getClass();
+
+    }
+
+    public static Object reflectGetInstanceWithAllMethodsPublic(Object instanceToAccess) {
+
+        Method[] methods = reflectGetAllMethods(instanceToAccess);
+        for(Method  m : methods) m.setAccessible(true);
+        return instanceToAccess;
+
+    }
+
+    public static Method[] reflectGetAllMethods(Object instanceOrClassToAccess) {
+
+        // Variables
+        Class classToAccess;
+        Method[] methodsFromClass = new Method[] {};
+        Method[] methodsFromSuperclass = new Method[] {};
+
+        // Convert parameter to instance of Class
+        if(instanceOrClassToAccess instanceof Class) {
+            classToAccess = (Class) instanceOrClassToAccess;
+        } else {
+            classToAccess = instanceOrClassToAccess.getClass();
+        }
+
+        // Retrieve methods
+        methodsFromClass = classToAccess.getDeclaredMethods();
+
+        if(classToAccess.getSuperclass() != null && classToAccess.getSuperclass() != Object.class) {
+
+            // Recursive call
+            try {
+                methodsFromSuperclass = reflectGetAllMethods( classToAccess.getSuperclass() );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // Combine Arrays
+            methodsFromClass = (Method[])ArrayCollectionMapManipulationUtil.combineArrays(methodsFromClass, methodsFromSuperclass);
+
+        }
+
+        // Remove accessibility limitations
+        try {
+            for( Method m : methodsFromClass ) m.setAccessible(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Return
+        return methodsFromClass;
     }
 
     /*
