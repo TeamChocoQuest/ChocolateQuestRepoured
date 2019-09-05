@@ -63,24 +63,8 @@ public class DungeonBase {
 	
 	public DungeonBase(File configFile) {
 		//DONE: read values from file
-		Properties prop = loadConfig(configFile);/*new Properties();
-		this.dunID = MathHelper.getRandomUUID();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		}*/
-		//if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		
 		if(prop != null) {
 			this.name = configFile.getName().replace(".properties", "");
 			this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 20);
