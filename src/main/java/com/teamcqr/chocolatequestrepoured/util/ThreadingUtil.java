@@ -14,6 +14,9 @@ public class ThreadingUtil {
 
 	
 	public static void passHashMapToThreads(List<BlockPos> positionsToIterate, Map<BlockPos, Block> mapContainingBlockInformation, int entriesPerMap, World world, boolean async) {
+		if(world == null) {
+			return;
+		}
 		if(async) {
 			if(entriesPerMap > 0) {
 				int counter = 0;
@@ -78,6 +81,9 @@ public class ThreadingUtil {
 	}
 
 	public static void passListWithBlocksToThreads(List<BlockPos> blocksToPlace, Block blockToPlace, World world, int entriesPerPartList, boolean async) {
+		if(world == null) {
+			return;
+		}
 		if(async) {
 			List<BlockPos> bplistTMP = new ArrayList<BlockPos>();
 			int counter = 1;
@@ -90,10 +96,12 @@ public class ThreadingUtil {
 						@Override
 						public void run() {
 							for(BlockPos b : bplistTMP) {
-								if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-									world.setBlockToAir(b);
-								} else {
-									world.setBlockState(b, blockToPlace.getDefaultState());
+								if(b != null) {
+									if(Block.isEqualTo(blockToPlace, Blocks.AIR)) {
+										world.setBlockToAir(b);
+									} else {
+										world.setBlockState(b, blockToPlace.getDefaultState());
+									}
 								}
 							}
 							
