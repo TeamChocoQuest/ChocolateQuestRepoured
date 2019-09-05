@@ -146,11 +146,209 @@ public class CQONConversionUtil {
      * DESERIALIZATION
      */
 
-    public static ArrayList<Field> convertCQONToObject(String fileNameIncludingPath, Object toLoadInto) {
+    public static HashMap<String, Object> convertCQONToObject(ArrayList<Byte> serializedData) {
 
-        // NOT YET IMPLEMENTED
+        // Vars
+        ArrayList<String> linesFromInput = new ArrayList<>();
+        ArrayList<Byte> buffer = new ArrayList<>();
 
-        return null;
+        // Convert serializedData into an ArrayList of Strings, with each String value representing a line from the incoming CQON
+        for(Byte b : serializedData) {
+            // If not a newline char, add to buffer
+            if(b != '\n') {
+                buffer.add(b);
+            }
+            // Otherwise transfer buffer contents to linesFromInput and clear buffer
+            else {
+                linesFromInput.add(ByteArrayManipulationUtil.convertArrayListByteToString(buffer));
+                buffer = new ArrayList<>();
+            }
+        }
+
+        // Add remaining data (likely blank line at end of file)
+        if(buffer.size() != 0) {
+            linesFromInput.add(ByteArrayManipulationUtil.convertArrayListByteToString(buffer));
+        }
+
+        // Recursively parse
+        HashMap<String, Object> temp = recursiveConvertCQONToObject(linesFromInput, 0);
+        System.out.println("FINAL OUT: " + temp);
+        return temp;
+
+    }
+
+    // Internal, recursive portion of deserialization method
+    // Separated from public-facing method for performance reasons
+    private static HashMap<String, Object> recursiveConvertCQONToObject(ArrayList<String> linesFromInput, int startingLineNumber) {
+
+        // Vars
+        HashMap<String, Object> toReturn = new HashMap<>();
+        int currentLineNumber = startingLineNumber;
+
+        // Iterate through lines
+        for(/**/; currentLineNumber < linesFromInput.size(); currentLineNumber++) {
+
+            /* Extract Tokens */
+
+            // Line-specific values
+            StringBuilder[] tokens = new StringBuilder[3];
+            int tokenIndex = 0;
+
+            // Initialize StringBuilders
+            for(int i = 0; i < tokens.length; i++) {
+                tokens[i] = new StringBuilder();
+            }
+
+            // Separate line into 3 tokens, corresponding to type, name, and value respectively.
+            for(char c : linesFromInput.get(currentLineNumber).toCharArray()) {
+                if(c == '\t') {
+                    // ignore - tabs exists solely for readability
+                } else if (c == ' ') {
+                    tokenIndex++;
+                } else {
+                    tokens[tokenIndex].append(c);
+                }
+            }
+
+            // DEBUG OUTPUT
+            //*
+            System.out.println("RECURSIVE CQON DESERIALIZATION [" + startingLineNumber + ", " + currentLineNumber + "/" + (linesFromInput.size() - 1) + "]");
+            System.out.println("TOKENS:");
+            System.out.println(tokens[0].toString());
+            System.out.println(tokens[1].toString());
+            System.out.println(tokens[2].toString());
+            //*/
+
+            /* Deserialize */
+
+            // Recursion check
+            if(tokens[0].toString().equals("]") || tokens[0].toString().equals("}") || linesFromInput.get(currentLineNumber).equals("")) {
+                toReturn.put("__CQON__currentLineNumber", currentLineNumber);
+            }
+            // Object
+            else if(tokens[2].toString().equals("[")) {
+
+                // Return var
+                Object toAddToReturn = null;
+
+                // Instantiate return object
+                try {
+                    toAddToReturn = IntrusiveModificationHelper.getInstanceOfClass( Class.forName( tokens[0].toString() ) );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                System.out.println(toAddToReturn);
+                System.out.println(toAddToReturn.getClass());
+
+                // Set each value recursively
+                boolean continueRecursion = true;
+                HashMap<String, Object> parsed = null;
+                // Loop until end of block
+                while(continueRecursion) {
+                    // Make recursive call (no parameter manipulation, already incremented)
+                    parsed = recursiveConvertCQONToObject(linesFromInput, currentLineNumber + 1);
+                    try{
+                        System.out.println("Obj Parsed: " + parsed);
+                        // If valid value, set appropriate field value and continue loop (try block to catch NPE)
+                        if(parsed.keySet().toArray().length != 0) {
+                            // Manually increment containing for loop
+                            currentLineNumber = (Integer)parsed.get("__CQON__currentLineNumber");
+                            parsed.remove("__CQON__currentLineNumber");
+                            System.out.println("All fields in toAddToReturn: " + IntrusiveModificationHelper.reflectGetAllFieldNames(toAddToReturn));
+                            System.out.println((String)(parsed.keySet().toArray()[0]) + " = " + parsed.get(parsed.keySet().toArray()[0]));
+                            toAddToReturn = IntrusiveModificationHelper.reflectSetFieldValue(toAddToReturn, IntrusiveModificationHelper.reflectGetField(toAddToReturn, new String[] {(String)(parsed.keySet().toArray()[0])}), parsed.get(parsed.keySet().toArray()[0]));
+                        }
+                        // Otherwise end loop
+                        else {
+                            continueRecursion = false;
+                        }
+                    } catch (NullPointerException ignored) {
+                        ignored.printStackTrace();
+                        continueRecursion = false;
+                    }
+                }
+
+                // Add to return var
+                toReturn.put( tokens[1].toString(), toAddToReturn );
+
+            }
+            // Array
+            else if(tokens[2].toString().equals("{")) {
+
+                // Vars
+                Object toAddToReturn = null;
+                ArrayList<Object> temp = new ArrayList<>();
+                HashMap<String, Object> parsed = null;
+                HashMap<String, Object> parsed2 = null;
+                boolean continueRecursion = true;
+
+                // Instantiate return object
+                try {
+                    toAddToReturn = IntrusiveModificationHelper.getInstanceOfClass( Class.forName( tokens[0].toString() ) );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // Loop until end of block, adding all values to temp
+                while(continueRecursion) {
+                    // Make recursive call (no parameter manipulation, already incremented)
+                    parsed = recursiveConvertCQONToObject(linesFromInput, currentLineNumber + 1);
+                    try {
+                        // If valid value, set appropriate field value and continue loop (try block to catch NPE)
+                        if(parsed.values().toArray().length != 0 && parsed.values().toArray()[0] != null) {
+                            // Manually increment containing for loop
+                            System.out.println( "__CQON__currentLineNumber = " + parsed.get("__CQON__currentLineNumber") );
+                            currentLineNumber = (Integer)parsed.get("__CQON__currentLineNumber");
+                            parsed.remove("__CQON__currentLineNumber");
+                            temp.add(parsed.values().toArray()[0]);
+                        }
+                        // Otherwise end loop
+                        else {
+                            continueRecursion = false;
+                        }
+                    } catch (NullPointerException ignored) {
+                        continueRecursion = false;
+                    }
+                }
+
+                // Add to toAddToReturn var (Implementation is type-specific)
+                if(toAddToReturn instanceof Object[]) {
+                    toAddToReturn = ArrayCollectionMapManipulationUtil.convertArrayishToArray(temp);
+                }
+                else if(toAddToReturn instanceof AbstractCollection) {
+                    ((AbstractCollection)toAddToReturn).addAll(temp);
+                }
+                else if(toAddToReturn instanceof AbstractMap) {
+                    for(int i = 0; i < temp.size(); i++) {
+                        ((AbstractMap)toAddToReturn).put(temp.get(2 * i), temp.get(2 * i + 1));
+                    }
+                }
+
+                // Add to return var
+                toReturn.put( tokens[1].toString(), toAddToReturn );
+
+            }
+            // Primitive/String
+            else {
+
+                // Attempt to instantiate prim using PrimitiveManipulationUtil
+                Object fromPrimitiveManipulationUtil = PrimitiveManipulationUtil.getPrimFromString(tokens[0].toString(), tokens[2].toString());
+
+                // If successful, put into return var
+                if(fromPrimitiveManipulationUtil != null) {
+                    toReturn.put(tokens[1].toString(), fromPrimitiveManipulationUtil);
+                }
+                // Otherwise, assume value is a String and return directly
+                else {
+                    toReturn.put(tokens[1].toString(), tokens[2].toString());
+                }
+
+            }
+
+        }
+
+        return toReturn;
 
     }
 
