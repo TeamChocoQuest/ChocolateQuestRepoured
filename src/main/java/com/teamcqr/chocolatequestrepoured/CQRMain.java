@@ -4,9 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.capability.CapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.CapabilityDungeonPlacerStorage;
+import com.teamcqr.chocolatequestrepoured.capability.ICapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.dungeonprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
@@ -25,6 +29,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -157,6 +162,8 @@ public class CQRMain
 		SmeltingHandler.init();
 
 		ModMessages.registerMessages();
+
+		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -216,6 +223,8 @@ public class CQRMain
 	public void init(FMLInitializationEvent event)
 	{		
 		proxy.init(event);
+
+		ModMaterials.setRepairItemsForMaterials();
 	}
 	
 	@EventHandler

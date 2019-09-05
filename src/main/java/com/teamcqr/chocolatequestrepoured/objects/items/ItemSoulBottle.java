@@ -7,14 +7,13 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
@@ -29,13 +28,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemSoulBottle extends ItemBase
+public class ItemSoulBottle extends Item
 {
 	private String EntityIn = "EntityIn";
 	
-	public ItemSoulBottle(String name) 
+	public ItemSoulBottle() 
 	{
-		super(name);
 		setMaxStackSize(1);
 	}
 	

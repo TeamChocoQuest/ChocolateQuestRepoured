@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.BlockBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -20,15 +18,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockNull extends BlockBase
-{
+public class BlockNull extends Block {
+
 	private final boolean ignoreSimilarity;
 	public static final PropertyBool PASSABLE = PropertyBool.create("passable");
-	
-	public BlockNull(String name, Material materialIn, boolean ignoreSimilarityIn) 
-	{
-		super(name, materialIn);
-		
+
+	public BlockNull(boolean ignoreSimilarityIn) {
+		super(Material.GLASS);
+
 		setSoundType(SoundType.GLASS);
 		setHardness(2.0F);
 		setResistance(30.0F);
@@ -36,89 +33,74 @@ public class BlockNull extends BlockBase
 		setDefaultState(blockState.getBaseState().withProperty(PASSABLE, false));
 		this.ignoreSimilarity = ignoreSimilarityIn;
 	}
-	
-	@Override
-	public boolean isFullCube(IBlockState state)
-    {
-        return false;
-    }
 
 	@Override
-    public boolean isOpaqueCube(IBlockState state)
-    {
-        return false;
-    }
-	
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
-    {
-		if(playerIn.capabilities.isCreativeMode && playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty())
-		{
-			if(state.getValue(PASSABLE))
-			{
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (playerIn.capabilities.isCreativeMode && playerIn.getHeldItem(EnumHand.MAIN_HAND).isEmpty()) {
+			if (state.getValue(PASSABLE)) {
 				worldIn.setBlockState(pos, state.withProperty(PASSABLE, false), 3);
-			}
-			else
-			{
+			} else {
 				worldIn.setBlockState(pos, state.withProperty(PASSABLE, true), 3);
 			}
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
-    }
-	
+	}
+
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
-    {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return blockState.getValue(PASSABLE) ? null : blockState.getBoundingBox(worldIn, pos);
-    }
-	
+	}
+
 	@Override
-    public IBlockState getStateFromMeta(int meta)
-    {
-        return this.getDefaultState().withProperty(PASSABLE, (meta & 1) != 0);
-    }
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(PASSABLE, (meta & 1) != 0);
+	}
 
-    @Override
-    public int getMetaFromState(IBlockState state)
-    {
-        return state.getValue(PASSABLE) ? 1 : 0;
-    }
-
-    @Override
-    protected BlockStateContainer createBlockState()
-    {
-        return new BlockStateContainer(this, new IProperty[] {PASSABLE});
-    }
-    
-    @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
-    {
-        return BlockRenderLayer.CUTOUT;
-    }
-    
-    @SuppressWarnings("deprecation")
 	@Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-    {
-        IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
-        Block block = iblockstate.getBlock();
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(PASSABLE) ? 1 : 0;
+	}
 
-        if(blockState != iblockstate)
-        {
-        	return true;
-    	}
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { PASSABLE });
+	}
 
-        if(block == this)
-    	{
-        	return false;
-    	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
 
-        return !this.ignoreSimilarity && block == this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-    }
+	@SuppressWarnings("deprecation")
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		IBlockState iblockstate = blockAccess.getBlockState(pos.offset(side));
+		Block block = iblockstate.getBlock();
+
+		if (blockState != iblockstate) {
+			return true;
+		}
+
+		if (block == this) {
+			return false;
+		}
+
+		return !this.ignoreSimilarity && block == this ? false : super.shouldSideBeRendered(blockState, blockAccess, pos, side);
+	}
+
 }

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.block.Block;
@@ -84,12 +84,7 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean isLootChest(Block b) {
-		for(Block lc : ModBlocks.LOOT_CHEST_BLOCKS) {
-			if(Block.isEqualTo(b, lc)) {
-				return true;
-			}
-		}
-		return false;
+		return b instanceof BlockExporterChest;
 	}
 	
 	public static boolean isCQBanner(TileEntityBanner banner) {
