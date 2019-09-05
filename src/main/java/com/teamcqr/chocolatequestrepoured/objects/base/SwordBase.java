@@ -16,7 +16,7 @@ public class SwordBase extends ItemSword implements IHasModel
 		setRegistryName(name);
 		setCreativeTab(CQRMain.CQRItemsTab);
 		
-		ModItems.ITEMS.add(this);
+		//ModItems.ITEMS.add(this);
 	}
 		
 	@Override
