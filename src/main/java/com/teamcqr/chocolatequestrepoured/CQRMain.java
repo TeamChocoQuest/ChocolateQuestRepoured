@@ -154,6 +154,8 @@ public class CQRMain
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		SmeltingHandler.init();
+
+		ModMessages.registerMessages();
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
