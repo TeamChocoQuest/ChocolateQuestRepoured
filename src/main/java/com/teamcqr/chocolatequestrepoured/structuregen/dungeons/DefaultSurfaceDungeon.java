@@ -5,9 +5,8 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultSurfaceGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -49,7 +48,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new DefaultGenerator();
+		return new DefaultSurfaceGenerator(null, null, null);
 	}
 	
 	protected File pickStructure(Random random) {
