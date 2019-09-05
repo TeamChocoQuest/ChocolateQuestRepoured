@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
 import net.minecraft.block.state.IBlockState;
