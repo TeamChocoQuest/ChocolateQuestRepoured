@@ -4,7 +4,7 @@ import java.io.File;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.StrongholdGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.StrongholdOpenGenerator;
 
 /**
  * Copyright (c) 29.04.2019
@@ -34,7 +34,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new StrongholdGenerator();
+		return new StrongholdOpenGenerator();
 	}
 
 	public File getStairFolder() {
