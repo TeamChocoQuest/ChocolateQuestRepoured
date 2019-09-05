@@ -157,6 +157,8 @@ public class CQRMain
 		SmeltingHandler.init();
 
 		ModMessages.registerMessages();
+
+		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
