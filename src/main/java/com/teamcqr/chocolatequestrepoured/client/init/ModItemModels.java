@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -24,11 +25,8 @@ public class ModItemModels {
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
 		// register custom item models first
-		for (int i = 0; i < 16; i++) {
+		for (int i = 0; i <= ItemDungeonPlacer.HIGHEST_ICON_NUMBER; i++) {
 			registerCustomItemModel(ModItems.DUNGEON_PLACER, i, ModItems.DUNGEON_PLACER.getRegistryName().toString() + "_d" + i, "inventory");
-		}
-		for (int i = 0; i < 16; i++) {
-			registerCustomItemModel(ModItems.DUNGEON_PLACER_2, i, ModItems.DUNGEON_PLACER.getRegistryName().toString() + "_d" + (i + 16), "inventory");
 		}
 
 		// register all other item models
