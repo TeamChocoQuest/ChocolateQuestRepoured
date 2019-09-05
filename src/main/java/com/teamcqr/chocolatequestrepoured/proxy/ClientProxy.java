@@ -54,7 +54,7 @@ public class ClientProxy extends CommonProxy
 		registerRenderers();
 		
 		//PACKETS / MESSAGES
-		CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
+		//CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
 	}
 	
 	@Override

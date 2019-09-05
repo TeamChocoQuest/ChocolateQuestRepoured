@@ -21,6 +21,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -92,6 +94,36 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 	@Override
 	protected abstract void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty);
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+
+		boolean hasHome = this.homePosition != null;
+		compound.setBoolean("hasHome", hasHome);
+		if (hasHome) {
+			compound.setTag("home", NBTUtil.createPosTag(this.homePosition));
+		}
+
+		boolean hasLeader = this.leaderUUID != null;
+		compound.setBoolean("hasLeader", hasLeader);
+		if (hasLeader) {
+			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
+		}
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+
+		if (compound.getBoolean("hasHome")) {
+			this.homePosition = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
+		}
+
+		if (compound.getBoolean("hasLeader")) {
+			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+	}
 
 	public EntityLivingBase getLeader() {
 		if (this.hasLeader()) {
