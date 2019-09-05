@@ -56,7 +56,7 @@ public class EventsHandler
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+		//event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
 		//ItemDungeonPlacer.itemRegistry = event.getRegistry();
 	}
 	
