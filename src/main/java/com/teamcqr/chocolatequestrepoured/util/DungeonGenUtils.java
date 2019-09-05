@@ -84,12 +84,7 @@ public class DungeonGenUtils {
 	}
 	
 	public static boolean isLootChest(Block b) {
-		for(Block lc : ModBlocks.LOOT_CHEST_BLOCKS) {
-			if(Block.isEqualTo(b, lc)) {
-				return true;
-			}
-		}
-		return false;
+		return b instanceof BlockExporterChest;
 	}
 	
 	public static boolean isCQBanner(TileEntityBanner banner) {
