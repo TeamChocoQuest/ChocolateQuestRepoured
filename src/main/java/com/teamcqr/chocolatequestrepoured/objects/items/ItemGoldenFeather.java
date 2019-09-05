@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
