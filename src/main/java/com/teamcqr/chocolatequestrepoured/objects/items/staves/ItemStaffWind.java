@@ -1,13 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.staves;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
+import net.minecraft.item.Item;
 
-public class ItemStaffWind extends ItemBase
-{
-	public ItemStaffWind(String name) 
-	{
-		super(name);
+public class ItemStaffWind extends Item {
+
+	public ItemStaffWind() {
 		setMaxDamage(2048);
 		setMaxStackSize(1);
 	}
+
 }
