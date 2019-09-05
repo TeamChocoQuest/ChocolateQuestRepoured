@@ -143,15 +143,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
 		BlockPos spawnerPos = new BlockPos(x, y, z);
-		/*world.setBlockState(spawnerPos, Blocks.MOB_SPAWNER.getDefaultState());
-		
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(spawnerPos);
-		
-		spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
-		//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
-		spawner.updateContainingBlockInfo();
-		
-		spawner.update();*/
+
 		SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getMob());
 	}
 	
