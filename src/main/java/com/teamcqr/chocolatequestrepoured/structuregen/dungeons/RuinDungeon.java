@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.RuinGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -63,7 +62,7 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new DefaultGenerator();
+		return new RuinGenerator(null, null, null);
 	}
 	
 	@Override

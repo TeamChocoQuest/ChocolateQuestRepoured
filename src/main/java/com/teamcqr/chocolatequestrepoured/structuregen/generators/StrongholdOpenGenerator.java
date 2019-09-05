@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -10,47 +8,45 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class SimpleCaveGenerator implements IDungeonGenerator {
-	
-	BlockPos[] floorBlocks = new BlockPos[]{};
-	BlockPos[] airBlocks = new BlockPos[]{};
-	
-	Block floorMat; 
-	Block airMat;
-	
-	public SimpleCaveGenerator(Block floorBlock, Block airBlock) {
-		this.floorMat = floorBlock;
-		this.airMat = airBlock;
-	}
+public class StrongholdOpenGenerator implements IDungeonGenerator{
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		//Calculate the positions of the airblocks !ASYNC to save resources!
+		//Builds support platform for entry, then creates the spire down
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		//Place the blocks into the calculated positions
+		//Will generate the structure
+		//Algorithm: while(genRooms < rooms && genFloors < maxFloors) do {
+		//while(genRoomsOnFloor < roomsPerFloor) {
+		//    choose structure, calculate next pos and chose next structure (System: structures in different folders named to where they may attach
+		//  build Staircase at next position
+		//  genRoomsOnFloor++
+		//  genFloors++
+		//build staircase to bossroom at next position, then build boss room
+		
+		//Structure gen information: stored in map with location and structure file
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		//UNUSED
+		//build all the structures in the map
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		//Place loot chest
+		//Unused
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
-		//Place boss spawner
+		//Unused
 	}
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
-		//MAKES NO SENSE FOR CAVES
+		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
 	}
 
 }

@@ -3,15 +3,30 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.base.ItemDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.*;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.AbandonedDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VillageDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -29,15 +44,15 @@ public class DungeonRegistry {
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
-	//TODO: Improve this method by splitting it into multiple smaller parts
+	//DONE: Improve this method by splitting it into multiple smaller parts
 	//DONE: It seems that choosing a random dungeon does not work how it should, rewrite this section or correct it
 	public void loadDungeonFiles() {
 		System.out.println("Loading dungeon configs...");
 		if(CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
 			System.out.println("Found " + CQRMain.CQ_DUNGEON_FOLDER.listFiles().length + " dungeon configs. Loading...");
 			System.out.println("Searching dungeons in " + CQRMain.CQ_DUNGEON_FOLDER.getAbsolutePath() );
-			//TODO: Make config "search" recursive, so that it also search in sub folders
-			for(File dungeonConfigurationFile : CQRMain.CQ_DUNGEON_FOLDER.listFiles()) {
+			//DONE: Make config "search" recursive, so that it also search in sub folders
+			for(File dungeonConfigurationFile : getAllFilesInFolder(CQRMain.CQ_DUNGEON_FOLDER)) {
 				System.out.println("Loading dungeon configuration " + dungeonConfigurationFile.getName() + "...");
 				Properties dungeonConfig = new Properties();
 				FileInputStream stream = null;
@@ -50,39 +65,12 @@ public class DungeonRegistry {
 					
 					if(EDungeonGenerator.isValidDungeonGenerator(dunType)) {
 						
-						BlockPos lockedPos = new BlockPos(0,0,0);
-						
-						boolean posLocked = PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false);
-						if(posLocked) {
-							if(dungeonConfig.containsKey("spawnAt")) {
-								String[] args = dungeonConfig.getProperty("spawnAt", "-;-;-").split(";");
-								if(args.length == 3) {
-									try {
-										int x = Integer.parseInt(args[0]);
-										int y = Integer.parseInt(args[1]);
-										int z = Integer.parseInt(args[2]);
-										
-										lockedPos = new BlockPos(x, y, z);
-										
-									} catch(NumberFormatException ex) {
-										posLocked = false;
-									}
-								} else {
-									posLocked = false;
-								}
-							}  else {
-								posLocked = false;
-							}
-						}
-						
 						DungeonBase dungeon = getDungeonByType(dunType, dungeonConfigurationFile);
 						
 						if(dungeon != null) {
 							//Position restriction stuff here
-							if(posLocked) {
-								System.out.println("Dungeon " + dungeon.getDungeonName() + " will spawn at X=" + lockedPos.getX() + " Y=" + lockedPos.getY() + " Z=" + lockedPos.getZ());
-								dungeon.setLockPos(lockedPos, posLocked);
-							}
+							
+							dungeon = handleLockedPos(dungeon, dungeonConfig);
 							//DONE: do biome map filling
 							//Biome map filling
 							String[] biomes = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[]{"PLAINS"});
@@ -146,6 +134,82 @@ public class DungeonRegistry {
 		}
 	}
 	
+	private DungeonBase handleLockedPos(DungeonBase dungeon, Properties dungeonConfig) {
+		BlockPos lockedPos = new BlockPos(0,0,0);
+		boolean posLocked = PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false);
+		if(posLocked) {
+			if(dungeonConfig.containsKey("spawnAt")) {
+				String[] args = dungeonConfig.getProperty("spawnAt", "-;-;-").split(";");
+				if(args.length == 3) {
+					try {
+						int x = Integer.parseInt(args[0]);
+						int y = Integer.parseInt(args[1]);
+						int z = Integer.parseInt(args[2]);
+						
+						lockedPos = new BlockPos(x, y, z);
+						
+					} catch(NumberFormatException ex) {
+						posLocked = false;
+					}
+				} else {
+					posLocked = false;
+				}
+			}  else {
+				posLocked = false;
+			}
+		}
+		
+		if(posLocked) {
+			System.out.println("Dungeon " + dungeon.getDungeonName() + " will spawn at X=" + lockedPos.getX() + " Y=" + lockedPos.getY() + " Z=" + lockedPos.getZ());
+			dungeon.setLockPos(lockedPos, posLocked);
+		}
+		
+		return dungeon;
+	}
+
+	private Set<File> getAllFilesInFolder(File cQ_DUNGEON_FOLDER) {
+		Set<File> files = new HashSet<>();
+		
+		for(File f : cQ_DUNGEON_FOLDER.listFiles(new FilenameFilter() {
+			
+			String[] fileExtensions = new String[] {"properties", "prop", "cfg"};
+			
+			@Override
+			public boolean accept(File file, String var2) {
+				if (file != null) {
+					if (file.isDirectory()) {
+						return true;
+					}
+
+					String fileName = file.getName();
+					int var3 = fileName.lastIndexOf(46);
+					if (var3 > 0 && var3 < fileName.length() - 1) {
+						String var4 = fileName.substring(var3 + 1).toLowerCase(Locale.ENGLISH);
+						String[] var5 = fileExtensions;
+						int var6 = var5.length;
+
+						for (int var7 = 0; var7 < var6; ++var7) {
+							String var8 = var5[var7];
+							if (var4.equals(var8)) {
+								return true;
+							}
+						}
+					}
+				}
+
+				return false;
+			}
+		})) {
+			if(f.isDirectory()) {
+				files.addAll(getAllFilesInFolder(f));
+			} else {
+				files.add(f);
+			}
+		}
+		
+		return files;
+	}
+
 	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
 		
 		switch(EDungeonGenerator.valueOf(dunType.toUpperCase())) {

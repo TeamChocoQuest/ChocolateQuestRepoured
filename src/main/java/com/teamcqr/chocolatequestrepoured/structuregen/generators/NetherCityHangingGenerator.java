@@ -23,7 +23,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.common.MinecraftForge;
 
-public class FloatingNetherCityGenerator implements IDungeonGenerator {
+public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 	private FloatingNetherCity dungeon;
 	private int islandCount = 1;
@@ -31,7 +31,7 @@ public class FloatingNetherCityGenerator implements IDungeonGenerator {
 	
 	//This needs to calculate async (island blocks, chain blocks, air blocks)
 	
-	public FloatingNetherCityGenerator(FloatingNetherCity generator) {
+	public NetherCityHangingGenerator(FloatingNetherCity generator) {
 		this.dungeon = generator;
 		this.islandCount = this.dungeon.getBuildingCount(new Random());
 	}

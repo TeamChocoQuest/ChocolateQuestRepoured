@@ -18,9 +18,7 @@ import net.minecraftforge.client.model.ModelLoader;
 
 public class ItemDungeonPlacer extends Item implements IHasModel {
 	
-	//public static IForgeRegistry<Item> itemRegistry;
-	
-	private static final int HIGHEST_ICON_NUMBER = 15;
+	private static final int HIGHEST_ICON_NUMBER = 16;
 	
 	private DungeonBase dungeon;
 	private int iconID = 0;
