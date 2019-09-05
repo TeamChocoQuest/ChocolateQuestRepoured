@@ -33,10 +33,10 @@ public enum ELootTable {
 	CQ_VANILLA_WOODLAND_MANSION(ModBlocks.EXPORTER_CHEST_VANILLA_MANSION, 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
 	
 	//DONE: LOAD LOOT TABLES
-	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_TREASURE, 0, "cq_treasure", registerChest("cq_treasure"), false),
+	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_VALUABLE, 0, "cq_treasure", registerChest("cq_treasure"), false),
 	CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
 	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false),
-	CQ_MATERIAL(ModBlocks.EXPORTER_CHEST_MATERIAL, 3, "cq_material", registerChest("cq_material"), false),
+	CQ_MATERIAL(ModBlocks.EXPORTER_CHEST_UTILITY, 3, "cq_material", registerChest("cq_material"), false),
 	
 	CQ_CUSTOM_1(ModBlocks.EXPORTER_CHEST_CUSTOM_1, 18, "cq_custom_1", registerChest("custom/cq_1"), true),
 	CQ_CUSTOM_2(ModBlocks.EXPORTER_CHEST_CUSTOM_2, 19, "cq_custom_2", registerChest("custom/cq_2"), true),
