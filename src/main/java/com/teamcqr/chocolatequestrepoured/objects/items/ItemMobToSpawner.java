@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
 import net.minecraft.block.state.IBlockState;
@@ -9,16 +8,16 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemMobToSpawner extends ItemBase {
+public class ItemMobToSpawner extends Item {
 	
-	public ItemMobToSpawner(String name) {
-		super(name);
+	public ItemMobToSpawner() {
 		setMaxStackSize(1);
 	}
 	

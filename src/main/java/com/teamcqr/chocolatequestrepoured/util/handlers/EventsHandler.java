@@ -56,19 +56,20 @@ public class EventsHandler
 	@SubscribeEvent
 	public static void onItemRegister(RegistryEvent.Register<Item> event)
 	{
-		event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
+		//event.getRegistry().registerAll(ModItems.ITEMS.toArray(new Item[0]));
 		//ItemDungeonPlacer.itemRegistry = event.getRegistry();
 	}
 	
 	@SubscribeEvent
 	public static void onBlockRegister(RegistryEvent.Register<Block> event)
 	{
-		event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
+		//event.getRegistry().registerAll(ModBlocks.BLOCKS.toArray(new Block[0]));
 	}
 	
 	@SubscribeEvent
 	public static void onModelRegister(ModelRegistryEvent event)
 	{
+		/*
 		System.out.println("Loading Item models...");
 		for(Item item : ModItems.ITEMS)
 		{
@@ -85,6 +86,7 @@ public class EventsHandler
 				((IHasModel)block).registerModels();
 			}
 		}
+		*/
 	}
 	
 	@SubscribeEvent
