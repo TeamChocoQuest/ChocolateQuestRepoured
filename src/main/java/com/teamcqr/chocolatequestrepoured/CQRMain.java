@@ -218,6 +218,8 @@ public class CQRMain
 	public void init(FMLInitializationEvent event)
 	{		
 		proxy.init(event);
+
+		ModMaterials.setRepairItemsForMaterials();
 	}
 	
 	@EventHandler
