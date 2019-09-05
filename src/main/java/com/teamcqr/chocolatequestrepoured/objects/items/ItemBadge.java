@@ -8,26 +8,25 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemBadge extends ItemBase
+public class ItemBadge extends Item
 {
 	public static UUID EntityUUID;
 	
-	public ItemBadge(String name) 
+	public ItemBadge() 
 	{
-		super(name);
 		setMaxStackSize(1);
 	}
 	
