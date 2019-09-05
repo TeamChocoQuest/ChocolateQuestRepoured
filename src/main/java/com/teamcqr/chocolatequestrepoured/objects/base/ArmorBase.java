@@ -19,7 +19,7 @@ public class ArmorBase extends ItemArmor implements IHasModel
 		setRegistryName(name);
 		setCreativeTab(CQRMain.CQRItemsTab);
 		
-		ModItems.ITEMS.add(this);
+		//ModItems.ITEMS.add(this);
 	}
 
 	@Override
