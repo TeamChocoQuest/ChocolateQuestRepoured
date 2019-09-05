@@ -24,6 +24,12 @@ public class ModItemModels {
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
 		// register custom item models first
+		for (int i = 0; i < 16; i++) {
+			registerCustomItemModel(ModItems.DUNGEON_PLACER, i, ModItems.DUNGEON_PLACER.getRegistryName().toString() + "_d" + i, "inventory");
+		}
+		for (int i = 0; i < 16; i++) {
+			registerCustomItemModel(ModItems.DUNGEON_PLACER_2, i, ModItems.DUNGEON_PLACER.getRegistryName().toString() + "_d" + (i + 16), "inventory");
+		}
 
 		// register all other item models
 		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {
