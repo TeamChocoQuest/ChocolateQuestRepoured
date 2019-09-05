@@ -6,14 +6,13 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -27,15 +26,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemTeleportStone extends ItemBase
+public class ItemTeleportStone extends Item
 {
 	private String X = "x";
 	private String Y = "y";
 	private String Z = "z";
 	
-	public ItemTeleportStone(String name) 
+	public ItemTeleportStone() 
 	{
-		super(name);
 		setMaxDamage(100);
 	}
 	
