@@ -22,13 +22,13 @@ import net.minecraftforge.common.MinecraftForge;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class SimplePasteGenerator implements IDungeonGenerator{
+public class DefaultSurfaceGenerator implements IDungeonGenerator{
 	
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DefaultSurfaceDungeon dungeon;
 	
-	public SimplePasteGenerator(DefaultSurfaceDungeon dun, CQStructure struct, PlacementSettings settings) {
+	public DefaultSurfaceGenerator(DefaultSurfaceDungeon dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
 		this.structure = struct;
 		this.placeSettings = settings;
