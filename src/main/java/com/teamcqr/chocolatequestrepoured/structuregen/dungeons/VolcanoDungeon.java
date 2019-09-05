@@ -45,7 +45,7 @@ public class VolcanoDungeon extends StrongholdOpenDungeon {
 	private Block magmaBlock = Blocks.MAGMA;
 	private Block rampBlock = Blocks.NETHERRACK;
 	private Block lowerStoneBlock = Blocks.COBBLESTONE;
-	private Block pillarBlock = ModBlocks.GRANITE_BRICK_LARGE;
+	private Block pillarBlock = ModBlocks.GRANITE_LARGE;
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);
