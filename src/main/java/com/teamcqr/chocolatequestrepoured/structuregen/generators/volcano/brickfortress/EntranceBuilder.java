@@ -138,7 +138,7 @@ public class EntranceBuilder {
 
 		//Floor
 		for(BlockPos p : BlockPos.getAllInBox(start, endP)) {
-			world.setBlockState(p, ModBlocks.GRANITE_BRICK_SMALL.getDefaultState());
+			world.setBlockState(p, ModBlocks.GRANITE_SMALL.getDefaultState());
 		}
 		
 		//Ceiling
