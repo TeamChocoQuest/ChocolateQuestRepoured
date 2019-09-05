@@ -185,13 +185,13 @@ public class CavernDungeon extends DungeonBase {
 			world.setBlockToAir(bossPos.down());
 			
 			//BOSS CHEST
-			world.setBlockState(bossPos.down(), Blocks.CHEST.getDefaultState());
+			world.setBlockState(bossPos, Blocks.CHEST.getDefaultState());
 			TileEntityChest bossChest = (TileEntityChest) world.getTileEntity(bossPos.down());
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
 			
 			//BOSS SPAWNER
 			//DONE: spawn the boss
-			SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(getBossMob(), world), false, null, world, bossPos);
+			SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(getBossMob(), world), false, null, world, bossPos.up());
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());
