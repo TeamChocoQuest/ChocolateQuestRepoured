@@ -3,11 +3,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.Set;
 
@@ -168,7 +170,36 @@ public class DungeonRegistry {
 	private Set<File> getAllFilesInFolder(File cQ_DUNGEON_FOLDER) {
 		Set<File> files = new HashSet<>();
 		
-		for(File f : cQ_DUNGEON_FOLDER.listFiles()) {
+		for(File f : cQ_DUNGEON_FOLDER.listFiles(new FilenameFilter() {
+			
+			String[] fileExtensions = new String[] {"properties", "prop", "cfg"};
+			
+			@Override
+			public boolean accept(File file, String var2) {
+				if (file != null) {
+					if (file.isDirectory()) {
+						return true;
+					}
+
+					String fileName = file.getName();
+					int var3 = fileName.lastIndexOf(46);
+					if (var3 > 0 && var3 < fileName.length() - 1) {
+						String var4 = fileName.substring(var3 + 1).toLowerCase(Locale.ENGLISH);
+						String[] var5 = fileExtensions;
+						int var6 = var5.length;
+
+						for (int var7 = 0; var7 < var6; ++var7) {
+							String var8 = var5[var7];
+							if (var4.equals(var8)) {
+								return true;
+							}
+						}
+					}
+				}
+
+				return false;
+			}
+		})) {
 			if(f.isDirectory()) {
 				files.addAll(getAllFilesInFolder(f));
 			} else {
