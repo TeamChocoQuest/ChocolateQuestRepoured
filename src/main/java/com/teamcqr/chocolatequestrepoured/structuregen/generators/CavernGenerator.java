@@ -166,7 +166,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		} */
 		else {
 			int v = 0;
-			buildSegment(start, world);
+			buildTunnelSegment(start, world);
 			if(xFirst) {
 				v = start.getX() < target.getX() ? 1 : -1;
 				if(start.getX() == target.getX()) {
@@ -184,7 +184,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		}
 	}
 	
-	private void buildSegment(BlockPos pos, World world) {
+	private void buildTunnelSegment(BlockPos pos, World world) {
 		Block airBlock = this.dungeon.getAirBlock();
 		Block floorMaterial = this.dungeon.getFloorBlock();
 		
