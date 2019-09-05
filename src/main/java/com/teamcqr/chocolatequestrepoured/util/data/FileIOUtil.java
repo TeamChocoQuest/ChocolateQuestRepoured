@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.data.IO;
+package com.teamcqr.chocolatequestrepoured.util.data;
 
 import net.minecraft.world.World;
 
