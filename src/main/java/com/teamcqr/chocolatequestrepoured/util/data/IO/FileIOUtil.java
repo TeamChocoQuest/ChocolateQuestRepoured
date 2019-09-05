@@ -11,7 +11,7 @@ import java.nio.file.Paths;
  * @author jdawg3636
  * GitHub: https://github.com/jdawg3636
  *
- * @version 25.07.19
+ * @version 05.09.19
  */
 public class FileIOUtil {
 
@@ -24,6 +24,7 @@ public class FileIOUtil {
 
     public static void saveToFile(String fileNameIncludingFullPathAndExtension, byte[] toSave) {
         try {
+            Files.createDirectories(Paths.get(fileNameIncludingFullPathAndExtension).getParent());
             Files.write(Paths.get(fileNameIncludingFullPathAndExtension), toSave);
         } catch (Exception e) {
             e.printStackTrace();
