@@ -29,6 +29,9 @@ public class TileEntityExporter extends TileEntity {
 	public boolean partModeUsing = false;
 	public boolean relativeMode = false;
 
+	private BlockPos minPos = new BlockPos(0, 0, 0);
+	private BlockPos maxPos = new BlockPos(0, 0, 0);
+
 	private EntityPlayer user = null;
 
 	public NBTTagCompound getExporterData(NBTTagCompound compound) {
@@ -54,6 +57,8 @@ public class TileEntityExporter extends TileEntity {
 		structureName = compound.getString("StructureName");
 		partModeUsing = compound.getBoolean("PartMode");
 		relativeMode = compound.getBoolean("RelativeMode");
+
+		this.onPositionsChanged();
 	}
 
 	@Override
@@ -80,6 +85,8 @@ public class TileEntityExporter extends TileEntity {
 		structureName = structName;
 		partModeUsing = usePartMode;
 		relativeMode = useRelativeMode;
+
+		this.onPositionsChanged();
 
 		this.markDirty();
 	}
