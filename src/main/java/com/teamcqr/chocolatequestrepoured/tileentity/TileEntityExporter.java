@@ -103,7 +103,6 @@ public class TileEntityExporter extends TileEntity {
 
 		GuiScreen screen = Minecraft.getMinecraft().currentScreen;
 		if (screen instanceof GuiExporter) {
-			System.out.println("SYNC GUI");
 			((GuiExporter) screen).sync();
 		}
 	}
