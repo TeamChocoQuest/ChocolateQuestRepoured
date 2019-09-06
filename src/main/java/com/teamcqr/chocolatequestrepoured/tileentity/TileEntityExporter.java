@@ -137,14 +137,27 @@ public class TileEntityExporter extends TileEntity {
 		}
 	}
 
-	public BlockPos getMinPos() {
-		return new BlockPos(Math.min(this.startX, this.endX), Math.min(this.startY, this.endY),
+	public void onPositionsChanged() {
+		this.minPos = new BlockPos(Math.min(this.startX, this.endX), Math.min(this.startY, this.endY),
 				Math.min(this.startZ, this.endZ));
+		this.maxPos = new BlockPos(Math.max(this.startX, this.endX), Math.max(this.startY, this.endY),
+				Math.max(this.startZ, this.endZ));
+	}
+
+	public BlockPos getMinPos() {
+		return this.minPos;
 	}
 
 	public BlockPos getMaxPos() {
-		return new BlockPos(Math.max(this.startX, this.endX), Math.max(this.startY, this.endY),
-				Math.max(this.startZ, this.endZ));
+		return this.maxPos;
+	}
+
+	public BlockPos getRenderMinPos() {
+		return this.relativeMode ? this.minPos : this.minPos.subtract(this.pos);
+	}
+
+	public BlockPos getRenderMaxPos() {
+		return this.relativeMode ? this.maxPos : this.maxPos.subtract(this.pos);
 	}
 
 }
