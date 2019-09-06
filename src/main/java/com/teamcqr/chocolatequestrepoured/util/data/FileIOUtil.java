@@ -1,6 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.util.data.IO;
+package com.teamcqr.chocolatequestrepoured.util.data;
 
-import net.minecraft.world.World;
+import net.minecraftforge.common.DimensionManager;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -15,12 +15,13 @@ import java.nio.file.Paths;
  */
 public class FileIOUtil {
 
-    // Prevent Instantiation
+    // Prevents Instantiation
     private FileIOUtil() {}
 
-    /*
-     * Binary File IO
-     */
+    // Helper method for saving to world file
+    public static String getAbsoluteWorldPath() {
+        return DimensionManager.getCurrentSaveRootDirectory() + "\\";
+    }
 
     public static void saveToFile(String fileNameIncludingFullPathAndExtension, byte[] toSave) {
         try {
@@ -35,18 +36,8 @@ public class FileIOUtil {
         try {
             return Files.readAllBytes(Paths.get(fileNameIncludingFullPathAndExtension));
         } catch (Exception e) {
-            e.printStackTrace();
+            return null;
         }
-        // Default - this means there is a problem
-        return new byte[0];
-    }
-
-    /*
-     * Helper Methods
-     */
-
-    public static String getFilePathFromWorld(World world) {
-        return world.getSaveHandler().getWorldDirectory().getAbsolutePath() + "//";
     }
 
 }
