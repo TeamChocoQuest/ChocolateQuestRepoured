@@ -4,9 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityDungeonPlacerStorage;
-import com.teamcqr.chocolatequestrepoured.capability.ICapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtleStorage;
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerStorage;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.dungeonprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -164,6 +167,8 @@ public class CQRMain
 		ModMessages.registerMessages();
 
 		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
+		CapabilityManager.INSTANCE.register(ICapabilityArmorTurtle.class, new CapabilityArmorTurtleStorage(), () -> new CapabilityArmorTurtle());
+
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
