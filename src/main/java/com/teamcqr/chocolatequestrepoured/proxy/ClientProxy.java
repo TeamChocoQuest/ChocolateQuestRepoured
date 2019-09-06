@@ -13,8 +13,6 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
-import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
-import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
@@ -27,7 +25,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileS
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -42,7 +39,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy
 {
