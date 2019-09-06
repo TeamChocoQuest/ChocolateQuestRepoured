@@ -26,18 +26,22 @@ public class ArchiveManipulationUtil {
      * Takes in a map of relative file path+names and their corresponding
      * data as a byte[] a single zip file containing all files provided (represented as a byte[])
      */
-    public static byte[] zip(HashMap<String, byte[]> inputFiles) throws Exception {
+    public static byte[] zip(HashMap<String, byte[]> inputFiles) {
         // Vars
         ByteArrayOutputStream toReturn = new ByteArrayOutputStream();
         ZipOutputStream out = new ZipOutputStream(toReturn);
-        // Loop Through Provided Map
-        for(String fileName : inputFiles.keySet()) {
-            out.putNextEntry(new ZipEntry(fileName));
-            out.write(inputFiles.get(fileName));
-            out.closeEntry();
+        try {
+            // Loop Through Provided Map
+            for(String fileName : inputFiles.keySet()) {
+                out.putNextEntry(new ZipEntry(fileName));
+                out.write(inputFiles.get(fileName));
+                out.closeEntry();
+            }
+            // Close Zip Output Stream
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        // Close Zip Output Stream
-        out.close();
         // Return
         return toReturn.toByteArray();
     }
