@@ -1,14 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.util.data;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 /**
- * Designed to assist with the creation, modification, and extraction of zip archives
+ * Designed to assist with the creation and extraction of zip archives
  * Intended for use with FileIOUtil or equivalent for reading from/writing to disk
  *
  * @author jdawg3636
@@ -17,6 +19,30 @@ import java.util.zip.ZipInputStream;
  * @version 05.09.19
  */
 public class ArchiveManipulationUtil {
+
+    /* Zipping */
+
+    /**
+     * Takes in a map of relative file path+names and their corresponding
+     * data as a byte[] a single zip file containing all files provided (represented as a byte[])
+     */
+    public static byte[] zip(HashMap<String, byte[]> inputFiles) throws Exception {
+        // Vars
+        ByteArrayOutputStream toReturn = new ByteArrayOutputStream();
+        ZipOutputStream out = new ZipOutputStream(toReturn);
+        // Loop Through Provided Map
+        for(String fileName : inputFiles.keySet()) {
+            out.putNextEntry(new ZipEntry(fileName));
+            out.write(inputFiles.get(fileName));
+            out.closeEntry();
+        }
+        // Close Zip Output Stream
+        out.close();
+        // Return
+        return toReturn.toByteArray();
+    }
+
+    /* Unzipping */
 
     /**
      * Convenience method for calling unzip method without specifying a prefix
