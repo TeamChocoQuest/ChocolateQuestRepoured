@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityDungeonPlacerProvider;
-import com.teamcqr.chocolatequestrepoured.capability.ICapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerProvider;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
