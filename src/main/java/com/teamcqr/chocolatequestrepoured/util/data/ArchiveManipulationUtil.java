@@ -64,6 +64,9 @@ public class ArchiveManipulationUtil {
      * @return Map of all files in archive with subdirectories included in the name (key) String
      */
     public static HashMap<String, byte[]> unzip(String namePrefix, byte[] zippedFileAsPrimByteArray){
+        // Null Check
+        if(zippedFileAsPrimByteArray == null) return null;
+
         // Vars
         ZipInputStream archiveAsInputStream = new ZipInputStream(new ByteArrayInputStream(zippedFileAsPrimByteArray));
         ZipEntry currentZipEntry = null;
