@@ -1,20 +1,21 @@
 package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
 
-import com.teamcqr.chocolatequestrepoured.util.data.ByteArrayManipulationUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.CQONConversionUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.FileIOUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.ArchiveManipulationUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.ObjectSerializationUtil;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
-import net.minecraftforge.fml.common.eventhandler.Event;
+import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -37,20 +38,34 @@ public class ProtectionHandler {
     private ArrayList<ProtectedRegion> activeRegions;
 
     // Accessors
-    public void registerRegion(ProtectedRegion region) {
-        activeRegions.add(region);
-    }
     public ArrayList<ProtectedRegion> getActiveRegions() {
         return activeRegions;
     }
 
-    // Detect Dungeon Spawn Event
+    // Handle Dungeon Spawn Event
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
-        ProtectedRegion toRegister = new ProtectedRegion(e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
-        registerRegion(toRegister);
-        // FileIOUtil.saveToFile( FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon", ByteArrayManipulationUtil.convertArrayListByteToPrimByteArray(CQONConversionUtil.convertObjectToCQON(toRegister, e.getDungeonID().toString(), CQONConversionUtil.getDefaultRelevancyLUT(), 0)));
-        // System.out.println( ByteArrayManipulationUtil.convertArrayListByteToString( CQONConversionUtil.convertObjectToCQON( (ProtectedRegion)(CQONConversionUtil.convertCQONToObject( ByteArrayManipulationUtil.convertPrimByteArrayToArrayListByte( FileIOUtil.loadFromFile(FileIOUtil.getFilePathFromWorld(e.getWorld())  + "test.cqon") ) ).values().toArray()[0]), e.getDungeonID().toString(), CQONConversionUtil.getDefaultRelevancyLUT(), 0 ) ) );
+        // Create ProtectedRegion obj
+        ProtectedRegion regionToBeRegistered = new ProtectedRegion(e.getDungeonID().toString(), e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
+        // Register in Memory
+        activeRegions.add(regionToBeRegistered);
+        // Register on Disc
+        HashMap<String, byte[]> regionsToBeZipped = new HashMap<>();
+        for(ProtectedRegion region : activeRegions) {
+            regionsToBeZipped.put( region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region) );
+        }
+        FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\protected_regions.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
+    }
+
+    // Handle World Load Event
+    @SubscribeEvent
+    public void eventHandleWorldLoad(WorldEvent.Load e) {
+        HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\protected_regions.zip"));
+        if(protectedRegionsFromDisc != null) {
+            for(String regionUUID : protectedRegionsFromDisc.keySet()) {
+                activeRegions.add((ProtectedRegion)ObjectSerializationUtil.readObectFromByteArray(protectedRegionsFromDisc.get(regionUUID)));
+            }
+        }
     }
 
     // Handle Protection-Related Events
@@ -58,7 +73,7 @@ public class ProtectionHandler {
     public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
 
         // Check break pos against all active regions and cancel if overlapping
-        for( ProtectedRegion region : activeRegions ) {
+        for( ProtectedRegion region : activeRegions) {
             if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
                 e.setCanceled(true);
             }
@@ -97,14 +112,15 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
-
+        // Commented out because not working
+        /*
         // Check spawn pos against all regions and cancel if overlapping
-        for( ProtectedRegion region : activeRegions ) {
+        for( ProtectedRegion region : activeRegions.get(e.getWorld()) ) {
             if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() ) && !e.isSpawner()) {
                 e.setResult(Event.Result.DENY);
             }
         }
-
+        */
     }
 
     /*

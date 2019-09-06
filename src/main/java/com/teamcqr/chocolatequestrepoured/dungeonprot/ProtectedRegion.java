@@ -1,9 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.dungeonprot;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.ICQONReady;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -17,20 +19,21 @@ import net.minecraft.world.World;
  *
  * @version 23.07.19
  */
-public class ProtectedRegion implements ICQONReady {
+public class ProtectedRegion implements Serializable {
 
     /*
      * Variables
      */
 
-    // Region Data - Immutable
-    private final BlockPos NWCorner;
-    private final BlockPos SECorner;
-    private final World world;
+    // Region Data
+    private String UUID;
+    private transient BlockPos NWCorner;
+    private transient BlockPos SECorner;
 
-    // Dependencies (Things that will disable ProtectedRegion if killed/destroyed)
-    private ArrayList<Entity> entityDependencies = new ArrayList<>(); // Likely a dungeon boss
-    private ArrayList<BlockPos> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
+    // Dependencies (Things that will remove ProtectedRegion if killed/destroyed)
+    // TODO Implement serialization for dependencies
+    private transient ArrayList<Entity> entityDependencies = new ArrayList<>(); // Likely a dungeon boss
+    private transient ArrayList<BlockPos> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
 
     // Settings
     public boolean preventBlockBreak = true;
@@ -42,22 +45,16 @@ public class ProtectedRegion implements ICQONReady {
     public boolean preventFireSpread = true;
     public boolean preventNaturalMobSpawn = true;
 
-    // Variable Names for Serialization
-    public String[] getCQONFieldNames() {
-        // Add every field
-        return IntrusiveModificationHelper.reflectGetAllFieldNames(this);
-    }
-
     /*
      * Constructors
      */
 
     // Contains all available region settings
-    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world, ArrayList<Entity> entityDependencies, ArrayList<BlockPos> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
+    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, ArrayList<Entity> entityDependencies, ArrayList<BlockPos> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
         // Region Data
+        this.UUID = UUID;
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
-        this.world = world;
         // Dependencies
         this.entityDependencies.addAll(entityDependencies);
         this.blockDependencies.addAll(blockDependencies);
@@ -73,26 +70,62 @@ public class ProtectedRegion implements ICQONReady {
     }
 
     // Contains only region data and uses default values for all dependency and protection settings
-    public ProtectedRegion(BlockPos NWCorner, BlockPos SECorner, World world) {
+    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, World world) {
+        this.UUID = UUID;
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
-        this.world = world;
+    }
+
+    /*
+     * Serialization
+     */
+
+    private void writeObject(ObjectOutputStream stream) throws Exception {
+        try {
+            stream.defaultWriteObject();
+        } catch (Exception ignored) {}
+        stream.writeInt(NWCorner.getX());
+        stream.writeInt(NWCorner.getY());
+        stream.writeInt(NWCorner.getZ());
+        stream.writeInt(SECorner.getX());
+        stream.writeInt(SECorner.getY());
+        stream.writeInt(SECorner.getZ());
+    }
+
+    private void readObject(ObjectInputStream stream) throws Exception {
+        try {
+            stream.defaultReadObject();
+        } catch (Exception ignored) {}
+        NWCorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
+        SECorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
     }
 
     /*
      * Private Field Accessors
      */
 
+    public String getUUIDString() {
+        return UUID;
+    }
+
+    public BlockPos getNWCorner() {
+        return NWCorner;
+    }
+
+    public BlockPos getSECorner() {
+        return SECorner;
+    }
+
     public void addEntityDependency(Entity entity) {
         entityDependencies.add(entity);
     }
 
-    public void addBlockDependency(BlockPos positionOfBlock) {
-        blockDependencies.add(positionOfBlock);
-    }
-
     public ArrayList<Entity> getEntityDependencies() {
         return entityDependencies;
+    }
+
+    public void addBlockDependency(BlockPos positionOfBlock) {
+        blockDependencies.add(positionOfBlock);
     }
 
     public ArrayList<BlockPos> getBlockDependencies() {
@@ -103,10 +136,8 @@ public class ProtectedRegion implements ICQONReady {
      * Util
      */
 
+    // Assumes correct world
     public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
-
-        // Check World
-        if(!world.equals(ofBlockPos)) return false;
 
         // Check NW (min)
         if(toCheck.getX() < NWCorner.getX()) return false;
