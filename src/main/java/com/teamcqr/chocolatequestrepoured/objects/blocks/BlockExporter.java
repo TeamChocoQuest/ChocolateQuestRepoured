@@ -19,9 +19,6 @@ import net.minecraft.world.World;
 
 public class BlockExporter extends Block implements ITileEntityProvider {
 
-	// DONE: rewrite as a container
-	// If that does not work, create a packet that tells the server to save the
-	// structure -> Saving bug fixed
 	public BlockExporter() {
 		super(Material.IRON);
 
@@ -33,13 +30,10 @@ public class BlockExporter extends Block implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		// DONE: Send data on server to client, otherwise it wont work
-
-		// When it is server side -> Request sync???
 		if (!worldIn.isRemote) {
-			((TileEntityExporter) worldIn.getTileEntity(pos)).requestSync();
+			playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
-		playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+
 		return true;
 	}
 
