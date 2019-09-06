@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.util.data.ArchiveManipulationUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.IO.FileIOUtil;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import java.util.HashMap;
 
