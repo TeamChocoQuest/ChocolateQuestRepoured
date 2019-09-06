@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.dungeonprot;
+package com.teamcqr.chocolatequestrepoured.structureprot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
