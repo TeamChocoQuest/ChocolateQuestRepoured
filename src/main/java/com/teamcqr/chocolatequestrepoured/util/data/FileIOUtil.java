@@ -15,12 +15,13 @@ import java.nio.file.Paths;
  */
 public class FileIOUtil {
 
-    // Prevent Instantiation
+    // Prevents Instantiation
     private FileIOUtil() {}
 
-    /*
-     * Binary File IO
-     */
+    // Helper method for saving to world file
+    public static String getAbsoluteWorldPath(World world) {
+        return world.getSaveHandler().getWorldDirectory().getAbsolutePath() + "//";
+    }
 
     public static void saveToFile(String fileNameIncludingFullPathAndExtension, byte[] toSave) {
         try {
@@ -39,14 +40,6 @@ public class FileIOUtil {
         }
         // Default - this means there is a problem
         return new byte[0];
-    }
-
-    /*
-     * Helper Methods
-     */
-
-    public static String getFilePathFromWorld(World world) {
-        return world.getSaveHandler().getWorldDirectory().getAbsolutePath() + "//";
     }
 
 }
