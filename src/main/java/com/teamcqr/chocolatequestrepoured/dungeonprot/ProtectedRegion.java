@@ -6,9 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 /**
  * Custom type for containing info about a protected region
@@ -31,49 +29,53 @@ public class ProtectedRegion implements Serializable {
     private transient BlockPos SECorner;
 
     // Dependencies (Things that will remove ProtectedRegion if killed/destroyed)
-    // TODO Implement serialization for dependencies
-    private transient ArrayList<Entity> entityDependencies = new ArrayList<>(); // Likely a dungeon boss
-    private transient ArrayList<BlockPos> blockDependencies = new ArrayList<>();   // Likely a ForceFieldNexus
+    private transient ArrayList<String> entityDependencies = new ArrayList<>(); // Stores UUIDs as Strings for ease of serialization
+    private transient ArrayList<BlockPos> blockDependencies = new ArrayList<>();
 
     // Settings
-    public boolean preventBlockBreak = true;
-    public boolean preventBlockBreakCreative = false;
-    public boolean preventBlockPlace = true;
-    public boolean preventBlockPlaceCreative = false;
-    public boolean preventExplosionTNT = false;
-    public boolean preventExplosionOther = true;
-    public boolean preventFireSpread = true;
-    public boolean preventNaturalMobSpawn = true;
+    public transient HashMap<String, Boolean> settings = new HashMap<>();
 
     /*
      * Constructors
      */
 
     // Contains all available region settings
-    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, ArrayList<Entity> entityDependencies, ArrayList<BlockPos> blockDependencies, boolean preventBlockBreak, boolean preventBlockBreakCreative, boolean preventBlockPlace, boolean preventBlockPlaceCreative, boolean preventExplosionTNT, boolean preventExplosionOther, boolean preventFireSpread, boolean preventNaturalMobSpawn) {
+    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, ArrayList<String> entityDependenciesAsUUIDStrings, ArrayList<BlockPos> blockDependencies, HashMap<String, Boolean> settingsOverrides) {
         // Region Data
         this.UUID = UUID;
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
         // Dependencies
-        this.entityDependencies.addAll(entityDependencies);
+        this.entityDependencies.addAll(entityDependenciesAsUUIDStrings);
         this.blockDependencies.addAll(blockDependencies);
-        // Protection Settings
-        this.preventBlockBreak = preventBlockBreak;
-        this.preventBlockBreakCreative = preventBlockBreakCreative;
-        this.preventBlockPlace = preventBlockPlace;
-        this.preventBlockPlaceCreative = preventBlockPlaceCreative;
-        this.preventExplosionTNT = preventExplosionTNT;
-        this.preventExplosionOther = preventExplosionOther;
-        this.preventFireSpread = preventFireSpread;
-        this.preventNaturalMobSpawn = preventNaturalMobSpawn;
+        // Protection Settings Defaults
+        this.settings.put("preventBlockBreak", true);
+        this.settings.put("preventBlockBreakCreative", false);
+        this.settings.put("preventBlockPlace", true);
+        this.settings.put("preventBlockPlaceCreative", false);
+        this.settings.put("preventExplosionTNT", false);
+        this.settings.put("preventExplosionOther", true);
+        this.settings.put("preventFireSpread", true);
+        this.settings.put("preventNaturalMobSpawn", true);
+        // Protection Settings Overrides
+        for(String settingName : settings.keySet()) {
+            this.settings.put(settingName, settingsOverrides.get(settingName));
+        }
     }
 
     // Contains only region data and uses default values for all dependency and protection settings
-    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, World world) {
+    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner) {
         this.UUID = UUID;
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
+        this.settings.put("preventBlockBreak", true);
+        this.settings.put("preventBlockBreakCreative", false);
+        this.settings.put("preventBlockPlace", true);
+        this.settings.put("preventBlockPlaceCreative", false);
+        this.settings.put("preventExplosionTNT", false);
+        this.settings.put("preventExplosionOther", true);
+        this.settings.put("preventFireSpread", true);
+        this.settings.put("preventNaturalMobSpawn", true);
     }
 
     /*
@@ -81,23 +83,65 @@ public class ProtectedRegion implements Serializable {
      */
 
     private void writeObject(ObjectOutputStream stream) throws Exception {
+        // Let default handle what it can
         try {
             stream.defaultWriteObject();
         } catch (Exception ignored) {}
+        // Write NW Corner
         stream.writeInt(NWCorner.getX());
         stream.writeInt(NWCorner.getY());
         stream.writeInt(NWCorner.getZ());
+        // Write SE Corner
         stream.writeInt(SECorner.getX());
         stream.writeInt(SECorner.getY());
         stream.writeInt(SECorner.getZ());
+        // Write Entity Dependencies
+        stream.writeInt(entityDependencies.size());
+        for(String UUID : entityDependencies) {
+            stream.writeObject(UUID);
+        }
+        // Write Block Dependencies
+        stream.writeInt(blockDependencies.size());
+        for(BlockPos position : blockDependencies) {
+            stream.writeInt(position.getX());
+            stream.writeInt(position.getY());
+            stream.writeInt(position.getZ());
+        }
+        // Write Settings Values
+        stream.writeInt(settings.keySet().size());
+        for(String setting : settings.keySet()) {
+            stream.writeObject(setting);
+            stream.writeBoolean(settings.get(setting));
+        }
     }
 
     private void readObject(ObjectInputStream stream) throws Exception {
+        // Let default handle what it can
         try {
             stream.defaultReadObject();
         } catch (Exception ignored) {}
+        // Read NW Corner
         NWCorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
+        // Read SE Corner
         SECorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
+        // Read Entity Dependencies
+        entityDependencies = new ArrayList<>();
+        int entityDependencyCount = stream.readInt();
+        for(int i = 0; i < entityDependencyCount; i++) {
+            entityDependencies.add((String)stream.readObject());
+        }
+        // Read Block Dependencies
+        blockDependencies = new ArrayList<>();
+        int blockDependencyCount = stream.readInt();
+        for(int i = 0; i < blockDependencyCount; i++) {
+            blockDependencies.add(new BlockPos(stream.readInt(), stream.readInt(), stream.readInt()));
+        }
+        // Read Settings Values
+        settings = new HashMap<>();
+        int settingCount = stream.readInt();
+        for(int i = 0; i < settingCount; i++) {
+            settings.put((String)stream.readObject(), stream.readBoolean());
+        }
     }
 
     /*
@@ -116,11 +160,11 @@ public class ProtectedRegion implements Serializable {
         return SECorner;
     }
 
-    public void addEntityDependency(Entity entity) {
-        entityDependencies.add(entity);
+    public void addEntityDependency(String entityUUID) {
+        entityDependencies.add(entityUUID);
     }
 
-    public ArrayList<Entity> getEntityDependencies() {
+    public ArrayList<String> getEntityDependenciesAsUUIDs() {
         return entityDependencies;
     }
 
@@ -137,7 +181,7 @@ public class ProtectedRegion implements Serializable {
      */
 
     // Assumes correct world
-    public boolean checkIfBlockPosInRegion(BlockPos toCheck, World ofBlockPos) {
+    public boolean checkIfBlockPosInRegion(BlockPos toCheck) {
 
         // Check NW (min)
         if(toCheck.getX() < NWCorner.getX()) return false;
