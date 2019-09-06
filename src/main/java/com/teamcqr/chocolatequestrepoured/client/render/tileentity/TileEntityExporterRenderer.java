@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,8 +19,8 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 			float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
-		Vec3i pos1 = te.getMinPos();
-		Vec3i pos2 = te.getMaxPos();
+		BlockPos pos1 = te.getRenderMinPos();
+		BlockPos pos2 = te.getRenderMaxPos();
 
 		double x1 = x + pos1.getX() - 0.01D;
 		double y1 = y + pos1.getY() - 0.01D;
@@ -28,17 +28,6 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		double x2 = x + pos2.getX() + 1.01D;
 		double y2 = y + pos2.getY() + 1.01D;
 		double z2 = z + pos2.getZ() + 1.01D;
-
-		if (!te.relativeMode) {
-			Vec3i pos = te.getPos();
-
-			x1 -= pos.getX();
-			y1 -= pos.getY();
-			z1 -= pos.getZ();
-			x2 -= pos.getX();
-			y2 -= pos.getY();
-			z2 -= pos.getZ();
-		}
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
