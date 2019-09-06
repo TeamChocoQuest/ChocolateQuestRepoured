@@ -64,7 +64,7 @@ public class ItemArmorSpider extends ItemArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if (ItemUtil.isFullSet(player, itemStack)) {
+		if (ItemUtil.hasFullSet(player, ItemArmorSpider.class)) {
 			if (player.collidedHorizontally) {
 				if (world.isRemote) {
 					if (player.moveForward > 0) {

@@ -58,7 +58,7 @@ public class ItemArmorBull extends ItemArmor {
 
 	@Override
 	public void onArmorTick(World worldIn, EntityPlayer player, ItemStack stack) {
-		if (ItemUtil.isFullSet(player, stack)) {
+		if (ItemUtil.hasFullSet(player, ItemArmorBull.class)) {
 			if (player.isSprinting()) {
 				player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 0, 1, false, false));
 			}

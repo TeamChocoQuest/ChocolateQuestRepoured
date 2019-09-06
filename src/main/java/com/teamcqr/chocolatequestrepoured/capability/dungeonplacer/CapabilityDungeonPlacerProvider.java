@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.capability;
+package com.teamcqr.chocolatequestrepoured.capability.dungeonplacer;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;

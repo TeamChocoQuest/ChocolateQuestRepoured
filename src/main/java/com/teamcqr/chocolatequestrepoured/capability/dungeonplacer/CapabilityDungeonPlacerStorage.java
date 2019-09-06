@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.capability;
+package com.teamcqr.chocolatequestrepoured.capability.dungeonplacer;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
