@@ -11,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ObjectSerializationUtil;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
@@ -29,53 +28,85 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class ProtectionHandler {
 
+    /* ************ */
+    /* Registration */
+    /* ************ */
+
     // Singleton setup
     private static ProtectionHandler PROTECTION_HANDLER = new ProtectionHandler();
-    private ProtectionHandler() { this.activeRegions = new ArrayList<>(); }
+    private ProtectionHandler() { this.activeRegions = new HashMap<>(); }
     public static ProtectionHandler getInstance() { return PROTECTION_HANDLER; }
 
     // Region Data
-    private ArrayList<ProtectedRegion> activeRegions;
+    private HashMap<Integer, ArrayList<ProtectedRegion>> activeRegions;
 
-    // Accessors
-    public ArrayList<ProtectedRegion> getActiveRegions() {
-        return activeRegions;
-    }
+    /* ************* */
+    /* Serialization */
+    /* ************* */
 
-    // Handle Dungeon Spawn Event
+    // ProtectedRegion Serialization
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
         // Create ProtectedRegion obj
-        ProtectedRegion regionToBeRegistered = new ProtectedRegion(e.getDungeonID().toString(), e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), e.getWorld());
+        ProtectedRegion regionToBeRegistered = new ProtectedRegion(e.getDungeonID().toString(), e.getPos(), new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()));
+        int dimID = e.getWorld().provider.getDimension();
         // Register in Memory
-        activeRegions.add(regionToBeRegistered);
+        ArrayList<ProtectedRegion> updated = activeRegions.get(dimID);
+        if(updated == null) updated = new ArrayList<>();
+        updated.add(regionToBeRegistered);
+        activeRegions.put(dimID, updated);
         // Register on Disc
         HashMap<String, byte[]> regionsToBeZipped = new HashMap<>();
-        for(ProtectedRegion region : activeRegions) {
-            regionsToBeZipped.put( region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region) );
+        for(ProtectedRegion region : activeRegions.get(dimID)) {
+            regionsToBeZipped.put( "dim_" + dimID + "\\" + region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region) );
         }
-        FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\protected_regions.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
+        FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\prot_region_defs.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
     }
 
-    // Handle World Load Event
+    // ProtectedRegion Deserialization
     @SubscribeEvent
     public void eventHandleWorldLoad(WorldEvent.Load e) {
-        HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\protected_regions.zip"));
+        HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "prot_region_defs.zip"));
         if(protectedRegionsFromDisc != null) {
-            for(String regionUUID : protectedRegionsFromDisc.keySet()) {
-                activeRegions.add((ProtectedRegion)ObjectSerializationUtil.readObectFromByteArray(protectedRegionsFromDisc.get(regionUUID)));
+            for(String regionFileName : protectedRegionsFromDisc.keySet()) {
+                ArrayList<ProtectedRegion> temp = activeRegions.get(Integer.parseInt(regionFileName.substring(4,5)));
+                temp.add((ProtectedRegion)ObjectSerializationUtil.readObectFromByteArray(protectedRegionsFromDisc.get(regionFileName)));
+                activeRegions.put(Integer.parseInt(regionFileName.substring(4,5)), temp);
             }
         }
     }
 
-    // Handle Protection-Related Events
+    /* ************** */
+    /* Event Handling */
+    /* ************** */
+
+    // TODO Add checking for entity dependency death
+
     @SubscribeEvent
     public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
 
-        // Check break pos against all active regions and cancel if overlapping
-        for( ProtectedRegion region : activeRegions) {
-            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
-                e.setCanceled(true);
+        // TODO Add checking for block dependency destruction
+
+        // Loop through all dims present in registry
+        for(int dimID : activeRegions.keySet()) {
+            // Loop through all registered regions for dim
+            for( ProtectedRegion region : activeRegions.get(dimID) ) {
+                // Noop if global setting disabled
+                if(!region.settings.get("preventBlockBreak")) {
+                    // noop
+                }
+                // Noop if in creative mode and specific setting disabled
+                else if(!region.settings.get("preventBlockBreakCreative") && e.getPlayer().isCreative()) {
+                    // noop
+                }
+                // Noop if different dim
+                else if(dimID != e.getWorld().provider.getDimension()) {
+                    // noop
+                }
+                // Otherwise check break pos and cancel if overlapping
+                else if(region.checkIfBlockPosInRegion(e.getPos())) {
+                    e.setCanceled(true);
+                }
             }
         }
 
@@ -84,10 +115,26 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void eventHandleBlockPlace(BlockEvent.PlaceEvent e) {
 
-        // Check place pos against all active regions and cancel if overlapping
-        for( ProtectedRegion region : activeRegions ) {
-            if(region.checkIfBlockPosInRegion( e.getPos(), e.getWorld() )) {
-                e.setCanceled(true);
+        // Loop through all dims present in registry
+        for(int dimID : activeRegions.keySet()) {
+            // Loop through all registered regions for dim
+            for( ProtectedRegion region : activeRegions.get(dimID) ) {
+                // Noop if global setting disabled
+                if(!region.settings.get("preventBlockPlace")) {
+                    // noop
+                }
+                // Noop if in creative mode and specific setting disabled
+                else if(!region.settings.get("preventBlockPlaceCreative") && e.getPlayer().isCreative()) {
+                    // noop
+                }
+                // Noop if different dim
+                else if(dimID != e.getWorld().provider.getDimension()) {
+                    // noop
+                }
+                // Otherwise check block pos and cancel if overlapping
+                else if(region.checkIfBlockPosInRegion(e.getPos())) {
+                    e.setCanceled(true);
+                }
             }
         }
 
@@ -96,55 +143,55 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void eventHandleExplosion(ExplosionEvent e) {
 
-        // Check explosion pos against all active regions
-        for( ProtectedRegion region : activeRegions ) {
-            if( region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z), e.getWorld()) ) {
+        // Loop through all dims present in registry
+        for(int dimID : activeRegions.keySet()) {
+            // Check explosion pos against all active regions
+            for( ProtectedRegion region : activeRegions.get(dimID) ) {
 
-                // Allow TNT, cancel if any other exploder
-                if ( !(IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"} ) ) instanceof EntityTNTPrimed ) ) {
-                    e.setCanceled(true);
+                // Noop if different dim
+                if(dimID != e.getWorld().provider.getDimension()) {
+                    // noop
+                }
+                // Check if TNT
+                else if (IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"} ) ) instanceof EntityTNTPrimed) {
+                    // Check if TNT allowed
+                    if(!region.settings.get("preventExplosionTNT")) {
+                        // noop
+                    }
+                    // Check if outside relevant region
+                    else if(!region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z))) {
+                        // noop
+                    }
+                    // Otherwise cancel
+                    else {
+                        e.setCanceled(true);
+                    }
+                }
+                // Otherwise
+                else {
+                    // Check if non-TNT explosions allowed
+                    if(!region.settings.get("preventExplosionOther")) {
+                        // noop
+                    }
+                    // Check if outside relevant region
+                    else if(!region.checkIfBlockPosInRegion( new BlockPos(e.getExplosion().getPosition().x, e.getExplosion().getPosition().y, e.getExplosion().getPosition().z))) {
+                        // noop
+                    }
+                    // Otherwise cancel
+                    else {
+                        e.setCanceled(true);
+                    }
                 }
 
             }
+
         }
 
     }
 
     @SubscribeEvent
     public void eventHandleNaturalSpawn(LivingSpawnEvent.CheckSpawn e) {
-        // Commented out because not working
-        /*
-        // Check spawn pos against all regions and cancel if overlapping
-        for( ProtectedRegion region : activeRegions.get(e.getWorld()) ) {
-            if(region.checkIfBlockPosInRegion( new BlockPos(e.getX(), e.getY(), e.getZ()), e.getWorld() ) && !e.isSpawner()) {
-                e.setResult(Event.Result.DENY);
-            }
-        }
-        */
-    }
-
-    /*
-     * Util
-     */
-
-    public ArrayList<ProtectedRegion> getActiveRegionsContainingBlockPos(BlockPos position, World world) {
-
-        ArrayList<ProtectedRegion> toReturn = new ArrayList<>();
-
-        // Check all active regions
-        for (ProtectedRegion region : activeRegions) {
-            if(region.checkIfBlockPosInRegion(position, world)) toReturn.add(region);
-        }
-
-        // Return
-        return toReturn;
-
-    }
-
-    public int getLargerRegion(ProtectedRegion a, ProtectedRegion b) {
-        if(a.getRegionVolume() > b.getRegionVolume()) return 1;
-        if(a.getRegionVolume() < b.getRegionVolume()) return 2;
-        return 0; // 0 = Both sizes equal
+        // TODO Implement - previous attempt unsuccessful, will likely require subscription to a different event
     }
 
 }
