@@ -119,6 +119,10 @@ public class TileEntityExporter extends TileEntity {
 	}
 
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) {
+		if (this.relativeMode) {
+			startPos = this.pos.subtract(startPos);
+			endPos = this.pos.subtract(endPos);
+		}
 		if (!world.isRemote) {
 			CQStructure structure = new CQStructure(this.structureName, true);
 			structure.setAuthor(authorName);
