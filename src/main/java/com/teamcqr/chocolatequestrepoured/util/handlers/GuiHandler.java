@@ -68,7 +68,7 @@ public class GuiHandler implements IGuiHandler
 		
 		if(ID == Reference.EXPORTER_GUI_ID) 
 		{
-			return new GuiExporter(world, player, (TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z)),new ContainerExporter((TileEntityExporter)world.getTileEntity(new BlockPos(x,y,z))));
+			return new GuiExporter((TileEntityExporter) world.getTileEntity(new BlockPos(x,y,z)));
 		}
 		
 		if(ID == Reference.BACKPACK_GUI_ID && player.getHeldItemMainhand().getItem() == ModItems.BACKPACK)
