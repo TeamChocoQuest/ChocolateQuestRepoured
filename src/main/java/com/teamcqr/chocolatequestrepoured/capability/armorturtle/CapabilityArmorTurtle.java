@@ -44,7 +44,7 @@ public class CapabilityArmorTurtle implements ICapabilityArmorTurtle {
 			((WorldServer) entity.world).spawnParticle(EnumParticleTypes.HEART, x, y, z, 4, 0.5D, 0.5D, 0.5D, 1.0D);
 			entity.world.playSound(null, x, y, z, SoundEvents.ENTITY_GENERIC_DRINK, SoundCategory.PLAYERS, 0.6F, 1.2F);
 		}
-		entity.getCapability(CapabilityArmorTurtleProvider.ARMOR_TURTLE_CAPABILITY, null).setCooldown(240);
+		entity.getCapability(CapabilityArmorTurtleProvider.ARMOR_TURTLE_CAPABILITY, null).setCooldown(24000);
 	}
 
 	@Override
