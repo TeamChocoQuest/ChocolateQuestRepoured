@@ -46,8 +46,8 @@ public class ProtectedRegion implements Serializable {
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
         // Dependencies
-        this.entityDependencies.addAll(entityDependenciesAsUUIDStrings);
-        this.blockDependencies.addAll(blockDependencies);
+        if(entityDependenciesAsUUIDStrings != null) for(String entry : entityDependenciesAsUUIDStrings) if(entry != null) this.entityDependencies.add(entry);
+        if(blockDependencies != null) for(BlockPos entry : blockDependencies) if(entry != null) this.blockDependencies.add(entry);
         // Protection Settings Defaults
         this.settings.put("preventBlockBreak", true);
         this.settings.put("preventBlockBreakCreative", false);
@@ -58,9 +58,7 @@ public class ProtectedRegion implements Serializable {
         this.settings.put("preventFireSpread", true);
         this.settings.put("preventNaturalMobSpawn", true);
         // Protection Settings Overrides
-        for(String settingName : settings.keySet()) {
-            this.settings.put(settingName, settingsOverrides.get(settingName));
-        }
+        if(settingsOverrides != null) for(String setting : settingsOverrides.keySet()) if(settingsOverrides.get(setting) != null) this.settings.put(setting, settingsOverrides.get(setting));
     }
 
     // Contains only region data and uses default values for all dependency and protection settings
