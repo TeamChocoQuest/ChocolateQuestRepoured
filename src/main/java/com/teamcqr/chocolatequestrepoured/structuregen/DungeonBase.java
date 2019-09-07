@@ -31,7 +31,7 @@ public class DungeonBase {
 	//private CQFaction owningFaction
 	protected String name;
 	private Item placeItem;
-	private UUID dunID;
+	protected UUID dunID;
 	protected int underGroundOffset = 0;
 	protected int chance;
 	protected int yOffset = 0;
@@ -71,7 +71,7 @@ public class DungeonBase {
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
-			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", false);
+			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", true);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
