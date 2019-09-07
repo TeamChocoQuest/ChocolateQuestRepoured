@@ -18,20 +18,11 @@ public class ItemUtil {
 	}
 
 	public static boolean compareRotations(double yaw1, double yaw2, double maxDiff) {
-		double d = (yaw1 - maxDiff) % 360;
-		double d1 = (yaw1 + maxDiff) % 360;
-		double d2 = yaw2 % 360;
-		if (d < 0.0D) {
-			d += 360.0D;
-		}
-		if (d1 < 0.0D) {
-			d1 += 360.0D;
-		}
-		if (d2 < 0.0D) {
-			d2 += 360.0D;
-		}
+		maxDiff = Math.abs(maxDiff);
+		double d = Math.abs(yaw1 - yaw2) % 360;
+		double diff = d > 180.0D ? 360.0D - d : d;
 
-		return d2 > d && d2 < d1;
+		return diff < maxDiff;
 	}
 
 }
