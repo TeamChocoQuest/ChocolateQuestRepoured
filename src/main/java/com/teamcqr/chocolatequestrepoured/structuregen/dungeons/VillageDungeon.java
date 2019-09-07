@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -111,7 +112,7 @@ public class VillageDungeon extends DungeonBase {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
+		this.dunID = MathHelper.getRandomUUID();
 		
 		this.generator = new VillageGenerator(this);
 		
