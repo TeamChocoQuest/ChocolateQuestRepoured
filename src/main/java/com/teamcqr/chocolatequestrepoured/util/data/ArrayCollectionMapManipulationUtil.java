@@ -52,16 +52,19 @@ public class ArrayCollectionMapManipulationUtil {
 
     public static Object genericAddValueToArrayish(Object arrayishToAddTo, Object toAdd, @Nullable Object keyIfMap) {
         if(arrayishToAddTo instanceof Object[]) {
-            return combineArrays(((Object[])arrayishToAddTo), new Object[] {toAdd});
+            combineArrays(((Object[])arrayishToAddTo), new Object[] {toAdd});
+            return arrayishToAddTo;
         }
         else if(arrayishToAddTo instanceof AbstractCollection) {
-            return ((AbstractCollection<Object>)arrayishToAddTo).add(toAdd);
+            ((AbstractCollection<Object>)arrayishToAddTo).add(toAdd);
+            return arrayishToAddTo;
         }
         else if(arrayishToAddTo instanceof AbstractMap) {
-            return ((AbstractMap<Object, Object>)arrayishToAddTo).put(keyIfMap, toAdd);
+            ((AbstractMap<Object, Object>)arrayishToAddTo).put(keyIfMap, toAdd);
+            return arrayishToAddTo;
+        } else {
+            return null;
         }
-        // If not arrayish, return null
-        return null;
     }
 
 }

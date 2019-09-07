@@ -3,6 +3,18 @@ package com.teamcqr.chocolatequestrepoured.factions;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityEvoker;
+import net.minecraft.entity.monster.EntityGolem;
+import net.minecraft.entity.monster.EntityIllusionIllager;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.EntityVex;
+import net.minecraft.entity.monster.EntityVindicator;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityVillager;
+import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.player.EntityPlayer;
+
 public enum EFaction {
 	
 	UNDEAD(new String[] {"WALKERS", "VILLAGERS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
@@ -16,6 +28,8 @@ public enum EFaction {
 	ILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	VILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	TRITONS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	PLAYERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	;
 	
 	
@@ -47,6 +61,52 @@ public enum EFaction {
 		}
 		
 		return EReputationStateRough.NEUTRAL;
+	}
+	
+	public boolean isEntityEnemy(Entity entity) {
+		if(getFactionOfEntity(entity) != null) {
+			return isEnemy(getFactionOfEntity(entity));
+		}
+		return false;
+	}
+	
+	public boolean isEntityAlly(Entity entity) {
+		if(getFactionOfEntity(entity) != null) {
+			return isAlly(getFactionOfEntity(entity));
+		}
+		return false;
+	}
+	
+	public static EFaction getFactionOfEntity(Entity entity) {
+		if(entity instanceof AbstractEntityCQR) {
+			return ((AbstractEntityCQR)entity).getFaction();
+		}
+		
+		if(entity instanceof EntityVillager || entity instanceof EntityGolem) {
+			return VILLAGERS;
+		}
+		if(entity instanceof EntityIllusionIllager || entity instanceof EntityVex || entity instanceof EntityVindicator || entity instanceof EntityEvoker) {
+			return ILLAGERS;
+		}
+		
+		if(entity instanceof EntityAnimal) {
+			return NEUTRAL;
+		}
+		
+		if(entity instanceof EntityMob) {
+			return UNDEAD;
+		}
+		
+		if(entity instanceof EntityWaterMob) {
+			return TRITONS;
+		}
+		
+		if(entity instanceof EntityPlayer) {
+			return PLAYERS;
+		}
+		
+		return null;
+		
 	}
 
 }
