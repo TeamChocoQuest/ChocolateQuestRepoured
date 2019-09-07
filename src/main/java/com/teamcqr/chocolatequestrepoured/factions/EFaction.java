@@ -11,6 +11,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityVex;
 import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -78,6 +79,10 @@ public enum EFaction {
 	}
 	
 	public static EFaction getFactionOfEntity(Entity entity) {
+		if(entity instanceof EntityTameable) {
+			return getFactionOfEntity(((EntityTameable)entity).getOwner());
+		}
+		
 		if(entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR)entity).getFaction();
 		}
