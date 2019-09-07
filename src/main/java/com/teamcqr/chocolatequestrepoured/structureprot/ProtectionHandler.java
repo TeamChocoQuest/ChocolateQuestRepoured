@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulati
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ObjectSerializationUtil;
 import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
@@ -137,7 +138,9 @@ public class ProtectionHandler {
                 }
                 // Otherwise check break pos and cancel if overlapping
                 else if(region.checkIfBlockPosInRegion(e.getPos())) {
-                    e.setCanceled(true);
+                	if(e.getState().getBlock() != Blocks.MOB_SPAWNER) {
+                		e.setCanceled(true);
+                	}
                 }
             }
             // Remove flagged regions
@@ -150,7 +153,6 @@ public class ProtectionHandler {
 
     @SubscribeEvent
     public void eventHandleBlockPlace(BlockEvent.PlaceEvent e) {
-
         // Loop through all dims present in registry
         for(int dimID : activeRegions.keySet()) {
             // Loop through all registered regions for dim
@@ -169,7 +171,9 @@ public class ProtectionHandler {
                 }
                 // Otherwise check block pos and cancel if overlapping
                 else if(region.checkIfBlockPosInRegion(e.getPos())) {
-                    e.setCanceled(true);
+                	if(e.getPlacedBlock().getBlock() != Blocks.TORCH) {
+                		e.setCanceled(true);
+                	}
                 }
             }
         }
