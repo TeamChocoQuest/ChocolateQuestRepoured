@@ -22,7 +22,7 @@ public class ItemUtil {
 		double d = Math.abs(yaw1 - yaw2) % 360;
 		double diff = d > 180.0D ? 360.0D - d : d;
 
-		return d < maxDiff;
+		return diff < maxDiff;
 	}
 
 }
