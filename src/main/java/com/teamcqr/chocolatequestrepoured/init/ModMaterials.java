@@ -14,16 +14,16 @@ import net.minecraftforge.common.util.EnumHelper;
 public class ModMaterials {
 
 	public static class ArmorMaterials {
-		public static final ArmorMaterial ARMOR_CLOUD = createArmorMaterial("cloud", 450, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_DRAGON = createArmorMaterial("dragon", 2850, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_BULL = createArmorMaterial("bull", 675, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_SPIDER = createArmorMaterial("spider", 675, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_SLIME = createArmorMaterial("slime", 675, new int[] { 2, 5, 6, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_TURTLE = createArmorMaterial("turtle", 675, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = createArmorMaterial("heavy_diamond", 2115, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_HEAVY_IRON = createArmorMaterial("heavy_iron", 1975, new int[] { 3, 6, 8, 3 }, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F);
-		public static final ArmorMaterial ARMOR_INQUISITION = createArmorMaterial("inquisition", 675, new int[] { 3, 8, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
-		public static final ArmorMaterial ARMOR_BACKPACK = createArmorMaterial("backpack", 1850, new int[] { 1, 3, 3, 1 }, 9, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, 0.0F);
+		public static final ArmorMaterial ARMOR_CLOUD = createArmorMaterial("cloud", 20, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_DRAGON = createArmorMaterial("dragon", 87, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_BULL = createArmorMaterial("bull", 38, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_SPIDER = createArmorMaterial("spider", 38, new int[] { 2, 5, 7, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_SLIME = createArmorMaterial("slime", 38, new int[] { 2, 5, 6, 2 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_TURTLE = createArmorMaterial("turtle", 38, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_HEAVY_DIAMOND = createArmorMaterial("heavy_diamond", 82, new int[] { 4, 7, 9, 4 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_HEAVY_IRON = createArmorMaterial("heavy_iron", 74, new int[] { 3, 6, 8, 3 }, 9, SoundEvents.ITEM_ARMOR_EQUIP_IRON, 1.0F);
+		public static final ArmorMaterial ARMOR_INQUISITION = createArmorMaterial("inquisition", 38, new int[] { 3, 8, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_DIAMOND, 1.0F);
+		public static final ArmorMaterial ARMOR_BACKPACK = createArmorMaterial("backpack", 67, new int[] { 1, 3, 3, 1 }, 9, SoundEvents.ITEM_ARMOR_EQIIP_ELYTRA, 0.0F);
 
 		private static ArmorMaterial createArmorMaterial(String name, int durability, int[] reductionAmounts, int enchantability, SoundEvent soundOnEquip, float toughness) {
 			return EnumHelper.addArmorMaterial(name, Reference.MODID + ":" + name, durability, reductionAmounts, enchantability, soundOnEquip, toughness);
