@@ -8,13 +8,13 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon>{
-	
+public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
+
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
 	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/skeletal_nether_dragon.png"));
 
 	public RenderCQRNetherDragon(RenderManager manager) {
-		super(manager, new ModelNetherDragon(), 0.5f);
+		super(manager, new ModelNetherDragon(), 0.5F);
 	}
 
 	@Override
