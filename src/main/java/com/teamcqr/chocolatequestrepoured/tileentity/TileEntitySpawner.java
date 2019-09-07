@@ -50,7 +50,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
+		compound = super.writeToNBT(compound);
 		compound.setTag("inventory", inventory.serializeNBT());
 		if (spawnedInDungeon) {
 			compound.setBoolean("isDungeonSpawner", true);
