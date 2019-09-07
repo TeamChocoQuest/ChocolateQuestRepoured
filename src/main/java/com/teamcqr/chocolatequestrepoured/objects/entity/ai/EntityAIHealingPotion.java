@@ -66,10 +66,12 @@ public class EntityAIHealingPotion extends EntityAIBase {
 			double z = attackTarget.posZ - this.entity.posZ;
 
 			if (!this.isHealing) {
-				ItemStack offhand = this.entity.getHeldItem(EnumHand.OFF_HAND);
+				if (!this.entity.isActiveItemStackBlocking()) {
+					ItemStack offhand = this.entity.getHeldItem(EnumHand.OFF_HAND);
 
-				if (offhand.getItem().isShield(offhand, this.entity)) {
-					this.entity.setActiveHand(EnumHand.OFF_HAND);
+					if (offhand.getItem().isShield(offhand, this.entity)) {
+						this.entity.setActiveHand(EnumHand.OFF_HAND);
+					}
 				}
 
 				if (this.entity.collidedHorizontally || ++this.ticksNotHealing > 100 || Math.sqrt(x * x + z * z) > 10.0D) {
