@@ -63,6 +63,20 @@ public enum EFaction {
 		return EReputationStateRough.NEUTRAL;
 	}
 	
+	public boolean isEntityEnemy(Entity entity) {
+		if(getFactionOfEntity(entity) != null) {
+			return isEnemy(getFactionOfEntity(entity));
+		}
+		return false;
+	}
+	
+	public boolean isEntityAlly(Entity entity) {
+		if(getFactionOfEntity(entity) != null) {
+			return isAlly(getFactionOfEntity(entity));
+		}
+		return false;
+	}
+	
 	public static EFaction getFactionOfEntity(Entity entity) {
 		if(entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR)entity).getFaction();
