@@ -5,12 +5,14 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityAIHealingPotion extends EntityAIBase {
 
@@ -83,6 +85,22 @@ public class EntityAIHealingPotion extends EntityAIBase {
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 
 			// TODO Only move backwards if there are blocks
+			
+			double angleOfEntityBackwards = Math.toRadians((double)entity.rotationYaw - 180.0D);
+			
+			//Location 3 blocks behind the entity
+			BlockPos locBehind = new BlockPos(Math.floor(entity.posX - Math.sin(
+					angleOfEntityBackwards) * 3.0D), 
+					Math.floor(entity.posY) - 1,
+					Math.floor(entity.posZ + Math.cos(angleOfEntityBackwards) * 3.0D));
+			
+			//Now check the material there to check if it is a possible floor
+			Material material = entity.getEntityWorld().getBlockState(locBehind).getMaterial();
+			boolean mayMove = false;
+			if(material.isSolid() || (material.isSolid() && material != Material.AIR && material != Material.FIRE && material != Material.LAVA)) {
+				mayMove = true;
+			}
+			
 			double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
 			EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
 		}

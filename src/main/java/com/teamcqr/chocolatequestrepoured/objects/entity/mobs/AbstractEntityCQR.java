@@ -255,9 +255,9 @@ public abstract class AbstractEntityCQR extends EntityMob {
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (this.canEntityBeSeen(cqrentity) || player.canEntityBeSeen(cqrentity)) {
 					if (this.getFaction().isEnemy(cqrentity.getFaction())) {
-
+						//TODO
 					} else if (this.getFaction().isAlly(cqrentity.getFaction())) {
-
+						//TODO
 					}
 				}
 			}
