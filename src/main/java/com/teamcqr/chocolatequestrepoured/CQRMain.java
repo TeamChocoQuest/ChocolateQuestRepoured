@@ -164,8 +164,6 @@ public class CQRMain
 		//Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
-		SmeltingHandler.init();
-
 		ModMessages.registerMessages();
 		SoundsHandler.registerSounds();
 
@@ -235,6 +233,7 @@ public class CQRMain
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
+		SmeltingHandler.init();
 	}
 	
 	@EventHandler
