@@ -40,7 +40,7 @@ public class EntityAIHealingPotion extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getRemainingPotions() > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.1D, 5.0D);
+		return this.entity.getHealingPotions() > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.1D, 5.0D);
 	}
 
 	@Override
