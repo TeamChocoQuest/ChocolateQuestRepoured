@@ -32,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * Copyright (c) 29.04.2019
@@ -298,6 +299,16 @@ public class DungeonRegistry {
 			}
 		}
 		return null;
+	}
+
+	public static void loadDungeons() {
+		// Fills the biomes of the biome-dungeonlist map
+		for (Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
+			if (b != null) {
+				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
+			}
+		}
+		CQRMain.dungeonRegistry.loadDungeonFiles();
 	}
 
 }
