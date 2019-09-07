@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 
 import net.minecraft.client.resources.I18n;
@@ -56,22 +57,7 @@ public class ItemDagger extends ItemSword {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (playerIn.onGround && !playerIn.isSwingInProgress) {
-			double strafe = playerIn.moveStrafing;
-			double forward = playerIn.moveForward;
-			double d = Math.sqrt(strafe * strafe + forward * forward);
-			if (d < 1.0D) {
-				d = 1.0D;
-			}
-			d = 1.0D / d;
-
-			strafe *= d;
-			forward *= d;
-
-			double d1 = Math.sin(playerIn.rotationYaw * 0.017453292D);
-			double d2 = Math.cos(playerIn.rotationYaw * 0.017453292D);
-
-			playerIn.motionX += strafe * d2 - forward * d1;
-			playerIn.motionZ += forward * d2 + strafe * d1;
+			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
 
 			playerIn.motionY = 0.2D;
 			playerIn.getCooldownTracker().setCooldown(stack.getItem(), cooldown);

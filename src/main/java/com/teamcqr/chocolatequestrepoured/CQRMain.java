@@ -17,7 +17,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
-import com.teamcqr.chocolatequestrepoured.proxy.CommonProxy;
+import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -25,6 +25,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
+import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -117,7 +119,7 @@ public class CQRMain
 	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("cqrepoured");
 	
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
-	public static CommonProxy proxy;
+	public static IProxy proxy;
 	
 	//Dungeon Registry instance, responsible for everything regarding dungeons
 	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
@@ -127,7 +129,7 @@ public class CQRMain
 	{
 		initConfigFolder(event);
 		
-		proxy.preInit(event);
+		proxy.preInit();
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
@@ -162,9 +164,8 @@ public class CQRMain
 		//Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
-		SmeltingHandler.init();
-
 		ModMessages.registerMessages();
+		SoundsHandler.registerSounds();
 
 		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
 		CapabilityManager.INSTANCE.register(ICapabilityArmorTurtle.class, new CapabilityArmorTurtleStorage(), () -> new CapabilityArmorTurtle());
@@ -227,14 +228,17 @@ public class CQRMain
 	@EventHandler
 	public void init(FMLInitializationEvent event)
 	{		
-		proxy.init(event);
+		proxy.init();
 
+		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
+		DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
+		SmeltingHandler.init();
 	}
 	
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event)
 	{
-		proxy.postInit(event);
+		proxy.postInit();
 	}
 }

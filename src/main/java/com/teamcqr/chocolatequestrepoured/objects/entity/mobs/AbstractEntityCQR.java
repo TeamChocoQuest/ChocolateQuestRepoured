@@ -5,6 +5,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -45,6 +46,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 	}
 
@@ -77,9 +79,10 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(5, new EntityAIAttackMelee(this, 1.0D, false));
-		this.tasks.addTask(10, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(15, new EntityAIMoveToHome(this));
+		this.tasks.addTask(5, new EntityAIHealingPotion(this));
+		this.tasks.addTask(10, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 	}
@@ -219,8 +222,16 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		}
 	}
 
-	public int getRemainingPotions() {
+	public int getHealingPotions() {
 		return this.healingPotions;
+	}
+
+	public void setHealingPotions(int amount) {
+		this.healingPotions = amount;
+	}
+
+	public void removeHealingPotion() {
+		this.healingPotions--;
 	}
 
 	public abstract EFaction getFaction();
@@ -256,10 +267,6 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
-	}
-
-	public void removePotion() {
-		healingPotions--;
 	}
 	
 }
