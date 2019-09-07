@@ -62,9 +62,9 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
-					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRPigman.class, "pigmen", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRZombie.class, "zombie", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
+					createEntityEntry(EntityCQRPigman.class, "pigmen", 64, 1, true, 0x333333, 0xEA9393),
+					createEntityEntry(EntityCQRZombie.class, "zombie", 64, 1, true, 0x333333, 0xC3BDBD),
 
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000)
 			};
