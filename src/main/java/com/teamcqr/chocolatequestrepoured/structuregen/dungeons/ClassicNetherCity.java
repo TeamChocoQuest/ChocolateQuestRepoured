@@ -90,6 +90,7 @@ public class ClassicNetherCity extends DungeonBase {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "  ...");
 		if(structCount != buildingFolder.listFiles().length) {
 			for(File f : buildingFolder.listFiles()) {

@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraftforge.common.MinecraftForge;
 
 public class NetherCityGenerator implements IDungeonGenerator {
 
@@ -96,7 +98,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				}
 			} else {
 				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
-				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(-dungeon.getDistanceBetweenBuildingCenters() /4, 0, -dungeon.getDistanceBetweenBuildingCenters() /4);
+				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(dungeon.getDistanceBetweenBuildingCenters() *0.1, 0, dungeon.getDistanceBetweenBuildingCenters() *0.05);
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
@@ -167,10 +169,10 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		settings.setRotation(Rotation.NONE);
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
-		
+
+		CQStructure centralStructure = null;
 		if(dungeon.centralBuildingIsSpecial()) {
 			//DONE: Choose a central building, figure out the size, then build the platform and then the building
-			CQStructure centralStructure = null;
 			if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isDirectory() && dungeon.getCentralBuildingFolder().listFiles().length > 0) {
 				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon.isProtectedFromModifications());
 			} else if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isFile()) {
@@ -215,6 +217,14 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				structure.placeBlocksInWorld(world, centerPos.add(0,1,0), settings, EPosType.CENTER_XZ_LAYER);
 			}
 		}
+		BlockPos posLower = new BlockPos(minX - dungeon.getDistanceBetweenBuildingCenters(), y, minZ- dungeon.getDistanceBetweenBuildingCenters());
+		BlockPos posUpper = new BlockPos(maxX + dungeon.getDistanceBetweenBuildingCenters(), y +dungeon.getCaveHeight(), maxZ + dungeon.getDistanceBetweenBuildingCenters());
+		
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world);
+		if(centralStructure != null) {
+			event.setShieldCorePosition(centralStructure.getShieldCorePosition());
+		}
+		MinecraftForge.EVENT_BUS.post(event);
 	}
 
 	@Override

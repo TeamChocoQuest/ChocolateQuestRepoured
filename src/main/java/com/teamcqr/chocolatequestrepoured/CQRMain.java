@@ -10,7 +10,7 @@ import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmo
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerStorage;
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.dungeonprot.ProtectionHandler;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;

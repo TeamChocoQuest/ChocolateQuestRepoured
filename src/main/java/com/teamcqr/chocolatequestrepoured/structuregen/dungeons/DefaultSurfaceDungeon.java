@@ -70,6 +70,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
+		
 		File structure = pickStructure(new Random());
 		if(structure != null) {
 			CQStructure dungeon = new CQStructure(structure, this.protectFromDestruction);
