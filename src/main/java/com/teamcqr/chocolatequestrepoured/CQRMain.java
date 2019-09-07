@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmo
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerStorage;
 import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
@@ -24,9 +23,11 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
+import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -230,6 +231,7 @@ public class CQRMain
 	{		
 		proxy.init();
 
+		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
