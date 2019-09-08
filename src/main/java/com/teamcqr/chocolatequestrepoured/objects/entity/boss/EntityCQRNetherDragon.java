@@ -4,16 +4,23 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
@@ -30,6 +37,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		FLYING_UPWARDS,
 		FLYING_DOWNWARDS
 	}
+	
+	/**
+	 * AI:
+	 * Circle around about 30 blocks above your home location in a radius of ~30 blocks
+	 * 
+	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up
+	 * Then begin spiraling up to your "strafing y", there you fly 0.5 - 3 rounds on your circle and attack again
+	 * While you are circling, you may change to a higher, thinner circler, about 10 blocks above the normal.
+	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs 
+	 */
 	
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
@@ -167,6 +184,78 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 					-(float) (Math.atan2(movementDifference.y, distance) * 180.0D / Math.PI));
 		}
 	}
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		
+		//DONE: Destroy the blocks
+		destroyBlocksInAABB(getEntityBoundingBox());
+		
+	}
+	
+	//Copied from ender dragon
+	private boolean destroyBlocksInAABB(AxisAlignedBB aabb)
+    {
+		if(getWorld().getGameRules().hasRule("mobGriefing") && !getWorld().getGameRules().getBoolean("mobGriefing")) {
+			return false;
+		}
+		
+        int x1 = MathHelper.floor(aabb.minX);
+        int y1 = MathHelper.floor(aabb.minY);
+        int z1 = MathHelper.floor(aabb.minZ);
+        int x2 = MathHelper.floor(aabb.maxX);
+        int y2 = MathHelper.floor(aabb.maxY);
+        int z2 = MathHelper.floor(aabb.maxZ);
+        boolean cancelled = false;
+        boolean blockDestroyed = false;
+
+        for (int k1 = x1; k1 <= x2; ++k1)
+        {
+            for (int l1 = y1; l1 <= y2; ++l1)
+            {
+                for (int i2 = z1; i2 <= z2; ++i2)
+                {
+                    BlockPos blockpos = new BlockPos(k1, l1, i2);
+                    IBlockState iblockstate = this.world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE)
+                    {
+                        if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this))
+                        {
+                            cancelled = true;
+                        }
+                        else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate))
+                        {
+                            if (block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS && block != Blocks.END_GATEWAY)
+                            {
+                                blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
+                            }
+                            else
+                            {
+                                cancelled = true;
+                            }
+                        }
+                        else
+                        {
+                            cancelled = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (blockDestroyed)
+        {
+            double x = aabb.minX + (aabb.maxX - aabb.minX) * (double)this.rand.nextFloat();
+            double y = aabb.minY + (aabb.maxY - aabb.minY) * (double)this.rand.nextFloat();
+            double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * (double)this.rand.nextFloat();
+            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
+        }
+
+        return cancelled;
+    }
 	
 	@Override
 	public void onUpdate() {
