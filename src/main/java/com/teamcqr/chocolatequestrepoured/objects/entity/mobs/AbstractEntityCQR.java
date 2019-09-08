@@ -27,6 +27,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -267,6 +268,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return super.getLootTable();
 	}
 	
 }
