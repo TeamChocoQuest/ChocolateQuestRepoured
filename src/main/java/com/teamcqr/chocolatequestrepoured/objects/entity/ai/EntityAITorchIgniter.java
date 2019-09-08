@@ -14,7 +14,7 @@ public class EntityAITorchIgniter extends EntityAIBase {
 
 	protected static final int searchRadiusHorizontal = 5;
 	protected static final int searchRadiusVertical = 1;
-	protected static final int maxDistanceToEntity = 3;
+	protected static final int maxDistanceToEntity = 10;
 	//Setting this to true crashes the game (!)
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	World world;
