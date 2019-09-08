@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.init;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRPigman;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
@@ -13,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
@@ -61,6 +63,8 @@ public class ModEntityRenderers {
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class,
 				renderManager -> new RenderCQRNetherDragon(renderManager));
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, renderManager -> new RenderCQRNetherDragonSegment(renderManager));
 	}
 
 }
