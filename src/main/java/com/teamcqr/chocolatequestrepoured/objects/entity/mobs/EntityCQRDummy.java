@@ -31,5 +31,15 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	protected void initEntityAI() {
 
 	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return false;
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
+	}
 
 }
