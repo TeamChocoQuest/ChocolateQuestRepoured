@@ -34,7 +34,7 @@ public class BlockUnlitTorch extends BlockTorch {
 
 		if (stack.getItem() instanceof ItemFlintAndSteel || block.getLightValue(block.getDefaultState(), worldIn, pos) > 0.0F) {
 			if (!worldIn.isRemote) {
-				this.lightUp(worldIn, pos, state.getValue(FACING));
+				lightUp(worldIn, pos, state.getValue(FACING));
 			}
 			return true;
 		}
@@ -45,11 +45,11 @@ public class BlockUnlitTorch extends BlockTorch {
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (!worldIn.isRemote && entityIn.isBurning()) {
-			this.lightUp(worldIn, pos, state.getValue(FACING));
+			lightUp(worldIn, pos, state.getValue(FACING));
 		}
 	}
 
-	private void lightUp(World world, BlockPos pos, EnumFacing facing) {
+	public static void lightUp(World world, BlockPos pos, EnumFacing facing) {
 		if (!world.isRemote) {
 			world.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, facing), 3);
 			world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 3.0F, 1.0F + world.rand.nextFloat());
