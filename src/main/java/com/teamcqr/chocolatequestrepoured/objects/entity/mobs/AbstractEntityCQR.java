@@ -44,6 +44,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
 	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return !Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent();
+	}
 
 	@Override
 	protected void applyEntityAttributes() {
