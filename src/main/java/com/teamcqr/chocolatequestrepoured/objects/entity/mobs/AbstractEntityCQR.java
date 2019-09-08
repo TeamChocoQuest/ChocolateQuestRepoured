@@ -11,9 +11,11 @@ import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItem
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -100,6 +102,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.tasks.addTask(10, new EntityAIAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(11, new EntityAIFireFighter(this));
+		this.tasks.addTask(19, new EntityAITorchIgniter(this));
 
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
 	}
