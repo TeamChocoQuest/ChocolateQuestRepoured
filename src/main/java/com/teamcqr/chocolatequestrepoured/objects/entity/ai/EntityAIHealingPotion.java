@@ -123,6 +123,7 @@ public class EntityAIHealingPotion extends EntityAIBase {
 			this.entity.resetActiveHand();
 			this.entity.setActiveHand(EnumHand.MAIN_HAND);
 		}
+		this.entity.swingArm(EnumHand.MAIN_HAND);
 	}
 
 }
