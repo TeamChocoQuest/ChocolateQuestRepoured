@@ -12,12 +12,13 @@ public class EntityAIFireFighter extends EntityAIBase {
 	
 	protected static final int searchRadiusHorizontal = 5;
 	protected static final int searchRadiusVertical = 1;
-	protected static final int maxDistanceToEntity = 3;
-	protected static final boolean checkPosReachableBeforeSettingPos = true;
+	protected static final int maxDistanceToEntity = 15;
+	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	protected static final float speedToWalkToFire = 1.15F;
 	World world;
 	AbstractEntityCQR entity;
 	BlockPos nearestFire = null;
+	int timerForPosConflicts = 10;
 
 	public EntityAIFireFighter(AbstractEntityCQR ent) {
 		entity = ent;
@@ -30,14 +31,17 @@ public class EntityAIFireFighter extends EntityAIBase {
 		int y = (int) Math.floor(entity.posY);
 		int z = (int) Math.floor(entity.posZ);
 		
-		for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
-			if(world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestFire) != null : true)) {
-				if(nearestFire != null) {
-					if(entity.getDistanceSq(posTmp) < entity.getDistanceSq(nearestFire)) {
+		if(timerForPosConflicts > 0) {
+			for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
+				if(world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestFire) != null : true)) {
+					if(nearestFire != null) {
+						if(entity.getDistanceSq(posTmp) < entity.getDistanceSq(nearestFire)) {
+							nearestFire = posTmp;
+							timerForPosConflicts--;
+						}
+					} else {
 						nearestFire = posTmp;
 					}
-				} else {
-					nearestFire = posTmp;
 				}
 			}
 		}
@@ -64,6 +68,7 @@ public class EntityAIFireFighter extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		nearestFire = null;
+		timerForPosConflicts = 10;
 	}
 
 }
