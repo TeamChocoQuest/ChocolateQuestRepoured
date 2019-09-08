@@ -105,7 +105,9 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		if (this.isHealing) {
-			this.entity.swapItemStacks();
+			if (this.entity.isHoldingPotion()) {
+				this.entity.swapItemStacks();
+			}
 			this.entity.resetActiveHand();
 		}
 		this.ticksNotHealing = 0;
@@ -115,7 +117,9 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	public void startHealing() {
 		if (!this.isHealing) {
 			this.isHealing = true;
-			this.entity.swapItemStacks();
+			if (!this.entity.isHoldingPotion()) {
+				this.entity.swapItemStacks();
+			}
 			this.entity.resetActiveHand();
 			this.entity.setActiveHand(EnumHand.MAIN_HAND);
 		}
