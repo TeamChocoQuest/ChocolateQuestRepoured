@@ -70,9 +70,6 @@ public class ItemPotionHealing extends Item {
 		} else {
 			entityLiving.heal(20.0F);
 			stack.shrink(1);
-			if (entityLiving instanceof AbstractEntityCQR) {
-				((AbstractEntityCQR) entityLiving).removeHealingPotion();
-			}
 		}
 		return stack;
 	}
