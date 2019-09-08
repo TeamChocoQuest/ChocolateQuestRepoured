@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import net.minecraft.util.EnumFacing;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -263,7 +265,60 @@ public class RoomGrid
         }
     }
 
-    public boolean withinGridBounds(int x, int z)
+    public boolean adjacentCellIsPopulated(RoomGridCell startCell, EnumFacing direction)
+    {
+        boolean result;
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        return (adjacent != null && adjacent.isPopulated());
+    }
+
+    public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction)
+    {
+        RoomGridPosition startPosition = startCell.getGridPosition();
+        int floor = startPosition.getFloor();
+        int x = startPosition.getX();
+        int z = startPosition.getZ();
+
+        switch (direction)
+        {
+            case UP:
+                floor += 1;
+                break;
+            case DOWN:
+                floor -= 1;
+                break;
+            case NORTH:
+                z -= 1;
+                break;
+            case SOUTH:
+                z += 1;
+                break;
+            case WEST:
+                x -= 1;
+                break;
+            case EAST:
+                x += 1;
+                break;
+            default:
+                break;
+        }
+
+        if (withinGridBounds(floor, x, z))
+        {
+            return roomArray[floor][x][z];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public boolean withinGridBounds(int floor, int x, int z)
+    {
+        return (floor >= 0 && floor < floors && withinFloorBounds(x, z));
+    }
+
+    public boolean withinFloorBounds(int x, int z)
     {
         return (x >= 0 && x < roomsX && z >= 0 && z < roomsZ);
     }
