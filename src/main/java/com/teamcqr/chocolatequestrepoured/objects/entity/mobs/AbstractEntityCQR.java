@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -175,6 +176,24 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		float distance = (float) Math.sqrt(x * x + z * z);
 
 		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		
+		if(world != null && world.getWorldInfo().isHardcoreModeEnabled()) {
+			health *= 2.0F;
+		} else {
+			switch(Minecraft.getMinecraft().gameSettings.difficulty) {
+			case EASY:
+				health *= 0.5F;
+				break;
+			case HARD:
+				health *= 1.5F;
+				break;
+			case PEACEFUL:
+				health *= 0.25F;
+				break;
+			default:
+				break;
+			}
+		}
 
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
