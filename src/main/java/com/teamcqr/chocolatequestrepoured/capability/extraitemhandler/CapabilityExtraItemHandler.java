@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.capability.extraslot;
+package com.teamcqr.chocolatequestrepoured.capability.extraitemhandler;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.util.EnumFacing;
