@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -31,15 +32,15 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	protected void initEntityAI() {
 
 	}
-	
-	@Override
-	public boolean canBeCollidedWith() {
-		return false;
-	}
-	
+
 	@Override
 	public boolean canBePushed() {
 		return false;
+	}
+
+	@Override
+	protected void collideWithEntity(Entity entityIn) {
+
 	}
 
 }
