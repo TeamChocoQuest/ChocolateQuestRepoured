@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
@@ -9,7 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -33,7 +31,6 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	protected final AbstractEntityCQR entity;
 	protected int ticksNotHealing;
 	protected boolean isHealing;
-	protected ItemStack stack = ItemStack.EMPTY;
 
 	public EntityAIHealingPotion(AbstractEntityCQR entity) {
 		this.entity = entity;
@@ -54,7 +51,6 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	public void startExecuting() {
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
-		this.stack = ItemStack.EMPTY;
 	}
 
 	@Override
@@ -109,19 +105,17 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		if (this.isHealing) {
-			this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
+			this.entity.swapItemStacks();
 			this.entity.resetActiveHand();
 		}
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
-		this.stack = ItemStack.EMPTY;
 	}
 
 	public void startHealing() {
 		if (!this.isHealing) {
 			this.isHealing = true;
-			this.stack = this.entity.getHeldItem(EnumHand.MAIN_HAND);
-			this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.POTION_HEALING));
+			this.entity.swapItemStacks();
 			this.entity.resetActiveHand();
 			this.entity.setActiveHand(EnumHand.MAIN_HAND);
 		}
