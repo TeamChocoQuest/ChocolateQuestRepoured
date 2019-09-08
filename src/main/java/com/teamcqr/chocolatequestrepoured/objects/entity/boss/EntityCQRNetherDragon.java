@@ -311,5 +311,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		this.bossInfoServer.removePlayer(player);
 	}
 	
+	public EDragonMovementState getCurrentMovementState() {
+		return movementState;
+	}
+	
 
 }
