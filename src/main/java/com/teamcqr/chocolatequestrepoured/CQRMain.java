@@ -4,12 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtle;
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtleStorage;
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmorTurtle;
-import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerStorage;
-import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
@@ -35,7 +29,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -167,9 +160,6 @@ public class CQRMain
 
 		ModMessages.registerMessages();
 		SoundsHandler.registerSounds();
-
-		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
-		CapabilityManager.INSTANCE.register(ICapabilityArmorTurtle.class, new CapabilityArmorTurtleStorage(), () -> new CapabilityArmorTurtle());
 
 	}
 	
