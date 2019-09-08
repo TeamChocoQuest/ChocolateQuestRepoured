@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -27,6 +28,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
@@ -41,6 +43,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
+	}
+	
+	@Override
+	protected boolean canDespawn() {
+		return !Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent();
 	}
 
 	@Override
@@ -174,6 +181,24 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		float distance = (float) Math.sqrt(x * x + z * z);
 
 		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		
+		if(world != null && world.getWorldInfo().isHardcoreModeEnabled()) {
+			health *= 2.0F;
+		} else {
+			switch(Minecraft.getMinecraft().gameSettings.difficulty) {
+			case EASY:
+				health *= 0.5F;
+				break;
+			case HARD:
+				health *= 1.5F;
+				break;
+			case PEACEFUL:
+				health *= 0.25F;
+				break;
+			default:
+				break;
+			}
+		}
 
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
@@ -267,6 +292,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return super.getLootTable();
 	}
 	
 }
