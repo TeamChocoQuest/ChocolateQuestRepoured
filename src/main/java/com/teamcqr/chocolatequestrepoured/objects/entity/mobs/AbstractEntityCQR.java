@@ -4,13 +4,19 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.ExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -28,23 +34,27 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntityCQR extends EntityMob {
 
-	protected int healingPotions = 3;
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
+	protected boolean holdingPotion;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
+		this.setHealingPotions(3);
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 	}
-	
+
 	@Override
 	protected boolean canDespawn() {
 		return !Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent();
@@ -120,8 +130,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		if (hasLeader) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
-		
-		compound.setInteger("healingPotions", healingPotions);
+
+		compound.setBoolean("holdingPotion", this.holdingPotion);
 	}
 
 	@Override
@@ -135,10 +145,19 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		if (compound.getBoolean("hasLeader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
-		
-		if(compound.hasKey("healingPotions")) {
-			this.healingPotions = compound.getInteger("healingPotions");
+
+		this.holdingPotion = compound.getBoolean("holdingPotion");
+	}
+
+	@Override
+	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
+		if (player.isCreative() && !player.isSneaking()) {
+			if (!this.world.isRemote) {
+				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
+			}
+			return true;
 		}
+		return false;
 	}
 
 	public EntityLivingBase getLeader() {
@@ -181,22 +200,16 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		float distance = (float) Math.sqrt(x * x + z * z);
 
 		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
-		
-		if(world != null && world.getWorldInfo().isHardcoreModeEnabled()) {
+
+		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			health *= 2.0F;
 		} else {
-			switch(Minecraft.getMinecraft().gameSettings.difficulty) {
-			case EASY:
+			EnumDifficulty difficulty = this.world.getDifficulty();
+
+			if (difficulty == EnumDifficulty.EASY) {
 				health *= 0.5F;
-				break;
-			case HARD:
+			} else if (difficulty == EnumDifficulty.HARD) {
 				health *= 1.5F;
-				break;
-			case PEACEFUL:
-				health *= 0.25F;
-				break;
-			default:
-				break;
 			}
 		}
 
@@ -248,15 +261,58 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	}
 
 	public int getHealingPotions() {
-		return this.healingPotions;
+		ItemStack stack;
+		if (this.holdingPotion) {
+			stack = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+
+		} else {
+			stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		}
+		if (stack.getItem() instanceof ItemPotionHealing) {
+			return stack.getCount();
+		}
+		return 0;
 	}
 
 	public void setHealingPotions(int amount) {
-		this.healingPotions = amount;
+		if (this.holdingPotion) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.POTION_HEALING, amount));
+		} else {
+			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot,
+					new ItemStack(ModItems.POTION_HEALING, amount));
+		}
 	}
 
 	public void removeHealingPotion() {
-		this.healingPotions--;
+		ItemStack stack;
+		if (this.holdingPotion) {
+			stack = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+
+		} else {
+			stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		}
+		if (stack.getItem() instanceof ItemPotionHealing) {
+			stack.shrink(1);
+		}
+	}
+
+	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
+		IExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		return capability.getStackInSlot(slot.getIndex());
+	}
+
+	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
+		ExtraItemHandler capability = (ExtraItemHandler) this
+				.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		capability.setStackInSlot(slot.getIndex(), stack);
+	}
+
+	public void swapItemStacks() {
+		ItemStack stack1 = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
+		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack2);
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack1);
+		this.holdingPotion = !this.holdingPotion;
 	}
 
 	public abstract EFaction getFaction();
@@ -280,9 +336,9 @@ public abstract class AbstractEntityCQR extends EntityMob {
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (this.canEntityBeSeen(cqrentity) || player.canEntityBeSeen(cqrentity)) {
 					if (this.getFaction().isEnemy(cqrentity.getFaction())) {
-						//TODO
+						// TODO
 					} else if (this.getFaction().isAlly(cqrentity.getFaction())) {
-						//TODO
+						// TODO
 					}
 				}
 			}
@@ -293,10 +349,14 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return super.getLootTable();
 	}
-	
+
+	public boolean isHoldingPotion() {
+		return this.holdingPotion;
+	}
+
 }

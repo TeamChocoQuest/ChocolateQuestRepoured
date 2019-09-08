@@ -61,13 +61,6 @@ public class CapabilityArmorTurtle implements ICapabilityArmorTurtle {
 	public static class EventHandler {
 
 		@SubscribeEvent
-		public static void register(AttachCapabilitiesEvent<Entity> event) {
-			if (event.getObject() instanceof EntityLivingBase) {
-				event.addCapability(new ResourceLocation(Reference.MODID, "armor_turtle"), new CapabilityArmorTurtleProvider());
-			}
-		}
-
-		@SubscribeEvent
 		public static void onLivingUpdateEvent(LivingUpdateEvent event) {
 			EntityLivingBase entity = event.getEntityLiving();
 			ICapabilityArmorTurtle icapability = entity.getCapability(CapabilityArmorTurtleProvider.ARMOR_TURTLE_CAPABILITY, null);

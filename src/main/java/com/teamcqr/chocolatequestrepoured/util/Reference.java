@@ -19,6 +19,7 @@ public class Reference
 	public static final int BADGE_GUI_ID = 3;
 	public static final int BACKPACK_GUI_ID = 4;
 	public static final int ALCHEMY_BAG_GUI_ID = 5;
+	public static final int CQR_ENTITY_GUI_ID = 6;
 	
 	public static final int ENTITY_SLIME_PART = 44;
 	public static final int TARGET_EFFECT_MESSAGE_ID = 30;
