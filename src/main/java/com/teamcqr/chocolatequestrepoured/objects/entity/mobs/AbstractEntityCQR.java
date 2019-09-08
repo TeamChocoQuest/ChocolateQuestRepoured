@@ -130,6 +130,8 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		if (hasLeader) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
+
+		compound.setBoolean("holdingPotion", this.holdingPotion);
 	}
 
 	@Override
@@ -143,11 +145,13 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		if (compound.getBoolean("hasLeader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
+
+		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (player.isCreative()) {
+		if (player.isCreative() && !player.isSneaking()) {
 			if (!this.world.isRemote) {
 				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
 			}
@@ -349,6 +353,10 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return super.getLootTable();
+	}
+
+	public boolean isHoldingPotion() {
+		return this.holdingPotion;
 	}
 
 }
