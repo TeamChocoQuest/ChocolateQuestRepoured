@@ -1,0 +1,23 @@
+package com.teamcqr.chocolatequestrepoured.init;
+
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtleStorage;
+import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.CapabilityDungeonPlacerStorage;
+import com.teamcqr.chocolatequestrepoured.capability.dungeonplacer.ICapabilityDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.ExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.ExtraItemHandlerStorage;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItemHandler;
+
+import net.minecraftforge.common.capabilities.CapabilityManager;
+
+public class ModCapabilities {
+
+	public static void registerCapabilities() {
+		CapabilityManager.INSTANCE.register(ICapabilityDungeonPlacer.class, new CapabilityDungeonPlacerStorage(), () -> new CapabilityDungeonPlacer());
+		CapabilityManager.INSTANCE.register(ICapabilityArmorTurtle.class, new CapabilityArmorTurtleStorage(), () -> new CapabilityArmorTurtle());
+		CapabilityManager.INSTANCE.register(IExtraItemHandler.class, new ExtraItemHandlerStorage(), () -> new ExtraItemHandler());
+	}
+
+}
