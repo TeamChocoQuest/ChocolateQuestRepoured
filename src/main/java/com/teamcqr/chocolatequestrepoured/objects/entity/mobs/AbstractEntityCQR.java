@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -155,7 +156,9 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (player.isCreative() && !player.isSneaking()) {
+		if (player.isCreative() && !player.isSneaking() && 
+				!(player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemBadge 
+						|| player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemBadge)) {
 			if (!this.world.isRemote) {
 				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
 			}
