@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
@@ -160,7 +161,7 @@ public class CQRMain
 
 		ModMessages.registerMessages();
 		SoundsHandler.registerSounds();
-
+		ModCapabilities.registerCapabilities();
 	}
 	
 	private void initConfigFolder(FMLPreInitializationEvent event) {
