@@ -80,6 +80,7 @@ public class CastleRoomSelector
         //addEntrances();
         //connectRooms();
         //placeDoors();
+        DetermineRoofs();
 
         //System.out.println(grid.printGrid());
     }
@@ -129,6 +130,11 @@ public class CastleRoomSelector
                     }
                 }
             }
+
+            int openCellsWest = offsetX;
+            int openCellsNorth = offsetZ;
+            int openCellsEast = maxLenX - mainRoomsX - offsetX;
+            int openCellsSouth = maxLenZ - mainRoomsZ - offsetZ;
         }
     }
 
@@ -148,9 +154,9 @@ public class CastleRoomSelector
 
     private int randomSubsectionLength(int mainLength)
     {
-        int rounding = (mainLength % 2 != 0) ? 1 : 0;
+        int rounding = (mainLength % 2 == 0) ? 0 : 1;
         int halfLen = mainLength / 2;
-        return halfLen + rounding + random.nextInt(mainLength);
+        return halfLen + random.nextInt(halfLen + rounding);
     }
 
     private void buildVerticalFloorHallway(int floor)
@@ -297,173 +303,26 @@ public class CastleRoomSelector
         for (int floor = 0; floor < maxFloors; floor++)
         {
             ArrayList<RoomGridCell> roomList = grid.getUnreachableRoomList(floor);
-            while (!roomList.isEmpty())
-            {
-                RoomGridCell currentRoom;
-
-                currentRoom = roomList.get(random.nextInt(roomList.size()));
-                connectRoomToNearestReachable(currentRoom);
-
-                roomList = grid.getUnreachableRoomList(floor);
-            }
         }
     }
 
-    public void connectRoomToNearestReachable(RoomGridCell roomGridCell)
+    private void DetermineRoofs()
     {
-        RoomGridPosition gridPos = roomGridCell.getGridPosition();
-        int floor = gridPos.getFloor();
-        int x = gridPos.getX();
-        int z = gridPos.getZ();
-        EnumFacing buildDirection = getDirectionOfNearestReachable(gridPos);
-
-        if (buildDirection != EnumFacing.DOWN)
+        for (RoomGridCell cell : grid.getSelectionListCopy())
         {
-            while (grid.withinGridBounds(x, z) && !grid.isRoomReachable(floor, x, z))
+            if (cell.isPopulated() && !grid.adjacentCellIsPopulated(cell, EnumFacing.UP))
             {
-                CastleRoom room = grid.getRoomAt(floor, x, z);
-                grid.setRoomReachable(floor, x, z);
-
-                if (buildDirection == EnumFacing.SOUTH)
+                for (EnumFacing direction : EnumFacing.HORIZONTALS)
                 {
-                    z++;
-                    room.addDoorOnSide(buildDirection);
-                }
-                else if (buildDirection == EnumFacing.EAST)
-                {
-                    x++;
-                    room.addDoorOnSide(buildDirection);
-                }
-                else if (buildDirection == EnumFacing.NORTH)
-                {
-                    if (z != 0)
+                    if (!grid.adjacentCellIsPopulated(cell, direction))
                     {
-                        z--;
-                        CastleRoom roomNorth = grid.getRoomAt(floor, x, z);
-                        roomNorth.addDoorOnSide(buildDirection.getOpposite());
-                    }
-                } else if (buildDirection == EnumFacing.WEST)
-                {
-                    if (x != 0)
-                    {
-                        x--;
-                        CastleRoom roomWest = grid.getRoomAt(floor, x, z);
-                        roomWest.addDoorOnSide(buildDirection.getOpposite());
+                        cell.getRoom().addRoofEdge(direction);
                     }
                 }
             }
         }
     }
 
-    private EnumFacing getDirectionOfNearestReachable(RoomGridPosition gridLocation)
-    {
-        EnumFacing result = EnumFacing.DOWN;
-
-        class DirectionDistance
-        {
-            private EnumFacing direction;
-            private int distance;
-
-            private DirectionDistance(EnumFacing direction, int distance)
-            {
-                this.direction = direction;
-                this.distance = distance;
-            }
-        }
-
-        int distance;
-        int shortest = Integer.MAX_VALUE;
-        ArrayList<DirectionDistance> possibleDirections = new ArrayList<>();
-
-        for (EnumFacing direction : EnumFacing.HORIZONTALS)
-        {
-            distance = distToReachableRoom(gridLocation.getFloor(), gridLocation.getX(), gridLocation.getZ(), direction);
-            possibleDirections.add(new DirectionDistance(direction, distance));
-            shortest = Math.min(shortest, distance);
-        }
-        Iterator<DirectionDistance> it = possibleDirections.iterator();
-        while (it.hasNext())
-        {
-            DirectionDistance dd = it.next();
-            if (dd.distance > shortest)
-            {
-                it.remove();
-            }
-        }
-        if (!possibleDirections.isEmpty())
-        {
-            result =  possibleDirections.get(random.nextInt(possibleDirections.size())).direction;
-        }
-
-        return result;
-    }
-
-    private int distToReachableRoom(int floor, int x, int z, EnumFacing direction)
-    {
-        int result = Integer.MAX_VALUE;
-        int currentDistance = 0;
-        if (direction == EnumFacing.NORTH)
-        {
-            while (z > 0)
-            {
-                z--;
-                currentDistance++;
-                if (grid.isRoomReachable(floor, x, z))
-                {
-                    result = currentDistance;
-                    break;
-                }
-            }
-        }
-        else if (direction == EnumFacing.SOUTH)
-        {
-            while (z < numSlotsZ - 1)
-            {
-                z++;
-                currentDistance++;
-                if (grid.isRoomReachable(floor, x, z))
-                {
-                    result = currentDistance;
-                    break;
-                }
-            }
-        }
-        else if (direction == EnumFacing.WEST)
-        {
-            while (x > 0)
-            {
-                x--;
-                currentDistance++;
-                if (grid.isRoomReachable(floor, x, z))
-                {
-                    result = currentDistance;
-                    break;
-                }
-            }
-        }
-        else if (direction == EnumFacing.EAST)
-        {
-            while (x < numSlotsX - 1)
-            {
-                x++;
-                currentDistance++;
-                if (grid.isRoomReachable(floor, x, z))
-                {
-                    result = currentDistance;
-                    break;
-                }
-            }
-        }
-        return result;
-    }
-
-    private void addEntrances()
-    {
-        for (EnumFacing side : EnumFacing.values())
-        {
-            addEntranceToSide(side);
-        }
-    }
 
     private void addEntranceToSide(EnumFacing side)
     {
