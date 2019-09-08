@@ -16,7 +16,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -32,6 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
@@ -156,11 +156,22 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (player.isCreative() && !player.isSneaking() && 
-				!(player.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemBadge 
-						|| player.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemBadge)) {
+		if (player.isCreative() && !player.isSneaking()) {
 			if (!this.world.isRemote) {
-				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
+				ItemStack stack = player.getHeldItem(hand);
+				if (stack.getItem() instanceof ItemArmor) {
+					EntityEquipmentSlot slot = getSlotForItemStack(stack);
+					ItemStack armor = this.getItemStackFromSlot(slot);
+
+					this.setItemStackToSlot(slot, stack);
+					if (hand == EnumHand.MAIN_HAND) {
+						player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, armor);
+					} else {
+						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, armor);
+					}
+				} else {
+					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
+				}
 			}
 			return true;
 		}
