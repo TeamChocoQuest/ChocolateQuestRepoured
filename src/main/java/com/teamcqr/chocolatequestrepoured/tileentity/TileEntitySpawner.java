@@ -78,9 +78,11 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
 				if (!stack.isEmpty() && stack.getTagCompound() != null) {
-					this.spawnEntityFromNBT(stack.getTagCompound().getCompoundTag("EntityIn"));
+					for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
+						this.spawnEntityFromNBT(stack.getTagCompound().getCompoundTag("EntityIn"));
 
-					this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+						this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+					}
 				}
 			}
 
