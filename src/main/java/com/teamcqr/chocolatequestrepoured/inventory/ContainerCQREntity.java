@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.gui.container;
+package com.teamcqr.chocolatequestrepoured.inventory;
 
 import javax.annotation.Nullable;
 

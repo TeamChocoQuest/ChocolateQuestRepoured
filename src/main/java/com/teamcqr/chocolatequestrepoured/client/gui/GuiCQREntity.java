@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;

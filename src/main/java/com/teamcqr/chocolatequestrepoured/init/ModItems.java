@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldWalker;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
@@ -180,6 +181,7 @@ public class ModItems {
 	public static final Item ALCHEMY_BAG = Null();
 
 	public static final Item DUNGEON_PLACER = Null();
+	public static final Item STRUCTURE_SELECTOR = Null();
 	
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
@@ -277,7 +279,8 @@ public class ModItems {
 					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"),
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
-					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab)
+					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab),
+					setItemName(new ItemStructureSelector(), "structure_selector")
 			};
 
 			IForgeRegistry<Item> registry = event.getRegistry();
