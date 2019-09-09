@@ -5,6 +5,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -13,8 +14,12 @@ public class ContainerBadge extends Container {
 
 	private final int numRows = 3;
 	private final int numColumns = 3;
+	private ItemStack stack;
+	private EnumHand hand;
 
-	public ContainerBadge(InventoryPlayer playerInv, ItemStack stack) {
+	public ContainerBadge(InventoryPlayer playerInv, ItemStack stack, EnumHand hand) {
+		this.stack = stack;
+		this.hand = hand;
 		IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		int currentItemIndex = playerInv.currentItem;
 
@@ -74,6 +79,12 @@ public class ContainerBadge extends Container {
 		}
 
 		return itemstack;
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		super.onContainerClosed(playerIn);
+		playerIn.setHeldItem(this.hand, stack);
 	}
 
 }
