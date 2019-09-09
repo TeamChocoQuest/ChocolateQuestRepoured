@@ -29,7 +29,7 @@ public class TileEntityExporter extends TileEntity {
 	public String structureName = "NoName";
 	public boolean partModeUsing = false;
 	public boolean relativeMode = false;
-
+	
 	private BlockPos minPos = new BlockPos(0, 0, 0);
 	private BlockPos maxPos = new BlockPos(0, 0, 0);
 
@@ -174,7 +174,8 @@ public class TileEntityExporter extends TileEntity {
 
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		return 65536.0D;
+		//return 65536.0D;
+		return ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks +1)* 16)^2;
 	}
 
 }

@@ -12,9 +12,9 @@ import net.minecraft.world.World;
 
 public class EntityAITorchIgniter extends EntityAIBase {
 
-	protected static final int searchRadiusHorizontal = 5;
-	protected static final int searchRadiusVertical = 1;
-	protected static final int maxDistanceToEntity = 10;
+	protected static final int searchRadiusHorizontal = 8;
+	protected static final int searchRadiusVertical = 2;
+	protected static final int maxDistanceToEntity = 3;
 	//Setting this to true crashes the game (!)
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	World world;
@@ -34,7 +34,7 @@ public class EntityAITorchIgniter extends EntityAIBase {
 		int z = (int) Math.floor(entity.posZ);
 		
 		if(timerForPosConflicts > 0) {
-			for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
+			for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + (searchRadiusHorizontal +2), y + searchRadiusVertical, z + searchRadiusHorizontal)) {
 				if(Block.isEqualTo(world.getBlockState(posTmp).getBlock(), ModBlocks.UNLIT_TORCH) && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestTorch) != null : true)) {
 					if(nearestTorch != null) {
 						if(entity.getDistanceSq(posTmp) < entity.getDistanceSq(nearestTorch)) {

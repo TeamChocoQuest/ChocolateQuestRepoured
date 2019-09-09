@@ -39,7 +39,7 @@ public class EntityAIHealingPotion extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getHealingPotions() > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.1D, 5.0D);
+		return (this.entity.getHealingPotions()) > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.1D, 5.0D);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class EntityAIHealingPotion extends EntityAIBase {
 			this.entity.rotationYaw = (float) (Math.atan2(-x, z) * (180.0D / Math.PI));
 			this.entity.rotationYawHead = this.entity.rotationYaw;
 
-			// TODO Only move backwards if there are blocks
+			// DONE Only move backwards if there are blocks
 			
 			double angleOfEntityBackwards = Math.toRadians((double)entity.rotationYaw - 180.0D);
 			
@@ -97,8 +97,11 @@ public class EntityAIHealingPotion extends EntityAIBase {
 				mayMove = true;
 			}
 			
-			double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
-			EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
+			if(mayMove) {
+				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+				EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
+			}
+			
 		}
 	}
 
