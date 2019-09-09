@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;
@@ -14,8 +15,12 @@ public class ContainerAlchemyBag extends Container {
 
 	private final int numRows = 1;
 	private final int numColumns = 5;
+	private ItemStack stack;
+	private EnumHand hand;
 
-	public ContainerAlchemyBag(InventoryPlayer playerInv, ItemStack stack) {
+	public ContainerAlchemyBag(InventoryPlayer playerInv, ItemStack stack, EnumHand hand) {
+		this.stack = stack;
+		this.hand = hand;
 		IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 		int currentItemIndex = playerInv.currentItem;
 
@@ -78,6 +83,12 @@ public class ContainerAlchemyBag extends Container {
 		}
 
 		return itemstack;
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		super.onContainerClosed(playerIn);
+		playerIn.setHeldItem(this.hand, stack);
 	}
 
 }
