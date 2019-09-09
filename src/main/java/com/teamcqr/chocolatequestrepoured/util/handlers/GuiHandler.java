@@ -28,7 +28,7 @@ public class GuiHandler implements IGuiHandler {
 	@Override
 	public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == Reference.BADGE_GUI_ID) {
-			return new ContainerBadge(player.inventory, player.getHeldItem(EnumHand.values()[x]));
+			return new ContainerBadge(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
 		}
 
 		if (ID == Reference.SPAWNER_GUI_ID) {
@@ -36,11 +36,11 @@ public class GuiHandler implements IGuiHandler {
 		}
 
 		if (ID == Reference.BACKPACK_GUI_ID) {
-			return new ContainerBackpack(player.inventory, player.getHeldItem(EnumHand.values()[x]));
+			return new ContainerBackpack(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
 		}
 
 		if (ID == Reference.ALCHEMY_BAG_GUI_ID) {
-			return new ContainerAlchemyBag(player.inventory, player.getHeldItem(EnumHand.values()[x]));
+			return new ContainerAlchemyBag(player.inventory, player.getHeldItem(EnumHand.values()[x]), EnumHand.values()[x]);
 		}
 
 		if (ID == Reference.CQR_ENTITY_GUI_ID) {
