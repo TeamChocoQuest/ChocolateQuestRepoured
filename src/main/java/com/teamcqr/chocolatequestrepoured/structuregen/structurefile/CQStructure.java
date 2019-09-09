@@ -15,6 +15,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
@@ -46,6 +47,8 @@ public class CQStructure {
 	private int sizeZ;
 	
 	private int parts = 0;
+	private int bossCount = 0;
+	private NBTTagCompound bossCompound = null;
 	private String author = "DerToaster98";
 	
 	//DONE: Add methods and fields to replace the old banners
@@ -94,6 +97,11 @@ public class CQStructure {
 						if(root.getString("type").equalsIgnoreCase("CQ_Structure")) {
 							try {
 								this.parts = root.getInteger("partcount");
+								if(root.hasKey("bossesCount") && root.hasKey("bosses")) {
+									this.bossCount = root.getInteger("bossesCount");
+									
+									this.bossCompound = root.getCompoundTag("bosses");
+								}
 								
 								NBTTagCompound sizeComp = root.getCompoundTag("size");
 								this.setSizeX(sizeComp.getInteger("x"));
@@ -199,9 +207,31 @@ public class CQStructure {
 				}
 				//partID++;
 			}
+			
+			//Place boss blocks
+			placeBossBlocks(worldIn, pos, settings);
 		}
 	}
 	
+	private void placeBossBlocks(World worldIn, BlockPos pos, PlacementSettings settings) {
+		if(this.bossCount > 0 && this.bossCompound != null) {
+			for(int i = 0; i < this.bossCount; i++) {
+				try {
+					BossInfo boi = new BossInfo(bossCompound.getCompoundTag("boss"+i));
+					if(boi != null) {
+						BlockPos vecPos = CQStructurePart.transformedBlockPos(settings, boi.getPos());
+						vecPos = vecPos.add(pos);
+						
+						//TODO: Place spawner for right boss
+						worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
+					}
+				} catch(Exception ex) {
+					
+				}
+			}
+		}
+	}
+
 	//DONE?: Split structure into 16x16 grid 
 	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode, EntityPlayer placer) {
 		BlockPos endPos = posEnd;
@@ -291,9 +321,20 @@ public class CQStructure {
 		root.setString("author", this.author);
 		
 		NBTTagCompound partsTag = new NBTTagCompound();
+		NBTTagCompound bossesTag = new NBTTagCompound();
 		
 		int index = 0;
+		int bossesCount = 0;
 		for(BlockPos offset : this.structures.keySet()) {
+			//Boss block code
+			if(!this.structures.get(offset).getBosses().isEmpty()) {
+				for(BossInfo boi : this.structures.get(offset).getBosses()) {
+					boi.addToPos(offset);
+					bossesTag.setTag("boss" + bossesCount, boi.getAsNBTTag());
+					bossesCount++;
+				}
+			}
+			//
 			NBTTagCompound part = new NBTTagCompound();
 			part = this.structures.get(offset).writeToNBT(part);
 			NBTTagCompound offsetTag = new NBTTagCompound();
@@ -303,6 +344,12 @@ public class CQStructure {
 			partsTag.setTag("p"+index, part);
 			index++;
 		}
+		if(bossesCount > 0) {
+			root.setInteger("bossesCount", bossesCount);
+			root.setTag("bosses", bossesTag);
+		}
+		
+		
 		//System.out.println("Finishing NBT Compound...");
 		root.setTag("parts", partsTag);
 		//System.out.println("Saving to file...");

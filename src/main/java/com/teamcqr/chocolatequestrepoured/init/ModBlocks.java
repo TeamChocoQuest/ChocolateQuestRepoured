@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockBossBlock;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
@@ -112,6 +113,7 @@ public class ModBlocks {
 	public static final BlockUnlitTorch UNLIT_TORCH = Null();
 	public static final BlockNull NULL_BLOCK = Null();
 	public static final BlockSpawner SPAWNER = Null();
+	public static final BlockBossBlock BOSS_BLOCK = Null();
 
 	// Loot Chests
 	// Standard
@@ -228,6 +230,7 @@ public class ModBlocks {
 
 					setBlockName(new BlockExporter(), "exporter"), setBlockName(new BlockUnlitTorch(), "unlit_torch"),
 					setBlockName(new BlockNull(true), "null_block"), setBlockName(new BlockSpawner(), "spawner"),
+					setBlockName(new BlockBossBlock(), "boss_block"),
 
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_valuable", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_food", CQRMain.CQRExporterChestTab),
@@ -353,6 +356,7 @@ public class ModBlocks {
 					createItemBlock(UNLIT_TORCH),
 					createItemBlock(NULL_BLOCK),
 					createItemBlock(SPAWNER),
+					createItemBlock(BOSS_BLOCK),
 
 					createItemBlock(EXPORTER_CHEST_VALUABLE),
 					createItemBlock(EXPORTER_CHEST_FOOD),
