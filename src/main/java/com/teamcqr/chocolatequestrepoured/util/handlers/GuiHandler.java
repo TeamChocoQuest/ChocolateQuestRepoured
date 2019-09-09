@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.client.gui.GuiAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiCQREntity;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBackpack;
@@ -11,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.inventory.ContainerBadge;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerCQREntity;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -68,6 +70,10 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.CQR_ENTITY_GUI_ID) {
 			return new GuiCQREntity(this.getServerGuiElement(ID, player, world, x, y, z), (AbstractEntityCQR) world.getEntityByID(x));
+		}
+
+		if (ID == Reference.EXPORTER_GUI_ID) {
+			return new GuiExporter((TileEntityExporter) world.getTileEntity(new BlockPos(x, y, z)));
 		}
 
 		return null;
