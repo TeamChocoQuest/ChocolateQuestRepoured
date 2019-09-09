@@ -14,6 +14,8 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
@@ -30,7 +32,7 @@ import net.minecraft.world.World;
 
 public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityMultiPart, IRangedAttackMob {
 	
-	enum EDragonMovementState {
+	public enum EDragonMovementState {
 		CHARGING,
 		FLYING,
 		//When it is flying up or down, it will spiral up or down
@@ -313,6 +315,20 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	
 	public EDragonMovementState getCurrentMovementState() {
 		return movementState;
+	}
+
+	public void updateMovementState(EDragonMovementState charging) {
+		this.movementState = charging;
+	}
+	
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateFlying(this, worldIn) {
+			@Override
+			public float getPathSearchRange() {
+				return 128.0F;
+			}
+		};
 	}
 	
 
