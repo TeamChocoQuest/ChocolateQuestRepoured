@@ -33,6 +33,7 @@ public class BossAISpiralUpOrDown extends EntityAIBase {
 	public boolean shouldContinueExecuting() {
 		if(currentIterations > maxIterations) {
 			this.dragon.updateMovementState(EDragonMovementState.FLYING);
+			resetTask();
 			return false;
 		}
 		return true;
