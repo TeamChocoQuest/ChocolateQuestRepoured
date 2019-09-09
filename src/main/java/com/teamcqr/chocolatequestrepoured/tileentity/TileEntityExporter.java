@@ -172,4 +172,9 @@ public class TileEntityExporter extends TileEntity {
 		return INFINITE_EXTENT_AABB;
 	}
 
+	@Override
+	public double getMaxRenderDistanceSquared() {
+		return 65536.0D;
+	}
+
 }
