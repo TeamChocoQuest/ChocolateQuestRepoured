@@ -10,9 +10,9 @@ import net.minecraft.world.World;
 
 public class EntityAIFireFighter extends EntityAIBase {
 	
-	protected static final int searchRadiusHorizontal = 5;
-	protected static final int searchRadiusVertical = 1;
-	protected static final int maxDistanceToEntity = 15;
+	protected static final int searchRadiusHorizontal = 8;
+	protected static final int searchRadiusVertical = 2;
+	protected static final int maxDistanceToEntity = 3;
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	protected static final float speedToWalkToFire = 1.15F;
 	World world;
