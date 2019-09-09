@@ -97,8 +97,11 @@ public class EntityAIHealingPotion extends EntityAIBase {
 				mayMove = true;
 			}
 			
-			double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
-			EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
+			if(mayMove) {
+				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+				EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
+			}
+			
 		}
 	}
 
