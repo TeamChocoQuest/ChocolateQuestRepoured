@@ -39,6 +39,8 @@ public class CQStructurePart extends Template {
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
 	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
 	
+	private List<BossInfo> bosses = new ArrayList<>();
+	
 	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
 	
 	private int part_id;
@@ -164,6 +166,13 @@ public class CQStructurePart extends Template {
 				if(Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
 					ForceFieldNexusInfo ffni = new ForceFieldNexusInfo(bi.pos);
 					this.forceFieldCores.add(ffni);
+					removeEntries.add(bi);
+				}
+				
+				//Boss blocks
+				if(Block.isEqualTo(currentBlock, ModBlocks.BOSS_BLOCK)) {
+					BossInfo boi = new BossInfo(bi.pos);
+					this.bosses.add(boi);
 					removeEntries.add(bi);
 				}
 			}
@@ -330,6 +339,10 @@ public class CQStructurePart extends Template {
 	
 	public List<ForceFieldNexusInfo> getFieldCores() {
 		return new ArrayList<ForceFieldNexusInfo>(this.forceFieldCores);
+	}
+	
+	public List<BossInfo> getBosses() {
+		return this.bosses;
 	}
 
 }
