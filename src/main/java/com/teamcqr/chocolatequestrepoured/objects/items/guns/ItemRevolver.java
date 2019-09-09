@@ -12,9 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -61,7 +59,7 @@ public class ItemRevolver extends Item {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		System.out.println("Hand: " + handIn.toString());
+		//System.out.println("Hand: " + handIn.toString());
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		boolean flag = !findAmmo(playerIn).isEmpty();
 

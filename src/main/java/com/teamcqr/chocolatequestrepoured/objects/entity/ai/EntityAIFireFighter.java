@@ -4,15 +4,18 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityAIFireFighter extends EntityAIBase {
 	
-	protected static final int searchRadiusHorizontal = 5;
-	protected static final int searchRadiusVertical = 1;
-	protected static final int maxDistanceToEntity = 15;
+	protected static final int searchRadiusHorizontal = 8;
+	protected static final int searchRadiusVertical = 2;
+	protected static final int maxDistanceToEntity = 3;
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	protected static final float speedToWalkToFire = 1.15F;
 	World world;
@@ -55,6 +58,9 @@ public class EntityAIFireFighter extends EntityAIBase {
 			if(entity.getDistanceSq(nearestFire) <= (maxDistanceToEntity * maxDistanceToEntity)) {
 				entity.swingArm(EnumHand.MAIN_HAND);
 				world.setBlockToAir(nearestFire);
+				//DONE: Particles and sounds
+				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, nearestFire.getX() -0.5d, nearestFire.getY() -0.5D, nearestFire.getZ() -0.5D, 1.0, 1.0, 1.0, 1);
+				world.playSound(nearestFire.getX(), nearestFire.getY(), nearestFire.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F, true);
 				nearestFire = null;
 			} else if(entity.getNavigator().getPathToPos(nearestFire) != null) {
 				//If we are not close enough we need to walk to the fire, now check if there's a path to it
