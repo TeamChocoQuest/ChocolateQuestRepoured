@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.gui;
+package com.teamcqr.chocolatequestrepoured.client.gui;
 
 import java.io.IOException;
 
@@ -14,7 +14,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.client.config.GuiCheckBox;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class GuiExporter extends GuiScreen {
 
 	private String authorName;

@@ -1,14 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -30,8 +30,8 @@ public class BlockExporter extends Block implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
 			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (!worldIn.isRemote) {
-			playerIn.openGui(CQRMain.INSTANCE, Reference.EXPORTER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+		if (worldIn.isRemote) {
+			Minecraft.getMinecraft().displayGuiScreen(new GuiExporter((TileEntityExporter) worldIn.getTileEntity(pos)));
 		}
 
 		return true;
