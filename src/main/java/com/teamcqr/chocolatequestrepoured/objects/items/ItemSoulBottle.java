@@ -34,7 +34,7 @@ public class ItemSoulBottle extends Item
 	
 	public ItemSoulBottle() 
 	{
-		setMaxStackSize(1);
+		setMaxStackSize(64);
 	}
 	
 	@Override
