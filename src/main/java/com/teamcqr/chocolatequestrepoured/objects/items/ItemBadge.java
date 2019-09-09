@@ -16,6 +16,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,6 +27,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -44,6 +46,7 @@ public class ItemBadge extends Item {
 			if (!player.world.isRemote) {
 				if (entity instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR) entity).setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, stack.copy());
+					((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				} else {
 					IItemHandler capability = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 					NBTTagList itemList = new NBTTagList();
@@ -54,11 +57,9 @@ public class ItemBadge extends Item {
 						stack1.writeToNBT(slotTag);
 						itemList.appendTag(slotTag);
 					}
-					entity.getEntityData().setTag("Items", itemList);
-					
-					//Few particles to show that it did its job
-					for(int x = 0; x < 10; x++) {
-						entity.getEntityWorld().spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 0.5D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, 0, 0, 0);
+					if (!itemList.hasNoTags()) {
+						entity.getEntityData().setTag("Items", itemList);
+						((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 					}
 				}
 			}
