@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -30,8 +31,8 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
@@ -44,12 +45,18 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public abstract class AbstractEntityCQR extends EntityMob {
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
 	protected boolean holdingPotion;
+	protected ResourceLocation lootTable;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
@@ -176,6 +183,35 @@ public abstract class AbstractEntityCQR extends EntityMob {
 			return true;
 		}
 		return false;
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return this.lootTable;
+	}
+
+	@Override
+	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
+		ResourceLocation resourcelocation = this.getLootTable();
+		if (resourcelocation != null) {
+			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((WorldServer) this.world).withLootedEntity(this).withDamageSource(source);
+			if (wasRecentlyHit && this.attackingPlayer != null) {
+				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+			}
+
+			for (ItemStack itemstack : lootTable.generateLootForPools(this.rand, lootContextBuilder.build())) {
+				this.entityDropItem(itemstack, 0.0F);
+			}
+		}
+
+		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BadgeSlot);
+		if (badge.getItem() instanceof ItemBadge) {
+			IItemHandler capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+			for (int i = 0; i < capability.getSlots(); i++) {
+				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
+			}
+		}
 	}
 
 	public EntityLivingBase getLeader() {
@@ -333,6 +369,10 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.holdingPotion = !this.holdingPotion;
 	}
 
+	public boolean isHoldingPotion() {
+		return this.holdingPotion;
+	}
+
 	public abstract EFaction getFaction();
 
 	public boolean hasFaction() {
@@ -353,7 +393,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (this.canEntityBeSeen(cqrentity) || player.canEntityBeSeen(cqrentity)) {
-					if(this.getFaction().equals(cqrentity.getFaction())) {
+					if (this.getFaction().equals(cqrentity.getFaction())) {
 						// TODO decrement the players repu on this entity's faction
 					} else if (this.getFaction().isEnemy(cqrentity.getFaction())) {
 						// TODO increment the players repu at CQREntity's faction
@@ -368,15 +408,6 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
-	}
-
-	@Override
-	protected ResourceLocation getLootTable() {
-		return super.getLootTable();
-	}
-
-	public boolean isHoldingPotion() {
-		return this.holdingPotion;
 	}
 
 }
