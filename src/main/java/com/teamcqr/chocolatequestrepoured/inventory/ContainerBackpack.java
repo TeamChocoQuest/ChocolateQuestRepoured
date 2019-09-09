@@ -84,7 +84,9 @@ public class ContainerBackpack extends Container {
 	@Override
 	public void onContainerClosed(EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
-		playerIn.setHeldItem(this.hand, stack);
+		if (!playerIn.world.isRemote) {
+			playerIn.setHeldItem(this.hand, stack);
+		}
 	}
 
 }
