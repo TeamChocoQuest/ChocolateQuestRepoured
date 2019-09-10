@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -11,7 +10,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAIFireFighter extends EntityAIBase {
+public class EntityAIFireFighter extends AbstractCQREntityAI {
 	
 	protected static final int searchRadiusHorizontal = 8;
 	protected static final int searchRadiusVertical = 2;
@@ -19,12 +18,11 @@ public class EntityAIFireFighter extends EntityAIBase {
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	protected static final float speedToWalkToFire = 1.15F;
 	World world;
-	AbstractEntityCQR entity;
 	BlockPos nearestFire = null;
 	int timerForPosConflicts = 10;
 
 	public EntityAIFireFighter(AbstractEntityCQR ent) {
-		entity = ent;
+		super(ent);
 		world = ent.getEntityWorld();
 	}
 
