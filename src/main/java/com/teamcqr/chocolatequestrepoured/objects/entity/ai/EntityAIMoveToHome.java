@@ -5,12 +5,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
-public class EntityAIMoveToHome extends EntityAIBase {
-
-	protected final AbstractEntityCQR entity;
+public class EntityAIMoveToHome extends AbstractCQREntityAI {
 
 	public EntityAIMoveToHome(AbstractEntityCQR entity) {
-		this.entity = entity;
+		super(entity);
 	}
 
 	@Override
@@ -39,4 +37,5 @@ public class EntityAIMoveToHome extends EntityAIBase {
 		BlockPos pos = this.entity.getHomePosition();
 		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
 	}
+
 }
