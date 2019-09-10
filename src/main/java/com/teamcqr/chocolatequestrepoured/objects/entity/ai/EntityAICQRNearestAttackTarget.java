@@ -66,7 +66,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		if (this.entity.getFaction() == EFaction.getFactionOfEntity(possibleTarget)) {
 			return false;
 		}
-		if (!this.entity.canEntityBeSeen(possibleTarget)) {
+		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
 			return false;
 		}
 		if (!this.canReachTarget(possibleTarget)) {
