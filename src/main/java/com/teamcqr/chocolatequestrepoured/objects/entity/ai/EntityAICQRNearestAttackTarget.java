@@ -45,7 +45,6 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 			for (EntityLivingBase possibleTarget : possibleTargets) {
 				if (this.isSuitableTarget(possibleTarget)) {
 					this.attackTarget = possibleTarget;
-					System.out.println("NEW TARGET");
 					return true;
 				}
 			}
