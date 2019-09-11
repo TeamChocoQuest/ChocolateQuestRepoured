@@ -24,7 +24,8 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		return super.attackEntityFrom(source, amount);
+		return this.dragon.attackEntityFromPart(this, source, amount);
+		//return super.attackEntityFrom(source, amount);
 	}
 	
 	@Override
