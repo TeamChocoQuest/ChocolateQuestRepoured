@@ -49,9 +49,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs 
 	 */
 	
+	public static final int SEGMENT_COUNT = 32;
+	
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[16];
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
 	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
@@ -67,7 +69,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		/*this.dragonBodyParts = new MultiPartEntityPart[] { this.headPart, this.body1, this.body2, this.body3,
 				this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
 				this.body12, this.body13, this.body14, this.body15, this.body16 };*/
-		this.setSize(2.0F, 2.0F);
+		this.setSize(1.5F, 1.5F);
 		this.noClip = true;
 		this.setNoGravity(true);
 		this.experienceValue = 100;
@@ -76,7 +78,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		
 		//Init the body parts
 		for(int i = 0; i < dragonBodyParts.length; i++) {
-			dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i);
+			dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i +1);
 		}
 	}
 	
@@ -159,32 +161,39 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	}
 	
 	protected void moveParts() {
-		for(int i = 0; i < this.dragonBodyParts.length; i++) {
-			Entity foregoingPart = i == 0 ? this : this.dragonBodyParts[i -1];
-			
-			double headerX = foregoingPart.posX;
-			double headerY = foregoingPart.posY;
-			double headerZ = foregoingPart.posZ;
-			
-			float angle = (float) (((foregoingPart.rotationYaw +180.0F) * Math.PI) /180.0F);
-			double idealX = -MathHelper.sin(angle);
-			double idealZ = MathHelper.cos(angle);
-			
-			Vec3d movementDifference = new Vec3d(dragonBodyParts[i].posX - headerX, dragonBodyParts[i].posY, dragonBodyParts[i].posZ).normalize();
-			movementDifference = movementDifference.addVector(idealX, 0, idealZ).normalize();
-			
-			
-			double destinationX = headerX +1.0D * movementDifference.x;
-			double destinationY = headerY +1.0D * movementDifference.y;
-			double destinationZ = headerZ +1.0D * movementDifference.z;
-			
-			//Now update the position
-			dragonBodyParts[i].setPosition(destinationX, destinationY, destinationZ);
-			
-			double distance = (double) MathHelper.sqrt(movementDifference.x * movementDifference.x + movementDifference.z * movementDifference.z + movementDifference.y * movementDifference.y);
+		for (int i = 0; i < this.dragonBodyParts.length; i++) {
+			Entity leader = i == 0 ? this : this.dragonBodyParts[i - 1];
+			double headerX = leader.posX;
+			double headerY = leader.posY;
+			double headerZ = leader.posZ;
 
-			dragonBodyParts[i].setRotation((float) (Math.atan2(movementDifference.z, movementDifference.x) * 180.0D / Math.PI) + 90.0F,
-					-(float) (Math.atan2(movementDifference.y, distance) * 180.0D / Math.PI));
+			// also weight the position so that the segments straighten out a little bit, and the front ones straighten more
+			float angle = (((leader.rotationYaw + 180) * 3.141593F) / 180F);
+
+
+			double straightenForce = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
+
+			double idealX = -MathHelper.sin(angle) * straightenForce;
+			double idealZ = MathHelper.cos(angle) * straightenForce;
+
+
+			Vec3d diff = new Vec3d(dragonBodyParts[i].posX - headerX, dragonBodyParts[i].posY - headerY, dragonBodyParts[i].posZ - headerZ);
+			diff = diff.normalize();
+
+			diff = diff.add(new Vec3d(idealX, 0, idealZ).normalize());
+
+			//Dont change these values, they are important for the correct allignment of the segments!!!
+			double f = i != 0 ? 0.378D : 0.34D;
+
+			double destX = headerX + f * diff.x;
+			double destY = headerY + f * diff.y;
+			double destZ = headerZ + f * diff.z;
+
+			dragonBodyParts[i].setPosition(destX, destY, destZ);
+
+			double distance = (double) MathHelper.sqrt(diff.x * diff.x + diff.z * diff.z);
+
+			dragonBodyParts[i].setRotation((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(diff.y, distance) * 180.0D / Math.PI));
 		}
 	}
 	
@@ -195,6 +204,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 		//DONE: Destroy the blocks
 		destroyBlocksInAABB(getEntityBoundingBox());
+		/*for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
+			destroyBlocksInAABB(part.getEntityBoundingBox());
+		}*/
 		
 	}
 	
@@ -331,6 +343,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 				return 128.0F;
 			}
 		};
+	}
+	
+	@Override
+	public int getHealingPotions() {
+		return 0;
 	}
 	
 
