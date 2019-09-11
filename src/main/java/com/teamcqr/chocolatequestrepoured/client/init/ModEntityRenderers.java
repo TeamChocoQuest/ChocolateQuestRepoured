@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonBodyPart;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragon;
@@ -64,7 +65,8 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class,
 				renderManager -> new RenderCQRNetherDragon(renderManager));
 		
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, renderManager -> new RenderCQRNetherDragonSegment(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class,
+				renderManager -> new RenderCQRNetherDragonSegment(renderManager, new ModelNetherDragonBodyPart()));
 	}
 
 }
