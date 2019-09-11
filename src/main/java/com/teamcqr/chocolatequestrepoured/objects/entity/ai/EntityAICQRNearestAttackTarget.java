@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -38,15 +39,18 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.world.rand.nextInt(5) == 0) {
+		if (this.entity.world.getTotalWorldTime() % 10 == 0 && !this.predicate.apply(this.entity.getAttackTarget())) {
 			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D, 8.0D, 32.0D);
 			List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
 			possibleTargets.sort(this.sorter);
-			for (EntityLivingBase possibleTarget : possibleTargets) {
-				if (this.isSuitableTarget(possibleTarget)) {
-					this.attackTarget = possibleTarget;
-					return true;
+			if (!possibleTargets.isEmpty()) {
+				for (EntityLivingBase possibleTarget : possibleTargets) {
+					if (possibleTarget instanceof EntityPlayer) {
+						this.attackTarget = possibleTarget;
+					}
 				}
+				this.attackTarget = possibleTargets.get(0);
+				return true;
 			}
 		}
 		return false;
