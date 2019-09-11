@@ -19,7 +19,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.dragon = dragon;
 		this.partID = partID;
 		//String partName, float width, float height
-		this.setInvisible(true);
+		this.setInvisible(false);
 	}
 	
 	@Override
