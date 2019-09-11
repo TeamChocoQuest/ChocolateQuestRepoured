@@ -66,7 +66,7 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityEnemy(Entity entity) {
-		if (entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (entity != null && entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
@@ -76,7 +76,7 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityAlly(Entity entity) {
-		if (entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (entity != null && entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			return true;
 		}
 		if(getFactionOfEntity(entity) != null) {
