@@ -29,10 +29,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 public abstract class SpawnerFactory {
 
 	public static void placeSpawnerForMob(Entity entity, boolean multiUseSpawner, @Nullable MultiUseSpawnerSettings spawnerSettings, World world, BlockPos pos) {
-		Entity[] entities = new Entity[1];
-		entities[0] = entity;
-		
-		placeSpawnerForMobs(entities, multiUseSpawner, spawnerSettings, world, pos);
+		placeSpawnerForMobs(new Entity[] { entity }, multiUseSpawner, spawnerSettings, world, pos);
 	}
 	
 	public static void placeSpawnerForMobs(Entity[] entities, boolean multiUseSpawner, @Nullable MultiUseSpawnerSettings spawnerSettings, World world, BlockPos pos) {
@@ -63,7 +60,7 @@ public abstract class SpawnerFactory {
 			if(tile != null && tile instanceof TileEntitySpawner) {
 				TileEntitySpawner spawner = (TileEntitySpawner)tile;
 				
-				for(int i = 0; i < entities.length; i++) {
+				for(int i = 0; i < entities.length && i < 9; i++) {
 					spawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
 				}
 				
