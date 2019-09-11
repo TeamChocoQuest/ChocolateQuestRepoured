@@ -15,35 +15,53 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.EnumDifficulty;
 
 public enum EFaction {
 	
-	UNDEAD(new String[] {"WALKERS", "VILLAGERS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
-	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
-	WALKERS(new String[] {"UNDEAD", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "PLAYER", "NPC"}, new String[] {}, EReputationState.ARCH_ENEMY),
+	UNDEAD(new String[] {"WALKERS", "VILLAGERS", "PLAYERS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
+	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
+	WALKERS(new String[] {"UNDEAD", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "PLAYERS", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "NPC"}, new String[] {}, EReputationState.ARCH_ENEMY),
 	DWARVES_AND_GOLEMS(new String[] {"WALKERS", "ENDERMEN", "ILLAGERS"}, new String[] {"VILLAGERS", "NPC", "INQUISITION"}, EReputationState.ACCEPTED),
-	GOBLINS(new String[] {"OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION"}, new String[] {"ENDERMEN", "ILLAGERS"}, EReputationState.ENEMY),
-	ENDERMEN(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	INQUISITION(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	ILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	VILLAGERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	GOBLINS(new String[] {"OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS"}, new String[] {"ENDERMEN", "ILLAGERS"}, EReputationState.ENEMY),
+	ENDERMEN(new String[] {"WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE"}, new String[] {"ILLAGERS", "UNDEAD"}, EReputationState.NEUTRAL),
+	//OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	INQUISITION(new String[] {"WALKERS", "ILLAGERS", "UNDEAD", "GOBLINS"}, new String[] {"DWARVES_AND_GOLEMS", "NPC", "VILLAGERS"}, EReputationState.NEUTRAL),
+	ILLAGERS(new String[] {"WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS"}, new String[] {"ENDERMEN", "UNDEAD", "PIRATE"}, EReputationState.NEUTRAL),
+	VILLAGERS(new String[] {"WALKERS", "UNDEAD", "ILLAGERS"}, new String[] {"NPC", "TRITONS", "PLAYERS"}, EReputationState.NEUTRAL),
 	NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	TRITONS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
-	PLAYERS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
+	TRITONS(new String[] {"WALKERS", "UNDEAD", "PIRATE", "ENDERMEN"}, new String[] {"NPC", "VILLAGERS"}, EReputationState.NEUTRAL),
+	PLAYERS(new String[] {}, new String[] {"VILLAGERS", "NPC"}, EReputationState.NEUTRAL),
 	;
+
+	public static final int REPU_DECREMENT_ON_MEMBER_KILL = 50;
+	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 10;
+	public static final int REPU_DECREMENT_ON_ALLY_KILL = 20;
 	
+	private String[] enemies;
+	private String[] allies;
+	private EReputationState defaultState;
 	
 	private EFaction(String[] enemies, String[] allies, EReputationState startState) {
-		//TODO: Create fields and fill them
+		this.enemies = enemies;
+		this.allies = allies;
+		this.defaultState = startState;
 	}
 	
 	public boolean isEnemy(EFaction otherFac) {
-		//TODO work this out
+		for(String str : this.enemies) {
+			if(otherFac.toString().toUpperCase().equals(str)) {
+				return true;
+			}
+		}
 		return false;
 	}
 	public boolean isAlly(EFaction otherFac) {
-		//TODO work this out
+		for(String str : this.allies) {
+			if(otherFac.toString().toUpperCase().equals(str)) {
+				return true;
+			}
+		}
 		return false;
 	}
 	
@@ -65,6 +83,9 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityEnemy(Entity entity) {
+		if(entity.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
+			return false;
+		}
 		if(getFactionOfEntity(entity) != null) {
 			return isEnemy(getFactionOfEntity(entity));
 		}
@@ -111,6 +132,14 @@ public enum EFaction {
 		}
 		
 		return null;
+		
+	}
+	
+	public void decrementReputation(EntityPlayer player, int amount) {
+		
+	}
+	
+	public void incrementReputation(EntityPlayer player, int amount) {
 		
 	}
 

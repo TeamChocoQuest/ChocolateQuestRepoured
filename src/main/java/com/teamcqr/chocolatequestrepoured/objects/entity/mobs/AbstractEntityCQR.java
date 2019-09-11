@@ -504,11 +504,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (this.canEntityBeSeen(cqrentity) || player.canEntityBeSeen(cqrentity)) {
 					if (this.getFaction().equals(cqrentity.getFaction())) {
-						// TODO decrement the players repu on this entity's faction
+						// DONE decrement the players repu on this entity's faction
+						this.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL);
 					} else if (this.getFaction().isEnemy(cqrentity.getFaction())) {
-						// TODO increment the players repu at CQREntity's faction
+						// DONE increment the players repu at CQREntity's faction
+						cqrentity.getFaction().incrementReputation(player, EFaction.REPU_DECREMENT_ON_ENEMY_KILL);
 					} else if (this.getFaction().isAlly(cqrentity.getFaction())) {
-						// TODO decrement the players repu on CQREntity's faction
+						// DONE decrement the players repu on CQREntity's faction
+						cqrentity.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL);
 					}
 				}
 			}

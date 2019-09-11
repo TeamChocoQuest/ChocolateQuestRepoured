@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelNetherDragon;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -14,7 +14,8 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/skeletal_nether_dragon.png"));
 
 	public RenderCQRNetherDragon(RenderManager manager) {
-		super(manager, new ModelNetherDragon(), 0.5F);
+		//super(manager, new ModelNetherDragon(), 0.5F);
+		super(manager, new ModelNetherDragonHead(), 0.5F);
 	}
 
 	@Override
