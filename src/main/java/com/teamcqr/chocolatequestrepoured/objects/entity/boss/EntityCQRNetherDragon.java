@@ -78,7 +78,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		
 		//Init the body parts
 		for(int i = 0; i < dragonBodyParts.length; i++) {
-			dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i);
+			dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i +1);
 		}
 	}
 	
@@ -183,7 +183,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			diff = diff.add(new Vec3d(idealX, 0, idealZ).normalize());
 
 			//Dont change these values, they are important for the correct allignment of the segments!!!
-			double f = i != 0 ? 0.38D : 0.345D;
+			double f = i != 0 ? 0.378D : 0.34D;
 
 			double destX = headerX + f * diff.x;
 			double destY = headerY + f * diff.y;

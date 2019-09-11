@@ -11,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
 	
+	//TODO: Add the tail peek
+	
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
 
 	private final ModelBase model;
@@ -26,7 +28,6 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.translate((float) x, (float) y, (float) z);
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 
-		// I forget what this glitch is called, but let's fix it
 		float yawDiff = entity.rotationYaw - entity.prevRotationYaw;
 		if (yawDiff > 180) {
 			yawDiff -= 360;
