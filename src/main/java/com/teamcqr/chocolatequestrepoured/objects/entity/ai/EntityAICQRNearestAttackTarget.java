@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -65,8 +64,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		// TODO Replace with isEntityAlly when factions are finished
-		if (this.entity.getFaction() == EFaction.getFactionOfEntity(possibleTarget)) {
+		if (this.entity.getFaction().isEntityAlly(possibleTarget)) {
 			return false;
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
