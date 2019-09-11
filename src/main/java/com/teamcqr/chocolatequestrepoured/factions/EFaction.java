@@ -15,6 +15,8 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.EnumDifficulty;
 
 public enum EFaction {
 	
@@ -65,6 +67,9 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityEnemy(Entity entity) {
+		if(entity.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
+			return false;
+		}
 		if(getFactionOfEntity(entity) != null) {
 			return isEnemy(getFactionOfEntity(entity));
 		}
