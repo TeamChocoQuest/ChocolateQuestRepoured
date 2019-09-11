@@ -18,7 +18,6 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -94,12 +93,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
+		/*if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
 			//return this.attackEntityFromPart(this.headPart, source, amount);
-		}
+			return true;
+		}*/
 
-		return false;
+		return super.attackEntityFrom(source, amount);
 	}
+	
 
 	@Override
 	public boolean isNonBoss() {
@@ -137,7 +138,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
 		//}
 
-		return damage > 0.01F;
+		return attackEntityFrom(source, damage);
 	}
 
 	@Override
@@ -191,6 +192,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		
+		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 		//DONE: Destroy the blocks
 		destroyBlocksInAABB(getEntityBoundingBox());
 		
