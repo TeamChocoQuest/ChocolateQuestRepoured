@@ -231,6 +231,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		super.onUpdate();
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawnerForMob(this, false, null, world, this.getPosition());
+			this.setDead();
 		}
 	}
 
