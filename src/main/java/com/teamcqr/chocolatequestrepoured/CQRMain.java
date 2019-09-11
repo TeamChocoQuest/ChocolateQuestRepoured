@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -232,6 +233,9 @@ public class CQRMain
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event)
 	{
+		/*for(EFaction efac : EFaction.values()) {
+			System.out.println(efac.toString());
+		}*/
 		proxy.postInit();
 	}
 }
