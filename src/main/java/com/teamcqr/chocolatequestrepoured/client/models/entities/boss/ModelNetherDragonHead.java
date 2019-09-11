@@ -54,7 +54,7 @@ public class ModelNetherDragonHead extends ModelBase {
         this.Horn_Left_B.addBox(0.0F, 0.0F, 0.0F, 2, 4, 2, 0.0F);
         this.setRotateAngle(Horn_Left_B, 0.0F, 0.0F, 0.8196066167365371F);
         this.Head_Back = new ModelRenderer(this, 52, 24);
-        this.Head_Back.setRotationPoint(-5.0F, 4.5F, 5.0F);
+        this.Head_Back.setRotationPoint(-5.0F, 7.5F, 5.0F);
         this.Head_Back.addBox(0.0F, 0.0F, 0.0F, 18, 9, 10, 0.0F);
         this.setRotateAngle(Head_Back, 0.0F, 1.5707963267948966F, 0.0F);
         this.Horn_Right_A = new ModelRenderer(this, 32, 1);
