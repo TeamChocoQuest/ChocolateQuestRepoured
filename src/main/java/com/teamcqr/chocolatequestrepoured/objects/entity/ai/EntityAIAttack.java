@@ -85,7 +85,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	}
 
 	protected boolean isSuitableTarget(EntityLivingBase possibleTarget) {
-		if (TargetUtil.PREDICATE.apply(possibleTarget)) {
+		if (!TargetUtil.PREDICATE.apply(possibleTarget)) {
 			return false;
 		}
 		if (possibleTarget == this.entity) {
