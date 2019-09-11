@@ -48,6 +48,10 @@ public enum EFaction {
 		this.defaultState = startState;
 	}
 	
+	public EReputationState getDefaultReputation() {
+		return this.defaultState;
+	}
+	
 	public boolean isEnemy(EFaction otherFac) {
 		for(String str : this.enemies) {
 			if(otherFac.toString().toUpperCase().equals(str)) {
