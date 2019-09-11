@@ -10,7 +10,6 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 
 	public EntityCQRDummy(World worldIn) {
 		super(worldIn);
-		this.setHealingPotions(0);
 	}
 
 	@Override

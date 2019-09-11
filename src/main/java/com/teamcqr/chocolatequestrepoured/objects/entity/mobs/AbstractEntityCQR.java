@@ -19,16 +19,19 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -41,8 +44,11 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -52,7 +58,7 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public abstract class AbstractEntityCQR extends EntityMob {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
@@ -62,8 +68,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
-		this.setHealingPotions(3);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
+		this.experienceValue = 5;
 	}
 
 	@Override
@@ -74,6 +79,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
 	}
@@ -110,19 +116,19 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 		this.tasks.addTask(9, new EntityAIBackstab(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
-		//this.tasks.addTask(10, new EntityAIAttackMelee(this, 1.0D, false));
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAITorchIgniter(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		//this.targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
 	}
 
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
+		this.setHealingPotions(3);
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		return ientitylivingdata;
@@ -199,9 +205,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		ResourceLocation resourcelocation = this.getLootTable();
 		if (resourcelocation != null) {
 			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(resourcelocation);
-			LootContext.Builder lootContextBuilder = new LootContext.Builder((WorldServer) this.world).withLootedEntity(this).withDamageSource(source);
+			LootContext.Builder lootContextBuilder = new LootContext.Builder((WorldServer) this.world)
+					.withLootedEntity(this).withDamageSource(source);
 			if (wasRecentlyHit && this.attackingPlayer != null) {
-				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer).withLuck(this.attackingPlayer.getLuck());
+				lootContextBuilder = lootContextBuilder.withPlayer(this.attackingPlayer)
+						.withLuck(this.attackingPlayer.getLuck());
 			}
 
 			for (ItemStack itemstack : lootTable.generateLootForPools(this.rand, lootContextBuilder.build())) {
@@ -218,11 +226,110 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		}
 	}
 
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			SpawnerFactory.placeSpawnerForMob(this, false, null, world, this.getPosition());
+			this.setDead();
+		}
+	}
+
+	// Entity Mob
+	public SoundCategory getSoundCategory() {
+		return SoundCategory.HOSTILE;
+	}
+
+	public void onLivingUpdate() {
+		this.updateArmSwingProgress();
+		super.onLivingUpdate();
+	}
+
+	protected SoundEvent getSwimSound() {
+		return SoundEvents.ENTITY_HOSTILE_SWIM;
+	}
+
+	protected SoundEvent getSplashSound() {
+		return SoundEvents.ENTITY_HOSTILE_SPLASH;
+	}
+
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_HOSTILE_HURT;
+	}
+
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_HOSTILE_DEATH;
+	}
+
+	protected SoundEvent getFallSound(int heightIn) {
+		return heightIn > 4 ? SoundEvents.ENTITY_HOSTILE_BIG_FALL : SoundEvents.ENTITY_HOSTILE_SMALL_FALL;
+	}
+
+	public boolean attackEntityAsMob(Entity entityIn) {
+		float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
+		int i = 0;
+
+		if (entityIn instanceof EntityLivingBase) {
+			f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(),
+					((EntityLivingBase) entityIn).getCreatureAttribute());
+			i += EnchantmentHelper.getKnockbackModifier(this);
+		}
+
+		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
+
+		if (flag) {
+			if (i > 0 && entityIn instanceof EntityLivingBase) {
+				((EntityLivingBase) entityIn).knockBack(this, (float) i * 0.5F,
+						(double) MathHelper.sin(this.rotationYaw * 0.017453292F),
+						(double) (-MathHelper.cos(this.rotationYaw * 0.017453292F)));
+				this.motionX *= 0.6D;
+				this.motionZ *= 0.6D;
+			}
+
+			int j = EnchantmentHelper.getFireAspectModifier(this);
+
+			if (j > 0) {
+				entityIn.setFire(j * 4);
+			}
+
+			if (entityIn instanceof EntityPlayer) {
+				EntityPlayer entityplayer = (EntityPlayer) entityIn;
+				ItemStack itemstack = this.getHeldItemMainhand();
+				ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack()
+						: ItemStack.EMPTY;
+
+				if (!itemstack.isEmpty() && !itemstack1.isEmpty()
+						&& itemstack.getItem().canDisableShield(itemstack, itemstack1, entityplayer, this)
+						&& itemstack1.getItem().isShield(itemstack1, entityplayer)) {
+					float f1 = 0.25F + (float) EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+
+					if (this.rand.nextFloat() < f1) {
+						entityplayer.getCooldownTracker().setCooldown(itemstack1.getItem(), 100);
+						this.world.setEntityState(entityplayer, (byte) 30);
+					}
+				}
+			}
+
+			this.applyEnchantments(this, entityIn);
+		}
+
+		return flag;
+	}
+
+	protected boolean canDropLoot() {
+		return true;
+	}
+
+	public boolean isPreventingPlayerRest(EntityPlayer playerIn) {
+		return true;
+	}
+
+	// Chocolate Quest Repoured
 	public EntityLivingBase getLeader() {
 		if (this.hasLeader()) {
-			for (Entity entity : this.world.loadedEntityList) {
-				if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID())) {
-					return (EntityLivingBase) entity;
+			for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
+				if (this.leaderUUID.equals(entity.getPersistentID())) {
+					return entity;
 				}
 			}
 		}
@@ -234,7 +341,7 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	}
 
 	public boolean hasLeader() {
-		return this.leaderUUID != null && !this.getLeader().isDead;
+		return this.leaderUUID != null && this.getLeader().isEntityAlive();
 	}
 
 	public BlockPos getHomePosition() {
@@ -322,7 +429,6 @@ public abstract class AbstractEntityCQR extends EntityMob {
 		ItemStack stack;
 		if (this.holdingPotion) {
 			stack = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-
 		} else {
 			stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
 		}
@@ -333,11 +439,11 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	}
 
 	public void setHealingPotions(int amount) {
+		ItemStack stack = new ItemStack(ModItems.POTION_HEALING, amount);
 		if (this.holdingPotion) {
-			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.POTION_HEALING, amount));
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 		} else {
-			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot,
-					new ItemStack(ModItems.POTION_HEALING, amount));
+			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
 		}
 	}
 
