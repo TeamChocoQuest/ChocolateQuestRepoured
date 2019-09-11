@@ -15,8 +15,8 @@ public class ModelNetherDragonBodyPart extends ModelBase {
         this.textureWidth = 128;
         this.textureHeight = 64;
         this.Trunk1 = new ModelRenderer(this, 0, 20);
-        this.Trunk1.setRotationPoint(-0.0F, 0.0F, 0.0F);
-        this.Trunk1.addBox(-6.0F, 6.0F, -6.0F, 12, 12, 12, 0.0F);
+        this.Trunk1.setRotationPoint(0.0F, -12.0F, 0.0F);
+        this.Trunk1.addBox(-6.0F, -6.0F, -6.0F, 12, 12, 12, 0.0F);
         this.setRotateAngle(Trunk1, 0.0F, 1.5707963267948966F, -0.0F);
     }
 

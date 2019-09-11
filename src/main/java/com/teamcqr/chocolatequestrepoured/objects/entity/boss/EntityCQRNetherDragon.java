@@ -49,9 +49,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs 
 	 */
 	
+	public static final int SEGMENT_COUNT = 32;
+	
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[16];
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
 	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
@@ -180,7 +182,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 			diff = diff.add(new Vec3d(idealX, 0, idealZ).normalize());
 
-			double f = 0.5D;
+			//Dont change these values, they are important for the correct allignment of the segments!!!
+			double f = i != 0 ? 0.38D : 0.345D;
 
 			double destX = headerX + f * diff.x;
 			double destY = headerY + f * diff.y;
@@ -189,11 +192,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			dragonBodyParts[i].setPosition(destX, destY, destZ);
 
 			double distance = (double) MathHelper.sqrt(diff.x * diff.x + diff.z * diff.z);
-
-			if (i == 0) {
-				// tilt segment next to head up towards head
-				diff = diff.add(new Vec3d(0, -0.15, 0));
-			}
 
 			dragonBodyParts[i].setRotation((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(diff.y, distance) * 180.0D / Math.PI));
 		}

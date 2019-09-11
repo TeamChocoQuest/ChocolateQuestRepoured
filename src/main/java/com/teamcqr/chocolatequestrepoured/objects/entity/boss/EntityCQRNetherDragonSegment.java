@@ -14,7 +14,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID) {
 		super((IEntityMultiPart)dragon, "dragonPart" + partID, 0.5F, 0.5F);
 		
-		setSize(1.5F, 1.5F);
+		setSize(1.25F, 1.25F);
 		
 		this.dragon = dragon;
 		this.partID = partID;
