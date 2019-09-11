@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -222,6 +223,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 			for (int i = 0; i < capability.getSlots(); i++) {
 				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
 			}
+		}
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			SpawnerFactory.placeSpawnerForMob(this, false, null, world, this.getPosition());
 		}
 	}
 
