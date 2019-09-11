@@ -160,40 +160,44 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		//Unused?
 	}
 	
+	//This code is not entirely made by me, it is oriented from this:
+	//https://github.com/TeamTwilight/twilightforest/blob/1.12.x/src/main/java/twilightforest/entity/boss/EntityTFNaga.java
 	protected void moveParts() {
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			Entity leader = i == 0 ? this : this.dragonBodyParts[i - 1];
+			
 			double headerX = leader.posX;
 			double headerY = leader.posY;
 			double headerZ = leader.posZ;
 
-			// also weight the position so that the segments straighten out a little bit, and the front ones straighten more
-			float angle = (((leader.rotationYaw + 180) * 3.141593F) / 180F);
+			float angle = (((leader.rotationYaw + 180) * new Float(Math.PI)) / 180F);
 
+			double straightDegree = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
 
-			double straightenForce = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
+			double idealX = -MathHelper.sin(angle) * straightDegree;
+			double idealZ = MathHelper.cos(angle) * straightDegree;
 
-			double idealX = -MathHelper.sin(angle) * straightenForce;
-			double idealZ = MathHelper.cos(angle) * straightenForce;
+			double x = dragonBodyParts[i].posX;
+			double y = dragonBodyParts[i].posY;
+			double z = dragonBodyParts[i].posZ;
+			
+			Vec3d deltaPos = new Vec3d(x - headerX, y - headerY, z - headerZ);
+			deltaPos = deltaPos.normalize();
 
-
-			Vec3d diff = new Vec3d(dragonBodyParts[i].posX - headerX, dragonBodyParts[i].posY - headerY, dragonBodyParts[i].posZ - headerZ);
-			diff = diff.normalize();
-
-			diff = diff.add(new Vec3d(idealX, 0, idealZ).normalize());
+			deltaPos = deltaPos.add(new Vec3d(idealX, 0, idealZ).normalize());
 
 			//Dont change these values, they are important for the correct allignment of the segments!!!
 			double f = i != 0 ? 0.378D : 0.34D;
 
-			double destX = headerX + f * diff.x;
-			double destY = headerY + f * diff.y;
-			double destZ = headerZ + f * diff.z;
+			double targetX = headerX + f * deltaPos.x;
+			double targetY = headerY + f * deltaPos.y;
+			double targetZ = headerZ + f * deltaPos.z;
 
-			dragonBodyParts[i].setPosition(destX, destY, destZ);
+			dragonBodyParts[i].setPosition(targetX, targetY, targetZ);
 
-			double distance = (double) MathHelper.sqrt(diff.x * diff.x + diff.z * diff.z);
-
-			dragonBodyParts[i].setRotation((float) (Math.atan2(diff.z, diff.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(diff.y, distance) * 180.0D / Math.PI));
+			double distance = (double) MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
+			//Finally apply the new position
+			dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
 		}
 	}
 	
