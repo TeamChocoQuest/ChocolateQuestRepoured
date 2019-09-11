@@ -7,9 +7,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
+	
+	//TODO: Add the tail peek
 
 	private final EntityCQRNetherDragon dragon;
 	private final int partID;
+	
+	private boolean tailPeek = false;
+	private int tailPart = -1;
 	
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID) {
 		super((IEntityMultiPart)dragon, "dragonPart" + partID, 0.5F, 0.5F);
@@ -18,6 +23,14 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		
 		this.dragon = dragon;
 		this.partID = partID;
+		
+		if(partID > EntityCQRNetherDragon.SEGMENT_COUNT -3) {
+			this.tailPeek = true;
+			
+			this.tailPart = EntityCQRNetherDragon.SEGMENT_COUNT - this.partID +1;
+			System.out.println("part id: " + this.tailPart);
+		}
+		
 		//String partName, float width, float height
 		this.setInvisible(false);
 	}
@@ -53,6 +66,14 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	@Override
 	public void setRotation(float yaw, float pitch) {
 		super.setRotation(yaw, pitch);
+	}
+	
+	public boolean isTailPeek() {
+		return this.tailPeek;
+	}
+	
+	public int getTailPartIndex() {
+		return this.tailPart;
 	}
 
 }
