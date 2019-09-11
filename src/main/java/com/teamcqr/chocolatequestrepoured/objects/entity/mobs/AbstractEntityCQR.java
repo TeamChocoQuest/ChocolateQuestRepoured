@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -19,6 +20,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.TargetUtil;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -410,6 +413,34 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePosition(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+	}
+
+	@Override
+	public void setDead() {
+		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			AxisAlignedBB aabb = this.getEntityBoundingBox().grow(8.0D, 2.0D, 8.0D);
+			List<AbstractEntityCQR> entities = this.world.getEntitiesWithinAABB(this.getClass(), aabb);
+			AbstractEntityCQR[] entityArray;
+			if (entities.size() > 9) {
+				entities.sort(new TargetUtil.Sorter(this));
+				entityArray = new AbstractEntityCQR[9];
+				for (int i = 0; i < 9; i++) {
+					entityArray[i] = entities.get(i);
+				}
+				SpawnerFactory.placeSpawnerForMobs(entityArray, false, null, world, this.getPosition());
+			} else {
+				entityArray = new AbstractEntityCQR[entities.size()];
+				for (int i = 0; i < entities.size(); i++) {
+					entityArray[i] = entities.get(i);
+				}
+				SpawnerFactory.placeSpawnerForMobs(entityArray, false, null, world, this.getPosition());
+			}
+			for (AbstractEntityCQR entity : entityArray) {
+				entity.isDead = true;
+			}
+		} else {
+			this.isDead = true;
+		}
 	}
 
 }
