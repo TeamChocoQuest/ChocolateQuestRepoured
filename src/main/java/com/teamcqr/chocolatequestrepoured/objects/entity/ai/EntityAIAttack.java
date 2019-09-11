@@ -1,13 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
-import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumHand;
 
 public class EntityAIAttack extends AbstractCQREntityAI {
@@ -24,20 +21,20 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if (this.isSuitableTarget(attackTarget) && this.entity.getEntitySenses().canSee(attackTarget) && this.canMoveToEntity(attackTarget)) {
+		if (this.isSuitableTarget(attackTarget) && this.entity.getEntitySenses().canSee(attackTarget)
+				&& this.canMoveToEntity(attackTarget)) {
 			return true;
 		}
-		// this.entity.setAttackTarget(null);
 		return false;
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if ((this.isSuitableTarget(attackTarget) || (attackTarget != null && attackTarget != this.entity && !this.entity.getEntitySenses().canSee(attackTarget))) && this.entity.hasPath()) {
+		if ((this.isSuitableTarget(attackTarget) || (attackTarget != null && attackTarget != this.entity
+				&& !this.entity.getEntitySenses().canSee(attackTarget))) && this.entity.hasPath()) {
 			return true;
 		}
-		// this.entity.setAttackTarget(null);
 		this.resetTask();
 		return false;
 	}
@@ -61,7 +58,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (this.shieldTick > 0) {
 			this.shieldTick--;
 		}
-		
+
 		if (this.shieldTick <= 0) {
 			if (!this.entity.isActiveItemStackBlocking()) {
 				ItemStack offhand = this.entity.getHeldItemOffhand();
@@ -70,12 +67,12 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 				}
 			}
 		}
-		
+
 		if (this.entity.getEntitySenses().canSee(attackTarget)) {
 			this.canMoveToEntity(attackTarget);
 			this.entity.getNavigator().setPath(this.path, 1.0D);
 		}
-		
+
 		double distance = this.entity.getDistanceSq(attackTarget);
 		this.checkAndPerformAttack(this.entity.getAttackTarget(), distance);
 	}
@@ -94,13 +91,12 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		// TODO Replace with isEntityAlly when factions are finished
-		if (this.entity.getFaction() == EFaction.getFactionOfEntity(possibleTarget)) {
+		if (this.entity.getFaction().isEntityAlly(possibleTarget)) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	protected boolean canMoveToEntity(EntityLivingBase target) {
 		this.path = this.entity.getNavigator().getPathToEntityLiving(target);
 		return this.path != null;
