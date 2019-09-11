@@ -62,8 +62,6 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
-		this.setHealingPotions(3);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 	}
 
 	@Override
