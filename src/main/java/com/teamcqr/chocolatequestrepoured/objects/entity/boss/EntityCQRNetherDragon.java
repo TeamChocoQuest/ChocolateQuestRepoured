@@ -174,8 +174,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 			double straightDegree = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
 
-			double idealX = -MathHelper.sin(angle) * straightDegree;
-			double idealZ = MathHelper.cos(angle) * straightDegree;
+			double calculatedRotatedX = -MathHelper.sin(angle) * straightDegree;
+			double calculatedRotatedZ = MathHelper.cos(angle) * straightDegree;
 
 			double x = dragonBodyParts[i].posX;
 			double y = dragonBodyParts[i].posY;
@@ -184,7 +184,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			Vec3d deltaPos = new Vec3d(x - headerX, y - headerY, z - headerZ);
 			deltaPos = deltaPos.normalize();
 
-			deltaPos = deltaPos.add(new Vec3d(idealX, 0, idealZ).normalize());
+			deltaPos = deltaPos.add(new Vec3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
 
 			//Dont change these values, they are important for the correct allignment of the segments!!!
 			double f = i != 0 ? 0.378D : 0.34D;
@@ -193,10 +193,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			double targetY = headerY + f * deltaPos.y;
 			double targetZ = headerZ + f * deltaPos.z;
 
+			//Set rotated position
 			dragonBodyParts[i].setPosition(targetX, targetY, targetZ);
 
 			double distance = (double) MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
-			//Finally apply the new position
+			//Finally apply the new rotation -> Rotate the block
 			dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
 		}
 	}
@@ -227,6 +228,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
         int x2 = MathHelper.floor(aabb.maxX);
         int y2 = MathHelper.floor(aabb.maxY);
         int z2 = MathHelper.floor(aabb.maxZ);
+        
         boolean cancelled = false;
         boolean blockDestroyed = false;
 
@@ -246,6 +248,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
                         {
                             cancelled = true;
                         }
+                        //Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
                         else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate))
                         {
                             if (block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS && block != Blocks.END_GATEWAY)
@@ -271,6 +274,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
             double x = aabb.minX + (aabb.maxX - aabb.minX) * (double)this.rand.nextFloat();
             double y = aabb.minY + (aabb.maxY - aabb.minY) * (double)this.rand.nextFloat();
             double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * (double)this.rand.nextFloat();
+            
             this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
         }
 
