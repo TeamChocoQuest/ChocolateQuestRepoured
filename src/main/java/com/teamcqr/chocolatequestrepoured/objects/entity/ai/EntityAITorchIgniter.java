@@ -5,12 +5,11 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityAITorchIgniter extends EntityAIBase {
+public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 	protected static final int searchRadiusHorizontal = 8;
 	protected static final int searchRadiusVertical = 2;
@@ -18,12 +17,11 @@ public class EntityAITorchIgniter extends EntityAIBase {
 	//Setting this to true crashes the game (!)
 	protected static final boolean checkPosReachableBeforeSettingPos = false;
 	World world;
-	AbstractEntityCQR entity;
 	BlockPos nearestTorch = null;
 	int timerForPosConflicts = 10;
 
 	public EntityAITorchIgniter(AbstractEntityCQR ent) {
-		entity = ent;
+		super(ent);
 		world = ent.getEntityWorld();
 	}
 

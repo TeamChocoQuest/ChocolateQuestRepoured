@@ -4,15 +4,13 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
-public class EntityAIHealingPotion extends EntityAIBase {
+public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
 	// First step: Walk away about 10-15 blocks from the attacker if that is
 	// possible
@@ -28,12 +26,11 @@ public class EntityAIHealingPotion extends EntityAIBase {
 	// If the entity is in a party, the party should attack the last attacker of
 	// this mob
 
-	protected final AbstractEntityCQR entity;
 	protected int ticksNotHealing;
 	protected boolean isHealing;
 
 	public EntityAIHealingPotion(AbstractEntityCQR entity) {
-		this.entity = entity;
+		super(entity);
 		this.setMutexBits(3);
 	}
 
@@ -49,6 +46,7 @@ public class EntityAIHealingPotion extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
+		this.entity.getNavigator().clearPath();
 		this.ticksNotHealing = 0;
 		this.isHealing = false;
 	}
@@ -63,6 +61,23 @@ public class EntityAIHealingPotion extends EntityAIBase {
 			double x = attackTarget.posX - this.entity.posX;
 			double z = attackTarget.posZ - this.entity.posZ;
 
+			double rad = Math.atan2(-x, z);
+			this.entity.rotationYaw = (float) (rad * (180.0D / Math.PI));
+			this.entity.rotationYawHead = this.entity.rotationYaw;
+
+			// TODO Improve check if blocks behind are safe to walk
+			boolean canMove = true;
+			double sin = Math.sin(rad);
+			double cos = Math.cos(rad);
+			BlockPos pos;
+			for (int i = 0; i < 2 && canMove; i++) {
+				pos = new BlockPos(this.entity.posX + (double) i * sin, this.entity.posY - 1.0D, this.entity.posZ - (double) i * cos);
+				System.out.println(i + " " + pos);
+				if (!this.entity.world.getBlockState(pos).getMaterial().isSolid()) {
+					canMove = false;
+				}
+			}
+
 			if (!this.isHealing) {
 				if (!this.entity.isActiveItemStackBlocking()) {
 					ItemStack offhand = this.entity.getHeldItem(EnumHand.OFF_HAND);
@@ -72,36 +87,16 @@ public class EntityAIHealingPotion extends EntityAIBase {
 					}
 				}
 
-				if (this.entity.collidedHorizontally || ++this.ticksNotHealing > 100 || Math.sqrt(x * x + z * z) > 10.0D) {
+				if (this.entity.collidedHorizontally || !canMove || ++this.ticksNotHealing > 100 || Math.sqrt(x * x + z * z) > 10.0D) {
 					this.startHealing();
 				}
 			}
-
-			this.entity.rotationYaw = (float) (Math.atan2(-x, z) * (180.0D / Math.PI));
-			this.entity.rotationYawHead = this.entity.rotationYaw;
-
-			// DONE Only move backwards if there are blocks
 			
-			double angleOfEntityBackwards = Math.toRadians((double)entity.rotationYaw - 180.0D);
-			
-			//Location 3 blocks behind the entity
-			BlockPos locBehind = new BlockPos(Math.floor(entity.posX - Math.sin(
-					angleOfEntityBackwards) * 3.0D), 
-					Math.floor(entity.posY) - 1,
-					Math.floor(entity.posZ + Math.cos(angleOfEntityBackwards) * 3.0D));
-			
-			//Now check the material there to check if it is a possible floor
-			Material material = entity.getEntityWorld().getBlockState(locBehind).getMaterial();
-			boolean mayMove = false;
-			if(material.isSolid() || (material.isSolid() && material != Material.AIR && material != Material.FIRE && material != Material.LAVA)) {
-				mayMove = true;
-			}
-			
-			if(mayMove) {
+			if (canMove) {
 				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
 				EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
 			}
-			
+
 		}
 	}
 
