@@ -15,6 +15,7 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.EnumDifficulty;
 
 public enum EFaction {
 	
@@ -40,11 +41,11 @@ public enum EFaction {
 	
 	public boolean isEnemy(EFaction otherFac) {
 		//TODO work this out
-		return false;
+		return this != otherFac;
 	}
 	public boolean isAlly(EFaction otherFac) {
 		//TODO work this out
-		return false;
+		return this == otherFac;
 	}
 	
 	//DONE: Methods to check wether a faction is an ally or an enemy
@@ -65,6 +66,9 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityEnemy(Entity entity) {
+		if (entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			return false;
+		}
 		if(getFactionOfEntity(entity) != null) {
 			return isEnemy(getFactionOfEntity(entity));
 		}
@@ -72,6 +76,9 @@ public enum EFaction {
 	}
 	
 	public boolean isEntityAlly(Entity entity) {
+		if (entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			return true;
+		}
 		if(getFactionOfEntity(entity) != null) {
 			return isAlly(getFactionOfEntity(entity));
 		}
