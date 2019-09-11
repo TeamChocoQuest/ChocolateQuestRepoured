@@ -6,12 +6,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathPoint;
 
-public class EntityAIMoveToLeader extends EntityAIBase {
-
-	protected final AbstractEntityCQR entity;
+public class EntityAIMoveToLeader extends AbstractCQREntityAI {
 
 	public EntityAIMoveToLeader(AbstractEntityCQR entity) {
-		this.entity = entity;
+		super(entity);
 	}
 
 	@Override

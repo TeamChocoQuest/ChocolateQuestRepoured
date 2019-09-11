@@ -11,6 +11,9 @@ import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItem
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
@@ -24,8 +27,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -107,13 +108,16 @@ public abstract class AbstractEntityCQR extends EntityMob {
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(10, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(9, new EntityAIBackstab(this));
+		this.tasks.addTask(10, new EntityAIAttack(this));
+		//this.tasks.addTask(10, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(11, new EntityAIFireFighter(this));
-		this.tasks.addTask(19, new EntityAITorchIgniter(this));
+		this.tasks.addTask(21, new EntityAITorchIgniter(this));
 
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		//this.targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
 	}
 
 	@Nullable
