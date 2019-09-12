@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.DifficultyInstance;
@@ -19,7 +20,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return 1;
+		return EBaseHealths.DUMMY.getValue();
 	}
 
 	@Override
