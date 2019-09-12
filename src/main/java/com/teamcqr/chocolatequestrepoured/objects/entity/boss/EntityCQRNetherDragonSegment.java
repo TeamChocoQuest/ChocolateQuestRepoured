@@ -28,7 +28,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 			this.tailPeek = true;
 			
 			this.tailPart = EntityCQRNetherDragon.SEGMENT_COUNT - this.partID +1;
-			System.out.println("part id: " + this.tailPart);
+			//System.out.println("part id: " + this.tailPart);
 		}
 		
 		//String partName, float width, float height

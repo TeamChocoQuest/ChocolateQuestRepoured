@@ -112,10 +112,11 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQREntity<EntityCQRZombie>(renderManager, "entity_mob_cqrzombie"));
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class,
-				renderManager -> new RenderCQRNetherDragon(renderManager));
 
+				renderManager -> new RenderCQRNetherDragon(renderManager, new ModelNetherDragonHead()));
+		
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class,
-				renderManager -> new RenderCQRNetherDragonSegment(renderManager, new ModelNetherDragonBodyPart()));
+				renderManager -> new RenderCQRNetherDragonSegment(renderManager/*, new ModelNetherDragonBodyPart()*/));
 	}
 
 }
