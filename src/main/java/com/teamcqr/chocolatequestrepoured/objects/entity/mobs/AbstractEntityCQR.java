@@ -541,4 +541,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
 
+	public boolean hasCape() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public ResourceLocation getResourceLocationOfCape() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
