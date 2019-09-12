@@ -196,6 +196,17 @@ item.battle_axe_bull.name=Bull Battle Axe
 item.sword_moonlight.name=Moonlight
 item.sword_sunshine.name=Sunshine
 
+//Shields
+item.cqr_shield_r01.name=Pigman Shield
+item.cqr_shield_r02.name=Pirate Shield
+item.cqr_shield_r03.name=Specter Shield
+item.cqr_shield_r04.name=Goblin Shield
+item.cqr_shield_r05.name=Mummy Shield
+item.cqr_shield_r06.name=Rainbow Shield
+item.cqr_shield_r07.name=Rusted Shield
+item.cqr_shield_r08.name=Turtles Shield
+item.cqr_shield_r09.name=Triton Shield
+
 //Walker set
 item.sword_walker.name=Walker Sword
 item.shield_walker.name=Walker Shield

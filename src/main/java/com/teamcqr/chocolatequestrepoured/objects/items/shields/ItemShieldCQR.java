@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.items;
+package com.teamcqr.chocolatequestrepoured.objects.items.shields;
 
 import javax.annotation.Nullable;
 
@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 
 public class ItemShieldCQR extends ItemShield {
-
+	
 	private Item repairItem;
 
 	public ItemShieldCQR(int durability, @Nullable Item repairItem) {
