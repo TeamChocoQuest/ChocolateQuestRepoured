@@ -8,7 +8,23 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRHuman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRInquisitor;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTestificate;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
@@ -42,7 +58,23 @@ public class ModEntities {
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
+	public static final EntityEntry ENDERMAN = Null();
+	public static final EntityEntry GOBLIN = Null();
+	public static final EntityEntry GOLEM = Null();
+	public static final EntityEntry HUMAN = Null();
+	public static final EntityEntry ILLAGER = Null();
+	public static final EntityEntry INQUISITOR = Null();
+	public static final EntityEntry MINOTAUR = Null();
+	public static final EntityEntry MUMMY = Null();
+	public static final EntityEntry OGRE = Null();
+	public static final EntityEntry ORC = Null();
 	public static final EntityEntry PIGMEN = Null();
+	public static final EntityEntry PIRATE = Null();
+	public static final EntityEntry SKELETON = Null();
+	public static final EntityEntry SPECTRE = Null();
+	public static final EntityEntry TESTIFICATE = Null();
+	public static final EntityEntry TRITON = Null();
+	public static final EntityEntry WALKER = Null();
 	public static final EntityEntry ZOMBIE = Null();
 
 	public static final EntityEntry NETHER_DRAGON = Null();
@@ -63,7 +95,23 @@ public class ModEntities {
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
+					createEntityEntry(EntityCQREnderman.class, "enderman", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRGoblin.class, "goblin", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRGolem.class, "golem", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRHuman.class, "human", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRIllager.class, "illager", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRInquisitor.class, "inquisitor", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRMinotaur.class, "minotaur", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRMummy.class, "mummy", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQROgre.class, "ogre", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQROrc.class, "orc", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRPigman.class, "pigmen", 64, 1, true, 0x333333, 0xEA9393),
+					createEntityEntry(EntityCQRPirate.class, "pirate", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRSkeleton.class, "skeleton", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRSpectre.class, "spectre", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRTestificate.class, "testificate", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRTriton.class, "triton", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRWalker.class, "walker", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRZombie.class, "zombie", 64, 1, true, 0x333333, 0xC3BDBD),
 
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000)
