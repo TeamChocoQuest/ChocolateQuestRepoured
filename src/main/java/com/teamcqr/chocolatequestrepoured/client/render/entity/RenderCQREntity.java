@@ -14,6 +14,8 @@ import net.minecraft.client.renderer.entity.layers.LayerArrow;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
@@ -49,6 +51,56 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		GL11.glScaled(this.widthScale, this.heightScale, this.widthScale);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GL11.glPopMatrix();
+		
+		if(this.mainModel instanceof ModelBiped) {
+			ModelBiped model = (ModelBiped)this.mainModel;
+			
+			ItemStack itemMainHand = entity.getHeldItemMainhand();
+			ItemStack itemOffHand = entity.getHeldItemOffhand();
+			
+			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
+            ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
+			//Main arm
+			if(!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+				EnumAction action = itemMainHand.getItemUseAction();
+				switch(action) {
+				case BLOCK:
+					armPoseMain = ModelBiped.ArmPose.BLOCK;
+					break;
+				case BOW:
+					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
+					break;
+				case NONE:
+					armPoseMain = ModelBiped.ArmPose.EMPTY;
+				default:
+					armPoseMain = ModelBiped.ArmPose.ITEM;
+					break;
+				
+				}
+			}
+			//Off arm
+			if(!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+				EnumAction action = itemOffHand.getItemUseAction();
+				switch(action) {
+				case BLOCK:
+					armPoseOff = ModelBiped.ArmPose.BLOCK;
+					break;
+				case BOW:
+					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
+					break;
+				case NONE:
+					armPoseOff = ModelBiped.ArmPose.EMPTY;
+					break;
+				default:
+					armPoseOff = ModelBiped.ArmPose.ITEM;
+					break;
+				
+				}
+			}
+			
+			model.rightArmPose = armPoseMain;
+			model.leftArmPose = armPoseOff;
+		}
 	}
 
 	protected ResourceLocation getEntityTexture(T entity) {
