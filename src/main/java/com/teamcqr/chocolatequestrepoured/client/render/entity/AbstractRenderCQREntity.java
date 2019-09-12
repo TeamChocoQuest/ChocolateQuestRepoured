@@ -1,10 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
@@ -29,5 +27,5 @@ public abstract class AbstractRenderCQREntity<T extends AbstractEntityCQR> exten
 	protected ResourceLocation getEntityTexture(T entity) {
 		return texture;
 	}
-
+	
 }
