@@ -1,10 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragon;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRPigman;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
@@ -62,7 +63,7 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQREntity<EntityCQRZombie>(renderManager, "entity_mob_cqrzombie"));
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class,
-				renderManager -> new RenderCQRNetherDragon(renderManager));
+				renderManager -> new RenderCQRNetherDragon(renderManager, new ModelNetherDragonHead()));
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class,
 				renderManager -> new RenderCQRNetherDragonSegment(renderManager/*, new ModelNetherDragonBodyPart()*/));
