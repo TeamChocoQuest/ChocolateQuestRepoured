@@ -91,10 +91,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		if (this.entity.getFaction() != null && this.entity.getFaction().isEntityAlly(possibleTarget)) {
-			return false;
-		}
-		return true;
+		return this.entity.getFaction() != null && this.entity.getFaction().isEntityEnemy(possibleTarget);
 	}
 
 	protected boolean canMoveToEntity(EntityLivingBase target) {
