@@ -1,18 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonBodyPart;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGoblin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGolem;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRIllager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMinotaur;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragon;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROrc;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;

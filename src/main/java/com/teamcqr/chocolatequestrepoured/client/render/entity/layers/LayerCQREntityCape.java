@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.AbstractRenderCQREntity;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.client.renderer.GlStateManager;
@@ -11,13 +11,13 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class LayerCQREntityCape<T extends AbstractEntityCQR> implements LayerRenderer<AbstractEntityCQR> {
+public class LayerCQREntityCape implements LayerRenderer<AbstractEntityCQR> {
 
-	private final AbstractRenderCQREntity<AbstractEntityCQR> playerRenderer;
+	private final RenderCQREntity playerRenderer;
 
-    public LayerCQREntityCape(AbstractRenderCQREntity<AbstractEntityCQR> playerRendererIn)
+    public LayerCQREntityCape(RenderCQREntity renderCQREntity)
     {
-        this.playerRenderer = playerRendererIn;
+        this.playerRenderer = renderCQREntity;
     }
 
     public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
