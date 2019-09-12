@@ -64,6 +64,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	protected UUID leaderUUID;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
+	
+	protected int usedPotions = 0;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
@@ -152,6 +154,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		if (hasLeader) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
+		if(this.usedPotions > 0) {
+			compound.setInteger("usedHealingPotions", this.usedPotions);
+		}
 
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 	}
@@ -166,6 +171,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 
 		if (compound.getBoolean("hasLeader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+		
+		if(compound.hasKey("usedHealingPotions")) {
+			this.usedPotions = compound.getInteger("usedHealingPotions");
 		}
 
 		this.holdingPotion = compound.getBoolean("holdingPotion");
@@ -384,6 +393,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 
 	public void handleArmorBreaking() {
 		if (!this.world.isRemote) {
+			/** Example
+			 * A  U   Triggered?
+			 * 3  0   N
+			 * 2  1   Y
+			 * 1  2   Y
+			 * 0  3   Y
+			 * 
+			 */
+			if(this.usedPotions +1 < getHealingPotions()) {
+				return;
+			}
+			
 			boolean armorBroke = false;
 			float hpPrcntg = this.getHealth() / this.getMaxHealth();
 
