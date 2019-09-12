@@ -154,6 +154,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			//Shoot fireball
 		} else {
 			//Spit fire
+			setMouthOpen(true);
 		}
 	}
 
@@ -360,6 +361,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		return 0;
 	}
 
+	public void setMouthOpen(boolean open) {
+		mouthOpen = open;
+	}
+	
 	public boolean isMouthOpen() {
 		return mouthOpen ;
 	}
