@@ -55,6 +55,10 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 	public void updateTask() {
 		Entity attackTarget = this.entity.getAttackTarget();
 
+		if(isHealing) {
+			startHealing();
+		}
+		
 		if (attackTarget == null) {
 			this.startHealing();
 		} else {
@@ -92,7 +96,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			}
 			
 			if (canMove) {
-				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue();
+				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() *1.5D;
 				EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
 			}
 
