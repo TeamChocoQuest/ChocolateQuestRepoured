@@ -56,7 +56,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		Entity attackTarget = this.entity.getAttackTarget();
 
 		if(isHealing) {
-			startHealing();
+			this.entity.swingArm(EnumHand.MAIN_HAND);
 		}
 		
 		if (attackTarget == null) {
@@ -124,7 +124,6 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			this.entity.resetActiveHand();
 			this.entity.setActiveHand(EnumHand.MAIN_HAND);
 		}
-		this.entity.swingArm(EnumHand.MAIN_HAND);
 	}
 
 }
