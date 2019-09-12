@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonBodyPart;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRNetherDragonSegment;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRPigman;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
@@ -72,7 +70,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class,
 				renderManager -> new RenderCQREntity<EntityCQRDummy>(renderManager, "entity_mob_cqrdummy"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class,
-				renderManager -> new RenderCQRDwarf(renderManager));
+				renderManager -> new RenderCQREntity<EntityCQRDwarf>(renderManager, "entity_mob_cqrdwarf", 0.9D, 0.65D));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class,
 				renderManager -> new RenderCQREntity<EntityCQREnderman>(renderManager, "entity_mob_cqrenderman"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class,
@@ -94,7 +92,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class,
 				renderManager -> new RenderCQREntity<EntityCQROrc>(renderManager, "entity_mob_cqrorc"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPigman.class,
-				renderManager -> new RenderCQRPigman(renderManager));
+				renderManager -> new RenderCQREntity<EntityCQRPigman>(renderManager, "entity_mob_cqrpigman", 1.2F, 1.1F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class,
 				renderManager -> new RenderCQREntity<EntityCQRPirate>(renderManager, "entity_mob_cqrpirate"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class,
