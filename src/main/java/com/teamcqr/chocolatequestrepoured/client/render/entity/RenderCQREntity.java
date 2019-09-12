@@ -5,18 +5,22 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.layers.LayerArrow;
-import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
-import net.minecraft.client.renderer.entity.layers.LayerElytra;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends AbstractRenderCQREntity<T> {
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
-		super(rendermanagerIn, new ModelBiped(), 0.5F, new ResourceLocation(Reference.MODID, "textures/entity/" + entityName + ".png"));
+		this(rendermanagerIn, entityName, 1.0D, 1.0D);
+	}
+
+	public RenderCQREntity(RenderManager rendermanagerIn, String entityName, double widthScale, double heightScale) {
+		this(rendermanagerIn, new ModelBiped(), 0.5F, entityName, widthScale, heightScale);
+	}
+
+	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
+			double widthScale, double heightScale) {
+		super(rendermanagerIn, model, shadowSize, new ResourceLocation(Reference.MODID, "textures/entity/" + entityName + ".png"), widthScale, heightScale);
 	}
 
 }
