@@ -143,17 +143,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 
-		boolean hasHome = this.homePosition != null;
-		compound.setBoolean("hasHome", hasHome);
-		if (hasHome) {
+		if (this.homePosition != null) {
 			compound.setTag("home", NBTUtil.createPosTag(this.homePosition));
 		}
 
-		boolean hasLeader = this.leaderUUID != null;
-		compound.setBoolean("hasLeader", hasLeader);
-		if (hasLeader) {
+		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
+
 		if(this.usedPotions > 0) {
 			compound.setInteger("usedHealingPotions", this.usedPotions);
 		}
@@ -165,14 +162,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 
-		if (compound.getBoolean("hasHome")) {
+		if (compound.hasKey("home")) {
 			this.homePosition = NBTUtil.getPosFromTag(compound.getCompoundTag("home"));
 		}
 
-		if (compound.getBoolean("hasLeader")) {
+		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
-		
+
 		if(compound.hasKey("usedHealingPotions")) {
 			this.usedPotions = compound.getInteger("usedHealingPotions");
 		}
