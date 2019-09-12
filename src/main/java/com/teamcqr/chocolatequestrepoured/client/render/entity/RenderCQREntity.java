@@ -44,11 +44,9 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	@Override
-	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GL11.glPushMatrix();
+	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
 		GL11.glScaled(this.widthScale, this.heightScale, this.widthScale);
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		GL11.glPopMatrix();
+		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
 
 	protected ResourceLocation getEntityTexture(T entity) {
