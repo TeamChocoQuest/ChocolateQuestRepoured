@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
+	private static double runAwaySpeed = 1.0;
 	// First step: Walk away about 10-15 blocks from the attacker if that is
 	// possible
 	// Once the entity is far away enough or it hits an obstacle -> start drinking
@@ -31,6 +32,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
 	public EntityAIHealingPotion(AbstractEntityCQR entity) {
 		super(entity);
+		this.runAwaySpeed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() *1.75D;
 		this.setMutexBits(3);
 	}
 
@@ -96,7 +98,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			}
 			
 			if (canMove) {
-				double speed = this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() *1.5D;
+				double speed = this.runAwaySpeed;
 				EntityUtil.move2D(this.entity, 0.0D, -0.2D, speed, this.entity.rotationYaw);
 			}
 
