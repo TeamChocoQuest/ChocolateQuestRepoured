@@ -6,9 +6,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRInquisitor extends AbstractEntityCQR {
+public class EntityCQRNPC extends AbstractEntityCQR {
 
-	public EntityCQRInquisitor(World worldIn) {
+	public EntityCQRNPC(World worldIn) {
 		super(worldIn);
 	}
 
@@ -19,7 +19,7 @@ public class EntityCQRInquisitor extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.INQUISITOR.getValue();
+		return EBaseHealths.NPC.getValue();
 	}
 
 	@Override
