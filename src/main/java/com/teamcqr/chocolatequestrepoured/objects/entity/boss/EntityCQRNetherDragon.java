@@ -187,7 +187,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			deltaPos = deltaPos.add(new Vec3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
 
 			//Dont change these values, they are important for the correct allignment of the segments!!!
-			double f = i != 0 ? 0.378D : 0.34D;
+			double f = i != 0 ? 0.378D : 0.338D;
 
 			double targetX = headerX + f * deltaPos.x;
 			double targetY = headerY + f * deltaPos.y;
