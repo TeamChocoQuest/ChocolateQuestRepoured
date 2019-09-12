@@ -14,7 +14,7 @@ public class EntityCQRPigman extends AbstractEntityCQR {
 
 	public EntityCQRPigman(World worldIn) {
 		super(worldIn);
-		this.setSize(1.0F, 2.3F);
+		this.setSize(0.95F, 2.0F);
 	}
 
 	@Override
@@ -26,7 +26,7 @@ public class EntityCQRPigman extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.PIGMEN.getValue();
+		return EBaseHealths.PIGMAN.getValue();
 	}
 
 	@Override
