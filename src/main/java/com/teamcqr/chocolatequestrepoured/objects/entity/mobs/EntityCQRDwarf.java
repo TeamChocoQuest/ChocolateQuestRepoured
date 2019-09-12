@@ -31,7 +31,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.DWARVES.getValue();
+		return EBaseHealths.DWARF.getValue();
 	}
 
 	@Override
