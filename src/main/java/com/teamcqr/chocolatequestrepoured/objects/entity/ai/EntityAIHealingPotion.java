@@ -72,7 +72,6 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			BlockPos pos;
 			for (int i = 0; i < 2 && canMove; i++) {
 				pos = new BlockPos(this.entity.posX + (double) i * sin, this.entity.posY - 1.0D, this.entity.posZ - (double) i * cos);
-				System.out.println(i + " " + pos);
 				if (!this.entity.world.getBlockState(pos).getMaterial().isSolid()) {
 					canMove = false;
 				}

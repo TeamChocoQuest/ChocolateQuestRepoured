@@ -20,7 +20,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.UNDEAD.getValue();
+		return EBaseHealths.ZOMBIE.getValue();
 	}
 
 	@Override

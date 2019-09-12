@@ -3,13 +3,12 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRDummy extends AbstractEntityCQR {
+public class EntityCQROgre extends AbstractEntityCQR {
 
-	public EntityCQRDummy(World worldIn) {
+	public EntityCQROgre(World worldIn) {
 		super(worldIn);
 	}
 
@@ -20,27 +19,12 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.DUMMY.getValue();
+		return EBaseHealths.OGRE.getValue();
 	}
 
 	@Override
 	public EFaction getFaction() {
-		return null;
-	}
-
-	@Override
-	protected void initEntityAI() {
-
-	}
-
-	@Override
-	public boolean canBePushed() {
-		return false;
-	}
-
-	@Override
-	protected void collideWithEntity(Entity entityIn) {
-
+		return EFaction.GOBLINS;
 	}
 
 }
