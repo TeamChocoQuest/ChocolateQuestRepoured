@@ -57,6 +57,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	
 	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
+	private boolean mouthOpen = false;
+
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
 	 * 
@@ -152,6 +154,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			//Shoot fireball
 		} else {
 			//Spit fire
+			setMouthOpen(true);
 		}
 	}
 
@@ -187,7 +190,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			deltaPos = deltaPos.add(new Vec3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
 
 			//Dont change these values, they are important for the correct allignment of the segments!!!
-			double f = i != 0 ? 0.378D : 0.34D;
+			double f = i != 0 ? 0.378D : 0.338D;
 
 			double targetX = headerX + f * deltaPos.x;
 			double targetY = headerY + f * deltaPos.y;
@@ -356,6 +359,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	@Override
 	public int getHealingPotions() {
 		return 0;
+	}
+
+	public void setMouthOpen(boolean open) {
+		mouthOpen = open;
+	}
+	
+	public boolean isMouthOpen() {
+		return mouthOpen ;
 	}
 	
 

@@ -79,6 +79,8 @@ public class ModelNetherDragonHead extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.Head_Back.render(f5);
+        
+        //this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
     }
 
     /**
