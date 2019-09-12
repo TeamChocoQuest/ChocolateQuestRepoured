@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.render.entity;
+package com.teamcqr.chocolatequestrepoured.client.render.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonBodyPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragonSegment;
