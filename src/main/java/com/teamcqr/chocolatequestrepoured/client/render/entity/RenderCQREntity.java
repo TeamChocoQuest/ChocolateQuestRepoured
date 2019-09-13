@@ -48,6 +48,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
+		//Problem: SizeVariation is 0 on client?!?!
 		GL11.glScaled(this.widthScale + entity.getSizeVariation() /2, this.heightScale + entity.getSizeVariation(), this.widthScale + entity.getSizeVariation() /2);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GL11.glPopMatrix();
