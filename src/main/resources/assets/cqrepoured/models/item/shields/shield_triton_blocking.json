@@ -1,0 +1,26 @@
+{
+    "parent": "cqrepoured:item/shields/models/shield_triton_model",
+    "display": {
+        "thirdperson_righthand": {
+            "rotation": [45, 135, 0],
+            "translation": [4, -2, 0.5]
+        },
+        "thirdperson_lefthand": {
+            "rotation": [45, 135, 0],
+            "translation": [4, -2, 0.5]
+        },
+        "firstperson_lefthand": {
+            "rotation": [0, 180, -3],
+            "translation": [-4, 2.5, 2]
+        },
+        "firstperson_righthand": {
+            "rotation": [0, 180, -3],
+            "translation": [-4, 2.5, 2]
+        },
+        "gui": {
+            "scale": [0.8, 0.8, 0.8],
+            "translation": [0, 0.5, 0],
+            "rotation": [-10, -20, -10]
+        }
+    }
+}
