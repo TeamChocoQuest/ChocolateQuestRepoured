@@ -129,7 +129,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 	@Override
 	public EFaction getFaction() {
-		return null;
+		return EFaction.UNDEAD;
 	}
 
 	@Override
