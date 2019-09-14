@@ -461,4 +461,24 @@ description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 
 // Mobs
-entity.EntityCQRZombie.name=Zombie(CQR)
+entity.dummy.name=Dummy(CQR)
+entity.dwarf.name=Dwarf(CQR)
+entity.enderman.name=Enderman(CQR)
+entity.goblin.name=Goblin(CQR)
+entity.golem.name=Golem(CQR)
+entity.illager.name=Illager(CQR)
+entity.npc.name=NPC(CQR)
+entity.minotaur.name=Minotaur(CQR)
+entity.mummy.name=Mummy(CQR)
+entity.ogre.name=Ogre(CQR)
+entity.orc.name=Orc(CQR)
+entity.pigman.name=Pigman(CQR)
+entity.pirate.name=Pirate(CQR)
+entity.skeleton.name=Skeleton(CQR)
+entity.spectre.name=Spectre(CQR)
+entity.triton.name=Squidward(CQR)
+entity.walker.name=Abyss Walker
+entity.zombie.name=Zombie(CQR)
+
+// Bosses
+entity.nether_dragon.name=Wormy Wurm Wyrm
