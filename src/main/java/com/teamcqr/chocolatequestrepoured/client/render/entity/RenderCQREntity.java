@@ -55,7 +55,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			//this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
 			//this.scaleVarApplied = true;
 		//}
-		double width = this.widthScale * (1.0D + 0.5D * entitylivingbaseIn.getSizeVariation());
+		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
 		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
