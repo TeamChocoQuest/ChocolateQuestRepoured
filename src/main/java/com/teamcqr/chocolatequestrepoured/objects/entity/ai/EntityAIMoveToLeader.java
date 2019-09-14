@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.pathfinding.PathPoint;
 
 public class EntityAIMoveToLeader extends AbstractCQREntityAI {
