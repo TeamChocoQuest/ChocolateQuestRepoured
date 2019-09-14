@@ -70,7 +70,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		if (!this.canReachTarget(possibleTarget)) {
 			return false;
 		}
-		return this.entity.getFaction().isEntityEnemy(possibleTarget);
+		return this.entity.getFaction() != null && this.entity.getFaction().isEntityEnemy(possibleTarget);
 	}
 
 	private boolean canReachTarget(EntityLivingBase possibleTarget) {
