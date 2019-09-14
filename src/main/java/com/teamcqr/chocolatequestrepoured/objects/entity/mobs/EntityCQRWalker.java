@@ -37,7 +37,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	}
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return SoundEvents.ENTITY_ENDERMITE_HURT;
+		return SoundEvents.ENTITY_ENDERMEN_HURT;
 	}
 	@Override
 	protected SoundEvent getDeathSound() {
