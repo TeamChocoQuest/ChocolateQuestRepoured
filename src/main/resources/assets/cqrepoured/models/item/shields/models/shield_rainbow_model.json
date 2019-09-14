@@ -1,10 +1,10 @@
 {
 	"credit": "Made by Silentine, with Blockbench",
 	"textures": {
-		"0": "shields/shield_round",
-		"1": "shields/shield_handle",
-		"2": "shields/shield_round_covers",
-		"particle": "shields/shield_round_covers"
+		"0": "cqrepoured:shields/shield_round",
+		"1": "cqrepoured:shields/shield_handle",
+		"2": "cqrepoured:shields/shield_round_covers",
+		"particle": "cqrepoured:shields/shield_round_covers"
 	},
 	"elements": [
 		{
@@ -117,7 +117,7 @@
 			"from": [3, 3, 8.25],
 			"to": [13, 13, 8.75],
 			"faces": {
-				"south": {"uv": [5, 2.5, 7.5, 5], "texture": "#2"}
+				"south": {"uv": [12.5, 0, 15, 2.5], "texture": "#2"}
 			}
 		},
 		{

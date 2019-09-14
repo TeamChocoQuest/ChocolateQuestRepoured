@@ -11,11 +11,11 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class LayerCQREntityCape implements LayerRenderer<AbstractEntityCQR> {
+public class LayerCQREntityCape<T extends AbstractEntityCQR> implements LayerRenderer<T> {
 
-	private final RenderCQREntity playerRenderer;
+	private final RenderCQREntity<T> playerRenderer;
 
-    public LayerCQREntityCape(RenderCQREntity renderCQREntity)
+    public LayerCQREntityCape(RenderCQREntity<T> renderCQREntity)
     {
         this.playerRenderer = renderCQREntity;
     }
