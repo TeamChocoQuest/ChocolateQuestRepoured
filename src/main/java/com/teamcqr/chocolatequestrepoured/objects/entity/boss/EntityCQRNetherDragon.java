@@ -3,11 +3,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
@@ -15,6 +17,7 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
@@ -299,17 +302,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return super.getHurtSound(damageSourceIn);
+		return SoundsHandler.NETHER_DRAGON_HURT;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundsHandler.NETHER_DRAGON_DEATH;
 	}
 	
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
 	}
 	
 	@Override
@@ -381,5 +384,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		super.readSpawnData(additionalData);
 		this.mouthOpen = additionalData.readBoolean();
 	}
+	
 
 }
