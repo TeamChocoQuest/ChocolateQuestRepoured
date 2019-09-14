@@ -65,6 +65,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	
+	protected float sizeVariation = 0.0F;
+	
 	protected int usedPotions = 0;
 
 	public AbstractEntityCQR(World worldIn) {
@@ -133,6 +135,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
+		this.sizeVariation = -0.25F + (this.rand.nextFloat() *0.5F);
+		System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
 
@@ -154,7 +158,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		if(this.usedPotions > 0) {
 			compound.setInteger("usedHealingPotions", this.usedPotions);
 		}
-
+		compound.setFloat("sizeVariation", this.sizeVariation);
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 	}
 
@@ -174,6 +178,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 			this.usedPotions = compound.getInteger("usedHealingPotions");
 		}
 
+		if(compound.hasKey("sizeVariation")) {
+			this.sizeVariation = compound.getFloat("sizeVariation");
+		}
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
 
@@ -549,6 +556,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	public ResourceLocation getResourceLocationOfCape() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public float getSizeVariation() {
+		return this.sizeVariation;
 	}
 
 }

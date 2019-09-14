@@ -32,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
+import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShield;
 import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldWalker;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
@@ -53,6 +54,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordWalker;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -83,6 +85,9 @@ public class ModItems {
 	// Walker items
 	public static final Item SWORD_WALKER = Null();
 	public static final Item SHIELD_WALKER = Null();
+	
+	//Shields
+	public static final Item SHIELD = Null();
 
 	// Great Swords
 	public static final Item GREAT_SWORD_IRON = Null();
@@ -205,6 +210,8 @@ public class ModItems {
 
 					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
 					setItemName(new ItemShieldWalker(), "shield_walker"),
+					
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield"),
 
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F), "great_sword_iron"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
