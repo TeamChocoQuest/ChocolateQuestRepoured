@@ -52,7 +52,7 @@ public class ModelCQRSkeleton extends ModelCQRBiped{
         this.leftArmPose = ModelBiped.ArmPose.EMPTY;
         ItemStack itemstack = entitylivingbaseIn.getHeldItem(EnumHand.MAIN_HAND);
 
-        if (itemstack.getItem() == Items.BOW && entitylivingbaseIn.getItemInUseCount() > 0)
+        if (itemstack.getItem() == Items.BOW)
         {
             if (entitylivingbaseIn.getPrimaryHand() == EnumHandSide.RIGHT)
             {
@@ -78,7 +78,7 @@ public class ModelCQRSkeleton extends ModelCQRBiped{
         ItemStack itemstack = ((EntityLivingBase)entityIn).getHeldItemMainhand();
         AbstractEntityCQR abstractskeleton = (AbstractEntityCQR)entityIn;
 
-        if (abstractskeleton.getItemInUseCount() > 0 && (itemstack.isEmpty() || itemstack.getItem() != Items.BOW))
+        if (abstractskeleton.getItemInUseCount() <= 0 && (itemstack.isEmpty() || itemstack.getItem() != Items.BOW))
         {
             float f = MathHelper.sin(this.swingProgress * (float)Math.PI);
             float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float)Math.PI);
