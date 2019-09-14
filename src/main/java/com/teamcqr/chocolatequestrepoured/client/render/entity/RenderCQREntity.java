@@ -26,8 +26,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public double widthScale;
 	public double heightScale;
 	
-	protected static final Random rand = new Random();
-
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
 		this(rendermanagerIn, entityName, 1.0D, 1.0D);
 	}
@@ -40,6 +38,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + entityName + ".png");
+		Random rand = new Random();
 		this.widthScale = widthScale + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
 		this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
 		this.addLayer(new LayerBipedArmor(this));
