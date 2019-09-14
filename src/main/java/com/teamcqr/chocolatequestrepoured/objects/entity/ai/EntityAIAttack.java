@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.Path;
+import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.EnumHand;
 
 public class EntityAIAttack extends AbstractCQREntityAI {
@@ -21,22 +22,47 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if (this.isSuitableTarget(attackTarget) && this.entity.getEntitySenses().canSee(attackTarget)
-				&& this.canMoveToEntity(attackTarget)) {
-			return true;
+		if (!TargetUtil.PREDICATE.apply(attackTarget)) {
+			return false;
 		}
-		return false;
+		/*
+		if (this.entity == attackTarget) {
+			return false;
+		}
+		if (!this.entity.getFaction().isEntityEnemy(attackTarget)) {
+			return false;
+		}
+		*/
+		if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+			return false;
+		}
+		return this.canMoveToEntity(attackTarget) || this.inAttackRange(attackTarget);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if ((this.isSuitableTarget(attackTarget) || (attackTarget != null && attackTarget != this.entity
-				&& !this.entity.getEntitySenses().canSee(attackTarget))) && this.entity.hasPath()) {
-			return true;
+		if (attackTarget == null) {
+			return false;
 		}
-		this.resetTask();
-		return false;
+		if (!attackTarget.isEntityAlive()) {
+			return false;
+		}
+		if (!EntitySelectors.CAN_AI_TARGET.apply(attackTarget)) {
+			return false;
+		}
+		/*
+		if (this.entity == attackTarget) {
+			return false;
+		}
+		if (!this.entity.getFaction().isEntityEnemy(attackTarget)) {
+			return false;
+		}
+		*/
+		if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+			return this.entity.hasPath();
+		}
+		return this.canMoveToEntity(attackTarget) || this.entity.hasPath() || this.inAttackRange(attackTarget);
 	}
 
 	@Override
@@ -53,48 +79,28 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	@Override
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
-		this.attackTick--;
+		if (this.attackTick > 0) {
+			this.attackTick--;
+		}
 		if (this.shieldTick > 0) {
 			this.shieldTick--;
 		}
 
-		if (this.shieldTick <= 0) {
-			if (!this.entity.isActiveItemStackBlocking()) {
-				ItemStack offhand = this.entity.getHeldItemOffhand();
-				if (offhand.getItem().isShield(offhand, this.entity)) {
-					this.entity.setActiveHand(EnumHand.OFF_HAND);
-				}
-			}
-		}
+		this.checkAndPerformBlock();
 
-		if (this.entity.getEntitySenses().canSee(attackTarget)) {
-			this.canMoveToEntity(attackTarget);
+		this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+
+		if (this.path != null) {
 			this.entity.getNavigator().setPath(this.path, 1.0D);
 		}
 
-		double distance = this.entity.getDistanceSq(attackTarget);
-		this.checkAndPerformAttack(this.entity.getAttackTarget(), distance);
+		this.checkAndPerformAttack(this.entity.getAttackTarget());
 	}
 
 	@Override
 	public void resetTask() {
+		this.entity.setAttackTarget(null);
 		this.entity.getNavigator().clearPath();
-		this.attackTick = 0;
-		this.shieldTick = 0;
-	}
-
-	protected boolean isSuitableTarget(EntityLivingBase possibleTarget) {
-		if (!TargetUtil.PREDICATE.apply(possibleTarget)) {
-			return false;
-		}
-		if (possibleTarget == this.entity) {
-			return false;
-		}
-		if (this.entity.getFaction() != null && this.entity.getFaction().isEntityAlly(possibleTarget)) {
-			return false;
-		}
-		return true;
 	}
 
 	protected boolean canMoveToEntity(EntityLivingBase target) {
@@ -102,10 +108,17 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		return this.path != null;
 	}
 
-	protected void checkAndPerformAttack(EntityLivingBase attackTarget, double distance) {
-		double d0 = this.getAttackReachSqr(attackTarget);
+	protected void checkAndPerformBlock() {
+		if (this.shieldTick <= 0 && !this.entity.isActiveItemStackBlocking()) {
+			ItemStack offhand = this.entity.getHeldItemOffhand();
+			if (offhand.getItem().isShield(offhand, this.entity)) {
+				this.entity.setActiveHand(EnumHand.OFF_HAND);
+			}
+		}
+	}
 
-		if (distance <= d0 && this.attackTick <= 0) {
+	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
+		if (this.attackTick <= 0 && this.inAttackRange(attackTarget)) {
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.resetActiveHand();
 				this.attackTick = 40;
@@ -118,8 +131,10 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		}
 	}
 
-	protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-		return (double) (this.entity.width * 2.0F * this.entity.width * 2.0F + attackTarget.width);
+	protected boolean inAttackRange(EntityLivingBase attackTarget) {
+		double attackReach = (double) (this.entity.width * 2.0F * this.entity.width * 2.0F + attackTarget.width);
+		double distance = this.entity.getDistanceSq(attackTarget);
+		return distance <= attackReach;
 	}
 
 }
