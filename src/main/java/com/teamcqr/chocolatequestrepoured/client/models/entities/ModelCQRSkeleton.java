@@ -6,7 +6,6 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.AbstractSkeleton;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -14,7 +13,7 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelCQRSkeleton extends ModelCQRBiped{
-
+//Copied from vanilla skeleton mode, but modified
 	public ModelCQRSkeleton()
     {
         this(0.0F, false);
@@ -77,9 +76,9 @@ public class ModelCQRSkeleton extends ModelCQRBiped{
     {
         super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         ItemStack itemstack = ((EntityLivingBase)entityIn).getHeldItemMainhand();
-        AbstractSkeleton abstractskeleton = (AbstractSkeleton)entityIn;
+        AbstractEntityCQR abstractskeleton = (AbstractEntityCQR)entityIn;
 
-        if (abstractskeleton.isSwingingArms() && (itemstack.isEmpty() || itemstack.getItem() != Items.BOW))
+        if (abstractskeleton.getItemInUseCount() > 0 && (itemstack.isEmpty() || itemstack.getItem() != Items.BOW))
         {
             float f = MathHelper.sin(this.swingProgress * (float)Math.PI);
             float f1 = MathHelper.sin((1.0F - (1.0F - this.swingProgress) * (1.0F - this.swingProgress)) * (float)Math.PI);
