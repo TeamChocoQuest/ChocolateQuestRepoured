@@ -61,23 +61,16 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 	}
 
 	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
-		if(possibleTarget != null) {
-			if (possibleTarget == this.entity) {
-				return false;
-			}
-			if (this.entity.getFaction() != null && this.entity.getFaction().isEntityAlly(possibleTarget)) {
-				return false;
-			}
-			if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
-				return false;
-			}
-			if (!this.canReachTarget(possibleTarget)) {
-				return false;
-			}
-			return (this.entity.getFaction() != null && this.entity.getFaction().isEntityEnemy(possibleTarget));
-		} else {
+		if (possibleTarget == this.entity) {
 			return false;
 		}
+		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+			return false;
+		}
+		if (!this.canReachTarget(possibleTarget)) {
+			return false;
+		}
+		return this.entity.getFaction().isEntityEnemy(possibleTarget);
 	}
 
 	private boolean canReachTarget(EntityLivingBase possibleTarget) {

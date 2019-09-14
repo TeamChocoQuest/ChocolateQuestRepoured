@@ -174,8 +174,9 @@ public class TileEntityExporter extends TileEntity {
 
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		//return 65536.0D;
-		return ((Minecraft.getMinecraft().gameSettings.renderDistanceChunks +1)* 16)^2;
+		// return 65536.0D;
+		double d = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
+		return d * d;
 	}
 
 }
