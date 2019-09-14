@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
@@ -23,6 +25,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public ResourceLocation texture;
 	public double widthScale;
 	public double heightScale;
+	
+	protected static final Random rand = new Random();
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
 		this(rendermanagerIn, entityName, 1.0D, 1.0D);
@@ -36,8 +40,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + entityName + ".png");
-		this.widthScale = widthScale;
-		this.heightScale = heightScale;
+		this.widthScale = widthScale + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
+		this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
 		this.addLayer(new LayerBipedArmor(this));
 		this.addLayer(new LayerHeldItem(this));
 		this.addLayer(new LayerArrow(this));
@@ -47,8 +51,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		double width = this.widthScale * (1.0D + 0.5D * (double) entitylivingbaseIn.getSizeVariation());
-		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
+		double width = this.widthScale;// * (1.0D + 0.5D * entitylivingbaseIn.getSizeVariation());
+		double height = this.heightScale;// * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
