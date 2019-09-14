@@ -3,6 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -26,6 +29,19 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	@Override
 	public EFaction getFaction() {
 		return EFaction.UNDEAD;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_ZOMBIE_HURT;
+	}
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ENTITY_ZOMBIE_AMBIENT;
+	}
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_ZOMBIE_DEATH;
 	}
 
 }
