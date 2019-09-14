@@ -25,7 +25,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public ResourceLocation texture;
 	public double widthScale;
 	public double heightScale;
-	private boolean scaleVarApplied = false;
+	//private boolean scaleVarApplied = false;
 	
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
 		this(rendermanagerIn, entityName, 1.0D, 1.0D);
@@ -51,14 +51,14 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		if(!this.scaleVarApplied) {
-			Random rand = new Random();
-			this.widthScale = widthScale + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
-			this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
-			this.scaleVarApplied = true;
-		}
-		double width = this.widthScale;// * (1.0D + 0.5D * entitylivingbaseIn.getSizeVariation());
-		double height = this.heightScale;// * (1.0D + entitylivingbaseIn.getSizeVariation());
+		//if(!this.scaleVarApplied) {
+			//Random rand = new Random();
+			//this.widthScale = widthScale + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
+			//this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
+			//this.scaleVarApplied = true;
+		//}
+		double width = this.widthScale * (1.0D + 0.5D * entitylivingbaseIn.getSizeVariation());
+		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
