@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
-import java.util.Random;
-
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
