@@ -26,5 +26,10 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public EFaction getFaction() {
 		return EFaction.ENDERMEN;
 	}
+	
+	@Override
+	public double getSizeVariation() {
+		return 0D;
+	} 
 
 }
