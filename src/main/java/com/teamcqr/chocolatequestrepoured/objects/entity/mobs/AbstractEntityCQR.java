@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -55,10 +56,11 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob,IEntityAdditionalSpawnData {
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
@@ -135,7 +137,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.sizeVariation = -0.25F + (this.rand.nextFloat() *0.5F);
+		this.sizeVariation = -0.125F + (this.rand.nextFloat() *0.25F);
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -562,6 +564,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	
 	public double getSizeVariation() {
 		return this.sizeVariation;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeDouble(this.sizeVariation);
+		
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		this.sizeVariation = additionalData.readDouble();
 	}
 
 }
