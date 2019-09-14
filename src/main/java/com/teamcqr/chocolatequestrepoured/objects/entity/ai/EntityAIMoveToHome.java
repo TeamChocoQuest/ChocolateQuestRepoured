@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityAIMoveToHome extends AbstractCQREntityAI {
