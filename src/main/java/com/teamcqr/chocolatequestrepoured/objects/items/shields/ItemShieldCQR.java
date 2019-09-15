@@ -9,7 +9,33 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.translation.I18n;
 
 public class ItemShieldCQR extends ItemShield {
-	
+
+	public static final String[] SHIELD_NAMES = {
+			"bull",
+			"carl",
+			"dragonslayer",
+			"fire",
+			"goblin",
+			"monking",
+			"moon",
+			"mummy",
+			"pigman",
+			"pirate",
+			"pirate2",
+			"rainbow",
+			"reflective",
+			"rusted",
+			"skeleton_friends",
+			"specter",
+			"spider",
+			"sun",
+			"tomb",
+			"triton",
+			"turtle",
+			"warped",
+			"zombie"
+	};
+
 	private Item repairItem;
 
 	public ItemShieldCQR(int durability, @Nullable Item repairItem) {
@@ -24,7 +50,7 @@ public class ItemShieldCQR extends ItemShield {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name").trim();
+		return I18n.translateToLocal(this.getUnlocalizedName() + ".name");
 	}
 
 	@Override
