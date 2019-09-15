@@ -43,6 +43,10 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 			//TODO: Fire ball
 			
 			attackCooldown = 0;
+		} else if(attackCooldown >= attackCooldownBorder){
+			//TODO: SPITFIRE (Eurobeat intensifies)
+			
+			attackCooldown = 0;
 		}
 		
 		this.dragon.getNavigator().tryMoveToEntityLiving(dragon.getAttackTarget(), chargingSpeed);
