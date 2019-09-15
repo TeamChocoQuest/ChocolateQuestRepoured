@@ -12,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
-	private static double runAwaySpeed = 1.0;
+	private double runAwaySpeed = 1.0;
 	// First step: Walk away about 10-15 blocks from the attacker if that is
 	// possible
 	// Once the entity is far away enough or it hits an obstacle -> start drinking

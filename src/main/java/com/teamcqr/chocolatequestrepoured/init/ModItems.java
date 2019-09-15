@@ -87,7 +87,30 @@ public class ModItems {
 	public static final Item SHIELD_WALKER = Null();
 	
 	//Shields
-	public static final Item SHIELD = Null();
+	public static final Item SHIELD_BULL = Null();
+	public static final Item SHIELD_CARL = Null();
+	public static final Item SHIELD_DRAGONSLAYER = Null();
+	public static final Item SHIELD_FIRE = Null();
+	public static final Item SHIELD_GOBLIN = Null();
+	public static final Item SHIELD_MONKING = Null();
+	public static final Item SHIELD_MOON = Null();
+	public static final Item SHIELD_MUMMY = Null();
+	public static final Item SHIELD_PIGMAN = Null();
+	public static final Item SHIELD_PIRATE = Null();
+	public static final Item SHIELD_PIRATE2 = Null();
+	public static final Item SHIELD_RAINBOW = Null();
+	public static final Item SHIELD_REFLECTIVE = Null();
+	public static final Item SHIELD_RUSTED = Null();
+	public static final Item SHIELD_SKELETON_FRIENDS = Null();
+	public static final Item SHIELD_SPECTER = Null();
+	public static final Item SHIELD_SPIDER = Null();
+	public static final Item SHIELD_SUN = Null();
+	public static final Item SHIELD_TOMB = Null();
+	public static final Item SHIELD_TRITON = Null();
+	public static final Item SHIELD_TURTLE = Null();
+	public static final Item SHIELD_WARPED = Null();
+	public static final Item SHIELD_WALKER_NORMAL = Null();
+	public static final Item SHIELD_ZOMBIE = Null();
 
 	// Great Swords
 	public static final Item GREAT_SWORD_IRON = Null();
@@ -211,8 +234,6 @@ public class ModItems {
 					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
 					setItemName(new ItemShieldWalker(), "shield_walker"),
 					
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield"),
-
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F), "great_sword_iron"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.6F), "great_sword_bull"),
@@ -287,7 +308,33 @@ public class ModItems {
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
 					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab),
-					setItemName(new ItemStructureSelector(), "structure_selector")
+					setItemName(new ItemStructureSelector(), "structure_selector"),
+					
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_bull"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_carl"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_dragonslayer"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_fire"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_goblin"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_monking"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_moon"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_mummy"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pigman"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pirate"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pirate2"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_rainbow"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_reflective"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_rusted"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_skeleton_friends"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_specter"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_spider"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_sun"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_tomb"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_triton"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_turtle"),
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_warped"),
+					//TODO: Normal walker shield, rename "special" walker shield to walker king shield
+					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_zombie")
+					
 			};
 
 			IForgeRegistry<Item> registry = event.getRegistry();

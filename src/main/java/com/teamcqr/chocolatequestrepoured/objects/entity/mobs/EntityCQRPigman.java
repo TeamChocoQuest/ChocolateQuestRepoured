@@ -5,8 +5,11 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -32,6 +35,19 @@ public class EntityCQRPigman extends AbstractEntityCQR {
 	@Override
 	public EFaction getFaction() {
 		return EFaction.UNDEAD;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_ZOMBIE_PIG_HURT;
+	}
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ENTITY_ZOMBIE_PIG_AMBIENT;
+	}
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_ZOMBIE_PIG_DEATH;
 	}
 
 }

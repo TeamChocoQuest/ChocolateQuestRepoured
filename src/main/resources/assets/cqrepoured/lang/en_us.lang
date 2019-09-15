@@ -209,7 +209,33 @@ item.cqr_shield_r09.name=Triton Shield
 
 //Walker set
 item.sword_walker.name=Walker Sword
-item.shield_walker.name=Walker Shield
+item.shield_walker.name=Walker King Shield
+
+//Shields
+item.shield_bull.name=Ice Bull Shield
+item.shield_carl.name=Carl
+item.shield_dragonslayer.name=Dragon Shield
+item.shield_fire.name=Fiery Shield
+item.shield_goblin.name=Goblin Shield
+item.shield_monking.name=Monkey Shield
+item.shield_moon.name=Moon Shield
+item.shield_mummy.name=Bandaged Shield
+item.shield_pigman.name=Pigman Shield
+item.shield_pirate.name=Pirate Shield
+item.shield_pirate2.name=Pirate Shield
+item.shield_rainbow.name=Rainbow Shield
+item.shield_reflective.name=Mirror Shield
+item.shield_rusted.name=Rusted Shield
+item.shield_skeleton_friends.name=Skeleton Shield
+item.shield_specter.name=Specter Shield
+item.shield_spider.name=Spider Shield
+item.shield_sun.name=Sun Shield
+item.shield_tomb.name=Tomb Shield
+item.shield_triton.name=Triton Shield
+item.shield_turtle.name=Turtle Infantry Shield
+item.shield_warped.name=Warped Shield
+item.shield_walker_normal.name=Walker Shield
+item.shield_zombie.name=Zombie Shield
 
 //Great Swords
 item.great_sword_monking.name=Monking Great Sword
@@ -461,4 +487,24 @@ description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 
 // Mobs
-entity.EntityCQRZombie.name=Zombie(CQR)
+entity.dummy.name=Dummy(CQR)
+entity.dwarf.name=Dwarf(CQR)
+entity.enderman.name=Enderman(CQR)
+entity.goblin.name=Goblin(CQR)
+entity.golem.name=Golem(CQR)
+entity.illager.name=Illager(CQR)
+entity.npc.name=NPC(CQR)
+entity.minotaur.name=Minotaur(CQR)
+entity.mummy.name=Mummy(CQR)
+entity.ogre.name=Ogre(CQR)
+entity.orc.name=Orc(CQR)
+entity.pigman.name=Pigman(CQR)
+entity.pirate.name=Pirate(CQR)
+entity.skeleton.name=Skeleton(CQR)
+entity.spectre.name=Spectre(CQR)
+entity.triton.name=Squidward(CQR)
+entity.walker.name=Abyss Walker
+entity.zombie.name=Zombie(CQR)
+
+// Bosses
+entity.nether_dragon.name=Wormy Wurm Wyrm

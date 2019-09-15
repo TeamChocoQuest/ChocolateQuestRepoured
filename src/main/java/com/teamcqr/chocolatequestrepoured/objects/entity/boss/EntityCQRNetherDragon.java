@@ -3,7 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -14,6 +16,7 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
@@ -39,6 +42,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		FLYING_DOWNWARDS
 	}
 	
+	public enum ENetherDragonAttacks {
+		SPIT_FIRE,
+		FIREBALL,
+		LIGHTNINGS,
+		BITE
+	}
+	
 	/**
 	 * AI:
 	 * Circle around about 30 blocks above your home location in a radius of ~30 blocks
@@ -58,6 +68,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
 	private boolean mouthOpen = false;
+
+	private boolean isReadyToAttack = true;
+
+	private ENetherDragonAttacks currentAttack = null;
+
+	private int attackTimer = 0;
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -128,7 +144,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 	@Override
 	public EFaction getFaction() {
-		return null;
+		return EFaction.UNDEAD;
 	}
 
 	@Override
@@ -298,17 +314,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return super.getHurtSound(damageSourceIn);
+		return SoundsHandler.NETHER_DRAGON_HURT;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundsHandler.NETHER_DRAGON_DEATH;
 	}
 	
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
 	}
 	
 	@Override
@@ -367,6 +383,26 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	
 	public boolean isMouthOpen() {
 		return mouthOpen ;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		super.writeSpawnData(buffer);
+		buffer.writeBoolean(this.mouthOpen);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		super.readSpawnData(additionalData);
+		this.mouthOpen = additionalData.readBoolean();
+	}
+	
+	public void startAttack(ENetherDragonAttacks attackType) {
+		if(this.isReadyToAttack) {
+			this.currentAttack = attackType;
+			setMouthOpen(true);
+			this.attackTimer  = 0;
+		}
 	}
 	
 

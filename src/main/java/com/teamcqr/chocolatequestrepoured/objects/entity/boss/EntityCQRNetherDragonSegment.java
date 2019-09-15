@@ -3,7 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
@@ -76,4 +78,12 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		return this.tailPart;
 	}
 
+	@Override
+	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+		if(this.dragon.isDead) {
+			return false;
+		}
+		return this.dragon.processInitialInteract(player, hand);
+	}
+	
 }

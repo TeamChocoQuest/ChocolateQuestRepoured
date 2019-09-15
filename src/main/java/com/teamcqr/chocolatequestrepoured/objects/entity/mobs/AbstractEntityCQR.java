@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -55,17 +56,18 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
+public abstract class AbstractEntityCQR extends EntityCreature implements IMob,IEntityAdditionalSpawnData {
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	
-	protected float sizeVariation = 0.0F;
+	protected double sizeVariation = 0.0F;
 	
 	protected int usedPotions = 0;
 
@@ -135,8 +137,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.sizeVariation = -0.25F + (this.rand.nextFloat() *0.5F);
-		System.out.println("Size Var: " + sizeVariation);
+		this.sizeVariation = -0.125F + (this.rand.nextFloat() *0.25F);
+		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
 
@@ -158,7 +160,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		if(this.usedPotions > 0) {
 			compound.setInteger("usedHealingPotions", this.usedPotions);
 		}
-		compound.setFloat("sizeVariation", this.sizeVariation);
+		compound.setDouble("sizeVariation", this.sizeVariation);
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 	}
 
@@ -179,7 +181,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		}
 
 		if(compound.hasKey("sizeVariation")) {
-			this.sizeVariation = compound.getFloat("sizeVariation");
+			this.sizeVariation = compound.getDouble("sizeVariation");
 		}
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
@@ -334,7 +336,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 	}
 
 	public boolean isPreventingPlayerRest(EntityPlayer playerIn) {
-		return true;
+		//DONE: Replace with faction system, returns true, when the player is the enemy
+		//return true;
+		return getFaction() == null || getFaction().isEntityEnemy(playerIn);
 	}
 
 	// Chocolate Quest Repoured
@@ -558,8 +562,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob {
 		return null;
 	}
 	
-	public float getSizeVariation() {
+	public double getSizeVariation() {
 		return this.sizeVariation;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeDouble(this.sizeVariation);
+		
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		this.sizeVariation = additionalData.readDouble();
 	}
 
 }
