@@ -31,7 +31,7 @@ public class ClassicNetherCity extends DungeonBase {
 	private int heightY = 31;
 	private int posY = 31;
 	private double bridgeSizeMultiplier = 1.2D;
-	private boolean singleAirPocketsForHouses = false;
+	//private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
 	private boolean centralSpawnerIsSingleUse = true;
 	private boolean spawnersAboveBuildings = true;
@@ -63,7 +63,7 @@ public class ClassicNetherCity extends DungeonBase {
 			posY = PropertyFileHelper.getIntProperty(prop, "posY", 31);
 			heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 			
-			singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
+			//singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
 			spawnersAboveBuildings = PropertyFileHelper.getBooleanProperty(prop, "spawnersAboveBuildings", true);
 			makeSpaceForBuildings = PropertyFileHelper.getBooleanProperty(prop, "createAirPocket", true);
 			specialUseForCentralBuilding = PropertyFileHelper.getBooleanProperty(prop, "centralBuildingIsSpecial", true);
@@ -144,9 +144,9 @@ public class ClassicNetherCity extends DungeonBase {
 		return (new Double(longestSide * bridgeSizeMultiplier)).intValue();
 	}
 	
-	public boolean useSingleAirPocketsForHouses() {
+	/*public boolean useSingleAirPocketsForHouses() {
 		return this.singleAirPocketsForHouses;
-	}
+	}*/
 	
 	public boolean placeSpawnersAboveBuildings() {
 		return spawnersAboveBuildings;

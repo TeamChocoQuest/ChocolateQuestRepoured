@@ -40,7 +40,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	private int minZ;
 	private int maxZ;
 	
-	private static int tunnelHeight = 3;
+	//private static int tunnelHeight = 3;
 	
 	public NetherCityGenerator(ClassicNetherCity dungeon) {
 		this.dungeon = dungeon;
@@ -88,7 +88,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		//Dig out the big air pocket or the small ones
 		if(dungeon.makeSpaceForBuildings()) {
-			if(dungeon.useSingleAirPocketsForHouses()) {
+			/*if(dungeon.useSingleAirPocketsForHouses()) {
 				for(BlockPos pocketCenter : gridPositions) {
 					BlockPos cLower = new BlockPos(pocketCenter.getX() - dungeon.getLongestSide() /2, y +1, pocketCenter.getZ() - dungeon.getLongestSide());
 					BlockPos cUpper = new BlockPos(pocketCenter.getX() + dungeon.getLongestSide() /2, y +dungeon.getCaveHeight(), pocketCenter.getZ() + dungeon.getLongestSide());
@@ -96,13 +96,13 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					PlateauBuilder pB = new PlateauBuilder();
 					pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world);
 				}
-			} else {
+			} else {*/
 				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
 				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(dungeon.getDistanceBetweenBuildingCenters() *0.1, 0, dungeon.getDistanceBetweenBuildingCenters() *0.05);
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
-			}
+			//}
 		}
 		
 		
@@ -121,13 +121,13 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				bridgeBlocks.add(pCW);
 				
 				//Tunnels if not big air pocket
-				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
+				/*if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
 					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCE.up(n));
 						world.setBlockToAir(pCW.up(n));
 					}
-				}
+				}*/
 			}
 		}
 		//Bridges from west to east
@@ -141,13 +141,13 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				bridgeBlocks.add(pCS);
 				
 				//Tunnels if not big air pocket
-				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
+				/*if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
 					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCN.up(n));
 						world.setBlockToAir(pCS.up(n));
 					}
-				}
+				}*/
 			}
 		}
 		
