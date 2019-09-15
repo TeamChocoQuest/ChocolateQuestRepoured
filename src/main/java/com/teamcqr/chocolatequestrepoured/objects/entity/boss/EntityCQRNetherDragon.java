@@ -42,6 +42,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		FLYING_DOWNWARDS
 	}
 	
+	public enum ENetherDragonAttacks {
+		SPIT_FIRE,
+		FIREBALL,
+		LIGHTNINGS,
+		BITE
+	}
+	
 	/**
 	 * AI:
 	 * Circle around about 30 blocks above your home location in a radius of ~30 blocks
@@ -61,6 +68,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
 	private boolean mouthOpen = false;
+
+	private boolean isReadyToAttack = true;
+
+	private ENetherDragonAttacks currentAttack = null;
+
+	private int attackTimer = 0;
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -382,6 +395,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
 		this.mouthOpen = additionalData.readBoolean();
+	}
+	
+	public void startAttack(ENetherDragonAttacks attackType) {
+		if(this.isReadyToAttack) {
+			this.currentAttack = attackType;
+			setMouthOpen(true);
+			this.attackTimer  = 0;
+		}
 	}
 	
 
