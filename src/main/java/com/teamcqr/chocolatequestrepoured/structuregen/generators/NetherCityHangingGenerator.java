@@ -179,16 +179,16 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		}
 		
 		if(this.dungeon.doBuildChains()) {
-			buildChain(center.add(radius *0.9, -2, radius *0.9), world);
-			buildChain(center.add(-radius *0.9, -2, -radius *0.9), world);
-			buildChain(center.add(-radius *0.9, -2, radius *0.9), world);
-			buildChain(center.add(radius *0.9, -2, -radius *0.9), world);
+			buildChain(center.add(radius *0.9, -2, radius *0.9), world, 0);
+			buildChain(center.add(-radius *0.9, -2, -radius *0.9), world, 0);
+			buildChain(center.add(-radius *0.9, -2, radius *0.9), world, 1);
+			buildChain(center.add(radius *0.9, -2, -radius *0.9), world, 1);
 		}
 		
 		ThreadingUtil.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100, true);
 	}
 
-	private void buildChain(BlockPos pos, World world) {
+	private void buildChain(BlockPos pos, World world, int iOffset) {
 		/*
 		 * Chain from side:
 		 *    # 
@@ -208,7 +208,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 			//Check the direction of the chain
 			int yOffset = i * deltaYPerChainSegment;
 			BlockPos startPos = pos.add(0, yOffset, 0);
-			if(i %2 > 0) {
+			if((i +iOffset) %2 > 0) {
 				buildChainSegment(startPos, startPos.north(), startPos.south(), startPos.north(2).up(), startPos.south(2).up(), world);
 			} else {
 				buildChainSegment(startPos, startPos.east(), startPos.west(), startPos.east(2).up(), startPos.west(2).up(), world);
