@@ -28,6 +28,7 @@ public class FloatingNetherCity extends DungeonBase {
 	private boolean buildChains = true;
 	private boolean buildBridges = false;
 	private File structureFolder;
+	private File centralStructureFolder;
 	
 	public FloatingNetherCity(File configFile) {
 		super(configFile);
