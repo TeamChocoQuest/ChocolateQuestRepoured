@@ -105,9 +105,9 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		}*/
 		BlockPos retPos = new BlockPos(centerPos);
 
-		Vec3i vector = new Vec3i(0, 0,	(this.dungeon.getIslandDistance() * 1.5D) * ((islandIndex+1) % 10 +1));
+		Vec3i vector = new Vec3i(0, 0,	(this.dungeon.getIslandDistance() * 1.5D) * ((islandIndex) / 10 +1));
 
-		int degreeMultiplier = islandIndex -(islandIndex %10 *10);
+		int degreeMultiplier = islandIndex -(Math.floorDiv(islandIndex, 10) *10);
 		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * 36D));
 		
 		return retPos;
