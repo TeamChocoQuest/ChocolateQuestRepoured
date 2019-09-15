@@ -32,7 +32,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
-import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShield;
+import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldWalker;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
@@ -208,7 +208,6 @@ public class ModItems {
 	public static final Item BADGE = Null();
 	public static final Item ALCHEMY_BAG = Null();
 
-	public static final Item DUNGEON_PLACER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
 	
 	@EventBusSubscriber(modid = Reference.MODID)
@@ -307,39 +306,24 @@ public class ModItems {
 					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"),
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
-					setItemNameAndTab(new ItemDungeonPlacer(), "dungeon_placer", CQRMain.CQRDungeonPlacerTab),
 					setItemName(new ItemStructureSelector(), "structure_selector"),
-					
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_bull"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_carl"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_dragonslayer"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_fire"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_goblin"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_monking"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_moon"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_mummy"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pigman"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pirate"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_pirate2"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_rainbow"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_reflective"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_rusted"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_skeleton_friends"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_specter"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_spider"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_sun"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_tomb"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_triton"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_turtle"),
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_warped"),
-					//TODO: Normal walker shield, rename "special" walker shield to walker king shield
-					setItemName(new ItemShield(1024, Items.IRON_INGOT), "shield_zombie")
-					
 			};
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 
 			for (Item item : items) {
+				registry.register(item);
+				ITEMS.add(item);
+			}
+
+			for (int i = 0; i < ItemShieldCQR.SHIELD_NAMES.length; i++) {
+				Item item = setItemName(new ItemShieldCQR(1024, Items.IRON_INGOT), "shield_" + ItemShieldCQR.SHIELD_NAMES[i]);
+				registry.register(item);
+				ITEMS.add(item);
+			}
+
+			for (int i = 0; i <= ItemDungeonPlacer.HIGHEST_ICON_NUMBER; i++) {
+				Item item = setItemNameAndTab(new ItemDungeonPlacer(i), "dungeon_placer_d" + i, CQRMain.CQRDungeonPlacerTab);
 				registry.register(item);
 				ITEMS.add(item);
 			}
