@@ -240,9 +240,11 @@ public class DungeonRegistry {
 			return new StrongholdLinearDungeon(dungeonPropertiesFile);
 		case JUNGLE_CAVE:
 			//TODO Jungle cave generator
+			System.out.println("Dungeon Generator JUNGLE_CAVE is not yet implemented!");
 			break;
 		case SWAMP_CAVE:
 			//TODO SWAMP CAVE GENERATOR
+			System.out.println("Dungeon Generator SWAMP_CAVE is not yet implemented!");
 			break;
 		default:
 			return null;
