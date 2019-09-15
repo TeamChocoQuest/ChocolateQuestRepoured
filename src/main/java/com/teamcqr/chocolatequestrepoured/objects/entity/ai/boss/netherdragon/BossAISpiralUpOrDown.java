@@ -57,8 +57,8 @@ public class BossAISpiralUpOrDown extends EntityAIBase {
 				// Get the current movement vector of the entity (rotation on x/z plane)
 				// Rotate this vector by the anglePerIteration
 				// Add this vector to the entities current pos and we have the new target
-				
-				newPos = VectorUtil.rotateVectorAroundY(newPos, flyingUp ? anglePerIteration : 360.0D - anglePerIteration);
+				Vec3d vec = new Vec3d(0,0,3D);
+				newPos = newPos.add(VectorUtil.rotateVectorAroundY(vec, flyingUp ? anglePerIteration * (currentIterations +1) : 360.0D - (currentIterations +1)));
 				newPos.addVector(0,flyingUp ? deltaYPerIteration : -deltaYPerIteration, 0);
 				
 				lastTarget = newPos;
