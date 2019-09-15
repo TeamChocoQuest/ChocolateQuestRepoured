@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon.ENetherDragonAttacks;
 
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -40,11 +41,13 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 		this.dragon.updateMovementState(EntityCQRNetherDragon.EDragonMovementState.CHARGING);
 		attackCooldown++;
 		if(attackCooldown >= attackCooldownBorder && this.dragon.getDistance(this.dragon.getAttackTarget()) >= minDistanceToFireBall) {
-			//TODO: Fire ball
+			//DONE: Fire ball
+			this.dragon.startAttack(ENetherDragonAttacks.FIREBALL);
 			
 			attackCooldown = 0;
 		} else if(attackCooldown >= attackCooldownBorder){
-			//TODO: SPITFIRE (Eurobeat intensifies)
+			//DONE: SPITFIRE (Eurobeat intensifies)
+			this.dragon.startAttack(ENetherDragonAttacks.SPIT_FIRE);
 			
 			attackCooldown = 0;
 		}
