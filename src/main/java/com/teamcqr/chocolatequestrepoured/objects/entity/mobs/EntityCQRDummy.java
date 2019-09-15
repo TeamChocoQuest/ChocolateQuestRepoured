@@ -42,5 +42,10 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	protected void collideWithEntity(Entity entityIn) {
 
 	}
+	
+	@Override
+	public double getSizeVariation() {
+		return 0F;
+	}
 
 }

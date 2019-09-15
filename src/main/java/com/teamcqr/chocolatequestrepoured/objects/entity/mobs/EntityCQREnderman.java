@@ -3,6 +3,11 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -10,6 +15,10 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	public EntityCQREnderman(World worldIn) {
 		super(worldIn);
+		
+		this.setSize(0.6F, 2.9F);
+        this.stepHeight = 1.0F;
+        this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
 
 	@Override
@@ -26,5 +35,38 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public EFaction getFaction() {
 		return EFaction.ENDERMEN;
 	}
+	
+	@Override
+	public double getSizeVariation() {
+		return 0D;
+	} 
+	
+	@Override
+	protected SoundEvent getAmbientSound()
+    {
+        return /*this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM :*/ SoundEvents.ENTITY_ENDERMEN_AMBIENT;
+    }
+	@Override
+    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+    {
+        return SoundEvents.ENTITY_ENDERMEN_HURT;
+    }
+	@Override
+    protected SoundEvent getDeathSound()
+    {
+        return SoundEvents.ENTITY_ENDERMEN_DEATH;
+    }
+	@Override
+	public float getEyeHeight()
+    {
+        return 2.55F;
+    }
+	@Override
+	protected void applyEntityAttributes()
+    {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
+        this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
+    }
 
 }

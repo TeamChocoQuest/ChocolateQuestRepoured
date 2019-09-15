@@ -11,7 +11,6 @@ import net.minecraft.util.math.Vec3i;
 public class EntityAIIdleSit extends AbstractCQREntityAI {
 	
 	private int cooldown = 0;
-	private boolean friendsToTalkNearby = false;
 	
 	protected static final int cooldownIdleBorder = 50;
 	
@@ -60,7 +59,9 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 						friendsFound++;
 					}
 				}
-				friendsToTalkNearby = friendsFound > 0;
+				if( friendsFound > 0) {
+					//we have someone to talk to, yay :D
+				}
 				
 				//TODO: Orient entity to random friend
 				//TODO: Make them "chat" / "play cards"
@@ -74,7 +75,6 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	public void resetTask() {
 		super.resetTask();
 		cooldown = 0;
-		friendsToTalkNearby = false;
 		//TODO: Make entity stand up and stop talking
 	}
 

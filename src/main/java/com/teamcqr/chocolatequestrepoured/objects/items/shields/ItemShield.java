@@ -1,11 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.shields;
 
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 
 public class ItemShield extends ItemShieldCQR {
 	
@@ -31,7 +26,6 @@ public class ItemShield extends ItemShieldCQR {
 		"tomb",
 		"triton",
 		"turtle",
-		"walker",
 		"warped",
 		"zombie"
 	};
@@ -47,7 +41,7 @@ public class ItemShield extends ItemShieldCQR {
 		return true;
 	}
 	
-	@Override
+	/*@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		//super.getSubItems(tab, items);
 		if (this.isInCreativeTab(tab)) {
@@ -57,6 +51,6 @@ public class ItemShield extends ItemShieldCQR {
 				items.add(stack);
 			}
 		}
-	}
+	}*/
 
 }

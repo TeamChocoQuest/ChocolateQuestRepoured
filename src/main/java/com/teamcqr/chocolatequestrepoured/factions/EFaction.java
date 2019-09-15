@@ -4,6 +4,9 @@ import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationS
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.monster.EntityEvoker;
 import net.minecraft.entity.monster.EntityGolem;
 import net.minecraft.entity.monster.EntityIllusionIllager;
@@ -123,6 +126,10 @@ public enum EFaction {
 		}
 		if(entity instanceof EntityIllusionIllager || entity instanceof EntityVex || entity instanceof EntityVindicator || entity instanceof EntityEvoker) {
 			return ILLAGERS;
+		}
+		
+		if(entity instanceof EntityEnderman || entity instanceof EntityEndermite || entity instanceof EntityDragon) {
+			return ENDERMEN;
 		}
 		
 		if(entity instanceof EntityAnimal) {
