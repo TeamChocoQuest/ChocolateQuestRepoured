@@ -7,17 +7,18 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -43,9 +44,15 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Radius = sqrt(((Longer side of building) / 2)^2 *2) +5
 		// Chain start pos: diagonal go (radius / 3) * 2 -1 blocks, here start building up the chains...
 		BlockPos nextIslandPos = new BlockPos(x, y, z);
-		
+		BlockPos center = new BlockPos(x,y,z);
+		Random rdm = new Random();
 		for(int i = 0; i < islandCount; i++) {
-			nextIslandPos = getNextIslandPos(nextIslandPos);
+			nextIslandPos = getNextIslandPos(center, i);
+			
+			File sf = this.dungeon.pickStructure(rdm);
+			if(sf != null) {
+				structureMap.put(nextIslandPos, sf);
+			}
 		}
 	}
 
@@ -53,9 +60,11 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Builds the platforms
 		// Builds the chains
+		//TODO: Methods to get central buildings
 		for(BlockPos bp : structureMap.keySet()) {
 			CQStructure structure = new CQStructure(structureMap.get(bp), dungeon.isProtectedFromModifications());
 			BlockPos pastePos = bp.subtract(structure.getSizeAsVec());
+			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());
 			
 			buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp));
 		}
@@ -86,16 +95,24 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	}
 	
 	//calculates a fitting position for the next island
-	private BlockPos getNextIslandPos(BlockPos prevIslandPos) {
-		BlockPos retPos = new BlockPos(prevIslandPos);
+	private BlockPos getNextIslandPos(BlockPos centerPos, int islandIndex) {
+		//BlockPos retPos = new BlockPos(prevIslandPos);
+		/*BlockPos retPos = prevIslandPos.add(VectorUtil.rotateVectorAroundY(new Vec3i(0, 0, this.dungeon.getIslandDistance() * 1.5), (360D / this.islandCount) * islandIndex));
 		
 		while(!structureMap.isEmpty() || !structureMap.containsKey(retPos) || locIsNotFine(retPos)) {
-			//TODO: Calculate new position
-		}
+			//DONE: Calculate new position
+			retPos = getNextIslandPos(retPos, islandIndex++);
+		}*/
+		BlockPos retPos = new BlockPos(centerPos);
+
+		Vec3i vector = new Vec3i(0, 0,	(this.dungeon.getIslandDistance() * 1.5D) * ((islandIndex+1) % 10 +1));
+
+		int degreeMultiplier = islandIndex -(islandIndex %10 *10);
+		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * 36D));
 		
 		return retPos;
 	}
-	private boolean locIsNotFine(BlockPos pos) {
+	/*private boolean locIsNotFine(BlockPos pos) {
 		for(BlockPos p : structureMap.keySet()) {
 			double dist = pos.getDistance(p.getX(), pos.getY(), p.getZ());
 			dist = Math.abs(dist);
@@ -104,7 +121,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 			}
 		}
 		return false;
-	}
+	}*/
 	
 	//Constructs an Island in this shape:
 	/*											Dec  Rad
@@ -125,8 +142,9 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		buildPlatform(center, radius, world);
 		
 		//DONE: Dig out cave
-		PlateauBuilder builder = new PlateauBuilder();
-		builder.createCave(new Random(), pos, pos.add(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world.getSeed(), world);
+		//TODO: Not single caverns but one large cavern for everything ?
+		/*PlateauBuilder builder = new PlateauBuilder();
+		builder.createCave(new Random(), pos, pos.add(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world.getSeed(), world);*/
 		
 		
 		PlacementSettings settings = new PlacementSettings();
@@ -160,7 +178,57 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 			decrementor++;
 		}
 		
+		if(this.dungeon.doBuildChains()) {
+			buildChain(center.add(radius *0.9, -2, radius *0.9), world);
+			buildChain(center.add(-radius *0.9, -2, -radius *0.9), world);
+			buildChain(center.add(-radius *0.9, -2, radius *0.9), world);
+			buildChain(center.add(radius *0.9, -2, -radius *0.9), world);
+		}
+		
 		ThreadingUtil.passListWithBlocksToThreads(blocks, dungeon.getIslandBlock(), world, 100, true);
+	}
+
+	private void buildChain(BlockPos pos, World world) {
+		/*
+		 * Chain from side:
+		 *    # 
+		 *  # # #
+		 * #  #  #
+		 * #     #
+		 * #     #
+		 * #     #
+		 * #  #  #
+		 *  # # #
+		 *    #
+		 */
+		int deltaYPerChainSegment = 5;
+		
+		int chainCount = (255 - pos.getY()) / 7;
+		for(int i = 0; i < chainCount; i++) {
+			//Check the direction of the chain
+			int yOffset = i * deltaYPerChainSegment;
+			BlockPos startPos = pos.add(0, yOffset, 0);
+			if(i %2 > 0) {
+				buildChainSegment(startPos, startPos.north(), startPos.south(), startPos.north(2).up(), startPos.south(2).up(), world);
+			} else {
+				buildChainSegment(startPos, startPos.east(), startPos.west(), startPos.east(2).up(), startPos.west(2).up(), world);
+			}
+		}
+	}
+	private void buildChainSegment(BlockPos lowerCenter, BlockPos lowerLeft, BlockPos lowerRight, BlockPos lowerBoundL, BlockPos lowerBoundR, World world) {
+		world.setBlockState(lowerCenter, this.dungeon.getChainBlock().getDefaultState());
+		world.setBlockState(lowerCenter.add(0,6,0), this.dungeon.getChainBlock().getDefaultState());
+		
+		world.setBlockState(lowerLeft, this.dungeon.getChainBlock().getDefaultState());
+		world.setBlockState(lowerLeft.add(0,6,0), this.dungeon.getChainBlock().getDefaultState());
+		
+		world.setBlockState(lowerRight, this.dungeon.getChainBlock().getDefaultState());
+		world.setBlockState(lowerRight.add(0,6,0), this.dungeon.getChainBlock().getDefaultState());
+		
+		for(int i = 0; i < 5; i++) {
+			world.setBlockState(lowerBoundL.add(0,i,0), this.dungeon.getChainBlock().getDefaultState());
+			world.setBlockState(lowerBoundR.add(0,i,0), this.dungeon.getChainBlock().getDefaultState());
+		}
 	}
 
 }
