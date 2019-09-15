@@ -9,7 +9,7 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 	protected EntityCQRNetherDragon dragon;
 	
 	protected static final int maxTargetDistance = 128;
-	protected static final double chargingSpeed = 1.75D;
+	protected static final double chargingSpeed = 2.5D;
 	protected static final int minDistanceToFireBall = 60; 
 	protected static final int attackCooldownBorder = 40;
 	
