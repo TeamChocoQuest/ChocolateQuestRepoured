@@ -2,16 +2,12 @@ package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHelmetDragon extends ItemArmor {
 
