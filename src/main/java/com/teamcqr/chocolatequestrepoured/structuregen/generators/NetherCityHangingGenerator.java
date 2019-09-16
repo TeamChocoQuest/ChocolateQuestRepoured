@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -28,6 +30,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 	private FloatingNetherCity dungeon;
 	private int islandCount = 1;
+	private int islandDistance = 1;
 	private HashMap<BlockPos, File> structureMap = new HashMap<BlockPos, File>();
 	
 	//This needs to calculate async (island blocks, chain blocks, air blocks)
@@ -35,6 +38,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	public NetherCityHangingGenerator(FloatingNetherCity generator) {
 		this.dungeon = generator;
 		this.islandCount = this.dungeon.getBuildingCount(new Random());
+		this.islandDistance = this.dungeon.getIslandDistance();
 	}
 
 	@Override
@@ -45,7 +49,16 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Chain start pos: diagonal go (radius / 3) * 2 -1 blocks, here start building up the chains...
 		BlockPos nextIslandPos = new BlockPos(x, y, z);
 		BlockPos center = new BlockPos(x,y,z);
+		
 		Random rdm = new Random();
+		
+		//DONE: Carve out cave -> Need to specify the height in the dungeon
+		int distMax = new Double((this.islandDistance * 1.5D) * (this.islandCount / 10D +2D)).intValue();
+		BlockPos lower = new BlockPos(x - distMax, y - this.dungeon.getYFactorHeight(), z - distMax);
+		BlockPos upper = new BlockPos(x + distMax, y + (this.dungeon.getYFactorHeight() * 1.5D), z + distMax);
+		PlateauBuilder pb = new PlateauBuilder();
+		pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
+		
 		for(int i = 0; i < islandCount; i++) {
 			nextIslandPos = getNextIslandPos(center, i);
 			
@@ -105,7 +118,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		}*/
 		BlockPos retPos = new BlockPos(centerPos);
 
-		Vec3i vector = new Vec3i(0, 0,	(this.dungeon.getIslandDistance() * 1.5D) * ((islandIndex) / 10 +1));
+		Vec3i vector = new Vec3i(0, 0,	(this.islandDistance * 1.5D) * ((islandIndex) / 10 +1));
 
 		int degreeMultiplier = islandIndex -(Math.floorDiv(islandIndex, 10) *10);
 		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * 36D));
@@ -142,7 +155,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		buildPlatform(center, radius, world);
 		
 		//DONE: Dig out cave
-		//TODO: Not single caverns but one large cavern for everything ?
+		//DONE: Not single caverns but one large cavern for everything ?
 		/*PlateauBuilder builder = new PlateauBuilder();
 		builder.createCave(new Random(), pos, pos.add(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world.getSeed(), world);*/
 		
