@@ -313,4 +313,13 @@ public class DungeonRegistry {
 		CQRMain.dungeonRegistry.loadDungeonFiles();
 	}
 
+	public DungeonBase getDungeon(String name) {
+		for (DungeonBase dungeon : this.dungeonList) {
+			if (dungeon.getDungeonName().equals(name)) {
+				return dungeon;
+			}
+		}
+		return null;
+	}
+
 }
