@@ -1,108 +1,108 @@
-The Chinese(simple) language file for Chocolate Quest Repoured Mod!
-//Author: Moko
+The English US language file for Chocolate Quest Repoured Mod!
+
 
 //CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=寻找巧克力-重铸: 方块
-itemGroup.ChocolateQuestRepouredItemsTab=寻找巧克力-重铸：物品
-itemGroup.ChocolateQuestRepouredDungeonPlacers=地牢放置者
+itemGroup.ChocolateQuestRepouredBlocksTab=寻找巧克力重铸版-方块
+itemGroup.ChocolateQuestRepouredItemsTab=寻找巧克力重铸版-物品
+itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR-地牢放置
 itemGroup.ChocolateQuestRepouredBannerTab=旗帜
 itemGroup.ChocolateQuestRepouredExporterChests=输出箱
 
 //Banners
-block.minecraft.banner.cqrepoured_cq_wither_eyes.white=白眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.orange=橘眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.magenta=桃眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.light_blue=靛眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.yellow=黄眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.lime=翠眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.pink=粉眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.gray=灰眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.silver=银眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.cyan=青眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.purple=紫眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.blue=蓝眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.brown=棕眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.green=绿眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.red=红眼凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_eyes.black=黑眼凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_eyes.white=白色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.orange=橙色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.magenta=品红色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.light_blue=淡蓝色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.yellow=黄色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.lime=黄绿色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.pink=粉红色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.gray=灰色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.silver=淡灰色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.cyan=青色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.purple=紫色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.blue=蓝色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.brown=棕色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.green=绿色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.red=红色凋零之眼
+block.minecraft.banner.cqrepoured_cq_wither_eyes.black=黑色凋零之眼
 
-block.minecraft.banner.cqrepoured_cq_wither_skull.white=白色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.orange=橘色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.magenta=桃色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.light_blue=淡蓝凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.yellow=黄色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.lime=淡绿凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.pink=粉红凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.gray=灰色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.silver=灰色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.cyan=青色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.purple=紫色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.blue=蓝色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.brown=棕色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.green=绿色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.red=红色凋灵旗
-block.minecraft.banner.cqrepoured_cq_wither_skull.black=黑色凋灵旗
+block.minecraft.banner.cqrepoured_cq_wither_skull.white=白色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.orange=橙色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.magenta=品红色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.light_blue=淡蓝色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.yellow=黄色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.lime=黄绿色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.pink=粉红色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.gray=灰色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.silver=淡灰色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.cyan=青色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.purple=紫色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.blue=蓝色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.brown=棕色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.green=绿色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.red=红色凋灵之首
+block.minecraft.banner.cqrepoured_cq_wither_skull.black=黑色凋灵之首
 
-block.minecraft.banner.cqrepoured_cq_fire.white=白色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.orange=橘色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.magenta=桃色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.light_blue=淡蓝火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.yellow=黄色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.lime=淡绿火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.pink=粉红火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.gray=灰色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.silver=银色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.cyan=青色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.purple=紫色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.blue=蓝色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.brown=棕色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.green=绿色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.red=红色火焰旗
-block.minecraft.banner.cqrepoured_cq_fire.black=黑色火焰旗
+block.minecraft.banner.cqrepoured_cq_fire.white=白色火焰
+block.minecraft.banner.cqrepoured_cq_fire.orange=橙色火焰
+block.minecraft.banner.cqrepoured_cq_fire.magenta=品红色火焰
+block.minecraft.banner.cqrepoured_cq_fire.light_blue=淡蓝色火焰
+block.minecraft.banner.cqrepoured_cq_fire.yellow=黄色火焰
+block.minecraft.banner.cqrepoured_cq_fire.lime=黄绿色火焰
+block.minecraft.banner.cqrepoured_cq_fire.pink=粉红色火焰
+block.minecraft.banner.cqrepoured_cq_fire.gray=灰色火焰
+block.minecraft.banner.cqrepoured_cq_fire.silver=淡灰色火焰
+block.minecraft.banner.cqrepoured_cq_fire.cyan=青色火焰
+block.minecraft.banner.cqrepoured_cq_fire.purple=紫色火焰
+block.minecraft.banner.cqrepoured_cq_fire.blue=蓝色火焰
+block.minecraft.banner.cqrepoured_cq_fire.brown=棕色火焰
+block.minecraft.banner.cqrepoured_cq_fire.green=绿色火焰
+block.minecraft.banner.cqrepoured_cq_fire.red=红色火焰
+block.minecraft.banner.cqrepoured_cq_fire.black=黑色火焰
 
-block.minecraft.banner.cqrepoured_cq_emerald.white=白色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.orange=橘色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.magenta=桃色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.light_blue=淡蓝翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.yellow=黄色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.lime=淡绿翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.pink=粉红翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.gray=灰色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.silver=银色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.cyan=青色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.purple=紫色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.blue=蓝色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.brown=棕色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.green=绿色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.red=红色翡翠旗
-block.minecraft.banner.cqrepoured_cq_emerald.black=黑色翡翠旗
+block.minecraft.banner.cqrepoured_cq_emerald.white=白色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.orange=橙色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.magenta=品红色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.light_blue=淡蓝色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.yellow=黄色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.lime=黄绿色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.pink=粉红色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.gray=灰色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.silver=淡灰色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.cyan=青色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.purple=紫色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.blue=蓝色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.brown=棕色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.green=绿色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.red=红色翡翠
+block.minecraft.banner.cqrepoured_cq_emerald.black=黑色翡翠
 
-block.minecraft.banner.cqrepoured_cq_bones.white=白色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.orange=橘色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.magenta=桃色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.light_blue=淡蓝死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.yellow=黄色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.lime=淡绿死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.pink=粉红死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.gray=灰色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.silver=银色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.cyan=青色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.purple=紫色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.blue=蓝色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.brown=棕色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.green=绿色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.red=红色死骨旗
-block.minecraft.banner.cqrepoured_cq_bones.black=黑色死骨旗
+block.minecraft.banner.cqrepoured_cq_bones.white=白色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.orange=橙色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.magenta=品红色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.light_blue=淡蓝色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.yellow=黄色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.lime=黄绿色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.pink=粉红色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.gray=灰色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.silver=淡灰色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.cyan=青色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.purple=紫色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.blue=蓝色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.brown=棕色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.green=绿色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.red=红色亡者之骨
+block.minecraft.banner.cqrepoured_cq_bones.black=黑色亡者之骨
 
 block.minecraft.banner.cqrepoured_walker_black_bg.white=白色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.orange=橙色旗织物
-block.minecraft.banner.cqrepoured_walker_black_bg.magenta=洋红旗织物
-block.minecraft.banner.cqrepoured_walker_black_bg.light_blue=淡蓝旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.magenta=品红色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.light_blue=淡蓝色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.yellow=黄色旗织物
-block.minecraft.banner.cqrepoured_walker_black_bg.lime=淡绿旗织物
-block.minecraft.banner.cqrepoured_walker_black_bg.pink=粉红旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.lime=Lime 旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.pink=粉红色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.gray=灰色旗织物
-block.minecraft.banner.cqrepoured_walker_black_bg.silver=银色旗织物
+block.minecraft.banner.cqrepoured_walker_black_bg.silver=淡灰色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.cyan=青色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.purple=紫色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.blue=蓝色旗织物
@@ -111,74 +111,77 @@ block.minecraft.banner.cqrepoured_walker_black_bg.green=绿色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.red=红色旗织物
 block.minecraft.banner.cqrepoured_walker_black_bg.black=黑色旗织物
 
-block.minecraft.banner.cqrepoured_walker_border.white=白色贴边
-block.minecraft.banner.cqrepoured_walker_border.orange=橙色贴边
-block.minecraft.banner.cqrepoured_walker_border.magenta=洋红贴边
-block.minecraft.banner.cqrepoured_walker_border.light_blue=淡蓝贴边
-block.minecraft.banner.cqrepoured_walker_border.yellow=黄色贴边
-block.minecraft.banner.cqrepoured_walker_border.lime=淡绿贴边
-block.minecraft.banner.cqrepoured_walker_border.pink=粉红贴边
-block.minecraft.banner.cqrepoured_walker_border.gray=灰色贴边
-block.minecraft.banner.cqrepoured_walker_border.silver=银色贴边
-block.minecraft.banner.cqrepoured_walker_border.cyan=青色贴边
-block.minecraft.banner.cqrepoured_walker_border.purple=紫色贴边
-block.minecraft.banner.cqrepoured_walker_border.blue=蓝色贴边
-block.minecraft.banner.cqrepoured_walker_border.brown=棕色贴边
-block.minecraft.banner.cqrepoured_walker_border.green=绿色贴边
-block.minecraft.banner.cqrepoured_walker_border.red=红色贴边
-block.minecraft.banner.cqrepoured_walker_border.black=黑色贴边
 
-block.minecraft.banner.cqrepoured_walker_inner_border.white=白色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.orange=橙色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.magenta=洋红粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.light_blue=淡蓝粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.yellow=黄色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.lime=淡绿粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.pink=粉红粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.gray=灰色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.silver=银色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.cyan=青色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.purple=紫色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.blue=蓝色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.brown=棕色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.green=绿色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.red=红色粗织物
-block.minecraft.banner.cqrepoured_walker_inner_border.black=黑色粗织物
+block.minecraft.banner.cqrepoured_walker_border.white=白色镶边
+block.minecraft.banner.cqrepoured_walker_border.orange=橙色镶边
+block.minecraft.banner.cqrepoured_walker_border.magenta=品红色镶边
+block.minecraft.banner.cqrepoured_walker_border.light_blue=蓝色镶边
+block.minecraft.banner.cqrepoured_walker_border.yellow=黄色镶边
+block.minecraft.banner.cqrepoured_walker_border.lime=Lime 镶边
+block.minecraft.banner.cqrepoured_walker_border.pink=粉红色镶边
+block.minecraft.banner.cqrepoured_walker_border.gray=灰色镶边
+block.minecraft.banner.cqrepoured_walker_border.silver=淡灰色镶边
+block.minecraft.banner.cqrepoured_walker_border.cyan=青色镶边
+block.minecraft.banner.cqrepoured_walker_border.purple=紫色镶边
+block.minecraft.banner.cqrepoured_walker_border.blue=蓝色镶边
+block.minecraft.banner.cqrepoured_walker_border.brown=棕色镶边
+block.minecraft.banner.cqrepoured_walker_border.green=绿色镶边
+block.minecraft.banner.cqrepoured_walker_border.red=红色镶边
+block.minecraft.banner.cqrepoured_walker_border.black=黑色镶边
 
-block.minecraft.banner.cqrepoured_walker_skull.white=白色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.orange=橙色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.magenta=洋红幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.light_blue=淡蓝幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.yellow=黄色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.lime=淡绿幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.pink=粉红幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.gray=灰色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.silver=银色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.cyan=青色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.purple=紫色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.blue=蓝色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.brown=棕色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.green=绿色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.red=红色幽谷脸
-block.minecraft.banner.cqrepoured_walker_skull.black=黑色幽谷脸
+block.minecraft.banner.cqrepoured_walker_inner_border.white=白色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.orange=橙色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.magenta=品红色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.light_blue=淡蓝色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.yellow=黄色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.lime=Lime 破布
+block.minecraft.banner.cqrepoured_walker_inner_border.pink=粉红色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.gray=灰色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.silver=淡灰色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.cyan=青色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.purple=紫色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.blue=蓝色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.brown=棕色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.green=绿色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.red=红色破布
+block.minecraft.banner.cqrepoured_walker_inner_border.black=黑色破布
+
+
+block.minecraft.banner.cqrepoured_walker_skull.white=白色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.orange=橙色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.magenta=品红色 漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.light_blue=淡蓝色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.yellow=黄色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.lime=Lime 漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.pink=粉红色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.gray=灰色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.silver=淡灰色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.cyan=青色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.purple=紫色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.blue=蓝色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.brown=棕色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.green=绿色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.red=红色漫步者脸庞
+block.minecraft.banner.cqrepoured_walker_skull.black=黑色漫步者脸庞
 
 
 //Gui
-gui.drops.name=掉落
+gui.drops.name=掉落物
 gui.backpack.name=背包
-gui.alchemy_bag.name=炼金师之囊
-description.gui_exporter.name=仅用于导出地牢的创造模式专用块,选择要导出的区域，然后保存它.
+gui.alchemy_bag.name=炼金术之袋
+description.gui_exporter.name=用于导出地牢的创造模式专用方块。 选择要导出的区域， 然后保存它。
 
 //Other
-item.potion_healing.name=回血药
+item.potion_healing.name=治疗药水
 item.teleport_stone.name=传送石
-item.soul_bottle.name=魂瓶
-item.badge.name=勋章
+item.soul_bottle.name=瓶中灵魂
+item.mob_to_spawner_tool.name=生物生成器
+item.badge.name=徽章
 item.backpack.name=背包
-item.alchemy_bag.name=炼金师之囊
+item.alchemy_bag.name=炼金术之袋
 
 //Dragon Items
-item.helmet_dragon.name=龙之颅
+item.helmet_dragon.name=龙之头盔
 
 //Daggers
 item.dagger_iron.name=铁质匕首
@@ -187,45 +190,82 @@ item.dagger_monking.name=头陀匕首
 item.dagger_ninja.name=忍者匕首
 
 //Swords
-item.sword_turtle.name=巨龟之剑
+item.sword_turtle.name=乌龟之剑
 item.sword_spider.name=蜘蛛之剑
-item.battle_axe_bull.name=猛牛战斧
-item.sword_moonlight.name=月耀
-item.sword_sunshine.name=日冕
+item.battle_axe_bull.name=斗牛之战斧
+item.sword_moonlight.name=月牙之刃
+item.sword_sunshine.name=晨曦之剑
+
+//Shields
+item.cqr_shield_r01.name=猪人盾
+item.cqr_shield_r02.name=海盗盾
+item.cqr_shield_r03.name=幽灵盾
+item.cqr_shield_r04.name=哥布林盾
+item.cqr_shield_r05.name=木乃伊盾
+item.cqr_shield_r06.name=彩虹盾
+item.cqr_shield_r07.name=生锈的盾
+item.cqr_shield_r08.name=乌龟盾
+item.cqr_shield_r09.name=鱿鱼盾
 
 //Walker set
-item.sword_walker.name=漫游者之剑
-item.shield_walker.name=漫游者之盾
+item.sword_walker.name=漫步者之剑
+item.shield_walker.name=深渊王之盾
+
+//Shields
+item.shield_bull.name=冰牛盾
+item.shield_carl.name=卡尔
+item.shield_dragonslayer.name=龙盾
+item.shield_fire.name=火焰盾
+item.shield_goblin.name=哥布林盾
+item.shield_monking.name=头陀盾
+item.shield_moon.name=月牙盾
+item.shield_mummy.name=绷带盾
+item.shield_pigman.name=猪人盾
+item.shield_pirate.name=海盗盾
+item.shield_pirate2.name=海盗盾
+item.shield_rainbow.name=彩虹盾
+item.shield_reflective.name=镜之盾
+item.shield_rusted.name=生锈的盾
+item.shield_skeleton_friends.name=骷髅盾
+item.shield_specter.name=幽灵盾
+item.shield_spider.name=蜘蛛盾
+item.shield_sun.name=太阳盾
+item.shield_tomb.name=古墓盾
+item.shield_triton.name=鱿鱼盾
+item.shield_turtle.name=龟步盾盾
+item.shield_warped.name=扭曲的盾
+item.shield_walker_normal.name=漫游者之盾
+item.shield_zombie.name=僵尸盾
 
 //Great Swords
-item.great_sword_monking.name=头陀巨剑
-item.great_sword_bull.name=猛牛巨剑
-item.great_sword_diamond.name=钻石巨剑
-item.great_sword_iron.name=铁质巨剑
+item.great_sword_monking.name=头陀大剑
+item.great_sword_bull.name=公牛巨剑
+item.great_sword_diamond.name=钻石大剑
+item.great_sword_iron.name=铁质大剑
 
 //Staves
 item.staff.name=法杖
-item.staff_fire.name=燃烧法杖
-item.staff_vampiric.name=吸血鬼法杖
-item.staff_wind.name=风啸法杖
+item.staff_fire.name=烈焰法杖
+item.staff_vampiric.name=吸血法杖
+item.staff_wind.name=风之法杖
 item.staff_poison.name=剧毒法杖
 item.staff_spider.name=蜘蛛法杖
-item.staff_gun.name=枪杖
-item.staff_healing.name=治愈法杖
+item.staff_gun.name=火枪法杖
+item.staff_healing.name=治疗法杖
 item.staff_thunder.name=雷电法杖
 
 //Guns
-item.revolver.name=左轮
-item.captain_revolver.name=左轮-船长式样
-item.musket.name=滑膛枪
-item.musket_iron.name=铁刺刀滑膛枪
-item.musket_diamond.name=钻刺刀滑膛枪
-item.musket_monking.name=头陀刺刀滑膛枪
-item.bullet_iron.name=铁质弹药
-item.bullet_gold.name=金质弹药
-item.bullet_diamond.name=钻石弹药
-item.bullet_fire.name=燃烧弹药
-item.cannon_ball.name=加农炮炮弹
+item.revolver.name=左轮手枪
+item.captain_revolver.name=海盗船长的左轮枪
+item.musket.name=火枪
+item.musket_iron.name=铁质刺刀火枪
+item.musket_diamond.name=钻石刺刀火枪
+item.musket_monking.name=头陀刺刀火枪
+item.bullet_iron.name=铁质子弹
+item.bullet_gold.name=黄金子弹
+item.bullet_diamond.name=钻石子弹
+item.bullet_fire.name=烈焰子弹
+item.cannon_ball.name=火炮炮弹
 item.flamethrower.name=火焰喷射器
 
 //Cloud Items
@@ -236,128 +276,128 @@ item.feather_golden.name=黄金羽毛
 item.bone_monking.name=头陀之骨
 
 //Inquisition Armor
-item.helmet_inquisition.name=信仰头盔
-item.chestplate_inquisition.name=信仰胸甲
-item.leggings_inquisition.name=信仰腿甲
-item.boots_inquisition.name=信仰靴子
+item.helmet_inquisition.name=宗教头盔
+item.chestplate_inquisition.name=宗教胸甲
+item.leggings_inquisition.name=宗教腿甲
+item.boots_inquisition.name=宗教靴子
 
 //Bull Armor
-item.helmet_bull.name=猛牛头盔
-item.chestplate_bull.name=猛牛胸甲
-item.leggings_bull.name=猛牛护胫
-item.boots_bull.name=猛牛重靴
-item.leather_bull.name=猛牛的硬皮
-item.horn_bull.name=猛牛的尖角
+item.helmet_bull.name=公牛头盔
+item.chestplate_bull.name=公牛胸甲
+item.leggings_bull.name=公牛腿甲
+item.boots_bull.name=公牛靴子
+item.leather_bull.name=公牛皮革
+item.horn_bull.name=公牛角
 
 //Turtle Armor
-item.helmet_turtle.name=巨龟头盔
-item.chestplate_turtle.name=巨龟胸铠
-item.leggings_turtle.name=巨龟护胫
-item.boots_turtle.name=巨龟重靴
-item.scale_turtle.name=巨龟的鳞片
+item.helmet_turtle.name=乌龟头盔
+item.chestplate_turtle.name=乌龟胸甲
+item.leggings_turtle.name=乌龟腿甲
+item.boots_turtle.name=乌龟靴子
+item.scale_turtle.name=龟鳞
 
 //Slime Armor
-item.helmet_slime.name=史莱姆头套
-item.chestplate_slime.name=史莱姆之躯
-item.leggings_slime.name=史莱姆下着
-item.boots_slime.name=史莱姆之脚
-item.ball_slime.name=再生粘球
+item.helmet_slime.name=史莱姆头盔
+item.chestplate_slime.name=史莱姆胸甲
+item.leggings_slime.name=史莱姆腿甲
+item.boots_slime.name=史莱姆靴子
+item.ball_slime.name=再生史莱姆球
 
 //Spider Armor
-item.helmet_spider.name=猛蛛头盔
-item.chestplate_spider.name=猛蛛胸甲
-item.leggings_spider.name=猛蛛护腿
-item.boots_spider.name=猛蛛之靴
-item.leather_spider.name=巨猛蛛的韧皮
-item.giant_spider_poison.name=巨猛蛛的毒液
+item.helmet_spider.name=蜘蛛头盔
+item.chestplate_spider.name=蜘蛛胸甲
+item.leggings_spider.name=蜘蛛腿甲
+item.boots_spider.name=蜘蛛靴子
+item.leather_spider.name=蜘蛛皮革
+item.giant_spider_poison.name=巨蛛毒液
 
 //Heavy Diamond Armor
-item.helmet_heavy_diamond.name=钻石重盔
-item.chestplate_heavy_diamond.name=钻石重甲
-item.leggings_heavy_diamond.name=钻石裙甲
-item.boots_heavy_diamond.name=钻石重靴
+item.helmet_heavy_diamond.name=重型钻石头盔
+item.chestplate_heavy_diamond.name=重型钻石胸甲
+item.leggings_heavy_diamond.name=重型钻石腿甲
+item.boots_heavy_diamond.name=重型钻石靴子
 
 //Heavy Iron Armor
-item.helmet_heavy_iron.name=金属重盔
-item.chestplate_heavy_iron.name=金属重甲
-item.leggings_heavy_iron.name=金属裙甲
-item.boots_heavy_iron.name=金属重靴
+item.helmet_heavy_iron.name=重型铁质头盔
+item.chestplate_heavy_iron.name=重型铁质胸甲
+item.leggings_heavy_iron.name=重型铁质腿甲
+item.boots_heavy_iron.name=重型铁质靴子
 
 //Blocks
 tile.exporter.name=输出方块
-tile.spawner.name=刷怪器
-tile.null_block.name=空的块
-tile.unlit_torch.name=未燃的火炬
+tile.spawner.name=生物生成器
+tile.null_block.name=空的方块
+tile.unlit_torch.name=未点燃的火把
 tile.table_oak.name=橡木桌
-tile.table_spruce.name=云杉桌
-tile.table_birch.name=桦木桌
-tile.table_jungle.name=丛林桌
-tile.table_acacia.name=合欢木桌
-tile.table_dark.name=黑橡木桌
+tile.table_spruce.name=云杉木桌
+tile.table_birch.name=白桦木桌
+tile.table_jungle.name=丛林木桌
+tile.table_acacia.name=金合欢木桌
+tile.table_dark.name=深色橡木桌
 
 //Andesite blocks
-tile.andesite_carved.name=錾制安山岩
-tile.andesite_pillar.name=安山岩石柱
-tile.andesite_cube.name=安山岩立方
-tile.andesite_scale.name=平滑安山岩
-tile.andesite_square.name=安山岩半砖
-tile.andesite_small.name=小型安山岩砖
-tile.andesite_large.name=大型安山岩砖
+tile.andesite_carved.name=雕刻的安山岩
+tile.andesite_pillar.name=竖纹安山岩
+tile.andesite_cube.name=安山岩立方体
+tile.andesite_scale.name=安山岩碎片
+tile.andesite_square.name=安山岩 Square
+tile.andesite_small.name=小型安山岩石砖
+tile.andesite_large.name=大型安山岩石砖
 
 //Diorite blocks
-tile.diorite_carved.name=錾制闪长岩
-tile.diorite_pillar.name=闪长岩石柱
-tile.diorite_cube.name=闪长岩立方
-tile.diorite_scale.name=平滑闪长岩
-tile.diorite_square.name=闪长岩半砖
-tile.diorite_small.name=小型闪长岩砖
-tile.diorite_large.name=大型闪长岩砖
+tile.diorite_carved.name=雕刻的闪长岩
+tile.diorite_pillar.name=竖纹闪长岩
+tile.diorite_cube.name=闪长岩立方体
+tile.diorite_scale.name=闪长岩碎片
+tile.diorite_square.name=闪长岩 Square
+tile.diorite_small.name=小型闪长岩石砖
+tile.diorite_large.name=大型闪长岩石砖
 
 //Diorite blocks
-tile.granite_carved.name=錾制花岗岩
-tile.granite_pillar.name=花岗岩石柱
-tile.granite_cube.name=花岗岩立方
-tile.granite_scale.name=平滑花岗岩
-tile.granite_square.name=花岗岩半砖
-tile.granite_small.name=小型花岗岩砖
-tile.granite_large.name=大型花岗岩砖
+tile.granite_carved.name=雕刻的花岗岩
+tile.granite_pillar.name=竖纹花岗岩
+tile.granite_cube.name=花岗岩立方体
+tile.granite_scale.name=花岗岩碎片
+tile.granite_square.name=花岗岩Square
+tile.granite_small.name=小型花岗岩石砖
+tile.granite_large.name=大型花岗岩石砖
 
 //Prismarine blocks
-tile.prismarine_carved.name=錾制海晶石
-tile.prismarine_pillar.name=海晶石柱
-tile.prismarine_cube.name=海晶石立方
-tile.prismarine_square.name=海晶石半砖
+tile.prismarine_carved.name=雕刻的海晶石
+tile.prismarine_pillar.name=竖纹海晶石
+tile.prismarine_cube.name=海晶石立方体
+tile.prismarine_square.name=海晶石Square
 tile.prismarine_small.name=小型海晶石砖
 tile.prismarine_large.name=大型海晶石砖
 
 //Endstone blocks
-tile.endstone_carved.name=錾制末地石
-tile.endstone_pillar.name=末地石柱
-tile.endstone_cube.name=末地石立方
-tile.endstone_scale.name=平滑末地石
-tile.endstone_square.name=末地石半砖
+tile.endstone_carved.name=雕刻的末地石
+tile.endstone_pillar.name=竖纹末地石
+tile.endstone_cube.name=末地石立方体
+tile.endstone_scale.name=末地石碎片
+tile.endstone_square.name=末地石 Square
 tile.endstone_small.name=小型末地石砖
 
 //Purpur blocks
-tile.purpur_carved.name=錾制紫珀块
-tile.purpur_cube.name=紫珀块立方
-tile.purpur_scale.name=平滑紫珀块
-tile.purpur_small.name=小型紫珀块砖
-tile.purpur_large.name=大型紫珀块砖
+tile.purpur_carved.name=雕刻的紫珀块
+tile.purpur_cube.name=紫珀块立方体
+tile.purpur_scale.name=紫珀块碎片
+tile.purpur_small.name=小型紫珀块石砖
+tile.purpur_large.name=大型紫珀块石砖
 
-//Red Netherbrick blocks
-tile.red_netherbrick_carved.name=錾制下界砖块
-tile.red_netherbrick_pillar.name=下界块柱
-tile.red_netherbrick_cube.name=下界砖块立方
-tile.red_netherbrick_scale.name=平滑下界砖块
-tile.red_netherbrick_square.name=下界半砖
-tile.red_netherbrick_large.name=大型下界砖块
+//RedNetherbrick blocks
+tile.red_netherbrick_carved.name=雕刻的红色地狱砖块
+tile.red_netherbrick_pillar.name=竖纹红色地狱砖块
+tile.red_netherbrick_cube.name=红色地狱砖立方体
+tile.red_netherbrick_scale.name=红色地狱砖块碎片
+tile.red_netherbrick_square.name=红色地狱砖块 Square
+tile.red_netherbrick_large.name=大型红色地狱砖块
 
 //Stone blocks
 tile.stone_pillar.name=石柱
-tile.stone_cube.name=石立方
-tile.stone_scale.name=平滑石块
-tile.stone_square.name=石半砖
+tile.stone_cube.name=石立方体
+tile.stone_scale.name=石碎片
+tile.stone_square.name=石Square
 tile.stone_small.name=小型石砖
 
 //Exporter chests
@@ -369,16 +409,16 @@ tile.exporter_chest_vanilla_blacksmith.name=输出箱 - 村庄铁匠铺
 tile.exporter_chest_vanilla_bonus.name=输出箱 - 奖励箱
 tile.exporter_chest_vanilla_dungeon.name=输出箱 - 地牢
 tile.exporter_chest_vanilla_end_city.name=输出箱 - 末地城
-tile.exporter_chest_vanilla_igloo.name=输出箱 - 冰屋
+tile.exporter_chest_vanilla_igloo.name=输出箱 - 雪屋
 tile.exporter_chest_vanilla_jungle.name=输出箱 - 丛林神庙箱子
 tile.exporter_chest_vanilla_jungle_dispenser.name=输出箱 - 丛林神庙发射器
-tile.exporter_chest_vanilla_mansion.name=输出箱 - 丛林宅邸
-tile.exporter_chest_vanilla_mineshaft.name=输出箱 - 放弃矿道
-tile.exporter_chest_vanilla_nether.name=输出箱 -下界要塞
-tile.exporter_chest_vanilla_pyramid.name=输出箱 - 沙漠神殿
+tile.exporter_chest_vanilla_mansion.name=输出箱 - 林地府邸
+tile.exporter_chest_vanilla_mineshaft.name=输出箱 - 废弃矿井
+tile.exporter_chest_vanilla_nether.name=输出箱 - 下界要塞
+tile.exporter_chest_vanilla_pyramid.name=输出箱 - 神殿
 tile.exporter_chest_vanilla_stronghold.name=输出箱 - 要塞走廊
 tile.exporter_chest_vanilla_stronghold_library.name=输出箱 - 要塞图书馆
-tile.exporter_chest_vanilla_stronghold_storeroom.name=输出箱 - 要塞矿道
+tile.exporter_chest_vanilla_stronghold_storeroom.name=输出箱 - 要塞矿井
 tile.exporter_chest_custom_1.name=输出箱 - 自定义 1
 tile.exporter_chest_custom_2.name=输出箱 - 自定义 2
 tile.exporter_chest_custom_3.name=输出箱 - 自定义 3
@@ -395,56 +435,76 @@ tile.exporter_chest_custom_13.name=输出箱 - 自定义 13
 tile.exporter_chest_custom_14.name=输出箱 - 自定义 14
 
 //Descriptions
-description.spider_armor.name=穿上它成为蜘蛛.整套可以让你爬墙跳得更高.
-description.spider_sword.name=从使这把简单的剑成为英雄之刃的尖牙中涌出, 一旦你的敌人被这把剑咬住, 巨猛蛛流淌的毒液就无法止住.
-description.bull_armor.name=穿上猛牛成为猛男(笑). 全套可以让你高速前进, 以及摧毁途经的一切！？.
-description.great_sword.name=按住鼠标右键单击以打击大面积区域.
-description.turtle_armor.name=神龟的力量, 如果你用它的外壳做一套完整的衣服, 会让你更快地恢复生命值. 背壳还可以防止后部的大部分伤害.
-description.slime_armor.name=当一整套再生粘液接触到你的皮肤时, 你能感觉到你的最大生命值溢出, 当你受到伤害时, 一小型史莱姆可能会出现, 如果你能接触到它,它可以恢复你的健康.
-description.cloud_boots.name=那些信奉先知所说的天使之歌的人是不会错的. 一跃成一跃，轻快的行走会降低声音的速度, 没有一次跌倒能阻止被选中的人, 何况有了这双靴子，以及你自己. 
-//description.dragon_helmet.name=你能感觉到龙的力量在你的血管里流动. 曾经对你构成威胁的攻击现在似乎毫无意义, 而你自身的攻击力是原来的两倍!
-description.dagger.name=前进时单击鼠标右键
-description.ninja_dagger.name=前进时单击鼠标右键.他们说，这把匕首的使用者可以随意消失而不留痕迹. 你可以用鼠标右键来模仿这种行为, 但是当你从视线中消失的时候, 你不会走得太远. 
-description.bull_battle_axe.name=Grux 右键单击地面. 制造地震. 向前狂奔. 将敌人撞得粉碎的滋味太棒了. "咕噜..咕噜".
-description.walker_set.name=传说任何向漫游之王出箭的人，都会在背后发现一把剑,而王就在背后. 也许收集他的剑和盾可以让你拥有同样的能力?
-description.gun.name=右键发射, 需要弹药.
-description.bullet_damage.name=弹药伤害
-description.bullet_fire.name=命中即点燃
+description.spider_armor.name=穿上蜘蛛铠甲如同变成蜘蛛。 全套装备可以让你攀爬墙壁并且跳得更高。
+description.spider_sword.name=毒液从尖牙中流出，使这把看似简单的剑成为英雄之刃，一旦你的敌人被这把剑咬住，巨蛛尸罗的毒液就不停的喷涌。
+description.bull_armor.name=穿上公牛铠甲如同变成公牛， 全套装备可以让你拥有更快的冲刺速度， 并且摧毁途径的一切。
+description.great_sword.name=按住鼠标右键可施展大范围攻击，
+description.turtle_armor.name=巨龟的力量，如果你用它的壳做一套完整的装备并穿上，会让你更快地恢复生命值。背壳还可以防止从后部造成的大部分伤害。
+description.slime_armor.name=当一整套的史莱姆装甲接触到你的皮肤时，你会感觉到你最大的生命值在溢出，当你受到伤害时，可能会出现一个小的史莱姆，如果你能接触到它，它可以恢复你的生命值。
+description.cloud_boots.name=那些踏上天使之歌的先知说，他们从不犯错。轻轻一跃便能飞升，轻快地行走便打破了声音的速度， 任何失败都无法阻止被选中的人， 而当你有了这双靴子, 你也不例外。
+//description.dragon_helmet.name=你能感觉到龙的力量在你的血管里流淌。曾经对你构成威胁的攻击现在看来毫无意义了，而你自身的攻击力却是原来的两倍！
+description.dagger.name=移动时按下鼠标右键以向前跳跃。
+description.ninja_dagger.name=移动时按下鼠标右键以向前跳跃。 据说使用这把匕首的人可以来无影去无踪。 你也许可以用潜行以及鼠标右键来模仿这种行为，但是注意，当你消失在别人的视野中时，你并没有移动多远。
+description.bull_battle_axe.name=右击地面制造地震
+description.walker_set.name=传说任何向深渊漫步者之王射箭的人都会突然发现在他们背后多了一把剑，而王就在他们背后。也许得到他的剑和他的盾可以让你拥有同样的能力？
+description.gun.name=右键发射，需要子弹。
+description.bullet_damage.name=子弹伤害
+description.bullet_fire.name=击中后点燃目标
 description.fire_rate.name=射速
 description.accuracy.name=精准度
-description.click_shift.name=按住SHIFT键可查看说明
+description.click_shift.name=按住shift键查看说明
 description.rear_damage.name=背刺伤害
-description.charging.name=充能...
-description.turtle_armor_charging.name=冷却能力, 剩余时间: 
-description.healing_potion.name=喝下回复2心.
-description.teleport_stone.name=远古种族创造的神秘物体. 按住右键单击以设置位置，然后再次执行该操作以传送到那里.按住鼠标右键单击以删除保存的位置.
-description.teleport_stone_position.name=当前位置:
-description.staff_fire.name=火焰吞噬了那些穿过你的道路的人, 只要简单的右击 便让他们感受到你的怒火. 顺便点燃火把~~
-description.staff_spider.name=右键射击, 兄弟这不用教了吧.
-description.staff_gun.name=这是一支棍子上的枪, 兄弟, 那些矮人真是天才...
-description.staff_healing.name=左键点击可以恢复你所需要的生命值, 我真的不记得这是怎么回事, 但出于贪婪，我不得不对所有这些进行描述.
-description.contains.name=包含:
+description.charging.name=充能中...
+description.turtle_armor_charging.name=冷却能力，剩余时间：
+description.healing_potion.name=喝下可以恢复2颗心
+description.teleport_stone.name=古代民族创造的神秘物体。按住右键单击以设置位置，然后再次执行此操作以传送到该位置。潜行并按住鼠标右键单击以删除保存的位置。
+description.teleport_stone_position.name=当前位置：
+description.staff_fire.name=火焰吞噬了那些穿过你的道路的人，只需简单的右击，让他们感受你的怒火吧！顺便也点燃火把。
+description.staff_spider.name=右击发射你的粘稠物质，（←_← ） 伙计。。。
+description.staff_gun.name=这是一把插在棍子上的枪。哦朋友，那些小矮人真是个天才！
+description.staff_healing.name=左键单击可以恢复你所需要的生命值，我不记得这是怎么回事，但我出于好玩不得不对所有这些进行描述。
+description.contains.name=包含：
 description.empty.name=空的
-description.soul_bottle.name=左键单击一个生物来存储它，右键单击来召唤那个生物. 也能变成这种生物的刷怪笼.
-description.flamethrower.name=毁灭者原型机-Fyrbird - MK7 22mm喷嘴火焰喷射装置. 鼠标右键应直接向前推火. 内部的凝胶弹仓应该能够从库存中的任何地方提取煤泥. 目前的模型需要定期重新加载，因为还没有发现煤泥的再生来源. 
-description.badge.name=创造模式专属. 右键点击生物来打开GUI, 放置在此GUI中的物品稍后可以通过再次用徽章左键单击来访问，并且当附属的生物被杀死时将会掉落.
-description.backpack.name=右键打开.
-description.alchemy_bag.name=右键打开. 只能存放药水.
-//description.woodshot.name=右键发射抓钩. 当抓钩命中木质方块时, 你将被拉拽过去.
-//description.hookshot.name=右键发射抓钩. 当抓钩命中一个方块时, 你将被拉拽过去.
-//description.longshot.name=右键发射抓钩. 当抓钩命中一个方块时, 你将被拉拽过去.
-//description.manualhook.name=右键发射抓钩. 一旦钩子碰到一个方块，你可以按住右键以靠近它, 潜行使用将会远离它.
-//description.spidershot.name=右键发射网. 一旦网钩碰到一个方块，你可以按住右键单击以靠近它, 潜行使用将会远离它.
-//description.hooksword.name=右键发射抓钩. 一旦钩子碰到一个方块，你可以按住右键以靠近它, 潜行使用将会远离它.
-description.moonlight.name=刀刃上的铭文写着“我的力量只能在月亮的光中被唤醒”
-description.sunshine.name=刀刃上的铭文写着：“我的力量只能在阳光下唤醒”
+description.soul_bottle.name=左键单击一个怪物来储存它，右键单击来召唤那个怪物。也可以变成这个怪物的刷怪笼。
+description.flamethrower.name=Undertech原型Fyrebird MK7 22mm喷嘴火焰喷射装置。鼠标右键按下应该可以直接向前发射。内部的Gel Cartridges应该能够从库存中的任何地方提取煤泥。由于未发现煤泥的再生来源，目前的模型需要定期修改。 
+description.badge.name=创造模式专属物品,左键单击一个怪物打开一个GUI，放置在这个界面中的物品可以稍后通过再次用徽章左键单击来访问，并且在附属的怪物被杀死时掉落。
+description.backpack.name=右键打开
+description.alchemy_bag.name=右键打开，只能储存药水
+//description.woodshot.name=右键射击抓钩。一旦钩子碰到木块，你就会被拽过去。
+//description.hookshot.name=右键射击抓钩。一旦钩子碰到方块，你就会被拽过去。
+//description.longshot.name=右键射击抓钩。一旦钩子碰到方块，你就会被拽过去。
+//description.manualhook.name=右键射击抓钩。一旦钩子碰到一个方块，你可以按住鼠标右键向它靠近，并在这样做时按潜行以离开它。
+//description.spidershot.name=右键单击以射击网。一旦钩子碰到一个方块，你可以按住鼠标右键向它靠近，并在这样做时按潜行以离开它。
+//description.hooksword.name=右键射击抓钩。一旦钩子碰到一个方块，你可以按住鼠标右键向它靠近，并在这样做时按潜行以离开它。
+description.moonlight.name=刀刃上的铭文写着“我的力量只能在月光下唤醒”
+description.sunshine.name=刀刃上的铭文写着“我的力量只能在阳光下被唤醒”
 description.attack_damage_at_night.name=夜间攻击伤害
 description.attack_damage_at_day.name=白天攻击伤害
-description.staff_vampiric.name=当你拿着它的时候，这个棒子放射出暗能量. 如果你把它靠近耳朵，你就会听到它的要求. 它的使用很简单：“用鼠标右键单击我”，当你这样做的时候，你会看到它确实发射出的一个抛射物（译者：作者你是不是在调戏我们的智商）. 虽然伤害很轻微，但如果你正好着陆，它会在击中时治愈你. 
-description.staff_wind.name=不管这是做什么，它还不起作用. #TODO（在制品）
-description.staff_poison.name=不管这是做什么，它还不起作用. #TODO（在制品）
-description.staff.name=缺失 #TODO（在制品）
-description.staff_thunder.name=丢失 #TODO（在制品）
+description.staff_vampiric.name=当你握着这根棍子时，它会散发出暗能量。如果你把它移近耳朵，你就会听到它的要求。它的叫法很简单：“右击我”，当你这样做的时候，你会看到，它确实发射了一个抛射物。虽然伤害很小，但如果你把它放在正确的地方，它会在你被击中时治愈你。
+description.staff_wind.name=不管这是做什么的，现在还不起作用。 #TODO
+description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
+description.staff.name=丢失 #TODO
+description.staff_thunder.name=丢失 #TODO
 
 // Mobs
-entity.EntityCQRZombie.name=僵尸兵(CQR)
+entity.dummy.name=木头人(CQR)
+entity.dwarf.name=矮人(CQR)
+entity.enderman.name=末影人(CQR)
+entity.goblin.name=哥布林(CQR)
+entity.golem.name=铁傀儡(CQR)
+entity.illager.name=卫道士(CQR)
+entity.npc.name=NPC(CQR)
+entity.minotaur.name=牛头人(CQR)
+entity.mummy.name=木乃伊(CQR)
+entity.ogre.name=食人魔(CQR)
+entity.orc.name=兽人(CQR)
+entity.pigman.name=猪人(CQR)
+entity.pirate.name=海盗(CQR)
+entity.skeleton.name=骷髅(CQR)
+entity.spectre.name=幽灵(CQR)
+entity.triton.name=鱿鱼人(CQR)
+entity.walker.name=深渊漫步者
+entity.zombie.name=僵尸(CQR)
+
+// Bosses
+entity.nether_dragon.name=血眼白龙
