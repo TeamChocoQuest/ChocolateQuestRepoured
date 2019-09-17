@@ -93,10 +93,12 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ) {
 		this.spawnedInDungeon = true;
-		this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
-		
-		this.dungeonChunkX = dunChunkX;
-		this.dungeonChunkZ = dunChunkZ;
+		if(dungeon.replaceMobs()) {
+			this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
+			
+			this.dungeonChunkX = dunChunkX;
+			this.dungeonChunkZ = dunChunkZ;
+		}
 		
 		this.markDirty();
 	}
@@ -112,13 +114,13 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 						NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
 						if(mobOverride != null && EDungeonMobType.byString(mobOverride) != null) {
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
-							if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
+							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
 								if(newMob.equals(EDungeonMobType.DEFAULT)) {
 									nbt.setString("id", EDungeonMobType.getMobDependingOnDistance(dungeonChunkX /16, dungeonChunkZ /16).toString());
 								} else {
 									nbt.setString("id", newMob.getEntityResourceLocation().toString());
 								}
-							}
+							//}
 						}
 						this.spawnEntityFromNBT(nbt);
 

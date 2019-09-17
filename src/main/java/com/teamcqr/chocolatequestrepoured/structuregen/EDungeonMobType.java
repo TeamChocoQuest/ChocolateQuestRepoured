@@ -11,7 +11,7 @@ import net.minecraft.util.ResourceLocation;
 public enum EDungeonMobType {
 	
 	DEFAULT(null),
-	DONT_REPLACE(null),
+	//DONT_REPLACE(null),
 	DWARF(new ResourceLocation(Reference.MODID, "dwarf")),
 	SKELETON(new ResourceLocation(Reference.MODID, "skeleton")),
 	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie")),
