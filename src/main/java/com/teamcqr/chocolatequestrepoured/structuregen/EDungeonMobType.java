@@ -78,7 +78,7 @@ public enum EDungeonMobType {
 		//if the index is larger than array size +1 -> RANDOM
 		Random rdm = new Random();
 		int indx = -1;
-		if(index > mobWheel.length +1) {
+		if(index >= mobWheel.length) {
 			indx = rdm.nextInt(mobCount.length);
 		} else {
 			indx = index;
