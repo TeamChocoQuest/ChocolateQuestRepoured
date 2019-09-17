@@ -1,0 +1,93 @@
+package com.teamcqr.chocolatequestrepoured.structuregen;
+
+import java.util.Random;
+
+import com.teamcqr.chocolatequestrepoured.util.Reference;
+
+import net.minecraft.util.ResourceLocation;
+
+public enum EDungeonMobType {
+	
+	DEFAULT(null),
+	DONT_REPLACE(null),
+	DWARF(new ResourceLocation(Reference.MODID, "dwarf")),
+	SKELETON(new ResourceLocation(Reference.MODID, "skeleton")),
+	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie")),
+	PIRATE(new ResourceLocation(Reference.MODID, "pirate")),
+	ILLAGER(new ResourceLocation(Reference.MODID, "illager")),
+	WALKER(new ResourceLocation(Reference.MODID, "walker")),
+	SPECTER(new ResourceLocation(Reference.MODID, "spectre")),
+	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman")),
+	ZOMBIE_PIGMAN(new ResourceLocation(Reference.MODID, "pigman")),
+	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur")),
+	ORC(new ResourceLocation(Reference.MODID, "orc")),
+	GOLEM(new ResourceLocation(Reference.MODID, "golem")),
+	GOBLIN(new ResourceLocation(Reference.MODID, "goblin")),
+	MUMMY(new ResourceLocation(Reference.MODID, "mummy")),
+	OGRE(new ResourceLocation(Reference.MODID, "ogre")),
+	TRITON(new ResourceLocation(Reference.MODID, "triton"))
+	;
+	
+	private ResourceLocation resLoc;
+	
+	private EDungeonMobType(ResourceLocation resLoc) {
+		this.resLoc = resLoc;
+	}
+	
+	public ResourceLocation getEntityResourceLocation() {
+		return resLoc;
+	}
+	
+	//X and Z are B L O C K x and z, not chunk x and z!!!
+	public static EDungeonMobType getMobDependingOnDistance(int x, int z) {
+		double distToSpawn = Math.sqrt(x * x + z * z);
+		
+		/*
+		 * Mob spawns depending on distance: Raising from near to far
+		 * 
+		 * Skeleton
+		 * Zombie
+		 * Illager
+		 * Goblin/Orc/Ogre -> Random
+		 * Specter
+		 * Minotaur?
+		 * Endermen
+		 * 
+		 * Distances: Config option for delimitter
+		 * 
+		 */
+		int[] mobCount = new int[] {
+				1,
+				2,
+				1,
+				3,
+				1,
+				1,
+				1
+		};
+		EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
+			new EDungeonMobType[] {SKELETON},
+			new EDungeonMobType[] {ZOMBIE, MUMMY},
+			new EDungeonMobType[] {ILLAGER},
+			new EDungeonMobType[] {GOBLIN, ORC, OGRE},
+			new EDungeonMobType[] {SPECTER},
+			new EDungeonMobType[] {MINOTAUR},
+			new EDungeonMobType[] {ENDERMAN},
+		};
+		int index = new Double(distToSpawn / Reference.CONFIG_HELPER_INSTANCE.getMobChangeDistanceDivisor()).intValue();
+		//if the index is larger than array size +1 -> RANDOM
+		Random rdm = new Random();
+		int indx = -1;
+		if(index > mobWheel.length +1) {
+			indx = rdm.nextInt(mobCount.length);
+		} else {
+			indx = index;
+		}
+		if(indx >= 0) {
+			return mobWheel[indx][rdm.nextInt(mobCount[indx])];
+		}
+		
+		return SKELETON;
+	}
+
+}
