@@ -12,10 +12,8 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerBadge extends Container {
 
-	private final int numRows = 3;
-	private final int numColumns = 3;
-	private ItemStack stack;
-	private EnumHand hand;
+	private final ItemStack stack;
+	private final EnumHand hand;
 
 	public ContainerBadge(InventoryPlayer playerInv, ItemStack stack, EnumHand hand) {
 		this.stack = stack;
@@ -42,8 +40,8 @@ public class ContainerBadge extends Container {
 			}
 		}
 
-		for (int l = 0; l < this.numRows; l++) {
-			for (int m = 0; m < this.numColumns; m++) {
+		for (int l = 0; l < 3; l++) {
+			for (int m = 0; m < 3; m++) {
 				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 3, 62 + m * 18, 17 + l * 18));
 			}
 		}
@@ -51,7 +49,7 @@ public class ContainerBadge extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return true;
+		return playerIn.isCreative();
 	}
 
 	@Override
@@ -63,21 +61,15 @@ public class ContainerBadge extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (index < this.numRows * 9) {
-				if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true)) {
+			if (index > 35) {
+				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false)) {
+			} else if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
-			} else {
-				slot.onSlotChanged();
-			}
 		}
-
 		return itemstack;
 	}
 
@@ -85,7 +77,7 @@ public class ContainerBadge extends Container {
 	public void onContainerClosed(EntityPlayer playerIn) {
 		super.onContainerClosed(playerIn);
 		if (!playerIn.world.isRemote) {
-			playerIn.setHeldItem(this.hand, stack);
+			playerIn.setHeldItem(this.hand, this.stack);
 		}
 	}
 

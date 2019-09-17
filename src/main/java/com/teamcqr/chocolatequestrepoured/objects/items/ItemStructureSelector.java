@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.capability.structureselector.IStructureSelector;
-import com.teamcqr.chocolatequestrepoured.capability.structureselector.StructureSelectorProvider;
+import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelector;
+import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelectorProvider;
 import com.teamcqr.chocolatequestrepoured.network.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -40,7 +40,7 @@ public class ItemStructureSelector extends Item {
 		if (world.getTileEntity(pos) instanceof TileEntityExporter) {
 			if (world.isRemote) {
 				TileEntityExporter tileEntity = (TileEntityExporter) world.getTileEntity(pos);
-				IStructureSelector capability = stack.getCapability(StructureSelectorProvider.STRUCTURE_SELECTOR, null);
+				CapabilityStructureSelector capability = stack.getCapability(CapabilityStructureSelectorProvider.STRUCTURE_SELECTOR, null);
 				BlockPos pos1 = capability.getPos1();
 				BlockPos pos2 = capability.getPos2();
 				if (tileEntity.relativeMode) {
@@ -71,12 +71,12 @@ public class ItemStructureSelector extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return new StructureSelectorProvider();
+		return CapabilityStructureSelectorProvider.createProvider();
 	}
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		IStructureSelector capability = stack.getCapability(StructureSelectorProvider.STRUCTURE_SELECTOR, null);
+		CapabilityStructureSelector capability = stack.getCapability(CapabilityStructureSelectorProvider.STRUCTURE_SELECTOR, null);
 		BlockPos pos1 = capability.getPos1();
 		BlockPos pos2 = capability.getPos2();
 		if (pos1 != null) {
@@ -125,14 +125,14 @@ public class ItemStructureSelector extends Item {
 	}
 
 	public static void setFirstPos(ItemStack stack, BlockPos pos, EntityPlayer player) {
-		stack.getCapability(StructureSelectorProvider.STRUCTURE_SELECTOR, null).setPos1(pos);
+		stack.getCapability(CapabilityStructureSelectorProvider.STRUCTURE_SELECTOR, null).setPos1(pos);
 		if (player.world.isRemote) {
 			player.sendMessage(new TextComponentString("First position set to " + pos));
 		}
 	}
 
 	public static void setSecondPos(ItemStack stack, BlockPos pos, EntityPlayer player) {
-		stack.getCapability(StructureSelectorProvider.STRUCTURE_SELECTOR, null).setPos2(pos);
+		stack.getCapability(CapabilityStructureSelectorProvider.STRUCTURE_SELECTOR, null).setPos2(pos);
 		if (player.world.isRemote) {
 			player.sendMessage(new TextComponentString("Second position set to " + pos));
 		}
