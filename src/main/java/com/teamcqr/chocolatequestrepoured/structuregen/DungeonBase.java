@@ -40,7 +40,8 @@ public class DungeonBase {
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
 	protected boolean useCoverBlock = false;
-	private EDungeonMobType dungeonMob = EDungeonMobType.DONT_REPLACE;
+	private boolean replaceMobs = true;
+	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
 	private boolean spawnBehindWall = false;
 	private int iconID;
 	private FileInputStream fisConfigFile = null;
@@ -78,7 +79,8 @@ public class DungeonBase {
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
-			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DONT_REPLACE.name().toUpperCase()).toUpperCase());
+			this.replaceMobs = PropertyFileHelper.getBooleanProperty(prop, "replaceMobs", false);
+			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
@@ -213,5 +215,9 @@ public class DungeonBase {
 
 	public EDungeonMobType getDungeonMob() {
 		return this.dungeonMob;
+	}
+
+	public boolean replaceMobs() {
+		return this.replaceMobs;
 	}
 }

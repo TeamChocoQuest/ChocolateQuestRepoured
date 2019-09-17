@@ -333,7 +333,7 @@ public class CQStructurePart extends Template {
 				
 				((TileEntitySpawner)te).setDungeonSpawner();
 				
-				if(this.dungeon != null) {
+				if(this.dungeon != null && dungeon.replaceMobs()) {
 					((TileEntitySpawner)te).setInDungeon(this.dungeon, this.dunX, this.dunZ);
 				}
 				
