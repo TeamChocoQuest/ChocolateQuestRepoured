@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -45,6 +46,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
+		this.addLayer(new LayerCQREntityPotion(this));
 	}
 
 	@Override
