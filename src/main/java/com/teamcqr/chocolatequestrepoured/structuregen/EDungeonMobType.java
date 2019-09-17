@@ -28,6 +28,25 @@ public enum EDungeonMobType {
 	TRITON(new ResourceLocation(Reference.MODID, "triton"))
 	;
 	
+	static final int[] mobCount = new int[] {
+			1,
+			2,
+			1,
+			3,
+			1,
+			1,
+			1
+	};
+	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
+		new EDungeonMobType[] {SKELETON},
+		new EDungeonMobType[] {ZOMBIE, MUMMY},
+		new EDungeonMobType[] {ILLAGER},
+		new EDungeonMobType[] {GOBLIN, ORC, OGRE},
+		new EDungeonMobType[] {SPECTER},
+		new EDungeonMobType[] {MINOTAUR},
+		new EDungeonMobType[] {ENDERMAN},
+	};
+	
 	private ResourceLocation resLoc;
 	
 	private EDungeonMobType(ResourceLocation resLoc) {
@@ -56,24 +75,7 @@ public enum EDungeonMobType {
 		 * Distances: Config option for delimitter
 		 * 
 		 */
-		int[] mobCount = new int[] {
-				1,
-				2,
-				1,
-				3,
-				1,
-				1,
-				1
-		};
-		EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
-			new EDungeonMobType[] {SKELETON},
-			new EDungeonMobType[] {ZOMBIE, MUMMY},
-			new EDungeonMobType[] {ILLAGER},
-			new EDungeonMobType[] {GOBLIN, ORC, OGRE},
-			new EDungeonMobType[] {SPECTER},
-			new EDungeonMobType[] {MINOTAUR},
-			new EDungeonMobType[] {ENDERMAN},
-		};
+		
 		int index = new Double(distToSpawn / Reference.CONFIG_HELPER_INSTANCE.getMobChangeDistanceDivisor()).intValue();
 		//if the index is larger than array size +1 -> RANDOM
 		Random rdm = new Random();
