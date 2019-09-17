@@ -6,8 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.ExtraItemHandler;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -490,13 +489,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
-		IExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		return capability.getStackInSlot(slot.getIndex());
 	}
 
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
-		ExtraItemHandler capability = (ExtraItemHandler) this
-				.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		capability.setStackInSlot(slot.getIndex(), stack);
 	}
 

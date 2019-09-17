@@ -50,7 +50,7 @@ public class ContainerSpawner extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
-		return true;
+		return playerIn.isCreative();
 	}
 
 	@Override
@@ -62,21 +62,15 @@ public class ContainerSpawner extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
-			if (index < this.numRows * 9) {
-				if (!this.mergeItemStack(itemstack1, this.numRows * 9, this.inventorySlots.size(), true)) {
+			if (index > 35) {
+				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 0, this.numRows * 9, false)) {
+			} else if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
-				slot.putStack(ItemStack.EMPTY);
-			} else {
-				slot.onSlotChanged();
-			}
 		}
-
 		return itemstack;
 	}
 

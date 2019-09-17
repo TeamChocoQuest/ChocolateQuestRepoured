@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtleProvider;
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.ICapabilityArmorTurtle;
+import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilitySpecialArmor;
+import com.teamcqr.chocolatequestrepoured.capability.armor.turtle.CapabilityTurtleArmorProvider;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -57,12 +57,9 @@ public class ItemArmorTurtle extends ItemArmor {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
 		if (player != null) {
-			ICapabilityArmorTurtle icapability = player.getCapability(CapabilityArmorTurtleProvider.ARMOR_TURTLE_CAPABILITY, null);
-			if (icapability != null) {
-				int cd = icapability.getCooldown();
-				if (cd > 0) {
-					tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + convertCooldown(cd));
-				}
+			CapabilitySpecialArmor icapability = player.getCapability(CapabilityTurtleArmorProvider.CAPABILITY_TURTLE_ARMOR, null);
+			if (icapability != null && icapability.onCooldown()) {
+				tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + convertCooldown(icapability.getCooldown()));
 			}
 		}
 

@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.ArmorCooldownSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.ArmorCooldownSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacketHandler;
@@ -23,6 +25,7 @@ public class ModMessages {
 	public static void registerMessages() {
 		CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(DungeonSyncPacketHandler.class, DungeonSyncPacket.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(ArmorCooldownSyncPacketHandler.class, ArmorCooldownSyncPacket.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, CQSaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);
