@@ -22,12 +22,12 @@ import net.minecraft.world.EnumDifficulty;
 
 public enum EFaction {
 	
-	UNDEAD(new String[] {"WALKERS", "VILLAGERS", "PLAYERS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
-	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
+	UNDEAD(new String[] {"WALKERS", "VILLAGERS", "PLAYERS", "TRITONS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
+	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS", "TRITONS"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
 	WALKERS(new String[] {"UNDEAD", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "PLAYERS", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "NPC"}, new String[] {}, EReputationState.ARCH_ENEMY),
 	DWARVES_AND_GOLEMS(new String[] {"WALKERS", "ENDERMEN", "ILLAGERS"}, new String[] {"VILLAGERS", "NPC", "INQUISITION"}, EReputationState.ACCEPTED),
 	GOBLINS(new String[] {"OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS"}, new String[] {"ENDERMEN", "ILLAGERS"}, EReputationState.ENEMY),
-	ENDERMEN(new String[] {"WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE"}, new String[] {"ILLAGERS", "UNDEAD"}, EReputationState.NEUTRAL),
+	ENDERMEN(new String[] {"WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE", "TRITONS"}, new String[] {"ILLAGERS", "UNDEAD"}, EReputationState.NEUTRAL),
 	//OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	INQUISITION(new String[] {"WALKERS", "ILLAGERS", "UNDEAD", "GOBLINS"}, new String[] {"DWARVES_AND_GOLEMS", "NPC", "VILLAGERS"}, EReputationState.NEUTRAL),
 	ILLAGERS(new String[] {"WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS"}, new String[] {"ENDERMEN", "UNDEAD", "PIRATE"}, EReputationState.NEUTRAL),
