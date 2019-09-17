@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -93,12 +94,10 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ) {
 		this.spawnedInDungeon = true;
-		if(dungeon.replaceMobs()) {
-			this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
-			
-			this.dungeonChunkX = dunChunkX;
-			this.dungeonChunkZ = dunChunkZ;
-		}
+		this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
+		
+		this.dungeonChunkX = dunChunkX;
+		this.dungeonChunkZ = dunChunkZ;
 		
 		this.markDirty();
 	}
@@ -112,7 +111,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 					for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
 						//DONE: Set "id" section of the nbt tag, type is resourcelocation
 						NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
-						if(mobOverride != null && EDungeonMobType.byString(mobOverride) != null) {
+						ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
+						boolean isCurrentCQDummy = (resLocCurrent.getResourceDomain().equalsIgnoreCase(Reference.MODID) && resLocCurrent.getResourcePath().equalsIgnoreCase("dummy"));
+						if(mobOverride != null && isCurrentCQDummy && EDungeonMobType.byString(mobOverride) != null) {
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
 							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
 								if(newMob.equals(EDungeonMobType.DEFAULT)) {
