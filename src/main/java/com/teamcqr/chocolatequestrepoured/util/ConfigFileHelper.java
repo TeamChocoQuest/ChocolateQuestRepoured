@@ -16,6 +16,7 @@ public class ConfigFileHelper {
 	private int wallTowerDistance = 3; //3 -> 2 chunks between each tower
 	private int supportHillWallSize = 8;
 	private int factionKillRepuChangeRadius = 60;
+	private int mobChangeDistance = 1500;
 	private boolean dungeonsInFlat = false;
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
@@ -99,6 +100,10 @@ public class ConfigFileHelper {
 		prop = config.get("general", "mobsFromCQSpawnersDontDespawn", true);
 		mobsSpawnedFromCQSpawnersArePersistent = prop.getBoolean(true);
 		
+		//Divisor for mob type distance
+		prop = config.get("general", "mobTypeChangeDistance", 1500);
+		mobChangeDistance = prop.getInt(1500);
+		
 		config.save();
 	}
 	
@@ -149,6 +154,9 @@ public class ConfigFileHelper {
 	}
 	public boolean areMobsFromCQSpawnersPersistent() {
 		return mobsSpawnedFromCQSpawnersArePersistent;
+	}
+	public int getMobChangeDistanceDivisor() {
+		return mobChangeDistance;
 	}
 
 }
