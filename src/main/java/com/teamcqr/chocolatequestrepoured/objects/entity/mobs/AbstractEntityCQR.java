@@ -36,7 +36,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
@@ -190,19 +192,28 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (player.isCreative() && !player.isSneaking()) {
 			if (!this.world.isRemote) {
 				ItemStack stack = player.getHeldItem(hand);
+				
 				if (stack.getItem() instanceof ItemArmor) {
 					EntityEquipmentSlot slot = getSlotForItemStack(stack);
-					ItemStack armor = this.getItemStackFromSlot(slot);
-
+					
 					this.setItemStackToSlot(slot, stack);
-					if (hand == EnumHand.MAIN_HAND) {
-						player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, armor);
-					} else {
-						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, armor);
-					}
-				} else {
-					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
+					player.setHeldItem(hand, this.getItemStackFromSlot(slot));
+					return true;
 				}
+				
+				if (stack.getItem() instanceof ItemSword) {
+					this.setHeldItem(EnumHand.MAIN_HAND, stack);
+					player.setHeldItem(hand, this.getHeldItemMainhand());
+					return true;
+				}
+				
+				if (stack.getItem() instanceof ItemShield) {
+					this.setHeldItem(EnumHand.OFF_HAND, stack);
+					player.setHeldItem(hand, this.getHeldItemOffhand());
+					return true;
+				}
+				
+				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
 			}
 			return true;
 		}
