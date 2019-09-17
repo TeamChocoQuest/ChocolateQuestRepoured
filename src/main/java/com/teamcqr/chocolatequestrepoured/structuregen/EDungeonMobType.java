@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
@@ -92,6 +94,7 @@ public enum EDungeonMobType {
 		return SKELETON.getEntityResourceLocation();
 	}
 	
+	@Nullable
 	public static EDungeonMobType byString(String name) {
 		for(EDungeonMobType e : EDungeonMobType.values()) {
 			if(e.name().equalsIgnoreCase(name)) {
