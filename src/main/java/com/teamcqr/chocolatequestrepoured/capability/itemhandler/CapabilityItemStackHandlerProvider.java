@@ -1,39 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.capability.itemhandler;
 
-import net.minecraft.nbt.NBTBase;
-import net.minecraft.util.EnumFacing;
+import com.teamcqr.chocolatequestrepoured.capability.CapabilityProviderCQR;
+
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class CapabilityItemStackHandlerProvider implements ICapabilitySerializable<NBTBase> {
+public class CapabilityItemHandlerProvider extends CapabilityProviderCQR<IItemHandler> {
 
-	private IItemHandler instance;
-
-	public CapabilityItemStackHandlerProvider(int slots) {
-		instance = new ItemStackHandler(slots);
+	public CapabilityItemHandlerProvider(Capability<IItemHandler> capability, IItemHandler instance) {
+		super(capability, instance);
 	}
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY;
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.<T>cast(this.instance) : null;
-	}
-
-	@Override
-	public NBTBase serializeNBT() {
-		return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getStorage().writeNBT(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, this.instance, null);
-	}
-
-	@Override
-	public void deserializeNBT(NBTBase nbt) {
-		CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.getStorage().readNBT(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, this.instance, null, nbt);
+	public static CapabilityItemHandlerProvider createProvider(int slots) {
+		return new CapabilityItemHandlerProvider(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, new ItemStackHandler(slots));
 	}
 
 }
