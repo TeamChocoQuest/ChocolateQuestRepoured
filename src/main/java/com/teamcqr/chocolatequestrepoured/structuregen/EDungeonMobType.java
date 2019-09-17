@@ -37,14 +37,14 @@ public enum EDungeonMobType {
 			1,
 			1
 	};
-	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
-		new EDungeonMobType[] {SKELETON},
-		new EDungeonMobType[] {ZOMBIE, MUMMY},
-		new EDungeonMobType[] {ILLAGER},
-		new EDungeonMobType[] {GOBLIN, ORC, OGRE},
-		new EDungeonMobType[] {SPECTER},
-		new EDungeonMobType[] {MINOTAUR},
-		new EDungeonMobType[] {ENDERMAN},
+	static final ResourceLocation[][] mobWheel = new ResourceLocation[][] {
+		new ResourceLocation[] {SKELETON.getEntityResourceLocation()},
+		new ResourceLocation[] {ZOMBIE.getEntityResourceLocation(), MUMMY.getEntityResourceLocation()},
+		new ResourceLocation[] {ILLAGER.getEntityResourceLocation()},
+		new ResourceLocation[] {GOBLIN.getEntityResourceLocation(), ORC.getEntityResourceLocation(), OGRE.getEntityResourceLocation()},
+		new ResourceLocation[] {SPECTER.getEntityResourceLocation()},
+		new ResourceLocation[] {MINOTAUR.getEntityResourceLocation()},
+		new ResourceLocation[] {ENDERMAN.getEntityResourceLocation()},
 	};
 	
 	private ResourceLocation resLoc;
@@ -58,7 +58,7 @@ public enum EDungeonMobType {
 	}
 	
 	//X and Z are B L O C K x and z, not chunk x and z!!!
-	public static EDungeonMobType getMobDependingOnDistance(int x, int z) {
+	public static ResourceLocation getMobDependingOnDistance(int x, int z) {
 		double distToSpawn = Math.sqrt(x * x + z * z);
 		
 		/*
@@ -89,7 +89,7 @@ public enum EDungeonMobType {
 			return mobWheel[indx][rdm.nextInt(mobCount[indx])];
 		}
 		
-		return SKELETON;
+		return SKELETON.getEntityResourceLocation();
 	}
 
 }
