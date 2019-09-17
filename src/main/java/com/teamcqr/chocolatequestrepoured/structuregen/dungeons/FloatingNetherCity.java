@@ -20,6 +20,7 @@ public class FloatingNetherCity extends DungeonBase {
 	private int maxBuildings = 12;
 	private int minIslandDistance = 15;
 	private int maxIslandDistance = 30;
+	private int yFactorHeight = 20;
 	private Block islandMaterial = Blocks.NETHERRACK;
 	private Block chainBlock = Blocks.OBSIDIAN;
 	private Block bridgeBlock = Blocks.NETHER_BRICK;
@@ -126,6 +127,9 @@ public class FloatingNetherCity extends DungeonBase {
 	}
 	public int getMaxIslandDistance() {
 		return this.maxIslandDistance;
+	}
+	public int getYFactorHeight() {
+		return this.yFactorHeight;
 	}
 
 }
