@@ -91,5 +91,14 @@ public enum EDungeonMobType {
 		
 		return SKELETON.getEntityResourceLocation();
 	}
+	
+	public static EDungeonMobType byString(String name) {
+		for(EDungeonMobType e : EDungeonMobType.values()) {
+			if(e.name().equalsIgnoreCase(name)) {
+				return e;
+			}
+		}
+		return null;
+	}
 
 }
