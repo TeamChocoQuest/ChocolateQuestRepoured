@@ -94,7 +94,7 @@ public class ClassicNetherCity extends DungeonBase {
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "  ...");
 		if(structCount != buildingFolder.listFiles().length) {
 			for(File f : buildingFolder.listFiles()) {
-				CQStructure cqs = new CQStructure(f, false);
+				CQStructure cqs = new CQStructure(f, null, 0, 0, false);
 				
 				if(cqs.getSizeX() > longestSide) {
 					longestSide = cqs.getSizeX();

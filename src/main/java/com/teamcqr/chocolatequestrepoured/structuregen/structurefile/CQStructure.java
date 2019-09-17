@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -72,7 +73,7 @@ public class CQStructure {
 		this.newBannerPattern = pattern;
 	}
 	
-	public CQStructure(File file, boolean hasShield) {
+	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
 		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {
@@ -118,7 +119,7 @@ public class CQStructure {
 									
 									BlockPos offsetVector = NBTUtil.BlockPosFromNBT(part.getCompoundTag("offset"));
 									
-									CQStructurePart partStructure = new CQStructurePart();
+									CQStructurePart partStructure = new CQStructurePart(dungeon, dunX, dunZ);
 									partStructure.setNewBannerPattern(newBannerPattern);
 									partStructure.read(part);
 									

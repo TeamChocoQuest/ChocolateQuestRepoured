@@ -75,7 +75,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Builds the chains
 		//TODO: Methods to get central buildings
 		for(BlockPos bp : structureMap.keySet()) {
-			CQStructure structure = new CQStructure(structureMap.get(bp), dungeon.isProtectedFromModifications());
+			CQStructure structure = new CQStructure(structureMap.get(bp), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			BlockPos pastePos = bp.subtract(structure.getSizeAsVec());
 			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());
 			
