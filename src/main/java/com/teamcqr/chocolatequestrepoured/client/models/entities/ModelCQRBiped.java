@@ -2,17 +2,25 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
 public class ModelCQRBiped extends ModelBiped {
 
-	private final ModelRenderer bipedCape;
+	public ModelRenderer bipedLeftArmwear;
+    public ModelRenderer bipedRightArmwear;
+    public ModelRenderer bipedLeftLegwear;
+    public ModelRenderer bipedRightLegwear;
+    public ModelRenderer bipedBodyWear;
+	public ModelRenderer bipedCape;
 	
 	public ModelCQRBiped(float modelSize) {
 		super(modelSize);
 		this.bipedCape = new ModelRenderer(this, 0, 0);
         this.bipedCape.setTextureSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
+        
+        initExtraLayer(modelSize);
 	}
 
 	public ModelCQRBiped(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
@@ -20,6 +28,30 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedCape = new ModelRenderer(this, 0, 0);
         this.bipedCape.setTextureSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
+        
+        initExtraLayer(modelSize);
+	}
+	
+	private void initExtraLayer(float modelSize) {
+		this.bipedLeftArm = new ModelRenderer(this, 32, 48);
+        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, modelSize);
+        this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
+        this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
+        this.bipedLeftArmwear.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+        this.bipedLeftArmwear.setRotationPoint(5.0F, 2.0F, 0.0F);
+        this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
+        this.bipedRightArmwear.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+        this.bipedRightArmwear.setRotationPoint(-5.0F, 2.0F, 10.0F);
+        
+        this.bipedLeftLegwear = new ModelRenderer(this, 0, 48);
+        this.bipedLeftLegwear.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+        this.bipedLeftLegwear.setRotationPoint(1.9F, 12.0F, 0.0F);
+        this.bipedRightLegwear = new ModelRenderer(this, 0, 32);
+        this.bipedRightLegwear.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+        this.bipedRightLegwear.setRotationPoint(-1.9F, 12.0F, 0.0F);
+        this.bipedBodyWear = new ModelRenderer(this, 16, 32);
+        this.bipedBodyWear.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, modelSize + 0.25F);
+        this.bipedBodyWear.setRotationPoint(0.0F, 0.0F, 0.0F);
 	}
 	
     public void renderCape(float scale)
@@ -36,6 +68,12 @@ public class ModelCQRBiped extends ModelBiped {
     {
         super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
+        copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
+        copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
+        copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
+        copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
+        copyModelAngles(this.bipedBody, this.bipedBodyWear);
+
         if (entityIn.isSneaking())
         {
             this.bipedCape.rotationPointY = 2.0F;
@@ -50,6 +88,29 @@ public class ModelCQRBiped extends ModelBiped {
     {
         super.setVisible(visible);
         this.bipedCape.showModel = visible;
+        
+        this.bipedLeftArmwear.showModel = visible;
+        this.bipedRightArmwear.showModel = visible;
+        this.bipedLeftLegwear.showModel = visible;
+        this.bipedRightLegwear.showModel = visible;
+        this.bipedBodyWear.showModel = visible;
+    }
+    
+    @Override
+    public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+    		float headPitch, float scale) {
+    	super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    	
+    	GlStateManager.pushMatrix();
+    	
+    	 this.bipedLeftLegwear.render(scale);
+         this.bipedRightLegwear.render(scale);
+         this.bipedLeftArmwear.render(scale);
+         this.bipedRightArmwear.render(scale);
+         this.bipedBodyWear.render(scale);
+         this.bipedCape.render(scale);
+         
+         GlStateManager.popMatrix();
     }
 
 }

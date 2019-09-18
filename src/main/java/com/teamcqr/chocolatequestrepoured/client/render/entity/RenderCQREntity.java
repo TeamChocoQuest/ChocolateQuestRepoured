@@ -83,10 +83,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BOW:
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					break;
-				case NONE:
-					armPoseMain = ModelBiped.ArmPose.EMPTY;
 				default:
-					armPoseMain = ModelBiped.ArmPose.ITEM;
+					armPoseMain = ModelBiped.ArmPose.EMPTY;
 					break;
 
 				}
@@ -101,11 +99,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BOW:
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					break;
-				case NONE:
-					armPoseOff = ModelBiped.ArmPose.EMPTY;
-					break;
 				default:
-					armPoseOff = ModelBiped.ArmPose.ITEM;
+					armPoseOff = ModelBiped.ArmPose.EMPTY;
 					break;
 
 				}
