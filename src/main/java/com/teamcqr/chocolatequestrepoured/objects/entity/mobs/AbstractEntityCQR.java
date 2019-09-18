@@ -6,8 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.ExtraItemHandler;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -37,7 +36,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
@@ -191,19 +192,28 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (player.isCreative() && !player.isSneaking()) {
 			if (!this.world.isRemote) {
 				ItemStack stack = player.getHeldItem(hand);
+				
 				if (stack.getItem() instanceof ItemArmor) {
 					EntityEquipmentSlot slot = getSlotForItemStack(stack);
-					ItemStack armor = this.getItemStackFromSlot(slot);
-
+					
 					this.setItemStackToSlot(slot, stack);
-					if (hand == EnumHand.MAIN_HAND) {
-						player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, armor);
-					} else {
-						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, armor);
-					}
-				} else {
-					player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
+					player.setHeldItem(hand, this.getItemStackFromSlot(slot));
+					return true;
 				}
+				
+				if (stack.getItem() instanceof ItemSword) {
+					this.setHeldItem(EnumHand.MAIN_HAND, stack);
+					player.setHeldItem(hand, this.getHeldItemMainhand());
+					return true;
+				}
+				
+				if (stack.getItem() instanceof ItemShield) {
+					this.setHeldItem(EnumHand.OFF_HAND, stack);
+					player.setHeldItem(hand, this.getHeldItemOffhand());
+					return true;
+				}
+				
+				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, world, this.getEntityId(), 0, 0);
 			}
 			return true;
 		}
@@ -490,13 +500,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
-		IExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		return capability.getStackInSlot(slot.getIndex());
 	}
 
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
-		ExtraItemHandler capability = (ExtraItemHandler) this
-				.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		capability.setStackInSlot(slot.getIndex(), stack);
 	}
 

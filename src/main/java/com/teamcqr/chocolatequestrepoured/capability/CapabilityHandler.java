@@ -1,7 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.capability;
 
-import com.teamcqr.chocolatequestrepoured.capability.armorturtle.CapabilityArmorTurtleProvider;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.armor.slime.CapabilitySlimeArmorProvider;
+import com.teamcqr.chocolatequestrepoured.capability.armor.turtle.CapabilityTurtleArmorProvider;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -18,10 +19,11 @@ public class CapabilityHandler {
 	@SubscribeEvent
 	public static void attachCapabilitiesEvent(AttachCapabilitiesEvent<Entity> event) {
 		if (event.getObject() instanceof EntityLivingBase) {
-			event.addCapability(new ResourceLocation(Reference.MODID, "armor_turtle"), new CapabilityArmorTurtleProvider());
+			event.addCapability(new ResourceLocation(Reference.MODID, "armor_turtle"), CapabilityTurtleArmorProvider.createProvider());
+			event.addCapability(new ResourceLocation(Reference.MODID, "armor_slime"), CapabilitySlimeArmorProvider.createProvider());
 		}
 		if (event.getObject() instanceof AbstractEntityCQR) {
-			event.addCapability(new ResourceLocation(Reference.MODID, "extra_item_slot"), new CapabilityExtraItemHandler(2));
+			event.addCapability(new ResourceLocation(Reference.MODID, "extra_item_slot"), CapabilityExtraItemHandlerProvider.createProvider(2));
 		}
 	}
 
