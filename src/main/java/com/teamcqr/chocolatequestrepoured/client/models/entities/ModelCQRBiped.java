@@ -89,11 +89,7 @@ public class ModelCQRBiped extends ModelBiped {
         super.setVisible(visible);
         this.bipedCape.showModel = visible;
         
-        this.bipedLeftArmwear.showModel = visible;
-        this.bipedRightArmwear.showModel = visible;
-        this.bipedLeftLegwear.showModel = visible;
-        this.bipedRightLegwear.showModel = visible;
-        this.bipedBodyWear.showModel = visible;
+        setClothingLayerVisible(visible);
     }
     
     @Override
@@ -111,6 +107,14 @@ public class ModelCQRBiped extends ModelBiped {
          this.bipedCape.render(scale);
          
          GlStateManager.popMatrix();
+    }
+    
+    protected void setClothingLayerVisible(boolean visible) {
+    	this.bipedLeftArmwear.showModel = visible;
+        this.bipedRightArmwear.showModel = visible;
+        this.bipedLeftLegwear.showModel = visible;
+        this.bipedRightLegwear.showModel = visible;
+        this.bipedBodyWear.showModel = visible;
     }
 
 }
