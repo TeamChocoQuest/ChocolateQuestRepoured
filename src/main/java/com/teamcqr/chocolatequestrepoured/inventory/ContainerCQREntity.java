@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.inventory;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
-import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.IExtraItemHandler;
+import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -25,7 +25,7 @@ public class ContainerCQREntity extends Container {
 
 	public ContainerCQREntity(InventoryPlayer playerInv, AbstractEntityCQR entity) {
 		IItemHandler inventory = entity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		IExtraItemHandler extraInventory = entity.getCapability(CapabilityExtraItemHandler.EXTRA_ITEM_HANDLER, null);
+		CapabilityExtraItemHandler extraInventory = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
@@ -144,42 +144,23 @@ public class ContainerCQREntity extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		Slot slot = this.getSlot(index);
-		if (slot.getHasStack()) {
-			ItemStack stack = slot.getStack();
-			Slot toPut = null;
-			
+		ItemStack itemstack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+
+		if (slot != null && slot.getHasStack()) {
+			ItemStack itemstack1 = slot.getStack();
+			itemstack = itemstack1.copy();
+
 			if (index > 35) {
-				toPut = this.getFirstValidSlot(0, 35, stack);
-			} else {
-				toPut = this.getFirstValidSlot(36, this.inventorySlots.size() - 1, stack);
-				if (toPut == null) {
-					if (index > 26) {
-						toPut = this.getFirstValidSlot(0, 26, stack);
-					} else {
-						toPut = this.getFirstValidSlot(27, 35, stack);
-					}
+				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
+					return ItemStack.EMPTY;
 				}
+			} else if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
+				return ItemStack.EMPTY;
 			}
 
-			if (toPut != null) {
-				toPut.putStack(stack);
-				slot.putStack(ItemStack.EMPTY);
-				return stack;
-			}
 		}
-		return ItemStack.EMPTY;
-	}
-
-	@Nullable
-	protected Slot getFirstValidSlot(int startIndex, int endIndex, ItemStack stack) {
-		for (int i = startIndex; i <= endIndex; i++) {
-			Slot slot = this.getSlot(i);
-			if (!slot.getHasStack() && slot.isItemValid(stack)) {
-				return slot;
-			}
-		}
-		return null;
+		return itemstack;
 	}
 
 }
