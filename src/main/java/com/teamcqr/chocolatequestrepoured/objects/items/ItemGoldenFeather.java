@@ -1,19 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import com.teamcqr.chocolatequestrepoured.objects.base.ItemBase;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class ItemGoldenFeather extends ItemBase
+public class ItemGoldenFeather extends Item
 {
-	public ItemGoldenFeather(String name) 
+	public ItemGoldenFeather() 
 	{
-		super(name);
-
 		setMaxStackSize(1);
 		setMaxDamage(385);
 	}

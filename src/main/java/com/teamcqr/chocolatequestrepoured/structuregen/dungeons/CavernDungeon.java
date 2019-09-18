@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CavernGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -16,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
@@ -97,7 +99,7 @@ public class CavernDungeon extends DungeonBase {
 			
 			this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
 			
-			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "ariblock", Blocks.AIR);
+			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
 			
 			closeConfigFile();
 		} else {
@@ -108,7 +110,7 @@ public class CavernDungeon extends DungeonBase {
 	//One block below starts y is the floor...
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		//super.generate(x, z, world, chunk, random);
+		super.generate(x, z, world, chunk, random);
 		
 		List<CavernGenerator> caves = new ArrayList<CavernGenerator>();
 		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
@@ -183,12 +185,13 @@ public class CavernDungeon extends DungeonBase {
 			world.setBlockToAir(bossPos.down());
 			
 			//BOSS CHEST
-			world.setBlockState(bossPos.down(), Blocks.CHEST.getDefaultState());
+			world.setBlockState(bossPos, Blocks.CHEST.getDefaultState());
 			TileEntityChest bossChest = (TileEntityChest) world.getTileEntity(bossPos.down());
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
 			
 			//BOSS SPAWNER
-			//TODO: spawn the boss
+			//DONE: spawn the boss
+			SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(getBossMob(), world), false, null, world, bossPos.up());
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());

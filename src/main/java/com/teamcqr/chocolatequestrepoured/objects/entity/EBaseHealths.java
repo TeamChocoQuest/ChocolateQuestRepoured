@@ -1,23 +1,31 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity;
 
 public enum EBaseHealths {
-	
+
+	DUMMY(1.0F),
+	DWARF(30.0F),
+	ENDERMAN(40.0F),
+	GOBLIN(20.0F),
+	GOLEM(40.0F),
+	ILLAGER(25.0F),
+	MINOTAUR(30.0F),
+	MUMMY(20.0F),
 	NPC(20.0F),
+	OGRE(35.0F),
+	ORC(30.0F),
+	PIGMAN(50.0F),
+	PIRATE(25.0F),
+	SKELETON(20.0F),
+	SPECTRE(30.0F),
+	TRITON(30.0F),
 	WALKER(40.0F),
-	PIGMEN(50.0F),
-	MACHINES(35.0F),
-	UNDEAD(25.0F),
-	MINOTAURS(30.0F),
-	DWARVES(30.0F),
-	ORCS(30.0F),
-	GREMLINS(15.0F),
-	OGRES(35.0F),
+	ZOMBIE(25.0F),
+
 	BEES(15.0F),
-	MOUNTS(25.0F),
-	SPECTRES(30.0F),
-	PIRATES(25.0F),
 	MANDRILS(30.0F),
-	
+
+	MOUNTS(25.0F),
+
 	NETHER_DRAGON(250.0F),
 	;
 	

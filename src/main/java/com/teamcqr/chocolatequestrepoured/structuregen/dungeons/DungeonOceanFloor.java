@@ -33,8 +33,10 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		//super.generate(x, z, world, chunk, random);
+		
 		File structure = pickStructure(random);
-		CQStructure dungeon = new CQStructure(structure, this.protectFromDestruction);
+		CQStructure dungeon = new CQStructure(structure, this, chunk.x, chunk.z, this.protectFromDestruction);
 		
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);

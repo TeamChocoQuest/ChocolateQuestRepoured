@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VolcanoDungeon extends StrongholdDungeon {
+public class VolcanoDungeon extends StrongholdOpenDungeon {
 	
 	//For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
 	
@@ -45,7 +45,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 	private Block magmaBlock = Blocks.MAGMA;
 	private Block rampBlock = Blocks.NETHERRACK;
 	private Block lowerStoneBlock = Blocks.COBBLESTONE;
-	private Block pillarBlock = ModBlocks.GRANITE_BRICK_LARGE;
+	private Block pillarBlock = ModBlocks.GRANITE_LARGE;
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);
@@ -71,7 +71,7 @@ public class VolcanoDungeon extends StrongholdDungeon {
 			this.lavaBlock = PropertyFileHelper.getBlockProperty(prop, "lavaBlock", Blocks.LAVA);
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
-			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_BRICK_LARGE);
+			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
 			
 			closeConfigFile();
 		} else {

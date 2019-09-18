@@ -31,7 +31,7 @@ public class ClassicNetherCity extends DungeonBase {
 	private int heightY = 31;
 	private int posY = 31;
 	private double bridgeSizeMultiplier = 1.2D;
-	private boolean singleAirPocketsForHouses = false;
+	//private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
 	private boolean centralSpawnerIsSingleUse = true;
 	private boolean spawnersAboveBuildings = true;
@@ -63,7 +63,7 @@ public class ClassicNetherCity extends DungeonBase {
 			posY = PropertyFileHelper.getIntProperty(prop, "posY", 31);
 			heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 			
-			singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
+			//singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
 			spawnersAboveBuildings = PropertyFileHelper.getBooleanProperty(prop, "spawnersAboveBuildings", true);
 			makeSpaceForBuildings = PropertyFileHelper.getBooleanProperty(prop, "createAirPocket", true);
 			specialUseForCentralBuilding = PropertyFileHelper.getBooleanProperty(prop, "centralBuildingIsSpecial", true);
@@ -90,9 +90,11 @@ public class ClassicNetherCity extends DungeonBase {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
+		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "  ...");
 		if(structCount != buildingFolder.listFiles().length) {
 			for(File f : buildingFolder.listFiles()) {
-				CQStructure cqs = new CQStructure(f, false);
+				CQStructure cqs = new CQStructure(f, null, 0, 0, false);
 				
 				if(cqs.getSizeX() > longestSide) {
 					longestSide = cqs.getSizeX();
@@ -108,6 +110,7 @@ public class ClassicNetherCity extends DungeonBase {
 		IDungeonGenerator generator = new NetherCityGenerator(this);
 		generator.generate(world, chunk, x, posY, z);
 		
+		System.out.println("Generated " + this.getDungeonName() + " at X: " + x + "  Y: " + posY + "  Z: " + z);
 	}
 	
 	public int getCaveHeight() {
@@ -141,9 +144,9 @@ public class ClassicNetherCity extends DungeonBase {
 		return (new Double(longestSide * bridgeSizeMultiplier)).intValue();
 	}
 	
-	public boolean useSingleAirPocketsForHouses() {
+	/*public boolean useSingleAirPocketsForHouses() {
 		return this.singleAirPocketsForHouses;
-	}
+	}*/
 	
 	public boolean placeSpawnersAboveBuildings() {
 		return spawnersAboveBuildings;

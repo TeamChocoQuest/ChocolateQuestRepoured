@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.API.events;
 
-import com.teamcqr.chocolatequestrepoured.dungeonprot.ProtectedRegion;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.ChunkPos;

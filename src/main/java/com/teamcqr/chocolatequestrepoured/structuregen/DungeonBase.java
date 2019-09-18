@@ -31,7 +31,7 @@ public class DungeonBase {
 	//private CQFaction owningFaction
 	protected String name;
 	private Item placeItem;
-	private UUID dunID;
+	protected UUID dunID;
 	protected int underGroundOffset = 0;
 	protected int chance;
 	protected int yOffset = 0;
@@ -40,6 +40,7 @@ public class DungeonBase {
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
 	protected boolean useCoverBlock = false;
+	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
 	private boolean spawnBehindWall = false;
 	private int iconID;
 	private FileInputStream fisConfigFile = null;
@@ -63,68 +64,29 @@ public class DungeonBase {
 	
 	public DungeonBase(File configFile) {
 		//DONE: read values from file
-		Properties prop = loadConfig(configFile);/*new Properties();
-		this.dunID = MathHelper.getRandomUUID();
-		FileInputStream fis = null;
-		try {
-			fis = new FileInputStream(configFile);
-			prop.load(fis);
-		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
-			e.printStackTrace();
-			prop = null;
-			configFile = null;
-		}*/
-		//if(prop != null && configFile != null && fis != null) {
+		Properties prop = loadConfig(configFile);
+		
 		if(prop != null) {
 			this.name = configFile.getName().replace(".properties", "");
 			this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 20);
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
-			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", false);
+			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", true);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
+			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
-				this.supportBlock = Blocks.STONE;
-				try {
-					Block tmp = Block.getBlockFromName(prop.getProperty("supportblock", "minecraft:stone"));
-					if(tmp != null) {
-						this.supportBlock = tmp;
-					}
-				} catch(Exception ex) {
-					System.out.println("couldnt load supportblock block! using default value (stone block)...");
-				}
-				
-				this.supportTopBlock = Blocks.GRASS;
-				try {
-					Block tmp = Block.getBlockFromName(prop.getProperty("supportblocktop", "minecraft:stone"));
-					if(tmp != null) {
-						this.supportTopBlock = tmp;
-					}
-				} catch(Exception ex) {
-					System.out.println("couldnt load supportblocktop block! using default value (air block)...");
-				}
+				this.supportBlock = PropertyFileHelper.getBlockProperty(prop, "supportblock", Blocks.STONE);
+				this.supportTopBlock = PropertyFileHelper.getBlockProperty(prop, "supportblocktop", Blocks.GRASS);
 			}
-			this.coverBlock = Blocks.AIR;
-			try {
-				Block tmp = Block.getBlockFromName(prop.getProperty("coverblock", "minecraft:air"));
-				if(tmp != null) {
-					this.coverBlock = tmp;
-				}
-			} catch(Exception ex) {
-				System.out.println("couldnt load cover block! using default value (air block)...");
-			}
+			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
+			
 			closeConfigFile();
 		} else {
 			registeredSuccessful = false;
@@ -247,5 +209,9 @@ public class DungeonBase {
 		}
 		registeredSuccessful = false;
 		return null;
+	}
+
+	public EDungeonMobType getDungeonMob() {
+		return this.dungeonMob;
 	}
 }

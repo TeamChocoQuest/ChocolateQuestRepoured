@@ -1,255 +1,140 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
-import java.util.UUID;
-
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ICQREntity;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
+import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRangedAttackMob, IEntityMultiPart {
+public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityMultiPart, IRangedAttackMob {
 	
-	private MultiPartEntityPart[] dragonBodyParts;
+	public enum EDragonMovementState {
+		CHARGING,
+		FLYING,
+		//When it is flying up or down, it will spiral up or down
+		FLYING_UPWARDS,
+		FLYING_DOWNWARDS
+	}
 	
-	private MultiPartEntityPart headPart = new MultiPartEntityPart(this, "head", 2.5F, 1.25F);
-	private MultiPartEntityPart body1 = new MultiPartEntityPart(this, "bodySegment1", 1.1f, 1.1f);
-	private MultiPartEntityPart body2 = new MultiPartEntityPart(this, "bodySegment2", 1.1f, 1.1f);
-	private MultiPartEntityPart body3 = new MultiPartEntityPart(this, "bodySegment3", 1.1f, 1.1f);
-	private MultiPartEntityPart body4 = new MultiPartEntityPart(this, "bodySegment4", 1.1f, 1.1f);
-	private MultiPartEntityPart body5 = new MultiPartEntityPart(this, "bodySegment5", 1.1f, 1.1f);
-	private MultiPartEntityPart body6 = new MultiPartEntityPart(this, "bodySegment6", 1.1f, 1.1f);
-	private MultiPartEntityPart body7 = new MultiPartEntityPart(this, "bodySegment7", 1.1f, 1.1f);
-	private MultiPartEntityPart body8 = new MultiPartEntityPart(this, "bodySegment8", 1.1f, 1.1f);
-	private MultiPartEntityPart body9 = new MultiPartEntityPart(this, "bodySegment9", 1.1f, 1.1f);
-	private MultiPartEntityPart body10 = new MultiPartEntityPart(this, "bodySegment10", 1.1f, 1.1f);
-	private MultiPartEntityPart body11 = new MultiPartEntityPart(this, "bodySegment11", 1.1f, 1.1f);
-	private MultiPartEntityPart body12 = new MultiPartEntityPart(this, "bodySegment12", 1.1f, 1.1f);
-	private MultiPartEntityPart body13 = new MultiPartEntityPart(this, "bodySegment13", 1.1f, 1.1f);
-	private MultiPartEntityPart body14 = new MultiPartEntityPart(this, "bodySegment14", 1.1f, 1.1f);
-	private MultiPartEntityPart body15 = new MultiPartEntityPart(this, "bodySegment15", 1.1f, 1.1f);
-	private MultiPartEntityPart body16 = new MultiPartEntityPart(this, "bodySegment16", 1.1f, 1.1f);
+	public enum ENetherDragonAttacks {
+		SPIT_FIRE,
+		FIREBALL,
+		LIGHTNINGS,
+		BITE
+	}
+	
+	/**
+	 * AI:
+	 * Circle around about 30 blocks above your home location in a radius of ~30 blocks
+	 * 
+	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up
+	 * Then begin spiraling up to your "strafing y", there you fly 0.5 - 3 rounds on your circle and attack again
+	 * While you are circling, you may change to a higher, thinner circler, about 10 blocks above the normal.
+	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs 
+	 */
+	
+	public static final int SEGMENT_COUNT = 32;
+	
+	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
+	
+	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
+
+	private boolean mouthOpen = false;
+
+	private boolean isReadyToAttack = true;
+
+	private ENetherDragonAttacks currentAttack = null;
+
+	private int attackTimer = 0;
+
+	/*
+	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
+	 * 
+	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them on fire
+	 * It will also break obsidian blocks, but not command blocks or structure blocks or bedrock
+	 */
+	
 	public EntityCQRNetherDragon(World worldIn) {
 		super(worldIn);
-		this.dragonBodyParts = new MultiPartEntityPart[] {
-				this.headPart,
-				this.body1,
-				this.body2,
-				this.body3,
-				this.body4,
-				this.body5,
-				this.body6,
-				this.body7,
-				this.body8,
-				this.body9,
-				this.body10,
-				this.body11,
-				this.body12,
-				this.body13,
-				this.body14,
-				this.body15,
-				this.body16
-		};
-		this.setHealth(getBaseHealth());
-		this.setSize(15.5f, 1.8f);
+		/*this.dragonBodyParts = new MultiPartEntityPart[] { this.headPart, this.body1, this.body2, this.body3,
+				this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
+				this.body12, this.body13, this.body14, this.body15, this.body16 };*/
+		this.setSize(1.5F, 1.5F);
 		this.noClip = true;
 		this.setNoGravity(true);
-	}
-
-	@Override
-	public World getWorld() {
-		return getEntityWorld();
+		this.experienceValue = 100;
+		
+		this.ignoreFrustumCheck = true;
+		
+		//Init the body parts
+		for(int i = 0; i < dragonBodyParts.length; i++) {
+			dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i +1);
+		}
 	}
 	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 	}
-	
+
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
-		
-		//TODO: Init the parts
-		
-		this.headPart.width = 2.5f;
-		this.headPart.height = 1.125f;
-		this.headPart.onUpdate();
-		
-		this.body1.width = 1.1f;
-		this.body1.height = 1.1f;
-		this.body1.onUpdate();
-		
-		this.body2.width = 1.1f;
-		this.body2.height = 1.1f;
-		this.body2.onUpdate();
-		
-		this.body3.width = 1.1f;
-		this.body3.height = 1.1f;
-		this.body3.onUpdate();
-		
-		this.body4.width = 1.1f;
-		this.body4.height = 1.1f;
-		this.body4.onUpdate();
-		
-		this.body5.width = 1.1f;
-		this.body5.height = 1.1f;
-		this.body5.onUpdate();
-		
-		this.body6.width = 1.1f;
-		this.body6.height = 1.1f;
-		this.body6.onUpdate();
-		
-		this.body7.width = 1.1f;
-		this.body7.height = 1.1f;
-		this.body7.onUpdate();
-		
-		this.body8.width = 1.1f;
-		this.body8.height = 1.1f;
-		this.body8.onUpdate();
-		
-		this.body9.width = 1.1f;
-		this.body9.height = 1.1f;
-		this.body9.onUpdate();
-		
-		this.body10.width = 1.1f;
-		this.body10.height = 1.1f;
-		this.body10.onUpdate();
-		
-		this.body11.width = 1.1f;
-		this.body11.height = 1.1f;
-		this.body11.onUpdate();
-		
-		this.body12.width = 1.1f;
-		this.body12.height = 1.1f;
-		this.body12.onUpdate();
-		
-		this.body13.width = 1.1f;
-		this.body13.height = 1.1f;
-		this.body13.onUpdate();
-		
-		this.body14.width = 1.1f;
-		this.body14.height = 1.1f;
-		this.body14.onUpdate();
-		
-		this.body15.width = 1.1f;
-		this.body15.height = 1.1f;
-		this.body15.onUpdate();
-		
-		this.body16.width = 1.1f;
-		this.body16.height = 1.1f;
-		this.body16.onUpdate();
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		this.bossInfoServer.setName(getDisplayName());
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		/*if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
+			//return this.attackEntityFromPart(this.headPart, source, amount);
+			return true;
+		}*/
+
+		return super.attackEntityFrom(source, amount);
 	}
 	
-	protected void applyEntityAttributes()
-    {
-        super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(getBaseHealth());
-    }
-	
-	 /**
-     * Called when the entity is attacked.
-     */
-    public boolean attackEntityFrom(DamageSource source, float amount)
-    {
-        if (source instanceof EntityDamageSource && ((EntityDamageSource)source).getIsThornsDamage())
-        {
-            this.attackEntityFromPart(this.headPart, source, amount);
-        }
-
-        return false;
-    }
-
 
 	@Override
-	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-        if (dragonPart != this.headPart)
-        {
-            damage = damage / 4.0F + Math.min(damage, 1.0F);
-        }
-
-        if (damage < 0.01F)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-	}
-
-	@Override
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setSwingingArms(boolean swingingArms) {
-		// TODO Auto-generated method stub
-
-	}
-	
-	/**
-     * Returns false if this Entity is a boss, true otherwise.
-     */
-    public boolean isNonBoss()
-    {
-        return false;
-    }
-    /**
-     * adds a PotionEffect to the entity
-     */
-    public void addPotionEffect(PotionEffect potioneffectIn)
-    {
-    }
-
-    protected boolean canBeRidden(Entity rider)
-    {
-        return false;
-    }
-
-	@Override
-	public EFaction getFaction() {
-		return null;
-	}
-
-	@Override
-	public UUID getUUID() {
-		return getUniqueID();
-	}
-
-	@Override
-	public boolean isBoss() {
-		return true;
-	}
-
-	@Override
-	public boolean isRideable() {
+	public boolean isNonBoss() {
 		return false;
 	}
 
 	@Override
-	public boolean isFriendlyTowardsPlayer() {
+	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
 		return false;
 	}
 
 	@Override
-	public boolean hasFaction() {
-		return false;
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+
 	}
 
 	@Override
@@ -258,32 +143,267 @@ public class EntityCQRNetherDragon extends EntityMob implements ICQREntity, IRan
 	}
 
 	@Override
-	public void setPosition(double x, double y, double z) {
-		super.setPosition(x, y, z);
-		
-		spawnAt(new Double(x).intValue(), new Double(y).intValue(), new Double(z).intValue());
+	public EFaction getFaction() {
+		return EFaction.UNDEAD;
 	}
-	
+
 	@Override
-	public void spawnAt(int x, int y, int z) {
-		if(getEntityWorld() != null && !getEntityWorld().isRemote) {
-			//sets the actual health
-			//changes the right attribute to apply
-			IAttributeInstance attribute = getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-			float newHP = getBaseHealthForLocation(new BlockPos(x,y,z), this.getBaseHealth());
-			//System.out.println("New HP: " + newHP);
-			if(attribute != null) {
-				attribute.setBaseValue(newHP);
-				setHealth(getMaxHealth());
-			}
-			
-			//setPosition(x, y, z);
+	public World getWorld() {
+		return this.world;
+	}
+
+	@Override
+	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
+		//if (dragonPart != this.headPart) {
+			damage = damage / 4.0F + Math.min(damage, 1.0F);
+		//}
+
+		return attackEntityFrom(source, damage);
+	}
+
+	@Override
+	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+		//TODO: Shoot fireball OR spit fire if close enough
+		double distance = getDistance(target);
+		
+		if(distance > 25) {
+			//Shoot fireball
+		} else {
+			//Spit fire
+			setMouthOpen(true);
 		}
 	}
 
 	@Override
-	public int getRemainingHealingPotions() {
+	public void setSwingingArms(boolean swingingArms) {
+		//Unused?
+	}
+	
+	//This code is not entirely made by me, it is oriented from this:
+	//https://github.com/TeamTwilight/twilightforest/blob/1.12.x/src/main/java/twilightforest/entity/boss/EntityTFNaga.java
+	protected void moveParts() {
+		for (int i = 0; i < this.dragonBodyParts.length; i++) {
+			Entity leader = i == 0 ? this : this.dragonBodyParts[i - 1];
+			
+			double headerX = leader.posX;
+			double headerY = leader.posY;
+			double headerZ = leader.posZ;
+
+			float angle = (((leader.rotationYaw + 180) * new Float(Math.PI)) / 180F);
+
+			double straightDegree = 0.05D + (1.0 / (float) (i + 1)) * 0.5D;
+
+			double calculatedRotatedX = -MathHelper.sin(angle) * straightDegree;
+			double calculatedRotatedZ = MathHelper.cos(angle) * straightDegree;
+
+			double x = dragonBodyParts[i].posX;
+			double y = dragonBodyParts[i].posY;
+			double z = dragonBodyParts[i].posZ;
+			
+			Vec3d deltaPos = new Vec3d(x - headerX, y - headerY, z - headerZ);
+			deltaPos = deltaPos.normalize();
+
+			deltaPos = deltaPos.add(new Vec3d(calculatedRotatedX, 0, calculatedRotatedZ).normalize());
+
+			//Dont change these values, they are important for the correct allignment of the segments!!!
+			double f = i != 0 ? 0.378D : 0.338D;
+
+			double targetX = headerX + f * deltaPos.x;
+			double targetY = headerY + f * deltaPos.y;
+			double targetZ = headerZ + f * deltaPos.z;
+
+			//Set rotated position
+			dragonBodyParts[i].setPosition(targetX, targetY, targetZ);
+
+			double distance = (double) MathHelper.sqrt(deltaPos.x * deltaPos.x + deltaPos.z * deltaPos.z);
+			//Finally apply the new rotation -> Rotate the block
+			dragonBodyParts[i].setRotation((float) (Math.atan2(deltaPos.z, deltaPos.x) * 180.0D / Math.PI) + 90.0F, -(float) (Math.atan2(deltaPos.y, distance) * 180.0D / Math.PI));
+		}
+	}
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		
+		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
+		//DONE: Destroy the blocks
+		destroyBlocksInAABB(getEntityBoundingBox());
+		/*for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
+			destroyBlocksInAABB(part.getEntityBoundingBox());
+		}*/
+		
+	}
+	
+	//Copied from ender dragon
+	private boolean destroyBlocksInAABB(AxisAlignedBB aabb)
+    {
+		if(getWorld().getGameRules().hasRule("mobGriefing") && !getWorld().getGameRules().getBoolean("mobGriefing")) {
+			return false;
+		}
+		
+        int x1 = MathHelper.floor(aabb.minX);
+        int y1 = MathHelper.floor(aabb.minY);
+        int z1 = MathHelper.floor(aabb.minZ);
+        int x2 = MathHelper.floor(aabb.maxX);
+        int y2 = MathHelper.floor(aabb.maxY);
+        int z2 = MathHelper.floor(aabb.maxZ);
+        
+        boolean cancelled = false;
+        boolean blockDestroyed = false;
+
+        for (int k1 = x1; k1 <= x2; ++k1)
+        {
+            for (int l1 = y1; l1 <= y2; ++l1)
+            {
+                for (int i2 = z1; i2 <= z2; ++i2)
+                {
+                    BlockPos blockpos = new BlockPos(k1, l1, i2);
+                    IBlockState iblockstate = this.world.getBlockState(blockpos);
+                    Block block = iblockstate.getBlock();
+
+                    if (!block.isAir(iblockstate, this.world, blockpos) && iblockstate.getMaterial() != Material.FIRE)
+                    {
+                        if (!net.minecraftforge.event.ForgeEventFactory.getMobGriefingEvent(this.world, this))
+                        {
+                            cancelled = true;
+                        }
+                        //Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
+                        else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate))
+                        {
+                            if (block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS && block != Blocks.END_GATEWAY)
+                            {
+                                blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
+                            }
+                            else
+                            {
+                                cancelled = true;
+                            }
+                        }
+                        else
+                        {
+                            cancelled = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (blockDestroyed)
+        {
+            double x = aabb.minX + (aabb.maxX - aabb.minX) * (double)this.rand.nextFloat();
+            double y = aabb.minY + (aabb.maxY - aabb.minY) * (double)this.rand.nextFloat();
+            double z = aabb.minZ + (aabb.maxZ - aabb.minZ) * (double)this.rand.nextFloat();
+            
+            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, x, y, z, 0.0D, 0.0D, 0.0D);
+        }
+
+        return cancelled;
+    }
+	
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		// update bodySegments parts
+		for (EntityCQRNetherDragonSegment segment : dragonBodyParts) {
+			this.world.updateEntityWithOptionalForce(segment, true);
+		}
+
+		moveParts();
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundsHandler.NETHER_DRAGON_HURT;
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundsHandler.NETHER_DRAGON_DEATH;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		for (EntityCQRNetherDragonSegment dragonPart : dragonBodyParts) {
+			// must use this instead of setDead
+			// since multiparts are not added to the world tick list which is what checks isDead
+			this.world.removeEntityDangerously(dragonPart);
+		}
+	}
+	
+	@Override
+	public Entity[] getParts() {
+		return dragonBodyParts;
+	}
+	
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		this.bossInfoServer.addPlayer(player);
+	}
+	
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		this.bossInfoServer.removePlayer(player);
+	}
+	
+	public EDragonMovementState getCurrentMovementState() {
+		return movementState;
+	}
+
+	public void updateMovementState(EDragonMovementState charging) {
+		this.movementState = charging;
+	}
+	
+	@Override
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateFlying(this, worldIn) {
+			@Override
+			public float getPathSearchRange() {
+				return 128.0F;
+			}
+		};
+	}
+	
+	@Override
+	public int getHealingPotions() {
 		return 0;
 	}
+
+	public void setMouthOpen(boolean open) {
+		mouthOpen = open;
+	}
+	
+	public boolean isMouthOpen() {
+		return mouthOpen ;
+	}
+	
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		super.writeSpawnData(buffer);
+		buffer.writeBoolean(this.mouthOpen);
+	}
+	
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		super.readSpawnData(additionalData);
+		this.mouthOpen = additionalData.readBoolean();
+	}
+	
+	public void startAttack(ENetherDragonAttacks attackType) {
+		if(this.isReadyToAttack) {
+			this.currentAttack = attackType;
+			setMouthOpen(true);
+			this.attackTimer  = 0;
+		}
+	}
+	
 
 }

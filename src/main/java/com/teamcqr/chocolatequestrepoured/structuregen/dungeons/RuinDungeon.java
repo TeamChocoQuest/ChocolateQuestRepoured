@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.RuinGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -63,14 +62,14 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new DefaultGenerator();
+		return new RuinGenerator(null, null, null);
 	}
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		File structure = pickStructure(new Random());
 		if(structure != null) {
-			CQStructure dungeonStructure = new CQStructure(structure, this.protectFromDestruction);
+			CQStructure dungeonStructure = new CQStructure(structure, this, chunk.x, chunk.z, this.protectFromDestruction);
 			
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);
