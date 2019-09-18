@@ -9,7 +9,7 @@ public class Reference
 	public static final String VERSION = "0.1.2";
 	public static final String ACCEPTED_VERSIONS = "[1.12.2]";
 	public static final String CLIENT_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ClientProxy";
-	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.CommonProxy";
+	public static final String COMMON_PROXY_CLASS = "com.teamcqr.chocolatequestrepoured.proxy.ServerProxy";
 	public static final String DUNGEON_REGISTRY = "com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry";
 	public static final String DUNGEON_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator";
 	public static final String WALL_TERRAIN_POPULATOR = "com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator";
@@ -19,6 +19,7 @@ public class Reference
 	public static final int BADGE_GUI_ID = 3;
 	public static final int BACKPACK_GUI_ID = 4;
 	public static final int ALCHEMY_BAG_GUI_ID = 5;
+	public static final int CQR_ENTITY_GUI_ID = 6;
 	
 	public static final int ENTITY_SLIME_PART = 44;
 	public static final int TARGET_EFFECT_MESSAGE_ID = 30;

@@ -15,5 +15,15 @@
 	{
 		"category": "neutral",
 		"sounds": [{"name": "cqrepoured:entity/player/classic_hurt"}]
+	},
+	"entity.nether_dragon.hurt":
+	{
+		"category": "neutral",
+		"sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt"}]
+	},
+	"entity.nether_dragon.death":
+	{
+		"category": "neutral",
+		"sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_death"}]
 	}
 }   

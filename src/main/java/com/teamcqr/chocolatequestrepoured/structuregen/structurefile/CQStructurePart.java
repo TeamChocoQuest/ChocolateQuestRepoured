@@ -4,13 +4,17 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Lists;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -38,12 +42,22 @@ public class CQStructurePart extends Template {
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
 	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
 	
+	private List<BossInfo> bosses = new ArrayList<>();
+	
 	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
+	
+	@Nullable DungeonBase dungeon;
+	int dunX, dunZ = 0;
 	
 	private int part_id;
 	
-	public CQStructurePart() {
+	public CQStructurePart(@Nullable DungeonBase dungeon, int posOfDunX, int posOfDunZ) {
 		super();
+		if(dungeon != null) {
+			this.dungeon = dungeon;
+		}
+		dunX = posOfDunX;
+		dunZ = posOfDunZ;
 	}
 	
 	public void setNewBannerPattern(EBanners pattern) {
@@ -52,6 +66,7 @@ public class CQStructurePart extends Template {
 	
 	public CQStructurePart(int part_id) {
 		super();
+		
 		this.setPart_id(part_id);
 	}
 	
@@ -163,6 +178,13 @@ public class CQStructurePart extends Template {
 				if(Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
 					ForceFieldNexusInfo ffni = new ForceFieldNexusInfo(bi.pos);
 					this.forceFieldCores.add(ffni);
+					removeEntries.add(bi);
+				}
+				
+				//Boss blocks
+				if(Block.isEqualTo(currentBlock, ModBlocks.BOSS_BLOCK)) {
+					BossInfo boi = new BossInfo(bi.pos);
+					this.bosses.add(boi);
 					removeEntries.add(bi);
 				}
 			}
@@ -309,6 +331,12 @@ public class CQStructurePart extends Template {
 				tileData.setInteger("y", spawnerPos.getY());
 				tileData.setInteger("z", spawnerPos.getZ());
 				
+				((TileEntitySpawner)te).setDungeonSpawner();
+				
+				if(this.dungeon != null) {
+					((TileEntitySpawner)te).setInDungeon(this.dungeon, this.dunX, this.dunZ);
+				}
+				
 				te.readFromNBT(tileData);
 				te.mirror(placementIn.getMirror());
 				te.rotate(placementIn.getRotation());
@@ -327,6 +355,10 @@ public class CQStructurePart extends Template {
 	
 	public List<ForceFieldNexusInfo> getFieldCores() {
 		return new ArrayList<ForceFieldNexusInfo>(this.forceFieldCores);
+	}
+	
+	public List<BossInfo> getBosses() {
+		return this.bosses;
 	}
 
 }

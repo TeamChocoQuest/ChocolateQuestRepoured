@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.block.Block;
@@ -76,17 +76,15 @@ public class DungeonGenUtils {
 	public static int getIntBetweenBorders(int min, int max) {
 		Random rdm = new Random();
 		max += 1;
-		int ret = min + rdm.nextInt(max - min);
-		return ret;
+		try {
+			return min + rdm.nextInt(max - min);
+		} catch(IllegalArgumentException ex) {
+			return min;
+		}
 	}
 	
 	public static boolean isLootChest(Block b) {
-		for(Block lc : ModBlocks.LOOT_CHEST_BLOCKS) {
-			if(Block.isEqualTo(b, lc)) {
-				return true;
-			}
-		}
-		return false;
+		return b instanceof BlockExporterChest;
 	}
 	
 	public static boolean isCQBanner(TileEntityBanner banner) {

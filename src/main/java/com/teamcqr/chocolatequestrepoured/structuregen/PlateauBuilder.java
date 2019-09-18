@@ -53,9 +53,10 @@ public class PlateauBuilder {
 	
 	//Coordinates are the N_W Corner!!
 	/*
-	 * TODO: Write also a method, that digs a cave with two corners
-	 * TODO:
-	 *   - Pass calculation of block positions to a daemon thread
+	 * DONE: Write also a method, that digs a cave with two corners
+	 * 
+	 * Future ideas:
+	 *   - Pass calculation of block positions to a daemon thread OR to a entity that places blocks every tick like old cqc
 	 *   - Let the daemon thread call a method that runs the block placement on the main Thread
 	 *   - Rewrite generators in that way, that they get a method that gets called by the calcThread to start block placement
 	 *   

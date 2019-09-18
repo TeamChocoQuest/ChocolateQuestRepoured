@@ -19,51 +19,39 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMusket extends ItemRevolver
-{
-	public ItemMusket(String name) 
-	{
-		super(name);
+public class ItemMusket extends ItemRevolver {
+
+	public ItemMusket() {
 		setMaxDamage(300);
 		setMaxStackSize(1);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn)
-    {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.BLUE + "7.5 " + I18n.format("description.bullet_damage.name"));
 		tooltip.add(TextFormatting.RED + "-60 " + I18n.format("description.fire_rate.name"));
 		tooltip.add(TextFormatting.RED + "-10" + "% " + I18n.format("description.accuracy.name"));
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
-		{
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.gun.name"));
-		}		
-		else
-		{
+		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
-    }
-	
+	}
+
 	@Override
-	public void shoot(ItemStack stack, World worldIn, EntityPlayer player)
-	{
+	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 		boolean flag = player.capabilities.isCreativeMode;
 		ItemStack itemstack = findAmmo(player);
-			
-		if(!itemstack.isEmpty() || flag)
-		{
-			if(!worldIn.isRemote)
-			{
-				if(flag && itemstack.isEmpty())
-				{
+
+		if (!itemstack.isEmpty() || flag) {
+			if (!worldIn.isRemote) {
+				if (flag && itemstack.isEmpty()) {
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
 					worldIn.spawnEntity(bulletE);
-				}
-				else
-				{
+				} else {
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
@@ -71,65 +59,61 @@ public class ItemMusket extends ItemRevolver
 					stack.damageItem(1, player);
 				}
 			}
-			
-			worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+
+			worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
+					1.0F, 1.0F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
-					
-			if(!flag)
-            {
+
+			if (!flag) {
 				itemstack.shrink(1);
 
-				if(itemstack.isEmpty())
-				{
+				if (itemstack.isEmpty()) {
 					player.inventory.deleteStack(itemstack);
 				}
 			}
 		}
 	}
-	
-/*	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft)
-    {
-		if(entityLiving instanceof EntityPlayer)
-		{
-			EntityPlayer player = (EntityPlayer)entityLiving;
+
+	/*
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		if (entityLiving instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entityLiving;
 			boolean flag = player.capabilities.isCreativeMode;
 			ItemStack itemstack = findAmmo(player);
-				
-			if(!itemstack.isEmpty() || flag)
-			{
-				if(!worldIn.isRemote)
-				{
-					if(flag && itemstack.isEmpty())
-					{
+
+			if (!itemstack.isEmpty() || flag) {
+				if (!worldIn.isRemote) {
+					if (flag && itemstack.isEmpty()) {
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
 						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
+						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
+								30);
 						worldIn.spawnEntity(bulletE);
-					}
-					else
-					{
+					} else {
 						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
 						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
+						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
+								30);
 						worldIn.spawnEntity(bulletE);
 						stack.damageItem(1, player);
 					}
 				}
-				
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+
+				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
+						1.0F, 1.0F, false);
 				entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
-						
-				if(!flag)
-	            {
+
+				if (!flag) {
 					itemstack.shrink(1);
 
-					if(itemstack.isEmpty())
-					{
+					if (itemstack.isEmpty()) {
 						player.inventory.deleteStack(itemstack);
 					}
 				}
 			}
 		}
-    } */
+	}
+	*/
+
 }

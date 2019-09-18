@@ -5,6 +5,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -21,6 +22,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraftforge.common.MinecraftForge;
 
 public class NetherCityGenerator implements IDungeonGenerator {
 
@@ -38,7 +40,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	private int minZ;
 	private int maxZ;
 	
-	private static int tunnelHeight = 3;
+	//private static int tunnelHeight = 3;
 	
 	public NetherCityGenerator(ClassicNetherCity dungeon) {
 		this.dungeon = dungeon;
@@ -86,7 +88,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		//Dig out the big air pocket or the small ones
 		if(dungeon.makeSpaceForBuildings()) {
-			if(dungeon.useSingleAirPocketsForHouses()) {
+			/*if(dungeon.useSingleAirPocketsForHouses()) {
 				for(BlockPos pocketCenter : gridPositions) {
 					BlockPos cLower = new BlockPos(pocketCenter.getX() - dungeon.getLongestSide() /2, y +1, pocketCenter.getZ() - dungeon.getLongestSide());
 					BlockPos cUpper = new BlockPos(pocketCenter.getX() + dungeon.getLongestSide() /2, y +dungeon.getCaveHeight(), pocketCenter.getZ() + dungeon.getLongestSide());
@@ -94,18 +96,18 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					PlateauBuilder pB = new PlateauBuilder();
 					pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world);
 				}
-			} else {
-				BlockPos cLower = new BlockPos(minX, y +1, minZ);
-				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ);
+			} else {*/
+				BlockPos cLower = new BlockPos(minX, y +1, minZ).add(-dungeon.getDistanceBetweenBuildingCenters(), 0, -dungeon.getDistanceBetweenBuildingCenters());;
+				BlockPos cUpper = new BlockPos(maxX, y +dungeon.getCaveHeight(), maxZ).add(dungeon.getDistanceBetweenBuildingCenters() *0.1, 0, dungeon.getDistanceBetweenBuildingCenters() *0.05);
 				
 				PlateauBuilder pB = new PlateauBuilder();
 				pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, minX, maxZ), world);
-			}
+			//}
 		}
 		
 		
 		//Build the roads / bridges and the floors
-		for(BlockPos lavaPos : BlockPos.getAllInBox(minX, y, minZ, maxX, y, maxZ)) {
+		for(BlockPos lavaPos : BlockPos.getAllInBox(minX - dungeon.getDistanceBetweenBuildingCenters(), y, minZ- dungeon.getDistanceBetweenBuildingCenters(), maxX + dungeon.getDistanceBetweenBuildingCenters(), y, maxZ + dungeon.getDistanceBetweenBuildingCenters())) {
 			lavaBlocks.add(lavaPos);
 		}
 		//Bridges from south to north
@@ -119,13 +121,13 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				bridgeBlocks.add(pCW);
 				
 				//Tunnels if not big air pocket
-				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+				/*if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCE.up(n));
 						world.setBlockToAir(pCW.up(n));
 					}
-				}
+				}*/
 			}
 		}
 		//Bridges from west to east
@@ -139,13 +141,13 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				bridgeBlocks.add(pCS);
 				
 				//Tunnels if not big air pocket
-				if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-					for(int n = 0; n < tunnelHeight; n++) {
+				/*if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
+					for(int n = 1; n <= tunnelHeight; n++) {
 						world.setBlockToAir(pC.up(n));
 						world.setBlockToAir(pCN.up(n));
 						world.setBlockToAir(pCS.up(n));
 					}
-				}
+				}*/
 			}
 		}
 		
@@ -167,19 +169,19 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		settings.setRotation(Rotation.NONE);
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
-		
+
+		CQStructure centralStructure = null;
 		if(dungeon.centralBuildingIsSpecial()) {
 			//DONE: Choose a central building, figure out the size, then build the platform and then the building
-			CQStructure centralStructure = null;
 			if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isDirectory() && dungeon.getCentralBuildingFolder().listFiles().length > 0) {
-				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon.isProtectedFromModifications());
+				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isFile()) {
-				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder(), dungeon.isProtectedFromModifications());
+				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(centralStructure != null) {
-				BlockPos cL = new BlockPos(x - centralStructure.getSizeX() /2, y, z - centralStructure.getSizeZ() /2);
-				BlockPos cU = cL.add(centralStructure.getSizeX(), 0, centralStructure.getSizeZ());
+				BlockPos cL = new BlockPos(x - (centralStructure.getSizeX() /2 +2), y, z - (centralStructure.getSizeZ() /2 +2));
+				BlockPos cU = cL.add(centralStructure.getSizeX() +4, 0, centralStructure.getSizeZ() +4);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override
@@ -196,14 +198,14 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		for(BlockPos centerPos : gridPositions) {
 			//DONE: Choose a building, figure out the size, then build the platform and then the building
 			if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() && filesInFolder > 1) {
-				structure = new CQStructure(dungeon.getBuildingFolder().listFiles()[rdm.nextInt(filesInFolder)], dungeon.isProtectedFromModifications());
+				structure = new CQStructure(dungeon.getBuildingFolder().listFiles()[rdm.nextInt(filesInFolder)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isFile()) {
-				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon.isProtectedFromModifications());
+				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(structure != null) {
-				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2, 0, structure.getSizeZ() /2));
-				BlockPos cU = centerPos.add(structure.getSizeX() /2, 0, structure.getSizeZ() /2);
+				BlockPos cL = centerPos.subtract(new Vec3i(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2));
+				BlockPos cU = centerPos.add(structure.getSizeX() /2  +2, 0, structure.getSizeZ() /2  +2);
 				BlockPos.getAllInBox(cL, cU).forEach(new Consumer<BlockPos>() {
 
 					@Override
@@ -215,6 +217,14 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				structure.placeBlocksInWorld(world, centerPos.add(0,1,0), settings, EPosType.CENTER_XZ_LAYER);
 			}
 		}
+		BlockPos posLower = new BlockPos(minX - dungeon.getDistanceBetweenBuildingCenters(), y, minZ- dungeon.getDistanceBetweenBuildingCenters());
+		BlockPos posUpper = new BlockPos(maxX + dungeon.getDistanceBetweenBuildingCenters(), y +dungeon.getCaveHeight(), maxZ + dungeon.getDistanceBetweenBuildingCenters());
+		
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world);
+		if(centralStructure != null) {
+			event.setShieldCorePosition(centralStructure.getShieldCorePosition());
+		}
+		MinecraftForge.EVENT_BUS.post(event);
 	}
 
 	@Override
@@ -231,20 +241,28 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			//DONE: Place CQ spawners !!!
 			if(dungeon.centralBuildingIsSpecial()) {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
-				if(dungeon.centralSpawnerIsSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+				try {
+					if(dungeon.centralSpawnerIsSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPosCentral);
 				}
 			}
 			
 			for(BlockPos p : gridPositions) {
 				BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
 				
-				if(dungeon.spawnersAreSingleUse()) {
-					SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPos);
-				} else {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+				try {
+					if(dungeon.spawnersAreSingleUse()) {
+						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world), false, null, world, spawnerPos);
+					} else {
+						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
+					}
+				} catch(NullPointerException ex) {
+					world.setBlockToAir(spawnerPos);
 				}
 			}
 		}
