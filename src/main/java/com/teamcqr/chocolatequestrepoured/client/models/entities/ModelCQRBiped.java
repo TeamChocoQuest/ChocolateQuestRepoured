@@ -15,19 +15,28 @@ public class ModelCQRBiped extends ModelBiped {
 	public ModelRenderer bipedCape;
 	
 	public ModelCQRBiped(float modelSize) {
-		super(modelSize);
+		/*super(modelSize);
 		this.bipedCape = new ModelRenderer(this, 0, 0);
         this.bipedCape.setTextureSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
         
-        initExtraLayer(modelSize);
+        initExtraLayer(modelSize);*/
+		this(modelSize, 0, 64, 64);
 	}
 
 	public ModelCQRBiped(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
+		super(modelSize, p_i1149_2_, 64, 64);
 		this.bipedCape = new ModelRenderer(this, 0, 0);
         this.bipedCape.setTextureSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
+        
+        this.bipedLeftArm = new ModelRenderer(this, 32, 48);
+        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, modelSize);
+        this.bipedLeftArm.setRotationPoint(5.0F, 2.0F, 0.0F);
+        
+        this.bipedLeftLeg = new ModelRenderer(this, 16, 48);
+        this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize);
+        this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
         
         initExtraLayer(modelSize);
 	}
