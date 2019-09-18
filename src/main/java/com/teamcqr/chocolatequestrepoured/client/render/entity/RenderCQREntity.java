@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
@@ -31,7 +32,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName, double widthScale, double heightScale) {
-		this(rendermanagerIn, new ModelBiped(), 0.5F, entityName, widthScale, heightScale);
+		this(rendermanagerIn, new ModelCQRBiped(0.0F), 0.5F, entityName, widthScale, heightScale);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
