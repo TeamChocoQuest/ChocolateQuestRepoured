@@ -320,6 +320,28 @@ public abstract class CastleRoom
         }
     }
 
+    public boolean hasWallOnSide(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            return buildNorthWall;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            return buildEastWall;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            return buildSouthWall;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            return buildWestWall;
+        }
+        return false;
+    }
+
+
     protected void buildRoofEdges(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();

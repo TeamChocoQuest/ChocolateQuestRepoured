@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.util.EnumFacing;
 
+import java.util.Comparator;
+
 public class RoomGridCell
 {
     private enum CellState
@@ -125,6 +127,13 @@ public class RoomGridCell
     public boolean needsRoomType()
     {
         return (state == CellState.SELECTED);
+    }
+
+    public double distanceTo(RoomGridCell destCell)
+    {
+        int distX = Math.abs(getGridX() - destCell.getGridX());
+        int distZ = Math.abs(getGridZ() - destCell.getGridZ());
+        return (Math.hypot(distX, distZ));
     }
 
     public CastleRoom getRoom()
