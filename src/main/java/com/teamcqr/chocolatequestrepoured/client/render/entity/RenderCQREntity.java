@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -77,7 +78,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
 			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
 			// Main arm
-			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0 && itemMainHand.getItem() instanceof ItemShield) {
 				EnumAction action = itemMainHand.getItemUseAction();
 				switch (action) {
 				case BLOCK:
@@ -93,7 +94,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				}
 			}
 			// Off arm
-			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0 && itemOffHand.getItem() instanceof ItemShield) {
 				EnumAction action = itemOffHand.getItemUseAction();
 				switch (action) {
 				case BLOCK:
