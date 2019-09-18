@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
@@ -66,7 +67,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (this.mainModel instanceof ModelBiped) {
+		if (this.mainModel instanceof ModelCQRBiped) {
+			GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 			ModelBiped model = (ModelBiped) this.mainModel;
 
 			ItemStack itemMainHand = entity.getHeldItemMainhand();
@@ -112,6 +114,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		if (this.mainModel instanceof ModelCQRBiped) {
+			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+		}
 	}
 
 	protected ResourceLocation getEntityTexture(T entity) {
