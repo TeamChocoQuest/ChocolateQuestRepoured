@@ -104,7 +104,7 @@ public class VillageGenerator implements IDungeonGenerator{
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon.isProtectedFromModifications());
+		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
 		
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -121,7 +121,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			if(i < this.chosenStructures.size()) {
 				System.out.println("Building support platform " + (i+1) + "...");
 				//DONE: Load structures from file method   !!HIGH PRIORITY!!
-				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i), this.dungeon.isProtectedFromModifications());
+				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
 				
 				if(dungeonToSpawn != null) {
 					//Build the support platform...

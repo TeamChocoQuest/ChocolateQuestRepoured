@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import net.minecraft.util.EnumFacing;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -220,7 +222,7 @@ public class RoomGrid
         roomArray[floor][x][z].setBuildable();
     }
 
-    public void selectRoomForBuilding(int floor, int x, int z)
+    public void selectCellForBuilding(int floor, int x, int z)
     {
         roomArray[floor][x][z].selectForBuilding();
     }
@@ -263,7 +265,124 @@ public class RoomGrid
         }
     }
 
-    public boolean withinGridBounds(int x, int z)
+    public RoomGridCell getCellAtLocation(RoomGridPosition position)
+    {
+        if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
+        {
+            return roomArray[position.getFloor()][position.getX()][position.getZ()];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public void selectBlockOfCellsForBuilding(int startFloor, int floors, int startX, int lenX, int startZ, int lenZ)
+    {
+        for (int floor = startFloor; floor < startFloor + floors; floor++)
+        {
+            for (int x = startX; x < startX + lenX; x++)
+            {
+                for (int z = startZ; z < startZ + lenZ; z++)
+                {
+                    if (withinGridBounds(floor, x, z))
+                    {
+                        selectCellForBuilding(floor, x, z);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean adjacentCellIsPopulated(RoomGridCell startCell, EnumFacing direction)
+    {
+        boolean result;
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        return (adjacent != null && adjacent.isPopulated());
+    }
+
+    public boolean adjacentCellIsSelected(RoomGridCell startCell, EnumFacing direction)
+    {
+        boolean result;
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        return (adjacent != null && adjacent.isSelectedForBuilding());
+    }
+
+    public boolean cellBordersHallway(RoomGridCell startCell)
+    {
+        return getAdjacentHallwayDirection(startCell) != EnumFacing.DOWN;
+    }
+
+    public EnumFacing getAdjacentHallwayDirection(RoomGridCell startCell)
+    {
+        for (EnumFacing direction : EnumFacing.HORIZONTALS)
+        {
+            RoomGridCell adjacentCell = getAdjacentCell(startCell, direction);
+            if (adjacentCell != null &&
+                    adjacentCell.isPopulated() &&
+                    adjacentCell.getRoom().getRoomType() == CastleRoom.RoomType.HALLWAY)
+            {
+                return direction;
+            }
+        }
+
+        return EnumFacing.DOWN;
+    }
+
+    public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)
+    {
+        int distX = Math.abs(c1.getGridX() - c2.getGridX());
+        int distZ = Math.abs(c1.getGridZ() - c2.getGridZ());
+        return (Math.hypot(distX, distZ));
+    }
+
+    public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction)
+    {
+        RoomGridPosition startPosition = startCell.getGridPosition();
+        int floor = startPosition.getFloor();
+        int x = startPosition.getX();
+        int z = startPosition.getZ();
+
+        switch (direction)
+        {
+            case UP:
+                floor += 1;
+                break;
+            case DOWN:
+                floor -= 1;
+                break;
+            case NORTH:
+                z -= 1;
+                break;
+            case SOUTH:
+                z += 1;
+                break;
+            case WEST:
+                x -= 1;
+                break;
+            case EAST:
+                x += 1;
+                break;
+            default:
+                break;
+        }
+
+        if (withinGridBounds(floor, x, z))
+        {
+            return roomArray[floor][x][z];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public boolean withinGridBounds(int floor, int x, int z)
+    {
+        return (floor >= 0 && floor < floors && withinFloorBounds(x, z));
+    }
+
+    public boolean withinFloorBounds(int x, int z)
     {
         return (x >= 0 && x < roomsX && z >= 0 && z < roomsZ);
     }

@@ -174,9 +174,9 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		if(dungeon.centralBuildingIsSpecial()) {
 			//DONE: Choose a central building, figure out the size, then build the platform and then the building
 			if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isDirectory() && dungeon.getCentralBuildingFolder().listFiles().length > 0) {
-				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon.isProtectedFromModifications());
+				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isFile()) {
-				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder(), dungeon.isProtectedFromModifications());
+				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(centralStructure != null) {
@@ -198,9 +198,9 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		for(BlockPos centerPos : gridPositions) {
 			//DONE: Choose a building, figure out the size, then build the platform and then the building
 			if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() && filesInFolder > 1) {
-				structure = new CQStructure(dungeon.getBuildingFolder().listFiles()[rdm.nextInt(filesInFolder)], dungeon.isProtectedFromModifications());
+				structure = new CQStructure(dungeon.getBuildingFolder().listFiles()[rdm.nextInt(filesInFolder)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isFile()) {
-				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon.isProtectedFromModifications());
+				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(structure != null) {

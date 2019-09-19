@@ -71,9 +71,9 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
 		
-		File structure = pickStructure(new Random());
-		if(structure != null) {
-			CQStructure dungeon = new CQStructure(structure, this.protectFromDestruction);
+		File structureF = pickStructure(new Random());
+		if(structureF != null && structureF.exists() && structureF.isFile()) {
+			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.protectFromDestruction);
 			
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);
@@ -95,8 +95,8 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 			}
 			
 			System.out.println("Placing dungeon: " + this.name);
-			System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
-			DefaultSurfaceGenerator generator = new DefaultSurfaceGenerator(this, dungeon, settings);
+			System.out.println("Generating structure " + structureF.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
+			DefaultSurfaceGenerator generator = new DefaultSurfaceGenerator(this, structure, settings);
 			generator.generate(world, chunk, x, y, z);
 		}
 	}
