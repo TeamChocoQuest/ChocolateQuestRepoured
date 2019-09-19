@@ -108,7 +108,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
 				if (!stack.isEmpty() && stack.getTagCompound() != null) {
-					for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
+					//for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
 						//DONE: Set "id" section of the nbt tag, type is resourcelocation
 						NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
 						ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
@@ -123,10 +123,12 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 								}
 							//}
 						}
-						this.spawnEntityFromNBT(nbt);
+						for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
+							this.spawnEntityFromNBT(nbt);
+						}
 
 						this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-					}
+					//}
 				}
 			}
 
