@@ -14,39 +14,25 @@ public class ModelCQREndermanArmor extends ModelBiped {
 
 	public ModelCQREndermanArmor(float scale, boolean legs) {
 		super(scale);
-		this.bipedHead = new ModelRenderer(this, 0, 0);
-		this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, scale);
+		this.bipedHead.setRotationPoint(0.0F, -14.0F, 0.0F);
 		this.bipedHeadwear.setRotationPoint(0.0F, -14.0F, 0.0F);
-		this.bipedHeadwear = new ModelRenderer(this, 32, 0);
-		this.bipedHeadwear.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, scale + 0.5F);
-		this.bipedHeadwear.setRotationPoint(0.0F, -14.0F, 0.0F);
-		this.bipedBody = new ModelRenderer(this, 16, 16);
-		this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, scale);
 		this.bipedBody.setRotationPoint(0.0F, -14.0F, 0.0F);
-		this.bipedRightArm = new ModelRenderer(this, 40, 16);
-		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, scale);
 		this.bipedRightArm.setRotationPoint(-3.0F, -12.0F, 0.0F);
-		this.bipedLeftArm = new ModelRenderer(this, 40, 16);
-		this.bipedLeftArm.mirror = true;
-		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, scale);
 		this.bipedLeftArm.setRotationPoint(5.0F, -12.0F, 0.0F);
 		if (legs) {
 			this.bipedRightLeg = new ModelRenderer(this, 0, 16);
 			this.bipedRightLeg.addBox(-2.0F, 4.0F, -2.0F, 4, 12, 4, scale);
-			this.bipedRightLeg.setRotationPoint(-2.0F, -2.0F, 0.0F);
 			this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-			this.bipedLeftLeg.mirror = true;
 			this.bipedLeftLeg.addBox(-2.0F, 4.0F, -2.0F, 4, 12, 4, scale);
-			this.bipedLeftLeg.setRotationPoint(2.0F, -2.0F, 0.0F);
 		} else {
 			this.bipedRightLeg = new ModelRenderer(this, 0, 16);
 			this.bipedRightLeg.addBox(-2.0F, 18.0F, -2.0F, 4, 12, 4, scale);
-			this.bipedRightLeg.setRotationPoint(-2.0F, -2.0F, 0.0F);
 			this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-			this.bipedLeftLeg.mirror = true;
 			this.bipedLeftLeg.addBox(-2.0F, 18.0F, -2.0F, 4, 12, 4, scale);
-			this.bipedLeftLeg.setRotationPoint(2.0F, -2.0F, 0.0F);
 		}
+		this.bipedRightLeg.setRotationPoint(-2.0F, -2.0F, 0.0F);
+		this.bipedLeftLeg.mirror = true;
+		this.bipedLeftLeg.setRotationPoint(2.0F, -2.0F, 0.0F);
 	}
 
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
