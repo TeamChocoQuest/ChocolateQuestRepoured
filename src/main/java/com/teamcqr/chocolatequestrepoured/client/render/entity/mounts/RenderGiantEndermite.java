@@ -1,8 +1,9 @@
-package com.teamcqr.chocolatequestrepoured.client.render.entity;
+package com.teamcqr.chocolatequestrepoured.client.render.entity.mounts;
 
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -11,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderGiantEndermite extends RenderLiving<EntityGiantEndermite> {
 	
-	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation("minecraft","textures/entity/endermite.png");
+	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(Reference.MODID,"textures/entity/mounts/giant_endermite.png");
 
 	public RenderGiantEndermite(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
 		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
