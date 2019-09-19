@@ -26,5 +26,5 @@ public abstract class EntityCQRGiantSilverfishBase extends EntityCQRMountBase {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SILVERFISH_DEATH;
 	}
-	
+
 }
