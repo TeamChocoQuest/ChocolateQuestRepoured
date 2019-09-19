@@ -5,7 +5,6 @@ import org.lwjgl.opengl.GL11;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSilverfish;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -15,8 +14,8 @@ public class RenderGiantSilverfish extends RenderLiving<EntityGiantSilverfishNor
 	
 	static ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_silverfish.png");
 
-	public RenderGiantSilverfish(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
-		super(rendermanagerIn, new ModelSilverfish(), shadowsizeIn);
+	public RenderGiantSilverfish(RenderManager rendermanagerIn) {
+		super(rendermanagerIn, new ModelSilverfish(), 1.5F);
 	}
 
 	@Override

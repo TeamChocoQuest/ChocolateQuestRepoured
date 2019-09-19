@@ -13,6 +13,10 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantEndermite;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfish;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfishRed;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
@@ -47,6 +51,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileE
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 
@@ -110,6 +118,18 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQREntity<EntityCQRWalker>(renderManager, "entity_mob_cqrwalker"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class,
 				renderManager -> new RenderCQREntity<EntityCQRZombie>(renderManager, "entity_mob_cqrzombie"));
+		
+		//Mounts
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class,
+				renderManager -> new RenderGiantEndermite(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class,
+				renderManager -> new RenderGiantSilverfish(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishGreen.class,
+				renderManager -> new RenderGiantSilverfishGreen(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishRed.class,
+				renderManager -> new RenderGiantSilverfishRed(renderManager));
+		
+		//Bosses
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class,
 
