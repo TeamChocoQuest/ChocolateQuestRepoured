@@ -56,17 +56,21 @@ public enum EFaction {
 	}
 	
 	public boolean isEnemy(EFaction otherFac) {
-		for(String str : this.enemies) {
-			if(otherFac.toString().toUpperCase().equals(str)) {
-				return true;
+		if(otherFac != null) {
+			for(String str : this.enemies) {
+				if(otherFac.toString().toUpperCase().equals(str)) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 	public boolean isAlly(EFaction otherFac) {
-		for(String str : this.allies) {
-			if(otherFac.toString().toUpperCase().equals(str)) {
-				return true;
+		if(otherFac != null) {
+			for(String str : this.allies) {
+				if(otherFac.toString().toUpperCase().equals(str)) {
+					return true;
+				}
 			}
 		}
 		return false;

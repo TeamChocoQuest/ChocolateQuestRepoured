@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
@@ -9,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
@@ -16,6 +18,7 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
@@ -31,7 +34,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName, double widthScale, double heightScale) {
-		this(rendermanagerIn, new ModelBiped(), 0.5F, entityName, widthScale, heightScale);
+		this(rendermanagerIn, new ModelCQRBiped(0.0F), 0.5F, entityName, widthScale, heightScale);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
@@ -65,7 +68,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (this.mainModel instanceof ModelBiped) {
+		if (this.mainModel instanceof ModelCQRBiped) {
+			GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 			ModelBiped model = (ModelBiped) this.mainModel;
 
 			ItemStack itemMainHand = entity.getHeldItemMainhand();
@@ -74,7 +78,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
 			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
 			// Main arm
-			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0 && itemMainHand.getItem() instanceof ItemShield) {
 				EnumAction action = itemMainHand.getItemUseAction();
 				switch (action) {
 				case BLOCK:
@@ -83,16 +87,14 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BOW:
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					break;
-				case NONE:
-					armPoseMain = ModelBiped.ArmPose.EMPTY;
 				default:
-					armPoseMain = ModelBiped.ArmPose.ITEM;
+					armPoseMain = ModelBiped.ArmPose.EMPTY;
 					break;
 
 				}
 			}
 			// Off arm
-			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0 && itemOffHand.getItem() instanceof ItemShield) {
 				EnumAction action = itemOffHand.getItemUseAction();
 				switch (action) {
 				case BLOCK:
@@ -101,11 +103,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BOW:
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					break;
-				case NONE:
-					armPoseOff = ModelBiped.ArmPose.EMPTY;
-					break;
 				default:
-					armPoseOff = ModelBiped.ArmPose.ITEM;
+					armPoseOff = ModelBiped.ArmPose.EMPTY;
 					break;
 
 				}
@@ -116,6 +115,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		if (this.mainModel instanceof ModelCQRBiped) {
+			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+		}
 	}
 
 	protected ResourceLocation getEntityTexture(T entity) {

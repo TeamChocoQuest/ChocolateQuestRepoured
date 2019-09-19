@@ -40,6 +40,7 @@ public class DungeonBase {
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
 	protected boolean useCoverBlock = false;
+	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
 	private boolean spawnBehindWall = false;
 	private int iconID;
 	private FileInputStream fisConfigFile = null;
@@ -77,38 +78,15 @@ public class DungeonBase {
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
+			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
-				this.supportBlock = Blocks.STONE;
-				try {
-					Block tmp = Block.getBlockFromName(prop.getProperty("supportblock", "minecraft:stone"));
-					if(tmp != null) {
-						this.supportBlock = tmp;
-					}
-				} catch(Exception ex) {
-					System.out.println("couldnt load supportblock block! using default value (stone block)...");
-				}
-				
-				this.supportTopBlock = Blocks.GRASS;
-				try {
-					Block tmp = Block.getBlockFromName(prop.getProperty("supportblocktop", "minecraft:stone"));
-					if(tmp != null) {
-						this.supportTopBlock = tmp;
-					}
-				} catch(Exception ex) {
-					System.out.println("couldnt load supportblocktop block! using default value (air block)...");
-				}
+				this.supportBlock = PropertyFileHelper.getBlockProperty(prop, "supportblock", Blocks.STONE);
+				this.supportTopBlock = PropertyFileHelper.getBlockProperty(prop, "supportblocktop", Blocks.GRASS);
 			}
-			this.coverBlock = Blocks.AIR;
-			try {
-				Block tmp = Block.getBlockFromName(prop.getProperty("coverblock", "minecraft:air"));
-				if(tmp != null) {
-					this.coverBlock = tmp;
-				}
-			} catch(Exception ex) {
-				System.out.println("couldnt load cover block! using default value (air block)...");
-			}
+			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
+			
 			closeConfigFile();
 		} else {
 			registeredSuccessful = false;
@@ -231,5 +209,9 @@ public class DungeonBase {
 		}
 		registeredSuccessful = false;
 		return null;
+	}
+
+	public EDungeonMobType getDungeonMob() {
+		return this.dungeonMob;
 	}
 }

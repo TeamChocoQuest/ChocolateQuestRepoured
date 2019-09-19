@@ -122,10 +122,17 @@ public abstract class CastleRoom
     protected int countY;
     protected int countZ;
     protected int maxSlotsUsed = 1;
+
     protected boolean buildNorthWall;
     protected boolean buildEastWall;
     protected boolean buildSouthWall;
     protected boolean buildWestWall;
+
+    protected boolean buildNorthRoof;
+    protected boolean buildEastRoof;
+    protected boolean buildSouthRoof;
+    protected boolean buildWestRoof;
+
     protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
     protected Random random = new Random();
@@ -144,6 +151,7 @@ public abstract class CastleRoom
     {
         generateRoom(blocks);
         generateWalls(blocks);
+        buildRoofEdges(blocks);
         generateDoors(blocks);
     }
 
@@ -290,6 +298,108 @@ public abstract class CastleRoom
         {
             buildWestWall = false;
         }
+    }
+
+    public void addRoofEdge(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            buildNorthRoof = true;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            buildEastRoof = true;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            buildSouthRoof = true;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            buildWestRoof = true;
+        }
+    }
+
+    public boolean hasWallOnSide(EnumFacing side)
+    {
+        if (side == EnumFacing.NORTH)
+        {
+            return buildNorthWall;
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            return buildEastWall;
+        }
+        else if (side == EnumFacing.SOUTH)
+        {
+            return buildSouthWall;
+        }
+        else if (side == EnumFacing.WEST)
+        {
+            return buildWestWall;
+        }
+        return false;
+    }
+
+
+    protected void buildRoofEdges(ArrayList<BlockPlacement> blocks)
+    {
+        IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
+        int len = sideLength;
+
+        if (buildNorthRoof)
+        {
+            for (int x = 0; x < len; x++)
+            {
+                BlockPos pos = startPos.add(x, height + 1, 0);
+                blocks.add(new BlockPlacement(pos, wallBlock));
+                if (ShouldBuildCrenellation(len, x))
+                {
+                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                }
+            }
+        }
+        if (buildSouthRoof)
+        {
+            for (int x = 0; x < len; x++)
+            {
+                BlockPos pos = startPos.add(x, height + 1, sideLength - 1);
+                blocks.add(new BlockPlacement(pos, wallBlock));
+                if (ShouldBuildCrenellation(len, x))
+                {
+                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                }
+            }
+        }
+        if (buildWestRoof)
+        {
+            for (int z = 0; z < len; z++)
+            {
+                BlockPos pos = startPos.add(0, height + 1, z);
+                blocks.add(new BlockPlacement(pos, wallBlock));
+                if (ShouldBuildCrenellation(len, z))
+                {
+                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                }
+            }
+        }
+        if (buildEastRoof)
+        {
+            for (int z = 0; z < len; z++)
+            {
+                BlockPos pos = startPos.add(sideLength - 1, height + 1, z);
+                blocks.add(new BlockPlacement(pos, wallBlock));
+                if (ShouldBuildCrenellation(len, z))
+                {
+                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                }
+            }
+        }
+    }
+
+    private boolean ShouldBuildCrenellation(int wallLength, int index)
+    {
+        return (index == 0 || index == wallLength - 1 || index % 2 == 0);
     }
 
     public String getPositionString()
