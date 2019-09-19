@@ -63,7 +63,7 @@ public class EventsHandler {
 			float amount = event.getAmount();
 			World world = player.world;
 
-			if (player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER
+			if (player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER_KING
 					|| player.getHeldItemMainhand().getItem() != ModItems.SWORD_WALKER
 					|| player.getRidingEntity() != null || attacker == null) {
 				return;

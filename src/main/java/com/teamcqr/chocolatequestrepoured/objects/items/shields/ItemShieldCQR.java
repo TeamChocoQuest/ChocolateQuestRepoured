@@ -32,6 +32,7 @@ public class ItemShieldCQR extends ItemShield {
 			"tomb",
 			"triton",
 			"turtle",
+			"walker",
 			"warped",
 			"zombie"
 	};
