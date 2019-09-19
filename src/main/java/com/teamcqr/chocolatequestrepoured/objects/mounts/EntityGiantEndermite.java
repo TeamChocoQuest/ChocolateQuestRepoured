@@ -11,6 +11,7 @@ public class EntityGiantEndermite extends EntityCQRMountBase {
 
 	public EntityGiantEndermite(World worldIn) {
 		super(worldIn);
+		setSize(1.5F, 1.5F);
 	}
 	
 	@Override

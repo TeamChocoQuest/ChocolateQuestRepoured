@@ -11,7 +11,7 @@ public class EntityPollo extends EntityCQRMountBase {
 
 	public EntityPollo(World worldIn) {
 		super(worldIn);
-		// TODO Auto-generated constructor stub
+		setSize(0.7F, 1.5F);
 	}
 	
 	@Override
