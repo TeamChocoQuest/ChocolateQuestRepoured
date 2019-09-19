@@ -2,25 +2,24 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity.mounts;
 
 import org.lwjgl.opengl.GL11;
 
-import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGreenGiantSilverfish;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelSilverfish;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderGiantSilverfishGreen extends RenderLiving<EntityGreenGiantSilverfish> {
+public class RenderGiantSilverfishGreen extends RenderLiving<EntityGiantSilverfishGreen> {
 	
 	static ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_silverfish_green.png");
 
-	public RenderGiantSilverfishGreen(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
-		super(rendermanagerIn, new ModelSilverfish(), shadowsizeIn);
+	public RenderGiantSilverfishGreen(RenderManager rendermanagerIn) {
+		super(rendermanagerIn, new ModelSilverfish(), 1.5F);
 	}
 
 	@Override
-	protected void preRenderCallback(EntityGreenGiantSilverfish entitylivingbaseIn, float partialTickTime) {
+	protected void preRenderCallback(EntityGiantSilverfishGreen entitylivingbaseIn, float partialTickTime) {
 		double width = 4D;
 		double height = 4D;
 		GL11.glScaled(width, height, width);
@@ -29,7 +28,7 @@ public class RenderGiantSilverfishGreen extends RenderLiving<EntityGreenGiantSil
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityGreenGiantSilverfish entity) {
+	protected ResourceLocation getEntityTexture(EntityGiantSilverfishGreen entity) {
 		return TEXTURE;
 	}
 }

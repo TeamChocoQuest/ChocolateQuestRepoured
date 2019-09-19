@@ -4,9 +4,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRGiantSil
 
 import net.minecraft.world.World;
 
-public class EntityRedGiantSilverfish extends EntityCQRGiantSilverfishBase {
+public class EntityGiantSilverfishRed extends EntityCQRGiantSilverfishBase {
 
-	public EntityRedGiantSilverfish(World worldIn) {
+	public EntityGiantSilverfishRed(World worldIn) {
 		super(worldIn);
 		// TODO Auto-generated constructor stub
 	}
