@@ -108,7 +108,7 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQREntity<EntityCQRPigman>(renderManager, "entity_mob_cqrpigman"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class,
 				renderManager -> new RenderCQREntity<EntityCQRPirate>(renderManager, "entity_mob_cqrpirate"));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class,
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class,	
 				renderManager -> new RenderCQRSkeleton(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectre.class,
 				renderManager -> new RenderCQREntity<EntityCQRSpectre>(renderManager, "entity_mob_cqrspectre"));
