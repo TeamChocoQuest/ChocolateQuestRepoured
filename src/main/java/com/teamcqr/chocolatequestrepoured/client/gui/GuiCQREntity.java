@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.gui;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.gui.inventory.GuiContainer;

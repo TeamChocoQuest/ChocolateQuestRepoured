@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
