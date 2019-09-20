@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGoblin;
@@ -105,7 +106,8 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class,
 				renderManager -> new RenderCQROrc(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPigman.class,
-				renderManager -> new RenderCQREntity<EntityCQRPigman>(renderManager, "entity_mob_cqrpigman"));
+				renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman_zombie"));
+				//renderManager -> new RenderCQREntity<EntityCQRPigman>(renderManager, "entity_mob_cqrpigman"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class,
 				renderManager -> new RenderCQREntity<EntityCQRPirate>(renderManager, "entity_mob_cqrpirate"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class,	
