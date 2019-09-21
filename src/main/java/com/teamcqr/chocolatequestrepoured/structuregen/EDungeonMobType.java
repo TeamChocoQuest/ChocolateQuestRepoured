@@ -20,7 +20,7 @@ public enum EDungeonMobType {
 	WALKER(new ResourceLocation(Reference.MODID, "walker")),
 	SPECTER(new ResourceLocation(Reference.MODID, "spectre")),
 	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman")),
-	ZOMBIE_PIGMAN(new ResourceLocation(Reference.MODID, "pigman")),
+	BOARMAN(new ResourceLocation(Reference.MODID, "boarman")),
 	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur")),
 	ORC(new ResourceLocation(Reference.MODID, "orc")),
 	GOLEM(new ResourceLocation(Reference.MODID, "golem")),
