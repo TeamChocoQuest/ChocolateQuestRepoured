@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;

@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.inventory.ContainerBackpack;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBadge;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerCQREntity;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerSpawner;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;

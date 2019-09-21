@@ -17,7 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
@@ -30,6 +30,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileE
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -65,13 +69,18 @@ public class ModEntities {
 	public static final EntityEntry MUMMY = Null();
 	public static final EntityEntry OGRE = Null();
 	public static final EntityEntry ORC = Null();
-	public static final EntityEntry PIGMAN = Null();
+	public static final EntityEntry BOARMAN = Null();
 	public static final EntityEntry PIRATE = Null();
 	public static final EntityEntry SKELETON = Null();
 	public static final EntityEntry SPECTRE = Null();
 	public static final EntityEntry TRITON = Null();
 	public static final EntityEntry WALKER = Null();
 	public static final EntityEntry ZOMBIE = Null();
+	
+	public static final EntityEntry GIANT_ENDERMITE = Null();
+	public static final EntityEntry GIANT_SILVERFISH = Null();
+	public static final EntityEntry GIANT_SILVERFISH1 = Null();
+	public static final EntityEntry GIANT_SILVERFISH2 = Null();
 
 	public static final EntityEntry NETHER_DRAGON = Null();
 
@@ -100,14 +109,21 @@ public class ModEntities {
 					createEntityEntry(EntityCQRMummy.class, "mummy", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQROgre.class, "ogre", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQROrc.class, "orc", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRPigman.class, "pigman", 64, 1, true, 0x333333, 0xEA9393),
+					createEntityEntry(EntityCQRBoarman.class, "boarman", 64, 1, true, 0x333333, 0xEA9393),
 					createEntityEntry(EntityCQRPirate.class, "pirate", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRSkeleton.class, "skeleton", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRSpectre.class, "spectre", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRTriton.class, "triton", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRWalker.class, "walker", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRZombie.class, "zombie", 64, 1, true, 0x333333, 0xC3BDBD),
-
+					
+					//Mounts
+					createEntityEntry(EntityGiantEndermite.class, "giant_endermite", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
+					
+					//Bosses
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000)
 			};
 

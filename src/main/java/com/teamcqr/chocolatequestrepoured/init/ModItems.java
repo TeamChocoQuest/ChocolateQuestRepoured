@@ -33,7 +33,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldCQR;
-import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldWalker;
+import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
@@ -84,7 +84,7 @@ public class ModItems {
 
 	// Walker items
 	public static final Item SWORD_WALKER = Null();
-	public static final Item SHIELD_WALKER = Null();
+	public static final Item SHIELD_WALKER_KING = Null();
 	
 	//Shields
 	public static final Item SHIELD_BULL = Null();
@@ -231,7 +231,7 @@ public class ModItems {
 					setItemName(new ItemBullBattleAxe(ModMaterials.ToolMaterials.TOOL_BULL_BATTLE_AXE), "battle_axe_bull"),
 
 					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
-					setItemName(new ItemShieldWalker(), "shield_walker"),
+					setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
 					
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F), "great_sword_iron"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
