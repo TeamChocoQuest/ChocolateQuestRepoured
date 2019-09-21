@@ -39,7 +39,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPigman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
@@ -105,7 +105,7 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQROgre(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class,
 				renderManager -> new RenderCQROrc(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPigman.class,
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class,
 				renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman_zombie"));
 				//renderManager -> new RenderCQREntity<EntityCQRPigman>(renderManager, "entity_mob_cqrpigman"));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class,

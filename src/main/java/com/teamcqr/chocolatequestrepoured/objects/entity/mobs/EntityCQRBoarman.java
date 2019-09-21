@@ -14,9 +14,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRPigman extends AbstractEntityCQR {
+public class EntityCQRBoarman extends AbstractEntityCQR {
 
-	public EntityCQRPigman(World worldIn) {
+	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
 		this.setSize(0.95F, 2.0F);
 	}
