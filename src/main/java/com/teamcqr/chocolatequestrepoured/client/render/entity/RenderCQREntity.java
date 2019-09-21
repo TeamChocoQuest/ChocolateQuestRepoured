@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;

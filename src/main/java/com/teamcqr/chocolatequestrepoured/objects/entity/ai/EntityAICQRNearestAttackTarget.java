@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;

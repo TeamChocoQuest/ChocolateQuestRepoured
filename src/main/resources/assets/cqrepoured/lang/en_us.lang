@@ -209,7 +209,7 @@ item.cqr_shield_r09.name=Triton Shield
 
 //Walker set
 item.sword_walker.name=Walker Sword
-item.shield_walker.name=Walker King Shield
+item.shield_walker_king.name=Walker King Shield
 
 //Shields
 item.shield_bull.name=Ice Bull Shield
@@ -234,6 +234,7 @@ item.shield_tomb.name=Tomb Shield
 item.shield_triton.name=Triton Shield
 item.shield_turtle.name=Turtle Infantry Shield
 item.shield_warped.name=Warped Shield
+item.shield_walker.name=Walker Shield
 item.shield_walker_normal.name=Walker Shield
 item.shield_zombie.name=Zombie Shield
 

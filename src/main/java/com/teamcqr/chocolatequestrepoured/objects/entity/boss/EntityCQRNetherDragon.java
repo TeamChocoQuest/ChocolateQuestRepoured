@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import io.netty.buffer.ByteBuf;
@@ -231,6 +231,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 		/*for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
 			destroyBlocksInAABB(part.getEntityBoundingBox());
 		}*/
+		
+		//TODO: Attack stuff
 		
 	}
 	

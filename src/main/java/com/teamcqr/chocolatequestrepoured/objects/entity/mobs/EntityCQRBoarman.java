@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -13,9 +14,9 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRPigman extends AbstractEntityCQR {
+public class EntityCQRBoarman extends AbstractEntityCQR {
 
-	public EntityCQRPigman(World worldIn) {
+	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
 		this.setSize(0.95F, 2.0F);
 	}

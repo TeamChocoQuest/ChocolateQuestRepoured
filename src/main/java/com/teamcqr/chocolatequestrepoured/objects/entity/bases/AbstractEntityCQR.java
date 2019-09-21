@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
+package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import java.util.UUID;
 

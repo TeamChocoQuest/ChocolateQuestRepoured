@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
