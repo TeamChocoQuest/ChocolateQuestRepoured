@@ -9,8 +9,12 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class LayerCQREntityPotion extends AbstractLayerCQR {
 
 	public LayerCQREntityPotion(RenderCQREntity renderCQREntity) {
@@ -20,25 +24,37 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 	@Override
 	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		if (this.entityRenderer.getMainModel() instanceof ModelBiped && entity.getHealingPotions() > 0) {
+		if (entity.getHealingPotions() > 0 && this.entityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
 
 			if (model.bipedBody.cubeList.size() > 0) {
 				ModelBox box = model.bipedBody.cubeList.get(0);
+
 				if (box != null) {
 					ItemStack stack = new ItemStack(ModItems.POTION_HEALING);
-
+					float x = 0.0625F * (model.bipedBody.rotationPointX + box.posX1);
+					float y = 0.0625F * (model.bipedBody.rotationPointY + box.posY2 - box.posY1);
+					float z = 0.0625F * (model.bipedBody.rotationPointZ + box.posZ1);
 					GlStateManager.pushMatrix();
+					GlStateManager.translate(x, y, z);
+
 					if (entity.isSneaking()) {
 						GlStateManager.translate(0.0F, 0.2F, 0.0F);
 					}
 
-					float f = 0.25F;
-					GlStateManager.scale(f, f, f);
-					GlStateManager.translate(0.5F * 0.0625F * (box.posX1 - box.posX2) / f, 0.0625F * (box.posY2 - box.posY1) / f, 0.0F);
+					float f = 0.0F;
+					if (!entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()) {
+						f = 1.0F;
+					} else if (!entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()) {
+						f = 0.5F;
+					}
+					GlStateManager.translate(-0.0625F * (f + 0.2F), 0.0F, 0.5F * 0.0625F * (box.posZ2 - box.posZ1));
+					float f1 = 0.4F;
+					GlStateManager.scale(f1, f1, f1);
 					GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 					Minecraft.getMinecraft().getItemRenderer().renderItem(entity, stack, ItemCameraTransforms.TransformType.NONE);
+
 					GlStateManager.popMatrix();
 				}
 			}
