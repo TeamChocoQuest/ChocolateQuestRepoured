@@ -208,7 +208,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}*/
 			if(dungeon.getRandomBuilding() != null) {
-				centralStructure = new CQStructure(dungeon.getRandomBuilding(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
+				structure = new CQStructure(dungeon.getRandomBuilding(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(structure != null) {
