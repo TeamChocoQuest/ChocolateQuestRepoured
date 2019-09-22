@@ -79,20 +79,18 @@ public class FloatingNetherCity extends DungeonBase {
 		return false;
 	}**/
 	
-	public File pickStructure(Random random) {
+	public File pickStructure() {
 		if(this.structureFolder == null) {
 			return null;
 		}
-		File chosenStructure = this.structureFolder;
-		while(chosenStructure.isDirectory()) {
-			if(chosenStructure.listFiles().length <= 0) {
-				return null;
-			}
-			File[] files = chosenStructure.listFiles();
-			int index = random.nextInt(files.length);
-			chosenStructure = files[index];
+		return getStructureFileFromDirectory(this.structureFolder);
+	}
+	
+	public File pickCentralStructure() {
+		if(this.centralStructureFolder == null) {
+			return null;
 		}
-		return chosenStructure;
+		return getStructureFileFromDirectory(this.centralStructureFolder);
 	}
 	
 	public boolean doBuildChains() {

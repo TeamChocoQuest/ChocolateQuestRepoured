@@ -62,7 +62,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		for(int i = 0; i < islandCount; i++) {
 			nextIslandPos = getNextIslandPos(center, i);
 			
-			File sf = this.dungeon.pickStructure(rdm);
+			File sf = this.dungeon.pickStructure();
 			if(sf != null) {
 				structureMap.put(nextIslandPos, sf);
 			}

@@ -67,7 +67,7 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		File structure = pickStructure(new Random());
+		File structure = pickStructure();
 		if(structure != null) {
 			CQStructure dungeonStructure = new CQStructure(structure, this, chunk.x, chunk.z, this.protectFromDestruction);
 			
