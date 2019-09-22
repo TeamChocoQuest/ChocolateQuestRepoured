@@ -28,6 +28,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	private ClassicNetherCity dungeon;
 	
+	//TODO: Dont make this a Set, sets are slow as they need to calculate the hash keys every time you add something to them...
 	private Set<BlockPos> gridPositions = new HashSet<>();
 	private Set<BlockPos> bridgeBuilderStartPositionsX = new HashSet<>();
 	private Set<BlockPos> bridgeBuilderStartPositionsZ = new HashSet<>();
