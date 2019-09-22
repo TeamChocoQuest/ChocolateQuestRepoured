@@ -243,7 +243,7 @@ public class DungeonBase {
 		}
 		List<File> allFiles = new ArrayList<File>();
 		Queue<File> dirs = new LinkedList<File>();
-		dirs.add(new File("/start/dir/"));
+		dirs.add(new File(parentDir.getAbsolutePath()));
 		while (!dirs.isEmpty()) {
 		  for (File f : dirs.poll().listFiles(DungeonGenUtils.getStructureFileFilter())) {
 		    if (f.isDirectory()) {
