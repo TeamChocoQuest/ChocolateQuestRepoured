@@ -44,7 +44,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		return new DefaultSurfaceGenerator(null, null, null);
 	}
 	
-	protected File pickStructure(Random random) {
+	protected File pickStructure() {
 		if(this.structureFolderPath == null) {
 			return null;
 		}
@@ -55,7 +55,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
 		
-		File structureF = pickStructure(new Random());
+		File structureF = pickStructure();
 		if(structureF != null && structureF.exists() && structureF.isFile()) {
 			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.protectFromDestruction);
 			
