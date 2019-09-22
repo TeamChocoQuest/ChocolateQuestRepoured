@@ -4,11 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
@@ -213,5 +218,41 @@ public class DungeonBase {
 
 	public EDungeonMobType getDungeonMob() {
 		return this.dungeonMob;
+	}
+	
+	public File getStructureFileFromDirectory(File parentDir) {
+		if(parentDir.isDirectory()) {
+			int fileCount = parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length;
+			if(fileCount > 0) {
+				Random rdm = new Random();
+				List<File> files = getFilesRecursively(parentDir);
+				fileCount = files.size();
+				return files.get(rdm.nextInt(fileCount));
+			}
+		} else {
+			if(parentDir.getName().contains(".nbt")) {
+				return parentDir;
+			}
+		}
+		return null;
+	}
+	
+	private List<File> getFilesRecursively(File parentDir) {
+		if(!parentDir.isDirectory() || parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length <= 0) {
+			return null;
+		}
+		List<File> allFiles = new ArrayList<File>();
+		Queue<File> dirs = new LinkedList<File>();
+		dirs.add(new File("/start/dir/"));
+		while (!dirs.isEmpty()) {
+		  for (File f : dirs.poll().listFiles(DungeonGenUtils.getStructureFileFilter())) {
+		    if (f.isDirectory()) {
+		      dirs.add(f);
+		    } else if (f.isFile()) {
+		      allFiles.add(f);
+		    }
+		  }
+		}
+		return allFiles;
 	}
 }
