@@ -31,14 +31,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {
-			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");/*new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
-
-			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
-				if(this.structureFolderPath.exists() && !this.structureFolderPath.isDirectory()) {
-					this.structureFolderPath.delete();
-				}
-				this.structureFolderPath.mkdirs();
-			}*/
+			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");
 			
 			closeConfigFile();
 		} else {
@@ -55,16 +48,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		if(this.structureFolderPath == null) {
 			return null;
 		}
-		File chosenStructure = this.structureFolderPath;
-		while(chosenStructure.isDirectory()) {
-			if(chosenStructure.listFiles().length <= 0) {
-				return null;
-			}
-			File[] files = chosenStructure.listFiles();
-			int index = random.nextInt(files.length);
-			chosenStructure = files[index];
-		}
-		return chosenStructure;
+		return getStructureFileFromDirectory(this.structureFolderPath);
 	}
 	
 	@Override
