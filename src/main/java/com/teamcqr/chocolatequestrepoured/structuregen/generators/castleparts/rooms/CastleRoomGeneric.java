@@ -11,9 +11,9 @@ public abstract class CastleRoomGeneric extends CastleRoom
     protected ArrayList<IBlockState> edgeClutter;
     protected ArrayList<IBlockState> centerClutter;
 
-    public CastleRoomGeneric(BlockPos startPos, int sideLength, int height, RoomPosition position)
+    public CastleRoomGeneric(BlockPos startPos, int sideLength, int height)
     {
-        super(startPos, sideLength, height, position);
+        super(startPos, sideLength, height);
         this.edgeClutter = new ArrayList<>();
         this.centerClutter = new ArrayList<>();
     }

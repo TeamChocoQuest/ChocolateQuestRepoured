@@ -8,9 +8,9 @@ import java.util.ArrayList;
 
 public class CastleRoomKitchen extends CastleRoomGeneric
 {
-    public CastleRoomKitchen(BlockPos startPos, int sideLength, int height, RoomPosition position)
+    public CastleRoomKitchen(BlockPos startPos, int sideLength, int height)
     {
-        super(startPos, sideLength, height, position);
+        super(startPos, sideLength, height);
         this.roomType = RoomType.KITCHEN;
         this.edgeClutter.add(Blocks.FURNACE.getDefaultState());
         this.edgeClutter.add(Blocks.CAULDRON.getDefaultState());
