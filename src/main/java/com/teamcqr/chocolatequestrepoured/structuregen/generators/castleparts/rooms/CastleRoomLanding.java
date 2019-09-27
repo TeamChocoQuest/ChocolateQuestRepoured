@@ -16,9 +16,9 @@ public class CastleRoomLanding extends CastleRoom
     private int stairZ;
     private EnumFacing stairStartSide;
 
-    public CastleRoomLanding(BlockPos startPos, int sideLength, int height, RoomPosition position, CastleRoomStaircase stairsBelow)
+    public CastleRoomLanding(BlockPos startPos, int sideLength, int height, CastleRoomStaircase stairsBelow)
     {
-        super(startPos, sideLength, height, position);
+        super(startPos, sideLength, height);
         this.roomType = RoomType.LANDING;
         this.openingWidth = stairsBelow.getUpperStairWidth();
         this.stairZ = stairsBelow.getUpperStairEndZ() + 1;

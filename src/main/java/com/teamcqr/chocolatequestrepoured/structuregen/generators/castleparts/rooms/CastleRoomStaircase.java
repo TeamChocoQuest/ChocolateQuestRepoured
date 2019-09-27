@@ -19,9 +19,9 @@ public class CastleRoomStaircase extends CastleRoom
     private int centerStairWidth;
     private int centerStairLength;
 
-    public CastleRoomStaircase(BlockPos startPos, int sideLength, int height, RoomPosition position, EnumFacing doorSide)
+    public CastleRoomStaircase(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
-        super(startPos, sideLength, height, position);
+        super(startPos, sideLength, height);
         this.roomType = RoomType.STAIRCASE;
         this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);

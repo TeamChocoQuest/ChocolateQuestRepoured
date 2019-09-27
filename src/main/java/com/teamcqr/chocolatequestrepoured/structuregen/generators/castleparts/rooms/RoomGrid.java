@@ -387,30 +387,4 @@ public class RoomGrid
         return (x >= 0 && x < roomsX && z >= 0 && z < roomsZ);
     }
 
-    //print the room array in a grid, floor by floor
-    public String printGrid()
-    {
-        String result = "";
-        for (int floor = 0; floor < floors; floor++)
-        {
-            result += "\nFloor " + floor + "\n";
-            for (int z = 0; z < roomsZ; z++)
-            {
-                for (int x = 0; x < roomsX; x++)
-                {
-                    if (isRoomFilled(floor, x, z))
-                    {
-                        result += "[" + getRoomAt(floor, x, z).getNameShortened() + "|" + getRoomAt(floor, x, z).getPositionString() + "] ";
-                    } else
-                    {
-                        result += "[NUL|--]";
-                    }
-                }
-                result += "\n";
-            }
-        }
-        result += "----------------\n";
-        return result;
-    }
-
 }
