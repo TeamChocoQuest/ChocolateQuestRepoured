@@ -32,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
@@ -41,7 +42,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
  */
 public class DungeonRegistry {
 	
-	public List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
+	protected List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 	
@@ -279,12 +280,20 @@ public class DungeonRegistry {
 	}
 	
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
-		System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
+		if(areDependenciesMissing(dungeon)) {
+			System.out.println("The dungeon " + dungeon.getDungeonName() + " is missing dependencies! It wont spawn naturally");
+			return;
+		}
+		//System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
 		for(Biome biome : this.biomeDungeonMap.keySet()) {
 			addDungeonToBiome(dungeon, biome);
 		}
 	}
 	private void addDungeonToBiome(DungeonBase dungeon, Biome biome) {
+		if(areDependenciesMissing(dungeon)) {
+			System.out.println("The dungeon " + dungeon.getDungeonName() + " is missing dependencies! It wont spawn naturally");
+			return;
+		}
 		if(this.biomeDungeonMap.containsKey(biome)) {
 			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
 			if(!dungs.contains(dungeon)) {
@@ -320,6 +329,19 @@ public class DungeonRegistry {
 			}
 		}
 		return null;
+	}
+	
+	public List<DungeonBase> getLoadedDungeons() {
+		return this.dungeonList;
+	}
+	
+	private boolean areDependenciesMissing(DungeonBase dungeon) {
+		for(String modid : dungeon.getDependencies()) {
+			if(!Loader.isModLoaded(modid)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

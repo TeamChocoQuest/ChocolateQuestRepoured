@@ -15,6 +15,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -41,6 +42,7 @@ public class DungeonBase {
 	protected int chance;
 	protected int yOffset = 0;
 	protected int[] allowedDims = {0};
+	protected String[] modDependencies = {Reference.MODID};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
@@ -84,6 +86,10 @@ public class DungeonBase {
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
+			this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[] {Reference.MODID});
+			if(this.modDependencies.length <= 0 || this.modDependencies == null) {
+				this.modDependencies = new String[] {Reference.MODID};
+			}
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
@@ -254,5 +260,9 @@ public class DungeonBase {
 		  }
 		}
 		return allFiles;
+	}
+	
+	public String[] getDependencies() {
+		return this.modDependencies;
 	}
 }
