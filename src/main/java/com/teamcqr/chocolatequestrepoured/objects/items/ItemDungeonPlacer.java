@@ -78,9 +78,9 @@ public class ItemDungeonPlacer extends Item {
 				String depend = nbtts.toString();
 				depend = depend.replaceAll(String.valueOf('"'), "");
 				if(Loader.isModLoaded(depend)) {
-					tooltip.add(TextFormatting.DARK_GREEN + depend);
+					tooltip.add(TextFormatting.DARK_GREEN + depend + ", ");
 				} else {
-					tooltip.add(TextFormatting.RED + depend);
+					tooltip.add(TextFormatting.RED + depend + ", ");
 				}
 			}
 		}
