@@ -73,6 +73,7 @@ public class ItemDungeonPlacer extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if(stack.getTagCompound().hasKey("dependencies")) {
+			tooltip.add("Mod Dependencies: ");
 			for(NBTBase nbtts : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
 				String depend = nbtts.toString();
 				depend = depend.replaceAll(String.valueOf('"'), "");
