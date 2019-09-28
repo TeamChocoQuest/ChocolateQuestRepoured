@@ -224,7 +224,7 @@ public class CQRMain
 
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
-		DungeonRegistry.loadDungeons();
+		//DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
 		SmeltingHandler.init();
 	}
@@ -235,6 +235,7 @@ public class CQRMain
 		/*for(EFaction efac : EFaction.values()) {
 			System.out.println(efac.toString());
 		}*/
+		DungeonRegistry.loadDungeons();
 		proxy.postInit();
 	}
 }
