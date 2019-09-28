@@ -85,7 +85,7 @@ public class DungeonRegistry {
 								} else {
 									if(getBiomeByName(b) != null) {
 										BiomeDictionary.Type biomeType = getBiomeByName(b);
-										System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
+										//System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
 										for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
 											if(this.biomeDungeonMap.containsKey(biome)) {
 												addDungeonToBiome(dungeon, biome);
