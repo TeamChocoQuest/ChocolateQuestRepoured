@@ -1,13 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
+import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.NetherCityHangingGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 /**
  * Copyright (c) 29.04.2019
@@ -23,16 +30,52 @@ public class FloatingNetherCity extends DungeonBase {
 	private int yFactorHeight = 20;
 	private Block islandMaterial = Blocks.NETHERRACK;
 	private Block chainBlock = Blocks.OBSIDIAN;
-	private Block bridgeBlock = Blocks.NETHER_BRICK;
-	private int bridgeChance = 20;
+	//private Block bridgeBlock = Blocks.NETHER_BRICK;
+	//private int bridgeChance = 20;
 	private int posY = 50; //lava level is 32 in the nether
 	private boolean buildChains = true;
-	private boolean buildBridges = false;
+	//private boolean buildBridges = false;
 	private File structureFolder;
 	private File centralStructureFolder;
 	
 	public FloatingNetherCity(File configFile) {
 		super(configFile);
+		Properties prop = loadConfig(configFile);
+		if(prop != null) {
+			this.minBuildings = PropertyFileHelper.getIntProperty(prop, "minBuildings", 6);
+			this.maxBuildings = PropertyFileHelper.getIntProperty(prop, "maxBuildings", 12);
+			this.minIslandDistance = PropertyFileHelper.getIntProperty(prop, "minIslandDistance", 15);
+			this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
+			this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
+			this.posY = PropertyFileHelper.getIntProperty(prop, "yPosition", 50);
+			
+			this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
+			
+			this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "floatingCity/islands");
+			this.centralStructureFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "floatingCity/centers");
+			
+			this.islandMaterial = PropertyFileHelper.getBlockProperty(prop, "islandBlock", Blocks.NETHERRACK);
+			this.chainBlock = PropertyFileHelper.getBlockProperty(prop, "chainBlock", Blocks.OBSIDIAN);
+			
+			closeConfigFile();
+		} else {
+			registeredSuccessful = false;
+		}
+	}
+	
+	@Override
+	public void generate(BlockPos pos, World world) {
+		getGenerator().generate(world, world.getChunkFromBlockCoords(pos), pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	@Override
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		getGenerator().generate(world, chunk, x, this.posY, z);
+	}
+	
+	@Override
+	public IDungeonGenerator getGenerator() {
+		return new NetherCityHangingGenerator(this);
 	}
 	
 	//Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!
@@ -96,12 +139,12 @@ public class FloatingNetherCity extends DungeonBase {
 	public boolean doBuildChains() {
 		return this.buildChains;
 	}
-	public boolean doBuildBridges() {
+	/*public boolean doBuildBridges() {
 		return this.buildBridges;
 	}
 	public int getBridgeChance() {
 		return this.bridgeChance;
-	}
+	}*/
 	public int getBuildingCount(Random random) {
 		return DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuildings, random);
 	}
@@ -114,9 +157,9 @@ public class FloatingNetherCity extends DungeonBase {
 	public Block getIslandBlock() {
 		return this.islandMaterial;
 	}
-	public Block getBridgeBlock() {
+	/*public Block getBridgeBlock() {
 		return this.bridgeBlock;
-	}
+	}*/
 	public int getPosY() {
 		return this.posY;
 	}
