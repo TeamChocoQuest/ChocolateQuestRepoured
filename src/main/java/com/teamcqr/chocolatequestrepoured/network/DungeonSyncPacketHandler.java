@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.network;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
