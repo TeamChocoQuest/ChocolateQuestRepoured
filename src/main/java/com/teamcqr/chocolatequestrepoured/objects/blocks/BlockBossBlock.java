@@ -1,17 +1,37 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 
 public class BlockBossBlock extends Block {
 
 	public BlockBossBlock() {
-			super(Material.ROCK);
+		super(Material.ROCK);
 
-			setSoundType(SoundType.STONE);
-			setBlockUnbreakable();
-			setResistance(Float.MAX_VALUE);
-		}
+		setSoundType(SoundType.STONE);
+		setBlockUnbreakable();
+		setResistance(Float.MAX_VALUE);
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return Items.AIR;
+	}
 
 }
