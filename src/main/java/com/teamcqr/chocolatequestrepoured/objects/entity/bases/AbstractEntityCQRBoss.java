@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
@@ -97,6 +98,13 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	
 	public void enableBossBar(boolean enabled) {
 		this.bossInfoServer.setVisible(enabled);
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause) {
+		super.onDeath(cause);
+		
+		//TOOD: Destroy protected region
 	}
 
 }
