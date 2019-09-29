@@ -94,5 +94,9 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public void setVarStyle(BossInfo.Overlay style) {
 		this.bossInfoServer.setOverlay(style);
 	}
+	
+	public void enableBossBar(boolean enabled) {
+		this.bossInfoServer.setVisible(enabled);
+	}
 
 }
