@@ -232,6 +232,18 @@ public class RoomGrid
         roomArray[floor][x][z].setAsMainStruct();
     }
 
+    public void setRoomAsNarrow(int floor, int x, int z)
+    {
+        roomArray[floor][x][z].setNarrow();
+    }
+
+    public boolean floorIsNarrow(final int floor)
+    {
+        return getAllCellsWhere(c -> c.isSelectedForBuilding() &&
+                c.getFloor() == floor &&
+                c.isNarrow()).size() > 0;
+    }
+
     public boolean isRoomFilled(int floor, int x, int z)
     {
         return roomArray[floor][x][z] != null && roomArray[floor][x][z].getRoom() != null;
