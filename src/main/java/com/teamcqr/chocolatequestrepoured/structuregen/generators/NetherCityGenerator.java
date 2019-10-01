@@ -253,7 +253,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
 				try {
 					if(dungeon.centralSpawnerIsSingleUse()) {
-						SpawnerFactory.placeSpawnerForMobs(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world)}, false, null, world, spawnerPosCentral);
+						SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world)}, false, null, world, spawnerPosCentral);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
 					}
@@ -267,7 +267,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				try {
 					if(dungeon.spawnersAreSingleUse()) {
-						SpawnerFactory.placeSpawnerForMobs(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, spawnerPos);
+						SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, spawnerPos);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
 					}

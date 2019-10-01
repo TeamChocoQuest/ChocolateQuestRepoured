@@ -30,7 +30,7 @@ public class ItemMobToSpawner extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		this.spawnAdditions(entity.world, entity);
-		SpawnerFactory.placeSpawnerForMobs(new Entity[] {entity}, false, null, player.getEntityWorld(), entity.getPosition());
+		SpawnerFactory.placeSpawner(new Entity[] {entity}, false, null, player.getEntityWorld(), entity.getPosition());
 		entity.setDead();
 		return false;
 	}
