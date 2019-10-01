@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
@@ -191,7 +192,7 @@ public class CavernDungeon extends DungeonBase {
 			
 			//BOSS SPAWNER
 			//DONE: spawn the boss
-			SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(getBossMob(), world), false, null, world, bossPos.up());
+			SpawnerFactory.placeSpawnerForMobs(new Entity[] { EntityList.createEntityByIDFromName(getBossMob(), world) }, false, null, world, bossPos.up());
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());

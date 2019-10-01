@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCit
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -252,7 +253,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
 				try {
 					if(dungeon.centralSpawnerIsSingleUse()) {
-						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
+						SpawnerFactory.placeSpawnerForMobs(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world)}, false, null, world, spawnerPosCentral);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
 					}
@@ -266,7 +267,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				try {
 					if(dungeon.spawnersAreSingleUse()) {
-						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world), false, null, world, spawnerPos);
+						SpawnerFactory.placeSpawnerForMobs(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, spawnerPos);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
 					}
