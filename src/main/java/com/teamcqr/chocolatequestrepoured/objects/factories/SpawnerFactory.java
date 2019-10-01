@@ -26,11 +26,12 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
+/**
+ * A static utility class for generating CQR spawners and converting them to/from vanilla spawners
+ * @author DerToaster, Meldexun, jdawg3636
+ * @version 1 October 2019
+ */
 public abstract class SpawnerFactory {
-
-	public static void placeSpawnerForMob(Entity entity, boolean multiUseSpawner, @Nullable MultiUseSpawnerSettings spawnerSettings, World world, BlockPos pos) {
-		placeSpawnerForMobs(new Entity[] { entity }, multiUseSpawner, spawnerSettings, world, pos);
-	}
 	
 	public static void placeSpawnerForMobs(Entity[] entities, boolean multiUseSpawner, @Nullable MultiUseSpawnerSettings spawnerSettings, World world, BlockPos pos) {
 		if(multiUseSpawner && spawnerSettings != null) {
@@ -141,7 +142,6 @@ public abstract class SpawnerFactory {
 	}
 	
 	public static void applySpawnerSettingsToSpawner(TileEntityMobSpawner spawner, MultiUseSpawnerSettings settings) {
-		@SuppressWarnings("unused")
 		MobSpawnerBaseLogic spawnerLogic = spawner.getSpawnerBaseLogic();
 		
 		//TODO Exchange values
