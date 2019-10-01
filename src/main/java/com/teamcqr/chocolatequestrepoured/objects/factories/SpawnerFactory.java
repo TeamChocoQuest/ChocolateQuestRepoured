@@ -27,14 +27,28 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 /**
- * A static utility class for generating CQR spawners and converting them to/from vanilla spawners
+ * A static utility class for generating CQR/vanilla spawners and converting them to/from the other
  * @author DerToaster, Meldexun, jdawg3636
  * @version 1 October 2019
  */
 public abstract class SpawnerFactory {
-	
+
+	/*
+	 * Creation/Modification
+	 */
+
+	/**
+	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined
+	 * dynamically based upon the requested capabilities.
+	 * @param entities Entities for spawner to spawn
+	 * @param multiUseSpawner Determines spawner type. Vanilla = true; CQR = false.
+	 * @param spawnerSettings Settings to be applied if generating vanilla spawner (can be null if CQR spawner)
+	 * @param world World in which to place spawner
+	 * @param pos Position at which to place spawner
+	 */
 	public static void placeSpawnerForMobs(Entity[] entities, boolean multiUseSpawner, @Nullable MultiUseSpawnerSettings spawnerSettings, World world, BlockPos pos) {
-		if(multiUseSpawner && spawnerSettings != null) {
+		// Generate Vanilla Spawner
+		if(multiUseSpawner == true && spawnerSettings != null) {
 			//NYI
 			world.setBlockToAir(pos);
 			
@@ -52,7 +66,9 @@ public abstract class SpawnerFactory {
 				applySpawnerSettingsToSpawner(spawnerTile, spawnerSettings);
 			}
 			return;
-		} else {
+		}
+		// Generate CQR Spawner
+		else {
 			world.setBlockToAir(pos);
 			
 			world.setBlockState(pos, ModBlocks.SPAWNER.getDefaultState());
@@ -71,7 +87,37 @@ public abstract class SpawnerFactory {
 			}
 		}
 	}
-	
+
+	/**
+	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for
+	 * the entity that it should spawn.
+	 */
+	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
+		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos);
+
+		spawner.getSpawnerBaseLogic().setEntityId(entityResLoc);
+
+		spawner.updateContainingBlockInfo();
+		spawner.update();
+	}
+
+	/**
+	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a
+	 * resource location in its parameter
+	 */
+	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
+		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
+	}
+
+	/*
+	 * CQR/Vanilla Conversion
+	 */
+
+	/**
+	 * Converts the CQR spawner at the provided World/BlockPos to a vanilla spawner
+	 * @param spawnerSettings
+	 */
 	public static void convertCQSpawnerToVanillaSpawner(World world, BlockPos pos, MultiUseSpawnerSettings spawnerSettings) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile != null && tile instanceof TileEntitySpawner) {
@@ -103,7 +149,10 @@ public abstract class SpawnerFactory {
 			placeSpawnerForMobs(entities, true, spawnerSettings, world, pos);
 		}
 	}
-	
+
+	/**
+	 * Converts the vanilla spawner at the provided World/BlockPos to a CQR spawner
+	 */
 	public static void convertVanillaSpawnerToCQSpawner(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile != null && tile instanceof TileEntityMobSpawner) {
@@ -126,8 +175,37 @@ public abstract class SpawnerFactory {
 			}
 		}
 	}
-	
-	static ItemStack getSoulBottleItemStackForEntity(Entity entity) {
+
+	/**
+	 * Applies the provided settings to the provided vanilla spawner
+	 */
+	public static void applySpawnerSettingsToSpawner(TileEntityMobSpawner spawner, MultiUseSpawnerSettings settings) {
+		MobSpawnerBaseLogic spawnerLogic = spawner.getSpawnerBaseLogic();
+
+		//TODO Exchange values
+
+		spawner.markDirty();
+	}
+
+	/*
+	 * Miscellaneous
+	 */
+
+	/**
+	 * Converts provided NBT data into an entity in the provided world without actually spawning it
+	 * @return Generated entity object
+	 */
+	public static Entity createEntityFromNBTWithoutSpawningIt(NBTTagCompound tag, World worldIn) {
+		Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
+		entity.readFromNBT(tag);
+
+		return entity;
+	}
+
+	/**
+	 * Used internally for the placeSpawnerForMobs method
+	 */
+	public static ItemStack getSoulBottleItemStackForEntity(Entity entity) {
 		ItemStack bottle = new ItemStack(ModItems.SOUL_BOTTLE);
 		bottle.setCount(1);
 		NBTTagCompound mobToSpawnerItem = new NBTTagCompound();
@@ -139,37 +217,6 @@ public abstract class SpawnerFactory {
 			return bottle;
 		}
 		return null;
-	}
-	
-	public static void applySpawnerSettingsToSpawner(TileEntityMobSpawner spawner, MultiUseSpawnerSettings settings) {
-		MobSpawnerBaseLogic spawnerLogic = spawner.getSpawnerBaseLogic();
-		
-		//TODO Exchange values
-		
-		spawner.markDirty();
-	}
-	
-	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
-		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
-	}
-	
-	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
-		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos);
-		
-		spawner.getSpawnerBaseLogic().setEntityId(entityResLoc);
-		
-		spawner.updateContainingBlockInfo();
-		spawner.update();
-	}
-	
-	
-	static Entity createEntityFromNBTWithoutSpawningIt(NBTTagCompound tag, World worldIn)
-	{
-		Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
-		entity.readFromNBT(tag);
-			
-		return entity;
 	}
 	
 }
