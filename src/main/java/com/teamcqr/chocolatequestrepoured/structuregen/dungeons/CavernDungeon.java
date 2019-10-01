@@ -192,7 +192,7 @@ public class CavernDungeon extends DungeonBase {
 			
 			//BOSS SPAWNER
 			//DONE: spawn the boss
-			SpawnerFactory.placeSpawnerForMobs(new Entity[] { EntityList.createEntityByIDFromName(getBossMob(), world) }, false, null, world, bossPos.up());
+			SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(getBossMob(), world) }, false, null, world, bossPos.up());
 		}
 		if(this.buildStaris) {
 			int entryCave = rdmCI.nextInt(caves.size());
