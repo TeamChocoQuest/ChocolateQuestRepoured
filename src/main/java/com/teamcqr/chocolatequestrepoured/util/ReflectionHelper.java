@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.intrusive;
+package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 
@@ -9,32 +9,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Abstracts away the use of intrusive modding methods such as ASM or Reflection API
- * At the moment this class has very limited functionality, all of which is based upon reflection. Much more is planned in this area.
+ * Abstracts away the use of Java's Reflection API
  *
- * NOTE: In certain use cases, the Forge Access Transformer system can be a viable alternative to this utility.
+ * NOTE: In many cases, the Forge Access Transformer system is a viable alternative to this utility.
  *
  * Use http://export.mcpbot.bspk.rs/stable/ for name references
  * MCP Name = development environment
  * Searge Name = compiled/release environment
  *
  * @author jdawg3636
- * @version 18/07/2019
+ * @version 1 October 2019
  */
-public class IntrusiveModificationHelper {
+public class ReflectionHelper {
+
+    // Prevents instantiation (all methods are static)
+    private ReflectionHelper() {}
 
     /*
-     * Boiler Plate - Please ignore
-     */
-
-    // Prevent instantiation (all methods are static)
-    private IntrusiveModificationHelper() {}
-
-    /*
-     * Java Reflection API
-     *
-     * Uses more resources than usual, but shouldn't have any
-     * inherent consequences in terms of compatibility or stability
+     * Class Objects
      */
 
     /**
@@ -60,6 +52,10 @@ public class IntrusiveModificationHelper {
             return null;
         }
     }
+
+    /*
+     * Fields
+     */
 
     /**
      * Returns requested Field with accessibility set to true
@@ -140,6 +136,7 @@ public class IntrusiveModificationHelper {
             e.printStackTrace();
         }
 
+        // Return modified instance to allow chaining
         return instance;
 
     }
@@ -251,20 +248,29 @@ public class IntrusiveModificationHelper {
 
     }
 
-    public static Object reflectMakeMethodPublic(Object instanceToAccess, Method toMakePublic) {
+    /*
+     * Methods
+     */
 
-        return instanceToAccess.getClass();
-
-    }
-
+    /**
+     * Sets all methods of the provided instance to public
+     * @return Copy of the modified instance (facilitates chaining)
+     */
     public static Object reflectGetInstanceWithAllMethodsPublic(Object instanceToAccess) {
 
         Method[] methods = reflectGetAllMethods(instanceToAccess);
         for(Method  m : methods) m.setAccessible(true);
+
+        // Return modified instance to allow chaining
         return instanceToAccess;
 
     }
 
+    /**
+     * Returns Reflect API Method objects to represent each method present in the instance/class provided.
+     * Accepts both normal instances and Class object representations
+     * @return Method[]
+     */
     public static Method[] reflectGetAllMethods(Object instanceOrClassToAccess) {
 
         // Variables
@@ -306,17 +312,5 @@ public class IntrusiveModificationHelper {
         // Return
         return methodsFromClass;
     }
-
-    /*
-     * ASM
-     *
-     * Bypasses Forge and interfaces directly with FML to directly modify the vanilla game
-     *
-     * Extremely intrusive and highly discouraged by Forge developers. Can easily
-     * cause stability/compatibility issues in addition to the inherent performance
-     * penalties. Should be used only when no other options are available.
-     */
-
-    // Not yet implemented
 
 }
