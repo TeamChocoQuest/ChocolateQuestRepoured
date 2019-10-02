@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util.data;
 
-import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
+import com.teamcqr.chocolatequestrepoured.util.ReflectionHelper;
 
 public class PrimitiveManipulationUtil {
 
@@ -26,7 +26,7 @@ public class PrimitiveManipulationUtil {
         // Generate dummy object of provided type
         Object instanceOfType = null;
         try{
-            instanceOfType = IntrusiveModificationHelper.getInstanceOfClass( IntrusiveModificationHelper.getClassFromName(verboseTypeNameAsSting) );
+            instanceOfType = ReflectionHelper.getInstanceOfClass( ReflectionHelper.getClassFromName(verboseTypeNameAsSting) );
         }
         // If unable to instantiate, return null
         catch (Exception ignored) {
