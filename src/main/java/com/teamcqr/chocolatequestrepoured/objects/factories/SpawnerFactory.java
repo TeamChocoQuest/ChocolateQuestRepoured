@@ -51,7 +51,7 @@ public abstract class SpawnerFactory {
 
 		world.setBlockToAir(pos);
 
-		world.setBlockState(pos, (multiUseSpawner == true && spawnerSettingsOverrides != null) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
+		world.setBlockState(pos, (multiUseSpawner == true /*&& spawnerSettingsOverrides != null*/) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tile = world.getTileEntity(pos);
 		if(tile instanceof TileEntityMobSpawner) {
@@ -63,9 +63,11 @@ public abstract class SpawnerFactory {
 
 			// Store entity ids into NBT tag
 			for (int i = 0; i < entities.length; i++) {
-				NBTTagCompound entityToAddAsNBT = new NBTTagCompound();
-				entityToAddAsNBT.setString("id", EntityList.getEntityString(entities[i]));
-				spawnerEntities.set(i, entityToAddAsNBT);
+				if(entities[i] != null) {
+					NBTTagCompound entityToAddAsNBT = new NBTTagCompound();
+					entityToAddAsNBT.setString("id", EntityList.getEntityString(entities[i]));
+					spawnerEntities.set(i, entityToAddAsNBT);
+				}
 			}
 			spawnerData.setTag("SpawnPotentials", spawnerEntities);
 
@@ -137,7 +139,7 @@ public abstract class SpawnerFactory {
 			
 			for(int i = 0; i < entities.length; i++) {
 				ItemStack stack = spawner.inventory.getStackInSlot(i);
-	    		if(!stack.isEmpty() && stack.getCount() >= 1) {
+	    		if(stack != null && !stack.isEmpty() && stack.getCount() >= 1) {
 	    			try {
 	        			NBTTagCompound tag = stack.getTagCompound();
 	            		
@@ -146,10 +148,10 @@ public abstract class SpawnerFactory {
 	        			entities[i] = createEntityFromNBTWithoutSpawningIt(entityTag, world);
 	        			
 	        			entities[i].setUniqueId(MathHelper.getRandomUUID(rand));
-        				
-	            		stack.shrink(1);
 	    			}
 	    			catch(NullPointerException ignored) {}
+	    		} else {
+	    			entities[i] = null;
 	    		}
 			}
 			world.setBlockToAir(pos);
@@ -203,6 +205,9 @@ public abstract class SpawnerFactory {
 	 * Used internally for the placeSpawner method
 	 */
 	public static ItemStack getSoulBottleItemStackForEntity(Entity entity) {
+		if(entity == null) {
+			return null;
+		}
 		ItemStack bottle = new ItemStack(ModItems.SOUL_BOTTLE);
 		bottle.setCount(1);
 		NBTTagCompound mobToSpawnerItem = new NBTTagCompound();
