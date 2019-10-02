@@ -25,7 +25,7 @@ public class ModelCQRBiped extends ModelBiped {
 	}
 
 	public ModelCQRBiped(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		super(modelSize, p_i1149_2_, 64, 64);
+		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
 		this.bipedCape = new ModelRenderer(this, 0, 0);
         this.bipedCape.setTextureSize(64, 32);
         this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
