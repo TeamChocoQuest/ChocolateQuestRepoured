@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.intrusive.IntrusiveModificationHelper;
+import com.teamcqr.chocolatequestrepoured.util.ReflectionHelper;
 
 import com.teamcqr.chocolatequestrepoured.util.data.ArchiveManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
@@ -193,7 +193,7 @@ public class ProtectionHandler {
                     // noop
                 }
                 // Check if TNT
-                else if (IntrusiveModificationHelper.reflectGetFieldValue(e.getExplosion(), IntrusiveModificationHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"} ) ) instanceof EntityTNTPrimed) {
+                else if (ReflectionHelper.reflectGetFieldValue(e.getExplosion(), ReflectionHelper.reflectGetField( e.getExplosion(), new String[] {"exploder", "field_77283_e"} ) ) instanceof EntityTNTPrimed) {
                     // Check if TNT allowed
                     if(!region.settings.get("preventExplosionTNT")) {
                         // noop
