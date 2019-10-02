@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import org.lwjgl.Sys;
 
 import java.util.*;
 import java.lang.Double;
@@ -159,46 +160,74 @@ public class CastleRoomSelector
                 }
                 else
                 {
-                    int towerX = minX - 1;
-                    int towerZ = minZ + random.nextInt(maxZ - minZ);
+                    int towerX = minX + offsetX - 1;
+                    int towerZ = minZ + offsetZ + random.nextInt(mainRoomsZ);
+                    addTower(towerX, towerZ, (layer * floorsPerLayer), 2, EnumFacing.EAST);
                 }
 
             }
 
             if (openCellsNorth > 0)
             {
-                sideRoomsX = random.nextInt(mainRoomsX + 1);
-                sideRoomsZ = random.nextInt(openCellsNorth + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                if (random.nextBoolean())
                 {
-                    startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
-                    startZ = minZ + offsetZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    sideRoomsX = random.nextInt(mainRoomsX + 1);
+                    sideRoomsZ = random.nextInt(openCellsNorth + 1);
+                    if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                    {
+                        startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
+                        startZ = minZ + offsetZ - sideRoomsZ;
+                        grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    }
+                }
+                else
+                {
+                    int towerX = minX + offsetX + random.nextInt(mainRoomsX);
+                    int towerZ = minZ + offsetZ - 1;
+                    addTower(towerX, towerZ, (layer * floorsPerLayer), 2, EnumFacing.SOUTH);
                 }
             }
 
             if (openCellsEast > 0)
             {
-                sideRoomsX = random.nextInt(openCellsEast + 1);
-                sideRoomsZ = random.nextInt(mainRoomsZ + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                if (random.nextBoolean())
                 {
-                    startX = minX + offsetX + mainRoomsX;
-                    startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    sideRoomsX = random.nextInt(openCellsEast + 1);
+                    sideRoomsZ = random.nextInt(mainRoomsZ + 1);
+                    if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                    {
+                        startX = minX + offsetX + mainRoomsX;
+                        startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
+                        grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    }
+                }
+                else
+                {
+                    int towerX = minX + offsetX + 1;
+                    int towerZ = minZ + offsetZ + random.nextInt(mainRoomsZ);
+                    addTower(towerX, towerZ, (layer * floorsPerLayer), 2, EnumFacing.EAST);
                 }
             }
 
             if (openCellsSouth > 0)
             {
-                sideRoomsX = random.nextInt(mainRoomsX + 1);
-                sideRoomsZ = random.nextInt(openCellsSouth + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                if (random.nextBoolean())
                 {
-                    startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
-                    startZ = minZ + offsetZ + mainRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    sideRoomsX = random.nextInt(mainRoomsX + 1);
+                    sideRoomsZ = random.nextInt(openCellsSouth + 1);
+                    if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
+                    {
+                        startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
+                        startZ = minZ + offsetZ + mainRoomsZ;
+                        grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
+                    }
+                }
+                else
+                {
+                    int towerX = minX + offsetX + random.nextInt(mainRoomsX);
+                    int towerZ = minZ + offsetZ + 1;
+                    addTower(towerX, towerZ, (layer * floorsPerLayer), 2, EnumFacing.SOUTH);
                 }
             }
         }
@@ -223,6 +252,19 @@ public class CastleRoomSelector
         int rounding = (mainLength % 2 == 0) ? 0 : 1;
         int halfLen = mainLength / 2;
         return halfLen + random.nextInt(halfLen + rounding);
+    }
+
+    private void addTower(int x, int z, int startFloor, int floors, EnumFacing alignment)
+    {
+        int towerSize = 5 + random.nextInt(roomSize - 5);
+        System.out.format("Placing tower at %d,%d on floor %d facing %s, size = %d",
+                x, z, startFloor, alignment.toString(), towerSize);
+        for (int floor = startFloor; floor < startFloor + floors; floor++)
+        {
+            RoomGridCell cell = grid.getCellAt(floor, x, z);
+            CastleRoomTowerSquare tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize);
+            cell.setRoom(tower);
+        }
     }
 
     private void buildVerticalFloorHallway(int floor)
@@ -333,6 +375,7 @@ public class CastleRoomSelector
 
                         CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(getRoomStart(aboveCell), roomSize, floorHeight, stairs);
                         aboveCell.setRoom(landing);
+                        aboveCell.setReachable();
                         break;
                     }
                 }
@@ -454,7 +497,7 @@ public class CastleRoomSelector
 
                 for (PathNode node : destToSrcPath)
                 {
-                    RoomGridCell cell = grid.getCellAtLocation(node.getCell().getGridPosition());
+                    RoomGridCell cell = grid.getCellAtPosition(node.getCell().getGridPosition());
                     if (cell != null)
                     {
                         if (node.getParent() != null)
