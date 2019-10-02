@@ -34,9 +34,9 @@ public enum EBannerPatternsCQ {
 		return this.mcPattern;
 	}
 	
-	public void changePattern(BannerPattern newPattern) {
+	/*public void changePattern(BannerPattern newPattern) {
 		this.mcPattern = newPattern;
-	}
+	}*/
 	
 	private static BannerPattern addPattern(String name, ItemStack craftingComponent) {
 		
