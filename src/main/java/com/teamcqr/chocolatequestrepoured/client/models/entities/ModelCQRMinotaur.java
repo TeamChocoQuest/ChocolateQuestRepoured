@@ -68,17 +68,6 @@ public class ModelCQRMinotaur extends ModelCQRBiped {
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) {
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-
-		/*GlStateManager.pushMatrix();
-
-		this.tail1.render(scale);
-		this.hornL2.render(scale);
-		this.snout.render(scale);
-		this.hornR2.render(scale);
-		this.hornL1.render(scale);
-		this.hornR1.render(scale);
-
-		GlStateManager.popMatrix();*/
 	}
 
 	/**
