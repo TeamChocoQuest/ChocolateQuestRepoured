@@ -25,7 +25,7 @@ public class CastleRoomTowerSquare extends CastleRoom
 
         if (alignment == EnumFacing.NORTH || alignment == EnumFacing.SOUTH)
         {
-            xStart += ((sideLength / 2) - (towerSize - 2));
+            xStart += (towerSize - sideLength) / 2;
             if (alignment == EnumFacing.SOUTH)
             {
                 zStart += sideLength - towerSize;
@@ -33,7 +33,7 @@ public class CastleRoomTowerSquare extends CastleRoom
         }
         if (alignment == EnumFacing.WEST || alignment == EnumFacing.EAST)
         {
-            zStart += ((sideLength / 2) - (towerSize - 2));
+            zStart += (towerSize - sideLength) / 2;
             if (alignment == EnumFacing.EAST)
             {
                 xStart += sideLength - towerSize;
@@ -44,14 +44,23 @@ public class CastleRoomTowerSquare extends CastleRoom
     @Override
     public void generateRoom(ArrayList<BlockPlacement> blocks)
     {
+        BlockPos pos;
         IBlockState blockToBuild;
-        for (int x = xStart; x < towerSize; x++)
+
+        for (int x = 0; x < towerSize - 1; x++)
         {
-            for (int z = zStart; z < towerSize; z++)
+            for (int z = 0; z < towerSize - 1; z++)
             {
-                blockToBuild = Blocks.BRICK_BLOCK.getDefaultState();
-                blocks.add(new BlockPlacement(startPos.add(x, 0, z), blockToBuild));
-                blocks.add(new BlockPlacement(startPos.add(x, height, z), blockToBuild));
+                for (int y = 0; y < height; y++)
+                {
+                    blockToBuild = Blocks.AIR.getDefaultState();
+                    pos = startPos.add(x + xStart, y, z + zStart);
+
+                    if (y == 0)
+                    {
+                        blockToBuild = Blocks.PLANKS.getDefaultState();
+                    }
+                }
             }
         }
     }
@@ -62,9 +71,4 @@ public class CastleRoomTowerSquare extends CastleRoom
         return "TWR";
     }
 
-    private void buildFloorBlock(int x, int z, ArrayList<BlockPlacement> blocks)
-    {
-        IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
-        blocks.add(new BlockPlacement(startPos.add(x, 0, z), blockToBuild));
-    }
 }

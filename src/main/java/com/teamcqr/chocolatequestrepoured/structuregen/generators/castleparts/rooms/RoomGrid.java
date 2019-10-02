@@ -277,7 +277,19 @@ public class RoomGrid
         }
     }
 
-    public RoomGridCell getCellAtLocation(RoomGridPosition position)
+    public RoomGridCell getCellAt(int floor, int x, int z)
+    {
+        if (withinGridBounds(floor, x, z))
+        {
+            return roomArray[floor][x][z];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public RoomGridCell getCellAtPosition(RoomGridPosition position)
     {
         if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
         {
