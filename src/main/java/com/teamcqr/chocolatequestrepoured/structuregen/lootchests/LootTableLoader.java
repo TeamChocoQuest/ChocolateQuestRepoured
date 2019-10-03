@@ -61,7 +61,7 @@ public class LootTableLoader {
 	}
 	
 	private static WeightedItemStack createWeightedItemStack(String entry) {
-		//		  1     2       3          4          5       6        7        8        9
+		//		 				 1     2       3          4          5       6        7        8        9
 		//String format: ID = ITEM, DAMAGE, MIN_COUNT, MAX_COUNT, CHANCE, ENCHANT, MIN_LVL, MAX_LVL, TREASURE
 		StringTokenizer tokenizer = new StringTokenizer(entry, ",");
 		int tokenCount = tokenizer.countTokens();
