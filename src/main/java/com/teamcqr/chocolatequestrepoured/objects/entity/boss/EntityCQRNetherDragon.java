@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
@@ -22,6 +23,7 @@ import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -405,6 +407,11 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 			setMouthOpen(true);
 			this.attackTimer  = 0;
 		}
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return ELootTablesBoss.BOSS_DRAGON_NETHER.getLootTable();
 	}
 	
 

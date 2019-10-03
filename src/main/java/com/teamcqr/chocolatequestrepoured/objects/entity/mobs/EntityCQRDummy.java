@@ -2,9 +2,11 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -47,6 +49,11 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	@Override
 	public double getSizeVariation() {
 		return 0F;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
 	}
 
 }
