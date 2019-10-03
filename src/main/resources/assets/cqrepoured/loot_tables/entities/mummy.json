@@ -2,6 +2,7 @@
     "pools": [
         {
             "rolls": 1,
+			"name": "lt1",
             "entries": [
                 {
                     "type": "item",
@@ -38,6 +39,7 @@
                 }
             ],
             "rolls": 1,
+			"name": "lt2",
             "entries": [
                 {
                     "type": "item",
