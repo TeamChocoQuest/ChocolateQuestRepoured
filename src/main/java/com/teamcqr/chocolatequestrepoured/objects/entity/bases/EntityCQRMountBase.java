@@ -12,6 +12,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 public abstract class EntityCQRMountBase extends EntityAnimal {
@@ -64,5 +65,8 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 		return false;
 
 	}
+	
+	@Override
+	protected abstract ResourceLocation getLootTable();
 
 }
