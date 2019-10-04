@@ -21,7 +21,7 @@ public class ModelCQRSkeleton extends ModelCQRBiped{
 
     public ModelCQRSkeleton(float modelSize, boolean p_i46303_2_)
     {
-        super(modelSize, 0.0F, 64, 32, false);
+        super(modelSize, 0.0F, 64, 64, false);
 
         if (!p_i46303_2_)
         {
