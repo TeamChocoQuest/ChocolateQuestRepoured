@@ -34,7 +34,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName, double widthScale, double heightScale) {
-		this(rendermanagerIn, new ModelCQRBiped(0.0F), 0.5F, entityName, widthScale, heightScale);
+		this(rendermanagerIn, new ModelCQRBiped(0.0F, true), 0.5F, entityName, widthScale, heightScale);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
@@ -68,7 +68,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (this.mainModel instanceof ModelCQRBiped) {
+		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 			ModelBiped model = (ModelBiped) this.mainModel;
 
@@ -116,7 +116,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		
-		if (this.mainModel instanceof ModelCQRBiped) {
+		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		}
 	}
