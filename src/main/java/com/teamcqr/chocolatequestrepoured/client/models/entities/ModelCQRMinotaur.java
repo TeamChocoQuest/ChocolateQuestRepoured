@@ -19,7 +19,7 @@ public class ModelCQRMinotaur extends ModelCQRBiped {
 	}
 
 	public ModelCQRMinotaur(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
+		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn, true);
 		
 		this.tail2 = new ModelRenderer(this, 66, 27);
 		this.tail2.setRotationPoint(-0.5F, 4.2F, -0.5F);
