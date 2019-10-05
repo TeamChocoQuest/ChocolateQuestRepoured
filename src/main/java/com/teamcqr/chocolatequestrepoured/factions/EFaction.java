@@ -25,7 +25,7 @@ public enum EFaction {
 	UNDEAD(new String[] {"WALKERS", "VILLAGERS", "PLAYERS", "TRITONS"}, new String[] {"ILLAGERS", "ENDERMEN"}, EReputationState.ENEMY),
 	PIRATE(new String[] {"WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS", "TRITONS"}, new String[] {"ILLAGERS"}, EReputationState.ENEMY),
 	WALKERS(new String[] {"UNDEAD", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "PLAYERS", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "NPC"}, new String[] {}, EReputationState.ARCH_ENEMY),
-	DWARVES_AND_GOLEMS(new String[] {"WALKERS", "ENDERMEN", "ILLAGERS"}, new String[] {"VILLAGERS", "NPC", "INQUISITION"}, EReputationState.ACCEPTED),
+	DWARVES_AND_GOLEMS(new String[] {"WALKERS", "ENDERMEN", "ILLAGERS", "UNDEAD"}, new String[] {"VILLAGERS", "NPC", "INQUISITION"}, EReputationState.ACCEPTED),
 	GOBLINS(new String[] {"OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS"}, new String[] {"ENDERMEN", "ILLAGERS"}, EReputationState.ENEMY),
 	ENDERMEN(new String[] {"WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE", "TRITONS"}, new String[] {"ILLAGERS", "UNDEAD"}, EReputationState.NEUTRAL),
 	//OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
@@ -37,9 +37,9 @@ public enum EFaction {
 	PLAYERS(new String[] {}, new String[] {"VILLAGERS", "NPC"}, EReputationState.NEUTRAL),
 	;
 
-	public static final int REPU_DECREMENT_ON_MEMBER_KILL = 50;
-	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 10;
-	public static final int REPU_DECREMENT_ON_ALLY_KILL = 20;
+	public static final int REPU_DECREMENT_ON_MEMBER_KILL = 5;
+	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 1;
+	public static final int REPU_DECREMENT_ON_ALLY_KILL = 2;
 	
 	private String[] enemies;
 	private String[] allies;
@@ -101,7 +101,7 @@ public enum EFaction {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
-			return isEnemy(getFactionOfEntity(entity));
+			return isEnemy(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isEnemy(this);
 		}
 		return false;
 	}
@@ -111,7 +111,7 @@ public enum EFaction {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
-			return isAlly(getFactionOfEntity(entity));
+			return isAlly(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isAlly(this);
 		}
 		return false;
 	}
