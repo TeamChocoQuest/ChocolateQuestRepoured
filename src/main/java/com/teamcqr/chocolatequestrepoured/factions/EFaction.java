@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -20,7 +23,11 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraftforge.common.util.Constants;
 
 public enum EFaction {
 	
@@ -43,21 +50,22 @@ public enum EFaction {
 	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 1;
 	public static final int REPU_DECREMENT_ON_ALLY_KILL = 2;
 	
-	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getCounter();
-	public static final int HIGHEST_REPU = EReputationState.MEMBER.getCounter(); 
+	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
+	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue(); 
 	
 	private String[] enemies;
 	private String[] allies;
-	private EReputationState defaultState;
+	private EReputationState defaultRepu;
+	private Map<UUID, Integer> reputationMap = new HashMap<>(); 
 	
 	private EFaction(String[] enemies, String[] allies, EReputationState startState) {
 		this.enemies = enemies;
 		this.allies = allies;
-		this.defaultState = startState;
+		this.defaultRepu = startState;
 	}
 	
 	public EReputationState getDefaultReputation() {
-		return this.defaultState;
+		return this.defaultRepu;
 	}
 	
 	public boolean isEnemy(EFaction otherFac) {
@@ -106,6 +114,9 @@ public enum EFaction {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
+			if(getFactionOfEntity(entity) == PLAYERS) {
+				return EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())).equals(EReputationStateRough.ENEMY);
+			}
 			return isEnemy(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isEnemy(this);
 		}
 		return false;
@@ -116,6 +127,9 @@ public enum EFaction {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
+			if(getFactionOfEntity(entity) == PLAYERS) {
+				return EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())).equals(EReputationStateRough.ALLY);
+			}
 			return isAlly(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isAlly(this);
 		}
 		return false;
@@ -163,7 +177,7 @@ public enum EFaction {
 	
 	public void decrementReputation(EntityPlayer player, int amount) {
 		if(canDecrementRepu(player)) {
-			
+			this.reputationMap.put(player.getPersistentID(), getReputation(player.getPersistentID()) -amount);
 		}
 	}
 	
@@ -179,12 +193,15 @@ public enum EFaction {
 	}
 
 	private int getReputation(UUID persistentID) {
-		return 0;
+		if(this.reputationMap.containsKey(persistentID)) {
+			return reputationMap.get(persistentID);
+		}
+		return defaultRepu.getValue();
 	}
 
 	public void incrementReputation(EntityPlayer player, int amount) {
 		if(canIncrementRepu(player)) {
-			
+			this.reputationMap.put(player.getPersistentID(), getReputation(player.getPersistentID()) +amount);
 		}
 	}
 
@@ -193,6 +210,61 @@ public enum EFaction {
 			return false;
 		}
 		return canRepuChange(player);
+	}
+	
+	public static void loadRepuValues(NBTTagCompound compound) {
+		if(compound.hasKey("Factions")) {
+			NBTTagList factions = compound.getTagList("Factions", Constants.NBT.TAG_COMPOUND);
+			factions.forEach(new Consumer<NBTBase>() {
+
+				@Override
+				public void accept(NBTBase t) {
+					try {
+						NBTTagCompound factionTag = (NBTTagCompound)t;
+						EFaction faction = EFaction.valueOf(factionTag.getString("Name"));
+						
+						NBTTagList repuListTag = factionTag.getTagList("Reputations", Constants.NBT.TAG_COMPOUND);
+						repuListTag.forEach(new Consumer<NBTBase>() {
+
+							@Override
+							public void accept(NBTBase t) {
+								NBTTagCompound repuTag = (NBTTagCompound)t;
+								faction.reputationMap.put(repuTag.getUniqueId("UUID"), repuTag.getInteger("Reputation"));
+							}
+						});
+						
+					} catch(Exception ex) {
+						System.out.println("Unable to load faction data!");
+						ex.printStackTrace();
+					}
+				}
+				
+			});
+		}
+		
+	}
+	
+	public static NBTTagCompound getCompoundForSavingToFile() {
+		NBTTagCompound compound = new NBTTagCompound();
+		NBTTagList factions = new NBTTagList();
+		
+		for(EFaction faction : values()) {
+			NBTTagList repus = new NBTTagList();
+			for(Map.Entry<UUID, Integer> entry : faction.reputationMap.entrySet()) {
+				NBTTagCompound repuTag = new NBTTagCompound();
+				repuTag.setUniqueId("UUID", entry.getKey());
+				repuTag.setInteger("Reputation", entry.getValue());
+				
+				repus.appendTag(repus);
+			}
+			NBTTagCompound factionTag = new NBTTagCompound();
+			factionTag.setString("Name", faction.name());
+			factionTag.setTag("Reputations", repus);
+			
+			factions.appendTag(factionTag);
+		}
+		compound.setTag("Factions", factions);
+		return compound;
 	}
 
 }
