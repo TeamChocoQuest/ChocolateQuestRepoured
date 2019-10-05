@@ -83,6 +83,7 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 			this.rotationYawHead = this.renderYawOffset;
 			strafe = entitylivingbase.moveStrafing * 0.5F;
 			forward = entitylivingbase.moveForward;
+			vertical = entitylivingbase.moveVertical;
 
 			if (forward <= 0.0F) {
 				forward *= 0.25F;
@@ -93,7 +94,7 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 				forward = 0.0F;
 			}
 
-			if (this.onGround) {
+			if (this.onGround && moveVertical > 0.2) {
 				this.motionY = 0.5F;
 
 				if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
