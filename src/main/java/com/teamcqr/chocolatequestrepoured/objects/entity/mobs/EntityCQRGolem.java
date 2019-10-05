@@ -52,5 +52,18 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_IRONGOLEM_DEATH;
 	}
+	
+	@Override
+	public boolean isImmuneToExplosions() {
+		return true;
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			return false;
+		}
+		return super.attackEntityFrom(source, amount);
+	}
 
 }

@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -33,6 +34,14 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_MINOTAUR.getLootTable();
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			return false;
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 	
 }
