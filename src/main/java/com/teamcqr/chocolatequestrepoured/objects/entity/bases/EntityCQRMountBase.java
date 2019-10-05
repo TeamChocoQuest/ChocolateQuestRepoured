@@ -110,7 +110,6 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 					float f1 = MathHelper.cos(this.rotationYaw * 0.017453292F);
 					this.motionX += (double) (-0.4F * f);
 					this.motionZ += (double) (0.4F * f1);
-					// this.playSound(SoundEvents.ENTITY_HORSE_JUMP, 0.4F, 1.0F);
 				}
 
 			}
