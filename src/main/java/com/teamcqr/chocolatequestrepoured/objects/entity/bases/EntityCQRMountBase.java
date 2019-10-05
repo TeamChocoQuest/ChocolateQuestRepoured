@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -13,6 +14,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public abstract class EntityCQRMountBase extends EntityAnimal {
@@ -44,12 +46,14 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 		return this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
 	}
 
+	@Override
 	public boolean canBeSteered() {
 		Entity entity = this.getControllingPassenger();
 
 		return entity != null && (entity instanceof AbstractEntityCQR || entity instanceof EntityPlayer);
 	}
 
+	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (!super.processInteract(player, hand)) {
 			if (!this.isBeingRidden()) {
@@ -64,6 +68,58 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 		return false;
 
 	}
+	
+	@Override
+	public void travel(float strafe, float vertical, float forward)
+    {
+        Entity entity = this.getPassengers().isEmpty() ? null : (Entity)this.getPassengers().get(0);
+
+        if (this.isBeingRidden() && this.canBeSteered())
+        {
+            this.rotationYaw = entity.rotationYaw;
+            this.prevRotationYaw = this.rotationYaw;
+            this.rotationPitch = entity.rotationPitch * 0.5F;
+            this.setRotation(this.rotationYaw, this.rotationPitch);
+            this.renderYawOffset = this.rotationYaw;
+            this.rotationYawHead = this.rotationYaw;
+            this.stepHeight = 1.0F;
+            this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
+
+
+            if (this.canPassengerSteer())
+            {
+                float f = (float)this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 0.225F;
+
+                this.setAIMoveSpeed(f);
+                super.travel(0.0F, 0.0F, 1.0F);
+            }
+            else
+            {
+                this.motionX = 0.0D;
+                this.motionY = 0.0D;
+                this.motionZ = 0.0D;
+            }
+
+            this.prevLimbSwingAmount = this.limbSwingAmount;
+            double d1 = this.posX - this.prevPosX;
+            double d0 = this.posZ - this.prevPosZ;
+            float f1 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
+
+            if (f1 > 1.0F)
+            {
+                f1 = 1.0F;
+            }
+
+            this.limbSwingAmount += (f1 - this.limbSwingAmount) * 0.4F;
+            this.limbSwing += this.limbSwingAmount;
+        }
+        else
+        {
+            this.stepHeight = 0.5F;
+            this.jumpMovementFactor = 0.02F;
+            super.travel(strafe, vertical, forward);
+        }
+    }
 	
 	@Override
 	protected abstract ResourceLocation getLootTable();
