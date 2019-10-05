@@ -57,5 +57,13 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_BOARMAN.getLootTable();
 	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			return false;
+		}
+		return super.attackEntityFrom(source, amount);
+	}
 
 }

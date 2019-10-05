@@ -65,5 +65,13 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_DWARF.getLootTable();
 	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isFireDamage()) {
+			return false;
+		}
+		return super.attackEntityFrom(source, amount);
+	}
 
 }
