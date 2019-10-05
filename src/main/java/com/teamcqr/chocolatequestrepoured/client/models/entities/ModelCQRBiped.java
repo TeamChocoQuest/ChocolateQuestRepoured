@@ -47,7 +47,7 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedLeftLeg.setRotationPoint(1.9F, 12.0F, 0.0F);
 
 		initExtraLayer(modelSize);
-		setClothingLayerVisible(!hasExtraLayer);
+		setClothingLayerVisible(hasExtraLayer);
 	}
 
 	private void initExtraLayer(float modelSize) {
