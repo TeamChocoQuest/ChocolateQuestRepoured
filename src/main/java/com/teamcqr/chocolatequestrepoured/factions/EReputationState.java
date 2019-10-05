@@ -35,13 +35,24 @@ public enum EReputationState {
 			low = lowBound;
 		}
 		
+		public int getHighBound() {
+			return high;
+		}
+		public int getLowBound() {
+			return low;
+		}
+		
 		public static EReputationStateRough getByRepuScore(int score) {
-			for(EReputationStateRough ersr : values()) {
-				if(score <= ersr.high && score >= ersr.low) {
-					return ersr;
-				}
+			if(score <= NEUTRAL.getHighBound() && score >= NEUTRAL.getLowBound()) {
+				return NEUTRAL;
 			}
-			return NEUTRAL;
+			if(score < NEUTRAL.getLowBound()) {
+				return ENEMY;
+			}
+			if(score > NEUTRAL.getHighBound()) {
+				return ALLY;
+			}
+			return ENEMY;
 		}
 	}
 
