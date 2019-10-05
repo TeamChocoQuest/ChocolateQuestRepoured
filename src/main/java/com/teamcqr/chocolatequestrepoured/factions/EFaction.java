@@ -115,7 +115,7 @@ public enum EFaction {
 		}
 		if(getFactionOfEntity(entity) != null) {
 			if(getFactionOfEntity(entity) == PLAYERS) {
-				System.out.println("Repu Rough: " + EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())));
+				//System.out.println("Repu Rough: " + EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())));
 				return EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())).equals(EReputationStateRough.ENEMY);
 			}
 			return isEnemy(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isEnemy(this);
@@ -179,7 +179,7 @@ public enum EFaction {
 	public void decrementReputation(EntityPlayer player, int amount) {
 		if(canDecrementRepu(player)) {
 			this.reputationMap.put(player.getPersistentID(), getReputation(player.getPersistentID()) -amount);
-			System.out.println("Repu of: " + player.getDisplayNameString() + " towards " + this.name() + " is: " + getReputation(player.getPersistentID()));
+			//System.out.println("Repu of: " + player.getDisplayNameString() + " towards " + this.name() + " is: " + getReputation(player.getPersistentID()));
 		}
 	}
 	
@@ -204,7 +204,7 @@ public enum EFaction {
 	public void incrementReputation(EntityPlayer player, int amount) {
 		if(canIncrementRepu(player)) {
 			this.reputationMap.put(player.getPersistentID(), getReputation(player.getPersistentID()) +amount);
-			System.out.println("Repu of: " + player.getDisplayNameString() + " towards " + this.name() + " is: " + getReputation(player.getPersistentID()));
+			//System.out.println("Repu of: " + player.getDisplayNameString() + " towards " + this.name() + " is: " + getReputation(player.getPersistentID()));
 		}
 	}
 
