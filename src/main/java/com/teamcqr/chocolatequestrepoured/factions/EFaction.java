@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
+import java.util.UUID;
+
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -40,6 +42,9 @@ public enum EFaction {
 	public static final int REPU_DECREMENT_ON_MEMBER_KILL = 5;
 	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 1;
 	public static final int REPU_DECREMENT_ON_ALLY_KILL = 2;
+	
+	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getCounter();
+	public static final int HIGHEST_REPU = EReputationState.MEMBER.getCounter(); 
 	
 	private String[] enemies;
 	private String[] allies;
@@ -157,11 +162,37 @@ public enum EFaction {
 	}
 	
 	public void decrementReputation(EntityPlayer player, int amount) {
-		
+		if(canDecrementRepu(player)) {
+			
+		}
 	}
 	
+	private boolean canDecrementRepu(EntityPlayer player) {
+		if(getReputation(player.getPersistentID()) < LOWEST_REPU) {
+			return false;
+		}
+		return canRepuChange(player);
+	}
+	
+	private boolean canRepuChange(EntityPlayer player) {
+		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator());
+	}
+
+	private int getReputation(UUID persistentID) {
+		return 0;
+	}
+
 	public void incrementReputation(EntityPlayer player, int amount) {
-		
+		if(canIncrementRepu(player)) {
+			
+		}
+	}
+
+	private boolean canIncrementRepu(EntityPlayer player) {
+		if(getReputation(player.getPersistentID()) > HIGHEST_REPU) {
+			return false;
+		}
+		return canRepuChange(player);
 	}
 
 }
