@@ -19,13 +19,12 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 
 	public EntityCQRMountBase(World worldIn) {
 		super(worldIn);
-		// TODO Auto-generated constructor stub
 	}
 
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 1.25D));
-		this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 1.0D));
+		this.tasks.addTask(1, new EntityAIPanic(this, 0.9D));
+		this.tasks.addTask(6, new EntityAIWanderAvoidWater(this, 0.6D));
 		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(8, new EntityAILookIdle(this));
 	}
