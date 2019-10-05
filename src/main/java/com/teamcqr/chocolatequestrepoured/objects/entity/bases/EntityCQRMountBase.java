@@ -90,11 +90,6 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 			}
 
 			if (this.onGround) {
-				strafe = 0.0F;
-				forward = 0.0F;
-			}
-
-			if (this.onGround && moveVertical > 0.2) {
 				this.motionY = 0.5F;
 
 				if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
