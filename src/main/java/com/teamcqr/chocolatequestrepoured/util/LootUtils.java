@@ -93,8 +93,12 @@ public class LootUtils {
 		/*LootCondition[] lchance = {new RandomChance(probability)};*/
 		
 		ArrayList<LootFunction> _functions = new ArrayList<LootFunction>();
-		_functions.add(new SetCount(lchance, new RandomValueRange(minQuantity, maxQuantity)));
-		_functions.add(new LootingEnchantBonus(new LootCondition[]{}, new RandomValueRange(minLootBonus, maxLootBonus), 0));
+		if(item.getItemStackLimit() > 1) {
+			_functions.add(new SetCount(lchance, new RandomValueRange(minQuantity, maxQuantity)));
+		} 
+		if(minLootBonus >= 0 && (maxLootBonus > minLootBonus || maxLootBonus > 0)) {
+			_functions.add(new LootingEnchantBonus(new LootCondition[]{}, new RandomValueRange(minLootBonus, maxLootBonus), 0));
+		}
 		_functions.add(new SetMetadata(new LootCondition[]{}, new RandomValueRange(minMeta, maxMeta)));
 		LootCallbacks.FunctionsCallback(_functions);
 		LootFunction[] lcount = _functions.toArray(new LootFunction[0]);

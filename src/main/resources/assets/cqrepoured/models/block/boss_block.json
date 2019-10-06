@@ -1,6 +1,12 @@
 {
-   "parent": "block/cube_all",
+   "parent": "block/cube",
    "textures": {
-       "all": "cqrepoured:blocks/boss_block"
+       "particle": "cqrepoured:blocks/boss_block",
+	   "down": "cqrepoured:blocks/spawner",
+       "up": "cqrepoured:blocks/spawner",
+       "north": "cqrepoured:blocks/boss_block",
+       "east": "cqrepoured:blocks/boss_block",
+       "south": "cqrepoured:blocks/boss_block",
+       "west": "cqrepoured:blocks/boss_block"
    }
 }

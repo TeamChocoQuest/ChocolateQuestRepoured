@@ -16,6 +16,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
@@ -204,10 +205,12 @@ public class ModItems {
 	public static final Item POTION_HEALING = Null();
 	public static final Item TELEPORT_STONE = Null();
 	public static final Item SOUL_BOTTLE = Null();
-	public static final Item MOB_TO_SPAWNER = Null();
 	public static final Item BADGE = Null();
 	public static final Item ALCHEMY_BAG = Null();
 
+	// Dungeon tools
+	public static final Item MOB_TO_SPAWNER = Null();
+	public static final Item SPAWNER_CONVERTER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
 	
 	@EventBusSubscriber(modid = Reference.MODID)
@@ -307,6 +310,7 @@ public class ModItems {
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
 					setItemName(new ItemStructureSelector(), "structure_selector"),
+					setItemName(new ItemSpawnerConverter(), "spawner_converter")
 			};
 
 			IForgeRegistry<Item> registry = event.getRegistry();

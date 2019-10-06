@@ -221,9 +221,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return this.lootTable;
-	}
+	protected abstract ResourceLocation getLootTable();
 
 	@Override
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {

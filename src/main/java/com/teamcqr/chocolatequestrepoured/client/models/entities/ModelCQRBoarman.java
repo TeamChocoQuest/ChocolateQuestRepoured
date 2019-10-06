@@ -14,7 +14,7 @@ public class ModelCQRBoarman extends ModelCQRBiped {
 	}
 
 	public ModelCQRBoarman(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
+		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn, true);
 
 		righttusk = new ModelRenderer(this, 56, 16);
 		righttusk.addBox(-1F, -1F, -2F, 1, 2, 2);

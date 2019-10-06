@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQREndermanArmor;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQREndermanArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
 

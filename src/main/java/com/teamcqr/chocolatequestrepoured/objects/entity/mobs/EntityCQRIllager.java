@@ -4,8 +4,10 @@ import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class EntityCQRIllager extends AbstractEntityCQR {
 
@@ -26,6 +28,11 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@Override
 	public EFaction getFaction() {
 		return EFaction.ILLAGERS;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableList.ENTITIES_VINDICATION_ILLAGER;
 	}
 
 }
