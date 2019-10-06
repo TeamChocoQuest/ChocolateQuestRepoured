@@ -259,10 +259,12 @@ public class CastleRoomSelector
         int towerSize = 5 + random.nextInt(roomSize - 5);
         System.out.format("Placing tower at %d,%d on floor %d facing %s, size = %d",
                 x, z, startFloor, alignment.toString(), towerSize);
+
+        CastleRoomTowerSquare tower = null;
         for (int floor = startFloor; floor < startFloor + floors; floor++)
         {
             RoomGridCell cell = grid.getCellAt(floor, x, z);
-            CastleRoomTowerSquare tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize);
+            tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize, tower);
             cell.setRoom(tower);
         }
     }
@@ -366,10 +368,9 @@ public class CastleRoomSelector
             {
                 for (RoomGridCell cell : candidateCells)
                 {
-                    if (grid.adjacentCellIsSelected(cell, EnumFacing.UP))
+                    RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
+                    if (aboveCell.isSelectedForBuilding() && aboveCell.isPopulated())
                     {
-                        RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
-
                         CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
                         cell.setRoom(stairs);
 
