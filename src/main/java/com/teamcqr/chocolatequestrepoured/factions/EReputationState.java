@@ -12,22 +12,47 @@ public enum EReputationState {
 	ALLY(500),
 	MEMBER(1000);
 	
-	private int counter = 0;
+	private int value = 0;
 	
 	private EReputationState(int index) {
-		counter = index;
+		value = index;
 	}
 	
-	public int getCounter() {
-		return counter;
+	public int getValue() {
+		return value;
 	}
 	
 	public enum EReputationStateRough {
 		NEUTRAL(250, -250),
-		ENEMY(-251, -1000),
-		ALLY(251, 1000);
+		ENEMY(-251, -10000),
+		ALLY(251, 10000);
+		
+		private final int high; 
+		private final int low;
 		
 		private EReputationStateRough(int highBound, int lowBound) {
+			high = highBound;
+			low = lowBound;
+		}
+		
+		public int getHighBound() {
+			return high;
+		}
+		public int getLowBound() {
+			return low;
+		}
+		
+		public static EReputationStateRough getByRepuScore(int score) {
+			if(score <= NEUTRAL.getHighBound() && score >= NEUTRAL.getLowBound()) {
+				return NEUTRAL;
+			}
+			if(score < NEUTRAL.getLowBound()) {
+				return ENEMY;
+			}
+			if(score > NEUTRAL.getHighBound()) {
+				return ALLY;
+			}
+			return ENEMY;
 		}
 	}
 

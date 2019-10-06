@@ -11,6 +11,8 @@ import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
@@ -153,6 +155,18 @@ public class CQRMain
 			}
 		} catch(Exception ex) {
 			System.err.println("WARNING: Failed to instantiate the banners!!");
+			ex.printStackTrace();
+		}
+		//Instantiating loot tables for entities
+		try {
+			for(ELootTablesNormal eltn : ELootTablesNormal.values()) {
+				eltn.getLootTable();
+			}
+			for(ELootTablesBoss eltn : ELootTablesBoss.values()) {
+				eltn.getLootTable();
+			}
+		} catch(Exception ex) {
+			System.err.println("WARNING: Failed to instantiate entity loot tables!!");
 			ex.printStackTrace();
 		}
 
