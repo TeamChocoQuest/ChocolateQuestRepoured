@@ -103,7 +103,7 @@ public abstract class CastleRoom
 
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
-        IBlockState wallBlock = Blocks.MOSSY_COBBLESTONE.getDefaultState();
+        IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
         int len = sideLength;
 
         if (walls.contains(EnumFacing.NORTH))

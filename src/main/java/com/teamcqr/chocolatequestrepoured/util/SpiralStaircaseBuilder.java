@@ -39,7 +39,7 @@ public class SpiralStaircaseBuilder
         }
 
         //The side of the stairs rotates each level from the bottom
-        stairSide = rotateFacingNTimesCW(firstSide,position.getY() - start.getY());
+        stairSide = rotateFacingNTimesCW(firstSide,Math.abs(position.getY() - start.getY()));
         EnumFacing stairFacing = rotateFacingNTimesCW(stairSide, 1);
 
         switch (stairSide)
