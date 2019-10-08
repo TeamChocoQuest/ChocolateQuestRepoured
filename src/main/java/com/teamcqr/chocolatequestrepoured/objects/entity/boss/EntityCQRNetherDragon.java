@@ -67,8 +67,6 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 
 	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
-	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-
 	private boolean mouthOpen = false;
 
 	private boolean isReadyToAttack = true;
