@@ -29,8 +29,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -117,6 +115,9 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 			//return this.attackEntityFromPart(this.headPart, source, amount);
 			return true;
 		}*/
+		if(source.isFireDamage() || source.isExplosion()) {
+			return false;
+		}
 
 		return super.attackEntityFrom(source, amount);
 	}
