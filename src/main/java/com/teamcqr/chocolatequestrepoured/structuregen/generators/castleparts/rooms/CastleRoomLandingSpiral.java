@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
-import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +16,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
     public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.LANDING;
+        this.roomType = RoomType.LANDING_SPIRAL;
         this.stairsBelow = stairsBelow;
     }
 

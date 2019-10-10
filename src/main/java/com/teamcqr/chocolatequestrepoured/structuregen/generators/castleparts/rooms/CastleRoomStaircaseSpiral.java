@@ -17,7 +17,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     public CastleRoomStaircaseSpiral(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.STAIRCASE;
+        this.roomType = RoomType.STAIRCASE_SPIRAL;
 
         int centerX = sideLength / 2;
         int centerZ = sideLength / 2;
