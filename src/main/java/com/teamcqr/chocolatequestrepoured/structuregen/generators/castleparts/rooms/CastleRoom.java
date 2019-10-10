@@ -20,20 +20,31 @@ public abstract class CastleRoom
         NONE,
         HALLWAY,
         KITCHEN,
-        STAIRCASE,
-        LANDING
+        STAIRCASE_DIRECTED,
+        STAIRCASE_SPIRAL,
+        LANDING_DIRECTED,
+        LANDING_SPIRAL,
+        TOWER_SQUARE
     }
 
     BlockPos startPos;
     protected int height;
     protected int sideLength;
 
-    //the counts represent how many roomSizes this room uses in a given direction
+    //The following variables are used for rooms that build blocks in a smaller area than the
+    //actual room occupies (such as towers). For most room types they will be not be changed from
+    //the values set in the default constructor.
+    protected int buildLength; //actual length of constructed part of room
+    protected int offsetX; //x offset from startPos that actual room starts
+    protected int offsetZ; //z offset from startPos that actual room starts
+
+    //The counts represent how many roomSizes this room uses in a given direction
     //so for example if countX was 2, the actual x size would be x*roomSize
     protected int countX;
     protected int countY;
     protected int countZ;
-    protected int maxSlotsUsed = 1;
+
+    protected int maxSlotsUsed = 1; //Max number of contiguous room grid slots this can occupy
 
     protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
@@ -46,6 +57,9 @@ public abstract class CastleRoom
     {
         this.startPos = startPos;
         this.sideLength = sideLength;
+        this.offsetX = 0;
+        this.offsetZ = 0;
+        this.buildLength = this.sideLength;
         this.height = height;
         this.doors = new ArrayList<>();
         this.walls = new HashSet<>();
@@ -104,7 +118,7 @@ public abstract class CastleRoom
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int len = sideLength;
+        int len = buildLength;
 
         if (walls.contains(EnumFacing.NORTH))
         {
@@ -112,7 +126,7 @@ public abstract class CastleRoom
             {
                 for (int y = 0; y < height / 2; y++)
                 {
-                    BlockPos pos = startPos.add(x, y, 0);
+                    BlockPos pos = startPos.add(x + offsetX, y, offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
 
@@ -124,7 +138,7 @@ public abstract class CastleRoom
             {
                 for (int y = 0; y < height / 2; y++)
                 {
-                    BlockPos pos = startPos.add(x, y, sideLength - 1);
+                    BlockPos pos = startPos.add(x + offsetX, y, buildLength + offsetZ - 1);
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
             }
@@ -135,7 +149,7 @@ public abstract class CastleRoom
             {
                 for (int y = 0; y < height / 2; y++)
                 {
-                    BlockPos pos = startPos.add(0, y, z);
+                    BlockPos pos = startPos.add(offsetX, y, z + offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
             }
@@ -146,7 +160,7 @@ public abstract class CastleRoom
             {
                 for (int y = 0; y < height / 2; y++)
                 {
-                    BlockPos pos = startPos.add(sideLength - 1, y, z);
+                    BlockPos pos = startPos.add(buildLength + offsetX - 1, y, z + offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
             }
@@ -171,6 +185,11 @@ public abstract class CastleRoom
     public boolean hasRoofEdgeOnSide(EnumFacing side)
     {
         return (roofEdges.contains(side));
+    }
+
+    public boolean isTower()
+    {
+        return false;
     }
 
     protected void buildRoofEdges(ArrayList<BlockPlacement> blocks)

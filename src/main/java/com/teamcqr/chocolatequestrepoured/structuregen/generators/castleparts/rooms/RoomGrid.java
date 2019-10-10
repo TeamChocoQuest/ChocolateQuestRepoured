@@ -111,6 +111,7 @@ public class RoomGrid
         result.removeIf(r -> r.getFloor() != floor);
         result.removeIf(r -> r.getGridX() != columnIndex);
         result.removeIf(r -> !r.isSelectedForBuilding());
+        result.removeIf(r -> !r.isPopulated());
         return result;
     }
 
@@ -120,6 +121,7 @@ public class RoomGrid
         result.removeIf(r -> r.getFloor() != floor);
         result.removeIf(r -> r.getGridZ() != rowIndex);
         result.removeIf(r -> !r.isSelectedForBuilding());
+        result.removeIf(r -> !r.isPopulated());
         return result;
     }
 
@@ -289,7 +291,7 @@ public class RoomGrid
         }
     }
 
-    public RoomGridCell getCellAtPosition(RoomGridPosition position)
+    public RoomGridCell getCellAt(RoomGridPosition position)
     {
         if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
         {
@@ -320,37 +322,44 @@ public class RoomGrid
 
     public boolean adjacentCellIsPopulated(RoomGridCell startCell, EnumFacing direction)
     {
-        boolean result;
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
         return (adjacent != null && adjacent.isPopulated());
     }
 
     public boolean adjacentCellIsSelected(RoomGridCell startCell, EnumFacing direction)
     {
-        boolean result;
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
         return (adjacent != null && adjacent.isSelectedForBuilding());
     }
 
-    public boolean cellBordersHallway(RoomGridCell startCell)
+    public boolean adjacentCellIsWalkableRoof(RoomGridCell startCell, EnumFacing direction)
     {
-        return getAdjacentHallwayDirection(startCell) != EnumFacing.DOWN;
-    }
+        boolean result = false;
 
-    public EnumFacing getAdjacentHallwayDirection(RoomGridCell startCell)
-    {
-        for (EnumFacing direction : EnumFacing.HORIZONTALS)
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        if (adjacent != null && adjacent.isSelectedForBuilding() && !adjacent.isPopulated())
         {
-            RoomGridCell adjacentCell = getAdjacentCell(startCell, direction);
-            if (adjacentCell != null &&
-                    adjacentCell.isPopulated() &&
-                    adjacentCell.getRoom().getRoomType() == CastleRoom.RoomType.HALLWAY)
-            {
-                return direction;
-            }
+            result = adjacentCellIsPopulated(adjacent, EnumFacing.DOWN);
         }
 
-        return EnumFacing.DOWN;
+        return result;
+    }
+
+    public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction)
+    {
+        RoomGridPosition coords = cell.getGridPosition();
+
+        coords = coords.move(direction);
+        while(withinGridBounds(coords))
+        {
+            if (getCellAt(coords).isPopulated())
+            {
+                return false;
+            }
+            coords = coords.move(direction);
+        }
+
+        return true;
     }
 
     public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)
@@ -358,6 +367,20 @@ public class RoomGrid
         int distX = Math.abs(c1.getGridX() - c2.getGridX());
         int distZ = Math.abs(c1.getGridZ() - c2.getGridZ());
         return (Math.hypot(distX, distZ));
+    }
+
+    public boolean cellBordersRoomType(RoomGridCell cell, CastleRoom.RoomType type)
+    {
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            RoomGridCell adjacent = getAdjacentCell(cell, side);
+            if (adjacent != null && adjacent.isPopulated() && adjacent.getRoom().getRoomType() == type)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction)
@@ -404,6 +427,12 @@ public class RoomGrid
     public boolean withinGridBounds(int floor, int x, int z)
     {
         return (floor >= 0 && floor < floors && withinFloorBounds(x, z));
+    }
+
+    public boolean withinGridBounds(RoomGridPosition position)
+    {
+        return (position.getFloor() >= 0 && position.getFloor() < floors &&
+                withinFloorBounds(position.getX(), position.getZ()));
     }
 
     public boolean withinFloorBounds(int x, int z)
