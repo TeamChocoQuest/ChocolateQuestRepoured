@@ -67,7 +67,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 					}
 				}
 				cooldwonForPartnerCycle++;
-				if(talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder) {
+				if((talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder) && !friends.isEmpty()) {
 					talkingPartner = friends.get(random.nextInt(friends.size()));
 					cooldwonForPartnerCycle = 0;
 				}
