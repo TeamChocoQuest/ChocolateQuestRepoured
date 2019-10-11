@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
@@ -11,9 +13,10 @@ import net.minecraft.util.math.Vec3i;
 public class EntityAIIdleSit extends AbstractCQREntityAI {
 	
 	private int cooldown = 0;
-	
+	private Entity talkingPartner = null;
+	private int cooldwonForPartnerCycle = 0;
 	protected static final int cooldownIdleBorder = 50;
-	
+	protected static final int cooldownCyclePartnerBorder = 100;
 	
 	public EntityAIIdleSit(AbstractEntityCQR entity) {
 		super(entity);
@@ -35,7 +38,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 					return false;
 				}
 			}
-			if(entity.getDistance(attacker) >= 35 && attacker instanceof EntityPlayer) {
+			if(entity.getDistance(attacker) >= 35 && !(attacker instanceof EntityPlayer)) {
 				return true;
 			}
 		}
@@ -52,19 +55,33 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		if(shouldExecute()) {
 			cooldown++;
 			if(cooldown >= cooldownIdleBorder) {
-				//TODO: Make entity sit
+				if(!entity.isSitting()) {
+					entity.setSitting(true);
+				}
+				//DONE: Make entity sit -> Renderer needs work for that
 				int friendsFound = 0;
-				for(Entity ent : entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(3,1,3)), entity.getPosition().add(3,1,3)), AbstractEntityCQR.MOB_SELECTOR)) {
+				List<Entity> friends = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(3,1,3)), entity.getPosition().add(3,1,3)), AbstractEntityCQR.MOB_SELECTOR);
+				for(Entity ent : friends) {
 					if(entity.getFaction().isEntityAlly((AbstractEntityCQR)ent)) {
 						friendsFound++;
 					}
 				}
-				if( friendsFound > 0) {
-					//we have someone to talk to, yay :D
+				cooldwonForPartnerCycle++;
+				if(talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder) {
+					talkingPartner = friends.get(random.nextInt(friends.size()));
+					cooldwonForPartnerCycle = 0;
 				}
-				
-				//TODO: Orient entity to random friend
-				//TODO: Make them "chat" / "play cards"
+				if( friendsFound > 0 && talkingPartner != null) {
+					//we have someone to talk to, yay :D
+					//DONE: Orient entity to random friend
+					//DONE: Make them "chat" / "play cards"
+					entity.setChatting(true);
+					entity.getLookHelper().setLookPositionWithEntity(talkingPartner, 0, 0);
+					if(talkingPartner instanceof AbstractEntityCQR) {
+						((AbstractEntityCQR)talkingPartner).setSitting(true);
+						((AbstractEntityCQR)talkingPartner).setChatting(true);
+					}
+				}
 			}
 		} else {
 			resetTask();
@@ -75,7 +92,12 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	public void resetTask() {
 		super.resetTask();
 		cooldown = 0;
-		//TODO: Make entity stand up and stop talking
+		cooldwonForPartnerCycle = 0;
+		talkingPartner = null;
+		if(entity.isSitting()) {
+			entity.setSitting(false);
+			entity.setChatting(false);
+		}
 	}
 
 }
