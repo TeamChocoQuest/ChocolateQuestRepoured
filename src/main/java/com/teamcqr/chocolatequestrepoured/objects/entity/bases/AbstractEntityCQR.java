@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.Capability
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
@@ -83,6 +84,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected static final DataParameter<Boolean> isSitting = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Float> sizeVariation = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Integer> healingPotions = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
@@ -96,6 +98,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.dataManager.register(sizeVariation, 0F);
 		this.dataManager.register(isSitting, false);
 		this.dataManager.register(healingPotions, 3);
+		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 	}
 	
 
@@ -618,6 +621,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		return this.dataManager.get(sizeVariation);
 	}
 	
+	public void setSitting(boolean sitting) {
+		this.dataManager.set(isSitting, sitting);
+	}
+	
+	public boolean isSitting() {
+		return this.dataManager.get(isSitting);
+	}
+	
+	public void setChatting(boolean chatting) {
+		//TODO
+	}
+	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeFloat(this.dataManager.get(sizeVariation));
@@ -627,6 +642,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		this.dataManager.set(sizeVariation, additionalData.readFloat());
+	}
+	
+	public void setArmPose(ECQREntityArmPoses pose) {
+		this.dataManager.set(ARM_POSE, pose.toString());
+	}
+	public ECQREntityArmPoses getArmPose() {
+		return ECQREntityArmPoses.valueOf(this.dataManager.get(ARM_POSE));
 	}
 
 }
