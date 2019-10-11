@@ -52,6 +52,7 @@ public abstract class CastleRoom
 
     protected HashSet<EnumFacing> walls;
     protected HashSet<EnumFacing> roofEdges;
+    protected HashSet<EnumFacing> doorSides;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
     {
@@ -64,6 +65,7 @@ public abstract class CastleRoom
         this.doors = new ArrayList<>();
         this.walls = new HashSet<>();
         this.roofEdges = new HashSet<>();
+        this.doorSides = new HashSet<>();
     }
 
     public void generate(ArrayList<BlockPlacement> blocks)
@@ -87,6 +89,8 @@ public abstract class CastleRoom
 
     public void addDoorOnSide(EnumFacing side)
     {
+        doorSides.add(side);
+
         final int DOOR_WIDTH = 4;
         if (side == EnumFacing.SOUTH && hasWallOnSide(EnumFacing.SOUTH))
         {
@@ -170,6 +174,11 @@ public abstract class CastleRoom
     public void removeWall(EnumFacing side)
     {
         walls.remove(side);
+    }
+
+    public boolean hasDoorOnSide(EnumFacing side)
+    {
+        return walls.contains(side);
     }
 
     public void addRoofEdge(EnumFacing side)
