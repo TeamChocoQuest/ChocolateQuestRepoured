@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import javafx.scene.control.Cell;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -79,6 +80,7 @@ public class CastleRoomSelector
 
         determineWalls();
         placeOuterDoors();
+        placeTowers();
         connectRooms();
         determineRoofs();
 
@@ -216,33 +218,71 @@ public class CastleRoomSelector
 
     private void placeTowers()
     {
-        for (int floor = 0; floor < usedFloors; floor++)
+        for (int floor = 0; floor < usedFloors; floor += floorsPerLayer)
         {
-            if (floor == 0)
+            HashSet<EnumFacing> sidesToCheck = new HashSet<>();
+            sidesToCheck.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+
+
+            final int f = floor;
+            ArrayList<RoomGridCell> candidateCells = grid.getAllCellsWhere(c -> c.getFloor() == f &&
+                    c.isPopulated());
+            Collections.shuffle(candidateCells); //make the list more random
+
+            CellLoop:
+            for (RoomGridCell cell : candidateCells)
             {
-                final int f = floor;
-                ArrayList<RoomGridCell> candidateCells = grid.getAllCellsWhere(c -> c.getFloor() == f &&
-                        c.isPopulated());
-
-                for (RoomGridCell cell : candidateCells)
+                for (EnumFacing side : sidesToCheck)
                 {
+                    boolean canBuild;
 
+                    if (floor == 0)
+                    {
+                        canBuild = grid.cellIsOuterEdge(cell, side);
+                    }
+                    else
+                    {
+                        canBuild = grid.adjacentCellIsWalkableRoof(cell, side) && !cell.getRoom().hasDoorOnSide(side);
+                    }
+
+                    if (canBuild)
+                    {
+                        int maxHeight = (usedFloors - floor) + 1;
+                        if (maxHeight - 3 > 0)
+                        {
+                            int height = 3 + random.nextInt(maxHeight - 3);
+                            addTower(cell.getGridPosition().move(side), height, side.getOpposite());
+                            sidesToCheck.remove(side);
+                            break CellLoop;
+                        }
+                    }
                 }
             }
         }
     }
-    private void addTower(int x, int z, int startFloor, int floors, EnumFacing alignment)
+    private void addTower(RoomGridPosition position, int height, EnumFacing alignment)
     {
+        int x = position.getX();
+        int z = position.getZ();
+        int startFloor = position.getFloor();
+
         int towerSize = 5 + random.nextInt(roomSize - 5);
         System.out.format("Placing tower at %d,%d on floor %d facing %s, size = %d\n",
                 x, z, startFloor, alignment.toString(), towerSize);
 
         CastleRoomTowerSquare tower = null;
-        for (int floor = startFloor; floor < startFloor + floors; floor++)
+        for (int floor = startFloor; floor < startFloor + height; floor++)
         {
             RoomGridCell cell = grid.getCellAt(floor, x, z);
-            tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize, tower);
-            cell.setRoom(tower);
+            if (cell == null)
+            {
+                System.out.println("Tried to place a tower @ null");
+            }
+            else
+            {
+                tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize, tower);
+                cell.setRoom(tower);
+            }
         }
     }
 
@@ -281,6 +321,8 @@ public class CastleRoomSelector
             HashSet<EnumFacing> doorDirections = new HashSet<>();
 
             ArrayList<RoomGridCell> floorRooms = grid.getAllCellsWhere(r -> r.getFloor() == 0 && r.isPopulated());
+            Collections.shuffle(floorRooms);
+
             for (RoomGridCell cell : floorRooms)
             {
                 for (EnumFacing side : EnumFacing.HORIZONTALS)
@@ -368,6 +410,7 @@ public class CastleRoomSelector
 
             aboveCell.setRoom(new CastleRoomLandingDirected(getRoomStart(aboveCell), roomSize, floorHeight,
                     stairs));
+            aboveCell.setReachable();
             aboveCell.getRoom().addDoorOnSide(side);
 
             return true;
