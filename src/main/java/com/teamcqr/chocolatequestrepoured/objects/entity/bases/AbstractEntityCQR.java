@@ -221,9 +221,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	}
 
 	@Override
-	protected ResourceLocation getLootTable() {
-		return this.lootTable;
-	}
+	protected abstract ResourceLocation getLootTable();
 
 	@Override
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
@@ -255,7 +253,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public void onUpdate() {
 		super.onUpdate();
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			SpawnerFactory.placeSpawnerForMob(this, false, null, world, this.getPosition());
+			SpawnerFactory.placeSpawner(new Entity[] {this}, false, null, world, this.getPosition());
 			this.setDead();
 		}
 	}

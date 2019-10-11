@@ -9,7 +9,7 @@ public abstract class EntityCQRGiantSilverfishBase extends EntityCQRMountBase {
 
 	public EntityCQRGiantSilverfishBase(World worldIn) {
 		super(worldIn);
-		setSize(2.5F, 2.5F);
+		setSize(2.0F, 1.0F);
 	}
 	
 	@Override

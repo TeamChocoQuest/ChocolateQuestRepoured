@@ -2,7 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import io.netty.buffer.ByteBuf;
@@ -22,17 +23,16 @@ import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityMultiPart, IRangedAttackMob {
+public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 	
 	public enum EDragonMovementState {
 		CHARGING,
@@ -65,8 +65,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 
 	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
-	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-
 	private boolean mouthOpen = false;
 
 	private boolean isReadyToAttack = true;
@@ -83,7 +81,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 	 */
 	
 	public EntityCQRNetherDragon(World worldIn) {
-		super(worldIn);
+		super(worldIn, 32);
 		/*this.dragonBodyParts = new MultiPartEntityPart[] { this.headPart, this.body1, this.body2, this.body3,
 				this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
 				this.body12, this.body13, this.body14, this.body15, this.body16 };*/
@@ -117,6 +115,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			//return this.attackEntityFromPart(this.headPart, source, amount);
 			return true;
 		}*/
+		if(source.isFireDamage() || source.isExplosion()) {
+			return false;
+		}
 
 		return super.attackEntityFrom(source, amount);
 	}
@@ -405,6 +406,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQR implements IEntityM
 			setMouthOpen(true);
 			this.attackTimer  = 0;
 		}
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return ELootTablesBoss.BOSS_DRAGON_NETHER.getLootTable();
 	}
 	
 

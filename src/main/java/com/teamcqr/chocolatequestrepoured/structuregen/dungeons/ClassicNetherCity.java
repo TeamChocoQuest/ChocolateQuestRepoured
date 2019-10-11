@@ -168,12 +168,17 @@ public class ClassicNetherCity extends DungeonBase {
 		return makeSpaceForBuildings;
 	}
 	
-	public File getBuildingFolder() {
+	private File getBuildingFolder() {
 		return buildingFolder;
 	}
-	
-	public File getCentralBuildingFolder() {
+	public File getRandomBuilding() {
+		return getStructureFileFromDirectory(getBuildingFolder());
+	}
+	private File getCentralBuildingFolder() {
 		return centralBuildingsFolder;
+	}
+	public File getRandomCentralBuilding() {
+		return getStructureFileFromDirectory(getCentralBuildingFolder());
 	}
 	
 	public ResourceLocation getSpawnerMob() {

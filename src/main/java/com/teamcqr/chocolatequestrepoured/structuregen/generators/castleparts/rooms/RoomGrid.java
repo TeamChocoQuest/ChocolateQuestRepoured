@@ -232,6 +232,18 @@ public class RoomGrid
         roomArray[floor][x][z].setAsMainStruct();
     }
 
+    public void setRoomAsNarrow(int floor, int x, int z)
+    {
+        roomArray[floor][x][z].setNarrow();
+    }
+
+    public boolean floorIsNarrow(final int floor)
+    {
+        return getAllCellsWhere(c -> c.isSelectedForBuilding() &&
+                c.getFloor() == floor &&
+                c.isNarrow()).size() > 0;
+    }
+
     public boolean isRoomFilled(int floor, int x, int z)
     {
         return roomArray[floor][x][z] != null && roomArray[floor][x][z].getRoom() != null;
@@ -265,7 +277,19 @@ public class RoomGrid
         }
     }
 
-    public RoomGridCell getCellAtLocation(RoomGridPosition position)
+    public RoomGridCell getCellAt(int floor, int x, int z)
+    {
+        if (withinGridBounds(floor, x, z))
+        {
+            return roomArray[floor][x][z];
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+    public RoomGridCell getCellAtPosition(RoomGridPosition position)
     {
         if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
         {
@@ -385,32 +409,6 @@ public class RoomGrid
     public boolean withinFloorBounds(int x, int z)
     {
         return (x >= 0 && x < roomsX && z >= 0 && z < roomsZ);
-    }
-
-    //print the room array in a grid, floor by floor
-    public String printGrid()
-    {
-        String result = "";
-        for (int floor = 0; floor < floors; floor++)
-        {
-            result += "\nFloor " + floor + "\n";
-            for (int z = 0; z < roomsZ; z++)
-            {
-                for (int x = 0; x < roomsX; x++)
-                {
-                    if (isRoomFilled(floor, x, z))
-                    {
-                        result += "[" + getRoomAt(floor, x, z).getNameShortened() + "|" + getRoomAt(floor, x, z).getPositionString() + "] ";
-                    } else
-                    {
-                        result += "[NUL|--]";
-                    }
-                }
-                result += "\n";
-            }
-        }
-        result += "----------------\n";
-        return result;
     }
 
 }

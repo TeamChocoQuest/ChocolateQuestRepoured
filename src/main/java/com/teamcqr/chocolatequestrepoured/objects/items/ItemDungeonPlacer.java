@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -8,19 +9,26 @@ import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagString;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
@@ -28,6 +36,8 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 public class ItemDungeonPlacer extends Item {
 
 	public static HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
+	public static HashMap<Integer, String[]> dependencyMap = new HashMap<>();
+	
 	public static final int HIGHEST_ICON_NUMBER = 16;
 	private int iconID;
 
@@ -46,8 +56,31 @@ public class ItemDungeonPlacer extends Item {
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("dungeonName", entry.getKey());
 					compound.setInteger("iconID", iconID);
+					
+					NBTTagList dependies = new NBTTagList();
+					for(String depend : dependencyMap.get(entry.getValue())) {
+						dependies.appendTag(new NBTTagString(depend));
+					}
+					compound.setTag("dependencies", dependies);
 					stack.setTagCompound(compound);
 					items.add(stack);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		if(stack.getTagCompound().hasKey("dependencies")) {
+			tooltip.add("Mod Dependencies: ");
+			for(NBTBase nbtts : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
+				String depend = nbtts.toString();
+				depend = depend.replaceAll(String.valueOf('"'), "");
+				if(Loader.isModLoaded(depend)) {
+					tooltip.add(TextFormatting.DARK_GREEN + depend + ", ");
+				} else {
+					tooltip.add(TextFormatting.RED + depend + ", ");
 				}
 			}
 		}
@@ -96,7 +129,7 @@ public class ItemDungeonPlacer extends Item {
 		@SubscribeEvent
 		public static void syncDungeonPlacers(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.dungeonList),
+				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()),
 						(EntityPlayerMP) event.player);
 			}
 		}

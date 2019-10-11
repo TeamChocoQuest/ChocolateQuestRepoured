@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCit
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -28,6 +29,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	private ClassicNetherCity dungeon;
 	
+	//TODO: Dont make this a Set, sets are slow as they need to calculate the hash keys every time you add something to them...
 	private Set<BlockPos> gridPositions = new HashSet<>();
 	private Set<BlockPos> bridgeBuilderStartPositionsX = new HashSet<>();
 	private Set<BlockPos> bridgeBuilderStartPositionsZ = new HashSet<>();
@@ -162,7 +164,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		//Place the buildings
-		Random rdm = new Random();
+		//Random rdm = new Random();
 		
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);
@@ -173,10 +175,14 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		CQStructure centralStructure = null;
 		if(dungeon.centralBuildingIsSpecial()) {
 			//DONE: Choose a central building, figure out the size, then build the platform and then the building
-			if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isDirectory() && dungeon.getCentralBuildingFolder().listFiles().length > 0) {
+			
+			/*if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isDirectory() && dungeon.getCentralBuildingFolder().listFiles().length > 0) {
 				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder().listFiles()[rdm.nextInt(dungeon.getCentralBuildingFolder().listFiles().length)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getCentralBuildingFolder().exists() && dungeon.getCentralBuildingFolder().isFile()) {
 				centralStructure = new CQStructure(dungeon.getCentralBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
+			}*/
+			if(dungeon.getRandomCentralBuilding() != null) {
+				centralStructure = new CQStructure(dungeon.getRandomCentralBuilding(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(centralStructure != null) {
@@ -194,13 +200,17 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			}
 		}
 		CQStructure structure = null;
-		int filesInFolder = dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() ? dungeon.getBuildingFolder().listFiles().length : -1;
+		//int filesInFolder = dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() ? dungeon.getBuildingFolder().listFiles().length : -1;
 		for(BlockPos centerPos : gridPositions) {
 			//DONE: Choose a building, figure out the size, then build the platform and then the building
-			if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() && filesInFolder > 1) {
+			
+			/*if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() && filesInFolder > 1) {
 				structure = new CQStructure(dungeon.getBuildingFolder().listFiles()[rdm.nextInt(filesInFolder)], dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			} else if(dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isFile()) {
 				structure = new CQStructure(dungeon.getBuildingFolder(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
+			}*/
+			if(dungeon.getRandomBuilding() != null) {
+				structure = new CQStructure(dungeon.getRandomBuilding(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			}
 			
 			if(structure != null) {
@@ -243,7 +253,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
 				try {
 					if(dungeon.centralSpawnerIsSingleUse()) {
-						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world), false, null, world, spawnerPosCentral);
+						SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getCentralSpawnerMob(), world)}, false, null, world, spawnerPosCentral);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, dungeon.getCentralSpawnerMob());
 					}
@@ -257,7 +267,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				
 				try {
 					if(dungeon.spawnersAreSingleUse()) {
-						SpawnerFactory.placeSpawnerForMob(EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world), false, null, world, spawnerPos);
+						SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, spawnerPos);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, dungeon.getSpawnerMob());
 					}

@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.models.entities;
+package com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;

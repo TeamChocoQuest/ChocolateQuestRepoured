@@ -36,6 +36,7 @@ public class RoomGridCell
     private boolean reachable;
     private boolean partOfMainStruct;
     private CastleRoom room;
+    private boolean narrow;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -91,6 +92,16 @@ public class RoomGridCell
     public boolean isMainStruct()
     {
         return partOfMainStruct;
+    }
+
+    public void setNarrow()
+    {
+        narrow = true;
+    }
+
+    public boolean isNarrow()
+    {
+        return narrow;
     }
 
     public void setBuildable()

@@ -10,19 +10,19 @@ public enum EBannerPatternsCQ {
 	
 	//TODO Wait for Artsquad to finish the textures
 	//DONE: Add 'blank' cq pattern
-	CQ_BLANK(addPattern("cq_blank", null)),
-	WITHER_SKULL(addPattern("cq_wither_skull", null)),
-	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", null)),
-	FIRE(addPattern("cq_fire", null)),
-	MAGIC_SMOKE(addPattern("cq_magic", null)),
-	EMERALD(addPattern("cq_emerald", null)),
-	BONES(addPattern("cq_bones", null)),
+	CQ_BLANK(addPattern("cq_blank", ItemStack.EMPTY)),
+	WITHER_SKULL(addPattern("cq_wither_skull", ItemStack.EMPTY)),
+	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", ItemStack.EMPTY)),
+	FIRE(addPattern("cq_fire", ItemStack.EMPTY)),
+	MAGIC_SMOKE(addPattern("cq_magic", ItemStack.EMPTY)),
+	EMERALD(addPattern("cq_emerald", ItemStack.EMPTY)),
+	BONES(addPattern("cq_bones", ItemStack.EMPTY)),
 	
-	WALKER_BACKGROUND(addPattern("walker_black_bg", null)),
-	WALKER_BORDER(addPattern("walker_border", null)),
+	WALKER_BACKGROUND(addPattern("walker_black_bg", ItemStack.EMPTY)),
+	WALKER_BORDER(addPattern("walker_border", ItemStack.EMPTY)),
 	//WALKER_EYES(addPattern("walker_eyes", null)),
-	WALKER_INNER_BORDER(addPattern("walker_inner_border", null)),
-	WALKER_SKULL(addPattern("walker_skull", null)),;
+	WALKER_INNER_BORDER(addPattern("walker_inner_border", ItemStack.EMPTY)),
+	WALKER_SKULL(addPattern("walker_skull", ItemStack.EMPTY)),;
 	
 	private BannerPattern mcPattern;
 	
@@ -34,9 +34,9 @@ public enum EBannerPatternsCQ {
 		return this.mcPattern;
 	}
 	
-	public void changePattern(BannerPattern newPattern) {
+	/*public void changePattern(BannerPattern newPattern) {
 		this.mcPattern = newPattern;
-	}
+	}*/
 	
 	private static BannerPattern addPattern(String name, ItemStack craftingComponent) {
 		

@@ -1,179 +1,511 @@
-Die deutsche �bersetzungsdatei f�r die Chocolate Quest Repoured Mod!
+The English US language file for Chocolate Quest Repoured Mod!
+This translation was created by MrMarnic
 
 
 //CreativeTabs
-itemGroup.ChocolateQuestRepouredBlocksTab=CQR Bl�cke
-itemGroup.ChocolateQuestRepouredItemsTab=CQR Items
-itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Spawner
-itemGroup.ChocolateQuestRepouredExporterChests=Exporter Loot
+itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blöcke
+itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
+itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Plazierer
+itemGroup.ChocolateQuestRepouredBannerTab=Banner
+itemGroup.ChocolateQuestRepouredExporterChests=Exporter Kisten
+
+//Banners
+item.banner.cqrepoured_cq_wither_eyes.white=Weiße Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.orange=Orange Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.magenta=Magenta Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.light_blue=Hellblaue Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.yellow=Gelbe Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.lime=Hellgrüne Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.pink=Pinke Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.gray=Graue Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.silver=Silberne Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.cyan=Cyan blaue Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.purple=Lila Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.blue=Blaue Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.brown=Braune Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.green=Grüne Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.red=Rote Augen des Wither Schädels
+item.banner.cqrepoured_cq_wither_eyes.black=Schwarze Augen des Wither Schädels
+
+item.banner.cqrepoured_cq_wither_skull.white=Weißer Wither Schädel
+item.banner.cqrepoured_cq_wither_skull.orange=Oranger Wither Schädel
+item.banner.cqrepoured_cq_wither_skull.magenta=Magenta Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.light_blue=Hellblauer Wither Schädel
+item.banner.cqrepoured_cq_wither_skull.yellow=Gelber Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.lime=Hellgrüner Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.pink=Pinker Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.gray=Grauer Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.silver=Silberner Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.cyan=Cyan blauer Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.purple=Lilaner Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.blue=Blauer Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.brown=Brauner Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.green=Grüner Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.red=Roter Wither Schädel 
+item.banner.cqrepoured_cq_wither_skull.black=Schwarzer 
+item.banner.cqrepoured_cq_fire.white=Weiße Flammen
+item.banner.cqrepoured_cq_fire.orange=Orange Flammen
+item.banner.cqrepoured_cq_fire.magenta=Magenta Flammen
+item.banner.cqrepoured_cq_fire.light_blue=Hellblaue Flammen
+item.banner.cqrepoured_cq_fire.yellow=Gelbe Flammen
+item.banner.cqrepoured_cq_fire.lime=Hellgrüne Flammen
+item.banner.cqrepoured_cq_fire.pink=Pinke Flammen
+item.banner.cqrepoured_cq_fire.gray=Graue Flammen
+item.banner.cqrepoured_cq_fire.silver=Silberne Flammen
+item.banner.cqrepoured_cq_fire.cyan=Cyan blaue Flammen
+item.banner.cqrepoured_cq_fire.purple=Lilarne Flammen
+item.banner.cqrepoured_cq_fire.blue=Blaue Flammen
+item.banner.cqrepoured_cq_fire.brown=Braune Flammen
+item.banner.cqrepoured_cq_fire.green=Grüne Flammen
+item.banner.cqrepoured_cq_fire.red=Rote Flammen
+item.banner.cqrepoured_cq_fire.black=Schwarze Flammen
+
+item.banner.cqrepoured_cq_emerald.white=Weißes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.orange=Oranges Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.magenta=Magentanes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.light_blue=Hellblaues Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.yellow=Gelbes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.lime=Hellgrünes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.pink=Pinkes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.gray=Graues Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.silver=Silbernes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.cyan=Cyan blaues Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.purple=Lilanes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.blue=Blaues Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.brown=Braunes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.green=Grünes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.red=Rotes Smaragd Juwel
+item.banner.cqrepoured_cq_emerald.black=Schwarzes Smaragd Juwel
+
+item.banner.cqrepoured_cq_bones.white=Weiße Knochen des Todes
+item.banner.cqrepoured_cq_bones.orange=Orange Knochen des Todes
+item.banner.cqrepoured_cq_bones.magenta=Magentane Knochen des Todes
+item.banner.cqrepoured_cq_bones.light_blue=Hellblaue Knochen des Todes
+item.banner.cqrepoured_cq_bones.yellow=Gelbe Knochen des Todes
+item.banner.cqrepoured_cq_bones.lime=Hellgrüne Knochen des Todes
+item.banner.cqrepoured_cq_bones.pink=Pinke Knochen des Todes
+item.banner.cqrepoured_cq_bones.gray=Graue Knochen des Todes
+item.banner.cqrepoured_cq_bones.silver=Silberne Knochen des Todes
+item.banner.cqrepoured_cq_bones.cyan=Cyan blaue Knochen des Todes
+item.banner.cqrepoured_cq_bones.purple=Lila Knochen des Todes
+item.banner.cqrepoured_cq_bones.blue=Blaue Knochen des Todes
+item.banner.cqrepoured_cq_bones.brown=Braune Knochen des Todes
+item.banner.cqrepoured_cq_bones.green=Grüne Knochen des Todes
+item.banner.cqrepoured_cq_bones.red=Rote Knochen des Todes
+item.banner.cqrepoured_cq_bones.black=Schwarze Knochen des Todes
+
+item.banner.cqrepoured_walker_black_bg.white=Stoff mit weißer Flagge
+item.banner.cqrepoured_walker_black_bg.orange=Stoff mit orangener Flagge
+item.banner.cqrepoured_walker_black_bg.magenta=Stoff mit magenta Flagge
+item.banner.cqrepoured_walker_black_bg.light_blue=Stoff mit hellblauer Flagge
+item.banner.cqrepoured_walker_black_bg.yellow=Stoff mit gelber Flagge
+item.banner.cqrepoured_walker_black_bg.lime=Stoff mit hellgrüner Flagge
+item.banner.cqrepoured_walker_black_bg.pink=Stoff mit pinker Flagge
+item.banner.cqrepoured_walker_black_bg.gray=Stoff mit grauer Flagge
+item.banner.cqrepoured_walker_black_bg.silver=Stoff mit silberner Flagge
+item.banner.cqrepoured_walker_black_bg.cyan=Stoff mit cyan blauer Flagge
+item.banner.cqrepoured_walker_black_bg.purple=Stoff mit lila Flagge
+item.banner.cqrepoured_walker_black_bg.blue=Stoff mit blauer Flagge
+item.banner.cqrepoured_walker_black_bg.brown=Stoff mit brauner Flagge
+item.banner.cqrepoured_walker_black_bg.green=Stoff mit grüner Flagge
+item.banner.cqrepoured_walker_black_bg.red=Stoff mit roter Flagge
+item.banner.cqrepoured_walker_black_bg.black=Stoff mit schwarzer Flagge
+
+
+item.banner.cqrepoured_walker_border.white=Weiße Grenze
+item.banner.cqrepoured_walker_border.orange=Orange Grenze
+item.banner.cqrepoured_walker_border.magenta=Magentarne Grenze
+item.banner.cqrepoured_walker_border.light_blue=Blaze Grenze
+item.banner.cqrepoured_walker_border.yellow=Gelbe Grenze
+item.banner.cqrepoured_walker_border.lime=Hellgrüne Grenze
+item.banner.cqrepoured_walker_border.pink=Pinke Grenze
+item.banner.cqrepoured_walker_border.gray=Graue Grenze
+item.banner.cqrepoured_walker_border.silver=Silberne Grenze
+item.banner.cqrepoured_walker_border.cyan=Cyan blaue Grenze
+item.banner.cqrepoured_walker_border.purple=Lilarne Genze
+item.banner.cqrepoured_walker_border.blue=Blaue Grenze
+item.banner.cqrepoured_walker_border.brown=Braune Grenze
+item.banner.cqrepoured_walker_border.green=Grüne Grenze
+item.banner.cqrepoured_walker_border.red=Rote Grenze
+item.banner.cqrepoured_walker_border.black=Schwarze Grenze
+
+item.banner.cqrepoured_walker_inner_border.white=Weißer zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.orange=Oranger zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.magenta=Magentaner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.light_blue=Hellblauer zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.yellow=Gelber zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.lime=Hellgrüner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.pink=Pinker zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.gray=Grauer zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.silver=Silberner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.cyan=Cyan blauer zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.purple=Lilaner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.blue=Blauer zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.brown=Brauner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.green=Grüner zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.red=Roter zerlumpter Stoff
+item.banner.cqrepoured_walker_inner_border.black=Schwarzer zerlumpter Stoff
+
+
+item.banner.cqrepoured_walker_skull.white=Weißes Walker Gesicht
+item.banner.cqrepoured_walker_skull.orange=Oranges Walker Gesicht
+item.banner.cqrepoured_walker_skull.magenta=Magentanes Walker Gesicht
+item.banner.cqrepoured_walker_skull.light_blue=Hellblaues Walker Gesicht
+item.banner.cqrepoured_walker_skull.yellow=Gelbes Walker Gesicht
+item.banner.cqrepoured_walker_skull.lime=Hellgrünes Walker Gesicht
+item.banner.cqrepoured_walker_skull.pink=Pinkes Walker Gesicht
+item.banner.cqrepoured_walker_skull.gray=Graues Walker Gesicht
+item.banner.cqrepoured_walker_skull.silver=Silbernes Walker Gesicht
+item.banner.cqrepoured_walker_skull.cyan=Cyan blaues Walker Gesicht
+item.banner.cqrepoured_walker_skull.purple=Lilanes Walker Gesicht
+item.banner.cqrepoured_walker_skull.blue=Blaues Walker Gesicht
+item.banner.cqrepoured_walker_skull.brown=Braunes Walker Gesicht
+item.banner.cqrepoured_walker_skull.green=Grünes Walker Gesicht
+item.banner.cqrepoured_walker_skull.red=Rotes Walker Gesicht
+item.banner.cqrepoured_walker_skull.black=Schwarzes Walker Gesicht
+
+
+//Gui
+gui.drops.name=Drops
+gui.backpack.name=Rucksack
+gui.alchemy_bag.name=Alchemie Beutel
+description.gui_exporter.name=Block für Dungeon Exportierung (Kreativ Modus). Wähle das Gebiet aus, das du exportieren möchtest und speichere es.
 
 //Other
 item.potion_healing.name=Heiltrank
 item.teleport_stone.name=Teleportations Stein
+item.soul_bottle.name=Seelen Flasche
+item.mob_to_spawner_tool.name=Tier zu Spawner Werkzeug
+item.badge.name=Abzeichen
+item.backpack.name=Rucksack
+item.alchemy_bag.name=Alchemie Beutel
 
 //Dragon Items
 item.helmet_dragon.name=Drachen Helm
 
 //Daggers
-item.dagger_iron.name=Eisen Dolch
+item.dagger_iron.name=Eiserner Dolch
 item.dagger_diamond.name=Diamant Dolch
 item.dagger_monking.name=Monking Dolch
 item.dagger_ninja.name=Ninja Dolch
 
 //Swords
-item.sword_turtle.name=Schildkr�ten Schwert
+item.sword_turtle.name=Schildkröten Schwert
 item.sword_spider.name=Spinnen Schwert
-item.battle_axe_bull.name=Stier Kriegsaxt
+item.battle_axe_bull.name=Bullen Kampf Axt
+item.sword_moonlight.name=Mondschein
+item.sword_sunshine.name=Sonnelicht
+
+//Shields
+item.cqr_shield_r01.name=Pigman Schild
+item.cqr_shield_r02.name=Piraten Schild
+item.cqr_shield_r03.name=Specter Schild
+item.cqr_shield_r04.name=Kobold Schild
+item.cqr_shield_r05.name=Mummien Schild
+item.cqr_shield_r06.name=Regenbogen Schild
+item.cqr_shield_r07.name=Verostetes Schild
+item.cqr_shield_r08.name=Schildkröten Schild
+item.cqr_shield_r09.name=Triton Schild
 
 //Walker set
-item.sword_walker.name=Walker Schwert
+item.sword_walker.name=Walker Sword
+item.shield_walker_king.name=Walker König Schild
+
+//Shields
+item.shield_bull.name=Schild des Eis Bullen
+item.shield_carl.name=Carl
+item.shield_dragonslayer.name=Drachen Schild
+item.shield_fire.name=Feuriges Schild
+item.shield_goblin.name=Kobold Schild
+item.shield_monking.name=Affen Schild
+item.shield_moon.name=Mond Schild
+item.shield_mummy.name=Angeschlagenes Schild
+item.shield_pigman.name=Pigman Schild
+item.shield_pirate.name=Priraten Schild
+item.shield_pirate2.name=Piraten Schild
+item.shield_rainbow.name=Regenbogen Schild
+item.shield_reflective.name=Spiegel Schild
+item.shield_rusted.name=Verrostetes Schild
+item.shield_skeleton_friends.name=Skeletten Schild
+item.shield_specter.name=Specter Schild
+item.shield_spider.name=Spinnen Schild
+item.shield_sun.name=Sonnen Schild
+item.shield_tomb.name=Grabstein Schild
+item.shield_triton.name=Triton Schild
+item.shield_turtle.name=Schildkröten Infanterie Schild
+item.shield_warped.name=Warped Schild
 item.shield_walker.name=Walker Schild
+item.shield_walker_normal.name=Walker Schild
+item.shield_zombie.name=Zombie Schild
 
 //Great Swords
-item.great_sword_monking.name=Monking Gro�schwert
-item.great_sword_bull.name=Stier Gro�schwert
-item.great_sword_diamond.name=Diamant Gro�schwert
-item.great_sword_iron.name=Eisen Gro�schwert
+item.great_sword_monking.name=Monking Great Sword
+item.great_sword_bull.name=Bull Greatsword
+item.great_sword_diamond.name=Diamand Greatsword
+item.great_sword_iron.name=Eisen Greatsword
 
-//Staffs
-item.staff_fire.name=Feuerstab
+//Staves
+item.staff.name=Stab
+item.staff_fire.name=Feuer Stab
+item.staff_vampiric.name=Vampier Stab
+item.staff_wind.name=Wind Stab
+item.staff_poison.name=Gift Stab
+item.staff_spider.name=Spinnen Stab
+item.staff_gun.name=Pistolen Stab
+item.staff_healing.name=Heilungs Stab
+item.staff_thunder.name=Sturm Stab
 
 //Guns
 item.revolver.name=Revolver
-item.captain_revolver.name=Revolver des K�pt'n
+item.captain_revolver.name=Captain Revolver
 item.musket.name=Muskete
-item.musket_iron.name=Muskete mit Eisenbajonett
-item.musket_diamond.name=Muskete mit Diamantbajonett
-item.musket_monking.name=Muskete mit Monking-Bajonett
-item.bullet_iron.name=Eisenpatronen
-item.bullet_gold.name=Goldpatronen
-item.bullet_diamond.name=Diamantpatronen
-item.bullet_fire.name=Feurige Patronen
+item.musket_iron.name=Muskete mit Eisen Dolch
+item.musket_diamond.name=Muskete with Diamant Dolch
+item.musket_monking.name=Muskete with Monking Dolch
+item.bullet_iron.name=Eiserne Kugeln
+item.bullet_gold.name=Goldene Kugeln
+item.bullet_diamond.name=Diamant Kugeln
+item.bullet_fire.name=Feurige Kugeln
+item.cannon_ball.name=Kanonen Kugel
+item.flamethrower.name=Flammenwerfer
 
 //Cloud Items
-item.boots_cloud.name=Wolkenstiefel
+item.boots_cloud.name=Wolken Schuhe
 item.feather_golden.name=Goldene Feder
 
 //Monking Items
 item.bone_monking.name=Monking Knochen
 
 //Inquisition Armor
-item.helmet_inquisition.name=Inquisitions Helm
-item.chestplate_inquisition.name=Inquisitions Brustpanzer
-item.leggings_inquisition.name=Inquisitions Beinr�stung
-item.boots_inquisition.name=Inquisitions Stiefel
+item.helmet_inquisition.name=Inquisition Hlem
+item.chestplate_inquisition.name=Inquisition Brustpanzer
+item.leggings_inquisition.name=Inquisition Hose
+item.boots_inquisition.name=Inquisition Schuhe
 
 //Bull Armor
-item.helmet_bull.name=Stierhelm
-item.chestplate_bull.name=Stier-Brustpanzer
-item.leggings_bull.name=Stier-Beinpanzer
-item.boots_bull.name=Stier-Stiefel
-item.leather_bull.name=Stierleder
-item.horn_bull.name=Stierhorn
+item.helmet_bull.name=Bullen Helm
+item.chestplate_bull.name=Bullen Brustpanzer
+item.leggings_bull.name=Bullen Hose
+item.boots_bull.name=Bullen Schuhe
+item.leather_bull.name=Bullen Leder
+item.horn_bull.name=Bullen Horn
 
 //Turtle Armor
-item.helmet_turtle.name=Turtle Helmet
-item.chestplate_turtle.name=Turtle Chestplate
-item.leggings_turtle.name=Turtle Leggings
-item.boots_turtle.name=Turtle Boots
-item.scale_turtle.name=Turtle Scale
+item.helmet_turtle.name=Schildkröten Hlem
+item.chestplate_turtle.name=Schildkröten Brustpanzer
+item.leggings_turtle.name=Schildkröten Hose
+item.boots_turtle.name=Schildkröten Schuhe
+item.scale_turtle.name=Schildkröten Panzer
 
 //Slime Armor
-item.helmet_slime.name=Slime Helmet
-item.chestplate_slime.name=Slime Chestplate
-item.leggings_slime.name=Slime Leggings
-item.boots_slime.name=Slime Boots
-item.ball_slime.name=Slime Ball
+item.helmet_slime.name=Schleim Helm
+item.chestplate_slime.name=Schleim Brustpanzer
+item.leggings_slime.name=Schleim Hose
+item.boots_slime.name=Schleim Schuhe
+item.ball_slime.name=Regenerierender Schleim Ball
 
 //Spider Armor
-item.helmet_spider.name=Spider Helmet
-item.chestplate_spider.name=Spider Chestplate
-item.leggings_spider.name=Spider Leggings
-item.boots_spider.name=Spider Boots
-item.leather_spider.name=Spider Leather
+item.helmet_spider.name=Spinnen Helm
+item.chestplate_spider.name=Spinnen Brustpanzer
+item.leggings_spider.name=Spinnen Hose
+item.boots_spider.name=Spinnen Schuhe
+item.leather_spider.name=Spinnen Leder
+item.giant_spider_poison.name=Giant Spinnen Gift
 
 //Heavy Diamond Armor
-item.helmet_heavy_diamond.name=Heavy Diamond Helmet
-item.chestplate_heavy_diamond.name=Heavy Diamond Chestplate
-item.leggings_heavy_diamond.name=Heavy Diamond Leggings
-item.boots_heavy_diamond.name=Heavy Diamond Boots
+item.helmet_heavy_diamond.name=Schwerer Diamant Helm
+item.chestplate_heavy_diamond.name=Schwerer Diamant Brustpanzer
+item.leggings_heavy_diamond.name=Schwere Diamant Hose
+item.boots_heavy_diamond.name=Schwere Diamant Schuhe
 
 //Heavy Iron Armor
-item.helmet_heavy_iron.name=Heavy Iron Helmet
-item.chestplate_heavy_iron.name=Heavy Iron Chestplate
-item.leggings_heavy_iron.name=Heavy Iron Leggings
-item.boots_heavy_iron.name=Heavy Iron Boots
+item.helmet_heavy_iron.name=Schwerer Eisen Helm
+item.chestplate_heavy_iron.name=Schwerer Eisen Brustpanzer
+item.leggings_heavy_iron.name=Schwere Eisen Hose
+item.boots_heavy_iron.name=Schwere Eisen Schuhe
 
 //Blocks
 tile.exporter.name=Exporter Block
+tile.spawner.name=Spawner
 tile.null_block.name=Null Block
-tile.table_oak.name=Eichen-Tisch
-tile.table_spruce.name=Fichten-Tisch
-tile.table_birch.name=Birken-Tisch
-tile.table_jungle.name=Tropenholz-Tisch
-tile.table_acacia.name=Akazien-Tisch
-tile.table_dark.name=Schwarzeichen-Tisch
+tile.unlit_torch.name=Nicht leuchtende Fackel
+tile.table_oak.name=Eichenholz Tisch
+tile.table_spruce.name=Fichteholz Tisch
+tile.table_birch.name=Birkenholz Tisch
+tile.table_jungle.name=Tropenholz Tisch
+tile.table_acacia.name=Akazieholz Tisch
+tile.table_dark.name=Dunkler Eichenholz Tisch
 
 //Andesite blocks
-tile.andesite_carved.name=Gemei�elter Andesit
-tile.andesite_pillar.name=Andesit S�ule
+tile.andesite_carved.name=Geschnitzter Andesit
+tile.andesite_pillar.name=Andesit Säule
+tile.andesite_cube.name=Andesit Würfel
+tile.andesite_scale.name=Andesit Rahmen
+tile.andesite_square.name=Andesit Quadrat
+tile.andesite_small.name=Kleiner Andesit Ziegel
+tile.andesite_large.name=Großer Andesit Ziegel
+
+//Diorite blocks
+tile.diorite_carved.name=Geschnitzter Diorit
+tile.diorite_pillar.name=Diorit Säule
+tile.diorite_cube.name=Diorit Würfel
+tile.diorite_scale.name=Diorit Rahmen
+tile.diorite_square.name=Diorit Quadrat
+tile.diorite_small.name=Kleiner Diorit Ziegel
+tile.diorite_large.name=Großer Diorit Ziegel
+
+//Diorite blocks
+tile.granite_carved.name=Geschnitzter Granit
+tile.granite_pillar.name=Granit Säule
+tile.granite_cube.name=Granit Würfel
+tile.granite_scale.name=Granit Rahmen
+tile.granite_square.name=Granit Quadrat
+tile.granite_small.name=Kleiner Granit Ziegel
+tile.granite_large.name=Großer Granit Ziegel
+
+//Prismarine blocks
+tile.prismarine_carved.name=Geschnitztes Prismarin
+tile.prismarine_pillar.name=Prismarin Säule
+tile.prismarine_cube.name=Prismarin Würfel
+tile.prismarine_square.name=Prismarin Quadrat
+tile.prismarine_small.name=Kleiner Prismarin Ziegel
+tile.prismarine_large.name=Großer Prismarin Ziegel
+
+//Endstone blocks
+tile.endstone_carved.name=Geschnitzter Endstein
+tile.endstone_pillar.name=Endstein Säule
+tile.endstone_cube.name=Endstein Würfel
+tile.endstone_scale.name=Endstein Rahmen
+tile.endstone_square.name=Endstein Quadrat
+tile.endstone_small.name=Kleiner Endstein Ziegel
+
+//Purpur blocks
+tile.purpur_carved.name=Geschnitztes Purpur
+tile.purpur_cube.name=Purpur Würfel
+tile.purpur_scale.name=Purpur Rahmen
+tile.purpur_small.name=Kleiner Purpur Ziegel
+tile.purpur_large.name=Großer Purpur Ziegel
+
+//Red Netherbrick blocks
+tile.red_netherbrick_carved.name=Geschnitzter Roter Netherziegel
+tile.red_netherbrick_pillar.name=Rote Netherziegel Säule
+tile.red_netherbrick_cube.name=Roter Netherziegel Würfel
+tile.red_netherbrick_scale.name=Roter Netherziegel Rahmen
+tile.red_netherbrick_square.name=Rotes Netherziegel Quadrat
+tile.red_netherbrick_large.name=Großer Roter Netherziegel
+
+//Stone blocks
+tile.stone_pillar.name=Stein Säule
+tile.stone_cube.name=Stein Würfel
+tile.stone_scale.name=Stein Rahmen
+tile.stone_square.name=Stein Quadrat
+tile.stone_small.name=Kleiner Stein Ziegel
 
 //Exporter chests
-tile.exporter_chest_valuable.name=Exporter Chest Treasure
-tile.exporter_chest_food.name=Exporter Chest Food
-tile.exporter_chest_equipment.name=Exporter Chest Equipment
-tile.exporter_chest_utility.name=Exporter Chest Utility
-tile.exporter_chest_vanilla_blacksmith.name=Exporter Chest - Village Blacksmith
-tile.exporter_chest_vanilla_bonus.name=Exporter Chest - Bonus Chest
-tile.exporter_chest_vanilla_dungeon.name=Exporter Chest - Dungeon
-tile.exporter_chest_vanilla_end_city.name=Exporter Chest - End City
-tile.exporter_chest_vanilla_igloo.name=Exporter Chest - Igloo
-tile.exporter_chest_vanilla_jungle.name=Exporter Chest - Jungle Chest
-tile.exporter_chest_vanilla_jungle_dispenser.name=Exporter Chest - Jungle Dispenser
-tile.exporter_chest_vanilla_mansion.name=Exporter Chest - Woodland Mansion
-tile.exporter_chest_vanilla_mineshaft.name=Exporter Chest - Mineshaft
-tile.exporter_chest_vanilla_nether.name=Exporter Chest - Nether Fortress
-tile.exporter_chest_vanilla_pyramid.name=Exporter Chest - Pyramid
-tile.exporter_chest_vanilla_stronghold.name=Exporter Chest - Stronghold Corridor
-tile.exporter_chest_vanilla_stronghold_library.name=Exporter Chest - Stronghold Library
-tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Chest - Stronghold Mine
-tile.exporter_chest_custom_1.name=Exporter Chest - Custom 1
-tile.exporter_chest_custom_2.name=Exporter Chest - Custom 2
-tile.exporter_chest_custom_3.name=Exporter Chest - Custom 3
-tile.exporter_chest_custom_4.name=Exporter Chest - Custom 4
-tile.exporter_chest_custom_5.name=Exporter Chest - Custom 5
-tile.exporter_chest_custom_6.name=Exporter Chest - Custom 6
-tile.exporter_chest_custom_7.name=Exporter Chest - Custom 7
-tile.exporter_chest_custom_8.name=Exporter Chest - Custom 8
-tile.exporter_chest_custom_9.name=Exporter Chest - Custom 9
-tile.exporter_chest_custom_10.name=Exporter Chest - Custom 10
-tile.exporter_chest_custom_11.name=Exporter Chest - Custom 11
-tile.exporter_chest_custom_12.name=Exporter Chest - Custom 12
-tile.exporter_chest_custom_13.name=Exporter Chest - Custom 13
-tile.exporter_chest_custom_14.name=Exporter Chest - Custom 14
+tile.exporter_chest_valuable.name=Exporter Kiste Schatz
+tile.exporter_chest_food.name=Exporter Kiste Essen
+tile.exporter_chest_equipment.name=Exporter Kiste Equipment
+tile.exporter_chest_utility.name=Exporter Kiste Utility
+tile.exporter_chest_vanilla_blacksmith.name=Exporter Kiste - Dorf Schmied
+tile.exporter_chest_vanilla_bonus.name=Exporter Kiste - Bonus Kiste
+tile.exporter_chest_vanilla_dungeon.name=Exporter Kiste - Dungeon
+tile.exporter_chest_vanilla_end_city.name=Exporter Kiste - End City
+tile.exporter_chest_vanilla_igloo.name=Exporter Kiste - Iglu
+tile.exporter_chest_vanilla_jungle.name=Exporter Kiste - Dschungel Kiste
+tile.exporter_chest_vanilla_jungle_dispenser.name=Exporter Kiste - Dschungel Dispenser
+tile.exporter_chest_vanilla_mansion.name=Exporter Kiste - Woodland Mansion
+tile.exporter_chest_vanilla_mineshaft.name=Exporter Kiste - Mienenschacht
+tile.exporter_chest_vanilla_nether.name=Exporter Kiste - Netherfestung
+tile.exporter_chest_vanilla_pyramid.name=Exporter Kiste - Pyramide
+tile.exporter_chest_vanilla_stronghold.name=Exporter Kiste - Festungs Gang
+tile.exporter_chest_vanilla_stronghold_library.name=Exporter Kiste - Festungs Bibliothek
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Exporter Kiste - Festungs Miene
+tile.exporter_chest_custom_1.name=Exporter Kiste - Custom 1
+tile.exporter_chest_custom_2.name=Exporter Kiste - Custom 2
+tile.exporter_chest_custom_3.name=Exporter Kiste - Custom 3
+tile.exporter_chest_custom_4.name=Exporter Kiste - Custom 4
+tile.exporter_chest_custom_5.name=Exporter Kiste - Custom 5
+tile.exporter_chest_custom_6.name=Exporter Kiste - Custom 6
+tile.exporter_chest_custom_7.name=Exporter Kiste - Custom 7
+tile.exporter_chest_custom_8.name=Exporter Kiste - Custom 8
+tile.exporter_chest_custom_9.name=Exporter Kiste - Custom 9
+tile.exporter_chest_custom_10.name=Exporter Kiste - Custom 10
+tile.exporter_chest_custom_11.name=Exporter Kiste - Custom 11
+tile.exporter_chest_custom_12.name=Exporter Kiste - Custom 12
+tile.exporter_chest_custom_13.name=Exporter Kiste - Custom 13
+tile.exporter_chest_custom_14.name=Exporter Kiste - Custom 14
 
 //Descriptions
-description.spider_armor.name=Tragen des gesamten Sets erm�glicht des Erklimmen von W�nden
-description.spider_sword.name=Vergiftet geschlagene Gegner
-//description.bull_armor.name=Tragen des gesamten Sets verleiht zus�tzlichen Schaden
-description.great_sword.name=Rechtsklick halten erzeugt eine Explosion
-description.turtle_armor.name=Wearing full set grants increased health regeneration and damage dealt to you back is ignored
-description.slime_armor.name=Getting Damaged creates a small slime, which can be collected to regain lost health
-description.cloud_boots.name=Erh�ht Geschwindigkeit und Sprungh�he
-//description.dragon_helmet.name=Verdoppelt Angriffsschaden und verleiht 5 extra Herzen
-description.dagger.name=Rechtsklick w�hrend Bewegung l�sst dich vorw�rts springen
-description.ninja_dagger.name=Right click while moving to leap forward. Sneak and right click to teleport in a range of 4 blocks and gain temporary invisibility
-description.bull_battle_axe.name=Rechtsklick erzeugt ein Erdbeben in deine Blickrichtung
-description.walker_set.name=Equip a Walker Sword and Shield to gain a special ability: If an enemy shoots you while your shield's up, you'll teleport to your attacker
-description.gun.name=Rechtsklick zum Schie�en
-description.bullet_damage.name=Schaden
-description.bullet_fire.name=Entfacht Feuer beim Einschlag
-description.fire_rate.name=Feuerrate
+description.spider_armor.name=Trage die Spinne um eine Spinne zu werden. Die volle Rüstung erlaubt es dir an Wänden zu klettern und viel höher zu springen.
+description.spider_sword.name=Shelobs Gift fließt aus den Fängen hervor, die dieses einfache Schwert zur Klinge eines Helden gemacht haben, und kann nicht zurückgehalten werden, wenn die Klinge in deinem Feind steckt.
+description.bull_armor.name=Trage den Bullen um zum Bullen zu werden. Die volle Rüstung erlaubt es dir mit großer Geschwindigkeit nach vorne zu sprinten und alles in deinem Weg zu zerstören.
+description.great_sword.name=Halte Rechtsklick um eine große Fläche zu treffen.
+description.turtle_armor.name=Die Kraft der Schildkröte ermöglicht es dir, wenn du die volle Rüstung besitzt, Gesundheit viel schneller wiederzugewinnen. Die Schale verhindert auch die meisten Schäden von hinten.
+description.slime_armor.name=Mit der vollständigen Rüstung kannst du deine Leben zum überfließen bringen und wenn du angegriffen wirst kann ein kleiner Schleim erscheinen, der bei Berührung deine Leben wiederherstellt.
+description.cloud_boots.name=Die Schuhe werden dein Leben beflügeln und dir das Leben einfacher machen. Kein Fall, mag er auch so tief sein, kann dich mehr stoppen.
+//description.dragon_helmet.name=Du kannst die Macht des Drachen durch deine Adern spüren. Ehemalige Gefahren erscheinen dir klein und nichtig, aber deine eigene Kraft ist nun doppel so stark.
+description.dagger.name=Drücke Rechtsklick während des Sprintens um weiter vorwärts zu kommen.
+description.ninja_dagger.name=Drücke Rechtsklick während des Sprintens um weiter vorwärts zu kommen. Man sagt, dass der Träger des Dolches von Zeit zu Zeit verschwinden kann. Der Prophezeiung nach muss man sneaken und rechtsklicken. Man wird aber nicht weit kommen.
+description.bull_battle_axe.name=Grux rechtsklicken auf Boden. Erdbeben machen. Laufen. Gegener kaputt machen. Grux mögen.
+description.walker_set.name=Die Legende besagt, dass jeder, der einen Pfeil auf den Walker König abfeuerte, ein Schwert im Rücken und den König hinter sich finden würde. Vielleicht würde es dir die gleiche Fähigkeit ermöglichen, wenn du sowhohl das Schwert als auch sein Schild einsammelst?
+description.gun.name=Rechtsklicken zum Schießen (benötigt Munition)
+description.bullet_damage.name=Kugel Schaden
+description.bullet_fire.name=Entündet beim Auftreffen
+description.fire_rate.name=Feuer Rate
 description.accuracy.name=Genauigkeit
-description.click_shift.name=Hold shift for item description
-description.rear_damage.name=Backstap Schaden
-description.charging.name=Lade auf...
-description.turtle_armor_charging.name=F�higkeit l�dt auf, Einsetzbar in: 
-description.healing_potion.name=Regeneriert 2 Herzen durch Trinken
-description.teleport_stone.name=Hold Right click to set a position, then do it again to teleport there. Sneak while holding Right click to delete the saved location.
-description.teleport_stone_position.name=Aktuelle Position:
+description.click_shift.name=Halte Shift gedrückt um die Beschreibung zu lesen
+description.rear_damage.name=Angriff von hinten
+description.charging.name=Läd auf...
+description.turtle_armor_charging.name=Fähigkeit läd auf, verbleibende Zeit: 
+description.healing_potion.name=Trinke um zwei Herzen wieder zu erlangen.
+description.teleport_stone.name=Ein mystisches Artifakt, erbaut von einer altertümlichen Spezies. Drücke Rechtsklick um eine Positionen festzulegen, zu der du dich mit einem zweiten Klick hinteleportieren kannst. Sneak während du Rechtsklick drückst um die Position zu löschen.
+description.teleport_stone_position.name=Jetzige Position:
+description.staff_fire.name=Die Flammen verschlingen jeden der deinen weg kreuzt. Ein einfacher Rechtsklick genügt um deine Feinde deinen Zorn spüren zu lassen. Außerdem können damit auch Fackeln angezündet werden.
+description.staff_spider.name=Rechtsklicken um zu schießen.
+description.staff_gun.name=Es ist eine Pistole auf einem Stock. Ich wusste das diese Zwerge Genies sind.
+description.staff_healing.name=Ein Linksklick heilt dich.
+description.contains.name=Contains:
+description.empty.name=Leer
+description.soul_bottle.name=Linksklick um ein Tier zu speichern, Rechtsklick um es wieder zu spawnen. Es kann auch in einen Spawner umgewandelt werden.
+description.flamethrower.name=Undertech Prototyp Fyrebird mk7 22mm nozzle Flammen Explosions Unit. Ein Rechtsklick sollte das Feuer sofort nach vorne schießen. Interne Gel KI-Einheiten sollten in der Lage sein, Schleim in deinem ganzen Inventar zu finden. Die jetzige Version benötigt normales Nachladen, da nicht regenderierender Schleim entdeckt wurde.
+description.badge.name=Kreavtiv Modus Item. Linksklicke auf einen Mob um ein GUI zu öffnen. Items, die in das GUI hineingelegt wurden, können später mit einem Linksklick mit einem Abzeichen wiedererlangt werden. Wenn der Mob getötet wird droppen die Items.
+description.backpack.name=Rechtsklicken zum Öffnen.
+description.alchemy_bag.name=Rechtsklicken zum Öffnen. Enthält nur Tränke.
+//description.woodshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Holz Block trifft, wirst du zu ihm gezogen.
+//description.hookshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, wirst du zu ihm gezogen.
+//description.longshot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, wirst du zu ihm gezogen.
+//description.manualhook.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+//description.spidershot.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+//description.hooksword.name=Rechtsklicken zum Schießen. Wenn der Hacken einen Block trifft, kannst du rechtsklicken um näher zu ihm zu kommen und sneaken um weiter weg zu kommen.
+description.moonlight.name=Die Inschrifft besagt: "Meine Kraft erwacht nur im Mondschein"
+description.sunshine.name=Die Inschrifft besagt: "Meine Kraft erwacht nur im Sonnenlicht"
+description.attack_damage_at_night.name=Angriffsschaden während der Nacht
+description.attack_damage_at_day.name=Angriffsschaden während des Tages
+description.staff_vampiric.name=Dieser Stab strahlt dunkle Energie aus, während du ihn in der Hand hältst. Wenn du ihn an dein Ohr hebst hörst du seinen Wunsch. Er ist sehr einfach: "Rechstklicke mich" und wenn du es endlich tust, wirst du ein Projektil fliegen sehen, dessen Schaden zwar leicht ist, dich aber heilen wird wenn du gut zielst.
+description.staff_wind.name=Nicht funktional. #TODO
+description.staff_poison.name=Nicht funktional. #TODO
+description.staff.name=Fehlt #TODO
+description.staff_thunder.name=Fehlt #TODO
+
+// Mobs
+entity.dummy.name=Dummy(CQR)
+entity.dwarf.name=Zwerg(CQR)
+entity.enderman.name=Enderman(CQR)
+entity.goblin.name=Kobold(CQR)
+entity.golem.name=Golem(CQR)
+entity.illager.name=Illager(CQR)
+entity.npc.name=NPC(CQR)
+entity.minotaur.name=Minotaurus(CQR)
+entity.mummy.name=Mummie(CQR)
+entity.ogre.name=Oger(CQR)
+entity.orc.name=Ork(CQR)
+entity.pigman.name=Pigman(CQR)
+entity.pirate.name=Pirat(CQR)
+entity.skeleton.name=Skelett(CQR)
+entity.spectre.name=Spectre(CQR)
+entity.triton.name=Squidward(CQR)
+entity.walker.name=Abyss Walker
+entity.zombie.name=Zombie(CQR)
+
+// Bosses
+entity.nether_dragon.name=Wormy Wurm Wyrm

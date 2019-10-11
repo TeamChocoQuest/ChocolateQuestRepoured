@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.network;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,6 +14,7 @@ public class DungeonSyncPacketHandler implements IMessageHandler<DungeonSyncPack
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (ctx.side.isClient()) {
 				ItemDungeonPlacer.dungeonMap = message.getDungeonMap();
+				ItemDungeonPlacer.dependencyMap = message.getDependencyMap();
 			}
 		});
 		return null;

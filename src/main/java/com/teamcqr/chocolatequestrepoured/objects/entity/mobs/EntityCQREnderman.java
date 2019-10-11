@@ -2,12 +2,14 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -69,5 +71,10 @@ public class EntityCQREnderman extends AbstractEntityCQR {
         this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.30000001192092896D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(7.0D);
     }
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return ELootTablesNormal.ENTITY_ENDERMAN.getLootTable();
+	}
 
 }
