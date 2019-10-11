@@ -36,7 +36,7 @@ public class ModelCQRBiped extends ModelBiped {
 			boolean hasExtraLayer) {
 		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
 		this.hasExtraLayers = hasExtraLayer;
-		
+
 		this.bipedCape = new ModelRenderer(this, 0, 0);
 		this.bipedCape.setTextureSize(64, 32);
 		this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
@@ -94,32 +94,35 @@ public class ModelCQRBiped extends ModelBiped {
 		} else {
 			this.bipedCape.rotationPointY = 0.0F;
 		}
-		
-		if(entityIn instanceof AbstractEntityCQR) {
-			if(((AbstractEntityCQR)entityIn).getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+
+		if (entityIn instanceof AbstractEntityCQR) {
+			if (((AbstractEntityCQR) entityIn).getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
 				this.bipedRightArm.rotationPointZ = 0.0F;
-	            this.bipedRightArm.rotationPointX = -5.0F;
-	            this.bipedLeftArm.rotationPointZ = 0.0F;
-	            this.bipedLeftArm.rotationPointX = 5.0F;
-	            this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-	            this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-	            this.bipedRightArm.rotateAngleZ = 2.3561945F;
-	            this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-	            this.bipedRightArm.rotateAngleY = 0.0F;
-	            this.bipedLeftArm.rotateAngleY = 0.0F;
-	            
-	            //Particles
-	            double dx = 0.7D;
-	            double dy = 0.5D;
-	            double dz = 0.2D;
-	            float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F + MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-	            float f1 = MathHelper.cos(f);
-	            float f2 = MathHelper.sin(f);
-	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ + (double)f2 * 0.6D, dx, dy, dz);
-	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ - (double)f2 * 0.6D, dx, dy, dz);
+				this.bipedRightArm.rotationPointX = -5.0F;
+				this.bipedLeftArm.rotationPointZ = 0.0F;
+				this.bipedLeftArm.rotationPointX = 5.0F;
+				this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+				this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+				this.bipedRightArm.rotateAngleZ = 2.3561945F;
+				this.bipedLeftArm.rotateAngleZ = -2.3561945F;
+				this.bipedRightArm.rotateAngleY = 0.0F;
+				this.bipedLeftArm.rotateAngleY = 0.0F;
+
+				// Particles
+				double dx = 0.7D;
+				double dy = 0.5D;
+				double dz = 0.2D;
+				float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
+						+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+				float f1 = MathHelper.cos(f);
+				float f2 = MathHelper.sin(f);
+				entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
+						entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
+				entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
+						entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
 			}
 		}
-		
+
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
@@ -150,8 +153,21 @@ public class ModelCQRBiped extends ModelBiped {
 			this.bipedRightArmwear.render(scale);
 			this.bipedBodyWear.render(scale);
 		}
-		if(entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR)entityIn).hasCape()) {
-			this.bipedCape.render(scale);
+		if (entityIn instanceof AbstractEntityCQR) {
+			AbstractEntityCQR entCQR = ((AbstractEntityCQR) entityIn);
+			if (entCQR.hasCape()) {
+				this.bipedCape.render(scale);
+			}
+			if (entCQR.isSitting()) {
+				this.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
+				this.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
+				this.bipedRightLeg.rotateAngleX = -1.4137167F;
+				this.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
+				this.bipedRightLeg.rotateAngleZ = 0.07853982F;
+				this.bipedLeftLeg.rotateAngleX = -1.4137167F;
+				this.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
+				this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
+			}
 		}
 
 		GlStateManager.popMatrix();
@@ -164,5 +180,7 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedRightLegwear.showModel = visible;
 		this.bipedBodyWear.showModel = visible;
 	}
+
+	
 
 }

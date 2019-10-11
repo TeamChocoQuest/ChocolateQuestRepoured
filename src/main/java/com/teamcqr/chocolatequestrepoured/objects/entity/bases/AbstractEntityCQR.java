@@ -81,10 +81,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected byte usedPotions = (byte)0;
 	
 	//Sync with client
-	protected static final DataParameter<Boolean> isSitting = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Float> sizeVariation = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
-	protected static final DataParameter<Integer> healingPotions = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Integer> HEALING_POTIONS_CLIENT = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
+	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
@@ -95,10 +96,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected void entityInit() {
 		super.entityInit();
 		
-		this.dataManager.register(sizeVariation, 0F);
-		this.dataManager.register(isSitting, false);
-		this.dataManager.register(healingPotions, 3);
+		this.dataManager.register(SIZE_VAR, 0F);
+		this.dataManager.register(IS_SITTING, false);
+		this.dataManager.register(HEALING_POTIONS_CLIENT, 3);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
+		this.dataManager.register(TALKING, false);
 	}
 	
 
@@ -162,7 +164,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.dataManager.set(sizeVariation, -0.125F + (this.rand.nextFloat() *0.25F));
+		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -185,9 +187,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if(this.usedPotions > (byte)0) {
 			compound.setByte("usedHealingPotions", usedPotions);
 		}
-		compound.setFloat("sizeVariation", this.dataManager.get(sizeVariation));
+		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
-		compound.setBoolean("isSitting", this.dataManager.get(AbstractEntityCQR.isSitting));
+		compound.setBoolean("isSitting", this.dataManager.get(AbstractEntityCQR.IS_SITTING));
 	}
 
 	@Override
@@ -208,10 +210,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 		if(compound.hasKey("sizeVariation")) {
 			//this.sizeVariation = compound.getDouble("sizeVariation");
-			this.dataManager.set(sizeVariation, compound.getFloat("sizeVariation"));
+			this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
 		}
 		if(compound.hasKey("isSitting")) {
-			this.dataManager.set(isSitting, compound.getBoolean("isSitting"));
+			this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		}
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
@@ -502,7 +504,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			return stack.getCount();
 		}
 		//return 0;
-		return this.dataManager.get(healingPotions);
+		return this.dataManager.get(HEALING_POTIONS_CLIENT);
 	}
 
 	public void setHealingPotions(int amount) {
@@ -512,7 +514,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		} else {
 			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
 		}
-		this.dataManager.set(healingPotions, amount);
+		this.dataManager.set(HEALING_POTIONS_CLIENT, amount);
 	}
 
 	public void removeHealingPotion() {
@@ -526,8 +528,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (stack.getItem() instanceof ItemPotionHealing) {
 			stack.shrink(1);
 		}
-		int currVal = this.dataManager.get(healingPotions);
-		this.dataManager.set(healingPotions, currVal - 1);
+		int currVal = this.dataManager.get(HEALING_POTIONS_CLIENT);
+		this.dataManager.set(HEALING_POTIONS_CLIENT, currVal - 1);
 		//System.out.println("byte value on watcher: " + this.dataManager.get(healingPotions));
 	}
 
@@ -542,13 +544,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		//Potion layer stuff
 		if(slot == EntityEquipmentExtraSlot.PotionSlot) {
 			if(stack.getItem() instanceof ItemPotionHealing) {
-				this.dataManager.set(healingPotions, stack.getCount());
+				this.dataManager.set(HEALING_POTIONS_CLIENT, stack.getCount());
 			} 
 			else {
 				/*if(getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemPotionHealing) {
 					this.dataManager.set(healingPotions, getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getCount());
 				} else {*/
-					this.dataManager.set(healingPotions, 0);
+					this.dataManager.set(HEALING_POTIONS_CLIENT, 0);
 				//}
 			}
 		}
@@ -618,30 +620,33 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	
 	public float getSizeVariation() {
 		//return this.sizeVariation;
-		return this.dataManager.get(sizeVariation);
+		return this.dataManager.get(SIZE_VAR);
 	}
 	
 	public void setSitting(boolean sitting) {
-		this.dataManager.set(isSitting, sitting);
+		this.dataManager.set(IS_SITTING, sitting);
 	}
 	
 	public boolean isSitting() {
-		return this.dataManager.get(isSitting);
+		return this.dataManager.get(IS_SITTING);
 	}
 	
 	public void setChatting(boolean chatting) {
-		//TODO
+		this.dataManager.set(TALKING, chatting);
+	}
+	public boolean isChatting() {
+		return this.dataManager.get(TALKING);
 	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeFloat(this.dataManager.get(sizeVariation));
+		buffer.writeFloat(this.dataManager.get(SIZE_VAR));
 		
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.dataManager.set(sizeVariation, additionalData.readFloat());
+		this.dataManager.set(SIZE_VAR, additionalData.readFloat());
 	}
 	
 	public void setArmPose(ECQREntityArmPoses pose) {
