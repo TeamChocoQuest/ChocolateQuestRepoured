@@ -96,7 +96,8 @@ public class ModelCQRBiped extends ModelBiped {
 		}
 
 		if (entityIn instanceof AbstractEntityCQR) {
-			if (((AbstractEntityCQR) entityIn).getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
+			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
 				this.bipedRightArm.rotationPointZ = 0.0F;
 				this.bipedRightArm.rotationPointX = -5.0F;
 				this.bipedLeftArm.rotationPointZ = 0.0F;
@@ -120,6 +121,17 @@ public class ModelCQRBiped extends ModelBiped {
 						entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
 				entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
 						entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
+			}
+			
+			if(cqrEnt.isSitting()) {
+				this.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
+				this.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
+				this.bipedRightLeg.rotateAngleX = -1.4137167F;
+				this.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
+				this.bipedRightLeg.rotateAngleZ = 0.07853982F;
+				this.bipedLeftLeg.rotateAngleX = -1.4137167F;
+				this.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
+				this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
 			}
 		}
 

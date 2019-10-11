@@ -114,16 +114,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
 			
-			if(entity.isSitting()) {
-				model.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
-				model.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
-				model.bipedRightLeg.rotateAngleX = -1.4137167F;
-				model.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
-				model.bipedRightLeg.rotateAngleZ = 0.07853982F;
-				model.bipedLeftLeg.rotateAngleX = -1.4137167F;
-				model.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
-				model.bipedLeftLeg.rotateAngleZ = -0.07853982F;
-		}
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
