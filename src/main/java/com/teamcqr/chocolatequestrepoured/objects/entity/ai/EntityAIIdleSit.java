@@ -24,7 +24,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if(!this.entity.isDead && this.entity.onGround && !this.entity.isBurning() && !this.entity.isRiding()) {
+		if(!this.entity.isDead && this.entity.onGround && !this.entity.isBurning() && !this.entity.isRiding() && notMoving(this.entity)) {
 			if(entity.getAttackTarget() != null && entity.getEntitySenses().canSee(entity.getAttackTarget()) && entity.getNavigator().getPathToEntityLiving(entity.getAttackTarget()) != null) {
 				return false;
 			}
@@ -45,6 +45,10 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		return false;
 	}
 	
+	private boolean notMoving(AbstractEntityCQR entity) {
+		return !(Math.abs(entity.moveForward) > 0.05F || Math.abs(entity.moveStrafing) > 0.05F);
+	}
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return shouldExecute();
