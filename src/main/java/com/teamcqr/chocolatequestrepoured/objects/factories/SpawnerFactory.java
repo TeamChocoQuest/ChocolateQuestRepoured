@@ -92,7 +92,9 @@ public abstract class SpawnerFactory {
 					//PROBLEM: We should not create these fake entities, we should use the NBT the bottle already has as this should contain all the data
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setInteger("Weight", 1);
-					compound.setTag("Entity", entities[i]);
+					NBTTagCompound tag = entities[i];
+					tag.removeTag("UUID");
+					compound.setTag("Entity", tag);
 					spawnerEntities.appendTag(compound);
 				} /*else {
 					System.out.println("Entity is null?!?!");
@@ -112,11 +114,6 @@ public abstract class SpawnerFactory {
 				spawnerData.setInteger("MaxNearbyEntities", spawnerSettingsOverrides.getInteger("MaxNearbyEntities"));
 				spawnerData.setInteger("SpawnRange", spawnerSettingsOverrides.getInteger("SpawnRange"));
 				spawnerData.setInteger("RequiredPlayerRange", spawnerSettingsOverrides.getInteger("RequiredPlayerRange"));
-			} else {
-				spawnerData.setInteger("SpawnCount", 2);
-				spawnerData.setInteger("MaxNearbyEntities", 6);
-				spawnerData.setInteger("SpawnRange", 8);
-				spawnerData.setInteger("RequiredPlayerRange", 32);
 			}
 
 			// Call spawner obj to read data from newly created NBT
