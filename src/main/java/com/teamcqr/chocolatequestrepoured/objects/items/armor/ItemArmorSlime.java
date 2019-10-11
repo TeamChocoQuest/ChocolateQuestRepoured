@@ -7,10 +7,13 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -53,6 +56,14 @@ public class ItemArmorSlime extends ItemArmor {
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+			ModelBiped _default) {
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.slimeArmorLegs : ModArmorModels.slimeArmor;
 	}
 
 }
