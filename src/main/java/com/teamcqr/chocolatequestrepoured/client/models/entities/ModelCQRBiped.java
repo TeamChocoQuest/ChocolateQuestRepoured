@@ -1,11 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelCQRBiped extends ModelBiped {
 
@@ -86,17 +89,42 @@ public class ModelCQRBiped extends ModelBiped {
 			float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
-		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
-		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
-		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
-		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
-		copyModelAngles(this.bipedBody, this.bipedBodyWear);
-
 		if (entityIn.isSneaking()) {
 			this.bipedCape.rotationPointY = 2.0F;
 		} else {
 			this.bipedCape.rotationPointY = 0.0F;
 		}
+		
+		if(entityIn instanceof AbstractEntityCQR) {
+			if(((AbstractEntityCQR)entityIn).getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+				this.bipedRightArm.rotationPointZ = 0.0F;
+	            this.bipedRightArm.rotationPointX = -5.0F;
+	            this.bipedLeftArm.rotationPointZ = 0.0F;
+	            this.bipedLeftArm.rotationPointX = 5.0F;
+	            this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+	            this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+	            this.bipedRightArm.rotateAngleZ = 2.3561945F;
+	            this.bipedLeftArm.rotateAngleZ = -2.3561945F;
+	            this.bipedRightArm.rotateAngleY = 0.0F;
+	            this.bipedLeftArm.rotateAngleY = 0.0F;
+	            
+	            //Particles
+	            double dx = 0.7D;
+	            double dy = 0.5D;
+	            double dz = 0.2D;
+	            float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F + MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+	            float f1 = MathHelper.cos(f);
+	            float f2 = MathHelper.sin(f);
+	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entityIn.posX + (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ + (double)f2 * 0.6D, dx, dy, dz);
+	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entityIn.posX - (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ - (double)f2 * 0.6D, dx, dy, dz);
+			}
+		}
+		
+		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
+		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
+		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
+		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
+		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 	}
 
 	public void setVisible(boolean visible) {
