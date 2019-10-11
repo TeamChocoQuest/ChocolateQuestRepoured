@@ -115,8 +115,8 @@ public class ModelCQRBiped extends ModelBiped {
 	            float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F + MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
 	            float f1 = MathHelper.cos(f);
 	            float f2 = MathHelper.sin(f);
-	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entityIn.posX + (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ + (double)f2 * 0.6D, dx, dy, dz);
-	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entityIn.posX - (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ - (double)f2 * 0.6D, dx, dy, dz);
+	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ + (double)f2 * 0.6D, dx, dy, dz);
+	            entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double)f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ - (double)f2 * 0.6D, dx, dy, dz);
 			}
 		}
 		
