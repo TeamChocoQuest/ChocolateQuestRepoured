@@ -40,8 +40,8 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 	
 	@Override
-	public double getSizeVariation() {
-		return 0D;
+	public float getSizeVariation() {
+		return 0F;
 	} 
 	
 	@Override
