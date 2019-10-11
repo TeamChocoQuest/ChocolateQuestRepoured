@@ -158,16 +158,6 @@ public class ModelCQRBiped extends ModelBiped {
 			if (entCQR.hasCape()) {
 				this.bipedCape.render(scale);
 			}
-			if (entCQR.isSitting()) {
-				this.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
-				this.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
-				this.bipedRightLeg.rotateAngleX = -1.4137167F;
-				this.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
-				this.bipedRightLeg.rotateAngleZ = 0.07853982F;
-				this.bipedLeftLeg.rotateAngleX = -1.4137167F;
-				this.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
-				this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
-			}
 		}
 
 		GlStateManager.popMatrix();
