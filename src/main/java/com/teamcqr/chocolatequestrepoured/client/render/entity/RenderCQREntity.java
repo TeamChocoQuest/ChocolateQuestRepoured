@@ -161,6 +161,23 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		 *
 	}*/
 
+	@Override
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
+			float netHeadYaw, float headPitch, float scaleFactor) {
+		
+		if(entitylivingbaseIn.isSitting()) {
+			/*GlStateManager.pushMatrix();
+			
+			GlStateManager.translate(0F, -0.6F, 0F);
+			
+			GlStateManager.popMatrix();*/
+			
+			GL11.glTranslatef(0, 0.6F, 0);
+		}
+		
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	}
+	
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.texture;
 	}
