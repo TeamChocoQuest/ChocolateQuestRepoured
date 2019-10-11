@@ -80,7 +80,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 					//DONE: Orient entity to random friend
 					//DONE: Make them "chat" / "play cards"
 					entity.setChatting(true);
-					entity.getLookHelper().setLookPositionWithEntity(talkingPartner, 0, 0);
+					entity.getLookHelper().setLookPositionWithEntity(talkingPartner, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
 					if(talkingPartner instanceof AbstractEntityCQR) {
 						((AbstractEntityCQR)talkingPartner).setSitting(true);
 						((AbstractEntityCQR)talkingPartner).setChatting(true);
