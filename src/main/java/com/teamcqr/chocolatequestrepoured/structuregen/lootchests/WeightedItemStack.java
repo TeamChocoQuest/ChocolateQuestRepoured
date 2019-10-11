@@ -52,8 +52,8 @@ public class WeightedItemStack {
 				((float) this.weight / 100.0F),
 				this.minCount,
 				this.maxCount,
-				this.enchant ? this.minLvl : 0,
-				this.enchant ? this.maxLvl : 0,
+				this.enchant ? (float)this.minLvl : 0F,
+				this.enchant ? (float)this.maxLvl : 0F,
 				this.itemName);
 	}
 	

@@ -4,12 +4,18 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -36,6 +42,7 @@ public class DungeonBase {
 	protected int chance;
 	protected int yOffset = 0;
 	protected int[] allowedDims = {0};
+	protected String[] modDependencies = {Reference.MODID};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
@@ -79,6 +86,10 @@ public class DungeonBase {
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
+			this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[] {Reference.MODID});
+			if(this.modDependencies.length <= 0 || this.modDependencies == null) {
+				this.modDependencies = new String[] {Reference.MODID};
+			}
 		
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
 			if(this.buildSupportPlatform) {
@@ -213,5 +224,45 @@ public class DungeonBase {
 
 	public EDungeonMobType getDungeonMob() {
 		return this.dungeonMob;
+	}
+	
+	public File getStructureFileFromDirectory(File parentDir) {
+		if(parentDir.isDirectory()) {
+			int fileCount = parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length;
+			if(fileCount > 0) {
+				Random rdm = new Random();
+				List<File> files = getFilesRecursively(parentDir);
+				fileCount = files.size();
+				return files.get(rdm.nextInt(fileCount));
+			}
+		} else {
+			if(parentDir.getName().contains(".nbt")) {
+				return parentDir;
+			}
+		}
+		return null;
+	}
+	
+	private List<File> getFilesRecursively(File parentDir) {
+		if(!parentDir.isDirectory() || parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length <= 0) {
+			return null;
+		}
+		List<File> allFiles = new ArrayList<File>();
+		Queue<File> dirs = new LinkedList<File>();
+		dirs.add(new File(parentDir.getAbsolutePath()));
+		while (!dirs.isEmpty()) {
+		  for (File f : dirs.poll().listFiles(DungeonGenUtils.getStructureFileFilter())) {
+		    if (f.isDirectory()) {
+		      dirs.add(f);
+		    } else if (f.isFile()) {
+		      allFiles.add(f);
+		    }
+		  }
+		}
+		return allFiles;
+	}
+	
+	public String[] getDependencies() {
+		return this.modDependencies;
 	}
 }

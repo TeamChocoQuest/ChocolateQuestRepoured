@@ -13,6 +13,7 @@ public class DungeonSyncPacket implements IMessage {
 
 	private List<DungeonBase> dungeonList;
 	private HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
+	private HashMap<Integer, String[]> dependencyMap = new HashMap<>();
 
 	public DungeonSyncPacket() {
 
@@ -26,7 +27,17 @@ public class DungeonSyncPacket implements IMessage {
 	public void fromBytes(ByteBuf buf) {
 		int size = buf.readInt();
 		for (int i = 0; i < size; i++) {
-			this.dungeonMap.put(ByteBufUtils.readUTF8String(buf), buf.readInt());
+			String name = ByteBufUtils.readUTF8String(buf);
+			int id = buf.readInt();
+			this.dungeonMap.put(name, id);
+			
+			//Dependencies
+			int dependencyCount = buf.readInt();
+			String[] dep = new String[dependencyCount];
+			for(int j = 0; j < dependencyCount; j++) {
+				dep[j] = ByteBufUtils.readUTF8String(buf);
+			}
+			dependencyMap.put(id, dep);
 		}
 	}
 
@@ -36,11 +47,21 @@ public class DungeonSyncPacket implements IMessage {
 		for (DungeonBase dungeon : this.dungeonList) {
 			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
 			buf.writeInt(dungeon.getIconID());
+			
+			//Dependencies
+			buf.writeInt(dungeon.getDependencies().length);
+			for(String dependency : dungeon.getDependencies()) {
+				ByteBufUtils.writeUTF8String(buf, dependency);
+			}
 		}
 	}
 
 	public HashMap<String, Integer> getDungeonMap() {
 		return dungeonMap;
+	}
+
+	public HashMap<Integer, String[]> getDependencyMap() {
+		return dependencyMap;
 	}
 
 }

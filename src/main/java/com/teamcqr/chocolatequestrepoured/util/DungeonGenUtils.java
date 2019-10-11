@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -10,8 +12,10 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -22,6 +26,45 @@ import net.minecraft.world.chunk.Chunk;
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonGenUtils {
+	
+	private static FilenameFilter structureFileFilter = null;
+	
+	public static FilenameFilter getStructureFileFilter() {
+		if(structureFileFilter == null) {
+			structureFileFilter = new FilenameFilter() {
+				
+				String[] fileExtensions = new String[] {"nbt"};
+				
+				@Override
+				public boolean accept(File file, String var2) {
+					if (file != null) {
+						if (file.isDirectory()) {
+							return true;
+						}
+
+						String fileName = file.getName();
+						int var3 = fileName.lastIndexOf(46);
+						if (var3 > 0 && var3 < fileName.length() - 1) {
+							String var4 = fileName.substring(var3 + 1).toLowerCase();
+							String[] var5 = fileExtensions;
+							int var6 = var5.length;
+
+							for (int var7 = 0; var7 < var6; ++var7) {
+								String var8 = var5[var7];
+								if (var4.equals(var8)) {
+									return true;
+								}
+							}
+						}
+					}
+
+					return false;
+				}
+			};
+		}
+		
+		return structureFileFilter;
+	}
 	
 	public static boolean isInsideCircle(int ix, int iz, int radius, BlockPos center) {
 		BlockPos newPos = new BlockPos(center.getX() +ix, center.getY(), center.getZ() +iz);

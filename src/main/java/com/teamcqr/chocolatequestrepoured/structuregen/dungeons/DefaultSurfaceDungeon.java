@@ -31,14 +31,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {
-			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");/*new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() +  "/" + prop.getProperty("structurefolder", "defaultFolder"));
-
-			if(!this.structureFolderPath.exists() || !this.structureFolderPath.isDirectory()) {
-				if(this.structureFolderPath.exists() && !this.structureFolderPath.isDirectory()) {
-					this.structureFolderPath.delete();
-				}
-				this.structureFolderPath.mkdirs();
-			}*/
+			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");
 			
 			closeConfigFile();
 		} else {
@@ -51,27 +44,18 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		return new DefaultSurfaceGenerator(null, null, null);
 	}
 	
-	protected File pickStructure(Random random) {
+	protected File pickStructure() {
 		if(this.structureFolderPath == null) {
 			return null;
 		}
-		File chosenStructure = this.structureFolderPath;
-		while(chosenStructure.isDirectory()) {
-			if(chosenStructure.listFiles().length <= 0) {
-				return null;
-			}
-			File[] files = chosenStructure.listFiles();
-			int index = random.nextInt(files.length);
-			chosenStructure = files[index];
-		}
-		return chosenStructure;
+		return getStructureFileFromDirectory(this.structureFolderPath);
 	}
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
 		
-		File structureF = pickStructure(new Random());
+		File structureF = pickStructure();
 		if(structureF != null && structureF.exists() && structureF.isFile()) {
 			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.protectFromDestruction);
 			

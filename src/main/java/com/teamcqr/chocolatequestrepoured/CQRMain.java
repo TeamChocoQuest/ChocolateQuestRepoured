@@ -11,6 +11,8 @@ import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
@@ -155,6 +157,18 @@ public class CQRMain
 			System.err.println("WARNING: Failed to instantiate the banners!!");
 			ex.printStackTrace();
 		}
+		//Instantiating loot tables for entities
+		try {
+			for(ELootTablesNormal eltn : ELootTablesNormal.values()) {
+				eltn.getLootTable();
+			}
+			for(ELootTablesBoss eltn : ELootTablesBoss.values()) {
+				eltn.getLootTable();
+			}
+		} catch(Exception ex) {
+			System.err.println("WARNING: Failed to instantiate entity loot tables!!");
+			ex.printStackTrace();
+		}
 
 		//Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
@@ -224,7 +238,7 @@ public class CQRMain
 
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
-		DungeonRegistry.loadDungeons();
+		//DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
 		SmeltingHandler.init();
 	}
@@ -235,6 +249,7 @@ public class CQRMain
 		/*for(EFaction efac : EFaction.values()) {
 			System.out.println(efac.toString());
 		}*/
+		DungeonRegistry.loadDungeons();
 		proxy.postInit();
 	}
 }
