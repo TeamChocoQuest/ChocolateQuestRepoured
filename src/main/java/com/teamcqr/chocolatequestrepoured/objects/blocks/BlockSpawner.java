@@ -46,8 +46,10 @@ public class BlockSpawner extends BlockContainer {
 		if (!worldIn.isRemote && playerIn.isCreative()) {
 			if(playerIn.getHeldItem(hand).getItem() == ModItems.SPAWNER_CONVERTER) {
 				return false;
+			} else {
+				playerIn.openGui(CQRMain.INSTANCE, Reference.SPAWNER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			}
-			playerIn.openGui(CQRMain.INSTANCE, Reference.SPAWNER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+			
 		}
 		return true;
 	}

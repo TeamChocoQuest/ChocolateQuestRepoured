@@ -30,12 +30,14 @@ public class ItemSpawnerConverter extends Item {
 			player.getCooldownTracker().setCooldown(this, 10);
 			if(block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
 				if(block == Blocks.MOB_SPAWNER) {
+					System.out.println("Converting: Vanilla -> CQR");
 					SpawnerFactory.convertVanillaSpawnerToCQSpawner(worldIn, pos);
-					return EnumActionResult.SUCCESS;
+					return EnumActionResult.PASS;
 				}
 				if(block == ModBlocks.SPAWNER) {
+					System.out.println("Converting: CQR -> Vanilla");
 					SpawnerFactory.convertCQSpawnerToVanillaSpawner(worldIn, pos, null);
-					return EnumActionResult.SUCCESS;
+					return EnumActionResult.PASS;
 				}
 			} 
 		}
