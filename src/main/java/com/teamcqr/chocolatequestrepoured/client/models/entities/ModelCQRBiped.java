@@ -98,29 +98,7 @@ public class ModelCQRBiped extends ModelBiped {
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
 			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
-				this.bipedRightArm.rotationPointZ = 0.0F;
-				this.bipedRightArm.rotationPointX = -5.0F;
-				this.bipedLeftArm.rotationPointZ = 0.0F;
-				this.bipedLeftArm.rotationPointX = 5.0F;
-				this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-				this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-				this.bipedRightArm.rotateAngleZ = 2.3561945F;
-				this.bipedLeftArm.rotateAngleZ = -2.3561945F;
-				this.bipedRightArm.rotateAngleY = 0.0F;
-				this.bipedLeftArm.rotateAngleY = 0.0F;
-
-				// Particles
-				double dx = 0.7D;
-				double dy = 0.5D;
-				double dz = 0.2D;
-				float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
-						+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-				float f1 = MathHelper.cos(f);
-				float f2 = MathHelper.sin(f);
-				entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
-						entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
-				entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
-						entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
+				renderSpellAnimation(entityIn, ageInTicks);
 			}
 			
 			if(cqrEnt.isSitting()) {
@@ -140,6 +118,32 @@ public class ModelCQRBiped extends ModelBiped {
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
 		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
+	}
+	
+	protected void renderSpellAnimation(Entity entityIn, float ageInTicks) {
+		this.bipedRightArm.rotationPointZ = 0.0F;
+		this.bipedRightArm.rotationPointX = -5.0F;
+		this.bipedLeftArm.rotationPointZ = 0.0F;
+		this.bipedLeftArm.rotationPointX = 5.0F;
+		this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		this.bipedRightArm.rotateAngleZ = 2.3561945F;
+		this.bipedLeftArm.rotateAngleZ = -2.3561945F;
+		this.bipedRightArm.rotateAngleY = 0.0F;
+		this.bipedLeftArm.rotateAngleY = 0.0F;
+
+		// Particles
+		double dx = 0.7D;
+		double dy = 0.5D;
+		double dz = 0.2D;
+		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
+				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		float f1 = MathHelper.cos(f);
+		float f2 = MathHelper.sin(f);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
 	}
 
 	public void setVisible(boolean visible) {
