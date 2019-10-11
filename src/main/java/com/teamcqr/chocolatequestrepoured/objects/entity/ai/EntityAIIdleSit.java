@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -64,9 +65,10 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 				}
 				//DONE: Make entity sit -> Renderer needs work for that
 				int friendsFound = 0;
-				List<Entity> friends = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(3,1,3)), entity.getPosition().add(3,1,3)), AbstractEntityCQR.MOB_SELECTOR);
-				for(Entity ent : friends) {
+				List<Entity> friends = new ArrayList<>(); 
+				for(Entity ent : entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(3,1,3)), entity.getPosition().add(3,1,3)), AbstractEntityCQR.MOB_SELECTOR)) {
 					if(entity.getFaction().isEntityAlly((AbstractEntityCQR)ent)) {
+						friends.add(ent);
 						friendsFound++;
 					}
 				}
@@ -75,12 +77,12 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 					talkingPartner = friends.get(random.nextInt(friends.size()));
 					cooldwonForPartnerCycle = 0;
 				}
-				if( friendsFound > 0 && talkingPartner != null) {
+				if( friendsFound > 0 && talkingPartner != null && talkingPartner != entity) {
 					//we have someone to talk to, yay :D
 					//DONE: Orient entity to random friend
 					//DONE: Make them "chat" / "play cards"
 					entity.setChatting(true);
-					entity.getLookHelper().setLookPositionWithEntity(talkingPartner, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
+					entity.getLookHelper().setLookPosition(talkingPartner.posX, talkingPartner.posY + talkingPartner.getEyeHeight(), talkingPartner.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
 					if(talkingPartner instanceof AbstractEntityCQR) {
 						((AbstractEntityCQR)talkingPartner).setSitting(true);
 						((AbstractEntityCQR)talkingPartner).setChatting(true);
