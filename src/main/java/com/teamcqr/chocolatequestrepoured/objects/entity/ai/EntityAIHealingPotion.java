@@ -38,7 +38,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		return (this.entity.getHealingPotions()) > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.1D, 5.0D);
+		return (this.entity.getHealingPotions()) > 0 && this.entity.getHealth() <= Math.max(this.entity.getMaxHealth() * 0.15D, 5.0D);
 	}
 
 	@Override
@@ -109,7 +109,8 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 	public void resetTask() {
 		if (this.isHealing) {
 			if (this.entity.isHoldingPotion()) {
-				this.entity.swapItemStacks();
+				this.entity.swapWeaponAndPotionSlotItemStacks();
+				this.entity.removeHealingPotion();
 			}
 			this.entity.resetActiveHand();
 		}
@@ -121,7 +122,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		if (!this.isHealing) {
 			this.isHealing = true;
 			if (!this.entity.isHoldingPotion()) {
-				this.entity.swapItemStacks();
+				this.entity.swapWeaponAndPotionSlotItemStacks();
 			}
 			this.entity.resetActiveHand();
 			this.entity.setActiveHand(EnumHand.MAIN_HAND);
