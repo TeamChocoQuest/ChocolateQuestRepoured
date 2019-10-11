@@ -18,6 +18,9 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.potion.PotionEffect;
@@ -29,8 +32,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BossInfo;
-import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -67,9 +68,8 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 
 	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
-	private final BossInfoServer bossInfoServer = new BossInfoServer(getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-
-	private boolean mouthOpen = false;
+	//private boolean mouthOpen = false;
+	private static final DataParameter<Boolean> mouthOpen = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 
 	private boolean isReadyToAttack = true;
 
@@ -105,6 +105,8 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	@Override
 	protected void entityInit() {
 		super.entityInit();
+		
+		this.dataManager.register(mouthOpen, false);
 	}
 
 	@Override
@@ -119,6 +121,9 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 			//return this.attackEntityFromPart(this.headPart, source, amount);
 			return true;
 		}*/
+		if(source.isFireDamage() || source.isExplosion()) {
+			return false;
+		}
 
 		return super.attackEntityFrom(source, amount);
 	}
@@ -382,23 +387,23 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	}
 
 	public void setMouthOpen(boolean open) {
-		mouthOpen = open;
+		this.dataManager.set(mouthOpen, open);
 	}
 	
 	public boolean isMouthOpen() {
-		return mouthOpen ;
+		return this.dataManager.get(mouthOpen);
 	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		super.writeSpawnData(buffer);
-		buffer.writeBoolean(this.mouthOpen);
+		buffer.writeBoolean(this.dataManager.get(mouthOpen));
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
-		this.mouthOpen = additionalData.readBoolean();
+		this.dataManager.set(mouthOpen, additionalData.readBoolean());
 	}
 	
 	public void startAttack(ENetherDragonAttacks attackType) {
