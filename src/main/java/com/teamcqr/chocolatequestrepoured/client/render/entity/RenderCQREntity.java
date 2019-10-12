@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -51,6 +52,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
 		this.addLayer(new LayerCQREntityPotion(this));
+		
+		if(model instanceof ModelCQRBiped) {
+			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped)model).bipedHead));
+		}
 	}
 
 	@Override
