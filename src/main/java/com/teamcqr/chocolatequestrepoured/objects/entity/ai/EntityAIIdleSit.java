@@ -107,6 +107,10 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		super.resetTask();
 		cooldown = 0;
 		cooldwonForPartnerCycle = 0;
+		if(talkingPartner != null && !talkingPartner.isDead && talkingPartner instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR)talkingPartner).setSitting(false);
+			((AbstractEntityCQR)talkingPartner).setChatting(false);
+		}
 		talkingPartner = null;
 		if(entity.isSitting()) {
 			entity.setSitting(false);
