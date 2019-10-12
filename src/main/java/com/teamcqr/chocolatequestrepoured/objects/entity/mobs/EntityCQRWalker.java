@@ -52,10 +52,5 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_WALKER.getLootTable();
 	}
-	
-	@Override
-	public ECQREntityArmPoses getArmPose() {
-		return ECQREntityArmPoses.SPELLCASTING;
-	}
 
 }
