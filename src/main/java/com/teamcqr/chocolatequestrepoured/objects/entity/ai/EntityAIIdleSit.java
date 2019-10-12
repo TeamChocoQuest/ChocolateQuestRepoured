@@ -17,7 +17,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	private Entity talkingPartner = null;
 	private int cooldwonForPartnerCycle = 0;
 	protected static final int cooldownIdleBorder = 50;
-	protected static final int cooldownCyclePartnerBorder = 100;
+	protected static final int cooldownCyclePartnerBorder = 30;
 	
 	public EntityAIIdleSit(AbstractEntityCQR entity) {
 		super(entity);
@@ -57,35 +57,43 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	
 	@Override
 	public void updateTask() {
-		if(shouldExecute()) {
+		if(shouldContinueExecuting()) {
 			cooldown++;
 			if(cooldown >= cooldownIdleBorder) {
 				if(!entity.isSitting()) {
 					entity.setSitting(true);
 				}
 				//DONE: Make entity sit -> Renderer needs work for that
-				int friendsFound = 0;
-				List<Entity> friends = new ArrayList<>(); 
-				for(Entity ent : entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(3,1,3)), entity.getPosition().add(3,1,3)), AbstractEntityCQR.MOB_SELECTOR)) {
-					if(entity.getFaction().isEntityAlly((AbstractEntityCQR)ent)) {
-						friends.add(ent);
-						friendsFound++;
+				//int friendsFound = 0;
+				List<Entity> friends = new ArrayList<>();
+				List<Entity> nearbyEntities = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(6,3,6)), entity.getPosition().add(6,3,6)), AbstractEntityCQR.MOB_SELECTOR);
+				//System.out.println("NearbyEntities: " + nearbyEntities.size());
+				if(!nearbyEntities.isEmpty()) {
+					for(Entity ent : nearbyEntities) {
+						if(entity.getFaction().isEntityAlly((AbstractEntityCQR)ent)) {
+							friends.add(ent);
+							//friendsFound++;
+						}
 					}
-				}
-				cooldwonForPartnerCycle++;
-				if((talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder) && !friends.isEmpty()) {
-					talkingPartner = friends.get(random.nextInt(friends.size()));
-					cooldwonForPartnerCycle = 0;
-				}
-				if( friendsFound > 0 && talkingPartner != null && talkingPartner != entity) {
-					//we have someone to talk to, yay :D
-					//DONE: Orient entity to random friend
-					//DONE: Make them "chat" / "play cards"
-					entity.setChatting(true);
-					entity.getLookHelper().setLookPosition(talkingPartner.posX, talkingPartner.posY + talkingPartner.getEyeHeight(), talkingPartner.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
-					if(talkingPartner instanceof AbstractEntityCQR) {
-						((AbstractEntityCQR)talkingPartner).setSitting(true);
-						((AbstractEntityCQR)talkingPartner).setChatting(true);
+					//System.out.println("Friend list size: " + friends.size());
+					if(!friends.isEmpty()) {
+						cooldwonForPartnerCycle++;
+						if(talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder || talkingPartner.isDead || entity.getDistance(talkingPartner) > 8) {
+							talkingPartner = friends.get(random.nextInt(friends.size()));
+							//System.out.println("I found a partner!");
+							cooldwonForPartnerCycle = 0;
+						}
+						if(talkingPartner != null && talkingPartner != entity && !talkingPartner.isDead) {
+							//we have someone to talk to, yay :D
+							//DONE: Orient entity to random friend
+							//DONE: Make them "chat" / "play cards"
+							entity.setChatting(true);
+							entity.getLookHelper().setLookPosition(talkingPartner.posX, talkingPartner.posY + talkingPartner.getEyeHeight(), talkingPartner.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
+							if(talkingPartner instanceof AbstractEntityCQR) {
+								((AbstractEntityCQR)talkingPartner).setSitting(true);
+								((AbstractEntityCQR)talkingPartner).setChatting(true);
+							}
+						}
 					}
 				}
 			}
