@@ -166,12 +166,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			float netHeadYaw, float headPitch, float scaleFactor) {
 		
 		if(entitylivingbaseIn.isSitting()) {
-			/*GlStateManager.pushMatrix();
-			
-			GlStateManager.translate(0F, -0.6F, 0F);
-			
-			GlStateManager.popMatrix();*/
-			
 			GL11.glTranslatef(0, 0.6F, 0);
 		}
 		
