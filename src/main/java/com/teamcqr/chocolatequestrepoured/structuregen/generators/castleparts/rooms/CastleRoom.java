@@ -87,29 +87,59 @@ public abstract class CastleRoom
         }
     }
 
-    public void addDoorOnSide(EnumFacing side)
+    public void addDoorOnSideRandom(EnumFacing side)
+    {
+        if (!doorSides.contains(side))
+        {
+            doorSides.add(side);
+
+            final int DOOR_WIDTH = 4;
+            if (side == EnumFacing.SOUTH && hasWallOnSide(EnumFacing.SOUTH))
+            {
+                int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+                doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
+            }
+            else if (side == EnumFacing.EAST && hasWallOnSide(EnumFacing.EAST))
+            {
+                int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+                doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
+            }
+            if (side == EnumFacing.NORTH && hasWallOnSide(EnumFacing.NORTH))
+            {
+                int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+                doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
+            }
+            else if (side == EnumFacing.WEST && hasWallOnSide(EnumFacing.WEST))
+            {
+                int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+                doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
+            }
+        }
+    }
+
+    public void addDoorOnSideCentered(EnumFacing side)
     {
         doorSides.add(side);
 
         final int DOOR_WIDTH = 4;
         if (side == EnumFacing.SOUTH && hasWallOnSide(EnumFacing.SOUTH))
         {
-            int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            int xOffset = (sideLength - DOOR_WIDTH) / 2;
             doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
         }
         else if (side == EnumFacing.EAST && hasWallOnSide(EnumFacing.EAST))
         {
-            int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            int zOffset = (sideLength - DOOR_WIDTH) / 2;
             doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
         }
         if (side == EnumFacing.NORTH && hasWallOnSide(EnumFacing.NORTH))
         {
-            int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            int xOffset = (sideLength - DOOR_WIDTH) / 2;
             doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
         }
         else if (side == EnumFacing.WEST && hasWallOnSide(EnumFacing.WEST))
         {
-            int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
+            int zOffset = (sideLength - DOOR_WIDTH) / 2;
             doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
         }
     }
@@ -191,6 +221,16 @@ public abstract class CastleRoom
         return (walls.contains(side));
     }
 
+    public boolean canBuildDoorOnSide(EnumFacing side)
+    {
+        return hasWallOnSide(side);
+    }
+
+    public boolean reachableFromSide(EnumFacing side)
+    {
+        return true;
+    }
+
     public boolean hasRoofEdgeOnSide(EnumFacing side)
     {
         return (roofEdges.contains(side));
@@ -204,13 +244,13 @@ public abstract class CastleRoom
     protected void buildRoofEdges(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int len = sideLength;
+        int len = buildLength;
 
         if (hasRoofEdgeOnSide(EnumFacing.NORTH))
         {
             for (int x = 0; x < len; x++)
             {
-                BlockPos pos = startPos.add(x, height + 1, 0);
+                BlockPos pos = startPos.add(x + offsetX, height + 1, offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
                 if (ShouldBuildCrenellation(len, x))
                 {
@@ -222,7 +262,7 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < len; x++)
             {
-                BlockPos pos = startPos.add(x, height + 1, sideLength - 1);
+                BlockPos pos = startPos.add(x + offsetX, height + 1, offsetZ + buildLength - 1);
                 blocks.add(new BlockPlacement(pos, wallBlock));
                 if (ShouldBuildCrenellation(len, x))
                 {
@@ -234,7 +274,7 @@ public abstract class CastleRoom
         {
             for (int z = 0; z < len; z++)
             {
-                BlockPos pos = startPos.add(0, height + 1, z);
+                BlockPos pos = startPos.add(offsetX, height + 1, z + offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
                 if (ShouldBuildCrenellation(len, z))
                 {
@@ -246,7 +286,7 @@ public abstract class CastleRoom
         {
             for (int z = 0; z < len; z++)
             {
-                BlockPos pos = startPos.add(sideLength - 1, height + 1, z);
+                BlockPos pos = startPos.add(offsetX + buildLength - 1, height + 1, z + offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
                 if (ShouldBuildCrenellation(len, z))
                 {
