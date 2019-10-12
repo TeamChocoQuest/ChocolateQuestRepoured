@@ -5,24 +5,21 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 
-public class LayerCQREntityCape<T extends AbstractEntityCQR> implements LayerRenderer<T> {
+public class LayerCQREntityCape extends AbstractLayerCQR {
 
-	private final RenderCQREntity<T> playerRenderer;
-
-    public LayerCQREntityCape(RenderCQREntity<T> renderCQREntity)
+    public LayerCQREntityCape(RenderCQREntity<?> renderCQREntity)
     {
-        this.playerRenderer = renderCQREntity;
+    	super(renderCQREntity);
     }
 
     public void doRenderLayer(AbstractEntityCQR entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
-    	if(!(this.playerRenderer.getMainModel() instanceof ModelCQRBiped)) {
+    	if(!(this.entityRenderer.getMainModel() instanceof ModelCQRBiped)) {
     		return;
     	}
     	
@@ -33,7 +30,7 @@ public class LayerCQREntityCape<T extends AbstractEntityCQR> implements LayerRen
             if (itemstack.getItem() != Items.ELYTRA)
             {
                 GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-                this.playerRenderer.bindTexture(entitylivingbaseIn.getResourceLocationOfCape());
+                this.entityRenderer.bindTexture(entitylivingbaseIn.getResourceLocationOfCape());
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(0.0F, 0.0F, 0.125F);
                 //ChasingPos: Positions of the cape
@@ -66,7 +63,7 @@ public class LayerCQREntityCape<T extends AbstractEntityCQR> implements LayerRen
                 GlStateManager.rotate(-f3 / 2.0F, 0.0F, 1.0F, 0.0F);
                 GlStateManager.rotate(180.0F, 0.0F, 1.0F, 0.0F);
                 //DONE: Base model for Human shaped entities for capes
-                ((ModelCQRBiped)this.playerRenderer.getMainModel()).renderCape(0.0625F);
+                ((ModelCQRBiped)this.entityRenderer.getMainModel()).renderCape(0.0625F);
                 GlStateManager.popMatrix();
             }
         }
