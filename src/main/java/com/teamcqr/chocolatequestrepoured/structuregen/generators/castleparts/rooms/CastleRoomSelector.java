@@ -1,12 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import javafx.scene.control.Cell;
+
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.*;
-import java.lang.Double;
 
 public class CastleRoomSelector
 {
