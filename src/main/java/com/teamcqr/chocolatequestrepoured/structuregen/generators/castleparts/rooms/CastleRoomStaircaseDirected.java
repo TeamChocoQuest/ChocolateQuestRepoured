@@ -168,4 +168,16 @@ public class CastleRoomStaircaseDirected extends CastleRoom
             blocks.add(new BlockPlacement(getRotatedPlacement(x, y, z, this.doorSide), blockToBuild));
         }
     }
+
+    @Override
+    public boolean canBuildDoorOnSide(EnumFacing side)
+    {
+        return (side == doorSide);
+    }
+
+    @Override
+    public boolean reachableFromSide(EnumFacing side)
+    {
+        return (side == doorSide);
+    }
 }
