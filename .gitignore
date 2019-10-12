@@ -22,3 +22,5 @@ eclipse
 run
 TexturesCopy
 build.bat
+#Working files(e.g. GIMP files)
+*.xcf
