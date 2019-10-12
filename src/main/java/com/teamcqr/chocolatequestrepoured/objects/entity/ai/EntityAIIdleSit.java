@@ -17,7 +17,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	private Entity talkingPartner = null;
 	private int cooldwonForPartnerCycle = 0;
 	protected static final int cooldownIdleBorder = 50;
-	protected static final int cooldownCyclePartnerBorder = 30;
+	protected static final int cooldownCyclePartnerBorder = 100;
 	
 	public EntityAIIdleSit(AbstractEntityCQR entity) {
 		super(entity);
