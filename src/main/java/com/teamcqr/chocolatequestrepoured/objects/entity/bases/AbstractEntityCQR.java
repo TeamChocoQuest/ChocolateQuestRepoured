@@ -658,5 +658,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public ECQREntityArmPoses getArmPose() {
 		return ECQREntityArmPoses.valueOf(this.dataManager.get(ARM_POSE));
 	}
+	
+	public boolean isLeader() {
+		//TODO: Implement team building
+		return false;
+	}
 
 }
