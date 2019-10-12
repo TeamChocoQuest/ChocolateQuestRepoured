@@ -69,6 +69,9 @@ public enum EFaction {
 	}
 	
 	public boolean isEnemy(EFaction otherFac) {
+		if(otherFac == this) {
+			return false;
+		}
 		if(otherFac != null) {
 			for(String str : this.enemies) {
 				if(otherFac.toString().toUpperCase().equals(str)) {
@@ -79,6 +82,9 @@ public enum EFaction {
 		return false;
 	}
 	public boolean isAlly(EFaction otherFac) {
+		if(otherFac == this) {
+			return true;
+		}
 		if(otherFac != null) {
 			for(String str : this.allies) {
 				if(otherFac.toString().toUpperCase().equals(str)) {
@@ -128,7 +134,7 @@ public enum EFaction {
 			return false;
 		}
 		if(getFactionOfEntity(entity) != null) {
-			if(getFactionOfEntity(entity) == PLAYERS) {
+			if(entity instanceof EntityPlayer) {
 				return EReputationStateRough.getByRepuScore(getReputation(entity.getPersistentID())).equals(EReputationStateRough.ALLY);
 			}
 			return isAlly(getFactionOfEntity(entity)) || getFactionOfEntity(entity).isAlly(this);
