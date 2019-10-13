@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
@@ -63,6 +64,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -87,6 +90,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected static final DataParameter<Integer> HEALING_POTIONS_CLIENT = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	
+	//Client only
+	@SideOnly(Side.CLIENT)
+	protected int currentSpeechBubbleID = 0;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
@@ -662,6 +669,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public boolean isLeader() {
 		//TODO: Implement team building
 		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ESpeechBubble getCurrentSpeechBubble() {
+		return ESpeechBubble.values()[this.currentSpeechBubbleID];
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void chooseNewRandomSpeechBubble() {
+		this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
 	}
 
 }
