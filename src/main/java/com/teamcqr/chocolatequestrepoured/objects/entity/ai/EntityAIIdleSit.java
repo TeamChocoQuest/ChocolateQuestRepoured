@@ -95,8 +95,14 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 								//((AbstractEntityCQR)talkingPartner).setSitting(true);
 								//((AbstractEntityCQR)talkingPartner).setChatting(true);
 							}*/
+						} else {
+							entity.setChatting(false);
 						}
+					} else {
+						entity.setChatting(false);
 					}
+				} else {
+					entity.setChatting(false);
 				}
 			}
 		} else {
