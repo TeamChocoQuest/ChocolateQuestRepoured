@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -34,7 +36,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 		
 		if(timerForPosConflicts > 0) {
 			for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
-				if(world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestFire) != null : true)) {
+				if(isSuitableFire(posTmp)) {
 					if(nearestFire != null) {
 						if(entity.getDistanceSq(posTmp) < entity.getDistanceSq(nearestFire)) {
 							nearestFire = posTmp;
@@ -50,6 +52,18 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 		return nearestFire != null;
 	}
 	
+	private boolean isSuitableFire(BlockPos posTmp) {
+		if(world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestFire) != null : true)) {
+			Block block = world.getBlockState(posTmp.down()).getBlock();
+			
+			if(block != null && (block == Blocks.NETHERRACK || block == Blocks.MAGMA)) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
 	@Override
 	public void updateTask() {
 		if(nearestFire != null) {

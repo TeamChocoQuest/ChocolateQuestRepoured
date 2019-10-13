@@ -17,7 +17,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LayerCQREntityPotion extends AbstractLayerCQR {
 
-	public LayerCQREntityPotion(RenderCQREntity renderCQREntity) {
+	public LayerCQREntityPotion(RenderCQREntity<?> renderCQREntity) {
 		super(renderCQREntity);
 	}
 

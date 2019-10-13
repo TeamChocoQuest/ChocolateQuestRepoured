@@ -19,7 +19,7 @@ public class CastleRoomLandingDirected extends CastleRoom
     public CastleRoomLandingDirected(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.LANDING;
+        this.roomType = RoomType.LANDING_DIRECTED;
         this.openingWidth = stairsBelow.getUpperStairWidth();
         this.stairZ = stairsBelow.getUpperStairEndZ() + 1;
         this.openingSeparation = stairsBelow.getCenterStairWidth();

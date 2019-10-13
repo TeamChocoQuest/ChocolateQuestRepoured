@@ -45,10 +45,9 @@ public class EventsHandler {
 
 			try {
 				LootTableLoader.fillLootTable(table, lootTable);
-				if(table.equals(ELootTable.CQ_EQUIPMENT)) {
+				/*if(table.equals(ELootTable.CQ_EQUIPMENT)) {
 					System.out.println(lootTable.toString());
-					System.out.println("test");
-				}
+				}*/
 			} catch (Exception ex) {
 				System.err.println("Unable to fill loot table " + event.getName());
 				ex.printStackTrace();

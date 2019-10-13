@@ -13,7 +13,7 @@ public enum ELootTablesNormal {
 	ENTITY_DWARF("dwarf"),
 	ENTITY_ENDERMAN("enderman"),
 	ENTITY_GOBLIN("goblin"),
-	ENTITY_GOLEM("golem"),
+	ENTITY_GOLEM("golem_small"),
 	ENTITY_MINOTAUR("minotaur"),
 	ENTITY_MONKEY("monkey"),
 	ENTITY_MUMMY("mummy"),
