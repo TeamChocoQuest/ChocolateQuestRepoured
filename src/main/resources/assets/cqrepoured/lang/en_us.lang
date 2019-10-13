@@ -177,6 +177,7 @@ item.potion_healing.name=Healing Potion
 item.teleport_stone.name=Teleport Stone
 item.soul_bottle.name=Soul Bottle
 item.mob_to_spawner_tool.name=Mob To Spawner Tool
+item.spawner_converter.name=Spawner Converter
 item.badge.name=Badge
 item.backpack.name=Backpack
 item.alchemy_bag.name=Alchemy Bag
