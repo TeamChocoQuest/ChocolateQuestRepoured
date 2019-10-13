@@ -54,7 +54,7 @@ public enum ESpeechBubble {
 	static final String folderPath = "textures/misc/speechbubbles/bubble_";
 	
 	private ESpeechBubble() {
-		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + name().toLowerCase());
+		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + name().toLowerCase() + ".png");
 	}
 	
 	public ResourceLocation getResourceLocation() {
