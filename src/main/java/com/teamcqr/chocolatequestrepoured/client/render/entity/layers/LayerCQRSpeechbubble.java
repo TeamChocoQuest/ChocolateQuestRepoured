@@ -2,12 +2,10 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
 import org.lwjgl.opengl.GL11;
 
-import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,15 +13,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 
-	private ModelRenderer bipedHead;
-	private ESpeechBubble currentBubble;
-	
 	private static final int CHANGE_BUBBLE_INTERVAL = 50;
 	
-	public LayerCQRSpeechbubble(RenderCQREntity<?> livingEntityRendererIn, ModelRenderer headBox) {
+	public LayerCQRSpeechbubble(RenderCQREntity<?> livingEntityRendererIn) {
 		super(livingEntityRendererIn);
-		this.bipedHead = headBox;
-		this.currentBubble = ESpeechBubble.ITEM_BEER;
 		//System.out.println("NEW INSTANCE");
 	}
 	
