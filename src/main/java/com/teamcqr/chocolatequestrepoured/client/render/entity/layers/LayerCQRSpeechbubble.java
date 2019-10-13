@@ -29,7 +29,7 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			
 			GlStateManager.pushMatrix();
-			GlStateManager.rotate(netHeadYaw +90, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(netHeadYaw, 0.0F, 1.0F, 0.0F);
 			GlStateManager.translate(-0.5, -1.7, 0);
 			
 			//System.out.println("Entity age: " + ageInTicks);
