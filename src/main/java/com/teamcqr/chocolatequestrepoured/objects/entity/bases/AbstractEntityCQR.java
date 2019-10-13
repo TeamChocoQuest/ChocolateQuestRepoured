@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -678,7 +679,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	
 	@SideOnly(Side.CLIENT)
 	public void chooseNewRandomSpeechBubble() {
-		this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
+		Random rdm2 = new Random();
+		rdm2.setSeed(this.ticksExisted / 160 + getEntityId());
+		this.currentSpeechBubbleID = rdm2.nextInt(ESpeechBubble.values().length);
 	}
 
 }

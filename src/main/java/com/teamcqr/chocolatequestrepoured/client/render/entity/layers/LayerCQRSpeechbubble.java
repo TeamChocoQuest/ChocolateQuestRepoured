@@ -30,7 +30,7 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 			
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(entity.rotationYawHead +90, 0.0F, 1.0F, 0.0F);
-			GlStateManager.translate(-0.5, -1.5, 0);
+			GlStateManager.translate(-0.5, -1.7, 0);
 			
 			//System.out.println("Entity age: " + ageInTicks);
 			if(ageInTicks % CHANGE_BUBBLE_INTERVAL == 0) {
