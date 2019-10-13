@@ -29,11 +29,11 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 			Minecraft minecraft = Minecraft.getMinecraft();
 			
 			GlStateManager.pushMatrix();
-			GlStateManager.rotate(entity.rotationYawHead +90, 0.0F, 1.0F, 0.0F);
+			GlStateManager.rotate(netHeadYaw +90, 0.0F, 1.0F, 0.0F);
 			GlStateManager.translate(-0.5, -1.7, 0);
 			
 			//System.out.println("Entity age: " + ageInTicks);
-			if(ageInTicks % CHANGE_BUBBLE_INTERVAL == 0) {
+			if(Math.floor(ageInTicks) % CHANGE_BUBBLE_INTERVAL == 0) {
 				//currentBubble = ESpeechBubble.getRandom(entity.getRNG());
 				entity.chooseNewRandomSpeechBubble();
 				//System.out.println("Bubble: " + currentBubble.name());
