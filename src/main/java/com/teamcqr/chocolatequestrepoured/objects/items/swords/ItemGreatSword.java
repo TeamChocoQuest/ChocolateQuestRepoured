@@ -159,7 +159,7 @@ public class ItemGreatSword extends ItemSword {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (player.getHeldItemOffhand() == stack) {
+				if (!player.getHeldItemOffhand().isEmpty()) {
 					if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
 						player.entityDropItem(player.getHeldItemOffhand(), 0F);
 					}
