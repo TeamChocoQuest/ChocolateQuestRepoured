@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -55,6 +56,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		
 		if(model instanceof ModelCQRBiped) {
 			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped)model).bipedHead));
+			this.addLayer(new LayerCQRSpeechbubble(this, ((ModelCQRBiped)model).bipedHead));
 		}
 	}
 

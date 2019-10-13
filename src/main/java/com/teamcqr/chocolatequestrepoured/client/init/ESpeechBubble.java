@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
@@ -49,7 +51,7 @@ public enum ESpeechBubble {
 	
 	
 	private final ResourceLocation resLoc;
-	static final String folderPath = ":textures/misc/speechbubbles/bubble_";
+	static final String folderPath = "textures/misc/speechbubbles/bubble_";
 	
 	private ESpeechBubble() {
 		this.resLoc = new ResourceLocation(Reference.MODID, folderPath + name().toLowerCase());
@@ -57,6 +59,10 @@ public enum ESpeechBubble {
 	
 	public ResourceLocation getResourceLocation() {
 		return this.resLoc;
+	}
+	
+	public static ESpeechBubble getRandom(Random rdm) {
+		return values()[rdm.nextInt(values().length)];
 	}
 	
 }
