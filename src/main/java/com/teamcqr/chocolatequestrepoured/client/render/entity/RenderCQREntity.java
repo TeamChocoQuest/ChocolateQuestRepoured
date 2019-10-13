@@ -56,7 +56,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		
 		if(model instanceof ModelCQRBiped) {
 			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped)model).bipedHead));
-			this.addLayer(new LayerCQRSpeechbubble(this, ((ModelCQRBiped)model).bipedHead));
+			this.addLayer(new LayerCQRSpeechbubble(this));
 		}
 	}
 
