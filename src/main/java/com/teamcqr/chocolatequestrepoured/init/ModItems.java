@@ -250,9 +250,9 @@ public class ModItems {
 
 					setItemName(new ItemRevolver(), "revolver"), setItemName(new ItemRevolver(), "captain_revolver"),
 					setItemName(new ItemMusket(), "musket"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_iron"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_diamond"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_monking"),
+					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"),
+					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
+					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"),
 					setItemName(new ItemBullet(), "bullet_iron"), setItemName(new ItemBullet(), "bullet_gold"),
 					setItemName(new ItemBullet(), "bullet_diamond"), setItemName(new ItemBullet(), "bullet_fire"),
 					setItemName(new ItemCannonBall(), "cannon_ball"),

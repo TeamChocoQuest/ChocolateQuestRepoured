@@ -73,5 +73,4 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-
 }

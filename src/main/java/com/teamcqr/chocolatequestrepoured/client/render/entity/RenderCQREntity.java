@@ -5,6 +5,8 @@ import org.lwjgl.opengl.GL11;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -17,6 +19,7 @@ import net.minecraft.client.renderer.entity.layers.LayerArrow;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
@@ -50,6 +53,11 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
 		this.addLayer(new LayerCQREntityPotion(this));
+		
+		if(model instanceof ModelCQRBiped) {
+			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped)model).bipedHead));
+			this.addLayer(new LayerCQRSpeechbubble(this));
+		}
 	}
 
 	@Override
@@ -112,15 +120,65 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
+			
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		if (entity.isChatting()) {
+			renderChatting(entity);
+		}
+		
 		
 		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		}
 	}
+	
+	protected void renderChatting(Entity entity) {
+		/*
+		 * GL11.glPushMatrix(); GL11.glTranslatef(0.0F, height * 1.6F, 0.0F);
+		 * GL11.glRotatef(180.0F - renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		 * GL11.glRotatef(180.0F - renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+		 * renderManager.renderEngine.bindTexture(BDHelper.getItemTexture());
+		 * Tessellator tessellator = Tessellator.instance;
+		 * 
+		 * int spriteIndex = (ticksExisted / 160 + entity.getEntityId()) % 16; float i1
+		 * = (spriteIndex % 16 * 16 + 0) / 256.0F; float i2 = (spriteIndex % 16 * 16 +
+		 * 16) / 256.0F; float i3 = 0.8125F; float i4 = 0.875F; float size = 0.6F; float
+		 * width = size; float x = -0.5F;
+		 * 
+		 * tessellator.startDrawingQuads(); tessellator.addVertexWithUV(x, 0.0D, 0.0D,
+		 * i1, i3); tessellator.addVertexWithUV(x + width, 0.0D, 0.0D, i2, i3);
+		 * tessellator.addVertexWithUV(x + width, size, 0.0D, i2, i4);
+		 * tessellator.addVertexWithUV(x + 0.0F, size, 0.0D, i1, i4);
+		 * tessellator.draw();
+		 * 
+		 * GL11.glPopMatrix();
+		 */
+	}
 
+	/*protected void renderHelmetFeather(AbstractEntityCQR entity) {
+	 	 *
+		 * GL11.glPushMatrix(); mainModel).bipedHead.postRender(0.0625F);
+		 * GL11.glTranslatef(-0.05F, featherY, 0.01F); GL11.glRotatef(180.0F, 1.0F,
+		 * 0.0F, 1.0F); GL11.glRotatef(125.0F, 0.0F, 1.0F, 0.0F); GL11.glScalef(0.5F,
+		 * 0.5F, 0.5F); renderManager.itemRenderer.renderItem(entity, item, 0);
+		 * GL11.glPopMatrix();
+		 *
+	}*/
+
+	@Override
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
+			float netHeadYaw, float headPitch, float scaleFactor) {
+		
+		if(entitylivingbaseIn.isSitting()) {
+			GL11.glTranslatef(0, 0.6F, 0);
+		}
+		
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	}
+	
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.texture;
 	}

@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -7,14 +8,17 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
@@ -41,6 +45,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -58,25 +65,53 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob,IEntityAdditionalSpawnData {
 
+	//Client side visable vars:
+	/*
+	 * - usedPotions
+	 * - sizeVariation
+	 * - sitting
+	 */
+	
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
+	protected byte usedPotions = (byte)0;
 	
-	protected double sizeVariation = 0.0F;
+	//Sync with client
+	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Integer> HEALING_POTIONS_CLIENT = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
+	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	
-	protected int usedPotions = 0;
+	//Client only
+	@SideOnly(Side.CLIENT)
+	protected int currentSpeechBubbleID = 0;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.8F);
 		this.experienceValue = 5;
 	}
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		
+		this.dataManager.register(SIZE_VAR, 0F);
+		this.dataManager.register(IS_SITTING, false);
+		this.dataManager.register(HEALING_POTIONS_CLIENT, 3);
+		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
+		this.dataManager.register(TALKING, false);
+	}
+	
 
 	@Override
 	protected boolean canDespawn() {
@@ -126,7 +161,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAITorchIgniter(this));
+		this.tasks.addTask(22, new EntityAITorchIgniter(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this));
+		//this.tasks.addTask(21, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 	}
@@ -138,7 +175,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.sizeVariation = -0.125F + (this.rand.nextFloat() *0.25F);
+		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -158,11 +195,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 
-		if(this.usedPotions > 0) {
-			compound.setInteger("usedHealingPotions", this.usedPotions);
+		if(this.usedPotions > (byte)0) {
+			compound.setByte("usedHealingPotions", usedPotions);
 		}
-		compound.setDouble("sizeVariation", this.sizeVariation);
+		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
+		compound.setBoolean("isSitting", this.dataManager.get(AbstractEntityCQR.IS_SITTING));
 	}
 
 	@Override
@@ -178,11 +216,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		}
 
 		if(compound.hasKey("usedHealingPotions")) {
-			this.usedPotions = compound.getInteger("usedHealingPotions");
+			this.usedPotions = compound.getByte("usedHealingPotions");
 		}
 
 		if(compound.hasKey("sizeVariation")) {
-			this.sizeVariation = compound.getDouble("sizeVariation");
+			//this.sizeVariation = compound.getDouble("sizeVariation");
+			this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
+		}
+		if(compound.hasKey("isSitting")) {
+			this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		}
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
@@ -252,7 +294,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (!this.world.isRemote && this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] {this}, false, null, world, this.getPosition());
 			this.setDead();
 		}
@@ -472,7 +514,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (stack.getItem() instanceof ItemPotionHealing) {
 			return stack.getCount();
 		}
-		return 0;
+		//return 0;
+		return this.dataManager.get(HEALING_POTIONS_CLIENT);
 	}
 
 	public void setHealingPotions(int amount) {
@@ -482,6 +525,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		} else {
 			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
 		}
+		this.dataManager.set(HEALING_POTIONS_CLIENT, amount);
 	}
 
 	public void removeHealingPotion() {
@@ -495,6 +539,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (stack.getItem() instanceof ItemPotionHealing) {
 			stack.shrink(1);
 		}
+		int currVal = this.dataManager.get(HEALING_POTIONS_CLIENT);
+		this.dataManager.set(HEALING_POTIONS_CLIENT, currVal - 1);
+		//System.out.println("byte value on watcher: " + this.dataManager.get(healingPotions));
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
@@ -505,9 +552,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
 		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		capability.setStackInSlot(slot.getIndex(), stack);
+		//Potion layer stuff
+		if(slot == EntityEquipmentExtraSlot.PotionSlot) {
+			if(stack.getItem() instanceof ItemPotionHealing) {
+				this.dataManager.set(HEALING_POTIONS_CLIENT, stack.getCount());
+			} 
+			else {
+				/*if(getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemPotionHealing) {
+					this.dataManager.set(healingPotions, getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getCount());
+				} else {*/
+					this.dataManager.set(HEALING_POTIONS_CLIENT, 0);
+				//}
+			}
+		}
 	}
 
-	public void swapItemStacks() {
+	public void swapWeaponAndPotionSlotItemStacks() {
 		ItemStack stack1 = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack2);
@@ -569,19 +629,59 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		return null;
 	}
 	
-	public double getSizeVariation() {
-		return this.sizeVariation;
+	public float getSizeVariation() {
+		//return this.sizeVariation;
+		return this.dataManager.get(SIZE_VAR);
+	}
+	
+	public void setSitting(boolean sitting) {
+		this.dataManager.set(IS_SITTING, sitting);
+	}
+	
+	public boolean isSitting() {
+		return this.dataManager.get(IS_SITTING);
+	}
+	
+	public void setChatting(boolean chatting) {
+		this.dataManager.set(TALKING, chatting);
+	}
+	public boolean isChatting() {
+		return this.dataManager.get(TALKING);
 	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeDouble(this.sizeVariation);
+		buffer.writeFloat(this.dataManager.get(SIZE_VAR));
 		
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.sizeVariation = additionalData.readDouble();
+		this.dataManager.set(SIZE_VAR, additionalData.readFloat());
+	}
+	
+	public void setArmPose(ECQREntityArmPoses pose) {
+		this.dataManager.set(ARM_POSE, pose.toString());
+	}
+	public ECQREntityArmPoses getArmPose() {
+		return ECQREntityArmPoses.valueOf(this.dataManager.get(ARM_POSE));
+	}
+	
+	public boolean isLeader() {
+		//TODO: Implement team building
+		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ESpeechBubble getCurrentSpeechBubble() {
+		return ESpeechBubble.values()[this.currentSpeechBubbleID];
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void chooseNewRandomSpeechBubble() {
+		Random rdm2 = new Random();
+		rdm2.setSeed(this.ticksExisted / 160 + getEntityId());
+		this.currentSpeechBubbleID = rdm2.nextInt(ESpeechBubble.values().length);
 	}
 
 }

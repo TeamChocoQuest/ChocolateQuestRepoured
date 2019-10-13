@@ -47,7 +47,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	}
 	
 	@Override
-	public double getSizeVariation() {
+	public float getSizeVariation() {
 		return 0F;
 	}
 	
