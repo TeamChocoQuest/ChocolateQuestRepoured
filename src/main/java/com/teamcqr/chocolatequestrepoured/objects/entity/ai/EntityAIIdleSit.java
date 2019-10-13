@@ -92,7 +92,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 							entity.setChatting(true);
 							entity.getLookHelper().setLookPosition(talkingPartner.posX, talkingPartner.posY + talkingPartner.getEyeHeight(), talkingPartner.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
 							if(talkingPartner instanceof AbstractEntityCQR) {
-								((AbstractEntityCQR)talkingPartner).setSitting(true);
+								//((AbstractEntityCQR)talkingPartner).setSitting(true);
 								((AbstractEntityCQR)talkingPartner).setChatting(true);
 							}
 						}
@@ -110,7 +110,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		cooldown = 0;
 		cooldwonForPartnerCycle = 0;
 		if(talkingPartner != null && !talkingPartner.isDead && talkingPartner instanceof AbstractEntityCQR) {
-			((AbstractEntityCQR)talkingPartner).setSitting(false);
+			//((AbstractEntityCQR)talkingPartner).setSitting(false);
 			((AbstractEntityCQR)talkingPartner).setChatting(false);
 		}
 		talkingPartner = null;
