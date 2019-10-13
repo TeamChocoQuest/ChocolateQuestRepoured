@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
