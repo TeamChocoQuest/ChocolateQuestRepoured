@@ -31,7 +31,7 @@ public class LayerCQRLeaderFeather extends AbstractLayerCQR {
 			GlStateManager.rotate(headPitch, 0, 0, 1);
 			GlStateManager.rotate(yaw, 0, 1, 0);
 			//GlStateManager.rotate(0, 0, -90, 0);
-			float height = entity.getEyeHeight() +0.125F;
+			float height = entity.getEyeHeight();
 			GlStateManager.translate(bipedHead.offsetX, height, bipedHead.offsetZ);
 			//GlStateManager.translate(0, headHeight /5, 0);
 			Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(Items.FEATHER, 1), ItemCameraTransforms.TransformType.FIXED);
