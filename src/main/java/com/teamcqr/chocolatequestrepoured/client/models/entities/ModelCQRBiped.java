@@ -22,13 +22,6 @@ public class ModelCQRBiped extends ModelBiped {
 	public boolean hasExtraLayers = true;
 
 	public ModelCQRBiped(float modelSize, boolean hasExtraLayer) {
-		/*
-		 * super(modelSize); this.bipedCape = new ModelRenderer(this, 0, 0);
-		 * this.bipedCape.setTextureSize(64, 32); this.bipedCape.addBox(-5.0F, 0.0F,
-		 * -1.0F, 10, 16, 1, modelSize);
-		 * 
-		 * initExtraLayer(modelSize);
-		 */
 		this(modelSize, 0, 64, 64, hasExtraLayer);
 	}
 

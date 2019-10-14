@@ -31,7 +31,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public ResourceLocation texture;
 	public double widthScale;
 	public double heightScale;
-	//private boolean scaleVarApplied = false;
 	
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
 		this(rendermanagerIn, entityName, 1.0D, 1.0D);
@@ -110,10 +109,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
-			
-			//if(entity.isSitting()) {
-				//renderSitting((ModelBiped) model);
-			//}
 			
 			switch(entity.getArmPose()) {
 			case HOLDING_ITEM:
