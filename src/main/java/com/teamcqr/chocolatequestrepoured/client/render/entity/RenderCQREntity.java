@@ -22,7 +22,9 @@ import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
@@ -61,12 +63,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		//if(!this.scaleVarApplied) {
-			//Random rand = new Random();
-			//this.widthScale = widthScale + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
-			//this.heightScale = heightScale + (-0.25D +(rand.nextDouble() *0.5D));;
-			//this.scaleVarApplied = true;
-		//}
 		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
 		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);
@@ -91,9 +87,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BLOCK:
 					armPoseMain = ModelBiped.ArmPose.BLOCK;
 					break;
-				case BOW:
-					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
-					break;
 				default:
 					armPoseMain = ModelBiped.ArmPose.EMPTY;
 					break;
@@ -107,37 +100,76 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				case BLOCK:
 					armPoseOff = ModelBiped.ArmPose.BLOCK;
 					break;
-				case BOW:
-					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
-					break;
 				default:
 					armPoseOff = ModelBiped.ArmPose.EMPTY;
 					break;
 
 				}
 			}
+			
 
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
 			
+			//if(entity.isSitting()) {
+				//renderSitting((ModelBiped) model);
+			//}
+			
+			switch(entity.getArmPose()) {
+			case HOLDING_ITEM:
+				break;
+			case PULLING_BOW:
+				break;
+			case SPELLCASTING:
+				renderSpellAnimation(entity, entity.ticksExisted, model);
+				break;
+			case STAFF_L:
+				break;
+			case STAFF_R:
+				break;
+			default:
+				break;
+			
+			}
+			
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		
+		this.mainModel.isRiding = entity.isSitting() || this.mainModel.isRiding;
+		
+		
 		
 		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 		}
 	}
 	
-	/*protected void renderHelmetFeather(AbstractEntityCQR entity) {
-	 	 *
-		 * GL11.glPushMatrix(); mainModel).bipedHead.postRender(0.0625F);
-		 * GL11.glTranslatef(-0.05F, featherY, 0.01F); GL11.glRotatef(180.0F, 1.0F,
-		 * 0.0F, 1.0F); GL11.glRotatef(125.0F, 0.0F, 1.0F, 0.0F); GL11.glScalef(0.5F,
-		 * 0.5F, 0.5F); renderManager.itemRenderer.renderItem(entity, item, 0);
-		 * GL11.glPopMatrix();
-		 *
-	}*/
+	protected void renderSpellAnimation(T entityIn, float ageInTicks, ModelBiped model) {
+		model.bipedRightArm.rotationPointZ = 0.0F;
+		model.bipedRightArm.rotationPointX = -5.0F;
+		model.bipedLeftArm.rotationPointZ = 0.0F;
+		model.bipedLeftArm.rotationPointX = 5.0F;
+		model.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		model.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		model.bipedRightArm.rotateAngleZ = 2.3561945F;
+		model.bipedLeftArm.rotateAngleZ = -2.3561945F;
+		model.bipedRightArm.rotateAngleY = 0.0F;
+		model.bipedLeftArm.rotateAngleY = 0.0F;
+
+		// Particles
+		double dx = 0.7D;
+		double dy = 0.5D;
+		double dz = 0.2D;
+		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
+				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		float f1 = MathHelper.cos(f);
+		float f2 = MathHelper.sin(f);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
+	}
 
 	@Override
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
@@ -148,6 +180,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 		
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		
+		this.mainModel.isRiding = entitylivingbaseIn.isSitting() || entitylivingbaseIn.isRiding();
 	}
 	
 	protected ResourceLocation getEntityTexture(T entity) {
