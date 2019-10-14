@@ -8,6 +8,8 @@ import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacketHandler;
+import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacketHandler;
@@ -26,6 +28,7 @@ public class ModMessages {
 		CQRMain.NETWORK.registerMessage(ParticleMessageHandler.class, ParticlesMessageToClient.class, Reference.TARGET_EFFECT_MESSAGE_ID, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(DungeonSyncPacketHandler.class, DungeonSyncPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(ArmorCooldownSyncPacketHandler.class, ArmorCooldownSyncPacket.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(ItemStackSyncPacketHandler.class, ItemStackSyncPacket.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, CQSaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);
