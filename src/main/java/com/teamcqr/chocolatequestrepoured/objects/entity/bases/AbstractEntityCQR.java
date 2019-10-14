@@ -98,7 +98,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
-		this.setSize(0.6F, 1.8F);
+		//this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
 		this.experienceValue = 5;
 	}
 	@Override
@@ -176,6 +176,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
+		//Adapt size of hitbox
+		this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -636,6 +638,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	
 	public void setSitting(boolean sitting) {
 		this.dataManager.set(IS_SITTING, sitting);
+		//if(this.isServerWorld()) {
+			if(sitting) {
+				this.setSize(this.width * 1.2F, this.height * 0.8F);
+			} else {
+				this.setSize(this.width * (10F /12F), this.height * (5F/4F));
+			}
+		//}
 	}
 	
 	public boolean isSitting() {
