@@ -4,13 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRTriton;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRTritonArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
 
 public class RenderCQRTriton extends RenderCQREntity<EntityCQRTriton> {
 
@@ -30,17 +29,8 @@ public class RenderCQRTriton extends RenderCQREntity<EntityCQRTriton> {
 		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
-				this.modelLeggings = new ModelBiped(0.5F);
-				this.modelLeggings.setVisible(false);
-				this.modelArmor = new ModelBiped(1.0F);
-			}
-			
-			@Override
-			public void doRenderLayer(EntityLivingBase entitylivingbaseIn, float limbSwing, float limbSwingAmount,
-					float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-				super.doRenderLayer(entitylivingbaseIn, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch,
-						scale);
-				this.modelLeggings.setVisible(false);
+				this.modelLeggings = new ModelCQRTritonArmor(0.5F);
+				this.modelArmor = new ModelCQRTritonArmor(1.0F);
 			}
 			
 		});
