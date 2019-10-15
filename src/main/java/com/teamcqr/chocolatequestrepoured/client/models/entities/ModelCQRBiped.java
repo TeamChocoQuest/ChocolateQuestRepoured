@@ -22,13 +22,6 @@ public class ModelCQRBiped extends ModelBiped {
 	public boolean hasExtraLayers = true;
 
 	public ModelCQRBiped(float modelSize, boolean hasExtraLayer) {
-		/*
-		 * super(modelSize); this.bipedCape = new ModelRenderer(this, 0, 0);
-		 * this.bipedCape.setTextureSize(64, 32); this.bipedCape.addBox(-5.0F, 0.0F,
-		 * -1.0F, 10, 16, 1, modelSize);
-		 * 
-		 * initExtraLayer(modelSize);
-		 */
 		this(modelSize, 0, 64, 64, hasExtraLayer);
 	}
 
@@ -85,34 +78,25 @@ public class ModelCQRBiped extends ModelBiped {
 	 * time(so that arms and legs swing back and forth) and par2 represents how
 	 * "far" arms and legs can swing at most.
 	 */
+	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scaleFactor, Entity entityIn) {
-		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-
 		if (entityIn.isSneaking()) {
 			this.bipedCape.rotationPointY = 2.0F;
 		} else {
 			this.bipedCape.rotationPointY = 0.0F;
 		}
-
+		
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
 			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
 				renderSpellAnimation(entityIn, ageInTicks);
 			}
-			
-			if(cqrEnt.isSitting()) {
-				this.bipedRightArm.rotateAngleX += -((float) Math.PI / 5F);
-				this.bipedLeftArm.rotateAngleX += -((float) Math.PI / 5F);
-				this.bipedRightLeg.rotateAngleX = -1.4137167F;
-				this.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
-				this.bipedRightLeg.rotateAngleZ = 0.07853982F;
-				this.bipedLeftLeg.rotateAngleX = -1.4137167F;
-				this.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
-				this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
-			}
+			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
 		}
 
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);

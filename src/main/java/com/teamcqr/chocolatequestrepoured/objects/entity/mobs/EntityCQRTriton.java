@@ -34,5 +34,10 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_TRITON.getLootTable();
 	}
+	
+	@Override
+	public boolean isSitting() {
+		return false;
+	}
 
 }

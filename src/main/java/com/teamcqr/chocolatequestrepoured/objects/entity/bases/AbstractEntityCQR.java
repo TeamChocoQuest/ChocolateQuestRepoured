@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import java.util.Random;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -7,8 +8,10 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
@@ -63,6 +66,8 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -80,17 +85,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte)0;
-	
+	public ItemStack prevPotion;
+
 	//Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
-	protected static final DataParameter<Integer> HEALING_POTIONS_CLIENT = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	
+	//Client only
+	@SideOnly(Side.CLIENT)
+	protected int currentSpeechBubbleID = 0;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
-		this.setSize(0.6F, 1.8F);
+		//this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
 		this.experienceValue = 5;
 	}
 	@Override
@@ -99,7 +108,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		
 		this.dataManager.register(SIZE_VAR, 0F);
 		this.dataManager.register(IS_SITTING, false);
-		this.dataManager.register(HEALING_POTIONS_CLIENT, 3);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
 	}
@@ -168,6 +176,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
+		//Adapt size of hitbox
+		this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -187,12 +197,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 
-		if(this.usedPotions > (byte)0) {
-			compound.setByte("usedHealingPotions", usedPotions);
-		}
+		compound.setByte("usedHealingPotions", usedPotions);
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
+		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
-		compound.setBoolean("isSitting", this.dataManager.get(AbstractEntityCQR.IS_SITTING));
 	}
 
 	@Override
@@ -207,17 +215,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 
-		if(compound.hasKey("usedHealingPotions")) {
-			this.usedPotions = compound.getByte("usedHealingPotions");
-		}
-
-		if(compound.hasKey("sizeVariation")) {
-			//this.sizeVariation = compound.getDouble("sizeVariation");
-			this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
-		}
-		if(compound.hasKey("isSitting")) {
-			this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
-		}
+		this.usedPotions = compound.getByte("usedHealingPotions");
+		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
+		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 	}
 
@@ -229,21 +229,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 				
 				if (stack.getItem() instanceof ItemArmor) {
 					EntityEquipmentSlot slot = getSlotForItemStack(stack);
-					
-					this.setItemStackToSlot(slot, stack);
+
 					player.setHeldItem(hand, this.getItemStackFromSlot(slot));
+					this.setItemStackToSlot(slot, stack);
 					return true;
 				}
 				
 				if (stack.getItem() instanceof ItemSword) {
-					this.setHeldItem(EnumHand.MAIN_HAND, stack);
 					player.setHeldItem(hand, this.getHeldItemMainhand());
+					this.setHeldItem(EnumHand.MAIN_HAND, stack);
 					return true;
 				}
 				
 				if (stack.getItem() instanceof ItemShield) {
-					this.setHeldItem(EnumHand.OFF_HAND, stack);
 					player.setHeldItem(hand, this.getHeldItemOffhand());
+					this.setHeldItem(EnumHand.OFF_HAND, stack);
 					return true;
 				}
 				
@@ -286,42 +286,55 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!this.world.isRemote && this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] {this}, false, null, world, this.getPosition());
 			this.setDead();
 		}
+
+		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		if (!this.world.isRemote && stack != this.prevPotion) {
+			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.PotionSlot.getIndex(), stack));
+		}
+		this.prevPotion = stack;
 	}
 
-	// Entity Mob
+	@Override
 	public SoundCategory getSoundCategory() {
 		return SoundCategory.HOSTILE;
 	}
 
+	@Override
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
 		super.onLivingUpdate();
 	}
 
+	@Override
 	protected SoundEvent getSwimSound() {
 		return SoundEvents.ENTITY_HOSTILE_SWIM;
 	}
 
+	@Override
 	protected SoundEvent getSplashSound() {
 		return SoundEvents.ENTITY_HOSTILE_SPLASH;
 	}
 
+	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_HOSTILE_HURT;
 	}
 
+	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_HOSTILE_DEATH;
 	}
 
+	@Override
 	protected SoundEvent getFallSound(int heightIn) {
 		return heightIn > 4 ? SoundEvents.ENTITY_HOSTILE_BIG_FALL : SoundEvents.ENTITY_HOSTILE_SMALL_FALL;
 	}
 
+	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		int i = 0;
@@ -373,14 +386,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		return flag;
 	}
 
+	@Override
 	protected boolean canDropLoot() {
 		return true;
-	}
-
-	public boolean isPreventingPlayerRest(EntityPlayer playerIn) {
-		//DONE: Replace with faction system, returns true, when the player is the enemy
-		//return true;
-		return getFaction() == null || getFaction().isEntityEnemy(playerIn);
 	}
 
 	// Chocolate Quest Repoured
@@ -506,8 +514,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (stack.getItem() instanceof ItemPotionHealing) {
 			return stack.getCount();
 		}
-		//return 0;
-		return this.dataManager.get(HEALING_POTIONS_CLIENT);
+		return 0;
 	}
 
 	public void setHealingPotions(int amount) {
@@ -517,23 +524,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		} else {
 			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
 		}
-		this.dataManager.set(HEALING_POTIONS_CLIENT, amount);
-	}
-
-	public void removeHealingPotion() {
-		ItemStack stack;
-		if (this.holdingPotion) {
-			stack = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-
-		} else {
-			stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
-		}
-		if (stack.getItem() instanceof ItemPotionHealing) {
-			stack.shrink(1);
-		}
-		int currVal = this.dataManager.get(HEALING_POTIONS_CLIENT);
-		this.dataManager.set(HEALING_POTIONS_CLIENT, currVal - 1);
-		//System.out.println("byte value on watcher: " + this.dataManager.get(healingPotions));
 	}
 
 	public ItemStack getItemStackFromExtraSlot(EntityEquipmentExtraSlot slot) {
@@ -544,19 +534,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public void setItemStackToExtraSlot(EntityEquipmentExtraSlot slot, ItemStack stack) {
 		CapabilityExtraItemHandler capability = this.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
 		capability.setStackInSlot(slot.getIndex(), stack);
-		//Potion layer stuff
-		if(slot == EntityEquipmentExtraSlot.PotionSlot) {
-			if(stack.getItem() instanceof ItemPotionHealing) {
-				this.dataManager.set(HEALING_POTIONS_CLIENT, stack.getCount());
-			} 
-			else {
-				/*if(getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemPotionHealing) {
-					this.dataManager.set(healingPotions, getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getCount());
-				} else {*/
-					this.dataManager.set(HEALING_POTIONS_CLIENT, 0);
-				//}
-			}
-		}
 	}
 
 	public void swapWeaponAndPotionSlotItemStacks() {
@@ -662,6 +639,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public boolean isLeader() {
 		//TODO: Implement team building
 		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public ESpeechBubble getCurrentSpeechBubble() {
+		return ESpeechBubble.values()[this.currentSpeechBubbleID];
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void chooseNewRandomSpeechBubble() {
+		Random rdm2 = new Random();
+		rdm2.setSeed(this.ticksExisted / 160 + getEntityId());
+		this.currentSpeechBubbleID = rdm2.nextInt(ESpeechBubble.values().length);
 	}
 
 }
