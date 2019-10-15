@@ -120,7 +120,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 			((AbstractEntityCQR)talkingPartner).setChatting(false);
 		}*/
 		talkingPartner = null;
-		if(entity.isSitting()) {
+		if(entity.isChatting() || entity.isSitting()) {
 			entity.setSitting(false);
 			entity.setChatting(false);
 		}
