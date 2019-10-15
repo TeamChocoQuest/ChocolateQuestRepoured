@@ -138,7 +138,40 @@ public class ModelCQRTriton extends ModelCQRBiped {
     		float headPitch, float scaleFactor, Entity entityIn) {
     	super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
     	
+    	//System.out.println("Limb swing: " + limbSwing);
+    	//System.out.println("Limb swing amount: " + limbSwingAmount);
+    	if(Math.abs(limbSwingAmount) > 0.1) {
+    		renderSlitheringTail(ageInTicks, 1.5F);
+    		renderSlitheringTailEnd(ageInTicks, 1.0F, 1.5F);
+    	} else {
+    		renderSlitheringTailEnd(ageInTicks, 0.5F, 1.0F);
+    	}
+    	
     	renderFaceTentaclesAnimation(ageInTicks);
+    }
+    
+    protected void renderSlitheringTail(float ageInTicks, float multiplierForAngle) {
+    	float speedMultiplier = 10;
+    	float sine = new Float(Math.sin( ((2F *Math.PI) / speedMultiplier) * ageInTicks)) /1.5F;
+    	sine *= multiplierForAngle;
+    	float sineTmp = sine;
+    	this.tail1.rotationPointX = sine;
+    	sine *= 0.85;
+    	this.tail2.rotationPointX = -sine -sineTmp;
+    	sineTmp = sine;
+    	sine *= 0.8;
+    	this.tail3.rotationPointX = sine +sineTmp;
+    }
+    
+    protected void renderSlitheringTailEnd(float ageInTicks, float multiplierForAngle, float speedMultiplier) {
+    	float angleY = new Float(Math.sin( ((2F *Math.PI) / (50 /speedMultiplier)) * ageInTicks)) /4F;
+    	angleY *= multiplierForAngle;
+    	
+    	this.tailEnd1.rotateAngleY = angleY;
+    	angleY /= 1.125F;
+    	this.tailEnd2.rotateAngleY = angleY;
+    	angleY /= 1.125F;
+    	this.tailEnd3.rotateAngleY = angleY;
     }
     
     protected void renderFaceTentaclesAnimation(float ageInTicks) {
