@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
-
 import mcalibrary.IMCAnimatedEntity;
 import mcalibrary.client.MCAModelRenderer;
 import mcalibrary.math.Quaternion;
@@ -21,7 +19,7 @@ public abstract class AnimationHandler {
 	/** Owner of this handler. */
 	private IMCAnimatedEntity animatedEntity;
 	/** List of all the activate animations of this Entity. */
-	public ArrayList<Channel> animCurrentChannels = new ArrayList();
+	public ArrayList<Channel> animCurrentChannels = new ArrayList<>();
 	/** Previous time of every active animation. */
 	public HashMap<String, Long> animPrevTime = new HashMap<String, Long>();
 	/** Current frame of every active animation. */
@@ -202,7 +200,7 @@ public abstract class AnimationHandler {
 	 * Must be called only by the model class.
 	 */
 	@SideOnly(Side.CLIENT)
-	public static void performAnimationInModel(HashMap<String, MCAModelRenderer> parts, EntityCQRTriton entity)
+	public static void performAnimationInModel(HashMap<String, MCAModelRenderer> parts, IMCAnimatedEntity entity)
 	{
 		for (Map.Entry<String, MCAModelRenderer> entry : parts.entrySet()) {
 			String boxName = entry.getKey();
