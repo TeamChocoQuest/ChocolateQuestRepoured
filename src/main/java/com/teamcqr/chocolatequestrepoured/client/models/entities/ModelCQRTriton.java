@@ -132,4 +132,39 @@ public class ModelCQRTriton extends ModelCQRBiped {
         modelRenderer.rotateAngleY = y;
         modelRenderer.rotateAngleZ = z;
     }
+    
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+    		float headPitch, float scaleFactor, Entity entityIn) {
+    	super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    	
+    	renderFaceTentaclesAnimation(ageInTicks);
+    }
+    
+    protected void renderFaceTentaclesAnimation(float ageInTicks) {
+    	float yAngle = new Float(Math.sin( ((2F *Math.PI) / 75) * ageInTicks) +1);
+    	yAngle /= 2.5F;
+    	
+    	this.mouthTentacle1.rotateAngleY = yAngle;
+    	this.mouthTentacle2.rotateAngleY = yAngle /2.5F;
+    	this.mouthTentacle3.rotateAngleY = -(yAngle /2.5F);
+    	this.mouthTentacle4.rotateAngleY = -yAngle;
+    	
+    	
+    	float xAngle = new Float(Math.sin( ((2F *Math.PI) / 50) * ageInTicks + (Math.PI / 8)));
+    	xAngle /= 6F;
+    	this.mouthTentacle1.rotateAngleX = xAngle -0.6981317007977318F;
+    	
+    	xAngle = new Float(Math.sin( ((2F *Math.PI) / 50) * ageInTicks + 3*(Math.PI / 8)));
+    	xAngle /= 6F;
+    	this.mouthTentacle2.rotateAngleX = xAngle -0.6981317007977318F;
+    	
+    	xAngle = new Float(Math.sin( ((2F *Math.PI) / 50) * ageInTicks + 5*(Math.PI / 8)));
+    	xAngle /= 6F;
+    	this.mouthTentacle3.rotateAngleX = xAngle -0.6981317007977318F;
+    	
+    	xAngle = new Float(Math.sin( ((2F *Math.PI) / 50) * ageInTicks + 7*(Math.PI / 8)));
+    	xAngle /= 6F;
+    	this.mouthTentacle4.rotateAngleX = xAngle -0.6981317007977318F;
+    }
 }
