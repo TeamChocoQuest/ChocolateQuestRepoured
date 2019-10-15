@@ -83,13 +83,16 @@ public class ItemMusket extends ItemRevolver {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (!player.getHeldItemOffhand().isEmpty()) {
-					if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
-						player.entityDropItem(player.getHeldItemOffhand(), 0F);
-					}
+				if (player.getHeldItemMainhand() == stack)
+				{
+					if (!player.getHeldItemOffhand().isEmpty()) {
+						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
+							player.entityDropItem(player.getHeldItemOffhand(), 0F);
+						}
 
-					if (!player.capabilities.isCreativeMode) {
-						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						if (!player.capabilities.isCreativeMode) {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						}
 					}
 				}
 			}
