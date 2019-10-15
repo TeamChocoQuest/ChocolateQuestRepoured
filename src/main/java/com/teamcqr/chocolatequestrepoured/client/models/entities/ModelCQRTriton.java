@@ -40,7 +40,7 @@ public class ModelCQRTriton extends ModelCQRBiped {
         this.tail2.addBox(-3.0F, 0.0F, 0.0F, 6, 4, 4, modelSize);
         
         this.tail1 = new ModelRenderer(this, 0, 56);
-        this.tail1.setRotationPoint(0.0F, 12.0F, -1.5F);
+        this.tail1.setRotationPoint(0.0F, 12.0F, -1.55F);
         this.tail1.addBox(-4.0F, 0.0F, 0.0F, 8, 4, 4, modelSize);
         
         this.bipedBody = new ModelRenderer(this, 0, 16);
