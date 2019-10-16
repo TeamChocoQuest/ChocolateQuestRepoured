@@ -25,6 +25,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         this.roomType = RoomType.STAIRCASE_DIRECTED;
         this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
+        this.defaultCeiling = false;
 
         upperStairWidth = 0;
 
