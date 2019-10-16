@@ -73,7 +73,7 @@ public class CastleRoomLandingDirected extends CastleRoom
     @Override
     public boolean reachableFromSide(EnumFacing side)
     {
-        return (side == stairStartSide);
+        return (side == stairStartSide || side == stairStartSide.getOpposite());
     }
 
     @Override
