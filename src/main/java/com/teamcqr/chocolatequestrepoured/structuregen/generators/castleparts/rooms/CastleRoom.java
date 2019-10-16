@@ -17,14 +17,30 @@ public abstract class CastleRoom
 {
     public enum RoomType
     {
-        NONE,
-        HALLWAY,
-        KITCHEN,
-        STAIRCASE_DIRECTED,
-        STAIRCASE_SPIRAL,
-        LANDING_DIRECTED,
-        LANDING_SPIRAL,
-        TOWER_SQUARE
+        NONE(0, "None", false),
+        HALLWAY(1, "Hallway", false),
+        KITCHEN(2, "Kitchen", false),
+        STAIRCASE_DIRECTED(3, "Directed Stairs", true),
+        STAIRCASE_SPIRAL(4, "Spiral Stairs", true),
+        LANDING_DIRECTED(5, "Directed Landing", true),
+        LANDING_SPIRAL(6, "Spiral Landng", true),
+        TOWER_SQUARE(7, "Square Tower", false);
+
+        private final int index;
+        private final String name;
+        private final boolean partOfStairs;
+
+        RoomType(int indexIn, String nameIn, boolean partOfStairsIn)
+        {
+            this.index = indexIn;
+            this.name = nameIn;
+            this.partOfStairs = partOfStairsIn;
+        }
+
+        public boolean isPartOfStairs()
+        {
+            return this.partOfStairs;
+        }
     }
 
     BlockPos startPos;
@@ -144,21 +160,16 @@ public abstract class CastleRoom
         }
     }
 
-    public void addWall(EnumFacing side, boolean force)
-    {
-        walls.add(side);
-    }
-
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int len = buildLength;
+        int hgt = height;
 
         if (walls.contains(EnumFacing.NORTH))
         {
-            for (int x = 0; x < len; x++)
+            for (int x = 0; x < buildLength; x++)
             {
-                for (int y = 0; y < height / 2; y++)
+                for (int y = 0; y < hgt; y++)
                 {
                     BlockPos pos = startPos.add(x + offsetX, y, offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
@@ -168,9 +179,9 @@ public abstract class CastleRoom
         }
         if (walls.contains(EnumFacing.SOUTH))
         {
-            for (int x = 0; x < len; x++)
+            for (int x = 0; x < buildLength; x++)
             {
-                for (int y = 0; y < height / 2; y++)
+                for (int y = 0; y < hgt; y++)
                 {
                     BlockPos pos = startPos.add(x + offsetX, y, buildLength + offsetZ - 1);
                     blocks.add(new BlockPlacement(pos, wallBlock));
@@ -179,9 +190,9 @@ public abstract class CastleRoom
         }
         if (walls.contains(EnumFacing.WEST))
         {
-            for (int z = 0; z < len; z++)
+            for (int z = 0; z < buildLength; z++)
             {
-                for (int y = 0; y < height / 2; y++)
+                for (int y = 0; y < hgt; y++)
                 {
                     BlockPos pos = startPos.add(offsetX, y, z + offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
@@ -190,15 +201,20 @@ public abstract class CastleRoom
         }
         if (walls.contains(EnumFacing.EAST))
         {
-            for (int z = 0; z < len; z++)
+            for (int z = 0; z < buildLength; z++)
             {
-                for (int y = 0; y < height / 2; y++)
+                for (int y = 0; y < hgt; y++)
                 {
                     BlockPos pos = startPos.add(buildLength + offsetX - 1, y, z + offsetZ);
                     blocks.add(new BlockPlacement(pos, wallBlock));
                 }
             }
         }
+    }
+
+    public void addWall(EnumFacing side, boolean force)
+    {
+        walls.add(side);
     }
 
     public void removeWall(EnumFacing side)
@@ -208,17 +224,17 @@ public abstract class CastleRoom
 
     public boolean hasDoorOnSide(EnumFacing side)
     {
-        return walls.contains(side);
-    }
-
-    public void addRoofEdge(EnumFacing side)
-    {
-        roofEdges.add(side);
+        return doorSides.contains(side);
     }
 
     public boolean hasWallOnSide(EnumFacing side)
     {
         return (walls.contains(side));
+    }
+
+    public void addRoofEdge(EnumFacing side)
+    {
+        roofEdges.add(side);
     }
 
     public boolean canBuildDoorOnSide(EnumFacing side)
@@ -250,9 +266,9 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < len; x++)
             {
-                BlockPos pos = startPos.add(x + offsetX, height + 1, offsetZ);
+                BlockPos pos = startPos.add(x + offsetX, height, offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
-                if (ShouldBuildCrenellation(len, x))
+                if (shouldBuildCrenellation(len, x))
                 {
                     blocks.add(new BlockPlacement(pos.up(), wallBlock));
                 }
@@ -262,9 +278,9 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < len; x++)
             {
-                BlockPos pos = startPos.add(x + offsetX, height + 1, offsetZ + buildLength - 1);
+                BlockPos pos = startPos.add(x + offsetX, height, offsetZ + buildLength - 1);
                 blocks.add(new BlockPlacement(pos, wallBlock));
-                if (ShouldBuildCrenellation(len, x))
+                if (shouldBuildCrenellation(len, x))
                 {
                     blocks.add(new BlockPlacement(pos.up(), wallBlock));
                 }
@@ -274,9 +290,9 @@ public abstract class CastleRoom
         {
             for (int z = 0; z < len; z++)
             {
-                BlockPos pos = startPos.add(offsetX, height + 1, z + offsetZ);
+                BlockPos pos = startPos.add(offsetX, height, z + offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
-                if (ShouldBuildCrenellation(len, z))
+                if (shouldBuildCrenellation(len, z))
                 {
                     blocks.add(new BlockPlacement(pos.up(), wallBlock));
                 }
@@ -286,9 +302,9 @@ public abstract class CastleRoom
         {
             for (int z = 0; z < len; z++)
             {
-                BlockPos pos = startPos.add(offsetX + buildLength - 1, height + 1, z + offsetZ);
+                BlockPos pos = startPos.add(offsetX + buildLength - 1, height, z + offsetZ);
                 blocks.add(new BlockPlacement(pos, wallBlock));
-                if (ShouldBuildCrenellation(len, z))
+                if (shouldBuildCrenellation(len, z))
                 {
                     blocks.add(new BlockPlacement(pos.up(), wallBlock));
                 }
@@ -296,7 +312,7 @@ public abstract class CastleRoom
         }
     }
 
-    private boolean ShouldBuildCrenellation(int wallLength, int index)
+    private boolean shouldBuildCrenellation(int wallLength, int index)
     {
         return (index == 0 || index == wallLength - 1 || index % 2 == 0);
     }

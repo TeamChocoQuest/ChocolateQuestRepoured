@@ -38,9 +38,10 @@ public class CastleRoomSelector
 
     public void generateRooms(ArrayList<BlockPlacement> blocks)
     {
-        for (CastleRoom room : grid.getRooms())
+        for (RoomGridCell cell : grid.getCellListCopy())
         {
-            room.generate(blocks);
+            cell.setRoomDoors();
+            cell.generateIfPopulated(blocks);
         }
     }
 
@@ -236,11 +237,11 @@ public class CastleRoomSelector
 
                     if (floor == 0)
                     {
-                        canBuild = grid.cellIsOuterEdge(cell, side) && grid.getAdjacentCell(cell, side) != null;
+                        canBuild = grid.cellIsOuterEdge(cell, side) && grid.canAttachTower(cell, side);
                     }
                     else
                     {
-                        canBuild = grid.adjacentCellIsWalkableRoof(cell, side) && !cell.getRoom().hasDoorOnSide(side);
+                        canBuild = grid.adjacentCellIsWalkableRoof(cell, side) && grid.canAttachTower(cell, side);
                     }
 
                     if (canBuild)
@@ -285,14 +286,14 @@ public class CastleRoomSelector
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, alignment);
                 if (adjacent.isPopulated())
                 {
-                    adjacent.getRoom().addDoorOnSideCentered(alignment.getOpposite());
+                    adjacent.addDoorOnSide(alignment.getOpposite());
                 }
                 else
                 {
                     cell.getRoom().addWall(alignment, false);
                     if (grid.adjacentCellIsWalkableRoof(cell, alignment))
                     {
-                        cell.getRoom().addDoorOnSideCentered(alignment);
+                        cell.addDoorOnSide(alignment);
                     }
                 }
             }
@@ -333,7 +334,8 @@ public class CastleRoomSelector
         {
             HashSet<EnumFacing> doorDirections = new HashSet<>(); //Sides of this floor that already have exits
 
-            ArrayList<RoomGridCell> floorRooms = grid.getAllCellsWhere(r -> r.getFloor() == 0 && r.isPopulated());
+            final int f = floor;
+            ArrayList<RoomGridCell> floorRooms = grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated());
             Collections.shuffle(floorRooms);
 
             for (RoomGridCell cell : floorRooms)
@@ -357,7 +359,7 @@ public class CastleRoomSelector
                         {
                             if (floor == 0) cell.setReachable();
                             doorDirections.add(side);
-                            cell.getRoom().addDoorOnSideRandom(side);
+                            cell.addDoorOnSide(side);
                             break;
                         }
                     }
@@ -419,12 +421,12 @@ public class CastleRoomSelector
             CastleRoomStaircaseDirected stairs = new CastleRoomStaircaseDirected(getRoomStart(cell), roomSize, floorHeight,
                     side);
             cell.setRoom(stairs);
-            cell.getRoom().addDoorOnSideRandom(side);
+            addDoorToRoomCentered(cell, side);
 
             aboveCell.setRoom(new CastleRoomLandingDirected(getRoomStart(aboveCell), roomSize, floorHeight,
                     stairs));
             aboveCell.setReachable();
-            aboveCell.getRoom().addDoorOnSideRandom(side);
+            addDoorToRoomCentered(cell, side);
 
             return true;
         }
@@ -515,8 +517,8 @@ public class CastleRoomSelector
         for (int floor = 0; floor < maxFloors; floor++)
         {
             final int f = floor;
-            ArrayList<RoomGridCell> unreachable = grid.getAllCellsWhere(c -> c.getFloor() == f && !c.isReachable() && c.isPopulated());
-            ArrayList<RoomGridCell> reachable = grid.getAllCellsWhere(c -> c.getFloor() == f && c.isReachable() && c.isPopulated());
+            ArrayList<RoomGridCell> unreachable = grid.getAllCellsWhere(c -> c.getFloor() == f && c.isValidPathStart());
+            ArrayList<RoomGridCell> reachable = grid.getAllCellsWhere(c -> c.getFloor() == f && c.isValidPathDestination());
 
             while (!unreachable.isEmpty() && !reachable.isEmpty())
             {
@@ -527,29 +529,26 @@ public class CastleRoomSelector
 
                 LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom);
 
-                for (PathNode node : destToSrcPath)
+                if (!destToSrcPath.isEmpty())
                 {
-                    RoomGridCell cell = grid.getCellAt(node.getCell().getGridPosition());
-                    if (cell != null)
+                    for (PathNode node : destToSrcPath)
                     {
-                        if (node.getParent() != null)
+                        RoomGridCell cell = grid.getCellAt(node.getCell().getGridPosition());
+                        if (cell != null)
                         {
-                            if (cell.getRoom().hasWallOnSide(node.getParentDirection()))
+                            if (node.getParent() != null)
                             {
-                                cell.getRoom().addDoorOnSideRandom(node.getParentDirection());
-                            } else
-                            {
-                                RoomGridCell parentCell = grid.getAdjacentCell(cell, node.getParentDirection());
-                                if (parentCell != null)
-                                {
-                                    parentCell.getRoom().addDoorOnSideRandom(node.getParentDirection().getOpposite());
-                                }
+                                addDoorToRoomCentered(cell, node.getParentDirection());
                             }
+                            cell.setReachable();
+                            unreachable.remove(cell);
+                            reachable.add(cell);
                         }
-                        cell.setReachable();
-                        unreachable.remove(cell);
-                        reachable.add(cell);
                     }
+                }
+                else
+                {
+                    System.out.println("Failed to find path from " + srcRoom.getGridPosition().toString() + " to" + destRoom.getGridPosition().toString());
                 }
             }
         }
@@ -584,7 +583,7 @@ public class CastleRoomSelector
             for (EnumFacing direction : EnumFacing.HORIZONTALS)
             {
                 RoomGridCell neighborCell = grid.getAdjacentCell(currentNode.getCell(), direction);
-                if (neighborCell != null && neighborCell.isPopulated()/* && neighborCell.getRoom().getRoomType() != CastleRoom.RoomType.STAIRCASE_DIRECTED*/)
+                if (neighborCell != null && neighborCell.isPopulated() && neighborCell.reachableFromSide(direction.getOpposite()))
                 {
                     PathNode neighborNode = new PathNode(currentNode, direction.getOpposite(), neighborCell, neighborG, neighborCell.distanceTo(endCell));
 
@@ -679,7 +678,7 @@ public class CastleRoomSelector
 
     private void determineRoofs()
     {
-        for (RoomGridCell cell : grid.getSelectionListCopy())
+        for (RoomGridCell cell : grid.getCellListCopy())
         {
             if (cell.isPopulated() && !grid.adjacentCellIsPopulated(cell, EnumFacing.UP))
             {
@@ -693,39 +692,32 @@ public class CastleRoomSelector
 
     private void addRoofEdgeIfRequired(RoomGridCell cell, EnumFacing side)
     {
+        boolean shouldAdd = true;
         RoomGridCell adjacent = grid.getAdjacentCell(cell, side);
+        RoomGridCell above = grid.getAdjacentCell(cell, EnumFacing.UP);
 
         if (adjacent == null || !adjacent.isPopulated() || adjacent.getRoom().isTower())
+        {
+            cell.getRoom().addRoofEdge(side);
+        }
+        else if (above != null &&
+                grid.getAdjacentCell(above, side).isPopulated() &&
+                grid.getAdjacentCell(above, side).getRoom().isTower())
         {
             cell.getRoom().addRoofEdge(side);
         }
     }
 
 
-    private void addEntranceToSide(EnumFacing side)
+    private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)
     {
-        ArrayList<RoomGridCell> rooms = grid.getSelectionListCopy();
-        rooms.removeIf(r -> r.getFloor() > 0);
-        if (side == EnumFacing.NORTH)
+        if (cell.getRoom().canBuildDoorOnSide(side))
         {
-            rooms.removeIf(r -> r.getGridZ() > 0);
+            cell.addDoorOnSide(side);
         }
-        else if (side == EnumFacing.SOUTH)
+        else
         {
-            rooms.removeIf(r -> r.getGridZ() < numSlotsZ - 1);
-        }
-        else if (side == EnumFacing.WEST)
-        {
-            rooms.removeIf(r -> r.getGridX() > 0);
-        }
-        else if (side == EnumFacing.EAST)
-        {
-            rooms.removeIf(r -> r.getGridX() < numSlotsX - 1);
-        }
-
-        if (!rooms.isEmpty())
-        {
-            rooms.get(random.nextInt(rooms.size())).getRoom().addDoorOnSideRandom(side);
+            grid.getAdjacentCell(cell, side).addDoorOnSide(side.getOpposite());
         }
     }
 
@@ -740,12 +732,6 @@ public class CastleRoomSelector
         int floor = selection.getFloor();
         int gridZ = selection.getGridZ();
         return startPos.add(gridX * roomSize, floor * floorHeight, gridZ * roomSize);
-    }
-
-    private void addRoomHallway(int floor, int x, int z, CastleRoomHallway.Alignment alignment)
-    {
-        CastleRoom room = new CastleRoomHallway(getRoomStart(floor, x, z), roomSize, floorHeight, alignment);
-        grid.addRoomAt(room, floor, x, z);
     }
 
     private int getLayerFromFloor(int floor)
