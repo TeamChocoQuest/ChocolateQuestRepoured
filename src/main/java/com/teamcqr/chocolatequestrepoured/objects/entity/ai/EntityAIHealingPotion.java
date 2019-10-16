@@ -110,7 +110,6 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		if (this.isHealing) {
 			if (this.entity.isHoldingPotion()) {
 				this.entity.swapWeaponAndPotionSlotItemStacks();
-				this.entity.removeHealingPotion();
 			}
 			this.entity.resetActiveHand();
 		}
