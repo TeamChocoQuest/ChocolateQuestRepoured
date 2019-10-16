@@ -1,11 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 
 public class ModelCQRBiped extends ModelBiped {
 
@@ -19,13 +22,6 @@ public class ModelCQRBiped extends ModelBiped {
 	public boolean hasExtraLayers = true;
 
 	public ModelCQRBiped(float modelSize, boolean hasExtraLayer) {
-		/*
-		 * super(modelSize); this.bipedCape = new ModelRenderer(this, 0, 0);
-		 * this.bipedCape.setTextureSize(64, 32); this.bipedCape.addBox(-5.0F, 0.0F,
-		 * -1.0F, 10, 16, 1, modelSize);
-		 * 
-		 * initExtraLayer(modelSize);
-		 */
 		this(modelSize, 0, 64, 64, hasExtraLayer);
 	}
 
@@ -33,7 +29,7 @@ public class ModelCQRBiped extends ModelBiped {
 			boolean hasExtraLayer) {
 		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn);
 		this.hasExtraLayers = hasExtraLayer;
-		
+
 		this.bipedCape = new ModelRenderer(this, 0, 0);
 		this.bipedCape.setTextureSize(64, 32);
 		this.bipedCape.addBox(-5.0F, 0.0F, -1.0F, 10, 16, 1, modelSize);
@@ -82,21 +78,56 @@ public class ModelCQRBiped extends ModelBiped {
 	 * time(so that arms and legs swing back and forth) and par2 represents how
 	 * "far" arms and legs can swing at most.
 	 */
+	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scaleFactor, Entity entityIn) {
-		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-
-		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
-		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
-		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
-		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
-		copyModelAngles(this.bipedBody, this.bipedBodyWear);
-
 		if (entityIn.isSneaking()) {
 			this.bipedCape.rotationPointY = 2.0F;
 		} else {
 			this.bipedCape.rotationPointY = 0.0F;
 		}
+		
+		if (entityIn instanceof AbstractEntityCQR) {
+			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
+			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+				renderSpellAnimation(entityIn, ageInTicks);
+			}
+			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
+		}
+
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		
+		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
+		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
+		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
+		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
+		copyModelAngles(this.bipedBody, this.bipedBodyWear);
+	}
+	
+	protected void renderSpellAnimation(Entity entityIn, float ageInTicks) {
+		this.bipedRightArm.rotationPointZ = 0.0F;
+		this.bipedRightArm.rotationPointX = -5.0F;
+		this.bipedLeftArm.rotationPointZ = 0.0F;
+		this.bipedLeftArm.rotationPointX = 5.0F;
+		this.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		this.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		this.bipedRightArm.rotateAngleZ = 2.3561945F;
+		this.bipedLeftArm.rotateAngleZ = -2.3561945F;
+		this.bipedRightArm.rotateAngleY = 0.0F;
+		this.bipedLeftArm.rotateAngleY = 0.0F;
+
+		// Particles
+		double dx = 0.7D;
+		double dy = 0.5D;
+		double dz = 0.2D;
+		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
+				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
+		float f1 = MathHelper.cos(f);
+		float f2 = MathHelper.sin(f);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
+		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
+				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
 	}
 
 	public void setVisible(boolean visible) {
@@ -122,8 +153,11 @@ public class ModelCQRBiped extends ModelBiped {
 			this.bipedRightArmwear.render(scale);
 			this.bipedBodyWear.render(scale);
 		}
-		if(entityIn instanceof AbstractEntityCQR && ((AbstractEntityCQR)entityIn).hasCape()) {
-			this.bipedCape.render(scale);
+		if (entityIn instanceof AbstractEntityCQR) {
+			AbstractEntityCQR entCQR = ((AbstractEntityCQR) entityIn);
+			if (entCQR.hasCape()) {
+				this.bipedCape.render(scale);
+			}
 		}
 
 		GlStateManager.popMatrix();
@@ -136,5 +170,7 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedRightLegwear.showModel = visible;
 		this.bipedBodyWear.showModel = visible;
 	}
+
+	
 
 }

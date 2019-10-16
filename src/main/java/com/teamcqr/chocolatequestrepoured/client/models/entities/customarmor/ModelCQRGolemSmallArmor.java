@@ -12,8 +12,6 @@ import net.minecraft.entity.Entity;
 
 public class ModelCQRGolemSmallArmor extends ModelBiped {
 
-	public boolean isAttacking;
-
 	public ModelCQRGolemSmallArmor(float scale) {
 		super(scale);
 

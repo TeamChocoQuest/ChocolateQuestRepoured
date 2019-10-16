@@ -1,8 +1,8 @@
 {
 	"credit": "Made by Silentine, with Blockbench",
 	"textures": {
-		"0": "cqrepoured:items/musket",
-		"particle": "cqrepoured:items/musket"
+		"0": "cqrepoured:items/musket/musket",
+		"particle": "cqrepoured:items/musket/musket"
 	},
 	"elements": [
 		{

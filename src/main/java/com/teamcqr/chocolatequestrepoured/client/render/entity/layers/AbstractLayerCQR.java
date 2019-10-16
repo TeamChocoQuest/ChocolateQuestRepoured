@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public abstract class AbstractLayerCQR implements LayerRenderer<AbstractEntityCQR> {
 
-	protected final RenderCQREntity entityRenderer;
+	protected final RenderCQREntity<?> entityRenderer;
 
-	public AbstractLayerCQR(RenderCQREntity livingEntityRendererIn) {
+	public AbstractLayerCQR(RenderCQREntity<?> livingEntityRendererIn) {
 		this.entityRenderer = livingEntityRendererIn;
 	}
 

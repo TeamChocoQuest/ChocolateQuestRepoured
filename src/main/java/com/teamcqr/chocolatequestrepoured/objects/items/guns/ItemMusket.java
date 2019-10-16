@@ -11,7 +11,9 @@ import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
@@ -69,6 +71,29 @@ public class ItemMusket extends ItemRevolver {
 
 				if (itemstack.isEmpty()) {
 					player.inventory.deleteStack(itemstack);
+				}
+			}
+		}
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) 
+	{
+		if (!worldIn.isRemote) {
+			if (entityIn instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entityIn;
+
+				if (player.getHeldItemMainhand() == stack)
+				{
+					if (!player.getHeldItemOffhand().isEmpty()) {
+						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
+							player.entityDropItem(player.getHeldItemOffhand(), 0F);
+						}
+
+						if (!player.capabilities.isCreativeMode) {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						}
+					}
 				}
 			}
 		}

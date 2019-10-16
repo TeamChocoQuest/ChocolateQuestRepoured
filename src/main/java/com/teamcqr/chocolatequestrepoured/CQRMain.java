@@ -169,7 +169,7 @@ public class CQRMain
 			System.err.println("WARNING: Failed to instantiate entity loot tables!!");
 			ex.printStackTrace();
 		}
-
+		
 		//Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
