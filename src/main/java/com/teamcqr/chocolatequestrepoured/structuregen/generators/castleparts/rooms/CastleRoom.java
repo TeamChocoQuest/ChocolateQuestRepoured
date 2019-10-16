@@ -64,6 +64,7 @@ public abstract class CastleRoom
 
     protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
+    protected boolean defaultCeiling = false;
     protected Random random = new Random();
 
     protected HashSet<EnumFacing> walls;
@@ -88,8 +89,13 @@ public abstract class CastleRoom
     {
         generateRoom(blocks);
         generateWalls(blocks);
-        buildRoofEdges(blocks);
+        generateRoofEdges(blocks);
         generateDoors(blocks);
+
+        if (defaultCeiling)
+        {
+            generateDefaultCeiling(blocks);
+        }
     }
 
     public abstract void generateRoom(ArrayList<BlockPlacement> blocks);
@@ -257,7 +263,18 @@ public abstract class CastleRoom
         return false;
     }
 
-    protected void buildRoofEdges(ArrayList<BlockPlacement> blocks)
+    protected void generateDefaultCeiling(ArrayList<BlockPlacement> blocks)
+    {
+        for (int z = 0; z < buildLength - 1; z++)
+        {
+            for (int x = 0; x < buildLength - 1; x++)
+            {
+                blocks.add(new BlockPlacement(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState()));
+            }
+        }
+    }
+
+    protected void generateRoofEdges(ArrayList<BlockPlacement> blocks)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
         int len = buildLength;

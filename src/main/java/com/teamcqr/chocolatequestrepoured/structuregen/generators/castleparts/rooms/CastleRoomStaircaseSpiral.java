@@ -18,6 +18,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     {
         super(startPos, sideLength, height);
         this.roomType = RoomType.STAIRCASE_SPIRAL;
+        this.defaultCeiling = false;
 
         int centerX = sideLength / 2;
         int centerZ = sideLength / 2;
@@ -49,6 +50,10 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
                     else if (stairs.isPartOfStairs(pos))
                     {
                         blockToBuild = stairs.getBlock(pos);
+                    }
+                    else if (y == height - 1)
+                    {
+                        blockToBuild = Blocks.STONEBRICK.getDefaultState();
                     }
                     blocks.add(new BlockPlacement(pos, blockToBuild));
                 }

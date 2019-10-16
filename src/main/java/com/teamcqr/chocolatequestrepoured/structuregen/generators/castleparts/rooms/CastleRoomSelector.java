@@ -442,9 +442,12 @@ public class CastleRoomSelector
         {
             for (EnumFacing side : EnumFacing.HORIZONTALS)
             {
-                if (grid.adjacentCellIsSelected(cell, side) &&
-                    !grid.adjacentCellIsPopulated(cell, side) &&
+                RoomGridCell adjacent = grid.getAdjacentCell(cell, side);
+                if (adjacent != null &&
+                    adjacent.isSelectedForBuilding()&&
+                    !adjacent.isPopulated() &&
                     !grid.cellBordersRoomType(cell, CastleRoom.RoomType.LANDING_DIRECTED) &&
+                    !grid.cellBordersRoomType(adjacent, CastleRoom.RoomType.LANDING_DIRECTED) &&
                     grid.adjacentCellIsSelected(aboveCell, side) &&
                     !grid.adjacentCellIsPopulated(aboveCell, side))
                 {
