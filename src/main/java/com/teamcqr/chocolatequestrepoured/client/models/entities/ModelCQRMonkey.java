@@ -19,7 +19,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 	}
 
 	public ModelCQRMonkey(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
-		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn, false);
+		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn, true);
 		this.textureWidth = textureWidthIn;
 		this.textureHeight = textureHeightIn;
 
@@ -56,7 +56,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		this.bipedHead.addBox(-4.0F, 0.0F, -4.0F, 8, 8, 8, modelSize);
 
 		this.bipedRightArm = new ModelRenderer(this, 40, 16);
-		this.bipedRightArm.mirror = true;
+		//this.bipedRightArm.mirror = true;
 		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedRightArm.addBox(-3.0F, 0.0F, -2.0F, 4, 12, 4, modelSize);
 		this.setRotateAngle(bipedRightArm, -0.2617993877991494F, 0.0F, 0.0F);
@@ -67,25 +67,51 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		this.setRotateAngle(bipedLeftArm, -0.2617993877991494F, 0.0F, 0.0F);
 
 		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
-		this.bipedRightLeg.mirror = true;
+		//this.bipedRightLeg.mirror = true;
 		this.bipedRightLeg.setRotationPoint(-2.2F, 12.0F, 0.0F);
 		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize);
 
 		// Children
 		this.bipedHead.addChild(this.snout);
-		//Tail
+		// Tail
 		this.bipedBody.addChild(this.tail1);
 		this.tail2.addChild(this.tail3);
 		this.tail1.addChild(this.tail2);
 
+		//Clothing layer
+		this.bipedHeadwear = new ModelRenderer(this, 32, 0);
+		this.bipedHeadwear.addBox(-4.0F, 0.0F, -4.0F, 8, 8, 8, modelSize + 0.5F);
+		this.bipedHeadwear.setRotationPoint(0.0F, -6.0F, -5.0F);
+		
+		this.bipedBodyWear = new ModelRenderer(this, 16, 32);
+		this.bipedBodyWear.addBox(-4.0F, -0.4F, -6.5F, 8, 12, 4, modelSize + 0.25F);
+		this.bipedBodyWear.setRotationPoint(0.0F, 0.0F, 0.0F);
+		
+		this.bipedLeftArmwear = new ModelRenderer(this, 48, 48);
+		this.bipedLeftArmwear.addBox(-1.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+		this.bipedLeftArmwear.setRotationPoint(5.0F, 1.5F, -3.0F);
+		
+		this.bipedRightArmwear = new ModelRenderer(this, 40, 32);
+		this.bipedRightArmwear.addBox(-3.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+		this.bipedRightArmwear.setRotationPoint(-5.0F, 1.5F, -3.0F);
+
+		this.bipedLeftLegwear = new ModelRenderer(this, 0, 48);
+		this.bipedLeftLegwear.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+		this.bipedLeftLegwear.setRotationPoint(2.2F, 12.0F, 0.0F);
+		
+		this.bipedRightLegwear = new ModelRenderer(this, 0, 32);
+		this.bipedRightLegwear.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, modelSize + 0.25F);
+		this.bipedRightLegwear.setRotationPoint(-2.2F, 12.0F, 0.0F);
+		
+		//Copying angles
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 		copyModelAngles(this.bipedHead, this.bipedHeadwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
 		copyModelAngles(this.bipedRightArm, this.bipedRightArmwear);
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
-		
-		//copyModelRotationPoint(bipedHead, bipedHeadwear);
+
+		// copyModelRotationPoint(bipedHead, bipedHeadwear);
 	}
 
 	@Override
@@ -109,7 +135,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 1.5F, -3.0F);
-		
+
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 		copyModelAngles(this.bipedHead, this.bipedHeadwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);
@@ -117,7 +143,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		
-		//copyModelRotationPoint(bipedHead, bipedHeadwear);
+		// copyModelRotationPoint(bipedHead, bipedHeadwear);
 	}
 
 	/**
