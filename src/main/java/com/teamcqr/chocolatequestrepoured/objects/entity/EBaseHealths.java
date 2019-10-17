@@ -21,7 +21,7 @@ public enum EBaseHealths {
 	WALKER(40.0F),
 	ZOMBIE(25.0F),
 
-	BEES(15.0F),
+	WASPS(15.0F),
 	MANDRILS(30.0F),
 
 	MOUNTS(25.0F),
