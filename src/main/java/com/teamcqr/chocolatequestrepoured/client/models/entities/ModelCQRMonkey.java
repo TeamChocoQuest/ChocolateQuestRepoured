@@ -132,6 +132,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
 		this.setRotateAngle(bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
+		
 		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);
 		this.bipedLeftArm.setRotationPoint(5.0F, 1.5F, -3.0F);
@@ -143,7 +144,22 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		
-		// copyModelRotationPoint(bipedHead, bipedHeadwear);
+		if(Math.abs(limbSwingAmount) >0.1) {
+			renderTailAnimation(entityIn.ticksExisted, 1.5);
+		} else {
+			renderTailAnimation(entityIn.ticksExisted, 1.0);	
+		}
+		
+	}
+
+	protected void renderTailAnimation(float ageInTicks, double speedMultiplier) {
+		float angleY = new Float(Math.sin( ((2F *Math.PI) / (50 /speedMultiplier)) * ageInTicks)) /3F;
+		float angleX = new Float(Math.cos( ((2F *Math.PI) / (80 / speedMultiplier)) *ageInTicks)) /4F;
+		float angleZ = new Float(Math.cos( ((2F *Math.PI) / (100 / speedMultiplier)) *ageInTicks)) /3F;
+		this.tail1.rotateAngleY = angleY;
+		this.tail2.rotateAngleX = angleX *0.75F;
+		this.tail2.rotateAngleZ = -angleX *0.5F;
+		this.tail3.rotateAngleX = angleZ;
 	}
 
 	/**
