@@ -85,7 +85,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		
-		copyModelRotationPoint(bipedHead, bipedHeadwear);
+		//copyModelRotationPoint(bipedHead, bipedHeadwear);
 	}
 
 	@Override
@@ -106,7 +106,9 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
 		this.setRotateAngle(bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
+		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);
+		this.bipedLeftArm.setRotationPoint(5.0F, 1.5F, -3.0F);
 		
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 		copyModelAngles(this.bipedHead, this.bipedHeadwear);
@@ -115,7 +117,7 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		
-		copyModelRotationPoint(bipedHead, bipedHeadwear);
+		//copyModelRotationPoint(bipedHead, bipedHeadwear);
 	}
 
 	/**
