@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.ICastleAddon;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +23,7 @@ public class CastleRoomSelector
     private int numSlotsZ;
     private Random random;
     private RoomGrid grid;
+    private List<CastleAddonRoof> roofs;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random)
     {
@@ -32,6 +35,7 @@ public class CastleRoomSelector
         this.numSlotsX = numSlotsX;
         this.numSlotsZ = numSlotsZ;
         this.random = random;
+        this.roofs = new ArrayList<>();
 
         this.grid = new RoomGrid(maxFloors, numSlotsX, numSlotsZ, random);
     }
@@ -270,9 +274,11 @@ public class CastleRoomSelector
                 x, z, startFloor, alignment.toString(), towerSize);
 
         CastleRoomTowerSquare tower = null;
+        RoomGridCell cell = null;
+
         for (int floor = startFloor; floor < startFloor + height; floor++)
         {
-            RoomGridCell cell = grid.getCellAt(floor, x, z);
+            cell = grid.getCellAt(floor, x, z);
             if (cell == null)
             {
                 System.out.println("Tried to place a tower @ null");
@@ -298,6 +304,7 @@ public class CastleRoomSelector
                 }
             }
         }
+        
     }
 
     private void buildVerticalFloorHallway(int floor)
@@ -736,6 +743,7 @@ public class CastleRoomSelector
         int gridZ = selection.getGridZ();
         return startPos.add(gridX * roomSize, floor * floorHeight, gridZ * roomSize);
     }
+
 
     private int getLayerFromFloor(int floor)
     {
