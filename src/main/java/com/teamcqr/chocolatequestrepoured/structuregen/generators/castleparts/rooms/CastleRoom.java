@@ -355,6 +355,11 @@ public abstract class CastleRoom
         blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
     }
 
+    public BlockPos getRoofStartPosition()
+    {
+        return startPos.add(offsetX, height, offsetZ);
+    }
+
     protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation)
     {
         switch (rotation)
