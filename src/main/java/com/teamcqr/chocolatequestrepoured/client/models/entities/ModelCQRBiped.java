@@ -170,6 +170,12 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedRightLegwear.showModel = visible;
 		this.bipedBodyWear.showModel = visible;
 	}
+	
+	public static void copyModelRotationPoint(ModelRenderer source, ModelRenderer target) {
+		target.rotationPointX = source.rotationPointX;
+		target.rotationPointY = source.rotationPointY;
+		target.rotationPointZ = source.rotationPointZ;
+	}
 
 	
 
