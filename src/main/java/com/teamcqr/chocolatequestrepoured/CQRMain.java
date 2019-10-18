@@ -23,7 +23,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerato
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
-import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -174,7 +173,6 @@ public class CQRMain
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		ModMessages.registerMessages();
-		SoundsHandler.registerSounds();
 		ModCapabilities.registerCapabilities();
 	}
 	

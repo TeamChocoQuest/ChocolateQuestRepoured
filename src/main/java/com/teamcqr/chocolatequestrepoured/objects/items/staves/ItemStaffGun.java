@@ -6,8 +6,8 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
-import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -50,7 +50,7 @@ public class ItemStaffGun extends Item {
 	}
 
 	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
+		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
 				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swingArm(handIn);
 
