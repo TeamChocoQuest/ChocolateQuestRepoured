@@ -3,6 +3,8 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRMonkey;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRMonkeyArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
@@ -33,6 +35,17 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 				this.modelArmor = new ModelCQRMonkeyArmor(1.0F);
 			}
 		});
+	}
+	
+	@Override
+	protected void renderModel(EntityCQRMandril entitylivingbaseIn, float limbSwing, float limbSwingAmount,
+			float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		if(entitylivingbaseIn.isSitting()) {
+			GL11.glTranslatef(0, 0, 0.25F);
+		} else {
+			GL11.glTranslatef(0, 0, 0.15F);
+		}
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
 }
