@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
-import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -41,7 +41,7 @@ public class ItemStaffHealing extends Item {
 							itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 				}
 			}
-			entity.world.playSound(player.posX, player.posY, player.posZ, SoundsHandler.MAGIC, SoundCategory.MASTER,
+			entity.world.playSound(player.posX, player.posY, player.posZ, ModSounds.MAGIC, SoundCategory.MASTER,
 					4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
