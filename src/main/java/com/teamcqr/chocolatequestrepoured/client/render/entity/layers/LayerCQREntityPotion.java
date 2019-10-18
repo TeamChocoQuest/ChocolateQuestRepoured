@@ -26,16 +26,20 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity.getHealingPotions() > 0 && this.entityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
+			ModelRenderer body = model.bipedBody;
 
-			if (model.bipedBody.cubeList.size() > 0) {
-				ModelBox box = model.bipedBody.cubeList.get(0);
+			if (body.cubeList.size() > 0) {
+				ModelBox box = body.cubeList.get(0);
 
 				if (box != null) {
 					ItemStack stack = new ItemStack(ModItems.POTION_HEALING);
-					float x = 0.0625F * (model.bipedBody.rotationPointX + box.posX1);
-					float y = 0.0625F * (model.bipedBody.rotationPointY + box.posY2 - box.posY1);
-					float z = 0.0625F * (model.bipedBody.rotationPointZ + box.posZ1);
+					float x = 0.0625F * (body.rotationPointX + box.posX1);
+					float y = 0.0625F * (body.rotationPointY + box.posY2 - box.posY1);
+					float z = 0.0625F * (body.rotationPointZ + box.posZ1);
 					GlStateManager.pushMatrix();
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleX), 1.0F, 0.0F, 0.0F);
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleY), 0.0F, 1.0F, 0.0F);
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleZ), 0.0F, 0.0F, 1.0F);
 					GlStateManager.translate(x, y, z);
 
 					if (entity.isSneaking()) {

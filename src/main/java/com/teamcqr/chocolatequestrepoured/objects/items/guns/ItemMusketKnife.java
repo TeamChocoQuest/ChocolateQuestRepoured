@@ -11,8 +11,8 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
-import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -127,7 +127,7 @@ public class ItemMusketKnife extends ItemSword {
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
+			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
 					1.0F, 1.0F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
