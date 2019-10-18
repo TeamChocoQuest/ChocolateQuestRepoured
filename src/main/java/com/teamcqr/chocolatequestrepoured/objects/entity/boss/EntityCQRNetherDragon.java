@@ -1,10 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import com.teamcqr.chocolatequestrepoured.util.handlers.SoundsHandler;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -323,12 +323,12 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return SoundsHandler.NETHER_DRAGON_HURT;
+		return ModSounds.NETHER_DRAGON_HURT;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundsHandler.NETHER_DRAGON_DEATH;
+		return ModSounds.NETHER_DRAGON_DEATH;
 	}
 	
 	@Override
