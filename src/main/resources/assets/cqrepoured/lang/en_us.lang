@@ -490,24 +490,23 @@ description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 
 // Mobs
-entity.dummy.name=Dummy(CQR)
-entity.dwarf.name=Dwarf(CQR)
-entity.enderman.name=Enderman(CQR)
-entity.goblin.name=Goblin(CQR)
-entity.golem.name=Golem(CQR)
-entity.illager.name=Illager(CQR)
-entity.npc.name=NPC(CQR)
-entity.minotaur.name=Minotaur(CQR)
-entity.mummy.name=Mummy(CQR)
-entity.ogre.name=Ogre(CQR)
-entity.orc.name=Orc(CQR)
-entity.pigman.name=Pigman(CQR)
-entity.pirate.name=Pirate(CQR)
-entity.skeleton.name=Skeleton(CQR)
-entity.spectre.name=Spectre(CQR)
-entity.triton.name=Squidward(CQR)
+entity.dummy.name=Dummy
+entity.dwarf.name=Dwarf
+entity.enderman.name=Enderman
+entity.goblin.name=Goblin
+entity.golem.name=Golem
+entity.illager.name=Illager
+entity.npc.name=NPC
+entity.minotaur.name=Minotaur
+entity.mummy.name=Mummy
+entity.ogre.name=Ogre
+entity.orc.name=Orc
+entity.pirate.name=Pirate
+entity.skeleton.name=Skeleton
+entity.spectre.name=Spectre
+entity.triton.name=Triton
 entity.walker.name=Abyss Walker
-entity.zombie.name=Zombie(CQR)
+entity.zombie.name=Zombie
 
 // Bosses
-entity.nether_dragon.name=Wormy Wurm Wyrm
+entity.nether_dragon.name=Nether Dragon
