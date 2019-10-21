@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 
 public class RoomGridCell
 {
@@ -37,6 +40,7 @@ public class RoomGridCell
     private boolean partOfMainStruct;
     private CastleRoom room;
     private boolean narrow;
+    protected HashSet<EnumFacing> doorSides;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -45,6 +49,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
+        this.doorSides = new HashSet<>();
     }
 
     public RoomGridCell(int floor, int x, int z)
@@ -54,6 +59,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
+        this.doorSides = new HashSet<>();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition, CastleRoom room)
@@ -63,6 +69,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
+        this.doorSides = new HashSet<>();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition)
@@ -72,6 +79,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
+        this.doorSides = new HashSet<>();
     }
 
     public void setReachable()
@@ -140,6 +148,16 @@ public class RoomGridCell
         return (state == CellState.SELECTED);
     }
 
+    public boolean isValidPathStart()
+    {
+        return !isReachable() && isPopulated() && !this.room.isTower();
+    }
+
+    public boolean isValidPathDestination()
+    {
+        return isReachable() && isPopulated() && !this.room.isTower();
+    }
+
     public double distanceTo(RoomGridCell destCell)
     {
         int distX = Math.abs(getGridX() - destCell.getGridX());
@@ -156,6 +174,47 @@ public class RoomGridCell
     {
         this.room = room;
         state = CellState.POPULATED;
+    }
+
+    public boolean reachableFromSide(EnumFacing side)
+    {
+        if (room != null)
+        {
+            return room.reachableFromSide(side);
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public boolean hasDoorOnSide(EnumFacing side)
+    {
+        return doorSides.contains(side);
+    }
+
+    public void addDoorOnSide(EnumFacing side)
+    {
+        doorSides.add(side);
+    }
+
+    public void setRoomDoors()
+    {
+        if (room != null)
+        {
+            for (EnumFacing side : doorSides)
+            {
+                room.addDoorOnSideCentered(side);
+            }
+        }
+    }
+
+    public void generateIfPopulated(ArrayList<BlockPlacement> blocks)
+    {
+        if (state == CellState.POPULATED)
+        {
+            room.generate(blocks);
+        }
     }
 
     public RoomGridPosition getGridPosition()

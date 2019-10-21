@@ -25,6 +25,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         this.roomType = RoomType.STAIRCASE_DIRECTED;
         this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
+        this.defaultCeiling = false;
 
         upperStairWidth = 0;
 
@@ -167,5 +168,17 @@ public class CastleRoomStaircaseDirected extends CastleRoom
             }
             blocks.add(new BlockPlacement(getRotatedPlacement(x, y, z, this.doorSide), blockToBuild));
         }
+    }
+
+    @Override
+    public boolean canBuildDoorOnSide(EnumFacing side)
+    {
+        return (side == doorSide);
+    }
+
+    @Override
+    public boolean reachableFromSide(EnumFacing side)
+    {
+        return (side == doorSide);
     }
 }

@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffFire extends Item {
+public class ItemStaffFire extends Item implements IRangedWeapon{
 
 	public ItemStaffFire() {
 		setMaxStackSize(1);

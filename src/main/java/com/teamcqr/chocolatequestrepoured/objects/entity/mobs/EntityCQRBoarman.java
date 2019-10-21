@@ -17,7 +17,7 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarman extends AbstractEntityCQR {
-
+	
 	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
 		this.setSize(0.95F, 2.0F);
@@ -65,5 +65,9 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-
+	
+	@Override
+	public int getTextureCount() {
+		return 3;
+	}
 }

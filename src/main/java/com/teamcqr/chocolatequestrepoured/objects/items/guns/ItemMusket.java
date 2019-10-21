@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,7 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMusket extends ItemRevolver {
+public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 
 	public ItemMusket() {
 		setMaxDamage(300);
@@ -83,13 +84,16 @@ public class ItemMusket extends ItemRevolver {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (!player.getHeldItemOffhand().isEmpty()) {
-					if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
-						player.entityDropItem(player.getHeldItemOffhand(), 0F);
-					}
+				if (player.getHeldItemMainhand() == stack)
+				{
+					if (!player.getHeldItemOffhand().isEmpty()) {
+						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
+							player.entityDropItem(player.getHeldItemOffhand(), 0F);
+						}
 
-					if (!player.capabilities.isCreativeMode) {
-						player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						if (!player.capabilities.isCreativeMode) {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						}
 					}
 				}
 			}

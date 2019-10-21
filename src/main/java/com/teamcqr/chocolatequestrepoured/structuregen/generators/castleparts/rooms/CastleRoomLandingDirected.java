@@ -64,6 +64,19 @@ public class CastleRoomLandingDirected extends CastleRoom
     }
 
     @Override
+    public boolean canBuildDoorOnSide(EnumFacing side)
+    {
+        //Really only works on this side, could add logic to align the doors for other sides later
+        return (side == stairStartSide);
+    }
+
+    @Override
+    public boolean reachableFromSide(EnumFacing side)
+    {
+        return (side == stairStartSide || side == stairStartSide.getOpposite());
+    }
+
+    @Override
     public String getNameShortened()
     {
         return "LAN";

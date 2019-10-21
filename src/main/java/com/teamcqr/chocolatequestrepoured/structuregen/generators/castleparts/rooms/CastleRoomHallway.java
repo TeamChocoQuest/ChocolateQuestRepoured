@@ -21,7 +21,7 @@ public class CastleRoomHallway extends CastleRoom
             this.value = value;
         }
 
-        private boolean requiresDoor(EnumFacing side)
+        private boolean requiresWall(EnumFacing side)
         {
             if (this.value == 0)
             {
@@ -62,7 +62,7 @@ public class CastleRoomHallway extends CastleRoom
     @Override
     public void addWall(EnumFacing side, boolean force)
     {
-        if (force || alignment.requiresDoor(side))
+        if (force || alignment.requiresWall(side))
         {
             this.walls.add(side);
         }
