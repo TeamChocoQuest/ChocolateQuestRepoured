@@ -34,5 +34,10 @@ public class EntityCQRPirate extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_PIRATE.getLootTable();
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

@@ -35,4 +35,9 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_SKELETON.getLootTable();
 	}
 
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
+	
 }

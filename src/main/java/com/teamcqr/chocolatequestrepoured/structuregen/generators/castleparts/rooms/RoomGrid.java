@@ -67,7 +67,7 @@ public class RoomGrid
 
     public ArrayList<CastleRoom> getRoomList()
     {
-        ArrayList<RoomGridCell> rooms = getSelectionListCopy();
+        ArrayList<RoomGridCell> rooms = getCellListCopy();
         ArrayList<CastleRoom> result = new ArrayList<>();
 
         for (RoomGridCell rs: rooms)
@@ -78,7 +78,7 @@ public class RoomGrid
         return result;
     }
 
-    public ArrayList<RoomGridCell> getSelectionListCopy()
+    public ArrayList<RoomGridCell> getCellListCopy()
     {
         return new ArrayList<RoomGridCell>(roomList);
     }
@@ -102,12 +102,12 @@ public class RoomGrid
 
     public ArrayList<RoomGridCell> getAllCellsWhere(Predicate<RoomGridCell> p)
     {
-        return getSelectionListCopy().stream().filter(p).collect(Collectors.toCollection(ArrayList::new));
+        return getCellListCopy().stream().filter(p).collect(Collectors.toCollection(ArrayList::new));
     }
 
     public ArrayList<RoomGridCell> getSelectedCellsInColumn(int floor, int columnIndex)
     {
-        ArrayList<RoomGridCell> result = getSelectionListCopy();
+        ArrayList<RoomGridCell> result = getCellListCopy();
         result.removeIf(r -> r.getFloor() != floor);
         result.removeIf(r -> r.getGridX() != columnIndex);
         result.removeIf(r -> !r.isSelectedForBuilding());
@@ -117,7 +117,7 @@ public class RoomGrid
 
     public ArrayList<RoomGridCell> getSelectedCellsInRow(int floor, int rowIndex)
     {
-        ArrayList<RoomGridCell> result = getSelectionListCopy();
+        ArrayList<RoomGridCell> result = getCellListCopy();
         result.removeIf(r -> r.getFloor() != floor);
         result.removeIf(r -> r.getGridZ() != rowIndex);
         result.removeIf(r -> !r.isSelectedForBuilding());
@@ -127,7 +127,7 @@ public class RoomGrid
 
     public ArrayList<RoomGridCell> getSelectedMainStructCells(int floor)
     {
-        ArrayList<RoomGridCell> result = getSelectionListCopy();
+        ArrayList<RoomGridCell> result = getCellListCopy();
         result.removeIf(r -> r.getFloor() != floor);
         result.removeIf(r -> !r.isSelectedForBuilding());
         result.removeIf(r -> !r.isMainStruct());
@@ -136,14 +136,14 @@ public class RoomGrid
 
     public ArrayList<RoomGridCell> getCellsWithoutAType()
     {
-        ArrayList<RoomGridCell> result = getSelectionListCopy();
+        ArrayList<RoomGridCell> result = getCellListCopy();
         result.removeIf(r -> !r.needsRoomType());
         return result;
     }
 
     public ArrayList<CastleRoom> getRooms()
     {
-        ArrayList<RoomGridCell> populatedRooms = getSelectionListCopy();
+        ArrayList<RoomGridCell> populatedRooms = getCellListCopy();
         ArrayList<CastleRoom> result = new ArrayList<>();
         for (RoomGridCell cell : populatedRooms)
         {
@@ -157,7 +157,7 @@ public class RoomGrid
 
     public int getMinBuildableXOnFloor(int floor)
     {
-        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+        Optional<RoomGridCell> result = getCellListCopy().stream()
                 .filter(r -> r.getFloor() == floor)
                 .filter(r -> r.isBuildable())
                 .min(Comparator.comparingInt(RoomGridCell::getGridX));
@@ -173,7 +173,7 @@ public class RoomGrid
 
     public int getMaxBuildableXOnFloor(int floor)
     {
-        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+        Optional<RoomGridCell> result = getCellListCopy().stream()
                 .filter(r -> r.getFloor() == floor)
                 .filter(r -> r.isBuildable())
                 .max(Comparator.comparingInt(RoomGridCell::getGridX));
@@ -189,7 +189,7 @@ public class RoomGrid
 
     public int getMinBuildableZOnFloor(int floor)
     {
-        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+        Optional<RoomGridCell> result = getCellListCopy().stream()
                 .filter(r -> r.getFloor() == floor)
                 .filter(r -> r.isBuildable())
                 .min(Comparator.comparingInt(RoomGridCell::getGridZ));
@@ -205,7 +205,7 @@ public class RoomGrid
 
     public int getMaxBuildableZOnFloor(int floor)
     {
-        Optional<RoomGridCell> result = getSelectionListCopy().stream()
+        Optional<RoomGridCell> result = getCellListCopy().stream()
                 .filter(r -> r.getFloor() == floor)
                 .filter(r -> r.isBuildable())
                 .max(Comparator.comparingInt(RoomGridCell::getGridZ));
@@ -337,7 +337,7 @@ public class RoomGrid
         boolean result = false;
 
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
-        if (adjacent != null && adjacent.isSelectedForBuilding() && !adjacent.isPopulated())
+        if (adjacent != null && adjacent.isBuildable() && !adjacent.isSelectedForBuilding())
         {
             result = adjacentCellIsPopulated(adjacent, EnumFacing.DOWN);
         }
@@ -360,6 +360,15 @@ public class RoomGrid
         }
 
         return true;
+    }
+
+    public boolean canAttachTower(RoomGridCell cell, EnumFacing side)
+    {
+        RoomGridCell adjacent = getAdjacentCell(cell, side);
+        return (!cell.getRoom().isTower() &&
+                adjacent != null &&
+                !adjacent.hasDoorOnSide(side) &&
+                !(adjacent.isPopulated() && adjacent.getRoom().getRoomType().isPartOfStairs()));
     }
 
     public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)

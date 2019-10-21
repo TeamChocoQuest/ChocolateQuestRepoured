@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffVampiric extends Item {
+public class ItemStaffVampiric extends Item implements IRangedWeapon{
 
 	public ItemStaffVampiric() {
 		setMaxDamage(2048);

@@ -26,7 +26,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		if(!this.entity.isDead && this.entity.onGround && !this.entity.isBurning() && !this.entity.isRiding() && notMoving(this.entity)) {
-			if(entity.getAttackTarget() != null && entity.getEntitySenses().canSee(entity.getAttackTarget()) && entity.getNavigator().getPathToEntityLiving(entity.getAttackTarget()) != null) {
+			if(entity.getAttackTarget() != null && !entity.getAttackTarget().isDead && entity.getEntitySenses().canSee(entity.getAttackTarget()) && entity.getNavigator().getPathToEntityLiving(entity.getAttackTarget()) != null) {
 				return false;
 			}
 			Entity attacker = entity.getAttackingEntity();
@@ -120,7 +120,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 			((AbstractEntityCQR)talkingPartner).setChatting(false);
 		}*/
 		talkingPartner = null;
-		if(entity.isSitting()) {
+		if(entity.isChatting() || entity.isSitting()) {
 			entity.setSitting(false);
 			entity.setChatting(false);
 		}

@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffSpider extends Item {
+public class ItemStaffSpider extends Item implements IRangedWeapon{
 
 	public ItemStaffSpider() {
 		setMaxDamage(2048);

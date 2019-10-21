@@ -88,7 +88,9 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 
 		this.checkAndPerformBlock();
 
-		this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+		if(attackTarget != null && !attackTarget.isDead) {
+			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 30.0F, 30.0F);
+		}
 
 		if (this.path != null) {
 			this.entity.getNavigator().setPath(this.path, 1.0D);
