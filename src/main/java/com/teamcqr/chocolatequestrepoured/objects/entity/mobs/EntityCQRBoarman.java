@@ -17,9 +17,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarman extends AbstractEntityCQR {
-
+	
 	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
+		TEXTURE_COUNT = 3;
 		this.setSize(0.95F, 2.0F);
 	}
 
