@@ -16,6 +16,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 
 	public EntityCQRZombie(World worldIn) {
 		super(worldIn);
+		TEXTURE_COUNT = 3;
 		this.setSize(0.6F, 1.95F);
 	}
 
