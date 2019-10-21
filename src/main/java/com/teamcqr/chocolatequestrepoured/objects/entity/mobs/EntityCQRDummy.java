@@ -56,4 +56,9 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
 	}
 
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
+
 }

@@ -418,6 +418,11 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	protected ResourceLocation getLootTable() {
 		return ELootTablesBoss.BOSS_DRAGON_NETHER.getLootTable();
 	}
+
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 	
 
 }

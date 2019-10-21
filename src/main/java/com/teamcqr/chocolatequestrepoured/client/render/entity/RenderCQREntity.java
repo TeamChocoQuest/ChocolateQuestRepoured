@@ -65,7 +65,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		if(T.getTextureCount() > 1) {
+		if(entitylivingbaseIn.getTextureCount() > 1) {
 			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() +".png");
 		}
 		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());

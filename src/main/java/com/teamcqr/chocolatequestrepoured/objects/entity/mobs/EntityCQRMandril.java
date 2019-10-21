@@ -45,5 +45,10 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 		//TODO: Create beast faction for these
 		return EFaction.UNDEAD;
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }
