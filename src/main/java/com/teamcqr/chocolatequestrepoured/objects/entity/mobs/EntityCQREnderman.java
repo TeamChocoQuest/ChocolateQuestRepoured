@@ -76,5 +76,10 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_ENDERMAN.getLootTable();
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

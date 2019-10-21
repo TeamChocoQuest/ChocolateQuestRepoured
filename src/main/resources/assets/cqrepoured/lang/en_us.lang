@@ -181,6 +181,7 @@ item.spawner_converter.name=Spawner Converter
 item.badge.name=Badge
 item.backpack.name=Backpack
 item.alchemy_bag.name=Alchemy Bag
+item.structure_selector.name=Selection Selector Helper
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -337,6 +338,8 @@ tile.table_birch.name=Birch Table
 tile.table_jungle.name=Jungle Table
 tile.table_acacia.name=Acacia Table
 tile.table_dark.name=Dark Oak Table
+tile.boss_block.name=Boss Block
+tile.force_field_nexus.name=Force Field Nexus (NYI)
 
 //Andesite blocks
 tile.andesite_carved.name=Carved Andesite
@@ -490,24 +493,31 @@ description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 
 // Mobs
-entity.dummy.name=Dummy(CQR)
-entity.dwarf.name=Dwarf(CQR)
-entity.enderman.name=Enderman(CQR)
-entity.goblin.name=Goblin(CQR)
-entity.golem.name=Golem(CQR)
-entity.illager.name=Illager(CQR)
-entity.npc.name=NPC(CQR)
-entity.minotaur.name=Minotaur(CQR)
-entity.mummy.name=Mummy(CQR)
-entity.ogre.name=Ogre(CQR)
-entity.orc.name=Orc(CQR)
-entity.pigman.name=Pigman(CQR)
-entity.pirate.name=Pirate(CQR)
-entity.skeleton.name=Skeleton(CQR)
-entity.spectre.name=Spectre(CQR)
-entity.triton.name=Squidward(CQR)
+entity.boarman.name=Boarman
+entity.dummy.name=Dummy
+entity.dwarf.name=Dwarf
+entity.enderman.name=Enderman
+entity.goblin.name=Goblin
+entity.golem.name=Golem
+entity.illager.name=Illager
+entity.npc.name=NPC
+entity.mandril.name=Mandril
+entity.minotaur.name=Minotaur
+entity.mummy.name=Mummy
+entity.ogre.name=Ogre
+entity.orc.name=Orc
+entity.pirate.name=Pirate
+entity.skeleton.name=Skeleton
+entity.spectre.name=Spectre
+entity.triton.name=Triton
 entity.walker.name=Abyss Walker
-entity.zombie.name=Zombie(CQR)
+entity.zombie.name=Zombie
+
+//Mounts
+entity.giant_endermite.name=Giant Endermite
+entity.giant_silverfish.name=Giant Silverfish
+entity.giant_silverfish1.name=Giant Lava Silverfish
+entity.giant_silverfish2.name=Giant Swamp Silverfish
 
 // Bosses
-entity.nether_dragon.name=Wormy Wurm Wyrm
+entity.nether_dragon.name=Nether Dragon

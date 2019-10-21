@@ -50,5 +50,10 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_MUMMY.getLootTable();
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

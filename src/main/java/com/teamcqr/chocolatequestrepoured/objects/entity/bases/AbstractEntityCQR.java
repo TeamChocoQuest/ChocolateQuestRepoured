@@ -86,12 +86,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte)0;
 	public ItemStack prevPotion;
-
+	
 	//Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT); 
 	
 	//Client only
 	@SideOnly(Side.CLIENT)
@@ -110,6 +111,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
+		this.dataManager.register(TEXTURE_INDEX, getRNG().nextInt(getTextureCount()));
 	}
 	
 
@@ -196,7 +198,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
-
+		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", usedPotions);
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
@@ -215,6 +217,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 
+		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
@@ -652,5 +655,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		rdm2.setSeed(this.ticksExisted / 160 + getEntityId());
 		this.currentSpeechBubbleID = rdm2.nextInt(ESpeechBubble.values().length);
 	}
+	
+	@SideOnly(Side.CLIENT) 
+	public int getTextureIndex() {
+		return this.dataManager.get(TEXTURE_INDEX);
+	}
+	
+	public abstract int getTextureCount();
 
 }

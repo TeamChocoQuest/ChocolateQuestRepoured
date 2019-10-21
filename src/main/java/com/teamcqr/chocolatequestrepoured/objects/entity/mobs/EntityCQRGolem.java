@@ -65,5 +65,10 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

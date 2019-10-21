@@ -32,6 +32,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public double widthScale;
 	public double heightScale;
 	
+	private final String entityName;
+	
 	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
 		this(rendermanagerIn, entityName, 1.0D, 1.0D);
 	}
@@ -43,7 +45,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
 			double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
-		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + entityName + ".png");
+		this.entityName = entityName;
+		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
 		//Random rand = new Random();
 		this.widthScale = widthScale;// + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
 		this.heightScale = heightScale;// + (-0.25D +(rand.nextDouble() *0.5D));;
@@ -62,6 +65,9 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
+		if(entitylivingbaseIn.getTextureCount() > 1) {
+			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() +".png");
+		}
 		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
 		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);

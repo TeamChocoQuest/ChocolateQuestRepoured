@@ -34,5 +34,10 @@ public class EntityCQRGoblin extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_GOBLIN.getLootTable();
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }
