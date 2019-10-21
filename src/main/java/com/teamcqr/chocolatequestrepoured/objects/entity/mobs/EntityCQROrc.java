@@ -34,5 +34,10 @@ public class EntityCQROrc extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_ORC.getLootTable();
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

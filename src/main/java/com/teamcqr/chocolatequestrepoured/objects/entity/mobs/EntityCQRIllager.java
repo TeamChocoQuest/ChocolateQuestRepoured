@@ -34,5 +34,10 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return LootTableList.ENTITIES_VINDICATION_ILLAGER;
 	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

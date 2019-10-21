@@ -87,8 +87,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected byte usedPotions = (byte)0;
 	public ItemStack prevPotion;
 	
-	protected static int TEXTURE_COUNT = 1;
-
 	//Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
@@ -113,7 +111,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
-		this.dataManager.register(TEXTURE_INDEX, getRNG().nextInt(TEXTURE_COUNT));
+		this.dataManager.register(TEXTURE_INDEX, getRNG().nextInt(getTextureCount()));
 	}
 	
 
@@ -663,8 +661,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		return this.dataManager.get(TEXTURE_INDEX);
 	}
 	
-	public static int getTextureCount() {
-		return TEXTURE_COUNT;
-	}
+	public abstract int getTextureCount();
 
 }

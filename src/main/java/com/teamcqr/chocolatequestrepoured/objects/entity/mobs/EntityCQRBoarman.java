@@ -20,7 +20,6 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	
 	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
-		TEXTURE_COUNT = 3;
 		this.setSize(0.95F, 2.0F);
 	}
 
@@ -66,5 +65,9 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-
+	
+	@Override
+	public int getTextureCount() {
+		return 3;
+	}
 }
