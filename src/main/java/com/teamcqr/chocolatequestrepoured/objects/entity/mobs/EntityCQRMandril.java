@@ -42,8 +42,7 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 
 	@Override
 	public EFaction getFaction() {
-		//TODO: Create beast faction for these
-		return EFaction.UNDEAD;
+		return EFaction.BEASTS;
 	}
 	
 	@Override
