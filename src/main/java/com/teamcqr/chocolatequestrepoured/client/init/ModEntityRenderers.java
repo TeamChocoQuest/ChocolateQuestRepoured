@@ -124,7 +124,7 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQROrc(renderManager));
 		//Boarman
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class,
-				renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman_zombie"));
+				renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman"));
 		//Pirate
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class,
 				renderManager -> new RenderCQREntity<EntityCQRPirate>(renderManager, "entity_mob_cqrpirate"));

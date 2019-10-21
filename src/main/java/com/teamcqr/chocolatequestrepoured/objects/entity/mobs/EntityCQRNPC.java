@@ -35,5 +35,10 @@ public class EntityCQRNPC extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_NPC.getLootTable();
 	}
 	
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
+	
 
 }

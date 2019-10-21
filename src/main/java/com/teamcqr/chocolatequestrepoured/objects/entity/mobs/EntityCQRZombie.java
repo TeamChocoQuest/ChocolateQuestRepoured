@@ -52,4 +52,9 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_ZOMBIE.getLootTable();
 	}
 
+	@Override
+	public int getTextureCount() {
+		return 3;
+	}
+
 }

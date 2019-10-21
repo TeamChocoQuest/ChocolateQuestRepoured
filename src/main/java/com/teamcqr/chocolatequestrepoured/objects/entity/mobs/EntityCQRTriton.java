@@ -39,5 +39,9 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	public boolean isSitting() {
 		return false;
 	}
+	@Override
+	public int getTextureCount() {
+		return 1;
+	}
 
 }

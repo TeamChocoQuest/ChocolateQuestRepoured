@@ -27,12 +27,17 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 	@Override
 	public EFaction getFaction() {
-		return EFaction.ILLAGERS;
+		return EFaction.BEASTS;
 	}
 	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableList.ENTITIES_VINDICATION_ILLAGER;
+	}
+	
+	@Override
+	public int getTextureCount() {
+		return 1;
 	}
 
 }
