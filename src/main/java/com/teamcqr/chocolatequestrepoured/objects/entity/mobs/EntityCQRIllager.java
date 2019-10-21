@@ -27,7 +27,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 	@Override
 	public EFaction getFaction() {
-		return EFaction.ILLAGERS;
+		return EFaction.BEASTS;
 	}
 	
 	@Override
