@@ -65,34 +65,46 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 		BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2);
 		BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2));
 		List<Entity> suitableMounts = this.entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(pos1, pos2), TargetUtil.PREDICATE_MOUNTS);
-		List<Entity> listTmp = new ArrayList<>();
-		suitableMounts.forEach(new Consumer<Entity>() {
+		if(!suitableMounts.isEmpty()) {
+			List<Entity> listTmp = new ArrayList<>();
+			suitableMounts.forEach(new Consumer<Entity>() {
 
-			@Override
-			public void accept(Entity t) {
-				if(entity.canSeeEntity((EntityLivingBase) t) && !t.isBeingRidden() && !t.isDead) {
-					listTmp.add(t);
+				@Override
+				public void accept(Entity t) {
+					if(entity.canSeeEntity((EntityLivingBase) t) && !t.isBeingRidden() && !t.isDead) {
+						listTmp.add(t);
+					}
+				}
+			});
+			suitableMounts = listTmp;
+			suitableMounts.sort(new Comparator<Entity>() {
+
+				@Override
+				public int compare(Entity e1, Entity e2) {
+					float distE1 = entity.getDistance(e1);
+					float distE2 = entity.getDistance(e2);
+
+					if(distE1 < distE2) {
+						return -1;
+					}
+					if(distE1 > distE2) {
+						return 1;
+					}
+					return 0;
+				}
+			});
+			if(!suitableMounts.isEmpty()) {
+				int i = 0;
+				Entity mount = suitableMounts.get(i);
+				while(mount == null && i < suitableMounts.size() -1) {
+					i++;
+					mount = suitableMounts.get(i);
+				}
+				if(i < suitableMounts.size() && mount != null) {
+					this.entityToMount = (EntityAnimal) mount;
 				}
 			}
-		});
-		suitableMounts = listTmp;
-		suitableMounts.sort(new Comparator<Entity>() {
-
-			@Override
-			public int compare(Entity e1, Entity e2) {
-				float distE1 = entity.getDistance(e1);
-				float distE2 = entity.getDistance(e2);
-
-				if(distE1 < distE2) {
-					return -1;
-				}
-				if(distE1 > distE2) {
-					return 1;
-				}
-				return 0;
-			}
-		});
-		this.entityToMount = (EntityAnimal) suitableMounts.get(0);
+		}
 	}
 
 	@Override
