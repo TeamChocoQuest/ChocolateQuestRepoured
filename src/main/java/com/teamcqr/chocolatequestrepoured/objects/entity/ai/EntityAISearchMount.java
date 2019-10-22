@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAISearchMount extends AbstractCQREntityAI {
 
-	protected static final int MOUNT_SEARCH_RANGE = 15;
+	protected static final int MOUNT_SEARCH_DIAMETER = 30;
 	protected static final float MAX_DISTANCE_WHEN_TO_MOUNT = 2F;
 	protected static final boolean FORCE_MOUNTING = true; 
 	protected static final double SPEED_WALK_TO_MOUNT = 1.5D;
@@ -35,8 +35,8 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 		}
 		
 		if(!this.entity.isRiding()) {
-			BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_RANGE /2, MOUNT_SEARCH_RANGE /4, MOUNT_SEARCH_RANGE /2);
-			BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_RANGE /2, MOUNT_SEARCH_RANGE /4, MOUNT_SEARCH_RANGE /2));
+			BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2);
+			BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2));
 			List<Entity> suitableMounts = this.entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(pos1, pos2), TargetUtil.PREDICATE_MOUNTS);
 			if(!suitableMounts.isEmpty()) {
 				for(Entity ent : suitableMounts) {
@@ -62,8 +62,8 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 	}
 	
 	private void findNewTargetMount() {
-		BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_RANGE /2, MOUNT_SEARCH_RANGE /4, MOUNT_SEARCH_RANGE /2);
-		BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_RANGE /2, MOUNT_SEARCH_RANGE /4, MOUNT_SEARCH_RANGE /2));
+		BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2);
+		BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2));
 		List<Entity> suitableMounts = this.entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(pos1, pos2), TargetUtil.PREDICATE_MOUNTS);
 		List<Entity> listTmp = new ArrayList<>();
 		suitableMounts.forEach(new Consumer<Entity>() {
