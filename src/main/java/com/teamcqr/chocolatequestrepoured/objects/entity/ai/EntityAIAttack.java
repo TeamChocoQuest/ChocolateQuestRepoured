@@ -75,7 +75,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (this.shieldTick > 0) {
 			this.shieldTick--;
 		}
-		if (this.entity.getEntitySenses().canSee(attackTarget)) {
+		if (attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget)) {
 			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 10.0F, 10.0F);
 
 			if (this.entity.canSeeEntity(attackTarget)) {
