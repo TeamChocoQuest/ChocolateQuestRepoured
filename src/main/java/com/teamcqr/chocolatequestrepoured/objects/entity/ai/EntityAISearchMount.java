@@ -10,6 +10,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
@@ -112,6 +115,13 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 		if(shouldContinueExecuting()) {
 			if(this.entityToMount != null && !this.entityToMount.isDead && !this.entityToMount.isBeingRidden()) {
 				if(this.entity.getDistance(this.entityToMount) <= MAX_DISTANCE_WHEN_TO_MOUNT) {
+					if(this.entityToMount instanceof EntityHorse) {
+						EntityHorse horse = (EntityHorse)this.entityToMount;
+						horse.setHorseTamed(true);
+						horse.setHorseSaddled(true);
+						//Should that stay?
+						horse.setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
+					}
 					this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
 				} else {
 					this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, SPEED_WALK_TO_MOUNT);
