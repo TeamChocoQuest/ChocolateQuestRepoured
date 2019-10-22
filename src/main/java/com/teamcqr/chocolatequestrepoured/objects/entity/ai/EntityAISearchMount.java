@@ -74,7 +74,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 				@Override
 				public void accept(Entity t) {
-					if(entity.canSeeEntity((EntityLivingBase) t) && !t.isBeingRidden() && !t.isDead) {
+					if(entity.canSeeEntity((EntityLivingBase) t) && !t.isBeingRidden() && !t.isDead && !(t instanceof EntityHorse && ((EntityHorse)t).isChild())) {
 						listTmp.add(t);
 					}
 				}
