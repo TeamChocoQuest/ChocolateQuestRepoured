@@ -26,7 +26,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
-import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import io.netty.buffer.ByteBuf;
@@ -671,6 +670,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 	public boolean inAttackReach(EntityLivingBase target) {
 		return this.getDistance(target) <= this.getAttackReach(target);
+	}
+	public boolean canSeeEntity(EntityLivingBase possibleTarget) {
+		return getEntitySenses().canSee(possibleTarget);
 	}
 
 }
