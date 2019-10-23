@@ -664,6 +664,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	
 	public abstract int getTextureCount();
 
+	public boolean canSeeEntity(EntityLivingBase target) {
+		double x = target.posX - this.posX;
+		double z = target.posZ - this.posZ;
+		double d = Math.toDegrees(Math.atan2(-x, z));
+		if (!ItemUtil.compareRotations(this.rotationYawHead, d, 80.0D)) {
+			return false;
+		}
+		double y = target.posY + target.getEyeHeight() - this.posY - this.getEyeHeight();
+		double xz = Math.sqrt(x * x + z * z);
+		double d1 = Math.toDegrees(Math.atan2(y, xz));
+		if (!ItemUtil.compareRotations(this.rotationPitch, d1, 50.0D)) {
+			return false;
+		}
+		return true;
+	}
+
 	public double getAttackReach(EntityLivingBase target) {
 		double d = this.width + target.width + 0.25D;
 		return d;
