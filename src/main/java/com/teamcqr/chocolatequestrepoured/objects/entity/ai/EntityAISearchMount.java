@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.init.Items;
@@ -74,7 +73,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 				@Override
 				public void accept(Entity t) {
-					if(entity.canSeeEntity((EntityLivingBase) t) && !t.isBeingRidden() && !t.isDead && !(t instanceof EntityHorse && ((EntityHorse)t).isChild())) {
+					if(entity.getEntitySenses().canSee(t) && entity.getNavigator().getPathToEntityLiving(t) != null && !t.isBeingRidden() && !t.isDead && !(t instanceof EntityHorse && ((EntityHorse)t).isChild())) {
 						listTmp.add(t);
 					}
 				}
@@ -119,7 +118,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 						EntityHorse horse = (EntityHorse)this.entityToMount;
 						horse.setHorseTamed(true);
 						horse.setHorseSaddled(true);
-						//Should that stay?
+						//Should that stay? -> Arlo says yes.
 						horse.setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
 					}
 					this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
