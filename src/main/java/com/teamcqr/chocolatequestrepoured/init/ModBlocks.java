@@ -160,11 +160,13 @@ public class ModBlocks {
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class BlockRegistrationHandler {
 
+		public static final List<Block> BLOCKS = new ArrayList<Block>();
 		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
 
 		@SubscribeEvent
 		public static void registerBlocks(RegistryEvent.Register<Block> event) {
-			final Block[] blocks = { setBlockName(new BlockDungeonBrick(), "andesite_carved"),
+			final Block[] blocks = {
+					setBlockName(new BlockDungeonBrick(), "andesite_carved"),
 					setBlockName(new BlockPillarDungeonBrick(), "andesite_pillar"),
 					setBlockName(new BlockDungeonBrick(), "andesite_cube"),
 					setBlockName(new BlockDungeonBrick(), "andesite_scale"),
@@ -267,12 +269,14 @@ public class ModBlocks {
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_13", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_14", CQRMain.CQRExporterChestTab),
 
-					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus") };
+					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus")
+			};
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
 			for (Block block : blocks) {
 				registry.register(block);
+				BLOCKS.add(block);
 			}
 		}
 
@@ -281,131 +285,22 @@ public class ModBlocks {
 		}
 
 		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
-			Block b = block.setUnlocalizedName(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
-			return b;
+			return block.setUnlocalizedName(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
 		}
 
 		@SubscribeEvent
 		public static void registerItemBlocks(RegistryEvent.Register<Item> event) {
-			final ItemBlock[] itemBlocks = {
-					createItemBlock(ANDESITE_CARVED),
-					createItemBlock(ANDESITE_PILLAR),
-					createItemBlock(ANDESITE_CUBE),
-					createItemBlock(ANDESITE_SCALE),
-					createItemBlock(ANDESITE_SQUARE),
-					createItemBlock(ANDESITE_SMALL),
-					createItemBlock(ANDESITE_LARGE),
-
-					createItemBlock(DIORITE_CARVED),
-					createItemBlock(DIORITE_PILLAR),
-					createItemBlock(DIORITE_CUBE),
-					createItemBlock(DIORITE_SCALE),
-					createItemBlock(DIORITE_SQUARE),
-					createItemBlock(DIORITE_SMALL),
-					createItemBlock(DIORITE_LARGE),
-
-					createItemBlock(GRANITE_CARVED),
-					createItemBlock(GRANITE_PILLAR),
-					createItemBlock(GRANITE_CUBE),
-					createItemBlock(GRANITE_SCALE),
-					createItemBlock(GRANITE_SQUARE),
-					createItemBlock(GRANITE_SMALL),
-					createItemBlock(GRANITE_LARGE),
-
-					createItemBlock(PRISMARINE_CARVED),
-					createItemBlock(PRISMARINE_PILLAR),
-					createItemBlock(PRISMARINE_CUBE),
-					createItemBlock(PRISMARINE_SQUARE),
-					createItemBlock(PRISMARINE_SMALL),
-					createItemBlock(PRISMARINE_LARGE),
-
-					createItemBlock(ENDSTONE_CARVED),
-					createItemBlock(ENDSTONE_PILLAR),
-					createItemBlock(ENDSTONE_CUBE),
-					createItemBlock(ENDSTONE_SCALE),
-					createItemBlock(ENDSTONE_SQUARE),
-					createItemBlock(ENDSTONE_SMALL),
-
-					createItemBlock(PURPUR_CARVED),
-					createItemBlock(PURPUR_CUBE),
-					createItemBlock(PURPUR_SCALE),
-					createItemBlock(PURPUR_SMALL),
-					createItemBlock(PURPUR_LARGE),
-
-					createItemBlock(RED_NETHERBRICK_CARVED),
-					createItemBlock(RED_NETHERBRICK_PILLAR),
-					createItemBlock(RED_NETHERBRICK_CUBE),
-					createItemBlock(RED_NETHERBRICK_SCALE),
-					createItemBlock(RED_NETHERBRICK_SQUARE),
-					createItemBlock(RED_NETHERBRICK_LARGE),
-
-					createItemBlock(STONE_PILLAR),
-					createItemBlock(STONE_CUBE),
-					createItemBlock(STONE_SCALE),
-					createItemBlock(STONE_SQUARE),
-					createItemBlock(STONE_SMALL),
-
-					createItemBlock(TABLE_OAK),
-					createItemBlock(TABLE_SPRUCE),
-					createItemBlock(TABLE_BIRCH),
-					createItemBlock(TABLE_JUNGLE),
-					createItemBlock(TABLE_ACACIA),
-					createItemBlock(TABLE_DARK),
-
-					createItemBlock(EXPORTER),
-					createItemBlock(UNLIT_TORCH),
-					createItemBlock(NULL_BLOCK),
-					createItemBlock(SPAWNER),
-					createItemBlock(BOSS_BLOCK),
-
-					createItemBlock(EXPORTER_CHEST_VALUABLE),
-					createItemBlock(EXPORTER_CHEST_FOOD),
-					createItemBlock(EXPORTER_CHEST_EQUIPMENT),
-					createItemBlock(EXPORTER_CHEST_UTILITY),
-
-					createItemBlock(EXPORTER_CHEST_VANILLA_BLACKSMITH),
-					createItemBlock(EXPORTER_CHEST_VANILLA_BONUS),
-					createItemBlock(EXPORTER_CHEST_VANILLA_DUNGEON),
-					createItemBlock(EXPORTER_CHEST_VANILLA_END_CITY),
-					createItemBlock(EXPORTER_CHEST_VANILLA_IGLOO),
-					createItemBlock(EXPORTER_CHEST_VANILLA_JUNGLE),
-					createItemBlock(EXPORTER_CHEST_VANILLA_JUNGLE_DISPENSER),
-					createItemBlock(EXPORTER_CHEST_VANILLA_MANSION),
-					createItemBlock(EXPORTER_CHEST_VANILLA_MINESHAFT),
-					createItemBlock(EXPORTER_CHEST_VANILLA_NETHER), 
-					createItemBlock(EXPORTER_CHEST_VANILLA_PYRAMID),
-					createItemBlock(EXPORTER_CHEST_VANILLA_STRONGHOLD),
-					createItemBlock(EXPORTER_CHEST_VANILLA_STRONGHOLD_LIBRARY),
-					createItemBlock(EXPORTER_CHEST_VANILLA_STRONGHOLD_STOREROOM),
-
-					createItemBlock(EXPORTER_CHEST_CUSTOM_1),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_2),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_3),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_4),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_5),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_6),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_7),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_8),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_9),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_10),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_11),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_12),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_13),
-					createItemBlock(EXPORTER_CHEST_CUSTOM_14),
-
-					createItemBlock(FORCE_FIELD_NEXUS) };
-
 			IForgeRegistry<Item> registry = event.getRegistry();
 
-			for (ItemBlock itemBlock : itemBlocks) {
+			for (Block block : BLOCKS) {
+				ItemBlock itemBlock = createItemBlock(block);
 				registry.register(itemBlock);
 				ITEM_BLOCKS.add(itemBlock);
 			}
 		}
 
 		private static ItemBlock createItemBlock(Block block) {
-			return (ItemBlock) new ItemBlock(block).setUnlocalizedName(block.getLocalizedName())
-					.setRegistryName(block.getRegistryName());
+			return (ItemBlock) new ItemBlock(block).setUnlocalizedName(block.getLocalizedName()).setRegistryName(block.getRegistryName());
 		}
 
 	}
