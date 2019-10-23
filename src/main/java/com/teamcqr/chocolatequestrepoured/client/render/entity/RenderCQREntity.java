@@ -176,7 +176,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch, float scaleFactor) {
 		
-		if(entitylivingbaseIn.isSitting()) {
+		if(this.mainModel.isRiding) {
 			GL11.glTranslatef(0, 0.6F, 0);
 		}
 		

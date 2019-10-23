@@ -22,11 +22,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
-import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import io.netty.buffer.ByteBuf;
@@ -163,6 +163,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(16, new EntityAISearchMount(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -687,6 +688,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 	public boolean inAttackReach(EntityLivingBase target) {
 		return this.getDistance(target) <= this.getAttackReach(target);
+	}
+	public boolean canSeeEntity(EntityLivingBase possibleTarget) {
+		return (possibleTarget != null && (canEntityBeSeen(possibleTarget) || getEntitySenses().canSee(possibleTarget)));
 	}
 
 }
