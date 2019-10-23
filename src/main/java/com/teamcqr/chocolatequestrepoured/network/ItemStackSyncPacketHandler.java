@@ -19,8 +19,10 @@ public class ItemStackSyncPacketHandler implements IMessageHandler<ItemStackSync
 			if (ctx.side.isClient()) {
 				World world = CQRMain.proxy.getPlayer(ctx).world;
 				Entity entity = world.getEntityByID(message.getEntityId());
-				CapabilityExtraItemHandler capability = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
-				capability.setStackInSlot(message.getSlotIndex(), message.getStack());
+				if (entity != null) {
+					CapabilityExtraItemHandler capability = entity.getCapability(CapabilityExtraItemHandlerProvider.EXTRA_ITEM_HANDLER, null);
+					capability.setStackInSlot(message.getSlotIndex(), message.getStack());
+				}
 			}
 		});
 		return null;
