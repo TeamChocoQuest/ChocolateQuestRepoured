@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.data.CQRDataFileManager;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -149,11 +150,26 @@ public class EventsHandler {
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onWorldLoad(WorldEvent.Load e) {
+		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldLoad(e.getWorld());
+		}
+	}
+	
+	public static void onWorldSave(WorldEvent.Save e) {
+		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldSaving(e.getWorld());
+		}
+	}
 
 	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldUnload(e.getWorld());
+			
 			// Stop export threads
 			if (!CQStructure.runningExportThreads.isEmpty()) {
 				for (Thread t : CQStructure.runningExportThreads) {
