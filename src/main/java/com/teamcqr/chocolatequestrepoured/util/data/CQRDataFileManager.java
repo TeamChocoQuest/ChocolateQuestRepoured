@@ -2,8 +2,14 @@ package com.teamcqr.chocolatequestrepoured.util.data;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CQRDataFileManager {
@@ -13,7 +19,9 @@ public class CQRDataFileManager {
 	protected final String DATA_FILE_NAME = "cqrdata.nbt";
 	
 	private File file;
-	private NBTTagCompound rootNBTTag = null;
+	
+	private Set<String> uniqueDungeonsSpawnedInWorld = new HashSet<>();
+	private List<DataEntryDungeon> entriesToBeSaved = new ArrayList<>();
 
 	public CQRDataFileManager() {
 		INSTANCE = this;
@@ -36,6 +44,9 @@ public class CQRDataFileManager {
 
 		//TODO: Manage world unload
 		
+		//FInally save all the stuff
+		handleWorldSaving(world);
+		
 		file = null;
 	}
 	
@@ -43,6 +54,12 @@ public class CQRDataFileManager {
 		allocateFileObjectInstance(world);
 
 		//TODO: Save data
+		if(!entriesToBeSaved.isEmpty()) {
+			for(DataEntryDungeon entry : entriesToBeSaved) {
+				//TODO: Save them!!
+			}
+			entriesToBeSaved.clear();
+		}
 		
 		file = null;
 	}
@@ -69,6 +86,25 @@ public class CQRDataFileManager {
 	
 	static {
 		new CQRDataFileManager();
+	}
+	
+	//Helper class to save data entries
+	class DataEntryDungeon {
+		private String dungeonName = "missingNo";
+		private BlockPos pos = new BlockPos(0,0,0);
+		
+		public DataEntryDungeon(String name, BlockPos pos) {
+			this.dungeonName = name;
+			this.pos = pos;
+		}
+		
+		public NBTTagCompound getNBT() {
+			NBTTagCompound compound = new NBTTagCompound();
+			compound.setString("name", this.dungeonName);
+			compound.setTag("position", NBTUtil.createPosTag(this.pos));
+			
+			return compound;
+		}
 	}
 
 }
