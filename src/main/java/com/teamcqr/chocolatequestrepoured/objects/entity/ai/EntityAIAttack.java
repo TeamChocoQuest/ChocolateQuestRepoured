@@ -38,7 +38,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (!this.entity.getEntitySenses().canSee(attackTarget)) {
 			return this.entity.hasPath();
 		}
-		if (this.entity.isEntityInFieldOfView(attackTarget)) {
+		if (this.entity.canSeeEntity(attackTarget)) {
 			if (!EntitySelectors.IS_ALIVE.apply(attackTarget)) {
 				return false;
 			}
@@ -78,7 +78,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget)) {
 			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 10.0F, 10.0F);
 
-			if (this.entity.isEntityInFieldOfView(attackTarget)) {
+			if (this.entity.canSeeEntity(attackTarget)) {
 				this.visionTick = this.entity.ticksExisted;
 			}
 		}
