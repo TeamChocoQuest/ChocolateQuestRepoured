@@ -673,7 +673,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	public boolean inAttackReach(EntityLivingBase target) {
 		return this.getDistance(target) <= this.getAttackReach(target);
 	}
-	public boolean isEntityInFieldOfView(EntityLivingBase possibleTarget) {
+	public boolean canSeeEntity(EntityLivingBase possibleTarget) {
 		return (possibleTarget != null && (canEntityBeSeen(possibleTarget) || getEntitySenses().canSee(possibleTarget)));
 	}
 

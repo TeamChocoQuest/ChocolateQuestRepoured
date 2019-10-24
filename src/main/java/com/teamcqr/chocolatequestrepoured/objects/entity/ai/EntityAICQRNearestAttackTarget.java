@@ -72,7 +72,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		if (distance <= this.entity.getAttackReach(possibleTarget)) {
 			return true;
 		}
-		if (!this.entity.isEntityInFieldOfView(possibleTarget)) {
+		if (!this.entity.canSeeEntity(possibleTarget)) {
 			if (distance > 12.0D) {
 				return false;
 			}
