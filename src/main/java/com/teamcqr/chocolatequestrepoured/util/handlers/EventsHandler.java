@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -158,9 +159,17 @@ public class EventsHandler {
 		}
 	}
 	
+	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
 		if (!e.getWorld().isRemote) {
 			CQRDataFileManager.getInstance().handleWorldSaving(e.getWorld());
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onDungeonGenerate(CQDungeonStructureGenerateEvent e) {
+		if(!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getDungeon(), e.getPos());
 		}
 	}
 

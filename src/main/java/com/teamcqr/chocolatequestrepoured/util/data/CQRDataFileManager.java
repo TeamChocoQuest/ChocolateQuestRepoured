@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
@@ -62,6 +64,16 @@ public class CQRDataFileManager {
 		}
 		
 		file = null;
+	}
+	
+	public void handleDungeonGeneration(DungeonBase dungeon, BlockPos position) {
+		if(dungeon.isUnique()) {
+			this.uniqueDungeonsSpawnedInWorld.add(dungeon.getDungeonName());
+			
+			DataEntryDungeon dataEntry = new DataEntryDungeon(dungeon.getDungeonName(), new BlockPos(position));
+			
+			this.entriesToBeSaved.add(dataEntry);
+		}
 	}
 	
 	private void allocateFileObjectInstance(World world) {
