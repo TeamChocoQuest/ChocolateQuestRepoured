@@ -167,6 +167,11 @@ item.banner.cqrepoured_walker_skull.black=Black walker face
 
 
 //Gui
+gui.repu.name=Reputation
+gui.repu.faction=Faction
+gui.repu.reputation=Your reputation
+gui.repu.memberskilled=Killed members
+gui.repu.dungeonsconquered=Homes destroyed
 gui.drops.name=Drops
 gui.backpack.name=Backpack
 gui.alchemy_bag.name=Alchemy Bag
