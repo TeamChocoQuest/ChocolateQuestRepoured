@@ -6,9 +6,9 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraftforge.client.event.GuiScreenEvent.KeyboardInputEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -19,10 +19,9 @@ public class KeybindingHandler {
 	
 	//Opens repu GUI
 	@SubscribeEvent(receiveCanceled = true)
-	public static void onKeyPress(KeyboardInputEvent event) {
+	public static void onKeyPress(KeyInputEvent event) {
 		if(ClientProxy.keybindReputationGUI.isPressed()) {
 			EntityPlayerSP player = Minecraft.getMinecraft().player;
-			System.out.println("Repu key pressed");
 			player.openGui(CQRMain.INSTANCE, Reference.REPUTATION_GUI_ID, Minecraft.getMinecraft().world, (int)player.posX, (int)player.posY, (int)player.posZ);
 		}
 	}
