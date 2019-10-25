@@ -56,7 +56,7 @@ public class CQRDataFileManager {
 		if(rootTag != null) {
 			//Factions
 			NBTTagCompound factionTag = getOrCreateTag(rootTag, "factiondata");
-			EFaction.loadRepuValues(factionTag);
+			EFaction.loadFromNBT(factionTag);
 			
 			//FIrst we need to empty our lists...
 			entriesToBeSaved.clear();
@@ -98,7 +98,7 @@ public class CQRDataFileManager {
 		
 		if(rootTag != null) {
 			//Factions
-			rootTag.setTag("factiondata", EFaction.getCompoundForSavingToFile());
+			rootTag.setTag("factiondata", EFaction.saveDataAsNBT());
 			
 			//Save dungeon data
 			if(!entriesToBeSaved.isEmpty()) {

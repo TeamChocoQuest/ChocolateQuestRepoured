@@ -16,8 +16,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class GuiReputation extends GuiScreen {
 	
 	//Textures
-	protected final ResourceLocation TEXTURE_BG = new ResourceLocation(Reference.MODID, "textures/gui/repu/gui_reputation.png");
-	protected final ResourceLocation TEXTURE_REPU_BAR = new ResourceLocation(Reference.MODID, "textures/gui/repu/repubar.png");
+	protected static final ResourceLocation TEXTURE_BG = new ResourceLocation(Reference.MODID, "textures/gui/repu/gui_reputation.png");
+	protected static final ResourceLocation TEXTURE_REPU_BAR = new ResourceLocation(Reference.MODID, "textures/gui/repu/repubar.png");
 	protected ResourceLocation imgPlayerHead;
 	
 	//GUI Elements
@@ -35,6 +35,9 @@ public class GuiReputation extends GuiScreen {
 	protected int REPU_BAR_X;
 	protected int REPU_BAR_Y;
 	
+	//Data
+	protected String[] factionNames = new String[] {"missingNo"};
+	
 	//Player texture: Player object -> getTexture or similar...
 	
 	public GuiReputation(EntityPlayerSP player) {
@@ -48,7 +51,7 @@ public class GuiReputation extends GuiScreen {
 	public void initGui() {
 		super.initGui();
 		
-		this.btnCycleFaction = new GuiButtonExt(0, width /2 -70, height /2 -45, 140, 20, "missingNo");
+		this.btnCycleFaction = new GuiButtonExt(0, width /2 -70, height /2 -45, 120, 20, "missingNo");
 		
 		this.buttonList.add(btnCycleFaction);
 		adjustComponentsToFaction(EFaction.BEASTS);
