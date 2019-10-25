@@ -304,7 +304,7 @@ public class CastleRoomSelector
                 }
             }
         }
-        
+
     }
 
     private void buildVerticalFloorHallway(int floor)
@@ -718,7 +718,6 @@ public class CastleRoomSelector
         }
     }
 
-
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)
     {
         if (cell.getRoom().canBuildDoorOnSide(side))
@@ -743,7 +742,6 @@ public class CastleRoomSelector
         int gridZ = selection.getGridZ();
         return startPos.add(gridX * roomSize, floor * floorHeight, gridZ * roomSize);
     }
-
 
     private int getLayerFromFloor(int floor)
     {

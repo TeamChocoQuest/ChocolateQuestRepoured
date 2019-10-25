@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonDoor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonWall;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockWoodSlab;
@@ -68,6 +69,8 @@ public abstract class CastleRoom
     protected Random random = new Random();
 
     protected HashSet<EnumFacing> walls;
+    protected ArrayList<CastleAddonWall> wallBuildList;
+
     protected HashSet<EnumFacing> roofEdges;
     protected HashSet<EnumFacing> doorSides;
 
@@ -168,54 +171,7 @@ public abstract class CastleRoom
 
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
-        IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int hgt = height;
 
-        if (walls.contains(EnumFacing.NORTH))
-        {
-            for (int x = 0; x < buildLength; x++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(x + offsetX, y, offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-
-            }
-        }
-        if (walls.contains(EnumFacing.SOUTH))
-        {
-            for (int x = 0; x < buildLength; x++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(x + offsetX, y, buildLength + offsetZ - 1);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
-        if (walls.contains(EnumFacing.WEST))
-        {
-            for (int z = 0; z < buildLength; z++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(offsetX, y, z + offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
-        if (walls.contains(EnumFacing.EAST))
-        {
-            for (int z = 0; z < buildLength; z++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(buildLength + offsetX - 1, y, z + offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
     }
 
     public void addWall(EnumFacing side, boolean force)
