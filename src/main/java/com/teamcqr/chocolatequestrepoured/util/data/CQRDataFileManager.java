@@ -230,7 +230,8 @@ public class CQRDataFileManager {
 				try {
 					root = CompressedStreamTools.readCompressed(stream);
 				} catch(IOException ex) {
-					ex.printStackTrace();
+					//ex.printStackTrace();
+					System.out.println("It seems the cqr data file is empty. This is not a problem :). Returning empty tag...");
 					root = new NBTTagCompound();
 				}
 				if(root != null) {
