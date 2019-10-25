@@ -22,6 +22,7 @@ public class KeybindingHandler {
 	public static void onKeyPress(KeyboardInputEvent event) {
 		if(ClientProxy.keybindReputationGUI.isPressed()) {
 			EntityPlayerSP player = Minecraft.getMinecraft().player;
+			System.out.println("Repu key pressed");
 			player.openGui(CQRMain.INSTANCE, Reference.REPUTATION_GUI_ID, Minecraft.getMinecraft().world, (int)player.posX, (int)player.posY, (int)player.posZ);
 		}
 	}
