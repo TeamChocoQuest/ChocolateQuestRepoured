@@ -87,4 +87,9 @@ public class GuiReputation extends GuiScreen {
 		this.btnCycleFaction.displayString = newFaction.name();
 	}
 	
+	@Override
+	public boolean doesGuiPauseGame() {
+		return false;
+	}
+	
 }
