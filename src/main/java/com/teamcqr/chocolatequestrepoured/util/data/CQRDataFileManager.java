@@ -191,6 +191,7 @@ public class CQRDataFileManager {
 		if(!file.exists()) {
 			try {
 				file.createNewFile();
+				saveToFile(new NBTTagCompound());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -198,6 +199,7 @@ public class CQRDataFileManager {
 			file.delete();
 			try {
 				file.createNewFile();
+				saveToFile(new NBTTagCompound());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -229,7 +231,7 @@ public class CQRDataFileManager {
 					root = CompressedStreamTools.readCompressed(stream);
 				} catch(IOException ex) {
 					ex.printStackTrace();
-					root = null;
+					root = new NBTTagCompound();
 				}
 				if(root != null) {
 					return root;
