@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -49,6 +48,9 @@ public class CQRDataFileManager {
 	}
 	
 	public void handleWorldLoad(World world) {
+		if(world.isRemote) {
+			return;
+		}
 		allocateFileObjectInstance(world);
 		//DONE: Load stuff
 		NBTTagCompound rootTag = getRootTag();
@@ -79,6 +81,9 @@ public class CQRDataFileManager {
 	}
 	
 	public void handleWorldUnload(World world) {
+		if(world.isRemote) {
+			return;
+		}
 		allocateFileObjectInstance(world);
 
 		//Finally save all the stuff
@@ -92,6 +97,9 @@ public class CQRDataFileManager {
 	}
 	
 	public void handleWorldSaving(World world) {
+		if(world.isRemote) {
+			return;
+		}
 		allocateFileObjectInstance(world);
 		
 		NBTTagCompound rootTag = getRootTag();
@@ -107,7 +115,7 @@ public class CQRDataFileManager {
 					structureList.appendTag(entry.getNBT());
 				}
 				rootTag.removeTag("structuredata");
-				rootTag.setTag("structuredata", rootTag);
+				rootTag.setTag("structuredata", structureList);
 				entriesToBeSaved.clear();
 			}
 			
@@ -134,7 +142,7 @@ public class CQRDataFileManager {
 					});
 
 				}
-				rootTag.removeTag("uniques");
+				//rootTag.removeTag("uniques");
 				rootTag.setTag("uniques", nameList);
 			}
 			
@@ -173,11 +181,15 @@ public class CQRDataFileManager {
 		if(dungeon.isUnique()) {
 			this.uniqueDungeonsSpawnedInWorld.add(dungeon.getDungeonName());
 		}
-		DataEntryDungeon dataEntry = new DataEntryDungeon(dungeon.getDungeonName(), new BlockPos(position));
+		DataEntryDungeon dataEntry = new DataEntryDungeon(dungeon.getDungeonName(), position);
 		this.entriesToBeSaved.add(dataEntry);
+		System.out.println("Entry added!");
 	}
 	
 	private void allocateFileObjectInstance(World world) {
+		if(world.isRemote) {
+			return;
+		}
 		File worldFile = new File(FileIOUtil.getAbsoluteWorldPath());
 		File folder = new File(worldFile.getAbsolutePath() + "/data/cqr/");
 		if(!folder.exists()) {
@@ -218,7 +230,7 @@ public class CQRDataFileManager {
 	}
 	
 	protected NBTTagCompound getRootTag() {
-		if(file.isFile() && file.getName().contains(".nbt")) {
+		if(file.exists() && file.isFile() && file.getName().contains(".nbt")) {
 			InputStream stream = null;
 			try {
 				stream = new FileInputStream(file);
@@ -240,25 +252,6 @@ public class CQRDataFileManager {
 			}
 		}
 		return null;
-	}
-	
-	//Helper class to save data entries
-	class DataEntryDungeon {
-		private String dungeonName = "missingNo";
-		private BlockPos pos = new BlockPos(0,0,0);
-		
-		public DataEntryDungeon(String name, BlockPos pos) {
-			this.dungeonName = name;
-			this.pos = pos;
-		}
-		
-		public NBTTagCompound getNBT() {
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setString("name", this.dungeonName);
-			compound.setTag("position", NBTUtil.createPosTag(this.pos));
-			
-			return compound;
-		}
 	}
 
 }
