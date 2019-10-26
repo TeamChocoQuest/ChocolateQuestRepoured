@@ -40,4 +40,9 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 		return 1;
 	}
 	
+	@Override
+	public boolean canRide() {
+		return true;
+	}
+	
 }
