@@ -30,7 +30,12 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if(!entity.canRide()) return false;
+		if(entity.world.isRemote) {
+			return false;
+		}
+		if(!entity.canRide()) {
+			return false;
+		}
 		if(this.entityToMount != null && !this.entityToMount.isDead) {
 			if(this.entityToMount.getRidingEntity() != null && this.entityToMount.getRidingEntity().equals(this.entity)) {
 				return false;
