@@ -180,9 +180,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
+		float initSizeVar = -0.125F + (this.rand.nextFloat() *0.25F);
+		this.dataManager.set(SIZE_VAR, initSizeVar);
 		//Adapt size of hitbox
-		this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
+		this.setSize(0.6F * (1F + initSizeVar*0.8F), 1.8F *(1F + initSizeVar));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
