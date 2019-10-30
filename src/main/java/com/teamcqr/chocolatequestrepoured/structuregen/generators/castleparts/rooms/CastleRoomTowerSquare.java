@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 import net.minecraft.block.state.IBlockState;
@@ -55,12 +56,18 @@ public class CastleRoomTowerSquare extends CastleRoom
         }
 
         this.pillarStart = startPos.add((offsetX + buildLength / 2), stairYOffset, (offsetZ + buildLength / 2));
+    }
+
+    @Override
+    public void setWalls(RoomWalls walls)
+    {
+        super.setWalls(walls);
 
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
             if (side != connectedSide)
             {
-                walls.add(side);
+                walls.addOuter(side);
             }
         }
     }

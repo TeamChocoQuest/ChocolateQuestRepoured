@@ -48,24 +48,15 @@ public class CastleRoomHallway extends CastleRoom
     @Override
     public void generateRoom(ArrayList<BlockPlacement> blocks)
     {
-        for (int z = 0; z < (hasWallOnSide(EnumFacing.SOUTH) ? sideLength - 1 : sideLength); z++)
+        for (int z = 0; z < (walls.hasWallOnSide(EnumFacing.SOUTH) ? sideLength - 1 : sideLength); z++)
         {
-            for (int x = 0; x < (hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
+            for (int x = 0; x < (walls.hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
             {
                 BlockPos pos = startPos.add(x, 0, z);
                 blocks.add(new BlockPlacement(pos, Blocks.WOOL.getDefaultState()));
             }
         }
         generateWalls(blocks);
-    }
-
-    @Override
-    public void addWall(EnumFacing side, boolean force)
-    {
-        if (force || alignment.requiresWall(side))
-        {
-            this.walls.add(side);
-        }
     }
 
     @Override

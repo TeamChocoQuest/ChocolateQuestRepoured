@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WallOptions;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 
@@ -40,7 +42,7 @@ public class RoomGridCell
     private boolean partOfMainStruct;
     private CastleRoom room;
     private boolean narrow;
-    protected HashSet<EnumFacing> doorSides;
+    private RoomWalls walls;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -49,7 +51,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(int floor, int x, int z)
@@ -59,7 +61,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition, CastleRoom room)
@@ -69,7 +71,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition)
@@ -79,7 +81,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public void setReachable()
@@ -173,7 +175,7 @@ public class RoomGridCell
     public void setRoom(CastleRoom room)
     {
         this.room = room;
-        state = CellState.POPULATED;
+        this.state = CellState.POPULATED;
     }
 
     public boolean reachableFromSide(EnumFacing side)
@@ -188,24 +190,34 @@ public class RoomGridCell
         }
     }
 
+    public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
+
     public boolean hasDoorOnSide(EnumFacing side)
     {
-        return doorSides.contains(side);
+        return walls.hasDoorOnside(side);
     }
 
-    public void addDoorOnSide(EnumFacing side)
+    public void addDoorOnSideCentered(EnumFacing side)
     {
-        doorSides.add(side);
+        walls.addCenteredDoor(side);
+    }
+    public void addDoorOnSideRandom(EnumFacing side) { walls.addRandomDoor(side); }
+
+    public void addOuterWall(EnumFacing side)
+    {
+        walls.addOuter(side);
     }
 
-    public void setRoomDoors()
+    public void addInnerWall(EnumFacing side)
     {
-        if (room != null)
+        walls.addInner(side);
+    }
+
+    public void saveRoomWalls()
+    {
+        if (this.room != null)
         {
-            for (EnumFacing side : doorSides)
-            {
-                room.addDoorOnSideCentered(side);
-            }
+            room.setWalls(walls);
         }
     }
 

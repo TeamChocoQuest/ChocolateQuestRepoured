@@ -1,14 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 
 public class RoomWalls
 {
     private EnumMap<EnumFacing, WallOptions> walls;
 
-    private RoomWalls()
+    public RoomWalls()
     {
         this.walls = new EnumMap<EnumFacing, WallOptions>(EnumFacing.class);
     }
@@ -44,8 +47,27 @@ public class RoomWalls
         return walls.containsKey(side);
     }
 
+    public boolean hasDoorOnside(EnumFacing side)
+    {
+        if (walls.containsKey(side))
+        {
+            return walls.get(side).hasDoor();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public WallOptions getOptionsForSide(EnumFacing side)
     {
         return walls.get(side);
     }
+
+    public void generate(BlockPos startPos, int height, ArrayList<BlockPlacement> blocks)
+    {
+
+    }
+
+
 }

@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 public class WallOptions
 {
-    private enum DoorOptions
+    public enum DoorPlacement
     {
         NONE,
         CENTERED,
@@ -10,21 +10,24 @@ public class WallOptions
     }
 
     private boolean hasWindow;
-    private DoorOptions door;
+    private DoorPlacement door;
 
     public WallOptions(boolean withWindow)
     {
+        this.door = DoorPlacement.NONE;
         this.hasWindow = withWindow;
     }
 
     public void addDoorCentered()
     {
-        this.door = DoorOptions.CENTERED;
+        this.door = DoorPlacement.CENTERED;
+        this.hasWindow = false;
     }
 
     public void addDoorRandom()
     {
-        this.door = DoorOptions.RANDOM;
+        this.door = DoorPlacement.RANDOM;
+        this.hasWindow = false;
     }
 
     public boolean hasWindow()
@@ -32,8 +35,11 @@ public class WallOptions
         return hasWindow;
     }
 
-    public DoorOptions getDoor()
+    public DoorPlacement getDoor()
     {
         return this.door;
     }
+
+    public boolean hasDoor() { return this.door != DoorPlacement.NONE; }
+
 }
