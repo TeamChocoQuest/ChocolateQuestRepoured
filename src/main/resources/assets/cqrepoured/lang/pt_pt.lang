@@ -392,12 +392,6 @@ tile.red_netherbrick_scale.name=Escama de Tijolo do Nether Vermelho
 tile.red_netherbrick_square.name=Quadrado de Tijolo do Nether Vermelho
 tile.red_netherbrick_large.name=Tijolos do Nether Vermelho Grandes
 
-//Stone blocks
-tile.stone_pillar.name=Pilar de Pedra
-tile.stone_cube.name=Cubo de Pedra
-tile.stone_scale.name=Escama de Pedra
-tile.stone_square.name=Quadrado de Pedra
-tile.stone_small.name=Tijolos de Pedra Pequenos
 //Exporter chests
 tile.exporter_chest_valuable.name=Exporter Chest Treasure
 tile.exporter_chest_food.name=Exporter Chest Food
@@ -484,25 +478,33 @@ description.staff_poison.name=Whatever this is supposed to do, it doesn't work y
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 
+
 // Mobs
-entity.dummy.name=Dummy(CQR)
-entity.dwarf.name=Dwarf(CQR)
-entity.enderman.name=Enderman(CQR)
-entity.goblin.name=Goblin(CQR)
-entity.golem.name=Golem(CQR)
-entity.illager.name=Illager(CQR)
-entity.npc.name=NPC(CQR)
-entity.minotaur.name=Minotaur(CQR)
-entity.mummy.name=Mummy(CQR)
-entity.ogre.name=Ogre(CQR)
-entity.orc.name=Orc(CQR)
-entity.pigman.name=Pigman(CQR)
-entity.pirate.name=Pirate(CQR)
-entity.skeleton.name=Skeleton(CQR)
-entity.spectre.name=Spectre(CQR)
-entity.triton.name=Squidward(CQR)
-entity.walker.name=Abyss Walker
-entity.zombie.name=Zombie(CQR)
+entity.boarman.name=Homem-Porco
+entity.dummy.name=Dummy
+entity.dwarf.name=Anão
+entity.enderman.name=Enderman
+entity.goblin.name=Goblin
+entity.golem.name=Golem
+entity.illager.name=Illager
+entity.npc.name=NPC
+entity.mandril.name=Macaco
+entity.minotaur.name=Minotauro
+entity.mummy.name=Múmia
+entity.ogre.name=Ogre
+entity.orc.name=Orc
+entity.pirate.name=Pirata
+entity.skeleton.name=Esqueleto
+entity.spectre.name=Espectro
+entity.triton.name=Tritão
+entity.walker.name=Walker do Abismo
+entity.zombie.name=Zombie
+
+//Mounts
+entity.giant_endermite.name=Endermite Gigante
+entity.giant_silverfish.name=Silverfish Gigante
+entity.giant_silverfish1.name=Silverfish de Lava Gigante
+entity.giant_silverfish2.name=Silverfish do Pântano Gigante
 
 // Bosses
-entity.nether_dragon.name=Wormy Wurm Wyrm
+entity.nether_dragon.name=Nether Dragon
