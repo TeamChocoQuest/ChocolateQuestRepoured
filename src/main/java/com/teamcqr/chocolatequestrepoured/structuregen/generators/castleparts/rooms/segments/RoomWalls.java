@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 
-import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.Random;
 
 public class RoomWalls
 {
@@ -26,20 +24,28 @@ public class RoomWalls
         walls.put(side, new WallOptions(true));
     }
 
-    public void addCenteredDoor(EnumFacing side)
+    public DoorPlacement addCenteredDoor(int wallLength, EnumFacing side)
     {
         if (walls.containsKey(side))
         {
-            walls.get(side).addDoorCentered();
+            int offset = (wallLength - DoorPlacement.DEFAULT_WIDTH) / 2;
+            DoorPlacement door = new DoorPlacement(offset, side);
+            walls.get(side).addDoor(door);
+            return door;
         }
+        return null;
     }
 
-    public void addRandomDoor(EnumFacing side)
+    public DoorPlacement addRandomDoor(Random random, int wallLength, EnumFacing side)
     {
         if (walls.containsKey(side))
         {
-            walls.get(side).addDoorRandom();
+            int offset = 1 + random.nextInt(wallLength - DoorPlacement.DEFAULT_WIDTH - 1);
+            DoorPlacement door = new DoorPlacement(offset, side);
+            walls.get(side).addDoor(door);
+            return door;
         }
+        return null;
     }
 
     public boolean hasWallOnSide(EnumFacing side)
@@ -63,11 +69,4 @@ public class RoomWalls
     {
         return walls.get(side);
     }
-
-    public void generate(BlockPos startPos, int height, ArrayList<BlockPlacement> blocks)
-    {
-
-    }
-
-
 }

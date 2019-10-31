@@ -8,21 +8,24 @@ import net.minecraft.util.EnumFacing;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Random;
 
 public class RoomGridCell
 {
     private enum CellState
     {
-        UNUSED (0),       //empty and cannot build anything on this space
-        BUILDABLE (1),    //empty but able to build on this space
-        SELECTED (2),     //selected for building but not filled with a room
-        POPULATED (3);    //filled with a room
+        UNUSED (0, "Unused"),       //empty and cannot build anything on this space
+        BUILDABLE (1, "Buildable"),    //empty but able to build on this space
+        SELECTED (2, "Selected"),     //selected for building but not filled with a room
+        POPULATED (3, "Populated");    //filled with a room
 
         private final int value;
+        private final String text;
 
-        CellState(int value)
+        CellState(int value, String text)
         {
             this.value = value;
+            this.text = text;
         }
 
         private boolean isAtLeast(CellState state)
@@ -190,37 +193,6 @@ public class RoomGridCell
         }
     }
 
-    public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
-
-    public boolean hasDoorOnSide(EnumFacing side)
-    {
-        return walls.hasDoorOnside(side);
-    }
-
-    public void addDoorOnSideCentered(EnumFacing side)
-    {
-        walls.addCenteredDoor(side);
-    }
-    public void addDoorOnSideRandom(EnumFacing side) { walls.addRandomDoor(side); }
-
-    public void addOuterWall(EnumFacing side)
-    {
-        walls.addOuter(side);
-    }
-
-    public void addInnerWall(EnumFacing side)
-    {
-        walls.addInner(side);
-    }
-
-    public void saveRoomWalls()
-    {
-        if (this.room != null)
-        {
-            room.setWalls(walls);
-        }
-    }
-
     public void generateIfPopulated(ArrayList<BlockPlacement> blocks)
     {
         if (state == CellState.POPULATED)
@@ -247,5 +219,12 @@ public class RoomGridCell
     public int getGridZ()
     {
         return this.gridPosition.getZ();
+    }
+
+    @Override
+    public String toString()
+    {
+        String roomStr = (getRoom() == null) ? "null" : getRoom().toString();
+        return String.format("RoomGridCell{%s, state=%s, room=%s}", gridPosition.toString(), state.toString(), roomStr);
     }
 }

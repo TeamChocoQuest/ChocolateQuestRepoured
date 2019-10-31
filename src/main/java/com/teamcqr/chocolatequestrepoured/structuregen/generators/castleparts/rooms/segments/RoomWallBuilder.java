@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -19,12 +18,10 @@ public class RoomWallBuilder
     private int height;
     private EnumFacing side;
     private Random random;
-    private static final int DOOR_WIDTH = 4;
-    private static final int DOOR_HEIGHT = 4;
 
     public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side, Random random)
     {
-        this.height = height;
+        this.height = height / 2;
         this.length = length;
         this.options = options;
         this.side = side;
@@ -43,15 +40,7 @@ public class RoomWallBuilder
 
         if (options.hasDoor())
         {
-            if (options.getDoor() == WallOptions.DoorPlacement.RANDOM)
-            {
-                //randomize somewhere in the middle of the wall
-                this.doorStart = 1 + random.nextInt(length - DOOR_WIDTH - 1);
-            }
-            else if (options.getDoor() == WallOptions.DoorPlacement.CENTERED)
-            {
-                this.doorStart = (length - DOOR_WIDTH) / 2;
-            }
+            this.doorStart = options.getDoor().getOffset();
         }
     }
 
@@ -110,7 +99,7 @@ public class RoomWallBuilder
             {
                 blockToBuild = Blocks.STONEBRICK.getDefaultState();
             }
-            else if (y < DOOR_HEIGHT)
+            else if (y < DoorPlacement.DEFAULT_HEIGHT)
             {
                 blockToBuild = Blocks.AIR.getDefaultState();
             }
@@ -166,6 +155,6 @@ public class RoomWallBuilder
     private boolean withinDoorWidth(int value)
     {
         int relativeToDoor = value - doorStart;
-        return (relativeToDoor >= 0 && relativeToDoor < DOOR_WIDTH);
+        return (relativeToDoor >= 0 && relativeToDoor < DoorPlacement.DEFAULT_WIDTH);
     }
 }
