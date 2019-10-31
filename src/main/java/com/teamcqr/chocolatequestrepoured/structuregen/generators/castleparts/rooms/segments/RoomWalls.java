@@ -69,4 +69,9 @@ public class RoomWalls
     {
         return walls.get(side);
     }
+
+    public void removeWall(EnumFacing side)
+    {
+        walls.remove(side);
+    }
 }

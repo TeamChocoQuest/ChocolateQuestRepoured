@@ -56,19 +56,10 @@ public class CastleRoomTowerSquare extends CastleRoom
         }
 
         this.pillarStart = startPos.add((offsetX + buildLength / 2), stairYOffset, (offsetZ + buildLength / 2));
-    }
 
-    @Override
-    public void setWalls(RoomWalls walls)
-    {
-        super.setWalls(walls);
-
-        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        for (EnumFacing side: EnumFacing.HORIZONTALS)
         {
-            if (side != connectedSide)
-            {
-                walls.addOuter(side);
-            }
+            this.walls.addOuter(side);
         }
     }
 

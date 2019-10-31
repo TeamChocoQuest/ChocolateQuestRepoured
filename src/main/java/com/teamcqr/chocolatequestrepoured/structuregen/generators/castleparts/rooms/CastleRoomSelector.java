@@ -286,19 +286,19 @@ public class CastleRoomSelector
             {
                 tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize, tower);
                 cell.setRoom(tower);
-                cell.setReachable();
+                //cell.setReachable();
 
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, alignment);
                 if (adjacent.isPopulated())
                 {
-                    adjacent.getRoom().addDoorOnSideCentered(roomSize, alignment.getOpposite());
+                    adjacent.getRoom().addDoorOnSideCentered(alignment.getOpposite());
+                    cell.getRoom().removeWall(alignment);
                 }
                 else
                 {
-                    cell.getRoom().addOuterWall(alignment);
                     if (grid.adjacentCellIsWalkableRoof(cell, alignment))
                     {
-                        cell.getRoom().addDoorOnSideCentered(roomSize, alignment);
+                        cell.getRoom().addDoorOnSideCentered(alignment);
                     }
                 }
             }
@@ -372,7 +372,7 @@ public class CastleRoomSelector
                                 cell.setReachable();
                             }
                             doorDirections.add(side);
-                            cell.getRoom().addDoorOnSideCentered(roomSize, side);
+                            cell.getRoom().addDoorOnSideCentered(side);
                             break;
                         }
                     }
@@ -555,7 +555,7 @@ public class CastleRoomSelector
                         {
                             if (node.getParent() != null)
                             {
-                                addDoorToRoomCentered(cell, node.getParentDirection());
+                                addDoorToRoomRandom(cell, node.getParentDirection());
                             }
                             cell.setReachable();
                             unreachable.remove(cell);
@@ -744,13 +744,13 @@ public class CastleRoomSelector
     {
         if (cell.getRoom().canBuildDoorOnSide(side))
         {
-            cell.getRoom().addDoorOnSideCentered(roomSize, side);
+            cell.getRoom().addDoorOnSideCentered(side);
         }
         else
         {
             if (grid.adjacentCellIsPopulated(cell, side))
             {
-                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideCentered(roomSize, side.getOpposite());
+                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideCentered(side.getOpposite());
             }
         }
     }
@@ -759,13 +759,13 @@ public class CastleRoomSelector
     {
         if (cell.getRoom().hasWallOnSide(side))
         {
-            cell.getRoom().addDoorOnSideRandom(random, roomSize, side);
+            cell.getRoom().addDoorOnSideRandom(random, side);
         }
         else
         {
             if (grid.adjacentCellIsPopulated(cell, side))
             {
-                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideRandom(random, roomSize, side.getOpposite());
+                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideRandom(random, side.getOpposite());
             }
         }
     }
