@@ -114,11 +114,6 @@ public abstract class CastleRoom
         }
     }
 
-    public void setWalls(RoomWalls walls)
-    {
-        this.walls = walls;
-    }
-
     public void addRoofEdge(EnumFacing side)
     {
         roofEdges.add(side);
@@ -294,13 +289,13 @@ public abstract class CastleRoom
         return walls.hasDoorOnside(side);
     }
 
-    public void addDoorOnSideCentered(int roomLength, EnumFacing side)
+    public void addDoorOnSideCentered(EnumFacing side)
     {
-        walls.addCenteredDoor(roomLength, side);
+        walls.addCenteredDoor(buildLength, side);
     }
-    public void addDoorOnSideRandom(Random random, int roomLength, EnumFacing side)
+    public void addDoorOnSideRandom(Random random, EnumFacing side)
     {
-        walls.addRandomDoor(random, roomLength, side);
+        walls.addRandomDoor(random, buildLength, side);
     }
 
     public void addOuterWall(EnumFacing side)
@@ -311,6 +306,11 @@ public abstract class CastleRoom
     public void addInnerWall(EnumFacing side)
     {
         walls.addInner(side);
+    }
+
+    public void removeWall(EnumFacing side)
+    {
+        walls.removeWall(side);
     }
 
     @Override
