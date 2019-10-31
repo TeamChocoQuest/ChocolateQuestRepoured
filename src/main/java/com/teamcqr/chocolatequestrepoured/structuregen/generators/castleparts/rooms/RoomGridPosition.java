@@ -62,4 +62,10 @@ public class RoomGridPosition
 
         return new RoomGridPosition(floor, x, z);
     }
+
+    @Override
+    public String toString()
+    {
+        return String.format("RoomGridPosition{floor=%d, x=%d, z=%d}", floor, x, z);
+    }
 }

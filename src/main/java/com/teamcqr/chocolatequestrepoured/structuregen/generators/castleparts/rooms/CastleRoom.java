@@ -91,7 +91,6 @@ public abstract class CastleRoom
         generateRoom(blocks);
         generateWalls(blocks);
         generateRoofEdges(blocks);
-        generateDoors(blocks);
 
         if (defaultCeiling)
         {
@@ -101,14 +100,6 @@ public abstract class CastleRoom
 
     public abstract void generateRoom(ArrayList<BlockPlacement> blocks);
     public abstract String getNameShortened();
-
-    private void generateDoors(ArrayList<BlockPlacement> blocks)
-    {
-        for (CastleAddonDoor door : doors)
-        {
-            door.generate(blocks);
-        }
-    }
 
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
@@ -294,5 +285,37 @@ public abstract class CastleRoom
     private BlockPos getbuildPosition()
     {
         return startPos.add(offsetX, 0, offsetZ);
+    }
+
+    public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
+
+    public boolean hasDoorOnSide(EnumFacing side)
+    {
+        return walls.hasDoorOnside(side);
+    }
+
+    public void addDoorOnSideCentered(int roomLength, EnumFacing side)
+    {
+        walls.addCenteredDoor(roomLength, side);
+    }
+    public void addDoorOnSideRandom(Random random, int roomLength, EnumFacing side)
+    {
+        walls.addRandomDoor(random, roomLength, side);
+    }
+
+    public void addOuterWall(EnumFacing side)
+    {
+        walls.addOuter(side);
+    }
+
+    public void addInnerWall(EnumFacing side)
+    {
+        walls.addInner(side);
+    }
+
+    @Override
+    public String toString()
+    {
+        return roomType.name;
     }
 }
