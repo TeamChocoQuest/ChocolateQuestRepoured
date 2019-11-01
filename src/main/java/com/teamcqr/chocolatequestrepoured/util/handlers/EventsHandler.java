@@ -3,11 +3,13 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.data.CQRDataFileManager;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -149,11 +151,34 @@ public class EventsHandler {
 			}
 		}
 	}
+	
+	@SubscribeEvent
+	public static void onWorldLoad(WorldEvent.Load e) {
+		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldLoad(e.getWorld());
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onWorldSave(WorldEvent.Save e) {
+		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldSaving(e.getWorld());
+		}
+	}
+	
+	@SubscribeEvent
+	public static void onDungeonGenerate(CQDungeonStructureGenerateEvent e) {
+		if(!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getDungeon(), e.getPos());
+		}
+	}
 
 	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
+			CQRDataFileManager.getInstance().handleWorldUnload(e.getWorld());
+			
 			// Stop export threads
 			if (!CQStructure.runningExportThreads.isEmpty()) {
 				for (Thread t : CQStructure.runningExportThreads) {

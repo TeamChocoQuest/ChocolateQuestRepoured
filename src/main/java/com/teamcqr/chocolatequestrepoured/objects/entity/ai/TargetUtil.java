@@ -3,9 +3,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.Comparator;
 
 import com.google.common.base.Predicate;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBase;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.util.EntitySelectors;
 
 public class TargetUtil {
@@ -24,6 +28,25 @@ public class TargetUtil {
 			}
 			return true;
 		}
+	};
+	
+	public static final Predicate<? super Entity> PREDICATE_MOUNTS = new Predicate<Entity>() {
+
+		@Override
+		public boolean apply(Entity input) {
+			if(input != null && input instanceof EntityAnimal && !input.isDead) {
+				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityHorse ||input instanceof EntityPig); 
+			}
+			return false;
+		}
+		
+		/*@Override
+		public boolean apply(Entity input) {
+			if(input != null && EntitySelectors.IS_ALIVE.apply(input) && input instanceof EntityAnimal) {
+				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase); 
+			}
+			return false;
+		}*/
 	};
 
 	public static class Sorter implements Comparator<Entity> {

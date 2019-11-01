@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemRevolver extends Item {
+public class ItemRevolver extends Item implements IRangedWeapon{
 
 	public ItemRevolver() {
 		setMaxDamage(300);

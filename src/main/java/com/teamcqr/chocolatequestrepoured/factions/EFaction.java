@@ -112,6 +112,10 @@ public enum EFaction {
 		return EReputationStateRough.NEUTRAL;
 	}
 	
+	public EReputationState getFineReputation(UUID uuid) {
+		return EReputationState.getByInt(getReputation(uuid));
+	}
+	
 	public boolean isEntityEnemy(Entity entity) {
 		if(entity == null) {
 			return false;
@@ -221,7 +225,7 @@ public enum EFaction {
 		return canRepuChange(player);
 	}
 	
-	public static void loadRepuValues(NBTTagCompound compound) {
+	public static void loadFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("Factions")) {
 			NBTTagList factions = compound.getTagList("Factions", Constants.NBT.TAG_COMPOUND);
 			factions.forEach(new Consumer<NBTBase>() {
@@ -243,7 +247,7 @@ public enum EFaction {
 						});
 						
 					} catch(Exception ex) {
-						System.out.println("Unable to load faction data!");
+						System.err.println("Unable to load faction data!");
 						ex.printStackTrace();
 					}
 				}
@@ -253,7 +257,7 @@ public enum EFaction {
 		
 	}
 	
-	public static NBTTagCompound getCompoundForSavingToFile() {
+	public static NBTTagCompound saveDataAsNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList factions = new NBTTagList();
 		

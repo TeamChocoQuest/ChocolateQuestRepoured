@@ -248,13 +248,15 @@ public class CQStructure {
 			startPos = new BlockPos(startPos.getX(), startPos.getY(), posEnd.getZ());
 		}
 		
-		this.setSizeX(endPos.getX() != startPos.getX() ? endPos.getX() - startPos.getX() : 1);
-		this.setSizeY(endPos.getY() != startPos.getY() ? endPos.getY() - startPos.getY() : 1);
-		this.setSizeZ(endPos.getZ() != startPos.getZ() ? endPos.getZ() - startPos.getZ() : 1);
+		this.setSizeX(endPos.getX() != startPos.getX() ? (endPos.getX() - startPos.getX()) +1: 1);
+		this.setSizeY(endPos.getY() != startPos.getY() ? (endPos.getY() - startPos.getY()) +1: 1);
+		this.setSizeZ(endPos.getZ() != startPos.getZ() ? (endPos.getZ() - startPos.getZ()) +1: 1);
 		
 		//DONE: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
 		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
 		//Problem was not the reflection thing, it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
+		
+		endPos = endPos.add(1, 1, 1);
 		
 		int distX = endPos.getX() - startPos.getX();
 		int distZ = endPos.getZ() - startPos.getZ();
