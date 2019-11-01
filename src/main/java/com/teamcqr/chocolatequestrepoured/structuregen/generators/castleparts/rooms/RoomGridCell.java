@@ -1,26 +1,31 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WallOptions;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Random;
 
 public class RoomGridCell
 {
     private enum CellState
     {
-        UNUSED (0),       //empty and cannot build anything on this space
-        BUILDABLE (1),    //empty but able to build on this space
-        SELECTED (2),     //selected for building but not filled with a room
-        POPULATED (3);    //filled with a room
+        UNUSED (0, "Unused"),       //empty and cannot build anything on this space
+        BUILDABLE (1, "Buildable"),    //empty but able to build on this space
+        SELECTED (2, "Selected"),     //selected for building but not filled with a room
+        POPULATED (3, "Populated");    //filled with a room
 
         private final int value;
+        private final String text;
 
-        CellState(int value)
+        CellState(int value, String text)
         {
             this.value = value;
+            this.text = text;
         }
 
         private boolean isAtLeast(CellState state)
@@ -40,7 +45,7 @@ public class RoomGridCell
     private boolean partOfMainStruct;
     private CastleRoom room;
     private boolean narrow;
-    protected HashSet<EnumFacing> doorSides;
+    private RoomWalls walls;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -49,7 +54,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(int floor, int x, int z)
@@ -59,7 +64,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition, CastleRoom room)
@@ -69,7 +74,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public RoomGridCell(RoomGridPosition gridPosition)
@@ -79,7 +84,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = null;
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public void setReachable()
@@ -173,7 +178,7 @@ public class RoomGridCell
     public void setRoom(CastleRoom room)
     {
         this.room = room;
-        state = CellState.POPULATED;
+        this.state = CellState.POPULATED;
     }
 
     public boolean reachableFromSide(EnumFacing side)
@@ -185,27 +190,6 @@ public class RoomGridCell
         else
         {
             return false;
-        }
-    }
-
-    public boolean hasDoorOnSide(EnumFacing side)
-    {
-        return doorSides.contains(side);
-    }
-
-    public void addDoorOnSide(EnumFacing side)
-    {
-        doorSides.add(side);
-    }
-
-    public void setRoomDoors()
-    {
-        if (room != null)
-        {
-            for (EnumFacing side : doorSides)
-            {
-                room.addDoorOnSideCentered(side);
-            }
         }
     }
 
@@ -235,5 +219,12 @@ public class RoomGridCell
     public int getGridZ()
     {
         return this.gridPosition.getZ();
+    }
+
+    @Override
+    public String toString()
+    {
+        String roomStr = (getRoom() == null) ? "null" : getRoom().toString();
+        return String.format("RoomGridCell{%s, state=%s, room=%s}", gridPosition.toString(), state.toString(), roomStr);
     }
 }
