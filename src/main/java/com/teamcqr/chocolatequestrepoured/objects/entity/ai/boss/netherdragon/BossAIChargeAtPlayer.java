@@ -1,14 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon.ENetherDragonAttacks;
 
-import net.minecraft.entity.ai.EntityAIBase;
+public class BossAIChargeAtPlayer extends AbstractCQREntityAI {
 
-public class BossAIChargeAtPlayer extends EntityAIBase {
-
-	protected EntityCQRNetherDragon dragon;
-	
 	protected static final int maxTargetDistance = 128;
 	protected static final double chargingSpeed = 2.5D;
 	protected static final int minDistanceToFireBall = 60; 
@@ -17,7 +14,11 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 	private int attackCooldown = 40;
 	
 	public BossAIChargeAtPlayer(EntityCQRNetherDragon dragon) {
-		this.dragon = dragon;
+		super(dragon);
+	}
+	
+	protected EntityCQRNetherDragon getDragon() {
+		return (EntityCQRNetherDragon)this.entity;
 	}
 
 	//TODO: Add checks if the target has been hit
@@ -25,11 +26,11 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 	
 	@Override
 	public boolean shouldExecute() {
-		if(this.dragon.isDead) {
+		if(this.getDragon().isDead) {
 			return false;
 		}
-		if(this.dragon.getAttackTarget() != null && !(this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS) || this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS))) {
-			if(this.dragon.getDistance(this.dragon.getAttackTarget()) <= maxTargetDistance) {
+		if(this.getDragon().getAttackTarget() != null && !(this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS) || this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS))) {
+			if(this.getDragon().getDistance(this.getDragon().getAttackTarget()) <= maxTargetDistance) {
 				return true;
 			}
 		}
@@ -38,21 +39,21 @@ public class BossAIChargeAtPlayer extends EntityAIBase {
 	
 	@Override
 	public void updateTask() {
-		this.dragon.updateMovementState(EntityCQRNetherDragon.EDragonMovementState.CHARGING);
+		this.getDragon().updateMovementState(EntityCQRNetherDragon.EDragonMovementState.CHARGING);
 		attackCooldown++;
-		if(attackCooldown >= attackCooldownBorder && this.dragon.getDistance(this.dragon.getAttackTarget()) >= minDistanceToFireBall) {
+		if(attackCooldown >= attackCooldownBorder && this.getDragon().getDistance(this.getDragon().getAttackTarget()) >= minDistanceToFireBall) {
 			//DONE: Fire ball
-			this.dragon.startAttack(ENetherDragonAttacks.FIREBALL);
+			this.getDragon().startAttack(ENetherDragonAttacks.FIREBALL);
 			
 			attackCooldown = 0;
 		} else if(attackCooldown >= attackCooldownBorder){
 			//DONE: SPITFIRE (Eurobeat intensifies)
-			this.dragon.startAttack(ENetherDragonAttacks.SPIT_FIRE);
+			this.getDragon().startAttack(ENetherDragonAttacks.SPIT_FIRE);
 			
 			attackCooldown = 0;
 		}
 		
-		this.dragon.getNavigator().tryMoveToEntityLiving(dragon.getAttackTarget(), chargingSpeed);
+		this.getDragon().getNavigator().tryMoveToEntityLiving(getDragon().getAttackTarget(), chargingSpeed);
 	}
 	
 	@Override
