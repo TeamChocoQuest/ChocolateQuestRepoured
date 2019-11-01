@@ -313,6 +313,54 @@ public abstract class CastleRoom
         walls.removeWall(side);
     }
 
+    public BlockPos getDecorationStartPos()
+    {
+        BlockPos result = startPos;
+
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            result = result.south();
+        }
+        if (walls.hasWallOnSide(EnumFacing.WEST))
+        {
+            result = result.east();
+        }
+
+        return result;
+    }
+
+    public int getDecorationLengthX()
+    {
+        int result = buildLength;
+
+        if (walls.hasWallOnSide(EnumFacing.WEST))
+        {
+            --result;
+        }
+        if (walls.hasWallOnSide(EnumFacing.EAST))
+        {
+            --result;
+        }
+
+        return result;
+    }
+
+    public int getDecorationLengthZ()
+    {
+        int result = buildLength;
+
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            --result;
+        }
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            --result;
+        }
+
+        return result;
+    }
+
     @Override
     public String toString()
     {

@@ -15,7 +15,7 @@ public class WallOptions
     public void addDoor(DoorPlacement door)
     {
         this.door = door;
-        this.hasWindow = false;
+        this.hasWindow = false; //doors override windows because they usually overlap
     }
 
     public boolean hasWindow()

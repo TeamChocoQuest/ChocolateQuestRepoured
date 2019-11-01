@@ -16,12 +16,12 @@ public class RoomWalls
 
     public void addOuter(EnumFacing side)
     {
-        walls.put(side, new WallOptions(false));
+        walls.put(side, new WallOptions(true));
     }
 
     public void addInner(EnumFacing side)
     {
-        walls.put(side, new WallOptions(true));
+        walls.put(side, new WallOptions(false));
     }
 
     public DoorPlacement addCenteredDoor(int wallLength, EnumFacing side)
