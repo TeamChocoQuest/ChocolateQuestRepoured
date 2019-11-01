@@ -1,17 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon.EDragonMovementState;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.Vec3d;
 
-public class BossAISpiralUpOrDown extends EntityAIBase {
+public class BossAISpiralUpOrDown extends AbstractCQREntityAI {
 
 	protected boolean flyingUp = false;
-	protected EntityCQRNetherDragon dragon;
-	
 	//Height it will change = deltaYPerIteration * maxIterations
 	protected static final int maxIterations = 20;
 	protected int currentIterations = 0;
@@ -21,18 +19,22 @@ public class BossAISpiralUpOrDown extends EntityAIBase {
 	protected static final double anglePerIteration = 36.0D; //10 requires 36 iterations for one circle
 	
 	public BossAISpiralUpOrDown(EntityCQRNetherDragon dragon) {
-		this.dragon = dragon;
+		super(dragon);
+	}
+	
+	protected EntityCQRNetherDragon getDragon() {
+		return (EntityCQRNetherDragon)this.entity;
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return (this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS) || this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS));
+		return (this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS) || this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS));
 	}
 	
 	@Override
 	public boolean shouldContinueExecuting() {
 		if(currentIterations > maxIterations) {
-			this.dragon.updateMovementState(EDragonMovementState.FLYING);
+			this.getDragon().updateMovementState(EDragonMovementState.FLYING);
 			resetTask();
 			return false;
 		}
@@ -42,22 +44,22 @@ public class BossAISpiralUpOrDown extends EntityAIBase {
 	@Override
 	public void updateTask() {
 		if(shouldContinueExecuting()) {
-			if(this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS)) {
+			if(this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_DOWNWARDS)) {
 				flyingUp = false;
-			} else if(this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_UPWARDS)) {
+			} else if(this.getDragon().getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING_UPWARDS)) {
 				flyingUp = true;
 			}
-			if(lastTarget == null || this.dragon.getDistance(lastTarget.x, lastTarget.y, lastTarget.z) <= 0.5D) {
+			if(lastTarget == null || this.getDragon().getDistance(lastTarget.x, lastTarget.y, lastTarget.z) <= 0.5D) {
 				currentIterations++;
 				
 				//DONE: Calculate position and move to it
-				Vec3d newPos = new Vec3d(this.dragon.posX, this.dragon.posY, this.dragon.posZ);
+				Vec3d newPos = new Vec3d(this.getDragon().posX, this.getDragon().posY, this.getDragon().posZ);
 				
 				//DONE: Redo this
 				// Get the current movement vector of the entity (rotation on x/z plane)
 				// Rotate this vector by the anglePerIteration
 				// Add this vector to the entities current pos and we have the new target
-				Vec3d vec = new Vec3d(this.dragon.motionX, 0, this.dragon.motionZ);//new Vec3d(0,0,3D);
+				Vec3d vec = new Vec3d(this.getDragon().motionX, 0, this.getDragon().motionZ);//new Vec3d(0,0,3D);
 				vec = vec.normalize();
 				vec = vec.add(vec).add(vec);
 				//DONE: Adjust this vector to the direction the dragon is looking in?
@@ -66,7 +68,7 @@ public class BossAISpiralUpOrDown extends EntityAIBase {
 				
 				lastTarget = newPos;
 			}
-			this.dragon.getNavigator().tryMoveToXYZ(lastTarget.x, lastTarget.y, lastTarget.z, 1.1F);
+			this.getDragon().getNavigator().tryMoveToXYZ(lastTarget.x, lastTarget.y, lastTarget.z, 1.1F);
 			
 		} else {
 			resetTask();
