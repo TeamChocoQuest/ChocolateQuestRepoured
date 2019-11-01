@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonDoor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockWoodSlab;
@@ -67,9 +69,9 @@ public abstract class CastleRoom
     protected boolean defaultCeiling = false;
     protected Random random = new Random();
 
-    protected HashSet<EnumFacing> walls;
     protected HashSet<EnumFacing> roofEdges;
-    protected HashSet<EnumFacing> doorSides;
+
+    protected RoomWalls walls;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
     {
@@ -80,9 +82,8 @@ public abstract class CastleRoom
         this.buildLength = this.sideLength;
         this.height = height;
         this.doors = new ArrayList<>();
-        this.walls = new HashSet<>();
         this.roofEdges = new HashSet<>();
-        this.doorSides = new HashSet<>();
+        this.walls = new RoomWalls();
     }
 
     public void generate(ArrayList<BlockPlacement> blocks)
@@ -90,7 +91,6 @@ public abstract class CastleRoom
         generateRoom(blocks);
         generateWalls(blocks);
         generateRoofEdges(blocks);
-        generateDoors(blocks);
 
         if (defaultCeiling)
         {
@@ -101,141 +101,17 @@ public abstract class CastleRoom
     public abstract void generateRoom(ArrayList<BlockPlacement> blocks);
     public abstract String getNameShortened();
 
-    private void generateDoors(ArrayList<BlockPlacement> blocks)
-    {
-        for (CastleAddonDoor door : doors)
-        {
-            door.generate(blocks);
-        }
-    }
-
-    public void addDoorOnSideRandom(EnumFacing side)
-    {
-        if (!doorSides.contains(side))
-        {
-            doorSides.add(side);
-
-            final int DOOR_WIDTH = 4;
-            if (side == EnumFacing.SOUTH && hasWallOnSide(EnumFacing.SOUTH))
-            {
-                int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-                doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-            }
-            else if (side == EnumFacing.EAST && hasWallOnSide(EnumFacing.EAST))
-            {
-                int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-                doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
-            }
-            if (side == EnumFacing.NORTH && hasWallOnSide(EnumFacing.NORTH))
-            {
-                int xOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-                doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-            }
-            else if (side == EnumFacing.WEST && hasWallOnSide(EnumFacing.WEST))
-            {
-                int zOffset = random.nextInt(sideLength - 1 - DOOR_WIDTH);
-                doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
-            }
-        }
-    }
-
-    public void addDoorOnSideCentered(EnumFacing side)
-    {
-        doorSides.add(side);
-
-        final int DOOR_WIDTH = 4;
-        if (side == EnumFacing.SOUTH && hasWallOnSide(EnumFacing.SOUTH))
-        {
-            int xOffset = (sideLength - DOOR_WIDTH) / 2;
-            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ() + sideLength - 1, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-        }
-        else if (side == EnumFacing.EAST && hasWallOnSide(EnumFacing.EAST))
-        {
-            int zOffset = (sideLength - DOOR_WIDTH) / 2;
-            doors.add(new CastleAddonDoor(startPos.getX() + sideLength - 1, startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
-        }
-        if (side == EnumFacing.NORTH && hasWallOnSide(EnumFacing.NORTH))
-        {
-            int xOffset = (sideLength - DOOR_WIDTH) / 2;
-            doors.add(new CastleAddonDoor(startPos.getX() + xOffset, startPos.getY() + 1, startPos.getZ(), DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, true));
-        }
-        else if (side == EnumFacing.WEST && hasWallOnSide(EnumFacing.WEST))
-        {
-            int zOffset = (sideLength - DOOR_WIDTH) / 2;
-            doors.add(new CastleAddonDoor(startPos.getX(), startPos.getY() + 1, startPos.getZ() + zOffset, DOOR_WIDTH, 3, CastleAddonDoor.DoorType.FENCE_SPRUCE_BORDER, false));
-        }
-    }
-
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {
-        IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int hgt = height;
-
-        if (walls.contains(EnumFacing.NORTH))
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
-            for (int x = 0; x < buildLength; x++)
+            if (walls.hasWallOnSide(side))
             {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(x + offsetX, y, offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-
+                BlockPos buildPos = getbuildPosition();
+                RoomWallBuilder builder = new RoomWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side, random);
+                builder.generate(blocks);
             }
         }
-        if (walls.contains(EnumFacing.SOUTH))
-        {
-            for (int x = 0; x < buildLength; x++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(x + offsetX, y, buildLength + offsetZ - 1);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
-        if (walls.contains(EnumFacing.WEST))
-        {
-            for (int z = 0; z < buildLength; z++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(offsetX, y, z + offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
-        if (walls.contains(EnumFacing.EAST))
-        {
-            for (int z = 0; z < buildLength; z++)
-            {
-                for (int y = 0; y < hgt; y++)
-                {
-                    BlockPos pos = startPos.add(buildLength + offsetX - 1, y, z + offsetZ);
-                    blocks.add(new BlockPlacement(pos, wallBlock));
-                }
-            }
-        }
-    }
-
-    public void addWall(EnumFacing side, boolean force)
-    {
-        walls.add(side);
-    }
-
-    public void removeWall(EnumFacing side)
-    {
-        walls.remove(side);
-    }
-
-    public boolean hasDoorOnSide(EnumFacing side)
-    {
-        return doorSides.contains(side);
-    }
-
-    public boolean hasWallOnSide(EnumFacing side)
-    {
-        return (walls.contains(side));
     }
 
     public void addRoofEdge(EnumFacing side)
@@ -245,8 +121,10 @@ public abstract class CastleRoom
 
     public boolean canBuildDoorOnSide(EnumFacing side)
     {
-        return hasWallOnSide(side);
+        return true;
     }
+
+    public boolean canBuildInnerWallOnSide(EnumFacing side) { return true; }
 
     public boolean reachableFromSide(EnumFacing side)
     {
@@ -355,6 +233,11 @@ public abstract class CastleRoom
         blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
     }
 
+    public BlockPos getRoofStartPosition()
+    {
+        return startPos.add(offsetX, height, offsetZ);
+    }
+
     protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation)
     {
         switch (rotation)
@@ -392,5 +275,95 @@ public abstract class CastleRoom
             facing = facing.rotateY();
         }
         return facing;
+    }
+
+    private BlockPos getbuildPosition()
+    {
+        return startPos.add(offsetX, 0, offsetZ);
+    }
+
+    public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
+
+    public boolean hasDoorOnSide(EnumFacing side)
+    {
+        return walls.hasDoorOnside(side);
+    }
+
+    public void addDoorOnSideCentered(EnumFacing side)
+    {
+        walls.addCenteredDoor(buildLength, side);
+    }
+    public void addDoorOnSideRandom(Random random, EnumFacing side)
+    {
+        walls.addRandomDoor(random, buildLength, side);
+    }
+
+    public void addOuterWall(EnumFacing side)
+    {
+        walls.addOuter(side);
+    }
+
+    public void addInnerWall(EnumFacing side)
+    {
+        walls.addInner(side);
+    }
+
+    public void removeWall(EnumFacing side)
+    {
+        walls.removeWall(side);
+    }
+
+    public BlockPos getDecorationStartPos()
+    {
+        BlockPos result = startPos;
+
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            result = result.south();
+        }
+        if (walls.hasWallOnSide(EnumFacing.WEST))
+        {
+            result = result.east();
+        }
+
+        return result;
+    }
+
+    public int getDecorationLengthX()
+    {
+        int result = buildLength;
+
+        if (walls.hasWallOnSide(EnumFacing.WEST))
+        {
+            --result;
+        }
+        if (walls.hasWallOnSide(EnumFacing.EAST))
+        {
+            --result;
+        }
+
+        return result;
+    }
+
+    public int getDecorationLengthZ()
+    {
+        int result = buildLength;
+
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            --result;
+        }
+        if (walls.hasWallOnSide(EnumFacing.NORTH))
+        {
+            --result;
+        }
+
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return roomType.name;
     }
 }

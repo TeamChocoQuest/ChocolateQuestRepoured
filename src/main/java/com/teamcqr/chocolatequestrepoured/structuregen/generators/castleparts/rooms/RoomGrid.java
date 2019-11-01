@@ -362,13 +362,18 @@ public class RoomGrid
         return true;
     }
 
+    /*
+    * Determine if a tower can be attached next to the given cell
+     */
     public boolean canAttachTower(RoomGridCell cell, EnumFacing side)
     {
         RoomGridCell adjacent = getAdjacentCell(cell, side);
+
         return (!cell.getRoom().isTower() &&
+                !cell.getRoom().hasDoorOnSide(side) &&
                 adjacent != null &&
-                !adjacent.hasDoorOnSide(side) &&
-                !(adjacent.isPopulated() && adjacent.getRoom().getRoomType().isPartOfStairs()));
+                !(adjacent.isPopulated() &&
+                 !cell.getRoom().getRoomType().isPartOfStairs()));
     }
 
     public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)
