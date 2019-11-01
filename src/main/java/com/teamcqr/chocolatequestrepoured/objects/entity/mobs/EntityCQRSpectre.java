@@ -39,5 +39,10 @@ public class EntityCQRSpectre extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 1;
 	}
+	
+	@Override
+	public boolean canRide() {
+		return true;
+	}
 
 }

@@ -1,10 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import com.teamcqr.chocolatequestrepoured.util.data.ArchiveManipulationUtil;
-import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
-
-import java.util.HashMap;
-
 /**
  * Alternative entry point for debugging algorithms
  * Does not launch the game or perform any actions not explicitly defined in this file

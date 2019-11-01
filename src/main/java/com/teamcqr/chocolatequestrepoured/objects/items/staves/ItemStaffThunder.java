@@ -6,6 +6,8 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -23,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffThunder extends Item {
+public class ItemStaffThunder extends Item implements IRangedWeapon{
 
 	public ItemStaffThunder() {
 		setMaxDamage(2048);

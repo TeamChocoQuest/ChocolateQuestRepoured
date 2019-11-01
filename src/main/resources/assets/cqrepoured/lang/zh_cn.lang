@@ -1,4 +1,4 @@
-The Chinese language file for Chocolate Quest Repoured Mod!
+The Chinese CN language file for Chocolate Quest Repoured Mod!
 This translation was created by Moko
 
 
@@ -177,9 +177,11 @@ item.potion_healing.name=治疗药水
 item.teleport_stone.name=传送石
 item.soul_bottle.name=瓶中灵魂
 item.mob_to_spawner_tool.name=生物生成器
+item.spawner_converter.name=刷怪笼转换器
 item.badge.name=徽章
 item.backpack.name=背包
 item.alchemy_bag.name=炼金术之袋
+item.structure_selector.name=选择选择器助手
 
 //Dragon Items
 item.helmet_dragon.name=龙之头盔
@@ -193,7 +195,7 @@ item.dagger_ninja.name=忍者匕首
 //Swords
 item.sword_turtle.name=乌龟之剑
 item.sword_spider.name=蜘蛛之剑
-item.battle_axe_bull.name=斗牛之战斧
+item.battle_axe_bull.name=公牛战斧
 item.sword_moonlight.name=月牙之刃
 item.sword_sunshine.name=晨曦之剑
 
@@ -233,16 +235,17 @@ item.shield_spider.name=蜘蛛盾
 item.shield_sun.name=太阳盾
 item.shield_tomb.name=古墓盾
 item.shield_triton.name=鱿鱼盾
-item.shield_turtle.name=龟步盾盾
+item.shield_turtle.name=龟步盾
 item.shield_warped.name=扭曲的盾
+item.shield_walker.name=漫游者之盾
 item.shield_walker_normal.name=漫游者之盾
 item.shield_zombie.name=僵尸盾
 
 //Great Swords
-item.great_sword_monking.name=头陀大剑
+item.great_sword_monking.name=头陀巨剑
 item.great_sword_bull.name=公牛巨剑
-item.great_sword_diamond.name=钻石大剑
-item.great_sword_iron.name=铁质大剑
+item.great_sword_diamond.name=钻石巨剑
+item.great_sword_iron.name=铁质巨剑
 
 //Staves
 item.staff.name=法杖
@@ -257,11 +260,11 @@ item.staff_thunder.name=雷电法杖
 
 //Guns
 item.revolver.name=左轮手枪
-item.captain_revolver.name=海盗船长的左轮枪
+item.captain_revolver.name=船长左轮枪
 item.musket.name=火枪
-item.musket_iron.name=铁质刺刀火枪
-item.musket_diamond.name=钻石刺刀火枪
-item.musket_monking.name=头陀刺刀火枪
+item.musket_dagger_iron.name=铁质刺刀火枪
+item.musket_dagger_diamond.name=钻石刺刀火枪
+item.musket_dagger_monking.name=头陀刺刀火枪
 item.bullet_iron.name=铁质子弹
 item.bullet_gold.name=黄金子弹
 item.bullet_diamond.name=钻石子弹
@@ -335,13 +338,15 @@ tile.table_birch.name=白桦木桌
 tile.table_jungle.name=丛林木桌
 tile.table_acacia.name=金合欢木桌
 tile.table_dark.name=深色橡木桌
+tile.boss_block.name=老怪（Boss）方块
+tile.force_field_nexus.name=力场关系(NYI)
 
 //Andesite blocks
 tile.andesite_carved.name=雕刻的安山岩
 tile.andesite_pillar.name=竖纹安山岩
 tile.andesite_cube.name=安山岩立方体
 tile.andesite_scale.name=安山岩碎片
-tile.andesite_square.name=安山岩 Square
+tile.andesite_square.name=安山岩花纹转
 tile.andesite_small.name=小型安山岩石砖
 tile.andesite_large.name=大型安山岩石砖
 
@@ -350,7 +355,7 @@ tile.diorite_carved.name=雕刻的闪长岩
 tile.diorite_pillar.name=竖纹闪长岩
 tile.diorite_cube.name=闪长岩立方体
 tile.diorite_scale.name=闪长岩碎片
-tile.diorite_square.name=闪长岩 Square
+tile.diorite_square.name=闪长岩花纹转
 tile.diorite_small.name=小型闪长岩石砖
 tile.diorite_large.name=大型闪长岩石砖
 
@@ -359,7 +364,7 @@ tile.granite_carved.name=雕刻的花岗岩
 tile.granite_pillar.name=竖纹花岗岩
 tile.granite_cube.name=花岗岩立方体
 tile.granite_scale.name=花岗岩碎片
-tile.granite_square.name=花岗岩Square
+tile.granite_square.name=花岗岩花纹转
 tile.granite_small.name=小型花岗岩石砖
 tile.granite_large.name=大型花岗岩石砖
 
@@ -367,7 +372,7 @@ tile.granite_large.name=大型花岗岩石砖
 tile.prismarine_carved.name=雕刻的海晶石
 tile.prismarine_pillar.name=竖纹海晶石
 tile.prismarine_cube.name=海晶石立方体
-tile.prismarine_square.name=海晶石Square
+tile.prismarine_square.name=海晶石花纹转
 tile.prismarine_small.name=小型海晶石砖
 tile.prismarine_large.name=大型海晶石砖
 
@@ -376,7 +381,7 @@ tile.endstone_carved.name=雕刻的末地石
 tile.endstone_pillar.name=竖纹末地石
 tile.endstone_cube.name=末地石立方体
 tile.endstone_scale.name=末地石碎片
-tile.endstone_square.name=末地石 Square
+tile.endstone_square.name=末地石花纹转
 tile.endstone_small.name=小型末地石砖
 
 //Purpur blocks
@@ -386,19 +391,19 @@ tile.purpur_scale.name=紫珀块碎片
 tile.purpur_small.name=小型紫珀块石砖
 tile.purpur_large.name=大型紫珀块石砖
 
-//RedNetherbrick blocks
+//Red Netherbrick blocks
 tile.red_netherbrick_carved.name=雕刻的红色地狱砖块
 tile.red_netherbrick_pillar.name=竖纹红色地狱砖块
 tile.red_netherbrick_cube.name=红色地狱砖立方体
 tile.red_netherbrick_scale.name=红色地狱砖块碎片
-tile.red_netherbrick_square.name=红色地狱砖块 Square
+tile.red_netherbrick_square.name=红色地狱砖块花纹转
 tile.red_netherbrick_large.name=大型红色地狱砖块
 
 //Stone blocks
 tile.stone_pillar.name=石柱
 tile.stone_cube.name=石立方体
 tile.stone_scale.name=石碎片
-tile.stone_square.name=石Square
+tile.stone_square.name=石花纹转
 tile.stone_small.name=小型石砖
 
 //Exporter chests
@@ -488,24 +493,31 @@ description.staff.name=丢失 #TODO
 description.staff_thunder.name=丢失 #TODO
 
 // Mobs
-entity.dummy.name=木头人(CQR)
-entity.dwarf.name=矮人(CQR)
-entity.enderman.name=末影人(CQR)
-entity.goblin.name=哥布林(CQR)
-entity.golem.name=铁傀儡(CQR)
-entity.illager.name=卫道士(CQR)
-entity.npc.name=NPC(CQR)
-entity.minotaur.name=牛头人(CQR)
-entity.mummy.name=木乃伊(CQR)
-entity.ogre.name=食人魔(CQR)
-entity.orc.name=兽人(CQR)
-entity.pigman.name=猪人(CQR)
-entity.pirate.name=海盗(CQR)
-entity.skeleton.name=骷髅(CQR)
-entity.spectre.name=幽灵(CQR)
-entity.triton.name=鱿鱼人(CQR)
+entity.boarman.name=野猪人
+entity.dummy.name=木头人
+entity.dwarf.name=矮人
+entity.enderman.name=末影人
+entity.goblin.name=哥布林
+entity.golem.name=铁傀儡
+entity.illager.name=卫道士
+entity.npc.name=NPC
+entity.mandril.name=山魈
+entity.minotaur.name=牛头人
+entity.mummy.name=木乃伊
+entity.ogre.name=食人魔
+entity.orc.name=兽人
+entity.pirate.name=海盗
+entity.skeleton.name=骷髅
+entity.spectre.name=幽灵
+entity.triton.name=鱿鱼人
 entity.walker.name=深渊漫步者
-entity.zombie.name=僵尸(CQR)
+entity.zombie.name=僵尸
+
+//Mounts
+entity.giant_endermite.name=巨型末影螨
+entity.giant_silverfish.name=巨型蠹虫
+entity.giant_silverfish1.name=巨型熔岩蠹虫
+entity.giant_silverfish2.name=巨型沼泽蠹虫
 
 // Bosses
-entity.nether_dragon.name=血眼白龙
+entity.nether_dragon.name=下界魔龙

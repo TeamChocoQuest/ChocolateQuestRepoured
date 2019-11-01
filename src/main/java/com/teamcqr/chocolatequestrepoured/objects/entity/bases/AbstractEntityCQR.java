@@ -22,10 +22,12 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import io.netty.buffer.ByteBuf;
@@ -100,6 +102,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
+		currentSpeechBubbleID = getRNG().nextInt(ESpeechBubble.values().length);
 		//this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
 		this.experienceValue = 5;
 	}
@@ -162,6 +165,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(16, new EntityAISearchMount(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -177,9 +181,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
-		this.dataManager.set(SIZE_VAR, -0.125F + (this.rand.nextFloat() *0.25F));
+		float initSizeVar = -0.125F + (this.rand.nextFloat() *0.25F);
+		this.dataManager.set(SIZE_VAR, initSizeVar);
 		//Adapt size of hitbox
-		this.setSize(0.6F * (1F + getSizeVariation()*0.8F), 1.8F *(1F + getSizeVariation()));
+		this.setSize(0.6F * (1F + initSizeVar*0.8F), 1.8F *(1F + initSizeVar));
 		//System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -662,5 +667,32 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	}
 	
 	public abstract int getTextureCount();
+
+	public double getAttackReach(EntityLivingBase target) {
+		double d = this.width + target.width + 0.25D;
+		return d;
+	}
+
+	public boolean inAttackReach(EntityLivingBase target) {
+		return target != null && !target.isDead && this.getDistance(target) <= this.getAttackReach(target);
+	}
+	
+	public abstract boolean canRide();
+
+	public boolean isEntityInFieldOfView(EntityLivingBase target) {
+		double x = target.posX - this.posX;
+		double z = target.posZ - this.posZ;
+		double d = Math.toDegrees(Math.atan2(-x, z));
+		if (!ItemUtil.compareRotations(this.rotationYawHead, d, 80.0D)) {
+			return false;
+		}
+		double y = target.posY + target.getEyeHeight() - this.posY - this.getEyeHeight();
+		double xz = Math.sqrt(x * x + z * z);
+		double d1 = Math.toDegrees(Math.atan2(y, xz));
+		if (!ItemUtil.compareRotations(this.rotationPitch, d1, 50.0D)) {
+			return false;
+		}
+		return true;
+	}
 
 }

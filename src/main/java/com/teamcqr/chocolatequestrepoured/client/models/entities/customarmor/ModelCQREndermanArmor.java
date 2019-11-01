@@ -38,7 +38,6 @@ public class ModelCQREndermanArmor extends ModelBiped {
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-		float f = -14.0F;
 		this.bipedBody.rotateAngleX = 0.0F;
 		this.bipedBody.rotationPointY = -14.0F;
 		this.bipedBody.rotationPointZ = -0.0F;
@@ -48,7 +47,6 @@ public class ModelCQREndermanArmor extends ModelBiped {
 		this.bipedLeftArm.rotateAngleX = (float) ((double) this.bipedLeftArm.rotateAngleX * 0.5D);
 		this.bipedRightLeg.rotateAngleX = (float) ((double) this.bipedRightLeg.rotateAngleX * 0.5D);
 		this.bipedLeftLeg.rotateAngleX = (float) ((double) this.bipedLeftLeg.rotateAngleX * 0.5D);
-		float f1 = 0.4F;
 
 		if (this.bipedRightArm.rotateAngleX > 0.4F) {
 			this.bipedRightArm.rotateAngleX = 0.4F;
@@ -105,7 +103,6 @@ public class ModelCQREndermanArmor extends ModelBiped {
 		this.bipedHeadwear.rotateAngleZ = this.bipedHead.rotateAngleZ;
 
 		if (this.isAttacking) {
-			float f2 = 1.0F;
 			this.bipedHead.rotationPointY -= 5.0F;
 		}
 	}

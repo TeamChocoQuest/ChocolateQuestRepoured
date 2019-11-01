@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDagger;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumHand;
 
 public class EntityAIBackstab extends EntityAIAttack {
 
@@ -14,7 +13,7 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemDagger && super.shouldExecute();
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldExecute();
 	}
 
 	@Override
