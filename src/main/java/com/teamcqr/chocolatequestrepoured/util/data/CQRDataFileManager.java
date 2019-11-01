@@ -145,7 +145,7 @@ public class CQRDataFileManager {
 				//rootTag.removeTag("uniques");
 				rootTag.setTag("uniques", nameList);
 			}
-			
+			//System.out.println("Saving...");
 			saveToFile(rootTag);
 			
 			file = null;

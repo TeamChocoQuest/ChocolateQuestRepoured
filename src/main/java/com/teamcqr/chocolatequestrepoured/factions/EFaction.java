@@ -268,7 +268,7 @@ public enum EFaction {
 				repuTag.setUniqueId("UUID", entry.getKey());
 				repuTag.setInteger("Reputation", entry.getValue());
 				
-				repus.appendTag(repus);
+				repus.appendTag(repuTag);
 			}
 			NBTTagCompound factionTag = new NBTTagCompound();
 			factionTag.setString("Name", faction.name());
@@ -277,6 +277,7 @@ public enum EFaction {
 			factions.appendTag(factionTag);
 		}
 		compound.setTag("Factions", factions);
+		//System.out.println("Faction data saved!");
 		return compound;
 	}
 
