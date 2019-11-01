@@ -21,7 +21,7 @@ public class RoomWallBuilder
 
     public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side, Random random)
     {
-        this.height = height / 2;
+        this.height = height;
         this.length = length;
         this.options = options;
         this.side = side;
