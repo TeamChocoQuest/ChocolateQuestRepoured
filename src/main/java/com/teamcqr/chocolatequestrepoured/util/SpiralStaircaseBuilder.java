@@ -8,10 +8,10 @@ import net.minecraft.util.math.BlockPos;
 
 public class SpiralStaircaseBuilder
 {
+    private static final int STAIR_WIDTH = 2;
+
     private BlockPos start;
     private EnumFacing firstSide;
-
-    private int startPattern;
 
     public SpiralStaircaseBuilder(BlockPos pillarStart, EnumFacing firstStairSide)
     {
@@ -23,8 +23,8 @@ public class SpiralStaircaseBuilder
     //the 3x3 grid of the spiral and at or above the starting Y
     public boolean isPartOfStairs(BlockPos position)
     {
-        return ((Math.abs(position.getX() - start.getX()) <= 1) &&
-                (Math.abs(position.getZ() - start.getZ()) <= 1) &&
+        return ((Math.abs(position.getX() - start.getX()) <= STAIR_WIDTH) &&
+                (Math.abs(position.getZ() - start.getZ()) <= STAIR_WIDTH) &&
                 (position.getY() >= start.getY()));
     }
 
@@ -48,44 +48,44 @@ public class SpiralStaircaseBuilder
         switch (stairSide)
         {
             case NORTH:
-                if (posX == startX && posZ == startZ - 1)
+                if (posX == startX && inBoundsNoZero(posZ, startZ, -STAIR_WIDTH))
                 {
                     return Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                 }
-                else if (posX == startX + 1 && (posZ == startZ - 1 || posZ == startZ))
+                else if (inBoundsNoZero(posX, startX, STAIR_WIDTH) && inBoundsWithZero(posZ, startZ, -STAIR_WIDTH))
                 {
                     return Blocks.STONEBRICK.getDefaultState();
                 }
                 break;
 
             case SOUTH:
-                if (posX == startX && posZ == startZ + 1)
+                if (posX == startX && inBoundsNoZero(posZ, startZ, STAIR_WIDTH))
                 {
                     return Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                 }
-                else if (posX == startX - 1 && (posZ == startZ + 1 || posZ == startZ))
+                else if (inBoundsNoZero(posX, startX, -STAIR_WIDTH) && inBoundsWithZero(posZ, startZ, STAIR_WIDTH))
                 {
                     return Blocks.STONEBRICK.getDefaultState();
                 }
                 break;
 
             case WEST:
-                if (posX == startX - 1 && posZ == startZ)
+                if (inBoundsNoZero(posX, startX, -STAIR_WIDTH) && posZ == startZ)
                 {
                     return Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                 }
-                else if ((posX == startX || posX == startX - 1) && posZ == startZ - 1)
+                else if (inBoundsWithZero(posX, startX, -STAIR_WIDTH) && inBoundsNoZero(posZ, startZ, -STAIR_WIDTH))
                 {
                     return Blocks.STONEBRICK.getDefaultState();
                 }
                 break;
 
             case EAST:
-                if (posX == startX + 1 && posZ == startZ)
+                if (inBoundsNoZero(posX, startX, STAIR_WIDTH) && posZ == startZ)
                 {
                     return Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                 }
-                else if ((posX == startX || posX == startX + 1) && posZ == startZ + 1)
+                else if (inBoundsWithZero(posX, startX, STAIR_WIDTH) && inBoundsNoZero(posZ, startZ, STAIR_WIDTH))
                 {
                     return Blocks.STONEBRICK.getDefaultState();
                 }
@@ -108,5 +108,29 @@ public class SpiralStaircaseBuilder
         return facing;
     }
 
+    private boolean inBoundsNoZero(int pos, int start, int distance)
+    {
+        int diff = pos - start;
+        if (distance > 0)
+        {
+            return (diff > 0 && diff <= distance);
+        }
+        else
+        {
+            return (diff < 0 && diff >= distance);
+        }
+    }
 
+    private boolean inBoundsWithZero(int pos, int start, int distance)
+    {
+        int diff = pos - start;
+        if (distance > 0)
+        {
+            return (diff >= 0 && diff <= distance);
+        }
+        else
+        {
+            return (diff <= 0 && diff >= distance);
+        }
+    }
 }

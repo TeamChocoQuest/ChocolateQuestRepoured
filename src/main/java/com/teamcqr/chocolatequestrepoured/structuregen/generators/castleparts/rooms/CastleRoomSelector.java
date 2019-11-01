@@ -406,7 +406,8 @@ public class CastleRoomSelector
              */
             {
                 candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f &&
-                        r.isSelectedForBuilding());
+                        r.isSelectedForBuilding() && !r.isPopulated());
+                Collections.shuffle(candidateCells);
 
                 for (RoomGridCell cell : candidateCells)
                 {
