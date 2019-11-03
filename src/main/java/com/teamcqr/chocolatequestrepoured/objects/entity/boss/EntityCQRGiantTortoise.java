@@ -13,11 +13,14 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
@@ -61,6 +64,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		
 		this.dataManager.register(MOUTH_OPEN, false);
 	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		
+		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.8D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.125D);
+	}
 
 	@Override
 	public World getWorld() {
@@ -77,6 +88,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(sentFromPart) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		} 
+		//TODO: Play "armor hit" sound
 		return true;
 	}
 
@@ -151,7 +163,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		
 		alignParts();
 	}
-
+	
 	private void alignParts() {
 		//Legs
 		Vec3d v = new Vec3d(0,0,baseWidth/2 + baseWidth*0.1);
@@ -190,6 +202,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			// since multiparts are not added to the world tick list which is what checks isDead
 			this.world.removeEntityDangerously(part);
 		}
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_SLIME_HURT;
 	}
 
 }
