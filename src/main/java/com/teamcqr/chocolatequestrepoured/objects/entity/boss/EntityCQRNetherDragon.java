@@ -226,8 +226,6 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 		//DONE: Destroy the blocks
 		destroyBlocksInAABB(getEntityBoundingBox());
 		/*for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
