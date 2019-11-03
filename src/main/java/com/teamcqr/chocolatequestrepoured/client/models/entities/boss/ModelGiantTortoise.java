@@ -159,8 +159,9 @@ public class ModelGiantTortoise extends ModelBase {
         
         //TODO: Properly make leg animation
         this.legJointFL.rotateAngleY =  -0.7853981633974483F + (MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
+        this.legJointFR.rotateAngleY = 0.7853981633974483F + -(MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
+        
+        this.legJointBL.rotateAngleY = -2.356194490192345F + -(MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
         this.legJointBR.rotateAngleY = 2.356194490192345F + (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
-        this.legJointFR.rotateAngleY = 0.7853981633974483F + (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
-        this.legJointBL.rotateAngleY = -2.356194490192345F + (MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
     }
 }
