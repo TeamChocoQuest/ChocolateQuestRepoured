@@ -140,9 +140,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			}
 		};
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return attackEntityFrom(source, amount, false);
+	}
+
+	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		boolean result = super.attackEntityFrom(source, amount);
 		if (result) {
 			this.handleArmorBreaking();

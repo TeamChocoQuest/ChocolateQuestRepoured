@@ -1,4 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
+package com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts;
+
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityMultiPart;
