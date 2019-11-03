@@ -28,12 +28,13 @@ public class CastleRoomKitchen extends CastleRoomGeneric
                 int yOffset = 0;
                 blocks.add(new BlockPlacement(startPos.add( x, yOffset, z), Blocks.PLANKS.getDefaultState()));
                 blocks.add(new BlockPlacement(startPos.add( x, yOffset + height - 1, z), Blocks.STONEBRICK.getDefaultState()));
-                yOffset++;
-                if (x == 0 || z == 0 || x == sideLength - 1 || z == sideLength - 1)
-                {
-
-                }
             }
+        }
+
+        ArrayList<BlockPos> edge = getDecorationEdge();
+        for (BlockPos pos : edge)
+        {
+            blocks.add(new BlockPlacement(pos, Blocks.CRAFTING_TABLE.getDefaultState()));
         }
     }
 

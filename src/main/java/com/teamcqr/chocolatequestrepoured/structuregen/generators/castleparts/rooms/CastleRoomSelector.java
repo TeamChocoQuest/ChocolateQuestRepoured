@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.ICastleAddon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -372,7 +373,7 @@ public class CastleRoomSelector
                                 cell.setReachable();
                             }
                             doorDirections.add(side);
-                            cell.getRoom().addDoorOnSideCentered(side);
+                            addDoorToRoomCentered(cell, side);
                             break;
                         }
                     }
@@ -743,15 +744,20 @@ public class CastleRoomSelector
 
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)
     {
-        if (cell.getRoom().canBuildDoorOnSide(side))
+        if (cell.getRoom().hasWallOnSide(side))
         {
-            cell.getRoom().addDoorOnSideCentered(side);
+            DoorPlacement placement = cell.getRoom().addDoorOnSideCentered(side);
+            if (grid.adjacentCellIsPopulated(cell, side))
+            {
+                grid.getAdjacentCell(cell, side).getRoom().registerAdjacentRoomDoor(side.getOpposite(), placement);
+            }
         }
         else
         {
             if (grid.adjacentCellIsPopulated(cell, side))
             {
-                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideCentered(side.getOpposite());
+                DoorPlacement placement = grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideCentered(side.getOpposite());
+                cell.getRoom().registerAdjacentRoomDoor(side, placement);
             }
         }
     }
@@ -760,13 +766,18 @@ public class CastleRoomSelector
     {
         if (cell.getRoom().hasWallOnSide(side))
         {
-            cell.getRoom().addDoorOnSideRandom(random, side);
+            DoorPlacement placement = cell.getRoom().addDoorOnSideRandom(random, side);
+            if (grid.adjacentCellIsPopulated(cell, side))
+            {
+                grid.getAdjacentCell(cell, side).getRoom().registerAdjacentRoomDoor(side.getOpposite(), placement);
+            }
         }
         else
         {
             if (grid.adjacentCellIsPopulated(cell, side))
             {
-                grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideRandom(random, side.getOpposite());
+                DoorPlacement placement = grid.getAdjacentCell(cell, side).getRoom().addDoorOnSideRandom(random, side.getOpposite());
+                cell.getRoom().registerAdjacentRoomDoor(side, placement);
             }
         }
     }
