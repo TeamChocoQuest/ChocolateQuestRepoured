@@ -18,7 +18,7 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 		
 		setSize(width, height);
 		
-		setInvisible(true);
+		//setInvisible(true);
 	}
 	
 	public EntityCQRGiantTortoise getParent() {

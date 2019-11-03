@@ -33,7 +33,7 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 		
 		if(animState < 11 && entity.isMouthOpen() && !mouthIsOpen) {
 			float angle = (animState) * 3.375F;
-			this.model.mouth.rotateAngleZ = new Float(Math.toRadians(angle));
+			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
 			
 			animState++;
 			if(animState == 11) {
@@ -45,7 +45,7 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 		else if(animState < 11 && !entity.isMouthOpen() && mouthIsOpen) {
 			//this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
 			float angle = (10 - animState) * 3.375F;
-			this.model.mouth.rotateAngleZ = new Float(Math.toRadians(angle));
+			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
 			
 			animState++;
 			if(animState == 11) {

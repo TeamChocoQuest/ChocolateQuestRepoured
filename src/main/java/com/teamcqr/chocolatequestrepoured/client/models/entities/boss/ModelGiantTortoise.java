@@ -30,7 +30,7 @@ public class ModelGiantTortoise extends ModelBase {
     public ModelRenderer legBL;
     public ModelRenderer footBL;
     public ModelRenderer head;
-    public ModelRenderer mouth;
+    public ModelRenderer jaw;
 
     public ModelGiantTortoise() {
         this.textureWidth = 192;
@@ -96,10 +96,10 @@ public class ModelGiantTortoise extends ModelBase {
         this.neck = new ModelRenderer(this, 50, 120);
         this.neck.setRotationPoint(0.0F, 0.0F, -17.0F);
         this.neck.addBox(-5.0F, -5.0F, -1.0F, 10, 10, 2, 0.0F);
-        this.mouth = new ModelRenderer(this, 140, 80);
-        this.mouth.setRotationPoint(0.0F, 3.5F, -1.0F);
-        this.mouth.addBox(-4.5F, -0.5F, -8.0F, 9, 1, 8, 0.0F);
-        this.setRotateAngle(mouth, 0.4363323129985824F, 0.0F, 0.0F);
+        this.jaw = new ModelRenderer(this, 140, 80);
+        this.jaw.setRotationPoint(0.0F, 3.5F, -1.0F);
+        this.jaw.addBox(-4.5F, -0.5F, -8.0F, 9, 1, 8, 0.0F);
+        //this.setRotateAngle(jaw, 0.4363323129985824F, 0.0F, 0.0F);
         this.footFL = new ModelRenderer(this, 140, 25);
         this.footFL.setRotationPoint(0.0F, 3.0F, -2.7F);
         this.footFL.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
@@ -130,7 +130,7 @@ public class ModelGiantTortoise extends ModelBase {
         this.neck.addChild(this.head);
         this.mainPart.addChild(this.legJointFR);
         this.mainPart.addChild(this.neck);
-        this.head.addChild(this.mouth);
+        this.head.addChild(this.jaw);
         this.legFL.addChild(this.footFL);
         this.mainPart.addChild(this.top);
         this.mainPart.addChild(this.legJointBL);
