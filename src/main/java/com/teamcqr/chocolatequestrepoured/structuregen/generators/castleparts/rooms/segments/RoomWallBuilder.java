@@ -14,18 +14,18 @@ public class RoomWallBuilder
     private BlockPos wallStart;
     private WallOptions options;
     private int doorStart = 0;
+    private int doorWidth = 0;
     private int length;
     private int height;
     private EnumFacing side;
     private Random random;
 
-    public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side, Random random)
+    public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side)
     {
         this.height = height;
         this.length = length;
         this.options = options;
         this.side = side;
-        this.random = random;
 
         this.wallStart = roomStart;
 
@@ -41,6 +41,7 @@ public class RoomWallBuilder
         if (options.hasDoor())
         {
             this.doorStart = options.getDoor().getOffset();
+            this.doorWidth = options.getDoor().getWidth();
         }
     }
 
@@ -155,6 +156,6 @@ public class RoomWallBuilder
     private boolean withinDoorWidth(int value)
     {
         int relativeToDoor = value - doorStart;
-        return (relativeToDoor >= 0 && relativeToDoor < DoorPlacement.DEFAULT_WIDTH);
+        return (relativeToDoor >= 0 && relativeToDoor < doorWidth);
     }
 }

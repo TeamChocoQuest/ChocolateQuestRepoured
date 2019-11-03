@@ -28,6 +28,9 @@ public class WallOptions
         return this.door;
     }
 
-    public boolean hasDoor() { return this.door != null; }
+    public boolean hasDoor()
+    {
+        return this.door != null;
+    }
 
 }
