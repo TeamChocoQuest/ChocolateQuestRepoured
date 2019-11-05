@@ -26,15 +26,52 @@ import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 	
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 	
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
 	
+	static int EAnimStateGlobalID = 0;
+	
+	public enum ETortoiseAnimState {
+		SPIN_UP,
+		SPIN_DOWN,
+		SPIN,
+		MOVE_PARTS_IN,
+		MOVE_PARTS_OUT,
+		WALKING,
+		HEALING,
+		NONE;
+
+		private int id;
+		
+		private ETortoiseAnimState() {
+			this.id = EAnimStateGlobalID;
+			EAnimStateGlobalID++;
+		}
+		
+		public static ETortoiseAnimState valueOf(int i) {
+			if(i >= values().length) {
+				return NONE;
+			}
+			return values()[i];
+		}
+		
+		public int getID() {
+			return this.id;
+		}
+	}
+	
 	final float baseWidth = 2.0F;
 	final float baseHeight = 1.7F;
+	
+	@SideOnly(Side.CLIENT)
+	private int animationProgress = 0;
 
 	public EntityCQRGiantTortoise(World worldIn) {
 		//super(worldIn, size);
@@ -63,6 +100,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.entityInit();
 		
 		this.dataManager.register(MOUTH_OPEN, false);
+		this.dataManager.register(ANIM_STATE, ETortoiseAnimState.NONE.getID());
 	}
 	
 	@Override
@@ -141,6 +179,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		return this.dataManager.get(MOUTH_OPEN);
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public ETortoiseAnimState getCurrentAnimation() {
+		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
+	}
+	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		super.writeSpawnData(buffer);
@@ -207,6 +250,20 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_SLIME_HURT;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public int getAnimationProgress() {
+		return animationProgress;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void setAnimationProgress(int newProg) {
+		animationProgress = newProg;
+	}
+	
+	public void setCurrentAnimation(ETortoiseAnimState newState) {
+		this.dataManager.set(ANIM_STATE, newState.getID());
 	}
 
 }
