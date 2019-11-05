@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -154,14 +157,51 @@ public class ModelGiantTortoise extends ModelBase {
     
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
     {
-        this.head.rotateAngleX = headPitch * 0.017453292F;
-        this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+    	boolean renderParts = true;
+    	EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise)entityIn;
+    	switch(ent.getCurrentAnimation()) {
+		case MOVE_PARTS_IN:
+			break;
+		case MOVE_PARTS_OUT:
+			break;
+		case SPIN:
+			renderParts = false;
+			//Spinning: Do this with OpenGL in render method, use limbSwingAmount for this
+			break;
+		case SPIN_DOWN:
+			renderParts = false;
+			break;
+		case SPIN_UP:
+			renderParts = false;
+			
+			if(ent.getAnimationProgress() >= 100) {
+				ent.setCurrentAnimation(ETortoiseAnimState.SPIN);
+				ent.setAnimationProgress(0);
+			} else {
+				ent.setAnimationProgress(ent.getAnimationProgress() +1);
+			}
+			break;
+		case WALKING:
+			this.legJointFL.rotateAngleY =  -0.7853981633974483F + (MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
+	        this.legJointFR.rotateAngleY = 0.7853981633974483F + -(MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
+	        
+	        this.legJointBL.rotateAngleY = -2.356194490192345F + -(MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
+	        this.legJointBR.rotateAngleY = 2.356194490192345F + (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
+			break;
+		case HEALING:
+			renderParts = false;
+			break;
+		case NONE:
+			renderParts = false;
+			break;
+		default:
+			break;
+    	}
+    	if(renderParts) {
+    		this.head.rotateAngleX = headPitch * 0.017453292F;
+            this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+    	}
         
-        //TODO: Properly make leg animation
-        this.legJointFL.rotateAngleY =  -0.7853981633974483F + (MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
-        this.legJointFR.rotateAngleY = 0.7853981633974483F + -(MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
-        
-        this.legJointBL.rotateAngleY = -2.356194490192345F + -(MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
-        this.legJointBR.rotateAngleY = 2.356194490192345F + (MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount);
+        //DONE: Properly make leg animation
     }
 }
