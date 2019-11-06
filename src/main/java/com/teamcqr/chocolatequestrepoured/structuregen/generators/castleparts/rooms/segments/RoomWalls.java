@@ -34,7 +34,7 @@ public class RoomWalls
         if (walls.containsKey(side))
         {
             int offset = (wallLength - DoorPlacement.DEFAULT_WIDTH) / 2;
-            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, side);
+            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, DoorPlacement.DEFAULT_HEIGHT);
             walls.get(side).addDoor(door);
             return door;
         }
@@ -46,7 +46,7 @@ public class RoomWalls
         if (walls.containsKey(side))
         {
             int offset = 1 + random.nextInt(wallLength - DoorPlacement.DEFAULT_WIDTH - 1);
-            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, side);
+            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, DoorPlacement.DEFAULT_HEIGHT);
             walls.get(side).addDoor(door);
             return door;
         }

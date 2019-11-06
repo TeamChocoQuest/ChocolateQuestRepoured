@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -73,6 +74,7 @@ public abstract class CastleRoom
     protected HashSet<EnumFacing> roofEdges;
 
     protected RoomWalls walls;
+    protected HashMap<BlockPos, IBlockState> decoMap;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
     {
@@ -85,6 +87,7 @@ public abstract class CastleRoom
         this.doors = new ArrayList<>();
         this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
+        this.decoMap = new HashMap<>();
     }
 
     public void generate(ArrayList<BlockPlacement> blocks)
@@ -326,7 +329,7 @@ public abstract class CastleRoom
     protected ArrayList<BlockPos> getDecorationEdge()
     {
         //First get all blocks that are not occupied by walls
-        ArrayList<BlockPos> result = getDecorationArea();
+        ArrayList<BlockPos> result = getDecorationFirstLayer();
         if (!result.isEmpty())
         {
             BlockPos topLeft = result.get(0); //Top left is the first one added
@@ -357,6 +360,90 @@ public abstract class CastleRoom
 
         return result;
     }
+
+    protected void setDoorAreasToAir()
+    {
+        BlockPos toAdd;
+        BlockPos topLeft = getDecorationStartPos();
+        int xStart = topLeft.getX();
+        int zStart = topLeft.getZ();
+        int xEnd = xStart + (getDecorationLengthX() - 1);
+        int zEnd = zStart + (getDecorationLengthZ() - 1);
+        int yStart = topLeft.getY();
+
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            DoorPlacement placement = null;
+
+            if (walls.hasDoorOnSide(side))
+            {
+                placement = walls.getDoorOnSide(side);
+            }
+            else if (walls.adjacentRoomHasDoorOnSide(side))
+            {
+                placement = walls.getAdjacentDoor(side);
+            }
+
+            if (placement != null)
+            {
+                final int doorStart;
+                final int doorEnd;
+                final int yEnd = yStart + placement.getHeight() - 1;
+
+                if (side.getAxis() == EnumFacing.Axis.Z)
+                {
+                    doorStart = startPos.getX() + placement.getOffset();
+                    doorEnd = doorStart + placement.getWidth() - 1;
+
+                    int z;
+                    if (side == EnumFacing.NORTH)
+                    {
+                        z = zStart;
+                    }
+                    else //SOUTH
+                    {
+                        z = zEnd;
+                    }
+                    for (int x = doorStart; x <= doorEnd; x++)
+                    {
+                        for (int y = yStart; y < yEnd; y++)
+                        {
+                            toAdd = new BlockPos(x, y, z);
+                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                        }
+                    }
+                }
+                else
+                {
+                    doorStart = startPos.getZ() + placement.getOffset();
+                    doorEnd = doorStart + placement.getWidth() - 1;
+
+                    int x;
+                    if (side == EnumFacing.WEST)
+                    {
+                        x = xStart;
+                    }
+                    else //SOUTH
+                    {
+                        x = xEnd;
+                    }
+                    for (int z = doorStart; z <= doorEnd; z++)
+                    {
+                        for (int y = yStart; y < yEnd; y++)
+                        {
+                            toAdd = new BlockPos(x, y, z);
+                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
 
     private void removePositionsAdjacentToDoor(ArrayList<BlockPos> result, int xStart, int zStart, int xEnd, int zEnd, EnumFacing side, DoorPlacement placement)
     {
@@ -399,16 +486,32 @@ public abstract class CastleRoom
     * of a room that can be decorated. In other words, the layer just above the floor
     * that is not already occupied by walls.
      */
+    protected ArrayList<BlockPos> getDecorationFirstLayer()
+    {
+        ArrayList<BlockPos> result = getDecorationArea();
+
+        if (!result.isEmpty())
+        {
+            BlockPos lowerUpperLeft = result.get(0);
+            result.removeIf(p -> p.getY() != lowerUpperLeft.getY());
+        }
+
+        return result;
+    }
+
     protected ArrayList<BlockPos> getDecorationArea()
     {
         ArrayList<BlockPos> result = new ArrayList<>();
-        BlockPos start = getDecorationStartPos().up(); //move up 1 to skip the floor level
+        BlockPos start = getDecorationStartPos();
 
         for (int x = 0; x < getDecorationLengthX(); x++)
         {
-            for (int z = 0; z < getDecorationLengthZ(); z++)
+            for (int y = 0; y < getDecorationLengthY(); y++)
             {
-                result.add(start.add(x, 0, z));
+                for (int z = 0; z < getDecorationLengthZ(); z++)
+                {
+                    result.add(start.add(x, y, z));
+                }
             }
         }
 
@@ -417,7 +520,7 @@ public abstract class CastleRoom
 
     public BlockPos getDecorationStartPos()
     {
-        BlockPos result = startPos;
+        BlockPos result = startPos.up(); //skip the floor
 
         if (walls.hasWallOnSide(EnumFacing.NORTH))
         {
@@ -458,6 +561,18 @@ public abstract class CastleRoom
         if (walls.hasWallOnSide(EnumFacing.SOUTH))
         {
             --result;
+        }
+
+        return result;
+    }
+
+    public int getDecorationLengthY()
+    {
+        int result = height - 1; //Remove one for the floor tiles
+
+        if (defaultCeiling)
+        {
+            --height;
         }
 
         return result;

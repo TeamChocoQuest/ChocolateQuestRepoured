@@ -9,13 +9,13 @@ public class DoorPlacement
 
     private int offset;
     private int width;
-    private EnumFacing.Axis axis;
+    private int height;
 
-    public DoorPlacement(int offset, int width, EnumFacing side)
+    public DoorPlacement(int offset, int width, int height)
     {
         this.offset = offset;
         this.width = width;
-        this.axis = side.getAxis();
+        this.height = height;
     }
 
     public int getOffset()
@@ -26,5 +26,10 @@ public class DoorPlacement
     public int getWidth()
     {
         return width;
+    }
+
+    public int getHeight()
+    {
+        return height;
     }
 }
