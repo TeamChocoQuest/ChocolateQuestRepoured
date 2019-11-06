@@ -2,6 +2,10 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class RoomDecorTable extends RoomDecor
 {
@@ -29,4 +33,5 @@ public class RoomDecorTable extends RoomDecor
         schematic.add(new DecoPlacement(0, 0, 1, blockType));
         schematic.add(new DecoPlacement(1, 0, 1, blockType));
     }
+
 }

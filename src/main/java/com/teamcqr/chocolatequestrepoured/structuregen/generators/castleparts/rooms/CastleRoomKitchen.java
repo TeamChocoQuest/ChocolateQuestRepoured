@@ -1,8 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorShelf;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
@@ -33,20 +35,25 @@ public class CastleRoomKitchen extends CastleRoomGeneric
             }
         }
 
-        setDoorAreasToAir();
+        setupDecoration();
+
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            ArrayList<BlockPos> edge = getDecorationEdge(side);
+            for (BlockPos pos : edge)
+            {
+                if (RoomDecorShelf.wouldFit(pos, decoArea, decoMap))
+                {
+                    RoomDecorShelf shelf = new RoomDecorShelf();
+                    shelf.build(pos, decoMap);
+                }
+            }
+        }
 
         for (Map.Entry<BlockPos, IBlockState> entry : decoMap.entrySet())
         {
-            blocks.add(new BlockPlacement(entry.getKey(), Blocks.GLASS.getDefaultState()));
+            blocks.add(new BlockPlacement(entry.getKey(), entry.getValue()));
         }
-        /*
-        ArrayList<BlockPos> decoArea = getDecorationArea();
-
-        ArrayList<BlockPos> edge = getDecorationEdge();
-        for (BlockPos pos : edge)
-        {
-            blocks.add(new BlockPlacement(pos, Blocks.CRAFTING_TABLE.getDefaultState()));
-        } */
     }
 
     @Override

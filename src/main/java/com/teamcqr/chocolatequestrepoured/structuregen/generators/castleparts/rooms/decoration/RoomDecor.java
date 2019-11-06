@@ -12,8 +12,8 @@ public abstract class RoomDecor
 {
     protected class DecoPlacement
     {
-        private Vec3i offset;
-        private IBlockState block;
+        public Vec3i offset;
+        public IBlockState block;
 
         protected DecoPlacement(int x, int y, int z, IBlockState block)
         {

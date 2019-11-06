@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonDoor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
@@ -75,6 +76,7 @@ public abstract class CastleRoom
 
     protected RoomWalls walls;
     protected HashMap<BlockPos, IBlockState> decoMap;
+    protected HashSet<BlockPos> decoArea;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
     {
@@ -88,6 +90,7 @@ public abstract class CastleRoom
         this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
         this.decoMap = new HashMap<>();
+        this.decoArea = new HashSet<>();
     }
 
     public void generate(ArrayList<BlockPlacement> blocks)
@@ -322,43 +325,10 @@ public abstract class CastleRoom
         walls.registerAdjacentDoor(side, door);
     }
 
-    /*
-    * Get a list of blocks that make up the decoratable edge of the room.
-    * Decoratable positions are adjacent to a wall but not in front of a door.
-     */
-    protected ArrayList<BlockPos> getDecorationEdge()
+    protected void setupDecoration()
     {
-        //First get all blocks that are not occupied by walls
-        ArrayList<BlockPos> result = getDecorationFirstLayer();
-        if (!result.isEmpty())
-        {
-            BlockPos topLeft = result.get(0); //Top left is the first one added
-            int xStart = topLeft.getX();
-            int zStart = topLeft.getZ();
-            int xEnd = xStart + (getDecorationLengthX() - 1);
-            int zEnd = zStart + (getDecorationLengthZ() - 1);
-
-            //Now remove all the blocks that aren't at the edges of the decoratable area
-            result.removeIf(p -> !(p.getX() == xStart || p.getZ() == zStart || p.getX() == xEnd || p.getZ() == zEnd));
-
-            for (EnumFacing side : EnumFacing.HORIZONTALS)
-            {
-                if (walls.hasDoorOnSide(side))
-                {
-                    DoorPlacement placement = walls.getDoorOnSide(side);
-
-                    removePositionsAdjacentToDoor(result, xStart, zStart, xEnd, zEnd, side, placement);
-                }
-                else if (walls.adjacentRoomHasDoorOnSide(side))
-                {
-                    DoorPlacement placement = walls.getAdjacentDoor(side);
-
-                    removePositionsAdjacentToDoor(result, xStart, zStart, xEnd, zEnd, side, placement);
-                }
-            }
-        }
-
-        return result;
+        decoArea = new HashSet<>(getDecorationArea());
+        setDoorAreasToAir();
     }
 
     protected void setDoorAreasToAir()
@@ -440,46 +410,42 @@ public abstract class CastleRoom
         }
     }
 
-
-
-
-
-
-    private void removePositionsAdjacentToDoor(ArrayList<BlockPos> result, int xStart, int zStart, int xEnd, int zEnd, EnumFacing side, DoorPlacement placement)
+    /*
+     * Get a list of blocks that make up the decoratable edge of the room.
+     * Decoratable edge positions are adjacent to a wall but not in front of a door.
+     */
+    protected ArrayList<BlockPos> getDecorationEdge(EnumFacing side)
     {
-        final int doorStart;
-        final int doorEnd;
+        //First get all blocks that are not occupied by walls
+        ArrayList<BlockPos> result = getDecorationFirstLayer();
 
-        if (side.getAxis() == EnumFacing.Axis.Z)
+        BlockPos topLeft = getDecorationStartPos();
+        final int xStart = topLeft.getX();
+        final int zStart = topLeft.getZ();
+        final int xEnd = xStart + (getDecorationLengthX() - 1);
+        final int zEnd = zStart + (getDecorationLengthZ() - 1);
+
+        if (side == EnumFacing.NORTH)
         {
-            doorStart = startPos.getX() + placement.getOffset();
-            doorEnd = doorStart + placement.getWidth() - 1;
-
-            if (side == EnumFacing.NORTH)
-            {
-                result.removeIf(p -> p.getZ() == zStart && p.getX() >= doorStart && p.getX() <= doorEnd);
-            }
-            else //SOUTH
-            {
-                result.removeIf(p -> p.getZ() == zEnd && p.getX() >= doorStart && p.getX() <= doorEnd);
-            }
+            result.removeIf(p -> p.getZ() != zStart);
         }
-        else
+        else if (side == EnumFacing.SOUTH)
         {
-            doorStart = startPos.getZ() + placement.getOffset();
-            doorEnd = doorStart + placement.getWidth() - 1;
-
-            if (side == EnumFacing.EAST)
-            {
-                result.removeIf(p -> p.getX() == xEnd && p.getZ() >= doorStart && p.getZ() <= doorEnd);
-            }
-            else //WEST
-            {
-                result.removeIf(p -> p.getX() == xStart && p.getZ() >= doorStart && p.getZ() <= doorEnd);
-            }
+            result.removeIf(p -> p.getZ() != zEnd);
         }
+        else if (side == EnumFacing.WEST)
+        {
+            result.removeIf(p -> p.getX() != xStart);
+        }
+        else if (side == EnumFacing.EAST)
+        {
+            result.removeIf(p -> p.getX() != xEnd);
+        }
+
+        result.removeIf(p -> decoMap.containsKey(p)); //Remove block if it is occupied already
+
+        return result;
     }
-
 
     /*
     * Get a 1-height square of block positions that represents the lowest y position
@@ -572,7 +538,7 @@ public abstract class CastleRoom
 
         if (defaultCeiling)
         {
-            --height;
+            --result;
         }
 
         return result;
