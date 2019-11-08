@@ -8,7 +8,7 @@ import net.minecraft.util.math.Vec3i;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class RoomDecor
+public abstract class RoomDecorBase
 {
     protected class DecoPlacement
     {
@@ -25,7 +25,7 @@ public abstract class RoomDecor
     protected Vec3i xyzSize; //Total # of blocks the object takes up in (x, y, z) format
     protected List<DecoPlacement> schematic; //Array of blockstates and their offsets
 
-    protected RoomDecor(int sizeX, int sizeY, int sizeZ)
+    protected RoomDecorBase(int sizeX, int sizeY, int sizeZ)
     {
         this.xyzSize = new Vec3i(sizeX, sizeY, sizeZ);
         this.schematic = new ArrayList<>();

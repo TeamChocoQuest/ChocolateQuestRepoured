@@ -42,6 +42,12 @@ public class CastleRoomKitchen extends CastleRoomGeneric
             ArrayList<BlockPos> edge = getDecorationEdge(side);
             for (BlockPos pos : edge)
             {
+                if (decoMap.containsKey(pos))
+                {
+                    //This position is already decorated, so keep going
+                    continue;
+                }
+
                 if (RoomDecorShelf.wouldFit(pos, decoArea, decoMap))
                 {
                     RoomDecorShelf shelf = new RoomDecorShelf();
