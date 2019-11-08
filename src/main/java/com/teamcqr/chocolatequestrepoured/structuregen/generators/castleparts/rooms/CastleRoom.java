@@ -104,8 +104,7 @@ public abstract class CastleRoom
         }
     }
 
-    public abstract void generateRoom(ArrayList<BlockPlacement> blocks);
-    public abstract String getNameShortened();
+    protected abstract void generateRoom(ArrayList<BlockPlacement> blocks);
 
     protected void generateWalls(ArrayList<BlockPlacement> blocks)
     {

@@ -58,10 +58,4 @@ public class CastleRoomHallway extends CastleRoom
         }
         generateWalls(blocks);
     }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "HLL";
-    }
 }

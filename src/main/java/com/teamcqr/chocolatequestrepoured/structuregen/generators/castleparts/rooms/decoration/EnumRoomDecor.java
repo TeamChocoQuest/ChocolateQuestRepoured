@@ -5,7 +5,8 @@ import java.util.function.Supplier;
 public enum EnumRoomDecor
 {
     SHELF(0, RoomDecorShelf::new, "Shelf"),
-    TABLE(1, RoomDecorTable::new, "Table");
+    TABLE_S(1, RoomDecorTableSmall::new, "Small Table"),
+    TABLE_M(1, RoomDecorTableMedium::new, "Medium Table");
 
     private final int id;
     private final Supplier<RoomDecorBase> supplier;
