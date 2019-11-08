@@ -167,6 +167,7 @@ public class VillageGenerator implements IDungeonGenerator{
 			int index = 1;
 			for(CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
+				//TODO: Move this stuff to preprocess to translate the paste position correctly
 				if(this.dungeon.rotateBuildingsRandomly()) {
 					plcmnt.setRotation(getRandomRotation());
 				}

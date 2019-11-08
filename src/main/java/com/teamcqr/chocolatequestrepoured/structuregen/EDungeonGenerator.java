@@ -18,7 +18,7 @@ public enum EDungeonGenerator {
 	CLASSIC_STRONGHOLD("classic_stronghold"),
 	JUNGLE_CAVE("jungle_cave"),
 	SWAMP_CAVE("swamp_cave"),
-	VILLAGE("village"),
+	GUARDED_CASTLE("guarded_castle"),
 	CASTLE("castle"),
 	VOLCANO("volcano");
 	
