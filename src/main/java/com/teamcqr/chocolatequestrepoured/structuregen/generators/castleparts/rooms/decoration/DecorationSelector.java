@@ -17,13 +17,11 @@ public class DecorationSelector
 
     public void registerEdgeDecor(EnumRoomDecor decor, int weight)
     {
-        try
-        {
-            edgeDecor.addItem(decor.createInstance(), weight);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        edgeDecor.add(decor.createInstance(), weight);
+    }
+
+    public RoomDecorBase randomEdgeDecor()
+    {
+        return edgeDecor.next();
     }
 }

@@ -28,7 +28,7 @@ public class WeightedRandom<T>
         this.items = new ArrayList<>();
     }
 
-    public void addItem(T item, int weight)
+    public void add(T item, int weight)
     {
         totalWeight += weight;
         items.add(new WeightedObject(item, weight));
@@ -45,7 +45,7 @@ public class WeightedRandom<T>
         items.clear();
     }
 
-    public T getItem()
+    public T next()
     {
         int seed = random.nextInt(totalWeight);
         int total = 0;

@@ -98,10 +98,4 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
         int centerZ = (int)Math.ceil((double)getDecorationLengthZ() / 2);
         pillarStart = getDecorationStartPos().add(centerX, 0, centerZ);
     }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "STR";
-    }
 }

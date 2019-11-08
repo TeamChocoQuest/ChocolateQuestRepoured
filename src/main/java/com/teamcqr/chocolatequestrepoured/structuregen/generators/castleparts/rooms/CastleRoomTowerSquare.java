@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 import net.minecraft.block.state.IBlockState;
@@ -107,12 +106,6 @@ public class CastleRoomTowerSquare extends CastleRoom
             result = result.rotateY();
         }
         return result;
-    }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "TWR";
     }
 
     @Override

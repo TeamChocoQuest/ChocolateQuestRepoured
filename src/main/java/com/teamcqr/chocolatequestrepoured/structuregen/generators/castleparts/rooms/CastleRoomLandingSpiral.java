@@ -57,10 +57,4 @@ public class CastleRoomLandingSpiral extends CastleRoom
             }
         }
     }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "LAN";
-    }
 }
