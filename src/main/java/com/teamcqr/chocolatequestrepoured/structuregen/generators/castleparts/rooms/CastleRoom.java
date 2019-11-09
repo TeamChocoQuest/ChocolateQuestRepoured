@@ -27,8 +27,10 @@ public abstract class CastleRoom
         STAIRCASE_DIRECTED(3, "Directed Stairs", true),
         STAIRCASE_SPIRAL(4, "Spiral Stairs", true),
         LANDING_DIRECTED(5, "Directed Landing", true),
-        LANDING_SPIRAL(6, "Spiral Landng", true),
-        TOWER_SQUARE(7, "Square Tower", false);
+        LANDING_SPIRAL(6, "Spiral Landing", true),
+        TOWER_SQUARE(7, "Square Tower", false),
+        ALCHEMY_LAB(8, "Alchemy Lab", false),
+        ARMORY(8, "Armory", false);
 
         private final int index;
         private final String name;
@@ -66,9 +68,9 @@ public abstract class CastleRoom
 
     protected int maxSlotsUsed = 1; //Max number of contiguous room grid slots this can occupy
 
-    protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
     protected boolean defaultCeiling = false;
+    protected boolean defaultFloor = false;
     protected Random random = new Random();
 
     protected HashSet<EnumFacing> roofEdges;
@@ -85,7 +87,6 @@ public abstract class CastleRoom
         this.offsetZ = 0;
         this.buildLength = this.sideLength;
         this.height = height;
-        this.doors = new ArrayList<>();
         this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
         this.decoMap = new HashMap<>();
@@ -95,9 +96,13 @@ public abstract class CastleRoom
     public void generate(ArrayList<BlockPlacement> blocks)
     {
         generateRoom(blocks);
-        generateWalls(blocks);
         generateRoofEdges(blocks);
+        generateWalls(blocks);
 
+        if (defaultFloor)
+        {
+            generateDefaultFloor(blocks);
+        }
         if (defaultCeiling)
         {
             generateDefaultCeiling(blocks);
@@ -153,6 +158,19 @@ public abstract class CastleRoom
             for (int x = 0; x < buildLength - 1; x++)
             {
                 blocks.add(new BlockPlacement(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState()));
+            }
+        }
+    }
+
+    protected void generateDefaultFloor(ArrayList<BlockPlacement> blocks)
+    {
+        BlockPos pos = getNonWallStartPos();
+
+        for (int z = 0; z < getDecorationLengthZ() - 1; z++)
+        {
+            for (int x = 0; x < getDecorationLengthX() - 1; x++)
+            {
+                blocks.add(new BlockPlacement(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState()));
             }
         }
     }
@@ -482,9 +500,14 @@ public abstract class CastleRoom
         return result;
     }
 
-    public BlockPos getDecorationStartPos()
+    protected BlockPos getDecorationStartPos()
     {
-        BlockPos result = startPos.up(); //skip the floor
+        return getNonWallStartPos().up(); //skip the floor
+    }
+
+    protected BlockPos getNonWallStartPos()
+    {
+        BlockPos result = startPos;
 
         if (walls.hasWallOnSide(EnumFacing.NORTH))
         {
@@ -498,7 +521,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthX()
+    protected int getDecorationLengthX()
     {
         int result = buildLength;
 
@@ -514,7 +537,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthZ()
+    protected int getDecorationLengthZ()
     {
         int result = buildLength;
 
@@ -530,7 +553,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthY()
+    protected int getDecorationLengthY()
     {
         int result = height - 1; //Remove one for the floor tiles
 
