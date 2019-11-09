@@ -79,7 +79,7 @@ public class ClassicNetherCity extends DungeonBase {
 			floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.LAVA);
 			airBlockForPocket = PropertyFileHelper.getBlockProperty(prop, "airPocketBlock", Blocks.AIR);
 			
-			buildingFolder = PropertyFileHelper.getFileProperty(prop, "structurefolder", "nether_city_buildings");
+			buildingFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "nether_city_buildings");
 			centralBuildingsFolder = PropertyFileHelper.getFileProperty(prop, "centralStructureFolder", "nether_city_buildings");
 			
 			closeConfigFile();

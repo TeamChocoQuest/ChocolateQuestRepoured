@@ -348,7 +348,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 						ex.printStackTrace();
 					}
 					if(resLoc != null) {
-						long seed = WorldDungeonGenerator.getSeed(world, x +pos.getX(), z +pos.getZ());
+						long seed = WorldDungeonGenerator.getSeed(world, x +pos.getX() + pos.getY(), z +pos.getZ() + pos.getY());
 						chest.setLootTable(resLoc, seed);
 					}
 				}

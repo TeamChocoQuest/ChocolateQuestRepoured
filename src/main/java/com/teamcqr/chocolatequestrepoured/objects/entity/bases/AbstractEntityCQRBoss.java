@@ -54,12 +54,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	}
 	
 	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
-		this.bossInfoServer.setName(getDisplayName());
-	}
-	
-	@Override
 	public boolean isNonBoss() {
 		return false;
 	}
@@ -105,6 +99,12 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 		super.onDeath(cause);
 		
 		//TOOD: Destroy protected region
+	}
+	
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		this.bossInfoServer.setName(getDisplayName());
 	}
 
 }

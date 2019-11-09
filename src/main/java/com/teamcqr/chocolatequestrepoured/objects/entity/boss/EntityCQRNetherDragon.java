@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -69,7 +70,7 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[SEGMENT_COUNT];
 	
 	//private boolean mouthOpen = false;
-	private static final DataParameter<Boolean> mouthOpen = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 
 	private boolean isReadyToAttack = true;
 
@@ -106,13 +107,7 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	protected void entityInit() {
 		super.entityInit();
 		
-		this.dataManager.register(mouthOpen, false);
-	}
-
-	@Override
-	public void setCustomNameTag(String name) {
-		super.setCustomNameTag(name);
-		this.bossInfoServer.setName(getDisplayName());
+		this.dataManager.register(MOUTH_OPEN, false);
 	}
 
 	@Override
@@ -231,8 +226,6 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
-		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 		//DONE: Destroy the blocks
 		destroyBlocksInAABB(getEntityBoundingBox());
 		/*for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
@@ -387,23 +380,23 @@ public class EntityCQRNetherDragon extends /*AbstractEntityCQR*/AbstractEntityCQ
 	}
 
 	public void setMouthOpen(boolean open) {
-		this.dataManager.set(mouthOpen, open);
+		this.dataManager.set(MOUTH_OPEN, open);
 	}
 	
 	public boolean isMouthOpen() {
-		return this.dataManager.get(mouthOpen);
+		return this.dataManager.get(MOUTH_OPEN);
 	}
 	
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		super.writeSpawnData(buffer);
-		buffer.writeBoolean(this.dataManager.get(mouthOpen));
+		buffer.writeBoolean(this.dataManager.get(MOUTH_OPEN));
 	}
 	
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
-		this.dataManager.set(mouthOpen, additionalData.readBoolean());
+		this.dataManager.set(MOUTH_OPEN, additionalData.readBoolean());
 	}
 	
 	public void startAttack(ENetherDragonAttacks attackType) {

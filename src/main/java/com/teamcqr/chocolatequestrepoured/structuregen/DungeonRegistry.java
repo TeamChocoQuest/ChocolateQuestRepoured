@@ -233,7 +233,7 @@ public class DungeonRegistry {
 			return new DungeonOceanFloor(dungeonPropertiesFile);
 		case TEMPLATE_SURFACE:
 			return new DefaultSurfaceDungeon(dungeonPropertiesFile);
-		case VILLAGE:
+		case GUARDED_CASTLE:
 			return new VillageDungeon(dungeonPropertiesFile);
 		case VOLCANO:
 			return new VolcanoDungeon(dungeonPropertiesFile);
