@@ -88,6 +88,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte)0;
 	protected boolean sittingState = false;
+	protected double healthScale = 1D;
 	public ItemStack prevPotion;
 	
 	//Sync with client
@@ -213,6 +214,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
+		compound.setDouble("healthScale", healthScale);
 	}
 
 	@Override
@@ -225,6 +227,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+		if(compound.hasKey("healthScale")) {
+			healthScale = compound.getDouble("healthScale");
 		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
@@ -294,6 +299,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
 			}
 		}
+		this.dropEquipment(wasRecentlyHit, lootingModifier);
 	}
 
 	@Override
@@ -467,6 +473,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 				health *= 1.5F;
 			}
 		}
+		
+		health *= healthScale;
 
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
@@ -734,6 +742,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		
 		double wHalf = hitboxX /2D;
 		setEntityBoundingBox(new AxisAlignedBB(posX - wHalf, posY, posZ - wHalf, posX + wHalf, posY + hitboxY, posZ + wHalf));
+	}
+	
+	@SideOnly(Side.SERVER)
+	public void setHealthScale(double hs) {
+		this.healthScale = hs;
 	}
 
 }
