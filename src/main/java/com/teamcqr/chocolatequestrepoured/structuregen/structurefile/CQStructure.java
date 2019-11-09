@@ -241,12 +241,19 @@ public class CQStructure {
 		
 		//Makes sure, that the end positions X and Z component is larger than the ones of the start pos
 		if(posEnd.getX() < posStart.getX()) {
+			int oldEndX = endPos.getX();
 			endPos = new BlockPos(posStart.getX(), endPos.getY(), endPos.getZ());
-			startPos = new BlockPos(posEnd.getX(), startPos.getY(), startPos.getZ());
+			startPos = new BlockPos(oldEndX, startPos.getY(), startPos.getZ());
+		}
+		if(posEnd.getY() < posStart.getY()) {
+			int oldEndY = endPos.getY();
+			endPos = new BlockPos(posEnd.getX(), posStart.getY(), posEnd.getZ());
+			startPos = new BlockPos(posStart.getX(), oldEndY, posStart.getZ());
 		}
 		if(posEnd.getZ() < posStart.getZ()) {
+			int oldEndZ = endPos.getZ();
 			endPos = new BlockPos(endPos.getX(), endPos.getY(), posStart.getZ());
-			startPos = new BlockPos(startPos.getX(), startPos.getY(), posEnd.getZ());
+			startPos = new BlockPos(startPos.getX(), startPos.getY(), oldEndZ);
 		}
 		
 		this.setSizeX(endPos.getX() != startPos.getX() ? (endPos.getX() - startPos.getX()) +1: 1);
