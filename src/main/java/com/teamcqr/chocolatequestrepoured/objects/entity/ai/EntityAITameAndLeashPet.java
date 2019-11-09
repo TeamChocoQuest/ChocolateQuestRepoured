@@ -9,8 +9,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemLead;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3i;
 
@@ -28,7 +28,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if(!(entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Items.LEAD || entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Items.LEAD )) {
+		if(!(entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemLead || entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemLead)) {
 			return false;
 		}
 		
