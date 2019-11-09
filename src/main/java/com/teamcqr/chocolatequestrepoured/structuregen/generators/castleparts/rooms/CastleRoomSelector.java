@@ -109,6 +109,10 @@ public class CastleRoomSelector
             {
                 selection.setRoom(new CastleRoomAlchemyLab(getRoomStart(selection), roomSize, floorHeight));
             }
+            else if (type == CastleRoom.RoomType.ARMORY)
+            {
+                selection.setRoom(new CastleRoomArmory(getRoomStart(selection), roomSize, floorHeight));
+            }
         }
     }
 
