@@ -36,6 +36,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 				entity.getPosition().subtract(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE)),
 				entity.getPosition().add(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE))),
 				TargetUtil.PREDICATE_PETS);
+		//System.out.println("Result of AI: " + ((!tameablesInRange.isEmpty())));
 		return (!tameablesInRange.isEmpty());
 	}
 	@Override
@@ -48,14 +49,14 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 		if(pet == null || pet.isDead) {
 			tamedNLeashedPet = false;
 		}
-		if(!shouldContinueExecuting() || pet == null || entity == null ||pet.isDead ||entity.isDead) {
+		if(!shouldContinueExecuting() || entity == null || (pet != null && pet.isDead) || entity.isDead) {
 			return;
 		}
 		if(tamedNLeashedPet) {
 			return;
 		}
 		if(pet != null && !pet.isDead) {
-			if(pet.getDistance(entity) > DISTANCE_TO_TAME) {
+			if(entity.getDistance(pet) > DISTANCE_TO_TAME) {
 				entity.getNavigator().tryMoveToEntityLiving(pet, 0.6D);
 				pet.getNavigator().tryMoveToEntityLiving(entity, 0.65D);
 			} else {
