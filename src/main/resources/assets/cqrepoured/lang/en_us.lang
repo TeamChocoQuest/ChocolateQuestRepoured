@@ -10,6 +10,23 @@ itemGroup.ChocolateQuestRepouredBannerTab=Banners
 itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 
 //Banners
+item.banner.cqrepoured_cq_blank.white=CQR-banner marker
+item.banner.cqrepoured_cq_blank.orange=CQR-banner marker
+item.banner.cqrepoured_cq_blank.magenta=CQR-banner marker
+item.banner.cqrepoured_cq_blank.light_blue=CQR-banner marker
+item.banner.cqrepoured_cq_blank.yellow=CQR-banner marker
+item.banner.cqrepoured_cq_blank.lime=CQR-banner marker
+item.banner.cqrepoured_cq_blank.pink=CQR-banner marker
+item.banner.cqrepoured_cq_blank.gray=CQR-banner marker
+item.banner.cqrepoured_cq_blank.silver=CQR-banner marker
+item.banner.cqrepoured_cq_blank.cyan=CQR-banner marker
+item.banner.cqrepoured_cq_blank.purple=CQR-banner marker
+item.banner.cqrepoured_cq_blank.blue=CQR-banner marker
+item.banner.cqrepoured_cq_blank.brown=CQR-banner marker
+item.banner.cqrepoured_cq_blank.green=CQR-banner marker
+item.banner.cqrepoured_cq_blank.red=CQR-banner marker
+item.banner.cqrepoured_cq_blank.black=CQR-banner marker
+
 item.banner.cqrepoured_cq_wither_eyes.white=White eyes of the wither skull
 item.banner.cqrepoured_cq_wither_eyes.orange=Orange eyes of the wither skull
 item.banner.cqrepoured_cq_wither_eyes.magenta=Magenta eyes of the wither skull
