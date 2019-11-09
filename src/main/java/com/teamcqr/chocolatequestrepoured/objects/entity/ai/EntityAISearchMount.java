@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -126,6 +127,12 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 						horse.setHorseSaddled(true);
 						//Should that stay? -> Arlo says yes.
 						horse.setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
+					}
+					if(this.entityToMount instanceof EntityLlama) {
+						EntityLlama lama = (EntityLlama)this.entityToMount;
+						lama.setOwnerUniqueId(entity.getPersistentID());
+						lama.setHorseSaddled(true);
+						lama.setHorseTamed(true);
 					}
 					this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
 				} else {
