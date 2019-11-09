@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.util.EntitySelectors;
 
@@ -35,18 +36,11 @@ public class TargetUtil {
 		@Override
 		public boolean apply(Entity input) {
 			if(input != null && input instanceof EntityAnimal && !input.isDead) {
-				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityHorse ||input instanceof EntityPig); 
+				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof EntityHorse ||input instanceof EntityPig); 
 			}
 			return false;
 		}
 		
-		/*@Override
-		public boolean apply(Entity input) {
-			if(input != null && EntitySelectors.IS_ALIVE.apply(input) && input instanceof EntityAnimal) {
-				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase); 
-			}
-			return false;
-		}*/
 	};
 
 	public static class Sorter implements Comparator<Entity> {
