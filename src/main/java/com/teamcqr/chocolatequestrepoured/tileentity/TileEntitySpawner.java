@@ -95,7 +95,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
-		System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
+		//System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
 		this.dungeonChunkX = dunChunkX;
 		this.dungeonChunkZ = dunChunkZ;
 		
