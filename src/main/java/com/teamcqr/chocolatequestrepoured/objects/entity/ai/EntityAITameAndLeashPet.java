@@ -74,6 +74,12 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
 					@Override
 					public void accept(Entity t) {
+						if(!(t instanceof EntityTameable)) {
+							return;
+						}
+						if(((EntityTameable)t).getOwner() != null) {
+							return;
+						}
 						if(entity.getNavigator().getPathToEntityLiving(t) != null) {
 							tmp.add(t);
 						}
