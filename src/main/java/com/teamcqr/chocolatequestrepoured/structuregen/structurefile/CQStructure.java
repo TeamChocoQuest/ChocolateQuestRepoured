@@ -74,6 +74,7 @@ public class CQStructure {
 	}
 	
 	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
+		System.out.println("Dungeon is null: " + (dungeon == null));
 		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {

@@ -43,6 +43,10 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+		Random rdm = new Random();
+		long seed = WorldDungeonGenerator.getSeed(world, chunk.x + y*x -z, chunk.z + y*z +x);
+		rdm.setSeed(seed);
+		islandCount = dungeon.getBuildingCount(rdm);
 		// Calculates the positions and creates the island objects
 		// positions are the !!CENTERS!! of the platforms, the structures positions are calculated by the platforms themselves
 		// Radius = sqrt(((Longer side of building) / 2)^2 *2) +5
@@ -50,14 +54,16 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		BlockPos nextIslandPos = new BlockPos(x, y, z);
 		BlockPos center = new BlockPos(x,y,z);
 		
-		Random rdm = new Random();
+		rdm = new Random();
 		
 		//DONE: Carve out cave -> Need to specify the height in the dungeon
 		int distMax = new Double((this.islandDistance * 1.5D) * (this.islandCount / 10D +2D)).intValue();
 		BlockPos lower = new BlockPos(x - distMax, y - this.dungeon.getYFactorHeight(), z - distMax);
 		BlockPos upper = new BlockPos(x + distMax, y + (this.dungeon.getYFactorHeight() * 1.5D), z + distMax);
-		PlateauBuilder pb = new PlateauBuilder();
-		pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
+		if(this.dungeon.digAirCave()) {
+			PlateauBuilder pb = new PlateauBuilder();
+			pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
+		}
 		
 		for(int i = 0; i < islandCount; i++) {
 			nextIslandPos = getNextIslandPos(center, i);
@@ -74,6 +80,11 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Builds the platforms
 		// Builds the chains
 		//TODO: Methods to get central buildings
+		BlockPos center = new BlockPos(x,y,z);
+		CQStructure censtruct = new CQStructure(dungeon.pickCentralStructure(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
+		center = new BlockPos(center.getX() - censtruct.getSizeX(), y, center.getZ() - censtruct.getSizeZ());
+		buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center));
+		
 		for(BlockPos bp : structureMap.keySet()) {
 			CQStructure structure = new CQStructure(structureMap.get(bp), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 			BlockPos pastePos = bp.subtract(structure.getSizeAsVec());
@@ -118,10 +129,14 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		}*/
 		BlockPos retPos = new BlockPos(centerPos);
 
-		Vec3i vector = new Vec3i(0, 0,	(this.islandDistance * 1.5D) * ((islandIndex) / 10 +1));
+		Vec3i vector = new Vec3i(0, 0,	(this.islandDistance * 3D) * ((islandIndex) / 10 +1));
 
-		int degreeMultiplier = islandIndex -(Math.floorDiv(islandIndex, 10) *10);
-		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * 36D));
+		int degreeMultiplier = islandIndex;//(Math.floorDiv(islandIndex, 10) *10);
+		if(islandCount > 10) {
+			degreeMultiplier -= (((islandIndex) / 10) *10);
+		}
+		double angle = islandCount >= 10 ? 36D : 360D / islandCount;
+		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * angle));
 		
 		return retPos;
 	}
@@ -151,6 +166,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		radius = new Double(Math.sqrt(Math.pow((double)radius /2.0D, 2.0D) *2.0D) +5).intValue();
 		
 		BlockPos center = pos.add(-radius, 0, -radius);
+		center = center.add(0,dungeon.getRandomHeightVariation(), 0);
 		
 		buildPlatform(center, radius, world);
 		
@@ -166,17 +182,21 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
 		
+		center = center.add(0, 1, 0);
+		
 		structure.placeBlocksInWorld(world, center, settings, EPosType.CENTER_XZ_LAYER);
 		
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()),world);
-		event.setShieldCorePosition(structure.getShieldCorePosition());
-		MinecraftForge.EVENT_BUS.post(event);
+		/*CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeAsVec()), world);
+		if(structure != null && structure.getShieldCorePosition() != null) {
+			event.setShieldCorePosition(structure.getShieldCorePosition());
+		}
+		MinecraftForge.EVENT_BUS.post(event);*/
 	}
 	
 	private void buildPlatform(BlockPos center, int radius, World world) {
 		List<BlockPos> blocks = new ArrayList<>();
 		int decrementor = 0;
-		int rad = radius;
+		int rad = (new Double(radius * 1.5D)).intValue();
 		while(decrementor < (rad /2)) {
 			rad -= decrementor;
 			

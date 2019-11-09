@@ -87,6 +87,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte)0;
+	protected boolean sittingState = false;
 	public ItemStack prevPotion;
 	
 	//Sync with client
@@ -140,9 +141,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			}
 		};
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return attackEntityFrom(source, amount, false);
+	}
+
+	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		boolean result = super.attackEntityFrom(source, amount);
 		if (result) {
 			this.handleArmorBreaking();
@@ -314,6 +319,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
+		/*if(!world.isRemote) {
+			if(sittingState != dataManager.get(IS_SITTING)) {
+				sittingState = dataManager.get(IS_SITTING);
+				if(sittingState) {
+					rescaleHitbox(1, 0.8);
+				} else {
+					rescaleHitbox(1, height /0.8);
+				}
+			}
+		}*/
 		super.onLivingUpdate();
 	}
 
@@ -693,6 +708,32 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			return false;
 		}
 		return true;
+	}
+	
+	public void rescaleHitbox(double multiplierX, double multiplierY) {
+		double h = this.height * multiplierY;
+		double w = this.width * multiplierX;
+		resizeHitBox(w, h);
+	}
+	public void resizeHitBox(double hitboxX, double hitboxY) {
+		if(isChild()) {
+			hitboxX *= 0.5D;
+			hitboxY *= 0.5D;
+		}
+		float oldW = width;
+		float oldH = height;
+		this.height = (float) hitboxY;
+		this.width = (float) hitboxX;
+		
+		if(hitboxX < oldW) {
+			//AxisAlignedBB aabb = getEntityBoundingBox();
+			if(!world.isRemote) {
+				posY += (oldH - height) /2F;
+			}
+		}
+		
+		double wHalf = hitboxX /2D;
+		setEntityBoundingBox(new AxisAlignedBB(posX - wHalf, posY, posZ - wHalf, posX + wHalf, posY + hitboxY, posZ + wHalf));
 	}
 
 }
