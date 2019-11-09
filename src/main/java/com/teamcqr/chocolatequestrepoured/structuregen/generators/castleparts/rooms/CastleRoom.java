@@ -166,9 +166,9 @@ public abstract class CastleRoom
     {
         BlockPos pos = getNonWallStartPos();
 
-        for (int z = 0; z < getDecorationLengthZ() - 1; z++)
+        for (int z = 0; z < getDecorationLengthZ(); z++)
         {
-            for (int x = 0; x < getDecorationLengthX() - 1; x++)
+            for (int x = 0; x < getDecorationLengthX(); x++)
             {
                 blocks.add(new BlockPlacement(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState()));
             }
