@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -79,6 +80,12 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 				@Override
 				public void accept(Entity t) {
+					if(!(t instanceof EntityTameable)) {
+						return;
+					}
+					if(((EntityTameable)t).getOwner() != null) {
+						return;
+					}
 					if(entity.getEntitySenses().canSee(t) && entity.getNavigator().getPathToEntityLiving(t) != null && !t.isBeingRidden() && !t.isDead && !(t instanceof EntityHorse && ((EntityHorse)t).isChild())) {
 						listTmp.add(t);
 					}
