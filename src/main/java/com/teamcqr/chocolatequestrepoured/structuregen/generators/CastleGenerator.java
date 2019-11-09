@@ -27,7 +27,6 @@ public class CastleGenerator implements IDungeonGenerator
     private CastleDungeon dungeon;
     private int maxSize;
     private int roomSize;
-    private int floorHeight;
     private Random random;
     private List<ICastlePart> parts;
     private int totalX;
@@ -39,7 +38,6 @@ public class CastleGenerator implements IDungeonGenerator
         this.dungeon = dungeon;
         this.maxSize = this.dungeon.getMaxSize();
         this.roomSize = this.dungeon.getRoomSize();
-        this.floorHeight = this.dungeon.getFloorHeight();
         this.random = this.dungeon.getRandom();
         this.parts = new ArrayList<>();
     }
@@ -53,43 +51,18 @@ public class CastleGenerator implements IDungeonGenerator
             supportBuilder.createSupportHill(random, world, new BlockPos(x, z, y), maxSize, maxSize, EPosType.CENTER_XZ_LAYER);
         }
 
-        int sizeX;
-        int sizeZ;
-        int offsetX;
-        int offsetZ;
-        int numRoomsX;
-        int numRoomsZ;
         int maxRoomsX;
         int maxRoomsZ;
-        int buildAreaX = maxSize;
-        int buildAreaZ = maxSize;
         int currentLayer = 0;
         int layerFloors = 2;
-        int totalFloors = 0;
 
-        //numRoomsX = randomizeNumRoomsFromSize(maxSize, 25);
-        //numRoomsZ = randomizeNumRoomsFromSize(maxSize, 25);
         maxRoomsX = maxSize / roomSize;
         maxRoomsZ = maxSize / roomSize;
-        numRoomsX = maxRoomsX / 2 + random.nextInt(maxRoomsX / 2);
-        numRoomsZ = maxRoomsZ / 2 + random.nextInt(maxRoomsZ / 2);
-
-        // Calculate random size based on maximum size
-        sizeX = numRoomsX * roomSize;
-        sizeZ = numRoomsZ * roomSize;
 
         // Add the main building
         CastlePartMain mainPart = new CastlePartMain(new BlockPos(x, y, z), maxRoomsX, maxRoomsZ, layerFloors, this.dungeon, currentLayer);
         parts.add(mainPart);
 
-        // Randomize the height of the towers to rise above the nearby structure areas
-        //if (!towers.isEmpty())
-        //{
-        //    for (CastlePartTower tower : towers)
-        //    {
-        //        tower.randomizeFloors(totalFloors); //make each tower a random height
-        //    }
-        //}
     }
 
     @Override
