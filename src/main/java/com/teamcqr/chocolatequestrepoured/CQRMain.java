@@ -221,19 +221,19 @@ public class CQRMain
 	{		
 		proxy.init();
 		
-		//Instantiating the ELootTable class
-				try {
-					ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
-					if(resLoc != null) {
-						System.out.println("Loot tables instantiated successfully!");
-						LootTableLoader ltl = new LootTableLoader();
-						System.out.println("Loading the loot configs...");
-						ltl.loadConfigs();
-					}
-				} catch (Exception e) {
-					System.err.println("WARNING: Failed to instantiate the loot tables or to exchange the files!!");
-					e.printStackTrace();
-				}
+		// Instantiating the ELootTable class
+		try {
+			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
+			if (resLoc != null) {
+				System.out.println("Loot tables instantiated successfully!");
+				LootTableLoader ltl = new LootTableLoader();
+				System.out.println("Loading the loot configs...");
+				ltl.loadConfigs();
+			}
+		} catch (Exception e) {
+			System.err.println("WARNING: Failed to instantiate the loot tables or to exchange the files!!");
+			e.printStackTrace();
+		}
 
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
