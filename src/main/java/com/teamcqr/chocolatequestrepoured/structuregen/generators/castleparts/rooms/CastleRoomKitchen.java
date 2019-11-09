@@ -18,6 +18,7 @@ public class CastleRoomKitchen extends CastleRoomGeneric
 
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 5);
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_S, 3);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_M, 2);
     }
 
     @Override

@@ -21,5 +21,12 @@ public class RoomDecorShelf extends RoomDecorBase
         IBlockState blockToBuild = Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
         this.schematic.add(new DecoPlacement(0, 2, 0, blockToBuild));
         this.schematic.add(new DecoPlacement(1, 2, 0, blockToBuild));
+
+        blockToBuild = Blocks.AIR.getDefaultState();
+        this.schematic.add(new DecoPlacement(0, 1, 0, blockToBuild));
+        this.schematic.add(new DecoPlacement(1, 1, 0, blockToBuild));
+        this.schematic.add(new DecoPlacement(0, 0, 0, blockToBuild));
+        this.schematic.add(new DecoPlacement(1, 0, 0, blockToBuild));
+
     }
 }
