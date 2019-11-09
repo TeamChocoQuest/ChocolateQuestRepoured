@@ -173,7 +173,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(16, new EntityAISearchMount(this));
-		this.tasks.addTask(16, new EntityAITameAndLeashPet(this));
+		this.tasks.addTask(17, new EntityAITameAndLeashPet(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
