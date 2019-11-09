@@ -319,7 +319,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
-		if(!world.isRemote) {
+		/*if(!world.isRemote) {
 			if(sittingState != dataManager.get(IS_SITTING)) {
 				sittingState = dataManager.get(IS_SITTING);
 				if(sittingState) {
@@ -328,7 +328,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 					rescaleHitbox(1, height /0.8);
 				}
 			}
-		}
+		}*/
 		super.onLivingUpdate();
 	}
 
