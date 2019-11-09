@@ -56,7 +56,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 		}
 		if(pet != null && !pet.isDead) {
 			if(pet.getDistance(entity) > DISTANCE_TO_TAME) {
-				pet.getNavigator().tryMoveToEntityLiving(entity, 0.6D);
+				entity.getNavigator().tryMoveToEntityLiving(pet, 0.6D);
 			} else {
 				pet.setTamed(true);
 				pet.setOwnerId(entity.getPersistentID());
