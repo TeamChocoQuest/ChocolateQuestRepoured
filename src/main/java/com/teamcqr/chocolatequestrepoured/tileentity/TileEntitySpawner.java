@@ -95,7 +95,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
-		
+		System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
 		this.dungeonChunkX = dunChunkX;
 		this.dungeonChunkZ = dunChunkZ;
 		
@@ -112,6 +112,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 						//DONE: Set "id" section of the nbt tag, type is resourcelocation
 						NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
 						ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
+						//System.out.println("Spawner Entity: " + resLocCurrent.toString());
 						boolean isCurrentCQDummy = (resLocCurrent.getResourceDomain().equalsIgnoreCase(Reference.MODID) && resLocCurrent.getResourcePath().equalsIgnoreCase("dummy"));
 						if(mobOverride != null && isCurrentCQDummy && EDungeonMobType.byString(mobOverride) != null) {
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
@@ -123,6 +124,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 								}
 							//}
 						}
+						//System.out.println("Spawning entities...");
 						for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
 							this.spawnEntityFromNBT(nbt);
 						}
