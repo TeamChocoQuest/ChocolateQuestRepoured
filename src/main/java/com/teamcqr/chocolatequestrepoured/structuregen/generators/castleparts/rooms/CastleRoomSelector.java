@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ad
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.ICastleAddon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -25,6 +26,7 @@ public class CastleRoomSelector
     private Random random;
     private RoomGrid grid;
     private List<CastleAddonRoof> roofs;
+    private WeightedRandom<CastleRoom.RoomType> roomRandomizer;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random)
     {
@@ -39,6 +41,11 @@ public class CastleRoomSelector
         this.roofs = new ArrayList<>();
 
         this.grid = new RoomGrid(maxFloors, numSlotsX, numSlotsZ, random);
+        this.roomRandomizer = new WeightedRandom<CastleRoom.RoomType>(random);
+
+        this.roomRandomizer.add(CastleRoom.RoomType.KITCHEN, 2);
+        this.roomRandomizer.add(CastleRoom.RoomType.ALCHEMY_LAB, 2);
+        this.roomRandomizer.add(CastleRoom.RoomType.ARMORY, 2);
     }
 
     public void generateRooms(ArrayList<BlockPlacement> blocks)
@@ -75,12 +82,7 @@ public class CastleRoomSelector
 
         addStairCases();
 
-        ArrayList<RoomGridCell> unTyped = grid.getAllCellsWhere(c -> c.isSelectedForBuilding() &&
-                                                                     !c.isPopulated());
-        for (RoomGridCell selection : unTyped)
-        {
-            selection.setRoom(new CastleRoomKitchen(getRoomStart(selection), roomSize, floorHeight));
-        }
+        randomizeRooms();
 
         determineWalls();
         placeOuterDoors();
@@ -89,6 +91,25 @@ public class CastleRoomSelector
         determineRoofs();
 
         //System.out.println(grid.printGrid());
+    }
+
+    private void randomizeRooms()
+    {
+        ArrayList<RoomGridCell> unTyped = grid.getAllCellsWhere(c -> c.isSelectedForBuilding() &&
+                                                                    !c.isPopulated());
+
+        for (RoomGridCell selection : unTyped)
+        {
+            CastleRoom.RoomType type = roomRandomizer.next();
+            if (type == CastleRoom.RoomType.KITCHEN)
+            {
+                selection.setRoom(new CastleRoomKitchen(getRoomStart(selection), roomSize, floorHeight));
+            }
+            else if (type == CastleRoom.RoomType.ALCHEMY_LAB)
+            {
+                selection.setRoom(new CastleRoomAlchemyLab(getRoomStart(selection), roomSize, floorHeight));
+            }
+        }
     }
 
     private void addMainBuilding()
