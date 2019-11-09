@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -133,6 +134,10 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 						lama.setOwnerUniqueId(entity.getPersistentID());
 						lama.setHorseSaddled(true);
 						lama.setHorseTamed(true);
+					}
+					if(this.entityToMount instanceof EntityPig) {
+						EntityPig pig = (EntityPig) this.entityToMount;
+						pig.setSaddled(true);
 					}
 					this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
 				} else {
