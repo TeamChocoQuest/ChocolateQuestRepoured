@@ -10,7 +10,10 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityLlama;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.util.EntitySelectors;
 
 public class TargetUtil {
@@ -37,6 +40,18 @@ public class TargetUtil {
 		public boolean apply(Entity input) {
 			if(input != null && input instanceof EntityAnimal && !input.isDead) {
 				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof EntityHorse ||input instanceof EntityPig); 
+			}
+			return false;
+		}
+		
+	};
+	
+	public static final Predicate<? super Entity> PREDICATE_PETS = new Predicate<Entity>() {
+
+		@Override
+		public boolean apply(Entity input) {
+			if(input != null && input instanceof EntityTameable && !input.isDead) {
+				return input instanceof EntityOcelot || input instanceof EntityWolf; 
 			}
 			return false;
 		}
