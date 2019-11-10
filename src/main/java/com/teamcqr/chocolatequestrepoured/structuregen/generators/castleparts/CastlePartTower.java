@@ -80,7 +80,7 @@ public class CastlePartTower implements ICastlePart
 
         if(!buildList.isEmpty()) {
             for(BlockPlacement blockPlace : buildList) {
-                blockPlace.build(world);
+                world.setBlockState(blockPlace.position, blockPlace.state);
             }
         }
 
@@ -141,7 +141,7 @@ public class CastlePartTower implements ICastlePart
 
         currentY = y + floors * (floorHeight + 1);
         CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
-        roof.generate(buildList);
+        //roof.generate(buildList);
     }
 
     private void assembleRound(ArrayList<BlockPlacement> buildList)
@@ -202,7 +202,7 @@ public class CastlePartTower implements ICastlePart
 
         currentY = y + floors * (floorHeight + 1);
         CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
-        roof.generate(buildList);
+        //roof.generate(buildList);
     }
 
     @Override

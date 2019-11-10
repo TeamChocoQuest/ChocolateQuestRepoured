@@ -1,12 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.ICastleAddon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.*;
 import java.lang.Double;
@@ -48,11 +47,11 @@ public class CastleRoomSelector
         this.roomRandomizer.add(CastleRoom.RoomType.ARMORY, 2);
     }
 
-    public void generateRooms(ArrayList<BlockPlacement> blocks)
+    public void generateRooms(World world)
     {
         for (RoomGridCell cell : grid.getCellListCopy())
         {
-            cell.generateIfPopulated(blocks);
+            cell.generateIfPopulated(world);
         }
     }
 
