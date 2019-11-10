@@ -4,8 +4,7 @@ import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 public class CastleRoomHallway extends CastleRoom
 {
@@ -46,16 +45,16 @@ public class CastleRoomHallway extends CastleRoom
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world)
     {
         for (int z = 0; z < (walls.hasWallOnSide(EnumFacing.SOUTH) ? sideLength - 1 : sideLength); z++)
         {
             for (int x = 0; x < (walls.hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
             {
                 BlockPos pos = startPos.add(x, 0, z);
-                blocks.add(new BlockPlacement(pos, Blocks.WOOL.getDefaultState()));
+                world.setBlockState(pos, Blocks.WOOL.getDefaultState());
             }
         }
-        generateWalls(blocks);
+        generateWalls(world);
     }
 }

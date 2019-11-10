@@ -1,10 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 public class CastleRoomArmory extends CastleRoomGeneric
 {
@@ -22,8 +20,8 @@ public class CastleRoomArmory extends CastleRoomGeneric
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world)
     {
-        super.generateRoom(blocks);
+        super.generateRoom(world);
     }
 }

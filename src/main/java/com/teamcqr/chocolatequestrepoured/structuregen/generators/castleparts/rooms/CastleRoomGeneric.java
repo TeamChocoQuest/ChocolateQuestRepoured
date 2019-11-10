@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -23,7 +24,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world)
     {
         setupDecoration();
 
@@ -59,7 +60,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
 
         for (Map.Entry<BlockPos, IBlockState> entry : decoMap.entrySet())
         {
-            blocks.add(new BlockPlacement(entry.getKey(), entry.getValue()));
+            world.setBlockState(entry.getKey(), entry.getValue());
         }
     }
 }

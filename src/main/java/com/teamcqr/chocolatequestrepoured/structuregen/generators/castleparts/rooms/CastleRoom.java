@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonDoor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
@@ -11,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,25 +93,25 @@ public abstract class CastleRoom
         this.decoArea = new HashSet<>();
     }
 
-    public void generate(ArrayList<BlockPlacement> blocks)
+    public void generate(World world)
     {
-        generateRoom(blocks);
-        generateRoofEdges(blocks);
-        generateWalls(blocks);
+        generateRoom(world);
+        generateRoofEdges(world);
+        generateWalls(world);
 
         if (defaultFloor)
         {
-            generateDefaultFloor(blocks);
+            generateDefaultFloor(world);
         }
         if (defaultCeiling)
         {
-            generateDefaultCeiling(blocks);
+            generateDefaultCeiling(world);
         }
     }
 
-    protected abstract void generateRoom(ArrayList<BlockPlacement> blocks);
+    protected abstract void generateRoom(World world);
 
-    protected void generateWalls(ArrayList<BlockPlacement> blocks)
+    protected void generateWalls(World world)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
@@ -119,7 +119,7 @@ public abstract class CastleRoom
             {
                 BlockPos buildPos = getbuildPosition();
                 RoomWallBuilder builder = new RoomWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(blocks);
+                builder.generate(world);
             }
         }
     }
@@ -151,18 +151,18 @@ public abstract class CastleRoom
         return false;
     }
 
-    protected void generateDefaultCeiling(ArrayList<BlockPlacement> blocks)
+    protected void generateDefaultCeiling(World world)
     {
         for (int z = 0; z < buildLength - 1; z++)
         {
             for (int x = 0; x < buildLength - 1; x++)
             {
-                blocks.add(new BlockPlacement(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState()));
+                world.setBlockState(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState());
             }
         }
     }
 
-    protected void generateDefaultFloor(ArrayList<BlockPlacement> blocks)
+    protected void generateDefaultFloor(World world)
     {
         BlockPos pos = getNonWallStartPos();
 
@@ -170,12 +170,12 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < getDecorationLengthX(); x++)
             {
-                blocks.add(new BlockPlacement(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState()));
+                world.setBlockState(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState());
             }
         }
     }
 
-    protected void generateRoofEdges(ArrayList<BlockPlacement> blocks)
+    protected void generateRoofEdges(World world)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
         int len = buildLength;
@@ -185,10 +185,10 @@ public abstract class CastleRoom
             for (int x = 0; x < len; x++)
             {
                 BlockPos pos = startPos.add(x + offsetX, height, offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, x))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -197,10 +197,10 @@ public abstract class CastleRoom
             for (int x = 0; x < len; x++)
             {
                 BlockPos pos = startPos.add(x + offsetX, height, offsetZ + buildLength - 1);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, x))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -209,10 +209,10 @@ public abstract class CastleRoom
             for (int z = 0; z < len; z++)
             {
                 BlockPos pos = startPos.add(offsetX, height, z + offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, z))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -221,10 +221,10 @@ public abstract class CastleRoom
             for (int z = 0; z < len; z++)
             {
                 BlockPos pos = startPos.add(offsetX + buildLength - 1, height, z + offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, z))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -238,22 +238,6 @@ public abstract class CastleRoom
     public RoomType getRoomType()
     {
         return roomType;
-    }
-
-    private void roomDecoTable(BlockPos pos, ArrayList<BlockPlacement> blocks)
-    {
-        IBlockState legBlock = Blocks.OAK_FENCE.getDefaultState();
-        IBlockState topBlock = Blocks.WOODEN_SLAB.getDefaultState();
-        topBlock = topBlock.withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.OAK);
-        blocks.add(new BlockPlacement(pos, legBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 0, 0), legBlock));
-        blocks.add(new BlockPlacement(pos.add(0, 0, 1), legBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 0, 1), legBlock));
-
-        blocks.add(new BlockPlacement(pos.add(0, 1, 0), topBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 1, 0), topBlock));
-        blocks.add(new BlockPlacement(pos.add(0, 1, 1), topBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
     }
 
     public BlockPos getRoofStartPosition()

@@ -6,8 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 public class CastleRoomTowerSquare extends CastleRoom
 {
@@ -63,7 +62,7 @@ public class CastleRoomTowerSquare extends CastleRoom
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world)
     {
         SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide);
 
@@ -92,7 +91,7 @@ public class CastleRoomTowerSquare extends CastleRoom
                         blockToBuild = Blocks.STONEBRICK.getDefaultState();
                     }
 
-                    blocks.add(new BlockPlacement(pos, blockToBuild));
+                    world.setBlockState(pos, blockToBuild);
                 }
             }
         }
