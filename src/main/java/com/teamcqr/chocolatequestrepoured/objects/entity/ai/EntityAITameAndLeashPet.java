@@ -16,6 +16,8 @@ import net.minecraft.util.math.Vec3i;
 
 public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
+	//TODO: Save pet information on entity!!!
+	
 	EntityTameable pet = null;
 	
 	protected final int TAMEABLE_SEARCH_RANGE = 12; 
