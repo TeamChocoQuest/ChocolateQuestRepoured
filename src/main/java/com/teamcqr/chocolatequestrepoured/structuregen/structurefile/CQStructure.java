@@ -284,7 +284,7 @@ public class CQStructure {
 			for(int iX = 0; iX < xIterations; iX++) {
 				for(int iZ = 0; iZ < zIterations; iZ++) {
 					start = new BlockPos(startPos.add(16 *iX, 0, 16 *iZ));
-					start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
+					//start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
 					end = new BlockPos(start.add(16, this.sizeY, 16));
 					
 					if((iX +1) == xIterations || (iZ +1) == zIterations) {
