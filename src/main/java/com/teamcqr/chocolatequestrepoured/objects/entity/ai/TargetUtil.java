@@ -7,8 +7,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBas
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityPig;
@@ -39,7 +39,7 @@ public class TargetUtil {
 		@Override
 		public boolean apply(Entity input) {
 			if(input != null && input instanceof EntityAnimal && !input.isDead) {
-				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof EntityHorse ||input instanceof EntityPig); 
+				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof AbstractHorse ||input instanceof EntityPig); 
 			}
 			return false;
 		}
