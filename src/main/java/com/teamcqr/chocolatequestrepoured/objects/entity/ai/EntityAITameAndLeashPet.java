@@ -81,7 +81,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 						if(!(t instanceof EntityTameable)) {
 							return;
 						}
-						if(pet == null && ((EntityTameable)t).getOwnerId().equals(entity.getPersistentID())) {
+						if(pet == null && entity != null && t != null && ((EntityTameable)t).getOwnerId() != null && ((EntityTameable)t).getOwnerId().equals(entity.getPersistentID())) {
 							pet = (EntityTameable) t;
 							return;
 						}
