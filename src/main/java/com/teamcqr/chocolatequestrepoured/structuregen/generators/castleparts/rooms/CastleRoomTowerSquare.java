@@ -24,6 +24,7 @@ public class CastleRoomTowerSquare extends CastleRoom
         this.roomType = RoomType.TOWER_SQUARE;
         this.connectedSide = connectedSide;
         this.buildLength = towerSize;
+        this.defaultCeiling = false;
 
         if (connectedSide == EnumFacing.NORTH || connectedSide == EnumFacing.SOUTH)
         {
@@ -55,12 +56,9 @@ public class CastleRoomTowerSquare extends CastleRoom
 
         this.pillarStart = startPos.add((offsetX + buildLength / 2), stairYOffset, (offsetZ + buildLength / 2));
 
-        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        for (EnumFacing side: EnumFacing.HORIZONTALS)
         {
-            if (side != connectedSide)
-            {
-                walls.add(side);
-            }
+            this.walls.addOuter(side);
         }
     }
 
@@ -87,7 +85,11 @@ public class CastleRoomTowerSquare extends CastleRoom
                     }
                     else if (y == 0)
                     {
-                        blockToBuild = Blocks.COBBLESTONE.getDefaultState();
+                        blockToBuild = Blocks.PLANKS.getDefaultState();
+                    }
+                    else if (y == height - 1)
+                    {
+                        blockToBuild = Blocks.STONEBRICK.getDefaultState();
                     }
 
                     blocks.add(new BlockPlacement(pos, blockToBuild));
@@ -104,12 +106,6 @@ public class CastleRoomTowerSquare extends CastleRoom
             result = result.rotateY();
         }
         return result;
-    }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "TWR";
     }
 
     @Override

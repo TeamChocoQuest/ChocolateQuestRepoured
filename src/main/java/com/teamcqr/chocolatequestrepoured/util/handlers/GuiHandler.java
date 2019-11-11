@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.gui.GuiBackpack;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiBadge;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
+import com.teamcqr.chocolatequestrepoured.client.gui.GuiReputation;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiSpawner;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.inventory.ContainerBackpack;
@@ -16,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.EnumHand;
@@ -25,6 +27,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 
 public class GuiHandler implements IGuiHandler {
 
+	//SERVER
 	@Override
 	public Container getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == Reference.BADGE_GUI_ID) {
@@ -50,6 +53,7 @@ public class GuiHandler implements IGuiHandler {
 		return null;
 	}
 
+	//CLIENT
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
 		if (ID == Reference.BADGE_GUI_ID) {
@@ -74,6 +78,10 @@ public class GuiHandler implements IGuiHandler {
 
 		if (ID == Reference.EXPORTER_GUI_ID) {
 			return new GuiExporter((TileEntityExporter) world.getTileEntity(new BlockPos(x, y, z)));
+		}
+		
+		if(ID == Reference.REPUTATION_GUI_ID) {
+			return new GuiReputation((EntityPlayerSP) player);
 		}
 
 		return null;

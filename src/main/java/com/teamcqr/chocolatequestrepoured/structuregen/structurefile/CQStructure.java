@@ -74,6 +74,7 @@ public class CQStructure {
 	}
 	
 	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
+		System.out.println("Dungeon is null: " + (dungeon == null));
 		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {
@@ -240,21 +241,30 @@ public class CQStructure {
 		
 		//Makes sure, that the end positions X and Z component is larger than the ones of the start pos
 		if(posEnd.getX() < posStart.getX()) {
+			int oldEndX = endPos.getX();
 			endPos = new BlockPos(posStart.getX(), endPos.getY(), endPos.getZ());
-			startPos = new BlockPos(posEnd.getX(), startPos.getY(), startPos.getZ());
+			startPos = new BlockPos(oldEndX, startPos.getY(), startPos.getZ());
+		}
+		if(posEnd.getY() < posStart.getY()) {
+			int oldEndY = endPos.getY();
+			endPos = new BlockPos(posEnd.getX(), posStart.getY(), posEnd.getZ());
+			startPos = new BlockPos(posStart.getX(), oldEndY, posStart.getZ());
 		}
 		if(posEnd.getZ() < posStart.getZ()) {
+			int oldEndZ = endPos.getZ();
 			endPos = new BlockPos(endPos.getX(), endPos.getY(), posStart.getZ());
-			startPos = new BlockPos(startPos.getX(), startPos.getY(), posEnd.getZ());
+			startPos = new BlockPos(startPos.getX(), startPos.getY(), oldEndZ);
 		}
 		
-		this.setSizeX(endPos.getX() != startPos.getX() ? endPos.getX() - startPos.getX() : 1);
-		this.setSizeY(endPos.getY() != startPos.getY() ? endPos.getY() - startPos.getY() : 1);
-		this.setSizeZ(endPos.getZ() != startPos.getZ() ? endPos.getZ() - startPos.getZ() : 1);
+		this.setSizeX(endPos.getX() != startPos.getX() ? (endPos.getX() - startPos.getX()) +1: 1);
+		this.setSizeY(endPos.getY() != startPos.getY() ? (endPos.getY() - startPos.getY()) +1: 1);
+		this.setSizeZ(endPos.getZ() != startPos.getZ() ? (endPos.getZ() - startPos.getZ()) +1: 1);
 		
 		//DONE: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
 		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
 		//Problem was not the reflection thing, it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
+		
+		endPos = endPos.add(1, 1, 1);
 		
 		int distX = endPos.getX() - startPos.getX();
 		int distZ = endPos.getZ() - startPos.getZ();
@@ -271,21 +281,21 @@ public class CQStructure {
 			int xIterations = this.sizeX / 16;
 			int zIterations = this.sizeZ / 16;
 			
-			for(int iX = 0; iX < xIterations; iX++) {
-				for(int iZ = 0; iZ < zIterations; iZ++) {
+			for(int iX = 0; iX <= xIterations; iX++) {
+				for(int iZ = 0; iZ <= zIterations; iZ++) {
 					start = new BlockPos(startPos.add(16 *iX, 0, 16 *iZ));
-					start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
+					//start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
 					end = new BlockPos(start.add(16, this.sizeY, 16));
 					
-					if((iX +1) == xIterations || (iZ +1) == zIterations) {
+					//if((iX) == xIterations || (iZ) == zIterations) {
 						//This section is for parts standing out of the grid...
-						if((iX +1) == xIterations) {
-							end = new BlockPos(posEnd.getX(), end.getY(), end.getZ());
+						if(iX == xIterations) {
+							end = new BlockPos(endPos.getX(), end.getY(), end.getZ());
 						}
-						if((iZ +1) == zIterations) {
-							end = new BlockPos(end.getX(), end.getY(), posEnd.getZ());
+						if(iZ == zIterations) {
+							end = new BlockPos(end.getX(), end.getY(), endPos.getZ());
 						}
-					}
+					//}
 					offset = start.subtract(startPos);
 					
 					CQStructurePart subPart = new CQStructurePart(partIndx);

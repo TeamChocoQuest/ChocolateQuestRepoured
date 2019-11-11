@@ -22,6 +22,28 @@ public enum EReputationState {
 		return value;
 	}
 	
+	public static EReputationState getByInt(int amount) {
+		if(amount < -750) {
+			return ARCH_ENEMY;
+		} else if(amount < -375) {
+			return ENEMY;
+		} else if(amount < -187) {
+			return HATED;
+		} else if(amount < -62) {
+			return AVOIDED;
+		} else if(amount < 62) {
+			return NEUTRAL;
+		} else if(amount < 187) {
+			return ACCEPTED;
+		} else if(amount < 375) {
+			return FRIEND;
+		} else if(amount < 750) {
+			return ALLY;
+		} else {
+			return MEMBER;
+		}
+	}
+	
 	public enum EReputationStateRough {
 		NEUTRAL(250, -250),
 		ENEMY(-251, -10000),

@@ -37,7 +37,12 @@ public class EntityCQRPirate extends AbstractEntityCQR {
 	
 	@Override
 	public int getTextureCount() {
-		return 1;
+		return 3;
+	}
+	
+	@Override
+	public boolean canRide() {
+		return false;
 	}
 
 }

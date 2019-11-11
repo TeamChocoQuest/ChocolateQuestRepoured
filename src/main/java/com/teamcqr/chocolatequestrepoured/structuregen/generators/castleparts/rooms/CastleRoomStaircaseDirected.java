@@ -68,12 +68,6 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         }
     }
 
-    @Override
-    public String getNameShortened()
-    {
-        return "STR";
-    }
-
     public void setDoorSide(EnumFacing side)
     {
         this.doorSide = side;

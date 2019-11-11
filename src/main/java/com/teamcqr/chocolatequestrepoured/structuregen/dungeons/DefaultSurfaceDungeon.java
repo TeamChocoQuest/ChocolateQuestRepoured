@@ -31,7 +31,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {
-			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structurefolder", "defaultFolder");
+			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structureFolder", "defaultFolder");
 			
 			closeConfigFile();
 		} else {

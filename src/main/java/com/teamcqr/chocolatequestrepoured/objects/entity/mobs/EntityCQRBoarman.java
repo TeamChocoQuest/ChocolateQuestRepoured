@@ -70,4 +70,9 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 3;
 	}
+	
+	@Override
+	public boolean canRide() {
+		return true;
+	}
 }

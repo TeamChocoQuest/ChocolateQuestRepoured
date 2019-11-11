@@ -18,6 +18,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
         super(startPos, sideLength, height);
         this.roomType = RoomType.LANDING_SPIRAL;
         this.stairsBelow = stairsBelow;
+        this.defaultCeiling = true;
     }
 
     @Override
@@ -55,11 +56,5 @@ public class CastleRoomLandingSpiral extends CastleRoom
                 }
             }
         }
-    }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "LAN";
     }
 }

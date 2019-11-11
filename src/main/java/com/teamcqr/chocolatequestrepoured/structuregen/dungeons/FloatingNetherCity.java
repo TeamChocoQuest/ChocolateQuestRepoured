@@ -28,6 +28,8 @@ public class FloatingNetherCity extends DungeonBase {
 	private int minIslandDistance = 15;
 	private int maxIslandDistance = 30;
 	private int yFactorHeight = 20;
+	private int heightVariation = 10;
+	private boolean digAirCave = true;
 	private Block islandMaterial = Blocks.NETHERRACK;
 	private Block chainBlock = Blocks.OBSIDIAN;
 	//private Block bridgeBlock = Blocks.NETHER_BRICK;
@@ -47,8 +49,10 @@ public class FloatingNetherCity extends DungeonBase {
 			this.minIslandDistance = PropertyFileHelper.getIntProperty(prop, "minIslandDistance", 15);
 			this.maxIslandDistance = PropertyFileHelper.getIntProperty(prop, "maxIslandDistance", 30);
 			this.yFactorHeight = PropertyFileHelper.getIntProperty(prop, "islandFloorCeilingsDistance", 20);
+			this.heightVariation = PropertyFileHelper.getIntProperty(prop, "islandHeightVariation", 10);
 			this.posY = PropertyFileHelper.getIntProperty(prop, "yPosition", 50);
 			
+			this.digAirCave = PropertyFileHelper.getBooleanProperty(prop, "digAirCave", true);
 			this.buildChains = PropertyFileHelper.getBooleanProperty(prop, "buildChains", true);
 			
 			this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structureFolder", "floatingCity/islands");
@@ -56,6 +60,8 @@ public class FloatingNetherCity extends DungeonBase {
 			
 			this.islandMaterial = PropertyFileHelper.getBlockProperty(prop, "islandBlock", Blocks.NETHERRACK);
 			this.chainBlock = PropertyFileHelper.getBlockProperty(prop, "chainBlock", Blocks.OBSIDIAN);
+			
+			registeredSuccessful = true;
 			
 			closeConfigFile();
 		} else {
@@ -65,12 +71,16 @@ public class FloatingNetherCity extends DungeonBase {
 	
 	@Override
 	public void generate(BlockPos pos, World world) {
+		System.out.println("Generating structure " + this.name + " at X: " + pos.getX() + "  Y: " + pos.getY() + "  Z: " + pos.getZ() + "  ...");
 		getGenerator().generate(world, world.getChunkFromBlockCoords(pos), pos.getX(), pos.getY(), pos.getZ());
+		System.out.println("Generated structure " + this.name + " at X: " + pos.getX() + "  Y: " + pos.getY() + "  Z: " + pos.getZ() + "!");
 	}
 	
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "  ...");
 		getGenerator().generate(world, chunk, x, this.posY, z);
+		System.out.println("Generated structure " + this.name + " at X: " + x + "  Y: " + posY + "  Z: " + z + "!");
 	}
 	
 	@Override
@@ -171,6 +181,19 @@ public class FloatingNetherCity extends DungeonBase {
 	}
 	public int getYFactorHeight() {
 		return this.yFactorHeight;
+	}
+
+	public boolean digAirCave() {
+		return this.digAirCave;
+	}
+	
+	public int getRandomHeightVariation() {
+		if(heightVariation != 0) {
+			int var = Math.abs(heightVariation);
+			int rvar = DungeonGenUtils.getIntBetweenBorders(0, var);
+			return var/2 -rvar;
+		}
+		return 0;
 	}
 
 }

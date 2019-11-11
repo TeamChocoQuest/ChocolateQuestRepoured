@@ -97,7 +97,11 @@ public enum ELootTable {
 	public static ELootTable valueOf(Block b) {
 		if(DungeonGenUtils.isLootChest(b)) {
 			for(ELootTable elt : ELootTable.values()) {
-				if(Block.isEqualTo(b, elt.block)) {
+				/*System.out.println("Block of ELT is null: " + (elt.block == null));
+				System.out.println("RL of ELT is null: " + (elt.block.getRegistryName() == null));
+				System.out.println("RL of B is null: " + (b.getRegistryName() == null));*/
+				if(b.getRegistryName().getResourceDomain() == elt.block.getRegistryName().getResourceDomain() && 
+						b.getRegistryName().getResourcePath() == elt.block.getRegistryName().getResourcePath()/*Block.isEqualTo(b, elt.block)*/) {
 					return elt;
 				}
 			}
