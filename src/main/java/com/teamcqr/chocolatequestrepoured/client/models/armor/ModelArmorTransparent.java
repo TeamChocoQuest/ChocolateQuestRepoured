@@ -1,13 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.client.models.armor;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
-public class ModelArmorTransparent extends ModelBiped {
+public class ModelArmorTransparent extends ModelCustomArmor {
 
 	public ModelArmorTransparent(float scale) {
-		super(scale);
+		super(scale, 64, 32);
 	}
 
 	@Override

@@ -7,13 +7,14 @@ import com.teamcqr.chocolatequestrepoured.client.init.ModEntityRenderers;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ClientProxy implements IProxy {
-	
+
 	static final String KEY_CATEGORY_MAIN = "Chocolate Quest Repoured";
-	
+
 	public static KeyBinding keybindReputationGUI = new KeyBinding("Reputation GUI", Keyboard.KEY_F4, KEY_CATEGORY_MAIN);
 
 	@Override
@@ -37,6 +38,15 @@ public class ClientProxy implements IProxy {
 			return Minecraft.getMinecraft().player;
 		} else {
 			return context.getServerHandler().player;
+		}
+	}
+
+	@Override
+	public World getWorld(MessageContext context) {
+		if (context.side.isClient()) {
+			return Minecraft.getMinecraft().world;
+		} else {
+			return context.getServerHandler().player.world;
 		}
 	}
 
