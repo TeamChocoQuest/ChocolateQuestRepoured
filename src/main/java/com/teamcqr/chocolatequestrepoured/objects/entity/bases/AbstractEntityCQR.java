@@ -35,6 +35,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -749,6 +750,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@SideOnly(Side.SERVER)
 	public void setHealthScale(double hs) {
 		this.healthScale = hs;
+	}
+	
+	@Override
+	public PathNavigate getNavigator() {
+		if(this.isRiding()) {
+			Entity ridden =  getRidingEntity();
+			if(ridden != null) {
+				if(ridden instanceof EntityLiving) {
+					return ((EntityLiving)ridden).getNavigator();
+				}
+			}
+		}
+		return super.getNavigator();
 	}
 
 }
