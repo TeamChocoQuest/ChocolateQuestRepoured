@@ -61,7 +61,10 @@ public enum EDungeonMobType {
 	
 	//X and Z are B L O C K x and z, not chunk x and z!!!
 	public static ResourceLocation getMobDependingOnDistance(int x, int z) {
+		//System.out.println("X: " + x);
+		//System.out.println("Z: " + z);
 		double distToSpawn = Math.sqrt(x * x + z * z);
+		//System.out.println("DistToSpawn: " + distToSpawn);
 		
 		/*
 		 * Mob spawns depending on distance: Raising from near to far
@@ -79,14 +82,16 @@ public enum EDungeonMobType {
 		 */
 		
 		int index = new Double(distToSpawn / Reference.CONFIG_HELPER_INSTANCE.getMobChangeDistanceDivisor()).intValue();
+		//System.out.println("Index: " + index);
 		//if the index is larger than array size +1 -> RANDOM
 		Random rdm = new Random();
 		int indx = -1;
-		if(index >= mobWheel.length) {
+		if(index >= mobCount.length) {
 			indx = rdm.nextInt(mobCount.length);
 		} else {
 			indx = index;
 		}
+		//System.out.println("Indx: " + indx);
 		if(indx >= 0) {
 			return mobWheel[indx][rdm.nextInt(mobCount[indx])];
 		}
