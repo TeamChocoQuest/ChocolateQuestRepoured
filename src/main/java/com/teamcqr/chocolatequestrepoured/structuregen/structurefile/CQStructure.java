@@ -281,21 +281,21 @@ public class CQStructure {
 			int xIterations = this.sizeX / 16;
 			int zIterations = this.sizeZ / 16;
 			
-			for(int iX = 0; iX < xIterations; iX++) {
-				for(int iZ = 0; iZ < zIterations; iZ++) {
+			for(int iX = 0; iX <= xIterations; iX++) {
+				for(int iZ = 0; iZ <= zIterations; iZ++) {
 					start = new BlockPos(startPos.add(16 *iX, 0, 16 *iZ));
 					//start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
 					end = new BlockPos(start.add(16, this.sizeY, 16));
 					
-					if((iX +1) == xIterations || (iZ +1) == zIterations) {
+					//if((iX) == xIterations || (iZ) == zIterations) {
 						//This section is for parts standing out of the grid...
-						if((iX +1) == xIterations) {
+						if(iX == xIterations) {
 							end = new BlockPos(posEnd.getX(), end.getY(), end.getZ());
 						}
-						if((iZ +1) == zIterations) {
+						if(iZ == zIterations) {
 							end = new BlockPos(end.getX(), end.getY(), posEnd.getZ());
 						}
-					}
+					//}
 					offset = start.subtract(startPos);
 					
 					CQStructurePart subPart = new CQStructurePart(partIndx);
