@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.init;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.ArmorCooldownSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.ArmorCooldownSyncPacketHandler;
-import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
@@ -12,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticleMessageHandler;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
+import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacketHandler;
 import com.teamcqr.chocolatequestrepoured.network.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.network.StructureSelectorPacketHandler;
@@ -30,7 +30,7 @@ public class ModMessages {
 		CQRMain.NETWORK.registerMessage(ArmorCooldownSyncPacketHandler.class, ArmorCooldownSyncPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(ItemStackSyncPacketHandler.class, ItemStackSyncPacket.class, messageID++, Side.CLIENT);
 
-		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, CQSaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
+		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, SaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(StructureSelectorPacketHandler.class, StructureSelectorPacket.class, messageID++, Side.SERVER);
 	}
