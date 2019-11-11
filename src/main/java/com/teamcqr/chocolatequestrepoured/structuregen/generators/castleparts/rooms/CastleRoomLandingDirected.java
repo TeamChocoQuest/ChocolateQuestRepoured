@@ -75,10 +75,4 @@ public class CastleRoomLandingDirected extends CastleRoom
     {
         return (side == stairStartSide || side == stairStartSide.getOpposite());
     }
-
-    @Override
-    public String getNameShortened()
-    {
-        return "LAN";
-    }
 }

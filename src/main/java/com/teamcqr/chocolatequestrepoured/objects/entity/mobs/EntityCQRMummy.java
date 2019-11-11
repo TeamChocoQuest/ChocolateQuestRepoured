@@ -5,7 +5,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -21,6 +25,19 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 
+	}
+	
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		boolean flag = super.attackEntityAsMob(entityIn);
+
+        if (flag && this.getHeldItemMainhand().isEmpty() && entityIn instanceof EntityLivingBase)
+        {
+            int i = this.world.getDifficulty().getDifficultyId();
+            ((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.HUNGER, 140 * i));
+        }
+
+        return flag;
 	}
 
 	@Override
@@ -54,6 +71,11 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	@Override
 	public int getTextureCount() {
 		return 1;
+	}
+	
+	@Override
+	public boolean canRide() {
+		return true;
 	}
 
 }

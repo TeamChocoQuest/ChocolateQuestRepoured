@@ -1,12 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 
 /**
  * Abstracts away the use of Java's Reflection API

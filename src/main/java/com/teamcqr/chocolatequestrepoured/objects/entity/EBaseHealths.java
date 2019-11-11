@@ -27,6 +27,7 @@ public enum EBaseHealths {
 	MOUNTS(25.0F),
 
 	NETHER_DRAGON(250.0F),
+	GIANT_TORTOISE(500.0F),
 	;
 	
 	private float baseHealth;
