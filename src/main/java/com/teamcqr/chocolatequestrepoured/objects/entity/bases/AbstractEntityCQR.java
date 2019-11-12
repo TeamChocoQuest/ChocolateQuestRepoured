@@ -161,6 +161,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 	@Override
 	public void onDeath(DamageSource cause) {
+		this.isDead = true;
 		if(!(this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot).getItem() instanceof ItemPotionHealing)) {
 			swapWeaponAndPotionSlotItemStacks();
 		}
