@@ -1,10 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.EnumFacing;
 
-public class RoomDecorTableMedium extends RoomDecorBase
+public class RoomDecorTableMedium extends RoomDecorBlocks
 {
 
     public RoomDecorTableMedium()
@@ -15,18 +17,28 @@ public class RoomDecorTableMedium extends RoomDecorBase
     @Override
     protected void makeSchematic()
     {
-        IBlockState blockType = Blocks.OAK_FENCE.getDefaultState();
-        schematic.add(new DecoPlacement(0, 0, 0, blockType));
-        schematic.add(new DecoPlacement(1, 0, 0, blockType));
-        schematic.add(new DecoPlacement(0, 0, 1, blockType));
-        schematic.add(new DecoPlacement(1, 0, 1, blockType));
+        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
+        schematic.add(new DecoBlockOffset(1, 0, 0, Blocks.OAK_FENCE));
+        schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.OAK_FENCE));
+        schematic.add(new DecoBlockOffset(1, 0, 1, Blocks.OAK_FENCE));
 
-        blockType = Blocks.WOODEN_SLAB.getDefaultState();
-        blockType = blockType.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-        schematic.add(new DecoPlacement(0, 1, 0, blockType));
-        schematic.add(new DecoPlacement(1, 1, 0, blockType));
-        schematic.add(new DecoPlacement(0, 1, 1, blockType));
-        schematic.add(new DecoPlacement(1, 1, 1, blockType));
+        schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_SLAB));
+        schematic.add(new DecoBlockOffset(1, 1, 0, Blocks.WOODEN_SLAB));
+        schematic.add(new DecoBlockOffset(0, 1, 1, Blocks.WOODEN_SLAB));
+        schematic.add(new DecoBlockOffset(1, 1, 1, Blocks.WOODEN_SLAB));
+    }
+
+    @Override
+    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
+    {
+        IBlockState result = block.getDefaultState();
+
+        if (block == Blocks.WOODEN_SLAB)
+        {
+            result = result.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
+        }
+
+        return result;
     }
 
 }

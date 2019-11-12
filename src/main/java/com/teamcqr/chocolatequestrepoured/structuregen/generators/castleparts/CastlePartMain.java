@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -56,22 +55,9 @@ public class CastlePartMain implements ICastlePart
         int z = start.getZ();
         IBlockState blockToBuild;
 
-        ArrayList<BlockPlacement> buildList = new ArrayList<>();
-
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors);
 
-        roomHelper.generateRooms(buildList);
-
-        //Build the roof
-        currentY = y + floors * (floorHeight + 1);
-
-        if(!buildList.isEmpty())
-        {
-            for(BlockPlacement blockPlace : buildList)
-            {
-                blockPlace.build(world);
-            }
-        }
+        roomHelper.generateRooms(world, dungeon);
 
     }
 

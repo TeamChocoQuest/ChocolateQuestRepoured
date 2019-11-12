@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import net.minecraft.world.World;
+
 import java.util.ArrayList;
 
 /**
@@ -9,5 +10,5 @@ import java.util.ArrayList;
  */
 public interface ICastleAddon
 {
-    public void generate(ArrayList<BlockPlacement> blocks);
+    public void generate(World world);
 }
