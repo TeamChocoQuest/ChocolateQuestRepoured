@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,8 +23,8 @@ public class CastleRoomKitchen extends CastleRoomGeneric
     }
 
     @Override
-    public void generateRoom(World world)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
-        super.generateRoom(world);
+        super.generateRoom(world, dungeon);
     }
 }

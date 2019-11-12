@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.capability.armor.slime.CapabilitySlimeArmor;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
@@ -14,6 +16,8 @@ public class CastleRoomSelector
 {
     private static final int MAX_LAYERS = 5;
 
+    private World world;
+    private CastleDungeon dungeon;
     private BlockPos startPos;
     private int floorHeight;
     private int roomSize;
@@ -27,7 +31,8 @@ public class CastleRoomSelector
     private List<CastleAddonRoof> roofs;
     private WeightedRandom<CastleRoom.RoomType> roomRandomizer;
 
-    public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random)
+    public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer,
+                              int numSlotsX, int numSlotsZ, Random random)
     {
         this.startPos = startPos;
         this.floorHeight = floorHeight;
@@ -47,11 +52,11 @@ public class CastleRoomSelector
         this.roomRandomizer.add(CastleRoom.RoomType.ARMORY, 2);
     }
 
-    public void generateRooms(World world)
+    public void generateRooms(World world, CastleDungeon dungeon)
     {
         for (RoomGridCell cell : grid.getCellListCopy())
         {
-            cell.generateIfPopulated(world);
+            cell.generateIfPopulated(world, dungeon);
         }
     }
 

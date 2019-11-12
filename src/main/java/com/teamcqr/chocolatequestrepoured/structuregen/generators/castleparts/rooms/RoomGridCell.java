@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
@@ -187,11 +188,11 @@ public class RoomGridCell
         }
     }
 
-    public void generateIfPopulated(World world)
+    public void generateIfPopulated(World world, CastleDungeon dungeon)
     {
         if (state == CellState.POPULATED)
         {
-            room.generate(world);
+            room.generate(world, dungeon);
         }
     }
 

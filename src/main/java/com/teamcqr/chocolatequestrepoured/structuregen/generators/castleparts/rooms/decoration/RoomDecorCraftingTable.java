@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
-public class RoomDecorCraftingTable extends RoomDecorBase
+public class RoomDecorCraftingTable extends RoomDecorBlocks
 {
     public RoomDecorCraftingTable()
     {
@@ -14,6 +14,6 @@ public class RoomDecorCraftingTable extends RoomDecorBase
     protected void makeSchematic()
     {
         IBlockState blockType = Blocks.CRAFTING_TABLE.getDefaultState();
-        schematic.add(new DecoPlacement(0, 0, 0, blockType));
+        schematic.add(new DecoBlockOffset(0, 0, 0, blockType));
     }
 }

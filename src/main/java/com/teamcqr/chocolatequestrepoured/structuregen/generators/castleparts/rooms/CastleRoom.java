@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -13,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -49,7 +47,7 @@ public abstract class CastleRoom
         }
     }
 
-    BlockPos startPos;
+    protected BlockPos startPos;
     protected int height;
     protected int sideLength;
 
@@ -76,7 +74,7 @@ public abstract class CastleRoom
     protected HashSet<EnumFacing> roofEdges;
 
     protected RoomWalls walls;
-    protected HashMap<BlockPos, IBlockState> decoMap;
+    protected HashSet<BlockPos> decoMap;
     protected HashSet<BlockPos> decoArea;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
@@ -89,13 +87,13 @@ public abstract class CastleRoom
         this.height = height;
         this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
-        this.decoMap = new HashMap<>();
+        this.decoMap = new HashSet<>();
         this.decoArea = new HashSet<>();
     }
 
-    public void generate(World world)
+    public void generate(World world, CastleDungeon dungeon)
     {
-        generateRoom(world);
+        generateRoom(world, dungeon);
         generateRoofEdges(world);
         generateWalls(world);
 
@@ -109,7 +107,7 @@ public abstract class CastleRoom
         }
     }
 
-    protected abstract void generateRoom(World world);
+    protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
     protected void generateWalls(World world)
     {
@@ -325,13 +323,13 @@ public abstract class CastleRoom
         walls.registerAdjacentDoor(side, door);
     }
 
-    protected void setupDecoration()
+    protected void setupDecoration(World world)
     {
         decoArea = new HashSet<>(getDecorationArea());
-        setDoorAreasToAir();
+        setDoorAreasToAir(world);
     }
 
-    protected void setDoorAreasToAir()
+    protected void setDoorAreasToAir(World world)
     {
         BlockPos toAdd;
         BlockPos topLeft = getDecorationStartPos();
@@ -379,7 +377,8 @@ public abstract class CastleRoom
                         for (int y = yStart; y < yEnd; y++)
                         {
                             toAdd = new BlockPos(x, y, z);
-                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                            world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+                            decoMap.add(toAdd);
                         }
                     }
                 }
@@ -402,7 +401,8 @@ public abstract class CastleRoom
                         for (int y = yStart; y < yEnd; y++)
                         {
                             toAdd = new BlockPos(x, y, z);
-                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                            world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+                            decoMap.add(toAdd);
                         }
                     }
                 }
@@ -428,21 +428,25 @@ public abstract class CastleRoom
         if (side == EnumFacing.NORTH)
         {
             result.removeIf(p -> p.getZ() != zStart);
+            result.sort(Comparator.comparingInt(BlockPos::getX));
         }
         else if (side == EnumFacing.SOUTH)
         {
             result.removeIf(p -> p.getZ() != zEnd);
+            result.sort(Comparator.comparingInt(BlockPos::getX).reversed());
         }
         else if (side == EnumFacing.WEST)
         {
             result.removeIf(p -> p.getX() != xStart);
+            result.sort(Comparator.comparingInt(BlockPos::getZ));
         }
         else if (side == EnumFacing.EAST)
         {
             result.removeIf(p -> p.getX() != xEnd);
+            result.sort(Comparator.comparingInt(BlockPos::getZ).reversed());
         }
 
-        result.removeIf(p -> decoMap.containsKey(p)); //Remove block if it is occupied already
+        result.removeIf(p -> decoMap.contains(p)); //Remove block if it is occupied already
 
         return result;
     }

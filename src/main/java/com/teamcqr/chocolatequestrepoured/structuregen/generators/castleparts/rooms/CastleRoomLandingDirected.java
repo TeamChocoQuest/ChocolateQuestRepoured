@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -26,7 +26,7 @@ public class CastleRoomLandingDirected extends CastleRoom
     }
 
     @Override
-    public void generateRoom(World world)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild;
         for (int x = 0; x < sideLength - 1; x++)
