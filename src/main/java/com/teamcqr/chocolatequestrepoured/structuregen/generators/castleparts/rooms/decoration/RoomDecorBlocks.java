@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -17,15 +18,15 @@ public abstract class RoomDecorBlocks implements IRoomDecor
     protected class DecoBlockOffset
     {
         public Vec3i offset;
-        public IBlockState block;
+        public Block block;
 
-        protected DecoBlockOffset(int x, int y, int z, IBlockState block)
+        protected DecoBlockOffset(int x, int y, int z, Block block)
         {
             this.offset = new Vec3i(x, y, z);
             this.block = block;
         }
 
-        protected DecoBlockOffset(Vec3i offset, IBlockState block)
+        protected DecoBlockOffset(Vec3i offset, Block block)
         {
             this.offset = offset;
             this.block = block;
@@ -65,7 +66,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor
         for (DecoBlockOffset placement : rotated)
         {
             BlockPos pos = start.add(placement.offset);
-            world.setBlockState(pos, placement.block);
+            world.setBlockState(pos, getRotatedBlockState(placement.block, side));
             decoMap.add(pos);
         }
 
@@ -77,7 +78,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor
 
         for (DecoBlockOffset p : schematic)
         {
-            result.add(new DecoBlockOffset(DungeonGenUtils.rotateVec3i(p.offset, side), getRotatedBlockState(p.block, side)));
+            result.add(new DecoBlockOffset(DungeonGenUtils.rotateVec3i(p.offset, side), p.block));
         }
 
         return result;
@@ -86,8 +87,8 @@ public abstract class RoomDecorBlocks implements IRoomDecor
     /*
     * This can be overridden so individual block properties can be changed
      */
-    protected IBlockState getRotatedBlockState(IBlockState state, EnumFacing side)
+    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
     {
-        return state;
+        return block.getDefaultState();
     }
 }

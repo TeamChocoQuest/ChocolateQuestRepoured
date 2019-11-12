@@ -13,7 +13,6 @@ public class RoomDecorNone extends RoomDecorBlocks
     @Override
     protected void makeSchematic()
     {
-        IBlockState blockType = Blocks.AIR.getDefaultState();
-        schematic.add(new DecoBlockOffset(0, 0, 0, blockType));
+        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.AIR));
     }
 }
