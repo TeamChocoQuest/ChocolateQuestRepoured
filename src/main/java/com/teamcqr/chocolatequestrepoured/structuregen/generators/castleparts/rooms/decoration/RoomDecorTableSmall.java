@@ -13,11 +13,9 @@ public class RoomDecorTableSmall extends RoomDecorBlocks
     @Override
     protected void makeSchematic()
     {
-        IBlockState blockType = Blocks.OAK_FENCE.getDefaultState();
-        schematic.add(new DecoBlockOffset(0, 0, 0, blockType));
+        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
 
-        blockType = Blocks.WOODEN_PRESSURE_PLATE.getDefaultState();
-        schematic.add(new DecoBlockOffset(0, 1, 0, blockType));
+        schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_PRESSURE_PLATE));
     }
 
 }
