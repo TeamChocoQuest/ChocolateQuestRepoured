@@ -7,35 +7,50 @@ import net.minecraft.client.model.ModelRenderer;
  * Created using Tabula 7.0.1
  */
 public class ModelArmorHeavyIron extends ModelCustomArmorBase {
-    public ModelRenderer pauldronRight;
-    public ModelRenderer pauldronLeft;
-    public ModelRenderer helmetExtension;
-    public ModelRenderer chestArmor;
+	public ModelRenderer RightArmPauldon;
+    public ModelRenderer RightLegTasset;
+    public ModelRenderer HeadHelmet;
+    public ModelRenderer ChestArmor;
+    public ModelRenderer LeftArmPauldron;
+    public ModelRenderer LeftLegTasset;
 
     public ModelArmorHeavyIron(float scale) {
     	super(scale, 128, 128);
     	
-    	this.chestArmor = new ModelRenderer(this, 0, 88);
-        this.chestArmor.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.chestArmor.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, scale);
+    	this.RightLegTasset = new ModelRenderer(this, 0, 110);
+        this.RightLegTasset.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.RightLegTasset.addBox(-3.5F, -1.5F, -2.6F, 5, 5, 5, scale);
+        this.setRotateAngle(RightLegTasset, 0.0F, 0.0F, 0.2617993877991494F);
         
-        this.helmetExtension = new ModelRenderer(this, 0, 64);
-        this.helmetExtension.setRotationPoint(0.0F, 0.0F, 0.0F);
-        this.helmetExtension.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, scale);
-    	
-    	 this.pauldronRight = new ModelRenderer(this, 0, 80);
-         this.pauldronRight.setRotationPoint(0.0F, 0.0F, 0.0F);
-         this.pauldronRight.addBox(-3.0F, -2.0F, -2.0F, 4, 4, 4, scale);
-         
-         this.pauldronLeft = new ModelRenderer(this, 0, 80);
-         this.pauldronLeft.mirror = true;
-         this.pauldronLeft.setRotationPoint(0.0F, 0.0F, 0.0F);
-         this.pauldronLeft.addBox(-1.0F, -2.0F, -2.0F, 4, 4, 4, scale);
-    	
-    	 this.bipedBody.addChild(this.chestArmor);
-         this.bipedHead.addChild(this.helmetExtension);
-         this.bipedLeftArm.addChild(this.pauldronLeft);
-         this.bipedRightArm.addChild(this.pauldronRight);
+        this.HeadHelmet = new ModelRenderer(this, 0, 64);
+        this.HeadHelmet.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.HeadHelmet.addBox(-4.5F, -8.5F, -4.5F, 9, 9, 9, scale);
+        
+        this.LeftLegTasset = new ModelRenderer(this, 0, 110);
+        this.LeftLegTasset.mirror = true;
+        this.LeftLegTasset.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.LeftLegTasset.addBox(-1.5F, -1.5F, -2.5F, 5, 5, 5, scale);
+        this.setRotateAngle(LeftLegTasset, 0.0F, 0.0F, -0.2617993877991494F);
+        
+        this.RightArmPauldon = new ModelRenderer(this, 0, 82);
+        this.RightArmPauldon.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.RightArmPauldon.addBox(-3.5F, -2.5F, -2.5F, 5, 5, 5, scale);
+        
+        this.LeftArmPauldron = new ModelRenderer(this, 0, 82);
+        this.LeftArmPauldron.mirror = true;
+        this.LeftArmPauldron.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.LeftArmPauldron.addBox(-1.5F, -2.5F, -2.5F, 5, 5, 5, scale);
+        
+        this.ChestArmor = new ModelRenderer(this, 0, 92);
+        this.ChestArmor.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.ChestArmor.addBox(-4.5F, -0.5F, -2.5F, 9, 13, 5, scale);
+        
+        this.bipedRightLeg.addChild(this.RightLegTasset);
+        this.bipedHead.addChild(this.HeadHelmet);
+        this.bipedLeftLeg.addChild(this.LeftLegTasset);
+        this.bipedRightArm.addChild(this.RightArmPauldon);
+        this.bipedLeftArm.addChild(this.LeftArmPauldron);
+        this.bipedBody.addChild(this.ChestArmor);
     }
 
     /**
