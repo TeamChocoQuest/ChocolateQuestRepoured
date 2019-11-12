@@ -234,88 +234,56 @@ public class CQStructure {
 		}
 	}
 
-	//DONE?: Split structure into 16x16 grid 
+	// DONE?: Split structure into 16x16 grid
 	public void save(World worldIn, BlockPos posStart, BlockPos posEnd, boolean usePartMode, EntityPlayer placer) {
-		BlockPos endPos = posEnd;
-		BlockPos startPos = posStart;
-		
-		//Makes sure, that the end positions X and Z component is larger than the ones of the start pos
-		if(posEnd.getX() < posStart.getX()) {
-			int oldEndX = endPos.getX();
-			endPos = new BlockPos(posStart.getX(), endPos.getY(), endPos.getZ());
-			startPos = new BlockPos(oldEndX, startPos.getY(), startPos.getZ());
-		}
-		if(posEnd.getY() < posStart.getY()) {
-			int oldEndY = endPos.getY();
-			endPos = new BlockPos(posEnd.getX(), posStart.getY(), posEnd.getZ());
-			startPos = new BlockPos(posStart.getX(), oldEndY, posStart.getZ());
-		}
-		if(posEnd.getZ() < posStart.getZ()) {
-			int oldEndZ = endPos.getZ();
-			endPos = new BlockPos(endPos.getX(), endPos.getY(), posStart.getZ());
-			startPos = new BlockPos(startPos.getX(), startPos.getY(), oldEndZ);
-		}
-		
-		this.setSizeX(endPos.getX() != startPos.getX() ? (endPos.getX() - startPos.getX()) +1: 1);
-		this.setSizeY(endPos.getY() != startPos.getY() ? (endPos.getY() - startPos.getY()) +1: 1);
-		this.setSizeZ(endPos.getZ() != startPos.getZ() ? (endPos.getZ() - startPos.getZ()) +1: 1);
-		
-		//DONE: make reflection thing faster / do it another time (e.g. when creating the json?) and pass it to a thread
-		//Solution: move saving  a w a y  from GUI, move it into the tile entity section
-		//Problem was not the reflection thing, it was that minecraft handles the "endPos" as a kind of Offset and not an actual location :D
-		
+		BlockPos startPos = new BlockPos(Math.min(posStart.getX(), posEnd.getX()),
+				Math.min(posStart.getY(), posEnd.getY()), Math.min(posStart.getZ(), posEnd.getZ()));
+		BlockPos endPos = new BlockPos(Math.max(posStart.getX(), posEnd.getX()),
+				Math.max(posStart.getY(), posEnd.getY()), Math.max(posStart.getZ(), posEnd.getZ()));
+
 		endPos = endPos.add(1, 1, 1);
-		
-		int distX = endPos.getX() - startPos.getX();
-		int distZ = endPos.getZ() - startPos.getZ();
-		
-		if((Math.abs(distX) > 32 && Math.abs(distZ) > 32) && usePartMode) {
-			//Use part mode and cut the structure into multiple smaller 16xHEIGHTx16 cubes
-			
-			int partIndx = 0;
-			
-			BlockPos start = new BlockPos(startPos);
-			BlockPos end = new BlockPos(start.add(16, this.sizeY, 16));
-			BlockPos offset = new BlockPos(0, 0, 0);
-			
+
+		this.setSizeX(endPos.getX() - startPos.getX());
+		this.setSizeY(endPos.getY() - startPos.getY());
+		this.setSizeZ(endPos.getZ() - startPos.getZ());
+
+		if (usePartMode && this.sizeX > 17 && this.sizeZ > 17) {
+			// Use part mode and cut the structure into multiple smaller 16xHEIGHTx16 cubes
+			int partIndex = 0;
 			int xIterations = this.sizeX / 16;
 			int zIterations = this.sizeZ / 16;
-			
-			for(int iX = 0; iX <= xIterations; iX++) {
-				for(int iZ = 0; iZ <= zIterations; iZ++) {
-					start = new BlockPos(startPos.add(16 *iX, 0, 16 *iZ));
-					//start = start.add(iX != 0 ? 1 : 0, 0,  iZ != 0 ? 1: 0);
-					end = new BlockPos(start.add(16, this.sizeY, 16));
-					
-					//if((iX) == xIterations || (iZ) == zIterations) {
-						//This section is for parts standing out of the grid...
-						if(iX == xIterations) {
-							end = new BlockPos(endPos.getX(), end.getY(), end.getZ());
-						}
-						if(iZ == zIterations) {
-							end = new BlockPos(end.getX(), end.getY(), endPos.getZ());
-						}
-					//}
-					offset = start.subtract(startPos);
-					
-					CQStructurePart subPart = new CQStructurePart(partIndx);
-					subPart.takeBlocksFromWorld(worldIn, start, end, true, Blocks.STRUCTURE_VOID);
-					
-					this.structures.put(new BlockPos(offset), subPart);
-					partIndx++;
+
+			for (int iX = 0; iX <= xIterations; iX++) {
+				for (int iZ = 0; iZ <= zIterations; iZ++) {
+					BlockPos partStartPos = startPos.add(16 * iX, 0, 16 * iZ);
+					BlockPos partEndPos = partStartPos.add(16, this.sizeY, 16);
+
+					if (iX == xIterations) {
+						partEndPos = new BlockPos(endPos.getX(), partEndPos.getY(), partEndPos.getZ());
+					}
+					if (iZ == zIterations) {
+						partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos.getZ());
+					}
+
+					CQStructurePart part = new CQStructurePart(partIndex);
+					part.takeBlocksFromWorld(worldIn, partStartPos, partEndPos, true, Blocks.STRUCTURE_VOID);
+					this.structures.put(partStartPos.subtract(startPos), part);
+					partIndex++;
 				}
 			}
-			this.parts = partIndx;
+
+			this.parts = partIndex;
 		} else {
-			//Do not use the part mode -> Save as one huge block
-			this.parts = 1;
+			// Do not use the part mode -> Save as one huge block
 			CQStructurePart struct = new CQStructurePart(0);
 			struct.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
-			this.structures.put(new BlockPos(0,0,0), struct);
-		}	
-		writeNBT(placer);
+			this.structures.put(BlockPos.ORIGIN, struct);
+			this.parts = 1;
+		}
+
+		this.writeNBT(placer);
 	}
-	
+
 	private void writeNBT(EntityPlayer placer) {
 		System.out.println("Saving file " + this.dataFile.getName() +"...");
 		NBTTagCompound root = new NBTTagCompound();

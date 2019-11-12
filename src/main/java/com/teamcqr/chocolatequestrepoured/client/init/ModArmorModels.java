@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelBackpack;
 
 public class ModArmorModels {
 
-	public static ModelBackpack backpack = new ModelBackpack();
+	public static ModelBackpack backpack = new ModelBackpack(0.0F);
 	public static ModelArmorTransparent slimeArmor = new ModelArmorTransparent(1.0F);
 	public static ModelArmorTransparent slimeArmorLegs = new ModelArmorTransparent(0.5F);
 
