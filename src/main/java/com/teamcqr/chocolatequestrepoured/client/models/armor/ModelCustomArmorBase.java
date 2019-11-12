@@ -8,9 +8,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class ModelCustomArmor extends ModelBiped {
+public class ModelCustomArmorBase extends ModelBiped {
 
-	public ModelCustomArmor(float scale, int textureWidth, int textureHeight) {
+	public ModelCustomArmorBase(float scale, int textureWidth, int textureHeight) {
 		super(scale, 0.0F, textureWidth, textureHeight);
 	}
 

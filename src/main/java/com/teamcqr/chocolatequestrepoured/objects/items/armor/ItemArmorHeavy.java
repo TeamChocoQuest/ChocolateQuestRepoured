@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +36,13 @@ public class ItemArmorHeavy extends ItemArmor {
 		}
 
 		return multimap;
+	}
+	
+	@Override
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+			ModelBiped _default) {
+		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+		return ModArmorModels.heavyIronArmor;
 	}
 
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {

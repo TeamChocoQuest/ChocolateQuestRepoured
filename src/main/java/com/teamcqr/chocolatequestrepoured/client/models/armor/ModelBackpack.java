@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.models.armor;
 
 import net.minecraft.client.model.ModelRenderer;
 
-public class ModelBackpack extends ModelCustomArmor {
+public class ModelBackpack extends ModelCustomArmorBase {
 
 	private ModelRenderer mainBag;
 	private ModelRenderer leftBag;

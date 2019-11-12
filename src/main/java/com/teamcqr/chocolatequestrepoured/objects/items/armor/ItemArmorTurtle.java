@@ -59,7 +59,7 @@ public class ItemArmorTurtle extends ItemArmor {
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
-		return ModArmorModels.turtleChestplate;
+		return ModArmorModels.turtleArmor;
 	}
 
 	@Override
