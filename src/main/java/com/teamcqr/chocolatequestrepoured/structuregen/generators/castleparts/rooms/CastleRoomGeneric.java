@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
@@ -27,6 +28,12 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         setupDecoration(world);
 
+        addEdgeDecoration(world, dungeon);
+        addSpawners(world, dungeon);
+    }
+
+    private void addEdgeDecoration(World world, CastleDungeon dungeon)
+    {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
             ArrayList<BlockPos> edge = getDecorationEdge(side);
@@ -56,6 +63,21 @@ public abstract class CastleRoomGeneric extends CastleRoom
                     decoMap.add(pos);
                 }
             }
+        }
+    }
+
+    private void addSpawners(World world, CastleDungeon dungeon)
+    {
+        ArrayList<BlockPos> spawnPositions = getDecorationFirstLayer();
+        spawnPositions.removeAll(decoMap);
+
+        int spawnerCount = getSpawnerCount();
+
+        for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++)
+        {
+            BlockPos pos = spawnPositions.get(random.nextInt(spawnPositions.size()));
+            SpawnerFactory.createSimpleMultiUseSpawner(world, pos, dungeon.getSpawnerMob());
+            spawnPositions.remove(pos);
         }
     }
 }
