@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 
-public class RoomDecorTableSmall extends RoomDecorBlocks
+public class RoomDecorCauldron extends RoomDecorBlocks
 {
-    public RoomDecorTableSmall()
+    public RoomDecorCauldron()
     {
         super();
     }
@@ -13,9 +13,6 @@ public class RoomDecorTableSmall extends RoomDecorBlocks
     @Override
     protected void makeSchematic()
     {
-        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
-
-        schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_PRESSURE_PLATE));
+        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.CAULDRON));
     }
-
 }

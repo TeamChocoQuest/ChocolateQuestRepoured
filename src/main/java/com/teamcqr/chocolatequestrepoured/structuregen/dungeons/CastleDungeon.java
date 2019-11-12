@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -31,6 +32,9 @@ public class CastleDungeon extends DungeonBase {
 	private Block wallBlock = Blocks.STONE;
 	private Block floorBlock = Blocks.WHITE_GLAZED_TERRACOTTA;
 
+	private String roomMobName = "minecraft:ghast";
+	private String bossMobName = "minecraft:wither_boss";
+
 	@Override
 	public IDungeonGenerator getGenerator() {
 		return new CastleGenerator(this);
@@ -46,6 +50,8 @@ public class CastleDungeon extends DungeonBase {
 			this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
 			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 			this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
+
+			roomMobName = prop.getProperty("spawnerMob", "minecraft:zombie");
 
 			this.wallBlock = Blocks.STONEBRICK;
 			try
@@ -103,5 +109,17 @@ public class CastleDungeon extends DungeonBase {
 	public int getRoomSize() {return this.roomSize;}
 	public int getFloorHeight() {return this.floorHeight;}
 	public Random getRandom() {return this.random;}
+
+	public ResourceLocation getSpawnerMob() {
+		String[] bossString = this.roomMobName.split(":");
+
+		return new ResourceLocation(bossString[0], bossString[1]);
+	}
+
+	public ResourceLocation getBossMob() {
+		String[] bossString = this.bossMobName.split(":");
+
+		return new ResourceLocation(bossString[0], bossString[1]);
+	}
 
 }

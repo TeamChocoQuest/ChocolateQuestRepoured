@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
@@ -48,8 +49,10 @@ public class CastleAddonRoof implements ICastleAddon
     }
 
     @Override
-    public void generate(ArrayList<BlockPlacement> roofBlocks)
+    public void generate(World world)
     {
+        ArrayList<BlockPlacement> roofBlocks = new ArrayList<>();
+
         switch (type)
         {
             case WALKABLE:
@@ -65,6 +68,11 @@ public class CastleAddonRoof implements ICastleAddon
             {
                 generateFourSided(roofBlocks);
             }
+        }
+
+        for (BlockPlacement block : roofBlocks)
+        {
+            block.build(world);
         }
     }
 
