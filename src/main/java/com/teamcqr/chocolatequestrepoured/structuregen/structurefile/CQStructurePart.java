@@ -67,7 +67,7 @@ public class CQStructurePart extends Template {
 	public CQStructurePart(int part_id) {
 		super();
 		
-		this.setPart_id(part_id);
+		this.setPartId(part_id);
 	}
 	
 	//CONFIRMED WORKING
@@ -345,11 +345,11 @@ public class CQStructurePart extends Template {
 		//Done :D
 	}
 
-	public int getPart_id() {
+	public int getPartId() {
 		return part_id;
 	}
 
-	public void setPart_id(int part_id) {
+	public void setPartId(int part_id) {
 		this.part_id = part_id;
 	}
 	

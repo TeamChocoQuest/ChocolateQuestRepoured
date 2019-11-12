@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
-import com.teamcqr.chocolatequestrepoured.network.CQSaveStructureRequestPacket;
+import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.client.Minecraft;
@@ -138,7 +138,7 @@ public class TileEntityExporter extends TileEntity {
 			System.out.println("Done!");
 		} else {
 			System.out.println("Sending structure save request packet...");
-			CQRMain.NETWORK.sendToServer(new CQSaveStructureRequestPacket(startPos, endPos, authorName,
+			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, authorName,
 					this.structureName, true, this.partModeUsing));
 			System.out.println("Packet sent!");
 		}
