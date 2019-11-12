@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 public class CastleRoomKitchen extends CastleRoomGeneric
 {
@@ -15,24 +13,18 @@ public class CastleRoomKitchen extends CastleRoomGeneric
         this.roomType = RoomType.KITCHEN;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
+        this.defaultFloor = true;
 
-        this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 5);
-        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_S, 3);
-        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_M, 2);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 5);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 3);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_SM, 2);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.CRAFTING_TABLE, 1);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.FURNACE, 1);
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
-        //build the floor
-        for (int z = 0; z < sideLength - 1; z++)
-        {
-            for (int x = 0; x < sideLength - 1; x++)
-            {
-                blocks.add(new BlockPlacement(startPos.add( x, 0, z), Blocks.PLANKS.getDefaultState()));
-            }
-        }
-
-        super.generateRoom(blocks);
+        super.generateRoom(world, dungeon);
     }
 }

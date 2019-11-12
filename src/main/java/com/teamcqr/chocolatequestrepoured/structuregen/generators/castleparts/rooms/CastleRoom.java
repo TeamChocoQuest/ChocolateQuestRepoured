@@ -1,19 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonDoor;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -27,8 +25,10 @@ public abstract class CastleRoom
         STAIRCASE_DIRECTED(3, "Directed Stairs", true),
         STAIRCASE_SPIRAL(4, "Spiral Stairs", true),
         LANDING_DIRECTED(5, "Directed Landing", true),
-        LANDING_SPIRAL(6, "Spiral Landng", true),
-        TOWER_SQUARE(7, "Square Tower", false);
+        LANDING_SPIRAL(6, "Spiral Landing", true),
+        TOWER_SQUARE(7, "Square Tower", false),
+        ALCHEMY_LAB(8, "Alchemy Lab", false),
+        ARMORY(8, "Armory", false);
 
         private final int index;
         private final String name;
@@ -47,7 +47,7 @@ public abstract class CastleRoom
         }
     }
 
-    BlockPos startPos;
+    protected BlockPos startPos;
     protected int height;
     protected int sideLength;
 
@@ -66,15 +66,15 @@ public abstract class CastleRoom
 
     protected int maxSlotsUsed = 1; //Max number of contiguous room grid slots this can occupy
 
-    protected ArrayList<CastleAddonDoor> doors;
     protected RoomType roomType = RoomType.NONE;
     protected boolean defaultCeiling = false;
+    protected boolean defaultFloor = false;
     protected Random random = new Random();
 
     protected HashSet<EnumFacing> roofEdges;
 
     protected RoomWalls walls;
-    protected HashMap<BlockPos, IBlockState> decoMap;
+    protected HashSet<BlockPos> decoMap;
     protected HashSet<BlockPos> decoArea;
 
     public CastleRoom(BlockPos startPos, int sideLength, int height)
@@ -85,28 +85,31 @@ public abstract class CastleRoom
         this.offsetZ = 0;
         this.buildLength = this.sideLength;
         this.height = height;
-        this.doors = new ArrayList<>();
         this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
-        this.decoMap = new HashMap<>();
+        this.decoMap = new HashSet<>();
         this.decoArea = new HashSet<>();
     }
 
-    public void generate(ArrayList<BlockPlacement> blocks)
+    public void generate(World world, CastleDungeon dungeon)
     {
-        generateRoom(blocks);
-        generateWalls(blocks);
-        generateRoofEdges(blocks);
+        generateRoom(world, dungeon);
+        generateRoofEdges(world);
+        generateWalls(world);
 
+        if (defaultFloor)
+        {
+            generateDefaultFloor(world);
+        }
         if (defaultCeiling)
         {
-            generateDefaultCeiling(blocks);
+            generateDefaultCeiling(world);
         }
     }
 
-    protected abstract void generateRoom(ArrayList<BlockPlacement> blocks);
+    protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
-    protected void generateWalls(ArrayList<BlockPlacement> blocks)
+    protected void generateWalls(World world)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
@@ -114,7 +117,7 @@ public abstract class CastleRoom
             {
                 BlockPos buildPos = getbuildPosition();
                 RoomWallBuilder builder = new RoomWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(blocks);
+                builder.generate(world);
             }
         }
     }
@@ -146,18 +149,31 @@ public abstract class CastleRoom
         return false;
     }
 
-    protected void generateDefaultCeiling(ArrayList<BlockPlacement> blocks)
+    protected void generateDefaultCeiling(World world)
     {
         for (int z = 0; z < buildLength - 1; z++)
         {
             for (int x = 0; x < buildLength - 1; x++)
             {
-                blocks.add(new BlockPlacement(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState()));
+                world.setBlockState(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState());
             }
         }
     }
 
-    protected void generateRoofEdges(ArrayList<BlockPlacement> blocks)
+    protected void generateDefaultFloor(World world)
+    {
+        BlockPos pos = getNonWallStartPos();
+
+        for (int z = 0; z < getDecorationLengthZ(); z++)
+        {
+            for (int x = 0; x < getDecorationLengthX(); x++)
+            {
+                world.setBlockState(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState());
+            }
+        }
+    }
+
+    protected void generateRoofEdges(World world)
     {
         IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
         int len = buildLength;
@@ -167,10 +183,10 @@ public abstract class CastleRoom
             for (int x = 0; x < len; x++)
             {
                 BlockPos pos = startPos.add(x + offsetX, height, offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, x))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -179,10 +195,10 @@ public abstract class CastleRoom
             for (int x = 0; x < len; x++)
             {
                 BlockPos pos = startPos.add(x + offsetX, height, offsetZ + buildLength - 1);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, x))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -191,10 +207,10 @@ public abstract class CastleRoom
             for (int z = 0; z < len; z++)
             {
                 BlockPos pos = startPos.add(offsetX, height, z + offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, z))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -203,10 +219,10 @@ public abstract class CastleRoom
             for (int z = 0; z < len; z++)
             {
                 BlockPos pos = startPos.add(offsetX + buildLength - 1, height, z + offsetZ);
-                blocks.add(new BlockPlacement(pos, wallBlock));
+                world.setBlockState(pos, wallBlock);
                 if (shouldBuildCrenellation(len, z))
                 {
-                    blocks.add(new BlockPlacement(pos.up(), wallBlock));
+                    world.setBlockState(pos.up(), wallBlock);
                 }
             }
         }
@@ -220,22 +236,6 @@ public abstract class CastleRoom
     public RoomType getRoomType()
     {
         return roomType;
-    }
-
-    private void roomDecoTable(BlockPos pos, ArrayList<BlockPlacement> blocks)
-    {
-        IBlockState legBlock = Blocks.OAK_FENCE.getDefaultState();
-        IBlockState topBlock = Blocks.WOODEN_SLAB.getDefaultState();
-        topBlock = topBlock.withProperty(BlockWoodSlab.VARIANT, BlockPlanks.EnumType.OAK);
-        blocks.add(new BlockPlacement(pos, legBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 0, 0), legBlock));
-        blocks.add(new BlockPlacement(pos.add(0, 0, 1), legBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 0, 1), legBlock));
-
-        blocks.add(new BlockPlacement(pos.add(0, 1, 0), topBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 1, 0), topBlock));
-        blocks.add(new BlockPlacement(pos.add(0, 1, 1), topBlock));
-        blocks.add(new BlockPlacement(pos.add(1, 1, 1), topBlock));
     }
 
     public BlockPos getRoofStartPosition()
@@ -323,13 +323,13 @@ public abstract class CastleRoom
         walls.registerAdjacentDoor(side, door);
     }
 
-    protected void setupDecoration()
+    protected void setupDecoration(World world)
     {
         decoArea = new HashSet<>(getDecorationArea());
-        setDoorAreasToAir();
+        setDoorAreasToAir(world);
     }
 
-    protected void setDoorAreasToAir()
+    protected void setDoorAreasToAir(World world)
     {
         BlockPos toAdd;
         BlockPos topLeft = getDecorationStartPos();
@@ -377,7 +377,8 @@ public abstract class CastleRoom
                         for (int y = yStart; y < yEnd; y++)
                         {
                             toAdd = new BlockPos(x, y, z);
-                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                            world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+                            decoMap.add(toAdd);
                         }
                     }
                 }
@@ -400,7 +401,8 @@ public abstract class CastleRoom
                         for (int y = yStart; y < yEnd; y++)
                         {
                             toAdd = new BlockPos(x, y, z);
-                            decoMap.put(toAdd, Blocks.AIR.getDefaultState());
+                            world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+                            decoMap.add(toAdd);
                         }
                     }
                 }
@@ -426,21 +428,25 @@ public abstract class CastleRoom
         if (side == EnumFacing.NORTH)
         {
             result.removeIf(p -> p.getZ() != zStart);
+            result.sort(Comparator.comparingInt(BlockPos::getX));
         }
         else if (side == EnumFacing.SOUTH)
         {
             result.removeIf(p -> p.getZ() != zEnd);
+            result.sort(Comparator.comparingInt(BlockPos::getX).reversed());
         }
         else if (side == EnumFacing.WEST)
         {
             result.removeIf(p -> p.getX() != xStart);
+            result.sort(Comparator.comparingInt(BlockPos::getZ));
         }
         else if (side == EnumFacing.EAST)
         {
             result.removeIf(p -> p.getX() != xEnd);
+            result.sort(Comparator.comparingInt(BlockPos::getZ).reversed());
         }
 
-        result.removeIf(p -> decoMap.containsKey(p)); //Remove block if it is occupied already
+        result.removeIf(p -> decoMap.contains(p)); //Remove block if it is occupied already
 
         return result;
     }
@@ -482,9 +488,14 @@ public abstract class CastleRoom
         return result;
     }
 
-    public BlockPos getDecorationStartPos()
+    protected BlockPos getDecorationStartPos()
     {
-        BlockPos result = startPos.up(); //skip the floor
+        return getNonWallStartPos().up(); //skip the floor
+    }
+
+    protected BlockPos getNonWallStartPos()
+    {
+        BlockPos result = startPos;
 
         if (walls.hasWallOnSide(EnumFacing.NORTH))
         {
@@ -498,7 +509,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthX()
+    protected int getDecorationLengthX()
     {
         int result = buildLength;
 
@@ -514,7 +525,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthZ()
+    protected int getDecorationLengthZ()
     {
         int result = buildLength;
 
@@ -530,7 +541,7 @@ public abstract class CastleRoom
         return result;
     }
 
-    public int getDecorationLengthY()
+    protected int getDecorationLengthY()
     {
         int result = height - 1; //Remove one for the floor tiles
 
@@ -540,6 +551,11 @@ public abstract class CastleRoom
         }
 
         return result;
+    }
+
+    protected int getSpawnerCount()
+    {
+        return 2;
     }
 
     @Override

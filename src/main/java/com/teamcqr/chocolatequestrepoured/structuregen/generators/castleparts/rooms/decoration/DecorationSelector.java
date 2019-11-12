@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class DecorationSelector
 {
-    private WeightedRandom<RoomDecorBase> edgeDecor;
-    private WeightedRandom<RoomDecorBase> midDecor;
+    private WeightedRandom<IRoomDecor> edgeDecor;
+    private WeightedRandom<IRoomDecor> midDecor;
 
     public DecorationSelector(Random random)
     {
@@ -20,7 +20,7 @@ public class DecorationSelector
         edgeDecor.add(decor.createInstance(), weight);
     }
 
-    public RoomDecorBase randomEdgeDecor()
+    public IRoomDecor randomEdgeDecor()
     {
         return edgeDecor.next();
     }

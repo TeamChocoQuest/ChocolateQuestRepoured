@@ -1,14 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WallOptions;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import net.minecraft.util.EnumFacing;
-
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Random;
+import net.minecraft.world.World;
 
 public class RoomGridCell
 {
@@ -193,11 +188,11 @@ public class RoomGridCell
         }
     }
 
-    public void generateIfPopulated(ArrayList<BlockPlacement> blocks)
+    public void generateIfPopulated(World world, CastleDungeon dungeon)
     {
         if (state == CellState.POPULATED)
         {
-            room.generate(blocks);
+            room.generate(world, dungeon);
         }
     }
 

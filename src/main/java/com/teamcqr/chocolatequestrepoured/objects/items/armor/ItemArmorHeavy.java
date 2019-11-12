@@ -1,8 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,6 +37,20 @@ public class ItemArmorHeavy extends ItemArmor {
 		}
 
 		return multimap;
+	}
+	
+	@Override
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+			ModelBiped _default) {
+		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+		if(itemStack.getItem() instanceof ItemArmor) {
+			if(((ItemArmor)itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
+				//TODO: Diamond armor
+			} else {
+				return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
+			}
+		}
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 	}
 
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {

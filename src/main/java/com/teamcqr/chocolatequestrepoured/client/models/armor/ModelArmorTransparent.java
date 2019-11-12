@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.models.armor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 
-public class ModelArmorTransparent extends ModelCustomArmor {
+public class ModelArmorTransparent extends ModelCustomArmorBase {
 
 	public ModelArmorTransparent(float scale) {
 		super(scale, 64, 32);
