@@ -14,7 +14,9 @@ import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -178,6 +180,31 @@ public class DungeonGenUtils {
 	}
 	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {
 		return getLocSpecDungeonsForChunk(chunk.x, chunk.z, world);
+	}
+
+	/*
+	 * Rotate a vec3i to align with the given side.
+	 * Assumes that the vec3i is default +x right, +z down coordinate system
+	 */
+	public static Vec3i rotateVec3i(Vec3i vec, EnumFacing side)
+	{
+		if (side == EnumFacing.SOUTH)
+		{
+			return new Vec3i(-vec.getX(), vec.getY(), -vec.getZ());
+		}
+		else if (side == EnumFacing.WEST)
+		{
+			return new Vec3i(vec.getZ(), vec.getY(), -vec.getX());
+		}
+		else if (side == EnumFacing.EAST)
+		{
+			return new Vec3i(-vec.getZ(), vec.getY(), vec.getX());
+		}
+		else
+		{
+			//North side, or some other invalid side
+			return vec;
+		}
 	}
 	
 }

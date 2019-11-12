@@ -5,8 +5,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 public class RoomWallBuilder
@@ -45,7 +45,7 @@ public class RoomWallBuilder
         }
     }
 
-    public void generate(ArrayList<BlockPlacement> blocks)
+    public void generate(World world)
     {
         BlockPos pos;
         IBlockState blockToBuild;
@@ -67,7 +67,7 @@ public class RoomWallBuilder
             {
                 pos = wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
                 blockToBuild = getBlockToBuild(pos);
-                blocks.add(new BlockPlacement(pos, blockToBuild));
+                world.setBlockState(pos, blockToBuild);
             }
         }
     }

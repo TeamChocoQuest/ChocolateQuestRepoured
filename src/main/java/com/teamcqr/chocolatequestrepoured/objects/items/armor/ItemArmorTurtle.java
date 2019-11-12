@@ -9,14 +9,17 @@ import org.lwjgl.input.Keyboard;
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilitySpecialArmor;
 import com.teamcqr.chocolatequestrepoured.capability.armor.turtle.CapabilityTurtleArmorProvider;
+import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -50,6 +53,13 @@ public class ItemArmorTurtle extends ItemArmor {
 		}
 
 		return multimap;
+	}
+	
+	@Override
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+			ModelBiped _default) {
+		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+		return ModArmorModels.turtleArmor;
 	}
 
 	@Override

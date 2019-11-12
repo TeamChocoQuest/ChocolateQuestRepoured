@@ -1,15 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorBase;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
-import net.minecraft.block.state.IBlockState;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorBlocks;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public abstract class CastleRoomGeneric extends CastleRoom
 {
@@ -23,16 +24,22 @@ public abstract class CastleRoomGeneric extends CastleRoom
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
-        setupDecoration();
+        setupDecoration(world);
 
+        addEdgeDecoration(world, dungeon);
+        addSpawners(world, dungeon);
+    }
+
+    private void addEdgeDecoration(World world, CastleDungeon dungeon)
+    {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
             ArrayList<BlockPos> edge = getDecorationEdge(side);
             for (BlockPos pos : edge)
             {
-                if (decoMap.containsKey(pos))
+                if (decoMap.contains(pos))
                 {
                     //This position is already decorated, so keep going
                     continue;
@@ -42,24 +49,35 @@ public abstract class CastleRoomGeneric extends CastleRoom
 
                 while (attempts < MAX_DECO_ATTEMPTS)
                 {
-                    RoomDecorBase decor = decoSelector.randomEdgeDecor();
+                    IRoomDecor decor = decoSelector.randomEdgeDecor();
                     if (decor.wouldFit(pos, side, decoArea, decoMap))
                     {
-                        decor.build(pos, side, decoMap);
+                        decor.build(world, dungeon, pos, side, decoMap);
                         break;
                     }
                     ++attempts;
                 }
                 if (attempts >= MAX_DECO_ATTEMPTS)
                 {
-                    decoMap.put(pos, Blocks.AIR.getDefaultState());
+                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                    decoMap.add(pos);
                 }
             }
         }
+    }
 
-        for (Map.Entry<BlockPos, IBlockState> entry : decoMap.entrySet())
+    private void addSpawners(World world, CastleDungeon dungeon)
+    {
+        ArrayList<BlockPos> spawnPositions = getDecorationFirstLayer();
+        spawnPositions.removeAll(decoMap);
+
+        int spawnerCount = getSpawnerCount();
+
+        for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++)
         {
-            blocks.add(new BlockPlacement(entry.getKey(), entry.getValue()));
+            BlockPos pos = spawnPositions.get(random.nextInt(spawnPositions.size()));
+            SpawnerFactory.createSimpleMultiUseSpawner(world, pos, dungeon.getSpawnerMob());
+            spawnPositions.remove(pos);
         }
     }
 }

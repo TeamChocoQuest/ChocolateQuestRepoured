@@ -1,13 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-
-import java.util.ArrayList;
+import net.minecraft.world.World;
 
 public class CastleRoomStaircaseSpiral extends CastleRoom
 {
@@ -24,7 +23,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     }
 
     @Override
-    public void generateRoom(ArrayList<BlockPlacement> blocks)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
         SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide);
 
@@ -52,7 +51,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
                     {
                         blockToBuild = Blocks.STONEBRICK.getDefaultState();
                     }
-                    blocks.add(new BlockPlacement(pos, blockToBuild));
+                    world.setBlockState(pos, blockToBuild);
                 }
             }
         }
@@ -61,7 +60,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     public EnumFacing getLastStairSide()
     {
         EnumFacing result = EnumFacing.NORTH;
-        for (int i = 0; i < height - 1; i++)
+        for (int i = 0; i < height - 2; i++)
         {
             result = result.rotateY();
         }
