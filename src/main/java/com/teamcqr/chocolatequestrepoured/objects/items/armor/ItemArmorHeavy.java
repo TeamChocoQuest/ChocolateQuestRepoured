@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLiving;
@@ -42,7 +43,14 @@ public class ItemArmorHeavy extends ItemArmor {
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
-		return ModArmorModels.heavyIronArmor;
+		if(itemStack.getItem() instanceof ItemArmor) {
+			if(((ItemArmor)itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
+				//TODO: Diamond armor
+			} else {
+				return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
+			}
+		}
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 	}
 
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
