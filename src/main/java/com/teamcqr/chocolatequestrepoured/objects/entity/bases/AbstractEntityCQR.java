@@ -69,6 +69,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -231,15 +232,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
-		if(compound.hasKey("healthScale")) {
-			healthScale = compound.getDouble("healthScale");
-		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
+		this.healthScale = compound.getDouble("healthScale");
 	}
 
 	@Override
@@ -655,12 +654,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeFloat(this.dataManager.get(SIZE_VAR));
-		
+		buffer.writeDouble(this.getHealthScale());
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.HEAD));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.CHEST));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.LEGS));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.FEET));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.MAINHAND));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.OFFHAND));
+		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot));
 	}
-	
+
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		this.dataManager.set(SIZE_VAR, additionalData.readFloat());
+		this.setHealthScale(additionalData.readDouble());
+		this.setDropChance(EntityEquipmentSlot.HEAD, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.CHEST, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.LEGS, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.FEET, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, ByteBufUtils.readItemStack(additionalData));
 	}
 	
 	public void setArmPose(ECQREntityArmPoses pose) {
@@ -747,9 +761,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		setEntityBoundingBox(new AxisAlignedBB(posX - wHalf, posY, posZ - wHalf, posX + wHalf, posY + hitboxY, posZ + wHalf));
 	}
 	
-	@SideOnly(Side.SERVER)
 	public void setHealthScale(double hs) {
 		this.healthScale = hs;
+	}
+
+	public double getHealthScale() {
+		return healthScale;
+	}
+
+	public float getDropChance(EntityEquipmentSlot slot) {
+		switch (slot.getSlotType()) {
+		case HAND:
+			return this.inventoryHandsDropChances[slot.getIndex()];
+		case ARMOR:
+			return this.inventoryArmorDropChances[slot.getIndex()];
+		}
+		return 0.0F;
 	}
 	
 	@Override
