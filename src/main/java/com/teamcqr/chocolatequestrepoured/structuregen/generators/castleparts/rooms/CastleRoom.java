@@ -553,6 +553,11 @@ public abstract class CastleRoom
         return result;
     }
 
+    protected int getSpawnerCount()
+    {
+        return 2;
+    }
+
     @Override
     public String toString()
     {
