@@ -7,7 +7,7 @@ import net.minecraft.entity.Entity;
  * ModelTurtleChestplate - Sir Squidly
  * Created using Tabula 7.1.0
  */
-public class ModelTurtleChestplate extends ModelCustomArmor {
+public class ModelTurtleChestplate extends ModelCustomArmorBase {
     public ModelRenderer chest1;
     public ModelRenderer shell1;
     public ModelRenderer armR1;
