@@ -57,7 +57,7 @@ public class CastlePartMain implements ICastlePart
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors);
 
-        roomHelper.generateRooms(world);
+        roomHelper.generateRooms(world, dungeon);
 
     }
 

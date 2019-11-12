@@ -12,18 +12,19 @@ public enum EnumRoomDecor
     CAULDRON         (RoomDecorCauldron::new, "Cauldron"),
     CRAFTING_TABLE   (RoomDecorCraftingTable::new, "Crafting Table"),
     ANVIL            (RoomDecorAnvil::new, "Anvil"),
-    FURNACE          (RoomDecorFurnace::new, "Furnace");
+    FURNACE          (RoomDecorFurnace::new, "Furnace"),
+    ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand");
 
-    private final Supplier<RoomDecorBase> supplier;
+    private final Supplier<IRoomDecor> supplier;
     private final String name;
 
-    EnumRoomDecor(Supplier<RoomDecorBase> supplier, String name)
+    EnumRoomDecor(Supplier<IRoomDecor> supplier, String name)
     {
         this.supplier = supplier;
         this.name = name;
     }
 
-    public RoomDecorBase createInstance()
+    public IRoomDecor createInstance()
     {
         return supplier.get();
     }

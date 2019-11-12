@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -21,7 +21,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
     }
 
     @Override
-    public void generateRoom(World world)
+    public void generateRoom(World world, CastleDungeon dungeon)
     {
         BlockPos pos;
         IBlockState blockToBuild;
