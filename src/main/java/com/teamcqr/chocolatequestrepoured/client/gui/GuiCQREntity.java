@@ -67,7 +67,7 @@ public class GuiCQREntity extends GuiContainer {
 		GlStateManager.color(1, 1, 1, 1);
 		mc.getTextureManager().bindTexture(BG_TEXTURE);
 		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
-		this.drawEntity(this.guiLeft + 50, this.guiTop + 100, 30, mouseX, mouseY);
+		this.drawEntity(this.guiLeft + 225, this.guiTop + 100, 30, mouseX, mouseY);
 	}
 
 	protected void drawEntity(int x, int y, int scale, float mouseX, float mouseY) {
