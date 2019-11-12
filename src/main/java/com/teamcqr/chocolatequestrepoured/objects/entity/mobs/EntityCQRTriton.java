@@ -41,7 +41,7 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	}
 	@Override
 	public int getTextureCount() {
-		return 1;
+		return 2;
 	}
 	
 	@Override

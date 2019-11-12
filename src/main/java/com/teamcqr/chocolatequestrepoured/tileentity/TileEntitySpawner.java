@@ -95,7 +95,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = dungeon.getDungeonMob().name().toUpperCase(); 
-		System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
+		//System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
 		this.dungeonChunkX = dunChunkX;
 		this.dungeonChunkZ = dunChunkZ;
 		
@@ -118,7 +118,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
 							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
 								if(newMob.equals(EDungeonMobType.DEFAULT)) {
-									nbt.setString("id", EDungeonMobType.getMobDependingOnDistance(dungeonChunkX /16, dungeonChunkZ /16).toString());
+									nbt.setString("id", EDungeonMobType.getMobDependingOnDistance(this.pos.getX(), this.pos.getZ()).toString());
 								} else {
 									nbt.setString("id", newMob.getEntityResourceLocation().toString());
 								}

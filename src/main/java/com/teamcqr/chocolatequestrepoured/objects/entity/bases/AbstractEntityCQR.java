@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
@@ -34,6 +35,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -88,6 +90,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte)0;
 	protected boolean sittingState = false;
+	protected double healthScale = 1D;
 	public ItemStack prevPotion;
 	
 	//Sync with client
@@ -171,6 +174,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(16, new EntityAISearchMount(this));
+		this.tasks.addTask(17, new EntityAITameAndLeashPet(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -213,6 +217,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
+		compound.setDouble("healthScale", healthScale);
 	}
 
 	@Override
@@ -225,6 +230,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 
 		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+		if(compound.hasKey("healthScale")) {
+			healthScale = compound.getDouble("healthScale");
 		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
@@ -294,6 +302,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 				this.entityDropItem(capability.getStackInSlot(i), 0.0F);
 			}
 		}
+		this.dropEquipment(wasRecentlyHit, lootingModifier);
 	}
 
 	@Override
@@ -467,6 +476,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 				health *= 1.5F;
 			}
 		}
+		
+		health *= healthScale;
 
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
@@ -734,6 +745,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 		
 		double wHalf = hitboxX /2D;
 		setEntityBoundingBox(new AxisAlignedBB(posX - wHalf, posY, posZ - wHalf, posX + wHalf, posY + hitboxY, posZ + wHalf));
+	}
+	
+	@SideOnly(Side.SERVER)
+	public void setHealthScale(double hs) {
+		this.healthScale = hs;
+	}
+	
+	@Override
+	public PathNavigate getNavigator() {
+		if(this.isRiding()) {
+			Entity ridden =  getRidingEntity();
+			if(ridden != null) {
+				if(ridden instanceof EntityLiving) {
+					return ((EntityLiving)ridden).getNavigator();
+				}
+			}
+		}
+		return super.getNavigator();
 	}
 
 }
