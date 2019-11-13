@@ -5,6 +5,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorBlocks;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -76,7 +78,8 @@ public abstract class CastleRoomGeneric extends CastleRoom
         for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++)
         {
             BlockPos pos = spawnPositions.get(random.nextInt(spawnPositions.size()));
-            SpawnerFactory.createSimpleMultiUseSpawner(world, pos, dungeon.getSpawnerMob());
+
+            SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, pos);
             spawnPositions.remove(pos);
         }
     }

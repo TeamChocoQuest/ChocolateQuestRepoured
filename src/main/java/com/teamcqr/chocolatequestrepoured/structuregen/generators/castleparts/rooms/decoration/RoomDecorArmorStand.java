@@ -17,11 +17,8 @@ public class RoomDecorArmorStand extends RoomDecorEntity
     @Override
     protected void spawnEntity(World world, BlockPos pos)
     {
-        EntityArmorStand stand = new EntityArmorStand(world);
-        stand.posX = pos.getX();
-        stand.posY = pos.getY();
-        stand.posZ = pos.getZ();
-
+        //Need to add 0.5 to each position amount so it spawns in the middle of the tile
+        EntityArmorStand stand = new EntityArmorStand(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
         world.spawnEntity(stand);
     }
 }
