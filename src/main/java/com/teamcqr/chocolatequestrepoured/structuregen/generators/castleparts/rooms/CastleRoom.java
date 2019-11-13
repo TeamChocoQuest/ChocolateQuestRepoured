@@ -109,6 +109,11 @@ public abstract class CastleRoom
 
     protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
+    public void decorate(World world, CastleDungeon dungeon)
+    {
+        ; //Default is no decoration
+    }
+
     protected void generateWalls(World world)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)

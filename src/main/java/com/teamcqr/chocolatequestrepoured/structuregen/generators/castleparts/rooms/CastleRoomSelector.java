@@ -53,9 +53,18 @@ public class CastleRoomSelector
 
     public void generateRooms(World world, CastleDungeon dungeon)
     {
-        for (RoomGridCell cell : grid.getCellListCopy())
+        ArrayList<RoomGridCell> populated = grid.getAllCellsWhere(RoomGridCell::isPopulated);
+
+        for (RoomGridCell cell : populated)
         {
-            cell.generateIfPopulated(world, dungeon);
+            cell.getRoom().generate(world, dungeon);
+        }
+
+        //The rooms MUST be generated before they are decorated
+        //Some decoration requires that neighboring rooms have their walls/doors
+        for (RoomGridCell cell : populated)
+        {
+            cell.getRoom().decorate(world, dungeon);
         }
     }
 
@@ -443,7 +452,7 @@ public class CastleRoomSelector
                 for (RoomGridCell cell : candidateCells)
                 {
                     RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
-                    if (aboveCell.isSelectedForBuilding() && !aboveCell.isPopulated())
+                    if (aboveCell != null && aboveCell.isSelectedForBuilding() && !aboveCell.isPopulated())
                     {
                         CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
                         cell.setRoom(stairs);
