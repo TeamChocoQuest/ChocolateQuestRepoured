@@ -256,6 +256,14 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case SPIN_DOWN:
 			renderParts = false;
+			
+			if(ent.getAnimationProgress() >= 250) {
+				ent.setCurrentAnimation(ETortoiseAnimState.NONE);
+				ent.setAnimationProgress(0);
+			} else {
+				ent.setAnimationProgress(ent.getAnimationProgress() +1);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F/50F) * (250 - ent.getAnimationProgress())) /20F);
+			}
 			break;
 		case SPIN_UP:
 			renderParts = false;
