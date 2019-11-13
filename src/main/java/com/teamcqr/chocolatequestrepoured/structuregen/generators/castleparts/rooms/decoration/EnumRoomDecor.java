@@ -13,7 +13,8 @@ public enum EnumRoomDecor
     CRAFTING_TABLE   (RoomDecorCraftingTable::new, "Crafting Table"),
     ANVIL            (RoomDecorAnvil::new, "Anvil"),
     FURNACE          (RoomDecorFurnace::new, "Furnace"),
-    ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand");
+    ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand"),
+    TORCH            (RoomDecorTorch::new, "Torch");
 
     private final Supplier<IRoomDecor> supplier;
     private final String name;

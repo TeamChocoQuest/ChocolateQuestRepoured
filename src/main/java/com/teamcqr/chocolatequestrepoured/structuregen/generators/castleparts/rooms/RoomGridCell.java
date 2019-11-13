@@ -188,14 +188,6 @@ public class RoomGridCell
         }
     }
 
-    public void generateIfPopulated(World world, CastleDungeon dungeon)
-    {
-        if (state == CellState.POPULATED)
-        {
-            room.generate(world, dungeon);
-        }
-    }
-
     public RoomGridPosition getGridPosition()
     {
         return gridPosition;

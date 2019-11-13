@@ -29,7 +29,11 @@ public abstract class CastleRoomGeneric extends CastleRoom
     public void generateRoom(World world, CastleDungeon dungeon)
     {
         setupDecoration(world);
+    }
 
+    @Override
+    public void decorate(World world, CastleDungeon dungeon)
+    {
         addEdgeDecoration(world, dungeon);
         addSpawners(world, dungeon);
     }
