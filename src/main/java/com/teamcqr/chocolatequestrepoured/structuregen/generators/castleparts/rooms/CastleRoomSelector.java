@@ -15,9 +15,8 @@ import java.lang.Double;
 public class CastleRoomSelector
 {
     private static final int MAX_LAYERS = 5;
+    private static final int MIN_TOWER_SIZE = 7; //needs to have room for spiral stairs
 
-    private World world;
-    private CastleDungeon dungeon;
     private BlockPos startPos;
     private int floorHeight;
     private int roomSize;
@@ -298,7 +297,9 @@ public class CastleRoomSelector
         int z = position.getZ();
         int startFloor = position.getFloor();
 
-        int towerSize = 5 + random.nextInt(roomSize - 5);
+        //Randomize the size somewhere between the min tower size and the room size
+        int towerSize = MIN_TOWER_SIZE + random.nextInt(roomSize - Math.min(MIN_TOWER_SIZE, roomSize));
+
         System.out.format("Placing tower at %d,%d on floor %d facing %s, size = %d\n",
                 x, z, startFloor, alignment.toString(), towerSize);
 
