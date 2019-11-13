@@ -285,6 +285,10 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case HEALING:
 			renderParts = false;
+			
+			this.mainPart.rotateAngleZ = (float) Math.toRadians(120 * Math.cos(ageInTicks) /8F);
+			this.mainPart.rotateAngleY = (float) Math.toRadians(120 * Math.sin(ageInTicks) /8F);
+			
 			break;
 		case NONE:
 			renderParts = false;

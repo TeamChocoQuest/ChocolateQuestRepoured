@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise> {
@@ -30,6 +31,31 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 			float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		//DONE: Rotate move around z axis when the mouth is open
+		
+		switch(entity.getCurrentAnimation()) {
+		case HEALING:
+			/*entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX - 0.5,
+					entity.posY + 1.0D, entity.posZ - 0.5, 1, 1.5, 1);*/
+			//TODO: Heart particles
+			break;
+		case MOVE_PARTS_IN:
+			break;
+		case MOVE_PARTS_OUT:
+			break;
+		case NONE:
+			break;
+		case SPIN:
+			break;
+		case SPIN_DOWN:
+			break;
+		case SPIN_UP:
+			break;
+		case WALKING:
+			break;
+		default:
+			break;
+		
+		}
 		
 		if(animState < 11 && entity.isMouthOpen() && !mouthIsOpen) {
 			float angle = (animState) * 3.375F;
