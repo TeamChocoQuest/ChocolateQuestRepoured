@@ -150,12 +150,12 @@ public class RoomGridCell
 
     public boolean isValidPathStart()
     {
-        return !isReachable() && isPopulated() && !this.room.isTower();
+        return !isReachable() && isPopulated() && room.isPathable();
     }
 
     public boolean isValidPathDestination()
     {
-        return isReachable() && isPopulated() && !this.room.isTower();
+        return isReachable() && isPopulated() && room.isPathable();
     }
 
     public double distanceTo(RoomGridCell destCell)

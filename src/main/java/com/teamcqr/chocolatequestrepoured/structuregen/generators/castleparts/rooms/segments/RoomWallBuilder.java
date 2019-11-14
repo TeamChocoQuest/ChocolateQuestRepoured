@@ -11,14 +11,14 @@ import java.util.Random;
 
 public class RoomWallBuilder
 {
-    private BlockPos wallStart;
-    private WallOptions options;
-    private int doorStart = 0;
-    private int doorWidth = 0;
-    private int length;
-    private int height;
-    private EnumFacing side;
-    private Random random;
+    protected BlockPos wallStart;
+    protected WallOptions options;
+    protected int doorStart = 0;
+    protected int doorWidth = 0;
+    protected int length;
+    protected int height;
+    protected EnumFacing side;
+    protected Random random;
 
     public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side)
     {
@@ -72,7 +72,7 @@ public class RoomWallBuilder
         }
     }
 
-    private IBlockState getBlockToBuild(BlockPos pos)
+    protected IBlockState getBlockToBuild(BlockPos pos)
     {
         if (options.hasWindow())
         {
@@ -88,7 +88,7 @@ public class RoomWallBuilder
         }
     }
 
-    private IBlockState getBlockDoor(BlockPos pos)
+    protected IBlockState getBlockDoor(BlockPos pos)
     {
         IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
         int y = pos.getY() - wallStart.getY();
@@ -142,7 +142,7 @@ public class RoomWallBuilder
      * This function gets the relevant length along the wall based on if we are a horizontal
      * wall or a vertical wall.
      */
-    private int getLengthPoint(BlockPos pos)
+    protected int getLengthPoint(BlockPos pos)
     {
         if (side.getAxis() == EnumFacing.Axis.X)
         {
@@ -153,7 +153,7 @@ public class RoomWallBuilder
         }
     }
 
-    private boolean withinDoorWidth(int value)
+    protected boolean withinDoorWidth(int value)
     {
         int relativeToDoor = value - doorStart;
         return (relativeToDoor >= 0 && relativeToDoor < doorWidth);

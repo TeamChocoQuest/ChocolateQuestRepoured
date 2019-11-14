@@ -95,12 +95,12 @@ public class CastleRoomSelector
         addStairCases();
 
         randomizeRooms();
+        determineRoofs();
 
         determineWalls();
         placeOuterDoors();
         placeTowers();
         connectRooms();
-        determineRoofs();
 
         //System.out.println(grid.printGrid());
     }
@@ -715,7 +715,7 @@ public class CastleRoomSelector
         {
             //If we are at the edge cells, we force adding the walls. Otherwise we don't force
             //it so rooms like hallways don't add them by mistake.
-            boolean outerSouth = !grid.adjacentCellIsPopulated(cell, EnumFacing.SOUTH);
+            boolean outerSouth = !grid.adjacentCellIsFullRoom(cell, EnumFacing.SOUTH);
 
             if (outerSouth)
             {
@@ -726,7 +726,7 @@ public class CastleRoomSelector
                 cell.getRoom().addInnerWall(EnumFacing.SOUTH);
             }
 
-            boolean outerEast = !grid.adjacentCellIsPopulated(cell, EnumFacing.EAST);
+            boolean outerEast = !grid.adjacentCellIsFullRoom(cell, EnumFacing.EAST);
 
             if (outerEast)
             {
@@ -737,12 +737,12 @@ public class CastleRoomSelector
                 cell.getRoom().addInnerWall(EnumFacing.EAST);
             }
 
-            if (!grid.adjacentCellIsPopulated(cell, EnumFacing.NORTH))
+            if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.NORTH))
             {
                 cell.getRoom().addOuterWall(EnumFacing.NORTH);
             }
 
-            if (!grid.adjacentCellIsPopulated(cell, EnumFacing.WEST))
+            if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.WEST))
             {
                 cell.getRoom().addOuterWall(EnumFacing.WEST);
             }
@@ -752,32 +752,11 @@ public class CastleRoomSelector
 
     private void determineRoofs()
     {
-        for (RoomGridCell cell : grid.getCellListCopy())
+        ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> !c.isSelectedForBuilding() &&
+                                                                        grid.adjacentCellIsPopulated(c, EnumFacing.DOWN));
+        for (RoomGridCell cell : roofCells)
         {
-            if (cell.isPopulated() && !grid.adjacentCellIsPopulated(cell, EnumFacing.UP))
-            {
-                for (EnumFacing side : EnumFacing.HORIZONTALS)
-                {
-                    addRoofEdgeIfRequired(cell, side);
-                }
-            }
-        }
-    }
-
-    private void addRoofEdgeIfRequired(RoomGridCell cell, EnumFacing side)
-    {
-        RoomGridCell adjacent = grid.getAdjacentCell(cell, side);
-        RoomGridCell above = grid.getAdjacentCell(cell, EnumFacing.UP);
-
-        if (adjacent == null || !adjacent.isPopulated() || adjacent.getRoom().isTower())
-        {
-            cell.getRoom().addRoofEdge(side);
-        }
-        else if (above != null &&
-                grid.getAdjacentCell(above, side).isPopulated() &&
-                grid.getAdjacentCell(above, side).getRoom().isTower())
-        {
-            cell.getRoom().addRoofEdge(side);
+            cell.setRoom(new CastleRoomWalkableRoof(getRoomStart(cell), roomSize, floorHeight));
         }
     }
 
