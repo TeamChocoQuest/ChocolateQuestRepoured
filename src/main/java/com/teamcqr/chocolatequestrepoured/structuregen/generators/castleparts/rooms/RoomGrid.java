@@ -326,6 +326,12 @@ public class RoomGrid
         return (adjacent != null && adjacent.isPopulated());
     }
 
+    public boolean adjacentCellIsFullRoom(RoomGridCell startCell, EnumFacing direction)
+    {
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        return (adjacent != null && adjacent.isPopulated() && !(adjacent.getRoom() instanceof CastleRoomWalkableRoof));
+    }
+
     public boolean adjacentCellIsSelected(RoomGridCell startCell, EnumFacing direction)
     {
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);

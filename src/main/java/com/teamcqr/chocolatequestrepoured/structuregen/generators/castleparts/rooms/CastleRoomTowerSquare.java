@@ -24,6 +24,8 @@ public class CastleRoomTowerSquare extends CastleRoom
         this.connectedSide = connectedSide;
         this.buildLength = towerSize;
         this.defaultCeiling = false;
+        this.pathable = false;
+        this.isTower = true;
 
         if (connectedSide == EnumFacing.NORTH || connectedSide == EnumFacing.SOUTH)
         {
