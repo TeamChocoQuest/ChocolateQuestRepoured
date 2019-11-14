@@ -36,7 +36,7 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 		bipedBody.addChild(shell1);
 		bipedBody.addChild(shell2);
 		bipedLeftLeg.addChild(legR1_2);
-		bipedLeftLeg.addChild(legR1_1);
+		bipedRightLeg.addChild(legR1_1);
 	}
 
 	/**
