@@ -10,8 +10,8 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 
 	public ModelRenderer shell1;
 	public ModelRenderer shell2;
-	public ModelRenderer tassetR1;
-	public ModelRenderer tassetL1;
+	public ModelRenderer tassetLeft;
+	public ModelRenderer tassetRight;
 
 	public ModelArmorTurtle(float scale) {
 		super(scale, 64, 64);
@@ -24,16 +24,16 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 		this.shell2.setRotationPoint(0.0F, 0.0F, 7.5F);
 		this.shell2.addBox(-4.0F, 0.0F, 0.0F, 8, 12, 2, scale);
 
-		this.tassetR1 = new ModelRenderer(this, 0, 52);
-		this.tassetR1.mirror = true;
-		this.tassetR1.setRotationPoint(6.0F, 0.0F, -0.2F);
-		this.tassetR1.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
-		this.setRotateAngle(tassetR1, 0.0F, 0.0F, -0.4363323129985824F);
+		this.tassetLeft = new ModelRenderer(this, 0, 52);
+		this.tassetLeft.mirror = true;
+		this.tassetLeft.setRotationPoint(2.0F, -1.2F, -0.2F);
+		this.tassetLeft.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
+		this.setRotateAngle(tassetLeft, 0.0F, 0.0F, -0.4363323129985824F);
 
-		this.tassetL1 = new ModelRenderer(this, 0, 52);
-		this.tassetL1.setRotationPoint(-6.0F, 0F, -0.2F);
-		this.tassetL1.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
-		this.setRotateAngle(tassetL1, 0.0F, 0.0F, 0.4363323129985824F);
+		this.tassetRight = new ModelRenderer(this, 0, 52);
+		this.tassetRight.setRotationPoint(-2.0F, -1.2F, -0.2F);
+		this.tassetRight.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
+		this.setRotateAngle(tassetRight, 0.0F, 0.0F, 0.4363323129985824F);
 
 		this.bipedHead = new ModelRenderer(this, 30, 46);
 		this.bipedHead.setRotationPoint(0F, 0F, 0F);
@@ -41,8 +41,8 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 
 		this.bipedBody.addChild(this.shell2);
 		this.bipedBody.addChild(this.shell1);
-		this.bipedLeftLeg.addChild(this.tassetL1);
-		this.bipedRightLeg.addChild(this.tassetR1);
+		this.bipedLeftLeg.addChild(this.tassetLeft);
+		this.bipedRightLeg.addChild(this.tassetRight);
 	}
 
 	/**

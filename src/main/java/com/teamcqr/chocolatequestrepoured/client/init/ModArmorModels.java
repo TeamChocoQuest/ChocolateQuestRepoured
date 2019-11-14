@@ -9,8 +9,8 @@ public class ModArmorModels {
 
 	public static ModelBackpack backpack = new ModelBackpack(0.0F);
 	
-	public static ModelArmorTransparent slimeArmor = new ModelArmorTransparent(1.0F);
-	public static ModelArmorTransparent slimeArmorLegs = new ModelArmorTransparent(0.5F);
+	public static ModelArmorTransparent slimeArmor = new ModelArmorTransparent(0.75F);
+	public static ModelArmorTransparent slimeArmorLegs = new ModelArmorTransparent(0.3F);
 	
 	public static ModelArmorTurtle turtleArmor = new ModelArmorTurtle(0.5F);
 	public static ModelArmorTurtle turtleArmorLegs = new ModelArmorTurtle(0.25F);
