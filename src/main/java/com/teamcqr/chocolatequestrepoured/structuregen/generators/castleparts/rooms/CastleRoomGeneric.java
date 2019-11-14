@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 public abstract class CastleRoomGeneric extends CastleRoom
 {
@@ -36,6 +37,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         addEdgeDecoration(world, dungeon);
         addSpawners(world, dungeon);
+        fillEmptySpaceWithAir(world, dungeon);
     }
 
     private void addEdgeDecoration(World world, CastleDungeon dungeon)
@@ -84,7 +86,19 @@ public abstract class CastleRoomGeneric extends CastleRoom
             BlockPos pos = spawnPositions.get(random.nextInt(spawnPositions.size()));
 
             SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, pos);
+            decoMap.add(pos);
             spawnPositions.remove(pos);
+        }
+    }
+
+    private void fillEmptySpaceWithAir(World world, CastleDungeon dungeon)
+    {
+        HashSet<BlockPos> emptySpaces = new HashSet<>(decoArea);
+        emptySpaces.removeAll(decoMap);
+
+        for (BlockPos emptyPos : emptySpaces)
+        {
+            world.setBlockState(emptyPos, Blocks.AIR.getDefaultState());
         }
     }
 }
