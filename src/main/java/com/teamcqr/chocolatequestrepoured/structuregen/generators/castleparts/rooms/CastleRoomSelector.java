@@ -713,41 +713,63 @@ public class CastleRoomSelector
         ArrayList<RoomGridCell> cells = grid.getAllCellsWhere(c -> c.isPopulated() && !c.getRoom().isTower());
         for (RoomGridCell cell : cells)
         {
-            //If we are at the edge cells, we force adding the walls. Otherwise we don't force
-            //it so rooms like hallways don't add them by mistake.
-            boolean outerSouth = !grid.adjacentCellIsFullRoom(cell, EnumFacing.SOUTH);
-
-            if (outerSouth)
+            if (cell.getRoom() instanceof  CastleRoomWalkableRoof)
             {
-                cell.getRoom().addOuterWall(EnumFacing.SOUTH);
+                determineWalkableRoofWalls(cell);
             }
             else
             {
-                cell.getRoom().addInnerWall(EnumFacing.SOUTH);
-            }
-
-            boolean outerEast = !grid.adjacentCellIsFullRoom(cell, EnumFacing.EAST);
-
-            if (outerEast)
-            {
-                cell.getRoom().addOuterWall(EnumFacing.EAST);
-            }
-            else
-            {
-                cell.getRoom().addInnerWall(EnumFacing.EAST);
-            }
-
-            if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.NORTH))
-            {
-                cell.getRoom().addOuterWall(EnumFacing.NORTH);
-            }
-
-            if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.WEST))
-            {
-                cell.getRoom().addOuterWall(EnumFacing.WEST);
+                determineNormalRoomWalls(cell);
             }
         }
+    }
 
+    private void determineWalkableRoofWalls(RoomGridCell cell)
+    {
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            if (!grid.adjacentCellIsPopulated(cell, side))
+            {
+                cell.getRoom().addOuterWall(side);
+            }
+        }
+    }
+
+    private void determineNormalRoomWalls(RoomGridCell cell)
+    {
+        //If we are at the edge cells, we force adding the walls. Otherwise we don't force
+        //it so rooms like hallways don't add them by mistake.
+        boolean outerSouth = !grid.adjacentCellIsFullRoom(cell, EnumFacing.SOUTH);
+
+        if (outerSouth)
+        {
+            cell.getRoom().addOuterWall(EnumFacing.SOUTH);
+        }
+        else
+        {
+            cell.getRoom().addInnerWall(EnumFacing.SOUTH);
+        }
+
+        boolean outerEast = !grid.adjacentCellIsFullRoom(cell, EnumFacing.EAST);
+
+        if (outerEast)
+        {
+            cell.getRoom().addOuterWall(EnumFacing.EAST);
+        }
+        else
+        {
+            cell.getRoom().addInnerWall(EnumFacing.EAST);
+        }
+
+        if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.NORTH))
+        {
+            cell.getRoom().addOuterWall(EnumFacing.NORTH);
+        }
+
+        if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.WEST))
+        {
+            cell.getRoom().addOuterWall(EnumFacing.WEST);
+        }
     }
 
     private void determineRoofs()
