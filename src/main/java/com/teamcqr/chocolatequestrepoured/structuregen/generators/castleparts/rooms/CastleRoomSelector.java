@@ -329,7 +329,7 @@ public class CastleRoomSelector
                 //cell.setReachable();
 
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, alignment);
-                if (adjacent.isPopulated())
+                if (adjacent.isPopulated() && !(adjacent.getRoom() instanceof CastleRoomWalkableRoof))
                 {
                     adjacent.getRoom().addDoorOnSideCentered(alignment.getOpposite());
                     cell.getRoom().removeWall(alignment);
@@ -344,6 +344,12 @@ public class CastleRoomSelector
             }
         }
 
+        //Build a walkable roof on top of the tower
+        if (tower != null)
+        {
+            cell = grid.getCellAt(startFloor + height, x, z);
+            cell.setRoom(new CastleRoomWalkableRoofTower(getRoomStart(cell), roomSize, floorHeight, tower));
+        }
     }
 
     private void buildVerticalFloorHallway(int floor)

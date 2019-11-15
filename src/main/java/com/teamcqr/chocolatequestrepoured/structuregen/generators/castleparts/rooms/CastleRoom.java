@@ -496,6 +496,21 @@ public abstract class CastleRoom
         return 2;
     }
 
+    public int getOffsetX()
+    {
+        return offsetX;
+    }
+
+    public int getOffsetZ()
+    {
+        return offsetZ;
+    }
+
+    public int getBuildLength()
+    {
+        return buildLength;
+    }
+
     @Override
     public String toString()
     {

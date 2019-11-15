@@ -340,15 +340,8 @@ public class RoomGrid
 
     public boolean adjacentCellIsWalkableRoof(RoomGridCell startCell, EnumFacing direction)
     {
-        boolean result = false;
-
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
-        if (adjacent != null && adjacent.isBuildable() && !adjacent.isSelectedForBuilding())
-        {
-            result = adjacentCellIsPopulated(adjacent, EnumFacing.DOWN);
-        }
-
-        return result;
+        return (adjacent != null && adjacent.isPopulated() && adjacent.getRoom() instanceof CastleRoomWalkableRoof);
     }
 
     public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction)
