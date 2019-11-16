@@ -51,9 +51,9 @@ public class RoomDecorChest extends RoomDecorBlocks
         if (chestIDs != null)
         {
             TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
-            int eltID = chestIDs[dungeon.getRandom().nextInt(chestIDs.length)];
             if (chest != null)
             {
+                int eltID = chestIDs[dungeon.getRandom().nextInt(chestIDs.length)];
                 ResourceLocation resLoc = null;
                 try
                 {
@@ -68,6 +68,10 @@ public class RoomDecorChest extends RoomDecorBlocks
                     chest.setLootTable(resLoc, seed);
                 }
             }
+        }
+        else
+        {
+            System.out.format("Placed a chest but could not find a loot table for Room Type {%s}", room.getRoomType().toString());
         }
     }
 }
