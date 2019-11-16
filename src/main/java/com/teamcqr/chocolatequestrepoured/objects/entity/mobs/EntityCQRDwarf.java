@@ -76,7 +76,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	
 	@Override
 	public int getTextureCount() {
-		return 1;
+		return 3;
 	}
 	
 	@Override

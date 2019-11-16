@@ -197,6 +197,7 @@ public class ModelGiantTortoise extends ModelBase {
     	//TODO: Change offset of model
 		case HEALING:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case MOVE_PARTS_IN:
 			break;
@@ -204,15 +205,19 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case NONE:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case SPIN:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case SPIN_DOWN:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case SPIN_UP:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case WALKING:
 			break;
@@ -247,18 +252,28 @@ public class ModelGiantTortoise extends ModelBase {
 		case SPIN:
 			renderParts = false;
 			//Spinning: Do this with OpenGL in render method, use limbSwingAmount for this
+			this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + 0.25F;
 			break;
 		case SPIN_DOWN:
 			renderParts = false;
+			
+			if(ent.getAnimationProgress() >= 250) {
+				ent.setCurrentAnimation(ETortoiseAnimState.NONE);
+				ent.setAnimationProgress(0);
+			} else {
+				ent.setAnimationProgress(ent.getAnimationProgress() +1);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F/50F) * (250 - ent.getAnimationProgress())) /20F);
+			}
 			break;
 		case SPIN_UP:
 			renderParts = false;
 			
-			if(ent.getAnimationProgress() >= 100) {
+			if(ent.getAnimationProgress() >= 250) {
 				ent.setCurrentAnimation(ETortoiseAnimState.SPIN);
 				ent.setAnimationProgress(0);
 			} else {
 				ent.setAnimationProgress(ent.getAnimationProgress() +1);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F/50F) * ent.getAnimationProgress()) /20F);
 			}
 			break;
 		case WALKING:
@@ -270,6 +285,10 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case HEALING:
 			renderParts = false;
+			
+			this.mainPart.rotateAngleZ = (float) Math.toRadians(120 * Math.cos(ageInTicks) /8F);
+			this.mainPart.rotateAngleY = (float) Math.toRadians(120 * Math.sin(ageInTicks) /8F);
+			
 			break;
 		case NONE:
 			renderParts = false;

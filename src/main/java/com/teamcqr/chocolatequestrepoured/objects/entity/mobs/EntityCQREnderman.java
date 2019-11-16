@@ -83,6 +83,11 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 	
 	@Override
+	public boolean isSitting() {
+		return false;
+	}
+	
+	@Override
 	public boolean canRide() {
 		return false;
 	}
