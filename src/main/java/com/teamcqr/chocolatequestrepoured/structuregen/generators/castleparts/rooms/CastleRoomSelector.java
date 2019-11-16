@@ -345,7 +345,7 @@ public class CastleRoomSelector
         }
 
         //Build a walkable roof on top of the tower
-        if (tower != null)
+        if (tower != null && grid.withinGridBounds(startFloor + height, x, z))
         {
             cell = grid.getCellAt(startFloor + height, x, z);
             cell.setRoom(new CastleRoomWalkableRoofTower(getRoomStart(cell), roomSize, floorHeight, tower));

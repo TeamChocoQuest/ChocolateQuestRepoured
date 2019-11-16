@@ -491,6 +491,11 @@ public abstract class CastleRoom
         return result;
     }
 
+    public int[] getChestIDs()
+    {
+        return null;
+    }
+
     protected int getSpawnerCount()
     {
         return 2;
