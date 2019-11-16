@@ -10,27 +10,27 @@ import net.minecraft.util.ResourceLocation;
 
 public enum EDungeonMobType {
 	
-	DEFAULT(null),
+	DEFAULT(null, null),
 	//DONT_REPLACE(null),
-	DWARF(new ResourceLocation(Reference.MODID, "dwarf")),
-	SKELETON(new ResourceLocation(Reference.MODID, "skeleton")),
-	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie")),
-	PIRATE(new ResourceLocation(Reference.MODID, "pirate")),
-	ILLAGER(new ResourceLocation(Reference.MODID, "illager")),
-	WALKER(new ResourceLocation(Reference.MODID, "walker")),
-	SPECTER(new ResourceLocation(Reference.MODID, "spectre")),
-	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman")),
-	BOARMAN(new ResourceLocation(Reference.MODID, "boarman")),
-	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur")),
-	ORC(new ResourceLocation(Reference.MODID, "orc")),
-	GOLEM(new ResourceLocation(Reference.MODID, "golem")),
-	GOBLIN(new ResourceLocation(Reference.MODID, "goblin")),
-	MUMMY(new ResourceLocation(Reference.MODID, "mummy")),
-	OGRE(new ResourceLocation(Reference.MODID, "ogre")),
-	TRITON(new ResourceLocation(Reference.MODID, "triton"))
+	DWARF(new ResourceLocation(Reference.MODID, "dwarf"), null),
+	SKELETON(new ResourceLocation(Reference.MODID, "skeleton"), null),
+	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), null),
+	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null),
+	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null),
+	WALKER(new ResourceLocation(Reference.MODID, "walker"), null),
+	SPECTER(new ResourceLocation(Reference.MODID, "spectre"), null),
+	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman"), null),
+	BOARMAN(new ResourceLocation(Reference.MODID, "boarman"), null),
+	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur"), null),
+	ORC(new ResourceLocation(Reference.MODID, "orc"), null),
+	GOLEM(new ResourceLocation(Reference.MODID, "golem"), null),
+	GOBLIN(new ResourceLocation(Reference.MODID, "goblin"), null),
+	MUMMY(new ResourceLocation(Reference.MODID, "mummy"), null),
+	OGRE(new ResourceLocation(Reference.MODID, "ogre"), null),
+	TRITON(new ResourceLocation(Reference.MODID, "triton"), null)
 	;
 	
-	static final int[] mobCount = new int[] {
+	static final int[] countMapping = new int[] {
 			1,
 			2,
 			1,
@@ -39,28 +39,35 @@ public enum EDungeonMobType {
 			1,
 			1
 	};
-	static final ResourceLocation[][] mobWheel = new ResourceLocation[][] {
-		new ResourceLocation[] {SKELETON.getEntityResourceLocation()},
-		new ResourceLocation[] {ZOMBIE.getEntityResourceLocation(), MUMMY.getEntityResourceLocation()},
-		new ResourceLocation[] {ILLAGER.getEntityResourceLocation()},
-		new ResourceLocation[] {GOBLIN.getEntityResourceLocation(), ORC.getEntityResourceLocation(), OGRE.getEntityResourceLocation()},
-		new ResourceLocation[] {SPECTER.getEntityResourceLocation()},
-		new ResourceLocation[] {MINOTAUR.getEntityResourceLocation()},
-		new ResourceLocation[] {ENDERMAN.getEntityResourceLocation()},
+	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
+		new EDungeonMobType[] {SKELETON},
+		new EDungeonMobType[] {ZOMBIE, MUMMY},
+		new EDungeonMobType[] {ILLAGER},
+		new EDungeonMobType[] {GOBLIN, ORC, OGRE},
+		new EDungeonMobType[] {SPECTER},
+		new EDungeonMobType[] {MINOTAUR},
+		new EDungeonMobType[] {ENDERMAN},
 	};
 	
 	private ResourceLocation resLoc;
+	private ResourceLocation bossResLoc;
 	
-	private EDungeonMobType(ResourceLocation resLoc) {
+	private EDungeonMobType(ResourceLocation resLoc, ResourceLocation bossResLoc) {
 		this.resLoc = resLoc;
+		this.bossResLoc = bossResLoc;
 	}
 	
 	public ResourceLocation getEntityResourceLocation() {
 		return resLoc;
 	}
+	public ResourceLocation getBossResourceLocation() {
+		return bossResLoc;
+	}
+	
+	//TODO: Rewrite this to return the mob type and not the mob itself
 	
 	//X and Z are B L O C K x and z, not chunk x and z!!!
-	public static ResourceLocation getMobDependingOnDistance(int x, int z) {
+	public static EDungeonMobType getMobTypeDependingOnDistance(int x, int z) {
 		//System.out.println("X: " + x);
 		//System.out.println("Z: " + z);
 		double distToSpawn = Math.sqrt(x * x + z * z);
@@ -86,17 +93,17 @@ public enum EDungeonMobType {
 		//if the index is larger than array size +1 -> RANDOM
 		Random rdm = new Random();
 		int indx = -1;
-		if(index >= mobCount.length) {
-			indx = rdm.nextInt(mobCount.length);
+		if(index >= countMapping.length) {
+			indx = rdm.nextInt(countMapping.length);
 		} else {
 			indx = index;
 		}
 		//System.out.println("Indx: " + indx);
 		if(indx >= 0) {
-			return mobWheel[indx][rdm.nextInt(mobCount[indx])];
+			return mobWheel[indx][rdm.nextInt(countMapping[indx])];
 		}
 		
-		return SKELETON.getEntityResourceLocation();
+		return SKELETON;
 	}
 	
 	@Nullable
