@@ -60,7 +60,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
                     IRoomDecor decor = decoSelector.randomEdgeDecor();
                     if (decor.wouldFit(pos, side, decoArea, decoMap))
                     {
-                        decor.build(world, dungeon, pos, side, decoMap);
+                        decor.build(world, this, dungeon, pos, side, decoMap);
                         break;
                     }
                     ++attempts;

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -21,11 +22,18 @@ public class CastleRoomKitchen extends CastleRoomGeneric
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_SM, 2);
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.CRAFTING_TABLE, 1);
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.FURNACE, 1);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.CHEST, 4);
     }
 
     @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
         super.generateRoom(world, dungeon);
+    }
+
+    @Override
+    public int[] getChestIDs()
+    {
+        return new int[] {ELootTable.CQ_FOOD.getID()};
     }
 }
