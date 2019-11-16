@@ -13,6 +13,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -37,7 +38,7 @@ public class ItemDungeonPlacer extends Item {
 
 	public static HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
 	public static HashMap<Integer, String[]> dependencyMap = new HashMap<>();
-	
+
 	public static final int HIGHEST_ICON_NUMBER = 16;
 	private int iconID;
 
@@ -56,9 +57,9 @@ public class ItemDungeonPlacer extends Item {
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setString("dungeonName", entry.getKey());
 					compound.setInteger("iconID", iconID);
-					
+
 					NBTTagList dependies = new NBTTagList();
-					for(String depend : dependencyMap.get(entry.getValue())) {
+					for (String depend : dependencyMap.get(entry.getValue())) {
 						dependies.appendTag(new NBTTagString(depend));
 					}
 					compound.setTag("dependencies", dependies);
@@ -68,16 +69,21 @@ public class ItemDungeonPlacer extends Item {
 			}
 		}
 	}
-	
+
+	@Override
+	public EntityEquipmentSlot getEquipmentSlot(ItemStack stack) {
+		return EntityEquipmentSlot.HEAD;
+	}
+
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		if(stack.getTagCompound().hasKey("dependencies")) {
+		if (stack.getTagCompound().hasKey("dependencies")) {
 			tooltip.add("Mod Dependencies: ");
-			for(NBTBase nbtts : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
+			for (NBTBase nbtts : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
 				String depend = nbtts.toString();
 				depend = depend.replaceAll(String.valueOf('"'), "");
-				if(Loader.isModLoaded(depend)) {
+				if (Loader.isModLoaded(depend)) {
 					tooltip.add(TextFormatting.DARK_GREEN + depend + ", ");
 				} else {
 					tooltip.add(TextFormatting.RED + depend + ", ");
