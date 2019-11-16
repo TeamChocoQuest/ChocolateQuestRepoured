@@ -2,28 +2,32 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorBlocks;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.*;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import scala.collection.mutable.HashEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public abstract class CastleRoomGeneric extends CastleRoom
 {
     protected static final int MAX_DECO_ATTEMPTS = 3;
     protected DecorationSelector decoSelector;
+    private HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
     public CastleRoomGeneric(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
         this.decoSelector = new DecorationSelector(random);
+        this.possibleChestLocs = new HashMap<>();
     }
 
     @Override
@@ -37,7 +41,21 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         addEdgeDecoration(world, dungeon);
         addSpawners(world, dungeon);
+        addChests(world, dungeon);
         fillEmptySpaceWithAir(world, dungeon);
+    }
+
+    private void addChests(World world, CastleDungeon dungeon)
+    {
+        if (this.getChestIDs() != null && !possibleChestLocs.isEmpty())
+        {
+            if (DungeonGenUtils.percentChance(random, 50))
+            {
+                IRoomDecor chest = new RoomDecorChest();
+                BlockPos pos = (BlockPos)possibleChestLocs.keySet().toArray()[random.nextInt(possibleChestLocs.size())];
+                chest.build(world, this, dungeon, pos, possibleChestLocs.get(pos), decoMap);
+            }
+        }
     }
 
     private void addEdgeDecoration(World world, CastleDungeon dungeon)
@@ -61,6 +79,12 @@ public abstract class CastleRoomGeneric extends CastleRoom
                     if (decor.wouldFit(pos, side, decoArea, decoMap))
                     {
                         decor.build(world, this, dungeon, pos, side, decoMap);
+
+                        //If we added air here then this is a candidate spot for a chest
+                        if (decor instanceof RoomDecorNone)
+                        {
+                            possibleChestLocs.put(pos, side);
+                        }
                         break;
                     }
                     ++attempts;

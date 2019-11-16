@@ -44,6 +44,12 @@ public abstract class CastleRoom
         {
             return this.partOfStairs;
         }
+
+        @Override
+        public String toString()
+        {
+            return name;
+        }
     }
 
     protected BlockPos startPos;
