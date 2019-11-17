@@ -27,7 +27,8 @@ public class CastleRoomSelector
     private int numSlotsZ;
     private Random random;
     private RoomGrid grid;
-    private List<CastleAddonRoof> roofs;
+    private List<CastleAddonRoof> potentialRoofs;
+    //private List<CastleAddonRoof> roofs;
     private WeightedRandom<CastleRoom.RoomType> roomRandomizer;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer,
@@ -41,7 +42,8 @@ public class CastleRoomSelector
         this.numSlotsX = numSlotsX;
         this.numSlotsZ = numSlotsZ;
         this.random = random;
-        this.roofs = new ArrayList<>();
+        this.potentialRoofs = new ArrayList<>();
+        //this.roofs = new ArrayList<>();
 
         this.grid = new RoomGrid(maxFloors, numSlotsX, numSlotsZ, random);
         this.roomRandomizer = new WeightedRandom<CastleRoom.RoomType>(random);
@@ -65,6 +67,14 @@ public class CastleRoomSelector
         for (RoomGridCell cell : populated)
         {
             cell.getRoom().decorate(world, dungeon);
+        }
+
+        for (CastleAddonRoof roof : potentialRoofs)
+        {
+            if (random.nextBoolean())
+            {
+                roof.generate(world, dungeon);
+            }
         }
     }
 
@@ -183,6 +193,7 @@ public class CastleRoomSelector
             int openCellsNorth = offsetZ;
             int openCellsEast = maxLenX - mainRoomsX - offsetX;
             int openCellsSouth = maxLenZ - mainRoomsZ - offsetZ;
+            int floorStart = layer * floorsPerLayer;
             int sideRoomsX, sideRoomsZ, startX, startZ;
 
             if (openCellsWest > 0)
@@ -193,7 +204,9 @@ public class CastleRoomSelector
                 {
                     startX = minX + offsetX - sideRoomsX;
                     startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+
+                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
                 }
             }
 
@@ -205,7 +218,9 @@ public class CastleRoomSelector
                 {
                     startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
                     startZ = minZ + offsetZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+
+                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
                 }
             }
 
@@ -217,7 +232,9 @@ public class CastleRoomSelector
                 {
                     startX = minX + offsetX + mainRoomsX;
                     startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+
+                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
                 }
             }
 
@@ -229,8 +246,9 @@ public class CastleRoomSelector
                 {
                     startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
                     startZ = minZ + offsetZ + mainRoomsZ;
-                    grid.selectBlockOfCellsForBuilding((layer * floorsPerLayer), floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
+                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
+                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
                 }
             }
         }
@@ -255,6 +273,13 @@ public class CastleRoomSelector
         int rounding = (mainLength % 2 == 0) ? 0 : 1;
         int halfLen = mainLength / 2;
         return halfLen + random.nextInt(halfLen + rounding);
+    }
+
+    private void sectionToRoofArea(int gridX, int roomsX, int gridZ, int roomsZ, int floorStart, int numFloors)
+    {
+        BlockPos roofStart = getRoomStart(floorStart, gridX, gridZ).up(numFloors * floorHeight);
+
+        potentialRoofs.add(new CastleAddonRoof(roofStart, roomsX * roomSize, roomsZ * roomSize));
     }
 
     private void placeTowers()
