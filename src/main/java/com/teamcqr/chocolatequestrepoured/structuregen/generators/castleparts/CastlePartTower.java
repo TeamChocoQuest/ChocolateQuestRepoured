@@ -140,7 +140,7 @@ public class CastlePartTower implements ICastlePart
         }
 
         currentY = y + floors * (floorHeight + 1);
-        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
+        //CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
         //roof.generate(buildList);
     }
 
@@ -201,7 +201,7 @@ public class CastlePartTower implements ICastlePart
         }
 
         currentY = y + floors * (floorHeight + 1);
-        CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
+        //CastleAddonRoof roof = new CastleAddonRoof(x, currentY, z, sideLen, sideLen, CastleAddonRoof.RoofType.FOURSIDED, facing);
         //roof.generate(buildList);
     }
 
