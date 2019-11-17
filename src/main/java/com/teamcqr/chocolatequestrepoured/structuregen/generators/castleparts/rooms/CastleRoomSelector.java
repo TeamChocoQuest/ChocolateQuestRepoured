@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.capability.armor.slime.CapabilitySlimeArmor;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
@@ -14,7 +13,27 @@ import java.lang.Double;
 
 public class CastleRoomSelector
 {
+    private class RoofArea
+    {
+        int gridStartX;
+        int lengthX;
+        int gridStartZ;
+        int lengthZ;
+        int floor;
+
+        private RoofArea(int gridStartX, int lengthX, int gridStartZ, int lengthZ, int floor)
+        {
+            this.gridStartX = gridStartX;
+            this.lengthX = lengthX;
+            this.gridStartZ = gridStartZ;
+            this.lengthZ = lengthZ;
+            this.floor = floor;
+        }
+    }
+
     private static final int MAX_LAYERS = 5;
+    private static final int PADDING_FLOORS = 2;
+    private static final int MIN_TOWER_FLOORS = 3;
     private static final int MIN_TOWER_SIZE = 7; //needs to have room for spiral stairs
 
     private BlockPos startPos;
@@ -27,8 +46,8 @@ public class CastleRoomSelector
     private int numSlotsZ;
     private Random random;
     private RoomGrid grid;
+    private List<RoofArea> roofAreas;
     private List<CastleAddonRoof> potentialRoofs;
-    //private List<CastleAddonRoof> roofs;
     private WeightedRandom<CastleRoom.RoomType> roomRandomizer;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer,
@@ -43,9 +62,11 @@ public class CastleRoomSelector
         this.numSlotsZ = numSlotsZ;
         this.random = random;
         this.potentialRoofs = new ArrayList<>();
-        //this.roofs = new ArrayList<>();
+        roofAreas = new ArrayList<>();
 
-        this.grid = new RoomGrid(maxFloors, numSlotsX, numSlotsZ, random);
+        //Add padding floors so that we can build walkable roofs on top of the highest rooms
+        this.grid = new RoomGrid(maxFloors + PADDING_FLOORS, numSlotsX, numSlotsZ, random);
+
         this.roomRandomizer = new WeightedRandom<CastleRoom.RoomType>(random);
 
         this.roomRandomizer.add(CastleRoom.RoomType.KITCHEN, 2);
@@ -57,6 +78,11 @@ public class CastleRoomSelector
     {
         ArrayList<RoomGridCell> populated = grid.getAllCellsWhere(RoomGridCell::isPopulated);
 
+        for (CastleAddonRoof roof : potentialRoofs)
+        {
+            roof.generate(world, dungeon);
+        }
+
         for (RoomGridCell cell : populated)
         {
             cell.getRoom().generate(world, dungeon);
@@ -67,14 +93,6 @@ public class CastleRoomSelector
         for (RoomGridCell cell : populated)
         {
             cell.getRoom().decorate(world, dungeon);
-        }
-
-        for (CastleAddonRoof roof : potentialRoofs)
-        {
-            if (random.nextBoolean())
-            {
-                roof.generate(world, dungeon);
-            }
         }
     }
 
@@ -142,12 +160,22 @@ public class CastleRoomSelector
     {
         setFirstLayerBuildable();
 
-        for (int layer = 0; layer < MAX_LAYERS; layer++)
+        //These are declared up here so after the for loop we retain the indices
+        //and floor of the highest section
+        int mainRoomsX = 0;
+        int mainRoomsZ = 0;
+        int minX = 0;
+        int minZ = 0;
+        int offsetX = 0;
+        int offsetZ = 0;
+        int layer;
+
+        for (layer = 0; layer < MAX_LAYERS; layer++)
         {
-            int minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
+            minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
             int maxX = grid.getMaxBuildableXOnFloor(layer * floorsPerLayer);
             int maxLenX = maxX - minX + 1;
-            int minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
+            minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
             int maxZ = grid.getMaxBuildableZOnFloor(layer * floorsPerLayer);
             int maxLenZ = maxZ - minZ + 1;
 
@@ -156,11 +184,11 @@ public class CastleRoomSelector
                 break;
             }
 
-            int mainRoomsX = randomSubsectionLength(maxLenX);
-            int mainRoomsZ = randomSubsectionLength(maxLenZ);
+            mainRoomsX = randomSubsectionLength(maxLenX);
+            mainRoomsZ = randomSubsectionLength(maxLenZ);
 
-            int offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
-            int offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
+            offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
+            offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
 
             for (int floor = 0; floor < floorsPerLayer; floor++)
             {
@@ -206,7 +234,7 @@ public class CastleRoomSelector
                     startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
-                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
+                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
                 }
             }
 
@@ -220,7 +248,7 @@ public class CastleRoomSelector
                     startZ = minZ + offsetZ - sideRoomsZ;
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
-                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
+                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
                 }
             }
 
@@ -234,7 +262,7 @@ public class CastleRoomSelector
                     startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
-                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
+                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
                 }
             }
 
@@ -248,10 +276,13 @@ public class CastleRoomSelector
                     startZ = minZ + offsetZ + mainRoomsZ;
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
-                    sectionToRoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart, floorsPerLayer);
+                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
                 }
             }
         }
+
+        //Make the highest main room section a potential roof position
+        roofAreas.add(new RoofArea(minX + offsetX, mainRoomsX, minZ + offsetZ, mainRoomsZ, layer * floorsPerLayer));
     }
 
     private void setFirstLayerBuildable()
@@ -275,19 +306,11 @@ public class CastleRoomSelector
         return halfLen + random.nextInt(halfLen + rounding);
     }
 
-    private void sectionToRoofArea(int gridX, int roomsX, int gridZ, int roomsZ, int floorStart, int numFloors)
-    {
-        BlockPos roofStart = getRoomStart(floorStart, gridX, gridZ).up(numFloors * floorHeight);
-
-        potentialRoofs.add(new CastleAddonRoof(roofStart, roomsX * roomSize, roomsZ * roomSize));
-    }
-
     private void placeTowers()
     {
         for (int floor = 0; floor < usedFloors; floor += floorsPerLayer)
         {
-            HashSet<EnumFacing> sidesToCheck = new HashSet<>();
-            sidesToCheck.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+            HashSet<EnumFacing> sidesToCheck = new HashSet<>(Arrays.asList(EnumFacing.HORIZONTALS));
 
             final int f = floor;
             ArrayList<RoomGridCell> candidateCells = grid.getAllCellsWhere(c -> c.getFloor() == f &&
@@ -312,10 +335,13 @@ public class CastleRoomSelector
 
                     if (canBuild)
                     {
+                        //max height is one floor above the top floor of the castle
                         int maxHeight = (usedFloors - floor) + 1;
-                        if (maxHeight - 3 > 0)
+
+                        //if we can build at least the min tower height
+                        if (maxHeight > MIN_TOWER_FLOORS)
                         {
-                            int height = 3 + random.nextInt(maxHeight - 3);
+                            int height = MIN_TOWER_FLOORS + random.nextInt(maxHeight - MIN_TOWER_FLOORS);
                             addTower(cell.getGridPosition().move(side), height, side.getOpposite());
                             sidesToCheck.remove(side);
                             break CellLoop;
@@ -807,10 +833,35 @@ public class CastleRoomSelector
     {
         ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> !c.isSelectedForBuilding() &&
                                                                         grid.adjacentCellIsPopulated(c, EnumFacing.DOWN));
+
+        for (RoofArea roofArea : roofAreas)
+        {
+            if (random.nextBoolean())
+            {
+                addRoofFromRoofArea(roofArea);
+                for (int x = roofArea.gridStartX; x < roofArea.gridStartX + roofArea.lengthX; x++)
+                {
+                    for (int z = roofArea.gridStartZ; z < roofArea.gridStartZ + roofArea.lengthZ; z++)
+                    {
+                        final int xf = x;
+                        final int zf = z;
+                        roofCells.removeIf(c -> c.getGridX() == xf && c.getGridZ() == zf && c.getFloor() == roofArea.floor);
+                    }
+                }
+            }
+        }
+
         for (RoomGridCell cell : roofCells)
         {
             cell.setRoom(new CastleRoomWalkableRoof(getRoomStart(cell), roomSize, floorHeight));
         }
+    }
+
+    private void addRoofFromRoofArea(RoofArea roofArea)
+    {
+        BlockPos roofStart = getRoomStart(roofArea.floor, roofArea.gridStartX, roofArea.gridStartZ);
+
+        potentialRoofs.add(new CastleAddonRoof(roofStart, roofArea.lengthX * roomSize, roofArea.lengthZ * roomSize));
     }
 
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)
