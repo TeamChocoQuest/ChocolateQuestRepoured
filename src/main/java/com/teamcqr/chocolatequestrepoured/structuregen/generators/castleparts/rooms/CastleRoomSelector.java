@@ -162,20 +162,18 @@ public class CastleRoomSelector
 
         //These are declared up here so after the for loop we retain the indices
         //and floor of the highest section
+        int lastMainStartX = 0;
+        int lastMainStartZ = 0;
         int mainRoomsX = 0;
         int mainRoomsZ = 0;
-        int minX = 0;
-        int minZ = 0;
-        int offsetX = 0;
-        int offsetZ = 0;
         int layer;
 
         for (layer = 0; layer < MAX_LAYERS; layer++)
         {
-            minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
+            int minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
             int maxX = grid.getMaxBuildableXOnFloor(layer * floorsPerLayer);
             int maxLenX = maxX - minX + 1;
-            minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
+            int minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
             int maxZ = grid.getMaxBuildableZOnFloor(layer * floorsPerLayer);
             int maxLenZ = maxZ - minZ + 1;
 
@@ -187,8 +185,11 @@ public class CastleRoomSelector
             mainRoomsX = randomSubsectionLength(maxLenX);
             mainRoomsZ = randomSubsectionLength(maxLenZ);
 
-            offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
-            offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
+            int offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
+            int offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
+
+            lastMainStartX = minX + offsetX;
+            lastMainStartZ = minZ + offsetZ;
 
             for (int floor = 0; floor < floorsPerLayer; floor++)
             {
@@ -197,8 +198,8 @@ public class CastleRoomSelector
                 {
                     for (int z = 0; z < mainRoomsZ; z++)
                     {
-                        int xIndex = minX + offsetX + x;
-                        int zIndex = minZ + offsetZ + z;
+                        int xIndex = lastMainStartX + x;
+                        int zIndex = lastMainStartZ + z;
                         int floorIndex = floor + (layer * floorsPerLayer);
                         grid.selectCellForBuilding(floorIndex, xIndex, zIndex);
                         grid.setRoomAsMainStruct(floorIndex, xIndex, zIndex);
@@ -282,7 +283,7 @@ public class CastleRoomSelector
         }
 
         //Make the highest main room section a potential roof position
-        roofAreas.add(new RoofArea(minX + offsetX, mainRoomsX, minZ + offsetZ, mainRoomsZ, layer * floorsPerLayer));
+        roofAreas.add(new RoofArea(lastMainStartX, mainRoomsX, lastMainStartZ, mainRoomsZ, layer * floorsPerLayer));
     }
 
     private void setFirstLayerBuildable()
