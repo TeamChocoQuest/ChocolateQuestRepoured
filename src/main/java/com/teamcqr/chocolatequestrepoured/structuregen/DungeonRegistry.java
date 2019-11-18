@@ -179,7 +179,7 @@ public class DungeonRegistry {
 			@Override
 			public boolean accept(File file, String var2) {
 				if (file != null) {
-					if (file.isDirectory()) {
+					if (file.isDirectory() && !file.getName().equalsIgnoreCase(("disabled"))) {
 						return true;
 					}
 
