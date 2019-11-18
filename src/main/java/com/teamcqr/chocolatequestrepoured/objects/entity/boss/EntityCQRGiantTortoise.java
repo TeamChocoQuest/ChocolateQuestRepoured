@@ -215,7 +215,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		alignParts();
 		
 		if(getWorld().isRemote) {
-			if(!lastTickAnim.equals(getCurrentAnimation())) {
+			if(!lastTickAnim.equals(getCurrentAnimation()) && getAnimationProgress() > 2) {
 				setAnimationProgress(0);
 				animationChanged = true;
 			}

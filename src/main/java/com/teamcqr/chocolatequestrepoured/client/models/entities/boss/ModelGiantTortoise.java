@@ -210,8 +210,7 @@ public class ModelGiantTortoise extends ModelBase {
     	EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise)entity;
     	
     	if(ent.shouldModelReset()) {
-    		//TODO: Reset legs offset, head offset and rotations
-    		
+    		resetParts();
     		ent.setAnimationChanged(false);
     	}
     	
@@ -304,8 +303,10 @@ public class ModelGiantTortoise extends ModelBase {
     }
 
     private void resetParts() {
-		// TODO Auto-generated method stub
-		
+    	//TODO: Reset legs offset, head offset and rotations
+    	this.mainPart.offsetY = 0F;
+    	this.head.offsetZ = -9F;
+    	this.jaw.rotateAngleX = 0F;
 	}
 
 	/**
