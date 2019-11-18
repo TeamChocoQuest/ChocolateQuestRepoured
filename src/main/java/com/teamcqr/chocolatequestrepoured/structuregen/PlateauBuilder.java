@@ -22,6 +22,7 @@ public class PlateauBuilder {
 
 	Block structureBlock = Blocks.STONE;
 	Block structureTopBlock = Blocks.GRASS;
+	private static final int TOP_LAYER_HEIGHT = 1;
 
 	public int wallSize = Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize();
 
@@ -76,7 +77,7 @@ public class PlateauBuilder {
 		
 		for (int x = 0; x < sizeX; ++x) {
 			for (int z = 0; z < sizeZ; ++z) {
-				int maxHeight = startY - 2 -  world.getTopSolidOrLiquidBlock(new BlockPos(x+startX,0,z+startZ)).getY();//DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true);
+				int maxHeight = startY - TOP_LAYER_HEIGHT -  world.getTopSolidOrLiquidBlock(new BlockPos(x+startX,0,z+startZ)).getY();//DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true);
 				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x+startX,0,z+startZ)).getY();//DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);
 				for (int y = 0; y <= maxHeight; ++y) {
 					//This generates the "cube" that goes under the structure
