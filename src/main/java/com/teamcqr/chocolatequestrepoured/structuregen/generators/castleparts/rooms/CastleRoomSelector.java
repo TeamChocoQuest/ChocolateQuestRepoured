@@ -449,7 +449,8 @@ public class CastleRoomSelector
             HashSet<EnumFacing> doorDirections = new HashSet<>(); //Sides of this floor that already have exits
 
             final int f = floor;
-            ArrayList<RoomGridCell> floorRooms = grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated());
+            ArrayList<RoomGridCell> floorRooms = grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated()
+                                    && !(r.getRoom() instanceof CastleRoomWalkableRoof) && !r.getRoom().isTower());
             Collections.shuffle(floorRooms);
 
             for (RoomGridCell cell : floorRooms)
