@@ -3,9 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WalkableRoofWallBuilder;
-import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -32,7 +29,7 @@ public class CastleRoomWalkableRoof extends CastleRoom
     }
 
     @Override
-    protected void generateWalls(World world)
+    protected void generateWalls(World world, CastleDungeon dungeon)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
@@ -40,7 +37,7 @@ public class CastleRoomWalkableRoof extends CastleRoom
             {
                 BlockPos buildPos = getbuildPosition();
                 RoomWallBuilder builder = new WalkableRoofWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(world);
+                builder.generate(world, dungeon);
             }
         }
     }

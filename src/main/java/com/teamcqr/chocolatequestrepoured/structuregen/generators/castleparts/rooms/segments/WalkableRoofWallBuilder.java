@@ -1,12 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Random;
 
 public class WalkableRoofWallBuilder extends RoomWallBuilder
 {
@@ -15,7 +14,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder
         super(roomStart, height, length, options, side);
     }
 
-    public void generate(World world)
+    public void generate(World world, CastleDungeon dungeon)
     {
         BlockPos pos;
         IBlockState blockToBuild;
@@ -36,14 +35,14 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder
             for (int y = 0; y < height; y++)
             {
                 pos = wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
-                blockToBuild = getBlockToBuild(pos);
+                blockToBuild = getBlockToBuild(pos, dungeon);
                 world.setBlockState(pos, blockToBuild);
             }
         }
     }
 
     @Override
-    protected IBlockState getBlockToBuild(BlockPos pos)
+    protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon)
     {
         if (options.hasDoor() && inDoorFrame(pos))
         {
@@ -51,7 +50,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder
         }
         else if (shouldBuildCrenellatedRoof(pos))
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
         else
         {

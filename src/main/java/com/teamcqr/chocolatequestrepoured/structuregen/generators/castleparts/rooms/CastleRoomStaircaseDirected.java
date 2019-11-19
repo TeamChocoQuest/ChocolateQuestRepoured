@@ -49,19 +49,19 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         {
             for (int z = 0; z < sideLength - 1; z++)
             {
-                buildFloorBlock(x, z, world);
+                buildFloorBlock(x, z, world, dungeon);
 
                 if (z < 2)
                 {
-                    buildPlatform(x, z, world);
+                    buildPlatform(x, z, world, dungeon);
                 }
                 else if (((x < upperStairWidth) || (x >= centerStairWidth + upperStairWidth)) && z < upperStairLength + PLATFORM_LENGTH)
                 {
-                    buildUpperStair(x, z, world);
+                    buildUpperStair(x, z, world, dungeon);
                 }
                 else if (((x >= upperStairWidth) || (x < centerStairWidth + upperStairWidth)) && z <= centerStairLength + PLATFORM_LENGTH)
                 {
-                    buildLowerStair(x, z, world);
+                    buildLowerStair(x, z, world, dungeon);
                 }
             }
         }
@@ -92,13 +92,13 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         return doorSide;
     }
 
-    private void buildFloorBlock(int x, int z, World world)
+    private void buildFloorBlock(int x, int z, World world, CastleDungeon dungeon)
     {
-        IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
+        IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
         world.setBlockState(startPos.add(x, 0, z), blockToBuild);
     }
 
-    private void buildUpperStair(int x, int z, World world)
+    private void buildUpperStair(int x, int z, World world, CastleDungeon dungeon)
     {
         int stairHeight = centerStairLength + (z - PLATFORM_LENGTH);
         EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.SOUTH, numRotations);
@@ -107,11 +107,11 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         {
             if (y < stairHeight)
             {
-                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
             }
             else if (y == stairHeight)
             {
-                blockToBuild = Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+                blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
             }
             else
             {
@@ -121,7 +121,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         }
     }
 
-    private void buildLowerStair(int x, int z, World world)
+    private void buildLowerStair(int x, int z, World world, CastleDungeon dungeon)
     {
         int stairHeight = centerStairLength - (z - PLATFORM_LENGTH + 1);
         EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.NORTH, numRotations);
@@ -130,11 +130,11 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         {
             if (y < stairHeight)
             {
-                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
             }
             else if (y == stairHeight)
             {
-                blockToBuild = Blocks.STONE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+                blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
             }
             else
             {
@@ -144,7 +144,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         }
     }
 
-    private void buildPlatform(int x, int z,World world)
+    private void buildPlatform(int x, int z,World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild;
         int platformHeight = centerStairLength; //the stair length is also the platform height
@@ -153,7 +153,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
         {
             if (y < platformHeight)
             {
-                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                blockToBuild = dungeon.getFloorBlock().getDefaultState();
             }
             else
             {
