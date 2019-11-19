@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -99,15 +98,15 @@ public abstract class CastleRoom
     public void generate(World world, CastleDungeon dungeon)
     {
         generateRoom(world, dungeon);
-        generateWalls(world);
+        generateWalls(world, dungeon);
 
         if (defaultFloor)
         {
-            generateDefaultFloor(world);
+            generateDefaultFloor(world, dungeon);
         }
         if (defaultCeiling)
         {
-            generateDefaultCeiling(world);
+            generateDefaultCeiling(world, dungeon);
         }
     }
 
@@ -118,7 +117,7 @@ public abstract class CastleRoom
         ; //Default is no decoration
     }
 
-    protected void generateWalls(World world)
+    protected void generateWalls(World world, CastleDungeon dungeon)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
@@ -126,7 +125,7 @@ public abstract class CastleRoom
             {
                 BlockPos buildPos = getbuildPosition();
                 RoomWallBuilder builder = new RoomWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(world);
+                builder.generate(world, dungeon);
             }
         }
     }
@@ -153,18 +152,18 @@ public abstract class CastleRoom
         return pathable;
     }
 
-    protected void generateDefaultCeiling(World world)
+    protected void generateDefaultCeiling(World world, CastleDungeon dungeon)
     {
         for (int z = 0; z < buildLength - 1; z++)
         {
             for (int x = 0; x < buildLength - 1; x++)
             {
-                world.setBlockState(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState());
+                world.setBlockState(startPos.add( x, height - 1, z), dungeon.getWallBlock().getDefaultState());
             }
         }
     }
 
-    protected void generateDefaultFloor(World world)
+    protected void generateDefaultFloor(World world, CastleDungeon dungeon)
     {
         BlockPos pos = getNonWallStartPos();
 
@@ -172,7 +171,7 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < getDecorationLengthX(); x++)
             {
-                world.setBlockState(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState());
+                world.setBlockState(pos.add( x, 0, z), dungeon.getFloorBlock().getDefaultState());
             }
         }
     }

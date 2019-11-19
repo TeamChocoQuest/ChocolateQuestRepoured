@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -45,7 +45,7 @@ public class RoomWallBuilder
         }
     }
 
-    public void generate(World world)
+    public void generate(World world, CastleDungeon dungeon)
     {
         BlockPos pos;
         IBlockState blockToBuild;
@@ -66,31 +66,31 @@ public class RoomWallBuilder
             for (int y = 0; y < height; y++)
             {
                 pos = wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
-                blockToBuild = getBlockToBuild(pos);
+                blockToBuild = getBlockToBuild(pos, dungeon);
                 world.setBlockState(pos, blockToBuild);
             }
         }
     }
 
-    protected IBlockState getBlockToBuild(BlockPos pos)
+    protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon)
     {
         if (options.hasWindow())
         {
-            return getBlockBasicGlass(pos);
+            return getBlockBasicGlass(pos, dungeon);
         }
         else if (options.hasDoor())
         {
-            return getBlockDoor(pos);
+            return getBlockDoor(pos, dungeon);
         }
         else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 
-    protected IBlockState getBlockDoor(BlockPos pos)
+    protected IBlockState getBlockDoor(BlockPos pos, CastleDungeon dungeon)
     {
-        IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
         int y = pos.getY() - wallStart.getY();
         int dist = getLengthPoint(pos);
 
@@ -98,7 +98,7 @@ public class RoomWallBuilder
         {
             if (y == 0)
             {
-                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
             }
             else if (y < DoorPlacement.DEFAULT_HEIGHT)
             {
@@ -109,7 +109,7 @@ public class RoomWallBuilder
         return blockToBuild;
     }
 
-    private IBlockState getBlockBasicGlass(BlockPos pos)
+    private IBlockState getBlockBasicGlass(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY() - wallStart.getY();
         int dist = getLengthPoint(pos);
@@ -119,11 +119,11 @@ public class RoomWallBuilder
             return Blocks.GLASS_PANE.getDefaultState();
         } else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 
-    private IBlockState getBlockBasicBars(BlockPos pos)
+    private IBlockState getBlockBasicBars(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY();
         int dist = getLengthPoint(pos);
@@ -133,7 +133,7 @@ public class RoomWallBuilder
             return Blocks.IRON_BARS.getDefaultState();
         } else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 

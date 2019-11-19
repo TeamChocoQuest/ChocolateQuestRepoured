@@ -23,6 +23,7 @@ public class CastleRoomTowerSquare extends CastleRoom
         this.roomType = RoomType.TOWER_SQUARE;
         this.connectedSide = connectedSide;
         this.buildLength = towerSize;
+        this.defaultFloor = false;
         this.defaultCeiling = false;
         this.pathable = false;
         this.isTower = true;
@@ -66,7 +67,7 @@ public class CastleRoomTowerSquare extends CastleRoom
     @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
-        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide);
+        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
         BlockPos pos;
         IBlockState blockToBuild;
@@ -86,11 +87,11 @@ public class CastleRoomTowerSquare extends CastleRoom
                     }
                     else if (y == 0)
                     {
-                        blockToBuild = Blocks.PLANKS.getDefaultState();
+                        blockToBuild = dungeon.getFloorBlock().getDefaultState();
                     }
                     else if (y == height - 1)
                     {
-                        blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                        blockToBuild = dungeon.getWallBlock().getDefaultState();
                     }
 
                     world.setBlockState(pos, blockToBuild);
