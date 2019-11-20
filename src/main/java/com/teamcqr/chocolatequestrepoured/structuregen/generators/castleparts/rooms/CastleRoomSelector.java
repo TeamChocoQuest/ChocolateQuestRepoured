@@ -72,6 +72,7 @@ public class CastleRoomSelector
         this.roomRandomizer.add(CastleRoom.RoomType.KITCHEN, 2);
         this.roomRandomizer.add(CastleRoom.RoomType.ALCHEMY_LAB, 2);
         this.roomRandomizer.add(CastleRoom.RoomType.ARMORY, 2);
+        this.roomRandomizer.add(CastleRoom.RoomType.BEDROOM, 4);
     }
 
     public void generateRooms(World world, CastleDungeon dungeon)
@@ -152,6 +153,10 @@ public class CastleRoomSelector
             else if (type == CastleRoom.RoomType.ARMORY)
             {
                 selection.setRoom(new CastleRoomArmory(getRoomStart(selection), roomSize, floorHeight));
+            }
+            else if (type == CastleRoom.RoomType.BEDROOM)
+            {
+                selection.setRoom(new CastleRoomBedroom(getRoomStart(selection), roomSize, floorHeight));
             }
         }
     }
