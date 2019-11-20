@@ -73,7 +73,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor
 
     }
 
-    private ArrayList<DecoBlockOffset> alignSchematic(EnumFacing side)
+    protected ArrayList<DecoBlockOffset> alignSchematic(EnumFacing side)
     {
         ArrayList<DecoBlockOffset> result = new ArrayList<>();
 

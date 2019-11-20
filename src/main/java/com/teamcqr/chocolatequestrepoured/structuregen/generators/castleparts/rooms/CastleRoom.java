@@ -28,6 +28,7 @@ public abstract class CastleRoom
         LANDING_SPIRAL("Spiral Landing", true),
         TOWER_SQUARE("Square Tower", false),
         ALCHEMY_LAB("Alchemy Lab", false),
+        BEDROOM("Bedroom", false),
         ARMORY("Armory", false);
 
         private final String name;
