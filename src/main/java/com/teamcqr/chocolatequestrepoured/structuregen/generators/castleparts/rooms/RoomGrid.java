@@ -372,7 +372,7 @@ public class RoomGrid
                 !cell.getRoom().hasDoorOnSide(side) &&
                 adjacent != null &&
                 !(adjacent.isPopulated() &&
-                 !cell.getRoom().getRoomType().isPartOfStairs()));
+                 !cell.getRoom().isStairsOrLanding()));
     }
 
     public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)

@@ -10,7 +10,7 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof
     public CastleRoomWalkableRoofTower(BlockPos startPos, int sideLength, int height, CastleRoomTowerSquare tower)
     {
         super(startPos, sideLength, height);
-        this.roomType = EnumRoomType.WALKABLE_ROOF;
+        this.roomType = EnumRoomType.WALKABLE_TOWER_ROOF;
         this.pathable = false;
         this.offsetX = tower.getOffsetX();
         this.offsetZ = tower.getOffsetZ();
