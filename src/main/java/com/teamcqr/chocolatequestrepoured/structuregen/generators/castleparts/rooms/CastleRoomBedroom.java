@@ -10,7 +10,7 @@ public class CastleRoomBedroom extends CastleRoomGeneric
     public CastleRoomBedroom(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.BEDROOM;
+        this.roomType = EnumRoomType.BEDROOM;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
         this.defaultFloor = true;

@@ -16,41 +16,6 @@ import java.util.Random;
 
 public abstract class CastleRoom
 {
-    public enum RoomType
-    {
-        NONE("None", false),
-        WALKABLE_ROOF("Walkablke Roof", false),
-        HALLWAY("Hallway", false),
-        KITCHEN("Kitchen", false),
-        STAIRCASE_DIRECTED("Directed Stairs", true),
-        STAIRCASE_SPIRAL("Spiral Stairs", true),
-        LANDING_DIRECTED("Directed Landing", true),
-        LANDING_SPIRAL("Spiral Landing", true),
-        TOWER_SQUARE("Square Tower", false),
-        ALCHEMY_LAB("Alchemy Lab", false),
-        BEDROOM("Bedroom", false),
-        ARMORY("Armory", false);
-
-        private final String name;
-        private final boolean partOfStairs;
-
-        RoomType(String nameIn, boolean partOfStairsIn)
-        {
-            this.name = nameIn;
-            this.partOfStairs = partOfStairsIn;
-        }
-
-        public boolean isPartOfStairs()
-        {
-            return this.partOfStairs;
-        }
-
-        @Override
-        public String toString()
-        {
-            return name;
-        }
-    }
 
     protected BlockPos startPos;
     protected int height;
@@ -74,7 +39,7 @@ public abstract class CastleRoom
     protected boolean isTower = false;
     protected boolean pathable = true;
 
-    protected RoomType roomType = RoomType.NONE;
+    protected EnumRoomType roomType = EnumRoomType.NONE;
     protected boolean defaultCeiling = false;
     protected boolean defaultFloor = false;
     protected Random random = new Random();
@@ -177,7 +142,7 @@ public abstract class CastleRoom
         }
     }
 
-    public RoomType getRoomType()
+    public EnumRoomType getRoomType()
     {
         return roomType;
     }
@@ -525,6 +490,6 @@ public abstract class CastleRoom
     @Override
     public String toString()
     {
-        return roomType.name;
+        return roomType.toString();
     }
 }

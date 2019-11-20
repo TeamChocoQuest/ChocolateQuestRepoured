@@ -20,7 +20,7 @@ public class CastleRoomTowerSquare extends CastleRoom
                                  EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.TOWER_SQUARE;
+        this.roomType = EnumRoomType.TOWER_SQUARE;
         this.connectedSide = connectedSide;
         this.buildLength = towerSize;
         this.defaultFloor = false;

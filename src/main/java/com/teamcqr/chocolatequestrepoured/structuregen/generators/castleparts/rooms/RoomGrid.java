@@ -382,7 +382,7 @@ public class RoomGrid
         return (Math.hypot(distX, distZ));
     }
 
-    public boolean cellBordersRoomType(RoomGridCell cell, CastleRoom.RoomType type)
+    public boolean cellBordersRoomType(RoomGridCell cell, EnumRoomType type)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
