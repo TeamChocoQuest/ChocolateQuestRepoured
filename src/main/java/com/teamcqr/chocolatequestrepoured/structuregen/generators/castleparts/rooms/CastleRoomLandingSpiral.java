@@ -15,7 +15,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
     public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.LANDING_SPIRAL;
+        this.roomType = EnumRoomType.LANDING_SPIRAL;
         this.stairsBelow = stairsBelow;
         this.defaultCeiling = true;
     }

@@ -48,7 +48,7 @@ public class CastleRoomSelector
     private RoomGrid grid;
     private List<RoofArea> roofAreas;
     private List<CastleAddonRoof> potentialRoofs;
-    private WeightedRandom<CastleRoom.RoomType> roomRandomizer;
+    private WeightedRandom<EnumRoomType> roomRandomizer;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer,
                               int numSlotsX, int numSlotsZ, Random random)
@@ -67,12 +67,12 @@ public class CastleRoomSelector
         //Add padding floors so that we can build walkable roofs on top of the highest rooms
         this.grid = new RoomGrid(maxFloors + PADDING_FLOORS, numSlotsX, numSlotsZ, random);
 
-        this.roomRandomizer = new WeightedRandom<CastleRoom.RoomType>(random);
+        this.roomRandomizer = new WeightedRandom<EnumRoomType>(random);
 
-        this.roomRandomizer.add(CastleRoom.RoomType.KITCHEN, 2);
-        this.roomRandomizer.add(CastleRoom.RoomType.ALCHEMY_LAB, 2);
-        this.roomRandomizer.add(CastleRoom.RoomType.ARMORY, 2);
-        this.roomRandomizer.add(CastleRoom.RoomType.BEDROOM, 4);
+        this.roomRandomizer.add(EnumRoomType.KITCHEN, 2);
+        this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, 2);
+        this.roomRandomizer.add(EnumRoomType.ARMORY, 2);
+        this.roomRandomizer.add(EnumRoomType.BEDROOM, 4);
     }
 
     public void generateRooms(World world, CastleDungeon dungeon)
@@ -141,23 +141,8 @@ public class CastleRoomSelector
 
         for (RoomGridCell selection : unTyped)
         {
-            CastleRoom.RoomType type = roomRandomizer.next();
-            if (type == CastleRoom.RoomType.KITCHEN)
-            {
-                selection.setRoom(new CastleRoomKitchen(getRoomStart(selection), roomSize, floorHeight));
-            }
-            else if (type == CastleRoom.RoomType.ALCHEMY_LAB)
-            {
-                selection.setRoom(new CastleRoomAlchemyLab(getRoomStart(selection), roomSize, floorHeight));
-            }
-            else if (type == CastleRoom.RoomType.ARMORY)
-            {
-                selection.setRoom(new CastleRoomArmory(getRoomStart(selection), roomSize, floorHeight));
-            }
-            else if (type == CastleRoom.RoomType.BEDROOM)
-            {
-                selection.setRoom(new CastleRoomBedroom(getRoomStart(selection), roomSize, floorHeight));
-            }
+            EnumRoomType type = roomRandomizer.next();
+            selection.setRoom(RoomFactoryCastle.CreateGenericRoom(type, getRoomStart(selection), roomSize, floorHeight));
         }
     }
 
@@ -573,8 +558,8 @@ public class CastleRoomSelector
                 if (adjacent != null &&
                     adjacent.isSelectedForBuilding()&&
                     !adjacent.isPopulated() &&
-                    !grid.cellBordersRoomType(cell, CastleRoom.RoomType.LANDING_DIRECTED) &&
-                    !grid.cellBordersRoomType(adjacent, CastleRoom.RoomType.LANDING_DIRECTED) &&
+                    !grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) &&
+                    !grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED) &&
                     grid.adjacentCellIsSelected(aboveCell, side) &&
                     !grid.adjacentCellIsPopulated(aboveCell, side))
                 {

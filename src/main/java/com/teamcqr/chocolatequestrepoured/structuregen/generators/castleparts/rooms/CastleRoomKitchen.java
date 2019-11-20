@@ -11,7 +11,7 @@ public class CastleRoomKitchen extends CastleRoomGeneric
     public CastleRoomKitchen(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.KITCHEN;
+        this.roomType = EnumRoomType.KITCHEN;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
         this.defaultFloor = true;
