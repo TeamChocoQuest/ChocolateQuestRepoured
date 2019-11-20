@@ -110,12 +110,17 @@ public abstract class CastleRoom
 
     public boolean isTower()
     {
-        return isTower;
+        return roomType.isTowerRoom();
+    }
+
+    public boolean isStairsOrLanding()
+    {
+        return roomType.isStairRoom();
     }
 
     public boolean isPathable()
     {
-        return pathable;
+        return roomType.isPathable();
     }
 
     protected void generateDefaultCeiling(World world, CastleDungeon dungeon)
