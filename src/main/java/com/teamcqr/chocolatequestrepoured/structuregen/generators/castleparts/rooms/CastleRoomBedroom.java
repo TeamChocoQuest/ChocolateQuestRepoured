@@ -28,7 +28,8 @@ public class CastleRoomBedroom extends CastleRoomGeneric
 
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 4);
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 2);
-        this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 2);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 1);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_SM, 2);
         this.decoSelector.registerEdgeDecor(EnumRoomDecor.BED, 2);
 
         List<EnumDyeColor> possibleColors = Arrays.asList(EnumDyeColor.values());
