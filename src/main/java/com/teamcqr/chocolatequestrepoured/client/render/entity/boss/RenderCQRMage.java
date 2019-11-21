@@ -13,9 +13,8 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages_black.png"));
 	public static final ResourceLocation TEXTURES_REVEALED = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages.png"));
 
-	public RenderCQRMage(RenderManager rendermanagerIn, ModelBiped model, float shadowSize, String entityName,
-			double widthScale, double heightScale) {
-		super(rendermanagerIn, model, shadowSize, entityName, widthScale, heightScale);
+	public RenderCQRMage(RenderManager rendermanagerIn, ModelBiped model, String entityName) {
+		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
 	}
 	
 	@Override
