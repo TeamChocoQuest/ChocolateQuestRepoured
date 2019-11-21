@@ -4,6 +4,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -142,9 +144,14 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < getDecorationLengthX(); x++)
             {
-                world.setBlockState(pos.add( x, 0, z), dungeon.getFloorBlock().getDefaultState());
+                world.setBlockState(pos.add( x, 0, z), getFloorBlock(dungeon));
             }
         }
+    }
+
+    protected IBlockState getFloorBlock(CastleDungeon dungeon)
+    {
+        return dungeon.getFloorBlock().getDefaultState();
     }
 
     public EnumRoomType getRoomType()

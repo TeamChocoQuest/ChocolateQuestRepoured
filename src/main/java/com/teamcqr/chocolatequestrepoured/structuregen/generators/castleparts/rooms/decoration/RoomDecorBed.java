@@ -29,19 +29,6 @@ public class RoomDecorBed extends RoomDecorBlocks
     }
 
     @Override
-    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
-    {
-        IBlockState result = block.getDefaultState();
-
-        if (block == Blocks.BED)
-        {
-            result = result.withProperty(BlockBed.FACING, side.getOpposite());
-        }
-
-        return result;
-    }
-
-    @Override
     public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap)
     {
         ArrayList<DecoBlockOffset> rotated = alignSchematic(side);
@@ -65,5 +52,18 @@ public class RoomDecorBed extends RoomDecorBlocks
             world.setBlockState(pos, blockState);
             decoMap.add(pos);
         }
+    }
+
+    @Override
+    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
+    {
+        IBlockState result = block.getDefaultState();
+
+        if (block == Blocks.BED)
+        {
+            result = result.withProperty(BlockBed.FACING, side);
+        }
+
+        return result;
     }
 }
