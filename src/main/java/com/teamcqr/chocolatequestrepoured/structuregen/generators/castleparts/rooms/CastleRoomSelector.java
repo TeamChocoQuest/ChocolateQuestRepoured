@@ -72,7 +72,7 @@ public class CastleRoomSelector
         this.roomRandomizer.add(EnumRoomType.KITCHEN, 2);
         this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, 2);
         this.roomRandomizer.add(EnumRoomType.ARMORY, 2);
-        this.roomRandomizer.add(EnumRoomType.BEDROOM, 4);
+        this.roomRandomizer.add(EnumRoomType.BEDROOM, 2);
     }
 
     public void generateRooms(World world, CastleDungeon dungeon)
