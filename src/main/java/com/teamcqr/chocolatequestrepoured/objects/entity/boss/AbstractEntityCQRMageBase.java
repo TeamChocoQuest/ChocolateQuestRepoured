@@ -38,6 +38,11 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	public void revealIdentity() {
 		this.dataManager.set(IDENTITY_HIDDEN, false);
 	}
+
+	@Override
+	public float getSizeVariation() {
+		return 0F;
+	}
 	
 	public boolean isIdentityHidden() {
 		return dataManager.get(IDENTITY_HIDDEN);
@@ -61,7 +66,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if(compound.getBoolean("identityHidden")) {
+		if(!compound.getBoolean("identityHidden")) {
 			revealIdentity();
 		}
 	}
