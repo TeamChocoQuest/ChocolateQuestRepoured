@@ -1,35 +1,37 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import net.minecraft.util.math.Vec3i;
+
 public enum EnumRoomType
 {
-        NONE("None", false, false, true),
+        NONE(false, false, true, new Vec3i(999, 999, 999)),
 
-        KITCHEN("Kitchen", false, false, true),
-        BEDROOM("Bedroom", false, false, true),
-        ARMORY("Armory", false, false, true),
-        ALCHEMY_LAB("Alchemy Lab", false, false, true),
+        KITCHEN(false, false, true, new Vec3i(3, 1, 3)),
+        BEDROOM(false, false, true, new Vec3i(3, 1, 3)),
+        ARMORY(false, false, true, new Vec3i(3, 1, 3)),
+        ALCHEMY_LAB(false, false, true, new Vec3i(2, 1, 2)),
 
-        WALKABLE_ROOF("Walkable Roof", false, false, false),
-        WALKABLE_TOWER_ROOF("Walkable Tower Roof", false, true, false),
+        WALKABLE_ROOF(false, false, false, new Vec3i(1, 1, 1)),
+        WALKABLE_TOWER_ROOF(false, true, false, new Vec3i(1, 1, 1)),
 
-        HALLWAY("Hallway", false, false, true),
-        STAIRCASE_DIRECTED("Directed Stairs", true, false, true),
-        STAIRCASE_SPIRAL("Spiral Stairs", true, false, true),
-        LANDING_DIRECTED("Directed Landing", true, false, true),
-        LANDING_SPIRAL("Spiral Landing", true, false, true),
-        TOWER_SQUARE("Square Tower", false, true, false);
+        HALLWAY(false, false, true, new Vec3i(999, 999, 999)),
+        STAIRCASE_DIRECTED(true, false, true, new Vec3i(1, 1, 1)),
+        STAIRCASE_SPIRAL(true, false, true, new Vec3i(1, 1, 1)),
+        LANDING_DIRECTED(true, false, true, new Vec3i(1, 1, 1)),
+        LANDING_SPIRAL(true, false, true, new Vec3i(1, 1, 1)),
+        TOWER_SQUARE(false, true, false, new Vec3i(1, 1, 1));
 
-        private final String name;
         private final boolean partOfStairs;
         private final boolean partOfTower;
         private final boolean pathable;
+        private final Vec3i maxSize;
 
-        EnumRoomType(String nameIn, boolean partOfStairsIn, boolean partOfTower, boolean pathable)
+        EnumRoomType(boolean stairs, boolean tower, boolean pathable, Vec3i maxSize)
         {
-            this.name = nameIn;
-            this.partOfStairs = partOfStairsIn;
-            this.partOfTower = partOfTower;
+            this.partOfStairs = stairs;
+            this.partOfTower = tower;
             this.pathable = pathable;
+            this.maxSize = maxSize;
         }
 
         public boolean isStairRoom()
@@ -47,9 +49,10 @@ public enum EnumRoomType
             return this.pathable;
         }
 
-        @Override
-        public String toString()
-        {
-            return name;
-        }
+        public Vec3i getMaxDimensions() { return this.maxSize; }
+
+        public int getMaxXCells() { return this.maxSize.getX(); }
+        public int getMaxYCells() { return this.maxSize.getY(); }
+        public int getMaxZCells() { return this.maxSize.getZ(); }
+
 }

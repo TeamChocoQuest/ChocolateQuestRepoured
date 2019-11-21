@@ -138,10 +138,29 @@ public class CastleRoomSelector
     {
         ArrayList<RoomGridCell> unTyped = grid.getAllCellsWhere(RoomGridCell::needsRoomType);
 
-        for (RoomGridCell selection : unTyped)
+        while (!unTyped.isEmpty())
         {
+            RoomGridCell rootCell = unTyped.get(random.nextInt(unTyped.size()));
+            int availableX = grid.getContiguousUntypedRoomsX(rootCell.getGridPosition());
+            int availableZ = grid.getContiguousUntypedRoomsZ(rootCell.getGridPosition());
+
             EnumRoomType type = roomRandomizer.next();
-            selection.setRoom(RoomFactoryCastle.CreateGenericRoom(type, getRoomStart(selection), roomSize, floorHeight));
+            int maxX = Math.min(type.getMaxXCells(), availableX);
+            int maxZ = Math.min(type.getMaxZCells(), availableZ);
+
+            int sizeX = (maxX > 1) ? (1 + random.nextInt(maxX - 1)) : 1;
+            int sizeZ = (maxZ > 1) ? (1 + random.nextInt(maxZ - 1)) : 1;
+
+            for (int x = 0; x < sizeX; x++)
+            {
+                for (int z = 0; z < sizeZ; z++)
+                {
+                    RoomGridCell buildCell = grid.getCellAt(rootCell.getFloor(), rootCell.getGridX() + x, rootCell.getGridZ() + z);
+                    buildCell.setRoom(RoomFactoryCastle.CreateGenericRoom(type, getRoomStart(buildCell), roomSize, floorHeight));
+                }
+            }
+
+            unTyped = grid.getAllCellsWhere(RoomGridCell::needsRoomType);
         }
     }
 

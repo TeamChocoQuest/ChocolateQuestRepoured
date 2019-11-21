@@ -228,7 +228,7 @@ public class RoomGrid
         while (cell != null && cell.needsRoomType())
         {
             ++result;
-            pos.move(EnumFacing.EAST);
+            pos = pos.move(EnumFacing.EAST);
             cell = getCellAt(pos);
         }
 
