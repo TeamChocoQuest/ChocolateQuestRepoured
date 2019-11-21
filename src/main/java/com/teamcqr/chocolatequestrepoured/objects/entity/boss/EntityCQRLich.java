@@ -12,6 +12,10 @@ import net.minecraft.world.World;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase {
 
+	public EntityCQRLich(World worldIn) {
+		this(worldIn, 1);
+	}
+	
 	public EntityCQRLich(World worldIn, int size) {
 		super(worldIn, size);
 		
