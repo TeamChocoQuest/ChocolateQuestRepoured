@@ -136,8 +136,7 @@ public class CastleRoomSelector
 
     private void randomizeRooms()
     {
-        ArrayList<RoomGridCell> unTyped = grid.getAllCellsWhere(c -> c.isSelectedForBuilding() &&
-                                                                    !c.isPopulated());
+        ArrayList<RoomGridCell> unTyped = grid.getAllCellsWhere(RoomGridCell::needsRoomType);
 
         for (RoomGridCell selection : unTyped)
         {
@@ -342,6 +341,7 @@ public class CastleRoomSelector
             }
         }
     }
+
     private void addTower(RoomGridPosition position, int height, EnumFacing alignment)
     {
         int x = position.getX();
@@ -502,14 +502,14 @@ public class CastleRoomSelector
             else
              */
             {
-                candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f &&
-                        r.isSelectedForBuilding() && !r.isPopulated());
+                candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f && r.needsRoomType());
+
                 Collections.shuffle(candidateCells);
 
                 for (RoomGridCell cell : candidateCells)
                 {
                     RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
-                    if (aboveCell != null && aboveCell.isSelectedForBuilding() && !aboveCell.isPopulated())
+                    if (aboveCell != null && aboveCell.needsRoomType())
                     {
                         CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
                         cell.setRoom(stairs);
@@ -556,8 +556,7 @@ public class CastleRoomSelector
             {
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, side);
                 if (adjacent != null &&
-                    adjacent.isSelectedForBuilding()&&
-                    !adjacent.isPopulated() &&
+                    adjacent.needsRoomType() &&
                     !grid.cellBordersRoomType(cell, EnumRoomType.LANDING_DIRECTED) &&
                     !grid.cellBordersRoomType(adjacent, EnumRoomType.LANDING_DIRECTED) &&
                     grid.adjacentCellIsSelected(aboveCell, side) &&
