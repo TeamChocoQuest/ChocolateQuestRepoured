@@ -219,6 +219,38 @@ public class RoomGrid
         }
     }
 
+    public int getContiguousUntypedRoomsX(RoomGridPosition start)
+    {
+        RoomGridPosition pos = start;
+        RoomGridCell cell = getCellAt(pos);
+        int result = 0;
+
+        while (cell != null && cell.needsRoomType())
+        {
+            ++result;
+            pos.move(EnumFacing.EAST);
+            cell = getCellAt(pos);
+        }
+
+        return result;
+    }
+
+    public int getContiguousUntypedRoomsZ(RoomGridPosition start)
+    {
+        RoomGridPosition pos = start;
+        RoomGridCell cell = getCellAt(pos);
+        int result = 0;
+
+        while (cell != null && cell.needsRoomType())
+        {
+            ++result;
+            pos = pos.move(EnumFacing.SOUTH);
+            cell = getCellAt(pos);
+        }
+
+        return result;
+    }
+
     public void setCellBuilable(int floor, int x, int z)
     {
         roomArray[floor][x][z].setBuildable();

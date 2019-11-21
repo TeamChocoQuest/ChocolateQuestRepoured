@@ -143,6 +143,7 @@ public class RoomGridCell
         return (state.isAtLeast(CellState.POPULATED));
     }
 
+    //Returns true if this room is selected to build but has not been populated with a room
     public boolean needsRoomType()
     {
         return (state == CellState.SELECTED);
