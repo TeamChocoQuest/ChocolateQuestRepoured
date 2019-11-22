@@ -28,7 +28,12 @@ public class ModelMageHidden extends ModelCQRBiped {
     	
         this.bipedRightArm = new ModelRenderer(this, 16, 34);
         this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
-        this.bipedRightArm.addBox(-4.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+        this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+        
+        this.bipedLeftArm = new ModelRenderer(this, 16, 34);
+        this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
+        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+        
         this.Hood_Left = new ModelRenderer(this, 24, 14);
         this.Hood_Left.setRotationPoint(4.5F, 0.0F, 0.0F);
         this.Hood_Left.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
@@ -54,9 +59,6 @@ public class ModelMageHidden extends ModelCQRBiped {
         this.Hood_Top = new ModelRenderer(this, 24, 14);
         this.Hood_Top.setRotationPoint(0.0F, -10.5F, 0.0F);
         this.Hood_Top.addBox(-4.5F, 0.0F, -9.0F, 9, 0, 9, 0.0F);
-        this.bipedLeftArm = new ModelRenderer(this, 16, 34);
-        this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
-        this.bipedLeftArm.addBox(-0.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
         this.Hood_Front = new ModelRenderer(this, 60, 23);
         this.Hood_Front.setRotationPoint(0.0F, 0.0F, -9.0F);
         this.Hood_Front.addBox(-4.5F, 0.0F, 0.0F, 9, 11, 0, 0.0F);
@@ -70,6 +72,7 @@ public class ModelMageHidden extends ModelCQRBiped {
         this.Buckle = new ModelRenderer(this, 78, 2);
         this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
         this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
+        
         this.bipedBody.addChild(this.bipedRightArm);
         this.Hood_Top.addChild(this.Hood_Left);
         this.bipedBody.addChild(this.Leg_Cape);

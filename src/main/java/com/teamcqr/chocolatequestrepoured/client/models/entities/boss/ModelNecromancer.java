@@ -27,6 +27,14 @@ public class ModelNecromancer extends ModelCQRBiped {
     public ModelNecromancer(float size, float p_i1149_2_, int width, int height) {
     	super(size, p_i1149_2_, width, height, false);
     	
+    	 this.bipedRightArm = new ModelRenderer(this, 16, 34);
+         this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
+         this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+         
+         this.bipedLeftArm = new ModelRenderer(this, 16, 34);
+         this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
+         this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
+    	
         this.Buckle = new ModelRenderer(this, 78, 2);
         this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
         this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
@@ -41,9 +49,6 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.bipedHead.addBox(-4.0F, -10.0F, -4.0F, 8, 10, 8, 0.0F);
         this.setRotateAngle(bipedHead, 0.0F, 0.017453292519943295F, 0.0F);
-        this.bipedRightArm = new ModelRenderer(this, 16, 34);
-        this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
-        this.bipedRightArm.addBox(-4.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
         this.Eyes = new ModelRenderer(this, 54, 18);
         this.Eyes.setRotationPoint(0.0F, -4.0F, -4.1F);
         this.Eyes.addBox(-3.0F, 0.0F, 0.0F, 6, 1, 0, 0.0F);
@@ -53,9 +58,6 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.Hood_Top = new ModelRenderer(this, 24, 14);
         this.Hood_Top.setRotationPoint(0.0F, -10.5F, 0.0F);
         this.Hood_Top.addBox(-4.5F, 0.0F, -9.0F, 9, 0, 9, 0.0F);
-        this.bipedLeftArm = new ModelRenderer(this, 16, 34);
-        this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
-        this.bipedLeftArm.addBox(-0.0F, -2.0F, -2.0F, 4, 12, 4, 0.0F);
         this.bipedRightLeg = new ModelRenderer(this, 0, 34);
         this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
         this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
@@ -74,6 +76,7 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.Nose = new ModelRenderer(this, 24, 2);
         this.Nose.setRotationPoint(0.0F, -3.0F, -4.0F);
         this.Nose.addBox(-1.0F, 0.0F, -2.0F, 2, 4, 2, 0.0F);
+        
         this.bipedBody.addChild(this.Buckle);
         this.Hood_Top.addChild(this.Hood_Front);
         this.bipedBody.addChild(this.Leg_Cape);
