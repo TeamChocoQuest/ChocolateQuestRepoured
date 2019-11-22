@@ -27,27 +27,35 @@ public class ModelLich extends ModelCQRBiped {
     public ModelLich(float size, float p_i1149_2_, int width, int height) {
     	super(size, p_i1149_2_, width, height, false);
     	
+    	//arms
+    	this.bipedRightArm = new ModelRenderer(this, 32, 34);
+        this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
+        this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
+        
+        this.Arm_Right_Bone = new ModelRenderer(this, 51, 2);
+        this.Arm_Right_Bone.setRotationPoint(-2.0F, 6.0F, 0.0F);
+        this.Arm_Right_Bone.addBox(0.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
+        
+        this.bipedLeftArm = new ModelRenderer(this, 32, 34);
+        this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
+        this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
+        
+        this.Arm_Left_Bone = new ModelRenderer(this, 51, 2);
+        this.Arm_Left_Bone.setRotationPoint(0.0F, 6.0F, 0.0F);
+        this.Arm_Left_Bone.addBox(0.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
+        
         this.Hood_Left = new ModelRenderer(this, 24, 14);
         this.Hood_Left.setRotationPoint(4.5F, 0.0F, 0.0F);
         this.Hood_Left.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
         this.bipedLeftLeg = new ModelRenderer(this, 0, 34);
         this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
         this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
-        this.bipedLeftArm = new ModelRenderer(this, 32, 34);
-        this.bipedLeftArm.setRotationPoint(4.0F, 2.0F, 0.0F);
-        this.bipedLeftArm.addBox(-0.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
-        this.bipedRightArm = new ModelRenderer(this, 32, 34);
-        this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
-        this.bipedRightArm.addBox(-4.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
         this.Hood_Front = new ModelRenderer(this, 60, 23);
         this.Hood_Front.setRotationPoint(0.0F, 0.0F, -9.0F);
         this.Hood_Front.addBox(-4.5F, 0.0F, 0.0F, 9, 11, 0, 0.0F);
         this.bipedBody = new ModelRenderer(this, 0, 18);
         this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
-        this.Arm_Right_Bone = new ModelRenderer(this, 51, 2);
-        this.Arm_Right_Bone.setRotationPoint(-2.0F, 6.0F, 0.0F);
-        this.Arm_Right_Bone.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
         this.Hood_Top = new ModelRenderer(this, 24, 14);
         this.Hood_Top.setRotationPoint(0.0F, -8.5F, 0.0F);
         this.Hood_Top.addBox(-4.5F, 0.0F, -9.0F, 9, 0, 9, 0.0F);
@@ -65,15 +73,13 @@ public class ModelLich extends ModelCQRBiped {
         this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
         this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
         this.setRotateAngle(bipedHead, 0.0F, 0.017453292519943295F, 0.0F);
-        this.Arm_Left_Bone = new ModelRenderer(this, 51, 2);
-        this.Arm_Left_Bone.setRotationPoint(2.0F, 6.0F, 0.0F);
-        this.Arm_Left_Bone.addBox(-1.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
         this.bipedRightLeg = new ModelRenderer(this, 0, 34);
         this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
         this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
         this.Hood_Right = new ModelRenderer(this, 24, 14);
         this.Hood_Right.setRotationPoint(-4.5F, 0.0F, 0.0F);
         this.Hood_Right.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
+        
         this.Hood_Top.addChild(this.Hood_Left);
         this.bipedBody.addChild(this.bipedLeftLeg);
         this.bipedBody.addChild(this.bipedLeftArm);
