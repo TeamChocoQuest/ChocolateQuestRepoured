@@ -19,7 +19,7 @@ public class ModelSummoningCircle extends ModelBase {
         this.textureWidth = 128;
         this.textureHeight = 64;
         this.circle = new ModelRenderer(this, -64, 0);
-        this.circle.setRotationPoint(0.0F, 24.0F, 0.0F);
+        this.circle.setRotationPoint(0.0F, 0.05F, 0.0F);
         this.circle.addBox(-32.0F, 0.0F, -32.0F, 64, 0, 64, scale);
     }
 
@@ -32,19 +32,11 @@ public class ModelSummoningCircle extends ModelBase {
         GlStateManager.scale(0.5D, 1.0D, 0.5D);
         GlStateManager.translate(-this.circle.offsetX, -this.circle.offsetY, -this.circle.offsetZ);
         GlStateManager.translate(-this.circle.rotationPointX * f5, -this.circle.rotationPointY * f5, -this.circle.rotationPointZ * f5);
-        GlStateManager.popMatrix();
         
-        //Spinning
-        GlStateManager.pushMatrix();
-        GlStateManager.rotate(5, 0, 1, 0);
-        GlStateManager.popMatrix();
-        
-        //Coloring
-        GlStateManager.pushMatrix();
-        GlStateManager.color(0.125F + (new Float(0.6F * Math.sin(entity.ticksExisted))), 0F, 0F);
-        GlStateManager.popMatrix();
+        this.circle.rotateAngleY = this.circle.rotateAngleY + 0.015625F;
         
         this.circle.render(f5);
+        GlStateManager.popMatrix();
         
         if(entity instanceof EntitySummoningCircle) {
         	if(((EntitySummoningCircle)entity).isSpawningParticles()) {
@@ -61,9 +53,9 @@ public class ModelSummoningCircle extends ModelBase {
     @Override
     public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
     		float headPitch, float scaleFactor, Entity entityIn) {
-    	super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    	//super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
     	
-    	this.circle.rotateAngleY = this.circle.rotateAngleY + 0.0125F;
+    	this.circle.rotateAngleY = this.circle.rotateAngleY + 0.125F;
     }
 
     /**

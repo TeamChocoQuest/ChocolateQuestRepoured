@@ -57,10 +57,22 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	
 	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture textre) {
 		super(worldIn);
+		setSize(2.0F, 0.005F);
+		
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
+	}
+	
+	@Override
+	public boolean getIsInvulnerable() {
+		return true;
+	}
+	
+	@Override
+	public boolean hasNoGravity() {
+		return true;
 	}
 
 	@Override
