@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCir
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -38,8 +39,11 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 	@Override
 	public void doRender(EntitySummoningCircle entity, double x, double y, double z, float entityYaw,
 			float partialTicks) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
 		this.bindTexture(getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		GlStateManager.popMatrix();
 	}
 	
 	@Override
