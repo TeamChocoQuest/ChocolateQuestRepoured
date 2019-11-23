@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -62,7 +63,30 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
+		this.noClip = true;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
+		setHealth(1F);
+		this.setEntityInvulnerable(true);
+	}
+	
+	@Override
+	public boolean canBeCollidedWith() {
+		return false;
+	}
+	
+	@Override
+	protected boolean canBeRidden(Entity entityIn) {
+		return false;
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
+	}
+	
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
 	}
 	
 	@Override
