@@ -180,7 +180,7 @@ public class DungeonRegistry {
 			public boolean accept(File file, String var2) {
 				if (file != null) {
 					if (file.isDirectory()) {
-						return true;
+						return !file.getName().equalsIgnoreCase(("disabled"));
 					}
 
 					String fileName = file.getName();

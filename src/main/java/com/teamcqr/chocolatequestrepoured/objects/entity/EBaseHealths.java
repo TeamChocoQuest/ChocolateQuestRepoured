@@ -28,6 +28,9 @@ public enum EBaseHealths {
 
 	NETHER_DRAGON(250.0F),
 	GIANT_TORTOISE(500.0F),
+	LICH(200.0F),
+	NECROMANCER(150.0F),
+	PIG_MAGE(250.0F),
 	;
 	
 	private float baseHealth;
