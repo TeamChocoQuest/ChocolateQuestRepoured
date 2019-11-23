@@ -54,5 +54,4 @@ public enum EnumRoomType
         public int getMaxXCells() { return this.maxSize.getX(); }
         public int getMaxYCells() { return this.maxSize.getY(); }
         public int getMaxZCells() { return this.maxSize.getZ(); }
-
 }

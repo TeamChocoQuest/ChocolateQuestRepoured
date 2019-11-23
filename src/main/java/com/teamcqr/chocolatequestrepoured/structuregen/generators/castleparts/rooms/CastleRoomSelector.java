@@ -124,12 +124,14 @@ public class CastleRoomSelector
         addStairCases();
 
         randomizeRooms();
-        determineRoofs();
+        linkCells();
 
+        determineRoofs();
         determineWalls();
+
         placeOuterDoors();
         placeTowers();
-        connectRooms();
+        pathBetweenRooms();
 
         //System.out.println(grid.printGrid());
     }
@@ -161,6 +163,50 @@ public class CastleRoomSelector
             }
 
             unTyped = grid.getAllCellsWhere(RoomGridCell::needsRoomType);
+        }
+    }
+
+    private void linkCells()
+    {
+        for (int floor = 0; floor < usedFloors; floor++)
+        {
+            linkCellsOnFloor(floor);
+        }
+    }
+
+    private void linkCellsOnFloor(int floor)
+    {
+        ArrayList<RoomGridCell> floorCells = grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() == floor && !c.getRoom().isWalkableRoof());
+
+        for (RoomGridCell cell : floorCells)
+        {
+            linkCellToAdjacentCells(cell);
+        }
+    }
+
+    private void linkCellToAdjacentCells(RoomGridCell cell)
+    {
+        cell.linkToCell(cell); //link the cell to itself first
+
+        for (EnumFacing direction : EnumFacing.HORIZONTALS)
+        {
+            RoomGridCell adjacent = grid.getAdjacentCell(cell, direction);
+            if (adjacent != null && adjacent.isPopulated() && cell.getRoom().getRoomType() == adjacent.getRoom().getRoomType())
+            {
+                //if we are already on the adjacent cell's list then it likely means
+                //that cell was linked to us already and nothing else needs to be done
+                if (!adjacent.isLinkedToCell(cell))
+                {
+                    //link all of this cell's linked cells (including me) to the adjacent cell
+                    for (RoomGridCell linkedCell : cell.getLinkedCells())
+                    {
+                        linkedCell.linkToCell(adjacent);
+                    }
+
+                    //copy current cell's links to neighbor
+                    adjacent.setLinkedCells(cell.getLinkedCells());
+                }
+            }
         }
     }
 
@@ -644,7 +690,7 @@ public class CastleRoomSelector
         }
     }
 
-    private void connectRooms()
+    private void pathBetweenRooms()
     {
         System.out.println("Connecting rooms");
         for (int floor = 0; floor < maxFloors; floor++)
@@ -822,7 +868,10 @@ public class CastleRoomSelector
         }
         else
         {
-            cell.getRoom().addInnerWall(EnumFacing.SOUTH);
+            if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.SOUTH)))
+            {
+                cell.getRoom().addInnerWall(EnumFacing.SOUTH);
+            }
         }
 
         boolean outerEast = !grid.adjacentCellIsFullRoom(cell, EnumFacing.EAST);
@@ -833,7 +882,10 @@ public class CastleRoomSelector
         }
         else
         {
-            cell.getRoom().addInnerWall(EnumFacing.EAST);
+            if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.EAST)))
+            {
+                cell.getRoom().addInnerWall(EnumFacing.EAST);
+            }
         }
 
         if (!grid.adjacentCellIsFullRoom(cell, EnumFacing.NORTH))

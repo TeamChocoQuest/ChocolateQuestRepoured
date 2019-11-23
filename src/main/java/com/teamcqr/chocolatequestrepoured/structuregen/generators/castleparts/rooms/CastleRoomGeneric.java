@@ -62,37 +62,40 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
-            ArrayList<BlockPos> edge = getDecorationEdge(side);
-            for (BlockPos pos : edge)
+            if (hasWallOnSide(side))
             {
-                if (decoMap.contains(pos))
+                ArrayList<BlockPos> edge = getDecorationEdge(side);
+                for (BlockPos pos : edge)
                 {
-                    //This position is already decorated, so keep going
-                    continue;
-                }
-
-                int attempts = 0;
-
-                while (attempts < MAX_DECO_ATTEMPTS)
-                {
-                    IRoomDecor decor = decoSelector.randomEdgeDecor();
-                    if (decor.wouldFit(pos, side, decoArea, decoMap))
+                    if (decoMap.contains(pos))
                     {
-                        decor.build(world, this, dungeon, pos, side, decoMap);
-
-                        //If we added air here then this is a candidate spot for a chest
-                        if (decor instanceof RoomDecorNone)
-                        {
-                            possibleChestLocs.put(pos, side);
-                        }
-                        break;
+                        //This position is already decorated, so keep going
+                        continue;
                     }
-                    ++attempts;
-                }
-                if (attempts >= MAX_DECO_ATTEMPTS)
-                {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
-                    decoMap.add(pos);
+
+                    int attempts = 0;
+
+                    while (attempts < MAX_DECO_ATTEMPTS)
+                    {
+                        IRoomDecor decor = decoSelector.randomEdgeDecor();
+                        if (decor.wouldFit(pos, side, decoArea, decoMap))
+                        {
+                            decor.build(world, this, dungeon, pos, side, decoMap);
+
+                            //If we added air here then this is a candidate spot for a chest
+                            if (decor instanceof RoomDecorNone)
+                            {
+                                possibleChestLocs.put(pos, side);
+                            }
+                            break;
+                        }
+                        ++attempts;
+                    }
+                    if (attempts >= MAX_DECO_ATTEMPTS)
+                    {
+                        world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                        decoMap.add(pos);
+                    }
                 }
             }
         }

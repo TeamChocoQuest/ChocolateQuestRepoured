@@ -127,9 +127,9 @@ public abstract class CastleRoom
 
     protected void generateDefaultCeiling(World world, CastleDungeon dungeon)
     {
-        for (int z = 0; z < buildLength - 1; z++)
+        for (int z = 0; z < buildLength; z++)
         {
-            for (int x = 0; x < buildLength - 1; x++)
+            for (int x = 0; x < buildLength; x++)
             {
                 world.setBlockState(startPos.add( x, height - 1, z), dungeon.getWallBlock().getDefaultState());
             }
@@ -497,6 +497,11 @@ public abstract class CastleRoom
     public int getBuildLength()
     {
         return buildLength;
+    }
+
+    public boolean isWalkableRoof()
+    {
+        return (this.roomType == EnumRoomType.WALKABLE_ROOF || this.roomType == EnumRoomType.WALKABLE_TOWER_ROOF);
     }
 
     @Override
