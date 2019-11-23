@@ -6,6 +6,8 @@ public enum EnumRoomDecor
 {
     NONE             (RoomDecorNone::new, "NONE"),
     SHELF            (RoomDecorShelf::new, "Shelf"),
+    CHEST            (RoomDecorChest::new, "Chest"),
+    BED              (RoomDecorBed::new, "Bed"),
     TABLE_SM         (RoomDecorTableSmall::new, "Small Table"),
     TABLE_MD         (RoomDecorTableMedium::new, "Medium Table"),
     BREW_STAND       (RoomDecorBrewingStand::new, "Brewing Stand"),
@@ -13,7 +15,8 @@ public enum EnumRoomDecor
     CRAFTING_TABLE   (RoomDecorCraftingTable::new, "Crafting Table"),
     ANVIL            (RoomDecorAnvil::new, "Anvil"),
     FURNACE          (RoomDecorFurnace::new, "Furnace"),
-    ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand");
+    ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand"),
+    TORCH            (RoomDecorTorch::new, "Torch");
 
     private final Supplier<IRoomDecor> supplier;
     private final String name;

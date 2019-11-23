@@ -369,7 +369,7 @@ public class VolcanoGenerator implements IDungeonGenerator{
 			spawner.updateContainingBlockInfo();
 			
 			spawner.update();*/
-			SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0,1,0), dungeon.getMob());
+			SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0,1,0), dungeon.getRampMob());
 		}
 	}
 

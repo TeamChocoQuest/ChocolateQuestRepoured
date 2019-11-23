@@ -206,5 +206,10 @@ public class DungeonGenUtils {
 			return vec;
 		}
 	}
+
+	public static boolean percentChance(Random random, int percent)
+	{
+		return (random.nextInt(100) < percent);
+	}
 	
 }

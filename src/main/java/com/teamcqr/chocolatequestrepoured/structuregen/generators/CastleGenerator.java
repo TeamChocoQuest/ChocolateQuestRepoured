@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.*;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -28,51 +29,48 @@ public class CastleGenerator implements IDungeonGenerator
     private int maxSize;
     private int roomSize;
     private Random random;
-    private List<ICastlePart> parts;
+    private CastleRoomSelector roomHelper;
     private int totalX;
     private int totalY;
     private int totalZ;
-    private static final int MIN_TOWER_SIZE = 5;
+    private static final int FLOORS_PER_LAYER = 2;
 
     public CastleGenerator(CastleDungeon dungeon) {
         this.dungeon = dungeon;
         this.maxSize = this.dungeon.getMaxSize();
         this.roomSize = this.dungeon.getRoomSize();
         this.random = this.dungeon.getRandom();
-        this.parts = new ArrayList<>();
     }
 
     @Override
     public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-        //Builds the support hill;
-        if(dungeon.doBuildSupportPlatform()) {
-            PlateauBuilder supportBuilder = new PlateauBuilder();
-            supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
-            supportBuilder.createSupportHill(random, world, new BlockPos(x, z, y), maxSize, maxSize, EPosType.CENTER_XZ_LAYER);
-        }
-
         int maxRoomsX;
         int maxRoomsZ;
-        int currentLayer = 0;
-        int layerFloors = 2;
 
         maxRoomsX = maxSize / roomSize;
         maxRoomsZ = maxSize / roomSize;
 
-        // Add the main building
-        CastlePartMain mainPart = new CastlePartMain(new BlockPos(x, y, z), maxRoomsX, maxRoomsZ, layerFloors, this.dungeon, currentLayer);
-        parts.add(mainPart);
+        roomHelper = new CastleRoomSelector(new BlockPos(x, y, z), dungeon.getRoomSize(), dungeon.getFloorHeight(), FLOORS_PER_LAYER, maxRoomsX, maxRoomsZ, random);
+        roomHelper.randomizeCastle();
 
+        //Builds the support hill;
+        if (dungeon.doBuildSupportPlatform())
+        {
+            PlateauBuilder supportBuilder = new PlateauBuilder();
+            supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
+            List<CastleRoomSelector.SupportArea> supportAreas = roomHelper.getSupportAreas();
+
+            for (CastleRoomSelector.SupportArea area : supportAreas)
+            {
+                supportBuilder.createSupportHill(random, world, area.getNwCorner(), area.getBlocksX(), area.getBlocksZ(), EPosType.CORNER_NW);
+            }
+        }
     }
 
     @Override
     public void buildStructure(World world, Chunk chunk, int x, int y, int z)
     {
-
-        for (ICastlePart part : parts)
-        {
-            part.generatePart(world);
-        }
+        roomHelper.generateRooms(world, dungeon);
 
         CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
         MinecraftForge.EVENT_BUS.post(event);
@@ -98,25 +96,4 @@ public class CastleGenerator implements IDungeonGenerator
         // TODO Auto-generated method stub
 
     }
-
-    private int roundToRoomSize(int size)
-    {
-        return Math.max((size - (size % dungeon.getRoomSize())), 0);
-    }
-
-    private int randomizeNumRoomsFromSize(int size, int minPercentOfSizeUsed)
-    {
-        int divisor = 100 / minPercentOfSizeUsed;
-        if (size < roomSize)
-        {
-            return 0;
-        }
-        else
-        {
-            int minSizeUsed = size / divisor;
-            int sizeUsed = minSizeUsed + random. nextInt(size - minSizeUsed);
-            return sizeUsed / roomSize;
-        }
-    }
-
 }

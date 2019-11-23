@@ -1,11 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -37,6 +37,9 @@ public class ModelGiantTortoise extends ModelBase {
     public ModelRenderer jaw;
     
     private ModelRenderer[] subParts = new ModelRenderer[14];
+    private ModelRenderer[] legJoints = new ModelRenderer[4];
+    private ModelRenderer[] knees = new ModelRenderer[4];
+    private ModelRenderer[] feet = new ModelRenderer[4];
 
     public ModelGiantTortoise() {
         this.textureWidth = 192;
@@ -93,18 +96,21 @@ public class ModelGiantTortoise extends ModelBase {
         this.legJointFL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
         this.setRotateAngle(legJointFL, 0.0F, -0.7853981633974483F, 0.0F);
         this.subParts[2] = legJointFL; 
+        legJoints[0] = legJointFL;
         
         this.legFL = new ModelRenderer(this, 140, 0);
         this.legFL.setRotationPoint(0.0F, 1.5F, 1.0F);
         this.legFL.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
         this.setRotateAngle(legFL, -0.7853981633974483F, 0.0F, 0.0F);
         this.subParts[3] = legFL; 
+        knees[0] = legFL;
         
         this.footFL = new ModelRenderer(this, 140, 25);
         this.footFL.setRotationPoint(0.0F, 3.0F, -2.7F);
         this.footFL.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
         this.setRotateAngle(footFL, 0.7853981633974483F, 0.0F, 0.0F);
         this.subParts[4] = footFL; 
+        feet[0] = footFL;
         
         //Leg Front Right
         this.legJointFR = new ModelRenderer(this, 0, 140);
@@ -112,18 +118,21 @@ public class ModelGiantTortoise extends ModelBase {
         this.legJointFR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
         this.setRotateAngle(legJointFR, 0.0F, 0.7853981633974483F, 0.0F);
         this.subParts[5] = legJointFR; 
+        legJoints[1] = legJointFR;
         
         this.legFR = new ModelRenderer(this, 140, 0);
         this.legFR.setRotationPoint(0.0F, 1.5F, 1.0F);
         this.legFR.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
         this.setRotateAngle(legFR, -0.7853981633974483F, 0.0F, 0.0F);
-        this.subParts[6] = legFR; 
+        this.subParts[6] = legFR;
+        knees[1] = legFR;
         
         this.footFR = new ModelRenderer(this, 140, 25);
         this.footFR.setRotationPoint(0.0F, 3.0F, -2.7F);
         this.footFR.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
         this.setRotateAngle(footFR, 0.7853981633974483F, 0.0F, 0.0F);
         this.subParts[7] = footFR; 
+        feet[1] = footFR;
         
         //Leg Back Right
         this.legJointBR = new ModelRenderer(this, 0, 140);
@@ -131,18 +140,21 @@ public class ModelGiantTortoise extends ModelBase {
         this.legJointBR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
         this.setRotateAngle(legJointBR, 0.0F, 2.356194490192345F, 0.0F);
         this.subParts[8] = legJointBR; 
+        legJoints[2] = legJointBR;
         
         this.legBR = new ModelRenderer(this, 140, 0);
         this.legBR.setRotationPoint(0.0F, 1.5F, 1.0F);
         this.legBR.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
         this.setRotateAngle(legBR, -0.7853981633974483F, 0.0F, 0.0F);
-        this.subParts[9] = legBR; 
+        this.subParts[9] = legBR;
+        knees[2] = legBR;
         
         this.footBR = new ModelRenderer(this, 140, 25);
         this.footBR.setRotationPoint(0.0F, 3.0F, -2.7F);
         this.footBR.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
         this.setRotateAngle(footBR, 0.7853981633974483F, 0.0F, 0.0F);
         this.subParts[10] = footBR; 
+        feet[2] = footBR;
         
         //Leg Back Left
         this.legJointBL = new ModelRenderer(this, 0, 140);
@@ -150,18 +162,21 @@ public class ModelGiantTortoise extends ModelBase {
         this.legJointBL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
         this.setRotateAngle(legJointBL, 0.0F, -2.356194490192345F, 0.0F);
         this.subParts[11] = legJointBL; 
+        legJoints[3] = legJointBL;
         
         this.legBL = new ModelRenderer(this, 140, 0);
         this.legBL.setRotationPoint(0.0F, 1.5F, 1.0F);
         this.legBL.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
         this.setRotateAngle(legBL, -0.7853981633974483F, 0.0F, 0.0F);
         this.subParts[12] = legBL; 
+        knees[3] = legBL;
         
         this.footBL = new ModelRenderer(this, 140, 25);
         this.footBL.setRotationPoint(0.0F, 3.0F, -2.7F);
         this.footBL.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
         this.setRotateAngle(footBL, 0.7853981633974483F, 0.0F, 0.0F);
-        this.subParts[13] = footBL; 
+        this.subParts[13] = footBL;
+        feet[3] = footBL;
         
         
         
@@ -193,15 +208,73 @@ public class ModelGiantTortoise extends ModelBase {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
     	boolean renderParts = true;
     	EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise)entity;
+    	
+    	if(ent.shouldModelReset()) {
+    		resetParts();
+    		ent.setAnimationChanged(false);
+    	}
+    	
     	switch(ent.getCurrentAnimation()) {
-    	//TODO: Change offset of model
+    	//DONE: Change offset of model
+		case MOVE_PARTS_IN:
+			if(ent.getAnimationProgress() >= 150) {
+				ent.setAnimationProgress(0);
+			}
+			if(ent.getAnimationProgress() >= 100) {
+				renderParts = false;
+				if(ent.getAnimationProgress() > 110) {
+					this.mainPart.offsetY = 0.5F;
+				}
+				if(ent.getAnimationProgress() <= 110) {
+					this.mainPart.offsetY = 0.05F *(ent.getAnimationProgress() -100) + 0.15F;
+					
+				} else if(ent.getAnimationProgress() <= 111) {
+					//DONE: Spawn particles that indicate that the shell landed
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.125, 0.125, 0.125);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.125, 0.125, 0.125);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.125, -0.125, 0.125);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.125, -0.125, 0.125);
+				}
+				
+			} else {
+				this.mainPart.offsetY = 0;
+				if(ent.getAnimationProgress() <= 60) {
+					this.head.offsetZ = ent.getAnimationProgress() *0.0125F;
+					
+					this.mainPart.offsetY = 0.0025F * (ent.getAnimationProgress());
+					
+					for(ModelRenderer legJoint : legJoints) {
+						legJoint.offsetY = -0.0025F * (ent.getAnimationProgress());
+					}
+				} else {
+					this.mainPart.offsetY = 0.15F;
+					for(ModelRenderer legJoint : legJoints) {
+						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
+					}
+					float offsetXZ = 0.0125F * (ent.getAnimationProgress() -59);
+					
+					this.legJointFL.offsetX = -offsetXZ;
+					this.legJointFL.offsetZ = offsetXZ;
+					
+					this.legJointBL.offsetX = -offsetXZ;
+					this.legJointBL.offsetZ = -offsetXZ;
+					
+					this.legJointFR.offsetX = offsetXZ;
+					this.legJointFR.offsetZ = offsetXZ;
+					
+					this.legJointBR.offsetX = offsetXZ;
+					this.legJointBR.offsetZ = -offsetXZ;
+					//this.head.isHidden = true;
+					//this.jaw.isHidden = true;
+				}
+			}
+			ent.setAnimationProgress(ent.getAnimationProgress() +1);
+			break;
+		case MOVE_PARTS_OUT:
+			break;
 		case HEALING:
 			renderParts = false;
 			this.mainPart.offsetY = 0.5F;
-			break;
-		case MOVE_PARTS_IN:
-			break;
-		case MOVE_PARTS_OUT:
 			break;
 		case NONE:
 			renderParts = false;
@@ -221,8 +294,6 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case WALKING:
 			break;
-		default:
-			break;
     	}
     	
     	for(ModelRenderer part : this.subParts) {
@@ -231,7 +302,14 @@ public class ModelGiantTortoise extends ModelBase {
         this.mainPart.render(f5);
     }
 
-    /**
+    private void resetParts() {
+    	//TODO: Reset legs offset, head offset and rotations
+    	this.mainPart.offsetY = 0F;
+    	this.head.offsetZ = -9F;
+    	this.jaw.rotateAngleX = 0F;
+	}
+
+	/**
      * This is a helper function from Tabula to set the rotation of model parts
      */
     public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
@@ -258,8 +336,8 @@ public class ModelGiantTortoise extends ModelBase {
 			renderParts = false;
 			
 			if(ent.getAnimationProgress() >= 250) {
-				ent.setCurrentAnimation(ETortoiseAnimState.NONE);
-				ent.setAnimationProgress(0);
+				//ent.setCurrentAnimation(ETortoiseAnimState.NONE);
+				//ent.setAnimationProgress(0);
 			} else {
 				ent.setAnimationProgress(ent.getAnimationProgress() +1);
 				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F/50F) * (250 - ent.getAnimationProgress())) /20F);
@@ -269,8 +347,9 @@ public class ModelGiantTortoise extends ModelBase {
 			renderParts = false;
 			
 			if(ent.getAnimationProgress() >= 250) {
-				ent.setCurrentAnimation(ETortoiseAnimState.SPIN);
-				ent.setAnimationProgress(0);
+				//ent.setCurrentAnimation(ETortoiseAnimState.SPIN);
+				//ent.setAnimationProgress(0);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + 0.25F;
 			} else {
 				ent.setAnimationProgress(ent.getAnimationProgress() +1);
 				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F/50F) * ent.getAnimationProgress()) /20F);

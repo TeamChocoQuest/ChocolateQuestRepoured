@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -10,5 +11,5 @@ import java.util.ArrayList;
  */
 public interface ICastleAddon
 {
-    public void generate(World world);
+    public void generate(World world, CastleDungeon dungeon);
 }

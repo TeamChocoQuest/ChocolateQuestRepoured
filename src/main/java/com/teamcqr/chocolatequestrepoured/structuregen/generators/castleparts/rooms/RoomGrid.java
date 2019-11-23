@@ -219,6 +219,38 @@ public class RoomGrid
         }
     }
 
+    public int getContiguousUntypedRoomsX(RoomGridPosition start)
+    {
+        RoomGridPosition pos = start;
+        RoomGridCell cell = getCellAt(pos);
+        int result = 0;
+
+        while (cell != null && cell.needsRoomType())
+        {
+            ++result;
+            pos = pos.move(EnumFacing.EAST);
+            cell = getCellAt(pos);
+        }
+
+        return result;
+    }
+
+    public int getContiguousUntypedRoomsZ(RoomGridPosition start)
+    {
+        RoomGridPosition pos = start;
+        RoomGridCell cell = getCellAt(pos);
+        int result = 0;
+
+        while (cell != null && cell.needsRoomType())
+        {
+            ++result;
+            pos = pos.move(EnumFacing.SOUTH);
+            cell = getCellAt(pos);
+        }
+
+        return result;
+    }
+
     public void setCellBuilable(int floor, int x, int z)
     {
         roomArray[floor][x][z].setBuildable();
@@ -326,6 +358,12 @@ public class RoomGrid
         return (adjacent != null && adjacent.isPopulated());
     }
 
+    public boolean adjacentCellIsFullRoom(RoomGridCell startCell, EnumFacing direction)
+    {
+        RoomGridCell adjacent = getAdjacentCell(startCell, direction);
+        return (adjacent != null && adjacent.isPopulated() && !(adjacent.getRoom() instanceof CastleRoomWalkableRoof));
+    }
+
     public boolean adjacentCellIsSelected(RoomGridCell startCell, EnumFacing direction)
     {
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
@@ -334,15 +372,8 @@ public class RoomGrid
 
     public boolean adjacentCellIsWalkableRoof(RoomGridCell startCell, EnumFacing direction)
     {
-        boolean result = false;
-
         RoomGridCell adjacent = getAdjacentCell(startCell, direction);
-        if (adjacent != null && adjacent.isBuildable() && !adjacent.isSelectedForBuilding())
-        {
-            result = adjacentCellIsPopulated(adjacent, EnumFacing.DOWN);
-        }
-
-        return result;
+        return (adjacent != null && adjacent.isPopulated() && adjacent.getRoom() instanceof CastleRoomWalkableRoof);
     }
 
     public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction)
@@ -373,7 +404,7 @@ public class RoomGrid
                 !cell.getRoom().hasDoorOnSide(side) &&
                 adjacent != null &&
                 !(adjacent.isPopulated() &&
-                 !cell.getRoom().getRoomType().isPartOfStairs()));
+                 !cell.getRoom().isStairsOrLanding()));
     }
 
     public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2)
@@ -383,7 +414,7 @@ public class RoomGrid
         return (Math.hypot(distX, distZ));
     }
 
-    public boolean cellBordersRoomType(RoomGridCell cell, CastleRoom.RoomType type)
+    public boolean cellBordersRoomType(RoomGridCell cell, EnumRoomType type)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {

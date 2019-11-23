@@ -38,6 +38,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	static int EAnimStateGlobalID = 0;
 	
+	@SideOnly(Side.CLIENT)
+	private ETortoiseAnimState lastTickAnim = ETortoiseAnimState.NONE;
+	@SideOnly(Side.CLIENT)
+	private boolean animationChanged = false;
+	
 	public enum ETortoiseAnimState {
 		SPIN_UP,
 		SPIN_DOWN,
@@ -181,7 +186,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	@SideOnly(Side.CLIENT)
 	public ETortoiseAnimState getCurrentAnimation() {
-		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
+		//return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
+		return ETortoiseAnimState.MOVE_PARTS_IN;
 	}
 	
 	@Override
@@ -200,11 +206,22 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void onUpdate() {
 		super.onUpdate();
 		
+		setAir(999);
+		
 		for(EntityCQRGiantTortoisePart part : parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 		}
 		
 		alignParts();
+		
+		if(getWorld().isRemote) {
+			if(!lastTickAnim.equals(getCurrentAnimation()) && getAnimationProgress() > 2) {
+				setAnimationProgress(0);
+				animationChanged = true;
+			}
+			
+			lastTickAnim = getCurrentAnimation();
+		}
 	}
 	
 	private void alignParts() {
@@ -260,6 +277,21 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@SideOnly(Side.CLIENT)
 	public void setAnimationProgress(int newProg) {
 		animationProgress = newProg;
+	}
+	
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean shouldModelReset() {
+		return animationChanged;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void setAnimationChanged(boolean newVal) {
+		animationChanged = newVal;
 	}
 	
 	public void setCurrentAnimation(ETortoiseAnimState newState) {

@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -59,7 +60,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor
         return true;
     }
 
-    public void build(World world, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap)
+    public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap)
     {
         ArrayList<DecoBlockOffset> rotated = alignSchematic(side);
 
@@ -72,7 +73,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor
 
     }
 
-    private ArrayList<DecoBlockOffset> alignSchematic(EnumFacing side)
+    protected ArrayList<DecoBlockOffset> alignSchematic(EnumFacing side)
     {
         ArrayList<DecoBlockOffset> result = new ArrayList<>();
 

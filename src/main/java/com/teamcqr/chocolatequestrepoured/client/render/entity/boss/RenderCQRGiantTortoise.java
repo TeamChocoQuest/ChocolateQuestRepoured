@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise> {
@@ -25,6 +24,7 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 	protected ResourceLocation getEntityTexture(EntityCQRGiantTortoise entity) {
 		return TEXTURE;
 	}
+	
 	
 	@Override
 	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw,

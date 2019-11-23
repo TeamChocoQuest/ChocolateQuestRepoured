@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -21,9 +22,23 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VolcanoDungeon extends StrongholdOpenDungeon {
+public class VolcanoDungeon extends DungeonBase {
 	
 	//For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
+	
+	public enum EStrongholdType {
+		LINEAR,
+		OPEN,
+		;
+		
+		public static EStrongholdType getByName(String s) {
+			if(EStrongholdType.valueOf(s) != null) {
+				return EStrongholdType.valueOf(s);
+			}
+			return LINEAR;
+		}
+	}
+	
 	
 	private boolean buildStairwell = true;
 	private boolean buildDungeon = false;
@@ -39,7 +54,8 @@ public class VolcanoDungeon extends StrongholdOpenDungeon {
 	private double steepness = 0.075D;
 	private double lavaChance = 0.005D;
 	private double magmaChance = 0.1;
-	private String mobName = "minecraft:zombie";
+	private EStrongholdType strongholdType = EStrongholdType.LINEAR;
+	private String rampMobName = "minecraft:zombie";
 	private Block stoneBlock = Blocks.STONE;
 	private Block lavaBlock = Blocks.LAVA;
 	private Block magmaBlock = Blocks.MAGMA;
@@ -64,7 +80,7 @@ public class VolcanoDungeon extends StrongholdOpenDungeon {
 			this.maxHoleSize = Math.max(Math.abs(PropertyFileHelper.getIntProperty(prop, "maxHoleSize", 9)), 2);
 			this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
 			this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
-			this.mobName = prop.getProperty("mob", "minecraft:zombie");
+			this.rampMobName = prop.getProperty("rampMob", "minecraft:zombie");
 			this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[]{4, 10, 2});
 			this.stoneBlock = PropertyFileHelper.getBlockProperty(prop, "topBlock", Blocks.STONE);
 			this.lowerStoneBlock = PropertyFileHelper.getBlockProperty(prop, "lowerBlock", Blocks.COBBLESTONE);
@@ -72,6 +88,7 @@ public class VolcanoDungeon extends StrongholdOpenDungeon {
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
+			this.strongholdType = EStrongholdType.getByName(prop.getProperty("strongholdType", "LINEAR").toUpperCase());
 			
 			closeConfigFile();
 		} else {
@@ -181,8 +198,8 @@ public class VolcanoDungeon extends StrongholdOpenDungeon {
 		return this.pillarBlock;
 	}
 
-	public ResourceLocation getMob() {
-		String[] bossString = this.mobName.split(":");
+	public ResourceLocation getRampMob() {
+		String[] bossString = this.rampMobName.split(":");
 		
 		return new ResourceLocation(bossString[0], bossString[1]);
 	}

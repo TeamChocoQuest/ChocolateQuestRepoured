@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.util.EnumFacing;
 
+import java.util.Objects;
+
 public class RoomGridPosition
 {
     private int floor;
@@ -67,5 +69,24 @@ public class RoomGridPosition
     public String toString()
     {
         return String.format("RoomGridPosition{floor=%d, x=%d, z=%d}", floor, x, z);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (!(obj instanceof RoomGridPosition)) {
+            return false;
+        }
+        RoomGridPosition position = (RoomGridPosition) obj;
+        return (floor == position.floor &&
+                x == position.x &&
+                z == position.z);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(floor, x, z);
     }
 }

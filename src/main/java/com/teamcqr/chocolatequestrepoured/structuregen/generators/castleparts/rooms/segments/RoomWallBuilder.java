@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -11,14 +11,14 @@ import java.util.Random;
 
 public class RoomWallBuilder
 {
-    private BlockPos wallStart;
-    private WallOptions options;
-    private int doorStart = 0;
-    private int doorWidth = 0;
-    private int length;
-    private int height;
-    private EnumFacing side;
-    private Random random;
+    protected BlockPos wallStart;
+    protected WallOptions options;
+    protected int doorStart = 0;
+    protected int doorWidth = 0;
+    protected int length;
+    protected int height;
+    protected EnumFacing side;
+    protected Random random;
 
     public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side)
     {
@@ -45,7 +45,7 @@ public class RoomWallBuilder
         }
     }
 
-    public void generate(World world)
+    public void generate(World world, CastleDungeon dungeon)
     {
         BlockPos pos;
         IBlockState blockToBuild;
@@ -66,31 +66,31 @@ public class RoomWallBuilder
             for (int y = 0; y < height; y++)
             {
                 pos = wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
-                blockToBuild = getBlockToBuild(pos);
+                blockToBuild = getBlockToBuild(pos, dungeon);
                 world.setBlockState(pos, blockToBuild);
             }
         }
     }
 
-    private IBlockState getBlockToBuild(BlockPos pos)
+    protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon)
     {
         if (options.hasWindow())
         {
-            return getBlockBasicGlass(pos);
+            return getBlockBasicGlass(pos, dungeon);
         }
         else if (options.hasDoor())
         {
-            return getBlockDoor(pos);
+            return getBlockDoor(pos, dungeon);
         }
         else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 
-    private IBlockState getBlockDoor(BlockPos pos)
+    protected IBlockState getBlockDoor(BlockPos pos, CastleDungeon dungeon)
     {
-        IBlockState blockToBuild = Blocks.STONEBRICK.getDefaultState();
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
         int y = pos.getY() - wallStart.getY();
         int dist = getLengthPoint(pos);
 
@@ -98,7 +98,7 @@ public class RoomWallBuilder
         {
             if (y == 0)
             {
-                blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
             }
             else if (y < DoorPlacement.DEFAULT_HEIGHT)
             {
@@ -109,7 +109,7 @@ public class RoomWallBuilder
         return blockToBuild;
     }
 
-    private IBlockState getBlockBasicGlass(BlockPos pos)
+    private IBlockState getBlockBasicGlass(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY() - wallStart.getY();
         int dist = getLengthPoint(pos);
@@ -119,11 +119,11 @@ public class RoomWallBuilder
             return Blocks.GLASS_PANE.getDefaultState();
         } else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 
-    private IBlockState getBlockBasicBars(BlockPos pos)
+    private IBlockState getBlockBasicBars(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY();
         int dist = getLengthPoint(pos);
@@ -133,7 +133,7 @@ public class RoomWallBuilder
             return Blocks.IRON_BARS.getDefaultState();
         } else
         {
-            return Blocks.STONEBRICK.getDefaultState();
+            return dungeon.getWallBlock().getDefaultState();
         }
     }
 
@@ -142,7 +142,7 @@ public class RoomWallBuilder
      * This function gets the relevant length along the wall based on if we are a horizontal
      * wall or a vertical wall.
      */
-    private int getLengthPoint(BlockPos pos)
+    protected int getLengthPoint(BlockPos pos)
     {
         if (side.getAxis() == EnumFacing.Axis.X)
         {
@@ -153,7 +153,7 @@ public class RoomWallBuilder
         }
     }
 
-    private boolean withinDoorWidth(int value)
+    protected boolean withinDoorWidth(int value)
     {
         int relativeToDoor = value - doorStart;
         return (relativeToDoor >= 0 && relativeToDoor < doorWidth);
