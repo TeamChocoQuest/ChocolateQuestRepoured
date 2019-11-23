@@ -1,16 +1,22 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
-import net.minecraft.entity.Entity;
+import java.util.ArrayList;
+
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Items;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntitySummoningCircle extends Entity {
+public class EntitySummoningCircle extends EntityLivingBase {
 
 	protected ResourceLocation entityToSpawn;
 	protected float timeMultiplierForSummon = 1F;
@@ -37,6 +43,12 @@ public class EntitySummoningCircle extends Entity {
 		private ECircleTexture(int textureID) {
 			this.textureID = textureID;
 		}
+		
+		static {
+			for(ECircleTexture ect : values()) {
+				ect.getTextureID();
+			}
+		}
 	}
 	
 	public EntitySummoningCircle(World worldIn) {
@@ -53,6 +65,7 @@ public class EntitySummoningCircle extends Entity {
 
 	@Override
 	protected void entityInit() {
+		super.entityInit();
 		this.dataManager.register(IS_SPAWNING_PARTICLES, false);
 		this.dataManager.register(ANIMATION_PROGRESS, 0F);
 		this.dataManager.register(TEXTURE_INDEX, this.texture != null ? this.texture.getTextureID() : 1);
@@ -72,9 +85,7 @@ public class EntitySummoningCircle extends Entity {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
-		
+	public void readEntityFromNBT(NBTTagCompound compound) {
 		this.dataManager.set(IS_SPAWNING_PARTICLES, compound.getBoolean("cqrdata.isSpawningParticles"));
 		this.dataManager.set(ANIMATION_PROGRESS, compound.getFloat("cqrdata.animationProgress"));
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("cqrdata.textureID"));
@@ -84,14 +95,32 @@ public class EntitySummoningCircle extends Entity {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
-		super.writeToNBT(compound);
-		
+	public void writeEntityToNBT(NBTTagCompound compound) {
 		compound.setBoolean("cqrdata.isSpawningParticles", this.dataManager.get(IS_SPAWNING_PARTICLES));
 		compound.setFloat("cqrdata.animationProgress", this.dataManager.get(ANIMATION_PROGRESS));
 		compound.setFloat("cqrdata.timeMultiplier", this.timeMultiplierForSummon);
 		compound.setInteger("cqrdata.textureID", this.dataManager.get(TEXTURE_INDEX));
 		compound.setString("cqrdata.entityToSpawn", entityToSpawn.getResourceDomain() + ":" + entityToSpawn.getResourcePath());
+	}
+
+	@Override
+	public Iterable<ItemStack> getArmorInventoryList() {
+		return new ArrayList<ItemStack>();
+	}
+
+	@Override
+	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
+		return new ItemStack(Items.AIR);
+	}
+
+	@Override
+	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+		
+	}
+
+	@Override
+	public EnumHandSide getPrimaryHand() {
+		return EnumHandSide.RIGHT;
 	}
 
 }
