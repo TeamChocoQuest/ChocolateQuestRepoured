@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROrc;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
@@ -37,6 +38,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
@@ -49,7 +52,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
@@ -76,7 +78,7 @@ public class ModEntityRenderers {
 
 	public static void registerRenderers() {
 		registerTileRenderers();
-		registerProjectileRenderers();
+		registerProjectileAndMiscRenderers();
 		registerEntityRenderers();
 		registerBossRenderers();
 	}
@@ -86,7 +88,7 @@ public class ModEntityRenderers {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 	}
 
-	protected static void registerProjectileRenderers() {
+	protected static void registerProjectileAndMiscRenderers() {
 		// Projectiles
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileBullet.class,
 				renderManager -> new RenderProjectileBullet(renderManager));
@@ -100,6 +102,12 @@ public class ModEntityRenderers {
 				renderManager -> new RenderProjectileSpiderBall(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class,
 				renderManager -> new RenderProjectileVampiricSpell(renderManager));
+		
+		
+		// Miscs
+		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class,
+				renderManager -> new RenderSummoningCircle(renderManager));
+		
 	}
 
 	protected static void registerEntityRenderers() {

@@ -1,9 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
 
 /**
  * SummoningCircle - DerToaster
@@ -21,15 +24,46 @@ public class ModelSummoningCircle extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+    	//Scaling
         GlStateManager.pushMatrix();
         GlStateManager.translate(this.circle.offsetX, this.circle.offsetY, this.circle.offsetZ);
         GlStateManager.translate(this.circle.rotationPointX * f5, this.circle.rotationPointY * f5, this.circle.rotationPointZ * f5);
         GlStateManager.scale(0.5D, 1.0D, 0.5D);
         GlStateManager.translate(-this.circle.offsetX, -this.circle.offsetY, -this.circle.offsetZ);
         GlStateManager.translate(-this.circle.rotationPointX * f5, -this.circle.rotationPointY * f5, -this.circle.rotationPointZ * f5);
-        this.circle.render(f5);
         GlStateManager.popMatrix();
+        
+        //Spinning
+        GlStateManager.pushMatrix();
+        GlStateManager.rotate(5, 0, 1, 0);
+        GlStateManager.popMatrix();
+        
+        //Coloring
+        GlStateManager.pushMatrix();
+        GlStateManager.color(0.125F + (new Float(0.6F * Math.sin(entity.ticksExisted))), 0F, 0F);
+        GlStateManager.popMatrix();
+        
+        this.circle.render(f5);
+        
+        if(entity instanceof EntitySummoningCircle) {
+        	if(((EntitySummoningCircle)entity).isSpawningParticles()) {
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0F, 0.5F, 0F, 10);
+        		
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, 0.5F, 5);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, -0.5F, 5);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, 0.5F, 5);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, -0.5F, 5);
+        	}
+        }
+    }
+    
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+    		float headPitch, float scaleFactor, Entity entityIn) {
+    	super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    	
+    	this.circle.rotateAngleY = this.circle.rotateAngleY + 0.0125F;
     }
 
     /**
