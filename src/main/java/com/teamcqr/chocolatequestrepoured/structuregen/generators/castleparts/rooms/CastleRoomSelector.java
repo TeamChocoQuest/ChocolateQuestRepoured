@@ -31,6 +31,36 @@ public class CastleRoomSelector
         }
     }
 
+    public class SupportArea
+    {
+        private BlockPos nwCorner;
+        private int blocksX;
+        private int blocksZ;
+        private int PADDING_PER_SIDE = 2;
+
+        private SupportArea(BlockPos nwCorner, int xCells, int zCells)
+        {
+            blocksX = (xCells * roomSize) + (PADDING_PER_SIDE * 2);
+            blocksZ = (zCells * roomSize) + (PADDING_PER_SIDE * 2);
+            this.nwCorner = nwCorner.north(PADDING_PER_SIDE).west(PADDING_PER_SIDE);
+        }
+
+        public BlockPos getNwCorner()
+        {
+            return nwCorner;
+        }
+
+        public int getBlocksX()
+        {
+            return blocksX;
+        }
+
+        public int getBlocksZ()
+        {
+            return blocksZ;
+        }
+    }
+
     private static final int MAX_LAYERS = 5;
     private static final int PADDING_FLOORS = 2;
     private static final int MIN_TOWER_FLOORS = 3;
@@ -47,6 +77,7 @@ public class CastleRoomSelector
     private Random random;
     private RoomGrid grid;
     private List<RoofArea> roofAreas;
+    private List<SupportArea> supportAreas;
     private List<CastleAddonRoof> potentialRoofs;
     private WeightedRandom<EnumRoomType> roomRandomizer;
 
@@ -62,7 +93,8 @@ public class CastleRoomSelector
         this.numSlotsZ = numSlotsZ;
         this.random = random;
         this.potentialRoofs = new ArrayList<>();
-        roofAreas = new ArrayList<>();
+        this.roofAreas = new ArrayList<>();
+        this.supportAreas = new ArrayList<>();
 
         //Add padding floors so that we can build walkable roofs on top of the highest rooms
         this.grid = new RoomGrid(maxFloors + PADDING_FLOORS, numSlotsX, numSlotsZ, random);
@@ -272,6 +304,8 @@ public class CastleRoomSelector
                 }
             }
 
+            addSupportIfFirstLayer(layer, lastMainStartX, lastMainStartZ, mainRoomsX, mainRoomsZ);
+
             int openCellsWest = offsetX;
             int openCellsNorth = offsetZ;
             int openCellsEast = maxLenX - mainRoomsX - offsetX;
@@ -290,6 +324,7 @@ public class CastleRoomSelector
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
                     roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
+                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
                 }
             }
 
@@ -304,6 +339,7 @@ public class CastleRoomSelector
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
                     roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
+                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
                 }
             }
 
@@ -318,6 +354,7 @@ public class CastleRoomSelector
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
                     roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
+                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
                 }
             }
 
@@ -332,6 +369,7 @@ public class CastleRoomSelector
                     grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
 
                     roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
+                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
                 }
             }
         }
@@ -359,6 +397,20 @@ public class CastleRoomSelector
         int rounding = (mainLength % 2 == 0) ? 0 : 1;
         int halfLen = mainLength / 2;
         return halfLen + random.nextInt(halfLen + rounding);
+    }
+
+    private void addSupportIfFirstLayer(int layer, int gridIndexX, int gridIndexZ, int roomsX, int roomsZ)
+    {
+        if (layer == 0)
+        {
+            BlockPos startCorner = getRoomStart(0, gridIndexX, gridIndexZ);
+            this.supportAreas.add(new SupportArea(startCorner, roomsX, roomsZ));
+        }
+    }
+
+    public List<SupportArea> getSupportAreas()
+    {
+        return supportAreas;
     }
 
     private void placeTowers()
@@ -399,6 +451,10 @@ public class CastleRoomSelector
                             int height = MIN_TOWER_FLOORS + random.nextInt(maxHeight - MIN_TOWER_FLOORS);
                             addTower(cell.getGridPosition().move(side), height, side.getOpposite());
                             sidesToCheck.remove(side);
+
+                            //First floor is the same as first layer in this case
+                            addSupportIfFirstLayer(floor, cell.getGridX(), cell.getGridZ(), 1, 1);
+
                             break CellLoop;
                         }
                     }
