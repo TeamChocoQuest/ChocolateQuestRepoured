@@ -279,6 +279,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		animationProgress = newProg;
 	}
 	
+	@Override
+	public boolean canBreatheUnderwater() {
+		return true;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public boolean shouldModelReset() {
 		return animationChanged;
