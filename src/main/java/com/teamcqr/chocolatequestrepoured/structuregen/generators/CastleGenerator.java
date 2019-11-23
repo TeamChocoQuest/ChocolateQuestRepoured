@@ -44,13 +44,6 @@ public class CastleGenerator implements IDungeonGenerator
 
     @Override
     public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-        //Builds the support hill;
-        if(dungeon.doBuildSupportPlatform()) {
-            PlateauBuilder supportBuilder = new PlateauBuilder();
-            supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
-            supportBuilder.createSupportHill(random, world, new BlockPos(x, y, z), maxSize, maxSize, EPosType.CORNER_NW);
-        }
-
         int maxRoomsX;
         int maxRoomsZ;
 
@@ -59,6 +52,19 @@ public class CastleGenerator implements IDungeonGenerator
 
         roomHelper = new CastleRoomSelector(new BlockPos(x, y, z), dungeon.getRoomSize(), dungeon.getFloorHeight(), FLOORS_PER_LAYER, maxRoomsX, maxRoomsZ, random);
         roomHelper.randomizeCastle();
+
+        //Builds the support hill;
+        if (dungeon.doBuildSupportPlatform())
+        {
+            PlateauBuilder supportBuilder = new PlateauBuilder();
+            supportBuilder.load(dungeon.getSupportBlock(), dungeon.getSupportTopBlock());
+            List<CastleRoomSelector.SupportArea> supportAreas = roomHelper.getSupportAreas();
+
+            for (CastleRoomSelector.SupportArea area : supportAreas)
+            {
+                supportBuilder.createSupportHill(random, world, area.getNwCorner(), area.getBlocksX(), area.getBlocksZ(), EPosType.CORNER_NW);
+            }
+        }
     }
 
     @Override
