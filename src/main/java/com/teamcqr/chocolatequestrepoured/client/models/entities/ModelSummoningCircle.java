@@ -40,12 +40,12 @@ public class ModelSummoningCircle extends ModelBase {
         
         if(entity instanceof EntitySummoningCircle) {
         	if(((EntitySummoningCircle)entity).isSpawningParticles()) {
-        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0F, 0.5F, 0F, 10);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0F, 0.5F, 0F, 2);
         		
-        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, 0.5F, 5);
-        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, -0.5F, 5);
-        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, 0.5F, 5);
-        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, -0.5F, 5);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, 0.5F, 1);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, 0.5F, 0.0F, -0.5F, 1);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, 0.5F, 1);
+        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.posX, entity.posY + 0.02, entity.posZ, -0.5F, 0.0F, -0.5F, 1);
         	}
         }
     }
