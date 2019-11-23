@@ -7,6 +7,7 @@ public enum EnumRoomDecor
     NONE             (RoomDecorNone::new, "NONE"),
     SHELF            (RoomDecorShelf::new, "Shelf"),
     CHEST            (RoomDecorChest::new, "Chest"),
+    BED              (RoomDecorBed::new, "Bed"),
     TABLE_SM         (RoomDecorTableSmall::new, "Small Table"),
     TABLE_MD         (RoomDecorTableMedium::new, "Medium Table"),
     BREW_STAND       (RoomDecorBrewingStand::new, "Brewing Stand"),

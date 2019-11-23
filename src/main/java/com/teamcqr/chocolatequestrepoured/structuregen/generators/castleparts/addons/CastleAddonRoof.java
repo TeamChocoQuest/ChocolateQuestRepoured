@@ -69,7 +69,7 @@ public class CastleAddonRoof implements ICastleAddon
         do
         {
             // Add the foundation under the roof
-            IBlockState state = Blocks.STONEBRICK.getDefaultState();
+            IBlockState state = dungeon.getWallBlock().getDefaultState();
             for (int i = 0; i < underLenX; i++)
             {
                 world.setBlockState(new BlockPos(x + i, y, z), state);
@@ -89,7 +89,7 @@ public class CastleAddonRoof implements ICastleAddon
             //add the north row
             for (int i = 0; i < roofLenX; i++)
             {
-                IBlockState blockState = Blocks.SPRUCE_STAIRS.getDefaultState();
+                IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
                 blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
 
                 //Apply properties to corner pieces
@@ -107,7 +107,7 @@ public class CastleAddonRoof implements ICastleAddon
             //add the south row
             for (int i = 0; i < roofLenX; i++)
             {
-                IBlockState blockState = Blocks.SPRUCE_STAIRS.getDefaultState();
+                IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
                 blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
 
                 //Apply properties to corner pieces
@@ -125,10 +125,10 @@ public class CastleAddonRoof implements ICastleAddon
 
             for (int i = 0; i < roofLenZ; i++)
             {
-                IBlockState blockState = Blocks.SPRUCE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+                IBlockState blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
                 world.setBlockState(new BlockPos(roofX, y, roofZ + i), blockState);
 
-                blockState = Blocks.SPRUCE_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+                blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
 
                 world.setBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState);
             }
