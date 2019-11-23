@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
@@ -89,6 +90,9 @@ public class ModEntities {
 	public static final EntityEntry NETHER_DRAGON = Null();
 	public static final EntityEntry GIANT_TORTOISE = Null();
 	public static final EntityEntry LICH = Null();
+	
+	//Misc Entities
+	public static final EntityEntry SUMMONING_CIRCLE = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -133,7 +137,10 @@ public class ModEntities {
 					//Bosses
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantTortoise.class, "giant_tortoise", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRLich.class, "lich", 64,1,true, 3289650,000000)
+					createEntityEntry(EntityCQRLich.class, "lich", 64,1,true, 3289650,000000),
+					
+					//Misc Entities
+					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true)
 			};
 
 			event.getRegistry().registerAll(entityEntries);
