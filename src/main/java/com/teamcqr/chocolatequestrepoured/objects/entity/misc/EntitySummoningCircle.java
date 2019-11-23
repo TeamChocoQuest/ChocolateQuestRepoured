@@ -85,6 +85,8 @@ public class EntitySummoningCircle extends Entity {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeToNBT(compound);
+		
 		compound.setBoolean("cqrdata.isSpawningParticles", this.dataManager.get(IS_SPAWNING_PARTICLES));
 		compound.setFloat("cqrdata.animationProgress", this.dataManager.get(ANIMATION_PROGRESS));
 		compound.setFloat("cqrdata.timeMultiplier", this.timeMultiplierForSummon);
