@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
@@ -42,6 +43,8 @@ public class CQStructurePart extends Template {
 	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
 	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
 	
+	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
+	
 	private List<BossInfo> bosses = new ArrayList<>();
 	
 	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
@@ -55,6 +58,7 @@ public class CQStructurePart extends Template {
 		super();
 		if(dungeon != null) {
 			this.dungeon = dungeon;
+			dungeonMob = dungeon.getDungeonMob();
 		}
 		dunX = posOfDunX;
 		dunZ = posOfDunZ;
@@ -62,6 +66,10 @@ public class CQStructurePart extends Template {
 	
 	public void setNewBannerPattern(EBanners pattern) {
 		this.newBannerPattern = pattern;
+	}
+	
+	public void setDungeonMob(EDungeonMobType type) {
+		this.dungeonMob = type;
 	}
 	
 	public CQStructurePart(int part_id) {
@@ -334,7 +342,7 @@ public class CQStructurePart extends Template {
 				((TileEntitySpawner)te).setDungeonSpawner();
 				
 				if(this.dungeon != null) {
-					((TileEntitySpawner)te).setInDungeon(this.dungeon, this.dunX, this.dunZ);
+					((TileEntitySpawner)te).setInDungeon(this.dungeon, this.dunX, this.dunZ, dungeonMob);
 				}
 				
 				te.readFromNBT(tileData);

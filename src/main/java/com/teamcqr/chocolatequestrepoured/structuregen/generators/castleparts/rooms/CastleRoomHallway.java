@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,7 +39,7 @@ public class CastleRoomHallway extends CastleRoom
     public CastleRoomHallway(BlockPos startPos, int sideLength, int height, Alignment alignment)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.HALLWAY;
+        this.roomType = EnumRoomType.HALLWAY;
         this.alignment = alignment;
     }
 
@@ -52,9 +51,9 @@ public class CastleRoomHallway extends CastleRoom
             for (int x = 0; x < (walls.hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
             {
                 BlockPos pos = startPos.add(x, 0, z);
-                world.setBlockState(pos, Blocks.WOOL.getDefaultState());
+                world.setBlockState(pos, dungeon.getFloorBlock().getDefaultState());
             }
         }
-        generateWalls(world);
+        generateWalls(world, dungeon);
     }
 }

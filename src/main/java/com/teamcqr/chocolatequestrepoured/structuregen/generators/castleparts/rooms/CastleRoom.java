@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -17,35 +18,6 @@ import java.util.Random;
 
 public abstract class CastleRoom
 {
-    public enum RoomType
-    {
-        NONE(0, "None", false),
-        HALLWAY(1, "Hallway", false),
-        KITCHEN(2, "Kitchen", false),
-        STAIRCASE_DIRECTED(3, "Directed Stairs", true),
-        STAIRCASE_SPIRAL(4, "Spiral Stairs", true),
-        LANDING_DIRECTED(5, "Directed Landing", true),
-        LANDING_SPIRAL(6, "Spiral Landing", true),
-        TOWER_SQUARE(7, "Square Tower", false),
-        ALCHEMY_LAB(8, "Alchemy Lab", false),
-        ARMORY(8, "Armory", false);
-
-        private final int index;
-        private final String name;
-        private final boolean partOfStairs;
-
-        RoomType(int indexIn, String nameIn, boolean partOfStairsIn)
-        {
-            this.index = indexIn;
-            this.name = nameIn;
-            this.partOfStairs = partOfStairsIn;
-        }
-
-        public boolean isPartOfStairs()
-        {
-            return this.partOfStairs;
-        }
-    }
 
     protected BlockPos startPos;
     protected int height;
@@ -66,12 +38,13 @@ public abstract class CastleRoom
 
     protected int maxSlotsUsed = 1; //Max number of contiguous room grid slots this can occupy
 
-    protected RoomType roomType = RoomType.NONE;
+    protected boolean isTower = false;
+    protected boolean pathable = true;
+
+    protected EnumRoomType roomType = EnumRoomType.NONE;
     protected boolean defaultCeiling = false;
     protected boolean defaultFloor = false;
     protected Random random = new Random();
-
-    protected HashSet<EnumFacing> roofEdges;
 
     protected RoomWalls walls;
     protected HashSet<BlockPos> decoMap;
@@ -85,7 +58,6 @@ public abstract class CastleRoom
         this.offsetZ = 0;
         this.buildLength = this.sideLength;
         this.height = height;
-        this.roofEdges = new HashSet<>();
         this.walls = new RoomWalls();
         this.decoMap = new HashSet<>();
         this.decoArea = new HashSet<>();
@@ -94,22 +66,26 @@ public abstract class CastleRoom
     public void generate(World world, CastleDungeon dungeon)
     {
         generateRoom(world, dungeon);
-        generateRoofEdges(world);
-        generateWalls(world);
+        generateWalls(world, dungeon);
 
         if (defaultFloor)
         {
-            generateDefaultFloor(world);
+            generateDefaultFloor(world, dungeon);
         }
         if (defaultCeiling)
         {
-            generateDefaultCeiling(world);
+            generateDefaultCeiling(world, dungeon);
         }
     }
 
     protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
-    protected void generateWalls(World world)
+    public void decorate(World world, CastleDungeon dungeon)
+    {
+        ; //Default is no decoration
+    }
+
+    protected void generateWalls(World world, CastleDungeon dungeon)
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
@@ -117,14 +93,9 @@ public abstract class CastleRoom
             {
                 BlockPos buildPos = getbuildPosition();
                 RoomWallBuilder builder = new RoomWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(world);
+                builder.generate(world, dungeon);
             }
         }
-    }
-
-    public void addRoofEdge(EnumFacing side)
-    {
-        roofEdges.add(side);
     }
 
     public boolean canBuildDoorOnSide(EnumFacing side)
@@ -139,28 +110,33 @@ public abstract class CastleRoom
         return true;
     }
 
-    public boolean hasRoofEdgeOnSide(EnumFacing side)
-    {
-        return (roofEdges.contains(side));
-    }
-
     public boolean isTower()
     {
-        return false;
+        return roomType.isTowerRoom();
     }
 
-    protected void generateDefaultCeiling(World world)
+    public boolean isStairsOrLanding()
     {
-        for (int z = 0; z < buildLength - 1; z++)
+        return roomType.isStairRoom();
+    }
+
+    public boolean isPathable()
+    {
+        return roomType.isPathable();
+    }
+
+    protected void generateDefaultCeiling(World world, CastleDungeon dungeon)
+    {
+        for (int z = 0; z < buildLength; z++)
         {
-            for (int x = 0; x < buildLength - 1; x++)
+            for (int x = 0; x < buildLength; x++)
             {
-                world.setBlockState(startPos.add( x, height - 1, z), Blocks.STONEBRICK.getDefaultState());
+                world.setBlockState(startPos.add( x, height - 1, z), dungeon.getWallBlock().getDefaultState());
             }
         }
     }
 
-    protected void generateDefaultFloor(World world)
+    protected void generateDefaultFloor(World world, CastleDungeon dungeon)
     {
         BlockPos pos = getNonWallStartPos();
 
@@ -168,72 +144,17 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < getDecorationLengthX(); x++)
             {
-                world.setBlockState(pos.add( x, 0, z), Blocks.PLANKS.getDefaultState());
+                world.setBlockState(pos.add( x, 0, z), getFloorBlock(dungeon));
             }
         }
     }
 
-    protected void generateRoofEdges(World world)
+    protected IBlockState getFloorBlock(CastleDungeon dungeon)
     {
-        IBlockState wallBlock = Blocks.STONEBRICK.getDefaultState();
-        int len = buildLength;
-
-        if (hasRoofEdgeOnSide(EnumFacing.NORTH))
-        {
-            for (int x = 0; x < len; x++)
-            {
-                BlockPos pos = startPos.add(x + offsetX, height, offsetZ);
-                world.setBlockState(pos, wallBlock);
-                if (shouldBuildCrenellation(len, x))
-                {
-                    world.setBlockState(pos.up(), wallBlock);
-                }
-            }
-        }
-        if (hasRoofEdgeOnSide(EnumFacing.SOUTH))
-        {
-            for (int x = 0; x < len; x++)
-            {
-                BlockPos pos = startPos.add(x + offsetX, height, offsetZ + buildLength - 1);
-                world.setBlockState(pos, wallBlock);
-                if (shouldBuildCrenellation(len, x))
-                {
-                    world.setBlockState(pos.up(), wallBlock);
-                }
-            }
-        }
-        if (hasRoofEdgeOnSide(EnumFacing.WEST))
-        {
-            for (int z = 0; z < len; z++)
-            {
-                BlockPos pos = startPos.add(offsetX, height, z + offsetZ);
-                world.setBlockState(pos, wallBlock);
-                if (shouldBuildCrenellation(len, z))
-                {
-                    world.setBlockState(pos.up(), wallBlock);
-                }
-            }
-        }
-        if (hasRoofEdgeOnSide(EnumFacing.EAST))
-        {
-            for (int z = 0; z < len; z++)
-            {
-                BlockPos pos = startPos.add(offsetX + buildLength - 1, height, z + offsetZ);
-                world.setBlockState(pos, wallBlock);
-                if (shouldBuildCrenellation(len, z))
-                {
-                    world.setBlockState(pos.up(), wallBlock);
-                }
-            }
-        }
+        return dungeon.getFloorBlock().getDefaultState();
     }
 
-    private boolean shouldBuildCrenellation(int wallLength, int index)
-    {
-        return (index == 0 || index == wallLength - 1 || index % 2 == 0);
-    }
-
-    public RoomType getRoomType()
+    public EnumRoomType getRoomType()
     {
         return roomType;
     }
@@ -282,7 +203,7 @@ public abstract class CastleRoom
         return facing;
     }
 
-    private BlockPos getbuildPosition()
+    protected BlockPos getbuildPosition()
     {
         return startPos.add(offsetX, 0, offsetZ);
     }
@@ -553,14 +474,39 @@ public abstract class CastleRoom
         return result;
     }
 
+    public int[] getChestIDs()
+    {
+        return null;
+    }
+
     protected int getSpawnerCount()
     {
         return 2;
     }
 
+    public int getOffsetX()
+    {
+        return offsetX;
+    }
+
+    public int getOffsetZ()
+    {
+        return offsetZ;
+    }
+
+    public int getBuildLength()
+    {
+        return buildLength;
+    }
+
+    public boolean isWalkableRoof()
+    {
+        return (this.roomType == EnumRoomType.WALKABLE_ROOF || this.roomType == EnumRoomType.WALKABLE_TOWER_ROOF);
+    }
+
     @Override
     public String toString()
     {
-        return roomType.name;
+        return roomType.toString();
     }
 }

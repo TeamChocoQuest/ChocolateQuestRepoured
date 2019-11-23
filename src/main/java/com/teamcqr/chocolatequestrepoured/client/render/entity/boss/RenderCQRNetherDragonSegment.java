@@ -60,7 +60,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
-		this.bindTexture(TEXTURES_NORMAL);
+		this.bindTexture(getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
