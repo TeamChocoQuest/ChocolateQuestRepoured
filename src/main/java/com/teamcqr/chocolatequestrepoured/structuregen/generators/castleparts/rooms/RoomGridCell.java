@@ -5,6 +5,10 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public class RoomGridCell
 {
     private enum CellState
@@ -40,7 +44,7 @@ public class RoomGridCell
     private boolean partOfMainStruct;
     private CastleRoom room;
     private boolean narrow;
-    private RoomWalls walls;
+    private HashSet<RoomGridCell> linkedCells;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -49,37 +53,7 @@ public class RoomGridCell
         this.reachable = false;
         this.partOfMainStruct = false;
         this.room = room;
-        this.walls = new RoomWalls();
-    }
-
-    public RoomGridCell(int floor, int x, int z)
-    {
-        this.gridPosition = new RoomGridPosition(floor, x, z);
-        this.state = CellState.UNUSED;
-        this.reachable = false;
-        this.partOfMainStruct = false;
-        this.room = null;
-        this.walls = new RoomWalls();
-    }
-
-    public RoomGridCell(RoomGridPosition gridPosition, CastleRoom room)
-    {
-        this.gridPosition = gridPosition;
-        this.state = CellState.UNUSED;
-        this.reachable = false;
-        this.partOfMainStruct = false;
-        this.room = room;
-        this.walls = new RoomWalls();
-    }
-
-    public RoomGridCell(RoomGridPosition gridPosition)
-    {
-        this.gridPosition = gridPosition;
-        this.state = CellState.UNUSED;
-        this.reachable = false;
-        this.partOfMainStruct = false;
-        this.room = null;
-        this.walls = new RoomWalls();
+        this.linkedCells = new HashSet<>();
     }
 
     public void setReachable()
@@ -209,10 +183,50 @@ public class RoomGridCell
         return this.gridPosition.getZ();
     }
 
+    public void linkToCell(RoomGridCell cell)
+    {
+        this.linkedCells.add(cell);
+    }
+
+    public void setLinkedCells(HashSet<RoomGridCell> cells)
+    {
+        linkedCells = new HashSet<>(cells);
+    }
+
+    public HashSet<RoomGridCell> getLinkedCells()
+    {
+        return new HashSet<>(linkedCells); //return a copy
+    }
+
+    public boolean isLinkedToCell(RoomGridCell cell)
+    {
+        return linkedCells.contains(cell);
+    }
+
     @Override
     public String toString()
     {
         String roomStr = (getRoom() == null) ? "null" : getRoom().toString();
         return String.format("RoomGridCell{%s, state=%s, room=%s}", gridPosition.toString(), state.toString(), roomStr);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj == this) return true;
+        if (!(obj instanceof RoomGridCell)) {
+            return false;
+        }
+        RoomGridCell cell = (RoomGridCell) obj;
+        return (gridPosition == cell.gridPosition &&
+                state == cell.state &&
+                room == cell.room);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        //Use just the gridPosition as a hash so we can keep sets of cells with only one cell per position
+        return gridPosition.hashCode();
     }
 }
