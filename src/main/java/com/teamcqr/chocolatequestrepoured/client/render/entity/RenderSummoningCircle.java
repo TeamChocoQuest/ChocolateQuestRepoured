@@ -41,6 +41,9 @@ public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 			float partialTicks) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
+		
+		GlStateManager.color(new Float(0.3F * (Math.sin(0.125 *entity.ticksExisted) +1)), 0F, 0F);
+		
 		this.bindTexture(getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
