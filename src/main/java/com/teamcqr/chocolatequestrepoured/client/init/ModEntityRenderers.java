@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
@@ -16,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantEndermite;
@@ -31,6 +33,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -182,6 +185,11 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQRGiantTortoise(renderManager, new ModelGiantTortoise(), 1.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class,
 				renderManager -> new RenderCQRGiantTortoisePart(renderManager));
+		
+		// Lich
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class,
+				renderManager -> new RenderCQRMage(renderManager, new ModelLich(0F), "entity_cqr_lich")
+			);
 	}
 
 }

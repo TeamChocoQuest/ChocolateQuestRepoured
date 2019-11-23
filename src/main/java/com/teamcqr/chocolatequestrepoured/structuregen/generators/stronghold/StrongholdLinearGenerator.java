@@ -1,4 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
+
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

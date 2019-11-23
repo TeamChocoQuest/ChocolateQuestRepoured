@@ -4,7 +4,8 @@ import java.io.File;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.StrongholdOpenGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 /**
  * Copyright (c) 29.04.2019
@@ -34,7 +35,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new StrongholdOpenGenerator();
+		return new StrongholdOpenGenerator(this);
 	}
 
 	public File getStairFolder() {
@@ -75,5 +76,28 @@ public class StrongholdOpenDungeon extends DungeonBase {
 
 	public void setRoomFolder(File roomFolder) {
 		this.roomFolder = roomFolder;
+	}
+	
+	public int getRandomFloorCount() {
+		return DungeonGenUtils.getIntBetweenBorders(minFloors, maxFloors);
+	}
+	public int getRandomRoomCountForFloor() {
+		return DungeonGenUtils.getIntBetweenBorders(minRoomsPerFloor, maxRoomsPerFloor);
+	}
+	
+	public File getBossRoom() {
+		return getStructureFileFromDirectory(bossRoomFolder);
+	}
+	public File getRoom() {
+		return getStructureFileFromDirectory(roomFolder);
+	}
+	public File getStairRoom() {
+		return getStructureFileFromDirectory(stairFolder);
+	}
+	public File getEntranceBuilding() {
+		return getStructureFileFromDirectory(entranceBuildingFolder);
+	}
+	public File getEntranceStair() {
+		return getStructureFileFromDirectory(entranceStairFolder);
 	}
 }

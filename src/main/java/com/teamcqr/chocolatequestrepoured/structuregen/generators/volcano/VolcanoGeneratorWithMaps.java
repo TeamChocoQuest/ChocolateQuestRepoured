@@ -417,7 +417,7 @@ public class VolcanoGeneratorWithMaps implements IDungeonGenerator{
 			
 			TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos.add(0,1,0));
 			
-			spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
+			spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getRampMob());
 			//System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
 			spawner.updateContainingBlockInfo();
 			
