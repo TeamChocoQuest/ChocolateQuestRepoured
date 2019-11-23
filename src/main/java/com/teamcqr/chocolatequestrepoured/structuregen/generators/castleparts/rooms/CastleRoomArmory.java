@@ -11,7 +11,7 @@ public class CastleRoomArmory extends CastleRoomGeneric
     public CastleRoomArmory(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.ALCHEMY_LAB;
+        this.roomType = EnumRoomType.ARMORY;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
         this.defaultFloor = true;

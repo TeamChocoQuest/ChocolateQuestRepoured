@@ -10,7 +10,7 @@ public class CastleRoomAlchemyLab extends CastleRoomGeneric
     public CastleRoomAlchemyLab(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.ALCHEMY_LAB;
+        this.roomType = EnumRoomType.ALCHEMY_LAB;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
         this.defaultFloor = true;

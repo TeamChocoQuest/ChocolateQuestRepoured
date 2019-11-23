@@ -15,7 +15,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
     public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.LANDING_SPIRAL;
+        this.roomType = EnumRoomType.LANDING_SPIRAL;
         this.stairsBelow = stairsBelow;
         this.defaultCeiling = true;
     }
@@ -28,7 +28,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
         BlockPos pillarStart = new BlockPos(stairsBelow.getCenterX(), startPos.getY(), stairsBelow.getCenterZ());
         EnumFacing firstStairSide = stairsBelow.getLastStairSide().rotateY();
 
-        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide);
+        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
         for (int x = 0; x < sideLength - 1; x++)
         {
@@ -48,7 +48,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
                         }
                         else
                         {
-                            blockToBuild = Blocks.PLANKS.getDefaultState();
+                            blockToBuild = dungeon.getFloorBlock().getDefaultState();
                         }
                     }
                     world.setBlockState(pos, blockToBuild);

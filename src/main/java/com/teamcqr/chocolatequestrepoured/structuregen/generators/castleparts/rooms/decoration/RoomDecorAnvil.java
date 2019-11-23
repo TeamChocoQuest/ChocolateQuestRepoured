@@ -26,7 +26,7 @@ public class RoomDecorAnvil extends RoomDecorBlocks
 
         if (block == Blocks.ANVIL)
         {
-            result = result.withProperty(BlockAnvil.FACING, side.getOpposite());
+            result = result.withProperty(BlockAnvil.FACING, side.getOpposite().rotateY() );
         }
 
         return result;

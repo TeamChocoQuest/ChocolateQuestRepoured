@@ -16,7 +16,9 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     public CastleRoomStaircaseSpiral(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
-        this.roomType = RoomType.STAIRCASE_SPIRAL;
+        this.roomType = EnumRoomType.STAIRCASE_SPIRAL;
+        this.defaultCeiling = false;
+        this.defaultFloor = false;
 
         this.firstStairSide = EnumFacing.NORTH;
         recalcPillarStart();
@@ -25,7 +27,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
-        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide);
+        recalcPillarStart();
+        SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
         BlockPos pos;
         IBlockState blockToBuild;
@@ -41,7 +44,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
 
                     if (y == 0)
                     {
-                        blockToBuild = Blocks.PLANKS.getDefaultState();
+                        blockToBuild = dungeon.getFloorBlock().getDefaultState();
                     }
                     else if (stairs.isPartOfStairs(pos))
                     {
@@ -49,7 +52,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
                     }
                     else if (y == height - 1)
                     {
-                        blockToBuild = Blocks.STONEBRICK.getDefaultState();
+                        blockToBuild = dungeon.getWallBlock().getDefaultState();
                     }
                     world.setBlockState(pos, blockToBuild);
                 }
@@ -60,7 +63,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     public EnumFacing getLastStairSide()
     {
         EnumFacing result = EnumFacing.NORTH;
-        for (int i = 0; i < height - 2; i++)
+        for (int i = 0; i < height - 1; i++)
         {
             result = result.rotateY();
         }
@@ -81,20 +84,18 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     public void addInnerWall(EnumFacing side)
     {
         super.addInnerWall(side);
-        recalcPillarStart();
     }
 
     @Override
     public void addOuterWall(EnumFacing side)
     {
         super.addOuterWall(side);
-        recalcPillarStart();
     }
 
     private void recalcPillarStart()
     {
-        int centerX = (int)Math.ceil((double)getDecorationLengthX() / 2);
-        int centerZ = (int)Math.ceil((double)getDecorationLengthZ() / 2);
-        pillarStart = getDecorationStartPos().add(centerX, 0, centerZ);
+        int centerX = (buildLength - 1) / 2;
+        int centerZ = (buildLength - 1) / 2;
+        pillarStart = startPos.add(centerX, 0, centerZ);
     }
 }

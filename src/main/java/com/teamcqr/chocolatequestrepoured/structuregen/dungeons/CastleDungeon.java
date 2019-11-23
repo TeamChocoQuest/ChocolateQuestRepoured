@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenera
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
+import javafx.beans.property.Property;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
@@ -29,8 +30,10 @@ public class CastleDungeon extends DungeonBase {
 	private int roomSize = 10;
 	private int floorHeight = 8;
 	private Random random;
-	private Block wallBlock = Blocks.STONE;
-	private Block floorBlock = Blocks.WHITE_GLAZED_TERRACOTTA;
+	private Block wallBlock = Blocks.STONEBRICK;
+	private Block roofBlock = Blocks.OAK_STAIRS;
+	private Block floorBlock = Blocks.PLANKS;
+	private Block stairBlock = Blocks.STONE_BRICK_STAIRS;
 
 	private String roomMobName = "minecraft:ghast";
 	private String bossMobName = "minecraft:wither_boss";
@@ -53,42 +56,19 @@ public class CastleDungeon extends DungeonBase {
 
 			roomMobName = prop.getProperty("spawnerMob", "minecraft:zombie");
 
-			this.wallBlock = Blocks.STONEBRICK;
-			try
-			{
-				Block tmp = Block.getBlockFromName(prop.getProperty("floorblock", "minecraft:stone"));
-				if(tmp != null)
-				{
-					this.wallBlock = tmp;
-				}
-			}
-			catch(Exception ex)
-			{
-				System.out.println("couldn't load wall block! using default value (stone bricks)...");
-			}
+			this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallblock", Blocks.STONEBRICK);
+			this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
+			this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
+			this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
 
-			try
-			{
-				Block tmp = Block.getBlockFromName(prop.getProperty("wallblock", "minecraft:white_terracotta"));
-				if(tmp != null)
-				{
-					this.floorBlock = tmp;
-				}
-			}
-			catch(Exception ex)
-			{
-				System.out.println("couldn't load wall block! using default value (white clay)...");
-			}
+			this.random = new Random();
 
 			closeConfigFile();
-		} else {
-			success = false;
 		}
-		if(success) {
-			this.registeredSuccessful = true;
+		else
+		{
+			this.registeredSuccessful = false;
 		}
-
-		this.random = new Random();
 	}
 
 	@Override
@@ -105,6 +85,17 @@ public class CastleDungeon extends DungeonBase {
 
 	public Block getWallBlock() {return this.wallBlock;}
 	public Block getFloorBlock() {return this.floorBlock;}
+
+	public Block getRoofBlock()
+	{
+		return roofBlock;
+	}
+
+	public Block getStairBlock()
+	{
+		return stairBlock;
+	}
+
 	public int getMaxSize() {return this.maxSize;}
 	public int getRoomSize() {return this.roomSize;}
 	public int getFloorHeight() {return this.floorHeight;}
