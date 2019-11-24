@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.rooms;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear;
 
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
