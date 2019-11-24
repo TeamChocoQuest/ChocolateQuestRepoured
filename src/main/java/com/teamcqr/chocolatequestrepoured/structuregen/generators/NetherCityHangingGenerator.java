@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
@@ -24,7 +23,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraftforge.common.MinecraftForge;
 
 public class NetherCityHangingGenerator implements IDungeonGenerator {
 
