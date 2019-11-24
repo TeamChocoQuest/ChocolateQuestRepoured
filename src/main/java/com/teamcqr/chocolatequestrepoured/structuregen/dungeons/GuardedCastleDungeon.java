@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VillageDungeon extends DungeonBase {
+public class GuardedCastleDungeon extends DungeonBase {
 	
 	private File structureFolder;
 	private File centerStructureFolder;
@@ -43,7 +43,7 @@ public class VillageDungeon extends DungeonBase {
 	}
 	
 	//DONE: Rewrite this whole file handling as it is unefficient and uses lots of memory which is unnecessary
-	public VillageDungeon(File configFile) {
+	public GuardedCastleDungeon(File configFile) {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {

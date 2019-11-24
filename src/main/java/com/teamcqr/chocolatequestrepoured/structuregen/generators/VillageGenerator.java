@@ -8,7 +8,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VillageDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -35,7 +35,7 @@ public class VillageGenerator implements IDungeonGenerator{
 	
 	//DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 	
-	private VillageDungeon dungeon;
+	private GuardedCastleDungeon dungeon;
 
 	private List<File> chosenStructures = new ArrayList<File>();
 	private File centerStructure;
@@ -45,7 +45,7 @@ public class VillageGenerator implements IDungeonGenerator{
 	
 	private HashMap<CQStructure,BlockPos> toGenerate = new HashMap<CQStructure,BlockPos>();
 	
-	public VillageGenerator(VillageDungeon dungeon) {
+	public VillageGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
 	}
 	
