@@ -94,8 +94,10 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 					ResourceLocation summon = new ResourceLocation(Reference.MODID, "zombie");
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE);
 					circle.setSummon(summon);
-					circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
-					circle.setPositionAndUpdate(p.getX(), p.getY(), p.getZ());
+					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
+					circle.setPosition(p.getX(), p.getY() +1, p.getZ());
+					
+					entity.world.spawnEntity(circle);
 					summonedMinions.add(circle);
 				}
 			}
