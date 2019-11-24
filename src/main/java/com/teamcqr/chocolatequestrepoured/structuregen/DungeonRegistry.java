@@ -24,7 +24,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCi
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VillageDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -234,7 +234,7 @@ public class DungeonRegistry {
 		case TEMPLATE_SURFACE:
 			return new DefaultSurfaceDungeon(dungeonPropertiesFile);
 		case GUARDED_CASTLE:
-			return new VillageDungeon(dungeonPropertiesFile);
+			return new GuardedCastleDungeon(dungeonPropertiesFile);
 		case VOLCANO:
 			return new VolcanoDungeon(dungeonPropertiesFile);
 		case CLASSIC_STRONGHOLD:
