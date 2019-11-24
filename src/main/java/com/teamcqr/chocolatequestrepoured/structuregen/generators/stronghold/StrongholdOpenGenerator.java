@@ -30,7 +30,6 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	private StrongholdOpenDungeon dungeon;
 	
-	private List<CQStructure[][]> roomLayout = new ArrayList<CQStructure[][]>();
 	private List<String> blacklistedRooms = new ArrayList<String>();
 	private Tuple<Integer, Integer> structureBounds;
 	
@@ -56,6 +55,10 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 				blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
+	}
+	
+	public StrongholdOpenDungeon getDungeon() {
+		return dungeon;
 	}
 
 	private void searchStructureBounds() {
@@ -119,13 +122,6 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
-	}
-	
-	class StrongholdRoomGridHelper {
-		
-		private CQStructure room;
-		private BlockPos pos;
-		
 	}
 
 }
