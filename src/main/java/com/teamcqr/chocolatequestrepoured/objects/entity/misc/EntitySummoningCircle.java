@@ -177,7 +177,7 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		compound.setInteger("cqrdata.textureID", this.dataManager.get(TEXTURE_INDEX));
 		compound.setString("cqrdata.entityToSpawn.Domain",entityToSpawn.getResourceDomain());
 		compound.setString("cqrdata.entityToSpawn.Path", entityToSpawn.getResourcePath());
-		System.out.println("RP: " + entityToSpawn.getResourcePath());
+		//System.out.println("RP: " + entityToSpawn.getResourcePath());
 	}
 
 	@Override
@@ -198,6 +198,10 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	@Override
 	public EnumHandSide getPrimaryHand() {
 		return EnumHandSide.RIGHT;
+	}
+
+	public void setSummon(ResourceLocation summon) {
+		this.entityToSpawn = summon;
 	}
 
 }
