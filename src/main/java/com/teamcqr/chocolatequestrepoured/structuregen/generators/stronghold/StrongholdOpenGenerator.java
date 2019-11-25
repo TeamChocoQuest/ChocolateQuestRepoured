@@ -35,6 +35,9 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	
 	private PlacementSettings settings = new PlacementSettings();
 	
+	private int dunX;
+	private int dunZ;
+	
 	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
 		super();
 		this.dungeon = dungeon;
@@ -67,16 +70,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		//Builds support platform for entry, then creates the spire down
-		BlockPos currPos = new BlockPos(x,y,z);
-		
-		int floors = dungeon.getRandomFloorCount();
-		
-		for(int floor = 0; floor < floors; floor++) {
-			int roomCount = dungeon.getRandomRoomCountForFloor();
-			roomCount = (new Double(Math.ceil(Math.sqrt(roomCount)))).intValue();
-			int[][] rooms = new int[roomCount][roomCount];
-		}
+		this.dunX = x;
+		this.dunZ = z;
 	}
 
 	@Override
@@ -122,6 +117,17 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
+	}
+
+	public int getDunX() {
+		return dunX;
+	}
+	public int getDunZ() {
+		return dunZ;
+	}
+	
+	public PlacementSettings getPlacementSettings() {
+		return settings;
 	}
 
 }
