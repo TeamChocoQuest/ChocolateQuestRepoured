@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -11,6 +12,8 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 /**
  * Copyright (c) 29.04.2019
@@ -65,6 +68,20 @@ public class StrongholdOpenDungeon extends DungeonBase {
 		} else {
 			registeredSuccessful = false;
 		}
+	}
+	
+	@Override
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
+		
+		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		//For position locked dungeons, use the positions y
+		if(this.isPosLocked()) {
+			y = this.getLockedPos().getY();
+		}
+		y += getYOffset();
+		
+		getGenerator().generate(world, chunk, x, y, z);
 	}
 
 	@Override
