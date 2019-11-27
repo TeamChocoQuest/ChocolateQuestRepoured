@@ -31,7 +31,7 @@ import net.minecraftforge.common.MinecraftForge;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VillageGenerator implements IDungeonGenerator{
+public class GuardedCastleGenerator implements IDungeonGenerator{
 	
 	//DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 	
@@ -45,7 +45,7 @@ public class VillageGenerator implements IDungeonGenerator{
 	
 	private HashMap<CQStructure,BlockPos> toGenerate = new HashMap<CQStructure,BlockPos>();
 	
-	public VillageGenerator(GuardedCastleDungeon dungeon) {
+	public GuardedCastleGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
 	}
 	
