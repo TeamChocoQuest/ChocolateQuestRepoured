@@ -114,9 +114,9 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		if(this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset() + this.dungeon.getYOffset(), z), structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
+			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
 		}
-		structure.placeBlocksInWorld(world, new BlockPos(x, y + this.dungeon.getYOffset(), z), this.settings, EPosType.CENTER_XZ_LAYER);
+		structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER);
 		
 		/*CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 		BlockPos pastePosForStair = new BlockPos(x, y - stairs.getSizeY(), z);
