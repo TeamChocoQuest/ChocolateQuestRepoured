@@ -86,7 +86,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 			((VillageGenerator)this.generator).setCenterStructure(building);
 		}
 		//Generating it...
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false) + getYOffset();
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		this.generator.generate(world, chunk, x, y, z);
 	}

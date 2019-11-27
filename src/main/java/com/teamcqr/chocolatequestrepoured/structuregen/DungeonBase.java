@@ -265,4 +265,8 @@ public class DungeonBase {
 	public String[] getDependencies() {
 		return this.modDependencies;
 	}
+	
+	public int getYOffset() {
+		return Math.abs(this.yOffset);
+	}
 }
