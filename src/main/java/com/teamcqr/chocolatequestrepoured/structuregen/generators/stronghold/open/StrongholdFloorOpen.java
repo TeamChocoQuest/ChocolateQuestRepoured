@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public class StrongholdFloorOpen {
@@ -22,6 +23,8 @@ public class StrongholdFloorOpen {
 	private Tuple<Integer, Integer> entranceStairIndex;
 	private Tuple<Integer, Integer> exitStairBlockPosition;
 	private Tuple<Integer, Integer> exitStairIndex;
+	private Tuple<BlockPos, BlockPos> exitStairCorners;
+	private Tuple<BlockPos, BlockPos> entranceStairCorners;
 	private int sideLength = 1;
 	private int yPos;
 	private File entranceStair = null;
@@ -64,8 +67,15 @@ public class StrongholdFloorOpen {
 		this.roomGrid[entranceStairIndex.getFirst()][entranceStairIndex.getSecond()] = new BlockPos(x,y,z);
 	}
 	
+	public void setIsFirstFloor(boolean val) {
+		this.isFirstFloor = val;
+	}
+	
 	public void setExitIsBossRoom(boolean newVal) {
 		this.exitStairIsBossRoom = newVal;
+		if(newVal) {
+			exitStairCorners = null;
+		}
 	}
 	
 	public Tuple<Integer, Integer> getExitCoordinates() {
@@ -73,6 +83,7 @@ public class StrongholdFloorOpen {
 	}
 	
 	public void calculatePositions() {
+		Vec3i v = new Vec3i(generator.getDungeon().getRoomSizeX() /2, 0, generator.getDungeon().getRoomSizeZ() /2);
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if(iX != entranceStairIndex.getFirst() && iZ != entranceStairIndex.getSecond()) {
@@ -86,6 +97,14 @@ public class StrongholdFloorOpen {
 					);
 					
 					this.roomGrid[iX][iZ] = pos;
+					if(iX == exitStairBlockPosition.getFirst() && iZ == exitStairBlockPosition.getSecond()) {
+						BlockPos p1 = pos.subtract(v);
+						BlockPos p2 = pos.add(v);
+						exitStairCorners = new Tuple<>(p1,p2);
+					}
+				} else {
+					BlockPos p = new BlockPos(entranceStairBlockPosition.getFirst(), this.yPos, entranceStairBlockPosition.getSecond());
+					entranceStairCorners = new Tuple<>(p.subtract(v), p.add(v));
 				}
 			}
 		}
@@ -152,11 +171,16 @@ public class StrongholdFloorOpen {
 		}
 		//Top
 		for(BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
-			
+			if(!(pT.getX() >= entranceStairCorners.getFirst().getX() && pT.getX() <= entranceStairCorners.getSecond().getX())
+					&& !(pT.getZ() >= entranceStairCorners.getFirst().getZ() && pT.getZ() <= entranceStairCorners.getSecond().getZ())) {
+				world.setBlockState(pT, block);
+			}
 		}
 		//Bottom
 		for(BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
-			if(exitStairIsBossRoom || true /*CHECK IF OUTSIDE EXIT REGION */) {
+			if(exitStairIsBossRoom || 
+					(!(pB.getX() >= exitStairCorners.getFirst().getX() && pB.getX() <= exitStairCorners.getSecond().getX())
+							&& !(pB.getZ() >= exitStairCorners.getFirst().getZ() && pB.getZ() <= exitStairCorners.getSecond().getZ()))) {
 				world.setBlockState(pB, block);
 			}
 		}
