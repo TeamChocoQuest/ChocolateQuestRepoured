@@ -1,13 +1,121 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RoomGrid
 {
+    public static class Area2D
+    {
+        public RoomGridPosition start;
+        public int sizeX;
+        public int sizeZ;
+
+        public Area2D (RoomGridPosition start, int sizeX, int sizeZ)
+        {
+            this.start = start;
+            this.sizeX = sizeX;
+            this.sizeZ = sizeZ;
+        }
+
+        public boolean dimensionsAre(int dim1, int dim2)
+        {
+            return (sizeX == dim1 && sizeZ == dim2) || (sizeX == dim2 && sizeZ == 1);
+        }
+
+        public boolean dimensionsAreAtLeast(int dim1, int dim2)
+        {
+            int larger = Math.max(dim1, dim2);
+            int smaller = Math.min(dim1, dim2);
+            return (Math.min(sizeX, sizeZ) >= smaller) && (Math.max(sizeX, sizeZ) >= larger);
+        }
+
+        public ArrayList<RoomGridPosition> getPositionList()
+        {
+            ArrayList<RoomGridPosition> positions = new ArrayList<>();
+
+            for (int x = 0; x < sizeX; x++)
+            {
+                for (int z = 0; z < sizeZ; z++)
+                {
+                    positions.add(start.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z));
+                }
+            }
+
+            return positions;
+        }
+
+        public void removeFromList(List<RoomGridCell> cells)
+        {
+            ArrayList<RoomGridPosition> positions = getPositionList();
+            for (RoomGridPosition gridPos : positions)
+            {
+                cells.removeIf(c -> c.getGridPosition().equals(gridPos));
+            }
+        }
+
+        public Area2D getRandomSubArea(Random random, int minDim1, int minDim2)
+        {
+            //Make sure this area has the space to fit the sub dimensions
+            if (dimensionsAreAtLeast(minDim1, minDim2))
+            {
+                int resultX;
+                int resultZ;
+
+                //Figure out which dimension is larger (so parameter order doesn't matter)
+                int larger = Math.max(minDim1, minDim2);
+                int smaller = Math.min(minDim1, minDim2);
+
+                //Determine which directions (X and Z) have the room to fit the longer of the two dimensions
+                boolean fitsX = sizeX >= larger;
+                boolean fitsZ = sizeZ >= larger;
+
+                //If either dimension could be the long side, then pick at random
+                if (fitsX && fitsZ)
+                {
+                    if (random.nextBoolean())
+                    {
+                        resultX = DungeonGenUtils.randomBetween(random, larger, sizeX - 1);
+                        resultZ = DungeonGenUtils.randomBetween(random, smaller, sizeZ - 1);
+                    }
+                    else
+                    {
+                        resultZ = DungeonGenUtils.randomBetween(random, larger, sizeZ - 1);
+                        resultX = DungeonGenUtils.randomBetween(random, smaller, sizeX - 1);
+                    }
+                }
+                //Otherwise use the side with more room as the long side
+                else if (fitsX)
+                {
+                    resultX = DungeonGenUtils.randomBetween(random, larger, sizeX - 1);
+                    resultZ = DungeonGenUtils.randomBetween(random, smaller, sizeZ -1);
+                }
+                else
+                {
+                    resultZ = DungeonGenUtils.randomBetween(random, larger, sizeZ - 1);
+                    resultX = DungeonGenUtils.randomBetween(random, smaller, sizeX - 1);
+                }
+
+                RoomGridPosition subStart = start;
+                subStart = subStart.move(EnumFacing.EAST, random.nextInt(sizeX - resultX));
+                subStart = subStart.move(EnumFacing.SOUTH, random.nextInt(sizeZ - resultZ));
+
+                return new Area2D(subStart, resultX, resultZ);
+            }
+            else
+            {
+                //Impossible to meet dimension constraints so just stay the same
+                return this;
+            }
+
+        }
+    }
+
     private static final int MAX_lAYERS = 5;
 
     private int floors;
@@ -216,6 +324,72 @@ public class RoomGrid
         else
         {
             return 0;
+        }
+    }
+
+    public ArrayList<Area2D> getAllBuildableAreasOnFloor(int floor)
+    {
+        ArrayList<RoomGridCell> floorCells = getAllCellsWhere(c -> c.getFloor() == floor);
+        ArrayList<Area2D> areas = new ArrayList<>();
+
+        Area2D largest = getLargestBuildableAreaOnFloor(floorCells);
+
+        while (largest != null && !floorCells.isEmpty() && largest.dimensionsAreAtLeast(2, 2))
+        {
+            areas.add(largest);
+            largest.removeFromList(floorCells);
+
+            largest = getLargestBuildableAreaOnFloor(floorCells);
+        }
+
+        return areas;
+    }
+
+    @Nullable
+    public Area2D getLargestBuildableAreaOnFloor(ArrayList<RoomGridCell> floorCells)
+    {
+        int largestArea = 0;
+        int largestX = 0;
+        int largestZ = 0;
+        RoomGridPosition largestStart = null;
+
+        if (!floorCells.isEmpty())
+        {
+            for (RoomGridCell cell : floorCells)
+            {
+                int x = 0;
+                int z = 0;
+
+                RoomGridPosition pos = cell.getGridPosition();
+                do
+                {
+                    pos = pos.move(EnumFacing.EAST);
+                    ++x;
+                }
+                while (withinGridBounds(pos) && getCellAt(pos).isBuildable());
+
+                pos = cell.getGridPosition();
+                do
+                {
+                    pos = pos.move(EnumFacing.SOUTH);
+                    ++z;
+                }
+                while (withinGridBounds(pos) && getCellAt(pos).isBuildable());
+
+                if (x * z > largestArea)
+                {
+                    largestArea = x * z;
+                    largestX = x;
+                    largestZ = z;
+                    largestStart = cell.getGridPosition();
+                }
+            }
+
+            return new Area2D(largestStart, largestX, largestZ);
+        }
+        else
+        {
+            return null;
         }
     }
 
@@ -466,6 +640,17 @@ public class RoomGrid
         else
         {
             return null;
+        }
+    }
+
+    public void setBossArea(Area2D area, int floor)
+    {
+        for (RoomGridPosition pos : area.getPositionList())
+        {
+            if (withinGridBounds(pos))
+            {
+                getCellAt(pos).setAsBossArea();
+            }
         }
     }
 
