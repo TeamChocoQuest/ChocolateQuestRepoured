@@ -90,7 +90,7 @@ public class ModelCQRBiped extends ModelBiped {
 		} else {
 			this.bipedCape.rotationPointY = 0.0F;
 		}
-		
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
 			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
@@ -99,8 +99,6 @@ public class ModelCQRBiped extends ModelBiped {
 			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
 		}
 
-		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-		
 		copyModelAngles(this.bipedLeftLeg, this.bipedLeftLegwear);
 		copyModelAngles(this.bipedRightLeg, this.bipedRightLegwear);
 		copyModelAngles(this.bipedLeftArm, this.bipedLeftArmwear);

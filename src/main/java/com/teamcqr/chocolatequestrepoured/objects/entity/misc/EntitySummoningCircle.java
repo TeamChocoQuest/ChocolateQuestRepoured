@@ -63,7 +63,7 @@ public class EntitySummoningCircle extends EntityLivingBase {
 			ECircleTexture textre) {
 		super(worldIn);
 		setSize(2.0F, 0.005F);
-		System.out.println("Mob: " + entityToSpawn);
+		//System.out.println("Mob: " + entityToSpawn);
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
