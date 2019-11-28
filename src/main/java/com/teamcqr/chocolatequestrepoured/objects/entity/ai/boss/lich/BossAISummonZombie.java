@@ -34,6 +34,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		if(entity == null || entity.isDead || entity.getAttackTarget() == null) {
+			this.currentAnimationTime = ANIMATION_TIME;
 			return false;
 		}
 		if(this.animationRunning) {
@@ -46,6 +47,8 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 				this.entity.setVelocity(0, 0, 0);
 				this.entity.setArmPose(ECQREntityArmPoses.SPELLCASTING);
 			}
+		} else {
+			this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
 		}
 		currentCooldownValue--;
 		//System.out.println("Current value: " + currentCooldownValue);
