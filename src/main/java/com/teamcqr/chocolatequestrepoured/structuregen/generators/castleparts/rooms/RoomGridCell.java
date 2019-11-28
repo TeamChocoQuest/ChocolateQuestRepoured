@@ -45,6 +45,7 @@ public class RoomGridCell
     private CastleRoom room;
     private boolean narrow;
     private HashSet<RoomGridCell> linkedCells;
+    private boolean isBossArea = false;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -181,6 +182,11 @@ public class RoomGridCell
     public int getGridZ()
     {
         return this.gridPosition.getZ();
+    }
+
+    public void setAsBossArea()
+    {
+        this.isBossArea = true;
     }
 
     public void linkToCell(RoomGridCell cell)

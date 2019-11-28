@@ -170,6 +170,8 @@ public class CastleRoomSelector
         //System.out.println(grid.printGrid());
     }
 
+    int minRoomsForBoss = (int)(Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
+
     private void addMainBuilding()
     {
         setFirstLayerBuildable();
@@ -186,6 +188,46 @@ public class CastleRoomSelector
 
         for (layer = 0; ((!lastFloor) && (layer < MAX_LAYERS)); layer++)
         {
+            int firstFloorInLayer = layer * floorsPerLayer;
+
+            ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllBuildableAreasOnFloor(firstFloorInLayer);
+
+            if (!buildableAreas.isEmpty())
+            {
+                for (RoomGrid.Area2D buildArea : buildableAreas)
+                {
+                    //The first area in the list is the largest area
+                    if (buildableAreas.get(0) == buildArea)
+                    {
+                        if (buildArea.dimensionsAreAtLeast(minRoomsForBoss, minRoomsForBoss + 1))
+                        {
+                            if (buildArea.dimensionsAre(minRoomsForBoss, minRoomsForBoss + 1))
+                            {
+                                //if largest area is exact size for boss room, have to make boss area here
+                                grid.setBossArea(buildArea, firstFloorInLayer);
+                                lastFloor = true;
+                            }
+                            else
+                            {
+                                //area is at least big enough for boss area
+                                if (layer >= 3)
+                                {
+                                    RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1);
+                                }
+                                else
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                    else //all other build areas that aren't the largest
+                    {
+
+                    }
+                }
+            }
+
             int minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
             int maxX = grid.getMaxBuildableXOnFloor(layer * floorsPerLayer);
             int maxLenX = maxX - minX + 1;
@@ -193,48 +235,10 @@ public class CastleRoomSelector
             int maxZ = grid.getMaxBuildableZOnFloor(layer * floorsPerLayer);
             int maxLenZ = maxZ - minZ + 1;
 
-            //Must retain at least a 3x4 area for the boss room
-
-
-            int minRoomsForBoss = (int)(Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
-
             //randomize length from possible length
             mainRoomsX = randomSubsectionLength(maxLenX);
             mainRoomsZ = randomSubsectionLength(maxLenZ);
             System.out.printf("Randomized main rooms X to %d and Z to %d", mainRoomsX, mainRoomsZ);
-
-            while (Math.min(mainRoomsX, mainRoomsZ) < minRoomsForBoss || Math.max(mainRoomsX, mainRoomsZ) < (minRoomsForBoss + 1))
-            {
-                int bufferX = maxLenX - mainRoomsX;
-                int bufferZ = maxLenZ - mainRoomsZ;
-
-                if (bufferX > bufferZ)
-                {
-                    ++mainRoomsX;
-                }
-                else if (bufferX < bufferZ)
-                {
-                    ++mainRoomsZ;
-                }
-                else //they are equal
-                {
-                    if (random.nextBoolean())
-                    {
-                        ++mainRoomsX;
-                    }
-                    else
-                    {
-                        ++mainRoomsZ;
-                    }
-                }
-
-                System.out.printf("One side was too small, changed X to %d and Z to %d", mainRoomsX, mainRoomsZ);
-            }
-
-            if (Math.min(mainRoomsX, mainRoomsZ) <= minRoomsForBoss || Math.max(mainRoomsX, mainRoomsZ) <= (minRoomsForBoss + 1))
-            {
-                lastFloor = true;
-            }
 
             //align the part to the left or right
             int offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;

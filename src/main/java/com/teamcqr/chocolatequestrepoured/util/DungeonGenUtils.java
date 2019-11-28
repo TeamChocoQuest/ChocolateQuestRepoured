@@ -211,5 +211,17 @@ public class DungeonGenUtils {
 	{
 		return (random.nextInt(100) < percent);
 	}
+
+	public static int randomBetween(Random random, int low, int high)
+	{
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			return low + random.nextInt(high - low + 1);
+		}
+	}
 	
 }
