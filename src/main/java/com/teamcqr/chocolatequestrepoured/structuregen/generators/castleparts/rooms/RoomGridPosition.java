@@ -32,6 +32,21 @@ public class RoomGridPosition
         return z;
     }
 
+    public void setFloor(int floor)
+    {
+        this.floor = floor;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setZ(int z)
+    {
+        this.z = z;
+    }
+
     public RoomGridPosition move(EnumFacing direction)
     {
         return move(direction, 1);
