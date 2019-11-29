@@ -232,9 +232,22 @@ public class DungeonGenUtils {
 		}
 		else
 		{
-			int span = high - low;
+			double avg = (high - low) / 2d;
+			double stdDev = (high - avg) / 3d; //guarantees that MOST (99.7%) results will be between low & high
 			double gaussian = random.nextGaussian();
-			return low + (int)((gaussian * span) + 0.5);
+			int result = (int)(avg + (gaussian * stdDev) + 0.5); //0.5 is added for rounding to nearest whole number
+			if (result < low)
+			{
+				return low;
+			}
+			else if (result > high)
+			{
+				return high;
+			}
+			else
+			{
+				return result;
+			}
 		}
 
 
