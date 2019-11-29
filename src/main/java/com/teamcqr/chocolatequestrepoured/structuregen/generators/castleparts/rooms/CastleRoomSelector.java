@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -163,11 +164,10 @@ public class CastleRoomSelector
         determineRoofs();
         determineWalls();
 
-        /*
         placeOuterDoors();
         placeTowers();
         pathBetweenRooms();
-        */
+        
         //System.out.println(grid.printGrid());
     }
 
@@ -219,16 +219,24 @@ public class CastleRoomSelector
                                 else
                                 {
                                     RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
+                                    System.out.println("Added central struct: " + structArea.toString());
                                     grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
                                     for (EnumFacing side : EnumFacing.HORIZONTALS)
                                     {
-                                        RoomGrid.Area2D sideArea = buildArea.sliceToSideOfArea(structArea, side);
-                                        if (sideArea != null)
+                                        RoomGrid.Area2D sideAllowedArea = buildArea.sliceToSideOfArea(structArea, side);
+                                        RoomGrid.Area2D lastBuiltArea = structArea;
+                                        RoomGrid.Area2D sideSelectedArea;
+
+                                        while (sideAllowedArea != null)
                                         {
-                                            sideArea = sideArea.getRandomSubArea(random, 1, 1, false);
-                                            sideArea.alignToSide(random, structArea, side, buildArea);
-                                            grid.selectBlockOfCellsForBuilding(sideArea, floorsPerLayer);
+                                            sideSelectedArea = sideAllowedArea.getRandomSubArea(random, 1, 1, false);
+                                            sideSelectedArea.alignToSide(random, lastBuiltArea, side, buildArea);
+                                            grid.selectBlockOfCellsForBuilding(sideSelectedArea, floorsPerLayer);
+                                            System.out.println("Added " + side.toString() + " side struct: " + sideSelectedArea.toString());
+                                            lastBuiltArea = sideSelectedArea;
+
+                                            sideAllowedArea = buildArea.sliceToSideOfArea(lastBuiltArea, side);
                                         }
                                     }
                                 }

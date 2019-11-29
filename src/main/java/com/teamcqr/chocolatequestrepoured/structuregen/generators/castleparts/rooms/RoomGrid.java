@@ -102,25 +102,25 @@ public class RoomGrid
                 {
                     if (random.nextBoolean())
                     {
-                        resultX = DungeonGenUtils.randomBetween(random, larger, sizeX - shrink);
-                        resultZ = DungeonGenUtils.randomBetween(random, smaller, sizeZ - shrink);
+                        resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeX - shrink);
+                        resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeZ - shrink);
                     }
                     else
                     {
-                        resultZ = DungeonGenUtils.randomBetween(random, larger, sizeZ - shrink);
-                        resultX = DungeonGenUtils.randomBetween(random, smaller, sizeX - shrink);
+                        resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeZ - shrink);
+                        resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeX - shrink);
                     }
                 }
                 //Otherwise use the side with more room as the long side
                 else if (fitsX)
                 {
-                    resultX = DungeonGenUtils.randomBetween(random, larger, sizeX - shrink);
-                    resultZ = DungeonGenUtils.randomBetween(random, smaller, sizeZ - shrink);
+                    resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeX - shrink);
+                    resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeZ - shrink);
                 }
                 else
                 {
-                    resultZ = DungeonGenUtils.randomBetween(random, larger, sizeZ - shrink);
-                    resultX = DungeonGenUtils.randomBetween(random, smaller, sizeX - shrink);
+                    resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeZ - shrink);
+                    resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeX - shrink);
                 }
 
                 RoomGridPosition subStart = start;
@@ -246,6 +246,12 @@ public class RoomGrid
 
                 start = start.move(EnumFacing.SOUTH, slideDest - start.getX());
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return String.format("RoomGrid.Area2D{start=%s, sizeX=%d, sizeZ=%d}", start, sizeX, sizeZ);
         }
     }
 
