@@ -158,7 +158,7 @@ public class RoomGrid
                 {
                     resultStart = start;
                     resultSizeX = sizeX;
-                    resultSizeZ = getStartZ() - mask.getStartZ();
+                    resultSizeZ = mask.getStartZ() - getStartZ();
                 }
                 else if (side == EnumFacing.SOUTH)
                 {
@@ -169,7 +169,7 @@ public class RoomGrid
                 else if (side == EnumFacing.WEST)
                 {
                     resultStart = start;
-                    resultSizeX = getStartX() - mask.getStartX();
+                    resultSizeX = mask.getStartX() - getStartX();
                     resultSizeZ = sizeZ;
                 }
                 else //East
@@ -204,47 +204,43 @@ public class RoomGrid
 
             if (side == EnumFacing.NORTH)
             {
-                distance = targetArea.getStartZ() - (getStartZ() + sizeZ);
-                start = start.move(EnumFacing.SOUTH, distance);
+                start.setZ(targetArea.getStartZ() - sizeZ);
 
                 minSlide = Math.max((targetArea.getStartX() - (sizeX - 1)), boundary.start.getX());
                 maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (sizeX - 1));
                 slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
 
-                start = start.move(EnumFacing.EAST, slideDest - start.getX());
+                start.setX(slideDest);
             }
             else if (side == EnumFacing.SOUTH)
             {
-                distance = getStartZ() - (targetArea.getStartZ() + targetArea.sizeZ);
-                start = start.move(EnumFacing.NORTH, distance);
+                start.setZ(targetArea.getEndZ() + 1);
 
                 minSlide = Math.max((targetArea.getStartX() - (sizeX - 1)), boundary.start.getX());
                 maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (sizeX - 1));
                 slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
 
-                start = start.move(EnumFacing.EAST, slideDest - start.getX());
+                start.setX(slideDest);
             }
             else if (side == EnumFacing.WEST)
             {
-                distance = targetArea.getStartX() - (getStartX() + sizeZ);
-                start = start.move(EnumFacing.EAST, distance);
+                start.setX(targetArea.getStartX() - sizeX);
 
                 minSlide = Math.max((targetArea.getStartZ() - (sizeZ - 1)), boundary.start.getZ());
                 maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (sizeZ - 1));
                 slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
 
-                start = start.move(EnumFacing.SOUTH, slideDest - start.getX());
+                start.setZ(slideDest);
             }
             else // East
             {
-                distance = getStartX() - (targetArea.getStartX() + targetArea.sizeX);
-                start = start.move(EnumFacing.WEST, distance);
+                start.setX(targetArea.getEndX() + 1);
 
                 minSlide = Math.max((targetArea.getStartZ() - (sizeZ - 1)), boundary.start.getZ());
                 maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (sizeZ - 1));
                 slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
 
-                start = start.move(EnumFacing.SOUTH, slideDest - start.getX());
+                start.setZ(slideDest);
             }
         }
 

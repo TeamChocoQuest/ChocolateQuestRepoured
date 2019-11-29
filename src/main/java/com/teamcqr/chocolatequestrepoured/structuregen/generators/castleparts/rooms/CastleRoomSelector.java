@@ -164,9 +164,11 @@ public class CastleRoomSelector
         determineRoofs();
         determineWalls();
 
+        /*
         placeOuterDoors();
         placeTowers();
         pathBetweenRooms();
+         */
         
         //System.out.println(grid.printGrid());
     }
