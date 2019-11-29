@@ -19,7 +19,7 @@ import net.minecraft.util.math.Vec3d;
 public class BossAISummonZombie extends AbstractCQREntityAI {
 
 	private final int COOLDOWN = 20;
-	private final int ANIMATION_TIME = 40;
+	private final int ANIMATION_TIME = 30;
 	private int currentCooldownValue = COOLDOWN;
 	private int currentAnimationTime = 0;
 	private int maxMinions = 5;
@@ -34,6 +34,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		if(entity == null || entity.isDead || entity.getAttackTarget() == null) {
+			this.currentAnimationTime = ANIMATION_TIME;
 			return false;
 		}
 		if(this.animationRunning) {
@@ -46,6 +47,8 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 				this.entity.setVelocity(0, 0, 0);
 				this.entity.setArmPose(ECQREntityArmPoses.SPELLCASTING);
 			}
+		} else {
+			this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
 		}
 		currentCooldownValue--;
 		//System.out.println("Current value: " + currentCooldownValue);
@@ -81,7 +84,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 		Vec3d vector = entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector);
 		int minionCount = maxMinions - getAliveMinionCount();
-		if(minionCount > 0) {
+		if(minionCount > 0 ) {
 			double angle = 180D / (double)minionCount;
 			vector = VectorUtil.rotateVectorAroundY(vector, 270);
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
@@ -90,12 +93,12 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 			}
 			for(BlockPos p : spawnPositions) {
 				if(entity.getNavigator().getPathToPos(p) != null) {
-					System.out.println("Pos: " + p.toString());
+					//System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = new ResourceLocation(Reference.MODID, "zombie");
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
-					circle.setPosition(p.getX(), p.getY() +1, p.getZ());
+					circle.setPosition(p.getX(), p.getY() +0.05, p.getZ());
 					
 					entity.world.spawnEntity(circle);
 					summonedMinions.add(circle);
@@ -117,10 +120,10 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 	@Override
 	public void resetTask() {
 		this.summonedMinions.clear();
-		this.currentAnimationTime = ANIMATION_TIME;
+		//this.currentAnimationTime = ANIMATION_TIME;
 		this.currentCooldownValue = COOLDOWN;
 		this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
-		this.animationRunning = false;
+		//this.animationRunning = false;
 	}
 
 }
