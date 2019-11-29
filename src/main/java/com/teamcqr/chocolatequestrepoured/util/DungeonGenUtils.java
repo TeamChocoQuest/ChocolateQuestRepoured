@@ -223,5 +223,21 @@ public class DungeonGenUtils {
 			return low + random.nextInt(high - low + 1);
 		}
 	}
+
+	public static int randomBetweenGaussian(Random random, int low, int high)
+	{
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			int span = high - low;
+			double gaussian = random.nextGaussian();
+			return low + (int)((gaussian * span) + 0.5);
+		}
+
+
+	}
 	
 }

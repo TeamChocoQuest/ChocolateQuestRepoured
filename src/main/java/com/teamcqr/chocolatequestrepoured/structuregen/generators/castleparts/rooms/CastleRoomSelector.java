@@ -61,7 +61,7 @@ public class CastleRoomSelector
         }
     }
 
-    private static final int MAX_LAYERS = 5;
+    private static final int MAX_LAYERS = 1;//5;
     private static final int PADDING_FLOORS = 2;
     private static final int MIN_TOWER_FLOORS = 3;
     private static final int MIN_TOWER_SIZE = 7; //needs to have room for spiral stairs
@@ -163,20 +163,20 @@ public class CastleRoomSelector
         determineRoofs();
         determineWalls();
 
+        /*
         placeOuterDoors();
         placeTowers();
         pathBetweenRooms();
-
+        */
         //System.out.println(grid.printGrid());
     }
-
-    int minRoomsForBoss = (int)(Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
 
     private void addMainBuilding()
     {
         setFirstLayerBuildable();
 
         boolean lastFloor = false;
+        int minRoomsForBoss = (int)(Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
 
         //These are declared up here so after the for loop we retain the indices
         //and floor of the highest section
@@ -204,7 +204,7 @@ public class CastleRoomSelector
                             if (buildArea.dimensionsAre(minRoomsForBoss, minRoomsForBoss + 1))
                             {
                                 //if largest area is exact size for boss room, have to make boss area here
-                                grid.setBossArea(buildArea, firstFloorInLayer);
+                                grid.setBossArea(buildArea);
                                 lastFloor = true;
                             }
                             else
@@ -212,42 +212,48 @@ public class CastleRoomSelector
                                 //area is at least big enough for boss area
                                 if (layer >= 3)
                                 {
-                                    RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1);
+                                    RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
+                                    grid.selectBlockOfCellsForBuilding(bossArea, floorsPerLayer);
+                                    grid.setBossArea(bossArea);
                                 }
                                 else
                                 {
+                                    RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
+                                    grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
+                                    for (EnumFacing side : EnumFacing.HORIZONTALS)
+                                    {
+                                        RoomGrid.Area2D sideArea = buildArea.sliceToSideOfArea(structArea, side);
+                                        if (sideArea != null)
+                                        {
+                                            sideArea = sideArea.getRandomSubArea(random, 1, 1, false);
+                                            sideArea.alignToSide(random, structArea, side, buildArea);
+                                            grid.selectBlockOfCellsForBuilding(sideArea, floorsPerLayer);
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
                     else //all other build areas that aren't the largest
                     {
+                        RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, 1, 1, true);
+                        grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
+                        for (EnumFacing side : EnumFacing.HORIZONTALS)
+                        {
+                            RoomGrid.Area2D sideArea = buildArea.sliceToSideOfArea(structArea, side);
+                            if (sideArea != null)
+                            {
+                                sideArea.alignToSide(random, structArea, side, buildArea);
+                                grid.selectBlockOfCellsForBuilding(sideArea, floorsPerLayer);
+                            }
+                        }
                     }
                 }
             }
 
-            int minX = grid.getMinBuildableXOnFloor(layer * floorsPerLayer);
-            int maxX = grid.getMaxBuildableXOnFloor(layer * floorsPerLayer);
-            int maxLenX = maxX - minX + 1;
-            int minZ = grid.getMinBuildableZOnFloor(layer * floorsPerLayer);
-            int maxZ = grid.getMaxBuildableZOnFloor(layer * floorsPerLayer);
-            int maxLenZ = maxZ - minZ + 1;
-
-            //randomize length from possible length
-            mainRoomsX = randomSubsectionLength(maxLenX);
-            mainRoomsZ = randomSubsectionLength(maxLenZ);
-            System.out.printf("Randomized main rooms X to %d and Z to %d", mainRoomsX, mainRoomsZ);
-
-            //align the part to the left or right
-            int offsetX = random.nextBoolean() ? 0 : maxLenX - mainRoomsX;
-
-            //align the part to the top or bottom
-            int offsetZ = random.nextBoolean() ? 0 : maxLenZ - mainRoomsZ;
-
-            lastMainStartX = minX + offsetX;
-            lastMainStartZ = minZ + offsetZ;
+            /*
 
             for (int floor = 0; floor < floorsPerLayer; floor++)
             {
@@ -345,6 +351,8 @@ public class CastleRoomSelector
                     addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
                 }
             }
+
+             */
         }
 
         //Make the highest main room section a potential roof position
@@ -352,6 +360,7 @@ public class CastleRoomSelector
         {
             roofAreas.add(new RoofArea(lastMainStartX, mainRoomsX, lastMainStartZ, mainRoomsZ, layer * floorsPerLayer));
         }
+
     }
 
     private void setFirstLayerBuildable()
@@ -364,11 +373,13 @@ public class CastleRoomSelector
         }
     }
 
-    private int randomSubsectionLength(int mainLength)
+    private void addSideStructures(RoomGrid.Area2D buildable, RoomGrid.Area2D mainStruct)
     {
-        int rounding = (mainLength % 2 == 0) ? 0 : 1;
-        int halfLen = mainLength / 2;
-        return halfLen + random.nextInt(halfLen + rounding);
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            RoomGrid.Area2D possibleArea = buildable.sliceToSideOfArea(mainStruct, side);
+
+        }
     }
 
     private void addSupportIfFirstLayer(int layer, int gridIndexX, int gridIndexZ, int roomsX, int roomsZ)
