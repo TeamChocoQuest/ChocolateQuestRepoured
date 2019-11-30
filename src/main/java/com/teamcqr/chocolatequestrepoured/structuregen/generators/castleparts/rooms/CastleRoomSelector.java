@@ -62,7 +62,7 @@ public class CastleRoomSelector
         }
     }
 
-    private static final int MAX_LAYERS = 2;//5;
+    private static final int MAX_LAYERS = 5;//5;
     private static final int PADDING_FLOORS = 2;
     private static final int MIN_TOWER_FLOORS = 3;
     private static final int MIN_TOWER_SIZE = 7; //needs to have room for spiral stairs
