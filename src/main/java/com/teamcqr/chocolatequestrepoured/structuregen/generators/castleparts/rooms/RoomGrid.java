@@ -256,6 +256,7 @@ public class RoomGrid
     private Random random;
     private RoomGridCell[][][] roomArray;
     private List<RoomGridCell> roomList;
+    private int bossFloor = 0;
 
     public RoomGrid(int floors, int roomsX, int roomsZ, Random random)
     {
@@ -731,6 +732,8 @@ public class RoomGrid
 
     public void setBossArea(Area2D area)
     {
+        bossFloor = area.start.getFloor();
+
         for (RoomGridPosition pos : area.getPositionList())
         {
             if (withinGridBounds(pos))

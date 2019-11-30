@@ -217,11 +217,14 @@ public class CastleRoomSelector
                                     RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
                                     grid.selectBlockOfCellsForBuilding(bossArea, floorsPerLayer);
                                     grid.setBossArea(bossArea);
+                                    lastFloor = true;
+
+                                    //TODO: Make use of any remaining space
                                 }
                                 else
                                 {
                                     RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
-                                    System.out.println("Added central struct: " + structArea.toString());
+                                    System.out.println("Added central struct to largest area: " + structArea.toString());
                                     grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
                                     addSideStructures(structArea, buildArea);
@@ -232,17 +235,10 @@ public class CastleRoomSelector
                     else //all other build areas that aren't the largest
                     {
                         RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, 1, 1, true);
+                        System.out.println("Added central struct to not largest area: " + structArea.toString());
                         grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
-                        for (EnumFacing side : EnumFacing.HORIZONTALS)
-                        {
-                            RoomGrid.Area2D sideArea = buildArea.sliceToSideOfArea(structArea, side);
-                            if (sideArea != null)
-                            {
-                                sideArea.alignToSide(random, structArea, side, buildArea);
-                                grid.selectBlockOfCellsForBuilding(sideArea, floorsPerLayer);
-                            }
-                        }
+                        addSideStructures(structArea, buildArea);
                     }
                 }
             }
