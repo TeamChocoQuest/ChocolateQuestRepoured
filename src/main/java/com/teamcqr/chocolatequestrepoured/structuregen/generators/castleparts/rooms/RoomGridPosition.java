@@ -17,6 +17,13 @@ public class RoomGridPosition
         this.z = z;
     }
 
+    public RoomGridPosition(RoomGridPosition pos)
+    {
+        this.floor = pos.floor;
+        this.x = pos.x;
+        this.z = pos.z;
+    }
+
     public int getFloor()
     {
         return floor;

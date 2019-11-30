@@ -62,7 +62,7 @@ public class CastleRoomSelector
         }
     }
 
-    private static final int MAX_LAYERS = 1;//5;
+    private static final int MAX_LAYERS = 2;//5;
     private static final int PADDING_FLOORS = 2;
     private static final int MIN_TOWER_FLOORS = 3;
     private static final int MIN_TOWER_SIZE = 7; //needs to have room for spiral stairs
@@ -224,23 +224,7 @@ public class CastleRoomSelector
                                     System.out.println("Added central struct: " + structArea.toString());
                                     grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
-                                    for (EnumFacing side : EnumFacing.HORIZONTALS)
-                                    {
-                                        RoomGrid.Area2D sideAllowedArea = buildArea.sliceToSideOfArea(structArea, side);
-                                        RoomGrid.Area2D lastBuiltArea = structArea;
-                                        RoomGrid.Area2D sideSelectedArea;
-
-                                        while (sideAllowedArea != null)
-                                        {
-                                            sideSelectedArea = sideAllowedArea.getRandomSubArea(random, 1, 1, false);
-                                            sideSelectedArea.alignToSide(random, lastBuiltArea, side, buildArea);
-                                            grid.selectBlockOfCellsForBuilding(sideSelectedArea, floorsPerLayer);
-                                            System.out.println("Added " + side.toString() + " side struct: " + sideSelectedArea.toString());
-                                            lastBuiltArea = sideSelectedArea;
-
-                                            sideAllowedArea = buildArea.sliceToSideOfArea(lastBuiltArea, side);
-                                        }
-                                    }
+                                    addSideStructures(structArea, buildArea);
                                 }
                             }
                         }
@@ -373,6 +357,28 @@ public class CastleRoomSelector
 
     }
 
+    private void addSideStructures(RoomGrid.Area2D structArea, RoomGrid.Area2D buildArea)
+    {
+        for (EnumFacing side : EnumFacing.HORIZONTALS)
+        {
+            RoomGrid.Area2D sideAllowedArea = buildArea.sliceToSideOfArea(structArea, side);
+            RoomGrid.Area2D lastBuiltArea = structArea;
+            RoomGrid.Area2D sideSelectedArea;
+
+            //While there is still room to build in this direction, 75% chance to keep going
+            while (sideAllowedArea != null && DungeonGenUtils.percentChance(random, 75))
+            {
+                sideSelectedArea = sideAllowedArea.getRandomSubArea(random, 1, 1, false);
+                sideSelectedArea.alignToSide(random, lastBuiltArea, side, buildArea);
+                grid.selectBlockOfCellsForBuilding(sideSelectedArea, floorsPerLayer);
+                System.out.println("Added " + side.toString() + " side struct: " + sideSelectedArea.toString());
+                lastBuiltArea = sideSelectedArea;
+
+                sideAllowedArea = buildArea.sliceToSideOfArea(lastBuiltArea, side);
+            }
+        }
+    }
+
     private void setFirstLayerBuildable()
     {
         ArrayList<RoomGridCell> firstLayer = grid.getAllCellsWhere(c -> c.getFloor() < floorsPerLayer);
@@ -380,15 +386,6 @@ public class CastleRoomSelector
         for (RoomGridCell cell : firstLayer)
         {
             cell.setBuildable();
-        }
-    }
-
-    private void addSideStructures(RoomGrid.Area2D buildable, RoomGrid.Area2D mainStruct)
-    {
-        for (EnumFacing side : EnumFacing.HORIZONTALS)
-        {
-            RoomGrid.Area2D possibleArea = buildable.sliceToSideOfArea(mainStruct, side);
-
         }
     }
 
