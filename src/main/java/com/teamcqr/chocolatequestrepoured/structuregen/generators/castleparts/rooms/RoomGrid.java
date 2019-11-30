@@ -362,7 +362,7 @@ public class RoomGrid
     public ArrayList<Area2D> getAllBuildableAreasOnFloor(int floor)
     {
         ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
-        getAllCellsWhere(c -> c.getFloor() == floor).forEach(c -> floorPositions.add(c.getGridPosition()));
+        getAllCellsWhere(c -> c.getFloor() == floor && c.isBuildable()).forEach(c -> floorPositions.add(c.getGridPosition()));
 
         ArrayList<Area2D> areas = new ArrayList<>();
 
@@ -391,8 +391,8 @@ public class RoomGrid
         {
             for (RoomGridPosition startPos : floorPositions)
             {
-                int x = 0;
-                int z = 0;
+                int x = 1;
+                int z = 1;
                 boolean incX = true;
                 boolean incZ = true;
 
@@ -405,10 +405,12 @@ public class RoomGrid
                     }
                     for (int i = 0; i < z; i++)
                     {
-                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, i);
+                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, (x - 1)).move(EnumFacing.SOUTH, i);
                         if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
                         {
                             incX = false;
+                            --x;
+                            break;
                         }
                     }
 
@@ -418,22 +420,16 @@ public class RoomGrid
                     }
                     for (int i = 0; i < x; i++)
                     {
-                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, z);
+                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, (z - 1));
                         if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
                         {
                             incZ = false;
+                            --z;
+                            break;
                         }
                     }
                 }
-                while (floorPositions.contains(pos) && withinGridBounds(pos) && getCellAt(pos).isBuildable());
-
-                pos = new RoomGridPosition(startPos);
-                do
-                {
-                    pos = pos.move(EnumFacing.SOUTH);
-                    ++z;
-                }
-                while (floorPositions.contains(pos) && withinGridBounds(pos) && getCellAt(pos).isBuildable());
+                while (incX || incZ);
 
                 if (x * z > largestArea)
                 {
