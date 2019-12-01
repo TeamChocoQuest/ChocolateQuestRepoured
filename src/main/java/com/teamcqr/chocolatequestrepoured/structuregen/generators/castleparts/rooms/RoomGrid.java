@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
@@ -22,6 +21,11 @@ public class RoomGrid
             this.start = start;
             this.sizeX = sizeX;
             this.sizeZ = sizeZ;
+        }
+
+        public Area2D addFloors(int numFloors)
+        {
+            return new Area2D(this.start.move(EnumFacing.UP, numFloors), sizeX, sizeZ);
         }
 
         public int getStartX()
@@ -609,6 +613,64 @@ public class RoomGrid
             if (cell != null)
             {
                 cell.setBuildable();
+            }
+        }
+
+        setCellPathingArea(area, numFloors);
+    }
+
+    public void setCellPathingArea(Area2D baseArea, int floors)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            Area2D currentFloorArea;
+            if (floor == 0)
+            {
+                currentFloorArea = baseArea;
+            }
+            else
+            {
+                currentFloorArea = baseArea.addFloors(floor);
+            }
+
+            HashSet<RoomGridCell> cellsInArea = new HashSet<>();
+            currentFloorArea.getPositionList().forEach(p -> cellsInArea.add(getCellAt(p)));
+
+            for (RoomGridCell cell : cellsInArea)
+            {
+                if (cell == null)
+                {
+                    System.out.println("How did this happen?");
+                }
+                cell.addPathableCells(cellsInArea);
+            }
+
+            //For each cell in this area
+            for (RoomGridCell cell: cellsInArea)
+            {
+                //Check N E S W
+                for (EnumFacing direction : EnumFacing.HORIZONTALS)
+                {
+                    //If adjacent cell isn't part of my area and is selected
+                    RoomGridCell adjacent = getAdjacentCell(cell, direction);
+                    if (adjacent != null && //adjacent cell exists
+                            !cellsInArea.contains(adjacent) && //not part of my area already
+                            adjacent.isSelectedForBuilding() && //adjacent cell is selected
+                            !cell.getPathableCells().contains(adjacent)) //I haven't already been pathed to it
+                    {
+                        //Copy the adjacent cell's pathable list to all cells in my area
+                        for (RoomGridCell myPathable : cellsInArea)
+                        {
+                            myPathable.addPathableCells(adjacent.getPathableCells());
+                        }
+                        //Copy my pathable list out to all the adjacent cell's pathable cells
+                        HashSet<RoomGridCell> adjacentPathable = new HashSet<>(adjacent.getPathableCells());
+                        for (RoomGridCell theirPathable : adjacentPathable)
+                        {
+                            theirPathable.addPathableCells(cell.getPathableCells());
+                        }
+                    }
+                }
             }
         }
     }

@@ -136,8 +136,9 @@ public class CastleRoomSelector
     {
         addMainBuilding();
 
-        boolean vertical = random.nextBoolean();
+        //boolean vertical = random.nextBoolean();
 
+        /*
         for (int floor = 0; floor < usedFloors; floor++)
         {
             boolean narrowFloor = grid.floorIsNarrow(floor);
@@ -155,6 +156,7 @@ public class CastleRoomSelector
                 vertical = !vertical;
             }
         }
+        */
 
         addStairCases();
 
@@ -164,11 +166,9 @@ public class CastleRoomSelector
         determineRoofs();
         determineWalls();
 
-        /*
         placeOuterDoors();
         placeTowers();
         pathBetweenRooms();
-         */
         
         //System.out.println(grid.printGrid());
     }
@@ -343,6 +343,8 @@ public class CastleRoomSelector
             }
 
              */
+
+            usedFloors += floorsPerLayer;
         }
 
         //Make the highest main room section a potential roof position
@@ -475,7 +477,7 @@ public class CastleRoomSelector
             {
                 tower = new CastleRoomTowerSquare(getRoomStart(cell), roomSize, floorHeight, alignment, towerSize, tower);
                 cell.setRoom(tower);
-                //cell.setReachable();
+                //cell.setAllLinkedReachable();
 
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, alignment);
                 if (adjacent.isPopulated())
@@ -818,9 +820,10 @@ public class CastleRoomSelector
             while (!unreachable.isEmpty() && !reachable.isEmpty())
             {
                 RoomGridCell srcRoom = unreachable.get(random.nextInt(unreachable.size()));
+                HashSet<RoomGridCell> pathableFromSrc = srcRoom.getPathableCells();
+                pathableFromSrc.remove(srcRoom); //Don't want to path to myself
 
-                //going for the nearest doesn't always make the most interesting layout, may want to add noise
-                RoomGridCell destRoom = findNearestReachableRoom(srcRoom, reachable);
+                RoomGridCell destRoom = findNearestReachableRoom(srcRoom, pathableFromSrc);
 
                 LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom);
 
@@ -835,9 +838,7 @@ public class CastleRoomSelector
                             {
                                 addDoorToRoomRandom(cell, node.getParentDirection());
                             }
-                            cell.setReachable();
-                            unreachable.remove(cell);
-                            reachable.add(cell);
+                            cell.setAllLinkedReachable(unreachable, reachable);
                         }
                     }
                 }
@@ -930,14 +931,16 @@ public class CastleRoomSelector
         return null;
     }
 
-    private RoomGridCell findNearestReachableRoom(RoomGridCell origin, ArrayList<RoomGridCell> floorRooms)
+    private RoomGridCell findNearestReachableRoom(RoomGridCell origin, HashSet<RoomGridCell> pathableRooms)
     {
-        if (!floorRooms.isEmpty())
+        ArrayList<RoomGridCell> sorted = new ArrayList<>(pathableRooms);
+
+        if (!sorted.isEmpty())
         {
-            floorRooms.sort((RoomGridCell c1, RoomGridCell c2) ->
+            sorted.sort((RoomGridCell c1, RoomGridCell c2) ->
                     Double.compare(grid.distanceBetweenCells2D(origin, c1), (grid.distanceBetweenCells2D(origin, c2))));
 
-            return floorRooms.get(0);
+            return sorted.get(0);
         }
         else
         {
