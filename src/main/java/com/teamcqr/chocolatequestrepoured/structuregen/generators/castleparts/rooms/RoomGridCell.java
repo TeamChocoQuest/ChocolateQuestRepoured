@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -44,7 +45,9 @@ public class RoomGridCell
     private boolean partOfMainStruct;
     private CastleRoom room;
     private boolean narrow;
-    private HashSet<RoomGridCell> linkedCells;
+    private HashSet<RoomGridCell> linkedCells; //cells that are connected to this room (no walls between)
+    private HashSet<RoomGridCell> pathableCells; //cells on the same floor that are potentially reachable
+    private boolean isBossArea = false;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
@@ -54,6 +57,24 @@ public class RoomGridCell
         this.partOfMainStruct = false;
         this.room = room;
         this.linkedCells = new HashSet<>();
+        this.pathableCells = new HashSet<>();
+    }
+
+    public void setAllLinkedReachable(List<RoomGridCell> unreachableCells, List<RoomGridCell> reachableCells)
+    {
+        this.reachable = true;
+
+        for (RoomGridCell linkedCell : getLinkedCells())
+        {
+            linkedCell.setReachable();
+            unreachableCells.remove(linkedCell);
+
+            //TODO: This would be easier and faster with a hashset
+            if (!reachableCells.contains(linkedCell))
+            {
+                reachableCells.add(linkedCell);
+            }
+        }
     }
 
     public void setReachable()
@@ -183,6 +204,11 @@ public class RoomGridCell
         return this.gridPosition.getZ();
     }
 
+    public void setAsBossArea()
+    {
+        this.isBossArea = true;
+    }
+
     public void linkToCell(RoomGridCell cell)
     {
         this.linkedCells.add(cell);
@@ -201,6 +227,16 @@ public class RoomGridCell
     public boolean isLinkedToCell(RoomGridCell cell)
     {
         return linkedCells.contains(cell);
+    }
+
+    public void addPathableCells(HashSet<RoomGridCell> cells)
+    {
+        pathableCells.addAll(cells);
+    }
+
+    public HashSet<RoomGridCell> getPathableCells()
+    {
+        return pathableCells;
     }
 
     @Override

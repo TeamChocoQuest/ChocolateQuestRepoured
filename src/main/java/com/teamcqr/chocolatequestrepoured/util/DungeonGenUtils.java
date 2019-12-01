@@ -211,5 +211,46 @@ public class DungeonGenUtils {
 	{
 		return (random.nextInt(100) < percent);
 	}
+
+	public static int randomBetween(Random random, int low, int high)
+	{
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			return low + random.nextInt(high - low + 1);
+		}
+	}
+
+	public static int randomBetweenGaussian(Random random, int low, int high)
+	{
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			double avg = (high - low) / 2d;
+			double stdDev = (high - avg) / 3d; //guarantees that MOST (99.7%) results will be between low & high
+			double gaussian = random.nextGaussian();
+			int result = (int)(avg + (gaussian * stdDev) + 0.5); //0.5 is added for rounding to nearest whole number
+			if (result < low)
+			{
+				return low;
+			}
+			else if (result > high)
+			{
+				return high;
+			}
+			else
+			{
+				return result;
+			}
+		}
+
+
+	}
 	
 }
