@@ -821,7 +821,9 @@ public class CastleRoomSelector
             {
                 RoomGridCell srcRoom = unreachable.get(random.nextInt(unreachable.size()));
                 HashSet<RoomGridCell> pathableFromSrc = srcRoom.getPathableCells();
+
                 pathableFromSrc.remove(srcRoom); //Don't want to path to myself
+                pathableFromSrc.removeIf(c -> !c.isReachable());
 
                 RoomGridCell destRoom = findNearestReachableRoom(srcRoom, pathableFromSrc);
 
