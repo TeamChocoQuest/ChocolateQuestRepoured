@@ -1,13 +1,257 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class RoomGrid
 {
+    public static class Area2D
+    {
+        public RoomGridPosition start;
+        public int sizeX;
+        public int sizeZ;
+
+        public Area2D (RoomGridPosition start, int sizeX, int sizeZ)
+        {
+            this.start = start;
+            this.sizeX = sizeX;
+            this.sizeZ = sizeZ;
+        }
+
+        public Area2D addFloors(int numFloors)
+        {
+            return new Area2D(this.start.move(EnumFacing.UP, numFloors), sizeX, sizeZ);
+        }
+
+        public int getStartX()
+        {
+            return start.getX();
+        }
+
+        public int getStartZ()
+        {
+            return start.getZ();
+        }
+
+        public int getEndX()
+        {
+            return start.getX() + sizeX - 1;
+        }
+
+        public int getEndZ()
+        {
+            return start.getZ() + sizeZ - 1;
+        }
+
+        public boolean dimensionsAre(int dim1, int dim2)
+        {
+            return (sizeX == dim1 && sizeZ == dim2) || (sizeX == dim2 && sizeZ == 1);
+        }
+
+        public boolean dimensionsAreAtLeast(int dim1, int dim2)
+        {
+            int larger = Math.max(dim1, dim2);
+            int smaller = Math.min(dim1, dim2);
+            return (Math.min(sizeX, sizeZ) >= smaller) && (Math.max(sizeX, sizeZ) >= larger);
+        }
+
+        public ArrayList<RoomGridPosition> getPositionList()
+        {
+            ArrayList<RoomGridPosition> positions = new ArrayList<>();
+
+            for (int x = 0; x < sizeX; x++)
+            {
+                for (int z = 0; z < sizeZ; z++)
+                {
+                    positions.add(start.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z));
+                }
+            }
+
+            return positions;
+        }
+
+        public void removeFromList(List<RoomGridPosition> positions)
+        {
+            ArrayList<RoomGridPosition> myPositions = getPositionList();
+            positions.removeAll(myPositions);
+        }
+
+        public Area2D getRandomSubArea(Random random, int minDim1, int minDim2, boolean mustBeSmaller)
+        {
+            //Make sure this area has the space to fit the sub dimensions
+            if (dimensionsAreAtLeast(minDim1, minDim2))
+            {
+                int resultX;
+                int resultZ;
+                int shrink = mustBeSmaller ? 1 : 0;
+
+                //Figure out which dimension is larger (so parameter order doesn't matter)
+                int larger = Math.max(minDim1, minDim2);
+                int smaller = Math.min(minDim1, minDim2);
+
+                //Determine which directions (X and Z) have the room to fit the longer of the two dimensions
+                boolean fitsX = sizeX >= larger;
+                boolean fitsZ = sizeZ >= larger;
+
+                //If either dimension could be the long side, then pick at random
+                if (fitsX && fitsZ)
+                {
+                    if (random.nextBoolean())
+                    {
+                        resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeX - shrink);
+                        resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeZ - shrink);
+                    }
+                    else
+                    {
+                        resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeZ - shrink);
+                        resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeX - shrink);
+                    }
+                }
+                //Otherwise use the side with more room as the long side
+                else if (fitsX)
+                {
+                    resultX = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeX - shrink);
+                    resultZ = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeZ - shrink);
+                }
+                else
+                {
+                    resultZ = DungeonGenUtils.randomBetweenGaussian(random, larger, sizeZ - shrink);
+                    resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeX - shrink);
+                }
+
+                RoomGridPosition subStart = start;
+                int maxMoveX = sizeX - resultX;
+                int maxMoveZ = sizeZ - resultZ;
+                if (maxMoveX > 0)
+                {
+                    subStart = subStart.move(EnumFacing.EAST, random.nextInt(sizeX - resultX));
+                }
+                if (maxMoveZ > 0)
+                {
+                    subStart = subStart.move(EnumFacing.SOUTH, random.nextInt(sizeZ - resultZ));
+                }
+
+                return new Area2D(subStart, resultX, resultZ);
+            }
+            else
+            {
+                //Impossible to meet dimension constraints so just stay the same
+                return this;
+            }
+
+        }
+
+        @Nullable
+        public Area2D sliceToSideOfArea(Area2D mask, EnumFacing side)
+        {
+            if (mask != null)
+            {
+                RoomGridPosition resultStart;
+                int resultSizeX;
+                int resultSizeZ;
+
+                if (side == EnumFacing.NORTH)
+                {
+                    resultStart = start;
+                    resultSizeX = sizeX;
+                    resultSizeZ = mask.getStartZ() - getStartZ();
+                }
+                else if (side == EnumFacing.SOUTH)
+                {
+                    resultStart = new RoomGridPosition(start.getFloor(), start.getX(), mask.getEndZ() + 1);
+                    resultSizeX = sizeX;
+                    resultSizeZ = getEndZ() - mask.getEndZ();
+                }
+                else if (side == EnumFacing.WEST)
+                {
+                    resultStart = start;
+                    resultSizeX = mask.getStartX() - getStartX();
+                    resultSizeZ = sizeZ;
+                }
+                else //East
+                {
+                    resultStart = new RoomGridPosition(start.getFloor(), mask.getEndX() + 1, start.getZ());
+                    resultSizeX = getEndX() - mask.getEndX();
+                    resultSizeZ = sizeZ;
+                }
+
+                ArrayList<RoomGridPosition> boundary = this.getPositionList();
+                if (boundary.contains(resultStart) && resultSizeX > 0 && resultSizeZ > 0)
+                {
+                    return new Area2D(resultStart, resultSizeX, resultSizeZ);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+            return null;
+        }
+
+        public void alignToSide(Random random, Area2D targetArea, EnumFacing side, Area2D boundary)
+        {
+            int distance; //distance to move toward target area so we are adjacent
+
+            //slide position is position perpendicular to the side to are least 1 square is touching
+            int minSlide;
+            int maxSlide;
+            int slideDest;
+
+            if (side == EnumFacing.NORTH)
+            {
+                start.setZ(targetArea.getStartZ() - sizeZ);
+
+                minSlide = Math.max((targetArea.getStartX() - (sizeX - 1)), boundary.start.getX());
+                maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (sizeX - 1));
+                slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+
+                start.setX(slideDest);
+            }
+            else if (side == EnumFacing.SOUTH)
+            {
+                start.setZ(targetArea.getEndZ() + 1);
+
+                minSlide = Math.max((targetArea.getStartX() - (sizeX - 1)), boundary.start.getX());
+                maxSlide = Math.min((targetArea.getEndX()), boundary.getEndX() - (sizeX - 1));
+                slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+
+                start.setX(slideDest);
+            }
+            else if (side == EnumFacing.WEST)
+            {
+                start.setX(targetArea.getStartX() - sizeX);
+
+                minSlide = Math.max((targetArea.getStartZ() - (sizeZ - 1)), boundary.start.getZ());
+                maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (sizeZ - 1));
+                slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+
+                start.setZ(slideDest);
+            }
+            else // East
+            {
+                start.setX(targetArea.getEndX() + 1);
+
+                minSlide = Math.max((targetArea.getStartZ() - (sizeZ - 1)), boundary.start.getZ());
+                maxSlide = Math.min((targetArea.getEndZ()), boundary.getEndZ() - (sizeZ - 1));
+                slideDest = DungeonGenUtils.randomBetweenGaussian(random, minSlide, maxSlide);
+
+                start.setZ(slideDest);
+            }
+        }
+
+        @Override
+        public String toString()
+        {
+            return String.format("RoomGrid.Area2D{start=%s, sizeX=%d, sizeZ=%d}", start, sizeX, sizeZ);
+        }
+    }
+
     private static final int MAX_lAYERS = 5;
 
     private int floors;
@@ -16,6 +260,7 @@ public class RoomGrid
     private Random random;
     private RoomGridCell[][][] roomArray;
     private List<RoomGridCell> roomList;
+    private int bossFloor = 0;
 
     public RoomGrid(int floors, int roomsX, int roomsZ, Random random)
     {
@@ -38,26 +283,6 @@ public class RoomGrid
                 }
             }
         }
-    }
-
-    public int getRandomXOffsetForRooms(int numRooms)
-    {
-        if (numRooms <= roomsX)
-        {
-            int maxOffset = roomsX - numRooms;
-            return random.nextInt(maxOffset + 1);
-        }
-        return -1;
-    }
-
-    public int getRandomZOffsetForRooms(int numRooms)
-    {
-        if (numRooms <= roomsZ)
-        {
-            int maxOffset = roomsZ - numRooms;
-            return random.nextInt(maxOffset + 1);
-        }
-        return -1;
     }
 
     public void setRoomReachable(int floor, int x, int z)
@@ -97,8 +322,6 @@ public class RoomGrid
 
         return result;
     }
-
-    //TODO: All of these list getters could (maybe?) be done faster as stream filters
 
     public ArrayList<RoomGridCell> getAllCellsWhere(Predicate<RoomGridCell> p)
     {
@@ -141,81 +364,92 @@ public class RoomGrid
         return result;
     }
 
-    public ArrayList<CastleRoom> getRooms()
+    public ArrayList<Area2D> getAllBuildableAreasOnFloor(int floor)
     {
-        ArrayList<RoomGridCell> populatedRooms = getCellListCopy();
-        ArrayList<CastleRoom> result = new ArrayList<>();
-        for (RoomGridCell cell : populatedRooms)
+        ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
+        getAllCellsWhere(c -> c.getFloor() == floor && c.isBuildable()).forEach(c -> floorPositions.add(c.getGridPosition()));
+
+        ArrayList<Area2D> areas = new ArrayList<>();
+
+        Area2D largest = getLargestBuildableAreaOnFloor(floorPositions);
+
+        while (largest != null && !floorPositions.isEmpty() && largest.dimensionsAreAtLeast(2, 2))
         {
-            if (cell.isPopulated())
+            areas.add(largest);
+            largest.removeFromList(floorPositions);
+
+            largest = getLargestBuildableAreaOnFloor(floorPositions);
+        }
+
+        return areas;
+    }
+
+    @Nullable
+    public Area2D getLargestBuildableAreaOnFloor(ArrayList<RoomGridPosition> floorPositions)
+    {
+        int largestArea = 0;
+        int largestX = 0;
+        int largestZ = 0;
+        RoomGridPosition largestStart = null;
+
+        if (!floorPositions.isEmpty())
+        {
+            for (RoomGridPosition startPos : floorPositions)
             {
-                result.add(cell.getRoom());
+                int x = 1;
+                int z = 1;
+                boolean incX = true;
+                boolean incZ = true;
+
+                RoomGridPosition pos = new RoomGridPosition(startPos);
+                do
+                {
+                    if (incX)
+                    {
+                        ++x;
+                    }
+                    for (int i = 0; i < z; i++)
+                    {
+                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, (x - 1)).move(EnumFacing.SOUTH, i);
+                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
+                        {
+                            incX = false;
+                            --x;
+                            break;
+                        }
+                    }
+
+                    if (incZ)
+                    {
+                        ++z;
+                    }
+                    for (int i = 0; i < x; i++)
+                    {
+                        RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, (z - 1));
+                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
+                        {
+                            incZ = false;
+                            --z;
+                            break;
+                        }
+                    }
+                }
+                while (incX || incZ);
+
+                if (x * z > largestArea)
+                {
+                    largestArea = x * z;
+                    largestX = x;
+                    largestZ = z;
+                    largestStart = startPos;
+                }
             }
-        }
-        return result;
-    }
 
-    public int getMinBuildableXOnFloor(int floor)
-    {
-        Optional<RoomGridCell> result = getCellListCopy().stream()
-                .filter(r -> r.getFloor() == floor)
-                .filter(r -> r.isBuildable())
-                .min(Comparator.comparingInt(RoomGridCell::getGridX));
-        if (result.isPresent())
-        {
-            return result.get().getGridX();
+            return new Area2D(largestStart, largestX, largestZ);
         }
         else
         {
-            return 0;
-        }
-    }
-
-    public int getMaxBuildableXOnFloor(int floor)
-    {
-        Optional<RoomGridCell> result = getCellListCopy().stream()
-                .filter(r -> r.getFloor() == floor)
-                .filter(r -> r.isBuildable())
-                .max(Comparator.comparingInt(RoomGridCell::getGridX));
-        if (result.isPresent())
-        {
-            return result.get().getGridX();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public int getMinBuildableZOnFloor(int floor)
-    {
-        Optional<RoomGridCell> result = getCellListCopy().stream()
-                .filter(r -> r.getFloor() == floor)
-                .filter(r -> r.isBuildable())
-                .min(Comparator.comparingInt(RoomGridCell::getGridZ));
-        if (result.isPresent())
-        {
-            return result.get().getGridZ();
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    public int getMaxBuildableZOnFloor(int floor)
-    {
-        Optional<RoomGridCell> result = getCellListCopy().stream()
-                .filter(r -> r.getFloor() == floor)
-                .filter(r -> r.isBuildable())
-                .max(Comparator.comparingInt(RoomGridCell::getGridZ));
-        if (result.isPresent())
-        {
-            return result.get().getGridZ();
-        }
-        else
-        {
-            return 0;
+            return null;
         }
     }
 
@@ -323,6 +557,7 @@ public class RoomGrid
         }
     }
 
+    @Nullable
     public RoomGridCell getCellAt(RoomGridPosition position)
     {
         if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
@@ -346,6 +581,94 @@ public class RoomGrid
                     if (withinGridBounds(floor, x, z))
                     {
                         selectCellForBuilding(floor, x, z);
+                    }
+                }
+            }
+        }
+    }
+
+    public void selectBlockOfCellsForBuilding(Area2D area, int numFloors)
+    {
+        ArrayList<RoomGridPosition> positions = area.getPositionList();
+        for (RoomGridPosition areaPos : positions)
+        {
+            int floor = 0;
+            RoomGridPosition gridPos;
+            RoomGridCell cell;
+
+            //First go through each floor and select the cells for building
+            for (; floor < numFloors; floor++)
+            {
+                gridPos = areaPos.move(EnumFacing.UP, floor);
+                cell = getCellAt(gridPos);
+                if (cell != null)
+                {
+                    cell.selectForBuilding();
+                }
+            }
+
+            //Then set the one cell above floors to buildable to begin the next layer
+            gridPos = areaPos.move(EnumFacing.UP, floor);
+            cell = getCellAt(gridPos);
+            if (cell != null)
+            {
+                cell.setBuildable();
+            }
+        }
+
+        setCellPathingArea(area, numFloors);
+    }
+
+    public void setCellPathingArea(Area2D baseArea, int floors)
+    {
+        for (int floor = 0; floor < floors; floor++)
+        {
+            Area2D currentFloorArea;
+            if (floor == 0)
+            {
+                currentFloorArea = baseArea;
+            }
+            else
+            {
+                currentFloorArea = baseArea.addFloors(floor);
+            }
+
+            HashSet<RoomGridCell> cellsInArea = new HashSet<>();
+            currentFloorArea.getPositionList().forEach(p -> cellsInArea.add(getCellAt(p)));
+
+            for (RoomGridCell cell : cellsInArea)
+            {
+                if (cell == null)
+                {
+                    System.out.println("How did this happen?");
+                }
+                cell.addPathableCells(cellsInArea);
+            }
+
+            //For each cell in this area
+            for (RoomGridCell cell: cellsInArea)
+            {
+                //Check N E S W
+                for (EnumFacing direction : EnumFacing.HORIZONTALS)
+                {
+                    //If adjacent cell isn't part of my area and is selected
+                    RoomGridCell adjacent = getAdjacentCell(cell, direction);
+                    if (adjacent != null && //adjacent cell exists
+                            !cellsInArea.contains(adjacent) && //not part of my area already
+                            adjacent.isSelectedForBuilding() && //adjacent cell is selected
+                            !cell.getPathableCells().contains(adjacent)) //I haven't already been pathed to it
+                    {
+                        //Copy the adjacent cell's pathable list to all cells in my area
+                        for (RoomGridCell myPathable : cellsInArea)
+                        {
+                            myPathable.addPathableCells(adjacent.getPathableCells());
+                        }
+                        //Copy my pathable list out to all the adjacent cell's pathable cells
+                        HashSet<RoomGridCell> adjacentPathable = new HashSet<>(adjacent.getPathableCells());
+                        for (RoomGridCell theirPathable : adjacentPathable)
+                        {
+                            theirPathable.addPathableCells(cell.getPathableCells());
+                        }
                     }
                 }
             }
@@ -466,6 +789,19 @@ public class RoomGrid
         else
         {
             return null;
+        }
+    }
+
+    public void setBossArea(Area2D area)
+    {
+        bossFloor = area.start.getFloor();
+
+        for (RoomGridPosition pos : area.getPositionList())
+        {
+            if (withinGridBounds(pos))
+            {
+                getCellAt(pos).setAsBossArea();
+            }
         }
     }
 
