@@ -1,8 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
@@ -64,6 +69,37 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 		super.onLivingUpdate();
 		
 		bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
+	}
+	
+	@Override
+	public void updateReputationOnDeath(DamageSource cause) {
+		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction()) {
+			EntityPlayer player = (EntityPlayer) cause.getTrueSource();
+			int range = Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius();
+			double x1 = player.posX - range;
+			double y1 = player.posY - range;
+			double z1 = player.posZ - range;
+			double x2 = player.posX + range;
+			double y2 = player.posY + range;
+			double z2 = player.posZ + range;
+			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
+
+			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
+				if (cqrentity.hasFaction() && (this.canEntityBeSeen(cqrentity) || cqrentity.canEntityBeSeen(player) || player.canEntityBeSeen(cqrentity))) {
+					if (this.getFaction().equals(cqrentity.getFaction())) {
+						// DONE decrement the players repu on this entity's faction
+						this.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL *100);
+					} else if (this.getFaction().isEnemy(cqrentity.getFaction())) {
+						// DONE increment the players repu at CQREntity's faction
+						cqrentity.getFaction().incrementReputation(player, EFaction.REPU_DECREMENT_ON_ENEMY_KILL *100);
+					} else if (this.getFaction().isAlly(cqrentity.getFaction())) {
+						// DONE decrement the players repu on CQREntity's faction
+						cqrentity.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL *100);
+					}
+					break;
+				}
+			}
+		}
 	}
 	
 	@Override

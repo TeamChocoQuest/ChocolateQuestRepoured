@@ -604,7 +604,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
-				if (cqrentity.hasFaction() && (this.canEntityBeSeen(cqrentity) || player.canEntityBeSeen(cqrentity))) {
+				if (cqrentity.hasFaction() && (this.canEntityBeSeen(cqrentity) || cqrentity.canEntityBeSeen(player) || player.canEntityBeSeen(cqrentity))) {
 					if (this.getFaction().equals(cqrentity.getFaction())) {
 						// DONE decrement the players repu on this entity's faction
 						this.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL);
@@ -615,6 +615,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob,I
 						// DONE decrement the players repu on CQREntity's faction
 						cqrentity.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL);
 					}
+					break;
 				}
 			}
 		}
