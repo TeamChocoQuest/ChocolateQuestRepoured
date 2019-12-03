@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.lang.Double;
 
@@ -234,7 +235,7 @@ public class CastleRoomSelector
                     }
                     else //all other build areas that aren't the largest
                     {
-                        RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, 1, 1, true);
+                        RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, 2, 1, true);
                         System.out.println("Added central struct to not largest area: " + structArea.toString());
                         grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
 
@@ -243,116 +244,16 @@ public class CastleRoomSelector
                 }
             }
 
-            /*
-
-            for (int floor = 0; floor < floorsPerLayer; floor++)
-            {
-                usedFloors++;
-                for (int x = 0; x < mainRoomsX; x++)
-                {
-                    for (int z = 0; z < mainRoomsZ; z++)
-                    {
-                        int xIndex = lastMainStartX + x;
-                        int zIndex = lastMainStartZ + z;
-                        int floorIndex = floor + (layer * floorsPerLayer);
-                        grid.selectCellForBuilding(floorIndex, xIndex, zIndex);
-                        grid.setRoomAsMainStruct(floorIndex, xIndex, zIndex);
-
-                        if (Math.min(mainRoomsX, mainRoomsZ) == 1)
-                        {
-                            grid.setRoomAsNarrow(floorIndex, xIndex, zIndex);
-                        }
-
-                        //Set the first floor og the next layer up as buildable so we know where to build the main struct
-                        int oneLayerUp = floorIndex + floorsPerLayer;
-                        if (oneLayerUp < maxFloors)
-                        {
-                            grid.setCellBuilable(oneLayerUp, xIndex, zIndex);
-                        }
-                    }
-                }
-            }
-
-            addSupportIfFirstLayer(layer, lastMainStartX, lastMainStartZ, mainRoomsX, mainRoomsZ);
-
-            int openCellsWest = offsetX;
-            int openCellsNorth = offsetZ;
-            int openCellsEast = maxLenX - mainRoomsX - offsetX;
-            int openCellsSouth = maxLenZ - mainRoomsZ - offsetZ;
-            int floorStart = layer * floorsPerLayer;
-            int sideRoomsX, sideRoomsZ, startX, startZ;
-
-            if (openCellsWest > 0)
-            {
-                sideRoomsX = random.nextInt(openCellsWest + 1);
-                sideRoomsZ = random.nextInt(mainRoomsZ + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
-                {
-                    startX = minX + offsetX - sideRoomsX;
-                    startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
-
-                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
-                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
-                }
-            }
-
-            if (openCellsNorth > 0)
-            {
-                sideRoomsX = random.nextInt(mainRoomsX + 1);
-                sideRoomsZ = random.nextInt(openCellsNorth + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
-                {
-                    startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
-                    startZ = minZ + offsetZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
-
-                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
-                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
-                }
-            }
-
-            if (openCellsEast > 0)
-            {
-                sideRoomsX = random.nextInt(openCellsEast + 1);
-                sideRoomsZ = random.nextInt(mainRoomsZ + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
-                {
-                    startX = minX + offsetX + mainRoomsX;
-                    startZ = random.nextBoolean() ? minZ + offsetZ : minZ + offsetZ + mainRoomsZ - sideRoomsZ;
-                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
-
-                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
-                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
-                }
-            }
-
-            if (openCellsSouth > 0)
-            {
-                sideRoomsX = random.nextInt(mainRoomsX + 1);
-                sideRoomsZ = random.nextInt(openCellsSouth + 1);
-                if (Math.min(sideRoomsX, sideRoomsZ) >= 1)
-                {
-                    startX = random.nextBoolean() ? minX + offsetX : minX + offsetX + mainRoomsX - sideRoomsX;
-                    startZ = minZ + offsetZ + mainRoomsZ;
-                    grid.selectBlockOfCellsForBuilding(floorStart, floorsPerLayer, startX, sideRoomsX, startZ, sideRoomsZ);
-
-                    roofAreas.add(new RoofArea(startX, sideRoomsX, startZ, sideRoomsZ, floorStart + floorsPerLayer));
-                    addSupportIfFirstLayer(layer, startX, startZ, sideRoomsX, sideRoomsZ);
-                }
-            }
-
-             */
-
             usedFloors += floorsPerLayer;
         }
 
         //Make the highest main room section a potential roof position
+        /*
         if (!lastFloor)
         {
             roofAreas.add(new RoofArea(lastMainStartX, mainRoomsX, lastMainStartZ, mainRoomsZ, layer * floorsPerLayer));
         }
-
+        */
     }
 
     private void addSideStructures(RoomGrid.Area2D structArea, RoomGrid.Area2D buildArea)
@@ -573,13 +474,13 @@ public class CastleRoomSelector
                 if (!adjacent.isLinkedToCell(cell))
                 {
                     //link all of this cell's linked cells (including me) to the adjacent cell
-                    for (RoomGridCell linkedCell : cell.getLinkedCells())
+                    for (RoomGridCell linkedCell : cell.getLinkedCellsCopy())
                     {
                         linkedCell.linkToCell(adjacent);
                     }
 
                     //copy current cell's links to neighbor
-                    adjacent.setLinkedCells(cell.getLinkedCells());
+                    adjacent.setLinkedCells(cell.getLinkedCellsCopy());
                 }
             }
         }
@@ -701,7 +602,6 @@ public class CastleRoomSelector
                         aboveCell.setRoom(landing);
                         aboveCell.setReachable();
                         aboveCell.setLandingForAllPathableCells();
-                        break;
                     }
                 }
             }
@@ -821,33 +721,39 @@ public class CastleRoomSelector
             while (!unreachable.isEmpty() && !reachable.isEmpty())
             {
                 RoomGridCell srcRoom = unreachable.get(random.nextInt(unreachable.size()));
-                HashSet<RoomGridCell> pathableFromSrc = srcRoom.getPathableCells();
+                HashSet<RoomGridCell> pathableFromSrc = srcRoom.getPathableCellsCopy();
 
                 pathableFromSrc.remove(srcRoom); //Don't want to path to myself
                 pathableFromSrc.removeIf(c -> !c.isReachable());
 
                 RoomGridCell destRoom = findNearestReachableRoom(srcRoom, pathableFromSrc);
 
-                LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom);
-
-                if (!destToSrcPath.isEmpty())
+                if (destRoom != null)
                 {
-                    for (PathNode node : destToSrcPath)
+                    LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom);
+
+                    if (!destToSrcPath.isEmpty())
                     {
-                        RoomGridCell cell = grid.getCellAt(node.getCell().getGridPosition());
-                        if (cell != null)
+                        for (PathNode node : destToSrcPath)
                         {
-                            if (node.getParent() != null)
+                            RoomGridCell cell = grid.getCellAt(node.getCell().getGridPosition());
+                            if (cell != null)
                             {
-                                addDoorToRoomRandom(cell, node.getParentDirection());
+                                if (node.getParent() != null)
+                                {
+                                    addDoorToRoomRandom(cell, node.getParentDirection());
+                                }
+                                cell.setAllLinkedReachable(unreachable, reachable);
                             }
-                            cell.setAllLinkedReachable(unreachable, reachable);
                         }
+                    } else
+                    {
+                        System.out.println("Failed to find path from " + srcRoom.getGridPosition().toString() + " to" + destRoom.getGridPosition().toString());
                     }
                 }
                 else
                 {
-                    System.out.println("Failed to find path from " + srcRoom.getGridPosition().toString() + " to" + destRoom.getGridPosition().toString());
+                    System.out.println(srcRoom + " had no pathable rooms!");
                 }
             }
         }
@@ -934,6 +840,7 @@ public class CastleRoomSelector
         return null;
     }
 
+    @Nullable
     private RoomGridCell findNearestReachableRoom(RoomGridCell origin, HashSet<RoomGridCell> pathableRooms)
     {
         ArrayList<RoomGridCell> sorted = new ArrayList<>(pathableRooms);

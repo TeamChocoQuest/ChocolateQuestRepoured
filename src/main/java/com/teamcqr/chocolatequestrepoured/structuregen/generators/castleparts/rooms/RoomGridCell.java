@@ -1,12 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -62,7 +57,7 @@ public class RoomGridCell
     {
         this.reachable = true;
 
-        for (RoomGridCell linkedCell : getLinkedCells())
+        for (RoomGridCell linkedCell : getLinkedCellsCopy())
         {
             linkedCell.setReachable();
             unreachableCells.remove(linkedCell);
@@ -217,7 +212,7 @@ public class RoomGridCell
         linkedCells = new HashSet<>(cells);
     }
 
-    public HashSet<RoomGridCell> getLinkedCells()
+    public HashSet<RoomGridCell> getLinkedCellsCopy()
     {
         return new HashSet<>(linkedCells); //return a copy
     }
@@ -232,9 +227,9 @@ public class RoomGridCell
         pathableCells.addAll(cells);
     }
 
-    public HashSet<RoomGridCell> getPathableCells()
+    public HashSet<RoomGridCell> getPathableCellsCopy()
     {
-        return pathableCells;
+        return new HashSet<>(pathableCells);
     }
 
     public boolean isOnFloorWithLanding()
