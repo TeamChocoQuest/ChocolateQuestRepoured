@@ -40,9 +40,10 @@ public class RoomGridCell
     }
 
     private RoomGridPosition gridPosition;
-    private CellState state;
-    private boolean reachable;
-    private boolean partOfMainStruct;
+    private CellState state = CellState.UNUSED;
+    private boolean reachable = false;
+    private boolean floorHasLanding = false;
+    private boolean partOfMainStruct = false;
     private CastleRoom room;
     private boolean narrow;
     private HashSet<RoomGridCell> linkedCells; //cells that are connected to this room (no walls between)
@@ -51,11 +52,8 @@ public class RoomGridCell
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
-        this.gridPosition = new RoomGridPosition(floor, x, z);
-        this.state = CellState.UNUSED;
-        this.reachable = false;
-        this.partOfMainStruct = false;
         this.room = room;
+        this.gridPosition = new RoomGridPosition(floor, x, z);
         this.linkedCells = new HashSet<>();
         this.pathableCells = new HashSet<>();
     }
@@ -237,6 +235,24 @@ public class RoomGridCell
     public HashSet<RoomGridCell> getPathableCells()
     {
         return pathableCells;
+    }
+
+    public boolean isOnFloorWithLanding()
+    {
+        return floorHasLanding;
+    }
+
+    private void setHasLanding()
+    {
+        floorHasLanding = true;
+    }
+
+    public void setLandingForAllPathableCells()
+    {
+        for (RoomGridCell cell : pathableCells)
+        {
+            cell.setHasLanding();
+        }
     }
 
     @Override
