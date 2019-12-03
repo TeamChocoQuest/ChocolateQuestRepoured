@@ -202,6 +202,11 @@ public class RoomGridCell
         this.isBossArea = true;
     }
 
+    public boolean isBossArea()
+    {
+        return isBossArea;
+    }
+
     public void linkToCell(RoomGridCell cell)
     {
         this.linkedCells.add(cell);

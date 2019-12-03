@@ -23,6 +23,13 @@ public class RoomGrid
             this.sizeZ = sizeZ;
         }
 
+        public Area2D (Area2D area)
+        {
+            this.start = area.start;
+            this.sizeX = area.sizeX;
+            this.sizeZ = area.sizeZ;
+        }
+
         public Area2D addFloors(int numFloors)
         {
             return new Area2D(this.start.move(EnumFacing.UP, numFloors), sizeX, sizeZ);
@@ -46,6 +53,16 @@ public class RoomGrid
         public int getEndZ()
         {
             return start.getZ() + sizeZ - 1;
+        }
+
+        public RoomGridPosition getTopRight()
+        {
+            return start.move(EnumFacing.EAST, sizeX - 1);
+        }
+
+        public RoomGridPosition getBottomLeft()
+        {
+            return start.move(EnumFacing.SOUTH, sizeZ - 1);
         }
 
         public boolean dimensionsAre(int dim1, int dim2)
@@ -260,7 +277,7 @@ public class RoomGrid
     private Random random;
     private RoomGridCell[][][] roomArray;
     private List<RoomGridCell> roomList;
-    private int bossFloor = 0;
+    private Area2D bossArea = null;
 
     public RoomGrid(int floors, int roomsX, int roomsZ, Random random)
     {
@@ -748,15 +765,18 @@ public class RoomGrid
 
     public void setBossArea(Area2D area)
     {
-        bossFloor = area.start.getFloor();
+        bossArea = new Area2D(area);
+    }
 
-        for (RoomGridPosition pos : area.getPositionList())
-        {
-            if (withinGridBounds(pos))
-            {
-                getCellAt(pos).setAsBossArea();
-            }
-        }
+    @Nullable
+    public Area2D getBossArea()
+    {
+        return bossArea;
+    }
+
+    public boolean bossAreaSet()
+    {
+        return bossArea != null;
     }
 
     public boolean withinGridBounds(int floor, int x, int z)
