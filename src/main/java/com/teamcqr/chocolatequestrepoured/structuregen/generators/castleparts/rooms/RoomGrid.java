@@ -656,18 +656,18 @@ public class RoomGrid
                     if (adjacent != null && //adjacent cell exists
                             !cellsInArea.contains(adjacent) && //not part of my area already
                             adjacent.isSelectedForBuilding() && //adjacent cell is selected
-                            !cell.getPathableCells().contains(adjacent)) //I haven't already been pathed to it
+                            !cell.getPathableCellsCopy().contains(adjacent)) //I haven't already been pathed to it
                     {
                         //Copy the adjacent cell's pathable list to all cells in my area
                         for (RoomGridCell myPathable : cellsInArea)
                         {
-                            myPathable.addPathableCells(adjacent.getPathableCells());
+                            myPathable.addPathableCells(adjacent.getPathableCellsCopy());
                         }
                         //Copy my pathable list out to all the adjacent cell's pathable cells
-                        HashSet<RoomGridCell> adjacentPathable = new HashSet<>(adjacent.getPathableCells());
+                        HashSet<RoomGridCell> adjacentPathable = adjacent.getPathableCellsCopy();
                         for (RoomGridCell theirPathable : adjacentPathable)
                         {
-                            theirPathable.addPathableCells(cell.getPathableCells());
+                            theirPathable.addPathableCells(cell.getPathableCellsCopy());
                         }
                     }
                 }
