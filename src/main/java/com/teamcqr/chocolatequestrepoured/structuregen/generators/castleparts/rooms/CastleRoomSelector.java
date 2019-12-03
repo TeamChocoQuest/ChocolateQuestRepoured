@@ -692,7 +692,7 @@ public class CastleRoomSelector
                 for (RoomGridCell cell : candidateCells)
                 {
                     RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
-                    if (aboveCell != null && aboveCell.needsRoomType())
+                    if (aboveCell != null && aboveCell.needsRoomType() && !aboveCell.isOnFloorWithLanding())
                     {
                         CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
                         cell.setRoom(stairs);
@@ -700,6 +700,7 @@ public class CastleRoomSelector
                         CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(getRoomStart(aboveCell), roomSize, floorHeight, stairs);
                         aboveCell.setRoom(landing);
                         aboveCell.setReachable();
+                        aboveCell.setLandingForAllPathableCells();
                         break;
                     }
                 }
