@@ -290,37 +290,9 @@ public class RoomGrid
         roomArray[floor][x][z].setReachable();
     }
 
-    public ArrayList<CastleRoom> getRoomList()
-    {
-        ArrayList<RoomGridCell> rooms = getCellListCopy();
-        ArrayList<CastleRoom> result = new ArrayList<>();
-
-        for (RoomGridCell rs: rooms)
-        {
-            result.add(rs.getRoom());
-        }
-
-        return result;
-    }
-
     public ArrayList<RoomGridCell> getCellListCopy()
     {
-        return new ArrayList<RoomGridCell>(roomList);
-    }
-
-    public ArrayList<RoomGridCell> getUnreachableRoomList(int floor)
-    {
-        ArrayList<RoomGridCell> result = new ArrayList<>();
-        for (int x = 0; x < roomArray[0].length; x++)
-        {
-            for (int z = 0; z < roomArray[0][0].length; z++)
-            {
-                if (roomArray[floor][x][z] != null && !roomArray[floor][x][z].isReachable())
-                    result.add(roomArray[floor][x][z]);
-            }
-        }
-
-        return result;
+        return new ArrayList<>(roomList);
     }
 
     public ArrayList<RoomGridCell> getAllCellsWhere(Predicate<RoomGridCell> p)
@@ -532,7 +504,6 @@ public class RoomGrid
         roomArray[floor][x][z].setRoom(room);
     }
 
-
     public CastleRoom getRoomAt(int floor, int x, int z)
     {
         if (roomArray[floor][x][z] != null)
@@ -567,23 +538,6 @@ public class RoomGrid
         else
         {
             return null;
-        }
-    }
-
-    public void selectBlockOfCellsForBuilding(int startFloor, int floors, int startX, int lenX, int startZ, int lenZ)
-    {
-        for (int floor = startFloor; floor < startFloor + floors; floor++)
-        {
-            for (int x = startX; x < startX + lenX; x++)
-            {
-                for (int z = startZ; z < startZ + lenZ; z++)
-                {
-                    if (withinGridBounds(floor, x, z))
-                    {
-                        selectCellForBuilding(floor, x, z);
-                    }
-                }
-            }
         }
     }
 
