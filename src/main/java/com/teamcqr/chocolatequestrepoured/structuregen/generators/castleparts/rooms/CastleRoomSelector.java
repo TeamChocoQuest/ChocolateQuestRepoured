@@ -375,7 +375,7 @@ public class CastleRoomSelector
                 //cell.setAllLinkedReachable();
 
                 RoomGridCell adjacent = grid.getAdjacentCell(cell, alignment);
-                if (adjacent.isPopulated())
+                if (adjacent.isPopulated() && !adjacent.getRoom().getRoomType().isBossRoom())
                 {
                     adjacent.getRoom().addDoorOnSideCentered(alignment.getOpposite());
 
@@ -386,13 +386,6 @@ public class CastleRoomSelector
                     else
                     {
                         cell.getRoom().removeWall(alignment);
-                    }
-                }
-                else
-                {
-                    if (grid.adjacentCellIsWalkableRoof(cell, alignment))
-                    {
-                        cell.getRoom().addDoorOnSideCentered(alignment);
                     }
                 }
             }
@@ -478,8 +471,10 @@ public class CastleRoomSelector
 
                 CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
                 grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
+                addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
                 CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
                 grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
+                addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
             }
 
             //Z side is longer
@@ -519,8 +514,10 @@ public class CastleRoomSelector
 
                 CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
                 grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
+                addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
                 CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
                 grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
+                addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
             }
         }
         else
