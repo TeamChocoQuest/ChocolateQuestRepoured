@@ -207,11 +207,6 @@ public class DungeonGenUtils {
 		}
 	}
 
-	public static boolean percentChance(Random random, int percent)
-	{
-		return (random.nextInt(100) < percent);
-	}
-
 	public static int randomBetween(Random random, int low, int high)
 	{
 		if (high <= low)

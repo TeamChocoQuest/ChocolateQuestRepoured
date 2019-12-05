@@ -9,9 +9,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CastleRoomRoofBossMain extends CastleRoom
 {
     private int subRoomsX;
@@ -61,7 +58,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
         {
             if (floorDesignBlock(x, z))
             {
-                blockToBuild = Blocks.STONE.getDefaultState();
+                blockToBuild = Blocks.CONCRETE.getDefaultState();
             }
             else
             {
@@ -74,7 +71,15 @@ public class CastleRoomRoofBossMain extends CastleRoom
         }
         else if (x == 1 || x == 15 || z == 1 || z == 15)
         {
-            blockToBuild = getInnerEdgeBlock(x, y, z);
+            blockToBuild = getInnerRing1Block(x, y, z);
+        }
+        else if (x == 2 || x == 14 || z == 2 || z == 14)
+        {
+            blockToBuild = getInnerRing2Block(x, y, z);
+        }
+        else if (x == 3 || x == 13 || z == 3 || z == 13)
+        {
+            blockToBuild = getInnerRing3Block(x, y, z);
         }
 
         return blockToBuild;
@@ -181,7 +186,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
         }
         else if (z == 0 || z == 16)
         {
-            if (x == 0 || x == 3 || x == 6 || x == 10 || x == 13 || x == 16)
+            if (x == 3 || x == 6 || x == 10 || x == 13)
             {
                 return Blocks.STONEBRICK.getDefaultState();
             }
@@ -236,16 +241,20 @@ public class CastleRoomRoofBossMain extends CastleRoom
         return Blocks.STONEBRICK.getDefaultState();
     }
 
-    private IBlockState getInnerEdgeBlock(int x, int y, int z)
+    private IBlockState getInnerRing1Block(int x, int y, int z)
     {
         final IBlockState chiseledStoneBlock = Blocks.STONEBRICK.getDefaultState().
                 withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
 
         if (x == 1 || x == 15)
         {
-            if (z == 0 || z == 3 || z == 6 || z == 10 || z == 13 || z == 16)
+            if (z == 3 || z == 6 || z == 10 || z == 13)
             {
                 return chiseledStoneBlock;
+            }
+            else if ((z == 1 || z == 2) && y == 1)
+            {
+                return Blocks.LAVA.getDefaultState();
             }
             else if (z >= 7 && z <= 9)
             {
@@ -268,9 +277,13 @@ public class CastleRoomRoofBossMain extends CastleRoom
         }
         else if (z == 1 || z == 15)
         {
-            if (x == 0 || x == 3 || x == 6 || x == 10 || x == 13 || x == 16)
+            if (x == 3 || x == 6 || x == 10 || x == 13)
             {
                 return chiseledStoneBlock;
+            }
+            else if (x == 2 && y == 1)
+            {
+                return Blocks.LAVA.getDefaultState();
             }
             else if (x >= 7 && x <= 9)
             {
@@ -284,11 +297,105 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 }
                 else if (y == 5 && x == 8)
                 {
-                    EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.NORTH : EnumFacing.SOUTH;
+                    EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.WEST : EnumFacing.EAST;
                     return Blocks.STONE_BRICK_STAIRS.getDefaultState().
                             withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).
                             withProperty(BlockStairs.FACING, frameTopStairFacing);
                 }
+            }
+        }
+
+        return Blocks.AIR.getDefaultState();
+    }
+
+    private IBlockState getInnerRing2Block(int x, int y, int z)
+    {
+        if (x == 2 || x == 14)
+        {
+            if ((z == 2 || z == 14) && y == 1)
+            {
+                return Blocks.LAVA.getDefaultState();
+            }
+            else if (z == 3 || z == 13)
+            {
+                if (y == 1 || y == 6)
+                {
+                    EnumFacing stairFacing = (z == 3) ? EnumFacing.NORTH : EnumFacing.SOUTH;
+                    BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
+                    return Blocks.STONE_BRICK_STAIRS.getDefaultState().
+                            withProperty(BlockStairs.FACING, stairFacing).
+                            withProperty(BlockStairs.HALF, stairHalf);
+                }
+                else if (y >= 2 && y <= 5)
+                {
+                    return Blocks.IRON_BARS.getDefaultState();
+                }
+            }
+            else if ((z == 6 || z == 10) && y == 3)
+            {
+                EnumFacing torchFacing = (x == 2) ? EnumFacing.EAST : EnumFacing.WEST;
+                return Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing);
+            }
+        }
+        else if (z == 2 || z == 14)
+        {
+            //Lava case covered by previous conditionals
+
+            if (x == 3 || x == 13)
+            {
+                if (y == 1 || y == 6)
+                {
+                    EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.EAST;
+                    BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
+                    return Blocks.STONE_BRICK_STAIRS.getDefaultState().
+                            withProperty(BlockStairs.FACING, stairFacing).
+                            withProperty(BlockStairs.HALF, stairHalf);
+                }
+                else if (y >= 2 && y <= 5)
+                {
+                    return Blocks.IRON_BARS.getDefaultState();
+                }
+            }
+            else if ((x == 6 || x == 10) && y == 3)
+            {
+                EnumFacing torchFacing = (z == 2) ? EnumFacing.SOUTH : EnumFacing.NORTH;
+                return Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing);
+            }
+        }
+
+        return Blocks.AIR.getDefaultState();
+    }
+
+    private IBlockState getInnerRing3Block(int x, int y, int z)
+    {
+        if ((x == 3 || x == 13) && z == 3)
+        {
+            if (y >= 2 & y <= 5)
+            {
+                return Blocks.IRON_BARS.getDefaultState();
+            }
+            else if (y == 1 || y == 6)
+            {
+                BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
+                EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.NORTH;
+                return Blocks.STONE_BRICK_STAIRS.getDefaultState().
+                        withProperty(BlockStairs.HALF, stairHalf).
+                        withProperty(BlockStairs.FACING, stairFacing);
+            }
+        }
+        else if ((x == 3 || x == 13) && z == 13)
+        {
+            if (y >= 2 & y <= 5)
+            {
+                return Blocks.IRON_BARS.getDefaultState();
+            }
+            else if (y == 1 || y == 6)
+            {
+                BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
+                EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.SOUTH;
+                return Blocks.STONE_BRICK_STAIRS.getDefaultState().
+                        withProperty(BlockStairs.HALF, stairHalf).
+                        withProperty(BlockStairs.FACING, stairFacing);
             }
         }
 
