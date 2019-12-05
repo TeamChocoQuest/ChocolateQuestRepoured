@@ -51,7 +51,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         if (this.getChestIDs() != null && !possibleChestLocs.isEmpty())
         {
-            if (DungeonGenUtils.percentChance(random, 50))
+            if (DungeonGenUtils.PercentageRandom(50, random))
             {
                 IRoomDecor chest = new RoomDecorChest();
                 BlockPos pos = (BlockPos)possibleChestLocs.keySet().toArray()[random.nextInt(possibleChestLocs.size())];

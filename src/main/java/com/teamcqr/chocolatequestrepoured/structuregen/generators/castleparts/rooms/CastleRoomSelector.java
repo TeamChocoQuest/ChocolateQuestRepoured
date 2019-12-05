@@ -259,7 +259,7 @@ public class CastleRoomSelector
             RoomGrid.Area2D sideSelectedArea;
 
             //While there is still room to build in this direction, 75% chance to keep going
-            while (sideAllowedArea != null && DungeonGenUtils.percentChance(random, 75))
+            while (sideAllowedArea != null && DungeonGenUtils.PercentageRandom(75, random))
             {
                 sideSelectedArea = sideAllowedArea.getRandomSubArea(random, 1, 1, false);
                 sideSelectedArea.alignToSide(random, lastBuiltArea, side, buildArea);
