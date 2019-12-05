@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

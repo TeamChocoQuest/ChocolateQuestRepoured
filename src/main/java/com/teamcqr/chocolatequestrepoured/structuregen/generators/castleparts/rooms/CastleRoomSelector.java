@@ -135,27 +135,6 @@ public class CastleRoomSelector
     {
         addMainBuilding();
 
-        //boolean vertical = random.nextBoolean();
-
-        /*
-        for (int floor = 0; floor < usedFloors; floor++)
-        {
-            boolean narrowFloor = grid.floorIsNarrow(floor);
-
-            if (!narrowFloor)
-            {
-                if (vertical)
-                {
-                    buildVerticalFloorHallway(floor);
-                }
-                else
-                {
-                    buildHorizontalFloorHallway(floor);
-                }
-                vertical = !vertical;
-            }
-        }
-        */
 
         addBossRooms();
         addStairCases();
@@ -169,8 +148,7 @@ public class CastleRoomSelector
         placeOuterDoors();
         placeTowers();
         pathBetweenRooms();
-        
-        //System.out.println(grid.printGrid());
+
     }
 
     private void addMainBuilding()
@@ -188,6 +166,7 @@ public class CastleRoomSelector
             int firstFloorInLayer = layer * floorsPerLayer;
 
             ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllBuildableAreasOnFloor(firstFloorInLayer);
+            System.out.println(buildableAreas.toString());
 
             if (!buildableAreas.isEmpty())
             {
@@ -437,87 +416,125 @@ public class CastleRoomSelector
             //X side is longer
             if (bossArea.sizeX > bossArea.sizeZ)
             {
-                boolean alignWest = random.nextBoolean();
-
-                RoomGridPosition rootPos = bossArea.start.move(EnumFacing.EAST, alignWest ? 0 : 1);
-                CastleRoomRoofBossMain rootRoom = new CastleRoomRoofBossMain(getRoomStart(rootPos), roomSize, floorHeight);
-
-                grid.getCellAt(rootPos).setRoom(rootRoom);
-
-                for (int x = 0; x < minRoomsForBoss; x++)
+                HashMap<RoomGridPosition, EnumFacing> possibleBossStairPos = new HashMap<>();
+                final RoomGridPosition stairOrigin = bossArea.start.move(EnumFacing.DOWN);
+                final int eastAmount = bossArea.sizeX - 1;
+                for (int z = 0; z < bossArea.sizeZ; z++)
                 {
-                    for (int z = 0; z < minRoomsForBoss; z++)
-                    {
-                        if (x == 0 && z == 0) { continue; }
+                    possibleBossStairPos.put(stairOrigin.move(EnumFacing.SOUTH, z), EnumFacing.EAST);
+                    possibleBossStairPos.put(stairOrigin.move(EnumFacing.SOUTH, z).move(EnumFacing.EAST, eastAmount), EnumFacing.WEST);
+                }
 
-                        RoomGridPosition emptyRoomPos = rootPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z);
-                        CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(getRoomStart(emptyRoomPos), roomSize, floorHeight);
-                        grid.getCellAt(emptyRoomPos).setRoom(emptyRoom);
+                Iterator<RoomGridPosition> it = new ArrayList<>(possibleBossStairPos.keySet()).iterator();
+                while (it.hasNext())
+                {
+                    RoomGridPosition pos = it.next();
+                    if (!cellValidForDirectedStairs(pos, possibleBossStairPos.get(pos)))
+                    {
+                        possibleBossStairPos.remove(pos);
                     }
                 }
 
-                EnumFacing bossStairDirection;
-                RoomGridPosition bossStairPos;
-                if (alignWest)
+                if (possibleBossStairPos.isEmpty())
                 {
-                    bossStairDirection = EnumFacing.WEST;
-                    bossStairPos = bossArea.getTopRight().move(EnumFacing.DOWN);
+                    System.out.print("Could not find valid place to build boss stairs!");
                 }
                 else
                 {
-                    bossStairDirection = EnumFacing.EAST;
-                    bossStairPos = bossArea.start.move(EnumFacing.DOWN);
-                }
+                    List<RoomGridPosition> posArray = new ArrayList<>(possibleBossStairPos.keySet());
+                    RoomGridPosition bossStairPos = posArray.get(random.nextInt(posArray.size()));
+                    EnumFacing bossStairDirection = possibleBossStairPos.get(bossStairPos);
+                    boolean alignWest = (bossStairDirection == EnumFacing.WEST);
 
-                CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
-                grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
-                addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
-                CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
-                grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
-                addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
+                    CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
+                    grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
+                    addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
+                    CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
+                    grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
+                    addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
+
+                    RoomGridPosition rootPos = bossArea.start.move(EnumFacing.EAST, alignWest ? 0 : 1);
+                    CastleRoomRoofBossMain rootRoom = new CastleRoomRoofBossMain(getRoomStart(rootPos), roomSize, floorHeight);
+
+                    grid.getCellAt(rootPos).setRoom(rootRoom);
+
+                    for (int x = 0; x < minRoomsForBoss; x++)
+                    {
+                        for (int z = 0; z < minRoomsForBoss; z++)
+                        {
+                            if (x == 0 && z == 0)
+                            {
+                                continue;
+                            }
+
+                            RoomGridPosition emptyRoomPos = rootPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z);
+                            CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(getRoomStart(emptyRoomPos), roomSize, floorHeight);
+                            grid.getCellAt(emptyRoomPos).setRoom(emptyRoom);
+                        }
+                    }
+                }
             }
 
             //Z side is longer
             else
             {
-                boolean alignNorth = random.nextBoolean();
-
-                RoomGridPosition rootPos = bossArea.start.move(EnumFacing.SOUTH, alignNorth ? 0 : 1);
-                CastleRoomRoofBossMain rootRoom = new CastleRoomRoofBossMain(getRoomStart(rootPos), roomSize, floorHeight);
-
-                grid.getCellAt(rootPos).setRoom(rootRoom);
-
-                for (int x = 0; x < minRoomsForBoss; x++)
+                HashMap<RoomGridPosition, EnumFacing> possibleBossStairPos = new HashMap<>();
+                final RoomGridPosition stairOrigin = bossArea.start.move(EnumFacing.DOWN);
+                final int southAmount = bossArea.sizeZ - 1;
+                for (int x = 0; x < bossArea.sizeX; x++)
                 {
-                    for (int z = 0; z < minRoomsForBoss; z++)
-                    {
-                        if (x == 0 && z == 0) { continue; }
+                    possibleBossStairPos.put(stairOrigin.move(EnumFacing.EAST, x), EnumFacing.SOUTH);
+                    possibleBossStairPos.put(stairOrigin.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, southAmount), EnumFacing.NORTH);
+                }
 
-                        RoomGridPosition emptyRoomPos = rootPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z);
-                        CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(getRoomStart(emptyRoomPos), roomSize, floorHeight);
-                        grid.getCellAt(emptyRoomPos).setRoom(emptyRoom);
+                Iterator<RoomGridPosition> it = new ArrayList<>(possibleBossStairPos.keySet()).iterator();
+                while (it.hasNext())
+                {
+                    RoomGridPosition pos = it.next();
+                    if (!cellValidForDirectedStairs(pos, possibleBossStairPos.get(pos)))
+                    {
+                        possibleBossStairPos.remove(pos);
                     }
                 }
 
-                EnumFacing bossStairDirection;
-                RoomGridPosition bossStairPos;
-                if (alignNorth)
+                if (possibleBossStairPos.isEmpty())
                 {
-                    bossStairDirection = EnumFacing.NORTH;
-                    bossStairPos = bossArea.getBottomLeft().move(EnumFacing.DOWN);
+                    System.out.print("Could not find valid place to build boss stairs!");
                 }
                 else
                 {
-                    bossStairDirection = EnumFacing.SOUTH;
-                    bossStairPos = bossArea.start.move(EnumFacing.DOWN);
-                }
+                    List<RoomGridPosition> posArray = new ArrayList<>(possibleBossStairPos.keySet());
+                    RoomGridPosition bossStairPos = posArray.get(random.nextInt(posArray.size()));
+                    EnumFacing bossStairDirection = possibleBossStairPos.get(bossStairPos);
+                    boolean alignNorth = (bossStairDirection == EnumFacing.NORTH);
 
-                CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
-                grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
-                addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
-                CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
-                grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
-                addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
+                    CastleRoomStaircaseDirected lowerStairPart = new CastleRoomStaircaseDirected(getRoomStart(bossStairPos), roomSize, floorHeight, bossStairDirection);
+                    grid.getCellAt(bossStairPos).setRoom(lowerStairPart);
+                    addDoorToRoomCentered(grid.getCellAt(bossStairPos), bossStairDirection);
+                    CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
+                    grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
+                    addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
+
+                    RoomGridPosition rootPos = bossArea.start.move(EnumFacing.SOUTH, alignNorth ? 0 : 1);
+                    CastleRoomRoofBossMain rootRoom = new CastleRoomRoofBossMain(getRoomStart(rootPos), roomSize, floorHeight);
+
+                    grid.getCellAt(rootPos).setRoom(rootRoom);
+
+                    for (int x = 0; x < minRoomsForBoss; x++)
+                    {
+                        for (int z = 0; z < minRoomsForBoss; z++)
+                        {
+                            if (x == 0 && z == 0)
+                            {
+                                continue;
+                            }
+
+                            RoomGridPosition emptyRoomPos = rootPos.move(EnumFacing.EAST, x).move(EnumFacing.SOUTH, z);
+                            CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(getRoomStart(emptyRoomPos), roomSize, floorHeight);
+                            grid.getCellAt(emptyRoomPos).setRoom(emptyRoom);
+                        }
+                    }
+                }
             }
         }
         else
@@ -525,6 +542,42 @@ public class CastleRoomSelector
             System.out.println("Error adding boss rooms: boss area was never set during castle shaping.");
         }
 
+    }
+    public boolean cellValidForDirectedStairs(RoomGridPosition position, EnumFacing direction)
+    {
+        RoomGridCell stairCell = grid.getCellAt(position);
+        RoomGridCell roomToStairs = grid.getCellAt(position.move(direction));
+
+        //First check to see if this cell and the room it will open to are available
+        if(stairCell != null &&
+                stairCell.isSelectedForBuilding() &&
+                roomToStairs != null &&
+                roomToStairs.isSelectedForBuilding())
+        {
+            //Then check the other sides to make sure that we don't block pathing
+            List<EnumFacing> outerSides = new ArrayList<>(Arrays.asList(EnumFacing.HORIZONTALS));
+            outerSides.remove(direction);
+
+            for (EnumFacing side : outerSides)
+            {
+                RoomGridCell checkCell = grid.getAdjacentCell(stairCell, side);
+                if (checkCell != null && checkCell.isSelectedForBuilding())
+                {
+                    HashSet<RoomGridCell> invalid = new HashSet<>();
+                    invalid.add(stairCell);
+                    LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(checkCell, roomToStairs, invalid);
+                    if (destToSrcPath.isEmpty())
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            //At this point we have checked all sides for blocked pathing so it should be OK
+            return true;
+        }
+
+        return false;
     }
 
     private void linkCells()
@@ -815,7 +868,7 @@ public class CastleRoomSelector
 
                 if (destRoom != null)
                 {
-                    LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom);
+                    LinkedList<PathNode> destToSrcPath = findPathBetweenRooms(srcRoom, destRoom, null);
 
                     if (!destToSrcPath.isEmpty())
                     {
@@ -844,11 +897,16 @@ public class CastleRoomSelector
         }
     }
 
-    private LinkedList<PathNode> findPathBetweenRooms(RoomGridCell startCell, RoomGridCell endCell)
+    private LinkedList<PathNode> findPathBetweenRooms(RoomGridCell startCell, RoomGridCell endCell, @Nullable HashSet<RoomGridCell> invalidCells)
     {
         LinkedList<PathNode> open = new LinkedList<>();
         LinkedList<PathNode> closed = new LinkedList<>();
         LinkedList<PathNode> path = new LinkedList<>();
+
+        if (invalidCells == null)
+        {
+            invalidCells = new HashSet<>();
+        }
 
         open.add(new PathNode(null, EnumFacing.DOWN, startCell, 0, startCell.distanceTo(endCell)));
 
@@ -873,7 +931,10 @@ public class CastleRoomSelector
             for (EnumFacing direction : EnumFacing.HORIZONTALS)
             {
                 RoomGridCell neighborCell = grid.getAdjacentCell(currentNode.getCell(), direction);
-                if (neighborCell != null && neighborCell.isPopulated() && neighborCell.reachableFromSide(direction.getOpposite()))
+                if (neighborCell != null &&
+                        neighborCell.isSelectedForBuilding() &&
+                        neighborCell.reachableFromSide(direction.getOpposite()) &&
+                        !invalidCells.contains(neighborCell))
                 {
                     PathNode neighborNode = new PathNode(currentNode, direction.getOpposite(), neighborCell, neighborG, neighborCell.distanceTo(endCell));
 

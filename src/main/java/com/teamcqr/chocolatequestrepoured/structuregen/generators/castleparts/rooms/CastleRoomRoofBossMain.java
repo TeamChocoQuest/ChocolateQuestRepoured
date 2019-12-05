@@ -106,8 +106,8 @@ public class CastleRoomRoofBossMain extends CastleRoom
                     {0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0},
                     {0,0,1,0,0,1,1,1,0,1,1,1,0,0,1,0,0},
                     {0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0},
-                    {0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0},
-                    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                    {0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0},
+                    {0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0},
                     {0,0,0,1,1,1,0,0,1,0,0,1,1,1,0,0,0},
                     {0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0},
                     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -268,7 +268,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 }
                 else if (y == 5 && z == 8)
                 {
-                    EnumFacing frameTopStairFacing = (x == 1) ? EnumFacing.NORTH : EnumFacing.SOUTH;
+                    EnumFacing frameTopStairFacing = (x == 1) ? EnumFacing.WEST : EnumFacing.EAST;
                     return Blocks.STONE_BRICK_STAIRS.getDefaultState().
                             withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).
                             withProperty(BlockStairs.FACING, frameTopStairFacing);
@@ -297,7 +297,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 }
                 else if (y == 5 && x == 8)
                 {
-                    EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.WEST : EnumFacing.EAST;
+                    EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.NORTH : EnumFacing.SOUTH;
                     return Blocks.STONE_BRICK_STAIRS.getDefaultState().
                             withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).
                             withProperty(BlockStairs.FACING, frameTopStairFacing);
