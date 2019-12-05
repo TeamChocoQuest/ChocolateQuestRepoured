@@ -173,7 +173,7 @@ public class RoomGridCell
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
