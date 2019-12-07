@@ -23,6 +23,7 @@ public class CastleRoomLandingDirected extends CastleRoom
         this.stairZ = stairsBelow.getUpperStairEndZ() + 1;
         this.openingSeparation = stairsBelow.getCenterStairWidth();
         this.stairStartSide = stairsBelow.getDoorSide();
+        this.defaultCeiling = true;
     }
 
     @Override

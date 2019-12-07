@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -276,8 +275,8 @@ public class RoomGrid
     private int roomsX;
     private int roomsZ;
     private Random random;
-    private RoomGridCell[][][] roomArray;
-    private List<RoomGridCell> roomList;
+    private RoomGridCell[][][] cellArray;
+    private List<RoomGridCell> cellList;
     private Area2D bossArea = null;
 
     public RoomGrid(int floors, int roomsX, int roomsZ, Random random)
@@ -286,8 +285,8 @@ public class RoomGrid
         this.roomsX = roomsX;
         this.roomsZ = roomsZ;
         this.random = random;
-        this.roomArray = new RoomGridCell[floors][roomsX][roomsZ];
-        this.roomList = new ArrayList<>();
+        this.cellArray = new RoomGridCell[floors][roomsX][roomsZ];
+        this.cellList = new ArrayList<>();
 
         //initialize the room grid
         for (int floor = 0; floor < floors; floor++)
@@ -296,8 +295,8 @@ public class RoomGrid
             {
                 for (int z = 0; z < roomsZ; z++)
                 {
-                    this.roomArray[floor][x][z] = new RoomGridCell(floor, x, z, null);
-                    roomList.add(this.roomArray[floor][x][z]);
+                    this.cellArray[floor][x][z] = new RoomGridCell(floor, x, z, null);
+                    cellList.add(this.cellArray[floor][x][z]);
                 }
             }
         }
@@ -305,12 +304,12 @@ public class RoomGrid
 
     public void setRoomReachable(int floor, int x, int z)
     {
-        roomArray[floor][x][z].setReachable();
+        cellArray[floor][x][z].setReachable();
     }
 
     public ArrayList<RoomGridCell> getCellListCopy()
     {
-        return new ArrayList<>(roomList);
+        return new ArrayList<>(cellList);
     }
 
     public ArrayList<RoomGridCell> getAllCellsWhere(Predicate<RoomGridCell> p)
@@ -477,22 +476,22 @@ public class RoomGrid
 
     public void setCellBuilable(int floor, int x, int z)
     {
-        roomArray[floor][x][z].setBuildable();
+        cellArray[floor][x][z].setBuildable();
     }
 
     public void selectCellForBuilding(int floor, int x, int z)
     {
-        roomArray[floor][x][z].selectForBuilding();
+        cellArray[floor][x][z].selectForBuilding();
     }
 
     public void setRoomAsMainStruct(int floor, int x, int z)
     {
-        roomArray[floor][x][z].setAsMainStruct();
+        cellArray[floor][x][z].setAsMainStruct();
     }
 
     public void setRoomAsNarrow(int floor, int x, int z)
     {
-        roomArray[floor][x][z].setNarrow();
+        cellArray[floor][x][z].setNarrow();
     }
 
     public boolean floorIsNarrow(final int floor)
@@ -502,43 +501,11 @@ public class RoomGrid
                 c.isNarrow()).size() > 0;
     }
 
-    public boolean isRoomFilled(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z] != null && roomArray[floor][x][z].getRoom() != null;
-    }
-
-    public boolean isRoomReachable(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z].isReachable();
-    }
-
-    public boolean isRoomPopulated(int floor, int x, int z)
-    {
-        return roomArray[floor][x][z].isPopulated();
-    }
-
-    public void addRoomAt(CastleRoom room, int floor, int x, int z)
-    {
-        roomArray[floor][x][z].setRoom(room);
-    }
-
-    public CastleRoom getRoomAt(int floor, int x, int z)
-    {
-        if (roomArray[floor][x][z] != null)
-        {
-            return (roomArray[floor][x][z].getRoom());
-        }
-        else
-        {
-            return null;
-        }
-    }
-
     public RoomGridCell getCellAt(int floor, int x, int z)
     {
         if (withinGridBounds(floor, x, z))
         {
-            return roomArray[floor][x][z];
+            return cellArray[floor][x][z];
         }
         else
         {
@@ -551,7 +518,7 @@ public class RoomGrid
     {
         if (withinGridBounds(position.getFloor(), position.getX(), position.getZ()))
         {
-            return roomArray[position.getFloor()][position.getX()][position.getZ()];
+            return cellArray[position.getFloor()][position.getX()][position.getZ()];
         }
         else
         {
@@ -671,6 +638,18 @@ public class RoomGrid
         return (adjacent != null && adjacent.isPopulated() && adjacent.getRoom() instanceof CastleRoomWalkableRoof);
     }
 
+    public boolean cellShouldBeWalkableRoof(RoomGridCell cell)
+    {
+        ArrayList<RoomGridCell> result = new ArrayList<>();
+
+        RoomGridCell below = getAdjacentCell(cell, EnumFacing.DOWN);
+
+        return (below != null &&
+                !cell.isSelectedForBuilding() &&
+                below.isPopulated() &&
+                !below.getRoom().getRoomType().isBossRoom());
+    }
+
     public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction)
     {
         RoomGridPosition coords = cell.getGridPosition();
@@ -723,6 +702,7 @@ public class RoomGrid
         return false;
     }
 
+    @Nullable
     public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction)
     {
         RoomGridPosition startPosition = startCell.getGridPosition();
@@ -756,7 +736,7 @@ public class RoomGrid
 
         if (withinGridBounds(floor, x, z))
         {
-            return roomArray[floor][x][z];
+            return cellArray[floor][x][z];
         }
         else
         {
