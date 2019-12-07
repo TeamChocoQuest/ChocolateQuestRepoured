@@ -77,6 +77,16 @@ public class RoomGrid
             return (Math.min(sizeX, sizeZ) >= smaller) && (Math.max(sizeX, sizeZ) >= larger);
         }
 
+        public int cellsFromStartX(RoomGridPosition gridPos)
+        {
+            return gridPos.getX() - start.getX();
+        }
+
+        public int cellsFromStartZ(RoomGridPosition gridPos)
+        {
+            return gridPos.getZ() - start.getZ();
+        }
+
         public ArrayList<RoomGridPosition> getPositionList()
         {
             ArrayList<RoomGridPosition> positions = new ArrayList<>();

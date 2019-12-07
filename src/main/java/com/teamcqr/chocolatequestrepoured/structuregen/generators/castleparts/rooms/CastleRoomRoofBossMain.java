@@ -1,32 +1,40 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public class CastleRoomRoofBossMain extends CastleRoom
 {
-    private int subRoomsX;
-    private int subRoomsZ;
+    private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
+    private static final int BOSS_ROOM_STATIC_SIZE = 17;
 
     public CastleRoomRoofBossMain(BlockPos startPos, int sideLength, int height)
     {
         super(startPos, sideLength, height);
         this.roomType = EnumRoomType.ROOF_BOSS_MAIN;
         this.pathable = false;
-        this.subRoomsX = 0;
-        this.subRoomsZ = 0;
     }
 
-    public void setSubRooms(int x, int z)
+    public void setBossBuildOffset(Vec3i bossBuildOffset)
     {
-        subRoomsX = x;
-        subRoomsZ = z;
+        this.bossBuildOffset = bossBuildOffset;
+    }
+
+    public int getStaticSize()
+    {
+        return BOSS_ROOM_STATIC_SIZE;
     }
 
     @Override
@@ -36,12 +44,16 @@ public class CastleRoomRoofBossMain extends CastleRoom
         BlockPos pos;
         IBlockState blockToBuild;
 
-        for (int x = 0; x < 17; x++)
+        for (int x = 0; x < BOSS_ROOM_STATIC_SIZE; x++)
         {
             for (int y = 0; y < 8; y++)
             {
-                for (int z = 0; z < 17; z++)
+                for (int z = 0; z < BOSS_ROOM_STATIC_SIZE; z++)
                 {
+                    if (x == 8 && z == 8 && y == 1)
+                    {
+                        placeBossSpawner(world, dungeon, new BlockPos(x, y, z));
+                    }
                     blockToBuild = getBlockToBuild(x, y, z);
                     pos = nwCorner.add(x, y, z);
 
@@ -49,6 +61,43 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 }
             }
         }
+
+        //Have to add torches last because they won't place unless the wall next to them is already built
+        placeTorches(world, nwCorner);
+    }
+
+    private void placeTorches(World world, BlockPos nwCorner)
+    {
+        IBlockState torchBase = Blocks.TORCH.getDefaultState();
+        world.setBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH));
+        world.setBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH));
+        world.setBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH));
+        world.setBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH));
+        world.setBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST));
+        world.setBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST));
+        world.setBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST));
+        world.setBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST));
+    }
+
+    private BlockPos getBossRoomBuildStartPosition()
+    {
+        return getNonWallStartPos().add(bossBuildOffset);
+    }
+
+    private void placeBossSpawner(World world, CastleDungeon dungeon, BlockPos pos)
+    {
+        ResourceLocation resLoc;
+        if (dungeon.getBossMob() == EDungeonMobType.DEFAULT)
+        {
+            resLoc = EDungeonMobType.getMobTypeDependingOnDistance(pos.getX(), pos.getZ()).getBossResourceLocation();
+        }
+        else
+        {
+            resLoc = dungeon.getBossMob().getBossResourceLocation();
+        }
+        Entity mobEntity = EntityList.createEntityByIDFromName(resLoc, world);
+
+        SpawnerFactory.placeSpawner(new Entity[] {mobEntity}, false, null, world, pos);
     }
 
     private IBlockState getBlockToBuild(int x, int y, int z)
@@ -331,11 +380,6 @@ public class CastleRoomRoofBossMain extends CastleRoom
                     return Blocks.IRON_BARS.getDefaultState();
                 }
             }
-            else if ((z == 6 || z == 10) && y == 3)
-            {
-                EnumFacing torchFacing = (x == 2) ? EnumFacing.EAST : EnumFacing.WEST;
-                return Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing);
-            }
         }
         else if (z == 2 || z == 14)
         {
@@ -355,11 +399,6 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 {
                     return Blocks.IRON_BARS.getDefaultState();
                 }
-            }
-            else if ((x == 6 || x == 10) && y == 3)
-            {
-                EnumFacing torchFacing = (z == 2) ? EnumFacing.SOUTH : EnumFacing.NORTH;
-                return Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, torchFacing);
             }
         }
 
