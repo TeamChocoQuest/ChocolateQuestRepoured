@@ -1076,8 +1076,7 @@ public class CastleRoomSelector
 
     private void determineRoofs()
     {
-        ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> !c.isSelectedForBuilding() &&
-                                                                        grid.adjacentCellIsPopulated(c, EnumFacing.DOWN));
+        ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> grid.cellShouldBeWalkableRoof(c));
 
         for (RoofArea roofArea : roofAreas)
         {

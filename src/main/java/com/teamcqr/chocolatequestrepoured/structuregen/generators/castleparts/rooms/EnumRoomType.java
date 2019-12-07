@@ -13,8 +13,8 @@ public enum EnumRoomType
 
         WALKABLE_ROOF(false, false, false, false, new Vec3i(1, 1, 1)),
         WALKABLE_TOWER_ROOF(false, true, false, false, new Vec3i(1, 1, 1)),
-        ROOF_BOSS_MAIN(false, false, false, false, new Vec3i(1, 1, 1)),
-        ROOF_BOSS_EMPTY(false, false, false, false, new Vec3i(1, 1, 1)),
+        ROOF_BOSS_MAIN(false, false, false, true, new Vec3i(1, 1, 1)),
+        ROOF_BOSS_EMPTY(false, false, false, true, new Vec3i(1, 1, 1)),
 
         HALLWAY(false, false, true, false, new Vec3i(999, 999, 999)),
         STAIRCASE_DIRECTED(true, false, false, false, new Vec3i(1, 1, 1)),
