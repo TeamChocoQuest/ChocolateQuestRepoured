@@ -40,7 +40,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
     @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
-        BlockPos nwCorner = getNonWallStartPos();
+        BlockPos nwCorner = startPos;
         BlockPos pos;
         IBlockState blockToBuild;
 
