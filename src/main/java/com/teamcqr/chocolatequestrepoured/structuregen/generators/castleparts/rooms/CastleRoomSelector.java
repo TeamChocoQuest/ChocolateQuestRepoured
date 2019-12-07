@@ -543,6 +543,7 @@ public class CastleRoomSelector
                     }
                 }
 
+                //Move the boss room area a few squares to align it with the stairs
                 if (rootRoom != null && bossStairDirection != null)
                 {
                     EnumFacing snapToSide = bossStairDirection.getOpposite();
