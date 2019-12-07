@@ -52,12 +52,15 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 {
                     if (x == 8 && z == 8 && y == 1)
                     {
-                        placeBossSpawner(world, dungeon, new BlockPos(x, y, z));
+                        placeBossSpawner(world, dungeon, nwCorner.add(x, y, z));
                     }
-                    blockToBuild = getBlockToBuild(x, y, z);
-                    pos = nwCorner.add(x, y, z);
+                    else
+                    {
+                        blockToBuild = getBlockToBuild(x, y, z);
+                        pos = nwCorner.add(x, y, z);
 
-                    world.setBlockState(pos, blockToBuild);
+                        world.setBlockState(pos, blockToBuild);
+                    }
                 }
             }
         }
