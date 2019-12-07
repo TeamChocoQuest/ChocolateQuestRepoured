@@ -8,6 +8,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -34,9 +35,7 @@ public class CastleDungeon extends DungeonBase {
 	private Block roofBlock = Blocks.OAK_STAIRS;
 	private Block floorBlock = Blocks.PLANKS;
 	private Block stairBlock = Blocks.STONE_BRICK_STAIRS;
-
-	private String roomMobName = "minecraft:ghast";
-	private String bossMobName = "minecraft:wither_boss";
+	private EDungeonMobType bossMob = EDungeonMobType.DEFAULT;
 
 	@Override
 	public IDungeonGenerator getGenerator() {
@@ -54,12 +53,12 @@ public class CastleDungeon extends DungeonBase {
 			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 			this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
-			roomMobName = prop.getProperty("spawnerMob", "minecraft:zombie");
-
 			this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallblock", Blocks.STONEBRICK);
 			this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
 			this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
 			this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
+
+			this.bossMob = EDungeonMobType.byString(prop.getProperty("bossMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 
 			this.random = new Random();
 
@@ -101,16 +100,8 @@ public class CastleDungeon extends DungeonBase {
 	public int getFloorHeight() {return this.floorHeight;}
 	public Random getRandom() {return this.random;}
 
-	public ResourceLocation getSpawnerMob() {
-		String[] bossString = this.roomMobName.split(":");
-
-		return new ResourceLocation(bossString[0], bossString[1]);
+	public EDungeonMobType getBossMob()
+	{
+		return bossMob;
 	}
-
-	public ResourceLocation getBossMob() {
-		String[] bossString = this.bossMobName.split(":");
-
-		return new ResourceLocation(bossString[0], bossString[1]);
-	}
-
 }
