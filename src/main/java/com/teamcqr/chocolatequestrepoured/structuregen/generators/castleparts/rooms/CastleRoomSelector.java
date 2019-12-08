@@ -449,7 +449,7 @@ public class CastleRoomSelector
                 else
                 {
                     List<RoomGridPosition> posArray = new ArrayList<>(possibleBossStairPos.keySet());
-                    bossStairPos = posArray.get(random.nextInt(posArray.size()));
+                    bossStairPos = posArray.remove(random.nextInt(posArray.size()));
                     bossStairDirection = possibleBossStairPos.get(bossStairPos);
                     boolean alignWest = (bossStairDirection == EnumFacing.WEST);
 
@@ -459,6 +459,25 @@ public class CastleRoomSelector
                     CastleRoomLandingDirected upperStairPart = new CastleRoomLandingDirected(getRoomStart(bossStairPos.move(EnumFacing.UP)), roomSize, floorHeight, lowerStairPart);
                     grid.getCellAt(bossStairPos.move(EnumFacing.UP)).setRoom(upperStairPart);
                     addDoorToRoomCentered(grid.getCellAt(bossStairPos.move(EnumFacing.UP)), bossStairDirection);
+
+                    List<RoomGridPosition> foyerArray = bossArea.getPositionList();
+                    foyerArray.remove(bossStairPos.move(EnumFacing.UP));
+                    if (bossStairDirection.getAxis() == EnumFacing.Axis.X)
+                    {
+                        final int x = bossStairPos.getX();
+                        foyerArray.removeIf(p -> p.getX() != x);
+                    }
+                    else
+                    {
+                        final int z = bossStairPos.getZ();
+                        foyerArray.removeIf(p -> p.getZ() != z);
+                    }
+
+                    for (RoomGridPosition foyerPos : foyerArray)
+                    {
+                        CastleRoomBossFoyer foyer = new CastleRoomBossFoyer(getRoomStart(foyerPos), roomSize, floorHeight);
+                        grid.getCellAt(foyerPos).setRoom(foyer);
+                    }
 
                     rootPos = bossArea.start.move(EnumFacing.EAST, alignWest ? 0 : 1);
                     rootRoom = new CastleRoomRoofBossMain(getRoomStart(rootPos), roomSize, floorHeight);

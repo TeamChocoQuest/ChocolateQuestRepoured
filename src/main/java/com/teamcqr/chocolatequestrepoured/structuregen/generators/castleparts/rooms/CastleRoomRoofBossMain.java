@@ -38,6 +38,9 @@ public class CastleRoomRoofBossMain extends CastleRoom
     }
 
     @Override
+    protected void generateWalls(World world, CastleDungeon dungeon) { }
+
+    @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
         BlockPos nwCorner = startPos;
@@ -135,12 +138,6 @@ public class CastleRoomRoofBossMain extends CastleRoom
         }
 
         return blockToBuild;
-    }
-
-    @Override
-    protected void generateWalls(World world, CastleDungeon dungeon)
-    {
-        ; //Skip building walls
     }
 
     private boolean floorDesignBlock(int x, int z)

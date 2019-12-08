@@ -6,7 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomRoofBossEmpty extends CastleRoom
+public class CastleRoomRoofBossEmpty extends CastleRoomWalkableRoof
 {
     public CastleRoomRoofBossEmpty(BlockPos startPos, int sideLength, int height)
     {
@@ -16,14 +16,6 @@ public class CastleRoomRoofBossEmpty extends CastleRoom
     }
 
     @Override
-    public void generateRoom(World world, CastleDungeon dungeon)
-    {
-        ; //Do not build anything - the main boss room handles building on all tiles
-    }
+    public void generateRoom(World world, CastleDungeon dungeon) { }
 
-    @Override
-    protected void generateWalls(World world, CastleDungeon dungeon)
-    {
-        ; //Skip building walls
-    }
 }
