@@ -411,10 +411,8 @@ public class CastleRoomSelector
 
     private void addBossRooms()
     {
-        CastleRoomRoofBossMain rootRoom = null;
-        RoomGridPosition rootPos = null;
-        EnumFacing bossStairDirection = null;
-        RoomGridPosition bossStairPos = null;
+        CastleRoomRoofBossMain rootRoom;
+        RoomGridPosition rootPos;
         RoomGrid.Area2D bossArea = grid.getBossArea();
 
         if (bossArea != null && bossArea.dimensionsAreAtLeast(minRoomsForBoss, minRoomsForBoss + 1))
@@ -499,36 +497,31 @@ public class CastleRoomSelector
 
 
                 //Move the boss room area a few squares to align it with the stairs
-                if (rootRoom != null && bossStairDirection != null)
+                EnumFacing snapToSide = stairDoorSide.getOpposite();
+                if (snapToSide == EnumFacing.NORTH)
                 {
-                    EnumFacing snapToSide = bossStairDirection.getOpposite();
-                    if (snapToSide == EnumFacing.NORTH)
-                    {
-                        int distFromEdge = (bossArea.sizeX * roomSize) - rootRoom.getStaticSize();
-                        int x = (bossArea.cellsFromStartX(topOfBossStairs) / (bossArea.sizeX - 1)) * distFromEdge;
-                        rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
-                    } else if (snapToSide == EnumFacing.WEST)
-                    {
-                        int distFromEdge = (bossArea.sizeZ * roomSize) - rootRoom.getStaticSize();
-                        int z = (bossArea.cellsFromStartZ(topOfBossStairs) / (bossArea.sizeZ - 1)) * distFromEdge;
-                        rootRoom.setBossBuildOffset(new Vec3i(0, 0, z));
-                    } else if (snapToSide == EnumFacing.SOUTH)
-                    {
-                        int distFromEdge = (bossArea.sizeX * roomSize) - rootRoom.getStaticSize();
-                        int x = (bossArea.cellsFromStartX(topOfBossStairs) / (bossArea.sizeX - 1)) * distFromEdge;
-                        int z = ((bossArea.sizeZ - 1) * roomSize) - rootRoom.getStaticSize();
-                        rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
-                    } else //east
-                    {
-                        int distFromEdge = (bossArea.sizeZ * roomSize) - rootRoom.getStaticSize();
-                        int z = (bossArea.cellsFromStartZ(topOfBossStairs) / (bossArea.sizeZ - 1)) * distFromEdge;
-                        int x = ((bossArea.sizeX - 1) * roomSize) - rootRoom.getStaticSize();
-                        rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
-                    }
-
+                    int distFromEdge = (bossArea.sizeX * roomSize) - rootRoom.getStaticSize();
+                    int x = (bossArea.cellsFromStartX(topOfBossStairs) / (bossArea.sizeX - 1)) * distFromEdge;
+                    rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
+                } else if (snapToSide == EnumFacing.WEST)
+                {
+                    int distFromEdge = (bossArea.sizeZ * roomSize) - rootRoom.getStaticSize();
+                    int z = (bossArea.cellsFromStartZ(topOfBossStairs) / (bossArea.sizeZ - 1)) * distFromEdge;
+                    rootRoom.setBossBuildOffset(new Vec3i(0, 0, z));
+                } else if (snapToSide == EnumFacing.SOUTH)
+                {
+                    int distFromEdge = (bossArea.sizeX * roomSize) - rootRoom.getStaticSize();
+                    int x = (bossArea.cellsFromStartX(topOfBossStairs) / (bossArea.sizeX - 1)) * distFromEdge;
+                    int z = ((bossArea.sizeZ - 1) * roomSize) - rootRoom.getStaticSize();
+                    rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
+                } else //east
+                {
+                    int distFromEdge = (bossArea.sizeZ * roomSize) - rootRoom.getStaticSize();
+                    int z = (bossArea.cellsFromStartZ(topOfBossStairs) / (bossArea.sizeZ - 1)) * distFromEdge;
+                    int x = ((bossArea.sizeX - 1) * roomSize) - rootRoom.getStaticSize();
+                    rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
                 }
             }
-
         }
         else
         {
