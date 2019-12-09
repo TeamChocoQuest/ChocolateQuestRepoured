@@ -1,105 +1,86 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import net.minecraft.block.BlockStairs;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public class CastleRoomBossStairMain extends CastleRoom
 {
-    private static final int PLATFORM_LENGTH = 2;
-    private BlockPos stairStart;
     private EnumFacing doorSide;
     private int numRotations;
-    private int upperStairWidth;
-    private int upperStairLength;
-    private int centerStairWidth;
-    private int centerStairLength;
+    private static final int ROOMS_LONG = 2;
+    private static final int ROOMS_SHORT = 1;
+    private static final int TOP_LANDING_BUFFER_Z = 3;
+    private static final int MAIN_LANDING_Z = 2;
+    private static final int MAIN_LANDING_X = 7;
+    private static final int FLOOR_HEIGHT = 1;
+    private static final int MID_STAIR_LENGH = 2;
+
+    int rotations;
+
+    int endX;
+    int lenX;
+    int endZ;
+    int lenZ;
+    int topStairLength;
+    int botStairLength;
+    int mainLandingXStartIdx;
+    int mainLandingXEndIdx;
+    int mainLandingMaxHeightIdx;
 
     public CastleRoomBossStairMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
         super(startPos, sideLength, height);
         this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
         this.doorSide = doorSide;
-        this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
+        this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
         this.defaultCeiling = false;
 
-        if (doorSide.getAxis() == EnumFacing.Axis.X)
-        {
-            this.stairStart = startPos.offset(EnumFacing.SOUTH, sideLength / 2);
-        }
-        else
-        {
-            this.stairStart = startPos.offset(EnumFacing.EAST, sideLength / 2);
-        }
-
-        upperStairWidth = 0;
-
-        //Determine the width of the center stairs and the two upper side stairs. Find the largest possible
-        //side width such that the center width is still greater than or equal to the length of each side.
-        do
-        {
-            upperStairWidth++;
-            centerStairWidth = (sideLength - 1) - upperStairWidth * 2;
-        } while ((centerStairWidth - 2) >= (upperStairWidth + 1));
-
-        //Each stair section should cover half the ascent
-        upperStairLength = height / 2;
-        centerStairLength = height + 1 - upperStairLength; //center section will either be same length or 1 more
+        this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+        this.lenX = endX + 1;
+        this.endZ = ROOMS_SHORT * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+        this.lenZ = endZ + 1;
+        this.topStairLength = lenZ - TOP_LANDING_BUFFER_Z - MAIN_LANDING_Z;
+        this.botStairLength = height - FLOOR_HEIGHT - MID_STAIR_LENGH - topStairLength;
+        this.mainLandingXStartIdx = sideLength - 3;
+        this.mainLandingXEndIdx = mainLandingXStartIdx + MAIN_LANDING_X - 1;
+        this.mainLandingMaxHeightIdx = height - topStairLength - 1;
     }
 
     @Override
     public void generateRoom(World world, CastleDungeon dungeon)
     {
-        for (int x = 0; x < sideLength - 1; x++)
-        {
-            for (int z = 0; z < sideLength - 1; z++)
-            {
-                buildFloorBlock(x, z, world, dungeon);
+        Vec3i offset;
 
-                if (z < 2)
+        for (int x = 0; x <= endX; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                for (int z = 0; z <= endZ; z++)
                 {
-                    buildPlatform(x, z, world, dungeon);
-                }
-                else if (((x < upperStairWidth) || (x >= centerStairWidth + upperStairWidth)) && z < upperStairLength + PLATFORM_LENGTH)
-                {
-                    buildUpperStair(x, z, world, dungeon);
-                }
-                else if (((x >= upperStairWidth) || (x < centerStairWidth + upperStairWidth)) && z <= centerStairLength + PLATFORM_LENGTH)
-                {
-                    buildLowerStair(x, z, world, dungeon);
+                    IBlockState blockToBuild = Blocks.AIR.getDefaultState();
+
+                    if (y == 0)
+                    {
+                        blockToBuild = getFloorBlock(dungeon);
+                    }
+                    else if ((x >= mainLandingXStartIdx) && (x <= mainLandingXEndIdx) && (z > endZ - MAIN_LANDING_Z))
+                    {
+                        blockToBuild = getMainLandingBlock(x, y, z);
+                    }
+
+                    offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), lenX, lenZ, numRotations);
+                    world.setBlockState(startPos.add(offset), blockToBuild);
                 }
             }
         }
     }
 
-    public void setDoorSide(EnumFacing side)
-    {
-        this.doorSide = side;
-    }
-
-    public int getUpperStairEndZ()
-    {
-        return (upperStairLength);
-    }
-
-    public int getUpperStairWidth()
-    {
-        return upperStairWidth;
-    }
-
-    public int getCenterStairWidth()
-    {
-        return centerStairWidth;
-    }
-
-    public EnumFacing getDoorSide()
-    {
-        return doorSide;
-    }
 
     private void buildFloorBlock(int x, int z, World world, CastleDungeon dungeon)
     {
@@ -107,68 +88,25 @@ public class CastleRoomBossStairMain extends CastleRoom
         world.setBlockState(startPos.add(x, 0, z), blockToBuild);
     }
 
-    private void buildUpperStair(int x, int z, World world, CastleDungeon dungeon)
+    public IBlockState getMainLandingBlock(int x, int y, int z)
     {
-        int stairHeight = centerStairLength + (z - PLATFORM_LENGTH);
-        EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.SOUTH, numRotations);
-        IBlockState blockToBuild;
-        for (int y = 1; y < height; y++)
+        if (y >= 1 && y <= mainLandingMaxHeightIdx)
         {
-            if (y < stairHeight)
-            {
-                blockToBuild = dungeon.getWallBlock().getDefaultState();
-            }
-            else if (y == stairHeight)
-            {
-                blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
-            }
-            else
-            {
-                blockToBuild = Blocks.AIR.getDefaultState();
-            }
-            world.setBlockState(getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+            return Blocks.STONEBRICK.getDefaultState();
+        }
+        else
+        {
+            return Blocks.AIR.getDefaultState();
         }
     }
 
-    private void buildLowerStair(int x, int z, World world, CastleDungeon dungeon)
+    @Override
+    public void addInnerWall(EnumFacing side)
     {
-        int stairHeight = centerStairLength - (z - PLATFORM_LENGTH + 1);
-        EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.NORTH, numRotations);
-        IBlockState blockToBuild;
-        for (int y = 1; y < height; y++)
+        if (!(doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) &&
+            !(doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST))
         {
-            if (y < stairHeight)
-            {
-                blockToBuild = dungeon.getWallBlock().getDefaultState();
-            }
-            else if (y == stairHeight)
-            {
-                blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
-            }
-            else
-            {
-                blockToBuild = Blocks.AIR.getDefaultState();
-            }
-            world.setBlockState(getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
-        }
-    }
-
-    private void buildPlatform(int x, int z,World world, CastleDungeon dungeon)
-    {
-        IBlockState blockToBuild;
-        int platformHeight = centerStairLength; //the stair length is also the platform height
-
-        for (int y = 1; y < height; y++)
-        {
-            if (y < platformHeight)
-            {
-                blockToBuild = dungeon.getFloorBlock().getDefaultState();
-            }
-            else
-            {
-                blockToBuild =  Blocks.AIR.getDefaultState();
-            }
-            world.setBlockState(getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+            super.addInnerWall(side);
         }
     }
 

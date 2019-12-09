@@ -6,7 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomRoofBossEmpty extends CastleRoomWalkableRoof
+public class CastleRoomRoofBossEmpty extends CastleRoom
 {
     public CastleRoomRoofBossEmpty(BlockPos startPos, int sideLength, int height)
     {
@@ -18,4 +18,6 @@ public class CastleRoomRoofBossEmpty extends CastleRoomWalkableRoof
     @Override
     public void generateRoom(World world, CastleDungeon dungeon) { }
 
+    @Override
+    protected void generateWalls(World world, CastleDungeon dungeon) { }
 }
