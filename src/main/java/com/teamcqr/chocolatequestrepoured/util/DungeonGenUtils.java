@@ -244,8 +244,28 @@ public class DungeonGenUtils {
 				return result;
 			}
 		}
-
-
 	}
-	
+
+	public static Vec3i rotateMatrixOffsetCW(Vec3i offset, int sizeX, int sizeZ, int numRotations)
+	{
+		final int maxXIndex = sizeX - 1;
+		final int maxZIndex = sizeZ - 1;
+
+		if (numRotations % 4 == 0)
+		{
+			return new Vec3i(offset.getX(), offset.getY(), offset.getZ());
+		}
+		else if (numRotations % 4 == 1)
+		{
+			return new Vec3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
+		}
+		else if (numRotations % 4 == 2)
+		{
+			return new Vec3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
+		}
+		else
+		{
+			return new Vec3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
+		}
+	}
 }
