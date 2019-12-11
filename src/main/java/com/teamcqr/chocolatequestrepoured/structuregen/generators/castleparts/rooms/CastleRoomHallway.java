@@ -50,7 +50,7 @@ public class CastleRoomHallway extends CastleRoom
         {
             for (int x = 0; x < (walls.hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
             {
-                BlockPos pos = startPos.add(x, 0, z);
+                BlockPos pos = origin.add(x, 0, z);
                 world.setBlockState(pos, dungeon.getFloorBlock().getDefaultState());
             }
         }

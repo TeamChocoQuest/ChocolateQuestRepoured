@@ -25,19 +25,19 @@ public class CastleRoomLandingSpiral extends CastleRoom
     {
         BlockPos pos;
         IBlockState blockToBuild;
-        BlockPos pillarStart = new BlockPos(stairsBelow.getCenterX(), startPos.getY(), stairsBelow.getCenterZ());
+        BlockPos pillarStart = new BlockPos(stairsBelow.getCenterX(), origin.getY(), stairsBelow.getCenterZ());
         EnumFacing firstStairSide = stairsBelow.getLastStairSide().rotateY();
 
         SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
-        for (int x = 0; x < sideLength - 1; x++)
+        for (int x = 0; x < buildLengthX - 1; x++)
         {
-            for (int z = 0; z < sideLength - 1; z++)
+            for (int z = 0; z < buildLengthZ - 1; z++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     blockToBuild = Blocks.AIR.getDefaultState();
-                    pos = startPos.add(x, y, z);
+                    pos = getBuildPosition().add(x, y, z);
 
                     // continue stairs for 1 layer through floor
                     if (y == 0)

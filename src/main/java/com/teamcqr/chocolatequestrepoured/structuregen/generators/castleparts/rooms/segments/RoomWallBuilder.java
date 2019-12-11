@@ -20,23 +20,14 @@ public class RoomWallBuilder
     protected EnumFacing side;
     protected Random random;
 
-    public RoomWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side)
+    public RoomWallBuilder(BlockPos wallStart, int height, int length, WallOptions options, EnumFacing side)
     {
         this.height = height;
         this.length = length;
         this.options = options;
         this.side = side;
 
-        this.wallStart = roomStart;
-
-        if (side == EnumFacing.EAST)
-        {
-            wallStart = wallStart.add(length - 1, 0, 0);
-        }
-        else if (side == EnumFacing.SOUTH)
-        {
-            wallStart = wallStart.add(0, 0, length - 1);
-        }
+        this.wallStart = wallStart;
 
         if (options.hasDoor())
         {

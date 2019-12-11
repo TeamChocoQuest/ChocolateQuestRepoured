@@ -29,16 +29,9 @@ public class CastleRoomWalkableRoof extends CastleRoom
     }
 
     @Override
-    protected void generateWalls(World world, CastleDungeon dungeon)
+    protected void createAndGenerateWallBuilder(World world, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart)
     {
-        for (EnumFacing side : EnumFacing.HORIZONTALS)
-        {
-            if (walls.hasWallOnSide(side))
-            {
-                BlockPos buildPos = getbuildPosition();
-                RoomWallBuilder builder = new WalkableRoofWallBuilder(buildPos, height, buildLength, walls.getOptionsForSide(side), side);
-                builder.generate(world, dungeon);
-            }
-        }
+        RoomWallBuilder builder = new WalkableRoofWallBuilder(wallStart, height, wallLength, walls.getOptionsForSide(side), side);
+        builder.generate(world, dungeon);
     }
 }
