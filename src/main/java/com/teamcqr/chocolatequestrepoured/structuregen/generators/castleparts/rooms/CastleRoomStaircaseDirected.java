@@ -45,9 +45,9 @@ public class CastleRoomStaircaseDirected extends CastleRoom
     public void generateRoom(World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild;
-        for (int x = 0; x < sideLength - 1; x++)
+        for (int x = 0; x < buildLengthX - 1; x++)
         {
-            for (int z = 0; z < sideLength - 1; z++)
+            for (int z = 0; z < buildLengthZ - 1; z++)
             {
                 buildFloorBlock(x, z, world, dungeon);
 
@@ -95,7 +95,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom
     private void buildFloorBlock(int x, int z, World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
-        world.setBlockState(startPos.add(x, 0, z), blockToBuild);
+        world.setBlockState(origin.add(x, 0, z), blockToBuild);
     }
 
     private void buildUpperStair(int x, int z, World world, CastleDungeon dungeon)

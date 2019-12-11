@@ -75,7 +75,7 @@ public class CastleRoomBossStairMain extends CastleRoom
                     }
 
                     offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), lenX, lenZ, numRotations);
-                    world.setBlockState(startPos.add(offset), blockToBuild);
+                    world.setBlockState(origin.add(offset), blockToBuild);
                 }
             }
         }
@@ -85,7 +85,7 @@ public class CastleRoomBossStairMain extends CastleRoom
     private void buildFloorBlock(int x, int z, World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
-        world.setBlockState(startPos.add(x, 0, z), blockToBuild);
+        world.setBlockState(origin.add(x, 0, z), blockToBuild);
     }
 
     public IBlockState getMainLandingBlock(int x, int y, int z)

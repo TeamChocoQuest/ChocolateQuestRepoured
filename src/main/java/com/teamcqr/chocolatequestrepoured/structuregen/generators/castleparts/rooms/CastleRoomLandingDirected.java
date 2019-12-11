@@ -30,9 +30,9 @@ public class CastleRoomLandingDirected extends CastleRoom
     public void generateRoom(World world, CastleDungeon dungeon)
     {
         IBlockState blockToBuild;
-        for (int x = 0; x < sideLength - 1; x++)
+        for (int x = 0; x < buildLengthX - 1; x++)
         {
-            for (int z = 0; z < sideLength - 1; z++)
+            for (int z = 0; z < buildLengthZ - 1; z++)
             {
                 for (int y = 0; y < height; y++)
                 {
