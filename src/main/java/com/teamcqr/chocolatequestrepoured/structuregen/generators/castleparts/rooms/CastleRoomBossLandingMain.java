@@ -55,11 +55,12 @@ public class CastleRoomBossLandingMain extends CastleRoom
         this.stairOpeningZStartIdx = LANDING_LENGTH_Z + 1;
         this.stairOpeningZEndIdx = stairOpeningZStartIdx + STAIR_OPENING_LENGTH_Z;
 
-        final int gapToBossRoom = BOSS_ROOM_WIDTH - lenX;
+        final int gapToBossRoom = 2 + BOSS_ROOM_WIDTH - lenX;
         connectingWallLength = 0;
         if (gapToBossRoom > 0)
         {
-            connectingWallLength = (int)Math.ceil((double)gapToBossRoom / 2);
+            //Determine size of walls that come in from each side so there is no space between this and boss room
+            connectingWallLength = (int)Math.ceil((double)(gapToBossRoom) / 2);
         }
     }
 
@@ -70,7 +71,7 @@ public class CastleRoomBossLandingMain extends CastleRoom
 
         for (int x = 0; x <= endX; x++)
         {
-            for (int y = 0; y < height - 1; y++)
+            for (int y = 0; y < height; y++)
             {
                 for (int z = -1; z <= endZ; z++)
                 {
@@ -87,7 +88,18 @@ public class CastleRoomBossLandingMain extends CastleRoom
     {
         IBlockState blockToBuild = Blocks.AIR.getDefaultState();
 
-        if (y == 0)
+        if (z == -1)
+        {
+            if (x < connectingWallLength || x > endX - connectingWallLength || y == height - 1)
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+            else if (y == 0)
+            {
+                return Blocks.QUARTZ_BLOCK.getDefaultState();
+            }
+        }
+        else if (y == 0)
         {
             if ((x >= stairOpeningXStartIdx) && (x <= stairOpeningXEndIdx))
             {
@@ -100,7 +112,7 @@ public class CastleRoomBossLandingMain extends CastleRoom
                     EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.NORTH, numRotations);
                     blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
                 }
-                else if (z >= stairOpeningZStartIdx && z <= stairOpeningZEndIdx)
+                else
                 {
                     return Blocks.AIR.getDefaultState();
                 }
@@ -110,12 +122,9 @@ public class CastleRoomBossLandingMain extends CastleRoom
                 blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
             }
         }
-        else if (z == -1)
+        else if (y == height - 1)
         {
-            if (x < connectingWallLength || x > endX - connectingWallLength)
-            {
-                blockToBuild = dungeon.getWallBlock().getDefaultState();
-            }
+            blockToBuild = dungeon.getWallBlock().getDefaultState();
         }
 
         return blockToBuild;
@@ -125,7 +134,8 @@ public class CastleRoomBossLandingMain extends CastleRoom
     public void addInnerWall(EnumFacing side)
     {
         if (!(doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) &&
-            !(doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST))
+            !(doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST) &&
+            !(side == doorSide))
         {
             super.addInnerWall(side);
         }
