@@ -456,9 +456,11 @@ public class CastleRoomSelector
                 {
                     CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(getRoomStart(bottomOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
+                    grid.initPathingForSingleCell(bottomOfBossStairs);
 
                     CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
+                    grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
 
                     CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(getRoomStart(topOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(topOfBossStairs).setRoom(landingMain);
@@ -468,7 +470,7 @@ public class CastleRoomSelector
                 }
                 else
                 {
-
+                    //TODO: Single-wide boss stairs (just use directed stairs)
                 }
 
                 rootPos = bossArea.start;

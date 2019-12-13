@@ -125,10 +125,17 @@ public class CastleRoomBossStairMain extends CastleRoom
         }
         else if (y == maxHeightIdx)
         {
-            if ((x >= upperStairXStartIdx && x <= upperStairXEndIdx) &&
-                    (z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + topStairLength - 1))
+            if (x >= upperStairXStartIdx && x <= upperStairXEndIdx)
             {
-                blockToBuild = Blocks.AIR.getDefaultState();
+                if (z == TOP_LANDING_BUFFER_Z)
+                {
+                    EnumFacing stairFacing = rotateFacingNTimesAboutY(EnumFacing.NORTH, numRotations);
+                    return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+                }
+                else if (z < TOP_LANDING_BUFFER_Z)
+                {
+                    return dungeon.getWallBlock().getDefaultState();
+                }
             }
             else
             {

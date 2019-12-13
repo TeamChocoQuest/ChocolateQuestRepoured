@@ -484,33 +484,6 @@ public class RoomGrid
         return result;
     }
 
-    public void setCellBuilable(int floor, int x, int z)
-    {
-        cellArray[floor][x][z].setBuildable();
-    }
-
-    public void selectCellForBuilding(int floor, int x, int z)
-    {
-        cellArray[floor][x][z].selectForBuilding();
-    }
-
-    public void setRoomAsMainStruct(int floor, int x, int z)
-    {
-        cellArray[floor][x][z].setAsMainStruct();
-    }
-
-    public void setRoomAsNarrow(int floor, int x, int z)
-    {
-        cellArray[floor][x][z].setNarrow();
-    }
-
-    public boolean floorIsNarrow(final int floor)
-    {
-        return getAllCellsWhere(c -> c.isSelectedForBuilding() &&
-                c.getFloor() == floor &&
-                c.isNarrow()).size() > 0;
-    }
-
     public RoomGridCell getCellAt(int floor, int x, int z)
     {
         if (withinGridBounds(floor, x, z))
@@ -565,10 +538,10 @@ public class RoomGrid
             }
         }
 
-        setCellPathingArea(area, numFloors);
+        initPathingForCellArea(area, numFloors);
     }
 
-    public void setCellPathingArea(Area2D baseArea, int floors)
+    public void initPathingForCellArea(Area2D baseArea, int floors)
     {
         for (int floor = 0; floor < floors; floor++)
         {
@@ -590,34 +563,50 @@ public class RoomGrid
                 if (cell == null)
                 {
                     System.out.println("How did this happen?");
+                    return;
                 }
                 cell.addPathableCells(cellsInArea);
             }
+            setPathingForCellSet(cellsInArea);
+        }
+    }
 
-            //For each cell in this area
-            for (RoomGridCell cell: cellsInArea)
+    public void initPathingForSingleCell(RoomGridPosition gridPos)
+    {
+        if (withinGridBounds(gridPos) && getCellAt(gridPos)!= null)
+        {
+            HashSet<RoomGridCell> cellsInArea = new HashSet<>();
+            cellsInArea.add(getCellAt(gridPos));
+
+            setPathingForCellSet(cellsInArea);
+        }
+    }
+
+    private void setPathingForCellSet(HashSet<RoomGridCell> cellsInArea)
+    {
+        //For each cell in this area
+        for (RoomGridCell cell: cellsInArea)
+        {
+            //Check N E S W
+            for (EnumFacing direction : EnumFacing.HORIZONTALS)
             {
-                //Check N E S W
-                for (EnumFacing direction : EnumFacing.HORIZONTALS)
+                //If adjacent cell isn't part of my area and is selected
+                RoomGridCell adjacent = getAdjacentCell(cell, direction);
+                if (adjacent != null && //adjacent cell exists
+                        !cellsInArea.contains(adjacent) && //not part of my area already
+                        adjacent.isSelectedForBuilding() && //adjacent cell is selected
+                        !cell.getPathableCellsCopy().contains(adjacent)) //I haven't already been pathed to it
                 {
-                    //If adjacent cell isn't part of my area and is selected
-                    RoomGridCell adjacent = getAdjacentCell(cell, direction);
-                    if (adjacent != null && //adjacent cell exists
-                            !cellsInArea.contains(adjacent) && //not part of my area already
-                            adjacent.isSelectedForBuilding() && //adjacent cell is selected
-                            !cell.getPathableCellsCopy().contains(adjacent)) //I haven't already been pathed to it
+                    //Copy the adjacent cell's pathable list to all cells in my area
+                    for (RoomGridCell myPathable : cellsInArea)
                     {
-                        //Copy the adjacent cell's pathable list to all cells in my area
-                        for (RoomGridCell myPathable : cellsInArea)
-                        {
-                            myPathable.addPathableCells(adjacent.getPathableCellsCopy());
-                        }
-                        //Copy my pathable list out to all the adjacent cell's pathable cells
-                        HashSet<RoomGridCell> adjacentPathable = adjacent.getPathableCellsCopy();
-                        for (RoomGridCell theirPathable : adjacentPathable)
-                        {
-                            theirPathable.addPathableCells(cell.getPathableCellsCopy());
-                        }
+                        myPathable.addPathableCells(adjacent.getPathableCellsCopy());
+                    }
+                    //Copy my pathable list out to all the adjacent cell's pathable cells
+                    HashSet<RoomGridCell> adjacentPathable = adjacent.getPathableCellsCopy();
+                    for (RoomGridCell theirPathable : adjacentPathable)
+                    {
+                        theirPathable.addPathableCells(cell.getPathableCellsCopy());
                     }
                 }
             }
