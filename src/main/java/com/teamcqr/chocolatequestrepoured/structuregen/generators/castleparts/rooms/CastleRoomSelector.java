@@ -457,8 +457,14 @@ public class CastleRoomSelector
                     CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(getRoomStart(bottomOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
 
-                    CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight);
+                    CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
+
+                    CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(getRoomStart(topOfBossStairs), roomSize, floorHeight, stairDoorSide);
+                    grid.getCellAt(topOfBossStairs).setRoom(landingMain);
+
+                    CastleRoomBossLandingEmpty landingEmpty = new CastleRoomBossLandingEmpty(getRoomStart(topOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
+                    grid.getCellAt(topOfBossStairs.move(alongShortSide)).setRoom(landingEmpty);
                 }
                 else
                 {

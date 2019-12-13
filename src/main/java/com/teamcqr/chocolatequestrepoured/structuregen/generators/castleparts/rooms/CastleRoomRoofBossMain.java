@@ -196,7 +196,7 @@ public class CastleRoomRoofBossMain extends CastleRoom
                 {
                     if (z == 7 || z == 9)
                     {
-                        EnumFacing doorFrameFacing = (z == 7) ? EnumFacing.WEST : EnumFacing.EAST;
+                        EnumFacing doorFrameFacing = (z == 7) ? EnumFacing.NORTH : EnumFacing.SOUTH;
                         return Blocks.STONE_BRICK_STAIRS.getDefaultState().
                                 withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).
                                 withProperty(BlockStairs.FACING, doorFrameFacing);

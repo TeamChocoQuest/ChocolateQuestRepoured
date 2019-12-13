@@ -16,6 +16,9 @@ public enum EnumRoomType
         ROOF_BOSS_MAIN(false, false, false, true, new Vec3i(1, 1, 1)),
         ROOF_BOSS_EMPTY(false, false, false, true, new Vec3i(1, 1, 1)),
 
+        STAIRCASE_BOSS(true, false, false, false, new Vec3i(1, 1, 1)),
+        LANDING_BOSS(true, false, true, false, new Vec3i(1, 1, 1)),
+
         HALLWAY(false, false, true, false, new Vec3i(999, 999, 999)),
         STAIRCASE_DIRECTED(true, false, false, false, new Vec3i(1, 1, 1)),
         STAIRCASE_SPIRAL(true, false, true, false, new Vec3i(1, 1, 1)),

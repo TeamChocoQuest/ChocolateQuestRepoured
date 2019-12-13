@@ -5,16 +5,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomBossStairEmpty extends CastleRoom
+public class CastleRoomBossLandingEmpty extends CastleRoom
 {
     private EnumFacing doorSide;
 
-    public CastleRoomBossStairEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
+    public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
         super(startPos, sideLength, height);
         this.roomType = EnumRoomType.STAIRCASE_BOSS;
-        this.pathable = true;
+        this.pathable = false;
         this.doorSide = doorSide;
+        this.defaultCeiling = true;
     }
 
     @Override
@@ -23,10 +24,11 @@ public class CastleRoomBossStairEmpty extends CastleRoom
     @Override
     public void addInnerWall(EnumFacing side)
     {
-        if (!(doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.NORTH) &&
-                !(doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.WEST))
+        if (!(doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) &&
+                !(doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST))
         {
             super.addInnerWall(side);
         }
     }
+
 }

@@ -21,13 +21,10 @@ public class CastleRoomBossStairMain extends CastleRoom
     private static final int MAIN_LANDING_X = 7;
     private static final int UPPER_STAIR_X = 3;
     private static final int LOWER_LANDING_Z = 2;
-    private static final int LOWER_LANDING_X = 2;
     private static final int LOWER_STAIRS_Z = 2;
     private static final int LOWER_STAIRS_LEN = 2;
     private static final int FLOOR_HEIGHT = 1;
     private static final int MID_STAIR_LENGTH = 2;
-
-    int rotations;
 
     private int endX;
     private int lenX;
@@ -35,7 +32,6 @@ public class CastleRoomBossStairMain extends CastleRoom
     private int lenZ;
     private int maxHeightIdx;
     private int topStairLength;
-    private int botStairLength;
 
     private int mainLandingXStartIdx;
     private int mainLandingXEndIdx;
@@ -61,10 +57,10 @@ public class CastleRoomBossStairMain extends CastleRoom
     public CastleRoomBossStairMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
         super(startPos, sideLength, height);
-        this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
+        this.roomType = EnumRoomType.STAIRCASE_BOSS;
+
         this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
-        this.defaultCeiling = false;
 
         this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
         this.lenX = endX + 1;
@@ -73,7 +69,7 @@ public class CastleRoomBossStairMain extends CastleRoom
         this.maxHeightIdx = height - 1;
 
         this.topStairLength = lenZ - TOP_LANDING_BUFFER_Z - MAIN_LANDING_Z;
-        this.botStairLength = height - FLOOR_HEIGHT - MID_STAIR_LENGTH - topStairLength;
+        final int lowerStairLength = height - FLOOR_HEIGHT - MID_STAIR_LENGTH - topStairLength;
 
         this.mainLandingXStartIdx = sideLength - 4;
         this.mainLandingXEndIdx = mainLandingXStartIdx + MAIN_LANDING_X - 1;
@@ -87,10 +83,10 @@ public class CastleRoomBossStairMain extends CastleRoom
         this.lowerLanding2XStartIdx = upperStairXEndIdx + 1;
         this.lowerLanding2XEndIdx = lowerLanding2XStartIdx + 1;
 
-        this.lowerStair1XStartIdx = lowerLanding1XStartIdx - botStairLength;
-        this.lowerStair1XEndIdx = lowerStair1XStartIdx + botStairLength - 1;
+        this.lowerStair1XStartIdx = lowerLanding1XStartIdx - lowerStairLength;
+        this.lowerStair1XEndIdx = lowerStair1XStartIdx + lowerStairLength - 1;
         this.lowerStair2XStartIdx = lowerLanding2XEndIdx + 1;
-        this.lowerStair2XEndIdx = lowerStair2XStartIdx + botStairLength - 1;
+        this.lowerStair2XEndIdx = lowerStair2XStartIdx + lowerStairLength - 1;
 
         this.midStairsZStartIdx = mainLandingZStartIdx - LOWER_STAIRS_Z;
         this.lowerLandingZStartIdx = midStairsZStartIdx - LOWER_LANDING_Z;
@@ -110,50 +106,69 @@ public class CastleRoomBossStairMain extends CastleRoom
             {
                 for (int z = 0; z <= endZ; z++)
                 {
-                    IBlockState blockToBuild = Blocks.AIR.getDefaultState();
-
-                    if (y == 0)
-                    {
-                        blockToBuild = getFloorBlock(dungeon);
-                    }
-                    else if ((x >= mainLandingXStartIdx && x <= mainLandingXEndIdx) &&
-                             (z >= mainLandingZStartIdx))
-                    {
-                        blockToBuild = getMainLandingBlock(x, y, z);
-                    }
-                    else if ((x >= upperStairXStartIdx && x <= upperStairXEndIdx) &&
-                            ((z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + topStairLength - 1)))
-                    {
-                        blockToBuild = getUpperStairBlock(x, y, z);
-                    }
-                    else if ((x >= lowerLanding1XStartIdx && x <= lowerLanding1XEndIdx) ||
-                             (x >= lowerLanding2XStartIdx && x <= lowerLanding2XEndIdx))
-                    {
-                        if (z == midStairsZStartIdx || z == midStairsZStartIdx + 1)
-                        {
-                            blockToBuild = getMidStairBlock(x, y, z);
-                        }
-                        else if (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1)
-                        {
-                            blockToBuild = getLowerLandingBlock(x, y, z);
-                        }
-                    }
-                    else if ((x >= lowerStair1XStartIdx && x <= lowerStair1XEndIdx) &&
-                            (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1))
-                    {
-                        blockToBuild = getLowerStair1Block(x, y, z);
-                    }
-                    else if ((x >= lowerStair2XStartIdx && x <= lowerStair2XEndIdx) &&
-                            (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1))
-                    {
-                        blockToBuild = getLowerStair2Block(x, y, z);
-                    }
+                    IBlockState blockToBuild = getBlockToBuild(dungeon, x, y, z);
 
                     offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), lenX, lenZ, numRotations);
                     world.setBlockState(origin.add(offset), blockToBuild);
                 }
             }
         }
+    }
+
+    private IBlockState getBlockToBuild(CastleDungeon dungeon, int x, int y, int z)
+    {
+        IBlockState blockToBuild = Blocks.AIR.getDefaultState();
+
+        if (y == 0)
+        {
+            blockToBuild = getFloorBlock(dungeon);
+        }
+        else if (y == maxHeightIdx)
+        {
+            if ((x >= upperStairXStartIdx && x <= upperStairXEndIdx) &&
+                    (z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + topStairLength - 1))
+            {
+                blockToBuild = Blocks.AIR.getDefaultState();
+            }
+            else
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+        }
+        else if ((x >= mainLandingXStartIdx && x <= mainLandingXEndIdx) &&
+                (z >= mainLandingZStartIdx))
+        {
+            blockToBuild = getMainLandingBlock(x, y, z);
+        }
+        else if ((x >= upperStairXStartIdx && x <= upperStairXEndIdx) &&
+                ((z >= TOP_LANDING_BUFFER_Z) && (z <= TOP_LANDING_BUFFER_Z + topStairLength - 1)))
+        {
+            blockToBuild = getUpperStairBlock(x, y, z);
+        }
+        else if ((x >= lowerLanding1XStartIdx && x <= lowerLanding1XEndIdx) ||
+                (x >= lowerLanding2XStartIdx && x <= lowerLanding2XEndIdx))
+        {
+            if (z == midStairsZStartIdx || z == midStairsZStartIdx + 1)
+            {
+                blockToBuild = getMidStairBlock(x, y, z);
+            }
+            else if (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1)
+            {
+                blockToBuild = getLowerLandingBlock(x, y, z);
+            }
+        }
+        else if ((x >= lowerStair1XStartIdx && x <= lowerStair1XEndIdx) &&
+                (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1))
+        {
+            blockToBuild = getLowerStair1Block(x, y, z);
+        }
+        else if ((x >= lowerStair2XStartIdx && x <= lowerStair2XEndIdx) &&
+                (z == lowerLandingZStartIdx || z == lowerLandingZStartIdx + 1))
+        {
+            blockToBuild = getLowerStair2Block(x, y, z);
+        }
+
+        return blockToBuild;
     }
 
     private IBlockState getLowerStair1Block(int x, int y, int z)
