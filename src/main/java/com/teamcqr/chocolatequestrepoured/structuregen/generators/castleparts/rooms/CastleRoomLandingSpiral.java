@@ -37,7 +37,7 @@ public class CastleRoomLandingSpiral extends CastleRoom
                 for (int y = 0; y < height; y++)
                 {
                     blockToBuild = Blocks.AIR.getDefaultState();
-                    pos = getBuildPosition().add(x, y, z);
+                    pos = getInteriorBuildStart().add(x, y, z);
 
                     // continue stairs for 1 layer through floor
                     if (y == 0)
