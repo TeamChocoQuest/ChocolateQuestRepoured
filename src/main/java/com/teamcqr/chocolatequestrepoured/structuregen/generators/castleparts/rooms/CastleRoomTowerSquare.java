@@ -36,12 +36,6 @@ public class CastleRoomTowerSquare extends CastleRoom
             {
                 offsetZ += sideLength - buildLengthZ;
             }
-
-            if (connectedSide == EnumFacing.SOUTH)
-            {
-                //Account for the extra wall in north facing outer rooms
-                --offsetZ;
-            }
         }
         if (connectedSide == EnumFacing.WEST || connectedSide == EnumFacing.EAST)
         {
@@ -49,12 +43,6 @@ public class CastleRoomTowerSquare extends CastleRoom
             if (connectedSide == EnumFacing.EAST)
             {
                 offsetX += sideLength - buildLengthX;
-            }
-
-            if (connectedSide == EnumFacing.EAST)
-            {
-                //Account for the extra wall in west facing outer rooms
-                --offsetX;
             }
         }
 
@@ -69,12 +57,12 @@ public class CastleRoomTowerSquare extends CastleRoom
             stairYOffset = 1; //account for 1 layer of floor
         }
 
-        this.pillarStart = startPos.add((offsetX + buildLengthX / 2), stairYOffset, (offsetZ + buildLengthZ / 2));
-
         for (EnumFacing side: EnumFacing.HORIZONTALS)
         {
             this.walls.addOuter(side);
         }
+
+        this.pillarStart = getNonWallStartPos().add((buildLengthX / 2), stairYOffset, (buildLengthZ / 2));
     }
 
     @Override
@@ -85,14 +73,14 @@ public class CastleRoomTowerSquare extends CastleRoom
         BlockPos pos;
         IBlockState blockToBuild;
 
-        for (int x = 0; x < buildLengthX; x++)
+        for (int x = 0; x < getDecorationLengthX(); x++)
         {
-            for (int z = 0; z < buildLengthZ; z++)
+            for (int z = 0; z < getDecorationLengthZ(); z++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     blockToBuild = Blocks.AIR.getDefaultState();
-                    pos = origin.add(x + offsetX, y, z + offsetZ);
+                    pos = getNonWallStartPos().add(x, y, z);
 
                     if (stairs.isPartOfStairs(pos))
                     {
@@ -128,4 +116,5 @@ public class CastleRoomTowerSquare extends CastleRoom
     {
         return true;
     }
+
 }

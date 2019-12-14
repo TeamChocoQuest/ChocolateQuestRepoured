@@ -97,15 +97,15 @@ public abstract class CastleRoom
                 BlockPos wallStart;
                 if (side == EnumFacing.EAST)
                 {
-                    wallStart = buildStartPos.offset(EnumFacing.EAST, buildLengthX - 1);
+                    wallStart = getExteriorBuildStart().offset(EnumFacing.EAST, buildLengthX - 1);
                 }
                 else if (side == EnumFacing.SOUTH)
                 {
-                    wallStart = buildStartPos.offset(EnumFacing.SOUTH, buildLengthZ - 1);
+                    wallStart = getExteriorBuildStart().offset(EnumFacing.SOUTH, buildLengthZ - 1);
                 }
                 else
                 {
-                     wallStart = new BlockPos(buildStartPos);
+                     wallStart = new BlockPos(getExteriorBuildStart());
                 }
 
                 createAndGenerateWallBuilder(world, dungeon, side, wallLength, wallStart);
@@ -152,7 +152,7 @@ public abstract class CastleRoom
         {
             for (int x = 0; x < getDecorationLengthX(); x++)
             {
-                world.setBlockState(getBuildPosition().add(x, (height - 1), z), dungeon.getWallBlock().getDefaultState());
+                world.setBlockState(getInteriorBuildStart().add(x, (height - 1), z), dungeon.getWallBlock().getDefaultState());
             }
         }
     }
@@ -224,9 +224,14 @@ public abstract class CastleRoom
         return facing;
     }
 
-    protected BlockPos getBuildPosition()
+    protected BlockPos getInteriorBuildStart()
     {
         return origin.add(offsetX, 0, offsetZ);
+    }
+
+    protected BlockPos getExteriorBuildStart()
+    {
+        return buildStartPos.add(offsetX, 0, offsetZ);
     }
 
     public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
@@ -249,23 +254,28 @@ public abstract class CastleRoom
 
     public void addOuterWall(EnumFacing side)
     {
-        walls.addOuter(side);
+        if (!walls.hasWallOnSide(side))
+        {
+            walls.addOuter(side);
 
-        if (side == EnumFacing.NORTH)
-        {
-            buildStartPos = buildStartPos.north();
-            ++buildLengthZ;
-        }
-        else if (side == EnumFacing.WEST)
-        {
-            buildStartPos = buildStartPos.west();
-            ++buildLengthX;
+            if (side == EnumFacing.NORTH)
+            {
+                buildStartPos = buildStartPos.north();
+                ++buildLengthZ;
+            } else if (side == EnumFacing.WEST)
+            {
+                buildStartPos = buildStartPos.west();
+                ++buildLengthX;
+            }
         }
     }
 
     public void addInnerWall(EnumFacing side)
     {
-        walls.addInner(side);
+        if (!walls.hasWallOnSide(side))
+        {
+            walls.addInner(side);
+        }
     }
 
     public void removeWall(EnumFacing side)
@@ -450,7 +460,7 @@ public abstract class CastleRoom
 
     protected BlockPos getNonWallStartPos()
     {
-        return origin;
+        return origin.add(offsetX, 0, offsetZ);
     }
 
     protected int getDecorationLengthX()

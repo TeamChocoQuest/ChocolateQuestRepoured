@@ -40,7 +40,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
                 for (int y = 0; y < height; y++)
                 {
                     blockToBuild = Blocks.AIR.getDefaultState();
-                    pos = getBuildPosition().add(x, y, z);
+                    pos = getInteriorBuildStart().add(x, y, z);
 
                     if (y == 0)
                     {
@@ -96,6 +96,6 @@ public class CastleRoomStaircaseSpiral extends CastleRoom
     {
         int centerX = (buildLengthX - 1) / 2;
         int centerZ = (buildLengthZ - 1) / 2;
-        pillarStart = getBuildPosition().add(centerX, 0, centerZ);
+        pillarStart = getInteriorBuildStart().add(centerX, 0, centerZ);
     }
 }
