@@ -166,7 +166,7 @@ public class CastleRoomSelector
         {
             int firstFloorInLayer = layer * floorsPerLayer;
 
-            ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllGridAreasWhere(firstFloorInLayer, RoomGridCell::isBuildable);
+            ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllGridAreasWhere(firstFloorInLayer, RoomGridCell::isBuildable, 2, 2);
             System.out.println(buildableAreas.toString());
 
             if (!buildableAreas.isEmpty())
@@ -1095,7 +1095,7 @@ public class CastleRoomSelector
         //For each "roof" floor
         for (int floor = floorsPerLayer; floor < usedFloors; floor += floorsPerLayer)
         {
-            roofAreas.addAll(grid.getAllGridAreasWhere(floor, c -> grid.cellIsValidForRoof(c)));
+            roofAreas.addAll(grid.getAllGridAreasWhere(floor, c -> grid.cellIsValidForRoof(c), 1, 2));
         }
 
         for (RoomGrid.Area2D roofArea : roofAreas)

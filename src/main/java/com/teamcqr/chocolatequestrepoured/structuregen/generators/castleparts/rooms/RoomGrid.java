@@ -363,7 +363,14 @@ public class RoomGrid
         return result;
     }
 
-    public ArrayList<Area2D> getAllGridAreasWhere(int floor, Predicate<RoomGridCell> condition)
+    /*
+    * Returns a list (from largest area to smallest area) of contiguous 2d grid areas
+    * that are on a given floor and satisfy a given condition.
+    *
+    * Note: Areas 2x2 or larger will always evaluate as larger than anything 1xN or Nx1.
+    * This is done on purpose because 2x2+ areas are more useful for building.
+     */
+    public ArrayList<Area2D> getAllGridAreasWhere(int floor, Predicate<RoomGridCell> condition, int minDimension1, int minDimension2)
     {
         ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
         condition = condition.and(c -> c.getFloor() == floor);
@@ -374,7 +381,7 @@ public class RoomGrid
 
         Area2D largest = getLargestAreaWhere(floorPositions, condition);
 
-        while (largest != null && !floorPositions.isEmpty() && largest.dimensionsAreAtLeast(2, 2))
+        while (largest != null && !floorPositions.isEmpty() && largest.dimensionsAreAtLeast(minDimension1, minDimension2))
         {
             areas.add(largest);
             largest.removeFromList(floorPositions);
@@ -439,8 +446,9 @@ public class RoomGrid
 
                 final int area = x * z;
 
-                //don't care about 1 x n areas since we can't build on them anyways
-                if (area > largestArea || largestX == 1 || largestZ == 1)
+                //Anything > 2x2 should always evaluate as larger than anything 1xN or Nx1.
+                if ((area > largestArea) ||
+                        (x > 1 && z > 1 && (largestX == 1 || largestZ == 1)))
                 {
                     largestArea = x * z;
                     largestX = x;
