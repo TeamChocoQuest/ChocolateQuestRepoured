@@ -435,7 +435,10 @@ public class RoomGrid
                 }
                 while (incX || incZ);
 
-                if (x * z > largestArea)
+                final int area = x * z;
+
+                //don't care about 1 x n areas since we can't build on them anyways
+                if (area > largestArea || x != 1 && z != 1)
                 {
                     largestArea = x * z;
                     largestX = x;

@@ -43,8 +43,8 @@ public class CastleRoomSelector
 
         private SupportArea(BlockPos nwCorner, int xCells, int zCells)
         {
-            blocksX = (xCells * roomSize) + (PADDING_PER_SIDE * 2);
-            blocksZ = (zCells * roomSize) + (PADDING_PER_SIDE * 2);
+            this.blocksX = (xCells * roomSize) + (PADDING_PER_SIDE * 2);
+            this.blocksZ = (zCells * roomSize) + (PADDING_PER_SIDE * 2);
             this.nwCorner = nwCorner.north(PADDING_PER_SIDE).west(PADDING_PER_SIDE);
         }
 
@@ -191,6 +191,7 @@ public class CastleRoomSelector
                                 {
                                     RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
                                     //grid.selectBlockOfCellsForBuilding(bossArea, floorsPerLayer);
+                                    System.out.println("At minimum boss area so setting boss area to: " + bossArea.toString());
                                     grid.setBossArea(bossArea);
                                     lastFloor = true;
 
@@ -201,6 +202,7 @@ public class CastleRoomSelector
                                     RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, false);
                                     System.out.println("Added central struct to largest area: " + structArea.toString());
                                     grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
+                                    addSupportIfFirstLayer(layer, structArea);
 
                                     addSideStructures(structArea, buildArea);
                                 }
@@ -210,12 +212,17 @@ public class CastleRoomSelector
                     else //all other build areas that aren't the largest
                     {
                         RoomGrid.Area2D structArea = buildArea.getRandomSubArea(random, 2, 1, true);
-                        System.out.println("Added central struct to not largest area: " + structArea.toString());
+                        System.out.println("Added central struct to NOT largest area: " + structArea.toString());
                         grid.selectBlockOfCellsForBuilding(structArea, floorsPerLayer);
+                        addSupportIfFirstLayer(layer, structArea);
 
                         addSideStructures(structArea, buildArea);
                     }
                 }
+            }
+            else
+            {
+                System.out.println("Buildable areas was empty (break here).");
             }
 
             usedFloors += floorsPerLayer;
@@ -243,8 +250,11 @@ public class CastleRoomSelector
             {
                 sideSelectedArea = sideAllowedArea.getRandomSubArea(random, 1, 1, false);
                 sideSelectedArea.alignToSide(random, lastBuiltArea, side, buildArea);
+
                 grid.selectBlockOfCellsForBuilding(sideSelectedArea, floorsPerLayer);
+                addSupportIfFirstLayer(structArea.start.getFloor(), sideSelectedArea);
                 System.out.println("Added " + side.toString() + " side struct: " + sideSelectedArea.toString());
+
                 lastBuiltArea = sideSelectedArea;
 
                 sideAllowedArea = buildArea.sliceToSideOfArea(lastBuiltArea, side);
@@ -262,11 +272,18 @@ public class CastleRoomSelector
         }
     }
 
+    private void addSupportIfFirstLayer(int layer, RoomGrid.Area2D area)
+    {
+        addSupportIfFirstLayer(layer, area.start.getX(), area.start.getZ(), area.sizeX, area.sizeZ);
+    }
+
     private void addSupportIfFirstLayer(int layer, int gridIndexX, int gridIndexZ, int roomsX, int roomsZ)
     {
         if (layer == 0)
         {
-            BlockPos startCorner = getRoomStart(0, gridIndexX, gridIndexZ);
+            //get NW corner of the area and move it NW 1 square because of the extra N and W walls on the sides
+            BlockPos startCorner = getRoomStart(0, gridIndexX, gridIndexZ).north().west();
+
             this.supportAreas.add(new SupportArea(startCorner, roomsX, roomsZ));
         }
     }

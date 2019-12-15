@@ -30,11 +30,6 @@ public abstract class CastleRoom
     protected int offsetX; //x offset from origin that actual room starts
     protected int offsetZ; //z offset from origin that actual room starts
 
-    //The counts represent how many roomSizes this room uses in a given direction
-    //so for example if countX was 2, the actual x size would be x*roomSize
-    protected int countX;
-    protected int countY;
-    protected int countZ;
 
     protected int maxSlotsUsed = 1; //Max number of contiguous room grid slots this can occupy
 
