@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3i;
@@ -17,13 +18,12 @@ public class RoomDecorArmorStand extends RoomDecorEntity
     }
 
     @Override
-    protected void spawnEntity(World world, BlockPos pos)
+    protected void createEntityDecoration(World world, BlockPos pos, EnumFacing side)
     {
         //Need to add 0.5 to each position amount so it spawns in the middle of the tile
-        EntityArmorStand stand = new EntityArmorStand(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
-        stand.setBodyRotation(new Rotations(0, 90, 0));
-        stand.setLeftLegRotation(new Rotations(0, 90, 0));
-        stand.setRightLegRotation(new Rotations(0, 90, 0));
+        EntityArmorStand stand = new EntityArmorStand(world);
+        float rotation = side.getHorizontalAngle();
+        stand.setPositionAndRotation((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5), rotation, 0f);
         world.spawnEntity(stand);
     }
 }
