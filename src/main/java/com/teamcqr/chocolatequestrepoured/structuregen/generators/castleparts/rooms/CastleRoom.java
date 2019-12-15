@@ -175,11 +175,6 @@ public abstract class CastleRoom
         return roomType;
     }
 
-    public BlockPos getRoofStartPosition()
-    {
-        return origin.add(offsetX, height, offsetZ);
-    }
-
     protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation)
     {
         switch (rotation)
@@ -432,7 +427,7 @@ public abstract class CastleRoom
     protected ArrayList<BlockPos> getDecorationArea()
     {
         ArrayList<BlockPos> result = new ArrayList<>();
-        BlockPos start = getNonWallStartPos();
+        BlockPos start = getDecorationStartPos();
 
         for (int x = 0; x < getDecorationLengthX(); x++)
         {
@@ -450,7 +445,14 @@ public abstract class CastleRoom
 
     protected BlockPos getDecorationStartPos()
     {
-        return getNonWallStartPos().up(); //skip the floor
+        if (defaultFloor)
+        {
+            return getNonWallStartPos().up(); //skip the floor
+        }
+        else
+        {
+            return getNonWallStartPos();
+        }
     }
 
     protected BlockPos getNonWallStartPos()
@@ -492,8 +494,12 @@ public abstract class CastleRoom
 
     protected int getDecorationLengthY()
     {
-        int result = height - 1; //Remove one for the floor tiles
+        int result = height; //Remove one for the floor tiles
 
+        if (defaultFloor)
+        {
+            --result;
+        }
         if (defaultCeiling)
         {
             --result;
