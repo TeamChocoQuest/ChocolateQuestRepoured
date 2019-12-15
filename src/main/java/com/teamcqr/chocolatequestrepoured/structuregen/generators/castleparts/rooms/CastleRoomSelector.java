@@ -156,7 +156,6 @@ public class CastleRoomSelector
     {
         addMainBuilding();
 
-
         addBossRooms();
         addHallways();
         addStairCases();

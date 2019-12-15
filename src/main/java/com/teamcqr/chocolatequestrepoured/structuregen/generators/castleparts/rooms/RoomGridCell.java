@@ -149,7 +149,7 @@ public class RoomGridCell
 
     public boolean isValidHallwayRoom()
     {
-        return isSelectedForBuilding() && !isBossArea;
+        return needsRoomType() && !isBossArea;
     }
 
     public double distanceTo(RoomGridCell destCell)
