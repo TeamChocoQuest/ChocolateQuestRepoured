@@ -147,6 +147,11 @@ public class RoomGridCell
         return isReachable() && isPopulated() && room.isPathable();
     }
 
+    public boolean isValidHallwayRoom()
+    {
+        return isSelectedForBuilding() && !isBossArea;
+    }
+
     public double distanceTo(RoomGridCell destCell)
     {
         int distX = Math.abs(getGridX() - destCell.getGridX());
