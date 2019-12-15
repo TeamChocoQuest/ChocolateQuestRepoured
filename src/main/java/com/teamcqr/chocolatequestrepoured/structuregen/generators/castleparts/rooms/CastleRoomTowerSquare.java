@@ -73,9 +73,9 @@ public class CastleRoomTowerSquare extends CastleRoom
         BlockPos pos;
         IBlockState blockToBuild;
 
-        for (int x = 0; x < getDecorationLengthX(); x++)
+        for (int x = 0; x < buildLengthX - 1; x++)
         {
-            for (int z = 0; z < getDecorationLengthZ(); z++)
+            for (int z = 0; z < buildLengthX - 1; z++)
             {
                 for (int y = 0; y < height; y++)
                 {
