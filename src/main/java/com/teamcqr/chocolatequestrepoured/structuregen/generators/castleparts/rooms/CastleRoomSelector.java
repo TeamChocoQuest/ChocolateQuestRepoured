@@ -80,9 +80,8 @@ public class CastleRoomSelector
     private int usedFloors;
     private Random random;
     private RoomGrid grid;
-    private List<RoofArea> roofAreas;
     private List<SupportArea> supportAreas;
-    private List<CastleAddonRoof> potentialRoofs;
+    private List<CastleAddonRoof> castleRoofs;
     private WeightedRandom<EnumRoomType> roomRandomizer;
 
     public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer,
@@ -95,8 +94,7 @@ public class CastleRoomSelector
         this.maxFloors = floorsPerLayer * MAX_LAYERS;
         this.minRoomsForBoss = (int)(Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
         this.random = random;
-        this.potentialRoofs = new ArrayList<>();
-        this.roofAreas = new ArrayList<>();
+        this.castleRoofs = new ArrayList<>();
         this.supportAreas = new ArrayList<>();
 
         //Add padding floors so that we can build walkable roofs on top of the highest rooms
@@ -110,25 +108,47 @@ public class CastleRoomSelector
         this.roomRandomizer.add(EnumRoomType.BEDROOM, 2);
     }
 
-    public void generateRooms(World world, CastleDungeon dungeon)
+    public void generate(World world, CastleDungeon dungeon)
     {
-        ArrayList<RoomGridCell> populated = grid.getAllCellsWhere(RoomGridCell::isPopulated);
+        //Roofs come first so rooms overwrite roof blocks
+        generateRoofs(world, dungeon);
 
-        for (CastleAddonRoof roof : potentialRoofs)
+        generateAndDecorateRooms(world, dungeon);
+
+    }
+
+    private void generateAndDecorateRooms(World world, CastleDungeon dungeon)
+    {
+        //Start with the entire list of populated cells
+        ArrayList<RoomGridCell> populated = grid.getAllCellsWhere(RoomGridCell::isPopulated);
+        ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
+
+        //Generate walkable roofs first since they are lowest priority, other rooms may occupy same BlockPos
+        for (RoomGridCell cell : grid.getAllCellsWhere(c -> c.isPopulated() && c.getRoom() instanceof CastleRoomWalkableRoof))
         {
-            roof.generate(world, dungeon);
+            toGenerate.remove(cell);
+            cell.getRoom().generate(world, dungeon);
         }
 
-        for (RoomGridCell cell : populated)
+        //Generate all other cells
+        for (RoomGridCell cell : toGenerate)
         {
             cell.getRoom().generate(world, dungeon);
         }
 
         //The rooms MUST be generated before they are decorated
         //Some decoration requires that neighboring rooms have their walls/doors
-        for (RoomGridCell cell : populated)
+        for (RoomGridCell cell : grid.getAllCellsWhere(RoomGridCell::isPopulated))
         {
             cell.getRoom().decorate(world, dungeon);
+        }
+    }
+
+    private void generateRoofs(World world, CastleDungeon dungeon)
+    {
+        for (CastleAddonRoof roof : castleRoofs)
+        {
+            roof.generate(world, dungeon);
         }
     }
 
@@ -1120,7 +1140,7 @@ public class CastleRoomSelector
     {
         BlockPos roofStart = getRoomStart(roofArea.start.getFloor(), roofArea.start.getX(), roofArea.start.getZ());
 
-        potentialRoofs.add(new CastleAddonRoof(roofStart, roofArea.sizeX * roomSize, roofArea.sizeZ * roomSize));
+        castleRoofs.add(new CastleAddonRoof(roofStart, roofArea.sizeX * roomSize, roofArea.sizeZ * roomSize));
     }
 
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)

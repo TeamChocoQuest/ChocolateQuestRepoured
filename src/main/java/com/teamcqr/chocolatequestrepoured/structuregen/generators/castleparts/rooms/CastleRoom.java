@@ -432,7 +432,7 @@ public abstract class CastleRoom
     protected ArrayList<BlockPos> getDecorationArea()
     {
         ArrayList<BlockPos> result = new ArrayList<>();
-        BlockPos start = getDecorationStartPos();
+        BlockPos start = getNonWallStartPos();
 
         for (int x = 0; x < getDecorationLengthX(); x++)
         {
