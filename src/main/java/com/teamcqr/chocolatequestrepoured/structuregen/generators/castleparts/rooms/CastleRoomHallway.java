@@ -1,27 +1,23 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomHallway extends CastleRoom
+public class CastleRoomHallway extends CastleRoomGeneric
 {
     public enum Alignment
     {
-        VERTICAL (0),
-        HORIZONTAL (1);
+        VERTICAL,
+        HORIZONTAL;
 
-        private final int value;
-
-        private Alignment(int value)
+        private boolean canHaveInteriorWall(EnumFacing side)
         {
-            this.value = value;
-        }
-
-        private boolean requiresWall(EnumFacing side)
-        {
-            if (this.value == 0)
+            if (this == VERTICAL)
             {
                 return (side == EnumFacing.WEST || side == EnumFacing.EAST);
             }
@@ -32,8 +28,6 @@ public class CastleRoomHallway extends CastleRoom
         }
     }
 
-
-
     private Alignment alignment;
 
     public CastleRoomHallway(BlockPos startPos, int sideLength, int height, Alignment alignment)
@@ -41,19 +35,25 @@ public class CastleRoomHallway extends CastleRoom
         super(startPos, sideLength, height);
         this.roomType = EnumRoomType.HALLWAY;
         this.alignment = alignment;
+        this.defaultFloor = true;
+        this.defaultCeiling = true;
+
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 10);
+        this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 1);
     }
 
     @Override
-    public void generateRoom(World world, CastleDungeon dungeon)
+    protected IBlockState getFloorBlock(CastleDungeon dungeon)
     {
-        for (int z = 0; z < (walls.hasWallOnSide(EnumFacing.SOUTH) ? sideLength - 1 : sideLength); z++)
+        return Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
+    }
+
+    @Override
+    public void addInnerWall(EnumFacing side)
+    {
+        if (alignment.canHaveInteriorWall(side))
         {
-            for (int x = 0; x < (walls.hasWallOnSide(EnumFacing.EAST) ? sideLength - 1 : sideLength); x++)
-            {
-                BlockPos pos = origin.add(x, 0, z);
-                world.setBlockState(pos, dungeon.getFloorBlock().getDefaultState());
-            }
+            super.addInnerWall(side);
         }
-        generateWalls(world, dungeon);
     }
 }

@@ -158,6 +158,7 @@ public class CastleRoomSelector
 
 
         addBossRooms();
+        addHallways();
         addStairCases();
 
         randomizeRooms();
@@ -733,6 +734,38 @@ public class CastleRoomSelector
         }
     }
 
+    private void addHallways()
+    {
+        for (int floor = 0; floor < usedFloors; floor++)
+        {
+            List<RoomGrid.Area2D> largestAreas = grid.getAllGridAreasWhere(floor, RoomGridCell::isValidHallwayRoom, 2, 2);
+            if (!largestAreas.isEmpty())
+            {
+                RoomGrid.Area2D hallwayArea = largestAreas.get(0);
+                boolean horizontal = hallwayArea.sizeX == hallwayArea.sizeZ ? random.nextBoolean() : hallwayArea.sizeX > hallwayArea.sizeZ;
+
+                if (horizontal)
+                {
+                    int zIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartZ(), hallwayArea.getEndZ());
+                    for (int xIndex = hallwayArea.getStartX(); xIndex <= hallwayArea.getEndX(); xIndex++)
+                    {
+                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.HORIZONTAL));
+                    }
+                }
+                else
+                {
+                    int xIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartX(), hallwayArea.getEndX());
+                    for (int zIndex = hallwayArea.getStartZ(); zIndex <= hallwayArea.getEndZ(); zIndex++)
+                    {
+                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.VERTICAL));
+                    }
+                }
+            }
+        }
+    }
+
     private void addStairCases()
     {
         for (int floor = 0; floor < usedFloors; floor++)
@@ -740,42 +773,25 @@ public class CastleRoomSelector
             final int f = floor; //lambda requires a final
             ArrayList<RoomGridCell> candidateCells;
 
-            /*
-            if (!grid.floorIsNarrow(floor + 1))
-            {
-                candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f &&
-                                                       r.isSelectedForBuilding() &&
-                                                       !r.isPopulated());
-                Iterator<RoomGridCell> iter =  candidateCells.iterator();
-                boolean built = false;
+            candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f && r.needsRoomType());
 
-                while (iter.hasNext() && !built)
+            Collections.shuffle(candidateCells);
+
+            for (RoomGridCell cell : candidateCells)
+            {
+                RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
+                if (aboveCell != null && aboveCell.needsRoomType() && !aboveCell.isOnFloorWithLanding())
                 {
-                    built = buildDirectedStairsIfPossible(iter.next());
+                    CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
+                    cell.setRoom(stairs);
+
+                    CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(getRoomStart(aboveCell), roomSize, floorHeight, stairs);
+                    aboveCell.setRoom(landing);
+                    aboveCell.setReachable();
+                    aboveCell.setLandingForAllPathableCells();
                 }
             }
-            else
-             */
-            {
-                candidateCells = grid.getAllCellsWhere(r -> r.getFloor() == f && r.needsRoomType());
 
-                Collections.shuffle(candidateCells);
-
-                for (RoomGridCell cell : candidateCells)
-                {
-                    RoomGridCell aboveCell = grid.getAdjacentCell(cell, EnumFacing.UP);
-                    if (aboveCell != null && aboveCell.needsRoomType() && !aboveCell.isOnFloorWithLanding())
-                    {
-                        CastleRoomStaircaseSpiral stairs = new CastleRoomStaircaseSpiral(getRoomStart(cell), roomSize, floorHeight);
-                        cell.setRoom(stairs);
-
-                        CastleRoomLandingSpiral landing = new CastleRoomLandingSpiral(getRoomStart(aboveCell), roomSize, floorHeight, stairs);
-                        aboveCell.setRoom(landing);
-                        aboveCell.setReachable();
-                        aboveCell.setLandingForAllPathableCells();
-                    }
-                }
-            }
         }
     }
 

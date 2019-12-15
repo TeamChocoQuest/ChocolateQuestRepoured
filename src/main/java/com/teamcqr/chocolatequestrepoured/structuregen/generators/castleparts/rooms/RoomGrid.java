@@ -757,6 +757,13 @@ public class RoomGrid
     public void setBossArea(Area2D area)
     {
         bossArea = new Area2D(area);
+        for (RoomGridPosition gridPos : area.getPositionList())
+        {
+            if (withinGridBounds(gridPos))
+            {
+                getCellAt(gridPos).setAsBossArea();
+            }
+        }
     }
 
     @Nullable
