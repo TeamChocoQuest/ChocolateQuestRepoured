@@ -1140,7 +1140,12 @@ public class CastleRoomSelector
     {
         BlockPos roofStart = getRoomStart(roofArea.start.getFloor(), roofArea.start.getX(), roofArea.start.getZ());
 
-        castleRoofs.add(new CastleAddonRoof(roofStart, roofArea.sizeX * roomSize, roofArea.sizeZ * roomSize));
+        //Account for extra wall on N and W sides
+        roofStart = roofStart.north().west();
+        final int sizeX = (roofArea.sizeX * roomSize) + 1;
+        final int sizeZ = (roofArea.sizeZ * roomSize) + 1;
+
+        castleRoofs.add(new CastleAddonRoof(roofStart, sizeX, sizeZ));
     }
 
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)
