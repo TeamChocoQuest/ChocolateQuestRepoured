@@ -166,7 +166,7 @@ public class CastleRoomSelector
         {
             int firstFloorInLayer = layer * floorsPerLayer;
 
-            ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllBuildableAreasOnFloor(firstFloorInLayer);
+            ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllGridAreasWhere(firstFloorInLayer, RoomGridCell::isBuildable);
             System.out.println(buildableAreas.toString());
 
             if (!buildableAreas.isEmpty())
@@ -1089,21 +1089,23 @@ public class CastleRoomSelector
 
     private void determineRoofs()
     {
-        ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> grid.cellShouldBeWalkableRoof(c));
+        List<RoomGrid.Area2D> roofAreas = new ArrayList<>();
+        ArrayList<RoomGridCell> roofCells = grid.getAllCellsWhere(c -> grid.cellIsValidForRoof(c));
 
-        for (RoofArea roofArea : roofAreas)
+        //For each "roof" floor
+        for (int floor = floorsPerLayer; floor < usedFloors; floor += floorsPerLayer)
+        {
+            roofAreas.addAll(grid.getAllGridAreasWhere(floor, c -> grid.cellIsValidForRoof(c)));
+        }
+
+        for (RoomGrid.Area2D roofArea : roofAreas)
         {
             if (random.nextBoolean())
             {
                 addRoofFromRoofArea(roofArea);
-                for (int x = roofArea.gridStartX; x < roofArea.gridStartX + roofArea.lengthX; x++)
+                for (RoomGridPosition areaPos : roofArea.getPositionList())
                 {
-                    for (int z = roofArea.gridStartZ; z < roofArea.gridStartZ + roofArea.lengthZ; z++)
-                    {
-                        final int xf = x;
-                        final int zf = z;
-                        roofCells.removeIf(c -> c.getGridX() == xf && c.getGridZ() == zf && c.getFloor() == roofArea.floor);
-                    }
+                    roofCells.remove(grid.getCellAt(areaPos));
                 }
             }
         }
@@ -1114,11 +1116,11 @@ public class CastleRoomSelector
         }
     }
 
-    private void addRoofFromRoofArea(RoofArea roofArea)
+    private void addRoofFromRoofArea(RoomGrid.Area2D roofArea)
     {
-        BlockPos roofStart = getRoomStart(roofArea.floor, roofArea.gridStartX, roofArea.gridStartZ);
+        BlockPos roofStart = getRoomStart(roofArea.start.getFloor(), roofArea.start.getX(), roofArea.start.getZ());
 
-        potentialRoofs.add(new CastleAddonRoof(roofStart, roofArea.lengthX * roomSize, roofArea.lengthZ * roomSize));
+        potentialRoofs.add(new CastleAddonRoof(roofStart, roofArea.sizeX * roomSize, roofArea.sizeZ * roomSize));
     }
 
     private void addDoorToRoomCentered(RoomGridCell cell, EnumFacing side)

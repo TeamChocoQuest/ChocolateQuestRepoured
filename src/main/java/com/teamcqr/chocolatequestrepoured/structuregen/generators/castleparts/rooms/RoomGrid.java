@@ -363,28 +363,30 @@ public class RoomGrid
         return result;
     }
 
-    public ArrayList<Area2D> getAllBuildableAreasOnFloor(int floor)
+    public ArrayList<Area2D> getAllGridAreasWhere(int floor, Predicate<RoomGridCell> condition)
     {
         ArrayList<RoomGridPosition> floorPositions = new ArrayList<>();
-        getAllCellsWhere(c -> c.getFloor() == floor && c.isBuildable()).forEach(c -> floorPositions.add(c.getGridPosition()));
+        condition = condition.and(c -> c.getFloor() == floor);
+
+        getAllCellsWhere(condition).forEach(c -> floorPositions.add(c.getGridPosition()));
 
         ArrayList<Area2D> areas = new ArrayList<>();
 
-        Area2D largest = getLargestBuildableAreaOnFloor(floorPositions);
+        Area2D largest = getLargestAreaWhere(floorPositions, condition);
 
         while (largest != null && !floorPositions.isEmpty() && largest.dimensionsAreAtLeast(2, 2))
         {
             areas.add(largest);
             largest.removeFromList(floorPositions);
 
-            largest = getLargestBuildableAreaOnFloor(floorPositions);
+            largest = getLargestAreaWhere(floorPositions, condition);
         }
 
         return areas;
     }
 
     @Nullable
-    public Area2D getLargestBuildableAreaOnFloor(ArrayList<RoomGridPosition> floorPositions)
+    public Area2D getLargestAreaWhere(ArrayList<RoomGridPosition> floorPositions, Predicate<RoomGridCell> condition)
     {
         int largestArea = 0;
         int largestX = 0;
@@ -410,7 +412,7 @@ public class RoomGrid
                     for (int i = 0; i < z; i++)
                     {
                         RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, (x - 1)).move(EnumFacing.SOUTH, i);
-                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
+                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !condition.test(getCellAt(checkPos)))
                         {
                             incX = false;
                             --x;
@@ -425,7 +427,7 @@ public class RoomGrid
                     for (int i = 0; i < x; i++)
                     {
                         RoomGridPosition checkPos = startPos.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, (z - 1));
-                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !getCellAt(checkPos).isBuildable())
+                        if (!floorPositions.contains(checkPos) || !withinGridBounds(checkPos) || !condition.test(getCellAt(checkPos)))
                         {
                             incZ = false;
                             --z;
@@ -438,7 +440,7 @@ public class RoomGrid
                 final int area = x * z;
 
                 //don't care about 1 x n areas since we can't build on them anyways
-                if (area > largestArea || x != 1 && z != 1)
+                if (area > largestArea || largestX == 1 || largestZ == 1)
                 {
                     largestArea = x * z;
                     largestX = x;
@@ -640,10 +642,8 @@ public class RoomGrid
         return (adjacent != null && adjacent.isPopulated() && adjacent.getRoom() instanceof CastleRoomWalkableRoof);
     }
 
-    public boolean cellShouldBeWalkableRoof(RoomGridCell cell)
+    public boolean cellIsValidForRoof(RoomGridCell cell)
     {
-        ArrayList<RoomGridCell> result = new ArrayList<>();
-
         RoomGridCell below = getAdjacentCell(cell, EnumFacing.DOWN);
 
         return (below != null &&
