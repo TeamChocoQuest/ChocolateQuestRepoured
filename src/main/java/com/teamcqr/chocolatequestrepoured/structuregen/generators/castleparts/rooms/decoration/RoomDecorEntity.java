@@ -48,10 +48,10 @@ public abstract class RoomDecorEntity implements IRoomDecor
             world.setBlockState(pos, Blocks.AIR.getDefaultState());
             decoMap.add(pos);
         }
-        spawnEntity(world, start);
+        createEntityDecoration(world, start, side);
     }
 
-    protected abstract void spawnEntity(World world, BlockPos pos);
+    protected abstract void createEntityDecoration(World world, BlockPos pos, EnumFacing side);
 
     private ArrayList<Vec3i> alignFootprint(EnumFacing side)
     {
