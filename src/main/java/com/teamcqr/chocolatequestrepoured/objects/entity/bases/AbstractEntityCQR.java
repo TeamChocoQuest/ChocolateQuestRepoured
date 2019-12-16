@@ -464,7 +464,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean hasHomePositionCQR() {
-		return this.getHomePosition() != null;
+		return this.getHomePositionCQR() != null;
 	}
 
 	public abstract float getBaseHealth();
