@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.VillageGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GuardedCastleGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -21,7 +21,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VillageDungeon extends DungeonBase {
+public class GuardedCastleDungeon extends DungeonBase {
 	
 	private File structureFolder;
 	private File centerStructureFolder;
@@ -39,11 +39,11 @@ public class VillageDungeon extends DungeonBase {
 	
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new VillageGenerator(this);
+		return new GuardedCastleGenerator(this);
 	}
 	
 	//DONE: Rewrite this whole file handling as it is unefficient and uses lots of memory which is unnecessary
-	public VillageDungeon(File configFile) {
+	public GuardedCastleDungeon(File configFile) {
 		super(configFile);
 		Properties prop = loadConfig(configFile);
 		if(prop != null) {
@@ -75,18 +75,18 @@ public class VillageDungeon extends DungeonBase {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		this.dunID = MathHelper.getRandomUUID();
 		
-		this.generator = new VillageGenerator(this);
+		this.generator = new GuardedCastleGenerator(this);
 		
 		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, random);
 		for(int i = 0; i < buildings; i++) {
 			File building = getStructureFileFromDirectory(this.structureFolder);/*getRandomBuilding(random);*/
-			((VillageGenerator)this.generator).addStructure(building);
+			((GuardedCastleGenerator)this.generator).addStructure(building);
 			building = this.centerStructureFolder;
 			building = getStructureFileFromDirectory(centerStructureFolder);
-			((VillageGenerator)this.generator).setCenterStructure(building);
+			((GuardedCastleGenerator)this.generator).setCenterStructure(building);
 		}
 		//Generating it...
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false) + getYOffset();
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		this.generator.generate(world, chunk, x, y, z);
 	}

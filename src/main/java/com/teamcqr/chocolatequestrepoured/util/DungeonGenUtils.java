@@ -207,9 +207,65 @@ public class DungeonGenUtils {
 		}
 	}
 
-	public static boolean percentChance(Random random, int percent)
+	public static int randomBetween(Random random, int low, int high)
 	{
-		return (random.nextInt(100) < percent);
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			return low + random.nextInt(high - low + 1);
+		}
 	}
-	
+
+	public static int randomBetweenGaussian(Random random, int low, int high)
+	{
+		if (high <= low)
+		{
+			return low;
+		}
+		else
+		{
+			double avg = (high - low) / 2d;
+			double stdDev = (high - avg) / 3d; //guarantees that MOST (99.7%) results will be between low & high
+			double gaussian = random.nextGaussian();
+			int result = (int)(avg + (gaussian * stdDev) + 0.5); //0.5 is added for rounding to nearest whole number
+			if (result < low)
+			{
+				return low;
+			}
+			else if (result > high)
+			{
+				return high;
+			}
+			else
+			{
+				return result;
+			}
+		}
+	}
+
+	public static Vec3i rotateMatrixOffsetCW(Vec3i offset, int sizeX, int sizeZ, int numRotations)
+	{
+		final int maxXIndex = sizeX - 1;
+		final int maxZIndex = sizeZ - 1;
+
+		if (numRotations % 4 == 0)
+		{
+			return new Vec3i(offset.getX(), offset.getY(), offset.getZ());
+		}
+		else if (numRotations % 4 == 1)
+		{
+			return new Vec3i(maxZIndex - offset.getZ(), offset.getY(), offset.getX());
+		}
+		else if (numRotations % 4 == 2)
+		{
+			return new Vec3i(maxXIndex - offset.getX(), offset.getY(), maxZIndex - offset.getZ());
+		}
+		else
+		{
+			return new Vec3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
+		}
+	}
 }

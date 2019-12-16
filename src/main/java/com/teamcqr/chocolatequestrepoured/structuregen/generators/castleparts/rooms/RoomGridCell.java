@@ -1,11 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -39,21 +35,39 @@ public class RoomGridCell
     }
 
     private RoomGridPosition gridPosition;
-    private CellState state;
-    private boolean reachable;
-    private boolean partOfMainStruct;
+    private CellState state = CellState.UNUSED;
+    private boolean reachable = false;
+    private boolean floorHasLanding = false;
+    private boolean partOfMainStruct = false;
     private CastleRoom room;
     private boolean narrow;
-    private HashSet<RoomGridCell> linkedCells;
+    private HashSet<RoomGridCell> linkedCells; //cells that are connected to this room (no walls between)
+    private HashSet<RoomGridCell> pathableCells; //cells on the same floor that are potentially reachable
+    private boolean isBossArea = false;
 
     public RoomGridCell(int floor, int x, int z, CastleRoom room)
     {
-        this.gridPosition = new RoomGridPosition(floor, x, z);
-        this.state = CellState.UNUSED;
-        this.reachable = false;
-        this.partOfMainStruct = false;
         this.room = room;
+        this.gridPosition = new RoomGridPosition(floor, x, z);
         this.linkedCells = new HashSet<>();
+        this.pathableCells = new HashSet<>();
+    }
+
+    public void setAllLinkedReachable(List<RoomGridCell> unreachableCells, List<RoomGridCell> reachableCells)
+    {
+        this.reachable = true;
+
+        for (RoomGridCell linkedCell : getLinkedCellsCopy())
+        {
+            linkedCell.setReachable();
+            unreachableCells.remove(linkedCell);
+
+            //TODO: This would be easier and faster with a hashset
+            if (!reachableCells.contains(linkedCell))
+            {
+                reachableCells.add(linkedCell);
+            }
+        }
     }
 
     public void setReachable()
@@ -133,6 +147,11 @@ public class RoomGridCell
         return isReachable() && isPopulated() && room.isPathable();
     }
 
+    public boolean isValidHallwayRoom()
+    {
+        return needsRoomType() && !isBossArea;
+    }
+
     public double distanceTo(RoomGridCell destCell)
     {
         int distX = Math.abs(getGridX() - destCell.getGridX());
@@ -159,7 +178,7 @@ public class RoomGridCell
         }
         else
         {
-            return false;
+            return true;
         }
     }
 
@@ -183,6 +202,16 @@ public class RoomGridCell
         return this.gridPosition.getZ();
     }
 
+    public void setAsBossArea()
+    {
+        this.isBossArea = true;
+    }
+
+    public boolean isBossArea()
+    {
+        return isBossArea;
+    }
+
     public void linkToCell(RoomGridCell cell)
     {
         this.linkedCells.add(cell);
@@ -193,7 +222,7 @@ public class RoomGridCell
         linkedCells = new HashSet<>(cells);
     }
 
-    public HashSet<RoomGridCell> getLinkedCells()
+    public HashSet<RoomGridCell> getLinkedCellsCopy()
     {
         return new HashSet<>(linkedCells); //return a copy
     }
@@ -201,6 +230,34 @@ public class RoomGridCell
     public boolean isLinkedToCell(RoomGridCell cell)
     {
         return linkedCells.contains(cell);
+    }
+
+    public void addPathableCells(HashSet<RoomGridCell> cells)
+    {
+        pathableCells.addAll(cells);
+    }
+
+    public HashSet<RoomGridCell> getPathableCellsCopy()
+    {
+        return new HashSet<>(pathableCells);
+    }
+
+    public boolean isOnFloorWithLanding()
+    {
+        return floorHasLanding;
+    }
+
+    private void setHasLanding()
+    {
+        floorHasLanding = true;
+    }
+
+    public void setLandingForAllPathableCells()
+    {
+        for (RoomGridCell cell : pathableCells)
+        {
+            cell.setHasLanding();
+        }
     }
 
     @Override

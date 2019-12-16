@@ -1,12 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastlePartMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.*;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
@@ -70,7 +67,7 @@ public class CastleGenerator implements IDungeonGenerator
     @Override
     public void buildStructure(World world, Chunk chunk, int x, int y, int z)
     {
-        roomHelper.generateRooms(world, dungeon);
+        roomHelper.generate(world, dungeon);
 
         CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(x + totalX, y + totalY, z + totalZ), world);
         MinecraftForge.EVENT_BUS.post(event);

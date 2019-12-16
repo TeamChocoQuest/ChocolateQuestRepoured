@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.*;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -8,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import scala.collection.mutable.HashEntry;
@@ -49,7 +51,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         if (this.getChestIDs() != null && !possibleChestLocs.isEmpty())
         {
-            if (DungeonGenUtils.percentChance(random, 50))
+            if (DungeonGenUtils.PercentageRandom(50, random))
             {
                 IRoomDecor chest = new RoomDecorChest();
                 BlockPos pos = (BlockPos)possibleChestLocs.keySet().toArray()[random.nextInt(possibleChestLocs.size())];
@@ -112,7 +114,18 @@ public abstract class CastleRoomGeneric extends CastleRoom
         {
             BlockPos pos = spawnPositions.get(random.nextInt(spawnPositions.size()));
 
-            SpawnerFactory.placeSpawner(new Entity[] {EntityList.createEntityByIDFromName(dungeon.getSpawnerMob(), world)}, false, null, world, pos);
+            ResourceLocation resLoc;
+            if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT)
+            {
+                resLoc = EDungeonMobType.getMobTypeDependingOnDistance(pos.getX(), pos.getZ()).getEntityResourceLocation();
+            }
+            else
+            {
+                resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
+            }
+            Entity mobEntity = EntityList.createEntityByIDFromName(resLoc, world);
+
+            SpawnerFactory.placeSpawner(new Entity[] {mobEntity}, false, null, world, pos);
             decoMap.add(pos);
             spawnPositions.remove(pos);
         }

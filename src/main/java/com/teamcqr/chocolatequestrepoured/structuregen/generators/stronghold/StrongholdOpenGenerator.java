@@ -8,6 +8,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -17,6 +18,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -30,11 +32,15 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	private StrongholdOpenDungeon dungeon;
 	
-	private List<CQStructure[][]> roomLayout = new ArrayList<CQStructure[][]>();
 	private List<String> blacklistedRooms = new ArrayList<String>();
 	private Tuple<Integer, Integer> structureBounds;
 	
 	private PlacementSettings settings = new PlacementSettings();
+	
+	private StrongholdFloorOpen[] floors;
+	
+	private int dunX;
+	private int dunZ;
 	
 	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
 		super();
@@ -45,6 +51,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
 		
+		this.floors = new StrongholdFloorOpen[dungeon.getRandomFloorCount()];
 		searchStructureBounds();
 		computeNotFittingStructures();
 	}
@@ -57,6 +64,10 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			}
 		}
 	}
+	
+	public StrongholdOpenDungeon getDungeon() {
+		return dungeon;
+	}
 
 	private void searchStructureBounds() {
 		
@@ -64,15 +75,36 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		//Builds support platform for entry, then creates the spire down
-		BlockPos currPos = new BlockPos(x,y,z);
-		
-		int floors = dungeon.getRandomFloorCount();
-		
-		for(int floor = 0; floor < floors; floor++) {
-			int roomCount = dungeon.getRandomRoomCountForFloor();
-			roomCount = (new Double(Math.ceil(Math.sqrt(roomCount)))).intValue();
-			int[][] rooms = new int[roomCount][roomCount];
+		this.dunX = x;
+		this.dunZ = z;
+		BlockPos initPos = new BlockPos(x,y,z);
+		initPos = initPos.add(0,dungeon.getYOffset(),0);
+		initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
+		for(int i = 0; i < floors.length; i++) {
+			StrongholdFloorOpen floor = new StrongholdFloorOpen(this);
+			File stair = null;
+			boolean isFirst = i==0;
+			if(isFirst) {
+				stair = dungeon.getEntranceStair();
+			} else {
+				stair = dungeon.getStairRoom();
+			}
+			floor.setIsFirstFloor(isFirst);
+			int dY = initPos.getY() - (new CQStructure(stair, this.dungeon, x, z, false)).getSizeY();
+			if(dY <= (this.dungeon.getRoomSizeY() +2) ) {
+				floors[i-1].setExitIsBossRoom(true);
+			} else {
+				initPos = initPos.subtract(new Vec3i(0,(new CQStructure(stair, this.dungeon, x, z, false)).getSizeY(),0));
+				if(!isFirst) {
+					initPos = initPos.add(0,dungeon.getRoomSizeY(),0);
+				}
+				if((i+1) == floors.length) {
+					floor.setExitIsBossRoom(true);
+				}
+				floor.setEntranceStairPosition(stair, initPos.getX(), initPos.getY(), initPos.getZ());
+				floor.calculatePositions();
+				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
+			}
 		}
 	}
 
@@ -86,9 +118,9 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		}
 		structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER);
 		
-		CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
+		/*CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 		BlockPos pastePosForStair = new BlockPos(x, y - stairs.getSizeY(), z);
-		stairs.placeBlocksInWorld(world, pastePosForStair, settings, EPosType.CENTER_XZ_LAYER);
+		stairs.placeBlocksInWorld(world, pastePosForStair, settings, EPosType.CENTER_XZ_LAYER);*/
 		//Will generate the structure
 		//Algorithm: while(genRooms < rooms && genFloors < maxFloors) do {
 		//while(genRoomsOnFloor < roomsPerFloor) {
@@ -99,11 +131,17 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		//build staircase to bossroom at next position, then build boss room
 		
 		//Structure gen information: stored in map with location and structure file
+		for(StrongholdFloorOpen floor : floors) {
+			floor.generateRooms(world);
+		}
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		//build all the structures in the map
+		for(StrongholdFloorOpen floor : floors) {
+			floor.buildWalls(world);
+		}
 	}
 
 	@Override
@@ -120,12 +158,16 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		//MAKES SENSE ONLY FOR ENTRANCE BUILDING
 	}
+
+	public int getDunX() {
+		return dunX;
+	}
+	public int getDunZ() {
+		return dunZ;
+	}
 	
-	class StrongholdRoomGridHelper {
-		
-		private CQStructure room;
-		private BlockPos pos;
-		
+	public PlacementSettings getPlacementSettings() {
+		return settings;
 	}
 
 }

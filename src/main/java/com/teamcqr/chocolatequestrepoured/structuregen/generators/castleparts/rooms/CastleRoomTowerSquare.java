@@ -22,7 +22,8 @@ public class CastleRoomTowerSquare extends CastleRoom
         super(startPos, sideLength, height);
         this.roomType = EnumRoomType.TOWER_SQUARE;
         this.connectedSide = connectedSide;
-        this.buildLength = towerSize;
+        this.buildLengthX = towerSize;
+        this.buildLengthZ = towerSize;
         this.defaultFloor = false;
         this.defaultCeiling = false;
         this.pathable = false;
@@ -30,18 +31,18 @@ public class CastleRoomTowerSquare extends CastleRoom
 
         if (connectedSide == EnumFacing.NORTH || connectedSide == EnumFacing.SOUTH)
         {
-            offsetX += (sideLength - buildLength) / 2;
+            offsetX += (sideLength - buildLengthX) / 2;
             if (connectedSide == EnumFacing.SOUTH)
             {
-                offsetZ += sideLength - buildLength;
+                offsetZ += sideLength - buildLengthZ;
             }
         }
         if (connectedSide == EnumFacing.WEST || connectedSide == EnumFacing.EAST)
         {
-            offsetZ += (sideLength - buildLength) / 2;
+            offsetZ += (sideLength - buildLengthZ) / 2;
             if (connectedSide == EnumFacing.EAST)
             {
-                offsetX += sideLength - buildLength;
+                offsetX += sideLength - buildLengthX;
             }
         }
 
@@ -56,12 +57,12 @@ public class CastleRoomTowerSquare extends CastleRoom
             stairYOffset = 1; //account for 1 layer of floor
         }
 
-        this.pillarStart = startPos.add((offsetX + buildLength / 2), stairYOffset, (offsetZ + buildLength / 2));
-
         for (EnumFacing side: EnumFacing.HORIZONTALS)
         {
             this.walls.addOuter(side);
         }
+
+        this.pillarStart = getNonWallStartPos().add((buildLengthX / 2), stairYOffset, (buildLengthZ / 2));
     }
 
     @Override
@@ -72,14 +73,14 @@ public class CastleRoomTowerSquare extends CastleRoom
         BlockPos pos;
         IBlockState blockToBuild;
 
-        for (int x = 0; x < buildLength; x++)
+        for (int x = 0; x < buildLengthX - 1; x++)
         {
-            for (int z = 0; z < buildLength; z++)
+            for (int z = 0; z < buildLengthX - 1; z++)
             {
                 for (int y = 0; y < height; y++)
                 {
                     blockToBuild = Blocks.AIR.getDefaultState();
-                    pos = startPos.add(x + offsetX, y, z + offsetZ);
+                    pos = getNonWallStartPos().add(x, y, z);
 
                     if (stairs.isPartOfStairs(pos))
                     {
@@ -115,4 +116,5 @@ public class CastleRoomTowerSquare extends CastleRoom
     {
         return true;
     }
+
 }
