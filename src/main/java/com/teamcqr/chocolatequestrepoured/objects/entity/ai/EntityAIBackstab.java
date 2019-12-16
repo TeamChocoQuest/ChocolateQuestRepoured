@@ -4,6 +4,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDagger;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.pathfinding.Path;
+import net.minecraft.pathfinding.PathNavigate;
 
 public class EntityAIBackstab extends EntityAIAttack {
 
@@ -13,17 +15,22 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldExecute();
+		return this.entity.getHeldItemWeapon().getItem() instanceof ItemDagger && super.shouldExecute();
 	}
 
 	@Override
-	protected boolean canMoveToEntity(EntityLivingBase target) {
-		double distance = Math.min(2.0D, this.entity.getDistance(target.posX, target.posY, target.posZ));
+	protected void updatePath(EntityLivingBase target) {
+		double distance = Math.min(4.0D, this.entity.getDistance(target.posX, target.posY, target.posZ) * 0.5D);
 		double rad = Math.toRadians(target.rotationYaw);
 		double sin = Math.sin(rad);
 		double cos = Math.cos(rad);
-		this.path = this.entity.getNavigator().getPathToXYZ(target.posX + sin * distance, target.posY, target.posZ - cos * distance);
-		return this.path != null;
+		PathNavigate navigator = this.entity.getNavigator();
+		Path path = null;
+		for (int i = 4; path == null && i >= 0; i--) {
+			double d = distance * (double) i / 4.0D;
+			path = navigator.getPathToXYZ(target.posX + sin * d, target.posY, target.posZ - cos * d);
+		}
+		navigator.setPath(path, 1.0D);
 	}
 
 }

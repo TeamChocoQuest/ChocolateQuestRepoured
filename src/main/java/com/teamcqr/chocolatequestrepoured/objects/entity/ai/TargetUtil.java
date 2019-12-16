@@ -18,13 +18,10 @@ import net.minecraft.util.EntitySelectors;
 
 public class TargetUtil {
 
-	public static final Predicate<EntityLivingBase> PREDICATE = new Predicate<EntityLivingBase>() {
+	public static final Predicate<EntityLivingBase> PREDICATE_ATTACK_TARGET = new Predicate<EntityLivingBase>() {
 		@Override
 		public boolean apply(EntityLivingBase input) {
 			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
 				return false;
 			}
 			if (!EntitySelectors.CAN_AI_TARGET.apply(input)) {
@@ -33,29 +30,37 @@ public class TargetUtil {
 			return true;
 		}
 	};
-	
+
 	public static final Predicate<? super Entity> PREDICATE_MOUNTS = new Predicate<Entity>() {
-
 		@Override
 		public boolean apply(Entity input) {
-			if(input != null && input instanceof EntityAnimal && !input.isDead) {
-				return (((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof AbstractHorse ||input instanceof EntityPig); 
+			if (input == null) {
+				return false;
 			}
-			return false;
+			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+				return false;
+			}
+			if (!(input instanceof EntityAnimal)) {
+				return false;
+			}
+			return ((EntityAnimal) input).canBeSteered() || input instanceof EntityCQRMountBase || input instanceof EntityLlama || input instanceof AbstractHorse || input instanceof EntityPig;
 		}
-		
 	};
-	
-	public static final Predicate<? super Entity> PREDICATE_PETS = new Predicate<Entity>() {
 
+	public static final Predicate<? super Entity> PREDICATE_PETS = new Predicate<Entity>() {
 		@Override
 		public boolean apply(Entity input) {
-			if(input != null && input instanceof EntityTameable && !input.isDead) {
-				return input instanceof EntityOcelot || input instanceof EntityWolf; 
+			if (input == null) {
+				return false;
 			}
-			return false;
+			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+				return false;
+			}
+			if (!(input instanceof EntityTameable)) {
+				return false;
+			}
+			return input instanceof EntityOcelot || input instanceof EntityWolf;
 		}
-		
 	};
 
 	public static class Sorter implements Comparator<Entity> {
@@ -66,6 +71,7 @@ public class TargetUtil {
 			this.entity = entityIn;
 		}
 
+		@Override
 		public int compare(Entity p_compare_1_, Entity p_compare_2_) {
 			double d0 = this.entity.getDistanceSq(p_compare_1_);
 			double d1 = this.entity.getDistanceSq(p_compare_2_);
@@ -76,7 +82,6 @@ public class TargetUtil {
 				return d0 > d1 ? 1 : 0;
 			}
 		}
-
 	}
 
 }
