@@ -22,9 +22,7 @@ import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
 
@@ -147,7 +145,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 	
 	protected void renderSpellAnimation(T entityIn, float ageInTicks, ModelBiped model) {
-		model.bipedRightArm.rotationPointZ = 0.0F;
+		/*model.bipedRightArm.rotationPointZ = 0.0F;
 		model.bipedRightArm.rotationPointX = -5.0F;
 		model.bipedLeftArm.rotationPointZ = 0.0F;
 		model.bipedLeftArm.rotationPointX = 5.0F;
@@ -169,7 +167,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
 				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
 		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
-				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
+				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);*/
 	}
 
 	@Override

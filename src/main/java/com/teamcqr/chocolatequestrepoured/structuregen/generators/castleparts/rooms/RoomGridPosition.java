@@ -17,6 +17,13 @@ public class RoomGridPosition
         this.z = z;
     }
 
+    public RoomGridPosition(RoomGridPosition pos)
+    {
+        this.floor = pos.floor;
+        this.x = pos.x;
+        this.z = pos.z;
+    }
+
     public int getFloor()
     {
         return floor;
@@ -32,34 +39,57 @@ public class RoomGridPosition
         return z;
     }
 
+    public void setFloor(int floor)
+    {
+        this.floor = floor;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public void setZ(int z)
+    {
+        this.z = z;
+    }
+
     public RoomGridPosition move(EnumFacing direction)
+    {
+        return move(direction, 1);
+    }
+
+    public RoomGridPosition move(EnumFacing direction, int distance)
     {
         int floor = this.getFloor();
         int x = this.getX();
         int z = this.getZ();
 
-        switch (direction)
+        for (int i = 0; i < distance; i++)
         {
-            case NORTH:
-                z--;
-                break;
-            case SOUTH:
-                z++;
-                break;
-            case WEST:
-                x--;
-                break;
-            case EAST:
-                x++;
-                break;
-            case UP:
-                floor++;
-                break;
-            case DOWN:
-                floor--;
-                break;
-            default:
-                break;
+            switch (direction)
+            {
+                case NORTH:
+                    z--;
+                    break;
+                case SOUTH:
+                    z++;
+                    break;
+                case WEST:
+                    x--;
+                    break;
+                case EAST:
+                    x++;
+                    break;
+                case UP:
+                    floor++;
+                    break;
+                case DOWN:
+                    floor--;
+                    break;
+                default:
+                    break;
+            }
         }
 
         return new RoomGridPosition(floor, x, z);

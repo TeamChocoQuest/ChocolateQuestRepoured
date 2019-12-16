@@ -14,7 +14,7 @@ public enum EDungeonMobType {
 	//DONT_REPLACE(null),
 	DWARF(new ResourceLocation(Reference.MODID, "dwarf"), null),
 	SKELETON(new ResourceLocation(Reference.MODID, "skeleton"), null),
-	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), null),
+	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), new ResourceLocation(Reference.MODID, "lich")),
 	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null),
 	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null),
 	WALKER(new ResourceLocation(Reference.MODID, "walker"), null),
@@ -64,7 +64,7 @@ public enum EDungeonMobType {
 		return bossResLoc;
 	}
 	
-	//TODO: Rewrite this to return the mob type and not the mob itself
+	//DONE: Rewrite this to return the mob type and not the mob itself
 	
 	//X and Z are B L O C K x and z, not chunk x and z!!!
 	public static EDungeonMobType getMobTypeDependingOnDistance(int x, int z) {

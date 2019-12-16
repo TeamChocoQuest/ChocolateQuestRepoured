@@ -92,6 +92,7 @@ public class ModelMageHidden extends ModelCQRBiped {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.bipedBody.render(f5);
     }
+    
 
     /**
      * This is a helper function from Tabula to set the rotation of model parts

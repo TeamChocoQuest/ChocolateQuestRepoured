@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -57,7 +56,7 @@ public class CastlePartMain implements ICastlePart
 
         System.out.println("Building a square part at " + x + ", " + y + ", " + z + ". sizeX = " + sizeX + ", sizeZ = " + sizeZ + ". Floors = " + floors);
 
-        roomHelper.generateRooms(world, dungeon);
+        roomHelper.generate(world, dungeon);
 
     }
 
