@@ -677,6 +677,46 @@ public class RoomGrid
         return true;
     }
 
+    public ArrayList<RoomGridCell> getAdjacentSelectedCellsInRow(RoomGridPosition position)
+    {
+        ArrayList<RoomGridCell> result = new ArrayList<>();
+
+        while (getCellAt(position.move(EnumFacing.WEST)) != null && getCellAt(position.move(EnumFacing.WEST)).isSelectedForBuilding())
+        {
+            position = position.move(EnumFacing.WEST);
+        }
+
+        result.add(getCellAt(position));
+
+        while (getCellAt(position.move(EnumFacing.EAST)) != null && getCellAt(position.move(EnumFacing.EAST)).isSelectedForBuilding())
+        {
+            position = position.move(EnumFacing.EAST);
+            result.add(getCellAt(position));
+        }
+
+        return result;
+    }
+
+    public ArrayList<RoomGridCell> getAdjacentSelectedCellsInColumn(RoomGridPosition position)
+    {
+        ArrayList<RoomGridCell> result = new ArrayList<>();
+
+        while (getCellAt(position.move(EnumFacing.NORTH)) != null && getCellAt(position.move(EnumFacing.NORTH)).isSelectedForBuilding())
+        {
+            position = position.move(EnumFacing.NORTH);
+        }
+
+        result.add(getCellAt(position));
+
+        while (getCellAt(position.move(EnumFacing.SOUTH)) != null && getCellAt(position.move(EnumFacing.SOUTH)).isSelectedForBuilding())
+        {
+            position = position.move(EnumFacing.SOUTH);
+            result.add(getCellAt(position));
+        }
+
+        return result;
+    }
+
     /*
     * Determine if a tower can be attached next to the given cell
      */
