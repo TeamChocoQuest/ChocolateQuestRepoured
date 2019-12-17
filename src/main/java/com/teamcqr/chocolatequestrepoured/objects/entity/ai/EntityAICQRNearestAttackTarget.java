@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -23,7 +22,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		this.predicate = new Predicate<EntityLivingBase>() {
 			@Override
 			public boolean apply(EntityLivingBase input) {
-				if (!TargetUtil.PREDICATE.apply(input)) {
+				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
 					return false;
 				}
 				if (!EntitySelectors.IS_ALIVE.apply(input)) {
@@ -41,8 +40,12 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.ticksExisted % 8 == 0 && !this.predicate.apply(this.entity.getAttackTarget())) {
-			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D, 8.0D, 32.0D);
+		if (this.entity.ticksExisted % 4 == 0 && this.entity.getAttackTarget() == null) {
+			double x = this.entity.posX;
+			double y = this.entity.posY + this.entity.getEyeHeight();
+			double z = this.entity.posZ;
+			double d = 32.0D;
+			AxisAlignedBB aabb = new AxisAlignedBB(x - d, y - d, z - d, x + d, y + d, z + d);
 			List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
 			if (!possibleTargets.isEmpty()) {
 				possibleTargets.sort(this.sorter);
@@ -55,7 +58,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 
 	@Override
 	public void startExecuting() {
-		this.entity.setAttackTarget(attackTarget);
+		this.entity.setAttackTarget(this.attackTarget);
 	}
 
 	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
@@ -68,24 +71,13 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
 			return false;
 		}
-		double distance = this.entity.getDistanceSq(possibleTarget);
-		if (distance <= this.entity.getAttackReach(possibleTarget)) {
+		if (this.entity.isInAttackReach(possibleTarget)) {
 			return true;
 		}
-		if (!this.entity.isEntityInFieldOfView(possibleTarget)) {
-			if (distance > 12.0D) {
-				return false;
-			}
-			if (possibleTarget.isSneaking()) {
-				return false;
-			}
+		if (this.entity.isEntityInFieldOfView(possibleTarget)) {
+			return this.entity.isInSightRange(possibleTarget);
 		}
-		return this.canMoveToEntity(possibleTarget);
-	}
-
-	protected boolean canMoveToEntity(EntityLivingBase possibleTarget) {
-		Path path = this.entity.getNavigator().getPathToEntityLiving(possibleTarget);
-		return path != null;
+		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 12.0D;
 	}
 
 }
