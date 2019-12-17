@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import net.minecraft.block.state.IBlockState;
@@ -234,12 +235,12 @@ public abstract class CastleRoom
     public DoorPlacement addDoorOnSideCentered(EnumFacing side)
     {
         int sideLength = (side.getAxis() == EnumFacing.Axis.X) ? buildLengthZ : buildLengthX;
-        return walls.addCenteredDoor(sideLength, side);
+        return walls.addCenteredDoor(random, sideLength, side, EnumCastleDoorType.RANDOM);
     }
     public DoorPlacement addDoorOnSideRandom(Random random, EnumFacing side)
     {
         int sideLength = (side.getAxis() == EnumFacing.Axis.X) ? buildLengthZ : buildLengthX;
-        return walls.addRandomDoor(random, sideLength, side);
+        return walls.addRandomDoor(random, sideLength, side, EnumCastleDoorType.RANDOM);
     }
 
     public void addOuterWall(EnumFacing side)

@@ -4,18 +4,14 @@ import net.minecraft.util.EnumFacing;
 
 public class DoorPlacement
 {
-    public static int DEFAULT_WIDTH = 3;
-    public static int DEFAULT_HEIGHT = 4;
 
     private int offset;
-    private int width;
-    private int height;
+    private EnumCastleDoorType type;
 
-    public DoorPlacement(int offset, int width, int height)
+    public DoorPlacement(int offset, EnumCastleDoorType type)
     {
         this.offset = offset;
-        this.width = width;
-        this.height = height;
+        this.type = type;
     }
 
     public int getOffset()
@@ -23,13 +19,18 @@ public class DoorPlacement
         return offset;
     }
 
+    public EnumCastleDoorType getType()
+    {
+        return type;
+    }
+
     public int getWidth()
     {
-        return width;
+        return type.getWidth();
     }
 
     public int getHeight()
     {
-        return height;
+        return type.getWidth();
     }
 }

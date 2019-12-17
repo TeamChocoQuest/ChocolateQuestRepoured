@@ -1,6 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -15,6 +19,7 @@ public class RoomWallBuilder
     protected WallOptions options;
     protected int doorStart = 0;
     protected int doorWidth = 0;
+    protected int doorHeight = 0;
     protected int length;
     protected int height;
     protected EnumFacing side;
@@ -33,6 +38,7 @@ public class RoomWallBuilder
         {
             this.doorStart = options.getDoor().getOffset();
             this.doorWidth = options.getDoor().getWidth();
+            this.doorHeight = options.getDoor().getHeight();
         }
     }
 
@@ -67,11 +73,11 @@ public class RoomWallBuilder
     {
         if (options.hasWindow())
         {
-            return getBlockBasicGlass(pos, dungeon);
+            return getBlockWindowBasicGlass(pos, dungeon);
         }
         else if (options.hasDoor())
         {
-            return getBlockDoor(pos, dungeon);
+            return getDoorBlock(pos, dungeon);
         }
         else
         {
@@ -79,7 +85,28 @@ public class RoomWallBuilder
         }
     }
 
-    protected IBlockState getBlockDoor(BlockPos pos, CastleDungeon dungeon)
+    protected IBlockState getDoorBlock(BlockPos pos, CastleDungeon dungeon)
+    {
+        switch (options.getDoor().getType())
+        {
+            case AIR:
+                return getBlockDoorAir(pos, dungeon);
+
+            case STANDARD:
+                return getBlockDoorStandard(pos, dungeon);
+
+            case FENCE_BORDER:
+                return getBlockDoorFenceBorder(pos, dungeon);
+
+            case STAIR_BORDER:
+                return getBlockDoorStairBorder(pos, dungeon);
+
+            default:
+                return dungeon.getWallBlock().getDefaultState();
+        }
+    }
+
+    private IBlockState getBlockDoorAir(BlockPos pos, CastleDungeon dungeon)
     {
         IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
         int y = pos.getY() - wallStart.getY();
@@ -91,7 +118,7 @@ public class RoomWallBuilder
             {
                 blockToBuild = dungeon.getWallBlock().getDefaultState();
             }
-            else if (y < DoorPlacement.DEFAULT_HEIGHT)
+            else if (y < doorHeight)
             {
                 blockToBuild = Blocks.AIR.getDefaultState();
             }
@@ -100,7 +127,147 @@ public class RoomWallBuilder
         return blockToBuild;
     }
 
-    private IBlockState getBlockBasicGlass(BlockPos pos, CastleDungeon dungeon)
+    private IBlockState getBlockDoorStairBorder(BlockPos pos, CastleDungeon dungeon)
+    {
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
+        final int y = pos.getY() - wallStart.getY();
+        final int dist = getLengthPoint(pos);
+        final int halfPoint = doorStart + (doorWidth / 2);
+
+        if (withinDoorWidth(dist))
+        {
+            if (y == 0)
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+            else if (dist == halfPoint || dist == halfPoint - 1)
+            {
+                if (y >= 1 && y <= 3)
+                {
+                    blockToBuild = Blocks.AIR.getDefaultState();
+                }
+                else if (y == 4)
+                {
+                    blockToBuild = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
+                }
+            }
+            else if (dist == halfPoint + 1 || dist == halfPoint - 2)
+            {
+                EnumFacing stairFacing;
+
+                if (side == EnumFacing.WEST || side == EnumFacing.SOUTH)
+                {
+                    stairFacing = (dist == halfPoint - 2) ? side.rotateY() : side.rotateYCCW();
+                }
+                else
+                {
+                    stairFacing = (dist == halfPoint - 2) ? side.rotateYCCW() : side.rotateY();
+                }
+
+
+                IBlockState stairBase = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+
+                if (y == 1)
+                {
+                    blockToBuild = stairBase;
+                }
+                else if (y == 2 || y == 3)
+                {
+                    blockToBuild = Blocks.AIR.getDefaultState();
+                }
+                else if (y == 4)
+                {
+                    blockToBuild = stairBase.withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP);
+                }
+            }
+        }
+
+        return blockToBuild;
+    }
+
+    private IBlockState getBlockDoorFenceBorder(BlockPos pos, CastleDungeon dungeon)
+    {
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
+        final int y = pos.getY() - wallStart.getY();
+        final int dist = getLengthPoint(pos);
+        final int halfPoint = doorStart + (doorWidth / 2);
+
+        if (withinDoorWidth(dist))
+        {
+            if (y == 0)
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+            else if (dist == halfPoint || dist == halfPoint - 1)
+            {
+                if (y == 1 || y == 2)
+                {
+                    blockToBuild = Blocks.AIR.getDefaultState();
+                }
+                else if (y == 3)
+                {
+                    blockToBuild = Blocks.OAK_FENCE.getDefaultState();
+                }
+            }
+            else if (((dist == halfPoint + 1) || (dist == halfPoint - 2)) && (y < doorHeight))
+            {
+                blockToBuild = Blocks.OAK_FENCE.getDefaultState();
+            }
+        }
+
+        return blockToBuild;
+    }
+
+    private IBlockState getBlockDoorStandard(BlockPos pos, CastleDungeon dungeon)
+    {
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
+        final int y = pos.getY() - wallStart.getY();
+        final int dist = getLengthPoint(pos);
+        final int halfPoint = doorStart + (doorWidth / 2);
+
+        if (withinDoorWidth(dist))
+        {
+            if (y == 0)
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+            else if ((dist == halfPoint || dist == halfPoint - 1))
+            {
+                if (y == 1 || y == 2)
+                {
+                    BlockDoor.EnumDoorHalf half = (y == 1) ? BlockDoor.EnumDoorHalf.LOWER : BlockDoor.EnumDoorHalf.UPPER;
+                    BlockDoor.EnumHingePosition hinge;
+
+                    if (side == EnumFacing.WEST || side == EnumFacing.SOUTH)
+                    {
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT;
+                    }
+                    else
+                    {
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
+                    }
+
+                    blockToBuild = Blocks.OAK_DOOR.getDefaultState().
+                            withProperty(BlockDoor.HALF, half).
+                            withProperty(BlockDoor.FACING, side).
+                            withProperty(BlockDoor.HINGE, hinge);
+                }
+                else if (y == 3)
+                {
+                    blockToBuild = Blocks.PLANKS.getDefaultState();
+                }
+
+            }
+            else if (((dist == halfPoint + 1) || (dist == halfPoint - 2)) && (y < doorHeight))
+            {
+                blockToBuild = Blocks.PLANKS.getDefaultState();
+            }
+        }
+
+        return blockToBuild;
+    }
+
+    private IBlockState getBlockWindowBasicGlass(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY() - wallStart.getY();
         int dist = getLengthPoint(pos);
@@ -108,13 +275,14 @@ public class RoomWallBuilder
         if ((y == 3 || y == 4) && (dist == length / 2))
         {
             return Blocks.GLASS_PANE.getDefaultState();
-        } else
+        }
+        else
         {
             return dungeon.getWallBlock().getDefaultState();
         }
     }
 
-    private IBlockState getBlockBasicBars(BlockPos pos, CastleDungeon dungeon)
+    private IBlockState getBlockWindowBasicBars(BlockPos pos, CastleDungeon dungeon)
     {
         int y = pos.getY();
         int dist = getLengthPoint(pos);
@@ -122,14 +290,15 @@ public class RoomWallBuilder
         if ((y == 3 || y == 4) && (dist == length / 2))
         {
             return Blocks.IRON_BARS.getDefaultState();
-        } else
+        }
+        else
         {
             return dungeon.getWallBlock().getDefaultState();
         }
     }
 
     /*
-     * Whether to build a window is usually determined by how far along the wall we are.
+     * Whether to build a door or window is usually determined by how far along the wall we are.
      * This function gets the relevant length along the wall based on if we are a horizontal
      * wall or a vertical wall.
      */
