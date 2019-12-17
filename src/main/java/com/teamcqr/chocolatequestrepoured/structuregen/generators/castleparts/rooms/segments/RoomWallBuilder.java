@@ -1,10 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import net.minecraft.block.BlockDoor;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTorch;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -100,6 +97,9 @@ public class RoomWallBuilder
 
             case STAIR_BORDER:
                 return getBlockDoorStairBorder(pos, dungeon);
+
+            case GRAND_ENTRY:
+                return getBlockGrandEntry(pos, dungeon);
 
             default:
                 return dungeon.getWallBlock().getDefaultState();
@@ -261,6 +261,69 @@ public class RoomWallBuilder
             else if (((dist == halfPoint + 1) || (dist == halfPoint - 2)) && (y < doorHeight))
             {
                 blockToBuild = Blocks.PLANKS.getDefaultState();
+            }
+        }
+
+        return blockToBuild;
+    }
+
+    private IBlockState getBlockGrandEntry(BlockPos pos, CastleDungeon dungeon)
+    {
+        IBlockState blockToBuild = dungeon.getWallBlock().getDefaultState();
+
+        final int y = pos.getY() - wallStart.getY();
+        final int dist = getLengthPoint(pos);
+        final int halfPoint = doorStart + (doorWidth / 2);
+        final int distFromHalf = Math.abs(dist - halfPoint);
+
+        final IBlockState CHISELED_STONE = Blocks.STONEBRICK.getDefaultState().
+                withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+
+        if (withinDoorWidth(dist))
+        {
+            if (y == 0)
+            {
+                blockToBuild = dungeon.getWallBlock().getDefaultState();
+            }
+            else if (distFromHalf == 0)
+            {
+                if (y == 4)
+                {
+                    return Blocks.OAK_FENCE.getDefaultState();
+                }
+                if (y == 5)
+                {
+                    return CHISELED_STONE;
+                }
+            }
+            else if (distFromHalf == 1)
+            {
+                if (y == 3 || y == 4)
+                {
+                    return Blocks.OAK_FENCE.getDefaultState();
+                }
+                if (y == 5)
+                {
+                    return CHISELED_STONE;
+                }
+            }
+            else if (Math.abs(dist - halfPoint) == 2)
+            {
+                if (y == 3)
+                {
+                    return Blocks.OAK_FENCE.getDefaultState();
+                }
+                if (y == 4 || y == 5)
+                {
+                    return CHISELED_STONE;
+                }
+            }
+            else if (Math.abs(dist - halfPoint) == 3)
+            {
+                if (y <= 4)
+                {
+                    return CHISELED_STONE;
+                }
             }
         }
 
