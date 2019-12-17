@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ObjectUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -746,19 +747,23 @@ public class CastleRoomSelector
                 if (horizontal)
                 {
                     int zIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartZ(), hallwayArea.getEndZ());
-                    for (int xIndex = hallwayArea.getStartX(); xIndex <= hallwayArea.getEndX(); xIndex++)
+
+                    RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, hallwayArea.getStartX(), zIndex);
+
+                    for (RoomGridCell hallwayCell : grid.getAdjacentSelectedCellsInRow(hallStartGridPos))
                     {
-                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
-                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.HORIZONTAL));
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(hallwayCell.getGridPosition()), roomSize, floorHeight, CastleRoomHallway.Alignment.HORIZONTAL));
                     }
                 }
                 else
                 {
                     int xIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartX(), hallwayArea.getEndX());
-                    for (int zIndex = hallwayArea.getStartZ(); zIndex <= hallwayArea.getEndZ(); zIndex++)
+
+                    RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, xIndex, hallwayArea.getStartZ());
+
+                    for (RoomGridCell hallwayCell : grid.getAdjacentSelectedCellsInColumn(hallStartGridPos))
                     {
-                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
-                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.VERTICAL));
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(hallwayCell.getGridPosition()), roomSize, floorHeight, CastleRoomHallway.Alignment.VERTICAL));
                     }
                 }
             }
