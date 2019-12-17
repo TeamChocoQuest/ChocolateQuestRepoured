@@ -8,7 +8,8 @@ public enum EnumCastleDoorType
     STANDARD(4, 4),
     AIR(4, 4),
     FENCE_BORDER(4, 4),
-    STAIR_BORDER(4, 5);
+    STAIR_BORDER(4, 5),
+    GRAND_ENTRY(7, 6);
 
     private final int width;
     private final int height;
