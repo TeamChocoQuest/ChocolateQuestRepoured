@@ -15,8 +15,8 @@ public class RoomWalls
 
     public RoomWalls()
     {
-        this.walls = new EnumMap<EnumFacing, WallOptions>(EnumFacing.class);
-        this.adjacentDoors = new EnumMap<EnumFacing, DoorPlacement>(EnumFacing.class);
+        this.walls = new EnumMap<>(EnumFacing.class);
+        this.adjacentDoors = new EnumMap<>(EnumFacing.class);
     }
 
     public void addOuter(EnumFacing side)
@@ -29,28 +29,43 @@ public class RoomWalls
         walls.put(side, new WallOptions(false));
     }
 
-    public DoorPlacement addCenteredDoor(int wallLength, EnumFacing side)
+    public DoorPlacement addCenteredDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type)
     {
-        if (walls.containsKey(side))
+
+        if (type == EnumCastleDoorType.RANDOM)
         {
-            int offset = (wallLength - DoorPlacement.DEFAULT_WIDTH) / 2;
-            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, DoorPlacement.DEFAULT_HEIGHT);
-            walls.get(side).addDoor(door);
-            return door;
+            type = EnumCastleDoorType.getRandomRegularType(random);
         }
-        return null;
+
+        int offset = (wallLength - type.getWidth()) / 2;
+
+        return addDoorWithOffset(side, offset, type);
     }
 
-    public DoorPlacement addRandomDoor(Random random, int wallLength, EnumFacing side)
+    public DoorPlacement addRandomDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type)
+    {
+        if (type == EnumCastleDoorType.RANDOM)
+        {
+            type = EnumCastleDoorType.getRandomRegularType(random);
+        }
+
+        int offset = 1 + random.nextInt(wallLength - type.getWidth() - 1);
+
+        return addDoorWithOffset(side, offset, type);
+    }
+
+    private DoorPlacement addDoorWithOffset(EnumFacing side, int offset, EnumCastleDoorType type)
     {
         if (walls.containsKey(side))
         {
-            int offset = 1 + random.nextInt(wallLength - DoorPlacement.DEFAULT_WIDTH - 1);
-            DoorPlacement door = new DoorPlacement(offset, DoorPlacement.DEFAULT_WIDTH, DoorPlacement.DEFAULT_HEIGHT);
+            DoorPlacement door = new DoorPlacement(offset, type);
             walls.get(side).addDoor(door);
             return door;
         }
-        return null;
+        else
+        {
+            return null;
+        }
     }
 
     public boolean hasWallOnSide(EnumFacing side)
