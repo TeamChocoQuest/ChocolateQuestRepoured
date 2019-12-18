@@ -759,7 +759,7 @@ public class CastleRoomSelector
                         }
                         else
                         {
-                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.EAST);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.EAST);
                             hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.EAST);
                             hallwayCells.get(hallwayCells.size() - 1).setReachable();
                         }
@@ -787,7 +787,7 @@ public class CastleRoomSelector
                         }
                         else
                         {
-                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.SOUTH);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.SOUTH);
                             hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.SOUTH);
                             hallwayCells.get(hallwayCells.size() - 1).setReachable();
                         }
