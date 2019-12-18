@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -20,8 +21,8 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
@@ -81,56 +82,72 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			ItemStack itemMainHand = entity.getHeldItemMainhand();
 			ItemStack itemOffHand = entity.getHeldItemOffhand();
 
-			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
-			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
+			ModelBiped.ArmPose armPoseMain = itemMainHand != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
+			ModelBiped.ArmPose armPoseOff = itemOffHand != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
+			
+			boolean dontRenderOffItem = false;
+			boolean dontRenderMainItem = false;
+			
 			// Main arm
-			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0 && itemMainHand.getItem() instanceof ItemShield) {
-				EnumAction action = itemMainHand.getItemUseAction();
-				switch (action) {
-				case BLOCK:
-					armPoseMain = ModelBiped.ArmPose.BLOCK;
-					break;
-				default:
-					armPoseMain = ModelBiped.ArmPose.EMPTY;
-					break;
-
-				}
+			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+					EnumAction action = itemMainHand.getItemUseAction();
+					switch (action) {
+					case BOW:
+						armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
+						dontRenderOffItem = true;
+						break;
+					case BLOCK:
+						armPoseMain = ModelBiped.ArmPose.BLOCK;
+						break;
+					default:
+						//armPoseMain = ModelBiped.ArmPose.EMPTY;
+						break;
+					}
 			}
 			// Off arm
-			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0 && itemOffHand.getItem() instanceof ItemShield) {
-				EnumAction action = itemOffHand.getItemUseAction();
-				switch (action) {
-				case BLOCK:
-					armPoseOff = ModelBiped.ArmPose.BLOCK;
-					break;
-				default:
-					armPoseOff = ModelBiped.ArmPose.EMPTY;
-					break;
+			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+				//if(itemOffHand.getItem() instanceof ItemShield) {
+					EnumAction action = itemOffHand.getItemUseAction();
+					switch (action) {
+					case BOW:
+						armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
+						dontRenderMainItem = true;
+						break;
+					case BLOCK:
+						armPoseOff = ModelBiped.ArmPose.BLOCK;
+						break;
+					default:
+						break;
 
-				}
+					}
 			}
 			
-
+			if(entity.getPrimaryHand() == EnumHandSide.LEFT) {
+				ArmPose tmp = armPoseMain;
+				armPoseMain = armPoseOff;
+				armPoseOff = tmp;
+				
+				boolean tmp2 = dontRenderMainItem;
+				dontRenderMainItem = dontRenderOffItem;
+				dontRenderOffItem = tmp2;
+			}
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
+			if(dontRenderMainItem) {
+				model.rightArmPose = ArmPose.EMPTY;
+			}
+			if(dontRenderOffItem) {
+				model.leftArmPose = ArmPose.EMPTY;
+			}
 			
 			switch(entity.getArmPose()) {
-			case HOLDING_ITEM:
-				break;
-			case PULLING_BOW:
-				break;
 			case SPELLCASTING:
 				renderSpellAnimation(entity, entity.ticksExisted, model);
-				break;
-			case STAFF_L:
-				break;
-			case STAFF_R:
 				break;
 			default:
 				break;
 			
 			}
-			
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
