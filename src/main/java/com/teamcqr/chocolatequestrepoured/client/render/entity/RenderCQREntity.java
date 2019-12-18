@@ -140,14 +140,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				model.leftArmPose = ArmPose.EMPTY;
 			}
 			
-			switch(entity.getArmPose()) {
-			case SPELLCASTING:
-				renderSpellAnimation(entity, entity.ticksExisted, model);
-				break;
-			default:
-				break;
-			
-			}
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
@@ -161,32 +153,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 	}
 	
-	protected void renderSpellAnimation(T entityIn, float ageInTicks, ModelBiped model) {
-		/*model.bipedRightArm.rotationPointZ = 0.0F;
-		model.bipedRightArm.rotationPointX = -5.0F;
-		model.bipedLeftArm.rotationPointZ = 0.0F;
-		model.bipedLeftArm.rotationPointX = 5.0F;
-		model.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		model.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		model.bipedRightArm.rotateAngleZ = 2.3561945F;
-		model.bipedLeftArm.rotateAngleZ = -2.3561945F;
-		model.bipedRightArm.rotateAngleY = 0.0F;
-		model.bipedLeftArm.rotateAngleY = 0.0F;
-
-		// Particles
-		double dx = 0.7D;
-		double dy = 0.5D;
-		double dz = 0.2D;
-		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
-				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		float f1 = MathHelper.cos(f);
-		float f2 = MathHelper.sin(f);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
-				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
-				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);*/
-	}
-
 	@Override
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch, float scaleFactor) {
