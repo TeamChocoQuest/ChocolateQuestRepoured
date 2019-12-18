@@ -9,7 +9,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.ObjectUtils;
+import scala.Int;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -17,24 +19,6 @@ import java.lang.Double;
 
 public class CastleRoomSelector
 {
-    private class RoofArea
-    {
-        int gridStartX;
-        int lengthX;
-        int gridStartZ;
-        int lengthZ;
-        int floor;
-
-        private RoofArea(int gridStartX, int lengthX, int gridStartZ, int lengthZ, int floor)
-        {
-            this.gridStartX = gridStartX;
-            this.lengthX = lengthX;
-            this.gridStartZ = gridStartZ;
-            this.lengthZ = lengthZ;
-            this.floor = floor;
-        }
-    }
-
     public class SupportArea
     {
         private BlockPos nwCorner;
