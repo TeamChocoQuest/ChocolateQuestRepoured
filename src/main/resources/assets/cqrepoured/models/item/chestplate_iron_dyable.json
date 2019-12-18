@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "item/chestplate_iron_dyable",
-        "layer1": "item/chestplate_iron_dyable_overlay"
+        "layer0": "cqrepoured:items/chestplate_iron_dyable",
+        "layer1": "cqrepoured:items/chestplate_iron_dyable_overlay"
     }
 }

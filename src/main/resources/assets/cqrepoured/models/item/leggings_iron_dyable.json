@@ -1,7 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "item/leggings_iron_dyable",
-        "layer1": "item/leggings_iron_dyable_overlay"
+        "layer0": "cqrepoured:items/leggings_iron_dyable",
+        "layer1": "cqrepoured:items/leggings_iron_dyable_overlay"
     }
 }
