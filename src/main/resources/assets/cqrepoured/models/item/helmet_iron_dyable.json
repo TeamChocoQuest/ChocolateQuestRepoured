@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "item/helmet_iron_dyable",
+        "layer1": "item/helmet_iron_dyable_overlay"
+    }
+}
