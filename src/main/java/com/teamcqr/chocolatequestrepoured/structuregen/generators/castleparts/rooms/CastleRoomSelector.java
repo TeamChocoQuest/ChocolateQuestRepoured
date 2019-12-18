@@ -1110,6 +1110,12 @@ public class CastleRoomSelector
             if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.SOUTH)))
             {
                 cell.getRoom().addInnerWall(EnumFacing.SOUTH);
+
+                RoomGridCell adjacentCell = grid.getAdjacentCell(cell, EnumFacing.SOUTH);
+                if (adjacentCell != null && adjacentCell.isPopulated())
+                {
+                    adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.NORTH);
+                }
             }
         }
 
@@ -1124,6 +1130,12 @@ public class CastleRoomSelector
             if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.EAST)))
             {
                 cell.getRoom().addInnerWall(EnumFacing.EAST);
+
+                RoomGridCell adjacentCell = grid.getAdjacentCell(cell, EnumFacing.EAST);
+                if (adjacentCell != null && adjacentCell.isPopulated())
+                {
+                    adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.WEST);
+                }
             }
         }
 
