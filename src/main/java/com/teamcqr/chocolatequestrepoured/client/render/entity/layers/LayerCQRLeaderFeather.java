@@ -22,7 +22,7 @@ public class LayerCQRLeaderFeather extends AbstractLayerCQR {
 	@Override
 	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks,
 			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		if(entity.isLeader() || !entity.hasLeader()) {
+		if(entity.isLeader()) {
 			GlStateManager.pushMatrix();
 			
 			GlStateManager.rotate(180, 0, 0, 1);
