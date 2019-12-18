@@ -243,6 +243,12 @@ public abstract class CastleRoom
         return walls.addRandomDoor(random, sideLength, side, EnumCastleDoorType.RANDOM);
     }
 
+    public DoorPlacement addGrandEntrance(EnumFacing side)
+    {
+        int sideLength = (side.getAxis() == EnumFacing.Axis.X) ? buildLengthZ : buildLengthX;
+        return walls.addCenteredDoor(random, sideLength, side, EnumCastleDoorType.GRAND_ENTRY);
+    }
+
     public void addOuterWall(EnumFacing side)
     {
         if (!walls.hasWallOnSide(side))
