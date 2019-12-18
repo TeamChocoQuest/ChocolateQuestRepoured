@@ -13,7 +13,7 @@ public class CastleRoomBossLandingEmpty extends CastleRoom
     public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
         super(startPos, sideLength, height);
-        this.roomType = EnumRoomType.STAIRCASE_BOSS;
+        this.roomType = EnumRoomType.LANDING_BOSS;
         this.pathable = false;
         this.doorSide = doorSide;
         this.defaultCeiling = true;

@@ -770,7 +770,7 @@ public class CastleRoomSelector
                     int xIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartX(), hallwayArea.getEndX());
 
                     RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, xIndex, hallwayArea.getStartZ());
-                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
+                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInColumn(hallStartGridPos);
 
                     for (RoomGridCell hallwayCell : hallwayCells)
                     {
