@@ -349,6 +349,18 @@ item.chestplate_heavy_iron.name=Heavy Iron Chestplate
 item.leggings_heavy_iron.name=Heavy Iron Leggings
 item.boots_heavy_iron.name=Heavy Iron Boots
 
+//Dyable Iron Armor
+item.helmet_iron_dyable.name=Dyable Iron Helmet
+item.chestplate_iron_dyable.name=Dyable Iron Chestplate
+item.leggings_iron_dyable.name=Dyable Iron Leggings
+item.boots_iron_dyable.name=Dyable Iron Boots
+
+//Dyable Diamond Armor
+item.helmet_diamond_dyable.name=Dyable Diamond Helmet
+item.chestplate_diamond_dyable.name=Dyable Diamond Chestplate
+item.leggings_diamond_dyable.name=Dyable Diamond Leggings
+item.boots_diamond_dyable.name=Dyable Diamond Boots
+
 //Blocks
 tile.exporter.name=Exporter Block
 tile.spawner.name=Spawner
