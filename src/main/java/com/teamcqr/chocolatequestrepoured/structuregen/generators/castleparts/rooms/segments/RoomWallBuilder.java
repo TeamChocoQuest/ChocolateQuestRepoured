@@ -240,11 +240,11 @@ public class RoomWallBuilder
 
                     if (side == EnumFacing.WEST || side == EnumFacing.SOUTH)
                     {
-                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT;
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
                     }
                     else
                     {
-                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT;
                     }
 
                     blockToBuild = Blocks.OAK_DOOR.getDefaultState().
