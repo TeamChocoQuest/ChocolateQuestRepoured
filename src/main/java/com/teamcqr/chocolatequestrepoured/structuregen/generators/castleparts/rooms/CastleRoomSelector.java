@@ -494,11 +494,11 @@ public class CastleRoomSelector
                 {
                     CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(getRoomStart(bottomOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
-                    grid.initPathingForSingleCell(bottomOfBossStairs);
+                    //grid.initPathingForSingleCell(bottomOfBossStairs);
 
                     CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
-                    grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
+                    //grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
 
                     CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(getRoomStart(topOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(topOfBossStairs).setRoom(landingMain);
@@ -729,7 +729,7 @@ public class CastleRoomSelector
 
     private void addHallways()
     {
-        for (int floor = 0; floor < usedFloors; floor++)
+        for (int floor = 0; floor < (grid.getBossArea().start.getFloor() - 1); floor++)
         {
             List<RoomGrid.Area2D> largestAreas = grid.getAllGridAreasWhere(floor, RoomGridCell::isValidHallwayRoom, 2, 2);
             if (!largestAreas.isEmpty())
