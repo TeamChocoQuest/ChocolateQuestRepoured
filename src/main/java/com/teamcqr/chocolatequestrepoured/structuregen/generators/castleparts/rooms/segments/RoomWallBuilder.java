@@ -287,33 +287,41 @@ public class RoomWallBuilder
             }
             else if (distFromHalf == 0)
             {
-                if (y == 4)
+                if (y <= 3)
+                {
+                    return Blocks.AIR.getDefaultState();
+                }
+                else if (y == 4)
                 {
                     return Blocks.OAK_FENCE.getDefaultState();
                 }
-                if (y == 5)
+                else if (y == 5)
                 {
                     return CHISELED_STONE;
                 }
             }
             else if (distFromHalf == 1)
             {
-                if (y == 3 || y == 4)
+                if (y <= 2)
+                {
+                    return Blocks.AIR.getDefaultState();
+                }
+                else if (y == 3 || y == 4)
                 {
                     return Blocks.OAK_FENCE.getDefaultState();
                 }
-                if (y == 5)
+                else if (y == 5)
                 {
                     return CHISELED_STONE;
                 }
             }
             else if (Math.abs(dist - halfPoint) == 2)
             {
-                if (y == 3)
+                if (y <= 3)
                 {
                     return Blocks.OAK_FENCE.getDefaultState();
                 }
-                if (y == 4 || y == 5)
+                else if (y == 4 || y == 5)
                 {
                     return CHISELED_STONE;
                 }
