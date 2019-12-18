@@ -82,8 +82,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			ItemStack itemMainHand = entity.getHeldItemMainhand();
 			ItemStack itemOffHand = entity.getHeldItemOffhand();
 
-			ModelBiped.ArmPose armPoseMain = itemMainHand != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
-			ModelBiped.ArmPose armPoseOff = itemOffHand != null ? ModelBiped.ArmPose.ITEM : ModelBiped.ArmPose.EMPTY;
+			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
+			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
 			
 			boolean dontRenderOffItem = false;
 			boolean dontRenderMainItem = false;
@@ -92,6 +92,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
 					EnumAction action = itemMainHand.getItemUseAction();
 					switch (action) {
+					case DRINK:
+					case EAT:
+						armPoseMain = ModelBiped.ArmPose.ITEM;
+						break;
 					case BOW:
 						armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 						dontRenderOffItem = true;
@@ -109,6 +113,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				//if(itemOffHand.getItem() instanceof ItemShield) {
 					EnumAction action = itemOffHand.getItemUseAction();
 					switch (action) {
+					case DRINK:
+					case EAT:
+						armPoseOff = ModelBiped.ArmPose.ITEM;
+						break;
 					case BOW:
 						armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 						dontRenderMainItem = true;
