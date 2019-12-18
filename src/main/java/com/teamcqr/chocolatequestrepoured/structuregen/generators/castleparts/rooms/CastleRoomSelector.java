@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ObjectUtils;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -493,11 +494,11 @@ public class CastleRoomSelector
                 {
                     CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(getRoomStart(bottomOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
-                    grid.initPathingForSingleCell(bottomOfBossStairs);
+                    //grid.initPathingForSingleCell(bottomOfBossStairs);
 
                     CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
-                    grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
+                    //grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
 
                     CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(getRoomStart(topOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(topOfBossStairs).setRoom(landingMain);
@@ -687,9 +688,8 @@ public class CastleRoomSelector
 
     private void placeOuterDoors()
     {
-        boolean firstRoomReachable = false;
-
-        for (int floor = 0; floor < usedFloors; floor += floorsPerLayer)
+        //Start at first floor since ground floor gets the grand entrance
+        for (int floor = 1; floor < usedFloors; floor += floorsPerLayer)
         {
             HashSet<EnumFacing> doorDirections = new HashSet<>(); //Sides of this floor that already have exits
 
@@ -717,12 +717,6 @@ public class CastleRoomSelector
 
                         if (buildExit)
                         {
-                            //At least one room needs to be reachable on the ground floor to start the pathing
-                            if(!firstRoomReachable && floor == 0)
-                            {
-                                firstRoomReachable = true;
-                                cell.setReachable();
-                            }
                             doorDirections.add(side);
                             addDoorToRoomCentered(cell, side);
                             break;
@@ -735,7 +729,7 @@ public class CastleRoomSelector
 
     private void addHallways()
     {
-        for (int floor = 0; floor < usedFloors; floor++)
+        for (int floor = 0; floor < (grid.getBossArea().start.getFloor() - 1); floor++)
         {
             List<RoomGrid.Area2D> largestAreas = grid.getAllGridAreasWhere(floor, RoomGridCell::isValidHallwayRoom, 2, 2);
             if (!largestAreas.isEmpty())
@@ -746,19 +740,57 @@ public class CastleRoomSelector
                 if (horizontal)
                 {
                     int zIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartZ(), hallwayArea.getEndZ());
-                    for (int xIndex = hallwayArea.getStartX(); xIndex <= hallwayArea.getEndX(); xIndex++)
+
+                    RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, hallwayArea.getStartX(), zIndex);
+                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
+
+                    for (RoomGridCell hallwayCell : hallwayCells)
                     {
-                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
-                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.HORIZONTAL));
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(hallwayCell.getGridPosition()), roomSize, floorHeight, CastleRoomHallway.Alignment.HORIZONTAL));
+                    }
+
+                    if (floor == 0)
+                    {
+                        if (random.nextBoolean())
+                        {
+                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.WEST);
+                            hallwayCells.get(0).getRoom().addGrandEntrance(EnumFacing.WEST);
+                            hallwayCells.get(0).setReachable();
+                        }
+                        else
+                        {
+                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.EAST);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.EAST);
+                            hallwayCells.get(hallwayCells.size() - 1).setReachable();
+                        }
                     }
                 }
                 else
                 {
                     int xIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartX(), hallwayArea.getEndX());
-                    for (int zIndex = hallwayArea.getStartZ(); zIndex <= hallwayArea.getEndZ(); zIndex++)
+
+                    RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, xIndex, hallwayArea.getStartZ());
+                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
+
+                    for (RoomGridCell hallwayCell : hallwayCells)
                     {
-                        RoomGridCell hallwayCell = grid.getCellAt(floor, xIndex, zIndex);
-                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(floor, xIndex, zIndex), roomSize, floorHeight, CastleRoomHallway.Alignment.VERTICAL));
+                        hallwayCell.setRoom(new CastleRoomHallway(getRoomStart(hallwayCell.getGridPosition()), roomSize, floorHeight, CastleRoomHallway.Alignment.VERTICAL));
+                    }
+
+                    if (floor == 0)
+                    {
+                        if (random.nextBoolean())
+                        {
+                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.NORTH);
+                            hallwayCells.get(0).getRoom().addGrandEntrance(EnumFacing.NORTH);
+                            hallwayCells.get(0).setReachable();
+                        }
+                        else
+                        {
+                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.SOUTH);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.SOUTH);
+                            hallwayCells.get(hallwayCells.size() - 1).setReachable();
+                        }
                     }
                 }
             }
