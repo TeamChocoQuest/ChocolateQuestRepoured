@@ -247,6 +247,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.healthScale = compound.getDouble("healthScale");
+		if(this.healthScale < 0D) {
+			this.healthScale = 1D;
+		}
 	}
 
 	@Override
