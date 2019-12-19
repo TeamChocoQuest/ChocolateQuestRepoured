@@ -9,7 +9,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import org.apache.commons.lang3.ObjectUtils;
+import scala.Int;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -17,24 +19,6 @@ import java.lang.Double;
 
 public class CastleRoomSelector
 {
-    private class RoofArea
-    {
-        int gridStartX;
-        int lengthX;
-        int gridStartZ;
-        int lengthZ;
-        int floor;
-
-        private RoofArea(int gridStartX, int lengthX, int gridStartZ, int lengthZ, int floor)
-        {
-            this.gridStartX = gridStartX;
-            this.lengthX = lengthX;
-            this.gridStartZ = gridStartZ;
-            this.lengthZ = lengthZ;
-            this.floor = floor;
-        }
-    }
-
     public class SupportArea
     {
         private BlockPos nwCorner;
@@ -759,7 +743,7 @@ public class CastleRoomSelector
                         }
                         else
                         {
-                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.EAST);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.EAST);
                             hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.EAST);
                             hallwayCells.get(hallwayCells.size() - 1).setReachable();
                         }
@@ -770,7 +754,7 @@ public class CastleRoomSelector
                     int xIndex = DungeonGenUtils.randomBetweenGaussian(random, hallwayArea.getStartX(), hallwayArea.getEndX());
 
                     RoomGridPosition hallStartGridPos = new RoomGridPosition(floor, xIndex, hallwayArea.getStartZ());
-                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInRow(hallStartGridPos);
+                    ArrayList<RoomGridCell> hallwayCells = grid.getAdjacentSelectedCellsInColumn(hallStartGridPos);
 
                     for (RoomGridCell hallwayCell : hallwayCells)
                     {
@@ -787,7 +771,7 @@ public class CastleRoomSelector
                         }
                         else
                         {
-                            hallwayCells.get(0).getRoom().addOuterWall(EnumFacing.SOUTH);
+                            hallwayCells.get(hallwayCells.size() - 1).getRoom().addOuterWall(EnumFacing.SOUTH);
                             hallwayCells.get(hallwayCells.size() - 1).getRoom().addGrandEntrance(EnumFacing.SOUTH);
                             hallwayCells.get(hallwayCells.size() - 1).setReachable();
                         }
@@ -1126,6 +1110,12 @@ public class CastleRoomSelector
             if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.SOUTH)))
             {
                 cell.getRoom().addInnerWall(EnumFacing.SOUTH);
+
+                RoomGridCell adjacentCell = grid.getAdjacentCell(cell, EnumFacing.SOUTH);
+                if (adjacentCell != null && adjacentCell.isPopulated())
+                {
+                    adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.NORTH);
+                }
             }
         }
 
@@ -1140,6 +1130,12 @@ public class CastleRoomSelector
             if (!cell.isLinkedToCell(grid.getAdjacentCell(cell, EnumFacing.EAST)))
             {
                 cell.getRoom().addInnerWall(EnumFacing.EAST);
+
+                RoomGridCell adjacentCell = grid.getAdjacentCell(cell, EnumFacing.EAST);
+                if (adjacentCell != null && adjacentCell.isPopulated())
+                {
+                    adjacentCell.getRoom().registerAdjacentRoomWall(EnumFacing.WEST);
+                }
             }
         }
 

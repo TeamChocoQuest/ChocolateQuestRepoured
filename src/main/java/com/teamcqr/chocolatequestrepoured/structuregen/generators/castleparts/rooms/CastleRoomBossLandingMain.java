@@ -38,7 +38,7 @@ public class CastleRoomBossLandingMain extends CastleRoom
     public CastleRoomBossLandingMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide)
     {
         super(startPos, sideLength, height);
-        this.roomType = EnumRoomType.STAIRCASE_BOSS;
+        this.roomType = EnumRoomType.LANDING_BOSS;
         this.doorSide = doorSide;
         this.numRotations = getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
         this.defaultCeiling = true;

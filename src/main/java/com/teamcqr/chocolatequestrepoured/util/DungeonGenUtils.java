@@ -227,7 +227,7 @@ public class DungeonGenUtils {
 		}
 		else
 		{
-			double avg = (high - low) / 2d;
+			double avg = low + ((high - low) / 2d);
 			double stdDev = (high - avg) / 3d; //guarantees that MOST (99.7%) results will be between low & high
 			double gaussian = random.nextGaussian();
 			int result = (int)(avg + (gaussian * stdDev) + 0.5); //0.5 is added for rounding to nearest whole number
