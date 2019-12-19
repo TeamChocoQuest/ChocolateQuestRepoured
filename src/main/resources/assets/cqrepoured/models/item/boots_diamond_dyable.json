@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "cqrepoured:items/armor/dyable/diamond/boots_diamond_dyable",
+        "layer1": "cqrepoured:items/armor/dyable/diamond/boots_diamond_dyable_overlay"
+    }
+}

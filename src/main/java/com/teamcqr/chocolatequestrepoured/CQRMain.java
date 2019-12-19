@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.crafting.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -14,7 +15,6 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
-import com.teamcqr.chocolatequestrepoured.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;

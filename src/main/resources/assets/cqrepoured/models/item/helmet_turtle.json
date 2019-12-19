@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/helmet_turtle"
+        "layer0": "cqrepoured:items/armor/turtle/helmet_turtle"
     }
 }

@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/boots_spider"
+        "layer0": "cqrepoured:items/armor/spider/boots_spider"
     }
 }
