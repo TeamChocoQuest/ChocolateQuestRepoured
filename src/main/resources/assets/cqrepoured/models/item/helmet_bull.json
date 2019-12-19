@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/helmet_bull"
+        "layer0": "cqrepoured:items/armor/bull/helmet_bull"
     }
 }
