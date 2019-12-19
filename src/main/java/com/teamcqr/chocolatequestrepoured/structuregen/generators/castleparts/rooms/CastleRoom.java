@@ -42,7 +42,8 @@ public abstract class CastleRoom
     protected boolean defaultFloor = false;
     protected Random random = new Random();
 
-    protected RoomWalls walls;
+    protected RoomWalls walls; //the walls of this room
+    protected HashSet<EnumFacing> adjacentWalls; //track which adjacent rooms have walls
     protected HashSet<BlockPos> decoMap;
     protected HashSet<BlockPos> decoArea;
 
@@ -57,6 +58,7 @@ public abstract class CastleRoom
         this.buildLengthZ = this.sideLength;
         this.height = height;
         this.walls = new RoomWalls();
+        this.adjacentWalls = new HashSet<>();
         this.decoMap = new HashSet<>();
         this.decoArea = new HashSet<>();
     }
@@ -227,6 +229,8 @@ public abstract class CastleRoom
 
     public boolean hasWallOnSide(EnumFacing side) { return walls.hasWallOnSide(side); }
 
+    protected boolean adjacentRoomHasWall(EnumFacing side) {return adjacentWalls.contains(side); }
+
     public boolean hasDoorOnSide(EnumFacing side)
     {
         return walls.hasDoorOnSide(side);
@@ -283,6 +287,11 @@ public abstract class CastleRoom
     public void registerAdjacentRoomDoor(EnumFacing side, DoorPlacement door)
     {
         walls.registerAdjacentDoor(side, door);
+    }
+
+    public void registerAdjacentRoomWall(EnumFacing side)
+    {
+        this.adjacentWalls.add(side);
     }
 
     protected void setupDecoration(World world)

@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import scala.Int;
 
 /**
  * Copyright (c) 25.05.2019
@@ -72,10 +73,29 @@ public class CastleDungeon extends DungeonBase {
 		this.generator = new CastleGenerator(this);
 
 		//Generating it...
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		int y = getHighestAreaY(chunk, x, z);
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		this.generator.generate(world, chunk, x, y, z);
 	}
+
+	public int getHighestAreaY(Chunk chunk, int nwCornerX, int nwCornerZ)
+	{
+		int highestY = Int.MinValue();
+		for (int x = 0; x < maxSize; x++)
+		{
+			for (int z = 0; z < maxSize; z++)
+			{
+				int y = DungeonGenUtils.getHighestYAt(chunk, (nwCornerX + x), (nwCornerZ + z), false);
+				if (y > highestY)
+				{
+					highestY = y;
+				}
+			}
+		}
+
+		return highestY;
+	}
+
 
 	public Block getWallBlock() {return this.wallBlock;}
 	public Block getFloorBlock() {return this.floorBlock;}
