@@ -1,4 +1,4 @@
-package crafting;
+package com.teamcqr.chocolatequestrepoured.crafting;
 
 import java.util.List;
 

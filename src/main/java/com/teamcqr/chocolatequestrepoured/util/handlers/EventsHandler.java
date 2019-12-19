@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -12,7 +13,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.data.CQRDataFileManager;
 
-import crafting.RecipesArmorDyes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

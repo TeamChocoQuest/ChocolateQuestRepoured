@@ -1,4 +1,4 @@
-package crafting.smelting;
+package com.teamcqr.chocolatequestrepoured.crafting.smelting;
 
 import java.util.ArrayList;
 import java.util.Iterator;
