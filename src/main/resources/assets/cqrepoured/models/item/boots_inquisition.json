@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/boots_inquisition"
+        "layer0": "cqrepoured:items/armor/inquisition/boots_inquisition"
     }
 }

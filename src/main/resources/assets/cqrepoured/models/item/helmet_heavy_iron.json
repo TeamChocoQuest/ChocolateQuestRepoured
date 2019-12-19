@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/helmet_heavy_iron"
+        "layer0": "cqrepoured:items/armor/heavy/iron/helmet_heavy_iron"
     }
 }
