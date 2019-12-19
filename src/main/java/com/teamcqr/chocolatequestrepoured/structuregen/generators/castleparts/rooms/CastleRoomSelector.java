@@ -172,7 +172,7 @@ public class CastleRoomSelector
             int firstFloorInLayer = layer * floorsPerLayer;
 
             ArrayList<RoomGrid.Area2D> buildableAreas = grid.getAllGridAreasWhere(firstFloorInLayer, RoomGridCell::isBuildable, 2, 2);
-            System.out.println(buildableAreas.toString());
+            System.out.println("Buildable areas: " + buildableAreas.toString());
 
             if (!buildableAreas.isEmpty())
             {
@@ -186,6 +186,7 @@ public class CastleRoomSelector
                             if (buildArea.dimensionsAre(minRoomsForBoss, minRoomsForBoss + 1))
                             {
                                 //if largest area is exact size for boss room, have to make boss area here
+                                System.out.println("At minimum boss area so setting boss area to: " + buildArea.toString());
                                 grid.setBossArea(buildArea);
                                 lastFloor = true;
                             }
@@ -194,13 +195,13 @@ public class CastleRoomSelector
                                 //area is at least big enough for boss area
                                 if (layer >= 3)
                                 {
-                                    RoomGrid.Area2D bossArea = buildArea.getRandomSubArea(random, minRoomsForBoss, minRoomsForBoss + 1, true);
+                                    RoomGrid.Area2D bossArea = buildArea.getExactSubArea(random, minRoomsForBoss, minRoomsForBoss + 1);
                                     //grid.selectBlockOfCellsForBuilding(bossArea, floorsPerLayer);
-                                    System.out.println("At minimum boss area so setting boss area to: " + bossArea.toString());
+                                    System.out.println("At high enough layer so setting boss area to: " + bossArea.toString());
                                     grid.setBossArea(bossArea);
                                     lastFloor = true;
 
-                                    //TODO: Make use of any remaining space
+                                    //TODO: Make use of any remaining space by subtracting boss area from buildarea
                                 }
                                 else
                                 {
