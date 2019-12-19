@@ -179,7 +179,7 @@ public class EventsHandler {
 	
 	@SubscribeEvent
 	public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
-		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(Reference.MODID, "dyable_armor"));
+		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(Reference.MODID, "armor_coloring"));
 	}
 
 	@SuppressWarnings("deprecation")
