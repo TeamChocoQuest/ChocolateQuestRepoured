@@ -72,7 +72,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		if(mobOverride != null) {
 			compound.setString("overrideMob", mobOverride);
 		}
-		if(!(dungeonChunkX == 0 && dungeonChunkZ == 0)) {
+		if(dungeonChunkX != 0 && dungeonChunkZ != 0) {
 			compound.setInteger("dungeonChunkX", dungeonChunkX);
 			compound.setInteger("dungeonChunkZ", dungeonChunkZ);
 		}
@@ -118,7 +118,8 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
 							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
 								if(newMob.equals(EDungeonMobType.DEFAULT)) {
-									nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(this.pos.getX(), this.pos.getZ()).getEntityResourceLocation().toString());
+									//TODO: Fix this not working sometimes...
+									nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(/*this.pos.getX()*/this.dungeonChunkX *16, /*this.pos.getZ()*/ this.dungeonChunkZ *16).getEntityResourceLocation().toString());
 								} else {
 									nbt.setString("id", newMob.getEntityResourceLocation().toString());
 								}
