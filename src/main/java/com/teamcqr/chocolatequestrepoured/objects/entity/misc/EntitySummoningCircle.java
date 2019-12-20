@@ -70,6 +70,7 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
+		this.summoner = summoner;
 		this.noClip = true;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
 		setHealth(1F);
@@ -92,7 +93,9 @@ public class EntitySummoningCircle extends EntityLivingBase {
 
 				world.spawnEntity(summon);
 				if(summoner != null && !summoner.getSummoner().isDead) {
-					summoner.addSummonedMinion(summon);
+					//summoner.addSummonedMinion(summon);
+					summoner.setSummonedEntityFaction(summon);
+					summoner.addSummonedEntityToList(summon);
 				}
 			} catch(NullPointerException ex) {
 				flag = false;

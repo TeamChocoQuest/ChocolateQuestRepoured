@@ -15,11 +15,12 @@ public interface ISummoner {
 	
 	public EntityLivingBase getSummoner();
 	
-	default void addSummonedMinion(Entity summoned) {
+	default void setSummonedEntityFaction(Entity summoned) {
 		if(summoned instanceof AbstractEntityCQR) {
 			((AbstractEntityCQR)summoned).setLeader(getSummoner());
 		}
-		getSummonedEntities().add(summoned);
 	}
+	
+	public void addSummonedEntityToList(Entity summoned);
 
 }

@@ -75,7 +75,6 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	
 	@Override
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
 		//Kill minions
 		for(Entity e : summonedMinions) {
 			if(e != null && !e.isDead) {
@@ -83,6 +82,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 			}
 		}
 		summonedMinions.clear();
+		
+		super.onDeath(cause);
 	}
 
 	@Override
@@ -113,6 +114,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	@Override
 	public EntityLivingBase getSummoner() {
 		return this;
+	}
+
+	@Override
+	public void addSummonedEntityToList(Entity summoned) {
+		System.out.println("Added minion to list!");
+		this.summonedMinions.add(summoned);
 	}
 
 }
