@@ -89,6 +89,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
+	protected EntityLivingBase leader = null;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte) 0;
@@ -443,8 +444,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	// Chocolate Quest Repoured
 	public EntityLivingBase getLeader() {
 		if (this.hasLeader()) {
+			if(this.leader != null) {
+				return this.leader;
+			}
 			for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
-				if (this.leaderUUID.equals(entity.getPersistentID())) {
+				if (entity != null && !entity.isDead && this.leaderUUID.equals(entity.getPersistentID())) {
+					this.leader = entity;
 					return entity;
 				}
 			}
@@ -453,11 +458,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setLeader(EntityLivingBase leader) {
+		this.leader = leader;
 		this.leaderUUID = leader.getPersistentID();
 	}
 
 	public boolean hasLeader() {
-		return this.leaderUUID != null && this.getLeader().isEntityAlive();
+		return this.leaderUUID != null /*&& this.getLeader().isEntityAlive()*/;
 	}
 
 	public BlockPos getHomePositionCQR() {
