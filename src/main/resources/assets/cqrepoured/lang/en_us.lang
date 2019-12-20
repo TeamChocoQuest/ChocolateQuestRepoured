@@ -269,6 +269,9 @@ item.great_sword_bull.name=Bull Greatsword
 item.great_sword_diamond.name=Diamond Greatsword
 item.great_sword_iron.name=Iron Greatsword
 
+//Spears
+item.spear_diamond.name=Diamond Spear
+
 //Staves
 item.staff.name=Staff
 item.staff_fire.name=Fire Staff
