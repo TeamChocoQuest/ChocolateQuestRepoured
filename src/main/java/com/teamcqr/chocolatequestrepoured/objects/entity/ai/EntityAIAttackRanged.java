@@ -29,7 +29,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 
 			if (this.entity.isEntityInFieldOfView(attackTarget)) {
 				this.entity.setArmPose(ECQREntityArmPoses.PULLING_BOW);
-				if (this.entity.getDistanced(attackTarget) > 28.0D) {
+				if (this.entity.getDistance(attackTarget) > 28.0D) {
 					this.updatePath(attackTarget);
 				} else if (this.entity.hasPath()) {
 					this.entity.getNavigator().clearPath();
@@ -48,7 +48,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 
 	@Override
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
-		if (this.attackTick <= 0 && this.entity.getDistanced(attackTarget) <= 32.0D && this.entity.getHeldItemMainhand().getItem() instanceof ItemBow) {
+		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 32.0D && this.entity.getHeldItemMainhand().getItem() instanceof ItemBow) {
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
 				this.entity.resetActiveHand();
