@@ -126,7 +126,6 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
-		System.out.println("Added minion to list!");
 		this.summonedMinions.add(summoned);
 	}
 
