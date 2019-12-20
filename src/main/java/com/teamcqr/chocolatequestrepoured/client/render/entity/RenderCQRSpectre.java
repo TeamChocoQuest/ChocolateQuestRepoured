@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 
 import net.minecraft.client.model.ModelBase;
@@ -8,6 +9,10 @@ import net.minecraft.client.renderer.entity.RenderManager;
 
 public class RenderCQRSpectre extends RenderCQREntity<EntityCQRSpectre> {
 
+	public RenderCQRSpectre(RenderManager rendermanagerIn) {
+		this(rendermanagerIn, new ModelCQRSpectre(0,  false), 0.5F, "entity_mob_cqrspectre", 1.0D, 1.0D);
+	}
+	
 	public RenderCQRSpectre(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
 			double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize, entityName, widthScale, heightScale);
