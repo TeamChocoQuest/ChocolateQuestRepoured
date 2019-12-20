@@ -7,6 +7,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.SoundEvent;
 
+/*
+ * 20.12.2019
+ * Made by: DerToaster98
+ * Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
+ */
 public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 
 	public AbstractEntityAIUseSpell(AbstractEntityCQR entity) {
