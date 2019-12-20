@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.model.ModelBiped;
@@ -93,7 +92,10 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+			/*if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+				renderSpellAnimation(entityIn, ageInTicks);
+			}*/
+			if(cqrEnt.isSpellcasting()) {
 				renderSpellAnimation(entityIn, ageInTicks);
 			}
 			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
