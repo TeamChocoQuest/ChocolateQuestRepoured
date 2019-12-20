@@ -30,7 +30,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.UNDEAD;
 	}
 	

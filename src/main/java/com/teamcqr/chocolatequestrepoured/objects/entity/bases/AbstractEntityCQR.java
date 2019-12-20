@@ -89,12 +89,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
+	protected EntityLivingBase leader = null;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte) 0;
 	protected boolean sittingState = false;
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
+	
+	private EFaction faction;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -247,6 +250,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.healthScale = compound.getDouble("healthScale");
+		if(this.healthScale < 0D) {
+			this.healthScale = 1D;
+		}
 	}
 
 	@Override
@@ -437,10 +443,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Chocolate Quest Repoured
 	public EntityLivingBase getLeader() {
-		if (this.hasLeader()) {
-			for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
-				if (this.leaderUUID.equals(entity.getPersistentID())) {
-					return entity;
+		if (this.hasLeader() && world != null && !world.isRemote) {
+			if(this.leader != null) {
+				return this.leader;
+			}
+			if(!world.loadedEntityList.isEmpty()) {
+				for (Entity entity : this.world.loadedEntityList) {
+					if(entity instanceof EntityLivingBase) {
+						if (entity != null && !entity.isDead && this.leaderUUID.equals(entity.getPersistentID())) {
+							this.leader = (EntityLivingBase) entity;
+							return (EntityLivingBase) entity;
+						}
+					}
 				}
 			}
 		}
@@ -448,11 +462,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setLeader(EntityLivingBase leader) {
+		this.leader = leader;
 		this.leaderUUID = leader.getPersistentID();
 	}
 
 	public boolean hasLeader() {
-		return this.leaderUUID != null && this.getLeader().isEntityAlive();
+		return this.leaderUUID != null /*&& this.getLeader().isEntityAlive()*/;
 	}
 
 	public BlockPos getHomePositionCQR() {
@@ -588,7 +603,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.holdingPotion;
 	}
 
-	public abstract EFaction getFaction();
+	public abstract EFaction getDefaultFaction();
+	
+	public EFaction getFaction() {
+		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : getDefaultFaction();
+	}
+	
+	public void setFaction(EFaction newFac) {
+		this.faction = newFac;
+	}
 
 	public boolean hasFaction() {
 		return this.getFaction() != null;

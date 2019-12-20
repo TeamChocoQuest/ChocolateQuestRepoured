@@ -46,7 +46,7 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.UNDEAD;
 	}
 	

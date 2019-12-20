@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/boots_heavy_diamond"
+        "layer0": "cqrepoured:items/armor/heavy/diamond/boots_heavy_diamond"
     }
 }

@@ -64,7 +64,7 @@ public abstract class CastleRoomGeneric extends CastleRoom
     {
         for (EnumFacing side : EnumFacing.HORIZONTALS)
         {
-            if (hasWallOnSide(side))
+            if (hasWallOnSide(side) || adjacentRoomHasWall(side))
             {
                 ArrayList<BlockPos> edge = getDecorationEdge(side);
                 for (BlockPos pos : edge)

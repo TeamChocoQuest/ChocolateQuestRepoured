@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/chestplate_bull"
+        "layer0": "cqrepoured:items/armor/bull/chestplate_bull"
     }
 }

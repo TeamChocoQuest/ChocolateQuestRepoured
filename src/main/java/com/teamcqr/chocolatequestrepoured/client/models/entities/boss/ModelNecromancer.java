@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
 /**
  * Necromancer - Arlo The Epic
@@ -80,22 +79,17 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.bipedBody.addChild(this.Buckle);
         this.Hood_Top.addChild(this.Hood_Front);
         this.bipedBody.addChild(this.Leg_Cape);
-        this.bipedBody.addChild(this.bipedHead);
-        this.bipedBody.addChild(this.bipedRightArm);
+      //  this.bipedBody.addChild(this.bipedHead);
+      //  this.bipedBody.addChild(this.bipedRightArm);
         this.bipedHead.addChild(this.Eyes);
         this.bipedHead.addChild(this.Hood_Rear);
         this.Hood_Rear.addChild(this.Hood_Top);
-        this.bipedBody.addChild(this.bipedLeftArm);
-        this.bipedBody.addChild(this.bipedRightLeg);
+       // this.bipedBody.addChild(this.bipedLeftArm);
+        //this.bipedBody.addChild(this.bipedRightLeg);
         this.Hood_Top.addChild(this.Hood_Right);
         this.Hood_Top.addChild(this.Hood_Left);
-        this.bipedBody.addChild(this.bipedLeftLeg);
+        //this.bipedBody.addChild(this.bipedLeftLeg);
         this.bipedHead.addChild(this.Nose);
-    }
-
-    @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.bipedBody.render(f5);
     }
 
     /**

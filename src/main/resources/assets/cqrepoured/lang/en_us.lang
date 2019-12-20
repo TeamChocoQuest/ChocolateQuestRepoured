@@ -349,6 +349,18 @@ item.chestplate_heavy_iron.name=Heavy Iron Chestplate
 item.leggings_heavy_iron.name=Heavy Iron Leggings
 item.boots_heavy_iron.name=Heavy Iron Boots
 
+//Dyable Iron Armor
+item.helmet_iron_dyable.name=Dyable Iron Helmet
+item.chestplate_iron_dyable.name=Dyable Iron Chestplate
+item.leggings_iron_dyable.name=Dyable Iron Leggings
+item.boots_iron_dyable.name=Dyable Iron Boots
+
+//Dyable Diamond Armor
+item.helmet_diamond_dyable.name=Dyable Diamond Helmet
+item.chestplate_diamond_dyable.name=Dyable Diamond Chestplate
+item.leggings_diamond_dyable.name=Dyable Diamond Leggings
+item.boots_diamond_dyable.name=Dyable Diamond Boots
+
 //Blocks
 tile.exporter.name=Exporter Block
 tile.spawner.name=Spawner
@@ -544,3 +556,9 @@ entity.giant_silverfish2.name=Giant Swamp Silverfish
 // Bosses
 entity.nether_dragon.name=Nether Dragon
 entity.giant_tortoise.name=Giant Tortoise
+entity.lich.name=Lich
+entity.necromancer.name=Necromancer
+entity.boarmage.name=Boarmage
+
+//Misc Entities
+entity.summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram

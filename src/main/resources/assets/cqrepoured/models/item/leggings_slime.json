@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "cqrepoured:items/leggings_slime"
+        "layer0": "cqrepoured:items/armor/slime/leggings_slime"
     }
 }

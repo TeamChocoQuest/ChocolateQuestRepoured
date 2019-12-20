@@ -26,7 +26,7 @@ public class EntityCQROrc extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.GOBLINS;
 	}
 	
