@@ -34,7 +34,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(attackTarget)) {
 			return false;
 		}
-		if (this.entity.getDistanced(attackTarget) > 64.0D) {
+		if (this.entity.getDistance(attackTarget) > 64.0D) {
 			return false;
 		}
 		if (this.entity.getEntitySenses().canSee(attackTarget) && (this.entity.isEntityInFieldOfView(attackTarget) || this.visionTick > 0)) {
