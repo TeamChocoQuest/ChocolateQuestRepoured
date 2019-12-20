@@ -606,7 +606,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public abstract EFaction getDefaultFaction();
 	
 	public EFaction getFaction() {
-		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : getDefaultFaction();
+		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (faction != null ? faction : getDefaultFaction());
 	}
 	
 	public void setFaction(EFaction newFac) {
