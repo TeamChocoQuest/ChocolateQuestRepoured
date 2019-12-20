@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -90,7 +91,10 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE, (ISummoner) this.entity);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
-					circle.setPosition(p.getX(), p.getY() +0.05, p.getZ());
+					if(entity.world.getBlockState(p).getBlock() != Blocks.AIR) {
+						p = p.add(0,1,0);
+					}
+					circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
 					
 					entity.world.spawnEntity(circle);
 					summoner.addSummonedEntityToList(circle);
