@@ -6,6 +6,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -27,6 +28,9 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 	private List<Entity> summonedMinions = new ArrayList<>();
 	private boolean animationRunning;
 	
+	/*
+	 * WARNING: entity has to implement ISummoner for this to work!
+	 */
 	public BossAISummonZombie(AbstractEntityCQR entity) {
 		super(entity);
 	}
@@ -40,7 +44,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 		if(this.animationRunning) {
 			currentAnimationTime++;
 			if(currentAnimationTime >= ANIMATION_TIME) {
-				this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
+				this.entity.setArmPose(ECQREntityArmPoses.NONE);
 				this.currentAnimationTime = 0;
 				this.animationRunning = false;
 			} else {
@@ -48,7 +52,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 				this.entity.setArmPose(ECQREntityArmPoses.SPELLCASTING);
 			}
 		} else {
-			this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
+			this.entity.setArmPose(ECQREntityArmPoses.NONE);
 		}
 		currentCooldownValue--;
 		//System.out.println("Current value: " + currentCooldownValue);
@@ -81,6 +85,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 			return;
 		}
 		currentCooldownValue = COOLDOWN;
+		this.entity.setArmPose(ECQREntityArmPoses.NONE);
 		Vec3d vector = entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector);
 		int minionCount = maxMinions - getAliveMinionCount();
@@ -95,7 +100,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 				if(entity.getNavigator().getPathToPos(p) != null) {
 					//System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = new ResourceLocation(Reference.MODID, "zombie");
-					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE);
+					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE, (ISummoner) this.entity);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
 					circle.setPosition(p.getX(), p.getY() +0.05, p.getZ());
@@ -122,7 +127,7 @@ public class BossAISummonZombie extends AbstractCQREntityAI {
 		this.summonedMinions.clear();
 		//this.currentAnimationTime = ANIMATION_TIME;
 		this.currentCooldownValue = COOLDOWN;
-		this.entity.setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
+		this.entity.setArmPose(ECQREntityArmPoses.NONE);
 		//this.animationRunning = false;
 	}
 
