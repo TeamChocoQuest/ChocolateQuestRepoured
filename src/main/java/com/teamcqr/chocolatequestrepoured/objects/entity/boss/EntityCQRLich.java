@@ -78,7 +78,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		//Kill minions
 		for(Entity e : summonedMinions) {
 			if(e != null && !e.isDead) {
-				e.setDead();
+				if(e instanceof EntityLivingBase) {
+					((EntityLivingBase)e).onDeath(cause);
+				} else {
+					e.setDead();
+				}
+				//TODO: Play sound and spawn particles
 			}
 		}
 		summonedMinions.clear();
