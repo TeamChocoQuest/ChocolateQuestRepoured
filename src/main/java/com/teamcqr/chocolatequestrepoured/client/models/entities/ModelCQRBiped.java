@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.model.ModelBiped;
@@ -125,6 +126,13 @@ public class ModelCQRBiped extends ModelBiped {
 		double dx = 0.7D;
 		double dy = 0.5D;
 		double dz = 0.2D;
+		
+		if(!((AbstractEntityCQR)entityIn).getActiveSpell().equals(ESpellType.NONE)) {
+			ESpellType spell = ((AbstractEntityCQR)entityIn).getActiveSpell();
+			dx = spell.getDX();
+			dy = spell.getDY();
+			dz = spell.getDZ();
+		}
 		
 		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
 				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;

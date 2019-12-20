@@ -876,6 +876,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(SPELLTYPE, type.getID());
 	}
 	
+	public ESpellType getActiveSpell() {
+		return ESpellType.values()[this.dataManager.get(SPELLTYPE)];
+	}
+	
 	public void setSpellCasting(boolean value) {
 		this.dataManager.set(SPELLCASTING, value);
 	}
