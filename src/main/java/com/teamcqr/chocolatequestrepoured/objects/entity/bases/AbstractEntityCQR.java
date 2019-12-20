@@ -443,14 +443,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Chocolate Quest Repoured
 	public EntityLivingBase getLeader() {
-		if (this.hasLeader()) {
+		if (this.hasLeader() && world != null && !world.isRemote) {
 			if(this.leader != null) {
 				return this.leader;
 			}
-			for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
-				if (entity != null && !entity.isDead && this.leaderUUID.equals(entity.getPersistentID())) {
-					this.leader = entity;
-					return entity;
+			if(!world.loadedEntityList.isEmpty()) {
+				for (Entity entity : this.world.loadedEntityList) {
+					if(entity instanceof EntityLivingBase) {
+						if (entity != null && !entity.isDead && this.leaderUUID.equals(entity.getPersistentID())) {
+							this.leader = (EntityLivingBase) entity;
+							return (EntityLivingBase) entity;
+						}
+					}
 				}
 			}
 		}
