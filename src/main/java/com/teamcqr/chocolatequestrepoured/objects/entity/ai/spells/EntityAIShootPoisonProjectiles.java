@@ -9,6 +9,11 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
+/*
+ * 20.12.2019
+ * Author: DerToaster98
+ * Comment: A simple AI that launches a bunch of poison balls at the enemy
+ */
 public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
 	protected static final int MAX_PROJECTILES = 10;
