@@ -27,11 +27,13 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	public boolean shouldExecute() {
 		if (this.entity.getAttackTarget() == null) {
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			return false;
 		} else if (this.entity.isSpellcasting()) {
 			return false;
 		} else {
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			return this.entity.ticksExisted >= this.spellCooldown;
 		}
 	}
@@ -70,6 +72,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 		if (this.spellWarmup == 0) {
 			this.castSpell();
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);
 		}
 	}
