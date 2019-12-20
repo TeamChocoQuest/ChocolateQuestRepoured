@@ -42,7 +42,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.DWARVES_AND_GOLEMS;
 	}
 	

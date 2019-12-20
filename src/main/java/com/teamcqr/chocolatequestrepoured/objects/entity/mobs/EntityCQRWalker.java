@@ -29,7 +29,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.WALKERS;
 	}
 

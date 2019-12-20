@@ -27,7 +27,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return null;
 	}
 
