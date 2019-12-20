@@ -16,6 +16,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+/*
+ * 20.12.2019
+ * Made by: DerToaster98
+ * Comment: Simple AI to summon some minions
+ */
 public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 
 	protected ISummoner summoner = null;
@@ -73,7 +78,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		}
 		if(minionCount > 0 ) {
 			double angle = 180D / (double)minionCount;
-			vector = VectorUtil.rotateVectorAroundY(vector, 270);
+			vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
 			for(int i = 0; i < minionCount; i++) {
 				spawnPositions[i] = entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle*i)));
@@ -85,7 +90,10 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE, (ISummoner) this.entity);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
-					circle.setPosition(p.getX(), p.getY() +0.05, p.getZ());
+					if(entity.world.getBlockState(p).isFullBlock()) {
+						p = p.add(0,1,0);
+					}
+					circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
 					
 					entity.world.spawnEntity(circle);
 					summoner.addSummonedEntityToList(circle);
