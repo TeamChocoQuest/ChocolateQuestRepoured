@@ -443,31 +443,40 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Chocolate Quest Repoured
 	public EntityLivingBase getLeader() {
-		if (this.hasLeader() && world != null && !world.isRemote) {
-			if(this.leader != null) {
-				return this.leader;
-			}
-			if(!world.loadedEntityList.isEmpty()) {
-				for (Entity entity : this.world.loadedEntityList) {
-					if(entity instanceof EntityLivingBase) {
-						if (entity != null && !entity.isDead && this.leaderUUID.equals(entity.getPersistentID())) {
-							this.leader = (EntityLivingBase) entity;
-							return (EntityLivingBase) entity;
-						}
+		if (this.leaderUUID != null) {
+			if (this.leader != null) {
+				if (this.leader.isEntityAlive()) {
+					return this.leader;
+				}
+				this.leader = null;
+				this.leaderUUID = null;
+			} else {
+				for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
+					if (this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+						this.leader = entity;
+						return entity;
 					}
 				}
+			}
+		} else {
+			if (this.leader != null) {
+				this.leader = null;
 			}
 		}
 		return null;
 	}
 
 	public void setLeader(EntityLivingBase leader) {
-		this.leader = leader;
-		this.leaderUUID = leader.getPersistentID();
+		if (leader != null && leader.isEntityAlive()) {
+			if (this.dimension == leader.dimension) {
+				this.leader = leader;
+			}
+			this.leaderUUID = leader.getPersistentID();
+		}
 	}
 
 	public boolean hasLeader() {
-		return this.leaderUUID != null /*&& this.getLeader().isEntityAlive()*/;
+		return this.getLeader() != null;
 	}
 
 	public BlockPos getHomePositionCQR() {
@@ -828,13 +837,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public ItemStack getHeldItemPotion() {
 		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
-	}
-
-	public double getDistanced(Entity entity) {
-		double x = this.posX - entity.posX;
-		double y = this.posY - entity.posY;
-		double z = this.posZ - entity.posZ;
-		return Math.sqrt(x * x + y * y + z * z);
 	}
 
 }
