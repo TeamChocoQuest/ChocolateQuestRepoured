@@ -95,6 +95,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected boolean sittingState = false;
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
+	
+	private EFaction faction;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -591,7 +593,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.holdingPotion;
 	}
 
-	public abstract EFaction getFaction();
+	public abstract EFaction getDefaultFaction();
+	
+	public EFaction getFaction() {
+		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : getDefaultFaction();
+	}
+	
+	public void setFaction(EFaction newFac) {
+		this.faction = newFac;
+	}
 
 	public boolean hasFaction() {
 		return this.getFaction() != null;
