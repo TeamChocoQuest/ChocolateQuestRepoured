@@ -151,26 +151,62 @@ public class RoomGrid
                     resultX = DungeonGenUtils.randomBetweenGaussian(random, smaller, sizeX - shrink);
                 }
 
-                RoomGridPosition subStart = start;
-                int maxMoveX = sizeX - resultX;
-                int maxMoveZ = sizeZ - resultZ;
-                if (maxMoveX > 0)
-                {
-                    subStart = subStart.move(EnumFacing.EAST, random.nextInt(sizeX - resultX));
-                }
-                if (maxMoveZ > 0)
-                {
-                    subStart = subStart.move(EnumFacing.SOUTH, random.nextInt(sizeZ - resultZ));
-                }
-
-                return new Area2D(subStart, resultX, resultZ);
+                return randomlyPositionSubArea(random, resultX, resultZ);
             }
             else
             {
                 //Impossible to meet dimension constraints so just stay the same
                 return this;
             }
+        }
 
+        public Area2D getExactSubArea(Random random, int minDim1, int minDim2)
+        {
+            //Make sure this area has the space to fit the sub dimensions
+            if (dimensionsAreAtLeast(minDim1, minDim2))
+            {
+                int resultX;
+                int resultZ;
+                boolean xIsLonger;
+
+                //Figure out which dimension is larger (so parameter order doesn't matter)
+                int larger = Math.max(minDim1, minDim2);
+                int smaller = Math.min(minDim1, minDim2);
+
+                //Determine which directions (X and Z) have the room to fit the longer of the two dimensions
+                boolean fitsX = sizeX >= larger;
+                boolean fitsZ = sizeZ >= larger;
+
+                //If either dimension could be the long side, then pick at random, otherwise force long side
+                xIsLonger = (fitsX && fitsZ) ? (random.nextBoolean()) : fitsX;
+
+                resultX = xIsLonger ? larger : smaller;
+                resultZ = xIsLonger ? smaller : larger;
+
+                return randomlyPositionSubArea(random, resultX, resultZ);
+            }
+            else
+            {
+                //Impossible to meet dimension constraints so just stay the same
+                return this;
+            }
+        }
+
+        private Area2D randomlyPositionSubArea(Random random, int resultX, int resultZ)
+        {
+            RoomGridPosition subStart = start;
+            int maxMoveX = sizeX - resultX;
+            int maxMoveZ = sizeZ - resultZ;
+            if (maxMoveX > 0)
+            {
+                subStart = subStart.move(EnumFacing.EAST, random.nextInt(sizeX - resultX));
+            }
+            if (maxMoveZ > 0)
+            {
+                subStart = subStart.move(EnumFacing.SOUTH, random.nextInt(sizeZ - resultZ));
+            }
+
+            return new Area2D(subStart, resultX, resultZ);
         }
 
         @Nullable

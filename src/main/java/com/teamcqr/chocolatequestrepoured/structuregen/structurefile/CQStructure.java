@@ -77,9 +77,10 @@ public class CQStructure {
 	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
 		System.out.println("Dungeon is null: " + (dungeon == null));
 		EDungeonMobType mobType = dungeon.getDungeonMob();
-		if(dungeon.getDungeonMob().equals(EDungeonMobType.DEFAULT)) {
+		//Handled in TileEntitySpawner
+		/*if(dungeon.getDungeonMob().equals(EDungeonMobType.DEFAULT) && (dunX != 0 && dunZ != 0)) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX, dunZ);
-		}
+		}*/
 		this.buildShieldCore = hasShield;
 		//System.out.println(file.getName());
 		if(file.isFile() && file.getName().contains(".nbt")) {

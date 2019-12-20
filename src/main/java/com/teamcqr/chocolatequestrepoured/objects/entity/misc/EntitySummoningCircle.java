@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,6 +28,7 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	protected ResourceLocation entityToSpawn;
 	protected float timeMultiplierForSummon = 1F;
 	protected ECircleTexture texture = ECircleTexture.METEOR;
+	protected ISummoner summoner = null;
 	protected final int BORDER_WHEN_TO_SPAWN_IN_TICKS = 60;
 
 	protected static final DataParameter<Boolean> IS_SPAWNING_PARTICLES = EntityDataManager
@@ -56,17 +59,18 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	}
 
 	public EntitySummoningCircle(World worldIn) {
-		this(worldIn, new ResourceLocation("minecraft", "zombie"), 1F, ECircleTexture.SKELETON);
+		this(worldIn, new ResourceLocation("minecraft", "zombie"), 1F, ECircleTexture.SKELETON, null);
 	}
 
 	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier,
-			ECircleTexture textre) {
+			ECircleTexture textre, ISummoner summoner) {
 		super(worldIn);
 		setSize(2.0F, 0.005F);
 		//System.out.println("Mob: " + entityToSpawn);
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
+		this.summoner = summoner;
 		this.noClip = true;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
 		setHealth(1F);
@@ -88,7 +92,11 @@ public class EntitySummoningCircle extends EntityLivingBase {
 				summon.setPosition(posX, posY + 0.5D, posZ);
 
 				world.spawnEntity(summon);
-
+				if(summoner != null && !summoner.getSummoner().isDead) {
+					//summoner.addSummonedMinion(summon);
+					summoner.setSummonedEntityFaction(summon);
+					summoner.addSummonedEntityToList(summon);
+				}
 			} catch(NullPointerException ex) {
 				flag = false;
 			}

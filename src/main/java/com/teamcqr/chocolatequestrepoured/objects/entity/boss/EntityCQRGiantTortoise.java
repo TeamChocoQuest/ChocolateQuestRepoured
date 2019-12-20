@@ -151,7 +151,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public EFaction getFaction() {
+	public EFaction getDefaultFaction() {
 		return EFaction.BEASTS;
 	}
 

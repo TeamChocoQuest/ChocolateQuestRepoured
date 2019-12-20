@@ -30,7 +30,7 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 		
 		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
 		for (LayerRenderer<?> layer : this.layerRenderers) {
-			if (layer instanceof LayerBipedArmor || layer instanceof LayerHeldItem) {
+			if (layer instanceof LayerBipedArmor /*|| layer instanceof LayerHeldItem*/) {
 				toRemove.add(layer);
 			}
 		}

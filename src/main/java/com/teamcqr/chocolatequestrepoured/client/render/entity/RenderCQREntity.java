@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -20,8 +21,8 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T> {
@@ -83,52 +84,68 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			ModelBiped.ArmPose armPoseMain = ModelBiped.ArmPose.EMPTY;
 			ModelBiped.ArmPose armPoseOff = ModelBiped.ArmPose.EMPTY;
+			
+			boolean dontRenderOffItem = false;
+			boolean dontRenderMainItem = false;
+			
 			// Main arm
-			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0 && itemMainHand.getItem() instanceof ItemShield) {
-				EnumAction action = itemMainHand.getItemUseAction();
-				switch (action) {
-				case BLOCK:
-					armPoseMain = ModelBiped.ArmPose.BLOCK;
-					break;
-				default:
-					armPoseMain = ModelBiped.ArmPose.EMPTY;
-					break;
-
-				}
+			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+					EnumAction action = itemMainHand.getItemUseAction();
+					switch (action) {
+					case DRINK:
+					case EAT:
+						armPoseMain = ModelBiped.ArmPose.ITEM;
+						break;
+					case BOW:
+						armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
+						dontRenderOffItem = true;
+						break;
+					case BLOCK:
+						armPoseMain = ModelBiped.ArmPose.BLOCK;
+						break;
+					default:
+						//armPoseMain = ModelBiped.ArmPose.EMPTY;
+						break;
+					}
 			}
 			// Off arm
-			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0 && itemOffHand.getItem() instanceof ItemShield) {
-				EnumAction action = itemOffHand.getItemUseAction();
-				switch (action) {
-				case BLOCK:
-					armPoseOff = ModelBiped.ArmPose.BLOCK;
-					break;
-				default:
-					armPoseOff = ModelBiped.ArmPose.EMPTY;
-					break;
+			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+				//if(itemOffHand.getItem() instanceof ItemShield) {
+					EnumAction action = itemOffHand.getItemUseAction();
+					switch (action) {
+					case DRINK:
+					case EAT:
+						armPoseOff = ModelBiped.ArmPose.ITEM;
+						break;
+					case BOW:
+						armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
+						dontRenderMainItem = true;
+						break;
+					case BLOCK:
+						armPoseOff = ModelBiped.ArmPose.BLOCK;
+						break;
+					default:
+						break;
 
-				}
+					}
 			}
 			
-
+			if(entity.getPrimaryHand() == EnumHandSide.LEFT) {
+				ArmPose tmp = armPoseMain;
+				armPoseMain = armPoseOff;
+				armPoseOff = tmp;
+				
+				boolean tmp2 = dontRenderMainItem;
+				dontRenderMainItem = dontRenderOffItem;
+				dontRenderOffItem = tmp2;
+			}
 			model.rightArmPose = armPoseMain;
 			model.leftArmPose = armPoseOff;
-			
-			switch(entity.getArmPose()) {
-			case HOLDING_ITEM:
-				break;
-			case PULLING_BOW:
-				break;
-			case SPELLCASTING:
-				renderSpellAnimation(entity, entity.ticksExisted, model);
-				break;
-			case STAFF_L:
-				break;
-			case STAFF_R:
-				break;
-			default:
-				break;
-			
+			if(dontRenderMainItem) {
+				model.rightArmPose = ArmPose.EMPTY;
+			}
+			if(dontRenderOffItem) {
+				model.leftArmPose = ArmPose.EMPTY;
 			}
 			
 		}
@@ -144,32 +161,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		}
 	}
 	
-	protected void renderSpellAnimation(T entityIn, float ageInTicks, ModelBiped model) {
-		/*model.bipedRightArm.rotationPointZ = 0.0F;
-		model.bipedRightArm.rotationPointX = -5.0F;
-		model.bipedLeftArm.rotationPointZ = 0.0F;
-		model.bipedLeftArm.rotationPointX = 5.0F;
-		model.bipedRightArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		model.bipedLeftArm.rotateAngleX = MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		model.bipedRightArm.rotateAngleZ = 2.3561945F;
-		model.bipedLeftArm.rotateAngleZ = -2.3561945F;
-		model.bipedRightArm.rotateAngleY = 0.0F;
-		model.bipedLeftArm.rotateAngleY = 0.0F;
-
-		// Particles
-		double dx = 0.7D;
-		double dy = 0.5D;
-		double dz = 0.2D;
-		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F
-				+ MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		float f1 = MathHelper.cos(f);
-		float f2 = MathHelper.sin(f);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D,
-				entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D,
-				entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);*/
-	}
-
 	@Override
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
 			float netHeadYaw, float headPitch, float scaleFactor) {

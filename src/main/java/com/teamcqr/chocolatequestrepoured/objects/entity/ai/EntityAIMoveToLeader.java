@@ -15,12 +15,14 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI {
 	public boolean shouldExecute() {
 		if (this.entity.hasLeader()) {
 			EntityLivingBase leader = this.entity.getLeader();
-			double x = leader.posX - this.entity.posX;
-			double y = leader.posY - this.entity.posY;
-			double z = leader.posZ - this.entity.posZ;
-			double distance = Math.sqrt(x * x + y * y + z * z);
+			if(leader != null && !leader.isDead) {
+				double x = leader.posX - this.entity.posX;
+				double y = leader.posY - this.entity.posY;
+				double z = leader.posZ - this.entity.posZ;
+				double distance = Math.sqrt(x * x + y * y + z * z);
 
-			return distance > 8.0D;
+				return distance > 8.0D;
+			}
 		}
 		return false;
 	}
@@ -29,16 +31,19 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI {
 	public boolean shouldContinueExecuting() {
 		if (this.entity.hasLeader()) {
 			EntityLivingBase leader = this.entity.getLeader();
-			double x = leader.posX - this.entity.posX;
-			double y = leader.posY - this.entity.posY;
-			double z = leader.posZ - this.entity.posZ;
-			double distance = Math.sqrt(x * x + y * y + z * z);
+			if(leader != null && !leader.isDead) {
+				double x = leader.posX - this.entity.posX;
+				double y = leader.posY - this.entity.posY;
+				double z = leader.posZ - this.entity.posZ;
+				double distance = Math.sqrt(x * x + y * y + z * z);
 
-			if (distance > 4.0D) {
-				return !this.entity.getNavigator().noPath();
+				if (distance > 4.0D) {
+					return !this.entity.getNavigator().noPath();
+				}
+
+				this.entity.getNavigator().clearPath();
+
 			}
-
-			this.entity.getNavigator().clearPath();
 		}
 		return false;
 	}
@@ -54,13 +59,15 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI {
 		if (!this.entity.getNavigator().noPath()) {
 			PathPoint target = this.entity.getNavigator().getPath().getFinalPathPoint();
 			EntityLivingBase leader = this.entity.getLeader();
-			double x = leader.posX - target.x;
-			double y = leader.posY - target.y;
-			double z = leader.posZ - target.z;
-			double distance = Math.sqrt(x * x + y * y + z * z);
-			
-			if (distance > 4.0D) {
-				this.entity.getNavigator().tryMoveToXYZ(leader.posX, leader.posY, leader.posZ, 1.0D);
+			if(leader != null && !leader.isDead) {
+				double x = leader.posX - target.x;
+				double y = leader.posY - target.y;
+				double z = leader.posZ - target.z;
+				double distance = Math.sqrt(x * x + y * y + z * z);
+				
+				if (distance > 4.0D) {
+					this.entity.getNavigator().tryMoveToXYZ(leader.posX, leader.posY, leader.posZ, 1.0D);
+				}
 			}
 		}
 	}

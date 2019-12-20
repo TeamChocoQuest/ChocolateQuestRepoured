@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSlime;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSpider;
@@ -190,6 +191,18 @@ public class ModItems {
 	public static final Item CHESTPLATE_HEAVY_IRON = Null();
 	public static final Item LEGGINGS_HEAVY_IRON = Null();
 	public static final Item BOOTS_HEAVY_IRON = Null();
+	
+	//Dyable Iron Armor
+	public static final Item HELMET_DYABLE_IRON = Null();
+	public static final Item CHESTPLATE_DYABLE_IRON = Null();
+	public static final Item LEGGINGS_DYABLE_IRON = Null();
+	public static final Item BOOTS_DYABLE_IRON = Null();
+	
+	//Dyable Diamond Armor
+	public static final Item HELMET_DYABLE_DIAMOND = Null();
+	public static final Item CHESTPLATE_DYABLE_DIAMOND = Null();
+	public static final Item LEGGINGS_DYABLE_DIAMOND = Null();
+	public static final Item BOOTS_DYABLE_DIAMOND = Null();
 
 	// Ingridients
 	public static final Item SCALE_TURTLE = Null();
@@ -296,6 +309,16 @@ public class ModItems {
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_iron"),
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_iron"),
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.FEET), "boots_heavy_iron"),
+					
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_diamond_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_diamond_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_diamond_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_diamond_dyable"),
+					
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_iron_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_iron_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
+					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
 
 					setItemName(new Item(), "scale_turtle"), setItemName(new Item(), "leather_bull"),
 					setItemName(new Item(), "horn_bull"), setItemName(new Item(), "ball_slime"),
