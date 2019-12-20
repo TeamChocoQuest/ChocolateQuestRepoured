@@ -13,7 +13,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
 	protected static final int MAX_PROJECTILES = 16;
 	protected static final int MIN_PROJECTILES = 4;
-	protected static final double SPEED_MULTIPLIER = 0.25;
+	protected static final double SPEED_MULTIPLIER = 0.125;
 	
 	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity) {
 		super(entity);
