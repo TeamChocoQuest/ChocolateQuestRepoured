@@ -28,6 +28,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -96,7 +97,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected boolean sittingState = false;
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
+	protected int spellTicks = 0;
 	
+	protected ESpellType activeSpell = ESpellType.NONE;
 	private EFaction faction;
 
 	// Sync with client
@@ -105,6 +108,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> SPELLCASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> SPELLTYPE = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 
 	// Client only
 	@SideOnly(Side.CLIENT)
@@ -126,7 +131,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
+		this.dataManager.register(SPELLCASTING, false);
+		this.dataManager.register(SPELLTYPE, 0);
 	}
+	
+	 protected void updateAITasks() {
+        super.updateAITasks();
+
+        if (this.spellTicks > 0)
+        {
+            --this.spellTicks;
+        }
+    }
 
 	@Override
 	protected boolean canDespawn() {
@@ -230,6 +246,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
+		compound.setInteger("spellTicks", this.spellTicks);
 	}
 
 	@Override
@@ -249,6 +266,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
+		this.spellTicks = compound.getInteger("spellTicks");
 		this.healthScale = compound.getDouble("healthScale");
 		if(this.healthScale < 0D) {
 			this.healthScale = 1D;
@@ -606,7 +624,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public abstract EFaction getDefaultFaction();
 	
 	public EFaction getFaction() {
-		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : getDefaultFaction();
+		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (faction != null ? faction : getDefaultFaction());
 	}
 	
 	public void setFaction(EFaction newFac) {
@@ -835,6 +853,31 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		double y = this.posY - entity.posY;
 		double z = this.posZ - entity.posZ;
 		return Math.sqrt(x * x + y * y + z * z);
+	}
+	
+	public void setSpellTicks(int val) {
+		this.spellTicks = val;
+	}
+
+	public boolean isSpellcasting()
+    {
+        if (this.world.isRemote)
+        {
+            return this.dataManager.get(SPELLCASTING);
+        }
+        else
+        {
+            return this.spellTicks > 0;
+        }
+    }
+	
+	public void setSpellType(ESpellType type) {
+		this.activeSpell = type;
+		this.dataManager.set(SPELLTYPE, type.getID());
+	}
+	
+	public void setSpellCasting(boolean value) {
+		this.dataManager.set(SPELLCASTING, value);
 	}
 
 }

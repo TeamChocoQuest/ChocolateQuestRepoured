@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.lich.BossAISummonZombie;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
@@ -60,7 +61,8 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(8, new BossAISummonZombie(this));
+		//this.tasks.addTask(8, new BossAISummonZombie(this));
+		this.tasks.addTask(8, new EntityAISummonMinionSpell(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -78,7 +80,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		//Kill minions
 		for(Entity e : summonedMinions) {
 			if(e != null && !e.isDead) {
-				e.setDead();
+				if(e instanceof EntityLivingBase) {
+					((EntityLivingBase)e).onDeath(cause);
+				}
+				if(e != null) {
+					e.setDead();
+				}
 			}
 		}
 		summonedMinions.clear();
