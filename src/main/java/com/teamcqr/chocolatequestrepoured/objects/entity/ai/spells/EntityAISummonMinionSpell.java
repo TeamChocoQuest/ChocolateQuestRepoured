@@ -91,7 +91,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE, (ISummoner) this.entity);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
-					if(entity.world.getBlockState(p).getBlock() != Blocks.AIR) {
+					if(entity.world.getBlockState(p).isFullBlock()) {
 						p = p.add(0,1,0);
 					}
 					circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
