@@ -79,7 +79,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		}
 		if(minionCount > 0 ) {
 			double angle = 180D / (double)minionCount;
-			vector = VectorUtil.rotateVectorAroundY(vector, 270);
+			vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
 			for(int i = 0; i < minionCount; i++) {
 				spawnPositions[i] = entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle*i)));
