@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
-	protected static final int MAX_PROJECTILES = 16;
+	protected static final int MAX_PROJECTILES = 10;
 	protected static final int MIN_PROJECTILES = 4;
 	protected static final double SPEED_MULTIPLIER = 0.125;
 	
