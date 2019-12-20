@@ -16,6 +16,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
+/*
+ * 20.12.2019
+ * Made by: DerToaster98
+ * Comment: Simple AI to summon some minions
+ */
 public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 
 	protected ISummoner summoner = null;
