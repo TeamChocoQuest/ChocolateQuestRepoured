@@ -27,7 +27,7 @@ public class EntityAIArmorSpell extends AbstractEntityAIUseSpell {
 	protected void castSpell() {
 		if(entity instanceof EntityCQRLich) {
 			EntityCQRLich lich = (EntityCQRLich)entity;
-			BlockPos pos = lich.getPosition().add(0,1,0);
+			BlockPos pos = lich.getPosition();//.add(0,1,0);
 			lich.world.setBlockState(pos, ModBlocks.PHYLACTERY.getDefaultState());
 			lich.setCurrentPhylacteryBlock(pos);
 		} else {
