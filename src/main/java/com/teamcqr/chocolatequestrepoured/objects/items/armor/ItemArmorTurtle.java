@@ -23,9 +23,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -54,11 +58,9 @@ public class ItemArmorTurtle extends ItemArmor {
 
 		return multimap;
 	}
-	
+
 	@Override
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
-			ModelBiped _default) {
-		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
 
@@ -69,7 +71,7 @@ public class ItemArmorTurtle extends ItemArmor {
 		if (player != null) {
 			CapabilitySpecialArmor icapability = player.getCapability(CapabilityTurtleArmorProvider.CAPABILITY_TURTLE_ARMOR, null);
 			if (icapability != null && icapability.onCooldown()) {
-				tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + convertCooldown(icapability.getCooldown()));
+				tooltip.add(TextFormatting.RED + I18n.format("description.turtle_armor_charging.name") + this.convertCooldown(icapability.getCooldown()));
 			}
 		}
 
@@ -97,10 +99,30 @@ public class ItemArmorTurtle extends ItemArmor {
 
 		@SubscribeEvent
 		public static void onLivingHurtEvent(LivingAttackEvent event) {
-			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST)
-					.getItem() == ModItems.CHESTPLATE_TURTLE) {
-				if (event.getSource().getImmediateSource() != null && ItemUtil.compareRotations(event.getEntity().rotationYaw, event.getSource().getImmediateSource().rotationYaw, 50.0D)) {
-					event.setCanceled(true);
+			if (event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() == ModItems.CHESTPLATE_TURTLE) {
+				if (event.getSource().getDamageLocation() != null) {
+					EntityLivingBase entity = event.getEntityLiving();
+					Vec3d hitVec = event.getSource().getDamageLocation();
+					double x = entity.posX - hitVec.x;
+					double z = entity.posZ - hitVec.z;
+					double yaw = Math.toDegrees(Math.atan2(-x, z));
+					double yaw2 = (double) entity.renderYawOffset;
+
+					if (ItemUtil.compareRotations((double) entity.renderYawOffset, yaw, 50.0D)) {
+						double y = (entity.posY + (double) entity.height * 0.5D) - hitVec.y;
+						double d = Math.sqrt(x * x + z * z);
+						double pitch = -Math.toDegrees(Math.atan2(y, d));
+
+						if (ItemUtil.compareRotations(0.0D, pitch, 50.0D)) {
+							if (event.getSource().getImmediateSource() instanceof EntityArrow) {
+								event.getSource().getImmediateSource().setDead();
+							}
+							if (!entity.world.isRemote) {
+								entity.world.playSound(null, hitVec.x, hitVec.y, hitVec.z, SoundEvents.ITEM_SHIELD_BLOCK, SoundCategory.NEUTRAL, 0.5F, 0.8F);
+							}
+							event.setCanceled(true);
+						}
+					}
 				}
 			}
 		}

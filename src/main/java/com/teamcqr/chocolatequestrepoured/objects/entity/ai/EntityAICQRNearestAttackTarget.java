@@ -41,11 +41,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 	@Override
 	public boolean shouldExecute() {
 		if (this.entity.ticksExisted % 4 == 0 && this.entity.getAttackTarget() == null) {
-			double x = this.entity.posX;
-			double y = this.entity.posY + this.entity.getEyeHeight();
-			double z = this.entity.posZ;
-			double d = 32.0D;
-			AxisAlignedBB aabb = new AxisAlignedBB(x - d, y - d, z - d, x + d, y + d, z + d);
+			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
 			List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
 			if (!possibleTargets.isEmpty()) {
 				possibleTargets.sort(this.sorter);
