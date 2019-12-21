@@ -103,6 +103,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private EFaction faction;
 	
 	protected boolean armorActive = false;
+	protected int magicArmorCooldown = 300;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -341,6 +342,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if (!this.world.isRemote && isMagicArmorActive()) {
+			updateCooldownForMagicArmor();
+		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
 			this.setDead();
@@ -903,8 +907,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setMagicArmorActive(boolean val) {
 		if(val != armorActive) {
 			armorActive = val;
+			setEntityInvulnerable(armorActive);
 			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
 		}
+	}
+	
+	protected void updateCooldownForMagicArmor() {
+		magicArmorCooldown--;
+		if(magicArmorCooldown <= 0) {
+			setMagicArmorActive(false);
+		}
+	}
+	
+	public void setMagicArmorCooldown(int val) {
+		this.magicArmorCooldown = val;
+		setMagicArmorActive(true);
 	}
 
 }
