@@ -20,6 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
@@ -35,7 +36,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffFire extends ItemStaff implements IRangedWeapon{
+public class ItemStaffFire extends Item implements IRangedWeapon{
 
 	public ItemStaffFire() {
 		setMaxStackSize(1);
@@ -70,7 +71,7 @@ public class ItemStaffFire extends ItemStaff implements IRangedWeapon{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.swingArm(handIn);
-		shoot(worldIn, playerIn, stack, handIn);
+		shootFromEntity(playerIn);
 		changeTorch(worldIn);
 		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
@@ -105,9 +106,8 @@ public class ItemStaffFire extends ItemStaff implements IRangedWeapon{
 		}
 	}
 
-	@Override
-	public void shoot(net.minecraft.world.World world, EntityLivingBase shooter, ItemStack stack, EnumHand handIn) {
-	//public void shootFromEntity(EntityLivingBase shooter) {
+	public void shootFromEntity(EntityLivingBase shooter) {
+		World world = shooter.world;
 		world.playSound(shooter.posX, shooter.posY, shooter.posZ, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.MASTER,
 				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 

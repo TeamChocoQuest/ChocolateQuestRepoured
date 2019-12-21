@@ -11,9 +11,9 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffPoison extends ItemStaff implements IRangedWeapon{
+public class ItemStaffPoison extends Item implements IRangedWeapon{
 
 	public ItemStaffPoison() {
 		setMaxDamage(2048);
@@ -34,12 +34,11 @@ public class ItemStaffPoison extends ItemStaff implements IRangedWeapon{
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shoot(worldIn, playerIn, stack, handIn);
+		shoot(stack, worldIn, playerIn, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	@Override
-	public void shoot(World worldIn, EntityLivingBase player, ItemStack stack, EnumHand handIn) {
+	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {
 		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW,
 				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
 				false);
@@ -49,10 +48,8 @@ public class ItemStaffPoison extends ItemStaff implements IRangedWeapon{
 			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(worldIn, player);
 			spell.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
 			worldIn.spawnEntity(spell);
-			if(player instanceof EntityPlayer) {
-				stack.damageItem(1, player);
-				((EntityPlayer) player).getCooldownTracker().setCooldown(stack.getItem(), 20);
-			}
+			stack.damageItem(1, player);
+			player.getCooldownTracker().setCooldown(stack.getItem(), 20);
 		}
 	}
 
