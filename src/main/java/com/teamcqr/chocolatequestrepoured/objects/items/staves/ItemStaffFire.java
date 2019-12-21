@@ -170,4 +170,10 @@ public class ItemStaffFire extends ItemStaff implements IRangedWeapon{
 		}
 	}
 
+	@Override
+	public void shoot(World world, Entity shooter, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

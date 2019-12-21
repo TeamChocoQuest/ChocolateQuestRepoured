@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -218,6 +219,12 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 			System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
 			return 0; // #SHOULD NEVER HAPPEN
 		}
+	}
+
+	@Override
+	public void shoot(World world, Entity shooter, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
