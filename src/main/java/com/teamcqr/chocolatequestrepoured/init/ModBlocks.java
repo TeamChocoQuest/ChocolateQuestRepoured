@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPhylactery;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPillarDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockTable;
@@ -156,6 +157,9 @@ public class ModBlocks {
 
 	// Protected region
 	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
+	
+	// Technical
+	public static final BlockPhylactery PHYLACTERY = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class BlockRegistrationHandler {
@@ -269,7 +273,9 @@ public class ModBlocks {
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_13", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_14", CQRMain.CQRExporterChestTab),
 
-					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus")
+					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
+					
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery")
 			};
 
 			IForgeRegistry<Block> registry = event.getRegistry();
