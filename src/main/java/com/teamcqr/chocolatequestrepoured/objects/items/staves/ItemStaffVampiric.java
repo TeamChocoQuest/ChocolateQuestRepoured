@@ -11,9 +11,9 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffVampiric extends Item implements IRangedWeapon{
+public class ItemStaffVampiric extends ItemStaff implements IRangedWeapon{
 
 	public ItemStaffVampiric() {
 		setMaxDamage(2048);
@@ -34,11 +34,12 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon{
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shoot(stack, worldIn, playerIn, handIn);
+		shoot( worldIn, playerIn, stack, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {
+	@Override
+	public void shoot(World worldIn, EntityLivingBase player, ItemStack stack, EnumHand handIn) {
 		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERPEARL_THROW,
 				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
 				false);
@@ -48,8 +49,10 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon{
 			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, player);
 			spell.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
 			worldIn.spawnEntity(spell);
-			stack.damageItem(1, player);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 20);
+			if(player instanceof EntityPlayer) {
+				stack.damageItem(1, player);
+				((EntityPlayer) player).getCooldownTracker().setCooldown(stack.getItem(), 20);
+			}
 		}
 	}
 
