@@ -87,7 +87,12 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 				if(entity.getNavigator().getPathToPos(p) != null) {
 					//System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = new ResourceLocation(Reference.MODID, "zombie");
-					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, ECircleTexture.ZOMBIE, (ISummoner) this.entity);
+					ECircleTexture texture = ECircleTexture.ZOMBIE;
+					if(entity.getRNG().nextInt(4) == 3) {
+						summon = new ResourceLocation(Reference.MODID, "skeleton");
+						texture = ECircleTexture.SKELETON;
+					}
+					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
 					circle.setSummon(summon);
 					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
 					if(entity.world.getBlockState(p).isFullBlock()) {
