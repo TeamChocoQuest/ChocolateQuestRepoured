@@ -8,7 +8,8 @@ public enum ESpellType {
 	NONE(0, null, 0, 0, 0),
 	SUMMON_FANGS(1, SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 0.4D, 0.3D, 0.35D),
 	SUMMON_MINIONS(2, SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 0.7D, 0.7D, 0.8D),
-	POISON_PLAYER(3, SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 0.16D, 0.48D, 0.12);
+	POISON_PLAYER(3, SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 0.16D, 0.48D, 0.12),
+	ACTIVATE_MAGIC_ARMOR(4, SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 0.8D, 0.0D, 0.0D);
 	
 	private int id;
 	private SoundEvent spellSound;
