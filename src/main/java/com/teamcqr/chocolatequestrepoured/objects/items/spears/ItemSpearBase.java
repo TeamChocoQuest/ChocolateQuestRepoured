@@ -25,6 +25,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import javax.annotation.Nullable;
 import java.util.List;
 
+/**
+ * Copyright (c) 20.12.2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
+ */
 public class ItemSpearBase extends ItemSword {
 
 	private float reach;
