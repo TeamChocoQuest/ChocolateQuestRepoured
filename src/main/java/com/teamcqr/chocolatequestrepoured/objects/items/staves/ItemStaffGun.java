@@ -12,8 +12,8 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffGun extends Item implements IRangedWeapon{
+public class ItemStaffGun extends ItemStaff implements IRangedWeapon{
 
 	public ItemStaffGun() {
 		setMaxDamage(2048);
@@ -50,7 +50,8 @@ public class ItemStaffGun extends Item implements IRangedWeapon{
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
+	@Override
+	public void shoot(World worldIn, EntityLivingBase playerIn, ItemStack stack, EnumHand handIn) {
 		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
 				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swingArm(handIn);
@@ -59,8 +60,10 @@ public class ItemStaffGun extends Item implements IRangedWeapon{
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, playerIn);
 			ball.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 3.5F, 0F);
 			worldIn.spawnEntity(ball);
-			stack.damageItem(1, playerIn);
-			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
+			if(playerIn instanceof EntityPlayer) {
+				stack.damageItem(1, playerIn);
+				((EntityPlayer) playerIn).getCooldownTracker().setCooldown(stack.getItem(), 20);
+			}
 		}
 	}
 
