@@ -879,6 +879,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public ESpellType getActiveSpell() {
+		if(!world.isRemote) {
+			return this.activeSpell;
+		}
 		return ESpellType.values()[this.dataManager.get(SPELLTYPE)];
 	}
 	
