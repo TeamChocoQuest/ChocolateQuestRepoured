@@ -1,8 +1,8 @@
 {
 	"credit": "Made by Silentine, with Blockbench",
 	"textures": {
-		"0": "cqrepoured:/blocks/phylactery",
-		"particle": "cqrepoured:/blocks/phylactery"
+		"0": "cqrepoured:blocks/phylactery",
+		"particle": "cqrepoured:blocks/phylactery"
 	},
 	"elements": [
 		{
