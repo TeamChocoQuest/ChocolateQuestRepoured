@@ -6,17 +6,17 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
-public class LayerMagicalArmor implements LayerRenderer<AbstractEntityCQR> {
+public class LayerMagicalArmor extends AbstractLayerCQR {
 
 	protected final ResourceLocation ARMOR_TEXTURE;
-	protected final RenderCQREntity<AbstractEntityCQR> RENDERER;
+	protected final RenderCQREntity<? extends AbstractEntityCQR> RENDERER;
 	protected final ModelBase MODEL;
 	
-	public LayerMagicalArmor(RenderCQREntity<AbstractEntityCQR> renderer, ResourceLocation texture, ModelBase model) {
+	public LayerMagicalArmor(RenderCQREntity<? extends AbstractEntityCQR> renderer, ResourceLocation texture, ModelBase model) {
+		super(renderer);
 		this.RENDERER = renderer;
 		this.ARMOR_TEXTURE= texture;
 		this.MODEL = model;
