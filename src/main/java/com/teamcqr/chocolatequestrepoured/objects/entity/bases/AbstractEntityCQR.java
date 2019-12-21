@@ -101,6 +101,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private EFaction faction;
+	
+	protected boolean armorActive = false;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -892,11 +894,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isMagicArmorActive() {
+		if(!world.isRemote) {
+			return armorActive;
+		}
 		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
 	}
 	
 	public void setMagicArmorActive(boolean val) {
-		this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
+		if(val != armorActive) {
+			armorActive = val;
+			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
+		}
 	}
 
 }
