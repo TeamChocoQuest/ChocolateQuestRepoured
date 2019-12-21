@@ -11,7 +11,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,10 +35,6 @@ public class ItemStaff extends Item {
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
-	}
-	
-	public void shoot(World worldIn, EntityLivingBase playerIn, ItemStack stack, EnumHand handIn) {
-		
 	}
 
 }
