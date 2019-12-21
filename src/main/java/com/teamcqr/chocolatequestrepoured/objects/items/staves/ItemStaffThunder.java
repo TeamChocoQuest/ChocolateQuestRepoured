@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -79,6 +80,12 @@ public class ItemStaffThunder extends Item implements IRangedWeapon{
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
+	}
+
+	@Override
+	public void shoot(World world, Entity shooter, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

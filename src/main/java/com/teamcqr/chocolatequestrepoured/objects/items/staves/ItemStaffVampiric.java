@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -64,6 +65,12 @@ public class ItemStaffVampiric extends ItemStaff implements IRangedWeapon{
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
+	}
+
+	@Override
+	public void shoot(World world, Entity shooter, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

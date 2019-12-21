@@ -37,7 +37,7 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		if (this.entity.getDistance(attackTarget) > 64.0D) {
 			return false;
 		}
-		if (this.entity.getEntitySenses().canSee(attackTarget) && (this.entity.isEntityInFieldOfView(attackTarget) || this.visionTick > 0)) {
+		if ((this.entity.getEntitySenses().canSee(attackTarget) && this.entity.isEntityInFieldOfView(attackTarget)) || this.visionTick > 0) {
 			return EntitySelectors.IS_ALIVE.apply(attackTarget);
 		}
 		return this.entity.hasPath();
@@ -54,21 +54,22 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 
-		if (this.entity.getEntitySenses().canSee(attackTarget)) {
-			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
-
-			if (this.entity.isEntityInFieldOfView(attackTarget)) {
+		if (attackTarget != null) {
+			boolean canSeeAttackTarget = this.entity.getEntitySenses().canSee(attackTarget);
+			if (canSeeAttackTarget) {
+				this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
+				this.checkAndPerformAttack(this.entity.getAttackTarget());
+			}
+			if (canSeeAttackTarget && this.entity.isEntityInFieldOfView(attackTarget)) {
 				this.updatePath(attackTarget);
-				this.visionTick = 20;
+				this.visionTick = 10;
 			} else if (this.visionTick > 0) {
 				this.updatePath(attackTarget);
 				this.visionTick--;
 			}
 
-			this.checkAndPerformAttack(this.entity.getAttackTarget());
+			this.checkAndPerformBlock();
 		}
-
-		this.checkAndPerformBlock();
 	}
 
 	@Override
