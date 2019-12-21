@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
@@ -11,7 +12,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAt
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.lich.BossAISummonZombie;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIArmorSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
@@ -20,6 +23,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
@@ -28,6 +32,7 @@ import net.minecraft.world.World;
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
+	protected BlockPos currentPhylacteryPosition = null;
 	
 	public EntityCQRLich(World worldIn) {
 		this(worldIn, 1);
@@ -55,14 +60,30 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		for(Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
+		//Phylactery
+		if(currentPhylacteryPosition != null) {
+			if(world.getBlockState(currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
+				setMagicArmorActive(true);
+			} else {
+				this.currentPhylacteryPosition = null;
+				setMagicArmorActive(false);
+			}
+		}
+	}
+	
+	public void setCurrentPhylacteryBlock(BlockPos pos) {
+		this.setMagicArmorActive(true);
+		this.currentPhylacteryPosition = pos;
 	}
 	
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		//this.tasks.addTask(8, new BossAISummonZombie(this));
-		this.tasks.addTask(8, new EntityAISummonMinionSpell(this));
+		this.tasks.addTask(6, new EntityAIArmorSpell(this));
+		this.tasks.addTask(7, new EntityAIFangAttack(this));
+		this.tasks.addTask(8, new EntityAIShootPoisonProjectiles(this));
+		this.tasks.addTask(9, new EntityAISummonMinionSpell(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -125,8 +146,11 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
-		System.out.println("Added minion to list!");
 		this.summonedMinions.add(summoned);
+	}
+	
+	@Override
+	protected void updateCooldownForMagicArmor() {
 	}
 
 }

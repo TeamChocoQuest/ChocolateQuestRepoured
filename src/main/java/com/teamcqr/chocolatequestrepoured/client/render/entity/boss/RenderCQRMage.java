@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelMageHidden;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerMagicalArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
@@ -19,6 +19,7 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 	
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages_black.png"));
 	public static final ResourceLocation TEXTURES_REVEALED = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages.png"));
+	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation((Reference.MODID + ":textures/entity/magic_armor/mages.png"));
 	
 	private static ModelBiped MODEL_IDENTITY_HIDDEN;
 	private ModelBiped MODEL_IDENTITY;
@@ -37,6 +38,7 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
+		this.addLayer(new LayerMagicalArmor(this, TEXTURES_ARMOR, model));
 	}
 	
 	@Override

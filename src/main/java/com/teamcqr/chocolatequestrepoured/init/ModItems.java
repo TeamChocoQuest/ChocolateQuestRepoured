@@ -36,6 +36,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.shields.ItemShieldWalkerKing;
+import com.teamcqr.chocolatequestrepoured.objects.items.spears.ItemSpearBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffFire;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffGun;
@@ -119,6 +120,9 @@ public class ModItems {
 	public static final Item GREAT_SWORD_DIAMOND = Null();
 	public static final Item GREAT_SWORD_BULL = Null();
 	public static final Item GREAT_SWORD_MONKING = Null();
+
+	//Spears
+	public static final Item SPEAR_DIAMOND = Null();
 
 	// Staves
 	public static final Item STAFF = Null();
@@ -253,6 +257,8 @@ public class ModItems {
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.6F), "great_sword_bull"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F), "great_sword_monking"),
+
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 10F), "spear_diamond"),
 
 					setItemName(new ItemStaff(), "staff"), setItemName(new ItemStaffFire(), "staff_fire"),
 					setItemName(new ItemStaffVampiric(), "staff_vampiric"),

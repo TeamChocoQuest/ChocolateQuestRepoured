@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMinotaur
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROrc;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
@@ -159,7 +160,7 @@ public class ModEntityRenderers {
 				renderManager -> new RenderCQRSkeleton(renderManager));
 		// Spectre
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectre.class,
-				renderManager -> new RenderCQREntity<EntityCQRSpectre>(renderManager, "entity_mob_cqrspectre"));
+				renderManager -> new RenderCQRSpectre(renderManager));
 		// Triton
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class,
 				renderManager -> new RenderCQRTriton(renderManager));
