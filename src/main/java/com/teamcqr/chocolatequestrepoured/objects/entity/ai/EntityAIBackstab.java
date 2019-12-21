@@ -15,7 +15,12 @@ public class EntityAIBackstab extends EntityAIAttack {
 
 	@Override
 	public boolean shouldExecute() {
-		return this.entity.getHeldItemWeapon().getItem() instanceof ItemDagger && super.shouldExecute();
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldExecute();
+	}
+
+	@Override
+	public boolean shouldContinueExecuting() {
+		return this.entity.getHeldItemMainhand().getItem() instanceof ItemDagger && super.shouldContinueExecuting();
 	}
 
 	@Override
