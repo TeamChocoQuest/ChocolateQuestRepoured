@@ -905,6 +905,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public void setMagicArmorActive(boolean val) {
+		//TODO: Particles for when it appears and disappears
 		if(val != armorActive) {
 			armorActive = val;
 			setEntityInvulnerable(armorActive);
