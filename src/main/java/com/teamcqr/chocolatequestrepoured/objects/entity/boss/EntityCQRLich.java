@@ -21,6 +21,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -151,6 +153,22 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	
 	@Override
 	protected void updateCooldownForMagicArmor() {
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		if(currentPhylacteryPosition != null) {
+			compound.setTag("currentPhylactery", NBTUtil.createPosTag(currentPhylacteryPosition));
+		}
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		if(compound.hasKey("currentPhylactery")) {
+			currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
+		}
 	}
 
 }
