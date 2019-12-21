@@ -17,6 +17,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.lang.Double;
 
+/**
+ * Copyright (c) 20.12.2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
+ */
 public class CastleRoomSelector
 {
     public class SupportArea

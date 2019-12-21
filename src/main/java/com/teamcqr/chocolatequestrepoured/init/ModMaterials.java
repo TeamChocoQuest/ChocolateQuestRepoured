@@ -34,9 +34,10 @@ public class ModMaterials {
 
 	public static class ToolMaterials {
 		public static final ToolMaterial TOOL_MONKING_GREAT_SWORD = EnumHelper.addToolMaterial("monking_great_sword", 0, 1560, 0.0F, 6.0F, 10);   
-		public static final ToolMaterial TOOL_BULL_GREAT_SWORD = EnumHelper.addToolMaterial("bull_great_sword", 0, 1560, 0.0F, 5F, 10);  			
-		public static final ToolMaterial TOOL_DIAMOND_GREAT_SWORD = EnumHelper.addToolMaterial("diamond_great_sword", 0, 1560, 0.0F, 5F, 10);     
-		public static final ToolMaterial TOOL_IRON_GREAT_SWORD = EnumHelper.addToolMaterial("iron_great_sword", 0, 250, 0.0F, 4F, 14);  			
+		public static final ToolMaterial TOOL_BULL_GREAT_SWORD = EnumHelper.addToolMaterial("bull_great_sword", 0, 1560, 0.0F, 5F, 10);
+		public static final ToolMaterial TOOL_DIAMOND_GREAT_SWORD = EnumHelper.addToolMaterial("diamond_great_sword", 0, 1560, 0.0F, 5F, 10);
+		public static final ToolMaterial TOOL_IRON_GREAT_SWORD = EnumHelper.addToolMaterial("iron_great_sword", 0, 250, 0.0F, 4F, 14);
+		public static final ToolMaterial TOOL_DIAMOND_SPEAR = EnumHelper.addToolMaterial("diamond_spear", 0, 1560, 0.0F, 2F, 10);
 		public static final ToolMaterial TOOL_IRON_DAGGER = EnumHelper.addToolMaterial("iron_dagger", 0, 250, 0.0F, 0.0F, 14);   					
 		public static final ToolMaterial TOOL_DIAMOND_DAGGER = EnumHelper.addToolMaterial("diamond_dagger", 0, 1560, 0.0F, 1F, 10);  				
 		public static final ToolMaterial TOOL_MONKING_DAGGER = EnumHelper.addToolMaterial("monking_dagger", 0, 1560, 0.0F, 3F, 10);   				
@@ -64,6 +65,9 @@ public class ModMaterials {
 		setRepairItemForToolMaterial(ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, Items.DIAMOND);
 		setRepairItemForToolMaterial(ToolMaterials.TOOL_IRON_DAGGER, Items.IRON_INGOT);
 		setRepairItemForToolMaterial(ToolMaterials.TOOL_IRON_GREAT_SWORD, Items.IRON_INGOT);
+
+		setRepairItemForToolMaterial(ToolMaterials.TOOL_DIAMOND_SPEAR, Items.DIAMOND);
+
 	}
 
 	public static void setRepairItemForArmorlMaterial(ArmorMaterial armorMaterial, Item item) {

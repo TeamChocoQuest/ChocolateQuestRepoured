@@ -18,6 +18,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRangedStaff;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
@@ -101,6 +102,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private EFaction faction;
+	
+	protected boolean armorActive = false;
+	protected int magicArmorCooldown = 300;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -110,6 +114,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> SPELLCASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELLTYPE = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 
 	// Client only
 	@SideOnly(Side.CLIENT)
@@ -133,6 +138,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(SPELLCASTING, false);
 		this.dataManager.register(SPELLTYPE, 0);
+		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 	}
 	
 	 protected void updateAITasks() {
@@ -195,6 +201,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
+		this.tasks.addTask(7, new EntityAIAttackRangedStaff(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(9, new EntityAIBackstab(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
@@ -268,7 +275,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.spellTicks = compound.getInteger("spellTicks");
 		this.healthScale = compound.getDouble("healthScale");
-		if(this.healthScale < 0D) {
+		if(this.healthScale <= 1D) {
 			this.healthScale = 1D;
 		}
 	}
@@ -337,6 +344,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if (!this.world.isRemote && isMagicArmorActive()) {
+			updateCooldownForMagicArmor();
+		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
 			this.setDead();
@@ -469,12 +479,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leader = null;
 				this.leaderUUID = null;
 			} else {
-				for (EntityLivingBase entity : this.world.getEntities(EntityLivingBase.class, null)) {
-					if (this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
-						this.leader = entity;
-						return entity;
-					}
-				}
+				for (Entity entity : this.world.loadedEntityList) {
+                    if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+                        this.leader = (EntityLivingBase) entity;
+                        return (EntityLivingBase) entity;
+                    }
+                }
 			}
 		} else {
 			if (this.leader != null) {
@@ -878,8 +888,43 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.set(SPELLTYPE, type.getID());
 	}
 	
+	public ESpellType getActiveSpell() {
+		if(!world.isRemote) {
+			return this.activeSpell;
+		}
+		return ESpellType.values()[this.dataManager.get(SPELLTYPE)];
+	}
+	
 	public void setSpellCasting(boolean value) {
 		this.dataManager.set(SPELLCASTING, value);
+	}
+
+	public boolean isMagicArmorActive() {
+		if(!world.isRemote) {
+			return armorActive;
+		}
+		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
+	}
+	
+	public void setMagicArmorActive(boolean val) {
+		//TODO: Particles for when it appears and disappears
+		if(val != armorActive) {
+			armorActive = val;
+			setEntityInvulnerable(armorActive);
+			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
+		}
+	}
+	
+	protected void updateCooldownForMagicArmor() {
+		magicArmorCooldown--;
+		if(magicArmorCooldown <= 0) {
+			setMagicArmorActive(false);
+		}
+	}
+	
+	public void setMagicArmorCooldown(int val) {
+		this.magicArmorCooldown = val;
+		setMagicArmorActive(true);
 	}
 
 }

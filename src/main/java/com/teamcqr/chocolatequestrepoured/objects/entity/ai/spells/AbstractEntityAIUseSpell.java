@@ -7,6 +7,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.SoundEvent;
 
+/*
+ * 20.12.2019
+ * Made by: DerToaster98
+ * Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
+ */
 public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 
 	public AbstractEntityAIUseSpell(AbstractEntityCQR entity) {
@@ -22,11 +27,15 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	public boolean shouldExecute() {
 		if (this.entity.getAttackTarget() == null) {
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			return false;
 		} else if (this.entity.isSpellcasting()) {
 			return false;
+		} else if (!this.entity.getActiveSpell().equals(ESpellType.NONE)) {
+			return false;
 		} else {
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			return this.entity.ticksExisted >= this.spellCooldown;
 		}
 	}
@@ -65,6 +74,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 		if (this.spellWarmup == 0) {
 			this.castSpell();
 			this.entity.setSpellCasting(false);
+			this.entity.setSpellType(ESpellType.NONE);
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);
 		}
 	}
