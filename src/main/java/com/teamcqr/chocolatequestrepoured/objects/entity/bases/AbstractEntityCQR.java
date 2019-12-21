@@ -110,6 +110,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> SPELLCASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELLTYPE = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 
 	// Client only
 	@SideOnly(Side.CLIENT)
@@ -133,6 +134,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(SPELLCASTING, false);
 		this.dataManager.register(SPELLTYPE, 0);
+		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 	}
 	
 	 protected void updateAITasks() {
@@ -887,6 +889,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	
 	public void setSpellCasting(boolean value) {
 		this.dataManager.set(SPELLCASTING, value);
+	}
+
+	public boolean isMagicArmorActive() {
+		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
+	}
+	
+	public void setMagicArmorActive(boolean val) {
+		this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
 	}
 
 }
