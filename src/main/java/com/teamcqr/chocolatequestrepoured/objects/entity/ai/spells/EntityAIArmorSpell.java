@@ -40,10 +40,15 @@ public class EntityAIArmorSpell extends AbstractEntityAIUseSpell {
 	protected int getCastingTime() {
 		return 200;
 	}
+	
+	@Override
+	protected int getCastWarmupTime() {
+		return 100;
+	}
 
 	@Override
 	protected int getCastingInterval() {
-		return 600;
+		return 1200;
 	}
 
 	@Override
