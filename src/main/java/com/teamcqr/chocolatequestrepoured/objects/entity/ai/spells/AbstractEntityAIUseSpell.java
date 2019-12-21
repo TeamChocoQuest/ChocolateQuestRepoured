@@ -31,6 +31,8 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			return false;
 		} else if (this.entity.isSpellcasting()) {
 			return false;
+		} else if (!this.entity.getActiveSpell().equals(ESpellType.NONE)) {
+			return false;
 		} else {
 			this.entity.setSpellCasting(false);
 			this.entity.setSpellType(ESpellType.NONE);
