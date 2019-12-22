@@ -149,10 +149,10 @@ public class StrongholdFloorOpen {
 		}
 		int dimX = generator.getDungeon().getRoomSizeX() /2;
 		int dimZ = generator.getDungeon().getRoomSizeZ() /2;
-		BlockPos p1 = roomGrid[sideLength -1][sideLength -1].add(1,-1,1).add(dimX, -1, dimZ);
-		BlockPos p2 = roomGrid[sideLength -1][0].add(1,-1,-1).add(dimX, -1, -dimZ);
-		BlockPos p3 = roomGrid[0][sideLength -1].add(-1,-1,1).add(-dimX, -1, dimZ);
-		BlockPos p4 = roomGrid[0][0].add(-1,-1,-1).add(-dimX, -1, -dimZ);
+		BlockPos p1 = roomGrid[sideLength -1][sideLength -1].add(1,0,1).add(dimX, -1, dimZ);
+		BlockPos p2 = roomGrid[sideLength -1][0].add(1,0,-1).add(dimX, -1, -dimZ);
+		BlockPos p3 = roomGrid[0][sideLength -1].add(-1,0,1).add(-dimX, -1, dimZ);
+		BlockPos p4 = roomGrid[0][0].add(-1,0,-1).add(-dimX, -1, -dimZ);
 		
 		IBlockState block = generator.getDungeon().getWallBlock().getDefaultState();
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
@@ -175,16 +175,16 @@ public class StrongholdFloorOpen {
 		}
 		//Top
 		for(BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
-			if(!(pT.getX() >= entranceStairCorners.getFirst().getX() && pT.getX() <= entranceStairCorners.getSecond().getX())
-					&& !(pT.getZ() >= entranceStairCorners.getFirst().getZ() && pT.getZ() <= entranceStairCorners.getSecond().getZ())) {
+			if(!(pT.getX() >= entranceStairCorners.getFirst().getX() && pT.getX() <= entranceStairCorners.getSecond().getX()
+					&& pT.getZ() >= entranceStairCorners.getFirst().getZ() && pT.getZ() <= entranceStairCorners.getSecond().getZ())) {
 				world.setBlockState(pT, block);
 			}
 		}
 		//Bottom
 		for(BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
 			if(exitStairIsBossRoom || 
-					(!(pB.getX() >= exitStairCorners.getFirst().getX() && pB.getX() <= exitStairCorners.getSecond().getX())
-							&& !(pB.getZ() >= exitStairCorners.getFirst().getZ() && pB.getZ() <= exitStairCorners.getSecond().getZ()))) {
+					(pB != null && exitStairCorners != null && !(pB.getX() >= exitStairCorners.getFirst().getX() && pB.getX() <= exitStairCorners.getSecond().getX()
+							&& pB.getZ() >= exitStairCorners.getFirst().getZ() && pB.getZ() <= exitStairCorners.getSecond().getZ()))) {
 				world.setBlockState(pB, block);
 			}
 		}
