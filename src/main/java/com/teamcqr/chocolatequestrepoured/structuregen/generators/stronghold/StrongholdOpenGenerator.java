@@ -45,6 +45,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
 		super();
 		this.dungeon = dungeon;
+		this.structureBounds = new Tuple<Integer, Integer>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 		
 		settings.setMirror(Mirror.NONE);
 		settings.setRotation(Rotation.NONE);
@@ -59,7 +60,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	private void computeNotFittingStructures() {
 		for(File f : dungeon.getRoomFolder().listFiles(DungeonGenUtils.getStructureFileFilter())) {
 			CQStructure struct = new CQStructure(f, dungeon, 0, 0, false);
-			if(struct.getSizeX() != structureBounds.getFirst() || struct.getSizeZ() != structureBounds.getSecond()) {
+			if(struct != null && (struct.getSizeX() != structureBounds.getFirst() || struct.getSizeZ() != structureBounds.getSecond())) {
 				blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
