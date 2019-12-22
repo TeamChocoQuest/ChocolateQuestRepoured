@@ -5,10 +5,11 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -58,7 +59,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 			maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 10);
 			
 			stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "stronghold/linear/stairs/");
-			entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairsFolder", "stronghold/linear/entranceStairs/");
+			entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
 			entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 			bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
 
@@ -89,6 +90,11 @@ public class StrongholdLinearDungeon extends DungeonBase {
 		y += getYOffset();
 		
 		getGenerator().generate(world, chunk, x, y, z);
+	}
+	
+	@Override
+	public IDungeonGenerator getGenerator() {
+		return new StrongholdLinearGenerator(this);
 	}
 
 	public int getMinFloors() {
