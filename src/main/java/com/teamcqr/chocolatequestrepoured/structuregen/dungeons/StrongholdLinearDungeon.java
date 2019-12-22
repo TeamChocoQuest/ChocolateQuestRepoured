@@ -2,10 +2,15 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 /**
  * Copyright (c) 29.04.2019
@@ -21,18 +26,19 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	
 	//IMPORTANT: the structure paste location MUST BE in its middle !!!
 	// --> calculate position  B E F O R E  pasting -> pre-process method
-	private File roomNSFolder;
-	private File roomEWFolder;
-	
-	private File roomNEFolder;
-	private File roomSEFolder;
-	private File roomSWFolder;
-	private File roomNWFolder;
+	private File roomCurveFolder;
+	private File roomRoomFolder;
+	private File roomCrossingFolder;
+	private File roomtCrossingFolder;
+	private File roomHallwayFolder;
 	
 	private int minFloors = 2;
 	private int maxFloors= 3;
 	private int minRoomsPerFloor = 6;
 	private int maxRoomsPerFloor = 10;
+	
+	private int roomSizeX = 15;
+	private int roomSizeZ = 15;
 	
 	//Generator for the old strongholds which were basic linear dungeons
 	
@@ -55,14 +61,15 @@ public class StrongholdLinearDungeon extends DungeonBase {
 			entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairsFolder", "stronghold/linear/entranceStairs/");
 			entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 			bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
+
+			roomRoomFolder = PropertyFileHelper.getFileProperty(prop, "deadEndFolder", "stronghold/linear/rooms/deadEnds");
+			roomHallwayFolder = PropertyFileHelper.getFileProperty(prop, "hallwayStraightFolder", "stronghold/linear/rooms/hallways/");
+			roomCurveFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCurveFolder", "stronghold/linear/rooms/curves/");
+			roomtCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/threesided/");
+			roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
 			
-			roomNSFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysNorthSouthFolder", "stronghold/linear/rooms/ns/");
-			roomEWFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysEastWestFolder", "stronghold/linear/rooms/ew/");
-			
-			roomNEFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysCurvedNorthEastFolder", "stronghold/linear/rooms/curves/ne/");
-			roomSEFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysCurvedSouthEastFolder", "stronghold/linear/rooms/curves/se/");
-			roomSWFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysCurvedSouthWestFolder", "stronghold/linear/rooms/curves/sw/");
-			roomNWFolder = PropertyFileHelper.getFileProperty(prop, "hallwaysCurvedNorthWestFolder", "stronghold/linear/rooms/curves/nw/");
+			roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
+			roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
 			
 			closeConfigFile();
 		} else {
@@ -70,19 +77,18 @@ public class StrongholdLinearDungeon extends DungeonBase {
 		}
 	}
 	
-	public File[] getPossibleRoomFolders(ESkyDirection exitDirectionOfPreviousRoom) {
-		switch(exitDirectionOfPreviousRoom) {
-		case EAST:
-			return new File[] {this.roomEWFolder, this.roomSEFolder, this.roomNEFolder};
-		case NORTH:
-			return new File[] {this.roomNSFolder, this.roomNWFolder, this.roomNEFolder};
-		case SOUTH:
-			return new File[] {this.roomSWFolder, this.roomSEFolder, this.roomNSFolder};
-		case WEST:
-			return new File[] {this.roomSWFolder, this.roomEWFolder, this.roomNWFolder};
-		default:
-			return null;		
+	@Override
+	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
+		super.generate(x, z, world, chunk, random);
+		
+		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
+		//For position locked dungeons, use the positions y
+		if(this.isPosLocked()) {
+			y = this.getLockedPos().getY();
 		}
+		y += getYOffset();
+		
+		getGenerator().generate(world, chunk, x, y, z);
 	}
 
 	public int getMinFloors() {
@@ -147,6 +153,41 @@ public class StrongholdLinearDungeon extends DungeonBase {
 
 	public void setBossRoomFolder(File bossRoomFolder) {
 		this.bossRoomFolder = bossRoomFolder;
+	}
+	
+	public File getCurveRoom() {
+		return getStructureFileFromDirectory(roomCurveFolder);
+	}
+	public File getTCrossingRoom() {
+		return getStructureFileFromDirectory(roomtCrossingFolder);
+	}
+	public File getCrossingRoom() {
+		return getStructureFileFromDirectory(roomCrossingFolder);
+	}
+	public File getHallwayRoom() {
+		return getStructureFileFromDirectory(roomHallwayFolder);
+	}
+	public File getDeadEndRoom() {
+		return getStructureFileFromDirectory(roomRoomFolder);
+	}
+	public File getEntranceStairRoom() {
+		return getStructureFileFromDirectory(entranceStairFolder);
+	}
+	public File getStairRoom() {
+		return getStructureFileFromDirectory(stairFolder);
+	}
+	public File getBossRoom() {
+		return getStructureFileFromDirectory(bossRoomFolder);
+	}
+	public int getRoomSizeX() {
+		return roomSizeX;
+	}
+	public int getRoomSizeZ() {
+		return roomSizeZ;
+	}
+
+	public File getEntranceBuilding() {
+		return getStructureFileFromDirectory(entranceBuildingFolder);
 	}
 
 }
