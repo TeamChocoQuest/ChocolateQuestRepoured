@@ -86,7 +86,7 @@ public class StrongholdFloorOpen {
 		Vec3i v = new Vec3i(generator.getDungeon().getRoomSizeX() /2, 0, generator.getDungeon().getRoomSizeZ() /2);
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
-				if(iX != entranceStairIndex.getFirst() && iZ != entranceStairIndex.getSecond()) {
+				if(!(iX == entranceStairIndex.getFirst() && iZ == entranceStairIndex.getSecond())) {
 					int multiplierX = iX - this.entranceStairIndex.getFirst();
 					int multiplierZ = iZ - this.entranceStairIndex.getSecond();
 					
