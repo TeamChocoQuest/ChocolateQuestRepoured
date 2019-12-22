@@ -163,8 +163,10 @@ public class StrongholdRoom {
 	}
 	
 	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings, CQStructure structure, boolean ignoreRotating) {
-		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos);
+		settings.setRotation(this.roomtype.getRotation());
+		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos, structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
 		structure.placeBlocksInWorld(world, pastePos, settings, EPosType.CENTER_XZ_LAYER);
+		System.out.println("Generating room: LAYOUT =  " + layout.toString() + "    TYPE: " + roomtype.toString() +"    AT: " + pastePos.toString());
 	}
 
 	public ESkyDirection getRandomFreeDirection(Random rdm) {

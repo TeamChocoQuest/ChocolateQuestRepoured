@@ -76,9 +76,10 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		settings.setIntegrity(1.0F);
 		
 		for(int i = 0; i < floors.length; i++) {
+			System.out.println("Init pos for floor #" + i +" :" +initPos.toString());
 			StrongholdFloor floor = floors[i];
 			floor.generateRooms(initPos, i==0, i==(floors.length -1), settings, world, dungeon);
-			initPos = floor.getLastRoomPastePos(initPos, dungeon);
+			initPos = floor.getLastRoomPastePos(initPos, dungeon).add(0,dungeon.getRoomSizeY(),0);
 		}
 		
 		CQStructure structure = new CQStructure(dungeon.getEntranceBuilding(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());

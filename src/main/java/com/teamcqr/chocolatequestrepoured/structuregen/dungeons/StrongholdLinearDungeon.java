@@ -39,6 +39,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	private int maxRoomsPerFloor = 10;
 	
 	private int roomSizeX = 15;
+	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
 	
 	//Generator for the old strongholds which were basic linear dungeons
@@ -70,6 +71,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 			roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
 			
 			roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
+			roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
 			roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
 			
 			closeConfigFile();
@@ -190,6 +192,9 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 	public int getRoomSizeZ() {
 		return roomSizeZ;
+	}
+	public int getRoomSizeY() {
+		return roomSizeY;
 	}
 
 	public File getEntranceBuilding() {

@@ -46,11 +46,15 @@ public enum ERoomTypeExtended {
 		this.mirror = mirror;
 	}
 	
-	public BlockPos getTransformedPastePos(BlockPos pastePosIn) {
+	public BlockPos getTransformedPastePos(BlockPos pastePosIn, int sizeX, int sizeZ, EPosType type) {
 		if(!this.rot.equals(Rotation.NONE)) {
-			return PasteHelper.getNewBlockPosForCorrectRotatedPlacement(pastePosIn, 0, 0, rot, EPosType.DEFAULT);
+			return PasteHelper.getNewBlockPosForCorrectRotatedPlacement(pastePosIn, sizeX, sizeZ, rot, type);
 		}
 		return pastePosIn;
+	}
+
+	public Rotation getRotation() {
+		return rot;
 	}
 
 }

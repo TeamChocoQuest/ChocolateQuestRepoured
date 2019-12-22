@@ -93,9 +93,10 @@ public class StrongholdFloor {
 			for(int iZ = 0; iZ < (roomCount +2); iZ++) {
 				StrongholdRoom room = roomGrid[iX][iZ];
 				if(room != null) {
-					Vec3i v = new Vec3i(iX - firstRoomIndexes.getFirst(), 0, iZ - firstRoomIndexes.getSecond());
-					BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getX() + (dungeon.getRoomSizeZ() * v.getZ()));
-					
+					Vec3i v = new Vec3i(room.getGridIndex().getFirst() - firstRoomIndexes.getFirst(), 0, room.getGridIndex().getSecond() - firstRoomIndexes.getSecond());
+					System.out.println("V: " + v.toString());
+					BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
+					System.out.println("Pos: " + pos.toString());
 					//first room
 					if(!(iX == firstRoomIndexes.getFirst() && iZ == firstRoomIndexes.getSecond())) {
 						//Last room
@@ -118,7 +119,7 @@ public class StrongholdFloor {
 	
 	public BlockPos getLastRoomPastePos(BlockPos upperFloorExitPos, StrongholdLinearDungeon dungeon) {
 		Vec3i v = new Vec3i(lastRoomIndexes.getFirst() - firstRoomIndexes.getFirst(), 0, lastRoomIndexes.getSecond() - firstRoomIndexes.getSecond());
-		BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getX() + (dungeon.getRoomSizeZ() * v.getZ()));
+		BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
 		return pos;
 	}
 	
