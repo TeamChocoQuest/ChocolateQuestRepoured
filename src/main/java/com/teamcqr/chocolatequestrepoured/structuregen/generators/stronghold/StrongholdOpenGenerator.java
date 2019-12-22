@@ -79,8 +79,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		this.dunX = x;
 		this.dunZ = z;
 		BlockPos initPos = new BlockPos(x,y,z);
-		initPos = initPos.add(0,dungeon.getYOffset(),0);
-		initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
+		//initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
+		//initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
 		for(int i = 0; i < floors.length; i++) {
 			StrongholdFloorOpen floor = new StrongholdFloorOpen(this);
 			File stair = null;
