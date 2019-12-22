@@ -8,7 +8,6 @@ import javax.annotation.Nonnull;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.Tuple;
@@ -119,7 +118,7 @@ public class StrongholdFloorOpen {
 			for(int z = 0; z < sideLength; z++) {
 				BlockPos p = this.roomGrid[x][z];
 				File structure = null;
-				if(x != exitStairIndex.getFirst() && z != exitStairIndex.getSecond()) {
+				if(!(x == exitStairIndex.getFirst() && z == exitStairIndex.getSecond())) {
 					if(x == entranceStairIndex.getFirst() && z == entranceStairIndex.getSecond()) {
 						if(this.entranceStair != null) {
 							structure = this.entranceStair;
@@ -133,6 +132,7 @@ public class StrongholdFloorOpen {
 					}
 				} else if(exitStairIsBossRoom) {
 					structure = this.generator.getDungeon().getBossRoom();
+					exitStairIsBossRoom = false;
 				}
 				
 				if(p != null && structure != null) {
@@ -147,12 +147,12 @@ public class StrongholdFloorOpen {
 		if(this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
-		int dimX = generator.getDungeon().getRoomSizeX();
-		int dimZ = generator.getDungeon().getRoomSizeZ();
-		BlockPos p1 = roomGrid[sideLength -1][sideLength -1].add(1,-1,1).add(dimX, 0, dimZ);
-		BlockPos p2 = roomGrid[sideLength -1][0].add(1,-1,-1).add(dimX, 0, -dimZ);
-		BlockPos p3 = roomGrid[0][sideLength -1].add(-1,-1,1).add(-dimX, 0, dimZ);
-		BlockPos p4 = roomGrid[0][0].add(-1,-1,-1).add(-dimX, 0, -dimZ);
+		int dimX = generator.getDungeon().getRoomSizeX() /2;
+		int dimZ = generator.getDungeon().getRoomSizeZ() /2;
+		BlockPos p1 = roomGrid[sideLength -1][sideLength -1].add(1,-1,1).add(dimX, -1, dimZ);
+		BlockPos p2 = roomGrid[sideLength -1][0].add(1,-1,-1).add(dimX, -1, -dimZ);
+		BlockPos p3 = roomGrid[0][sideLength -1].add(-1,-1,1).add(-dimX, -1, dimZ);
+		BlockPos p4 = roomGrid[0][0].add(-1,-1,-1).add(-dimX, -1, -dimZ);
 		
 		IBlockState block = generator.getDungeon().getWallBlock().getDefaultState();
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
