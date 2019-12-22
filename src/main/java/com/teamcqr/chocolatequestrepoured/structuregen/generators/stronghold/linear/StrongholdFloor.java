@@ -45,7 +45,7 @@ public class StrongholdFloor {
 		room.setGridIndex(roomCount-1, roomCount-1);
 		rooms.add(room);
 		roomsWithFreeNeighbors.add(room);
-		roomGrid[roomCount +2][roomCount +2] = room;
+		roomGrid[room.getGridIndex().getFirst()][room.getGridIndex().getSecond()] = room;
 		firstRoomIndexes = room.getGridIndex();
 		Random rdm = new Random();
 		for(int i = 0; i < roomCount; i++) {
