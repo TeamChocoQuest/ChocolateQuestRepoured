@@ -66,7 +66,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 			roomHallwayFolder = PropertyFileHelper.getFileProperty(prop, "hallwayStraightFolder", "stronghold/linear/rooms/hallways/");
 			roomCurveFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCurveFolder", "stronghold/linear/rooms/curves/");
 			roomtCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/threesided/");
-			roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
+			roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
 			
 			roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
 			roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
