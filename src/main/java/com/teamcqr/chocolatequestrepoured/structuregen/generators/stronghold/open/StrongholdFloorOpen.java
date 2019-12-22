@@ -97,10 +97,11 @@ public class StrongholdFloorOpen {
 					);
 					
 					this.roomGrid[iX][iZ] = pos;
-					if(iX == exitStairBlockPosition.getFirst() && iZ == exitStairBlockPosition.getSecond()) {
+					if(iX == exitStairIndex.getFirst() && iZ == exitStairIndex.getSecond()) {
 						BlockPos p1 = pos.subtract(v);
 						BlockPos p2 = pos.add(v);
 						exitStairCorners = new Tuple<>(p1,p2);
+						exitStairBlockPosition = new Tuple<>(pos.getX(), pos.getZ());
 					}
 				} else {
 					BlockPos p = new BlockPos(entranceStairBlockPosition.getFirst(), this.yPos, entranceStairBlockPosition.getSecond());

@@ -106,6 +106,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 				floor.calculatePositions();
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
+			floors[i] = floor;
 		}
 	}
 
