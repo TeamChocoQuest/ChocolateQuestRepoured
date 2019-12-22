@@ -9,10 +9,10 @@ import net.minecraft.util.math.Vec3i;
 public class PasteHelper {
 	
 	public static BlockPos getNewBlockPosForCorrectRotatedPlacement(BlockPos oldCenteredPastePos, CQStructure structure, Rotation rotation, EPosType posType) {
-		return getnewBlockPosForCorrectRotatedPlacement(oldCenteredPastePos, structure.getSizeX(), structure.getSizeZ(), rotation, posType);
+		return getNewBlockPosForCorrectRotatedPlacement(oldCenteredPastePos, structure.getSizeX(), structure.getSizeZ(), rotation, posType);
 	}
 
-	public static BlockPos getnewBlockPosForCorrectRotatedPlacement(BlockPos oldCenteredPastePos, int sizeX, int sizeZ, Rotation rotation, EPosType posType) {
+	public static BlockPos getNewBlockPosForCorrectRotatedPlacement(BlockPos oldCenteredPastePos, int sizeX, int sizeZ, Rotation rotation, EPosType posType) {
 		BlockPos pastePos = oldCenteredPastePos;
 		//int sizeX = structure.getSizeX();
 		//int sizeZ = structure.getSizeZ();
