@@ -2,12 +2,17 @@ package com.teamcqr.chocolatequestrepoured.objects.items.spears;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.ExtendedReachAttackPacket;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.util.EntitySelectors;
@@ -15,6 +20,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -23,7 +29,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Copyright (c) 20.12.2019
@@ -33,14 +42,37 @@ import java.util.List;
 public class ItemSpearBase extends ItemSword {
 
 	private float reach;
+	private float attackSpeed;
 
-	public ItemSpearBase(ToolMaterial material, float reach) {
+	public ItemSpearBase(ToolMaterial material, float reach, float attackSpeed) {
 		super(material);
 		this.reach = reach;
+		this.attackSpeed = attackSpeed;
 	}
 
 	public float getReach(){
 		return reach;
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, attackSpeed);
+		return modifiers;
+	}
+
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id,
+								   double value) {
+		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		Optional<AttributeModifier> modifierOptional = modifiers.stream()
+				.filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+
+		if (modifierOptional.isPresent()) {
+			AttributeModifier modifier = modifierOptional.get();
+			modifiers.remove(modifier);
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value,
+					modifier.getOperation()));
+		}
 	}
 
 	@Mod.EventBusSubscriber(modid = Reference.MODID)
@@ -81,7 +113,7 @@ public class ItemSpearBase extends ItemSword {
 	@SideOnly(Side.CLIENT)
 	public static RayTraceResult getMouseOverExtended(float distance)
 	{
-		//Most of this is copied from EntityRenderer#getMouseOver()
+		//Most of this is copied from EntityRenderer#getMouseOver(). Some variable names changed for readability
 
 		Entity pointedEntity = null;
 		Minecraft mc = Minecraft.getMinecraft();
@@ -166,6 +198,29 @@ public class ItemSpearBase extends ItemSword {
 
 		return null;
 
+	}
+
+	//Unequip off hand weapons
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (!worldIn.isRemote) {
+			if (entityIn instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entityIn;
+
+				if (player.getHeldItemMainhand() == stack)
+				{
+					if (!player.getHeldItemOffhand().isEmpty()) {
+						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
+							player.entityDropItem(player.getHeldItemOffhand(), 0F);
+						}
+
+						if (!player.capabilities.isCreativeMode) {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 }
