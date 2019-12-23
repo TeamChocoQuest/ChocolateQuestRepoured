@@ -10,6 +10,7 @@ import net.minecraft.client.model.ModelRenderer;
  */
 public class ModelLich extends ModelCQRBiped {
     public ModelRenderer Leg_Cape;
+    public ModelRenderer Buckle;
     public ModelRenderer Hood_Rear;
     public ModelRenderer Eyes;
     public ModelRenderer Hood_Top;
@@ -78,6 +79,9 @@ public class ModelLich extends ModelCQRBiped {
         this.Hood_Right = new ModelRenderer(this, 24, 14);
         this.Hood_Right.setRotationPoint(-4.5F, 0.0F, 0.0F);
         this.Hood_Right.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
+        this.Buckle = new ModelRenderer(this, 78, 2);
+        this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
+        this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
         
         this.Hood_Top.addChild(this.Hood_Left);
         this.Hood_Top.addChild(this.Hood_Front);
@@ -89,6 +93,7 @@ public class ModelLich extends ModelCQRBiped {
         this.bipedBody.addChild(this.bipedHead);
         this.bipedLeftArm.addChild(this.Arm_Left_Bone);
         this.Hood_Top.addChild(this.Hood_Right);
+        this.bipedBody.addChild(this.Buckle);
 
         this.bipedHeadwear.isHidden = true;
         this.bipedHeadwear.showModel = false;

@@ -10,6 +10,7 @@ import net.minecraft.client.model.ModelRenderer;
 public class ModelPigMage extends ModelCQRBiped {
 	public ModelRenderer Leg_Cape;
 	public ModelRenderer Hood_Rear;
+	public ModelRenderer Buckle;
 	public ModelRenderer Eyes;
 	public ModelRenderer Hood_Top;
 	public ModelRenderer Hood_Left;
@@ -76,7 +77,11 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedLeftLeg = new ModelRenderer(this, 0, 34);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
 		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
+		this.Buckle = new ModelRenderer(this, 78, 2);
+        this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
+        this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
 		
+        this.bipedBody.addChild(this.Buckle);
 		this.bipedLeftArm.addChild(this.Arm_Left_Bone);
 		this.Hood_Top.addChild(this.Hood_Left);
 		this.bipedRightArm.addChild(this.Arm_Right_Bone);
