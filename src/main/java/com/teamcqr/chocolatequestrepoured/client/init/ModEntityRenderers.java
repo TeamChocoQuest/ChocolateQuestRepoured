@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.init;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMage;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
@@ -34,6 +35,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
@@ -198,6 +200,11 @@ public class ModEntityRenderers {
 		// Lich
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class,
 				renderManager -> new RenderCQRMage(renderManager, new ModelLich(0F), "entity_cqr_lich")
+			);
+		
+		// Boar Mage
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class,
+				renderManager -> new RenderCQRMage(renderManager, new ModelPigMage(0F), "entity_cqr_boar_mage")
 			);
 	}
 

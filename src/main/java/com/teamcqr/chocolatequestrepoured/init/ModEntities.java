@@ -5,10 +5,12 @@ import static com.teamcqr.chocolatequestrepoured.util.InjectionUtil.Null;
 import javax.annotation.Nonnull;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
@@ -21,7 +23,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
@@ -35,8 +36,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileP
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
-import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -90,6 +91,7 @@ public class ModEntities {
 	public static final EntityEntry NETHER_DRAGON = Null();
 	public static final EntityEntry GIANT_TORTOISE = Null();
 	public static final EntityEntry LICH = Null();
+	public static final EntityEntry BOAR_MAGE = Null();
 	
 	//Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -138,6 +140,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantTortoise.class, "giant_tortoise", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRLich.class, "lich", 64,1,true, 3289650,000000),
+					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650,000000),
 					
 					//Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true)
