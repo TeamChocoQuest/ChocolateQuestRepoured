@@ -18,18 +18,19 @@ public class EntityAISummonFireWall extends AbstractEntityAIUseSpell {
 	@Override
 	protected void castSpell() {
 		Vec3d v = new Vec3d(entity.getAttackTarget().getPosition().subtract(entity.getPosition()));
+		v = new Vec3d(v.x,0,v.z);
 		v = v.normalize();
 		Vec3d vR = VectorUtil.rotateVectorAroundY(v, 90);
 		Vec3d vL = VectorUtil.rotateVectorAroundY(v, 270);
 		Vec3d[] positions = new Vec3d[WALL_LENGTH +2];
-		Vec3d startPos = entity.getPositionVector().add(new Vec3d(v.x /2, v.y /2, v.z /2));
+		Vec3d startPos = entity.getPositionVector().add(new Vec3d(v.x /2, 0, v.z /2));
 		int arrayIndex = 0;
 		positions[arrayIndex] = startPos;
 		arrayIndex++;
 		for(int i = 1; i <= WALL_LENGTH / 2; i++) {
-			positions[arrayIndex] = startPos.add(new Vec3d(i* vR.x, i*vR.y, i*vR.z));
+			positions[arrayIndex] = startPos.add(new Vec3d(i* vR.x, 0, i*vR.z));
 			arrayIndex++;
-			positions[arrayIndex] = startPos.add(new Vec3d(i* vL.x, i*vL.y, i*vL.z));
+			positions[arrayIndex] = startPos.add(new Vec3d(i* vL.x, 0, i*vL.z));
 			arrayIndex++;
 		}
 		
@@ -37,7 +38,7 @@ public class EntityAISummonFireWall extends AbstractEntityAIUseSpell {
 			if(p != null) {
 				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(entity.world, entity);
 				if(wallPart != null) {
-					wallPart.setVelocity(p.x, p.y, p.z);
+					wallPart.setVelocity(p.x, 0, p.z);
 					entity.world.spawnEntity(wallPart);
 				}
 			}
