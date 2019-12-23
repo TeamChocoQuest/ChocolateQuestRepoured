@@ -18,7 +18,7 @@ public class EntityAISummonMeteors extends AbstractEntityAIUseSpell {
 	protected static final int MAX_FIREBALLS_PER_CAST = 8;
 	
 	public EntityAISummonMeteors(AbstractEntityCQR entity) {
-		super(entity, true);
+		super(entity);
 	}
 
 	@Override
