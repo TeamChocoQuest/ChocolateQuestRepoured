@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 
 	public EntityAIExplosionRay(AbstractEntityCQR entity) {
-		super(entity);
+		super(entity, true);
 	}
 
 	@Override
@@ -22,12 +22,12 @@ public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 		BlockPos start = entity.getPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
 		for(int i = 1; i <= explosionCount; i++) {
-			BlockPos p = start.add(v.x * i, v.y *i, v.z *i);
+			BlockPos p = start.add(v.x * i + 4*Math.sin((i-1) *2), v.y *i, v.z *i+ 4*Math.sin((i-1) *2));
 			positions[i-1] = p;
 		}
 		
 		for(BlockPos p : positions) {
-			entity.world.createExplosion(entity, p.getX(), p.getY(), p.getZ(), 2.5F, true);
+			entity.world.newExplosion(entity, p.getX(), p.getY(), p.getZ(), 0.5F, entity.getRNG().nextBoolean(), true);
 		}
 	}
 
