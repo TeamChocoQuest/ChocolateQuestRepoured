@@ -38,15 +38,15 @@ public class EntityAISummonMeteors extends AbstractEntityAIUseSpell {
 			for(BlockPos p : spawnPositions) {
 				if(entity.getNavigator().getPathToPos(p) != null) {
 					//System.out.println("Pos: " + p.toString());
-					ResourceLocation summon = new ResourceLocation("minecraft", "small_fireball");
+					ResourceLocation summon = new ResourceLocation("minecraft", "fireball");
 					ECircleTexture texture = ECircleTexture.METEOR;
 					if(entity.getRNG().nextInt(4) == 3) {
-						summon = new ResourceLocation("minecraft", "fireball");
+						summon = new ResourceLocation("minecraft", "small_fireball");
 					}
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, null);
 					circle.setSummon(summon);
 					circle.setPosition(p.getX(), p.getY() + 10, p.getZ());
-					circle.setVelocityForSummon(new Vec3d(0D,-0.7D,0D));
+					circle.setVelocityForSummon(new Vec3d(0D,-1D,0D));
 					
 					entity.world.spawnEntity(circle);
 				}
