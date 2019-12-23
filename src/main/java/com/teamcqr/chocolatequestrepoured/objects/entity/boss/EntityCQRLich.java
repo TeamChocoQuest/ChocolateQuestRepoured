@@ -97,11 +97,6 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 	
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.STAFF_VAMPIRIC, 1));
-	}
-	
-	@Override
 	public void onDeath(DamageSource cause) {
 		//Kill minions
 		for(Entity e : summonedMinions) {

@@ -1,12 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
@@ -55,6 +59,11 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 		if((getHealth() / getMaxHealth()) < 0.83) {
 			revealIdentity();
 		}
+	}
+	
+	@Override
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.STAFF_VAMPIRIC, 1));	
 	}
 	
 	@Override
