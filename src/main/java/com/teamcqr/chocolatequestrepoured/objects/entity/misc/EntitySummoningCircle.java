@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,6 +30,7 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	protected float timeMultiplierForSummon = 1F;
 	protected ECircleTexture texture = ECircleTexture.METEOR;
 	protected ISummoner summoner = null;
+	protected Vec3d velForSummon = null;
 	protected final int BORDER_WHEN_TO_SPAWN_IN_TICKS = 60;
 
 	protected static final DataParameter<Boolean> IS_SPAWNING_PARTICLES = EntityDataManager
@@ -90,6 +92,10 @@ public class EntitySummoningCircle extends EntityLivingBase {
 				Entity summon = EntityList.createEntityByIDFromName(entityToSpawn, world);
 				summon.setUniqueId(MathHelper.getRandomUUID());
 				summon.setPosition(posX, posY + 0.5D, posZ);
+				
+				if(this.velForSummon != null) {
+					summon.setVelocity(velForSummon.x, velForSummon.y, velForSummon.z);
+				}
 
 				world.spawnEntity(summon);
 				if(summoner != null && !summoner.getSummoner().isDead) {
@@ -107,6 +113,10 @@ public class EntitySummoningCircle extends EntityLivingBase {
 				&& !isSpawningParticles()) {
 			this.dataManager.set(IS_SPAWNING_PARTICLES, true);
 		}
+	}
+	
+	public void setVelocityForSummon(Vec3d v) {
+		this.velForSummon = v;
 	}
 
 	@Override
