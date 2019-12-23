@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import java.util.Random;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,6 +11,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileFireWallPart extends ProjectileBase {
+	
+	private Random rdm = new Random();
 
 	public ProjectileFireWallPart(World worldIn) {
 		super(worldIn);
@@ -39,7 +43,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if(world.getBlockState(getPosition().offset(EnumFacing.DOWN)).isFullBlock()) {
+		if(world.getBlockState(getPosition().offset(EnumFacing.DOWN)).isFullBlock() && rdm.nextInt(5) == 0) {
 			world.setBlockState(getPosition(), Blocks.FIRE.getDefaultState());
 		}
 	}

@@ -38,7 +38,8 @@ public class EntityAISummonFireWall extends AbstractEntityAIUseSpell {
 			if(p != null) {
 				ProjectileFireWallPart wallPart = new ProjectileFireWallPart(entity.world, entity);
 				if(wallPart != null) {
-					wallPart.setVelocity(p.x, 0, p.z);
+					wallPart.setPosition(p.x, p.y, p.z);
+					wallPart.setVelocity(v.x /2, 0, v.z/2);
 					entity.world.spawnEntity(wallPart);
 				}
 			}
