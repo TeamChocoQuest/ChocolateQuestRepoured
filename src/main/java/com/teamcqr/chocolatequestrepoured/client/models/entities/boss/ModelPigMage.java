@@ -39,7 +39,7 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 8, 4, 0.0F);
 
 		this.Arm_Left_Bone = new ModelRenderer(this, 51, 2);
-		this.Arm_Left_Bone.setRotationPoint(2.0F, 8.0F, 0.0F);
+		this.Arm_Left_Bone.setRotationPoint(0.0F, 6.0F, 0.0F);
 		this.Arm_Left_Bone.addBox(0.0F, 0.0F, -1.0F, 2, 4, 2, 0.0F);
 
 		this.bipedHead = new ModelRenderer(this, 83, 0);
