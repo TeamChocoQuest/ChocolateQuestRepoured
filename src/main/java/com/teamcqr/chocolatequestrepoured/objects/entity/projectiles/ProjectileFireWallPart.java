@@ -43,7 +43,7 @@ public class ProjectileFireWallPart extends ProjectileBase {
 	@Override
 	protected void onUpdateInAir() {
 		super.onUpdateInAir();
-		if(world.getBlockState(getPosition().offset(EnumFacing.DOWN)).isFullBlock() && rdm.nextInt(5) == 0) {
+		if(world.getBlockState(getPosition().offset(EnumFacing.DOWN)).isFullBlock() && rdm.nextInt(10) == 8) {
 			world.setBlockState(getPosition(), Blocks.FIRE.getDefaultState());
 		}
 	}
