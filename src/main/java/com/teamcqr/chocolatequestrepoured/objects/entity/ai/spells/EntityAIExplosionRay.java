@@ -10,7 +10,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 
 	public EntityAIExplosionRay(AbstractEntityCQR entity) {
-		super(entity, true);
+		super(entity);
 	}
 
 	@Override
