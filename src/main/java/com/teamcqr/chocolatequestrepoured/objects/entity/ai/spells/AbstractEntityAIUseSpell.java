@@ -78,8 +78,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 		if(dontMoveEntityWhilstCasting) {
 			this.entity.setMoveForward(0);
 			this.entity.setMoveStrafing(0);
-			this.entity.setMoveVertical(0);
-			this.entity.setVelocity(0, 0, 0);
+			this.entity.setVelocity(0, entity.getMoveHelper().getY(), 0);
 		}
 		--this.spellWarmup;
 
