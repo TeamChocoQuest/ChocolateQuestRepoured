@@ -377,6 +377,7 @@ description.staff_wind.name=Cokolwiek to robi, jeszcze nie działa. #TODO
 description.staff_poison.name=Cokolwiek to robi, jeszcze nie działa.. #TODO
 description.staff.name=Ni ma tu nic #TODO
 description.staff_thunder.name=Ni ma tu nic #TODO
+description.spear_diamond.name=Ni ma tu nic #TODO
 
 // Mobs
 entity.EntityCQRZombie.name=Zombi(CQR)
