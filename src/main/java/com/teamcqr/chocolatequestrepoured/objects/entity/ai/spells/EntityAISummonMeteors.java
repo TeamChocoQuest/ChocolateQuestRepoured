@@ -32,8 +32,14 @@ public class EntityAISummonMeteors extends AbstractEntityAIUseSpell {
 			double angle = /*180D*/360D / (double)ballCount;
 			//vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
+			BlockPos centeredPos = entity.getPosition();
+			if(entity.getAttackTarget() != null && !entity.getAttackTarget().isDead) {
+				Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector());
+				v = new Vec3d(v.x /2, v.y /2, v.z/2);
+				centeredPos = centeredPos.add(v.x, v.y, v.z);
+			}
 			for(int i = 0; i < ballCount; i++) {
-				spawnPositions[i] = entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle*i)));
+				spawnPositions[i] = centeredPos.add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle*i)));
 			}
 			for(BlockPos p : spawnPositions) {
 				if(entity.getNavigator().getPathToPos(p) != null) {
