@@ -53,7 +53,7 @@ public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected ESpellType getSpellType() {
-		return null;
+		return ESpellType.SUMMON_EXPLOSION_RAY;
 	}
 
 }
