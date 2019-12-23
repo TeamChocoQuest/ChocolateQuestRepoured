@@ -30,6 +30,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGian
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileFirewallPart;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
@@ -64,6 +65,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
@@ -105,7 +107,8 @@ public class ModEntityRenderers {
 				renderManager -> new RenderProjectileSpiderBall(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class,
 				renderManager -> new RenderProjectileVampiricSpell(renderManager));
-		
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class,
+				renderManager -> new RenderProjectileFirewallPart(renderManager));
 		
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class,

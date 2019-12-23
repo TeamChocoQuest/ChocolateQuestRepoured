@@ -32,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
@@ -62,6 +63,7 @@ public class ModEntities {
 	public static final EntityEntry PROJECTILE_POISON_SPELL = Null();
 	public static final EntityEntry PROJECTILE_SPIDER_BALL = Null();
 	public static final EntityEntry PROJECTILE_VAMPIRIC_SPELL = Null();
+	public static final EntityEntry PROJECTILE_FIREWALL_PART = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -109,6 +111,7 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(ProjectilePoisonSpell.class, "projectile_poison_spell", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileSpiderBall.class, "projectile_spider_ball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
