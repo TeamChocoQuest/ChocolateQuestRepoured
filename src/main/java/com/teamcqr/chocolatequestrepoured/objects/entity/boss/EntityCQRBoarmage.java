@@ -6,10 +6,18 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.BossInfo.Color;
@@ -64,6 +72,19 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		
 		super.onDeath(cause);
 	}
+	
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(5, new EntityAIHealingPotion(this));
+		this.tasks.addTask(6, new EntityAISummonMeteors(this));
+		this.tasks.addTask(7, new EntityAIExplosionRay(this));
+		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this));
+
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+	}
 
 	@Override
 	protected ResourceLocation getLootTable() {
@@ -77,12 +98,12 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	@Override
 	public EFaction getDefaultFaction() {
-		return EFaction.BEASTS;
+		return EFaction.UNDEAD;
 	}
 
 	@Override
 	public int getTextureCount() {
-		return 0;
+		return 1;
 	}
 
 	@Override
