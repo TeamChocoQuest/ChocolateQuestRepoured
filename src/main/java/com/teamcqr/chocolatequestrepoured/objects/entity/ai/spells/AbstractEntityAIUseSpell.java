@@ -17,13 +17,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	public AbstractEntityAIUseSpell(AbstractEntityCQR entity) {
 		super(entity);
 	}
-	
-	public AbstractEntityAIUseSpell(AbstractEntityCQR entity, boolean cantMoveWhileCasting) {
-		super(entity);
-		this.dontMoveEntityWhilstCasting = cantMoveWhileCasting;
-	}
 
-	protected boolean dontMoveEntityWhilstCasting = false;
 	protected int spellWarmup;
 	protected int spellCooldown;
 
@@ -75,11 +69,6 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	 */
 	public void updateTask() {
 		this.entity.setSpellCasting(true);
-		if(dontMoveEntityWhilstCasting) {
-			this.entity.setMoveForward(0);
-			this.entity.setMoveStrafing(0);
-			this.entity.setVelocity(0, entity.getMoveHelper().getY(), 0);
-		}
 		--this.spellWarmup;
 
 		if (this.spellWarmup == 0) {
