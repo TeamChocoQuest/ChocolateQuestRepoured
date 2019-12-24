@@ -38,7 +38,6 @@ public class LayerMagicalArmor extends AbstractLayerCQR {
             GlStateManager.translate(f1, f2, 0.0F);
             GlStateManager.matrixMode(5888);
             GlStateManager.enableBlend();
-            float f3 = 0.5F;
             GlStateManager.color(0.5F, 0.5F, 0.5F, 1.0F);
             GlStateManager.disableLighting();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
