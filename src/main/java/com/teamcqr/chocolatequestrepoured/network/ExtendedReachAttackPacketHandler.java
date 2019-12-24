@@ -25,7 +25,8 @@ public class ExtendedReachAttackPacketHandler implements IMessageHandler<Extende
                 {
                     ItemSpearBase spear = (ItemSpearBase)attackingPlayer.getHeldItemMainhand().getItem();
                     double distSq = attackingPlayer.getDistanceSq(attackTarget);
-                    double reachSq = Math.pow(spear.getReach(), 2.0);
+                    double reach = message.getIsExtended() ? spear.getReachExtended() : spear.getReach();
+                    double reachSq = Math.pow(reach, 2.0);
 
                     if (reachSq >= distSq)
                     {

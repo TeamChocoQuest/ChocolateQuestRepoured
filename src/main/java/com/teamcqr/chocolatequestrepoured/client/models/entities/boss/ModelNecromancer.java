@@ -79,16 +79,11 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.bipedBody.addChild(this.Buckle);
         this.Hood_Top.addChild(this.Hood_Front);
         this.bipedBody.addChild(this.Leg_Cape);
-      //  this.bipedBody.addChild(this.bipedHead);
-      //  this.bipedBody.addChild(this.bipedRightArm);
         this.bipedHead.addChild(this.Eyes);
         this.bipedHead.addChild(this.Hood_Rear);
         this.Hood_Rear.addChild(this.Hood_Top);
-       // this.bipedBody.addChild(this.bipedLeftArm);
-        //this.bipedBody.addChild(this.bipedRightLeg);
         this.Hood_Top.addChild(this.Hood_Right);
         this.Hood_Top.addChild(this.Hood_Left);
-        //this.bipedBody.addChild(this.bipedLeftLeg);
         this.bipedHead.addChild(this.Nose);
     }
 

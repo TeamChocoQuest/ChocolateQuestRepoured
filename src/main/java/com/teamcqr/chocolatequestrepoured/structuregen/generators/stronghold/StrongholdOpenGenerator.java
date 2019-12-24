@@ -45,6 +45,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
 		super();
 		this.dungeon = dungeon;
+		this.structureBounds = new Tuple<Integer, Integer>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 		
 		settings.setMirror(Mirror.NONE);
 		settings.setRotation(Rotation.NONE);
@@ -59,7 +60,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	private void computeNotFittingStructures() {
 		for(File f : dungeon.getRoomFolder().listFiles(DungeonGenUtils.getStructureFileFilter())) {
 			CQStructure struct = new CQStructure(f, dungeon, 0, 0, false);
-			if(struct.getSizeX() != structureBounds.getFirst() || struct.getSizeZ() != structureBounds.getSecond()) {
+			if(struct != null && (struct.getSizeX() != structureBounds.getFirst() || struct.getSizeZ() != structureBounds.getSecond())) {
 				blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
@@ -78,8 +79,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		this.dunX = x;
 		this.dunZ = z;
 		BlockPos initPos = new BlockPos(x,y,z);
-		initPos = initPos.add(0,dungeon.getYOffset(),0);
-		initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
+		//initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
+		//initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
 		for(int i = 0; i < floors.length; i++) {
 			StrongholdFloorOpen floor = new StrongholdFloorOpen(this);
 			File stair = null;
@@ -105,6 +106,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 				floor.calculatePositions();
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
+			floors[i] = floor;
 		}
 	}
 

@@ -2,28 +2,46 @@ package com.teamcqr.chocolatequestrepoured.objects.items.spears;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.ExtendedReachAttackPacket;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.renderer.entity.RenderPlayer;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
+import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nullable;
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Copyright (c) 20.12.2019
@@ -32,20 +50,103 @@ import java.util.List;
  */
 public class ItemSpearBase extends ItemSword {
 
+	private final float SPECIAL_REACH_MULTIPLIER = 1.5F;
 	private float reach;
+	private float attackSpeed;
 
-	public ItemSpearBase(ToolMaterial material, float reach) {
+
+	public ItemSpearBase(ToolMaterial material, float reach, float attackSpeed) {
 		super(material);
 		this.reach = reach;
+		this.attackSpeed = attackSpeed;
 	}
 
 	public float getReach(){
 		return reach;
 	}
 
+	public float getReachExtended() {
+		return reach * SPECIAL_REACH_MULTIPLIER;
+	}
+
+	@Override
+	public ImmutableMap<String, ITimeValue> getAnimationParameters(ItemStack stack, World world, EntityLivingBase entity)
+	{
+		return super.getAnimationParameters(stack, world, entity);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
+		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, attackSpeed);
+		return modifiers;
+	}
+
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id,
+								   double value) {
+		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		Optional<AttributeModifier> modifierOptional = modifiers.stream()
+				.filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+
+		if (modifierOptional.isPresent()) {
+			AttributeModifier modifier = modifierOptional.get();
+			modifiers.remove(modifier);
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value,
+					modifier.getOperation()));
+		}
+	}
+
+	//Makes the right click a "charge attack" action
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack)
+	{
+		return EnumAction.BOW;
+	}
+
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack stack = playerIn.getHeldItem(handIn);
+		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20 * 5); //20 ticks per sec * 5 seconds
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+	}
+
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack)
+	{
+		return 72000;
+	}
+
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		final float SPECIAL_CHARGE_TIME_TICKS = 20F * 1.5F;
+
+		if(entityLiving instanceof EntityPlayer)
+		{
+			EntityPlayer player = (EntityPlayer)entityLiving;
+			int timeCharged = getMaxItemUseDuration(stack) - timeLeft;
+			if (!player.isSneaking() && timeCharged > SPECIAL_CHARGE_TIME_TICKS)
+			{
+				RayTraceResult result = getMouseOverExtended(reach * SPECIAL_REACH_MULTIPLIER);
+				if (result != null && result.entityHit != null)
+				{
+					if (result.entityHit != player && result.entityHit.hurtResistantTime == 0)
+					{
+						CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), true));
+					}
+				}
+				else
+				{
+					player.swingArm(EnumHand.MAIN_HAND);
+				}
+
+				player.getCooldownTracker().setCooldown(stack.getItem(), 20 * 2); //20 ticks per sec * 2 seconds
+			}
+		}
+	}
+
 	@Mod.EventBusSubscriber(modid = Reference.MODID)
 	public static class EventHandler {
-
 		@SideOnly(Side.CLIENT)
 		@SubscribeEvent(priority = EventPriority.NORMAL, receiveCanceled = true)
 		public static void onEvent(MouseEvent event) {
@@ -68,7 +169,7 @@ public class ItemSpearBase extends ItemSword {
 						{
 							if (result.entityHit != clickingPlayer && result.entityHit.hurtResistantTime == 0)
 							{
-								CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId()));
+								CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), false));
 							}
 						}
 					}
@@ -79,9 +180,8 @@ public class ItemSpearBase extends ItemSword {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static RayTraceResult getMouseOverExtended(float distance)
-	{
-		//Most of this is copied from EntityRenderer#getMouseOver()
+	public static RayTraceResult getMouseOverExtended(float distance) {
+		//Most of this is copied from EntityRenderer#getMouseOver(). Some variable names changed for readability
 
 		Entity pointedEntity = null;
 		Minecraft mc = Minecraft.getMinecraft();
@@ -166,6 +266,39 @@ public class ItemSpearBase extends ItemSword {
 
 		return null;
 
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.spear_diamond.name"));
+		} else {
+			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
+		}
+	}
+
+	//Unequip off hand weapons
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if (!worldIn.isRemote) {
+			if (entityIn instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entityIn;
+
+				if (player.getHeldItemMainhand() == stack)
+				{
+					if (!player.getHeldItemOffhand().isEmpty()) {
+						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
+							player.entityDropItem(player.getHeldItemOffhand(), 0F);
+						}
+
+						if (!player.capabilities.isCreativeMode) {
+							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 }

@@ -106,7 +106,7 @@ public enum ELootTable {
 				}
 			}
 		}
-		return null;
+		return ELootTable.CQ_VANILLA_DUNGEON;
 	}
 	
 	public static ELootTable valueOf(int ID) {

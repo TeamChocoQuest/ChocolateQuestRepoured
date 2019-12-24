@@ -491,6 +491,7 @@ description.staff_wind.name=不管这是做什么的，现在还不起作用。 
 description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
 description.staff.name=丢失 #TODO
 description.staff_thunder.name=丢失 #TODO
+description.spear_diamond.name=丢失 #TODO
 
 // Mobs
 entity.boarman.name=野猪人

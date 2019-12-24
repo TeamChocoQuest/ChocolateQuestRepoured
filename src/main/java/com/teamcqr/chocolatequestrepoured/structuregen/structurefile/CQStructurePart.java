@@ -80,6 +80,7 @@ public class CQStructurePart extends Template {
 	
 	//CONFIRMED WORKING
 	//@SuppressWarnings("unchecked")
+	@SuppressWarnings("unchecked")
 	@Override
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
 		//System.out.println("Scanning blocks...");
