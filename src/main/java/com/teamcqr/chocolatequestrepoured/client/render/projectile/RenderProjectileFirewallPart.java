@@ -37,7 +37,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
         float f1 = 0.5F;
         float f3 = entity.height / f;
         float f4 = (float)(entity.posY - entity.getEntityBoundingBox().minY);
-        float rotateAngle = new Float(Math.atan2(entity.motionX, entity.motionZ)) - new Float(Math.toRadians(45));
+        float rotateAngle = new Float(Math.atan2(entity.motionX, entity.motionZ)) - new Float(Math.toRadians(90));
         GlStateManager.rotate(rotateAngle, 0.0F, 1.0F, 0.0F);
         GlStateManager.translate(0.0F, 0.0F, -0.3F + (float)((int)f3) * 0.02F);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
