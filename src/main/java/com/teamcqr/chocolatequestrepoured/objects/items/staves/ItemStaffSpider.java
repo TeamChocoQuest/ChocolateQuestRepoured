@@ -12,9 +12,9 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffSpider extends ItemStaff implements IRangedWeapon{
+public class ItemStaffSpider extends Item implements IRangedWeapon{
 
 	public ItemStaffSpider() {
 		setMaxDamage(2048);
@@ -51,8 +51,7 @@ public class ItemStaffSpider extends ItemStaff implements IRangedWeapon{
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
-	@Override
-	public void shoot(World worldIn, EntityLivingBase playerIn, ItemStack stack, EnumHand handIn) {
+	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
 		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH,
 				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
 				false);
@@ -62,10 +61,8 @@ public class ItemStaffSpider extends ItemStaff implements IRangedWeapon{
 			ProjectileSpiderBall ball = new ProjectileSpiderBall(worldIn, playerIn);
 			ball.shoot(playerIn, playerIn.rotationPitch, playerIn.rotationYaw, 0.0F, 1.5F, 0F);
 			worldIn.spawnEntity(ball);
-			if(playerIn instanceof EntityPlayer) {
-				stack.damageItem(1, playerIn);
-				((EntityPlayer) playerIn).getCooldownTracker().setCooldown(stack.getItem(), 20);
-			}
+			stack.damageItem(1, playerIn);
+			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 		}
 	}
 
@@ -99,6 +96,7 @@ public class ItemStaffSpider extends ItemStaff implements IRangedWeapon{
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
+
 
 	@Override
 	public void shoot(World world, Entity shooter, double x, double y, double z) {

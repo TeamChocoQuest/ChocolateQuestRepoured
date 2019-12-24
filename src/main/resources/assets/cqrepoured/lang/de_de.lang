@@ -486,6 +486,7 @@ description.staff_wind.name=Nicht funktional. #TODO
 description.staff_poison.name=Nicht funktional. #TODO
 description.staff.name=Fehlt #TODO
 description.staff_thunder.name=Fehlt #TODO
+description.spear_diamond.name=Fehlt #TODO
 
 // Mobs
 entity.dummy.name=Dummy(CQR)

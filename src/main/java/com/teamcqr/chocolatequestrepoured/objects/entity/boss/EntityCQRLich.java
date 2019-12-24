@@ -21,12 +21,13 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummoner {
@@ -92,11 +93,6 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 	
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
-	}
-	
-	@Override
 	public void onDeath(DamageSource cause) {
 		//Kill minions
 		for(Entity e : summonedMinions) {
@@ -131,7 +127,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	public EFaction getSummonerFaction() {
-		return getDefaultFaction();
+		return getFaction();
 	}
 
 	@Override
@@ -151,6 +147,22 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	
 	@Override
 	protected void updateCooldownForMagicArmor() {
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		if(currentPhylacteryPosition != null) {
+			compound.setTag("currentPhylactery", NBTUtil.createPosTag(currentPhylacteryPosition));
+		}
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		if(compound.hasKey("currentPhylactery")) {
+			currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
+		}
 	}
 
 }

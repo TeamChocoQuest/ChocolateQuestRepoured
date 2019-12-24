@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.init;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMage;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
@@ -29,11 +30,13 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGian
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileFirewallPart;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
@@ -62,6 +65,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
@@ -103,7 +107,8 @@ public class ModEntityRenderers {
 				renderManager -> new RenderProjectileSpiderBall(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class,
 				renderManager -> new RenderProjectileVampiricSpell(renderManager));
-		
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class,
+				renderManager -> new RenderProjectileFirewallPart(renderManager));
 		
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class,
@@ -198,6 +203,11 @@ public class ModEntityRenderers {
 		// Lich
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class,
 				renderManager -> new RenderCQRMage(renderManager, new ModelLich(0F), "entity_cqr_lich")
+			);
+		
+		// Boar Mage
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class,
+				renderManager -> new RenderCQRMage(renderManager, new ModelPigMage(0F), "entity_cqr_boar_mage")
 			);
 	}
 
