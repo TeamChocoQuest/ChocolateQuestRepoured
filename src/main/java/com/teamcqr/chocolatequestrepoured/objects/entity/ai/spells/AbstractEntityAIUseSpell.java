@@ -78,6 +78,11 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);
 		}
 	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
+	}
 
 	protected abstract void castSpell();
 
