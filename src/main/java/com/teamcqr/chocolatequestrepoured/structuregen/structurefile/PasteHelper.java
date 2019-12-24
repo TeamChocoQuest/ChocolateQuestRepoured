@@ -1,10 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
-import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
-
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 
 public class PasteHelper {
 	
@@ -64,10 +61,11 @@ public class PasteHelper {
 			case COUNTERCLOCKWISE_90:
 				oldCenteredPastePos = oldCenteredPastePos.add(0,0,sizeZ).add(0,0,-1);
 				break;
+			default:
+				break;
 			}
 			return oldCenteredPastePos;
 		}
-		//TODO
 		switch(rotation) {
 		case CLOCKWISE_180:
 			x = new Double(Math.ceil((double)sizeX /2D)).intValue();
