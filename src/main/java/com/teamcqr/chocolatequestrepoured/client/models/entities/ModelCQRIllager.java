@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 
 import net.minecraft.client.model.ModelRenderer;
@@ -75,19 +74,24 @@ public class ModelCQRIllager extends ModelCQRBiped {
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         if(entityIn instanceof EntityCQRIllager) {
-        	this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
-            this.bipedHead.render(scale);
+        	//this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
+        	super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+           /* this.bipedHead.render(scale);
             this.bipedBody.render(scale);
             this.bipedRightLeg.render(scale);
-            this.bipedLeftLeg.render(scale);
+            this.bipedLeftLeg.render(scale);*/
             EntityCQRIllager abstractillager = (EntityCQRIllager)entityIn;
 
             if (!abstractillager.isAggressive())
             {
                 this.arms.render(scale);
+                this.bipedRightArm.showModel = false;
+                this.bipedLeftArm.showModel = false;
             }
             else
             {
+            	this.bipedRightArm.showModel = true;
+                this.bipedLeftArm.showModel = true;
                 this.bipedRightArm.render(scale);
                 this.bipedLeftArm.render(scale);
             }
@@ -115,7 +119,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
         this.bipedRightLeg.rotateAngleY = 0.0F;
         this.bipedLeftLeg.rotateAngleY = 0.0F;
         
-        this.isRiding = ((AbstractEntityCQR) entityIn).isSitting() || entityIn.isRiding();
+        super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
         
         AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = ((EntityCQRIllager)entityIn).getIllagerArmPose();
 
@@ -148,7 +152,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
             this.bipedRightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
             this.bipedLeftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
         }
-        else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.SPELLCASTING)
+        /*else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.SPELLCASTING)
         {
             this.bipedRightArm.rotationPointZ = 0.0F;
             this.bipedRightArm.rotationPointX = -5.0F;
@@ -160,7 +164,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
             this.bipedLeftArm.rotateAngleZ = -2.3561945F;
             this.bipedRightArm.rotateAngleY = 0.0F;
             this.bipedLeftArm.rotateAngleY = 0.0F;
-        }
+        }*/
         else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.BOW_AND_ARROW)
         {
             this.bipedRightArm.rotateAngleY = -0.1F + this.bipedHead.rotateAngleY;
