@@ -40,6 +40,7 @@ import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityPollo;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -89,6 +90,7 @@ public class ModEntities {
 	public static final EntityEntry GIANT_SILVERFISH = Null();
 	public static final EntityEntry GIANT_SILVERFISH1 = Null();
 	public static final EntityEntry GIANT_SILVERFISH2 = Null();
+	public static final EntityEntry POLLO = Null();
 
 	public static final EntityEntry NETHER_DRAGON = Null();
 	public static final EntityEntry GIANT_TORTOISE = Null();
@@ -138,6 +140,7 @@ public class ModEntities {
 					createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityPollo.class, "pollo", 64, 1, true, 0xC29D62, 0xEA9393),
 					
 					//Bosses
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
