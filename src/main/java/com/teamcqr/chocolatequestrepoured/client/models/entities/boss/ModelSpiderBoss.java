@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.client.models.entities;
+package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
