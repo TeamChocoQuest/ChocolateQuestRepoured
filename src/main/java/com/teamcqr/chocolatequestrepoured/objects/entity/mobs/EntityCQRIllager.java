@@ -2,10 +2,14 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
+import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.monster.AbstractIllager.IllagerArmPose;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBow;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,20 +34,24 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 		
 		this.dataManager.register(IS_AGGRESSIVE, false);
 	}
-
+	
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 
 	}
 	
 	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		if(getAttackTarget() != null) {
-			dataManager.set(IS_AGGRESSIVE, true);
-		} else {
-			dataManager.set(IS_AGGRESSIVE, false);
+	public void onEntityUpdate() {
+		if(!world.isRemote) {
+			if(getAttackTarget() != null && !this.dataManager.get(IS_AGGRESSIVE)) {
+				dataManager.set(IS_AGGRESSIVE, true);
+				setArmPose(ECQREntityArmPoses.HOLDING_ITEM);
+			} else if(getAttackTarget() == null) {
+				dataManager.set(IS_AGGRESSIVE, false);
+				setArmPose(ECQREntityArmPoses.NONE);
+			}
 		}
+		super.onEntityUpdate();
 	}
 
 	@Override
@@ -63,7 +71,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	
 	@Override
 	public int getTextureCount() {
-		return 1;
+		return 2;
 	}
 	
 	@Override
@@ -72,27 +80,24 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	}
 
 	public boolean isAggressive() {
+		if(!world.isRemote) {
+			return getAttackTarget() != null;
+		}
 		return dataManager.get(IS_AGGRESSIVE);
 	}
 
 	@SideOnly(Side.CLIENT)
 	public IllagerArmPose getIllagerArmPose() {
 		if(isAggressive()) {
-			switch(getArmPose()) {
-			case HOLDING_ITEM:
-				return IllagerArmPose.ATTACKING;
-			case PULLING_BOW:
-				return IllagerArmPose.ATTACKING;
-			case SPELLCASTING:
+			if(getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
 				return IllagerArmPose.SPELLCASTING;
-			case STAFF_L:
-			case STAFF_R:
-				return IllagerArmPose.ATTACKING;
-			default:
-				return IllagerArmPose.CROSSED;
 			}
+			Item active = getActiveItemStack().getItem();
+			if(active instanceof IRangedWeapon || active instanceof ItemBow) {
+				return IllagerArmPose.BOW_AND_ARROW;
+			}
+			return IllagerArmPose.ATTACKING;
 		}
-		
 		return IllagerArmPose.CROSSED;
 	}
 
