@@ -74,12 +74,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale)
     {
         if(entityIn instanceof EntityCQRIllager) {
-        	//this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
         	super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-           /* this.bipedHead.render(scale);
-            this.bipedBody.render(scale);
-            this.bipedRightLeg.render(scale);
-            this.bipedLeftLeg.render(scale);*/
             EntityCQRIllager abstractillager = (EntityCQRIllager)entityIn;
 
             if (!abstractillager.isAggressive())
