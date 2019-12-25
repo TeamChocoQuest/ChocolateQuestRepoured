@@ -89,9 +89,10 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@SideOnly(Side.CLIENT)
 	public IllagerArmPose getIllagerArmPose() {
 		if(isAggressive()) {
-			if(getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
+			if(isSpellcasting()) {
 				return IllagerArmPose.SPELLCASTING;
 			}
+			
 			Item active = getActiveItemStack().getItem();
 			if(active instanceof IRangedWeapon || active instanceof ItemBow) {
 				return IllagerArmPose.BOW_AND_ARROW;
