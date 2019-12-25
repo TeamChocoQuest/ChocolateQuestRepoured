@@ -219,7 +219,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
-		this.setHealingPotions(3);
+		this.setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
@@ -806,12 +806,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void rescaleHitbox(double multiplierX, double multiplierY) {
-		double h = this.height * multiplierY;
-		double w = this.width * multiplierX;
+		float h = new Float(this.height * multiplierY);
+		float w = new Float(this.width * multiplierX);
 		this.resizeHitBox(w, h);
 	}
 
-	public void resizeHitBox(double hitboxX, double hitboxY) {
+	public void resizeHitBox(float hitboxX, float hitboxY) {
 		if (this.isChild()) {
 			hitboxX *= 0.5D;
 			hitboxY *= 0.5D;
@@ -830,6 +830,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		double wHalf = hitboxX / 2D;
 		this.setEntityBoundingBox(new AxisAlignedBB(this.posX - wHalf, this.posY, this.posZ - wHalf, this.posX + wHalf, this.posY + hitboxY, this.posZ + wHalf));
+		super.setSize(hitboxX, hitboxY);
 	}
 
 	public void setHealthScale(double hs) {

@@ -25,6 +25,7 @@ public class ConfigFileHelper {
 	//Mobs
 	//health
 	private double baseHealthDistanceDivisor = 1000;
+	private int defaultHealingPotionCount = 1;
 	
 	public ConfigFileHelper() {
 		
@@ -93,6 +94,10 @@ public class ConfigFileHelper {
 		prop = config.get("mobs", "distanceDivisor", 1000.0D);
 		baseHealthDistanceDivisor = prop.getDouble(1000.0D);
 		
+		//Healing potion count
+		prop = config.get("mobs", "defaultHealingPotionCount", 1);
+		defaultHealingPotionCount = prop.getInt(1);
+		
 		//radius of the faction repu that receives updates in a certain radius
 		prop = config.get("mobs", "factionUpdateRadius", 100);
 		factionKillRepuChangeRadius = prop.getInt(100);
@@ -157,6 +162,9 @@ public class ConfigFileHelper {
 	}
 	public int getMobChangeDistanceDivisor() {
 		return mobChangeDistance;
+	}
+	public int getDefaultHealingPotionCount() {
+		return defaultHealingPotionCount;
 	}
 
 }
