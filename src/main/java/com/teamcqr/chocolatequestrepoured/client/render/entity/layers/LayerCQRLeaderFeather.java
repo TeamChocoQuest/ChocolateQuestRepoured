@@ -28,7 +28,7 @@ public class LayerCQRLeaderFeather extends AbstractLayerCQR {
 			GlStateManager.rotate(180, 0, 0, 1);
 			GlStateManager.scale(scale +0.4, scale +0.4, scale +0.4);
 			float yaw = netHeadYaw +90F;
-			GlStateManager.rotate(headPitch, 1, 0, 0);
+			GlStateManager.rotate(-headPitch, 1, 0, 0);
 			GlStateManager.rotate(yaw, 0, 1, 0);
 			//GlStateManager.rotate(0, 0, -90, 0);
 			float height = entity.getEyeHeight();
