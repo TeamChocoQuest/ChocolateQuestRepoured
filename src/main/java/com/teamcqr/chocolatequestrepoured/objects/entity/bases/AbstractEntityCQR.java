@@ -60,6 +60,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -98,6 +99,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
 	protected int spellTicks = 0;
+	
+	protected PathNavigate waterNavigator;
 	
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private EFaction faction;
