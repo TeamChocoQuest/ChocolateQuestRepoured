@@ -226,7 +226,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		float initSizeVar = -0.125F + (this.rand.nextFloat() * 0.25F);
 		this.dataManager.set(SIZE_VAR, initSizeVar);
 		// Adapt size of hitbox
-		this.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
+		super.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
 		// System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
