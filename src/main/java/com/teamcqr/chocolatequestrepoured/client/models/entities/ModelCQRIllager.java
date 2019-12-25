@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 
 import net.minecraft.client.model.ModelRenderer;
@@ -113,6 +114,9 @@ public class ModelCQRIllager extends ModelCQRBiped {
         this.bipedLeftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
         this.bipedRightLeg.rotateAngleY = 0.0F;
         this.bipedLeftLeg.rotateAngleY = 0.0F;
+        
+        this.isRiding = ((AbstractEntityCQR) entityIn).isSitting() || entityIn.isRiding();
+        
         AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = ((EntityCQRIllager)entityIn).getIllagerArmPose();
 
         if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.ATTACKING)
