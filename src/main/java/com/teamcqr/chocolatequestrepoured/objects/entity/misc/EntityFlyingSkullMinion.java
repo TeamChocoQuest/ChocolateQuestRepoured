@@ -47,7 +47,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if(summoner == null || summoner.isDead) {
+		if((summoner == null || summoner.isDead) && ticksExisted > 5) {
 			explode();
 			return;
 		}
@@ -62,7 +62,6 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			//If we hit a wall we explode
 			if(!isInsideOfMaterial(Material.AIR)) {
 				explode();
-				setDead();
 			}
 		} else {
 			Vec3d v = summoner.getLookVec();
@@ -101,6 +100,8 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+		
+		setDead();
 	}
 
 	public void setTarget(Entity target) {
