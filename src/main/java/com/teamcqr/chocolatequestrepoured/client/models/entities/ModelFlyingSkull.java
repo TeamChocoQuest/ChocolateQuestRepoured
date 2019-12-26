@@ -34,8 +34,8 @@ public class ModelFlyingSkull extends ModelBase {
 			float headPitch, float scale) { 
         if(entity instanceof EntityFlyingSkullMinion) {
         	this.skull.rotateAngleY = new Float(Math.atan2(entity.motionX, entity.motionZ));
-        	//this.skull.rotateAngleX = (entity.motionY == 0 ? 0F : (new Float(Math.atan2(entity.motionY, 0)))) -90F;
-        	this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
+        	this.skull.rotateAngleX = (entity.motionY == 0 ? 0F : (new Float(Math.atan2(entity.motionY, 0)))) - new Float(Math.toRadians(90F));
+        	//this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
         	this.jaw.rotateAngleX = new Float(Math.toRadians(22.5D * (0.5D*(1D + (Math.sin( ((2D * Math.PI) / 8) * entity.ticksExisted))))));
         	this.skull.render(scale);
         	Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.getPositionVector().x, entity.getPositionVector().y + 0.02, entity.getPositionVector().z, 0F, 0.5F, 0F, 2);
