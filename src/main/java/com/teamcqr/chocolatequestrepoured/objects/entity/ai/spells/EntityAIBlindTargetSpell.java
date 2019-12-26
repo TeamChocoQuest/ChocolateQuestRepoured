@@ -44,12 +44,12 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected int getCastingTime() {
-		return 20;
+		return 15;
 	}
 
 	@Override
 	protected int getCastingInterval() {
-		return 100;
+		return 50;
 	}
 
 	@Override
