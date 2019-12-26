@@ -33,12 +33,22 @@ public class ModelFlyingSkull extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) { 
         if(entity instanceof EntityFlyingSkullMinion) {
-        	this.skull.rotateAngleY = netHeadYaw;
-        	this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
+        	super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+        	//setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+        	//this.skull.rotateAngleY = netHeadYaw;
+        	//this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
         	this.jaw.rotateAngleX = new Float(Math.toRadians(22.5D * (0.5D*(1D + (Math.sin( ((2D * Math.PI) / 8) * entity.ticksExisted))))));
         	this.skull.render(scale);
         	Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.getPositionVector().x, entity.getPositionVector().y + 0.02, entity.getPositionVector().z, 0F, 0.5F, 0F, 2);
         }
     }
+    
+    @Override
+    	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+    			float headPitch, float scaleFactor, Entity entityIn) {
+    		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    		this.skull.rotateAngleY = netHeadYaw * 0.017453292F;
+    		this.skull.rotateAngleX = headPitch * 0.017453292F;
+    	}
 
 }
