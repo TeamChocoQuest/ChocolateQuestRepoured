@@ -48,7 +48,7 @@ public class ModelFlyingSkull extends ModelBase {
     			float headPitch, float scaleFactor, Entity entityIn) {
     		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
     		this.skull.rotateAngleY = netHeadYaw * 0.017453292F;
-    		this.skull.rotateAngleX = headPitch * 0.017453292F;
+    		this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
     	}
 
 }
