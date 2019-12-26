@@ -8,6 +8,10 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 
+/**
+ * Skullo - ArloTheEpic
+ * Created using Tabula 7.0.1
+ */
 public class ModelFlyingSkull extends ModelBase {
 
 	public ModelRenderer skull;
@@ -26,13 +30,15 @@ public class ModelFlyingSkull extends ModelBase {
     }
 
     @Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
+			float headPitch, float scale) { 
         if(entity instanceof EntityFlyingSkullMinion) {
         	this.skull.rotateAngleY = new Float(Math.atan2(entity.motionX, entity.motionZ));
-        	this.skull.rotateAngleX = (entity.motionY == 0 ? 0F : (new Float(Math.atan2(entity.motionY, 0)))) -90F;
+        	//this.skull.rotateAngleX = (entity.motionY == 0 ? 0F : (new Float(Math.atan2(entity.motionY, 0)))) -90F;
+        	this.skull.rotateAngleX = headPitch;
         	this.jaw.rotateAngleX = new Float(Math.toRadians(22.5D * (0.5D*(1D + (Math.sin( ((2D * Math.PI) / 8) * entity.ticksExisted))))));
-        	this.skull.render(f5);
-        	Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.getPosition().getX(), entity.getPosition().getY() + 0.02, entity.getPosition().getZ(), 0F, 0.5F, 0F, 2);
+        	this.skull.render(scale);
+        	Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.SPELL_WITCH, entity.getPositionVector().x, entity.getPositionVector().y + 0.02, entity.getPositionVector().z, 0F, 0.5F, 0F, 2);
         }
     }
 
