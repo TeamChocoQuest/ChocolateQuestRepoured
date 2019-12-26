@@ -68,8 +68,13 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		super.onLivingUpdate();
 		filterSummonLists();
 		
-		if(summonedSkulls.size() > 3) {
-			
+		if(getAttackTarget() != null && !getAttackTarget().isDead && summonedSkulls.size() >= 3) {
+			for(int i = 2; i < summonedSkulls.size(); i++) {
+				EntityFlyingSkullMinion skull = summonedSkulls.get(i);
+				if(!skull.isAttacking() || !skull.hasTarget()) {
+					skull.setTargetAndAttack(getAttackTarget());
+				}
+			}
 		}
 	}
 	
