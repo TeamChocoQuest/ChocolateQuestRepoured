@@ -11,9 +11,12 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 /*
@@ -24,9 +27,10 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 
 	protected ISummoner summoner = null;
-	protected static final int MAX_MINIONS = 10;
-	protected static final int MAX_MINIONS_AT_A_TIME = 3;
+	protected int MAX_MINIONS = 10;
+	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<Entity>();
+	protected boolean summonViaCircle = true;
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 	
@@ -37,10 +41,13 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		}
 	}
 	
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture) {
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn) {
 		this(entity);
+		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
 		this.circleTextureOverride = texture;
+		this.MAX_MINIONS = maxMinions;
+		this.MAX_MINIONS_AT_A_TIME = maxMinionsPerSpawn;
 	}
 	
 	@Override
@@ -114,17 +121,39 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 							texture = ECircleTexture.SKELETON;
 						}
 					}
-					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
-					circle.setSummon(summon);
-					//circle.setLocationAndAngles(p.getX(), entity.posY +0.05, p.getZ(), 0F, 0F);
 					if(entity.world.getBlockState(p).isFullBlock()) {
 						p = p.add(0,1,0);
 					}
-					circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
-					
-					entity.world.spawnEntity(circle);
-					summoner.addSummonedEntityToList(circle);
-					activeCircles.add(circle);
+					if(summonViaCircle) {
+						EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
+						circle.setSummon(summon);
+						circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
+						
+						entity.world.spawnEntity(circle);
+						summoner.addSummonedEntityToList(circle);
+						activeCircles.add(circle);
+					} else {
+						Entity summoned = EntityList.createEntityByIDFromName(summon, entity.world);
+						
+						summoned.setUniqueId(MathHelper.getRandomUUID());
+						summoned.setPosition(p.getX(), p.getY() + 0.5D, p.getZ());
+						
+						entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F, 1);
+						
+						entity.world.spawnEntity(summoned);
+						if(summoner != null && !summoner.getSummoner().isDead) {
+							summoner.setSummonedEntityFaction(summoned);
+							summoner.addSummonedEntityToList(summoned);
+						}
+						
+						entity.world.spawnEntity(summoned);
+						summoner.addSummonedEntityToList(summoned);
+						activeCircles.add(summoned);
+					}
 				}
 			}
 		}
