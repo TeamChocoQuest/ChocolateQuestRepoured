@@ -85,6 +85,9 @@ public class ModelNecromancer extends ModelCQRBiped {
         this.Hood_Top.addChild(this.Hood_Right);
         this.Hood_Top.addChild(this.Hood_Left);
         this.bipedHead.addChild(this.Nose);
+        
+        this.bipedHeadwear.isHidden = true;
+        this.bipedHeadwear.showModel = false;
     }
 
     /**

@@ -61,7 +61,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected ESpellType getSpellType() {
-		return ESpellType.POISON_PLAYER;
+		return ESpellType.POISON_TARGET;
 	}
 
 }

@@ -8,7 +8,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
@@ -40,6 +42,7 @@ import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
+import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityPollo;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -89,14 +92,17 @@ public class ModEntities {
 	public static final EntityEntry GIANT_SILVERFISH = Null();
 	public static final EntityEntry GIANT_SILVERFISH1 = Null();
 	public static final EntityEntry GIANT_SILVERFISH2 = Null();
+	public static final EntityEntry POLLO = Null();
 
 	public static final EntityEntry NETHER_DRAGON = Null();
 	public static final EntityEntry GIANT_TORTOISE = Null();
 	public static final EntityEntry LICH = Null();
 	public static final EntityEntry BOAR_MAGE = Null();
+	public static final EntityEntry NECROMANCER = Null();
 	
 	//Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
+	public static final EntityEntry FLYING_SKULL = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -138,15 +144,18 @@ public class ModEntities {
 					createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityPollo.class, "pollo", 64, 1, true, 0xC29D62, 0xEA9393),
 					
 					//Bosses
 					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRGiantTortoise.class, "giant_tortoise", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRLich.class, "lich", 64,1,true, 3289650,000000),
 					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650,000000),
+					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650,000000),
 					
 					//Misc Entities
-					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true)
+					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
 			};
 
 			event.getRegistry().registerAll(entityEntries);
