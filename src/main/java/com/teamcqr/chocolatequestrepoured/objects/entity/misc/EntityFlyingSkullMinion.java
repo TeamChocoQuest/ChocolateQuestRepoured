@@ -92,8 +92,8 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			if(getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
 				Vec3d velo = targetPos.subtract(getPositionVector());
 				velo = velo.normalize();
-				velo = velo.scale(0.05);
-				setVelocity(velo.x, velo.y, velo.z);
+				velo = velo.scale(0.2);
+				setVelocity(velo.x, velo.y * 1.5, velo.z);
 			}
 		}
 	}
