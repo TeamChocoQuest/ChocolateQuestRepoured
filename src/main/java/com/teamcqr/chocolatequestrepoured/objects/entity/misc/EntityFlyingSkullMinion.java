@@ -44,7 +44,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	
 	@Override
 	public void onLivingUpdate() {
-		super.onUpdate();
+		super.onLivingUpdate();
 		if(attacking) {
 			if(this.target != null && !this.target.isDead) {
 				updateDirection();
