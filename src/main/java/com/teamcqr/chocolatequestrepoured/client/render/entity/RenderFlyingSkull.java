@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderFlyingSkull extends Render<EntityFlyingSkullMinion> {
 
-	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/flying_skull");
+	private static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/flying_skull.png");
 	private final ModelBase model;
 
 	public RenderFlyingSkull(RenderManager renderManager) {
