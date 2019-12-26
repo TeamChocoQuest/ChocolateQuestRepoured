@@ -27,12 +27,20 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	protected static final int MAX_MINIONS = 10;
 	protected static final int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<Entity>();
+	protected ResourceLocation minionOverride = null;
+	protected ECircleTexture circleTextureOverride = null;
 	
 	public EntityAISummonMinionSpell(AbstractEntityCQR entity) {
 		super(entity);
 		if(entity instanceof ISummoner) {
 			this.summoner = (ISummoner) entity;
 		}
+	}
+	
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture) {
+		this(entity);
+		this.minionOverride = minion;
+		this.circleTextureOverride = texture;
 	}
 	
 	@Override
@@ -86,11 +94,25 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 			for(BlockPos p : spawnPositions) {
 				if(entity.getNavigator().getPathToPos(p) != null) {
 					//System.out.println("Pos: " + p.toString());
-					ResourceLocation summon = new ResourceLocation(Reference.MODID, "zombie");
-					ECircleTexture texture = ECircleTexture.ZOMBIE;
-					if(entity.getRNG().nextInt(4) == 3) {
-						summon = new ResourceLocation(Reference.MODID, "skeleton");
-						texture = ECircleTexture.SKELETON;
+					ResourceLocation summon = null;
+					boolean rdmFlag = false;
+					if(minionOverride != null) {
+						summon = minionOverride;
+					} else {
+						summon = new ResourceLocation(Reference.MODID, "zombie");
+						if(entity.getRNG().nextInt(4) == 3) {
+							summon = new ResourceLocation(Reference.MODID, "skeleton");
+							rdmFlag = true;
+						}
+					}
+					ECircleTexture texture = null;
+					if(circleTextureOverride != null) {
+						texture = circleTextureOverride;
+					} else {
+						texture = ECircleTexture.ZOMBIE;
+						if(rdmFlag) {
+							texture = ECircleTexture.SKELETON;
+						}
 					}
 					EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
 					circle.setSummon(summon);
