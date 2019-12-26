@@ -24,7 +24,7 @@ public class ModelFlyingSkull extends ModelBase {
         this.jaw.setRotationPoint(0.0F, 2.0F, 4.0F);
         this.jaw.addBox(-4.0F, 0.0F, -8.0F, 8, 2, 8, scale);
         this.skull = new ModelRenderer(this, 0, 0);
-        this.skull.setRotationPoint(0.0F, 0.0F, 0.0F);
+        this.skull.setRotationPoint(0.0F, 4.0F, 0.0F);
         this.skull.addBox(-4.0F, -4.0F, -4.0F, 8, 6, 8, scale);
         this.skull.addChild(this.jaw);
     }
