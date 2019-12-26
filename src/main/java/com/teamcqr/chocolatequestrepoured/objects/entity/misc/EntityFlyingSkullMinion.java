@@ -99,6 +99,14 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		}
 	}
 	
+	public boolean isAttacking() {
+		return attacking;
+	}
+	
+	public boolean hasTarget() {
+		return target != null && !target.isDead;
+	}
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
