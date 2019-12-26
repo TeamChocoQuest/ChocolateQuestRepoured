@@ -27,7 +27,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 	@Override
 	protected void castSpell() {
 		if(entity.getAttackTarget() != null) {
-			Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector());
+			Vec3d v = entity.getAttackTarget().getLookVec();
 			v = v.normalize();
 			v = v.add(v).add(v).add(v);
 			
