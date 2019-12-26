@@ -63,6 +63,20 @@ public class TargetUtil {
 		}
 	};
 
+	public static final Predicate<? super Entity> LIVING = new Predicate<Entity>() {
+		@Override
+		public boolean apply(Entity input) {
+			if (input == null) {
+				return false;
+			}
+			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+				return false;
+			}
+			
+			return input instanceof EntityLivingBase;
+		}
+	};
+
 	public static class Sorter implements Comparator<Entity> {
 
 		private final Entity entity;
