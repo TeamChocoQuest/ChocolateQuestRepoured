@@ -9,6 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
@@ -30,9 +31,25 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		super(worldIn);
 		setSize(0.5F, 0.5F);
 		setNoGravity(true);
-		setHealth(6F);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(6F);
+		setHealth(1F);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1F);
 		this.navigator = new PathNavigateFlying(this, worldIn);
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+			explode(10F);
+			return true;
+		}
+		if(getRNG().nextInt(20) == 19) {
+			Entity summonerTmp = this.summoner;
+			this.summoner = source.getTrueSource();
+			this.target = summonerTmp;
+			return true;
+		} 
+		explode();
+		return true;
 	}
 	
 	@Override
@@ -47,11 +64,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if(summoner == null || summoner.isDead) {
-			if(ticksExisted > 5) {
-				explode();
-			}
-			return;
+		//If we hit a wall we explode
+		if(!isInsideOfMaterial(Material.AIR)) {
+			explode();
 		}
 		if(attacking) {
 			if(this.target != null && !this.target.isDead) {
@@ -59,19 +74,18 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			}
 			Vec3d v = direction;
 			v = v.normalize();
-			setVelocity(v.x * 0.6F, v.y * 0.4F, v.z * 0.6F);
+			setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			
-			//If we hit a wall we explode
-			if(!isInsideOfMaterial(Material.AIR)) {
-				explode();
-			}
-		} else {
+			getLookHelper().setLookPositionWithEntity(target, 10, 10);
+			
+		} else if(summoner != null) {
 			Vec3d v = summoner.getLookVec();
 			v = new Vec3d(v.x, 2.25D, v.z);
 			v = v.normalize();
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, isLeftSkull ? 270 : 90);
 			Vec3d targetPos = summoner.getPositionVector().add(v);
+			getLookHelper().setLookPositionWithEntity(summoner, 10, 10);
 			if(getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
 				Vec3d velo = targetPos.subtract(getPositionVector());
 				velo = velo.normalize();
@@ -96,7 +110,11 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	}
 	
 	private void explode() {
-		world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F, true, false);
+		explode(1F);
+	}
+	
+	private void explode(float strengthMultiplier) {
+		world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
 		
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
