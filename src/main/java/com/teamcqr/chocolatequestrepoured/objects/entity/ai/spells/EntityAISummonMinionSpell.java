@@ -31,6 +31,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<Entity>();
 	protected boolean summonViaCircle = true;
+	protected Vec3d positionOffsetForSummons = new Vec3d(0,0,0);
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 	
@@ -41,13 +42,14 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		}
 	}
 	
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn) {
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
 		this(entity);
 		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
 		this.circleTextureOverride = texture;
 		this.MAX_MINIONS = maxMinions;
 		this.MAX_MINIONS_AT_A_TIME = maxMinionsPerSpawn;
+		this.positionOffsetForSummons = offsetV;
 	}
 	
 	@Override
@@ -127,7 +129,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 					if(summonViaCircle) {
 						EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
 						circle.setSummon(summon);
-						circle.setPosition(p.getX(), p.getY() +0.1, p.getZ());
+						circle.setPosition(p.getX() + positionOffsetForSummons.x, p.getY() +0.1 + positionOffsetForSummons.y, p.getZ() + positionOffsetForSummons.z);
 						
 						entity.world.spawnEntity(circle);
 						summoner.addSummonedEntityToList(circle);
@@ -136,7 +138,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 						Entity summoned = EntityList.createEntityByIDFromName(summon, entity.world);
 						
 						summoned.setUniqueId(MathHelper.getRandomUUID());
-						summoned.setPosition(p.getX(), p.getY() + 0.5D, p.getZ());
+						summoned.setPosition(p.getX() + positionOffsetForSummons.x, p.getY() + 0.5D + positionOffsetForSummons.y, p.getZ() + positionOffsetForSummons.z);
 						
 						entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
 		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
