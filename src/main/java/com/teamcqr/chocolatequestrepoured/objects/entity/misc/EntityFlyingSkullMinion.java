@@ -62,6 +62,14 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	}
 	
 	@Override
+	protected void collideWithEntity(Entity entityIn) {
+		if(entityIn != summoner) {
+			super.collideWithEntity(entityIn);
+			explode();
+		}
+	}
+	
+	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		explode();
