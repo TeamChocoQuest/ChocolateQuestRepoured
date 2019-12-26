@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.TargetUtil;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -22,6 +23,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	protected Entity summoner;
 	protected Entity target;
 	protected boolean attacking = false;
+	protected boolean isLeftSkull = false;
 	protected Vec3d direction = null;
 
 	public EntityFlyingSkullMinion(World worldIn) {
@@ -45,6 +47,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		if(summoner == null || summoner.isDead) {
+			explode();
+		}
 		if(attacking) {
 			if(this.target != null && !this.target.isDead) {
 				updateDirection();
@@ -58,6 +63,17 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				explode();
 				setDead();
 			}
+		} else {
+			Vec3d v = summoner.getLookVec();
+			v = new Vec3d(v.x, 2.25D, v.z);
+			v = v.normalize();
+			v = v.scale(1.5D);
+			v = VectorUtil.rotateVectorAroundY(v, isLeftSkull ? 270 : 90);
+			Vec3d targetPos = summoner.getPositionVector().add(v);
+			Vec3d velo = targetPos.subtract(getPositionVector());
+			velo = velo.normalize();
+			velo = velo.scale(0.5);
+			setVelocity(velo.x, velo.y, velo.z);
 		}
 	}
 	
@@ -115,6 +131,10 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	
 	public boolean hasTarget() {
 		return target != null && !target.isDead;
+	}
+	
+	public void setSide(boolean left) {
+		this.isLeftSkull = left;
 	}
 	
 	@Override
