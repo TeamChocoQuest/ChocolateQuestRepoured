@@ -88,7 +88,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	@Override
 	protected void castSpell() {
 		Vec3d vector = entity.getLookVec().normalize();
-		vector = vector.add(vector).add(vector).add(vector);
+		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = MAX_MINIONS - getAliveMinionCount();
 		if(minionCount > MAX_MINIONS_AT_A_TIME) {
 			minionCount = MAX_MINIONS_AT_A_TIME;
