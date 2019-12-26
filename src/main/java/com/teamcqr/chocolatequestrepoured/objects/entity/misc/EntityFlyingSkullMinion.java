@@ -52,7 +52,6 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			Vec3d v = direction;
 			v = v.normalize();
 			setVelocity(v.x * 0.6F, v.y * 0.4F, v.z * 0.6F);
-			world.spawnParticle(EnumParticleTypes.SPELL_WITCH, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0F, 0.5F, 0F, 2);
 			
 			//If we hit a wall we explode
 			if(!isInsideOfMaterial(Material.AIR)) {
