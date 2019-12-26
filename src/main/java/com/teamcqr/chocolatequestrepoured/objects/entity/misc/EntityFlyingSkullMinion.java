@@ -79,7 +79,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			v = v.normalize();
 			setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
 			
-			getLookHelper().setLookPositionWithEntity(target, 10, 10);
+			getLookHelper().setLookPositionWithEntity(target, 30, 30);
 			
 		} else if(summoner != null) {
 			Vec3d v = summoner.getLookVec();
@@ -88,7 +88,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			v = v.scale(2.5D);
 			v = VectorUtil.rotateVectorAroundY(v, isLeftSkull ? 270 : 90);
 			Vec3d targetPos = summoner.getPositionVector().add(v);
-			getLookHelper().setLookPositionWithEntity(summoner, 10, 10);
+			getLookHelper().setLookPositionWithEntity(summoner, 30, 30);
 			if(getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
 				Vec3d velo = targetPos.subtract(getPositionVector());
 				velo = velo.normalize();
