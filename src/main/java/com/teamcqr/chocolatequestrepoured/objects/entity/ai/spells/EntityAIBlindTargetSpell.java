@@ -34,7 +34,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 			if(entity.getAttackTarget().isPotionApplicable(POTION_EFFECT)) {
 				entity.getAttackTarget().addPotionEffect(POTION_EFFECT);
 				Vec3d newPos = entity.getAttackTarget().getPositionVector().subtract(v);
-				if(entity.world.isSideSolid(new BlockPos(newPos).offset(EnumFacing.DOWN), EnumFacing.UP)) {
+				if(entity.world.getBlockState(new BlockPos(newPos).offset(EnumFacing.DOWN)).getMaterial().isSolid()) {
 					entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.7F, 1.1F);
 					entity.attemptTeleport(newPos.x, newPos.y, newPos.z);
 				}
