@@ -33,7 +33,7 @@ public class ModelFlyingSkull extends ModelBase {
     public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
 			float headPitch, float scale) { 
         if(entity instanceof EntityFlyingSkullMinion) {
-        	this.skull.rotateAngleY = new Float(Math.atan2(entity.motionX, entity.motionZ));
+        	this.skull.rotateAngleY = netHeadYaw;
         	this.skull.rotateAngleX = (float) (headPitch +Math.toRadians(180));
         	this.jaw.rotateAngleX = new Float(Math.toRadians(22.5D * (0.5D*(1D + (Math.sin( ((2D * Math.PI) / 8) * entity.ticksExisted))))));
         	this.skull.render(scale);
