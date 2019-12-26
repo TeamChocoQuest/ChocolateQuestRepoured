@@ -49,6 +49,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		super.onLivingUpdate();
 		if(summoner == null || summoner.isDead) {
 			explode();
+			return;
 		}
 		if(attacking) {
 			if(this.target != null && !this.target.isDead) {
