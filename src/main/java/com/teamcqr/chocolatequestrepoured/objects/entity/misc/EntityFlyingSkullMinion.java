@@ -84,10 +84,13 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
 	}
 
-	public void setTargetAndAttack(Entity target) {
+	public void setTarget(Entity target) {
 		this.target = target;
-		this.attacking = true;
 		updateDirection();
+	}
+	
+	public void startAttacking() {
+		this.attacking = true;
 	}
 	
 	private void updateDirection() {
