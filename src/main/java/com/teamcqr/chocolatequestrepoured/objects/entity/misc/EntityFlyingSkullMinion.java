@@ -39,6 +39,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+			Entity summonerTmp = this.summoner;
+			this.summoner = source.getTrueSource();
+			this.target = summonerTmp;
 			explode(10F);
 			return true;
 		}
