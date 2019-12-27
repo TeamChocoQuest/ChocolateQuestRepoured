@@ -103,29 +103,31 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	protected void collideWithEntity(Entity entityIn) {
 		if(entityIn != summoner) {
 			super.collideWithEntity(entityIn);
-			explode();
+			explode(0.75F);
 		}
 	}
 	
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		explode();
+		explode(1.25F);
 	}
 	
 	private void explode() {
 		explode(1F);
+		setDead();
 	}
 	
 	private void explode(float strengthMultiplier) {
-		world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
-		
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
-		
-		setDead();
+		if(world != null) {
+			if(summoner != null) {
+				world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
+			}
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+		}
 	}
 
 	public void setTarget(Entity target) {
