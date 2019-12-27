@@ -690,6 +690,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
+	
+	public void equipDefaultEquipment(World world, BlockPos pos) {
+		setEquipmentBasedOnDifficulty(world.getDifficultyForLocation(pos));
+	}
 
 	public boolean hasCape() {
 		// TODO Auto-generated method stub

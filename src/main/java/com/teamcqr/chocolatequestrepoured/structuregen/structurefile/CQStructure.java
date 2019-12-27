@@ -17,10 +17,14 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -58,6 +62,10 @@ public class CQStructure {
 	
 	@Nullable
 	private BlockPos shieldCorePosition = null;
+	@Nullable
+	private DungeonBase dungeon = null;
+	
+	private int dunX, dunZ;
 	
 	//DONE: move structure origin to the center of it -> "Placing Config"
 	
@@ -77,7 +85,10 @@ public class CQStructure {
 	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
 		//System.out.println("Dungeon is null: " + (dungeon == null));
 		EDungeonMobType mobType = null;
+		this.dunX = dunX;
+		this.dunZ = dunZ;
 		if(dungeon != null) {
+			this.dungeon = dungeon;
 			mobType = dungeon.getDungeonMob();
 		}
 		//Handled in TileEntitySpawner
@@ -227,18 +238,37 @@ public class CQStructure {
 	
 	private void placeBossBlocks(World worldIn, BlockPos pos, PlacementSettings settings) {
 		if(this.bossCount > 0 && this.bossCompound != null) {
-			for(int i = 0; i < this.bossCount; i++) {
-				try {
-					BossInfo boi = new BossInfo(bossCompound.getCompoundTag("boss"+i));
-					if(boi != null) {
-						BlockPos vecPos = CQStructurePart.transformedBlockPos(settings, boi.getPos());
-						vecPos = vecPos.add(pos);
+			if(dungeon != null) {
+				EDungeonMobType mobType = dungeon.getDungeonMob() != null ? dungeon.getDungeonMob() : EDungeonMobType.DEFAULT;
+				if(mobType.equals(EDungeonMobType.DEFAULT)) {
+					mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX, dunZ);
+				}
+				
+				for(int i = 0; i < this.bossCount; i++) {
+					try {
+						BossInfo boi = new BossInfo(bossCompound.getCompoundTag("boss"+i));
+						if(boi != null) {
+							BlockPos vecPos = CQStructurePart.transformedBlockPos(settings, boi.getPos());
+							vecPos = vecPos.add(pos);
+							
+							//DONE: Place spawner for right boss
+							if(mobType.getBossResourceLocation() != null) {
+								Entity bossEnt = EntityList.createEntityByIDFromName(mobType.getBossResourceLocation(), worldIn);
+								bossEnt.setPosition(vecPos.getX(), vecPos.getY() +0.25, vecPos.getZ());
+								worldIn.spawnEntity(bossEnt);
+								if(bossEnt instanceof AbstractEntityCQRBoss) {
+									AbstractEntityCQRBoss boss = (AbstractEntityCQRBoss) bossEnt;
+									boss.onSpawnFromCQRSpawnerInDungeon();
+									boss.setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
+									boss.equipDefaultEquipment(worldIn, vecPos);
+								}
+							} else {
+								worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
+							}
+						}
+					} catch(Exception ex) {
 						
-						//TODO: Place spawner for right boss
-						worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
 					}
-				} catch(Exception ex) {
-					
 				}
 			}
 		}

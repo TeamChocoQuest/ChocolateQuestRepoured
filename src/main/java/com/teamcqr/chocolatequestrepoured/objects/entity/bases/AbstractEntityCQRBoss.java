@@ -23,7 +23,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public AbstractEntityCQRBoss(World worldIn, int size) {
 		super(worldIn);
 		this.bossSize = size;
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getSize() {
@@ -36,7 +35,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
 		super.readEntityFromNBT(compound);
 		if(compound.hasKey("assignedRegion")) {
 			this.assignedRegionID = compound.getString("assignedRegion");
@@ -45,7 +43,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		// TODO Auto-generated method stub
 		super.writeEntityToNBT(compound);
 		if(this.assignedRegionID != null) {
 			compound.setString("assignedRegion", assignedRegionID);
