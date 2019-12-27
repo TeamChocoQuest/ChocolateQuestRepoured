@@ -45,7 +45,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			explode(10F);
 			return true;
 		}
-		if(getRNG().nextInt(20) == 19) {
+		if(getRNG().nextInt(10) == 9) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
