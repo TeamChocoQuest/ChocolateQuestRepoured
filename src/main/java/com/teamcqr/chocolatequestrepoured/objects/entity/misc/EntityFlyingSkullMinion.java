@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.util.DamageSource;
@@ -147,6 +148,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		compound.setDouble("vX", direction == null ? 0D : direction.x);
 		compound.setDouble("vY", direction == null ? 0D : direction.y);
 		compound.setDouble("vZ", direction == null ? 0D : direction.z);
+		if(summoner != null && !summoner.isDead) {
+			compound.setTag("summonerID", NBTUtil.createUUIDTag(summoner.getPersistentID()));
+		}
 		if(target != null && !target.isDead) {
 			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(target.getPersistentID()));
 		}
@@ -179,6 +183,16 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
 					if(ent.getPersistentID().equals(id)) {
 						target = ent;
+					}
+				}
+			}
+		}
+		if(compound.hasKey("summonerID")) {
+			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
+			if(world != null) {
+				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
+					if(ent.getPersistentID().equals(id)) {
+						summoner = ent;
 					}
 				}
 			}
