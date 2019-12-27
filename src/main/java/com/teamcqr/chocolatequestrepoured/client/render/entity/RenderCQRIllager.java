@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRIllagerArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 
@@ -29,14 +30,14 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
-		//TODO: Illager armor
-		/*this.addLayer(new LayerBipedArmor(this) {
+		//DONE: Illager armor
+		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
-				this.modelLeggings = new ModelCQREndermanArmor(0.5F, true);
-				this.modelArmor = new ModelCQREndermanArmor(1.0F, false);
+				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
+				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
 			}
-		});*/
+		});
 		
 		this.addLayer(new LayerCQRHeldItem(this)
         {
