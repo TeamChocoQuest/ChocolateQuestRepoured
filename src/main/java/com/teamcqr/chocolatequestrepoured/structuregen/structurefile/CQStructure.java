@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -60,6 +61,8 @@ public class CQStructure {
 	//DONE: Add methods and fields to replace the old banners
 	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
 	
+	@Nullable
+	private List<UUID> bossIDs = new ArrayList<>();
 	@Nullable
 	private BlockPos shieldCorePosition = null;
 	@Nullable
@@ -262,6 +265,7 @@ public class CQStructure {
 									boss.setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
 									boss.equipDefaultEquipment(worldIn, vecPos);
 								}
+								bossIDs.add(bossEnt.getPersistentID());
 							} else {
 								worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
 							}
@@ -272,6 +276,10 @@ public class CQStructure {
 				}
 			}
 		}
+	}
+	
+	public List<UUID> getBossIDs() {
+		return bossIDs;
 	}
 
 	// DONE?: Split structure into 16x16 grid
