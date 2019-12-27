@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager
 import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRIllagerArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
@@ -44,7 +45,7 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
         	@Override
             public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
             {
-                if (entity instanceof EntityCQRIllager && ((EntityCQRIllager) entity).isAggressive())
+                if (entity instanceof EntityCQRIllager && (((EntityCQRIllager) entity).isAggressive() || ((EntityCQRIllager)entity).getHeldItemMainhand().getItem() instanceof ItemPotionHealing))
                 {
                     super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
                 }
