@@ -95,6 +95,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 			} else if (this.entityToMount instanceof EntityPig) {
 				((EntityPig) this.entityToMount).setSaddled(true);
 			}
+			this.entity.getNavigator().clearPath();
 			this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
 		}
 	}

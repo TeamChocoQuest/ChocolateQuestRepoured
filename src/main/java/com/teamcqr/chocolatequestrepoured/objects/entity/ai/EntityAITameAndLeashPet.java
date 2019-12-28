@@ -53,7 +53,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 		if (!this.entityToTame.isEntityAlive()) {
 			return false;
 		}
-		if (this.entityToTame.getOwner() != null) {
+		if (this.entityToTame.getOwnerId() != null) {
 			return false;
 		}
 		if (this.entity.getDistance(this.entityToTame) > 16.0D) {
