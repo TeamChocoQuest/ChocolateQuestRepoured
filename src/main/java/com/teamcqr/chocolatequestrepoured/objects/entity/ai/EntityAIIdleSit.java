@@ -82,8 +82,10 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 				if (this.entity.ticksExisted % 4 == 0) {
 					AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getPositionVector().subtract(6.0D, 3.0D, 6.0D), this.entity.getPositionVector().addVector(6.0D, 3.0D, 6.0D));
 					List<AbstractEntityCQR> friends = this.entity.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this.predicate);
-					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
-					this.cooldwonForPartnerCycle = 0;
+					if(!friends.isEmpty()) {
+						this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
+						this.cooldwonForPartnerCycle = 0;
+					}
 				}
 /**Before PR Meldex
 				//DONE: Make entity sit -> Renderer needs work for that
