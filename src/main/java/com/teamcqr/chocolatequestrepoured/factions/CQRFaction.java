@@ -55,12 +55,16 @@ public class CQRFaction {
 
 	public void addAlly(CQRFaction ally) {
 		//allies = addFactionToRelationArray(ally, allies);
-		allies.add(ally);
+		if(ally != null) {
+			allies.add(ally);
+		}
 	}
 	
 	public void addEnemy(CQRFaction enemy) {
 		//enemies = addFactionToRelationArray(enemy, enemies);
-		enemies.add(enemy);
+		if(enemy != null) {
+			enemies.add(enemy);
+		}
 	}
 	
 	/*private CQRFaction[] addFactionToRelationArray(CQRFaction f, CQRFaction[] a) {
