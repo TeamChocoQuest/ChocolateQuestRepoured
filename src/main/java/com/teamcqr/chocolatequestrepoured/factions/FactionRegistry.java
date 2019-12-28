@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +24,8 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 public class FactionRegistry {
 
@@ -45,7 +48,33 @@ public class FactionRegistry {
 	}
 	
 	private void loadDefaultFactions() {
+		String[][] allies = new String[EDefaultFaction.values().length][];
+		String[][] enemies = new String[EDefaultFaction.values().length][];
+		for(int i = 0; i < EDefaultFaction.values().length; i++) {
+			EDefaultFaction edf = EDefaultFaction.values()[i];
+			allies[i] = edf.getAllies();
+			enemies[i] = edf.getEnemies();
+			
+			Optional<Integer> optionMember = Optional.empty();
+			Optional<Integer> optionAlly = Optional.empty();
+			Optional<Integer> optionEnemy = Optional.empty();
+			
+			CQRFaction fac = new CQRFaction(edf.name(), edf.getDefaultReputation(), false, optionMember, optionAlly, optionEnemy);
+			factions.put(edf.name(), fac);
+		}
 		
+		for(int i = 0; i < EDefaultFaction.values().length; i++) {
+			String name = EDefaultFaction.values()[i].name();
+			CQRFaction fac = factions.get(name);
+			for(int j = 0; j < allies[i].length; j++) {
+				fac.addAlly(factions.get(allies[i][j]));
+			}
+			for(int j = 0; j < enemies[i].length; j++) {
+				fac.addEnemy(factions.get(enemies[i][j]));
+			}
+		}
+		
+		System.out.println("Defaunt factions loaded and initialized!");
 	}
 	
 	public CQRFaction getFactionOf(Entity entity) {
@@ -155,6 +184,14 @@ public class FactionRegistry {
 	
 	private boolean canRepuChange(EntityPlayer player) {
 		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator());
+	}
+	
+	public void handlePlayerLogin(PlayerLoggedInEvent event) {
+		
+	}
+	
+	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
+		
 	}
 
 }
