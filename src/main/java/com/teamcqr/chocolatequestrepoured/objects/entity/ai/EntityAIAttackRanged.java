@@ -60,14 +60,6 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 	}
 
 	@Override
-	public void resetTask() {
-		this.visionTick = 0;
-		this.entity.setAttackTarget(null);
-		this.entity.getNavigator().clearPath();
-		this.entity.resetActiveHand();
-	}
-
-	@Override
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 32.0D) {
 			ItemStack stack = this.entity.getHeldItemMainhand();
