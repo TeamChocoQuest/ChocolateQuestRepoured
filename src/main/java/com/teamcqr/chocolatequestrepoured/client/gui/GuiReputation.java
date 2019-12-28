@@ -51,10 +51,10 @@ public class GuiReputation extends GuiScreen {
 	public void initGui() {
 		super.initGui();
 		
-		this.btnCycleFaction = new GuiButtonExt(0, width /2 -70, height /2 -45, 120, 20, "missingNo");
+		this.btnCycleFaction = new GuiButtonExt(0, width /2 -65, height /2 -65, 150, 20, "missingNo");
 		
 		this.buttonList.add(btnCycleFaction);
-		adjustComponentsToFaction(EFaction.BEASTS);
+		adjustComponentsToFaction(null);
 	}
 	
 	@Override
@@ -65,6 +65,8 @@ public class GuiReputation extends GuiScreen {
 		this.drawHoveringText(I18n.format(lblReputationBarLangKey), width /2 -70, height /2 +5);
 		this.drawHoveringText(I18n.format(lblMembersKilledLangKey) + ": missingNo", width /2 -70, height /2 +25);
 		this.drawHoveringText(I18n.format(lblDungeonsConqueredLangKey) + ": missingNo", width /2 -70, height /2 +45);
+		this.REPU_BAR_X = width /2 -70;
+		this.REPU_BAR_Y  = height /2 +65;
 	}
 	
 	@Override
@@ -79,15 +81,19 @@ public class GuiReputation extends GuiScreen {
 		//TODO: Calculate coordinates for head -> Recalculate X coordinate
 		
 		//Draw player head
-		Minecraft.getMinecraft().renderEngine.bindTexture(imgPlayerHead);
+		//Minecraft.getMinecraft().renderEngine.bindTexture(imgPlayerHead);
 		//Face
-		this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 8, 8, 8, 8);
+		//this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 8, 8, 8, 8);
 		//Headwear
-		this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 72, 8, 8, 8);
+		//this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 72, 8, 8, 8);
 	}
 	
 	protected void adjustComponentsToFaction(EFaction newFaction) {
-		this.btnCycleFaction.displayString = newFaction.name();
+		if(newFaction != null) {
+			this.btnCycleFaction.displayString = newFaction.name();
+		} else {
+			this.btnCycleFaction.displayString = "None";
+		}
 	}
 	
 	@Override
