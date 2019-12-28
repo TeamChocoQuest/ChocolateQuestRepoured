@@ -251,6 +251,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
+		if(!factionName.equalsIgnoreCase(getDefaultFaction().name())) {
+			compound.setString("factionOverride", factionName);
+		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
@@ -270,6 +273,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
+		}
+		
+		if(compound.hasKey("factionOverride")) {
+			this.setFaction(compound.getString("factionOverride"));
 		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
@@ -654,7 +661,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public CQRFaction getFaction() {
-		if(factionInstance == null) {
+		if(factionInstance == null && factionName != null && !factionName.isEmpty()) {
 			factionInstance = FactionRegistry.instance().getFactionInstance(factionName);
 		}
 		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (factionInstance != null ? factionInstance : getDefaultFactionInstance());
@@ -711,12 +718,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean hasCape() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public ResourceLocation getResourceLocationOfCape() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -927,7 +932,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public void setMagicArmorActive(boolean val) {
-		//TODO: Particles for when it appears and disappears
 		if(val != armorActive) {
 			armorActive = val;
 			setEntityInvulnerable(armorActive);
