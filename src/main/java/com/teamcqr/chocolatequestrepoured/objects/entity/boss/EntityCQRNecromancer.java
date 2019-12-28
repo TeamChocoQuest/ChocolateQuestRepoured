@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIBlindTargetSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -55,7 +56,8 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		
 		this.tasks.addTask(7, new EntityAIBlindTargetSpell(this));
 		this.tasks.addTask(7, new EntityAIFangAttack(this));
-		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 1, new Vec3d(0,2.5,0)));
+		this.tasks.addTask(8, new EntityAIVampiricSpell(this));
+		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0,2.5,0)));
 		
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));

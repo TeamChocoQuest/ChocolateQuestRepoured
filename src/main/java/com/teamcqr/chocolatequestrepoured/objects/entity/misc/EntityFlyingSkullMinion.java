@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.util.DamageSource;
@@ -45,7 +46,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			explode(10F);
 			return true;
 		}
-		if(getRNG().nextInt(20) == 19) {
+		if(getRNG().nextInt(10) == 9) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
@@ -102,29 +103,31 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	protected void collideWithEntity(Entity entityIn) {
 		if(entityIn != summoner) {
 			super.collideWithEntity(entityIn);
-			explode();
+			explode(0.75F);
 		}
 	}
 	
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		explode();
+		explode(1.25F);
 	}
 	
 	private void explode() {
 		explode(1F);
+		setDead();
 	}
 	
 	private void explode(float strengthMultiplier) {
-		world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
-		
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
-		world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
-		
-		setDead();
+		if(world != null) {
+			if(summoner != null) {
+				world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
+			}
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
+			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+		}
 	}
 
 	public void setTarget(Entity target) {
@@ -147,6 +150,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		compound.setDouble("vX", direction == null ? 0D : direction.x);
 		compound.setDouble("vY", direction == null ? 0D : direction.y);
 		compound.setDouble("vZ", direction == null ? 0D : direction.z);
+		if(summoner != null && !summoner.isDead) {
+			compound.setTag("summonerID", NBTUtil.createUUIDTag(summoner.getPersistentID()));
+		}
 		if(target != null && !target.isDead) {
 			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(target.getPersistentID()));
 		}
@@ -179,6 +185,16 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
 					if(ent.getPersistentID().equals(id)) {
 						target = ent;
+					}
+				}
+			}
+		}
+		if(compound.hasKey("summonerID")) {
+			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
+			if(world != null) {
+				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
+					if(ent.getPersistentID().equals(id)) {
+						summoner = ent;
 					}
 				}
 			}
