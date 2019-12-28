@@ -2,7 +2,9 @@ package com.teamcqr.chocolatequestrepoured.util.data;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.DimensionManager;
+import net.minecraftforge.common.util.Constants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -113,5 +115,18 @@ public class FileIOUtil {
 		}
 		return file;
     }
+    
+    public static NBTTagList getOrCreateTagList(NBTTagCompound rootTag, String key, int listType) {
+		NBTTagList structureList = new NBTTagList();
+		if(!rootTag.hasKey(key, Constants.NBT.TAG_LIST)) {
+			if(rootTag.hasKey(key)) {
+				rootTag.removeTag(key);
+			}
+			rootTag.setTag(key, structureList);
+		} else {
+			structureList = rootTag.getTagList(key, listType);
+		}
+		return structureList;
+	}
 
 }
