@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -151,8 +151,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.BEASTS;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.BEASTS;
 	}
 
 	@Override

@@ -3,7 +3,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
@@ -144,12 +145,12 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.UNDEAD;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.UNDEAD;
 	}
 
 	@Override
-	public EFaction getSummonerFaction() {
+	public CQRFaction getSummonerFaction() {
 		return getFaction();
 	}
 

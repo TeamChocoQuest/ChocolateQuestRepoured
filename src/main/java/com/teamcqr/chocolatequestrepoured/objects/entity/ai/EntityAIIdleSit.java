@@ -82,9 +82,49 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 				if (this.entity.ticksExisted % 4 == 0) {
 					AxisAlignedBB aabb = new AxisAlignedBB(this.entity.getPositionVector().subtract(6.0D, 3.0D, 6.0D), this.entity.getPositionVector().addVector(6.0D, 3.0D, 6.0D));
 					List<AbstractEntityCQR> friends = this.entity.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb, this.predicate);
-					this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
-					this.cooldwonForPartnerCycle = 0;
+					if(!friends.isEmpty()) {
+						this.talkingPartner = friends.get(this.random.nextInt(friends.size()));
+						this.cooldwonForPartnerCycle = 0;
+					}
 				}
+/**Before PR Meldex
+				//DONE: Make entity sit -> Renderer needs work for that
+				//int friendsFound = 0;
+				List<Entity> friends = new ArrayList<>();
+				List<Entity> nearbyEntities = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().subtract(new Vec3i(6,3,6)), entity.getPosition().add(6,3,6)), AbstractEntityCQR.MOB_SELECTOR);
+				//System.out.println("NearbyEntities: " + nearbyEntities.size());
+				if(!nearbyEntities.isEmpty()) {
+					for(Entity ent : nearbyEntities) {
+						if(ent instanceof AbstractEntityCQR) {
+							if(entity.getFaction().isAlly((AbstractEntityCQR)ent)) {
+								friends.add(ent);
+								//friendsFound++;
+							}
+						}
+					}
+					//System.out.println("Friend list size: " + friends.size());
+					if(!friends.isEmpty()) {
+						cooldwonForPartnerCycle++;
+						if(talkingPartner == null || cooldwonForPartnerCycle >= cooldownCyclePartnerBorder || talkingPartner.isDead || entity.getDistance(talkingPartner) > 8) {
+							talkingPartner = friends.get(random.nextInt(friends.size()));
+							//System.out.println("I found a partner!");
+							cooldwonForPartnerCycle = 0;
+						}
+						if(talkingPartner != null && talkingPartner != entity && !talkingPartner.isDead) {
+							//we have someone to talk to, yay :D
+							//DONE: Orient entity to random friend
+							//DONE: Make them "chat" / "play cards"
+							entity.setChatting(true);
+							entity.getLookHelper().setLookPosition(talkingPartner.posX, talkingPartner.posY + talkingPartner.getEyeHeight(), talkingPartner.posZ, (float)this.entity.getHorizontalFaceSpeed(), (float)this.entity.getVerticalFaceSpeed());
+							
+						} else {
+							entity.setChatting(false);
+						}
+					} else {
+						entity.setChatting(false);
+					}
+END_OF_OLD_STATE
+**/
 			}
 
 			// check if talking partner is valid and either talk to him or stop talking
@@ -92,6 +132,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 				if (this.talkingPartner.isEntityAlive() && this.entity.getDistance(this.talkingPartner) < 8.0D) {
 					this.entity.setChatting(true);
 					this.entity.getLookHelper().setLookPositionWithEntity(this.talkingPartner, 15.0F, 15.0F);
+//PR Meldex
 				} else {
 					this.talkingPartner = null;
 					this.entity.setChatting(false);
@@ -106,7 +147,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		return this.entity.getFaction().isEntityAlly(possibleAlly);
+		return this.entity.getFaction().isAlly(possibleAlly);
 	}
 
 	private boolean isEntityMoving(Entity entity) {
