@@ -1,7 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.util.data;
 
+import net.minecraft.nbt.CompressedStreamTools;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.DimensionManager;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -38,6 +47,71 @@ public class FileIOUtil {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    public static void saveNBTCompoundToFile(NBTTagCompound root, File file) {
+    	try {
+			OutputStream outStream = null;
+			outStream = new FileOutputStream(file);
+			CompressedStreamTools.writeCompressed(root, outStream);
+			outStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public static NBTTagCompound getRootNBTTagOfFile(File file) {
+    	if(file.exists() && file.isFile() && file.getName().contains(".nbt")) {
+			InputStream stream = null;
+			try {
+				stream = new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			if(stream != null) {
+				NBTTagCompound root = null;
+				try {
+					root = CompressedStreamTools.readCompressed(stream);
+				} catch(IOException ex) {
+					//ex.printStackTrace();
+					System.out.println("It seems the cqr data file is empty. This is not a problem :). Returning empty tag...");
+					root = new NBTTagCompound();
+				}
+				if(root != null) {
+					return root;
+				}
+			}
+		}
+		return null;
+    }
+    
+    public static File getOrCreateFile(String FolderPath, String fileName) {
+    	File folder = new File(FolderPath);
+		if(!folder.exists()) {
+			folder.mkdirs();
+		} else if(!folder.isDirectory()) {
+			folder.delete();
+			folder.mkdirs();
+		}
+		
+		File file = new File(folder, fileName);
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+				saveNBTCompoundToFile(new NBTTagCompound(), file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if(!file.isFile()) {
+			file.delete();
+			try {
+				file.createNewFile();
+				saveNBTCompoundToFile(new NBTTagCompound(), file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return file;
     }
 
 }
