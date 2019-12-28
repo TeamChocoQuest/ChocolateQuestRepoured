@@ -145,7 +145,7 @@ END_OF_OLD_STATE
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		return this.entity.getFaction().isEntityAlly(possibleAlly);
+		return this.entity.getFaction().isAlly(possibleAlly);
 	}
 
 	private boolean isEntityMoving(Entity entity) {
