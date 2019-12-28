@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.EnumDifficulty;
 
 public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 
@@ -40,12 +41,14 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
+		if (this.entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			return false;
+		}
 		if (this.entity.ticksExisted % 4 == 0 && this.entity.getAttackTarget() == null) {
 			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
 			List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
 			if (!possibleTargets.isEmpty()) {
-				possibleTargets.sort(this.sorter);
-				this.attackTarget = possibleTargets.get(0);
+				this.attackTarget = TargetUtil.getNearestEntity(this.entity, possibleTargets);
 				return true;
 			}
 		}
