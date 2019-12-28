@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -57,8 +56,8 @@ public class CQRDataFileManager {
 		
 		if(rootTag != null) {
 			//Factions
-			NBTTagCompound factionTag = getOrCreateTag(rootTag, "factiondata");
-			EFaction.loadFromNBT(factionTag);
+			//NBTTagCompound factionTag = getOrCreateTag(rootTag, "factiondata");
+			//EFaction.loadFromNBT(factionTag);
 			
 			//FIrst we need to empty our lists...
 			entriesToBeSaved.clear();
@@ -106,7 +105,7 @@ public class CQRDataFileManager {
 		
 		if(rootTag != null) {
 			//Factions
-			rootTag.setTag("factiondata", EFaction.saveDataAsNBT(new File(FileIOUtil.getAbsoluteWorldPath())));
+			//rootTag.setTag("factiondata", EFaction.saveDataAsNBT(new File(FileIOUtil.getAbsoluteWorldPath())));
 			
 			//Save dungeon data
 			if(!entriesToBeSaved.isEmpty()) {

@@ -150,7 +150,9 @@ public class CQRFaction {
 	}
 	
 	public void saveToFile(File folder) {
-		
+		if(savedGlobally) {
+			//TODO: SAVE DATA
+		}
 	}
 
 }
