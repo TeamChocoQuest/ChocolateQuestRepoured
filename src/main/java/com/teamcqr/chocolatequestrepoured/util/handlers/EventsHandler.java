@@ -39,6 +39,8 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 @EventBusSubscriber
 public class EventsHandler {
@@ -205,6 +207,7 @@ public class EventsHandler {
 		}
 	}
 	
+	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
 		if(event.isCanceled()) {
@@ -213,6 +216,7 @@ public class EventsHandler {
 		FactionRegistry.instance().handlePlayerLogin(event);
 	}
 	
+	@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
 		if(event.isCanceled()) {
