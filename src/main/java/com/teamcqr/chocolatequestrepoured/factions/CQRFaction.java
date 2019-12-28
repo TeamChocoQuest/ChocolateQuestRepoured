@@ -78,7 +78,7 @@ public class CQRFaction {
 		}
 		if(faction != null) {
 			for(CQRFaction str : this.enemies) {
-				if(faction.getName().equalsIgnoreCase(str.getName())) {
+				if(str != null && faction.getName().equalsIgnoreCase(str.getName())) {
 					return true;
 				}
 			}
