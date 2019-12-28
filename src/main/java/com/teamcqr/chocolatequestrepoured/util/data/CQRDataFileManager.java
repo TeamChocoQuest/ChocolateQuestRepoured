@@ -106,7 +106,7 @@ public class CQRDataFileManager {
 		
 		if(rootTag != null) {
 			//Factions
-			rootTag.setTag("factiondata", EFaction.saveDataAsNBT());
+			rootTag.setTag("factiondata", EFaction.saveDataAsNBT(new File(FileIOUtil.getAbsoluteWorldPath())));
 			
 			//Save dungeon data
 			if(!entriesToBeSaved.isEmpty()) {
