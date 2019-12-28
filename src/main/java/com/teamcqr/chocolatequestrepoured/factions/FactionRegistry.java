@@ -87,7 +87,7 @@ public class FactionRegistry {
 			}
 		}
 		
-		System.out.println("Defaunt factions loaded and initialized!");
+		System.out.println("Default factions loaded and initialized!");
 	}
 	
 	public CQRFaction getFactionOf(Entity entity) {
