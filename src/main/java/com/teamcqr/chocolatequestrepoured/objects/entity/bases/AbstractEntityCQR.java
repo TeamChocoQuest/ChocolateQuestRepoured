@@ -251,7 +251,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
-		if(!factionName.equalsIgnoreCase(getDefaultFaction().name())) {
+		if(factionName != null && !factionName.equalsIgnoreCase(getDefaultFaction().name())) {
 			compound.setString("factionOverride", factionName);
 		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
