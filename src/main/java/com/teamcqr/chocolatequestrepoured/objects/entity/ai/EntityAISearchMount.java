@@ -1,165 +1,108 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityHorse;
-import net.minecraft.entity.passive.EntityLlama;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityAISearchMount extends AbstractCQREntityAI {
 
-	protected static final int MOUNT_SEARCH_DIAMETER = 30;
-	protected static final float MAX_DISTANCE_WHEN_TO_MOUNT = 2F;
-	protected static final boolean FORCE_MOUNTING = true; 
-	protected static final double SPEED_WALK_TO_MOUNT = 1.5D;
-	
+	protected static final double MOUNT_SEARCH_RADIUS = 16;
+	protected static final double DISTANCE_TO_MOUNT = 2.0D;
+	protected static final boolean FORCE_MOUNTING = true;
+	protected static final double WALK_SPEED_TO_MOUNT = 1.0D;
+
 	protected EntityAnimal entityToMount = null;
-	
+
 	public EntityAISearchMount(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if(entity.world.isRemote) {
+		if (!this.entity.canRide()) {
 			return false;
 		}
-		if(!entity.canRide()) {
+		if (this.entity.isRiding()) {
 			return false;
 		}
-		if(this.entityToMount != null && !this.entityToMount.isDead) {
-			if(this.entityToMount.getRidingEntity() != null && this.entityToMount.getRidingEntity().equals(this.entity)) {
-				return false;
-			}
-		}
-		
-		if(!this.entity.isRiding()) {
-			BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2);
-			BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2));
-			List<Entity> suitableMounts = this.entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(pos1, pos2), TargetUtil.PREDICATE_MOUNTS);
-			if(!suitableMounts.isEmpty()) {
-				for(Entity ent : suitableMounts) {
-					EntityAnimal animal = (EntityAnimal)ent;
-					return (!animal.isBeingRidden());
-				}
+		if (this.entity.ticksExisted % 4 == 0) {
+			Vec3d vec1 = this.entity.getPositionVector().addVector(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
+			AxisAlignedBB aabb = new AxisAlignedBB(vec1, vec2);
+			List<EntityAnimal> possibleMounts = this.entity.world.getEntitiesWithinAABB(EntityAnimal.class, aabb, TargetUtil.PREDICATE_MOUNTS);
+			if (!possibleMounts.isEmpty()) {
+				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
+				return true;
 			}
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
-		return shouldExecute();
+		if (!this.entity.canRide()) {
+			return false;
+		}
+		if (this.entity.isRiding()) {
+			return false;
+		}
+		if (this.entityToMount == null) {
+			return false;
+		}
+		if (!this.entityToMount.isEntityAlive()) {
+			return false;
+		}
+		if (this.entityToMount.isBeingRidden()) {
+			return false;
+		}
+		if (this.entity.getDistance(this.entityToMount) > 16.0D) {
+			return false;
+		}
+		return this.entity.hasPath();
 	}
-	
+
 	@Override
 	public void startExecuting() {
-		super.startExecuting();
-		if(!this.entity.isRiding() && entityToMount == null) {
-			findNewTargetMount();
-		}
-	}
-	
-	private void findNewTargetMount() {
-		BlockPos pos1 = this.entity.getPosition().add(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2);
-		BlockPos pos2 = this.entity.getPosition().subtract(new BlockPos(MOUNT_SEARCH_DIAMETER /2, MOUNT_SEARCH_DIAMETER /4, MOUNT_SEARCH_DIAMETER /2));
-		List<Entity> suitableMounts = this.entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(pos1, pos2), TargetUtil.PREDICATE_MOUNTS);
-		if(!suitableMounts.isEmpty()) {
-			List<Entity> listTmp = new ArrayList<>();
-			suitableMounts.forEach(new Consumer<Entity>() {
-
-				@Override
-				public void accept(Entity t) {
-					if(entity.getEntitySenses().canSee(t) && entity.getNavigator().getPathToEntityLiving(t) != null && !t.isBeingRidden() && !t.isDead && !(t instanceof EntityHorse && ((EntityHorse)t).isChild())) {
-						listTmp.add(t);
-					}
-				}
-			});
-			suitableMounts = listTmp;
-			suitableMounts.sort(new Comparator<Entity>() {
-
-				@Override
-				public int compare(Entity e1, Entity e2) {
-					float distE1 = entity.getDistance(e1);
-					float distE2 = entity.getDistance(e2);
-
-					if(distE1 < distE2) {
-						return -1;
-					}
-					if(distE1 > distE2) {
-						return 1;
-					}
-					return 0;
-				}
-			});
-			if(!suitableMounts.isEmpty()) {
-				int i = 0;
-				Entity mount = suitableMounts.get(i);
-				while(mount == null && i < suitableMounts.size() -1) {
-					i++;
-					mount = suitableMounts.get(i);
-				}
-				if(i < suitableMounts.size() && mount != null) {
-					this.entityToMount = (EntityAnimal) mount;
-				}
-			}
+		if (this.entity.getDistance(this.entityToMount) > DISTANCE_TO_MOUNT) {
+			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		}
 	}
 
 	@Override
 	public void updateTask() {
-		if(shouldContinueExecuting()) {
-			if(this.entityToMount != null && !this.entityToMount.isDead && !this.entityToMount.isBeingRidden()) {
-				if(this.entity.getDistance(this.entityToMount) <= MAX_DISTANCE_WHEN_TO_MOUNT) {
-					if(this.entityToMount instanceof AbstractHorse) {
-						AbstractHorse horse = (AbstractHorse)this.entityToMount;
-						horse.setHorseTamed(true);
-						horse.setHorseSaddled(true);
-						//Should that stay? -> Arlo says yes.
-						if(horse instanceof EntityHorse) {
-							((EntityHorse) horse).setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
-						}
-						
-					}
-					if(this.entityToMount instanceof EntityLlama) {
-						EntityLlama lama = (EntityLlama)this.entityToMount;
-						lama.setOwnerUniqueId(entity.getPersistentID());
-						lama.setHorseSaddled(true);
-						lama.setHorseTamed(true);
-					}
-					if(this.entityToMount instanceof EntityPig) {
-						EntityPig pig = (EntityPig) this.entityToMount;
-						pig.setSaddled(true);
-					}
-					this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
-				} else {
-					this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, SPEED_WALK_TO_MOUNT);
-				}
-			} else {
-				findNewTargetMount();
-			}
+		if (this.entity.getDistance(this.entityToMount) > DISTANCE_TO_MOUNT) {
+			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToMount, WALK_SPEED_TO_MOUNT);
 		} else {
-			resetTask();
+			if (this.entityToMount instanceof AbstractHorse) {
+				AbstractHorse horse = (AbstractHorse) this.entityToMount;
+				horse.setOwnerUniqueId(this.entity.getPersistentID());
+				horse.setHorseTamed(true);
+				horse.setHorseSaddled(true);
+				// Should that stay? -> Arlo says yes.
+				if (horse instanceof EntityHorse) {
+					((EntityHorse) horse).setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
+				}
+			} else if (this.entityToMount instanceof EntityPig) {
+				((EntityPig) this.entityToMount).setSaddled(true);
+			}
+			this.entity.startRiding(this.entityToMount, FORCE_MOUNTING);
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
-		super.resetTask();
-		
 		this.entityToMount = null;
+		this.entity.getNavigator().clearPath();
 	}
 
 }
