@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRIllagerArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
@@ -29,21 +31,21 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
-		//TODO: Illager armor
-		/*this.addLayer(new LayerBipedArmor(this) {
+		//DONE: Illager armor
+		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
-				this.modelLeggings = new ModelCQREndermanArmor(0.5F, true);
-				this.modelArmor = new ModelCQREndermanArmor(1.0F, false);
+				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
+				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
 			}
-		});*/
+		});
 		
 		this.addLayer(new LayerCQRHeldItem(this)
         {
         	@Override
             public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale)
             {
-                if (entity instanceof EntityCQRIllager && ((EntityCQRIllager) entity).isAggressive())
+                if (entity instanceof EntityCQRIllager && (((EntityCQRIllager) entity).isAggressive() || ((EntityCQRIllager)entity).getHeldItemMainhand().getItem() instanceof ItemPotionHealing))
                 {
                     super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
                 }

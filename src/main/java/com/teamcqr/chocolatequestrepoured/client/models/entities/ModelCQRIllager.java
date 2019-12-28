@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -31,36 +32,48 @@ public class ModelCQRIllager extends ModelCQRBiped {
         this.bipedHead = (new ModelRenderer(this)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedHead.setRotationPoint(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.bipedHead.setTextureOffset(0, 0).addBox(-4.0F, -10.0F, -4.0F, 8, 10, 8, scaleFactor);
+        
         this.bipedHeadwear = (new ModelRenderer(this, 32, 0)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedHeadwear.addBox(-4.0F, -10.0F, -4.0F, 8, 12, 8, scaleFactor + 0.45F);
+        
         this.bipedHead.addChild(this.bipedHeadwear);
         this.bipedHeadwear.showModel = false;
+        
         this.nose = (new ModelRenderer(this)).setTextureSize(textureWidthIn, textureHeightIn);
         this.nose.setRotationPoint(0.0F, p_i47227_2_ - 2.0F, 0.0F);
         this.nose.setTextureOffset(24, 0).addBox(-1.0F, -1.0F, -6.0F, 2, 4, 2, scaleFactor);
+        
         this.bipedHead.addChild(this.nose);
+        
         this.bipedBody = (new ModelRenderer(this)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedBody.setRotationPoint(0.0F, 0.0F + p_i47227_2_, 0.0F);
         this.bipedBody.setTextureOffset(16, 20).addBox(-4.0F, 0.0F, -3.0F, 8, 12, 6, scaleFactor);
         this.bipedBody.setTextureOffset(0, 38).addBox(-4.0F, 0.0F, -3.0F, 8, 18, 6, scaleFactor + 0.5F);
+        
         this.arms = (new ModelRenderer(this)).setTextureSize(textureWidthIn, textureHeightIn);
         this.arms.setRotationPoint(0.0F, 0.0F + p_i47227_2_ + 2.0F, 0.0F);
         this.arms.setTextureOffset(44, 22).addBox(-8.0F, -2.0F, -2.0F, 4, 8, 4, scaleFactor);
+        
         ModelRenderer modelrenderer = (new ModelRenderer(this, 44, 22)).setTextureSize(textureWidthIn, textureHeightIn);
         modelrenderer.mirror = true;
         modelrenderer.addBox(4.0F, -2.0F, -2.0F, 4, 8, 4, scaleFactor);
+        
         this.arms.addChild(modelrenderer);
         this.arms.setTextureOffset(40, 38).addBox(-4.0F, 2.0F, -2.0F, 8, 4, 4, scaleFactor);
+        
         this.bipedRightLeg = (new ModelRenderer(this, 0, 22)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F + p_i47227_2_, 0.0F);
         this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scaleFactor);
+        
         this.bipedLeftLeg = (new ModelRenderer(this, 0, 22)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedLeftLeg.mirror = true;
         this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F + p_i47227_2_, 0.0F);
         this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scaleFactor);
+        
         this.bipedRightArm = (new ModelRenderer(this, 40, 46)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, scaleFactor);
         this.bipedRightArm.setRotationPoint(-5.0F, 2.0F + p_i47227_2_, 0.0F);
+        
         this.bipedLeftArm = (new ModelRenderer(this, 40, 46)).setTextureSize(textureWidthIn, textureHeightIn);
         this.bipedLeftArm.mirror = true;
         this.bipedLeftArm.addBox(-1.0F, -2.0F, -2.0F, 4, 12, 4, scaleFactor);
@@ -77,18 +90,18 @@ public class ModelCQRIllager extends ModelCQRBiped {
         	super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
             EntityCQRIllager abstractillager = (EntityCQRIllager)entityIn;
 
-            if (!abstractillager.isAggressive())
-            {
-                this.arms.render(scale);
-                this.bipedRightArm.showModel = false;
-                this.bipedLeftArm.showModel = false;
-            }
-            else
+            if (abstractillager.isAggressive() || abstractillager.getHeldItemMainhand().getItem() instanceof ItemPotionHealing)
             {
             	this.bipedRightArm.showModel = true;
                 this.bipedLeftArm.showModel = true;
                 this.bipedRightArm.render(scale);
                 this.bipedLeftArm.render(scale);
+            }
+            else
+            {
+            	this.arms.render(scale);
+                this.bipedRightArm.showModel = false;
+                this.bipedLeftArm.showModel = false;
             }
         }
     }
