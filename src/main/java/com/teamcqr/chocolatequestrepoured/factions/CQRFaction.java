@@ -1,10 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
@@ -76,6 +78,7 @@ public class CQRFaction {
 		return a;
 	}*/
 
+	//TODO: Special case for player faction!!
 	public boolean isEnemy(CQRFaction faction) {
 		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
@@ -89,7 +92,7 @@ public class CQRFaction {
 		}
 		return false;
 	}
-	
+	//TODO: Special case for player faction!!
 	public boolean isAlly(CQRFaction faction) {
 		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return true;
@@ -114,11 +117,17 @@ public class CQRFaction {
 		return isEnemy(ent.getFaction());
 	}
 	public boolean isAlly(Entity ent) {
+		if(ent instanceof EntityPlayer) {
+			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
+		}
 		return isAlly(FactionRegistry.instance().getFactionOf(ent));
 	}
 	public boolean isEnemy(Entity ent) {
 		if(ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
 			return false;
+		}
+		if(ent instanceof EntityPlayer) {
+			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
 		}
 		return isEnemy(FactionRegistry.instance().getFactionOf(ent));
 	}
@@ -129,6 +138,10 @@ public class CQRFaction {
 
 	public void incrementReputation(EntityPlayer player, int score) {
 		FactionRegistry.instance().incrementRepuOf(player, name, score);
+	}
+	
+	public void saveToFile(File folder) {
+		
 	}
 
 }
