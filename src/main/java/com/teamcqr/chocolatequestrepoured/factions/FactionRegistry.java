@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
@@ -41,7 +44,7 @@ public class FactionRegistry {
 	private static FactionRegistry instance;
 	
 	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
-	
+	private List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
 	
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
@@ -183,7 +186,7 @@ public class FactionRegistry {
 			Map<String, Integer> factionsOfPlayer = playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
 			if(factionsOfPlayer != null) {
 				if(factionsOfPlayer.containsKey(faction)) {
-					return factionsOfPlayer.get(faction) >= HIGHEST_REPU;
+					return factionsOfPlayer.get(faction) <= HIGHEST_REPU;
 				} else {
 					return true;
 				}
@@ -195,7 +198,7 @@ public class FactionRegistry {
 	}
 	
 	private boolean canRepuChange(EntityPlayer player) {
-		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator());
+		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator() || uuidsBeingLoaded.contains(player.getPersistentID()));
 	}
 	
 	public void handlePlayerLogin(PlayerLoggedInEvent event) {
@@ -209,19 +212,24 @@ public class FactionRegistry {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if(!repuDataList.hasNoTags()) {
-						Map<String, Integer> mapping = playerFactionRepuMap.get(event.player.getPersistentID());
-						repuDataList.forEach(new Consumer<NBTBase>() {
+						uuidsBeingLoaded.add(event.player.getPersistentID());
+						try {
+							Map<String, Integer> mapping = playerFactionRepuMap.get(event.player.getPersistentID());
+							repuDataList.forEach(new Consumer<NBTBase>() {
 
-							@Override
-							public void accept(NBTBase t) {
-								NBTTagCompound tag = (NBTTagCompound)t;
-								String fac = tag.getString("factionName");
-								if(factions.containsKey(fac)) {
-									int reputation = tag.getInteger("reputation");
-									mapping.put(fac, reputation);
+								@Override
+								public void accept(NBTBase t) {
+									NBTTagCompound tag = (NBTTagCompound)t;
+									String fac = tag.getString("factionName");
+									if(factions.containsKey(fac)) {
+										int reputation = tag.getInteger("reputation");
+										mapping.put(fac, reputation);
+									}
 								}
-							}
-						});
+							});
+						} finally {
+							uuidsBeingLoaded.remove(event.player.getPersistentID());
+						}
 					}
 				}
 			});
@@ -240,27 +248,32 @@ public class FactionRegistry {
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 					File f = FileIOUtil.getOrCreateFile(path, event.player.getPersistentID() +".nbt");
 					if(f != null) {
-						NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
-						NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-						for(int i = 0; i < repuDataList.tagCount(); i++) {
-							NBTTagCompound tag = repuDataList.getCompoundTagAt(i);
-							if(mapping.containsKey(tag.getString("factionName"))) {
-								entryMapping.put(tag.getString("factionName"), i);
+						uuidsBeingLoaded.add(event.player.getPersistentID());
+						try {
+							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
+							NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
+							for(int i = 0; i < repuDataList.tagCount(); i++) {
+								NBTTagCompound tag = repuDataList.getCompoundTagAt(i);
+								if(mapping.containsKey(tag.getString("factionName"))) {
+									entryMapping.put(tag.getString("factionName"), i);
+								}
 							}
-						}
-						for(Map.Entry<String, Integer> entry : mapping.entrySet()) {
-							if(entryMapping.containsKey(entry.getKey())) {
-								repuDataList.removeTag(entryMapping.get(entry.getKey()));
+							for(Map.Entry<String, Integer> entry : mapping.entrySet()) {
+								if(entryMapping.containsKey(entry.getKey())) {
+									repuDataList.removeTag(entryMapping.get(entry.getKey()));
+								}
+								NBTTagCompound tag = new NBTTagCompound();
+								tag.setString("factionName", entry.getKey());
+								tag.setInteger("reputation", entry.getValue());
+								repuDataList.appendTag(tag);
 							}
-							NBTTagCompound tag = new NBTTagCompound();
-							tag.setString("factionName", entry.getKey());
-							tag.setInteger("reputation", entry.getValue());
-							repuDataList.appendTag(tag);
+							root.removeTag("reputationdata");
+							root.setTag("reputationdata", repuDataList);
+							
+							FileIOUtil.saveNBTCompoundToFile(root, f);
+						} finally {
+							uuidsBeingLoaded.remove(event.player.getPersistentID());
 						}
-						root.removeTag("reputationdata");
-						root.setTag("reputationdata", repuDataList);
-						
-						FileIOUtil.saveNBTCompoundToFile(root, f);
 					}
 				}
 			});
