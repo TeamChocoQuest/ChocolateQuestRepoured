@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,13 +84,13 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 				if (cqrentity.hasFaction() && (this.canEntityBeSeen(cqrentity) || cqrentity.canEntityBeSeen(player) || player.canEntityBeSeen(cqrentity))) {
 					if (this.getFaction().equals(cqrentity.getFaction())) {
 						// DONE decrement the players repu on this entity's faction
-						this.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL *100);
+						this.getFaction().decrementReputation(player, getFaction().getRepuMemberKill() *100);
 					} else if (this.getFaction().isEnemy(cqrentity.getFaction())) {
 						// DONE increment the players repu at CQREntity's faction
-						cqrentity.getFaction().incrementReputation(player, EFaction.REPU_DECREMENT_ON_ENEMY_KILL *100);
+						cqrentity.getFaction().incrementReputation(player, getFaction().getRepuEnemyKill() *100);
 					} else if (this.getFaction().isAlly(cqrentity.getFaction())) {
 						// DONE decrement the players repu on CQREntity's faction
-						cqrentity.getFaction().decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL *100);
+						cqrentity.getFaction().decrementReputation(player, getFaction().getRepuAllyKill() *100);
 					}
 					break;
 				}

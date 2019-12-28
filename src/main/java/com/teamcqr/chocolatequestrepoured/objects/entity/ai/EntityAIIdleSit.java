@@ -71,7 +71,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 				if(!nearbyEntities.isEmpty()) {
 					for(Entity ent : nearbyEntities) {
 						if(ent instanceof AbstractEntityCQR) {
-							if(entity.getFaction().isEntityAlly((AbstractEntityCQR)ent)) {
+							if(entity.getFaction().isAlly((AbstractEntityCQR)ent)) {
 								friends.add(ent);
 								//friendsFound++;
 							}

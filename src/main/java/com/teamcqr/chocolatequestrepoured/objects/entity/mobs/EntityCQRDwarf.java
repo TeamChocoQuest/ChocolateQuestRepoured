@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
@@ -42,8 +42,8 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.DWARVES_AND_GOLEMS;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.DWARVES_AND_GOLEMS;
 	}
 	
 	@Override

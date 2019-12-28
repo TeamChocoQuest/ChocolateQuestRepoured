@@ -3,7 +3,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
@@ -108,8 +109,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.UNDEAD;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.UNDEAD;
 	}
 
 	@Override
@@ -123,7 +124,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	}
 
 	@Override
-	public EFaction getSummonerFaction() {
+	public CQRFaction getSummonerFaction() {
 		return this.getFaction();
 	}
 
