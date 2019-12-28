@@ -1,9 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -23,11 +29,10 @@ import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraftforge.common.util.Constants;
 
 public enum EFaction {
 	
@@ -46,9 +51,9 @@ public enum EFaction {
 	PLAYERS(new String[] {}, new String[] {"VILLAGERS", "NPC"}, EReputationState.NEUTRAL),
 	;
 
-	public static final int REPU_DECREMENT_ON_MEMBER_KILL = 5;
+	/*public static final int REPU_DECREMENT_ON_MEMBER_KILL = 5;
 	public static final int REPU_DECREMENT_ON_ENEMY_KILL = 1;
-	public static final int REPU_DECREMENT_ON_ALLY_KILL = 2;
+	public static final int REPU_DECREMENT_ON_ALLY_KILL = 2;*/
 	
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue(); 
@@ -227,8 +232,8 @@ public enum EFaction {
 	
 	public static void loadFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("Factions")) {
-			NBTTagList factions = compound.getTagList("Factions", Constants.NBT.TAG_COMPOUND);
-			factions.forEach(new Consumer<NBTBase>() {
+			//NBTTagList factions = compound.getTagList("Factions", Constants.NBT.TAG_COMPOUND);
+			/*factions.forEach(new Consumer<NBTBase>() {
 
 				@Override
 				public void accept(NBTBase t) {
@@ -252,33 +257,89 @@ public enum EFaction {
 					}
 				}
 				
-			});
+			});*/
 		}
 		
 	}
 	
-	public static NBTTagCompound saveDataAsNBT() {
+	public static NBTTagCompound saveDataAsNBT(File worldFolder) {
 		NBTTagCompound compound = new NBTTagCompound();
 		NBTTagList factions = new NBTTagList();
 		
 		for(EFaction faction : values()) {
-			NBTTagList repus = new NBTTagList();
-			for(Map.Entry<UUID, Integer> entry : faction.reputationMap.entrySet()) {
-				NBTTagCompound repuTag = new NBTTagCompound();
-				repuTag.setUniqueId("UUID", entry.getKey());
-				repuTag.setInteger("Reputation", entry.getValue());
+			//NBTTagList repus = new NBTTagList();
+			Map<UUID, Integer> repuMap = faction.reputationMap;
+			
+			//Running file IO stuff async to cause less lag
+			Thread saveThread = new Thread(new Runnable() {
 				
-				repus.appendTag(repuTag);
-			}
+				@Override
+				public void run() {
+					for(Map.Entry<UUID, Integer> entry : repuMap.entrySet()) {
+						//NBTTagCompound repuTag = new NBTTagCompound();
+						//repuTag.setUniqueId("UUID", entry.getKey());
+						//repuTag.setInteger("Reputation", entry.getValue());
+						
+						//repus.appendTag(repuTag);
+						
+						saveReputationForUUID(entry.getKey(), entry.getValue(), faction.name(), worldFolder);
+					}
+				}
+			});
+			saveThread.start();
+			
 			NBTTagCompound factionTag = new NBTTagCompound();
 			factionTag.setString("Name", faction.name());
-			factionTag.setTag("Reputations", repus);
+			//factionTag.setTag("Reputations", repus);
 			
 			factions.appendTag(factionTag);
 		}
 		compound.setTag("Factions", factions);
 		//System.out.println("Faction data saved!");
 		return compound;
+	}
+	
+	private static void saveReputationForUUID(UUID id, int score, String factionName, File worldFolder) {
+		File file = new File(worldFolder.getAbsolutePath() + "/data/CQR/factions/", id.toString() + ".nbt");
+		boolean success = true;
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				success = false;
+				e.printStackTrace();
+			}
+		}
+		if(success) {
+			InputStream stream = null;
+			try {
+				stream = new FileInputStream(file);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
+			if(stream != null) {
+				NBTTagCompound root = null;
+				try {
+					root = CompressedStreamTools.readCompressed(stream);
+				} catch(IOException ex) {
+					//ex.printStackTrace();
+					System.out.println("It seems the reputation data file of " +id.toString() + " is empty. This is not a problem :)  Returning empty tag...");
+					root = new NBTTagCompound();
+				}
+				if(root != null) {
+					root.setInteger(factionName, score);
+					
+					try {
+						OutputStream outStream = null;
+						outStream = new FileOutputStream(file);
+						CompressedStreamTools.writeCompressed(root, outStream);
+						outStream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
 	}
 
 }

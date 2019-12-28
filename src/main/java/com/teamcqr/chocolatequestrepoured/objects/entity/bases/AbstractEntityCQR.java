@@ -11,7 +11,9 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
@@ -102,7 +104,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected PathNavigate waterNavigator;
 	
 	protected ESpellType activeSpell = ESpellType.NONE;
-	private EFaction faction;
+	private CQRFaction factionInstance;
+	private String factionName;
+	private CQRFaction defaultFactionInstance;
 	
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
@@ -640,14 +644,25 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.holdingPotion;
 	}
 
-	public abstract EFaction getDefaultFaction();
+	public abstract EDefaultFaction getDefaultFaction();
 	
-	public EFaction getFaction() {
-		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (faction != null ? faction : getDefaultFaction());
+	public CQRFaction getDefaultFactionInstance() {
+		if(defaultFactionInstance == null) {
+			defaultFactionInstance = FactionRegistry.instance().getFactionInstance(getDefaultFaction().name());
+		}
+		return defaultFactionInstance;
 	}
 	
-	public void setFaction(EFaction newFac) {
-		this.faction = newFac;
+	public CQRFaction getFaction() {
+		if(factionInstance == null) {
+			factionInstance = FactionRegistry.instance().getFactionInstance(factionName);
+		}
+		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (factionInstance != null ? factionInstance : getDefaultFactionInstance());
+	}
+	
+	public void setFaction(String newFac) {
+		this.factionInstance = null;
+		this.factionName = newFac;
 	}
 
 	public boolean hasFaction() {
@@ -666,19 +681,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			double z2 = player.posZ + range;
 			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 
-			List<EFaction> checkedFactions = new ArrayList<EFaction>();
+			List<CQRFaction> checkedFactions = new ArrayList<>();
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
-					EFaction faction = cqrentity.getFaction();
+					CQRFaction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
-						faction.decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL);
+						faction.decrementReputation(player, faction.getRepuMemberKill());
 					} else if (this.getFaction().isEnemy(faction)) {
 						// DONE increment the players repu at CQREntity's faction
-						faction.incrementReputation(player, EFaction.REPU_DECREMENT_ON_ENEMY_KILL);
+						faction.incrementReputation(player, faction.getRepuEnemyKill());
 					} else if (this.getFaction().isAlly(faction)) {
 						// DONE decrement the players repu on CQREntity's faction
-						faction.decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL);
+						faction.decrementReputation(player, faction.getRepuAllyKill());
 					}
 					checkedFactions.add(faction);
 				}

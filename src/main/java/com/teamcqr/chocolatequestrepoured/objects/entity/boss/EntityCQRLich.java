@@ -3,7 +3,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
@@ -121,12 +122,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.UNDEAD;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.UNDEAD;
 	}
 
 	@Override
-	public EFaction getSummonerFaction() {
+	public CQRFaction getSummonerFaction() {
 		return getFaction();
 	}
 
