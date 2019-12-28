@@ -72,7 +72,7 @@ public class FactionRegistry {
 			Optional<Integer> optionAlly = Optional.empty();
 			Optional<Integer> optionEnemy = Optional.empty();
 			
-			CQRFaction fac = new CQRFaction(edf.name(), edf.getDefaultReputation(), false, optionMember, optionAlly, optionEnemy);
+			CQRFaction fac = new CQRFaction(edf.name(), edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
 			factions.put(edf.name(), fac);
 		}
 		
@@ -145,6 +145,9 @@ public class FactionRegistry {
 	}
 	
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
+		if(faction.isRepuStatic()) {
+			return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
+		}
 		if(playerFactionRepuMap.containsKey(playerID)) {
 			if(playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
 				return EReputationStateRough.getByRepuScore(playerFactionRepuMap.get(playerID).get(faction.getName()));

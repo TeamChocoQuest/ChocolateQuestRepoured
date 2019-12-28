@@ -16,6 +16,7 @@ import net.minecraft.world.EnumDifficulty;
 public class CQRFaction {
 
 	private boolean savedGlobally = true;
+	private boolean repuMayChange = true;
 	private String name;
 	//private CQRFaction[] allies = new CQRFaction[12];
 	private ArrayList<CQRFaction> allies = new ArrayList<>();
@@ -27,15 +28,15 @@ public class CQRFaction {
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
 	
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
-		this(name, defaultReputationState, true, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+		this(name, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 	
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
 		this.defaultRelation = defaultReputationState;
-		
+		this.repuMayChange = canRepuChange;
 		this.repuChangeOnMemberKill = repuChangeOnMemberKill.isPresent() ? repuChangeOnMemberKill.get() : 5;
 		this.repuChangeOnAllyKill = repuChangeOnAllyKill.isPresent() ? repuChangeOnAllyKill.get() : 2;
 		this.repuChangeOnEnemyKill = repuChangeOnEnemyKill.isPresent() ? repuChangeOnEnemyKill.get() : 1;
@@ -133,11 +134,19 @@ public class CQRFaction {
 	}
 
 	public void decrementReputation(EntityPlayer player, int score) {
-		FactionRegistry.instance().decrementRepuOf(player, name, score);
+		if(repuMayChange) {
+			FactionRegistry.instance().decrementRepuOf(player, name, score);
+		}
 	}
 
 	public void incrementReputation(EntityPlayer player, int score) {
-		FactionRegistry.instance().incrementRepuOf(player, name, score);
+		if(repuMayChange) {
+			FactionRegistry.instance().incrementRepuOf(player, name, score);
+		}
+	}
+	
+	public boolean isRepuStatic() {
+		return !repuMayChange;
 	}
 	
 	public void saveToFile(File folder) {
