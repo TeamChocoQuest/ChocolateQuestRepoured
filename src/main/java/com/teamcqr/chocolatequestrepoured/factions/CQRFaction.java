@@ -77,7 +77,7 @@ public class CQRFaction {
 	}*/
 
 	public boolean isEnemy(CQRFaction faction) {
-		if(faction == this) {
+		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
 		}
 		if(faction != null) {
@@ -91,7 +91,7 @@ public class CQRFaction {
 	}
 	
 	public boolean isAlly(CQRFaction faction) {
-		if(faction == this) {
+		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return true;
 		}
 		if(faction != null) {

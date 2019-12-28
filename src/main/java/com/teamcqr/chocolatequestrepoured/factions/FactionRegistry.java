@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityEndermite;
 import net.minecraft.entity.monster.EntityEvoker;
@@ -80,6 +81,9 @@ public class FactionRegistry {
 	public CQRFaction getFactionOf(Entity entity) {
 		if(entity instanceof EntityTameable) {
 			return getFactionOf(((EntityTameable)entity).getOwner());
+		}
+		if(entity instanceof EntityArmorStand) {
+			return factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
 		
 		if(entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
