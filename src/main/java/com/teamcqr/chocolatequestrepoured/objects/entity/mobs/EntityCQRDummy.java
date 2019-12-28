@@ -28,7 +28,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 
 	@Override
 	public EDefaultFaction getDefaultFaction() {
-		return null;
+		return EDefaultFaction.ALL_ALLY;
 	}
 
 	@Override
