@@ -5,6 +5,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -36,6 +37,8 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 @EventBusSubscriber
 public class EventsHandler {
@@ -200,6 +203,16 @@ public class EventsHandler {
 				CQStructure.runningExportThreads.clear();
 			}
 		}
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerLoggedInEvent event) {
+		FactionRegistry.instance().handlePlayerLogin(event);
+	}
+	
+	@SubscribeEvent
+	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
+		FactionRegistry.instance().handlePlayerLogout(event);
 	}
 
 }
