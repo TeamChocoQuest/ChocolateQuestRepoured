@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.crafting.smelting.SmeltingHandler;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -126,6 +127,9 @@ public class CQRMain
 		initConfigFolder(event);
 		
 		proxy.preInit();
+	
+		//Faction system
+		FactionRegistry.instance().loadFactions();
 		
 		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
