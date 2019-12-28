@@ -60,28 +60,17 @@ public class CQRFaction {
 	}
 
 	public void addAlly(CQRFaction ally) {
-		//allies = addFactionToRelationArray(ally, allies);
 		if(ally != null) {
 			allies.add(ally);
 		}
 	}
 	
 	public void addEnemy(CQRFaction enemy) {
-		//enemies = addFactionToRelationArray(enemy, enemies);
 		if(enemy != null) {
 			enemies.add(enemy);
 		}
 	}
 	
-	/*private CQRFaction[] addFactionToRelationArray(CQRFaction f, CQRFaction[] a) {
-		if(a[a.length -1] != null) {
-			a = (CQRFaction[]) ArrayManipulationUtil.enlargeFactionArray(a, 1);
-		}
-		a[a.length -1] = f;
-		
-		return a;
-	}*/
-
 	//DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
 		if(ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
