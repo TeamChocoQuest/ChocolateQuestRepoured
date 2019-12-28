@@ -1,11 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.util.data.ArrayManipulationUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,8 +15,10 @@ public class CQRFaction {
 
 	private boolean savedGlobally = true;
 	private String name;
-	private CQRFaction[] allies = new CQRFaction[1];
-	private CQRFaction[] enemies = new CQRFaction[1];
+	//private CQRFaction[] allies = new CQRFaction[12];
+	private ArrayList<CQRFaction> allies = new ArrayList<>();
+	//private CQRFaction[] enemies = new CQRFaction[12];
+	private ArrayList<CQRFaction> enemies = new ArrayList<>();
 	private EReputationState defaultRelation;
 	
 	private int repuChangeOnMemberKill = 5;
@@ -34,7 +36,7 @@ public class CQRFaction {
 		
 		this.repuChangeOnMemberKill = repuChangeOnMemberKill.isPresent() ? repuChangeOnMemberKill.get() : 5;
 		this.repuChangeOnAllyKill = repuChangeOnAllyKill.isPresent() ? repuChangeOnAllyKill.get() : 2;
-		this.repuChangeOnMemberKill = repuChangeOnEnemyKill.isPresent() ? repuChangeOnEnemyKill.get() : 1;
+		this.repuChangeOnEnemyKill = repuChangeOnEnemyKill.isPresent() ? repuChangeOnEnemyKill.get() : 1;
 	}
 	
 	public int getRepuMemberKill() {return repuChangeOnMemberKill;}
@@ -52,21 +54,23 @@ public class CQRFaction {
 	}
 
 	public void addAlly(CQRFaction ally) {
-		allies = addFactionToRelationArray(ally, allies);
+		//allies = addFactionToRelationArray(ally, allies);
+		allies.add(ally);
 	}
 	
 	public void addEnemy(CQRFaction enemy) {
-		enemies = addFactionToRelationArray(enemy, enemies);
+		//enemies = addFactionToRelationArray(enemy, enemies);
+		enemies.add(enemy);
 	}
 	
-	private CQRFaction[] addFactionToRelationArray(CQRFaction f, CQRFaction[] a) {
+	/*private CQRFaction[] addFactionToRelationArray(CQRFaction f, CQRFaction[] a) {
 		if(a[a.length -1] != null) {
-			a = (CQRFaction[]) ArrayManipulationUtil.enlargeArray(a, 1);
+			a = (CQRFaction[]) ArrayManipulationUtil.enlargeFactionArray(a, 1);
 		}
 		a[a.length -1] = f;
 		
 		return a;
-	}
+	}*/
 
 	public boolean isEnemy(CQRFaction faction) {
 		if(faction == this) {
