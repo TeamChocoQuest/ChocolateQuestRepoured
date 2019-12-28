@@ -56,7 +56,7 @@ public class TargetUtil {
 			if (!EntitySelectors.IS_ALIVE.apply(input)) {
 				return false;
 			}
-			if (input.getOwner() != null) {
+			if (input.getOwnerId() != null) {
 				return false;
 			}
 			return input instanceof EntityOcelot || input instanceof EntityWolf;
