@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.gui;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.Minecraft;
@@ -88,9 +87,9 @@ public class GuiReputation extends GuiScreen {
 		//this.drawTexturedModalRect(PLAYER_HEAD_X, PLAYER_HEAD_Y, 72, 8, 8, 8);
 	}
 	
-	protected void adjustComponentsToFaction(EFaction newFaction) {
+	protected void adjustComponentsToFaction(String newFaction) {
 		if(newFaction != null) {
-			this.btnCycleFaction.displayString = newFaction.name();
+			this.btnCycleFaction.displayString = newFaction;
 		} else {
 			this.btnCycleFaction.displayString = "None";
 		}
