@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
@@ -141,6 +142,15 @@ public class FactionRegistry {
 			return factions.get(factionName);
 		}
 		return factions.get(EDefaultFaction.UNDEAD.name());
+	}
+	
+	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
+		if(playerFactionRepuMap.containsKey(playerID)) {
+			if(playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
+				return EReputationStateRough.getByRepuScore(playerFactionRepuMap.get(playerID).get(faction.getName()));
+			}
+		}
+		return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
 	}
 	
 	public void incrementRepuOf(EntityPlayer player, String faction, int score) {
