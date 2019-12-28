@@ -182,7 +182,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		if(compound.hasKey("targetID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("targetID"));
 			if(world != null) {
-				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
+				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if(ent.getPersistentID().equals(id)) {
 						target = ent;
 					}
@@ -192,7 +192,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		if(compound.hasKey("summonerID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
 			if(world != null) {
-				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.LIVING)) {
+				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
 					if(ent.getPersistentID().equals(id)) {
 						summoner = ent;
 					}
