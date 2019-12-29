@@ -90,15 +90,18 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			boolean dontRenderOffItem = false;
 			boolean dontRenderMainItem = false;
+			
+			boolean flagMain = false;
+			boolean flagOff = false;
 
 			// Main arm
-			if (!itemMainHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemMainHand.isEmpty()) {
 				if (itemMainHand.getItem() instanceof ItemMusket) {
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderOffItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
-
-				} else {
+					flagMain = true;
+				} else if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemMainHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -119,15 +122,15 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				}
 			}
 			// Off arm
-			if (!itemOffHand.isEmpty() && entity.getItemInUseCount() > 0) {
+			if (!itemOffHand.isEmpty()) {
 				// if(itemOffHand.getItem() instanceof ItemShield) {
 
 				if (itemOffHand.getItem() instanceof ItemMusket) {
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderMainItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
-
-				} else {
+					flagOff = true;
+				} else if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemOffHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -149,17 +152,34 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			}
 
+			boolean flagSide = false;
 			if (entity.getPrimaryHand() == EnumHandSide.LEFT) {
 				ArmPose tmp = armPoseMain;
 				armPoseMain = armPoseOff;
 				armPoseOff = tmp;
-
+				flagSide = true;
 				boolean tmp2 = dontRenderMainItem;
 				dontRenderMainItem = dontRenderOffItem;
 				dontRenderOffItem = tmp2;
 			}
-			model.rightArmPose = armPoseMain;
-			model.leftArmPose = armPoseOff;
+			if(!flagMain) {
+				model.rightArmPose = armPoseMain;
+			} else {
+				if(flagSide) {
+					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
+				} else {
+					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
+				}
+			}
+			if(!flagOff) {
+				model.leftArmPose = armPoseOff;
+			} else {
+				if(flagSide) {
+					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
+				} else {
+					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
+				}
+			}
 			if (dontRenderMainItem) {
 				model.rightArmPose = ArmPose.EMPTY;
 			}
