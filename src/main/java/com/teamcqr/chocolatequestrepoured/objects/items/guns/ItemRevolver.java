@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,18 +33,6 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 		setMaxDamage(300);
 		setMaxStackSize(1);
 	}
-
-	/*
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.NONE;
-	}
-	*/
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -113,48 +102,6 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 		}
 	}
 
-	/*
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLiving;
-			boolean flag = player.capabilities.isCreativeMode;
-			ItemStack itemstack = findAmmo(player);
-
-			if (!itemstack.isEmpty() || flag) {
-				if (!worldIn.isRemote) {
-					if (flag && itemstack.isEmpty()) {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								10);
-						worldIn.spawnEntity(bulletE);
-					} else {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								10);
-						worldIn.spawnEntity(bulletE);
-						stack.damageItem(1, player);
-					}
-				}
-
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
-						1.0F, 1.0F, false);
-				entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
-
-				if (!flag) {
-					itemstack.shrink(1);
-
-					if (itemstack.isEmpty()) {
-						player.inventory.deleteStack(itemstack);
-					}
-				}
-			}
-		}
-	}
-	*/
-
 	protected boolean isBullet(ItemStack stack) {
 		return stack.getItem() instanceof ItemBullet;
 	}
@@ -222,9 +169,14 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 	}
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		if (!worldIn.isRemote) {
+			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, 1/* 1 is Iron bullet */);
+			bulletE.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw, 0.0F, 3.5F, 5F);
+			worldIn.spawnEntity(bulletE);
+		}
+
+		worldIn.playSound(shooter.posX, shooter.posY, shooter.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
 	}
 
 }
