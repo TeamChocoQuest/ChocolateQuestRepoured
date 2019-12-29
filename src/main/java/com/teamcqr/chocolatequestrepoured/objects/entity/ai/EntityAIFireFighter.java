@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityAIFireFighter extends AbstractCQREntityAI {
-	
+
 	protected static final int searchRadiusHorizontal = 8;
 	protected static final int searchRadiusVertical = 2;
 	protected static final int maxDistanceToEntity = 3;
@@ -25,38 +25,38 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	public EntityAIFireFighter(AbstractEntityCQR ent) {
 		super(ent);
-		world = ent.getEntityWorld();
+		this.world = ent.getEntityWorld();
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		int x = (int) Math.floor(entity.posX);
-		int y = (int) Math.floor(entity.posY);
-		int z = (int) Math.floor(entity.posZ);
-		
-		if(timerForPosConflicts > 0) {
-			for(BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
-				if(isSuitableFire(posTmp)) {
-					if(nearestFire != null) {
-						if(entity.getDistanceSq(posTmp) < entity.getDistanceSq(nearestFire)) {
-							nearestFire = posTmp;
-							timerForPosConflicts--;
+		int x = (int) Math.floor(this.entity.posX);
+		int y = (int) Math.floor(this.entity.posY);
+		int z = (int) Math.floor(this.entity.posZ);
+
+		if (this.timerForPosConflicts > 0) {
+			for (BlockPos posTmp : BlockPos.getAllInBox(x - searchRadiusHorizontal, y - searchRadiusVertical, z - searchRadiusHorizontal, x + searchRadiusHorizontal, y + searchRadiusVertical, z + searchRadiusHorizontal)) {
+				if (this.isSuitableFire(posTmp)) {
+					if (this.nearestFire != null) {
+						if (this.entity.getDistanceSq(posTmp) < this.entity.getDistanceSq(this.nearestFire)) {
+							this.nearestFire = posTmp;
+							this.timerForPosConflicts--;
 						}
 					} else {
-						nearestFire = posTmp;
+						this.nearestFire = posTmp;
 					}
 				}
 			}
 		}
-		
-		return nearestFire != null;
+
+		return this.nearestFire != null;
 	}
-	
+
 	private boolean isSuitableFire(BlockPos posTmp) {
-		if(world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? entity.getNavigator().getPathToPos(nearestFire) != null : true)) {
-			Block block = world.getBlockState(posTmp.down()).getBlock();
-			
-			if(block != null && (block == Blocks.NETHERRACK || block == Blocks.MAGMA)) {
+		if (this.world.getBlockState(posTmp).getMaterial() == Material.FIRE && (checkPosReachableBeforeSettingPos ? this.entity.getNavigator().getPathToPos(this.nearestFire) != null : true)) {
+			Block block = this.world.getBlockState(posTmp.down()).getBlock();
+
+			if (block != null && (block == Blocks.NETHERRACK || block == Blocks.MAGMA)) {
 				return false;
 			}
 			return true;
@@ -66,27 +66,27 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	@Override
 	public void updateTask() {
-		if(nearestFire != null) {
-			if(entity.getDistanceSq(nearestFire) <= (maxDistanceToEntity * maxDistanceToEntity)) {
-				entity.swingArm(EnumHand.MAIN_HAND);
-				world.setBlockToAir(nearestFire);
-				//DONE: Particles and sounds
-				world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, nearestFire.getX() -0.5d, nearestFire.getY() -0.5D, nearestFire.getZ() -0.5D, 1.0, 1.0, 1.0, 1);
-				world.playSound(nearestFire.getX(), nearestFire.getY(), nearestFire.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F, true);
-				nearestFire = null;
-			} else if(entity.getNavigator().getPathToPos(nearestFire) != null) {
-				//If we are not close enough we need to walk to the fire, now check if there's a path to it
-				entity.getNavigator().tryMoveToXYZ(nearestFire.getX(), nearestFire.getY(), nearestFire.getZ(), speedToWalkToFire);
+		if (this.nearestFire != null) {
+			if (this.entity.getDistanceSq(this.nearestFire) <= (maxDistanceToEntity * maxDistanceToEntity)) {
+				this.entity.swingArm(EnumHand.MAIN_HAND);
+				this.world.setBlockToAir(this.nearestFire);
+				// DONE: Particles and sounds
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.nearestFire.getX() - 0.5d, this.nearestFire.getY() - 0.5D, this.nearestFire.getZ() - 0.5D, 1.0, 1.0, 1.0, 1);
+				this.world.playSound(this.nearestFire.getX(), this.nearestFire.getY(), this.nearestFire.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 1.0F, 1.0F, true);
+				this.nearestFire = null;
+			} else if (this.entity.getNavigator().getPathToPos(this.nearestFire) != null) {
+				// If we are not close enough we need to walk to the fire, now check if there's a path to it
+				this.entity.getNavigator().tryMoveToXYZ(this.nearestFire.getX(), this.nearestFire.getY(), this.nearestFire.getZ(), speedToWalkToFire);
 			} else {
 				this.nearestFire = null;
 			}
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
-		nearestFire = null;
-		timerForPosConflicts = 10;
+		this.nearestFire = null;
+		this.timerForPosConflicts = 10;
 	}
 
 }

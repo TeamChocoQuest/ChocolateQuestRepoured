@@ -112,7 +112,7 @@ public class ModItems {
 	public static final Item SHIELD_TRITON = Null();
 	public static final Item SHIELD_TURTLE = Null();
 	public static final Item SHIELD_WARPED = Null();
-	public static final Item SHIELD_WALKER_NORMAL = Null();
+	public static final Item SHIELD_WALKER = Null();
 	public static final Item SHIELD_ZOMBIE = Null();
 
 	// Great Swords
@@ -139,9 +139,9 @@ public class ModItems {
 	public static final Item REVOLVER = Null();
 	public static final Item CAPTAIN_REVOLVER = Null();
 	public static final Item MUSKET = Null();
-	public static final Item MUSKET_IRON = Null(); // #TODO TEXTURES
-	public static final Item MUSKET_DIAMOND = Null(); // #TODO TEXTURES
-	public static final Item MUSKET_MONKING = Null(); // #TODO TEXTURES
+	public static final Item MUSKET_DAGGER_IRON = Null(); // #TODO TEXTURES
+	public static final Item MUSKET_DAGGER_DIAMOND = Null(); // #TODO TEXTURES
+	public static final Item MUSKET_DAGGER_MONKING = Null(); // #TODO TEXTURES
 	public static final Item BULLET_IRON = Null();
 	public static final Item BULLET_GOLD = Null();
 	public static final Item BULLET_DIAMOND = Null();
@@ -197,16 +197,16 @@ public class ModItems {
 	public static final Item BOOTS_HEAVY_IRON = Null();
 	
 	//Dyable Iron Armor
-	public static final Item HELMET_DYABLE_IRON = Null();
-	public static final Item CHESTPLATE_DYABLE_IRON = Null();
-	public static final Item LEGGINGS_DYABLE_IRON = Null();
-	public static final Item BOOTS_DYABLE_IRON = Null();
+	public static final Item HELMET_IRON_DYABLE = Null();
+	public static final Item CHESTPLATE_IRON_DYABLE = Null();
+	public static final Item LEGGINGS_IRON_DYABLE = Null();
+	public static final Item BOOTS_IRON_DYABLE = Null();
 	
 	//Dyable Diamond Armor
-	public static final Item HELMET_DYABLE_DIAMOND = Null();
-	public static final Item CHESTPLATE_DYABLE_DIAMOND = Null();
-	public static final Item LEGGINGS_DYABLE_DIAMOND = Null();
-	public static final Item BOOTS_DYABLE_DIAMOND = Null();
+	public static final Item HELMET_DIAMOND_DYABLE = Null();
+	public static final Item CHESTPLATE_DIAMOND_DYABLE = Null();
+	public static final Item LEGGINGS_DIAMOND_DYABLE = Null();
+	public static final Item BOOTS_DIAMOND_DYABLE = Null();
 
 	// Ingridients
 	public static final Item SCALE_TURTLE = Null();
@@ -226,7 +226,7 @@ public class ModItems {
 	public static final Item ALCHEMY_BAG = Null();
 
 	// Dungeon tools
-	public static final Item MOB_TO_SPAWNER = Null();
+	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
 	
