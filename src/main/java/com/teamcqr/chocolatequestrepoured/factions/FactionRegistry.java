@@ -57,9 +57,13 @@ public class FactionRegistry {
 	
 	public void loadFactions() {
 		loadDefaultFactions();
-		
+		loadFactionsInConfigFolder();
 	}
 	
+	private void loadFactionsInConfigFolder() {
+		//TODO: Load factions from files
+	}
+
 	private void loadDefaultFactions() {
 		String[][] allies = new String[EDefaultFaction.values().length][];
 		String[][] enemies = new String[EDefaultFaction.values().length][];
