@@ -57,9 +57,13 @@ public class FactionRegistry {
 	
 	public void loadFactions() {
 		loadDefaultFactions();
-		
+		loadFactionsInConfigFolder();
 	}
 	
+	private void loadFactionsInConfigFolder() {
+		//TODO: Load factions from files
+	}
+
 	private void loadDefaultFactions() {
 		String[][] allies = new String[EDefaultFaction.values().length][];
 		String[][] enemies = new String[EDefaultFaction.values().length][];
@@ -87,7 +91,7 @@ public class FactionRegistry {
 			}
 		}
 		
-		System.out.println("Defaunt factions loaded and initialized!");
+		System.out.println("Default factions loaded and initialized!");
 	}
 	
 	public CQRFaction getFactionOf(Entity entity) {
@@ -166,15 +170,19 @@ public class FactionRegistry {
 	
 	public void changeRepuOf(EntityPlayer player, String faction, int score) {
 		boolean flag = false;
-		if(score < 0) {
-			flag = canDecrementRepu(player, faction);
-		} else {
-			flag = canIncrementRepu(player, faction);
+		if(canRepuChange(player)) {
+			if(score < 0) {
+				flag = canDecrementRepu(player, faction);
+			} else {
+				flag = canIncrementRepu(player, faction);
+			}
 		}
 		if(flag) {
 			Map<String, Integer> factionsOfPlayer = playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
 			int oldScore = factionsOfPlayer.getOrDefault(faction, factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
+			playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
+			System.out.println("Repu changed!");
 		}
 	}
 	
@@ -218,6 +226,7 @@ public class FactionRegistry {
 		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 		File f = new File(path, event.player.getPersistentID() + ".nbt");
 		if(f.exists()) {
+			System.out.println("Loading player reputation...");
 			Thread t = new Thread(new Runnable() {
 				
 				@Override
@@ -252,6 +261,7 @@ public class FactionRegistry {
 	
 	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
 		if(playerFactionRepuMap.containsKey(event.player.getPersistentID())) {
+			System.out.println("Saving player reputation...");
 			Thread t = new Thread(new Runnable() {
 				
 				@Override
