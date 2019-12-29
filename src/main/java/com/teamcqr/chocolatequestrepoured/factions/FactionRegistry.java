@@ -182,6 +182,7 @@ public class FactionRegistry {
 			int oldScore = factionsOfPlayer.getOrDefault(faction, factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
 			playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
+			System.out.println("Repu changed!");
 		}
 	}
 	
