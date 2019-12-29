@@ -214,7 +214,6 @@ public class EventsHandler {
 		FactionRegistry.instance().handlePlayerLogin(event);
 	}
 	
-	//@SideOnly(Side.SERVER)
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
 		if(event.isCanceled()) {
