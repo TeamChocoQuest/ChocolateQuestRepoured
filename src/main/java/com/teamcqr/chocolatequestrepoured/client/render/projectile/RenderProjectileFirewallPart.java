@@ -80,6 +80,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
             f5 += 0.03F;
             ++i;
         }
+        bufferbuilder.finishDrawing();
 	}
 
 	@Override
