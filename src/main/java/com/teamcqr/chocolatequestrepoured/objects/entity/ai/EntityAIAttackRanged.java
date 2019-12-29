@@ -85,7 +85,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 			} else if (stack.getItem() instanceof IRangedWeapon) {
 				IRangedWeapon weapon = (IRangedWeapon) stack.getItem();
 				this.attackTick = weapon.getCooldown();
-				weapon.shoot(this.entity.world, this.entity, attackTarget);
+				weapon.shoot(this.entity.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
 			}
 		}
 	}
