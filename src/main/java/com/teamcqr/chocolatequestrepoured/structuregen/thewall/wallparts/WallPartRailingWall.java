@@ -122,19 +122,19 @@ public class WallPartRailingWall implements IWallPart {
 
 		nbttagcompound1.setInteger("color", 000000);
 		
-		ItemStack helmet = new ItemStack(ModItems.HELMET_DYABLE_IRON, 1/*, 0, nbttagcompound*/);
+		ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
 		//((ItemArmorDyable)ModItems.HELMET_DYABLE_IRON).setColor(helmet, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.HEAD, helmet);
 		
-		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_DYABLE_IRON, 1/*, 0, nbttagcompound*/);
+		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
 		//((ItemArmorDyable)ModItems.CHESTPLATE_DYABLE_IRON).setColor(chest, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
 		
-		ItemStack legs = new ItemStack(ModItems.LEGGINGS_DYABLE_IRON, 1/*, 0, nbttagcompound*/);
+		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
 		//((ItemArmorDyable)ModItems.LEGGINGS_DYABLE_IRON).setColor(legs, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
 		
-		ItemStack boots = new ItemStack(ModItems.BOOTS_DYABLE_IRON, 1/*, 0, nbttagcompound*/);
+		ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
 		//((ItemArmorDyable)ModItems.BOOTS_DYABLE_IRON).setColor(boots, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
 		
