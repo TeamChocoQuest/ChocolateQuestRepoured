@@ -205,13 +205,20 @@ public class EventsHandler {
 		}
 	}
 	
+	
 	@SubscribeEvent
 	public static void onPlayerLogin(PlayerLoggedInEvent event) {
+		if(event.isCanceled()) {
+			return;
+		}
 		FactionRegistry.instance().handlePlayerLogin(event);
 	}
 	
 	@SubscribeEvent
 	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
+		if(event.isCanceled()) {
+			return;
+		}
 		FactionRegistry.instance().handlePlayerLogout(event);
 	}
 
