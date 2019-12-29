@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.factions;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nonnull;
@@ -23,8 +25,8 @@ public class CQRFaction {
 	private boolean savedGlobally = true;
 	private boolean repuMayChange = true;
 	private String name;
-	private ArrayList<CQRFaction> allies = new ArrayList<>();
-	private ArrayList<CQRFaction> enemies = new ArrayList<>();
+	private List<CQRFaction> allies = Collections.synchronizedList(new ArrayList<CQRFaction>());
+	private List<CQRFaction> enemies = Collections.synchronizedList(new ArrayList<CQRFaction>());
 	private EReputationState defaultRelation;
 	
 	private int repuChangeOnMemberKill = 5;
