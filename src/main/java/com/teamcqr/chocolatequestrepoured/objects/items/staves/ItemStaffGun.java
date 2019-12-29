@@ -21,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -66,9 +67,6 @@ public class ItemStaffGun extends Item implements IRangedWeapon{
 
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
-		worldIn.playSound(shooter.posX, shooter.posY, shooter.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
-				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
-
 		if (!worldIn.isRemote) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, shooter);
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
@@ -77,6 +75,11 @@ public class ItemStaffGun extends Item implements IRangedWeapon{
 			ball.setVelocity(v.x, v.y, v.z);
 			worldIn.spawnEntity(ball);
 		}
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return ModSounds.GUN_SHOOT;
 	}
 
 }

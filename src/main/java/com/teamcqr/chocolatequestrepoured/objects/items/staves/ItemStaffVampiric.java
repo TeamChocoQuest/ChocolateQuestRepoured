@@ -21,6 +21,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -68,19 +69,21 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon{
 
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
-		worldIn.playSound(shooter.posX, shooter.posY, shooter.posZ, SoundEvents.ENTITY_ENDERPEARL_THROW,
-				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
-				false);
 		shooter.swingArm(handIn);
 
 		if (!worldIn.isRemote) {
 			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, shooter);
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
-			v = v.scale(2D);
+			v = v.scale(0.5D);
 			spell.setVelocity(v.x, v.y, v.z);
 			worldIn.spawnEntity(spell);
 		}
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return SoundEvents.ENTITY_ENDERPEARL_THROW;
 	}
 
 }
