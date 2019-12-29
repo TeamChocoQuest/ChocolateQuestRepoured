@@ -43,18 +43,6 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		setMaxDamage(2048);
 	}
 
-	/*
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.NONE;
-	}
-	*/
-
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		boolean flag = super.hitEntity(stack, target, attacker);
@@ -77,19 +65,6 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
-
-	/*
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		shootFromEntity(entityLiving);
-		changeTorch(worldIn);
-		stack.damageItem(1, entityLiving);
-
-		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 20);
-		}
-	}
-	*/
 
 	public void changeTorch(World worldIn) {
 		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
@@ -171,9 +146,8 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 	}
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		shootFromEntity(shooter);
 	}
 
 }
