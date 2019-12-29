@@ -22,6 +22,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -172,11 +174,17 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
 			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, 1/* 1 is Iron bullet */);
-			bulletE.shoot(shooter, shooter.rotationPitch, shooter.rotationYaw, 0.0F, 3.5F, 5F);
+			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			v = v.normalize();
+			v = v.scale(3.5D);
+			bulletE.setVelocity(v.x, v.y, v.z);
 			worldIn.spawnEntity(bulletE);
 		}
-
-		worldIn.playSound(shooter.posX, shooter.posY, shooter.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return ModSounds.GUN_SHOOT;
 	}
 
 }

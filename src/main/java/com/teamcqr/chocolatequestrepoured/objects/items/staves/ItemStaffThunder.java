@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.Minecraft;
@@ -20,6 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -96,6 +98,10 @@ public class ItemStaffThunder extends Item implements IRangedWeapon{
 		EntityLightningBolt entity = new EntityLightningBolt(worldIn, pos.x,
 				pos.y, pos.z, false);
 		worldIn.spawnEntity(entity);
+	}
+	@Override
+	public SoundEvent getShootSound() {
+		return ModSounds.MAGIC;
 	}
 
 }

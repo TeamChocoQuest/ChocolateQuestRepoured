@@ -86,6 +86,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 				IRangedWeapon weapon = (IRangedWeapon) stack.getItem();
 				this.attackTick = weapon.getCooldown();
 				weapon.shoot(this.entity.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
+				this.entity.playSound(weapon.getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 			}
 		}
 	}
