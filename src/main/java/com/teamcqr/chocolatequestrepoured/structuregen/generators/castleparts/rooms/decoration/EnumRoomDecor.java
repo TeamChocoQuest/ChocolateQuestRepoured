@@ -16,7 +16,8 @@ public enum EnumRoomDecor
     ANVIL            (RoomDecorAnvil::new, "Anvil"),
     FURNACE          (RoomDecorFurnace::new, "Furnace"),
     ARMOR_STAND      (RoomDecorArmorStand::new, "Armor Stand"),
-    TORCH            (RoomDecorTorch::new, "Torch");
+    TORCH            (RoomDecorTorch::new, "Torch"),
+    FIREPLACE        (RoomDecorFireplace::new, "Fireplace");
 
     private final Supplier<IRoomDecor> supplier;
     private final String name;

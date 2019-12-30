@@ -9,9 +9,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import org.apache.commons.lang3.ObjectUtils;
-import scala.Int;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -238,14 +235,6 @@ public class CastleRoomSelector
 
             usedFloors += floorsPerLayer;
         }
-
-        //Make the highest main room section a potential roof position
-        /*
-        if (!lastFloor)
-        {
-            roofAreas.add(new RoofArea(lastMainStartX, mainRoomsX, lastMainStartZ, mainRoomsZ, layer * floorsPerLayer));
-        }
-        */
     }
 
     private void addSideStructures(RoomGrid.Area2D structArea, RoomGrid.Area2D buildArea)
@@ -484,11 +473,9 @@ public class CastleRoomSelector
                 {
                     CastleRoomBossStairMain stairMain = new CastleRoomBossStairMain(getRoomStart(bottomOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs).setRoom(stairMain);
-                    //grid.initPathingForSingleCell(bottomOfBossStairs);
 
                     CastleRoomBossStairEmpty stairEmpty = new CastleRoomBossStairEmpty(getRoomStart(bottomOfBossStairs.move(alongShortSide)), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(bottomOfBossStairs.move(alongShortSide)).setRoom(stairEmpty);
-                    //grid.initPathingForSingleCell(bottomOfBossStairs.move(alongShortSide));
 
                     CastleRoomBossLandingMain landingMain = new CastleRoomBossLandingMain(getRoomStart(topOfBossStairs), roomSize, floorHeight, stairDoorSide);
                     grid.getCellAt(topOfBossStairs).setRoom(landingMain);
@@ -645,34 +632,6 @@ public class CastleRoomSelector
                     adjacent.setLinkedCells(cell.getLinkedCellsCopy());
                 }
             }
-        }
-    }
-
-    private void buildVerticalFloorHallway(int floor)
-    {
-        ArrayList<RoomGridCell> mainRooms = grid.getSelectedMainStructCells(floor);
-        RoomGridCell rootRoom = mainRooms.get(random.nextInt(mainRooms.size()));
-        ArrayList<RoomGridCell> hallwayRooms = grid.getSelectedCellsInColumn(floor, rootRoom.getGridX());
-
-        for (RoomGridCell selection : hallwayRooms)
-        {
-            selection.setRoom(new CastleRoomHallway(getRoomStart(selection), roomSize, floorHeight,
-                    CastleRoomHallway.Alignment.VERTICAL));
-            selection.setReachable();
-        }
-    }
-
-    private void buildHorizontalFloorHallway(int floor)
-    {
-        ArrayList<RoomGridCell> mainRooms = grid.getSelectedMainStructCells(floor);
-        RoomGridCell rootRoom = mainRooms.get(random.nextInt(mainRooms.size()));
-        ArrayList<RoomGridCell> hallwayRooms = grid.getSelectedCellsInRow(floor, rootRoom.getGridZ());
-
-        for (RoomGridCell selection : hallwayRooms)
-        {
-            selection.setRoom(new CastleRoomHallway(getRoomStart(selection), roomSize, floorHeight,
-                    CastleRoomHallway.Alignment.HORIZONTAL));
-            selection.setReachable();
         }
     }
 
@@ -1257,9 +1216,5 @@ public class CastleRoomSelector
         int gridZ = position.getZ();
         return startPos.add(gridX * roomSize, floor * floorHeight, gridZ * roomSize);
     }
-
-    private int getLayerFromFloor(int floor)
-    {
-        return floor / floorsPerLayer;
-    }
+    
 }
