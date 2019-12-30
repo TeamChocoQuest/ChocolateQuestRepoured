@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
@@ -58,7 +57,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (!revengeTarget.isEntityAlive()) {
 			return false;
 		}
-		if (!this.entity.getFaction().isEnemy(revengeTarget)) {
+		if (!this.entity.getFaction().isEnemy(revengeTarget) && !FactionRegistry.instance().getReputationOf(revengeTarget.getPersistentID(), this.entity.getFaction()).equals(EReputationStateRough.ALLY)) {
 			
 		}
 		if (!this.entity.isInSightRange(revengeTarget)) {

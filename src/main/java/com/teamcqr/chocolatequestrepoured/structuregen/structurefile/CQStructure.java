@@ -26,6 +26,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -256,15 +257,18 @@ public class CQStructure {
 							
 							//DONE: Place spawner for right boss
 							if(mobType.getBossResourceLocation() != null) {
+								worldIn.setBlockToAir(vecPos);
 								Entity bossEnt = EntityList.createEntityByIDFromName(mobType.getBossResourceLocation(), worldIn);
 								bossEnt.setPosition(vecPos.getX(), vecPos.getY() +0.25, vecPos.getZ());
-								worldIn.spawnEntity(bossEnt);
-								if(bossEnt instanceof AbstractEntityCQRBoss) {
-									AbstractEntityCQRBoss boss = (AbstractEntityCQRBoss) bossEnt;
-									boss.onSpawnFromCQRSpawnerInDungeon();
-									boss.setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
-									boss.equipDefaultEquipment(worldIn, vecPos);
+								if(bossEnt instanceof EntityLiving) {
+									((EntityLiving) bossEnt).enablePersistence();
 								}
+								if(bossEnt instanceof AbstractEntityCQRBoss) {
+									((AbstractEntityCQRBoss) bossEnt).onSpawnFromCQRSpawnerInDungeon();
+									((AbstractEntityCQRBoss) bossEnt).setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
+									((AbstractEntityCQRBoss) bossEnt).equipDefaultEquipment(worldIn, vecPos);
+								}
+								worldIn.spawnEntity(bossEnt);
 								bossIDs.add(bossEnt.getPersistentID());
 							} else {
 								worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
