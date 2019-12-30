@@ -57,9 +57,9 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (!revengeTarget.isEntityAlive()) {
 			return false;
 		}
-		if (!this.entity.getFaction().isEnemy(revengeTarget) && !FactionRegistry.instance().getReputationOf(revengeTarget.getPersistentID(), this.entity.getFaction()).equals(EReputationStateRough.ALLY)) {
-			
-		}
+		if (this.entity.getFaction().isAlly(revengeTarget)) {
+			return false;
+	    }
 		if (!this.entity.isInSightRange(revengeTarget)) {
 			return false;
 		}
