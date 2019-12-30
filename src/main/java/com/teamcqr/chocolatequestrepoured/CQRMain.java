@@ -125,6 +125,7 @@ public class CQRMain
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event)
 	{
+		//Important: This has to be the  F I R S T  statement
 		initConfigFolder(event);
 		
 		proxy.preInit();
