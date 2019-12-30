@@ -226,7 +226,7 @@ public class CQRMain {
 
 		if (installCQ) {
 			try {
-				Path target = new File(event.getModConfigurationDirectory(), "cqr_test").toPath();
+				Path target = new File(event.getModConfigurationDirectory(), "CQR").toPath();
 				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", target);
 			} catch (Exception e) {
 				e.printStackTrace();
