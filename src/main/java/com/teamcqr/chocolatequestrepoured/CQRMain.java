@@ -55,6 +55,7 @@ public class CQRMain
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
+	public static File CQ_FACTION_FOLDER = null;
 	
 	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
 	public static List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
@@ -180,6 +181,9 @@ public class CQRMain
 		if(!CQFolder.exists() || (CQFolder.exists() && !CQFolder.isDirectory())) {
 			CQFolder.mkdirs();
 			//Install default files
+			installCQ = true;
+		}
+		if(Reference.CONFIG_HELPER_INSTANCE.reInstallDefaultFiles()) {
 			installCQ = true;
 		}
 		
