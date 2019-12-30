@@ -1,19 +1,9 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import com.teamcqr.chocolatequestrepoured.crafting.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
@@ -239,61 +229,6 @@ public class CQRMain {
 				Path target = new File(event.getModConfigurationDirectory(), "cqr_test").toPath();
 				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", target);
 			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
-	private void installDefaultFiles(File folder) {
-		// DONE: Install the default stuff
-		System.out.println("Installing default configs....");
-		String path = "assets/cqrepoured/defaultConfigs";
-
-		Class<?> clazz = CQRMain.class;
-		URL dirURL = clazz.getResource(path);
-		if (dirURL == null) {
-
-			String me = clazz.getName().replace(".", "/") + ".class";
-			dirURL = clazz.getClassLoader().getResource(me);
-		}
-		if (dirURL.getProtocol().equals("jar")) {
-			try {
-				String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!"));
-
-				@SuppressWarnings("resource")
-				JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
-				Enumeration<JarEntry> entries = jar.entries();
-				while (entries.hasMoreElements()) {
-					JarEntry entry = (JarEntry) entries.nextElement();
-					String name = entry.getName();
-					if (name.startsWith(path)) {
-						String entryName = name.substring(path.length());
-
-						File f = new File(CQ_CONFIG_FOLDER + entryName);
-						if (f.exists()) {
-							System.out.println(f + " " + new Date(entry.getTime()) + " " + new Date(f.lastModified()));
-						} else {
-							if (entry.isDirectory()) {
-								f.mkdirs();
-							} else {
-								FileOutputStream fileoutputstream = new FileOutputStream(f);
-								InputStream zipinputstream = jar.getInputStream(entry);
-								byte[] buf = new byte[8];
-
-								int n;
-								while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
-									fileoutputstream.write(buf, 0, n);
-								}
-								fileoutputstream.close();
-								zipinputstream.close();
-							}
-							System.out.println("Extracted: " + f);
-						}
-					}
-				}
-			} catch (UnsupportedEncodingException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
