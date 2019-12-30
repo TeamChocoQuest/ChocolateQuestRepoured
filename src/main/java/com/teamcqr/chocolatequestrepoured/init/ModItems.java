@@ -123,6 +123,7 @@ public class ModItems {
 
 	//Spears
 	public static final Item SPEAR_DIAMOND = Null();
+	public static final Item SPEAR_IRON = Null();
 
 	// Staves
 	public static final Item STAFF = Null();
@@ -259,6 +260,7 @@ public class ModItems {
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F), "great_sword_monking"),
 
 					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 10F, -0.5F), "spear_diamond"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 10F, -0.5F), "spear_iron"),
 
 					setItemName(new ItemStaff(), "staff"), setItemName(new ItemStaffFire(), "staff_fire"),
 					setItemName(new ItemStaffVampiric(), "staff_vampiric"),

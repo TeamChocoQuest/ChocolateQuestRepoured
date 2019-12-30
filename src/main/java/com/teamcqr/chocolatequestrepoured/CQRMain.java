@@ -1,8 +1,18 @@
 package com.teamcqr.chocolatequestrepoured;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 
 import com.teamcqr.chocolatequestrepoured.crafting.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
@@ -45,186 +55,246 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 @Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
-public class CQRMain
-{
-	
-	//public static boolean generateInFlat = false;
-	
+public class CQRMain {
+
+	// public static boolean generateInFlat = false;
+
 	public static File CQ_CONFIG_FOLDER = null;
 	public static File CQ_DUNGEON_FOLDER = null;
 	public static File CQ_STRUCTURE_FILES_FOLDER = null;
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
-	
+	public static File CQ_FACTION_FOLDER = null;
+
 	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
 	public static List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
-	
-	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab")
-	{
+
+	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
-		public ItemStack getTabIconItem() 
-		{
+		public ItemStack getTabIconItem() {
 			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
-	//Tab with all the blocks
-	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab")
-	{
+	// Tab with all the blocks
+	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
 		@Override
-		public ItemStack getTabIconItem() 
-		{
+		public ItemStack getTabIconItem() {
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
-	//Tab that holds all banner designs loaded
+	// Tab that holds all banner designs loaded
 	public static CreativeTabs CQRBannersTab = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
-		
+
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Items.BANNER);
 		}
+
 		@Override
 		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> itemList) {
 			List<ItemStack> banners = new ArrayList<ItemStack>();
-			//banners = BannerHandler.addBannersToTabs();
+			// banners = BannerHandler.addBannersToTabs();
 			banners = BannerHelper.addBannersToTabs();
-			if(banners != null && !banners.isEmpty()) {
-				for(ItemStack stack : banners) itemList.add(stack);
+			if (banners != null && !banners.isEmpty()) {
+				for (ItemStack stack : banners)
+					itemList.add(stack);
 			}
 		};
 	};
-	//Tab that holds placers for all dungeons
+	// Tab that holds placers for all dungeons
 	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
-		
+
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
-	//Tab that holds all dungeon building things (chests + exporter)
+	// Tab that holds all dungeon building things (chests + exporter)
 	public static CreativeTabs CQRExporterChestTab = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
-		
+
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
-	
+
 	@Instance
 	public static CQRMain INSTANCE;
-	
+
 	public static final SimpleNetworkWrapper NETWORK = NetworkRegistry.INSTANCE.newSimpleChannel("cqrepoured");
-	
+
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static IProxy proxy;
-	
-	//Dungeon Registry instance, responsible for everything regarding dungeons
+
+	// Dungeon Registry instance, responsible for everything regarding dungeons
 	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
-	
+
 	@EventHandler
-	public void PreInit(FMLPreInitializationEvent event)
-	{
+	public void PreInit(FMLPreInitializationEvent event) {
+		// Important: This has to be the F I R S T statement
 		initConfigFolder(event);
-		
+
 		proxy.preInit();
-	
-		//Faction system
+
+		// Faction system
 		FactionRegistry.instance().loadFactions();
-		
-		//Enables Dungeon generation in worlds, do not change the number (!) and do NOT remove this line, moving it somewhere else is fine, but it must be called in pre initialization (!) 
+
+		// Enables Dungeon generation in worlds, do not change the number (!) and do NOT
+		// remove this line, moving it somewhere else is fine, but it must be called in
+		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if(Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
+		if (Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
-		//Instantiating the banners
+		// Instantiating the banners
 		try {
-			//BannerHandler.initPatterns();
-			for(EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
+			// BannerHandler.initPatterns();
+			for (EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
 				cqPattern.getPattern();
 			}
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			System.err.println("WARNING: Failed to instantiate the banners!!");
 			ex.printStackTrace();
 		}
-		//Instantiating loot tables for entities
+		// Instantiating loot tables for entities
 		try {
-			for(ELootTablesNormal eltn : ELootTablesNormal.values()) {
+			for (ELootTablesNormal eltn : ELootTablesNormal.values()) {
 				eltn.getLootTable();
 			}
-			for(ELootTablesBoss eltn : ELootTablesBoss.values()) {
+			for (ELootTablesBoss eltn : ELootTablesBoss.values()) {
 				eltn.getLootTable();
 			}
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			System.err.println("WARNING: Failed to instantiate entity loot tables!!");
 			ex.printStackTrace();
 		}
-		
-		//Register event handling for dungeon protection system
+
+		// Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
 	}
-	
+
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
-		
+
 		Reference.CONFIG_HELPER_INSTANCE.loadValues(configFile);
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
-		
+		Reference.BLOCK_PLACING_THREADS_INSTANCE
+				.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
+
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
-		
+
 		boolean installCQ = false;
 		File CQFolder = new File(CQ_CONFIG_FOLDER.getAbsolutePath() + "/CQR/");
-		if(!CQFolder.exists() || (CQFolder.exists() && !CQFolder.isDirectory())) {
+		if (!CQFolder.exists() || (CQFolder.exists() && !CQFolder.isDirectory())) {
 			CQFolder.mkdirs();
-			//Install default files
+			// Install default files
 			installCQ = true;
 		}
-		
+		if (Reference.CONFIG_HELPER_INSTANCE.reInstallDefaultFiles()) {
+			installCQ = true;
+		}
+
 		File dungeonFolder = new File(CQFolder.getAbsolutePath() + "/dungeons//");
-		if(!dungeonFolder.exists()) {
+		if (!dungeonFolder.exists()) {
 			dungeonFolder.mkdirs();
 		}
 		System.out.println("Dungeon Folder Path: " + dungeonFolder.getAbsolutePath());
 		CQRMain.CQ_DUNGEON_FOLDER = dungeonFolder;
-		
+
 		File chestFolder = new File(CQFolder.getAbsolutePath() + "/lootconfigs//");
-		if(!chestFolder.exists()) {
+		if (!chestFolder.exists()) {
 			chestFolder.mkdirs();
 		}
 		System.out.println("LootConfig Folder Path: " + chestFolder.getAbsolutePath());
 		CQRMain.CQ_CHEST_FOLDER = chestFolder;
-		
+
 		File structureFolder = new File(CQFolder.getAbsolutePath() + "/structures//");
-		if(!structureFolder.exists()) {
+		if (!structureFolder.exists()) {
 			structureFolder.mkdirs();
 		}
 		System.out.println("Structure Folder Path: " + structureFolder.getAbsolutePath());
 		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
-		
+
 		File exportFolder = new File(CQFolder.getAbsolutePath() + "/exports//");
-		if(!exportFolder.exists()) {
+		if (!exportFolder.exists()) {
 			exportFolder.mkdirs();
 		}
 		System.out.println("Export Folder Path: " + exportFolder.getAbsolutePath());
 		CQRMain.CQ_EXPORT_FILES_FOLDER = exportFolder;
-		
-		if(installCQ) {
+
+		File factionFolder = new File(CQFolder.getAbsolutePath() + "/factions//");
+		if (!factionFolder.exists()) {
+			factionFolder.mkdirs();
+		}
+		System.out.println("Faction Folder Path: " + factionFolder.getAbsolutePath());
+		CQRMain.CQ_FACTION_FOLDER = exportFolder;
+
+		if (installCQ) {
 			installDefaultFiles(CQFolder);
 		}
 	}
-	
+
 	private void installDefaultFiles(File folder) {
-		//TODO: Install the default stuff
+		// DONE: Install the default stuff
+		System.out.println("Installing default configs....");
+		String path = "assets/cqrepoured/defaultConfigs";
+
+		Class<?> clazz = CQRMain.class;
+		URL dirURL = clazz.getResource(path);
+		if (dirURL == null) {
+
+			String me = clazz.getName().replace(".", "/") + ".class";
+			dirURL = clazz.getClassLoader().getResource(me);
+		}
+		if (dirURL.getProtocol().equals("jar")) {
+			try {
+				String jarPath = dirURL.getPath().substring(5, dirURL.getPath().indexOf("!"));
+
+				@SuppressWarnings("resource")
+				JarFile jar = new JarFile(URLDecoder.decode(jarPath, "UTF-8"));
+				Enumeration<JarEntry> entries = jar.entries();
+				while (entries.hasMoreElements()) {
+					JarEntry entry = (JarEntry) entries.nextElement();
+					String name = entry.getName();
+					if (name.startsWith(path)) {
+						String entryName = name.substring(path.length());
+
+						File f = new File(CQ_CONFIG_FOLDER + entryName);
+						if (f.exists()) {
+							System.out.println(f + " " + new Date(entry.getTime()) + " " + new Date(f.lastModified()));
+						} else {
+							if (entry.isDirectory()) {
+								f.mkdirs();
+							} else {
+								FileOutputStream fileoutputstream = new FileOutputStream(f);
+								InputStream zipinputstream = jar.getInputStream(entry);
+								byte[] buf = new byte['Ѐ'];
+
+								int n;
+								while ((n = zipinputstream.read(buf, 0, 1024)) > -1)
+									fileoutputstream.write(buf, 0, n);
+								fileoutputstream.close();
+								zipinputstream.close();
+							}
+							System.out.println("Extracted: " + f);
+						}
+					}
+				}
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
-	
+
 	@EventHandler
-	public void init(FMLInitializationEvent event)
-	{		
+	public void init(FMLInitializationEvent event) {
 		proxy.init();
-		
+
 		// Instantiating the ELootTable class
 		try {
 			ResourceLocation resLoc = ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation();
@@ -241,17 +311,17 @@ public class CQRMain
 
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
-		//DungeonRegistry.loadDungeons();
+		// DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
 		SmeltingHandler.init();
 	}
-	
+
 	@EventHandler
-	public void PostInit(FMLPostInitializationEvent event)
-	{
-		/*for(EFaction efac : EFaction.values()) {
-			System.out.println(efac.toString());
-		}*/
+	public void PostInit(FMLPostInitializationEvent event) {
+		/*
+		 * for(EFaction efac : EFaction.values()) { System.out.println(efac.toString());
+		 * }
+		 */
 		DungeonRegistry.loadDungeons();
 		proxy.postInit();
 	}

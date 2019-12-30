@@ -20,21 +20,14 @@ public class RenderCQRSpectre extends RenderCQREntity<EntityCQRSpectre> {
 	
 	@Override
 	public void doRender(EntityCQRSpectre entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		GlStateManager.pushMatrix();
-		
-		GlStateManager.enableAlpha();
-		GlStateManager.enableBlend();
-		
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-		
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		
-		GlStateManager.disableAlpha();
-		GlStateManager.disableBlend();
-		
-		GlStateManager.popMatrix();
+        GlStateManager.enableNormalize();
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        this.mainModel.setModelAttributes(getMainModel());
+        super.doRender(entity, x, y, z, entityYaw, partialTicks);
+        GlStateManager.disableBlend();
+        GlStateManager.disableNormalize();
 	}
 
 }
