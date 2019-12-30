@@ -118,7 +118,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
 							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
 								if(newMob.equals(EDungeonMobType.DEFAULT)) {
-									//TODO: Fix this not working sometimes...
+									//DONE: Fix this not working sometimes...
 									nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(/*this.pos.getX()*/this.dungeonChunkX *16, /*this.pos.getZ()*/ this.dungeonChunkZ *16).getEntityResourceLocation().toString());
 								} else {
 									nbt.setString("id", newMob.getEntityResourceLocation().toString());

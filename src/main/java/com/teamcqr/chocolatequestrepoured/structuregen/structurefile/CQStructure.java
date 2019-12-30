@@ -95,6 +95,9 @@ public class CQStructure {
 			this.dungeon = dungeon;
 			mobType = dungeon.getDungeonMob();
 		}
+		if(mobType.equals(EDungeonMobType.DEFAULT)) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX *16, dunZ *16);
+		}
 		//Handled in TileEntitySpawner
 		/*if(dungeon.getDungeonMob().equals(EDungeonMobType.DEFAULT) && (dunX != 0 && dunZ != 0)) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX, dunZ);
@@ -144,7 +147,7 @@ public class CQStructure {
 									
 									BlockPos offsetVector = NBTUtil.BlockPosFromNBT(part.getCompoundTag("offset"));
 									
-									CQStructurePart partStructure = new CQStructurePart(dungeon, dunX, dunZ);
+									CQStructurePart partStructure = new CQStructurePart(dungeon, dunX, dunZ, mobType);
 									partStructure.setDungeonMob(mobType);
 									partStructure.setNewBannerPattern(newBannerPattern);
 									partStructure.read(part);
