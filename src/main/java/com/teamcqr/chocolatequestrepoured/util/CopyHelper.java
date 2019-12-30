@@ -17,7 +17,9 @@ import java.nio.file.attribute.BasicFileAttributes;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 public class CopyHelper {
-
+	/*
+	 * Small utility by meldexun to extract a folder from a jar
+	 */
 	public static void copyFromJar(String source, Path target) throws URISyntaxException, IOException {
 		Path path;
 
