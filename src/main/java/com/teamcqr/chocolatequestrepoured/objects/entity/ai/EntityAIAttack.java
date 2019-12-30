@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -40,6 +41,12 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(attackTarget)) {
 			return false;
+		}
+		if (this.entity.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+			if (this.entity.getEntitySenses().canSee(attackTarget)) {
+				return attackTarget.getHealth() < attackTarget.getMaxHealth();
+			}
+			return this.entity.hasPath();
 		}
 		if (this.entity.getDistance(attackTarget) > 64.0D) {
 			return false;

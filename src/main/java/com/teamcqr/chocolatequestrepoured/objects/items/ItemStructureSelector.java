@@ -33,14 +33,17 @@ public class ItemStructureSelector extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX,
-			float hitY, float hitZ, EnumHand hand) {
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
 
 		if (world.getTileEntity(pos) instanceof TileEntityExporter) {
 			if (world.isRemote) {
 				TileEntityExporter tileEntity = (TileEntityExporter) world.getTileEntity(pos);
 				CapabilityStructureSelector capability = stack.getCapability(CapabilityStructureSelectorProvider.STRUCTURE_SELECTOR, null);
+				if (!capability.hasPos1AndPos2()) {
+					player.sendMessage(new TextComponentString("Set both positions before using on a exporter"));
+					return EnumActionResult.SUCCESS;
+				}
 				BlockPos pos1 = capability.getPos1();
 				BlockPos pos2 = capability.getPos2();
 				if (tileEntity.relativeMode) {
@@ -64,7 +67,7 @@ public class ItemStructureSelector extends Item {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (playerIn.isSneaking()) {
-			ItemStructureSelector.setSecondPos(stack, playerIn.getPosition(), playerIn);
+			ItemStructureSelector.setSecondPos(stack, new BlockPos(playerIn), playerIn);
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
