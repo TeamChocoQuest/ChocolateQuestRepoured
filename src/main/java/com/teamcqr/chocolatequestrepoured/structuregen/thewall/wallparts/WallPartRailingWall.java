@@ -5,13 +5,14 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -91,55 +92,59 @@ public class WallPartRailingWall implements IWallPart {
 	}
 	
 	private void placeSpawner(BlockPos spawnerPos, World world) {
-		AbstractEntityCQR spawnerEnt = new EntityCQRSpectre(world);
-		switch(spawnerEnt.getRNG().nextInt(5)) {
-		case 0:
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-			break;
-		case 1:
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-			break;
-		case 2:
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-			break;
-		case 3:
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-			break;
-		case 4:
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-			break;
-		}
-		spawnerEnt.setHealingPotions(3);
-		NBTTagCompound nbttagcompound = new NBTTagCompound();
-		NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+		Entity spawnerEnt = EntityList.createEntityByIDFromName(Reference.CONFIG_HELPER_INSTANCE.getWallMob(), world);
+		if(spawnerEnt instanceof EntityLiving) {
+			switch(((EntityLiving) spawnerEnt).getRNG().nextInt(5)) {
+			case 0:
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+				break;
+			case 1:
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+				break;
+			case 2:
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
+				break;
+			case 3:
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+				break;
+			case 4:
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+				break;
+			}
+			if(spawnerEnt instanceof AbstractEntityCQR) {
+				((AbstractEntityCQR) spawnerEnt).setHealingPotions(3);
+			}
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
 
-		if (!nbttagcompound.hasKey("display", 10)) {
-			nbttagcompound.setTag("display", nbttagcompound1);
-		}
+			if (!nbttagcompound.hasKey("display", 10)) {
+				nbttagcompound.setTag("display", nbttagcompound1);
+			}
 
-		nbttagcompound1.setInteger("color", 000000);
-		
-		ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1, 0, nbttagcompound);
-		((ItemArmorDyable)ModItems.HELMET_IRON_DYABLE).setColor(helmet, 000000);
-		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.HEAD, helmet);
-		
-		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1, 0, nbttagcompound);
-		((ItemArmorDyable)ModItems.CHESTPLATE_IRON_DYABLE).setColor(chest, 000000);
-		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
-		
-		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1, 0, nbttagcompound);
-		((ItemArmorDyable)ModItems.LEGGINGS_IRON_DYABLE).setColor(legs, 000000);
-		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
-		
-		ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1, 0, nbttagcompound);
-		((ItemArmorDyable)ModItems.BOOTS_IRON_DYABLE).setColor(boots, 000000);
-		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
-		
-		SpawnerFactory.placeSpawner(new Entity[] {spawnerEnt}, false, null, world, spawnerPos);
+			nbttagcompound1.setInteger("color", 000000);
+			
+			ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable)ModItems.HELMET_IRON_DYABLE).setColor(helmet, 000000);
+			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.HEAD, helmet);
+			
+			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable)ModItems.CHESTPLATE_IRON_DYABLE).setColor(chest, 000000);
+			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+			
+			ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable)ModItems.LEGGINGS_IRON_DYABLE).setColor(legs, 000000);
+			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
+			
+			ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable)ModItems.BOOTS_IRON_DYABLE).setColor(boots, 000000);
+			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
+			
+			SpawnerFactory.placeSpawner(new Entity[] {spawnerEnt}, false, null, world, spawnerPos);
+		}
 	}
 
 	private boolean isBiggerPart(int xAsChunkRelativeCoord) {
