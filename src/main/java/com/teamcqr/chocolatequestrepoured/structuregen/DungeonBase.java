@@ -13,9 +13,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -228,7 +228,7 @@ public class DungeonBase {
 	
 	public File getStructureFileFromDirectory(File parentDir) {
 		if(parentDir.isDirectory()) {
-			int fileCount = parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length;
+			int fileCount = parentDir.listFiles(FileIOUtil.getNBTFileFilter()).length;
 			if(fileCount > 0) {
 				Random rdm = new Random();
 				List<File> files = getFilesRecursively(parentDir);
@@ -244,14 +244,14 @@ public class DungeonBase {
 	}
 	
 	private List<File> getFilesRecursively(File parentDir) {
-		if(!parentDir.isDirectory() || parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length <= 0) {
+		if(!parentDir.isDirectory() || parentDir.listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			return null;
 		}
 		List<File> allFiles = new ArrayList<File>();
 		Queue<File> dirs = new LinkedList<File>();
 		dirs.add(new File(parentDir.getAbsolutePath()));
 		while (!dirs.isEmpty()) {
-		  for (File f : dirs.poll().listFiles(DungeonGenUtils.getStructureFileFilter())) {
+		  for (File f : dirs.poll().listFiles(FileIOUtil.getNBTFileFilter())) {
 		    if (f.isDirectory()) {
 		      dirs.add(f);
 		    } else if (f.isFile()) {

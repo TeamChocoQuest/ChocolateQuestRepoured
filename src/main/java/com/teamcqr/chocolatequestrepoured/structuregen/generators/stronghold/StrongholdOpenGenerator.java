@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenera
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -58,7 +58,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	}
 	
 	private void computeNotFittingStructures() {
-		for(File f : dungeon.getRoomFolder().listFiles(DungeonGenUtils.getStructureFileFilter())) {
+		for(File f : dungeon.getRoomFolder().listFiles(FileIOUtil.getNBTFileFilter())) {
 			CQStructure struct = new CQStructure(f, dungeon, 0, 0, false);
 			if(struct != null && (struct.getSizeX() != structureBounds.getFirst() || struct.getSizeZ() != structureBounds.getSecond())) {
 				blacklistedRooms.add(f.getParent() + "/" + f.getName());
