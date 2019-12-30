@@ -261,9 +261,6 @@ public class CQRMain {
 
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event) {
-		// for (EFaction efac : EFaction.values()) {
-		// System.out.println(efac.toString());
-		// }
 		DungeonRegistry.loadDungeons();
 		proxy.postInit();
 	}
