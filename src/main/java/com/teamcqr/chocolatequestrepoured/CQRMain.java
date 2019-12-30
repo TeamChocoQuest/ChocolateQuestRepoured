@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
@@ -32,6 +33,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
+import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
@@ -96,8 +98,9 @@ public class CQRMain {
 			// banners = BannerHandler.addBannersToTabs();
 			banners = BannerHelper.addBannersToTabs();
 			if (banners != null && !banners.isEmpty()) {
-				for (ItemStack stack : banners)
+				for (ItemStack stack : banners) {
 					itemList.add(stack);
+				}
 			}
 		};
 	};
@@ -132,7 +135,7 @@ public class CQRMain {
 	@EventHandler
 	public void PreInit(FMLPreInitializationEvent event) {
 		// Important: This has to be the F I R S T statement
-		initConfigFolder(event);
+		this.initConfigFolder(event);
 
 		proxy.preInit();
 
@@ -181,8 +184,7 @@ public class CQRMain {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
 
 		Reference.CONFIG_HELPER_INSTANCE.loadValues(configFile);
-		Reference.BLOCK_PLACING_THREADS_INSTANCE
-				.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
 
 		CQRMain.CQ_CONFIG_FOLDER = configFile.getConfigFile().getParentFile();
 
@@ -233,7 +235,12 @@ public class CQRMain {
 		CQRMain.CQ_FACTION_FOLDER = exportFolder;
 
 		if (installCQ) {
-			installDefaultFiles(CQFolder);
+			try {
+				Path target = new File(event.getModConfigurationDirectory(), "cqr_test").toPath();
+				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", target);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -271,11 +278,12 @@ public class CQRMain {
 							} else {
 								FileOutputStream fileoutputstream = new FileOutputStream(f);
 								InputStream zipinputstream = jar.getInputStream(entry);
-								byte[] buf = new byte['Ѐ'];
+								byte[] buf = new byte[8];
 
 								int n;
-								while ((n = zipinputstream.read(buf, 0, 1024)) > -1)
+								while ((n = zipinputstream.read(buf, 0, 1024)) > -1) {
 									fileoutputstream.write(buf, 0, n);
+								}
 								fileoutputstream.close();
 								zipinputstream.close();
 							}
@@ -318,10 +326,9 @@ public class CQRMain {
 
 	@EventHandler
 	public void PostInit(FMLPostInitializationEvent event) {
-		/*
-		 * for(EFaction efac : EFaction.values()) { System.out.println(efac.toString());
-		 * }
-		 */
+		// for (EFaction efac : EFaction.values()) {
+		// System.out.println(efac.toString());
+		// }
 		DungeonRegistry.loadDungeons();
 		proxy.postInit();
 	}
