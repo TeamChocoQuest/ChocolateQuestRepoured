@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
@@ -100,14 +101,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
 	protected int spellTicks = 0;
-	
+
 	protected PathNavigate waterNavigator;
-	
+
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private CQRFaction factionInstance;
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
-	
+
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
 
@@ -145,15 +146,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(SPELLTYPE, 0);
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 	}
-	
-	 protected void updateAITasks() {
-        super.updateAITasks();
 
-        if (this.spellTicks > 0)
-        {
-            --this.spellTicks;
-        }
-    }
+	@Override
+	protected void updateAITasks() {
+		super.updateAITasks();
+
+		if (this.spellTicks > 0) {
+			--this.spellTicks;
+		}
+	}
 
 	@Override
 	protected boolean canDespawn() {
@@ -218,6 +219,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
@@ -250,8 +252,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
-		if(factionName != null && !factionName.equalsIgnoreCase(getDefaultFaction().name())) {
-			compound.setString("factionOverride", factionName);
+		if (this.factionName != null && !this.factionName.equalsIgnoreCase(this.getDefaultFaction().name())) {
+			compound.setString("factionOverride", this.factionName);
 		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
@@ -273,8 +275,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (compound.hasKey("leader")) {
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
-		
-		if(compound.hasKey("factionOverride")) {
+
+		if (compound.hasKey("factionOverride")) {
 			this.setFaction(compound.getString("factionOverride"));
 		}
 
@@ -285,7 +287,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.spellTicks = compound.getInteger("spellTicks");
 		this.healthScale = compound.getDouble("healthScale");
-		if(this.healthScale <= 1D) {
+		if (this.healthScale <= 1D) {
 			this.healthScale = 1D;
 		}
 	}
@@ -354,8 +356,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!this.world.isRemote && isMagicArmorActive()) {
-			updateCooldownForMagicArmor();
+		if (!this.world.isRemote && this.isMagicArmorActive()) {
+			this.updateCooldownForMagicArmor();
 		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
@@ -490,11 +492,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leaderUUID = null;
 			} else {
 				for (Entity entity : this.world.loadedEntityList) {
-                    if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
-                        this.leader = (EntityLivingBase) entity;
-                        return (EntityLivingBase) entity;
-                    }
-                }
+					if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+						this.leader = (EntityLivingBase) entity;
+						return (EntityLivingBase) entity;
+					}
+				}
 			}
 		} else {
 			if (this.leader != null) {
@@ -651,21 +653,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public abstract EDefaultFaction getDefaultFaction();
-	
+
 	public CQRFaction getDefaultFactionInstance() {
-		if(defaultFactionInstance == null) {
-			defaultFactionInstance = FactionRegistry.instance().getFactionInstance(getDefaultFaction().name());
+		if (this.defaultFactionInstance == null) {
+			this.defaultFactionInstance = FactionRegistry.instance().getFactionInstance(this.getDefaultFaction().name());
 		}
-		return defaultFactionInstance;
+		return this.defaultFactionInstance;
 	}
-	
+
 	public CQRFaction getFaction() {
-		if(factionInstance == null && factionName != null && !factionName.isEmpty()) {
-			factionInstance = FactionRegistry.instance().getFactionInstance(factionName);
+		if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
+			this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
 		}
-		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (factionInstance != null ? factionInstance : getDefaultFactionInstance());
+		return this.hasLeader() && this.getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR) this.getLeader()).getFaction() : (this.factionInstance != null ? this.factionInstance : this.getDefaultFactionInstance());
 	}
-	
+
 	public void setFaction(String newFac) {
 		this.factionInstance = null;
 		this.factionName = newFac;
@@ -711,9 +713,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
-	
+
 	public void equipDefaultEquipment(World world, BlockPos pos) {
-		setEquipmentBasedOnDifficulty(world.getDifficultyForLocation(pos));
+		this.setEquipmentBasedOnDifficulty(world.getDifficultyForLocation(pos));
 	}
 
 	public boolean hasCape() {
@@ -890,64 +892,60 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public ItemStack getHeldItemPotion() {
 		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
 	}
-	
+
 	public void setSpellTicks(int val) {
 		this.spellTicks = val;
 	}
 
-	public boolean isSpellcasting()
-    {
-        if (this.world.isRemote)
-        {
-            return this.dataManager.get(SPELLCASTING);
-        }
-        else
-        {
-            return this.spellTicks > 0;
-        }
-    }
-	
+	public boolean isSpellcasting() {
+		if (this.world.isRemote) {
+			return this.dataManager.get(SPELLCASTING);
+		} else {
+			return this.spellTicks > 0;
+		}
+	}
+
 	public void setSpellType(ESpellType type) {
 		this.activeSpell = type;
 		this.dataManager.set(SPELLTYPE, type.getID());
 	}
-	
+
 	public ESpellType getActiveSpell() {
-		if(!world.isRemote) {
+		if (!this.world.isRemote) {
 			return this.activeSpell;
 		}
 		return ESpellType.values()[this.dataManager.get(SPELLTYPE)];
 	}
-	
+
 	public void setSpellCasting(boolean value) {
 		this.dataManager.set(SPELLCASTING, value);
 	}
 
 	public boolean isMagicArmorActive() {
-		if(!world.isRemote) {
-			return armorActive;
+		if (!this.world.isRemote) {
+			return this.armorActive;
 		}
 		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
 	}
-	
+
 	public void setMagicArmorActive(boolean val) {
-		if(val != armorActive) {
-			armorActive = val;
-			setEntityInvulnerable(armorActive);
+		if (val != this.armorActive) {
+			this.armorActive = val;
+			this.setEntityInvulnerable(this.armorActive);
 			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
 		}
 	}
-	
+
 	protected void updateCooldownForMagicArmor() {
-		magicArmorCooldown--;
-		if(magicArmorCooldown <= 0) {
-			setMagicArmorActive(false);
+		this.magicArmorCooldown--;
+		if (this.magicArmorCooldown <= 0) {
+			this.setMagicArmorActive(false);
 		}
 	}
-	
+
 	public void setMagicArmorCooldown(int val) {
 		this.magicArmorCooldown = val;
-		setMagicArmorActive(true);
+		this.setMagicArmorActive(true);
 	}
 
 }

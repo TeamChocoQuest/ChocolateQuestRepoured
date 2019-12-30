@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -63,6 +64,18 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
 		if (possibleTarget == this.entity) {
 			return false;
+		}
+		if (this.entity.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+			if (!this.entity.getFaction().isAlly(possibleTarget)) {
+				return false;
+			}
+			if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+				return false;
+			}
+			if (!this.entity.isInSightRange(possibleTarget)) {
+				return false;
+			}
+			return possibleTarget.getHealth() < possibleTarget.getMaxHealth();
 		}
 		if (!this.entity.getFaction().isEnemy(possibleTarget)) {
 			return false;
