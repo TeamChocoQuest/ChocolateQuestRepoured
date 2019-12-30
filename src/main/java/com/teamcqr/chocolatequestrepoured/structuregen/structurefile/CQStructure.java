@@ -256,6 +256,7 @@ public class CQStructure {
 							
 							//DONE: Place spawner for right boss
 							if(mobType.getBossResourceLocation() != null) {
+								worldIn.setBlockToAir(vecPos);
 								Entity bossEnt = EntityList.createEntityByIDFromName(mobType.getBossResourceLocation(), worldIn);
 								bossEnt.setPosition(vecPos.getX(), vecPos.getY() +0.25, vecPos.getZ());
 								worldIn.spawnEntity(bossEnt);
