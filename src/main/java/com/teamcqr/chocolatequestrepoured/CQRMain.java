@@ -215,6 +215,13 @@ public class CQRMain
 		System.out.println("Export Folder Path: " + exportFolder.getAbsolutePath());
 		CQRMain.CQ_EXPORT_FILES_FOLDER = exportFolder;
 		
+		File factionFolder = new File(CQFolder.getAbsolutePath() + "/factions//");
+		if(!factionFolder.exists()) {
+			factionFolder.mkdirs();
+		}
+		System.out.println("Faction Folder Path: " + factionFolder.getAbsolutePath());
+		CQRMain.CQ_FACTION_FOLDER = exportFolder;
+		
 		if(installCQ) {
 			installDefaultFiles(CQFolder);
 		}
