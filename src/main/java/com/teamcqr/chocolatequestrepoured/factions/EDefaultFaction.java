@@ -10,7 +10,7 @@ public enum EDefaultFaction {
 	ENDERMEN(new String[] {"WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE", "TRITONS"}, new String[] {"ILLAGERS", "UNDEAD"}, EReputationState.NEUTRAL, false),
 	//OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	INQUISITION(new String[] {"WALKERS", "ILLAGERS", "UNDEAD", "GOBLINS"}, new String[] {"DWARVES_AND_GOLEMS", "NPC", "VILLAGERS"}, EReputationState.NEUTRAL),
-	BEASTS(new String[] {"WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS", "UNDEAD"}, new String[] {"ENDERMEN", "PIRATE"}, EReputationState.NEUTRAL),
+	BEASTS(new String[] {"WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS", "UNDEAD"}, new String[] {"ENDERMEN", "PIRATE"}, EReputationState.ENEMY),
 	VILLAGERS(new String[] {"WALKERS", "UNDEAD", "ILLAGERS"}, new String[] {"NPC", "TRITONS", "PLAYERS"}, EReputationState.NEUTRAL),
 	NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL, false),
 	TRITONS(new String[] {"WALKERS", "UNDEAD", "PIRATE", "ENDERMEN"}, new String[] {"NPC", "VILLAGERS"}, EReputationState.NEUTRAL),

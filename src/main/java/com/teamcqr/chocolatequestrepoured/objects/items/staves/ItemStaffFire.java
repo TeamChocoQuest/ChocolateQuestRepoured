@@ -27,7 +27,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -42,18 +42,6 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		setMaxStackSize(1);
 		setMaxDamage(2048);
 	}
-
-	/*
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.NONE;
-	}
-	*/
 
 	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
@@ -78,19 +66,6 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	/*
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		shootFromEntity(entityLiving);
-		changeTorch(worldIn);
-		stack.damageItem(1, entityLiving);
-
-		if (entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(stack.getItem(), 20);
-		}
-	}
-	*/
-
 	public void changeTorch(World worldIn) {
 		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
 
@@ -108,8 +83,6 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 
 	public void shootFromEntity(EntityLivingBase shooter) {
 		World world = shooter.world;
-		world.playSound(shooter.posX, shooter.posY, shooter.posZ, SoundEvents.ENTITY_GHAST_SHOOT, SoundCategory.MASTER,
-				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 
 		float x = (float) -Math.sin(Math.toRadians(shooter.rotationYaw));
 		float z = (float) Math.cos(Math.toRadians(shooter.rotationYaw));
@@ -120,7 +93,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		for (int i = 0; i < 50; i++) {
 			double flameRandomMotion = itemRand.nextDouble() + 0.2D;
 			float height = shooter.height;
-			world.spawnParticle(EnumParticleTypes.FLAME, shooter.posX, shooter.posY + height, shooter.posZ,
+			world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ,
 					(x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
 					(y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
 					(z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
@@ -171,9 +144,13 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 	}
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		shootFromEntity(shooter);
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return SoundEvents.ENTITY_GHAST_SHOOT;
 	}
 
 }

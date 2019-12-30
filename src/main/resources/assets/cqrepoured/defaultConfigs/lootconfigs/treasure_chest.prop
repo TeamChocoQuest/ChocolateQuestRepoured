@@ -1,0 +1,5 @@
+goldBlock = minecraft:gold_block,0,0,4,100
+enderPearl = minecraft:ender_pearl,0,0,12,100
+diamond = minecraft:diamond,0,0,6,100
+emerald= minecraft:emerald,0,0,10,100
+goldenApple = minecraft:golden_apple,0,0,4,100

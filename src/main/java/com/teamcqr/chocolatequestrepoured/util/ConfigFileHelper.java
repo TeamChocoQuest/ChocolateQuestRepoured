@@ -21,6 +21,7 @@ public class ConfigFileHelper {
 	private boolean enableWallInTheNorth = true;
 	private boolean wallHasObsiCore = true;
 	private boolean mobsSpawnedFromCQSpawnersArePersistent = true;
+	private boolean reinstallDefaultFiles = false;
 	
 	//Mobs
 	//health
@@ -61,6 +62,10 @@ public class ConfigFileHelper {
 		//Loot Table rolls
 		prop = config.get("general", "maxloottablepoolrolls", 3);
 		this.maxLootTableRolls = prop.getInt(3);
+		
+		//Reinstall Option
+		prop = config.get("general", "reinstallDefaultConfigs", false);
+		this.reinstallDefaultFiles = prop.getBoolean(false);
 		
 		// Wall
 		// enabled
@@ -165,6 +170,9 @@ public class ConfigFileHelper {
 	}
 	public int getDefaultHealingPotionCount() {
 		return defaultHealingPotionCount;
+	}
+	public boolean reInstallDefaultFiles() {
+		return reinstallDefaultFiles;
 	}
 
 }

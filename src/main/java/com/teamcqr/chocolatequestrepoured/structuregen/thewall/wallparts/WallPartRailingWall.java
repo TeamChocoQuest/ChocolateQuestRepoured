@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockStoneSlab;
@@ -45,7 +46,7 @@ public class WallPartRailingWall implements IWallPart {
 		List<BlockPos> railingBlocks = new ArrayList<BlockPos>();
 		
 		//Spawner
-		BlockPos spawnerPos = new BlockPos(startX + 4, getTopY() +12 +1 -7, startZ + 6);
+		BlockPos spawnerPos = new BlockPos(startX + 4, getTopY() +12 +1 -7, startZ + 7);
 		placeSpawner(spawnerPos, world);
 		
 		for(int y = 0; y <= 7; y++) {
@@ -122,20 +123,20 @@ public class WallPartRailingWall implements IWallPart {
 
 		nbttagcompound1.setInteger("color", 000000);
 		
-		ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
-		//((ItemArmorDyable)ModItems.HELMET_DYABLE_IRON).setColor(helmet, 000000);
+		ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1, 0, nbttagcompound);
+		((ItemArmorDyable)ModItems.HELMET_IRON_DYABLE).setColor(helmet, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.HEAD, helmet);
 		
-		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
-		//((ItemArmorDyable)ModItems.CHESTPLATE_DYABLE_IRON).setColor(chest, 000000);
+		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1, 0, nbttagcompound);
+		((ItemArmorDyable)ModItems.CHESTPLATE_IRON_DYABLE).setColor(chest, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
 		
-		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
-		//((ItemArmorDyable)ModItems.LEGGINGS_DYABLE_IRON).setColor(legs, 000000);
+		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1, 0, nbttagcompound);
+		((ItemArmorDyable)ModItems.LEGGINGS_IRON_DYABLE).setColor(legs, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
 		
-		ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1/*, 0, nbttagcompound*/);
-		//((ItemArmorDyable)ModItems.BOOTS_DYABLE_IRON).setColor(boots, 000000);
+		ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1, 0, nbttagcompound);
+		((ItemArmorDyable)ModItems.BOOTS_IRON_DYABLE).setColor(boots, 000000);
 		spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
 		
 		SpawnerFactory.placeSpawner(new Entity[] {spawnerEnt}, false, null, world, spawnerPos);

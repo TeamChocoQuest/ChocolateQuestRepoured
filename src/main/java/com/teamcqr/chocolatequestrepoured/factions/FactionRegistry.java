@@ -11,6 +11,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
@@ -61,7 +62,65 @@ public class FactionRegistry {
 	}
 	
 	private void loadFactionsInConfigFolder() {
-		//TODO: Load factions from files
+		//DONE: Load factions from files
+		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getNBTFileFilter());
+		int fileCount = files.length;
+		if(fileCount > 0) {
+			ArrayList<String> fIDs = new ArrayList<>(); 
+			ArrayList<List<String>> allyTmp = new ArrayList<>();
+			ArrayList<List<String>> enemyTmp = new ArrayList<>();
+			for(int i = 0; i < fileCount; i++) {
+				File faction = files[i];
+				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(faction);
+				if(root.getString("type").equalsIgnoreCase("FACTION")) {
+					List<String> fAlly = new ArrayList<>();
+					List<String> fEnemy = new ArrayList<>();
+					//CQRFaction fTmp = 
+					String fName = root.getString("name");
+					int repuChangeAlly = root.getInteger("repuchangekillally");
+					int repuChangeEnemy = root.getInteger("repuchangekillenemy");
+					int repuChangeMember = root.getInteger("repuchangekillmember");
+					EReputationState defRepu = EReputationState.valueOf(root.getString("defaultrelation"));
+					boolean staticRepu = root.getBoolean("staticreputation");
+					//Reputation lists
+					NBTTagCompound repuTag = root.getCompoundTag("relations");
+					if(!repuTag.hasNoTags()) {
+						NBTTagList allyTag = FileIOUtil.getOrCreateTagList(repuTag, "allies", Constants.NBT.TAG_STRING);
+						if(!allyTag.hasNoTags()) {
+							for(int j = 0; j < allyTag.tagCount(); j++) {
+								fAlly.add(allyTag.getStringTagAt(j));
+							}
+						}
+						NBTTagList enemyTag = FileIOUtil.getOrCreateTagList(repuTag, "enemies", Constants.NBT.TAG_STRING);
+						if(!enemyTag.hasNoTags()) {
+							for(int j = 0; j < enemyTag.tagCount(); j++) {
+								fEnemy.add(enemyTag.getStringTagAt(j));
+							}
+						}
+					}
+					fIDs.set(i, fName);
+					allyTmp.set(i, fAlly);
+					enemyTmp.set(i, fEnemy);
+					
+					Optional<Integer> optionMember = Optional.of(repuChangeMember);
+					Optional<Integer> optionAlly = Optional.of(repuChangeAlly);
+					Optional<Integer> optionEnemy = Optional.of(repuChangeEnemy);
+					
+					CQRFaction f = new CQRFaction(fName, defRepu, !staticRepu, optionMember, optionAlly, optionEnemy);
+					factions.put(fName, f);
+				}
+			}
+			for(int i = 0; i < fIDs.size(); i++) {
+				String name = fIDs.get(i);
+				CQRFaction fac = factions.get(name);
+				for(String s : allyTmp.get(i)) {
+					fac.addAlly(factions.get(s));
+				}
+				for(String s : enemyTmp.get(i)) {
+					fac.addEnemy(factions.get(s));
+				}
+			}
+		}
 	}
 
 	private void loadDefaultFactions() {

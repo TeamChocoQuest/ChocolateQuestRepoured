@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -20,6 +21,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -66,9 +69,22 @@ public class ItemStaffPoison extends Item implements IRangedWeapon{
 
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		shooter.swingArm(handIn);
+
+		if (!worldIn.isRemote) {
+			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(worldIn, shooter);
+			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			v = v.normalize();
+			v = v.scale(2D);
+			spell.setVelocity(v.x, v.y, v.z);
+			worldIn.spawnEntity(spell);
+		}
+	}
+	
+	@Override
+	public SoundEvent getShootSound() {
+		return SoundEvents.ENTITY_SNOWBALL_THROW;
 	}
 
 }

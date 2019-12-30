@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -127,6 +128,45 @@ public class FileIOUtil {
 			structureList = rootTag.getTagList(key, listType);
 		}
 		return structureList;
+	}
+    
+private static FilenameFilter nbtFileFilter = null;
+	
+	public static FilenameFilter getNBTFileFilter() {
+		if(nbtFileFilter == null) {
+			nbtFileFilter = new FilenameFilter() {
+				
+				String[] fileExtensions = new String[] {"nbt"};
+				
+				@Override
+				public boolean accept(File file, String var2) {
+					if (file != null) {
+						if (file.isDirectory()) {
+							return true;
+						}
+
+						String fileName = file.getName();
+						int var3 = fileName.lastIndexOf(46);
+						if (var3 > 0 && var3 < fileName.length() - 1) {
+							String var4 = fileName.substring(var3 + 1).toLowerCase();
+							String[] var5 = fileExtensions;
+							int var6 = var5.length;
+
+							for (int var7 = 0; var7 < var6; ++var7) {
+								String var8 = var5[var7];
+								if (var4.equals(var8)) {
+									return true;
+								}
+							}
+						}
+					}
+
+					return false;
+				}
+			};
+		}
+		
+		return nbtFileFilter;
 	}
 
 }

@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
@@ -91,7 +92,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		this.tasks.addTask(7, new EntityAIExplosionRay(this));
 		this.tasks.addTask(7, new EntityAIExplosionSpell(this));
 		this.tasks.addTask(6, new EntityAISummonFireWall(this));
-		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(10, new EntityAIAttackRanged(this));
+		this.tasks.addTask(11, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
