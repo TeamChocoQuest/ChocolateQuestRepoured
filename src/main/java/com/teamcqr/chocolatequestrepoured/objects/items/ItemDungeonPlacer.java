@@ -39,7 +39,7 @@ public class ItemDungeonPlacer extends Item {
 	public static HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
 	public static HashMap<Integer, String[]> dependencyMap = new HashMap<>();
 
-	public static final int HIGHEST_ICON_NUMBER = 16;
+	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
 
 	public ItemDungeonPlacer(int iconID) {
