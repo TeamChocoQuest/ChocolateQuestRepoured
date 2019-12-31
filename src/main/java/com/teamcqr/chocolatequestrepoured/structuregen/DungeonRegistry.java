@@ -29,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
@@ -78,20 +79,37 @@ public class DungeonRegistry {
 							String[] biomes = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[]{"PLAINS"});
 							System.out.println("Biomes where " + dungeon.getDungeonName() + " can spawn: ");
 							for(String b : biomes) {
-								System.out.println(" - " + b);
 								//Add the biome to the map
 								if(b.equalsIgnoreCase("*") || b.equalsIgnoreCase("ALL")) {
+									System.out.println(" - " + b);
 									addDungeonToAllBiomes(dungeon);
 								} else {
-									if(getBiomeByName(b) != null) {
-										BiomeDictionary.Type biomeType = getBiomeByName(b);
-										//System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
+									//Getting biomes by type
+									if(getBiomeTypeByName(b) != null) {
+										System.out.println(" - " + b);
+										BiomeDictionary.Type biomeType = getBiomeTypeByName(b);
+										System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes: ");
+										
+										//Biomes of type
 										for(Biome biome : BiomeDictionary.getBiomes(biomeType)) {
 											if(this.biomeDungeonMap.containsKey(biome)) {
 												addDungeonToBiome(dungeon, biome);
+												System.out.println("   - " + biome.getRegistryName().toString());
 											}
 										}
-										
+									} else {
+										//Getting biomes by ResLoc:
+										ResourceLocation resLoc = null;
+										if(b.split(":").length == 2) {
+											resLoc = new ResourceLocation(b);
+										} else {
+											resLoc = new ResourceLocation("minecraft", b);
+										}
+										Biome biome = ForgeRegistries.BIOMES.getValue(resLoc);
+										if(biome != null) {
+											addDungeonToBiome(dungeon, biome);
+											System.out.println("   - " + biome.getRegistryName().toString());
+										}
 									}
 								}
 							}
@@ -294,16 +312,16 @@ public class DungeonRegistry {
 			System.out.println("The dungeon " + dungeon.getDungeonName() + " is missing dependencies! It wont spawn naturally");
 			return;
 		}
-		if(this.biomeDungeonMap.containsKey(biome)) {
-			List<DungeonBase> dungs = this.biomeDungeonMap.get(biome);
+		//if(this.biomeDungeonMap.containsKey(biome)) {
+			List<DungeonBase> dungs = this.biomeDungeonMap.getOrDefault(biome, new ArrayList<DungeonBase>());
 			if(!dungs.contains(dungeon)) {
 				dungs.add(dungeon);
 				this.biomeDungeonMap.replace(biome, dungs);
 				//System.out.println(" - " + biome.getRegistryName());
 			}
-		}
+		//}
 	}
-	private BiomeDictionary.Type getBiomeByName(String biomeName) {
+	private BiomeDictionary.Type getBiomeTypeByName(String biomeName) {
 		for(BiomeDictionary.Type bType : BiomeDictionary.Type.getAll()) {
 			if(biomeName.equalsIgnoreCase(bType.getName()) || biomeName.equalsIgnoreCase(bType.toString())) {
 				return bType;
@@ -313,10 +331,12 @@ public class DungeonRegistry {
 	}
 
 	public static void loadDungeons() {
-		// Fills the biomes of the biome-dungeonlist map
+		//// Fills the biomes of the biome-dungeonlist map
+		System.out.println("Registered Biomes: ");
 		for (Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
 			if (b != null) {
 				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
+				//System.out.println("    - " + b.getRegistryName().toString());
 			}
 		}
 		CQRMain.dungeonRegistry.loadDungeonFiles();
