@@ -274,7 +274,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		// DungeonRegistry.loadDungeons();
 		ModMaterials.setRepairItemsForMaterials();
-		SmeltingHandler.init();
+		// SmeltingHandler.init();
 	}
 
 	@EventHandler
