@@ -72,7 +72,7 @@ public class FactionRegistry {
 			for(int i = 0; i < fileCount; i++) {
 				File faction = files[i];
 				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(faction);
-				if(root.getString("type").equalsIgnoreCase("FACTION")) {
+				if(faction != null && root != null && root.getString("type").equalsIgnoreCase("FACTION")) {
 					List<String> fAlly = new ArrayList<>();
 					List<String> fEnemy = new ArrayList<>();
 					//CQRFaction fTmp = 

@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.crafting.smelting.SmeltingHandler;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
@@ -24,7 +23,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoade
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
-import com.teamcqr.chocolatequestrepoured.util.PresetTabItems;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
@@ -240,7 +238,7 @@ public class CQRMain {
 			factionFolder.mkdirs();
 		}
 		System.out.println("Faction Folder Path: " + factionFolder.getAbsolutePath());
-		CQRMain.CQ_FACTION_FOLDER = exportFolder;
+		CQRMain.CQ_FACTION_FOLDER = factionFolder;
 
 		if (installCQ) {
 			try {
