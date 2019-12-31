@@ -54,11 +54,11 @@ public class CQStructurePart extends Template {
 	
 	private int part_id;
 	
-	public CQStructurePart(@Nullable DungeonBase dungeon, int posOfDunX, int posOfDunZ) {
+	public CQStructurePart(@Nullable DungeonBase dungeon, int posOfDunX, int posOfDunZ, EDungeonMobType mob) {
 		super();
 		if(dungeon != null) {
 			this.dungeon = dungeon;
-			dungeonMob = dungeon.getDungeonMob();
+			dungeonMob = mob;
 		}
 		dunX = posOfDunX;
 		dunZ = posOfDunZ;

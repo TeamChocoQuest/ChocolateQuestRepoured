@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
@@ -22,6 +23,7 @@ public class ConfigFileHelper {
 	private boolean wallHasObsiCore = true;
 	private boolean mobsSpawnedFromCQSpawnersArePersistent = true;
 	private boolean reinstallDefaultFiles = false;
+	private ResourceLocation wallMob = new ResourceLocation(Reference.MODID, "spectre");
 	
 	//Mobs
 	//health
@@ -88,10 +90,16 @@ public class ConfigFileHelper {
 		// If the wall has a obsidian core
 		prop = config.get("wall", "obsidianCore", true);
 		this.wallHasObsiCore = prop.getBoolean(true);
+
+		//Mob to guard the wall
+		prop = config.get("wall", "mob", Reference.MODID + ":spectre");
+		this.wallMob = new ResourceLocation(prop.getString());
+		
 		
 		// How many threads are used for block placing
 		prop = config.get("advanced", "threadCount", 4);
 		blockPlacerThreadCount = prop.getInt(4);
+		
 		
 		//Mobs
 		//Health
@@ -173,6 +181,9 @@ public class ConfigFileHelper {
 	}
 	public boolean reInstallDefaultFiles() {
 		return reinstallDefaultFiles;
+	}
+	public ResourceLocation getWallMob() {
+		return wallMob;
 	}
 
 }

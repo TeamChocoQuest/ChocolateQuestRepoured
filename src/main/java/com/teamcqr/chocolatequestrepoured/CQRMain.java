@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoade
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
+import com.teamcqr.chocolatequestrepoured.util.PresetTabItems;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
@@ -110,6 +111,23 @@ public class CQRMain {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
+	//Tab that has some dummy presets
+	/*public static CreativeTabs CQRDummyPresetTab = new CreativeTabs("ChocolateQuestRepouredDummyPresets") {
+		
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModItems.SOUL_BOTTLE);
+		}
+		
+		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> items) {
+			items.addAll(PresetTabItems.getLeatherPresets());
+			items.addAll(PresetTabItems.getGoldPresets());
+			items.addAll(PresetTabItems.getChainmailPresets());
+			items.addAll(PresetTabItems.getIronPresets());
+			items.addAll(PresetTabItems.getDiamondPresets());
+		};
+	};*/
+	
 
 	@Instance
 	public static CQRMain INSTANCE;

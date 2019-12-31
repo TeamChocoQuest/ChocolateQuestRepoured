@@ -3,8 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
-import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
@@ -57,9 +55,9 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (!revengeTarget.isEntityAlive()) {
 			return false;
 		}
-		if (!this.entity.getFaction().isEnemy(revengeTarget) && !FactionRegistry.instance().getReputationOf(revengeTarget.getPersistentID(), this.entity.getFaction()).equals(EReputationStateRough.ALLY)) {
-			
-		}
+		if (this.entity.getFaction().isAlly(revengeTarget)) {
+			return false;
+	    }
 		if (!this.entity.isInSightRange(revengeTarget)) {
 			return false;
 		}
