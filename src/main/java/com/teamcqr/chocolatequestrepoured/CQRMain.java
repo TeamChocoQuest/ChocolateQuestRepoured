@@ -109,6 +109,13 @@ public class CQRMain {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
+	// Tab that holds all cqr spawn eggs
+	public static CreativeTabs CQRSpawnEggTab = new CreativeTabs("CQR Spawn Eggs") {
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(Items.SPAWN_EGG);
+		}
+	};
 	// Tab that has some dummy presets
 	/*
 	 * public static CreativeTabs CQRDummyPresetTab = new CreativeTabs("ChocolateQuestRepouredDummyPresets") {
