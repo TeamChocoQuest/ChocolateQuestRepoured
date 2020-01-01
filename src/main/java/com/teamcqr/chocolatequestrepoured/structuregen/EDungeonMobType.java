@@ -34,7 +34,7 @@ public enum EDungeonMobType {
 			1,
 			2,
 			1,
-			3,
+			//3,
 			1,
 			1,
 			1
@@ -43,7 +43,7 @@ public enum EDungeonMobType {
 		new EDungeonMobType[] {SKELETON},
 		new EDungeonMobType[] {ZOMBIE, MUMMY},
 		new EDungeonMobType[] {ILLAGER},
-		new EDungeonMobType[] {GOBLIN, ORC, OGRE},
+		//new EDungeonMobType[] {GOBLIN, ORC, OGRE},
 		new EDungeonMobType[] {SPECTER},
 		new EDungeonMobType[] {MINOTAUR},
 		new EDungeonMobType[] {ENDERMAN},

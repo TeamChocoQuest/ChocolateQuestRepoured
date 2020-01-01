@@ -13,9 +13,9 @@ public enum ERoomTypeExtended {
 	HALLWAY_NS(false, Rotation.NONE),
 	HALLWAY_EW(false, Rotation.CLOCKWISE_90),
 	
-	CROSSING_ENW(false, Rotation.NONE),
+	CROSSING_ENW(false, Rotation.CLOCKWISE_180),
 	CROSSING_NES(false, Rotation.CLOCKWISE_90),
-	CROSSING_WSE(false, Rotation.CLOCKWISE_180),
+	CROSSING_WSE(false, Rotation.NONE),
 	CROSSING_NWS(false, Rotation.COUNTERCLOCKWISE_90),
 	
 	CROSSING_NESW(false, Rotation.NONE),
@@ -33,10 +33,10 @@ public enum ERoomTypeExtended {
 	ROOM_S(false, Rotation.CLOCKWISE_180),
 	ROOM_W(false, Rotation.COUNTERCLOCKWISE_90),
 	
-	CURVE_NE(false, Rotation.NONE),
-	CURVE_ES(false, Rotation.CLOCKWISE_90),
-	CURVE_SW(false, Rotation.CLOCKWISE_180),
-	CURVE_WN(false, Rotation.COUNTERCLOCKWISE_90);
+	CURVE_NE(false, Rotation.CLOCKWISE_90),
+	CURVE_ES(false, Rotation.NONE),
+	CURVE_SW(false, Rotation.COUNTERCLOCKWISE_90),
+	CURVE_WN(false, Rotation.CLOCKWISE_180);
 
 	private boolean mirror;
 	private Rotation rot;
