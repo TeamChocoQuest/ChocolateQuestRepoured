@@ -36,11 +36,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffFire extends Item implements IRangedWeapon{
+public class ItemStaffFire extends Item implements IRangedWeapon {
 
 	public ItemStaffFire() {
-		setMaxStackSize(1);
-		setMaxDamage(2048);
+		this.setMaxStackSize(1);
+		this.setMaxDamage(2048);
 	}
 
 	@Override
@@ -59,8 +59,8 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.swingArm(handIn);
-		shootFromEntity(playerIn);
-		changeTorch(worldIn);
+		this.shootFromEntity(playerIn);
+		this.changeTorch(worldIn);
 		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
@@ -70,13 +70,11 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
 
 		if (result != null && !worldIn.isRemote) {
-			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(),
-					result.getBlockPos().getZ());
+			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
 			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
 			if (blockStateLookingAt.getBlock() == ModBlocks.UNLIT_TORCH) {
-				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING,
-						blockStateLookingAt.getValue(BlockUnlitTorch.FACING)));
+				worldIn.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(BlockTorch.FACING, blockStateLookingAt.getValue(BlockUnlitTorch.FACING)));
 			}
 		}
 	}
@@ -93,21 +91,17 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 		for (int i = 0; i < 50; i++) {
 			double flameRandomMotion = itemRand.nextDouble() + 0.2D;
 			float height = shooter.height;
-			world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ,
-					(x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
-					(y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
-					(z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
+			world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
+					(y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
 		}
 
 		if (!world.isRemote) {
 			int dist = 15;
-			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(shooter, shooter.getEntityBoundingBox()
-					.grow(shooter.getLookVec().x * dist, shooter.getLookVec().y * dist, shooter.getLookVec().z * dist)
-					.expand(1.0D, 1.0D, 1.0D));
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(shooter, shooter.getEntityBoundingBox().grow(shooter.getLookVec().x * dist, shooter.getLookVec().y * dist, shooter.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
 
 			for (Entity e : list) {
 				if (e instanceof EntityLivingBase) {
-					double rotDiff = Math.abs(getAngleBetweenEntities(shooter, e));
+					double rotDiff = Math.abs(this.getAngleBetweenEntities(shooter, e));
 					double rot = rotDiff - Math.abs(MathHelper.wrapDegrees(shooter.rotationYaw));
 					rot = Math.abs(rot);
 
@@ -145,9 +139,9 @@ public class ItemStaffFire extends Item implements IRangedWeapon{
 
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
-		shootFromEntity(shooter);
+		this.shootFromEntity(shooter);
 	}
-	
+
 	@Override
 	public SoundEvent getShootSound() {
 		return SoundEvents.ENTITY_GHAST_SHOOT;

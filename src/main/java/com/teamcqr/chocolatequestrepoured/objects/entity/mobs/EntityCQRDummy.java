@@ -45,12 +45,12 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	protected void collideWithEntity(Entity entityIn) {
 
 	}
-	
+
 	@Override
 	public float getSizeVariation() {
 		return 0F;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
@@ -60,7 +60,7 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 1;
 	}
-	
+
 	@Override
 	public boolean canRide() {
 		return false;

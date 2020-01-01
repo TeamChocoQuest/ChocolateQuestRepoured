@@ -10,90 +10,74 @@ import net.minecraft.scoreboard.Team;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntitySlimePart extends EntitySlime
-{
+public class EntitySlimePart extends EntitySlime {
 	private EntityLivingBase owner;
 	private float healthValue;
-	
-	public EntitySlimePart(World worldIn) 
-	{
+
+	public EntitySlimePart(World worldIn) {
 		super(worldIn);
 		this.fallDistance = -5F;
 	}
-	
-	public EntitySlimePart(World worldIn, EntityLivingBase owner, float size) 
-	{
+
+	public EntitySlimePart(World worldIn, EntityLivingBase owner, float size) {
 		this(worldIn);
 		this.owner = owner;
-		this.setSlimeSize(Math.max(1, (int)size / 3), false);
+		this.setSlimeSize(Math.max(1, (int) size / 3), false);
 		this.setHealth(1.0F);
 		this.experienceValue = 0;
 		this.healthValue = size;
 	}
-	
+
 	@Override
-	protected void applyEntityAttributes()
-	{
+	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.4D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(15.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.4D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(15.0D);
 	}
-	
-	public void onUpdate()
-    {
+
+	@Override
+	public void onUpdate() {
 		super.onUpdate();
-		
-		if(this.ticksExisted > 400)
-		{
+
+		if (this.ticksExisted > 400) {
 			this.setDead();
 		}
-    }
-	
+	}
+
 	@Override
-	public void applyEntityCollision(Entity entityIn)
-	{
-		if(entityIn == this.owner)
-		{
-			if(this.ticksExisted > 10) 
-			{
-				owner.setHealth(owner.getHealth() + 2F);
-				setDead();
-			}
-			else
-			{
-				owner.setHealth(owner.getHealth() + 1F);
-				setDead();
+	public void applyEntityCollision(Entity entityIn) {
+		if (entityIn == this.owner) {
+			if (this.ticksExisted > 10) {
+				this.owner.setHealth(this.owner.getHealth() + 2F);
+				this.setDead();
+			} else {
+				this.owner.setHealth(this.owner.getHealth() + 1F);
+				this.setDead();
 			}
 		}
-		
-		if(entityIn instanceof EntityLivingBase && entityIn.getClass() != getClass()) 
-		{
-			EntityLivingBase entity = (EntityLivingBase)entityIn;
-			
-			if(!entity.isOnSameTeam(this))
-			{
+
+		if (entityIn instanceof EntityLivingBase && entityIn.getClass() != this.getClass()) {
+			EntityLivingBase entity = (EntityLivingBase) entityIn;
+
+			if (!entity.isOnSameTeam(this)) {
 				entity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, false, false));
 			}
 			super.applyEntityCollision(entityIn);
 		}
 	}
-	
+
 	@Override
-	public boolean canAttackClass(Class <? extends EntityLivingBase > cls)
-	{
-		return(super.canAttackClass(cls)) && (cls != getClass()) && (cls != EntitySlimePart.class);
+	public boolean canAttackClass(Class<? extends EntityLivingBase> cls) {
+		return (super.canAttackClass(cls)) && (cls != this.getClass()) && (cls != EntitySlimePart.class);
 	}
-	
+
 	@Override
-	public void setDead()
-	{
-		if(!this.world.isRemote && !this.isDead && getHealth() <= 0.0F && getSlimeSize() > 1) 
-		{
+	public void setDead() {
+		if (!this.world.isRemote && !this.isDead && this.getHealth() <= 0.0F && this.getSlimeSize() > 1) {
 			int size = MathHelper.floor(this.healthValue * 0.34F);
-			
-			for(int a = 0; a < 2; a++) 
-			{
+
+			for (int a = 0; a < 2; a++) {
 				EntitySlimePart part = new EntitySlimePart(this.world, this.owner, size);
 				part.setPosition(this.posX, this.posY + 1.0D, this.posZ);
 				part.motionX = this.rand.nextGaussian();
@@ -102,21 +86,18 @@ public class EntitySlimePart extends EntitySlime
 			}
 		}
 		this.isDead = true;
-	} 
-	
+	}
+
 	@Override
-	public Team getTeam()
-	{
-		if(this.owner != null)
-		{
+	public Team getTeam() {
+		if (this.owner != null) {
 			return this.owner.getTeam();
 		}
 		return super.getTeam();
 	}
-	
+
 	@Override
-	protected int getAttackStrength()
-	{
+	protected int getAttackStrength() {
 		return 0;
 	}
 }

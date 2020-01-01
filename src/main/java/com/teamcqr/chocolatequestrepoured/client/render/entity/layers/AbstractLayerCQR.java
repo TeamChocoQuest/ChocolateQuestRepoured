@@ -14,8 +14,7 @@ public abstract class AbstractLayerCQR implements LayerRenderer<AbstractEntityCQ
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks,
-			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 
 	}
 

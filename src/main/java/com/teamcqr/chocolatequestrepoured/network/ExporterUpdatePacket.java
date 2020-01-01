@@ -43,17 +43,17 @@ public class ExporterUpdatePacket implements IMessage {
 	@Override
 	public void toBytes(ByteBuf buf) {
 		PacketBuffer buffer = new PacketBuffer(Unpooled.buffer());
-		buffer.writeBlockPos(entityExporter.getPos());
-		buffer.writeCompoundTag(entityExporter.getExporterData(new NBTTagCompound()));
+		buffer.writeBlockPos(this.entityExporter.getPos());
+		buffer.writeCompoundTag(this.entityExporter.getExporterData(new NBTTagCompound()));
 		buf.writeBytes(buffer);
 	}
 
 	public NBTTagCompound getExporterData() {
-		return data;
+		return this.data;
 	}
 
 	public BlockPos getPos() {
-		return pos;
+		return this.pos;
 	}
 
 }

@@ -18,8 +18,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class GuiCQREntity extends GuiContainer {
 
-	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID,
-			"textures/gui/container/gui_cqr_entity.png");
+	private static final ResourceLocation BG_TEXTURE = new ResourceLocation(Reference.MODID, "textures/gui/container/gui_cqr_entity.png");
 
 	private AbstractEntityCQR entity;
 
@@ -65,14 +64,13 @@ public class GuiCQREntity extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
 		this.drawGradientRect(0, 0, this.width, this.height, -1072689136, -804253680);
 		GlStateManager.color(1, 1, 1, 1);
-		mc.getTextureManager().bindTexture(BG_TEXTURE);
-		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, xSize, ySize);
+		this.mc.getTextureManager().bindTexture(BG_TEXTURE);
+		this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
 		this.drawEntity(this.guiLeft + 225, this.guiTop + 100, 30, mouseX, mouseY);
 	}
 
 	protected void drawEntity(int x, int y, int scale, float mouseX, float mouseY) {
-		GuiInventory.drawEntityOnScreen(x, y, scale, (float) x - mouseX,
-				(float) y - (float) scale * this.entity.getEyeHeight() - mouseY, this.entity);
+		GuiInventory.drawEntityOnScreen(x, y, scale, (float) x - mouseX, (float) y - (float) scale * this.entity.getEyeHeight() - mouseY, this.entity);
 	}
 
 	@Override
@@ -95,8 +93,7 @@ public class GuiCQREntity extends GuiContainer {
 		this.entity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) dropChanceMainhand / 100.0F);
 		this.entity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) dropChanceOffhand / 100.0F);
 
-		CQRMain.NETWORK.sendToServer(new SyncEntityPacket(this.entity.getEntityId(), healthScaling, dropChanceHelm,
-				dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand));
+		CQRMain.NETWORK.sendToServer(new SyncEntityPacket(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand));
 	}
 
 	@Override

@@ -6,14 +6,11 @@ package com.teamcqr.chocolatequestrepoured.util;
  * GitHub: https://github.com/DerToaster98
  */
 public enum ESkyDirection {
-	
-	NORTH,
-	EAST,
-	SOUTH,
-	WEST;
+
+	NORTH, EAST, SOUTH, WEST;
 
 	public ESkyDirection getOpposite() {
-		switch(this) {
+		switch (this) {
 		case EAST:
 			return WEST;
 		case NORTH:

@@ -15,19 +15,19 @@ public class ModelCQRGolemSmallArmor extends ModelBiped {
 	public ModelCQRGolemSmallArmor(float scale) {
 		super(scale);
 
-		bipedRightLeg = new ModelRenderer(this, 0, 16);
-		bipedRightLeg.addBox(-3F, 0F, -2F, 4, 12, 4, scale);
-		bipedRightLeg.setRotationPoint(-2F, 12F, 0F);
-		bipedRightLeg.setTextureSize(64, 32);
-		bipedRightLeg.mirror = true;
-		setRotation(bipedRightLeg, 0F, 0F, 0F);
-		
-		bipedLeftLeg = new ModelRenderer(this, 0, 16);
-		bipedLeftLeg.addBox(-1F, 0F, -2F, 4, 12, 4, scale);
-		bipedLeftLeg.setRotationPoint(2F, 12F, 0F);
-		bipedLeftLeg.setTextureSize(64, 32);
-		bipedLeftLeg.mirror = true;
-		setRotation(bipedLeftLeg, 0F, 0F, 0F);
+		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
+		this.bipedRightLeg.addBox(-3F, 0F, -2F, 4, 12, 4, scale);
+		this.bipedRightLeg.setRotationPoint(-2F, 12F, 0F);
+		this.bipedRightLeg.setTextureSize(64, 32);
+		this.bipedRightLeg.mirror = true;
+		this.setRotation(this.bipedRightLeg, 0F, 0F, 0F);
+
+		this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
+		this.bipedLeftLeg.addBox(-1F, 0F, -2F, 4, 12, 4, scale);
+		this.bipedLeftLeg.setRotationPoint(2F, 12F, 0F);
+		this.bipedLeftLeg.setTextureSize(64, 32);
+		this.bipedLeftLeg.mirror = true;
+		this.setRotation(this.bipedLeftLeg, 0F, 0F, 0F);
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -35,11 +35,10 @@ public class ModelCQRGolemSmallArmor extends ModelBiped {
 		model.rotateAngleY = y;
 		model.rotateAngleZ = z;
 	}
-	
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-			float headPitch, float scaleFactor, Entity entityIn) {
+
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 	}
 
-	
 }

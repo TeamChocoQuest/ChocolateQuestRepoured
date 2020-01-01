@@ -35,7 +35,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 		this.entity.isSwingInProgress = true;
 		this.entity.setActiveHand(EnumHand.MAIN_HAND);
 	}
-	
+
 	@Override
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
