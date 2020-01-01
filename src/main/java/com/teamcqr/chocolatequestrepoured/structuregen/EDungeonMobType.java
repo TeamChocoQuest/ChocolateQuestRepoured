@@ -4,30 +4,31 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
 
 public enum EDungeonMobType {
 	
-	DEFAULT(null, null),
+	DEFAULT(null, null, null),
 	//DONT_REPLACE(null),
-	DWARF(new ResourceLocation(Reference.MODID, "dwarf"), null),
-	SKELETON(new ResourceLocation(Reference.MODID, "skeleton"), new ResourceLocation(Reference.MODID, "necromancer")),
-	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), new ResourceLocation(Reference.MODID, "lich")),
-	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null),
-	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null),
-	WALKER(new ResourceLocation(Reference.MODID, "walker"), null),
-	SPECTER(new ResourceLocation(Reference.MODID, "spectre"), null),
-	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman"), null),
-	BOARMAN(new ResourceLocation(Reference.MODID, "boarman"), new ResourceLocation(Reference.MODID, "boar_mage")),
-	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur"), null),
-	ORC(new ResourceLocation(Reference.MODID, "orc"), null),
-	GOLEM(new ResourceLocation(Reference.MODID, "golem"), null),
-	GOBLIN(new ResourceLocation(Reference.MODID, "goblin"), null),
-	MUMMY(new ResourceLocation(Reference.MODID, "mummy"), null),
-	OGRE(new ResourceLocation(Reference.MODID, "ogre"), null),
-	TRITON(new ResourceLocation(Reference.MODID, "triton"), null)
+	DWARF(new ResourceLocation(Reference.MODID, "dwarf"), null, null),
+	SKELETON(new ResourceLocation(Reference.MODID, "skeleton"), new ResourceLocation(Reference.MODID, "necromancer"), EBanners.SKELETON_BANNER),
+	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), new ResourceLocation(Reference.MODID, "lich"), null),
+	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null, EBanners.PIRATE_BANNER),
+	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null, EBanners.ILLAGER_BANNER),
+	WALKER(new ResourceLocation(Reference.MODID, "walker"), null, EBanners.WALKER_ORDO),
+	SPECTER(new ResourceLocation(Reference.MODID, "spectre"), null, null),
+	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman"), null, EBanners.ENDERMEN_BANNER),
+	BOARMAN(new ResourceLocation(Reference.MODID, "boarman"), new ResourceLocation(Reference.MODID, "boar_mage"), EBanners.PIGMAN_BANNER),
+	MINOTAUR(new ResourceLocation(Reference.MODID, "minotaur"), null, null),
+	ORC(new ResourceLocation(Reference.MODID, "orc"), null, null),
+	GOLEM(new ResourceLocation(Reference.MODID, "golem"), null, null),
+	GOBLIN(new ResourceLocation(Reference.MODID, "goblin"), null, null),
+	MUMMY(new ResourceLocation(Reference.MODID, "mummy"), null, null),
+	OGRE(new ResourceLocation(Reference.MODID, "ogre"), null, null),
+	TRITON(new ResourceLocation(Reference.MODID, "triton"), null, null)
 	;
 	
 	static final int[] countMapping = new int[] {
@@ -51,9 +52,11 @@ public enum EDungeonMobType {
 	
 	private ResourceLocation resLoc;
 	private ResourceLocation bossResLoc;
+	private EBanners banner;
 	
-	private EDungeonMobType(ResourceLocation resLoc, ResourceLocation bossResLoc) {
+	private EDungeonMobType(ResourceLocation resLoc, ResourceLocation bossResLoc, EBanners banner) {
 		this.resLoc = resLoc;
+		this.banner = banner;
 		this.bossResLoc = bossResLoc;
 	}
 	
@@ -62,6 +65,9 @@ public enum EDungeonMobType {
 	}
 	public ResourceLocation getBossResourceLocation() {
 		return bossResLoc;
+	}
+	public EBanners getBanner() {
+		return banner;
 	}
 	
 	//DONE: Rewrite this to return the mob type and not the mob itself
