@@ -95,7 +95,7 @@ public class CQStructure {
 			this.dungeon = dungeon;
 			mobType = dungeon.getDungeonMob();
 		}
-		if(mobType.equals(EDungeonMobType.DEFAULT)) {
+		if(mobType != null && mobType.equals(EDungeonMobType.DEFAULT)) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX *16, dunZ *16);
 		}
 		//Handled in TileEntitySpawner
