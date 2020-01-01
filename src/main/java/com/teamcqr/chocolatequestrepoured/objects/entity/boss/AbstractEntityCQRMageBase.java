@@ -16,10 +16,11 @@ import net.minecraft.world.World;
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	private static final DataParameter<Boolean> IDENTITY_HIDDEN = EntityDataManager.<Boolean>createKey(AbstractEntityCQRMageBase.class, DataSerializers.BOOLEAN);
-
+	
 	public AbstractEntityCQRMageBase(World worldIn, int size) {
 		super(worldIn, size);
 	}
+
 
 	@Override
 	public int getTextureCount() {
@@ -30,14 +31,14 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	public boolean canRide() {
 		return false;
 	}
-
+	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-
+		
 		this.dataManager.register(IDENTITY_HIDDEN, true);
 	}
-
+	
 	public void revealIdentity() {
 		this.dataManager.set(IDENTITY_HIDDEN, false);
 	}
@@ -46,37 +47,37 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	public float getSizeVariation() {
 		return 0F;
 	}
-
+	
 	public boolean isIdentityHidden() {
-		return this.dataManager.get(IDENTITY_HIDDEN);
+		return dataManager.get(IDENTITY_HIDDEN);
 	}
-
+	
 	@Override
 	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
 		super.damageEntity(damageSrc, damageAmount);
-
-		if ((this.getHealth() / this.getMaxHealth()) < 0.83) {
-			this.revealIdentity();
+		
+		if((getHealth() / getMaxHealth()) < 0.83) {
+			revealIdentity();
 		}
 	}
-
+	
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.STAFF_VAMPIRIC, 1));
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.STAFF_VAMPIRIC, 1));	
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setBoolean("identityHidden", this.isIdentityHidden());
+		compound.setBoolean("identityHidden", isIdentityHidden());
 	}
-
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if (!compound.getBoolean("identityHidden")) {
-			this.revealIdentity();
+		if(!compound.getBoolean("identityHidden")) {
+			revealIdentity();
 		}
 	}
-
+	
 }

@@ -21,15 +21,16 @@ public class RenderFlyingSkull extends RenderLiving<EntityFlyingSkullMinion> {
 	protected ResourceLocation getEntityTexture(EntityFlyingSkullMinion entity) {
 		return TEXTURE;
 	}
-
+	
 	@Override
-	public void doRender(EntityFlyingSkullMinion entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		// this.mainModel.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+	public void doRender(EntityFlyingSkullMinion entity, double x, double y, double z, float entityYaw,
+			float partialTicks) {
+		//this.mainModel.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-
+	
 	@Override
 	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
-		// Should be empty!!
+		//Should be empty!!
 	}
 }

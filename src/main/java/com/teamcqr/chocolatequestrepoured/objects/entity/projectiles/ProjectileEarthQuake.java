@@ -16,88 +16,105 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ProjectileEarthQuake extends EntityThrowable {
+public class ProjectileEarthQuake extends EntityThrowable
+{
 	private int lifeTime = 60;
 	@SuppressWarnings("unused")
 	private EntityLivingBase thrower;
-
-	public ProjectileEarthQuake(World worldIn) {
+	
+	public ProjectileEarthQuake(World worldIn) 
+	{
 		super(worldIn);
 	}
+	
+	public ProjectileEarthQuake(World worldIn, double x, double y, double z)
+    {
+        super(worldIn, x, y, z);
+    }
 
-	public ProjectileEarthQuake(World worldIn, double x, double y, double z) {
-		super(worldIn, x, y, z);
-	}
+    public ProjectileEarthQuake(World worldIn, EntityLivingBase throwerIn)
+    {
+    	super(worldIn, throwerIn);
+    	this.thrower = throwerIn;
 
-	public ProjectileEarthQuake(World worldIn, EntityLivingBase throwerIn) {
-		super(worldIn, throwerIn);
-		this.thrower = throwerIn;
-
-		this.posY -= 1.2D;
-		this.motionX = 0.1D;
-		this.motionY = -2.0D;
-		this.motionZ = 0.1D;
-		this.isImmuneToFire = true;
-	}
+    	this.posY -= 1.2D;
+    	this.motionX = 0.1D;
+    	this.motionY = -2.0D;
+    	this.motionZ = 0.1D;
+    	this.isImmuneToFire = true;
+    }
 
 	@Override
-	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote) {
-			if (!(result.entityHit instanceof EntityLiving)) {
-				this.motionY = 0.0D;
+	protected void onImpact(RayTraceResult result) 
+	{
+		if(!world.isRemote)
+		{
+			if(!(result.entityHit instanceof EntityLiving))
+			{
+				motionY = 0.0D;
 			}
 		}
 	}
-
+	
 	@Override
-	public void onUpdate() {
-		this.motionX *= 1.01D;
-		this.motionY *= 1.01D;
-		this.motionZ *= 1.01D;
-
-		if (this.getThrower() != null && this.getThrower().isDead) {
-			this.setDead();
+	public void onUpdate()
+	{
+		motionX *= 1.01D;
+		motionY *= 1.01D;
+		motionZ *= 1.01D;
+		
+		if(getThrower() != null && getThrower().isDead)
+		{
+			setDead();
 		}
-
-		else {
-			if (this.ticksExisted++ > 300) {
-				this.setDead();
+		
+		else
+		{
+			if(ticksExisted++ > 300)
+			{
+				setDead();
 			}
-
+			
 			this.onUpdateInAir();
 			super.onUpdate();
 		}
 	}
-
-	private void onUpdateInAir() {
-		this.lifeTime -= 1;
-
-		if (this.lifeTime <= 0) {
-			this.setDead();
+	
+	private void onUpdateInAir()
+	{
+		lifeTime -= 1;    
+		
+		if(lifeTime <= 0)
+		{
+			setDead();
 		}
-
+		
 		BlockPos pos = new BlockPos(this.getPosition().getX(), this.getPosition().getY() - 1, this.getPosition().getZ());
-		IBlockState iblockstate = this.world.getBlockState(pos);
-
-		if (iblockstate.getBlock() == null || iblockstate.getBlock().isAir(iblockstate, this.world, pos)) {
+		IBlockState iblockstate = world.getBlockState(pos);
+			
+		if(iblockstate.getBlock() == null || iblockstate.getBlock().isAir(iblockstate, world, pos))
+		{
 			iblockstate = Blocks.GLASS.getDefaultState();
 		}
-
+			
 		double dist = 1.0D;
-		AxisAlignedBB var3 = this.getEntityBoundingBox().expand(dist, 2.0D, dist);
-		List<Entity> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, var3);
-
-		for (Entity entity : list) {
-			if (entity instanceof EntityLivingBase && entity != this.getThrower() && !this.world.isRemote && entity.onGround) {
+		AxisAlignedBB var3 = getEntityBoundingBox().expand(dist, 2.0D, dist);
+		List<Entity> list = world.getEntitiesWithinAABB(EntityLivingBase.class, var3);
+   
+		for(Entity entity : list)
+		{
+			if(entity instanceof EntityLivingBase && entity != getThrower() && !world.isRemote && entity.onGround)
+			{
 				entity.motionY = 0.3D;
-				entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getThrower()), 1.0F);
+				entity.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, getThrower()), 1.0F);
 			}
 		}
-
-		if (this.world.isRemote) {
-			for (int i = 0; i < 10; i++) {
-				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, this.posX + this.rand.nextFloat() - 0.5D, this.posY + this.rand.nextFloat() - 0.5D, this.posZ + this.rand.nextFloat() - 0.5D, this.rand.nextFloat() - 0.5F,
-						this.rand.nextFloat(), this.rand.nextFloat() - 0.5F, Block.getStateId(iblockstate));
+		
+		if(world.isRemote)
+		{
+			for(int i = 0; i < 10; i++)
+			{
+				world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, posX + rand.nextFloat() - 0.5D, posY + rand.nextFloat() - 0.5D, posZ + rand.nextFloat() - 0.5D, rand.nextFloat() - 0.5F, rand.nextFloat(), rand.nextFloat() - 0.5F, Block.getStateId(iblockstate));
 			}
 		}
 	}

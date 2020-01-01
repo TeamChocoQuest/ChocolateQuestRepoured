@@ -35,12 +35,14 @@ public class ItemDaggerNinja extends ItemDagger {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (playerIn.isSneaking()) {
-			worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+			worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT,
+					SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F,
-						itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D,
+						playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D,
+						itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 
 			double x = -Math.sin(Math.toRadians(playerIn.rotationYaw));
@@ -50,7 +52,8 @@ public class ItemDaggerNinja extends ItemDagger {
 			z *= (1.0D - Math.abs(y));
 			int dist = 4;
 
-			BlockPos pos = new BlockPos(playerIn.posX + x * dist, playerIn.posY + y * dist + 1, playerIn.posZ + z * dist);
+			BlockPos pos = new BlockPos(playerIn.posX + x * dist, playerIn.posY + y * dist + 1,
+					playerIn.posZ + z * dist);
 
 			if (worldIn.getBlockState(pos).getBlock().isPassable(worldIn, pos) && pos.getY() > 0) {
 				playerIn.setPosition(playerIn.posX + x * dist, playerIn.posY + y * dist + 1, playerIn.posZ + z * dist);
@@ -62,8 +65,9 @@ public class ItemDaggerNinja extends ItemDagger {
 			stack.damageItem(1, playerIn);
 
 			for (int i = 0; i < 6; i++) {
-				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D, playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F,
-						itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+				worldIn.spawnParticle(EnumParticleTypes.PORTAL, playerIn.posX + itemRand.nextFloat() - 0.5D,
+						playerIn.posY + itemRand.nextFloat() - 0.5D, playerIn.posZ + itemRand.nextFloat() - 0.5D,
+						itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 			}
 		} else {
 			super.onItemRightClick(worldIn, playerIn, handIn);

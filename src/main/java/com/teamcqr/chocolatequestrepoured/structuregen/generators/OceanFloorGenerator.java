@@ -16,17 +16,18 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.common.MinecraftForge;
 
 /**
- * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019
+ * Developed by DerToaster98
+ * GitHub: https://github.com/DerToaster98
  */
-public class OceanFloorGenerator implements IDungeonGenerator {
+public class OceanFloorGenerator implements IDungeonGenerator{
 
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DefaultSurfaceDungeon dungeon;
-
-	public OceanFloorGenerator() {
-	}
-
+	
+	public OceanFloorGenerator() {}
+	
 	public OceanFloorGenerator(DungeonOceanFloor dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
 		this.structure = struct;
@@ -35,8 +36,8 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
-		// Builds the support hill;
-		if (this.dungeon.doBuildSupportPlatform()) {
+		//Builds the support hill;
+		if(this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y, z), this.structure.getSizeX(), this.structure.getSizeZ(), EPosType.DEFAULT);
@@ -45,30 +46,30 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		// Simply puts the structure at x,y,z
+		//Simply puts the structure at x,y,z
 		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
-
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world);
+		
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x,y,z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()),world);
 		event.setShieldCorePosition(this.structure.getShieldCorePosition());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		// UNUSED HERE
-
+		//UNUSED HERE
+		
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
-		// UNUSED HERE
-
+		//UNUSED HERE
+		
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
 		// UNUSED HERE
-
+		
 	}
 
 	@Override

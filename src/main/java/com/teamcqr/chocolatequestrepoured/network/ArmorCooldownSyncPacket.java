@@ -21,7 +21,8 @@ public class ArmorCooldownSyncPacket implements IMessage {
 		this.cooldowns = cooldowns;
 	}
 
-	public ArmorCooldownSyncPacket(EntityPlayer player, List<Capability<? extends CapabilitySpecialArmor>> capabilities) {
+	public ArmorCooldownSyncPacket(EntityPlayer player,
+			List<Capability<? extends CapabilitySpecialArmor>> capabilities) {
 		this.cooldowns = new int[capabilities.size()];
 		CapabilitySpecialArmor icapability;
 		for (int i = 0; i < capabilities.size(); i++) {
@@ -49,7 +50,7 @@ public class ArmorCooldownSyncPacket implements IMessage {
 	}
 
 	public int[] getCooldowns() {
-		return this.cooldowns;
+		return cooldowns;
 	}
 
 }

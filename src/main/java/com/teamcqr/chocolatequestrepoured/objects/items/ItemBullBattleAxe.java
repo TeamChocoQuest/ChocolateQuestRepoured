@@ -61,20 +61,23 @@ public class ItemBullBattleAxe extends ItemSword {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
-			this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 0.6);
+			replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, 0.6);
 		}
 
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double multiplier) {
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id,
+			double multiplier) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+		Optional<AttributeModifier> modifierOptional = modifiers.stream()
+				.filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			final AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() - multiplier, modifier.getOperation()));
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() - multiplier,
+					modifier.getOperation()));
 		}
 	}
 
@@ -90,7 +93,8 @@ public class ItemBullBattleAxe extends ItemSword {
 
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state) {
-		return (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.PLANTS || state.getMaterial() == Material.VINE) ? 7.0F : super.getDestroySpeed(stack, state);
+		return (state.getMaterial() == Material.WOOD || state.getMaterial() == Material.PLANTS
+				|| state.getMaterial() == Material.VINE) ? 7.0F : super.getDestroySpeed(stack, state);
 	}
 
 }

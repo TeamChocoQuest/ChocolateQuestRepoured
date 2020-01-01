@@ -35,20 +35,21 @@ public class BlockSpawner extends BlockContainer {
 	public BlockSpawner() {
 		super(Material.IRON);
 
-		this.setSoundType(SoundType.METAL);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
+		setSoundType(SoundType.METAL);
+		setBlockUnbreakable();
+		setResistance(Float.MAX_VALUE);
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
+			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote && playerIn.isCreative()) {
-			if (playerIn.getHeldItem(hand).getItem() == ModItems.SPAWNER_CONVERTER) {
+			if(playerIn.getHeldItem(hand).getItem() == ModItems.SPAWNER_CONVERTER) {
 				return false;
 			} else {
 				playerIn.openGui(CQRMain.INSTANCE, Reference.SPAWNER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 			}
-
+			
 		}
 		return true;
 	}

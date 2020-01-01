@@ -19,9 +19,9 @@ public class MCAModelBox extends ModelBox {
 
 		this.MCAquadList = new TexturedQuad[6];
 
-		float endX = posX + (float) sizeX;
-		float endY = posY + (float) sizeY;
-		float endZ = posZ + (float) sizeZ;
+		float endX = posX + (float)sizeX;
+		float endY = posY + (float)sizeY;
+		float endZ = posZ + (float)sizeZ;
 		posX -= scaleFactor;
 		posY -= scaleFactor;
 		posZ -= scaleFactor;
@@ -29,7 +29,8 @@ public class MCAModelBox extends ModelBox {
 		endY += scaleFactor;
 		endZ += scaleFactor;
 
-		if (par1ModelRenderer.mirror) {
+		if (par1ModelRenderer.mirror)
+		{
 			float tempValueForSwitch = endX;
 			endX = posX;
 			posX = tempValueForSwitch;
@@ -44,45 +45,46 @@ public class MCAModelBox extends ModelBox {
 		PositionTextureVertex PTV_front_right_bottom = new PositionTextureVertex(endX, posY, endZ, 0.0F, 8.0F);
 		PositionTextureVertex PTV_front_right_top = new PositionTextureVertex(endX, endY, endZ, 8.0F, 8.0F);
 		PositionTextureVertex PTV_front_left_top = new PositionTextureVertex(posX, endY, endZ, 8.0F, 0.0F);
-		// ...
+		//...
 		/** Create the TexturedQuads. The constructor of each quad defines the order of the PTV (counterclockwise) and fixes their UV. */
-		// Right quad (TODO fix texture)
-		this.MCAquadList[0] = new TexturedQuad(new PositionTextureVertex[] { PTV_back_right_top, PTV_front_right_top, PTV_front_right_bottom, PTV_back_right_bottom }, textureX + sizeZ + sizeX, textureY + sizeZ,
-				textureX + sizeZ + sizeX + sizeZ, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
-		// Left quad (TODO fix texture)
-		this.MCAquadList[1] = new TexturedQuad(new PositionTextureVertex[] { PTV_front_left_top, PTV_back_left_top, PTV_back_left_bottom, PTV_front_left_bottom }, textureX, textureY + sizeZ, textureX + sizeZ, textureY + sizeZ + sizeY,
-				par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
-		// Bottom quad
-		this.MCAquadList[2] = new TexturedQuad(new PositionTextureVertex[] { PTV_front_right_bottom, PTV_front_left_bottom, PTV_back_left_bottom, PTV_back_right_bottom }, textureX + sizeZ + sizeX, textureY, textureX + sizeZ + sizeX + sizeX,
-				textureY + sizeZ, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
-		// Top quad
-		this.MCAquadList[3] = new TexturedQuad(new PositionTextureVertex[] { PTV_back_right_top, PTV_back_left_top, PTV_front_left_top, PTV_front_right_top }, textureX + sizeZ, textureY, textureX + sizeZ + sizeX, textureY + sizeZ,
-				par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
-		// Back quad
-		this.MCAquadList[4] = new TexturedQuad(new PositionTextureVertex[] { PTV_back_left_top, PTV_back_right_top, PTV_back_right_bottom, PTV_back_left_bottom }, textureX + sizeZ + sizeX + sizeZ, textureY + sizeZ,
-				textureX + sizeZ + sizeX + sizeZ + sizeX, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
-		// Front quad
-		this.MCAquadList[5] = new TexturedQuad(new PositionTextureVertex[] { PTV_front_right_top, PTV_front_left_top, PTV_front_left_bottom, PTV_front_right_bottom }, textureX + sizeZ, textureY + sizeZ, textureX + sizeZ + sizeX,
-				textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Right quad (TODO fix texture)
+		this.MCAquadList[0] = new TexturedQuad(new PositionTextureVertex[] {PTV_back_right_top, PTV_front_right_top, PTV_front_right_bottom, PTV_back_right_bottom}, textureX + sizeZ + sizeX, textureY + sizeZ, textureX + sizeZ + sizeX + sizeZ, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Left quad (TODO fix texture)
+		this.MCAquadList[1] = new TexturedQuad(new PositionTextureVertex[] {PTV_front_left_top, PTV_back_left_top, PTV_back_left_bottom, PTV_front_left_bottom}, textureX, textureY + sizeZ, textureX + sizeZ, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Bottom quad
+		this.MCAquadList[2] = new TexturedQuad(new PositionTextureVertex[] {PTV_front_right_bottom, PTV_front_left_bottom, PTV_back_left_bottom, PTV_back_right_bottom}, textureX + sizeZ + sizeX, textureY, textureX + sizeZ + sizeX + sizeX, textureY + sizeZ, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Top quad
+		this.MCAquadList[3] = new TexturedQuad(new PositionTextureVertex[] {PTV_back_right_top, PTV_back_left_top, PTV_front_left_top, PTV_front_right_top}, textureX + sizeZ, textureY, textureX + sizeZ + sizeX, textureY + sizeZ, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Back quad 
+		this.MCAquadList[4] = new TexturedQuad(new PositionTextureVertex[] {PTV_back_left_top, PTV_back_right_top, PTV_back_right_bottom, PTV_back_left_bottom}, textureX + sizeZ + sizeX + sizeZ, textureY + sizeZ, textureX + sizeZ + sizeX + sizeZ + sizeX, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
+		//Front quad 
+		this.MCAquadList[5] = new TexturedQuad(new PositionTextureVertex[] {PTV_front_right_top, PTV_front_left_top, PTV_front_left_bottom, PTV_front_right_bottom}, textureX + sizeZ, textureY + sizeZ, textureX + sizeZ + sizeX, textureY + sizeZ + sizeY, par1ModelRenderer.textureWidth, par1ModelRenderer.textureHeight);
 
-		if (par1ModelRenderer.mirror) {
-			for (int j1 = 0; j1 < this.MCAquadList.length; ++j1) {
+		if (par1ModelRenderer.mirror)
+		{
+			for (int j1 = 0; j1 < this.MCAquadList.length; ++j1)
+			{
 				this.MCAquadList[j1].flipFace();
 			}
 		}
 
 	}
 
-	/*
-	 * @Override
-	 * 
-	 * @SideOnly(Side.CLIENT) public void render(Tessellator par1Tessellator, float textureX) { for (int i = 0; i < this.MCAquadList.length; ++i) { this.MCAquadList[i].draw(par1Tessellator, textureX); } }
-	 */
+	/*@Override
+	@SideOnly(Side.CLIENT)
+	public void render(Tessellator par1Tessellator, float textureX)
+	{
+		for (int i = 0; i < this.MCAquadList.length; ++i)
+		{
+			this.MCAquadList[i].draw(par1Tessellator, textureX);
+		}
+	}*/
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void render(BufferBuilder renderer, float scale) {
-		// super.render(renderer, scale);
-		for (int i = 0; i < this.MCAquadList.length; ++i) {
+		//super.render(renderer, scale);
+		for (int i = 0; i < this.MCAquadList.length; ++i)
+		{
 			this.MCAquadList[i].draw(renderer, scale);
 		}
 	}

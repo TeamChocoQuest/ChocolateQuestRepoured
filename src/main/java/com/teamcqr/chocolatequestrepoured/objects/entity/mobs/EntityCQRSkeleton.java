@@ -29,7 +29,7 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.UNDEAD;
 	}
-
+	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_SKELETON.getLootTable();
@@ -39,10 +39,10 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;
 	}
-
+	
 }

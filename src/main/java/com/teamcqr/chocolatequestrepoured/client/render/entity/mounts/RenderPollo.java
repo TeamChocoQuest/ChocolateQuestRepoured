@@ -8,8 +8,8 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderPollo extends RenderLiving<EntityPollo> {
-
+public class RenderPollo extends RenderLiving<EntityPollo>{
+	
 	static ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/mounts/pollo.png");
 
 	public RenderPollo(RenderManager rendermanagerIn) {

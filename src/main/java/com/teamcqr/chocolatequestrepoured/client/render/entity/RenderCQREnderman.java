@@ -38,5 +38,7 @@ public class RenderCQREnderman extends RenderCQREntity<EntityCQREnderman> {
 			}
 		});
 	}
+	
+	
 
 }

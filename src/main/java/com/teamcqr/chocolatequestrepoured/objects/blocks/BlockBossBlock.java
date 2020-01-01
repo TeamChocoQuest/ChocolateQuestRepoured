@@ -18,9 +18,9 @@ public class BlockBossBlock extends Block {
 	public BlockBossBlock() {
 		super(Material.ROCK);
 
-		this.setSoundType(SoundType.STONE);
-		this.setBlockUnbreakable();
-		this.setResistance(Float.MAX_VALUE);
+		setSoundType(SoundType.STONE);
+		setBlockUnbreakable();
+		setResistance(Float.MAX_VALUE);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class BlockBossBlock extends Block {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Items.AIR;
 	}
-
+	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;

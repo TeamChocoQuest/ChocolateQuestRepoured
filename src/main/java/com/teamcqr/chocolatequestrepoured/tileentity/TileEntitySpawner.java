@@ -44,7 +44,8 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	@Nullable
 	@Override
 	public <T> T getCapability(Capability<T> capability, @Nullable EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) this.inventory : super.getCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? (T) inventory
+				: super.getCapability(capability, facing);
 	}
 
 	@Override
@@ -52,30 +53,30 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		super.readFromNBT(compound);
 		this.inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		if (compound.hasKey("isDungeonSpawner")) {
-			this.spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
+			spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
 		}
-		if (compound.hasKey("overrideMob")) {
-			this.mobOverride = compound.getString("overrideMob");
+		if(compound.hasKey("overrideMob")) {
+			mobOverride = compound.getString("overrideMob");
 		}
-		if (compound.hasKey("dungeonChunkX") && compound.hasKey("dungeonChunkZ")) {
-			this.dungeonChunkX = compound.getInteger("dungeonChunkX");
-			this.dungeonChunkZ = compound.getInteger("dungeonChunkZ");
+		if(compound.hasKey("dungeonChunkX") && compound.hasKey("dungeonChunkZ")) {
+			dungeonChunkX = compound.getInteger("dungeonChunkX");
+			dungeonChunkZ = compound.getInteger("dungeonChunkZ");
 		}
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound = super.writeToNBT(compound);
-		compound.setTag("inventory", this.inventory.serializeNBT());
-		if (this.spawnedInDungeon) {
+		compound.setTag("inventory", inventory.serializeNBT());
+		if (spawnedInDungeon) {
 			compound.setBoolean("isDungeonSpawner", true);
 		}
-		if (this.mobOverride != null) {
-			compound.setString("overrideMob", this.mobOverride);
+		if(mobOverride != null) {
+			compound.setString("overrideMob", mobOverride);
 		}
-		if (this.dungeonChunkX != 0 && this.dungeonChunkZ != 0) {
-			compound.setInteger("dungeonChunkX", this.dungeonChunkX);
-			compound.setInteger("dungeonChunkZ", this.dungeonChunkZ);
+		if(dungeonChunkX != 0 && dungeonChunkZ != 0) {
+			compound.setInteger("dungeonChunkX", dungeonChunkX);
+			compound.setInteger("dungeonChunkZ", dungeonChunkZ);
 		}
 		return compound;
 	}
@@ -92,14 +93,14 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.turnBackIntoEntity();
 		}
 	}
-
+	
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
 		this.spawnedInDungeon = true;
-		this.mobOverride = mobOverride.name().toUpperCase();
-		// System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
+		this.mobOverride = mobOverride.name().toUpperCase(); 
+		//System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
 		this.dungeonChunkX = dunChunkX;
 		this.dungeonChunkZ = dunChunkZ;
-
+		
 		this.markDirty();
 	}
 
@@ -109,30 +110,30 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
 				if (!stack.isEmpty() && stack.getTagCompound() != null) {
-					// for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
-					// DONE: Set "id" section of the nbt tag, type is resourcelocation
-					NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
-					ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
-					// System.out.println("Spawner Entity: " + resLocCurrent.toString());
-					boolean isCurrentCQDummy = (resLocCurrent.getResourceDomain().equalsIgnoreCase(Reference.MODID) && resLocCurrent.getResourcePath().equalsIgnoreCase("dummy"));
-					if (this.mobOverride != null && isCurrentCQDummy && EDungeonMobType.byString(this.mobOverride) != null) {
-						EDungeonMobType newMob = EDungeonMobType.byString(this.mobOverride);
-						// if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
-						if (newMob.equals(EDungeonMobType.DEFAULT)) {
-							// DONE: Fix this not working sometimes...
-							nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(/* this.pos.getX() */this.dungeonChunkX * 16, /* this.pos.getZ() */ this.dungeonChunkZ * 16).getEntityResourceLocation().toString());
-						} else {
-							nbt.setString("id", newMob.getEntityResourceLocation().toString());
+					//for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
+						//DONE: Set "id" section of the nbt tag, type is resourcelocation
+						NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
+						ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
+						//System.out.println("Spawner Entity: " + resLocCurrent.toString());
+						boolean isCurrentCQDummy = (resLocCurrent.getResourceDomain().equalsIgnoreCase(Reference.MODID) && resLocCurrent.getResourcePath().equalsIgnoreCase("dummy"));
+						if(mobOverride != null && isCurrentCQDummy && EDungeonMobType.byString(mobOverride) != null) {
+							EDungeonMobType newMob = EDungeonMobType.byString(mobOverride);
+							//if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
+								if(newMob.equals(EDungeonMobType.DEFAULT)) {
+									//DONE: Fix this not working sometimes...
+									nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(/*this.pos.getX()*/this.dungeonChunkX *16, /*this.pos.getZ()*/ this.dungeonChunkZ *16).getEntityResourceLocation().toString());
+								} else {
+									nbt.setString("id", newMob.getEntityResourceLocation().toString());
+								}
+							//}
 						}
-						// }
-					}
-					// System.out.println("Spawning entities...");
-					for (int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
-						this.spawnEntityFromNBT(nbt);
-					}
+						//System.out.println("Spawning entities...");
+						for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
+							this.spawnEntityFromNBT(nbt);
+						}
 
-					this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-					// }
+						this.inventory.setStackInSlot(i, ItemStack.EMPTY);
+					//}
 				}
 			}
 
@@ -145,8 +146,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 		if (entity != null) {
 			entity.setUniqueId(MathHelper.getRandomUUID());
-			Vec3d pos = new Vec3d((double) this.pos.getX() + this.world.rand.nextDouble(), (double) this.pos.getY(), (double) this.pos.getZ() + this.world.rand.nextDouble());
-			if (this.world.getBlockState(new BlockPos(pos)).getMaterial().blocksMovement() || this.world.getBlockState(new BlockPos(pos).offset(EnumFacing.UP)).getMaterial().blocksMovement()) {
+			Vec3d pos = new Vec3d((double) this.pos.getX() + this.world.rand.nextDouble(), (double) this.pos.getY(),
+					(double) this.pos.getZ() + this.world.rand.nextDouble());
+			if(world.getBlockState(new BlockPos(pos)).getMaterial().blocksMovement() || world.getBlockState(new BlockPos(pos).offset(EnumFacing.UP)).getMaterial().blocksMovement()) {
 				pos = new Vec3d(this.pos.getX(), this.pos.getY(), this.pos.getZ());
 			}
 			entity.setPosition(pos.x, pos.y, pos.z);
@@ -168,7 +170,8 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	protected boolean isNonCreativePlayerInRange(double range) {
 		if (range > 0.0D) {
 			for (EntityPlayer player : this.world.playerEntities) {
-				if (!player.isCreative() && !player.isSpectator() && player.getDistance(this.pos.getX(), this.pos.getY(), this.pos.getZ()) < range) {
+				if (!player.isCreative() && !player.isSpectator()
+						&& player.getDistance(this.pos.getX(), this.pos.getY(), this.pos.getZ()) < range) {
 					return true;
 				}
 			}
@@ -177,6 +180,6 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	}
 
 	public void setDungeonSpawner() {
-		this.spawnedInDungeon = true;
+		spawnedInDungeon = true;
 	}
 }

@@ -7,20 +7,26 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 
-public class ItemGoldenFeather extends Item {
-	public ItemGoldenFeather() {
-		this.setMaxStackSize(1);
-		this.setMaxDamage(385);
+public class ItemGoldenFeather extends Item
+{
+	public ItemGoldenFeather() 
+	{
+		setMaxStackSize(1);
+		setMaxDamage(385);
 	}
-
+	
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (isSelected && entityIn instanceof EntityLivingBase) {
-			if (entityIn.fallDistance > 1.5F) {
-				stack.damageItem(1, (EntityLivingBase) entityIn);
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected)
+    {
+		if(isSelected && entityIn instanceof EntityLivingBase)
+		{
+			if(entityIn.fallDistance > 1.5F)
+			{
+				stack.damageItem(1, (EntityLivingBase)entityIn);
 				entityIn.fallDistance = 0.0F;
-
-				for (int i = 0; i < 3; i++) {
+				
+				for(int i = 0; i < 3; i++)
+				{
 					worldIn.spawnParticle(EnumParticleTypes.CLOUD, entityIn.posX, entityIn.posY, entityIn.posZ, (itemRand.nextFloat() - 0.5F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.5F) / 2.0F);
 				}
 			}

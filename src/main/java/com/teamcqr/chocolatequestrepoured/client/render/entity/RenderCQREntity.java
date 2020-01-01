@@ -43,7 +43,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this(rendermanagerIn, new ModelCQRBiped(0.0F, true), 0.5F, entityName, widthScale, heightScale);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName, double widthScale, double heightScale) {
+	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName,
+			double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.entityName = entityName;
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
@@ -52,7 +53,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.heightScale = heightScale;// + (-0.25D +(rand.nextDouble() *0.5D));;
 		this.addLayer(new LayerBipedArmor(this));
 		this.addLayer(new LayerHeldItem(this));
-		// this.addLayer(new LayerRevolver(this));
+		//this.addLayer(new LayerRevolver(this));
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
@@ -67,7 +68,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
 		if (entitylivingbaseIn.getTextureCount() > 1) {
-			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() + ".png");
+			this.texture = new ResourceLocation(Reference.MODID,
+					"textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() + ".png");
 		}
 		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
 		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
@@ -89,7 +91,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			boolean dontRenderOffItem = false;
 			boolean dontRenderMainItem = false;
-
+			
 			boolean flagMain = false;
 			boolean flagOff = false;
 
@@ -100,7 +102,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 					dontRenderOffItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
 					flagMain = true;
-				} else if (entity.getItemInUseCount() > 0) {
+				} else if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemMainHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -129,7 +131,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 					dontRenderMainItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
 					flagOff = true;
-				} else if (entity.getItemInUseCount() > 0) {
+				} else if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemOffHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -159,12 +161,12 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				dontRenderMainItem = dontRenderOffItem;
 				dontRenderOffItem = tmp2;
 			}
-			if (!flagMain) {
+			if(!flagMain) {
 				model.rightArmPose = armPoseMain;
-			}
-			if (!flagOff) {
+			} 
+			if(!flagOff) {
 				model.leftArmPose = armPoseOff;
-			}
+			} 
 			if (dontRenderMainItem) {
 				model.rightArmPose = ArmPose.EMPTY;
 			}
@@ -184,18 +186,19 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	@Override
-	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks,
+			float netHeadYaw, float headPitch, float scaleFactor) {
 
 		if (this.mainModel.isRiding) {
 			GL11.glTranslatef(0, 0.6F, 0);
 		}
 
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch,
+				scaleFactor);
 
 		this.mainModel.isRiding = entitylivingbaseIn.isSitting() || entitylivingbaseIn.isRiding();
 	}
 
-	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.texture;
 	}

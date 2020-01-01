@@ -14,7 +14,7 @@ public abstract class CapabilitySpecialArmor {
 	}
 
 	public Class<? extends ItemArmor> getItemClass() {
-		return this.itemClass;
+		return itemClass;
 	}
 
 	public abstract void onLivingUpdateEvent(LivingUpdateEvent event);
@@ -22,7 +22,7 @@ public abstract class CapabilitySpecialArmor {
 	public abstract void onLivingDamageEvent(LivingDamageEvent event);
 
 	public int getCooldown() {
-		return this.cooldown;
+		return cooldown;
 	}
 
 	public void setCooldown(int cooldown) {

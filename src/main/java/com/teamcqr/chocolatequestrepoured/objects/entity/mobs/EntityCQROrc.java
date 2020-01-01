@@ -29,17 +29,17 @@ public class EntityCQROrc extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.GOBLINS;
 	}
-
+	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_ORC.getLootTable();
 	}
-
+	
 	@Override
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;

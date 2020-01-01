@@ -6,17 +6,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 public class ServerProxy implements IProxy {
 
-	@Override
 	public void preInit() {
 
 	}
 
-	@Override
 	public void init() {
 
 	}
 
-	@Override
 	public void postInit() {
 
 	}

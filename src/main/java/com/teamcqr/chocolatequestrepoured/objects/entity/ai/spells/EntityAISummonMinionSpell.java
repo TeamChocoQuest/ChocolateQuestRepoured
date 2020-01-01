@@ -20,7 +20,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 /*
- * 20.12.2019 Made by: DerToaster98 Comment: Simple AI to summon some minions
+ * 20.12.2019
+ * Made by: DerToaster98
+ * Comment: Simple AI to summon some minions
  */
 public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 
@@ -29,17 +31,17 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	protected int MAX_MINIONS_AT_A_TIME = 3;
 	protected List<Entity> activeCircles = new ArrayList<Entity>();
 	protected boolean summonViaCircle = true;
-	protected Vec3d positionOffsetForSummons = new Vec3d(0, 0, 0);
+	protected Vec3d positionOffsetForSummons = new Vec3d(0,0,0);
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
-
+	
 	public EntityAISummonMinionSpell(AbstractEntityCQR entity) {
 		super(entity);
-		if (entity instanceof ISummoner) {
+		if(entity instanceof ISummoner) {
 			this.summoner = (ISummoner) entity;
 		}
 	}
-
+	
 	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
 		this(entity);
 		this.summonViaCircle = useCircle;
@@ -49,110 +51,110 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		this.MAX_MINIONS_AT_A_TIME = maxMinionsPerSpawn;
 		this.positionOffsetForSummons = offsetV;
 	}
-
+	
 	@Override
 	public boolean shouldExecute() {
-		if (this.summoner == null) {
+		if(this.summoner == null) {
 			return false;
 		}
-		if (super.shouldExecute()) {
-			return this.getAliveMinionCount() < this.MAX_MINIONS;
+		if(super.shouldExecute()) {
+			return getAliveMinionCount() < MAX_MINIONS;
 		}
 		return false;
 	}
-
+	
 	protected int getAliveMinionCount() {
-		if (this.activeCircles.isEmpty() && this.summoner.getSummonedEntities().isEmpty()) {
+		if(activeCircles.isEmpty() && summoner.getSummonedEntities().isEmpty()) {
 			return 0;
 		}
 		int aliveMinions = 0;
 		List<Entity> toRemove = new ArrayList<>();
-		for (Entity minio : this.activeCircles) {
-			if (minio != null && !minio.isDead) {
+		for(Entity minio : activeCircles) {
+			if(minio != null && !minio.isDead) {
 				aliveMinions++;
 			} else {
 				toRemove.add(minio);
 			}
 		}
-		for (Entity minio : this.summoner.getSummonedEntities()) {
-			if (minio != null && !minio.isDead) {
+		for(Entity minio : summoner.getSummonedEntities()) {
+			if(minio != null && !minio.isDead) {
 				aliveMinions++;
 			}
 		}
-		this.activeCircles.removeAll(toRemove);
+		activeCircles.removeAll(toRemove);
 		return aliveMinions;
 	}
 
 	@Override
 	protected void castSpell() {
-		Vec3d vector = this.entity.getLookVec().normalize();
+		Vec3d vector = entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
-		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
-		if (minionCount > this.MAX_MINIONS_AT_A_TIME) {
-			minionCount = this.MAX_MINIONS_AT_A_TIME;
+		int minionCount = MAX_MINIONS - getAliveMinionCount();
+		if(minionCount > MAX_MINIONS_AT_A_TIME) {
+			minionCount = MAX_MINIONS_AT_A_TIME;
 		}
-		if (minionCount > 0) {
-			double angle = /* 180D */360D / (double) minionCount;
-			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
+		if(minionCount > 0 ) {
+			double angle = /*180D*/360D / (double)minionCount;
+			//vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[minionCount];
-			for (int i = 0; i < minionCount; i++) {
-				spawnPositions[i] = this.entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
+			for(int i = 0; i < minionCount; i++) {
+				spawnPositions[i] = entity.getPosition().add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle*i)));
 			}
-			for (BlockPos p : spawnPositions) {
-				if (this.entity.getNavigator().getPathToPos(p) != null) {
-					// System.out.println("Pos: " + p.toString());
+			for(BlockPos p : spawnPositions) {
+				if(entity.getNavigator().getPathToPos(p) != null) {
+					//System.out.println("Pos: " + p.toString());
 					ResourceLocation summon = null;
 					boolean rdmFlag = false;
-					if (this.minionOverride != null) {
-						summon = this.minionOverride;
+					if(minionOverride != null) {
+						summon = minionOverride;
 					} else {
 						summon = new ResourceLocation(Reference.MODID, "zombie");
-						if (this.entity.getRNG().nextInt(4) == 3) {
+						if(entity.getRNG().nextInt(4) == 3) {
 							summon = new ResourceLocation(Reference.MODID, "skeleton");
 							rdmFlag = true;
 						}
 					}
 					ECircleTexture texture = null;
-					if (this.circleTextureOverride != null) {
-						texture = this.circleTextureOverride;
+					if(circleTextureOverride != null) {
+						texture = circleTextureOverride;
 					} else {
 						texture = ECircleTexture.ZOMBIE;
-						if (rdmFlag) {
+						if(rdmFlag) {
 							texture = ECircleTexture.SKELETON;
 						}
 					}
-					if (this.entity.world.getBlockState(p).isFullBlock()) {
-						p = p.add(0, 1, 0);
+					if(entity.world.getBlockState(p).isFullBlock()) {
+						p = p.add(0,1,0);
 					}
-					if (this.summonViaCircle) {
-						EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
+					if(summonViaCircle) {
+						EntitySummoningCircle circle = new EntitySummoningCircle(entity.world, summon, 1.1F, texture, (ISummoner) this.entity);
 						circle.setSummon(summon);
-						circle.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.1 + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
-
-						this.entity.world.spawnEntity(circle);
-						this.summoner.addSummonedEntityToList(circle);
-						this.activeCircles.add(circle);
+						circle.setPosition(p.getX() + positionOffsetForSummons.x, p.getY() +0.1 + positionOffsetForSummons.y, p.getZ() + positionOffsetForSummons.z);
+						
+						entity.world.spawnEntity(circle);
+						summoner.addSummonedEntityToList(circle);
+						activeCircles.add(circle);
 					} else {
-						Entity summoned = EntityList.createEntityByIDFromName(summon, this.entity.world);
-
+						Entity summoned = EntityList.createEntityByIDFromName(summon, entity.world);
+						
 						summoned.setUniqueId(MathHelper.getRandomUUID());
-						summoned.setPosition(p.getX() + this.positionOffsetForSummons.x, p.getY() + 0.5D + this.positionOffsetForSummons.y, p.getZ() + this.positionOffsetForSummons.z);
-
-						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
-						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
-						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F, 1);
-						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F, 1);
-						this.entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F, 1);
-
-						this.entity.world.spawnEntity(summoned);
-						if (this.summoner != null && !this.summoner.getSummoner().isDead) {
-							this.summoner.setSummonedEntityFaction(summoned);
-							this.summoner.addSummonedEntityToList(summoned);
+						summoned.setPosition(p.getX() + positionOffsetForSummons.x, p.getY() + 0.5D + positionOffsetForSummons.y, p.getZ() + positionOffsetForSummons.z);
+						
+						entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0F, 0.5F, 0F, 2);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, 0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), 0.5F, 0.0F, -0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, 0.5F, 1);
+		        		entity.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, p.getX(), p.getY() + 0.02, p.getZ(), -0.5F, 0.0F, -0.5F, 1);
+						
+						entity.world.spawnEntity(summoned);
+						if(summoner != null && !summoner.getSummoner().isDead) {
+							summoner.setSummonedEntityFaction(summoned);
+							summoner.addSummonedEntityToList(summoned);
 						}
-
-						this.entity.world.spawnEntity(summoned);
-						this.summoner.addSummonedEntityToList(summoned);
-						this.activeCircles.add(summoned);
+						
+						entity.world.spawnEntity(summoned);
+						summoner.addSummonedEntityToList(summoned);
+						activeCircles.add(summoned);
 					}
 				}
 			}
@@ -178,7 +180,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	protected ESpellType getSpellType() {
 		return ESpellType.SUMMON_MINIONS;
 	}
-
+	
 	@Override
 	public void resetTask() {
 		super.resetTask();

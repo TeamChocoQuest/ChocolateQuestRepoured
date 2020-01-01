@@ -7,13 +7,16 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileEarthQuake extends Render<ProjectileEarthQuake> {
-	public RenderProjectileEarthQuake(RenderManager renderManager) {
+public class RenderProjectileEarthQuake extends Render<ProjectileEarthQuake>
+{
+	public RenderProjectileEarthQuake(RenderManager renderManager) 
+	{
 		super(renderManager);
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileEarthQuake entity) {
+	protected ResourceLocation getEntityTexture(ProjectileEarthQuake entity) 
+	{
 		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 }

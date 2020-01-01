@@ -19,10 +19,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemStaff extends Item {
 
 	public ItemStaff() {
-		this.setMaxStackSize(1);
+		setMaxStackSize(1);
 	}
 
-	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		target.knockBack(attacker, 1.0F, attacker.posX - target.posX, attacker.posZ - target.posZ);
 		return false;

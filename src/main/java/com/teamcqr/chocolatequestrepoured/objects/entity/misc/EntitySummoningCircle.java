@@ -33,9 +33,12 @@ public class EntitySummoningCircle extends EntityLivingBase {
 	protected Vec3d velForSummon = null;
 	protected final int BORDER_WHEN_TO_SPAWN_IN_TICKS = 60;
 
-	protected static final DataParameter<Boolean> IS_SPAWNING_PARTICLES = EntityDataManager.<Boolean>createKey(EntitySummoningCircle.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Float> ANIMATION_PROGRESS = EntityDataManager.<Float>createKey(EntitySummoningCircle.class, DataSerializers.FLOAT);
-	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(EntitySummoningCircle.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> IS_SPAWNING_PARTICLES = EntityDataManager
+			.<Boolean>createKey(EntitySummoningCircle.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Float> ANIMATION_PROGRESS = EntityDataManager
+			.<Float>createKey(EntitySummoningCircle.class, DataSerializers.FLOAT);
+	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager
+			.<Integer>createKey(EntitySummoningCircle.class, DataSerializers.VARINT);
 
 	public enum ECircleTexture {
 		ZOMBIE(0), SKELETON(1), FLYING_SKULL(2), FLYING_SWORD(3), METEOR(4),;
@@ -61,17 +64,18 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		this(worldIn, new ResourceLocation("minecraft", "zombie"), 1F, ECircleTexture.SKELETON, null);
 	}
 
-	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture textre, ISummoner summoner) {
+	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier,
+			ECircleTexture textre, ISummoner summoner) {
 		super(worldIn);
-		this.setSize(2.0F, 0.005F);
-		// System.out.println("Mob: " + entityToSpawn);
+		setSize(2.0F, 0.005F);
+		//System.out.println("Mob: " + entityToSpawn);
 		this.entityToSpawn = entityToSpawn;
 		this.timeMultiplierForSummon = timeMultiplier;
 		this.texture = textre;
 		this.summoner = summoner;
 		this.noClip = true;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
-		this.setHealth(1F);
+		setHealth(1F);
 		this.setEntityInvulnerable(true);
 	}
 
@@ -80,35 +84,37 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		super.onUpdate();
 
 		// Summon entity
-		if (this.ticksExisted >= this.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon && !this.getEntityWorld().isRemote && this.world != null && this.entityToSpawn != null) {
+		if (this.ticksExisted >= BORDER_WHEN_TO_SPAWN_IN_TICKS * timeMultiplierForSummon && !getEntityWorld().isRemote
+				&& world != null && entityToSpawn != null) {
 			boolean flag = true;
 			try {
-				// System.out.println("Summoning: " + entityToSpawn.toString());
-				Entity summon = EntityList.createEntityByIDFromName(this.entityToSpawn, this.world);
+				//System.out.println("Summoning: " + entityToSpawn.toString());
+				Entity summon = EntityList.createEntityByIDFromName(entityToSpawn, world);
 				summon.setUniqueId(MathHelper.getRandomUUID());
-				summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
-
-				if (this.velForSummon != null) {
-					summon.setVelocity(this.velForSummon.x, this.velForSummon.y, this.velForSummon.z);
+				summon.setPosition(posX, posY + 0.5D, posZ);
+				
+				if(this.velForSummon != null) {
+					summon.setVelocity(velForSummon.x, velForSummon.y, velForSummon.z);
 				}
 
-				this.world.spawnEntity(summon);
-				if (this.summoner != null && !this.summoner.getSummoner().isDead) {
-					// summoner.addSummonedMinion(summon);
-					this.summoner.setSummonedEntityFaction(summon);
-					this.summoner.addSummonedEntityToList(summon);
+				world.spawnEntity(summon);
+				if(summoner != null && !summoner.getSummoner().isDead) {
+					//summoner.addSummonedMinion(summon);
+					summoner.setSummonedEntityFaction(summon);
+					summoner.addSummonedEntityToList(summon);
 				}
-			} catch (NullPointerException ex) {
+			} catch(NullPointerException ex) {
 				flag = false;
 			}
-			if (flag) {
+			if(flag) {
 				this.setDead();
 			}
-		} else if (this.ticksExisted >= (this.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon) * 0.8 && !this.isSpawningParticles()) {
+		} else if (this.ticksExisted >= (BORDER_WHEN_TO_SPAWN_IN_TICKS * timeMultiplierForSummon) * 0.8
+				&& !isSpawningParticles()) {
 			this.dataManager.set(IS_SPAWNING_PARTICLES, true);
 		}
 	}
-
+	
 	public void setVelocityForSummon(Vec3d v) {
 		this.velForSummon = v;
 	}
@@ -187,9 +193,9 @@ public class EntitySummoningCircle extends EntityLivingBase {
 		compound.setFloat("cqrdata.animationProgress", this.dataManager.get(ANIMATION_PROGRESS));
 		compound.setFloat("cqrdata.timeMultiplier", this.timeMultiplierForSummon);
 		compound.setInteger("cqrdata.textureID", this.dataManager.get(TEXTURE_INDEX));
-		compound.setString("cqrdata.entityToSpawn.Domain", this.entityToSpawn.getResourceDomain());
-		compound.setString("cqrdata.entityToSpawn.Path", this.entityToSpawn.getResourcePath());
-		// System.out.println("RP: " + entityToSpawn.getResourcePath());
+		compound.setString("cqrdata.entityToSpawn.Domain",entityToSpawn.getResourceDomain());
+		compound.setString("cqrdata.entityToSpawn.Path", entityToSpawn.getResourcePath());
+		//System.out.println("RP: " + entityToSpawn.getResourcePath());
 	}
 
 	@Override

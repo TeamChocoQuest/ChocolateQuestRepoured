@@ -29,20 +29,21 @@ public class EntityCQRNPC extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.INQUISITION;
 	}
-
+	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_NPC.getLootTable();
 	}
-
+	
 	@Override
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;
 	}
+	
 
 }

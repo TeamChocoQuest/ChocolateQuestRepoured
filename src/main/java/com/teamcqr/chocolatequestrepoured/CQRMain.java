@@ -109,15 +109,23 @@ public class CQRMain {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
-	// Tab that has some dummy presets
-	/*
-	 * public static CreativeTabs CQRDummyPresetTab = new CreativeTabs("ChocolateQuestRepouredDummyPresets") {
-	 * 
-	 * @Override public ItemStack getTabIconItem() { return new ItemStack(ModItems.SOUL_BOTTLE); }
-	 * 
-	 * public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> items) { items.addAll(PresetTabItems.getLeatherPresets()); items.addAll(PresetTabItems.getGoldPresets());
-	 * items.addAll(PresetTabItems.getChainmailPresets()); items.addAll(PresetTabItems.getIronPresets()); items.addAll(PresetTabItems.getDiamondPresets()); }; };
-	 */
+	//Tab that has some dummy presets
+	/*public static CreativeTabs CQRDummyPresetTab = new CreativeTabs("ChocolateQuestRepouredDummyPresets") {
+		
+		@Override
+		public ItemStack getTabIconItem() {
+			return new ItemStack(ModItems.SOUL_BOTTLE);
+		}
+		
+		public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> items) {
+			items.addAll(PresetTabItems.getLeatherPresets());
+			items.addAll(PresetTabItems.getGoldPresets());
+			items.addAll(PresetTabItems.getChainmailPresets());
+			items.addAll(PresetTabItems.getIronPresets());
+			items.addAll(PresetTabItems.getDiamondPresets());
+		};
+	};*/
+	
 
 	@Instance
 	public static CQRMain INSTANCE;

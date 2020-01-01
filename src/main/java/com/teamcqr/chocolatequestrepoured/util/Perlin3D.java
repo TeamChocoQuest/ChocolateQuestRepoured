@@ -11,14 +11,16 @@ public class Perlin3D {
 
 	public Perlin3D(long seed, int octave, Random random) {
 		this.seed = seed;
-		this.frequency = octave;
-		this.rand = random;// new Random();
+		frequency = octave;
+		rand = random;//new Random();
 	}
 
 	public double getNoiseAt(int x, int y, int z) {
 		int ymin = (int) Math.floor((double) y / (double) this.frequency);
 		int ymax = ymin + 1;
-		return (double) this.cosineInterpolate((float) this.getNoiseLevelAtPosition(x, ymin, z), (float) this.getNoiseLevelAtPosition(x, ymax, z), ((float) y - (float) ymin * (float) this.frequency) / (float) this.frequency);
+		return (double) this.cosineInterpolate((float) this.getNoiseLevelAtPosition(x, ymin, z),
+				(float) this.getNoiseLevelAtPosition(x, ymax, z),
+				((float) y - (float) ymin * (float) this.frequency) / (float) this.frequency);
 	}
 
 	private double getNoiseLevelAtPosition(int x, int y, int z) {
@@ -26,13 +28,18 @@ public class Perlin3D {
 		int xmax = xmin + 1;
 		int zmin = (int) Math.floor((double) z / (double) this.frequency);
 		int zmax = zmin + 1;
-		return (double) this.cosineInterpolate(this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmin), (float) this.getRandomAtPosition(xmax, y, zmin), (float) (x - xmin * this.frequency) / (float) this.frequency),
-				this.cosineInterpolate((float) this.getRandomAtPosition(xmin, y, zmax), (float) this.getRandomAtPosition(xmax, y, zmax), (float) (x - xmin * this.frequency) / (float) this.frequency),
+		return (double)cosineInterpolate(
+				cosineInterpolate((float) getRandomAtPosition(xmin, y, zmin),
+						(float) getRandomAtPosition(xmax, y, zmin), 
+						(float) (x - xmin * frequency) / (float)frequency),
+				cosineInterpolate((float) getRandomAtPosition(xmin, y, zmax),
+						(float) getRandomAtPosition(xmax, y, zmax), 
+						(float) (x - xmin * frequency) / (float) frequency),
 				((float) z - (float) zmin * (float) this.frequency) / (float) this.frequency);
 	}
 
 	private float cosineInterpolate(float a, float b, float x) {
-		float f = (float) ((1.0D - Math.cos((double) x * Math.PI)) * 0.5D);
+		float f = (float) ((1.0D - Math.cos((double)x * Math.PI)) * 0.5D);
 		return a * (1.0F - f) + b * f;
 	}
 
@@ -42,13 +49,13 @@ public class Perlin3D {
 	}
 
 	private double getRandomAtPosition(int x, int y, int z) {
-		Double seedD = new Double((10000.0D * (Math.sin(x) + Math.cos(z) + Math.cos(y) + Math.tan((double) this.seed))));
-		// System.out.println("Double value: " + seedD);
-		// System.out.println("double value: " + seedD.doubleValue());
-		this.rand.setSeed(seedD.longValue());
-		// System.out.println("long value: " + seedD.longValue());
-		// System.out.println("long value with cast: " + ((long) seedD.doubleValue()));
-		return this.rand.nextDouble();
+		Double seedD = new Double((10000.0D * (Math.sin(x) + Math.cos(z) + Math.cos(y) + Math.tan((double)this.seed))));
+		//System.out.println("Double value: " + seedD);
+		//System.out.println("double value: " + seedD.doubleValue());
+		rand.setSeed(seedD.longValue());
+		//System.out.println("long value: " + seedD.longValue());
+		//System.out.println("long value with cast: " + ((long) seedD.doubleValue()));
+		return rand.nextDouble();
 	}
 
 }

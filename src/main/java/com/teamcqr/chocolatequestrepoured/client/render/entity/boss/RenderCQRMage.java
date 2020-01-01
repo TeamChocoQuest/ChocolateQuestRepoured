@@ -16,11 +16,11 @@ import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
-
+	
 	public static final ResourceLocation TEXTURES_HIDDEN = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages_black.png"));
 	public static final ResourceLocation TEXTURES_REVEALED = new ResourceLocation((Reference.MODID + ":textures/entity/boss/mages.png"));
 	public static final ResourceLocation TEXTURES_ARMOR = new ResourceLocation((Reference.MODID + ":textures/entity/magic_armor/mages.png"));
-
+	
 	private static ModelBiped MODEL_IDENTITY_HIDDEN;
 	private ModelBiped MODEL_IDENTITY;
 
@@ -28,10 +28,10 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
 		RenderCQRMage.MODEL_IDENTITY_HIDDEN = new ModelMageHidden(0F);
 		this.MODEL_IDENTITY = model;
-
+		
 		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
 		for (LayerRenderer<?> layer : this.layerRenderers) {
-			if (layer instanceof LayerBipedArmor /* || layer instanceof LayerHeldItem */) {
+			if (layer instanceof LayerBipedArmor /*|| layer instanceof LayerHeldItem*/) {
 				toRemove.add(layer);
 			}
 		}
@@ -40,20 +40,21 @@ public class RenderCQRMage extends RenderCQREntity<AbstractEntityCQRMageBase> {
 		}
 		this.addLayer(new LayerMagicalArmor(this, TEXTURES_ARMOR, model));
 	}
-
+	
 	@Override
-	public void doRender(AbstractEntityCQRMageBase entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if (entity.isIdentityHidden()) {
+	public void doRender(AbstractEntityCQRMageBase entity, double x, double y, double z, float entityYaw,
+			float partialTicks) {
+		if(entity.isIdentityHidden()) {
 			this.mainModel = MODEL_IDENTITY_HIDDEN;
 		} else {
-			this.mainModel = this.MODEL_IDENTITY;
+			this.mainModel = MODEL_IDENTITY;
 		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
-
+	
 	@Override
 	protected ResourceLocation getEntityTexture(AbstractEntityCQRMageBase entity) {
-		if (entity.isIdentityHidden()) {
+		if(entity.isIdentityHidden()) {
 			return TEXTURES_HIDDEN;
 		}
 		return TEXTURES_REVEALED;

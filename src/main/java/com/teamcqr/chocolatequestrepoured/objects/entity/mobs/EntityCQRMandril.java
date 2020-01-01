@@ -22,9 +22,9 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		Item[] swords = new Item[] { Items.STONE_SWORD, Items.IRON_SWORD, Items.GOLDEN_SWORD, ModItems.DAGGER_MONKING };
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(swords[this.getRNG().nextInt(swords.length)], 1));
-
-		if (this.getRNG().nextBoolean()) {
+		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(swords[getRNG().nextInt(swords.length)], 1));
+		
+		if(getRNG().nextBoolean()) {
 			this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.CHAINMAIL_CHESTPLATE, 1));
 			this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.CHAINMAIL_HELMET, 1));
 		}
@@ -44,12 +44,12 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.BEASTS;
 	}
-
+	
 	@Override
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;

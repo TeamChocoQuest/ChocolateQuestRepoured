@@ -11,7 +11,7 @@ public enum EntityEquipmentExtraSlot {
 	}
 
 	public int getIndex() {
-		return this.index;
+		return index;
 	}
 
 }

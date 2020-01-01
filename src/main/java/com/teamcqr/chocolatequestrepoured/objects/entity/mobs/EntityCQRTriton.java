@@ -29,22 +29,21 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.TRITONS;
 	}
-
+	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_TRITON.getLootTable();
 	}
-
+	
 	@Override
 	public boolean isSitting() {
 		return false;
 	}
-
 	@Override
 	public int getTextureCount() {
 		return 2;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return false;

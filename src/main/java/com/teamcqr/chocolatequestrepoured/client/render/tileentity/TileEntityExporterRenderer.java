@@ -15,7 +15,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEntityExporter> {
 
 	@Override
-	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityExporter te, double x, double y, double z, float partialTicks, int destroyStage,
+			float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 
 		BlockPos pos1 = te.getRenderMinPos();
@@ -34,7 +35,9 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		GlStateManager.disableLighting();
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
 		this.setLightmapDisabled(true);
 
 		this.renderBox(tessellator, bufferbuilder, x1, y1, z1, x2, y2, z2);
@@ -49,7 +52,8 @@ public class TileEntityExporterRenderer extends TileEntitySpecialRenderer<TileEn
 		// GlStateManager.disableBlend();
 	}
 
-	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2, double y2, double z2) {
+	private void renderBox(Tessellator tessellator, BufferBuilder buffer, double x1, double y1, double z1, double x2,
+			double y2, double z2) {
 		int cl1 = 255;
 		int cl2 = 223;
 		int cl3 = 127;

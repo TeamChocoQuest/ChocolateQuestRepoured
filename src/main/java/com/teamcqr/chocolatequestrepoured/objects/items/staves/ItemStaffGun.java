@@ -28,22 +28,23 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffGun extends Item implements IRangedWeapon {
+public class ItemStaffGun extends Item implements IRangedWeapon{
 
 	public ItemStaffGun() {
-		this.setMaxDamage(2048);
-		this.setMaxStackSize(1);
+		setMaxDamage(2048);
+		setMaxStackSize(1);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		this.shootStaff(worldIn, playerIn, stack, handIn);
+		shootStaff(worldIn, playerIn, stack, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void shootStaff(World worldIn, EntityPlayer player, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
+				4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 
 		if (!worldIn.isRemote) {
 			ProjectileCannonBall ball = new ProjectileCannonBall(worldIn, player);
@@ -75,7 +76,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 			worldIn.spawnEntity(ball);
 		}
 	}
-
+	
 	@Override
 	public SoundEvent getShootSound() {
 		return ModSounds.GUN_SHOOT;
