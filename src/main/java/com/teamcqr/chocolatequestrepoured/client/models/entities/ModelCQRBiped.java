@@ -2,11 +2,14 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 
@@ -93,11 +96,24 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			/*if (cqrEnt.getArmPose().equals(ECQREntityArmPoses.SPELLCASTING)) {
-				renderSpellAnimation(entityIn, ageInTicks);
-			}*/
 			if(cqrEnt.isSpellcasting()) {
 				renderSpellAnimation(entityIn, ageInTicks);
+			} else {
+				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
+				if(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
+					if(flagSide) {
+						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
+					} else {
+						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
+					}
+				}
+				if(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+					if(flagSide) {
+						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
+					} else {
+						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
+					}
+				}
 			}
 			this.isRiding = cqrEnt.isSitting() || cqrEnt.isRiding();
 		}

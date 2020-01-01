@@ -153,34 +153,20 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			}
 
-			boolean flagSide = false;
 			if (entity.getPrimaryHand() == EnumHandSide.LEFT) {
 				ArmPose tmp = armPoseMain;
 				armPoseMain = armPoseOff;
 				armPoseOff = tmp;
-				flagSide = true;
 				boolean tmp2 = dontRenderMainItem;
 				dontRenderMainItem = dontRenderOffItem;
 				dontRenderOffItem = tmp2;
 			}
 			if(!flagMain) {
 				model.rightArmPose = armPoseMain;
-			} else {
-				if(flagSide) {
-					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
-				} else {
-					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
-				}
-			}
+			} 
 			if(!flagOff) {
 				model.leftArmPose = armPoseOff;
-			} else {
-				if(flagSide) {
-					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
-				} else {
-					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
-				}
-			}
+			} 
 			if (dontRenderMainItem) {
 				model.rightArmPose = ArmPose.EMPTY;
 			}
