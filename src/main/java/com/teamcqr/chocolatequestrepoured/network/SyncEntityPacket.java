@@ -18,7 +18,8 @@ public class SyncEntityPacket implements IMessage {
 
 	}
 
-	public SyncEntityPacket(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand) {
+	public SyncEntityPacket(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest,
+			int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand) {
 		this.entityId = entityId;
 		this.healthScaling = healthScaling;
 		this.dropChanceHelm = dropChanceHelm;
@@ -54,35 +55,35 @@ public class SyncEntityPacket implements IMessage {
 	}
 
 	public int getEntityId() {
-		return this.entityId;
+		return entityId;
 	}
 
 	public int getHealthScaling() {
-		return this.healthScaling;
+		return healthScaling;
 	}
 
 	public int getDropChanceHelm() {
-		return this.dropChanceHelm;
+		return dropChanceHelm;
 	}
 
 	public int getDropChanceChest() {
-		return this.dropChanceChest;
+		return dropChanceChest;
 	}
 
 	public int getDropChanceLegs() {
-		return this.dropChanceLegs;
+		return dropChanceLegs;
 	}
 
 	public int getDropChanceFeet() {
-		return this.dropChanceFeet;
+		return dropChanceFeet;
 	}
 
 	public int getDropChanceMainhand() {
-		return this.dropChanceMainhand;
+		return dropChanceMainhand;
 	}
 
 	public int getDropChanceOffhand() {
-		return this.dropChanceOffhand;
+		return dropChanceOffhand;
 	}
 
 }

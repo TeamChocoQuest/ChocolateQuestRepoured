@@ -19,7 +19,8 @@ public class ItemSwordTurtle extends ItemSword {
 	}
 
 	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot, ItemStack stack) {
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot equipmentSlot,
+			ItemStack stack) {
 		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(equipmentSlot, stack);
 
 		if (equipmentSlot == EntityEquipmentSlot.MAINHAND) {

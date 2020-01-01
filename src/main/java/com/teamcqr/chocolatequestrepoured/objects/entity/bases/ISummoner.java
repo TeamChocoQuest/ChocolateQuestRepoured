@@ -9,23 +9,23 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
 public interface ISummoner {
-
+	
 	public CQRFaction getSummonerFaction();
-
+	
 	public List<Entity> getSummonedEntities();
-
+	
 	public EntityLivingBase getSummoner();
-
+	
 	default void setSummonedEntityFaction(Entity summoned) {
-		if (summoned instanceof AbstractEntityCQR) {
-			((AbstractEntityCQR) summoned).setLeader(this.getSummoner());
-			((AbstractEntityCQR) summoned).setFaction(this.getSummonerFaction().getName());
+		if(summoned instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR)summoned).setLeader(getSummoner());
+			((AbstractEntityCQR)summoned).setFaction(getSummonerFaction().getName());
 		}
-		if (summoned instanceof EntityFlyingSkullMinion) {
-			((EntityFlyingSkullMinion) summoned).setSummoner(this.getSummoner());
+		if(summoned instanceof EntityFlyingSkullMinion) {
+			((EntityFlyingSkullMinion)summoned).setSummoner(getSummoner());
 		}
 	}
-
+	
 	public void addSummonedEntityToList(Entity summoned);
 
 }

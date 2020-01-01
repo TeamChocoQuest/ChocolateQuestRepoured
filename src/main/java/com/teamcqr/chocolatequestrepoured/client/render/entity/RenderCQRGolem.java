@@ -12,20 +12,20 @@ import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public class RenderCQRGolem extends RenderCQREntity<EntityCQRGolem> {
-
+	
 	public RenderCQRGolem(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCQRGolem(0F), 0.5F, "entity_mob_cqrgolemsmall", 1.0D, 1.0D);
-
+		
 		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
 		for (LayerRenderer<?> layer : this.layerRenderers) {
-			if (layer instanceof LayerBipedArmor) {
+			if (layer instanceof LayerBipedArmor ) {
 				toRemove.add(layer);
 			}
 		}
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
-
+		
 		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {

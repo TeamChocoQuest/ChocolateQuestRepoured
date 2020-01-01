@@ -29,61 +29,61 @@ import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
-
+	
 	protected List<Entity> summonedMinions = new ArrayList<>();
 
 	public EntityCQRBoarmage(World world) {
 		this(world, 1);
 	}
-
+	
 	public EntityCQRBoarmage(World worldIn, int size) {
 		super(worldIn, size);
-		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(true);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.isImmuneToFire = true;
-
-		this.setSize(0.6F, 1.8F);
+		bossInfoServer.setColor(Color.RED);
+		bossInfoServer.setCreateFog(true);
+		bossInfoServer.setOverlay(Overlay.PROGRESS);
+		
+		isImmuneToFire = true;
+		
+		setSize(0.6F, 1.8F);
 	}
-
+	
 	@Override
 	public boolean isImmuneToExplosions() {
 		return true;
 	}
-
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
-		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.isDead) {
+		for(Entity ent : summonedMinions) {
+			if(ent == null  || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for (Entity e : tmp) {
+		for(Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
 	}
-
+	
 	@Override
 	public void onDeath(DamageSource cause) {
-		// Kill minions
-		for (Entity e : this.summonedMinions) {
-			if (e != null && !e.isDead) {
-				if (e instanceof EntityLivingBase) {
-					((EntityLivingBase) e).onDeath(cause);
+		//Kill minions
+		for(Entity e : summonedMinions) {
+			if(e != null && !e.isDead) {
+				if(e instanceof EntityLivingBase) {
+					((EntityLivingBase)e).onDeath(cause);
 				}
-				if (e != null) {
+				if(e != null) {
 					e.setDead();
 				}
 			}
 		}
-		this.summonedMinions.clear();
-
+		summonedMinions.clear();
+		
 		super.onDeath(cause);
 	}
-
+	
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -132,7 +132,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		return this.summonedMinions;
+		return summonedMinions;
 	}
 
 	@Override

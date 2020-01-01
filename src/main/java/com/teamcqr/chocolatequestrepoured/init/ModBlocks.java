@@ -157,7 +157,7 @@ public class ModBlocks {
 
 	// Protected region
 	public static final BlockForceFieldNexus FORCE_FIELD_NEXUS = Null();
-
+	
 	// Technical
 	public static final BlockPhylactery PHYLACTERY = Null();
 
@@ -169,63 +169,114 @@ public class ModBlocks {
 
 		@SubscribeEvent
 		public static void registerBlocks(RegistryEvent.Register<Block> event) {
-			final Block[] blocks = { setBlockName(new BlockDungeonBrick(), "andesite_carved"), setBlockName(new BlockPillarDungeonBrick(), "andesite_pillar"), setBlockName(new BlockDungeonBrick(), "andesite_cube"),
-					setBlockName(new BlockDungeonBrick(), "andesite_scale"), setBlockName(new BlockDungeonBrick(), "andesite_square"), setBlockName(new BlockDungeonBrick(), "andesite_small"),
+			final Block[] blocks = {
+					setBlockName(new BlockDungeonBrick(), "andesite_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "andesite_pillar"),
+					setBlockName(new BlockDungeonBrick(), "andesite_cube"),
+					setBlockName(new BlockDungeonBrick(), "andesite_scale"),
+					setBlockName(new BlockDungeonBrick(), "andesite_square"),
+					setBlockName(new BlockDungeonBrick(), "andesite_small"),
 					setBlockName(new BlockDungeonBrick(), "andesite_large"),
 
-					setBlockName(new BlockDungeonBrick(), "diorite_carved"), setBlockName(new BlockPillarDungeonBrick(), "diorite_pillar"), setBlockName(new BlockDungeonBrick(), "diorite_cube"),
-					setBlockName(new BlockDungeonBrick(), "diorite_scale"), setBlockName(new BlockDungeonBrick(), "diorite_square"), setBlockName(new BlockDungeonBrick(), "diorite_small"),
+					setBlockName(new BlockDungeonBrick(), "diorite_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "diorite_pillar"),
+					setBlockName(new BlockDungeonBrick(), "diorite_cube"),
+					setBlockName(new BlockDungeonBrick(), "diorite_scale"),
+					setBlockName(new BlockDungeonBrick(), "diorite_square"),
+					setBlockName(new BlockDungeonBrick(), "diorite_small"),
 					setBlockName(new BlockDungeonBrick(), "diorite_large"),
 
-					setBlockName(new BlockDungeonBrick(), "granite_carved"), setBlockName(new BlockPillarDungeonBrick(), "granite_pillar"), setBlockName(new BlockDungeonBrick(), "granite_cube"),
-					setBlockName(new BlockDungeonBrick(), "granite_scale"), setBlockName(new BlockDungeonBrick(), "granite_square"), setBlockName(new BlockDungeonBrick(), "granite_small"),
+					setBlockName(new BlockDungeonBrick(), "granite_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "granite_pillar"),
+					setBlockName(new BlockDungeonBrick(), "granite_cube"),
+					setBlockName(new BlockDungeonBrick(), "granite_scale"),
+					setBlockName(new BlockDungeonBrick(), "granite_square"),
+					setBlockName(new BlockDungeonBrick(), "granite_small"),
 					setBlockName(new BlockDungeonBrick(), "granite_large"),
 
-					setBlockName(new BlockDungeonBrick(), "prismarine_carved"), setBlockName(new BlockPillarDungeonBrick(), "prismarine_pillar"), setBlockName(new BlockDungeonBrick(), "prismarine_cube"),
-					setBlockName(new BlockDungeonBrick(), "prismarine_square"), setBlockName(new BlockDungeonBrick(), "prismarine_small"), setBlockName(new BlockDungeonBrick(), "prismarine_large"),
+					setBlockName(new BlockDungeonBrick(), "prismarine_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "prismarine_pillar"),
+					setBlockName(new BlockDungeonBrick(), "prismarine_cube"),
+					setBlockName(new BlockDungeonBrick(), "prismarine_square"),
+					setBlockName(new BlockDungeonBrick(), "prismarine_small"),
+					setBlockName(new BlockDungeonBrick(), "prismarine_large"),
 
-					setBlockName(new BlockDungeonBrick(), "endstone_carved"), setBlockName(new BlockPillarDungeonBrick(), "endstone_pillar"), setBlockName(new BlockDungeonBrick(), "endstone_cube"),
-					setBlockName(new BlockDungeonBrick(), "endstone_scale"), setBlockName(new BlockDungeonBrick(), "endstone_square"), setBlockName(new BlockDungeonBrick(), "endstone_small"),
+					setBlockName(new BlockDungeonBrick(), "endstone_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "endstone_pillar"),
+					setBlockName(new BlockDungeonBrick(), "endstone_cube"),
+					setBlockName(new BlockDungeonBrick(), "endstone_scale"),
+					setBlockName(new BlockDungeonBrick(), "endstone_square"),
+					setBlockName(new BlockDungeonBrick(), "endstone_small"),
 
-					setBlockName(new BlockDungeonBrick(), "purpur_carved"), setBlockName(new BlockDungeonBrick(), "purpur_cube"), setBlockName(new BlockDungeonBrick(), "purpur_scale"), setBlockName(new BlockDungeonBrick(), "purpur_small"),
+					setBlockName(new BlockDungeonBrick(), "purpur_carved"),
+					setBlockName(new BlockDungeonBrick(), "purpur_cube"),
+					setBlockName(new BlockDungeonBrick(), "purpur_scale"),
+					setBlockName(new BlockDungeonBrick(), "purpur_small"),
 					setBlockName(new BlockDungeonBrick(), "purpur_large"),
 
-					setBlockName(new BlockDungeonBrick(), "red_netherbrick_carved"), setBlockName(new BlockPillarDungeonBrick(), "red_netherbrick_pillar"), setBlockName(new BlockDungeonBrick(), "red_netherbrick_cube"),
-					setBlockName(new BlockDungeonBrick(), "red_netherbrick_scale"), setBlockName(new BlockDungeonBrick(), "red_netherbrick_square"), setBlockName(new BlockDungeonBrick(), "red_netherbrick_large"),
+					setBlockName(new BlockDungeonBrick(), "red_netherbrick_carved"),
+					setBlockName(new BlockPillarDungeonBrick(), "red_netherbrick_pillar"),
+					setBlockName(new BlockDungeonBrick(), "red_netherbrick_cube"),
+					setBlockName(new BlockDungeonBrick(), "red_netherbrick_scale"),
+					setBlockName(new BlockDungeonBrick(), "red_netherbrick_square"),
+					setBlockName(new BlockDungeonBrick(), "red_netherbrick_large"),
 
-					setBlockName(new BlockPillarDungeonBrick(), "stone_pillar"), setBlockName(new BlockDungeonBrick(), "stone_cube"), setBlockName(new BlockDungeonBrick(), "stone_scale"),
-					setBlockName(new BlockDungeonBrick(), "stone_square"), setBlockName(new BlockDungeonBrick(), "stone_small"),
+					setBlockName(new BlockPillarDungeonBrick(), "stone_pillar"),
+					setBlockName(new BlockDungeonBrick(), "stone_cube"),
+					setBlockName(new BlockDungeonBrick(), "stone_scale"),
+					setBlockName(new BlockDungeonBrick(), "stone_square"),
+					setBlockName(new BlockDungeonBrick(), "stone_small"),
 
-					setBlockName(new BlockTable(), "table_oak"), setBlockName(new BlockTable(), "table_spruce"), setBlockName(new BlockTable(), "table_birch"), setBlockName(new BlockTable(), "table_jungle"),
-					setBlockName(new BlockTable(), "table_acacia"), setBlockName(new BlockTable(), "table_dark"),
+					setBlockName(new BlockTable(), "table_oak"),
+					setBlockName(new BlockTable(), "table_spruce"),
+					setBlockName(new BlockTable(), "table_birch"),
+					setBlockName(new BlockTable(), "table_jungle"),
+					setBlockName(new BlockTable(), "table_acacia"),
+					setBlockName(new BlockTable(), "table_dark"),
 
-					setBlockName(new BlockExporter(), "exporter"), setBlockName(new BlockUnlitTorch(), "unlit_torch"), setBlockName(new BlockNull(true), "null_block"), setBlockName(new BlockSpawner(), "spawner"),
+					setBlockName(new BlockExporter(), "exporter"), setBlockName(new BlockUnlitTorch(), "unlit_torch"),
+					setBlockName(new BlockNull(true), "null_block"), setBlockName(new BlockSpawner(), "spawner"),
 					setBlockName(new BlockBossBlock(), "boss_block"),
 
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_valuable", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_food", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_equipment", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_utility", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_valuable", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_food", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_equipment", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_utility", CQRMain.CQRExporterChestTab),
 
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_blacksmith", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_bonus", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_dungeon", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_end_city", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_igloo", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_jungle", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_blacksmith", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_bonus", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_dungeon", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_end_city", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_igloo", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_jungle", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_jungle_dispenser", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_mansion", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_mineshaft", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_nether", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_pyramid", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_mansion", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_mineshaft", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_nether", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_pyramid", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_stronghold", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_stronghold_library", CQRMain.CQRExporterChestTab),
 					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_vanilla_stronghold_storeroom", CQRMain.CQRExporterChestTab),
 
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_1", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_2", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_3", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_4", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_5", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_6", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_7", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_8", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_9", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_10", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_11", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_12", CQRMain.CQRExporterChestTab),
-					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_13", CQRMain.CQRExporterChestTab), setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_14", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_1", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_2", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_3", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_4", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_5", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_6", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_7", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_8", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_9", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_10", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_11", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_12", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_13", CQRMain.CQRExporterChestTab),
+					setBlockNameAndTab(new BlockExporterChest(), "exporter_chest_custom_14", CQRMain.CQRExporterChestTab),
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
-
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery") };
+					
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery")
+			};
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 

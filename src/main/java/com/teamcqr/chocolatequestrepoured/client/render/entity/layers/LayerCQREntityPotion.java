@@ -23,7 +23,8 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 	}
 
 	@Override
-	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks,
+			float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entity.getHealingPotions() > 0 && this.entityRenderer.getMainModel() instanceof ModelBiped) {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
 			ModelRenderer body = model.bipedBody;

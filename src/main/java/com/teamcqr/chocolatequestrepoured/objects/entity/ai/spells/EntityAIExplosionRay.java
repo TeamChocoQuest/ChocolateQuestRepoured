@@ -16,18 +16,18 @@ public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 	@Override
 	protected void castSpell() {
 		int explosionCount = 1;
-		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
-		explosionCount = new Double(v.lengthVector()).intValue() / 2;
+		Vec3d v = new Vec3d(entity.getAttackTarget().getPosition().subtract(entity.getPosition()));
+		explosionCount = new Double(v.lengthVector()).intValue() /2;
 		v = v.normalize();
-		BlockPos start = this.entity.getPosition();
+		BlockPos start = entity.getPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
-		for (int i = 1; i <= explosionCount; i++) {
-			BlockPos p = start.add(v.x * i + 4 * Math.sin((i - 1) * 2), v.y * i, v.z * i + 4 * Math.sin((i - 1) * 2));
-			positions[i - 1] = p;
+		for(int i = 1; i <= explosionCount; i++) {
+			BlockPos p = start.add(v.x * i + 4*Math.sin((i-1) *2), v.y *i, v.z *i+ 4*Math.sin((i-1) *2));
+			positions[i-1] = p;
 		}
-
-		for (BlockPos p : positions) {
-			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 0.5F, this.entity.getRNG().nextBoolean(), true);
+		
+		for(BlockPos p : positions) {
+			entity.world.newExplosion(entity, p.getX(), p.getY(), p.getZ(), 0.5F, entity.getRNG().nextBoolean(), true);
 		}
 	}
 
@@ -40,7 +40,7 @@ public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 	protected int getCastingInterval() {
 		return 160;
 	}
-
+	
 	@Override
 	protected int getCastWarmupTime() {
 		return 60;

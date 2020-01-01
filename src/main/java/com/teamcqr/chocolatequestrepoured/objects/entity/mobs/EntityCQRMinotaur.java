@@ -35,23 +35,23 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_MINOTAUR.getLootTable();
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if (source.isFireDamage()) {
+		if(source.isFireDamage()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-
+	
 	@Override
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;
 	}
-
+	
 }

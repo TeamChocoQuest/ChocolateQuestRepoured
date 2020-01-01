@@ -17,7 +17,8 @@ public class SaveStructureRequestPacket implements IMessage {
 
 	}
 
-	public SaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean hasShield, boolean partMode) {
+	public SaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name,
+			boolean hasShield, boolean partMode) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.author = authorName;
@@ -27,46 +28,46 @@ public class SaveStructureRequestPacket implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.startPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
-		this.endPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
-		this.author = ByteBufUtils.readUTF8String(buf);
-		this.structureName = ByteBufUtils.readUTF8String(buf);
-		this.usePartMode = buf.readBoolean();
+		startPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		endPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
+		author = ByteBufUtils.readUTF8String(buf);
+		structureName = ByteBufUtils.readUTF8String(buf);
+		usePartMode = buf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.startPos.getX());
-		buf.writeInt(this.startPos.getY());
-		buf.writeInt(this.startPos.getZ());
+		buf.writeInt(startPos.getX());
+		buf.writeInt(startPos.getY());
+		buf.writeInt(startPos.getZ());
 
-		buf.writeInt(this.endPos.getX());
-		buf.writeInt(this.endPos.getY());
-		buf.writeInt(this.endPos.getZ());
+		buf.writeInt(endPos.getX());
+		buf.writeInt(endPos.getY());
+		buf.writeInt(endPos.getZ());
 
-		ByteBufUtils.writeUTF8String(buf, this.author);
-		ByteBufUtils.writeUTF8String(buf, this.structureName);
-		buf.writeBoolean(this.usePartMode);
+		ByteBufUtils.writeUTF8String(buf, author);
+		ByteBufUtils.writeUTF8String(buf, structureName);
+		buf.writeBoolean(usePartMode);
 	}
 
 	public BlockPos getStartPos() {
-		return this.startPos;
+		return startPos;
 	}
 
 	public BlockPos getEndPos() {
-		return this.endPos;
+		return endPos;
 	}
 
 	public String getAuthor() {
-		return this.author;
+		return author;
 	}
 
 	public String getName() {
-		return this.structureName;
+		return structureName;
 	}
 
 	public Boolean usePartMode() {
-		return this.usePartMode;
+		return usePartMode;
 	}
 
 }

@@ -1,28 +1,36 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-public class DoorPlacement {
+import net.minecraft.util.EnumFacing;
 
-	private int offset;
-	private EnumCastleDoorType type;
+public class DoorPlacement
+{
 
-	public DoorPlacement(int offset, EnumCastleDoorType type) {
-		this.offset = offset;
-		this.type = type;
-	}
+    private int offset;
+    private EnumCastleDoorType type;
 
-	public int getOffset() {
-		return this.offset;
-	}
+    public DoorPlacement(int offset, EnumCastleDoorType type)
+    {
+        this.offset = offset;
+        this.type = type;
+    }
 
-	public EnumCastleDoorType getType() {
-		return this.type;
-	}
+    public int getOffset()
+    {
+        return offset;
+    }
 
-	public int getWidth() {
-		return this.type.getWidth();
-	}
+    public EnumCastleDoorType getType()
+    {
+        return type;
+    }
 
-	public int getHeight() {
-		return this.type.getWidth();
-	}
+    public int getWidth()
+    {
+        return type.getWidth();
+    }
+
+    public int getHeight()
+    {
+        return type.getWidth();
+    }
 }

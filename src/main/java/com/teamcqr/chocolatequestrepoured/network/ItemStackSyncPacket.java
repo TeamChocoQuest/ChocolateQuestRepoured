@@ -30,21 +30,21 @@ public class ItemStackSyncPacket implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.entityId);
-		buf.writeInt(this.slotIndex);
-		ByteBufUtils.writeItemStack(buf, this.stack);
+		buf.writeInt(entityId);
+		buf.writeInt(slotIndex);
+		ByteBufUtils.writeItemStack(buf, stack);
 	}
 
 	public int getEntityId() {
-		return this.entityId;
+		return entityId;
 	}
 
 	public int getSlotIndex() {
-		return this.slotIndex;
+		return slotIndex;
 	}
 
 	public ItemStack getStack() {
-		return this.stack;
+		return stack;
 	}
 
 }

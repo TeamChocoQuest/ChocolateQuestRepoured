@@ -10,7 +10,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
-
+	
 	protected static final int MIN_PROJECTILES = 1;
 	protected static final int MAX_PROJECTILES = 5;
 
@@ -20,21 +20,21 @@ public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected void castSpell() {
-		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
-
-		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
+		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, entity.getRNG());
+		
+		Vec3d vector = new Vec3d(entity.getAttackTarget().getPosition().subtract(entity.getPosition())).normalize();
 		vector = vector.add(vector).add(vector).add(vector);
-		double angle = 180D / (double) projectiles;
-		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
+		double angle = 180D / (double)projectiles;
+		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 		Vec3d velocities[] = new Vec3d[projectiles];
-		for (int i = 0; i < projectiles; i++) {
-			velocities[i] = VectorUtil.rotateVectorAroundY(vector, angle * i);
+		for(int i = 0; i < projectiles; i++) {
+			velocities[i] = VectorUtil.rotateVectorAroundY(vector, angle*i);
 		}
-
-		for (Vec3d v : velocities) {
-			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
+		
+		for(Vec3d v : velocities) {
+			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(entity.world, entity);
 			proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
-			this.entity.world.spawnEntity(proj);
+			entity.world.spawnEntity(proj);
 		}
 	}
 

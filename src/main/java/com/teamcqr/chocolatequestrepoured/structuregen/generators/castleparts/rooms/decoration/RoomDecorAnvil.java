@@ -6,24 +6,29 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 
-public class RoomDecorAnvil extends RoomDecorBlocks {
-	public RoomDecorAnvil() {
-		super();
-	}
+public class RoomDecorAnvil extends RoomDecorBlocks
+{
+    public RoomDecorAnvil()
+    {
+        super();
+    }
 
-	@Override
-	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.ANVIL));
-	}
+    @Override
+    protected void makeSchematic()
+    {
+        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.ANVIL));
+    }
 
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
+    @Override
+    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
+    {
+        IBlockState result = block.getDefaultState();
 
-		if (block == Blocks.ANVIL) {
-			result = result.withProperty(BlockAnvil.FACING, side.getOpposite().rotateY());
-		}
+        if (block == Blocks.ANVIL)
+        {
+            result = result.withProperty(BlockAnvil.FACING, side.getOpposite().rotateY() );
+        }
 
-		return result;
-	}
+        return result;
+    }
 }

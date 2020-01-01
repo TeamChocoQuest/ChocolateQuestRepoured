@@ -60,7 +60,7 @@ public class ItemDagger extends ItemSword {
 			EntityUtil.move2D(playerIn, playerIn.moveStrafing, playerIn.moveForward, 1.0D, playerIn.rotationYaw);
 
 			playerIn.motionY = 0.2D;
-			playerIn.getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+			playerIn.getCooldownTracker().setCooldown(stack.getItem(), cooldown);
 		}
 		return super.onItemRightClick(worldIn, playerIn, handIn);
 	}

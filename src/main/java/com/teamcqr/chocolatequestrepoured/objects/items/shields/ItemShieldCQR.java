@@ -10,19 +10,43 @@ import net.minecraft.util.text.translation.I18n;
 
 public class ItemShieldCQR extends ItemShield {
 
-	public static final String[] SHIELD_NAMES = { "bull", "carl", "dragonslayer", "fire", "goblin", "monking", "moon", "mummy", "pigman", "pirate", "pirate2", "rainbow", "reflective", "rusted", "skeleton_friends", "specter", "spider",
-			"sun", "tomb", "triton", "turtle", "walker", "warped", "zombie" };
+	public static final String[] SHIELD_NAMES = {
+			"bull",
+			"carl",
+			"dragonslayer",
+			"fire",
+			"goblin",
+			"monking",
+			"moon",
+			"mummy",
+			"pigman",
+			"pirate",
+			"pirate2",
+			"rainbow",
+			"reflective",
+			"rusted",
+			"skeleton_friends",
+			"specter",
+			"spider",
+			"sun",
+			"tomb",
+			"triton",
+			"turtle",
+			"walker",
+			"warped",
+			"zombie"
+	};
 
 	private Item repairItem;
 
 	public ItemShieldCQR(int durability, @Nullable Item repairItem) {
-		this.setMaxDamage(durability);
+		setMaxDamage(durability);
 		this.repairItem = repairItem;
 	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-		return repair.getItem() == this.repairItem;
+		return repair.getItem() == repairItem;
 	}
 
 	@Override

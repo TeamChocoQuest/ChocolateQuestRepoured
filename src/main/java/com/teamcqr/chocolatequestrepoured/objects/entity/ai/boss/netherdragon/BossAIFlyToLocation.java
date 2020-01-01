@@ -7,7 +7,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 public class BossAIFlyToLocation extends EntityAIBase {
 
 	protected EntityCQRNetherDragon dragon;
-
+	
 	public BossAIFlyToLocation(EntityCQRNetherDragon dragon) {
 		this.dragon = dragon;
 	}
@@ -16,7 +16,7 @@ public class BossAIFlyToLocation extends EntityAIBase {
 	public boolean shouldExecute() {
 		return this.dragon.getCurrentMovementState().equals(EntityCQRNetherDragon.EDragonMovementState.FLYING);
 	}
-
+	
 	@Override
 	public void updateTask() {
 		super.updateTask();

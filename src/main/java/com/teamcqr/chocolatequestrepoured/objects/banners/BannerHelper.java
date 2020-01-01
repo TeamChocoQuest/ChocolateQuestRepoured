@@ -8,21 +8,20 @@ import net.minecraft.tileentity.TileEntityBanner;
 
 public class BannerHelper {
 
-	public BannerHelper() {
-	}
-
+	public BannerHelper() {}
+	
 	public static List<ItemStack> addBannersToTabs() {
 		List<ItemStack> itemList = new ArrayList<>();
-		for (EBanners banner : EBanners.values()) {
+		for(EBanners banner : EBanners.values()) {
 			itemList.add(banner.getBanner());
 		}
 		return itemList;
 	}
-
+	
 	public static boolean isCQBanner(TileEntityBanner bannerTile) {
-		if (bannerTile != null && !bannerTile.getPatternList().isEmpty()) {
-			for (EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
-				if (bannerTile.getPatternList().contains(cqPattern.getPattern())) {
+		if(bannerTile != null && !bannerTile.getPatternList().isEmpty()) {
+			for(EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
+				if(bannerTile.getPatternList().contains(cqPattern.getPattern())) {
 					return true;
 				}
 			}

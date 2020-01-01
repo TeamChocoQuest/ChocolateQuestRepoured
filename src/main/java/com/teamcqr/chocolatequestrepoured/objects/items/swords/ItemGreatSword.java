@@ -54,18 +54,21 @@ public class ItemGreatSword extends ItemSword {
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
+		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, attackSpeed);
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id,
+			double value) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+		Optional<AttributeModifier> modifierOptional = modifiers.stream()
+				.filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value,
+					modifier.getOperation()));
 		}
 	}
 
@@ -96,16 +99,16 @@ public class ItemGreatSword extends ItemSword {
 		for (int i = 0; i < entitiesInAABB.size(); i++) {
 			EntityLiving entityInAABB = entitiesInAABB.get(i);
 
-			if (this.getMaxItemUseDuration(stack) - timeLeft <= 30) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage);
+			if (getMaxItemUseDuration(stack) - timeLeft <= 30) {
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage);
 			}
 
-			if (this.getMaxItemUseDuration(stack) - timeLeft > 30 && this.getMaxItemUseDuration(stack) - timeLeft <= 60) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage * 3);
+			if (getMaxItemUseDuration(stack) - timeLeft > 30 && getMaxItemUseDuration(stack) - timeLeft <= 60) {
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 3);
 			}
 
-			if (this.getMaxItemUseDuration(stack) - timeLeft > 60) {
-				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), this.damage * 4);
+			if (getMaxItemUseDuration(stack) - timeLeft > 60) {
+				entityInAABB.attackEntityFrom(DamageSource.causeExplosionDamage(entityLiving), damage * 4);
 			}
 		}
 
@@ -118,15 +121,17 @@ public class ItemGreatSword extends ItemSword {
 			x *= (1.0F - Math.abs(y));
 			z *= (1.0F - Math.abs(y));
 
-			if (player.onGround && this.getMaxItemUseDuration(stack) - timeLeft > 40) {
+			if (player.onGround && getMaxItemUseDuration(stack) - timeLeft > 40) {
 				player.posY += 0.1D;
 				player.motionY += 0.35D;
 			}
 
-			player.getCooldownTracker().setCooldown(stack.getItem(), this.cooldown);
+			player.getCooldownTracker().setCooldown(stack.getItem(), cooldown);
 			player.swingArm(EnumHand.MAIN_HAND);
-			worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
-			worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX + x, player.posY + y + 1.5D, player.posZ + z, 0D, 0D, 0D);
+			worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE,
+					SoundCategory.AMBIENT, 1.0F, 1.0F, false);
+			worldIn.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, player.posX + x, player.posY + y + 1.5D,
+					player.posZ + z, 0D, 0D, 0D);
 			stack.damageItem(1, player);
 		}
 	}
@@ -154,7 +159,8 @@ public class ItemGreatSword extends ItemSword {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (player.getHeldItemMainhand() == stack) {
+				if (player.getHeldItemMainhand() == stack)
+				{
 					if (!player.getHeldItemOffhand().isEmpty()) {
 						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
 							player.entityDropItem(player.getHeldItemOffhand(), 0F);

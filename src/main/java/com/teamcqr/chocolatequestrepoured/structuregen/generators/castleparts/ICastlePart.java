@@ -3,14 +3,16 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 01.06.2019 Developed by KalgogSmash: https://github.com/kalgogsmash
+ * Copyright (c) 01.06.2019 Developed by KalgogSmash:
+ * https://github.com/kalgogsmash
  */
-public interface ICastlePart {
-	void generatePart(World world);
+public interface ICastlePart
+{
+    void generatePart(World world);
 
-	boolean isTower();
+    boolean isTower();
 
-	void setAsTopFloor();
+    void setAsTopFloor();
 
-	int getStartLayer();
+    int getStartLayer();
 }

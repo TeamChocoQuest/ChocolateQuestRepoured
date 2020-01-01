@@ -29,35 +29,35 @@ public class TileEntityExporter extends TileEntity {
 	public String structureName = "NoName";
 	public boolean partModeUsing = false;
 	public boolean relativeMode = false;
-
+	
 	private BlockPos minPos = new BlockPos(0, 0, 0);
 	private BlockPos maxPos = new BlockPos(0, 0, 0);
 
 	private EntityPlayer user = null;
 
 	public NBTTagCompound getExporterData(NBTTagCompound compound) {
-		compound.setInteger("StartX", this.startX);
-		compound.setInteger("StartY", this.startY);
-		compound.setInteger("StartZ", this.startZ);
-		compound.setInteger("EndX", this.endX);
-		compound.setInteger("EndY", this.endY);
-		compound.setInteger("EndZ", this.endZ);
-		compound.setString("StructureName", this.structureName);
-		compound.setBoolean("PartMode", this.partModeUsing);
-		compound.setBoolean("RelativeMode", this.relativeMode);
+		compound.setInteger("StartX", startX);
+		compound.setInteger("StartY", startY);
+		compound.setInteger("StartZ", startZ);
+		compound.setInteger("EndX", endX);
+		compound.setInteger("EndY", endY);
+		compound.setInteger("EndZ", endZ);
+		compound.setString("StructureName", structureName);
+		compound.setBoolean("PartMode", partModeUsing);
+		compound.setBoolean("RelativeMode", relativeMode);
 		return compound;
 	}
 
 	public void setExporterData(NBTTagCompound compound) {
-		this.startX = compound.getInteger("StartX");
-		this.startY = compound.getInteger("StartY");
-		this.startZ = compound.getInteger("StartZ");
-		this.endX = compound.getInteger("EndX");
-		this.endY = compound.getInteger("EndY");
-		this.endZ = compound.getInteger("EndZ");
-		this.structureName = compound.getString("StructureName");
-		this.partModeUsing = compound.getBoolean("PartMode");
-		this.relativeMode = compound.getBoolean("RelativeMode");
+		startX = compound.getInteger("StartX");
+		startY = compound.getInteger("StartY");
+		startZ = compound.getInteger("StartZ");
+		endX = compound.getInteger("EndX");
+		endY = compound.getInteger("EndY");
+		endZ = compound.getInteger("EndZ");
+		structureName = compound.getString("StructureName");
+		partModeUsing = compound.getBoolean("PartMode");
+		relativeMode = compound.getBoolean("RelativeMode");
 
 		this.onPositionsChanged();
 	}
@@ -75,16 +75,17 @@ public class TileEntityExporter extends TileEntity {
 		this.setExporterData(compound);
 	}
 
-	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode, boolean useRelativeMode) {
-		this.startX = sX;
-		this.startY = sY;
-		this.startZ = sZ;
-		this.endX = eX;
-		this.endY = eY;
-		this.endZ = eZ;
-		this.structureName = structName;
-		this.partModeUsing = usePartMode;
-		this.relativeMode = useRelativeMode;
+	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode,
+			boolean useRelativeMode) {
+		startX = sX;
+		startY = sY;
+		startZ = sZ;
+		endX = eX;
+		endY = eY;
+		endZ = eZ;
+		structureName = structName;
+		partModeUsing = usePartMode;
+		relativeMode = useRelativeMode;
 
 		this.onPositionsChanged();
 
@@ -110,14 +111,14 @@ public class TileEntityExporter extends TileEntity {
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound data = super.getUpdateTag();
-		data.setTag("data", this.getExporterData(new NBTTagCompound()));
+		data.setTag("data", getExporterData(new NBTTagCompound()));
 		return data;
 	}
 
 	@Override
 	public void handleUpdateTag(NBTTagCompound tag) {
 		super.handleUpdateTag(tag);
-		this.setExporterData(tag.getCompoundTag("data"));
+		setExporterData(tag.getCompoundTag("data"));
 	}
 
 	public void setUser(EntityPlayer player) {
@@ -137,14 +138,17 @@ public class TileEntityExporter extends TileEntity {
 			System.out.println("Done!");
 		} else {
 			System.out.println("Sending structure save request packet...");
-			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, authorName,
+					this.structureName, true, this.partModeUsing));
 			System.out.println("Packet sent!");
 		}
 	}
 
 	public void onPositionsChanged() {
-		this.minPos = new BlockPos(Math.min(this.startX, this.endX), Math.min(this.startY, this.endY), Math.min(this.startZ, this.endZ));
-		this.maxPos = new BlockPos(Math.max(this.startX, this.endX), Math.max(this.startY, this.endY), Math.max(this.startZ, this.endZ));
+		this.minPos = new BlockPos(Math.min(this.startX, this.endX), Math.min(this.startY, this.endY),
+				Math.min(this.startZ, this.endZ));
+		this.maxPos = new BlockPos(Math.max(this.startX, this.endX), Math.max(this.startY, this.endY),
+				Math.max(this.startZ, this.endZ));
 	}
 
 	public BlockPos getMinPos() {

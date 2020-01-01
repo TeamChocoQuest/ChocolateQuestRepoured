@@ -16,9 +16,10 @@ public class RenderCQRGiantTortoisePart extends Render<EntityCQRGiantTortoisePar
 	protected ResourceLocation getEntityTexture(EntityCQRGiantTortoisePart entity) {
 		return null;
 	}
-
+	
 	@Override
-	public void doRender(EntityCQRGiantTortoisePart entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityCQRGiantTortoisePart entity, double x, double y, double z, float entityYaw,
+			float partialTicks) {
 	}
 
 }

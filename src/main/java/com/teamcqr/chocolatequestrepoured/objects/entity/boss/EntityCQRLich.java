@@ -36,49 +36,49 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
-
+	
 	public EntityCQRLich(World worldIn) {
 		this(worldIn, 1);
 	}
-
+	
 	public EntityCQRLich(World worldIn, int size) {
 		super(worldIn, size);
-
-		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(true);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.setSize(0.6F, 1.8F);
+		
+		bossInfoServer.setColor(Color.RED);
+		bossInfoServer.setCreateFog(true);
+		bossInfoServer.setOverlay(Overlay.PROGRESS);
+		
+		setSize(0.6F, 1.8F);
 	}
-
+	
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
-		for (Entity ent : this.summonedMinions) {
-			if (ent == null || ent.isDead) {
+		for(Entity ent : summonedMinions) {
+			if(ent == null  || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for (Entity e : tmp) {
+		for(Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
-		// Phylactery
-		if (this.currentPhylacteryPosition != null) {
-			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
-				this.setMagicArmorActive(true);
+		//Phylactery
+		if(currentPhylacteryPosition != null) {
+			if(world.getBlockState(currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
+				setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
-				this.setMagicArmorActive(false);
+				setMagicArmorActive(false);
 			}
 		}
 	}
-
+	
 	public void setCurrentPhylacteryBlock(BlockPos pos) {
 		this.setMagicArmorActive(true);
 		this.currentPhylacteryPosition = pos;
 	}
-
+	
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -94,22 +94,22 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 	}
-
+	
 	@Override
 	public void onDeath(DamageSource cause) {
-		// Kill minions
-		for (Entity e : this.summonedMinions) {
-			if (e != null && !e.isDead) {
-				if (e instanceof EntityLivingBase) {
-					((EntityLivingBase) e).onDeath(cause);
+		//Kill minions
+		for(Entity e : summonedMinions) {
+			if(e != null && !e.isDead) {
+				if(e instanceof EntityLivingBase) {
+					((EntityLivingBase)e).onDeath(cause);
 				}
-				if (e != null) {
+				if(e != null) {
 					e.setDead();
 				}
 			}
 		}
-		this.summonedMinions.clear();
-
+		summonedMinions.clear();
+		
 		super.onDeath(cause);
 	}
 
@@ -130,12 +130,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	public CQRFaction getSummonerFaction() {
-		return this.getFaction();
+		return getFaction();
 	}
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		return this.summonedMinions;
+		return summonedMinions;
 	}
 
 	@Override
@@ -147,24 +147,24 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
 	}
-
+	
 	@Override
 	protected void updateCooldownForMagicArmor() {
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		if (this.currentPhylacteryPosition != null) {
-			compound.setTag("currentPhylactery", NBTUtil.createPosTag(this.currentPhylacteryPosition));
+		if(currentPhylacteryPosition != null) {
+			compound.setTag("currentPhylactery", NBTUtil.createPosTag(currentPhylacteryPosition));
 		}
 	}
-
+	
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if (compound.hasKey("currentPhylactery")) {
-			this.currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
+		if(compound.hasKey("currentPhylactery")) {
+			currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
 		}
 	}
 

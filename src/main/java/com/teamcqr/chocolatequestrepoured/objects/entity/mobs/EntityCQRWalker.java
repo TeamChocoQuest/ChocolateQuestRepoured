@@ -33,31 +33,30 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 		return EDefaultFaction.WALKERS;
 	}
 
+	
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_WITHER_AMBIENT;
 	}
-
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ENDERMEN_HURT;
 	}
-
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
 	}
-
+	
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_WALKER.getLootTable();
 	}
-
+	
 	@Override
 	public int getTextureCount() {
 		return 1;
 	}
-
+	
 	@Override
 	public boolean canRide() {
 		return true;

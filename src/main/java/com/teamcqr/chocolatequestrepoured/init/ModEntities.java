@@ -87,7 +87,7 @@ public class ModEntities {
 	public static final EntityEntry TRITON = Null();
 	public static final EntityEntry WALKER = Null();
 	public static final EntityEntry ZOMBIE = Null();
-
+	
 	public static final EntityEntry GIANT_ENDERMITE = Null();
 	public static final EntityEntry GIANT_SILVERFISH = Null();
 	public static final EntityEntry GIANT_SILVERFISH1 = Null();
@@ -99,8 +99,8 @@ public class ModEntities {
 	public static final EntityEntry LICH = Null();
 	public static final EntityEntry BOAR_MAGE = Null();
 	public static final EntityEntry NECROMANCER = Null();
-
-	// Misc Entities
+	
+	//Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
 	public static final EntityEntry FLYING_SKULL = Null();
 
@@ -109,45 +109,71 @@ public class ModEntities {
 
 		@SubscribeEvent
 		public static void registerTileEntities(RegistryEvent.Register<EntityEntry> event) {
-			final EntityEntry[] entityEntries = { createEntityEntryWithoutEgg(EntitySlimePart.class, "slime_part", 64, 1, true), createEntityEntryWithoutEgg(ProjectileBullet.class, "projectile_bullet", 64, 1, true),
-					createEntityEntryWithoutEgg(ProjectileCannonBall.class, "projectile_cannon_ball", 64, 1, true), createEntityEntryWithoutEgg(ProjectileEarthQuake.class, "projectile_earth_quake", 64, 1, true),
-					createEntityEntryWithoutEgg(ProjectilePoisonSpell.class, "projectile_poison_spell", 64, 1, true), createEntityEntryWithoutEgg(ProjectileSpiderBall.class, "projectile_spider_ball", 64, 1, true),
-					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true), createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
+			final EntityEntry[] entityEntries = {
+					createEntityEntryWithoutEgg(EntitySlimePart.class, "slime_part", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileBullet.class, "projectile_bullet", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileCannonBall.class, "projectile_cannon_ball", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileEarthQuake.class, "projectile_earth_quake", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectilePoisonSpell.class, "projectile_poison_spell", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileSpiderBall.class, "projectile_spider_ball", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
 
-					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C), createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
-					createEntityEntry(EntityCQREnderman.class, "enderman", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRGoblin.class, "goblin", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRGolem.class, "golem", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRIllager.class, "illager", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRNPC.class, "npc", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRMinotaur.class, "minotaur", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRMandril.class, "mandril", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRMummy.class, "mummy", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQROgre.class, "ogre", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQROrc.class, "orc", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRBoarman.class, "boarman", 64, 1, true, 0x333333, 0xEA9393), createEntityEntry(EntityCQRPirate.class, "pirate", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRSkeleton.class, "skeleton", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRSpectre.class, "spectre", 64, 1, true, 0x333333, 0xC3BDBD),
-					createEntityEntry(EntityCQRTriton.class, "triton", 64, 1, true, 0x333333, 0xC3BDBD), createEntityEntry(EntityCQRWalker.class, "walker", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
+					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
+					createEntityEntry(EntityCQREnderman.class, "enderman", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRGoblin.class, "goblin", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRGolem.class, "golem", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRIllager.class, "illager", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRNPC.class, "npc", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRMinotaur.class, "minotaur", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRMandril.class, "mandril", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRMummy.class, "mummy", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQROgre.class, "ogre", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQROrc.class, "orc", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRBoarman.class, "boarman", 64, 1, true, 0x333333, 0xEA9393),
+					createEntityEntry(EntityCQRPirate.class, "pirate", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRSkeleton.class, "skeleton", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRSpectre.class, "spectre", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRTriton.class, "triton", 64, 1, true, 0x333333, 0xC3BDBD),
+					createEntityEntry(EntityCQRWalker.class, "walker", 64, 1, true, 0x333333, 0xC3BDBD),
 					createEntityEntry(EntityCQRZombie.class, "zombie", 64, 1, true, 0x333333, 0xC3BDBD),
-
-					// Mounts
-					createEntityEntry(EntityGiantEndermite.class, "giant_endermite", 64, 1, true, 0xC29D62, 0xEA9393), createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
-					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393), createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
+					
+					//Mounts
+					createEntityEntry(EntityGiantEndermite.class, "giant_endermite", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishNormal.class, "giant_silverfish", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishRed.class, "giant_silverfish1", 64, 1, true, 0xC29D62, 0xEA9393),
+					createEntityEntry(EntityGiantSilverfishGreen.class, "giant_silverfish2", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntry(EntityPollo.class, "pollo", 64, 1, true, 0xC29D62, 0xEA9393),
-
-					// Bosses
-					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000), createEntityEntry(EntityCQRGiantTortoise.class, "giant_tortoise", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRLich.class, "lich", 64, 1, true, 3289650, 000000), createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
-
-					// Misc Entities
-					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true), createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true), };
+					
+					//Bosses
+					createEntityEntry(EntityCQRNetherDragon.class, "nether_dragon", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRGiantTortoise.class, "giant_tortoise", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRLich.class, "lich", 64,1,true, 3289650,000000),
+					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650,000000),
+					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650,000000),
+					
+					//Misc Entities
+					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
+			};
 
 			event.getRegistry().registerAll(entityEntries);
 		}
 
-		private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1, int eggColor2) {
-			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates)
-					.build();
+		private static EntityEntry createEntityEntry(@Nonnull Class<? extends Entity> entityClass, String name,
+				int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1,
+				int eggColor2) {
+			return EntityEntryBuilder.create().entity(entityClass)
+					.id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2)
+					.tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 		}
 
-		private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass, String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
-			return EntityEntryBuilder.create().entity(entityClass).id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
+		private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass,
+				String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
+			return EntityEntryBuilder.create().entity(entityClass)
+					.id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates)
+					.build();
 		}
 
 	}
