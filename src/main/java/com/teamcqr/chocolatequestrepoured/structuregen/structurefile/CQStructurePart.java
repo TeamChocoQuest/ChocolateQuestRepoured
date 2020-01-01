@@ -330,7 +330,7 @@ public class CQStructurePart extends Template {
 		if (this.spawners != null && !this.spawners.isEmpty()) {
 			for (SpawnerInfo si : this.spawners) {
 				// DONE: Place spawners
-				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos().add(pos));
+				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos()).add(pos);
 				worldIn.setBlockState(spawnerPos, ModBlocks.SPAWNER.getDefaultState());
 				TileEntity te = worldIn.getTileEntity(spawnerPos);
 
