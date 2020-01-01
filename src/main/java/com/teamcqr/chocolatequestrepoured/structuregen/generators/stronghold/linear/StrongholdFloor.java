@@ -47,31 +47,36 @@ public class StrongholdFloor {
 		roomsWithFreeNeighbors.add(room);
 		roomGrid[room.getGridIndex().getFirst()][room.getGridIndex().getSecond()] = room;
 		firstRoomIndexes = room.getGridIndex();
+		lastRoomIndexes = firstRoomIndexes;
 		Random rdm = new Random();
 		for(int i = 0; i < roomCount; i++) {
 			if(roomsWithFreeNeighbors.isEmpty()) {
 				break;
 			}
 			StrongholdRoom prevRoom = getRandomUsableRoom(rdm);
-			ESkyDirection expansionDir = prevRoom.getRandomFreeDirection(rdm);
-			prevRoom.connectRoomOnSide(expansionDir);
-			Tuple<Integer, Integer> v = getSkyDirectionAsGridVector(expansionDir);
-			int gridX = prevRoom.getGridIndex().getFirst() + v.getFirst();
-			int gridZ = prevRoom.getGridIndex().getSecond() + v.getSecond();
-		
-			if(!prevRoom.hasFreeSides()) {
-				roomsWithFreeNeighbors.remove(prevRoom);
+			if(prevRoom != null) {
+				ESkyDirection expansionDir = prevRoom.getRandomFreeDirection(rdm);
+				prevRoom.connectRoomOnSide(expansionDir);
+				Tuple<Integer, Integer> v = getSkyDirectionAsGridVector(expansionDir);
+				int gridX = prevRoom.getGridIndex().getFirst() + v.getFirst();
+				int gridZ = prevRoom.getGridIndex().getSecond() + v.getSecond();
+			
+				if(!prevRoom.hasFreeSides()) {
+					roomsWithFreeNeighbors.remove(prevRoom);
+				}
+				
+				StrongholdRoom newRoom = new StrongholdRoom(this);
+				newRoom.connectRoomOnSide(expansionDir.getOpposite());
+				newRoom.setGridIndex(gridX, gridZ);
+				rooms.add(newRoom);
+				roomsWithFreeNeighbors.add(newRoom);
+				roomGrid[gridX][gridZ] = newRoom;
+				lastRoomIndexes = newRoom.getGridIndex();
+				
+				setConnectionStateOnGridForCoordinates(gridX, gridZ);
+			} else {
+				break;
 			}
-			
-			StrongholdRoom newRoom = new StrongholdRoom(this);
-			newRoom.connectRoomOnSide(expansionDir.getOpposite());
-			newRoom.setGridIndex(gridX, gridZ);
-			rooms.add(newRoom);
-			roomsWithFreeNeighbors.add(newRoom);
-			roomGrid[gridX][gridZ] = newRoom;
-			lastRoomIndexes = newRoom.getGridIndex();
-			
-			setConnectionStateOnGridForCoordinates(gridX, gridZ);
 		}
 	}
 	
@@ -124,9 +129,11 @@ public class StrongholdFloor {
 	}
 	
 	private void setConnectionStateOnGridForCoordinates(int gridX, int gridZ) {
+		StrongholdRoom roomAtPos = roomGrid[gridX][gridZ];
 		for(ESkyDirection direction : ESkyDirection.values()) {
 			StrongholdRoom room = roomGrid[gridX + getSkyDirectionAsGridVector(direction).getFirst()][gridZ + getSkyDirectionAsGridVector(direction).getSecond()];
 			if(room != null) {
+				roomAtPos.connectRoomOnSide(direction);
 				room.connectRoomOnSide(direction.getOpposite());
 				if(!room.hasFreeSides()) {
 					roomsWithFreeNeighbors.remove(room);
@@ -159,7 +166,18 @@ public class StrongholdFloor {
 
 	private StrongholdRoom getRandomUsableRoom(Random rdm) {
 		if(!roomsWithFreeNeighbors.isEmpty()) {
-			return roomsWithFreeNeighbors.get(rdm.nextInt(roomsWithFreeNeighbors.size()));
+			StrongholdRoom room = roomsWithFreeNeighbors.get(rdm.nextInt(roomsWithFreeNeighbors.size()));
+			while(!room.hasFreeSides() && !roomsWithFreeNeighbors.isEmpty()) {
+				roomsWithFreeNeighbors.remove(room);
+				if(roomsWithFreeNeighbors.isEmpty()) {
+					return null;
+				}
+				room = roomsWithFreeNeighbors.get(rdm.nextInt(roomsWithFreeNeighbors.size()));
+			}
+			if(roomsWithFreeNeighbors.isEmpty()) {
+				return null;
+			}
+			return room;
 		}
 		return null;
 	}

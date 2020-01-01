@@ -80,31 +80,31 @@ public class StrongholdRoom {
 			}
 			switch(s1) {
 			case EAST:
-				if(s1.equals(ESkyDirection.NORTH)) {
-					roomtype = ERoomTypeExtended.CURVE_NE;
+				if(s2.equals(ESkyDirection.NORTH)) {
+					roomtype = ERoomTypeExtended.CURVE_SW;
 				} else {
-					roomtype = ERoomTypeExtended.CURVE_ES;
+					roomtype = ERoomTypeExtended.CURVE_WN;
 				}
 				break;
 			case NORTH:
-				if(s1.equals(ESkyDirection.WEST)) {
-					roomtype = ERoomTypeExtended.CURVE_WN;
-				} else {
-					roomtype = ERoomTypeExtended.CURVE_NE;
-				}
-				break;
-			case SOUTH:
-				if(s1.equals(ESkyDirection.EAST)) {
+				if(s2.equals(ESkyDirection.WEST)) {
 					roomtype = ERoomTypeExtended.CURVE_ES;
 				} else {
 					roomtype = ERoomTypeExtended.CURVE_SW;
 				}
 				break;
-			case WEST:
-				if(s1.equals(ESkyDirection.SOUTH)) {
-					roomtype = ERoomTypeExtended.CURVE_SW;
-				} else {
+			case SOUTH:
+				if(s2.equals(ESkyDirection.EAST)) {
 					roomtype = ERoomTypeExtended.CURVE_WN;
+				} else {
+					roomtype = ERoomTypeExtended.CURVE_NE;
+				}
+				break;
+			case WEST:
+				if(s2.equals(ESkyDirection.SOUTH)) {
+					roomtype = ERoomTypeExtended.CURVE_NE;
+				} else {
+					roomtype = ERoomTypeExtended.CURVE_ES;
 				}
 				break;
 			default:
