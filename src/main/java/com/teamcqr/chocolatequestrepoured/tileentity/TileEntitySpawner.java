@@ -17,7 +17,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
@@ -144,8 +146,12 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 		if (entity != null) {
 			entity.setUniqueId(MathHelper.getRandomUUID());
-			entity.setPosition((double) this.pos.getX() + this.world.rand.nextDouble(), (double) this.pos.getY(),
+			Vec3d pos = new Vec3d((double) this.pos.getX() + this.world.rand.nextDouble(), (double) this.pos.getY(),
 					(double) this.pos.getZ() + this.world.rand.nextDouble());
+			if(world.getBlockState(new BlockPos(pos)).getMaterial().blocksMovement() || world.getBlockState(new BlockPos(pos).offset(EnumFacing.UP)).getMaterial().blocksMovement()) {
+				pos = new Vec3d(this.pos.getX(), this.pos.getY(), this.pos.getZ());
+			}
+			entity.setPosition(pos.x, pos.y, pos.z);
 
 			if (entity instanceof EntityLiving) {
 				if (Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent()) {
