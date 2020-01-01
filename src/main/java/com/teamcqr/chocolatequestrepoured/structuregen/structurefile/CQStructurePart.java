@@ -291,7 +291,7 @@ public class CQStructurePart extends Template {
 		
 		//Now we want to place the banners first......
 		//DONE: Wait for banner patterns, then do this
-		if(this.banners != null && !this.banners.isEmpty()) {
+		if(this.dungeon.replaceBanners() && this.banners != null && !this.banners.isEmpty() && this.newBannerPattern != null) {
 			for(BannerInfo bi : this.banners) {
 				if(bi != null) {
 					BlockPos bannerPos = transformedBlockPos(placementIn, bi.getPos()).add(pos);

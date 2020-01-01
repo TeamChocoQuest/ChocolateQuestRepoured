@@ -82,7 +82,7 @@ public class CQStructure {
 		this.setDataFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt"));
 	}
 	
-	public void setNewBannerPattern(EBanners pattern) {
+	private void setNewBannerPattern(EBanners pattern) {
 		this.newBannerPattern = pattern;
 	}
 	
@@ -97,6 +97,7 @@ public class CQStructure {
 		}
 		if(mobType != null && mobType.equals(EDungeonMobType.DEFAULT)) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX *16, dunZ *16);
+			setNewBannerPattern(mobType.getBanner());
 		}
 		//Handled in TileEntitySpawner
 		/*if(dungeon.getDungeonMob().equals(EDungeonMobType.DEFAULT) && (dunX != 0 && dunZ != 0)) {
