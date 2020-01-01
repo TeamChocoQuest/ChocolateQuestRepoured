@@ -60,6 +60,8 @@ public class ItemArmorTurtle extends ItemArmor {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
