@@ -57,6 +57,7 @@ public class DungeonBase {
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
+	private boolean rotateDungeon = true;
 
 	public void generate(BlockPos pos, World world) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
@@ -97,6 +98,7 @@ public class DungeonBase {
 				this.supportTopBlock = PropertyFileHelper.getBlockProperty(prop, "supportblocktop", Blocks.GRASS);
 			}
 			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
+			this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
 
 			this.closeConfigFile();
 		} else {
@@ -196,6 +198,10 @@ public class DungeonBase {
 
 	public boolean replaceBanners() {
 		return this.replaceBanners;
+	}
+
+	public boolean rotateDungeon() {
+		return this.rotateDungeon;
 	}
 
 	public Properties loadConfig(File configFile) {
