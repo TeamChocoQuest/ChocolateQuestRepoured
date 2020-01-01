@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemSoulBottle extends Item
 {
 	public static final String EntityIn = "EntityIn";
+	public static final String ENTITY_IN_TAG = "EntityIn";
 	
 	public ItemSoulBottle() 
 	{
@@ -50,9 +51,9 @@ public class ItemSoulBottle extends Item
 		
 		NBTTagCompound entityTag = new NBTTagCompound();
 		
-		if(bottle.getTag(EntityIn) == null && entity.writeToNBTOptional(entityTag))
+		if(bottle.getTag(ENTITY_IN_TAG) == null && entity.writeToNBTOptional(entityTag))
 		{
-			bottle.setTag(EntityIn, entityTag);
+			bottle.setTag(ENTITY_IN_TAG, entityTag);
 			entity.setDead();
 			this.spawnAdditions(entity.world, entity);
 		}
@@ -68,9 +69,9 @@ public class ItemSoulBottle extends Item
 
 		if(bottle != null)
 		{
-			if(bottle.getTag(EntityIn) != null)
+			if(bottle.getTag(ENTITY_IN_TAG) != null)
 			{
-				NBTTagCompound entityTag = (NBTTagCompound)bottle.getTag(EntityIn);
+				NBTTagCompound entityTag = (NBTTagCompound)bottle.getTag(ENTITY_IN_TAG);
 				Entity entity = this.createEntityFromNBT(entityTag, worldIn, pos.getX(), pos.getY(), pos.getZ());
 				entity.setUniqueId(MathHelper.getRandomUUID(new Random()));
 				
@@ -83,7 +84,7 @@ public class ItemSoulBottle extends Item
 	
 					if(!(player.isCreative() || player.isSpectator()) || (player.isCreative() && player.isSneaking())) 
 					{
-						bottle.removeTag(EntityIn);
+						bottle.removeTag(ENTITY_IN_TAG);
 					}
 				}
 				
@@ -133,9 +134,9 @@ public class ItemSoulBottle extends Item
 		
 		if(stack.hasTagCompound())
 		{
-			if(stack.getTagCompound().hasKey(EntityIn))
+			if(stack.getTagCompound().hasKey(ENTITY_IN_TAG))
 			{
-				NBTTagCompound tag = (NBTTagCompound)stack.getTagCompound().getTag(EntityIn);
+				NBTTagCompound tag = (NBTTagCompound)stack.getTagCompound().getTag(ENTITY_IN_TAG);
 				Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
 				entity.readFromNBT(tag);
 				

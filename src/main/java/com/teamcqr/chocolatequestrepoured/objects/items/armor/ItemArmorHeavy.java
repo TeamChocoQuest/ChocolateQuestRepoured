@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
@@ -14,6 +16,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemArmorHeavy extends ItemArmor {
 
@@ -40,6 +44,8 @@ public class ItemArmorHeavy extends ItemArmor {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
+	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
 			ModelBiped _default) {
 		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
