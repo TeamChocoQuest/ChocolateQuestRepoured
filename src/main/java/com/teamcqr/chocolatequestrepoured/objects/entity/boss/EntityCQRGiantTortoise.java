@@ -181,7 +181,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@SideOnly(Side.CLIENT)
 	public ETortoiseAnimState getCurrentAnimation() {
 		// return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
-		return ETortoiseAnimState.MOVE_PARTS_IN;
+		return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
 
 	@Override
