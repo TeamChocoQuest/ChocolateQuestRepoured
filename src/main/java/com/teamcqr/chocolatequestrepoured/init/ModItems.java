@@ -8,6 +8,26 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMummy;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROgre;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQROrc;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSkeleton;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
@@ -16,6 +36,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
@@ -235,6 +256,7 @@ public class ModItems {
 	public static class ItemRegistrationHandler {
 
 		public static final List<Item> ITEMS = new ArrayList<Item>();
+		public static final List<Item> SPAWN_EGGS = new ArrayList<Item>();
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
@@ -338,6 +360,36 @@ public class ModItems {
 				Item item = setItemNameAndTab(new ItemDungeonPlacer(i), "dungeon_placer_d" + i, CQRMain.CQRDungeonPlacerTab);
 				registry.register(item);
 				ITEMS.add(item);
+			}
+
+			registerSpawnEggs(EntityCQRBoarman.class, "boarman", registry);
+			registerSpawnEggs(EntityCQRDummy.class, "dummy", registry);
+			registerSpawnEggs(EntityCQRDwarf.class, "dwarf", registry);
+			registerSpawnEggs(EntityCQREnderman.class, "enderman", registry);
+			registerSpawnEggs(EntityCQRGoblin.class, "goblin", registry);
+			registerSpawnEggs(EntityCQRGolem.class, "golem", registry);
+			registerSpawnEggs(EntityCQRIllager.class, "illager", registry);
+			registerSpawnEggs(EntityCQRMandril.class, "mandril", registry);
+			registerSpawnEggs(EntityCQRMinotaur.class, "minotaur", registry);
+			registerSpawnEggs(EntityCQRMummy.class, "mummy", registry);
+			registerSpawnEggs(EntityCQRNPC.class, "npc", registry);
+			registerSpawnEggs(EntityCQROgre.class, "ogre", registry);
+			registerSpawnEggs(EntityCQROrc.class, "orc", registry);
+			registerSpawnEggs(EntityCQRPirate.class, "pirate", registry);
+			registerSpawnEggs(EntityCQRSkeleton.class, "skeleton", registry);
+			registerSpawnEggs(EntityCQRSpectre.class, "spectre", registry);
+			registerSpawnEggs(EntityCQRTriton.class, "triton", registry);
+			registerSpawnEggs(EntityCQRWalker.class, "walker", registry);
+			registerSpawnEggs(EntityCQRZombie.class, "zombie", registry);
+		}
+
+		private static void registerSpawnEggs(Class<? extends AbstractEntityCQR> entityClass, String entityName, IForgeRegistry<Item> registry) {
+			List<Item> spawnEggList = ItemSpawnEggCQR.getItemList(entityClass, entityName);
+			for (int i = 0; i < spawnEggList.size(); i++) {
+				Item item = setItemNameAndTab(spawnEggList.get(i), "cqr_" + entityName + "_spawn_egg_" + i, CQRMain.CQRSpawnEggTab);
+				registry.register(item);
+				ITEMS.add(item);
+				SPAWN_EGGS.add(item);
 			}
 		}
 
