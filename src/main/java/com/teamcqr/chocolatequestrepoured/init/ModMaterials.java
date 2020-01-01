@@ -38,7 +38,8 @@ public class ModMaterials {
 		public static final ToolMaterial TOOL_DIAMOND_GREAT_SWORD = EnumHelper.addToolMaterial("diamond_great_sword", 0, 1560, 0.0F, 5F, 10);
 		public static final ToolMaterial TOOL_IRON_GREAT_SWORD = EnumHelper.addToolMaterial("iron_great_sword", 0, 250, 0.0F, 4F, 14);
 		public static final ToolMaterial TOOL_DIAMOND_SPEAR = EnumHelper.addToolMaterial("diamond_spear", 0, 1560, 0.0F, 2F, 10);
-		public static final ToolMaterial TOOL_IRON_DAGGER = EnumHelper.addToolMaterial("iron_dagger", 0, 250, 0.0F, 0.0F, 14);   					
+		public static final ToolMaterial TOOL_IRON_SPEAR = EnumHelper.addToolMaterial("iron_spear", 0, 250, 0.0F, 1F, 7);
+		public static final ToolMaterial TOOL_IRON_DAGGER = EnumHelper.addToolMaterial("iron_dagger", 0, 250, 0.0F, 0.0F, 14);
 		public static final ToolMaterial TOOL_DIAMOND_DAGGER = EnumHelper.addToolMaterial("diamond_dagger", 0, 1560, 0.0F, 1F, 10);  				
 		public static final ToolMaterial TOOL_MONKING_DAGGER = EnumHelper.addToolMaterial("monking_dagger", 0, 1560, 0.0F, 3F, 10);   				
 		public static final ToolMaterial TOOL_NINJA_DAGGER = EnumHelper.addToolMaterial("ninja_dagger", 0, 2048, 0.0F, 2F, 10);        			
@@ -51,7 +52,7 @@ public class ModMaterials {
 		public static final ToolMaterial TOOL_MUSKET_IRON = EnumHelper.addToolMaterial("musket_iron", 0, 300, 0.0F, 0.0F, 14);
 		public static final ToolMaterial TOOL_MUSKET_DIAMOND = EnumHelper.addToolMaterial("musket_diamond", 0, 300, 0.0F, 1F, 10);
 		public static final ToolMaterial TOOL_MUSKET_MONKING = EnumHelper.addToolMaterial("musket_monking", 0, 300, 0.0F, 3F, 10);
-		public static final ToolMaterial TOOL_IRON_SPEAR = EnumHelper.addToolMaterial("iron_spear", 0, 250, 0.0F, 1F, 7);
+		public static final ToolMaterial TOOL_HOOKSHOT_BASIC = EnumHelper.addToolMaterial("hookshot", 0, 300, 0.0F, 0.5F, 0);
 	}
 
 	public static void setRepairItemsForMaterials() {

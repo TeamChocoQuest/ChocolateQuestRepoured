@@ -8,17 +8,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
+import com.teamcqr.chocolatequestrepoured.objects.items.*;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
@@ -278,6 +268,8 @@ public class ModItems {
 					setItemName(new ItemBullet(), "bullet_diamond"), setItemName(new ItemBullet(), "bullet_fire"),
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
+
+					setItemName(new ItemHookshotBase(), "hookshot"),
 
 					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
