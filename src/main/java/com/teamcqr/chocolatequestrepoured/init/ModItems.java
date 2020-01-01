@@ -269,7 +269,7 @@ public class ModItems {
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
 
-					setItemName(new ItemHookshotBase(), "hookshot"),
+					setItemName(new ItemHookshotBase(), "hookshoot"),
 
 					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),

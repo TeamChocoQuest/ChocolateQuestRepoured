@@ -52,7 +52,6 @@ public class ModMaterials {
 		public static final ToolMaterial TOOL_MUSKET_IRON = EnumHelper.addToolMaterial("musket_iron", 0, 300, 0.0F, 0.0F, 14);
 		public static final ToolMaterial TOOL_MUSKET_DIAMOND = EnumHelper.addToolMaterial("musket_diamond", 0, 300, 0.0F, 1F, 10);
 		public static final ToolMaterial TOOL_MUSKET_MONKING = EnumHelper.addToolMaterial("musket_monking", 0, 300, 0.0F, 3F, 10);
-		public static final ToolMaterial TOOL_HOOKSHOT_BASIC = EnumHelper.addToolMaterial("hookshot", 0, 300, 0.0F, 0.5F, 0);
 	}
 
 	public static void setRepairItemsForMaterials() {
