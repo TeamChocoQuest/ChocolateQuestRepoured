@@ -7,9 +7,8 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREn
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerRevolver;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
-import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
@@ -53,6 +52,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.heightScale = heightScale;// + (-0.25D +(rand.nextDouble() *0.5D));;
 		this.addLayer(new LayerBipedArmor(this));
 		this.addLayer(new LayerHeldItem(this));
+		this.addLayer(new LayerRevolver(this));
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
@@ -96,12 +96,12 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			// Main arm
 			if (!itemMainHand.isEmpty()) {
-				if (itemMainHand.getItem() instanceof ItemMusket) {
+				/*if (itemMainHand.getItem() instanceof ItemMusket) {
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderOffItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
 					flagMain = true;
-				} else if(entity.getItemInUseCount() > 0) {
+				} else */if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemMainHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -125,12 +125,12 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			if (!itemOffHand.isEmpty()) {
 				// if(itemOffHand.getItem() instanceof ItemShield) {
 
-				if (itemOffHand.getItem() instanceof ItemMusket) {
+				/*if (itemOffHand.getItem() instanceof ItemMusket) {
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderMainItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
 					flagOff = true;
-				} else if(entity.getItemInUseCount() > 0) {
+				} else */if(entity.getItemInUseCount() > 0) {
 					EnumAction action = itemOffHand.getItemUseAction();
 					switch (action) {
 					case DRINK:
@@ -162,24 +162,24 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				dontRenderMainItem = dontRenderOffItem;
 				dontRenderOffItem = tmp2;
 			}
-			if(!flagMain) {
+			/*if(!flagMain) {*/
 				model.rightArmPose = armPoseMain;
-			} else {
+			/*} else {
 				if(flagSide) {
 					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
 				} else {
 					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
 				}
 			}
-			if(!flagOff) {
+			if(!flagOff) {*/
 				model.leftArmPose = armPoseOff;
-			} else {
+			/*} else {
 				if(flagSide) {
 					model.bipedRightArm.rotateAngleX = new Float(Math.toRadians(-90F));
 				} else {
 					model.bipedLeftArm.rotateAngleX = new Float(Math.toRadians(-90F));
 				}
-			}
+			}*/
 			if (dontRenderMainItem) {
 				model.rightArmPose = ArmPose.EMPTY;
 			}
