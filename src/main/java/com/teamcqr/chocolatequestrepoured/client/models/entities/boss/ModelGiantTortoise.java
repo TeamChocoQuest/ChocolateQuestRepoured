@@ -306,10 +306,28 @@ public class ModelGiantTortoise extends ModelBase {
 	}
 
 	private void resetParts() {
-		// TODO: Reset legs offset, head offset and rotations
 		this.mainPart.offsetY = 0F;
 		this.head.offsetZ = -9F;
 		this.jaw.rotateAngleX = 0F;
+		
+		for(ModelRenderer joint : legJoints) {
+			setRotateAngle(joint, 0, 0.7853981633974483F, 0);
+			joint.offsetX = -5F;
+			joint.offsetY = -5F;
+			joint.offsetZ = -5F;
+		}
+		for(ModelRenderer knee : knees) {
+			setRotateAngle(knee, -0.7853981633974483F, 0F, 0F);
+			knee.offsetX = -4F;
+			knee.offsetY = 0F;
+			knee.offsetZ = 0F;
+		}
+		for(ModelRenderer foot : feet) {
+			setRotateAngle(foot, 0.7853981633974483F, 0F, 0F);
+			foot.offsetX = -3.5F;
+			foot.offsetY = 0F;
+			foot.offsetZ = 0F;
+		}
 	}
 
 	/**
