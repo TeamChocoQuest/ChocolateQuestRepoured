@@ -7,11 +7,13 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.Mod
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelEnderman;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,6 +37,15 @@ public class RenderCQREnderman extends RenderCQREntity<EntityCQREnderman> {
 			protected void initArmor() {
 				this.modelLeggings = new ModelCQREndermanArmor(0.5F, true);
 				this.modelArmor = new ModelCQREndermanArmor(1.0F, false);
+			}
+
+			@Override
+			protected void setModelSlotVisible(ModelBiped modelIn, EntityEquipmentSlot slotIn) {
+				if (modelIn == this.modelArmor || modelIn == this.modelLeggings) {
+					super.setModelSlotVisible(modelIn, slotIn);
+				} else {
+					this.setModelVisible(modelIn);
+				}
 			}
 		});
 	}
