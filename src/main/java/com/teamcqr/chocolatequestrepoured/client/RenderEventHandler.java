@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-@EventBusSubscriber
+@EventBusSubscriber(value = Side.CLIENT)
 public class RenderEventHandler {
 
 	@SubscribeEvent
