@@ -13,6 +13,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -408,6 +409,11 @@ public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntity
 	@Override
 	public boolean canRide() {
 		return false;
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEFINED;
 	}
 
 }

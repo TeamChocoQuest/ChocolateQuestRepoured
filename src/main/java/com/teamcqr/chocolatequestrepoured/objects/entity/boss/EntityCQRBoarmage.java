@@ -21,6 +21,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -143,6 +144,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
+	}
+
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEAD;
 	}
 
 }
