@@ -9,32 +9,38 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * CQRTurtleBossShell - DerToaster
- * Created using Tabula 7.0.1
+ * CQRTurtleBossShell - DerToaster Created using Tabula 7.0.1
  */
 public class ModelGiantTortoise extends ModelBase {
 	public ModelRenderer mainPart;
 	public ModelRenderer belly;
 	public ModelRenderer top;
-	public ModelRenderer legJointFR;
-	public ModelRenderer legJointFL;
-	public ModelRenderer legJointBR;
-	public ModelRenderer legJointBL;
 	public ModelRenderer neck;
 	public ModelRenderer top1;
 	public ModelRenderer top2;
 	public ModelRenderer top3;
 	public ModelRenderer top4;
-	public ModelRenderer legFR;
-	public ModelRenderer footFR;
-	public ModelRenderer legFL;
-	public ModelRenderer footFL;
-	public ModelRenderer legBR;
-	public ModelRenderer footBR;
-	public ModelRenderer legBL;
-	public ModelRenderer footBL;
 	public ModelRenderer head;
 	public ModelRenderer jaw;
+	// Leg FL
+	public ModelRenderer legJointFL;
+	public ModelRenderer legFL;
+	public ModelRenderer footFL;
+
+	// Leg FR
+	public ModelRenderer legJointFR;
+	public ModelRenderer legFR;
+	public ModelRenderer footFR;
+
+	// Leg BL
+	public ModelRenderer legJointBL;
+	public ModelRenderer legBL;
+	public ModelRenderer footBL;
+
+	// Leg BR
+	public ModelRenderer legJointBR;
+	public ModelRenderer legBR;
+	public ModelRenderer footBR;
 
 	private ModelRenderer[] subParts = new ModelRenderer[14];
 	private ModelRenderer[] legJoints = new ModelRenderer[4];
@@ -93,21 +99,21 @@ public class ModelGiantTortoise extends ModelBase {
 		this.legJointFL = new ModelRenderer(this, 0, 140);
 		this.legJointFL.setRotationPoint(13.0F, 3.5F, -13.0F);
 		this.legJointFL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
-		this.setRotateAngle(this.legJointFL, 0.0F, -0.7853981633974483F, 0.0F);
+		this.setRotateAngle(legJointFL, 0.0F, -0.7853981633974483F, 0.0F);
 		this.subParts[2] = this.legJointFL;
 		this.legJoints[0] = this.legJointFL;
 
 		this.legFL = new ModelRenderer(this, 140, 0);
-		this.legFL.setRotationPoint(0.0F, 1.5F, 1.0F);
-		this.legFL.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
-		this.setRotateAngle(this.legFL, -0.7853981633974483F, 0.0F, 0.0F);
+		this.legFL.setRotationPoint(0.0F, -4.0F, -5.0F);
+		this.legFL.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
+		this.setRotateAngle(legFL, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[3] = this.legFL;
 		this.knees[0] = this.legFL;
 
 		this.footFL = new ModelRenderer(this, 140, 25);
-		this.footFL.setRotationPoint(0.0F, 3.0F, -2.7F);
-		this.footFL.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
-		this.setRotateAngle(this.footFL, 0.7853981633974483F, 0.0F, 0.0F);
+		this.footFL.setRotationPoint(0.0F, 8.0F, 0.5F);
+		this.footFL.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
+		this.setRotateAngle(footFL, 0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[4] = this.footFL;
 		this.feet[0] = this.footFL;
 
@@ -115,21 +121,21 @@ public class ModelGiantTortoise extends ModelBase {
 		this.legJointFR = new ModelRenderer(this, 0, 140);
 		this.legJointFR.setRotationPoint(-13.0F, 3.5F, -13.0F);
 		this.legJointFR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
-		this.setRotateAngle(this.legJointFR, 0.0F, 0.7853981633974483F, 0.0F);
+		this.setRotateAngle(legJointFR, 0.0F, 0.7853981633974483F, 0.0F);
 		this.subParts[5] = this.legJointFR;
 		this.legJoints[1] = this.legJointFR;
 
 		this.legFR = new ModelRenderer(this, 140, 0);
-		this.legFR.setRotationPoint(0.0F, 1.5F, 1.0F);
-		this.legFR.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
-		this.setRotateAngle(this.legFR, -0.7853981633974483F, 0.0F, 0.0F);
+		this.legFR.setRotationPoint(0.0F, -4.0F, -5.0F);
+		this.legFR.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
+		this.setRotateAngle(legFR, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[6] = this.legFR;
 		this.knees[1] = this.legFR;
 
 		this.footFR = new ModelRenderer(this, 140, 25);
-		this.footFR.setRotationPoint(0.0F, 3.0F, -2.7F);
-		this.footFR.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
-		this.setRotateAngle(this.footFR, 0.7853981633974483F, 0.0F, 0.0F);
+		this.footFR.setRotationPoint(0.0F, 8.0F, 0.5F);
+		this.footFR.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
+		this.setRotateAngle(footFR, 0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[7] = this.footFR;
 		this.feet[1] = this.footFR;
 
@@ -137,21 +143,21 @@ public class ModelGiantTortoise extends ModelBase {
 		this.legJointBR = new ModelRenderer(this, 0, 140);
 		this.legJointBR.setRotationPoint(-13.0F, 3.5F, 13.0F);
 		this.legJointBR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
-		this.setRotateAngle(this.legJointBR, 0.0F, 2.356194490192345F, 0.0F);
+		this.setRotateAngle(legJointBR, 0.0F, 2.356194490192345F, 0.0F);
 		this.subParts[8] = this.legJointBR;
 		this.legJoints[2] = this.legJointBR;
 
 		this.legBR = new ModelRenderer(this, 140, 0);
-		this.legBR.setRotationPoint(0.0F, 1.5F, 1.0F);
-		this.legBR.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
-		this.setRotateAngle(this.legBR, -0.7853981633974483F, 0.0F, 0.0F);
+		this.legBR.setRotationPoint(0.0F, -4.0F, -5.0F);
+		this.legBR.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
+		this.setRotateAngle(legBR, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[9] = this.legBR;
 		this.knees[2] = this.legBR;
 
 		this.footBR = new ModelRenderer(this, 140, 25);
-		this.footBR.setRotationPoint(0.0F, 3.0F, -2.7F);
-		this.footBR.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
-		this.setRotateAngle(this.footBR, 0.7853981633974483F, 0.0F, 0.0F);
+		this.footBR.setRotationPoint(0.0F, 8.0F, 0.5F);
+		this.footBR.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
+		this.setRotateAngle(footBR, 0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[10] = this.footBR;
 		this.feet[2] = this.footBR;
 
@@ -159,21 +165,21 @@ public class ModelGiantTortoise extends ModelBase {
 		this.legJointBL = new ModelRenderer(this, 0, 140);
 		this.legJointBL.setRotationPoint(13.0F, 3.5F, 13.0F);
 		this.legJointBL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
-		this.setRotateAngle(this.legJointBL, 0.0F, -2.356194490192345F, 0.0F);
+		this.setRotateAngle(legJointBL, 0.0F, -2.356194490192345F, 0.0F);
 		this.subParts[11] = this.legJointBL;
 		this.legJoints[3] = this.legJointBL;
 
 		this.legBL = new ModelRenderer(this, 140, 0);
-		this.legBL.setRotationPoint(0.0F, 1.5F, 1.0F);
-		this.legBL.addBox(-4.0F, 0.0F, -8.0F, 8, 8, 8, 0.0F);
-		this.setRotateAngle(this.legBL, -0.7853981633974483F, 0.0F, 0.0F);
+		this.legBL.setRotationPoint(0.0F, -4.0F, -5.0F);
+		this.legBL.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
+		this.setRotateAngle(legBL, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[12] = this.legBL;
 		this.knees[3] = this.legBL;
 
 		this.footBL = new ModelRenderer(this, 140, 25);
-		this.footBL.setRotationPoint(0.0F, 3.0F, -2.7F);
-		this.footBL.addBox(-3.5F, 0.0F, -7.0F, 7, 8, 7, 0.0F);
-		this.setRotateAngle(this.footBL, 0.7853981633974483F, 0.0F, 0.0F);
+		this.footBL.setRotationPoint(0.0F, 8.0F, 0.5F);
+		this.footBL.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
+		this.setRotateAngle(footBL, 0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[13] = this.footBL;
 		this.feet[3] = this.footBL;
 
