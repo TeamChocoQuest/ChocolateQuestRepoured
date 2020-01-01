@@ -52,7 +52,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.heightScale = heightScale;// + (-0.25D +(rand.nextDouble() *0.5D));;
 		this.addLayer(new LayerBipedArmor(this));
 		this.addLayer(new LayerHeldItem(this));
-		this.addLayer(new LayerRevolver(this));
+		//this.addLayer(new LayerRevolver(this));
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
 		this.addLayer(new LayerCQREntityCape(this));
