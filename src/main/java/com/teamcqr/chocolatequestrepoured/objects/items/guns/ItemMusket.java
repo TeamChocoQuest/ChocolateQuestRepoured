@@ -53,12 +53,12 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 				if (flag && itemstack.isEmpty()) {
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
+					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
 				} else {
 					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-					player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
+					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
 					stack.damageItem(1, player);
 				}
