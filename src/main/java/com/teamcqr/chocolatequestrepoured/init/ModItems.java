@@ -88,8 +88,8 @@ public class ModItems {
 	// Walker items
 	public static final Item SWORD_WALKER = Null();
 	public static final Item SHIELD_WALKER_KING = Null();
-	
-	//Shields
+
+	// Shields
 	public static final Item SHIELD_BULL = Null();
 	public static final Item SHIELD_CARL = Null();
 	public static final Item SHIELD_DRAGONSLAYER = Null();
@@ -121,7 +121,7 @@ public class ModItems {
 	public static final Item GREAT_SWORD_BULL = Null();
 	public static final Item GREAT_SWORD_MONKING = Null();
 
-	//Spears
+	// Spears
 	public static final Item SPEAR_DIAMOND = Null();
 	public static final Item SPEAR_IRON = Null();
 
@@ -196,14 +196,14 @@ public class ModItems {
 	public static final Item CHESTPLATE_HEAVY_IRON = Null();
 	public static final Item LEGGINGS_HEAVY_IRON = Null();
 	public static final Item BOOTS_HEAVY_IRON = Null();
-	
-	//Dyable Iron Armor
+
+	// Dyable Iron Armor
 	public static final Item HELMET_IRON_DYABLE = Null();
 	public static final Item CHESTPLATE_IRON_DYABLE = Null();
 	public static final Item LEGGINGS_IRON_DYABLE = Null();
 	public static final Item BOOTS_IRON_DYABLE = Null();
-	
-	//Dyable Diamond Armor
+
+	// Dyable Diamond Armor
 	public static final Item HELMET_DIAMOND_DYABLE = Null();
 	public static final Item CHESTPLATE_DIAMOND_DYABLE = Null();
 	public static final Item LEGGINGS_DIAMOND_DYABLE = Null();
@@ -230,7 +230,7 @@ public class ModItems {
 	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
-	
+
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
 
@@ -238,46 +238,31 @@ public class ModItems {
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
-			final Item[] items = {
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25), "dagger_iron"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20), "dagger_diamond"),
-					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15), "dagger_ninja"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10), "dagger_monking"),
+			final Item[] items = { setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25), "dagger_iron"), setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20), "dagger_diamond"),
+					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15), "dagger_ninja"), setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10), "dagger_monking"),
 
-					setItemName(new ItemSwordTurtle(ModMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"),
-					setItemName(new ItemSwordSpider(ModMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
-					setItemName(new ItemSwordMoonlight(ModMaterials.ToolMaterials.TOOL_MOONLIGHT_SWORD), "sword_moonlight"),
-					setItemName(new ItemSwordSunshine(ModMaterials.ToolMaterials.TOOL_SUNSHINE_SWORD), "sword_sunshine"),
+					setItemName(new ItemSwordTurtle(ModMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"), setItemName(new ItemSwordSpider(ModMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
+					setItemName(new ItemSwordMoonlight(ModMaterials.ToolMaterials.TOOL_MOONLIGHT_SWORD), "sword_moonlight"), setItemName(new ItemSwordSunshine(ModMaterials.ToolMaterials.TOOL_SUNSHINE_SWORD), "sword_sunshine"),
 
 					setItemName(new ItemBullBattleAxe(ModMaterials.ToolMaterials.TOOL_BULL_BATTLE_AXE), "battle_axe_bull"),
 
-					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
-					setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
-					
+					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"), setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
+
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F), "great_sword_iron"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.6F), "great_sword_bull"),
 					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F), "great_sword_monking"),
 
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 10F, -0.5F), "spear_diamond"),
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 10F, -0.5F), "spear_iron"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 10F, -0.5F), "spear_diamond"), setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 10F, -0.5F), "spear_iron"),
 
-					setItemName(new ItemStaff(), "staff"), setItemName(new ItemStaffFire(), "staff_fire"),
-					setItemName(new ItemStaffVampiric(), "staff_vampiric"),
-					setItemName(new ItemStaffWind(), "staff_wind"), setItemName(new ItemStaffPoison(), "staff_poison"),
-					setItemName(new ItemStaffHealing(), "staff_healing"),
-					setItemName(new ItemStaffThunder(), "staff_thunder"),
-					setItemName(new ItemStaffSpider(), "staff_spider"), setItemName(new ItemStaffGun(), "staff_gun"),
+					setItemName(new ItemStaff(), "staff"), setItemName(new ItemStaffFire(), "staff_fire"), setItemName(new ItemStaffVampiric(), "staff_vampiric"), setItemName(new ItemStaffWind(), "staff_wind"),
+					setItemName(new ItemStaffPoison(), "staff_poison"), setItemName(new ItemStaffHealing(), "staff_healing"), setItemName(new ItemStaffThunder(), "staff_thunder"), setItemName(new ItemStaffSpider(), "staff_spider"),
+					setItemName(new ItemStaffGun(), "staff_gun"),
 
-					setItemName(new ItemRevolver(), "revolver"), setItemName(new ItemRevolver(), "captain_revolver"),
-					setItemName(new ItemMusket(), "musket"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
-					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"),
-					setItemName(new ItemBullet(), "bullet_iron"), setItemName(new ItemBullet(), "bullet_gold"),
-					setItemName(new ItemBullet(), "bullet_diamond"), setItemName(new ItemBullet(), "bullet_fire"),
-					setItemName(new ItemCannonBall(), "cannon_ball"),
-					setItemName(new ItemFlamethrower(), "flamethrower"),
+					setItemName(new ItemRevolver(), "revolver"), setItemName(new ItemRevolver(), "captain_revolver"), setItemName(new ItemMusket(), "musket"),
+					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"), setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
+					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"), setItemName(new ItemBullet(), "bullet_iron"), setItemName(new ItemBullet(), "bullet_gold"),
+					setItemName(new ItemBullet(), "bullet_diamond"), setItemName(new ItemBullet(), "bullet_fire"), setItemName(new ItemCannonBall(), "cannon_ball"), setItemName(new ItemFlamethrower(), "flamethrower"),
 
 					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
@@ -317,32 +302,24 @@ public class ModItems {
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_iron"),
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.LEGS), "leggings_heavy_iron"),
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON, -1, EntityEquipmentSlot.FEET), "boots_heavy_iron"),
-					
+
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_diamond_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_diamond_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_diamond_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.DIAMOND_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_diamond_dyable"),
-					
+
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.HEAD), "helmet_iron_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.CHEST), "chestplate_iron_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
 
-					setItemName(new Item(), "scale_turtle"), setItemName(new Item(), "leather_bull"),
-					setItemName(new Item(), "horn_bull"), setItemName(new Item(), "ball_slime"),
-					setItemName(new Item(), "leather_spider"), setItemName(new Item(), "bone_monking"),
-					setItemName(new Item(), "giant_spider_poison"),
-					setItemName(new ItemGoldenFeather(), "feather_golden"),
+					setItemName(new Item(), "scale_turtle"), setItemName(new Item(), "leather_bull"), setItemName(new Item(), "horn_bull"), setItemName(new Item(), "ball_slime"), setItemName(new Item(), "leather_spider"),
+					setItemName(new Item(), "bone_monking"), setItemName(new Item(), "giant_spider_poison"), setItemName(new ItemGoldenFeather(), "feather_golden"),
 
-					setItemName(new ItemPotionHealing(), "potion_healing"),
-					setItemName(new ItemTeleportStone(), "teleport_stone"),
-					setItemName(new ItemSoulBottle(), "soul_bottle"),
-					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"),
-					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
+					setItemName(new ItemPotionHealing(), "potion_healing"), setItemName(new ItemTeleportStone(), "teleport_stone"), setItemName(new ItemSoulBottle(), "soul_bottle"),
+					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"), setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
-					setItemName(new ItemStructureSelector(), "structure_selector"),
-					setItemName(new ItemSpawnerConverter(), "spawner_converter")
-			};
+					setItemName(new ItemStructureSelector(), "structure_selector"), setItemName(new ItemSpawnerConverter(), "spawner_converter") };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 

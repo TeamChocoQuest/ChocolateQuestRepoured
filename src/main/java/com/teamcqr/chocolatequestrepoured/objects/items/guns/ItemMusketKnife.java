@@ -37,42 +37,33 @@ public class ItemMusketKnife extends ItemSword {
 
 	public ItemMusketKnife(ToolMaterial material) {
 		super(material);
-		setMaxDamage(300);
-		setMaxStackSize(1);
+		this.setMaxDamage(300);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
 		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, -0.8F);
+		this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, -0.8F);
 		return modifiers;
 	}
 
-	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id,
-			double value) {
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
 		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
-		Optional<AttributeModifier> modifierOptional = modifiers.stream()
-				.filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
 
 		if (modifierOptional.isPresent()) {
 			AttributeModifier modifier = modifierOptional.get();
 			modifiers.remove(modifier);
-			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value,
-					modifier.getOperation()));
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
 		}
 	}
 
 	/*
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.NONE;
-	}
-	*/
+	 * @Override public int getMaxItemUseDuration(ItemStack stack) { return 72000; }
+	 * 
+	 * @Override public EnumAction getItemUseAction(ItemStack stack) { return EnumAction.NONE; }
+	 */
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -91,25 +82,24 @@ public class ItemMusketKnife extends ItemSword {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		boolean flag = !findAmmo(playerIn).isEmpty();
+		boolean flag = !this.findAmmo(playerIn).isEmpty();
 
-		if (!playerIn.capabilities.isCreativeMode && !flag && getBulletStack(stack, playerIn) == ItemStack.EMPTY) {
+		if (!playerIn.capabilities.isCreativeMode && !flag && this.getBulletStack(stack, playerIn) == ItemStack.EMPTY) {
 			if (flag) {
-				shoot(stack, worldIn, playerIn);
+				this.shoot(stack, worldIn, playerIn);
 			}
-			return flag ? new ActionResult(EnumActionResult.PASS, stack)
-					: new ActionResult(EnumActionResult.FAIL, stack);
+			return flag ? new ActionResult(EnumActionResult.PASS, stack) : new ActionResult(EnumActionResult.FAIL, stack);
 		}
 
 		else {
-			shoot(stack, worldIn, playerIn);
+			this.shoot(stack, worldIn, playerIn);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 		boolean flag = player.capabilities.isCreativeMode;
-		ItemStack itemstack = findAmmo(player);
+		ItemStack itemstack = this.findAmmo(player);
 
 		if (!itemstack.isEmpty() || flag) {
 			if (!worldIn.isRemote) {
@@ -119,7 +109,7 @@ public class ItemMusketKnife extends ItemSword {
 					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
 				} else {
-					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
+					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, this.getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
@@ -127,8 +117,7 @@ public class ItemMusketKnife extends ItemSword {
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
-					1.0F, 1.0F, false);
+			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
 			if (!flag) {
@@ -140,16 +129,14 @@ public class ItemMusketKnife extends ItemSword {
 			}
 		}
 	}
-	
+
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) 
-	{
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!worldIn.isRemote) {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (player.getHeldItemMainhand() == stack)
-				{
+				if (player.getHeldItemMainhand() == stack) {
 					if (!player.getHeldItemOffhand().isEmpty()) {
 						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
 							player.entityDropItem(player.getHeldItemOffhand(), 0F);
@@ -165,61 +152,35 @@ public class ItemMusketKnife extends ItemSword {
 	}
 
 	/*
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLiving;
-			boolean flag = player.capabilities.isCreativeMode;
-			ItemStack itemstack = findAmmo(player);
-
-			if (!itemstack.isEmpty() || flag) {
-				if (!worldIn.isRemote) {
-					if (flag && itemstack.isEmpty()) {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								30);
-						worldIn.spawnEntity(bulletE);
-					} else {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								30);
-						worldIn.spawnEntity(bulletE);
-						stack.damageItem(1, player);
-					}
-				}
-
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
-						1.0F, 1.0F, false);
-				entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
-
-				if (!flag) {
-					itemstack.shrink(1);
-
-					if (itemstack.isEmpty()) {
-						player.inventory.deleteStack(itemstack);
-					}
-				}
-			}
-		}
-	}
-	*/
+	 * @Override public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) { if (entityLiving instanceof EntityPlayer) { EntityPlayer player = (EntityPlayer) entityLiving; boolean flag =
+	 * player.capabilities.isCreativeMode; ItemStack itemstack = findAmmo(player);
+	 * 
+	 * if (!itemstack.isEmpty() || flag) { if (!worldIn.isRemote) { if (flag && itemstack.isEmpty()) { ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1); bulletE.shoot(player, player.rotationPitch, player.rotationYaw,
+	 * 0.0F, 3.5F, 2F); player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30); worldIn.spawnEntity(bulletE); } else { ProjectileBullet bulletE = new ProjectileBullet(worldIn, player,
+	 * getBulletType(itemstack)); bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F); player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(), 30);
+	 * worldIn.spawnEntity(bulletE); stack.damageItem(1, player); } }
+	 * 
+	 * worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false); entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
+	 * 
+	 * if (!flag) { itemstack.shrink(1);
+	 * 
+	 * if (itemstack.isEmpty()) { player.inventory.deleteStack(itemstack); } } } } }
+	 */
 
 	protected boolean isBullet(ItemStack stack) {
 		return stack.getItem() instanceof ItemBullet;
 	}
 
 	protected ItemStack findAmmo(EntityPlayer player) {
-		if (isBullet(player.getHeldItem(EnumHand.OFF_HAND))) {
+		if (this.isBullet(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (isBullet(player.getHeldItem(EnumHand.MAIN_HAND))) {
+		} else if (this.isBullet(player.getHeldItem(EnumHand.MAIN_HAND))) {
 			return player.getHeldItem(EnumHand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = player.inventory.getStackInSlot(i);
 
-				if (isBullet(itemstack)) {
+				if (this.isBullet(itemstack)) {
 					return itemstack;
 				}
 			}

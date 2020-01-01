@@ -40,8 +40,7 @@ public class ContainerSpawner extends Container {
 
 					@Override
 					public boolean isItemValid(ItemStack stack) {
-						return stack.getItem() instanceof ItemSoulBottle && stack.hasTagCompound()
-								&& stack.getTagCompound().hasKey("EntityIn");
+						return stack.getItem() instanceof ItemSoulBottle && stack.hasTagCompound() && stack.getTagCompound().hasKey("EntityIn");
 					}
 				});
 			}

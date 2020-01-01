@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderGiantSilverfish extends RenderLiving<EntityGiantSilverfishNormal> {
-	
+
 	static ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_silverfish.png");
 
 	public RenderGiantSilverfish(RenderManager rendermanagerIn) {
@@ -23,10 +23,10 @@ public class RenderGiantSilverfish extends RenderLiving<EntityGiantSilverfishNor
 		double width = 4D;
 		double height = 4D;
 		GL11.glScaled(width, height, width);
-		
+
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
-	
+
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGiantSilverfishNormal entity) {
 		return TEXTURE;

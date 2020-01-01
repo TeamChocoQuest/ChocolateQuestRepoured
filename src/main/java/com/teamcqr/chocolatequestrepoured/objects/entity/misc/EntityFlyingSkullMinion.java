@@ -21,7 +21,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class EntityFlyingSkullMinion extends EntityFlying {
-	
+
 	protected Entity summoner;
 	protected Entity target;
 	protected boolean attacking = false;
@@ -30,171 +30,171 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 
 	public EntityFlyingSkullMinion(World worldIn) {
 		super(worldIn);
-		setSize(0.5F, 0.5F);
-		setNoGravity(true);
-		setHealth(1F);
+		this.setSize(0.5F, 0.5F);
+		this.setNoGravity(true);
+		this.setHealth(1F);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1F);
 		this.navigator = new PathNavigateFlying(this, worldIn);
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
-			explode(10F);
+			this.explode(10F);
 			return true;
 		}
-		if(getRNG().nextInt(10) == 9) {
+		if (this.getRNG().nextInt(10) == 9) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
 			return true;
-		} 
-		explode();
+		}
+		this.explode();
 		return true;
 	}
-	
+
 	@Override
 	public PathNavigate getNavigator() {
-		return navigator;
+		return this.navigator;
 	}
-	
+
 	public void setSummoner(Entity ent) {
 		this.summoner = ent;
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		//If we hit a wall we explode
-		if(!isInsideOfMaterial(Material.AIR)) {
-			explode();
+		// If we hit a wall we explode
+		if (!this.isInsideOfMaterial(Material.AIR)) {
+			this.explode();
 		}
-		if(attacking) {
-			if(this.target != null && !this.target.isDead) {
-				updateDirection();
+		if (this.attacking) {
+			if (this.target != null && !this.target.isDead) {
+				this.updateDirection();
 			}
-			Vec3d v = direction;
+			Vec3d v = this.direction;
 			v = v.normalize();
-			setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
-			
-			getLookHelper().setLookPositionWithEntity(target, 30, 30);
-			
-		} else if(summoner != null) {
-			Vec3d v = summoner.getLookVec();
+			this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
+
+			this.getLookHelper().setLookPositionWithEntity(this.target, 30, 30);
+
+		} else if (this.summoner != null) {
+			Vec3d v = this.summoner.getLookVec();
 			v = new Vec3d(v.x, 2.25D, v.z);
 			v = v.normalize();
 			v = v.scale(2.5D);
-			v = VectorUtil.rotateVectorAroundY(v, isLeftSkull ? 270 : 90);
-			Vec3d targetPos = summoner.getPositionVector().add(v);
-			getLookHelper().setLookPositionWithEntity(summoner, 30, 30);
-			if(getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
-				Vec3d velo = targetPos.subtract(getPositionVector());
+			v = VectorUtil.rotateVectorAroundY(v, this.isLeftSkull ? 270 : 90);
+			Vec3d targetPos = this.summoner.getPositionVector().add(v);
+			this.getLookHelper().setLookPositionWithEntity(this.summoner, 30, 30);
+			if (this.getDistance(targetPos.x, targetPos.y, targetPos.z) > 1) {
+				Vec3d velo = targetPos.subtract(this.getPositionVector());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
-				setVelocity(velo.x, velo.y * 1.5, velo.z);
+				this.setVelocity(velo.x, velo.y * 1.5, velo.z);
 			}
 		}
 	}
-	
+
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
-		if(entityIn != summoner) {
+		if (entityIn != this.summoner) {
 			super.collideWithEntity(entityIn);
-			explode(0.75F);
+			this.explode(0.75F);
 		}
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		explode(1.25F);
+		this.explode(1.25F);
 	}
-	
+
 	private void explode() {
-		explode(1F);
-		setDead();
+		this.explode(1F);
+		this.setDead();
 	}
-	
+
 	private void explode(float strengthMultiplier) {
-		if(world != null) {
-			if(summoner != null) {
-				world.newExplosion(this.summoner, getPosition().getX(), getPosition().getY(), getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
+		if (this.world != null) {
+			if (this.summoner != null) {
+				this.world.newExplosion(this.summoner, this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
 			}
-			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, getPosition().getX(), getPosition().getY() + 0.02, getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, -0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, -0.5F, 1);
+			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), -0.5F, 0.0F, 0.5F, 1);
 		}
 	}
 
 	public void setTarget(Entity target) {
 		this.target = target;
-		updateDirection();
+		this.updateDirection();
 	}
-	
+
 	public void startAttacking() {
 		this.attacking = true;
 	}
-	
+
 	private void updateDirection() {
-		this.direction = target.getPositionVector().subtract(getPositionVector());
+		this.direction = this.target.getPositionVector().subtract(this.getPositionVector());
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		compound.setBoolean("attacking", attacking);
-		compound.setDouble("vX", direction == null ? 0D : direction.x);
-		compound.setDouble("vY", direction == null ? 0D : direction.y);
-		compound.setDouble("vZ", direction == null ? 0D : direction.z);
-		if(summoner != null && !summoner.isDead) {
-			compound.setTag("summonerID", NBTUtil.createUUIDTag(summoner.getPersistentID()));
+		compound.setBoolean("attacking", this.attacking);
+		compound.setDouble("vX", this.direction == null ? 0D : this.direction.x);
+		compound.setDouble("vY", this.direction == null ? 0D : this.direction.y);
+		compound.setDouble("vZ", this.direction == null ? 0D : this.direction.z);
+		if (this.summoner != null && !this.summoner.isDead) {
+			compound.setTag("summonerID", NBTUtil.createUUIDTag(this.summoner.getPersistentID()));
 		}
-		if(target != null && !target.isDead) {
-			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(target.getPersistentID()));
+		if (this.target != null && !this.target.isDead) {
+			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(this.target.getPersistentID()));
 		}
 	}
-	
+
 	public boolean isAttacking() {
-		return attacking;
+		return this.attacking;
 	}
-	
+
 	public boolean hasTarget() {
-		return target != null && !target.isDead;
+		return this.target != null && !this.target.isDead;
 	}
-	
+
 	public void setSide(boolean left) {
 		this.isLeftSkull = left;
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		attacking = compound.getBoolean("attacking");
-		double x,y,z;
+		this.attacking = compound.getBoolean("attacking");
+		double x, y, z;
 		x = compound.getDouble("vX");
 		y = compound.getDouble("vY");
 		z = compound.getDouble("vZ");
-		direction = new Vec3d(x, y, z);
-		if(compound.hasKey("targetID")) {
+		this.direction = new Vec3d(x, y, z);
+		if (compound.hasKey("targetID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("targetID"));
-			if(world != null) {
-				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
-					if(ent.getPersistentID().equals(id)) {
-						target = ent;
+			if (this.world != null) {
+				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+					if (ent.getPersistentID().equals(id)) {
+						this.target = ent;
 					}
 				}
 			}
 		}
-		if(compound.hasKey("summonerID")) {
+		if (compound.hasKey("summonerID")) {
 			UUID id = net.minecraft.nbt.NBTUtil.getUUIDFromTag(compound.getCompoundTag("summonerID"));
-			if(world != null) {
-				for(Entity ent : world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(10,10,10), getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
-					if(ent.getPersistentID().equals(id)) {
-						summoner = ent;
+			if (this.world != null) {
+				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(this.getPosition().add(10, 10, 10), this.getPosition().add(-10, -10, -10)), TargetUtil.PREDICATE_LIVING)) {
+					if (ent.getPersistentID().equals(id)) {
+						this.summoner = ent;
 					}
 				}
 			}

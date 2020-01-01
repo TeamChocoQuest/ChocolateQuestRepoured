@@ -28,16 +28,18 @@ public class CQRFaction {
 	private List<CQRFaction> allies = Collections.synchronizedList(new ArrayList<CQRFaction>());
 	private List<CQRFaction> enemies = Collections.synchronizedList(new ArrayList<CQRFaction>());
 	private EReputationState defaultRelation;
-	
+
 	private int repuChangeOnMemberKill = 5;
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
-	
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill,
+			Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
-	
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
+
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean saveGlobally, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill,
+			Optional<Integer> repuChangeOnEnemyKill) {
 		this.savedGlobally = saveGlobally;
 		this.name = name;
 		this.defaultRelation = defaultReputationState;
@@ -46,81 +48,96 @@ public class CQRFaction {
 		this.repuChangeOnAllyKill = repuChangeOnAllyKill.isPresent() ? repuChangeOnAllyKill.get() : 2;
 		this.repuChangeOnEnemyKill = repuChangeOnEnemyKill.isPresent() ? repuChangeOnEnemyKill.get() : 1;
 	}
-	
-	public int getRepuMemberKill() {return repuChangeOnMemberKill;}
-	public int getRepuAllyKill() {return repuChangeOnAllyKill;}
-	public int getRepuEnemyKill() {return repuChangeOnEnemyKill;}
-	
+
+	public int getRepuMemberKill() {
+		return this.repuChangeOnMemberKill;
+	}
+
+	public int getRepuAllyKill() {
+		return this.repuChangeOnAllyKill;
+	}
+
+	public int getRepuEnemyKill() {
+		return this.repuChangeOnEnemyKill;
+	}
+
 	public String getName() {
 		return this.name;
 	}
+
 	public boolean isSavedGlobally() {
-		return savedGlobally;
+		return this.savedGlobally;
 	}
+
 	public EReputationState getDefaultReputation() {
-		return defaultRelation;
+		return this.defaultRelation;
 	}
 
 	public void addAlly(CQRFaction ally) {
-		if(ally != null) {
-			allies.add(ally);
+		if (ally != null) {
+			this.allies.add(ally);
 		}
 	}
-	
+
 	public void addEnemy(CQRFaction enemy) {
-		if(enemy != null) {
-			enemies.add(enemy);
+		if (enemy != null) {
+			this.enemies.add(enemy);
 		}
 	}
-	
-	//DONE: Special case for player faction!!
+
+	// DONE: Special case for player faction!!
 	public boolean isEnemy(Entity ent) {
-		if(ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
+		if (ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
 			return false;
 		}
-		if(ent instanceof EntityPlayer) {
-			//Special case for player
+		if (ent instanceof EntityPlayer) {
+			// Special case for player
 			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ENEMY;
 		}
-		return isEnemy(FactionRegistry.instance().getFactionOf(ent));
+		return this.isEnemy(FactionRegistry.instance().getFactionOf(ent));
 	}
+
 	public boolean isEnemy(AbstractEntityCQR ent) {
-		if(ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
+		if (ent.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL)) {
 			return false;
 		}
-		return isEnemy(ent.getFaction());
+		return this.isEnemy(ent.getFaction());
 	}
+
 	public boolean isEnemy(CQRFaction faction) {
-		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return false;
 		}
-		if(faction != null) {
-			for(CQRFaction str : this.enemies) {
-				if(str != null && faction.getName().equalsIgnoreCase(str.getName())) {
+		if (faction != null) {
+			for (CQRFaction str : this.enemies) {
+				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	//DONE: Special case for player faction!!
+
+	// DONE: Special case for player faction!!
 	public boolean isAlly(Entity ent) {
-		if(ent instanceof EntityPlayer) {
-			//Special case for player
+		if (ent instanceof EntityPlayer) {
+			// Special case for player
 			return FactionRegistry.instance().getReputationOf(ent.getPersistentID(), this) == EReputationStateRough.ALLY;
 		}
-		return isAlly(FactionRegistry.instance().getFactionOf(ent));
+		return this.isAlly(FactionRegistry.instance().getFactionOf(ent));
 	}
+
 	public boolean isAlly(AbstractEntityCQR ent) {
-		return isAlly(ent.getFaction());
+		return this.isAlly(ent.getFaction());
 	}
+
 	public boolean isAlly(CQRFaction faction) {
-		if(faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
+		if (faction == this || (faction != null && faction.getName().equalsIgnoreCase("ALL_ALLY"))) {
 			return true;
 		}
-		if(faction != null) {
-			for(CQRFaction str : this.allies) {
-				if(str != null && faction.getName().equalsIgnoreCase(str.getName())) {
+		if (faction != null) {
+			for (CQRFaction str : this.allies) {
+				if (str != null && faction.getName().equalsIgnoreCase(str.getName())) {
 					return true;
 				}
 			}
@@ -128,52 +145,51 @@ public class CQRFaction {
 		return false;
 	}
 
-
 	public void decrementReputation(EntityPlayer player, int score) {
-		if(repuMayChange) {
-			FactionRegistry.instance().decrementRepuOf(player, name, score);
+		if (this.repuMayChange) {
+			FactionRegistry.instance().decrementRepuOf(player, this.name, score);
 		}
 	}
 
 	public void incrementReputation(EntityPlayer player, int score) {
-		if(repuMayChange) {
-			FactionRegistry.instance().incrementRepuOf(player, name, score);
+		if (this.repuMayChange) {
+			FactionRegistry.instance().incrementRepuOf(player, this.name, score);
 		}
 	}
-	
+
 	public boolean isRepuStatic() {
-		return !repuMayChange;
+		return !this.repuMayChange;
 	}
-	
+
 	public void saveToFile(File folder) {
-		if(savedGlobally) {
-			//DONE: SAVE DATA
+		if (this.savedGlobally) {
+			// DONE: SAVE DATA
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), getName() + ".nbt");
+					File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), CQRFaction.this.getName() + ".nbt");
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(file);
-					if(root != null) {
+					if (root != null) {
 						root.setString("type", "faction");
-						root.setString("name", name);
-						root.setBoolean("staticreputation", isRepuStatic());
-						root.setString("defaultrelation", getDefaultReputation().toString());
-						root.setInteger("repuchangekillally", getRepuAllyKill());
-						root.setInteger("repuchangekillmember", getRepuMemberKill());
-						root.setInteger("repuchangekillenemy", getRepuEnemyKill());
+						root.setString("name", CQRFaction.this.name);
+						root.setBoolean("staticreputation", CQRFaction.this.isRepuStatic());
+						root.setString("defaultrelation", CQRFaction.this.getDefaultReputation().toString());
+						root.setInteger("repuchangekillally", CQRFaction.this.getRepuAllyKill());
+						root.setInteger("repuchangekillmember", CQRFaction.this.getRepuMemberKill());
+						root.setInteger("repuchangekillenemy", CQRFaction.this.getRepuEnemyKill());
 						NBTTagCompound relationInfo = new NBTTagCompound();
-						if(relationInfo.hasKey("allies")) {
+						if (relationInfo.hasKey("allies")) {
 							relationInfo.removeTag("allies");
 						}
 						NBTTagList allyTag = FileIOUtil.getOrCreateTagList(relationInfo, "allies", Constants.NBT.TAG_STRING);
-						for(CQRFaction af : allies) {
+						for (CQRFaction af : CQRFaction.this.allies) {
 							allyTag.appendTag(new NBTTagString(af.getName()));
 						}
-						if(relationInfo.hasKey("enemies")) {
+						if (relationInfo.hasKey("enemies")) {
 							relationInfo.removeTag("enemies");
 						}
 						NBTTagList enemyTag = FileIOUtil.getOrCreateTagList(relationInfo, "enemies", Constants.NBT.TAG_STRING);
-						for(CQRFaction ef : enemies) {
+						for (CQRFaction ef : CQRFaction.this.enemies) {
 							enemyTag.appendTag(new NBTTagString(ef.getName()));
 						}
 						relationInfo.setTag("allies", allyTag);

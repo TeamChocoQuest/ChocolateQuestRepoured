@@ -9,8 +9,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 /*
- * Developed by MrMarnic on 28.08.2019
- * GitHub: https://github.com/MrMarnic
+ * Developed by MrMarnic on 28.08.2019 GitHub: https://github.com/MrMarnic
  */
 public class ExporterUpdatePacketHandler implements IMessageHandler<ExporterUpdatePacket, IMessage> {
 

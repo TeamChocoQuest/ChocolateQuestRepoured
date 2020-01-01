@@ -42,16 +42,15 @@ public class ItemArmorHeavy extends ItemArmor {
 
 		return multimap;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
-			ModelBiped _default) {
-		//return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
-		if(itemStack.getItem() instanceof ItemArmor) {
-			if(((ItemArmor)itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
-				//TODO: Diamond armor
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		// return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
+		if (itemStack.getItem() instanceof ItemArmor) {
+			if (((ItemArmor) itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
+				// TODO: Diamond armor
 			} else {
 				return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 			}
@@ -59,6 +58,7 @@ public class ItemArmorHeavy extends ItemArmor {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 	}
 
+	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if (!world.isRemote) {
 			if (!player.onGround) {
