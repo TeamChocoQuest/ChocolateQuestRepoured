@@ -165,14 +165,14 @@ public class ModEntities {
 				int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates, int eggColor1,
 				int eggColor2) {
 			return EntityEntryBuilder.create().entity(entityClass)
-					.id(new ResourceLocation(Reference.MODID, name), entityID++).name(name).egg(eggColor1, eggColor2)
-					.tracker(64, 1, false).build();
+					.id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).egg(eggColor1, eggColor2)
+					.tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates).build();
 		}
 
 		private static EntityEntry createEntityEntryWithoutEgg(@Nonnull Class<? extends Entity> entityClass,
 				String name, int trackerRange, int trackerUpdateFrequency, boolean sendVelocityUpdates) {
 			return EntityEntryBuilder.create().entity(entityClass)
-					.id(new ResourceLocation(Reference.MODID, name), entityID++).name(name).tracker(64, 1, false)
+					.id(new ResourceLocation(Reference.MODID, name), entityID++).name("cqr_" + name).tracker(trackerRange, trackerUpdateFrequency, sendVelocityUpdates)
 					.build();
 		}
 
