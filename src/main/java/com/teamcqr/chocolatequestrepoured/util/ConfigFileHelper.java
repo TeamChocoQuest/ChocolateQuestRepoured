@@ -23,6 +23,7 @@ public class ConfigFileHelper {
 	private boolean wallHasObsiCore = true;
 	private boolean mobsSpawnedFromCQSpawnersArePersistent = true;
 	private boolean reinstallDefaultFiles = false;
+	private boolean armorBreaksOnMobs = true;
 	private ResourceLocation wallMob = new ResourceLocation(Reference.MODID, "spectre");
 	
 	//Mobs
@@ -107,6 +108,10 @@ public class ConfigFileHelper {
 		prop = config.get("mobs", "distanceDivisor", 1000.0D);
 		baseHealthDistanceDivisor = prop.getDouble(1000.0D);
 		
+		//Armor shatter option
+		prop = config.get("mobs", "armorShattersOnMobs", true);
+		armorBreaksOnMobs = prop.getBoolean(true);
+		
 		//Healing potion count
 		prop = config.get("mobs", "defaultHealingPotionCount", 1);
 		defaultHealingPotionCount = prop.getInt(1);
@@ -184,6 +189,9 @@ public class ConfigFileHelper {
 	}
 	public ResourceLocation getWallMob() {
 		return wallMob;
+	}
+	public boolean doesArmorShatterOnMobs() {
+		return armorBreaksOnMobs;
 	}
 
 }
