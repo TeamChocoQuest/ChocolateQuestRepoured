@@ -34,28 +34,29 @@ public class ItemHelmetDragon extends ItemArmor {
 	}
 
 	/*
-	@SideOnly(Side.CLIENT)
-	@Override
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
-			ModelBiped _default) {
-		if (itemStack != null) {
-			if (itemStack.getItem() instanceof ItemArmor) {
-				ModelHelmetDragon model = new ModelHelmetDragon();
-
-				model.bipedHead.showModel = armorSlot == EntityEquipmentSlot.HEAD;
-				model.bipedHeadwear.showModel = armorSlot == EntityEquipmentSlot.HEAD;
-
-				model.isSneak = _default.isSneak;
-				model.isRiding = _default.isRiding;
-				model.isChild = _default.isChild;
-				model.rightArmPose = _default.rightArmPose;
-				model.leftArmPose = _default.leftArmPose;
-
-				return model;
-			}
-		}
-		return null;
-	}
-	*/
+	 * @SideOnly(Side.CLIENT)
+	 * 
+	 * @Override
+	 * public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot,
+	 * ModelBiped _default) {
+	 * if (itemStack != null) {
+	 * if (itemStack.getItem() instanceof ItemArmor) {
+	 * ModelHelmetDragon model = new ModelHelmetDragon();
+	 * 
+	 * model.bipedHead.showModel = armorSlot == EntityEquipmentSlot.HEAD;
+	 * model.bipedHeadwear.showModel = armorSlot == EntityEquipmentSlot.HEAD;
+	 * 
+	 * model.isSneak = _default.isSneak;
+	 * model.isRiding = _default.isRiding;
+	 * model.isChild = _default.isChild;
+	 * model.rightArmPose = _default.rightArmPose;
+	 * model.leftArmPose = _default.leftArmPose;
+	 * 
+	 * return model;
+	 * }
+	 * }
+	 * return null;
+	 * }
+	 */
 
 }

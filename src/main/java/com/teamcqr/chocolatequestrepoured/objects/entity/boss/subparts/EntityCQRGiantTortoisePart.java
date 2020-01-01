@@ -12,49 +12,49 @@ import net.minecraft.util.math.BlockPos;
 public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 
 	private boolean isHead;
-	
+
 	public EntityCQRGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
 		super(parent, partName, width, height);
-		
-		setSize(width, height);
-		
-		//setInvisible(true);
+
+		this.setSize(width, height);
+
+		// setInvisible(true);
 	}
-	
+
 	public EntityCQRGiantTortoise getParent() {
-		return (EntityCQRGiantTortoise)parent;
+		return (EntityCQRGiantTortoise) this.parent;
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(isHead) {
+		if (this.isHead) {
 			amount *= 1.5F;
 		}
-		return getParent().attackEntityFromPart(this, source, amount);
+		return this.getParent().attackEntityFromPart(this, source, amount);
 	}
-	
+
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		
+
 		++this.ticksExisted;
 	}
-	
+
 	@Override
 	public boolean isNonBoss() {
-		return getParent().isNonBoss();
+		return this.getParent().isNonBoss();
 	}
 
-	//As this is a part it does not make any noises
+	// As this is a part it does not make any noises
 	@Override
 	protected void playStepSound(BlockPos pos, Block blockIn) {
 	}
-	
+
 	@Override
 	public void setRotation(float yaw, float pitch) {
 		super.setRotation(yaw, pitch);
@@ -62,10 +62,10 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if(getParent().isDead) {
+		if (this.getParent().isDead) {
 			return false;
 		}
-		return getParent().processInitialInteract(player, hand);
+		return this.getParent().processInitialInteract(player, hand);
 	}
 
 }

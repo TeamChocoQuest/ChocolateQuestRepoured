@@ -13,33 +13,32 @@ import net.minecraft.util.math.BlockPos;
 
 class ForceFieldNexusInfo {
 
-private BlockPos position;
-	
+	private BlockPos position;
+
 	public ForceFieldNexusInfo(BlockPos location) {
 		this.position = location;
 	}
-	
+
 	public NBTTagCompound getAsNBTTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-		
+
 		tag.setString("type", "forcefieldcoreinfo");
-		
+
 		NBTTagCompound posTag = NBTUtil.BlockPosToNBTTag(this.position);
-		
+
 		tag.setTag("position", posTag);
-		
-		
+
 		return tag;
 	}
-	
+
 	public ForceFieldNexusInfo(NBTTagCompound nbtTag) {
-		if(nbtTag.getString("type").equalsIgnoreCase("forcefieldcoreinfo")) {
-			
+		if (nbtTag.getString("type").equalsIgnoreCase("forcefieldcoreinfo")) {
+
 			NBTTagCompound posTag = nbtTag.getCompoundTag("position");
 			int x = posTag.getInteger("x");
 			int y = posTag.getInteger("y");
 			int z = posTag.getInteger("z");
-			
+
 			this.position = new BlockPos(x, y, z);
 		}
 	}

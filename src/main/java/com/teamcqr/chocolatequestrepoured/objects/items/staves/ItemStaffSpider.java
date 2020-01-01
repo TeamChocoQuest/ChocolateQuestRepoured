@@ -28,24 +28,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffSpider extends Item implements IRangedWeapon{
+public class ItemStaffSpider extends Item implements IRangedWeapon {
 
 	public ItemStaffSpider() {
-		setMaxDamage(2048);
-		setMaxStackSize(1);
+		this.setMaxDamage(2048);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shoot(worldIn, playerIn, stack, handIn);
+		this.shoot(worldIn, playerIn, stack, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	public void shoot(World worldIn, EntityPlayer playerIn, ItemStack stack, EnumHand handIn) {
-		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH,
-				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
-				false);
+		worldIn.playSound(playerIn.posX, playerIn.posY, playerIn.posZ, SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		playerIn.swingArm(handIn);
 
 		if (!worldIn.isRemote) {
@@ -67,7 +65,6 @@ public class ItemStaffSpider extends Item implements IRangedWeapon{
 		}
 	}
 
-
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		shooter.swingArm(handIn);
@@ -81,7 +78,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon{
 			worldIn.spawnEntity(ball);
 		}
 	}
-	
+
 	@Override
 	public SoundEvent getShootSound() {
 		return SoundEvents.ENTITY_SLIME_SQUISH;

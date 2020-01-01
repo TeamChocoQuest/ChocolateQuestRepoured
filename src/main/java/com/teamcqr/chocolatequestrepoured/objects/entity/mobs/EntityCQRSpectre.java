@@ -29,17 +29,17 @@ public class EntityCQRSpectre extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.UNDEAD;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_SPECTRE.getLootTable();
 	}
-	
+
 	@Override
 	public int getTextureCount() {
 		return 3;
 	}
-	
+
 	@Override
 	public boolean canRide() {
 		return true;

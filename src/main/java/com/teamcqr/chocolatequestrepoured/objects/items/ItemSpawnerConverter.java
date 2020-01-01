@@ -16,30 +16,29 @@ import net.minecraft.world.World;
 public class ItemSpawnerConverter extends Item {
 
 	public ItemSpawnerConverter() {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!worldIn.isRemote) {
 			Block block = worldIn.getBlockState(pos).getBlock();
-			if(block == null) {
+			if (block == null) {
 				return EnumActionResult.PASS;
 			}
 			player.getCooldownTracker().setCooldown(this, 10);
-			if(block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
-				if(block == Blocks.MOB_SPAWNER) {
+			if (block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
+				if (block == Blocks.MOB_SPAWNER) {
 					System.out.println("Converting: Vanilla -> CQR");
 					SpawnerFactory.convertVanillaSpawnerToCQSpawner(worldIn, pos);
 					return EnumActionResult.PASS;
 				}
-				if(block == ModBlocks.SPAWNER) {
+				if (block == ModBlocks.SPAWNER) {
 					System.out.println("Converting: CQR -> Vanilla");
 					SpawnerFactory.convertCQSpawnerToVanillaSpawner(worldIn, pos, null);
 					return EnumActionResult.PASS;
 				}
-			} 
+			}
 		}
 		return EnumActionResult.PASS;
 	}

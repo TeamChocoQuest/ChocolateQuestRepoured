@@ -24,83 +24,83 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	private File entranceStairFolder;
 	private File entranceBuildingFolder;
 	private File bossRoomFolder;
-	
-	//IMPORTANT: the structure paste location MUST BE in its middle !!!
-	// --> calculate position  B E F O R E  pasting -> pre-process method
+
+	// IMPORTANT: the structure paste location MUST BE in its middle !!!
+	// --> calculate position B E F O R E pasting -> pre-process method
 	private File roomCurveFolder;
 	private File roomRoomFolder;
 	private File roomCrossingFolder;
 	private File roomtCrossingFolder;
 	private File roomHallwayFolder;
-	
+
 	private int minFloors = 2;
-	private int maxFloors= 3;
+	private int maxFloors = 3;
 	private int minRoomsPerFloor = 6;
 	private int maxRoomsPerFloor = 10;
-	
+
 	private int roomSizeX = 15;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
-	
-	//Generator for the old strongholds which were basic linear dungeons
-	
-	//Important: All rooms need to have the same x and z size, the height must be the same for all, except the stair rooms: They must have the double height
-	//Also all stair rooms must have exits and entries to ALL sides (N, E, S, W)
-	
+
+	// Generator for the old strongholds which were basic linear dungeons
+
+	// Important: All rooms need to have the same x and z size, the height must be the same for all, except the stair rooms: They must have the double height
+	// Also all stair rooms must have exits and entries to ALL sides (N, E, S, W)
+
 	public StrongholdLinearDungeon(File configFile) {
 		super(configFile);
-		
-		Properties prop = loadConfig(configFile);
-		
-		if(prop != null) {
-			
-			minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
-			maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 3);
-			minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 6);
-			maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 10);
-			
-			stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "stronghold/linear/stairs/");
-			entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
-			entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
-			bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
 
-			roomRoomFolder = PropertyFileHelper.getFileProperty(prop, "deadEndFolder", "stronghold/linear/rooms/deadEnds");
-			roomHallwayFolder = PropertyFileHelper.getFileProperty(prop, "hallwayStraightFolder", "stronghold/linear/rooms/hallways/");
-			roomCurveFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCurveFolder", "stronghold/linear/rooms/curves/");
-			roomtCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/threesided/");
-			roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
-			
-			roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
-			roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
-			roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
-			
-			closeConfigFile();
+		Properties prop = this.loadConfig(configFile);
+
+		if (prop != null) {
+
+			this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
+			this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 3);
+			this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 6);
+			this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 10);
+
+			this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "stronghold/linear/stairs/");
+			this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
+			this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
+			this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
+
+			this.roomRoomFolder = PropertyFileHelper.getFileProperty(prop, "deadEndFolder", "stronghold/linear/rooms/deadEnds");
+			this.roomHallwayFolder = PropertyFileHelper.getFileProperty(prop, "hallwayStraightFolder", "stronghold/linear/rooms/hallways/");
+			this.roomCurveFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCurveFolder", "stronghold/linear/rooms/curves/");
+			this.roomtCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/threesided/");
+			this.roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
+
+			this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
+			this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
+			this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
+
+			this.closeConfigFile();
 		} else {
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		}
 	}
-	
+
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-		
+
 		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
-		//For position locked dungeons, use the positions y
-		if(this.isPosLocked()) {
+		// For position locked dungeons, use the positions y
+		if (this.isPosLocked()) {
 			y = this.getLockedPos().getY();
 		}
-		y += getYOffset();
-		
-		getGenerator().generate(world, chunk, x, y, z);
+		y += this.getYOffset();
+
+		this.getGenerator().generate(world, chunk, x, y, z);
 	}
-	
+
 	@Override
 	public IDungeonGenerator getGenerator() {
 		return new StrongholdLinearGenerator(this);
 	}
 
 	public int getMinFloors() {
-		return minFloors;
+		return this.minFloors;
 	}
 
 	public void setMinFloors(int floors) {
@@ -108,7 +108,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public int getMinRoomsPerFloor() {
-		return minRoomsPerFloor;
+		return this.minRoomsPerFloor;
 	}
 
 	public void setMinRoomsPerFloor(int minRoomsPerFloor) {
@@ -116,7 +116,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public int getMaxFloors() {
-		return maxFloors;
+		return this.maxFloors;
 	}
 
 	public void setMaxFloors(int floorss) {
@@ -124,7 +124,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public int getMaxRoomsPerFloor() {
-		return maxRoomsPerFloor;
+		return this.maxRoomsPerFloor;
 	}
 
 	public void setMaxRoomsPerFloor(int maxRoomsPerFloor) {
@@ -132,7 +132,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public File getStairFolder() {
-		return stairFolder;
+		return this.stairFolder;
 	}
 
 	public void setStairFolder(File stairFolder) {
@@ -140,7 +140,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public File getEntranceStairFolder() {
-		return entranceStairFolder;
+		return this.entranceStairFolder;
 	}
 
 	public void setEntranceStairFolder(File entranceStairFolder) {
@@ -148,7 +148,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public File getEntranceBuildingFolder() {
-		return entranceBuildingFolder;
+		return this.entranceBuildingFolder;
 	}
 
 	public void setEntranceBuildingFolder(File entranceBuildingFolder) {
@@ -156,49 +156,59 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	}
 
 	public File getBossRoomFolder() {
-		return bossRoomFolder;
+		return this.bossRoomFolder;
 	}
 
 	public void setBossRoomFolder(File bossRoomFolder) {
 		this.bossRoomFolder = bossRoomFolder;
 	}
-	
+
 	public File getCurveRoom() {
-		return getStructureFileFromDirectory(roomCurveFolder);
+		return this.getStructureFileFromDirectory(this.roomCurveFolder);
 	}
+
 	public File getTCrossingRoom() {
-		return getStructureFileFromDirectory(roomtCrossingFolder);
+		return this.getStructureFileFromDirectory(this.roomtCrossingFolder);
 	}
+
 	public File getCrossingRoom() {
-		return getStructureFileFromDirectory(roomCrossingFolder);
+		return this.getStructureFileFromDirectory(this.roomCrossingFolder);
 	}
+
 	public File getHallwayRoom() {
-		return getStructureFileFromDirectory(roomHallwayFolder);
+		return this.getStructureFileFromDirectory(this.roomHallwayFolder);
 	}
+
 	public File getDeadEndRoom() {
-		return getStructureFileFromDirectory(roomRoomFolder);
+		return this.getStructureFileFromDirectory(this.roomRoomFolder);
 	}
+
 	public File getEntranceStairRoom() {
-		return getStructureFileFromDirectory(entranceStairFolder);
+		return this.getStructureFileFromDirectory(this.entranceStairFolder);
 	}
+
 	public File getStairRoom() {
-		return getStructureFileFromDirectory(stairFolder);
+		return this.getStructureFileFromDirectory(this.stairFolder);
 	}
+
 	public File getBossRoom() {
-		return getStructureFileFromDirectory(bossRoomFolder);
+		return this.getStructureFileFromDirectory(this.bossRoomFolder);
 	}
+
 	public int getRoomSizeX() {
-		return roomSizeX;
+		return this.roomSizeX;
 	}
+
 	public int getRoomSizeZ() {
-		return roomSizeZ;
+		return this.roomSizeZ;
 	}
+
 	public int getRoomSizeY() {
-		return roomSizeY;
+		return this.roomSizeY;
 	}
 
 	public File getEntranceBuilding() {
-		return getStructureFileFromDirectory(entranceBuildingFolder);
+		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
 	}
 
 }

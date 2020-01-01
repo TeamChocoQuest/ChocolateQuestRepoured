@@ -27,8 +27,7 @@ public class CapabilityStructureSelectorStorage implements IStorage<CapabilitySt
 	}
 
 	@Override
-	public void readNBT(Capability<CapabilityStructureSelector> capability, CapabilityStructureSelector instance, EnumFacing side,
-			NBTBase nbt) {
+	public void readNBT(Capability<CapabilityStructureSelector> capability, CapabilityStructureSelector instance, EnumFacing side, NBTBase nbt) {
 		NBTTagCompound compound = (NBTTagCompound) nbt;
 
 		if (compound.hasKey("pos1")) {

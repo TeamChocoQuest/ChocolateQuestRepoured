@@ -32,15 +32,15 @@ public class RenderEventHandler {
 			} else {
 				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
-		} else if(itemMain instanceof ItemRevolver) {
-			if(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
+		} else if (itemMain instanceof ItemRevolver) {
+			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 			} else {
 				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
 			}
 		}
-		if(itemOff instanceof ItemMusket) {
-			if(!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
+		if (itemOff instanceof ItemMusket) {
+			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
 				event.getRenderer().getMainModel().rightArmPose = ArmPose.BOW_AND_ARROW;
