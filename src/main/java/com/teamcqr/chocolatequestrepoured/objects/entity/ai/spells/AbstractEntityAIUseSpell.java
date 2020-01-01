@@ -8,9 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.util.SoundEvent;
 
 /*
- * 20.12.2019
- * Made by: DerToaster98
- * Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
+ * 20.12.2019 Made by: DerToaster98 Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
  */
 public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 
@@ -24,6 +22,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute() {
 		if (this.entity.getAttackTarget() == null) {
 			this.entity.setSpellCasting(false);
@@ -43,6 +42,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean shouldContinueExecuting() {
 		return this.entity.getAttackTarget() != null && this.spellWarmup > 0;
 	}
@@ -50,6 +50,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting() {
 		this.entity.setSpellCasting(false);
 		this.spellWarmup = this.getCastWarmupTime();
@@ -61,12 +62,13 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			this.entity.playSound(soundevent, 1.0F, 1.0F);
 		}
 
-		this.entity.setSpellType(getSpellType());
+		this.entity.setSpellType(this.getSpellType());
 	}
 
 	/**
 	 * Keep ticking a continuous task that has already been started
 	 */
+	@Override
 	public void updateTask() {
 		this.entity.setSpellCasting(true);
 		--this.spellWarmup;
@@ -78,7 +80,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);
 		}
 	}
-	
+
 	@Override
 	public boolean isInterruptible() {
 		return false;

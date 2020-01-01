@@ -16,72 +16,70 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class StrongholdOpenDungeon extends DungeonBase {
-	
+
 	private File stairFolder;
 	private File bossRoomFolder;
 	private File entranceStairFolder;
 	private File entranceBuildingFolder;
 	private File roomFolder;
-	
+
 	private int minFloors = 2;
 	private int maxFloors = 4;
 	private int minRoomsPerFloor = 7;
 	private int maxRoomsPerFloor = 10;
-	
+
 	private int roomSizeX = 17;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 17;
-	
-	private Block wallBlock = Blocks.STONEBRICK;
-	
-	//Important: All rooms must have the same dimensions!!!
 
-	//Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
-	
+	private Block wallBlock = Blocks.STONEBRICK;
+
+	// Important: All rooms must have the same dimensions!!!
+
+	// Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
+
 	public StrongholdOpenDungeon(File configFile) {
 		super(configFile);
-		Properties prop = loadConfig(configFile);
-		if(prop != null) {
-			stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");
-			entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
-			entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
-			roomFolder = PropertyFileHelper.getFileProperty(prop, "roomFolder", "strongholds/open/rooms");
-			bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "strongholds/open/boss");
-			
-			minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
-			maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 4);
-			minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 4);
-			maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 16);
-			
-			roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 17);
-			roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
-			roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
-			
-			wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
-			
-			closeConfigFile();
+		Properties prop = this.loadConfig(configFile);
+		if (prop != null) {
+			this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");
+			this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
+			this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
+			this.roomFolder = PropertyFileHelper.getFileProperty(prop, "roomFolder", "strongholds/open/rooms");
+			this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "strongholds/open/boss");
+
+			this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
+			this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 4);
+			this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 4);
+			this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 16);
+
+			this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 17);
+			this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
+			this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
+
+			this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
+
+			this.closeConfigFile();
 		} else {
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		}
 	}
-	
+
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-		
+
 		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
-		//For position locked dungeons, use the positions y
-		if(this.isPosLocked()) {
+		// For position locked dungeons, use the positions y
+		if (this.isPosLocked()) {
 			y = this.getLockedPos().getY();
 		}
-		y += getYOffset();
-		
-		getGenerator().generate(world, chunk, x, y, z);
+		y += this.getYOffset();
+
+		this.getGenerator().generate(world, chunk, x, y, z);
 	}
 
 	@Override
@@ -90,7 +88,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 	}
 
 	public File getStairFolder() {
-		return stairFolder;
+		return this.stairFolder;
 	}
 
 	public void setStairFolder(File stairFolder) {
@@ -98,7 +96,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 	}
 
 	public File getBossRoomFolder() {
-		return bossRoomFolder;
+		return this.bossRoomFolder;
 	}
 
 	public void setBossRoomFolder(File bossRoomFolder) {
@@ -106,7 +104,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 	}
 
 	public File getEntranceStairFolder() {
-		return entranceStairFolder;
+		return this.entranceStairFolder;
 	}
 
 	public void setEntranceStairFolder(File entranceStairFolder) {
@@ -114,7 +112,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 	}
 
 	public File getEntranceBuildingFolder() {
-		return entranceBuildingFolder;
+		return this.entranceBuildingFolder;
 	}
 
 	public void setEntranceBuildingFolder(File entranceBuildingFolder) {
@@ -122,45 +120,54 @@ public class StrongholdOpenDungeon extends DungeonBase {
 	}
 
 	public File getRoomFolder() {
-		return roomFolder;
+		return this.roomFolder;
 	}
 
 	public void setRoomFolder(File roomFolder) {
 		this.roomFolder = roomFolder;
 	}
-	
+
 	public int getRandomFloorCount() {
-		return DungeonGenUtils.getIntBetweenBorders(minFloors, maxFloors);
+		return DungeonGenUtils.getIntBetweenBorders(this.minFloors, this.maxFloors);
 	}
+
 	public int getRandomRoomCountForFloor() {
-		return DungeonGenUtils.getIntBetweenBorders(minRoomsPerFloor, maxRoomsPerFloor);
+		return DungeonGenUtils.getIntBetweenBorders(this.minRoomsPerFloor, this.maxRoomsPerFloor);
 	}
-	
+
 	public File getBossRoom() {
-		return getStructureFileFromDirectory(bossRoomFolder);
+		return this.getStructureFileFromDirectory(this.bossRoomFolder);
 	}
+
 	public File getRoom() {
-		return getStructureFileFromDirectory(roomFolder);
+		return this.getStructureFileFromDirectory(this.roomFolder);
 	}
+
 	public File getStairRoom() {
-		return getStructureFileFromDirectory(stairFolder);
+		return this.getStructureFileFromDirectory(this.stairFolder);
 	}
+
 	public File getEntranceBuilding() {
-		return getStructureFileFromDirectory(entranceBuildingFolder);
+		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
 	}
+
 	public File getEntranceStair() {
-		return getStructureFileFromDirectory(entranceStairFolder);
+		return this.getStructureFileFromDirectory(this.entranceStairFolder);
 	}
+
 	public int getRoomSizeX() {
-		return roomSizeX;
+		return this.roomSizeX;
 	}
+
 	public int getRoomSizeY() {
-		return roomSizeY;
+		return this.roomSizeY;
 	}
+
 	public int getRoomSizeZ() {
-		return roomSizeZ;
+		return this.roomSizeZ;
 	}
+
 	public Block getWallBlock() {
-		return wallBlock;
+		return this.wallBlock;
 	}
 }

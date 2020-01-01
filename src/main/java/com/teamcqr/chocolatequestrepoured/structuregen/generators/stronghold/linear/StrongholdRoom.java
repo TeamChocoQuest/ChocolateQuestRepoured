@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdRoom {
-	
+
 	private List<ESkyDirection> freeSides = new ArrayList<>();
 	private ERoomType layout = ERoomType.UNSET;
 	private ERoomTypeExtended roomtype = ERoomTypeExtended.UNSET;
@@ -24,161 +24,161 @@ public class StrongholdRoom {
 
 	public StrongholdRoom(StrongholdFloor floor) {
 		this.floor = floor;
-		
-		freeSides.add(ESkyDirection.NORTH);
-		freeSides.add(ESkyDirection.EAST);
-		freeSides.add(ESkyDirection.SOUTH);
-		freeSides.add(ESkyDirection.WEST);
+
+		this.freeSides.add(ESkyDirection.NORTH);
+		this.freeSides.add(ESkyDirection.EAST);
+		this.freeSides.add(ESkyDirection.SOUTH);
+		this.freeSides.add(ESkyDirection.WEST);
 	}
-	
+
 	public void setGridIndex(int x, int z) {
-		gridIndex = new Tuple<> (x,z);
+		this.gridIndex = new Tuple<>(x, z);
 	}
-	
+
 	public Tuple<Integer, Integer> getGridIndex() {
-		return gridIndex;
+		return this.gridIndex;
 	}
-	
+
 	public void connectRoomOnSide(ESkyDirection side) {
-		if(freeSides.contains(side)) {
-			freeSides.remove(side);
+		if (this.freeSides.contains(side)) {
+			this.freeSides.remove(side);
 		}
-		switch(freeSides.size()) {
+		switch (this.freeSides.size()) {
 		case 0:
-			layout = ERoomType.FOUR_SIDED;
-			roomtype = ERoomTypeExtended.CROSSING_NESW;
+			this.layout = ERoomType.FOUR_SIDED;
+			this.roomtype = ERoomTypeExtended.CROSSING_NESW;
 			break;
 		case 1:
-			layout = ERoomType.T_CROSSING;
-			switch(freeSides.get(0)) {
+			this.layout = ERoomType.T_CROSSING;
+			switch (this.freeSides.get(0)) {
 			case EAST:
-				roomtype = ERoomTypeExtended.CROSSING_NWS;
+				this.roomtype = ERoomTypeExtended.CROSSING_NWS;
 				break;
 			case NORTH:
-				roomtype = ERoomTypeExtended.CROSSING_WSE;
+				this.roomtype = ERoomTypeExtended.CROSSING_WSE;
 				break;
 			case SOUTH:
-				roomtype = ERoomTypeExtended.CROSSING_ENW;
+				this.roomtype = ERoomTypeExtended.CROSSING_ENW;
 				break;
 			case WEST:
-				roomtype = ERoomTypeExtended.CROSSING_NES;
+				this.roomtype = ERoomTypeExtended.CROSSING_NES;
 				break;
 			}
 			break;
-		case 2: 
-			ESkyDirection s1 = freeSides.get(0);
-			ESkyDirection s2 = freeSides.get(1);
-			if(s1.equals(ESkyDirection.NORTH) && s2.equals(ESkyDirection.SOUTH)) {
-				layout = ERoomType.HALLWAY;
-				roomtype = ERoomTypeExtended.HALLWAY_EW;
+		case 2:
+			ESkyDirection s1 = this.freeSides.get(0);
+			ESkyDirection s2 = this.freeSides.get(1);
+			if (s1.equals(ESkyDirection.NORTH) && s2.equals(ESkyDirection.SOUTH)) {
+				this.layout = ERoomType.HALLWAY;
+				this.roomtype = ERoomTypeExtended.HALLWAY_EW;
 				break;
 			}
-			if(s1.equals(ESkyDirection.EAST) && s2.equals(ESkyDirection.WEST)) {
-				layout = ERoomType.HALLWAY;
-				roomtype = ERoomTypeExtended.HALLWAY_NS;
+			if (s1.equals(ESkyDirection.EAST) && s2.equals(ESkyDirection.WEST)) {
+				this.layout = ERoomType.HALLWAY;
+				this.roomtype = ERoomTypeExtended.HALLWAY_NS;
 				break;
 			}
-			switch(s1) {
+			switch (s1) {
 			case EAST:
-				if(s2.equals(ESkyDirection.NORTH)) {
-					roomtype = ERoomTypeExtended.CURVE_SW;
+				if (s2.equals(ESkyDirection.NORTH)) {
+					this.roomtype = ERoomTypeExtended.CURVE_SW;
 				} else {
-					roomtype = ERoomTypeExtended.CURVE_WN;
+					this.roomtype = ERoomTypeExtended.CURVE_WN;
 				}
 				break;
 			case NORTH:
-				if(s2.equals(ESkyDirection.WEST)) {
-					roomtype = ERoomTypeExtended.CURVE_ES;
+				if (s2.equals(ESkyDirection.WEST)) {
+					this.roomtype = ERoomTypeExtended.CURVE_ES;
 				} else {
-					roomtype = ERoomTypeExtended.CURVE_SW;
+					this.roomtype = ERoomTypeExtended.CURVE_SW;
 				}
 				break;
 			case SOUTH:
-				if(s2.equals(ESkyDirection.EAST)) {
-					roomtype = ERoomTypeExtended.CURVE_WN;
+				if (s2.equals(ESkyDirection.EAST)) {
+					this.roomtype = ERoomTypeExtended.CURVE_WN;
 				} else {
-					roomtype = ERoomTypeExtended.CURVE_NE;
+					this.roomtype = ERoomTypeExtended.CURVE_NE;
 				}
 				break;
 			case WEST:
-				if(s2.equals(ESkyDirection.SOUTH)) {
-					roomtype = ERoomTypeExtended.CURVE_NE;
+				if (s2.equals(ESkyDirection.SOUTH)) {
+					this.roomtype = ERoomTypeExtended.CURVE_NE;
 				} else {
-					roomtype = ERoomTypeExtended.CURVE_ES;
+					this.roomtype = ERoomTypeExtended.CURVE_ES;
 				}
 				break;
 			default:
 				break;
-			
+
 			}
-			layout = ERoomType.CURVE;
+			this.layout = ERoomType.CURVE;
 			break;
 		case 3:
-			layout = ERoomType.DEAD_END;
-			switch(side) {
+			this.layout = ERoomType.DEAD_END;
+			switch (side) {
 			case EAST:
-				roomtype = ERoomTypeExtended.ROOM_E;
+				this.roomtype = ERoomTypeExtended.ROOM_E;
 				break;
 			case NORTH:
-				roomtype = ERoomTypeExtended.ROOM_N;
+				this.roomtype = ERoomTypeExtended.ROOM_N;
 				break;
 			case SOUTH:
-				roomtype = ERoomTypeExtended.ROOM_S;
+				this.roomtype = ERoomTypeExtended.ROOM_S;
 				break;
 			case WEST:
-				roomtype = ERoomTypeExtended.ROOM_W;
+				this.roomtype = ERoomTypeExtended.ROOM_W;
 				break;
 			}
 			break;
 		case 4:
-			layout = ERoomType.UNSET;
+			this.layout = ERoomType.UNSET;
 			break;
 		}
 	}
-	
+
 	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings) {
 		CQStructure structure = null;
-		switch(layout) {
+		switch (this.layout) {
 		case CURVE:
-			structure = new CQStructure(dungeon.getCurveRoom(), dungeon, floor.getGenerator().getDunZ(), floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getCurveRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
 			break;
 		case DEAD_END:
-			structure = new CQStructure(dungeon.getDeadEndRoom(), dungeon, floor.getGenerator().getDunZ(), floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getDeadEndRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
 			break;
 		case FOUR_SIDED:
-			structure = new CQStructure(dungeon.getCrossingRoom(), dungeon, floor.getGenerator().getDunZ(), floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getCrossingRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
 			break;
 		case HALLWAY:
-			structure = new CQStructure(dungeon.getHallwayRoom(), dungeon, floor.getGenerator().getDunZ(), floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getHallwayRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
 			break;
 		case T_CROSSING:
-			structure = new CQStructure(dungeon.getTCrossingRoom(), dungeon, floor.getGenerator().getDunZ(), floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getTCrossingRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
 			break;
 		default:
 			break;
 		}
-		if(structure != null) {
-			generateRoom(dungeon, centeredOnXZPos, world, settings, structure, false);
+		if (structure != null) {
+			this.generateRoom(dungeon, centeredOnXZPos, world, settings, structure, false);
 		}
 	}
-	
+
 	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings, CQStructure structure, boolean ignoreRotating) {
 		settings.setRotation(this.roomtype.getRotation());
 		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos, structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
 		structure.placeBlocksInWorld(world, pastePos, settings, EPosType.CENTER_XZ_LAYER);
-		System.out.println("Generating room: LAYOUT =  " + layout.toString() + "    TYPE: " + roomtype.toString() +"    AT: " + pastePos.toString());
+		System.out.println("Generating room: LAYOUT =  " + this.layout.toString() + "    TYPE: " + this.roomtype.toString() + "    AT: " + pastePos.toString());
 	}
 
 	public ESkyDirection getRandomFreeDirection(Random rdm) {
-		if(!freeSides.isEmpty()) {
-			return freeSides.get(rdm.nextInt(freeSides.size()));
+		if (!this.freeSides.isEmpty()) {
+			return this.freeSides.get(rdm.nextInt(this.freeSides.size()));
 		} else {
 			return null;
 		}
 	}
 
 	public boolean hasFreeSides() {
-		return freeSides.isEmpty();
+		return this.freeSides.isEmpty();
 	}
 
 }

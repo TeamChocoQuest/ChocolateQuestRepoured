@@ -2,9 +2,9 @@ package com.teamcqr.chocolatequestrepoured.client.mca.animations.entities.wasp;
 
 import java.util.HashMap;
 
-import mcalibrary.animation.Channel;
 import mcalibrary.IMCAnimatedEntity;
 import mcalibrary.animation.AnimationHandler;
+import mcalibrary.animation.Channel;
 
 public class AnimationHandlerCQRWasp extends AnimationHandler {
 	/** Map with all the animations. */

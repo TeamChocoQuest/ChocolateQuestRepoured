@@ -33,20 +33,22 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.UNDEAD;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ZOMBIE_HURT;
 	}
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_ZOMBIE_AMBIENT;
 	}
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ZOMBIE_DEATH;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_ZOMBIE.getLootTable();
@@ -56,7 +58,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	public int getTextureCount() {
 		return 3;
 	}
-	
+
 	@Override
 	public boolean canRide() {
 		return true;

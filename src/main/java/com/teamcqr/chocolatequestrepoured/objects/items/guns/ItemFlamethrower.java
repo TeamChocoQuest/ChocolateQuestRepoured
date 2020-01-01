@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemFlamethrower extends Item {
 
 	public ItemFlamethrower() {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -58,14 +58,11 @@ public class ItemFlamethrower extends Item {
 
 		if (world.isRemote) {
 			for (int i = 0; i < 8; i++) {
-				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (x + itemRand.nextFloat() - 0.5D) / 3.0D,
-						(y + itemRand.nextFloat() - 0.5D) / 8.0D, (z + itemRand.nextFloat() - 0.5D) / 3.0D);
+				world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, (x + itemRand.nextFloat() - 0.5D) / 3.0D, (y + itemRand.nextFloat() - 0.5D) / 8.0D, (z + itemRand.nextFloat() - 0.5D) / 3.0D);
 			}
 		} else {
 			int dist = 10;
-			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox()
-					.grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist)
-					.expand(1.0D, 1.0D, 1.0D));
+			List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(entity, entity.getEntityBoundingBox().grow(entity.getLookVec().x * dist, entity.getLookVec().y * dist, entity.getLookVec().z * dist).expand(1.0D, 1.0D, 1.0D));
 
 			for (Entity e : list) {
 				if (e instanceof EntityLivingBase && !e.isWet() && !e.isBeingRidden()) {
@@ -97,7 +94,7 @@ public class ItemFlamethrower extends Item {
 			EntityPlayer player = (EntityPlayer) entityIn;
 
 			if (player.isHandActive() && player.getActiveItemStack() == stack) {
-				shootFlames((EntityLivingBase) entityIn);
+				this.shootFlames((EntityLivingBase) entityIn);
 			}
 		}
 	}

@@ -23,11 +23,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemMusket extends ItemRevolver implements IRangedWeapon{
+public class ItemMusket extends ItemRevolver implements IRangedWeapon {
 
 	public ItemMusket() {
-		setMaxDamage(300);
-		setMaxStackSize(1);
+		this.setMaxDamage(300);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -46,7 +46,7 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 	@Override
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 		boolean flag = player.capabilities.isCreativeMode;
-		ItemStack itemstack = findAmmo(player);
+		ItemStack itemstack = this.findAmmo(player);
 
 		if (!itemstack.isEmpty() || flag) {
 			if (!worldIn.isRemote) {
@@ -56,7 +56,7 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
 				} else {
-					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
+					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, this.getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 2F);
 					player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 					worldIn.spawnEntity(bulletE);
@@ -64,8 +64,7 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
-					1.0F, 1.0F, false);
+			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
 			if (!flag) {
@@ -77,16 +76,14 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 			}
 		}
 	}
-	
+
 	@Override
-	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) 
-	{
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if (!worldIn.isRemote) {
 			if (entityIn instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (player.getHeldItemMainhand() == stack)
-				{
+				if (player.getHeldItemMainhand() == stack) {
 					if (!player.getHeldItemOffhand().isEmpty()) {
 						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
 							player.entityDropItem(player.getHeldItemOffhand(), 0F);
@@ -100,7 +97,7 @@ public class ItemMusket extends ItemRevolver implements IRangedWeapon{
 			}
 		}
 	}
-	
+
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;

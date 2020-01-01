@@ -20,8 +20,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 	}
 
 	@Override
-	public void doRender(ProjectileFireWallPart entity, double x, double y, double z, float entityYaw,
-			float partialTicks) {
+	public void doRender(ProjectileFireWallPart entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
 		GlStateManager.disableLighting();
@@ -38,18 +37,16 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 		float f3 = entity.height / f;
 		float f4 = (float) (entity.posY - entity.getEntityBoundingBox().minY);
 		float rotateAngle = new Float(Math.atan2(entity.motionX, entity.motionZ)) - new Float(Math.toRadians(90));
-		draw(rotateAngle, bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
+		this.draw(rotateAngle, bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
 		tessellator.draw();
-		draw(rotateAngle + new Float(Math.toRadians(90)), bufferbuilder, f1, f3, f4, textureatlassprite,
-				textureatlassprite1);
+		this.draw(rotateAngle + new Float(Math.toRadians(90)), bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
 		tessellator.draw();
 
 		GlStateManager.popMatrix();
 		GlStateManager.enableLighting();
 	}
 
-	private void draw(float rotateAngle, BufferBuilder bufferbuilder, float f1, float f3, float f4,
-			TextureAtlasSprite textureatlassprite, TextureAtlasSprite textureatlassprite1) {
+	private void draw(float rotateAngle, BufferBuilder bufferbuilder, float f1, float f3, float f4, TextureAtlasSprite textureatlassprite, TextureAtlasSprite textureatlassprite1) {
 		GlStateManager.rotate(rotateAngle, 0.0F, 1.0F, 0.0F);
 		GlStateManager.translate(0.0F, 0.0F, -0.3F + (float) ((int) f3) * 0.02F);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
@@ -71,14 +68,10 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 				f6 = f10;
 			}
 
-			bufferbuilder.pos((double) (f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f8, (double) f9)
-					.endVertex();
-			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f6, (double) f9)
-					.endVertex();
-			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f6, (double) f7)
-					.endVertex();
-			bufferbuilder.pos((double) (f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f8, (double) f7)
-					.endVertex();
+			bufferbuilder.pos((double) (f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f8, (double) f9).endVertex();
+			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f6, (double) f9).endVertex();
+			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f6, (double) f7).endVertex();
+			bufferbuilder.pos((double) (f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f8, (double) f7).endVertex();
 			f3 -= 0.45F;
 			f4 -= 0.45F;
 			f1 *= 0.9F;
