@@ -44,8 +44,8 @@ public class ArrayCollectionMapManipulationUtil {
         for(int i = 0; i < a.length; i++) {
             toReturn[i] = a[i];
         }
-        for(int i = a.length; i < b.length; i++) {
-            toReturn[i] = a[i];
+        for(int i = 0; i < b.length; i++) {
+            toReturn[i + a.length] = b[i];
         }
         return toReturn;
     }
