@@ -52,7 +52,7 @@ public class PresetTabItems {
 	static ItemStack createPresetItem(Item MAIN_HAND, Item OFF_HAND, ArmorMaterial ARMOR_MATERIAL) {
 		ItemStack item = new ItemStack(ModItems.SOUL_BOTTLE);
 		NBTTagCompound bottle = item.getTagCompound();
-		NBTTagCompound tag = (NBTTagCompound) bottle.getTag(ItemSoulBottle.EntityIn);
+		NBTTagCompound tag = (NBTTagCompound) bottle.getTag(ItemSoulBottle.ENTITY_IN_TAG);
 		tag.setString("id", "cqrepoured:dummy");
 		
 		//NYI
