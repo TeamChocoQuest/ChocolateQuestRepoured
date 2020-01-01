@@ -2,12 +2,18 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase
 {
+	private static final float PULL_SPEED = 2.0f;
+	private boolean pulling = false;
+
 	public ProjectileHookShotHook(World worldIn)
 	{
 		super(worldIn);
@@ -55,8 +61,31 @@ public class ProjectileHookShotHook extends ProjectileBase
 			{
 				System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
 			}
+
+			zeroizeVelocity();
+			pulling = true;
 		} 
 	}
 
+	@Override
+	public void onEntityUpdate() {
+		super.onEntityUpdate();
+
+		if (pulling && !world.isRemote && getThrower() instanceof EntityPlayer)
+		{
+			EntityPlayer shootingPlayer = (EntityPlayer)getThrower();
+			Vec3d playerPos = shootingPlayer.getPositionVector();
+			Vec3d hookPos = this.getPositionVector();
+			Vec3d hookDirection = hookPos.subtract(playerPos).normalize().scale(PULL_SPEED);
+			shootingPlayer.setVelocity(hookDirection.x * PULL_SPEED, hookDirection.y * PULL_SPEED, hookDirection.z * PULL_SPEED);
+			shootingPlayer.velocityChanged = true;
+		}
+	}
+
 	protected void onUpdateInAir(){}
+
+	private void zeroizeVelocity()
+	{
+		setVelocity(0, 0, 0);
+	}
 }
