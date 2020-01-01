@@ -32,13 +32,13 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 			this.layerRenderers.remove(layer);
 		}
 		//DONE: Illager armor
-		this.addLayer(new LayerBipedArmor(this) {
+		/*this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
 				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
 				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
 			}
-		});
+		});*/
 		
 		this.addLayer(new LayerCQRHeldItem(this)
         {

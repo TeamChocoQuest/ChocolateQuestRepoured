@@ -30,7 +30,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSoulBottle extends Item
 {
-	private String EntityIn = "EntityIn";
+	public static final String EntityIn = "EntityIn";
 	
 	public ItemSoulBottle() 
 	{
