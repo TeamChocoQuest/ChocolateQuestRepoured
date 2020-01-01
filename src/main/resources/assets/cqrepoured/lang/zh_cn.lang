@@ -494,31 +494,31 @@ description.staff_thunder.name=丢失 #TODO
 description.spear_diamond.name=丢失 #TODO
 
 // Mobs
-entity.boarman.name=野猪人
-entity.dummy.name=木头人
-entity.dwarf.name=矮人
-entity.enderman.name=末影人
-entity.goblin.name=哥布林
-entity.golem.name=铁傀儡
-entity.illager.name=卫道士
-entity.npc.name=NPC
-entity.mandril.name=山魈
-entity.minotaur.name=牛头人
-entity.mummy.name=木乃伊
-entity.ogre.name=食人魔
-entity.orc.name=兽人
-entity.pirate.name=海盗
-entity.skeleton.name=骷髅
-entity.spectre.name=幽灵
-entity.triton.name=鱿鱼人
-entity.walker.name=深渊漫步者
-entity.zombie.name=僵尸
+entity.cqr_boarman.name=野猪人
+entity.cqr_dummy.name=木头人
+entity.cqr_dwarf.name=矮人
+entity.cqr_enderman.name=末影人
+entity.cqr_goblin.name=哥布林
+entity.cqr_golem.name=铁傀儡
+entity.cqr_illager.name=卫道士
+entity.cqr_npc.name=NPC
+entity.cqr_mandril.name=山魈
+entity.cqr_minotaur.name=牛头人
+entity.cqr_mummy.name=木乃伊
+entity.cqr_ogre.name=食人魔
+entity.cqr_orc.name=兽人
+entity.cqr_pirate.name=海盗
+entity.cqr_skeleton.name=骷髅
+entity.cqr_spectre.name=幽灵
+entity.cqr_triton.name=鱿鱼人
+entity.cqr_walker.name=深渊漫步者
+entity.cqr_zombie.name=僵尸
 
 //Mounts
-entity.giant_endermite.name=巨型末影螨
-entity.giant_silverfish.name=巨型蠹虫
-entity.giant_silverfish1.name=巨型熔岩蠹虫
-entity.giant_silverfish2.name=巨型沼泽蠹虫
+entity.cqr_giant_endermite.name=巨型末影螨
+entity.cqr_giant_silverfish.name=巨型蠹虫
+entity.cqr_giant_silverfish1.name=巨型熔岩蠹虫
+entity.cqr_giant_silverfish2.name=巨型沼泽蠹虫
 
 // Bosses
-entity.nether_dragon.name=下界魔龙
+entity.cqr_nether_dragon.name=下界魔龙
