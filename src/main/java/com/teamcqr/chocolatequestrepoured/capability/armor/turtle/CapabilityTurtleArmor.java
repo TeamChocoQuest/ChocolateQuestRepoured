@@ -2,11 +2,9 @@ package com.teamcqr.chocolatequestrepoured.capability.armor.turtle;
 
 import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilitySpecialArmor;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
-import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;

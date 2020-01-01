@@ -26,7 +26,7 @@ public class StructureSelectorPacket implements IMessage {
 	}
 
 	public int getHand() {
-		return hand;
+		return this.hand;
 	}
 
 }

@@ -38,13 +38,11 @@ public class CastleDungeon extends DungeonBase {
 		return new CastleGenerator(this);
 	}
 
-
 	public CastleDungeon(File configFile) {
 		super(configFile);
 		boolean success = true;
-		Properties prop = loadConfig(configFile);
-		if(prop != null)
-		{
+		Properties prop = this.loadConfig(configFile);
+		if (prop != null) {
 			this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
 			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 			this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
@@ -58,10 +56,8 @@ public class CastleDungeon extends DungeonBase {
 
 			this.random = new Random();
 
-			closeConfigFile();
-		}
-		else
-		{
+			this.closeConfigFile();
+		} else {
 			this.registeredSuccessful = false;
 		}
 	}
@@ -72,22 +68,18 @@ public class CastleDungeon extends DungeonBase {
 
 		this.generator = new CastleGenerator(this);
 
-		//Generating it...
-		int y = getHighestAreaY(chunk, x, z);
+		// Generating it...
+		int y = this.getHighestAreaY(chunk, x, z);
 		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 		this.generator.generate(world, chunk, x, y, z);
 	}
 
-	public int getHighestAreaY(Chunk chunk, int nwCornerX, int nwCornerZ)
-	{
+	public int getHighestAreaY(Chunk chunk, int nwCornerX, int nwCornerZ) {
 		int highestY = Int.MinValue();
-		for (int x = 0; x < maxSize; x++)
-		{
-			for (int z = 0; z < maxSize; z++)
-			{
+		for (int x = 0; x < this.maxSize; x++) {
+			for (int z = 0; z < this.maxSize; z++) {
 				int y = DungeonGenUtils.getHighestYAt(chunk, (nwCornerX + x), (nwCornerZ + z), false);
-				if (y > highestY)
-				{
+				if (y > highestY) {
 					highestY = y;
 				}
 			}
@@ -96,27 +88,39 @@ public class CastleDungeon extends DungeonBase {
 		return highestY;
 	}
 
-
-	public Block getWallBlock() {return this.wallBlock;}
-	public Block getFloorBlock() {return this.floorBlock;}
-
-	public Block getRoofBlock()
-	{
-		return roofBlock;
+	public Block getWallBlock() {
+		return this.wallBlock;
 	}
 
-	public Block getStairBlock()
-	{
-		return stairBlock;
+	public Block getFloorBlock() {
+		return this.floorBlock;
 	}
 
-	public int getMaxSize() {return this.maxSize;}
-	public int getRoomSize() {return this.roomSize;}
-	public int getFloorHeight() {return this.floorHeight;}
-	public Random getRandom() {return this.random;}
+	public Block getRoofBlock() {
+		return this.roofBlock;
+	}
 
-	public EDungeonMobType getBossMob()
-	{
-		return bossMob;
+	public Block getStairBlock() {
+		return this.stairBlock;
+	}
+
+	public int getMaxSize() {
+		return this.maxSize;
+	}
+
+	public int getRoomSize() {
+		return this.roomSize;
+	}
+
+	public int getFloorHeight() {
+		return this.floorHeight;
+	}
+
+	public Random getRandom() {
+		return this.random;
+	}
+
+	public EDungeonMobType getBossMob() {
+		return this.bossMob;
 	}
 }

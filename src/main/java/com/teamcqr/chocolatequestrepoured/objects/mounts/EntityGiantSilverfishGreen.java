@@ -12,7 +12,7 @@ public class EntityGiantSilverfishGreen extends EntityCQRGiantSilverfishBase {
 		super(worldIn);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_GIANT_SILVERFISH_GREEN.getLootTable();

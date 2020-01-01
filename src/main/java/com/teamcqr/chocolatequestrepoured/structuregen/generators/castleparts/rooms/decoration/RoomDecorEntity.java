@@ -1,64 +1,59 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+public abstract class RoomDecorEntity implements IRoomDecor {
+	protected List<Vec3i> footprint; // Array of blockstates and their offsets
 
-public abstract class RoomDecorEntity implements IRoomDecor
-{
-    protected List<Vec3i> footprint; //Array of blockstates and their offsets
+	protected RoomDecorEntity() {
+		this.footprint = new ArrayList<>();
+	}
 
-    protected RoomDecorEntity()
-    {
-        this.footprint = new ArrayList<>();
-    }
+	@Override
+	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
+		ArrayList<Vec3i> rotated = this.alignFootprint(side);
 
-    public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap)
-    {
-        ArrayList<Vec3i> rotated = alignFootprint(side);
+		for (Vec3i placement : rotated) {
+			BlockPos pos = start.add(placement);
+			if (!decoArea.contains(pos) || decoMap.contains(pos)) {
+				return false;
+			}
+		}
 
-        for (Vec3i placement : rotated)
-        {
-            BlockPos pos = start.add(placement);
-            if (!decoArea.contains(pos) || decoMap.contains(pos))
-            {
-                return false;
-            }
-        }
+		return true;
+	}
 
-        return true;
-    }
+	@Override
+	public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+		ArrayList<Vec3i> rotated = this.alignFootprint(side);
 
-    public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap)
-    {
-        ArrayList<Vec3i> rotated = alignFootprint(side);
+		for (Vec3i placement : rotated) {
+			BlockPos pos = start.add(placement);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+			decoMap.add(pos);
+		}
+		this.createEntityDecoration(world, start, side);
+	}
 
-        for (Vec3i placement : rotated)
-        {
-            BlockPos pos = start.add(placement);
-            world.setBlockState(pos, Blocks.AIR.getDefaultState());
-            decoMap.add(pos);
-        }
-        createEntityDecoration(world, start, side);
-    }
+	protected abstract void createEntityDecoration(World world, BlockPos pos, EnumFacing side);
 
-    protected abstract void createEntityDecoration(World world, BlockPos pos, EnumFacing side);
+	private ArrayList<Vec3i> alignFootprint(EnumFacing side) {
+		ArrayList<Vec3i> result = new ArrayList<>();
 
-    private ArrayList<Vec3i> alignFootprint(EnumFacing side)
-    {
-        ArrayList<Vec3i> result = new ArrayList<>();
+		this.footprint.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));
 
-        footprint.forEach(v -> result.add(DungeonGenUtils.rotateVec3i(v, side)));
-
-        return result;
-    }
+		return result;
+	}
 }

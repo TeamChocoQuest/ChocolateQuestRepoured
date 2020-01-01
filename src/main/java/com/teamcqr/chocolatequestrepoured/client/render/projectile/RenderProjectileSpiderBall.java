@@ -11,55 +11,49 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
-public class RenderProjectileSpiderBall extends Render<ProjectileSpiderBall>
-{
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/spider_ball.png");
-	
-	public RenderProjectileSpiderBall(RenderManager renderManager) 
-	{
+public class RenderProjectileSpiderBall extends Render<ProjectileSpiderBall> {
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/spider_ball.png");
+
+	public RenderProjectileSpiderBall(RenderManager renderManager) {
 		super(renderManager);
 	}
-	
-	@Override
-	public void doRender(ProjectileSpiderBall entity, double x, double y, double z, float entityYaw, float partialTicks)
-    {
-    	GlStateManager.pushMatrix();
-        this.bindEntityTexture(entity);
-        GlStateManager.translate((float)x, (float)y, (float)z);
-        GlStateManager.enableRescaleNormal();
-        GlStateManager.scale(.5F, .5F, .5F);
-        Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
-        GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-        GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-
-        if(this.renderOutlines)
-        {
-            GlStateManager.enableColorMaterial();
-            GlStateManager.enableOutlineMode(this.getTeamColor(entity));
-        }
-
-        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
-        bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-        bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-        bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-        bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
-        tessellator.draw();
-
-        if(this.renderOutlines)
-        {
-            GlStateManager.disableOutlineMode();
-            GlStateManager.disableColorMaterial();
-        }
-
-        GlStateManager.disableRescaleNormal();
-        GlStateManager.popMatrix();
-        super.doRender(entity, x, y, z, entityYaw, partialTicks);
-    }
 
 	@Override
-	protected ResourceLocation getEntityTexture(ProjectileSpiderBall entity) 
-	{
-		return TEXTURE;
+	public void doRender(ProjectileSpiderBall entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		GlStateManager.pushMatrix();
+		this.bindEntityTexture(entity);
+		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.enableRescaleNormal();
+		GlStateManager.scale(.5F, .5F, .5F);
+		Tessellator tessellator = Tessellator.getInstance();
+		BufferBuilder bufferbuilder = tessellator.getBuffer();
+		GlStateManager.rotate(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate((this.renderManager.options.thirdPersonView == 2 ? -1 : 1) * -this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
+
+		if (this.renderOutlines) {
+			GlStateManager.enableColorMaterial();
+			GlStateManager.enableOutlineMode(this.getTeamColor(entity));
+		}
+
+		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX_NORMAL);
+		bufferbuilder.pos(-0.5D, -0.25D, 0.0D).tex(0.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(0.5D, -0.25D, 0.0D).tex(1.0D, 1.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(0.5D, 0.75D, 0.0D).tex(1.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+		bufferbuilder.pos(-0.5D, 0.75D, 0.0D).tex(0.0D, 0.0D).normal(0.0F, 1.0F, 0.0F).endVertex();
+		tessellator.draw();
+
+		if (this.renderOutlines) {
+			GlStateManager.disableOutlineMode();
+			GlStateManager.disableColorMaterial();
+		}
+
+		GlStateManager.disableRescaleNormal();
+		GlStateManager.popMatrix();
+		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	}
+
+	@Override
+	protected ResourceLocation getEntityTexture(ProjectileSpiderBall entity) {
+		return this.TEXTURE;
 	}
 }

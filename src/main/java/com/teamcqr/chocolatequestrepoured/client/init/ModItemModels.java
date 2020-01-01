@@ -25,7 +25,6 @@ public class ModItemModels {
 	public static void registerItemModels(ModelRegistryEvent event) {
 		// register custom item models first
 
-
 		// register all other item models
 		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {
 			if (!REGISTERED_ITEM_MODELS.contains(item)) {

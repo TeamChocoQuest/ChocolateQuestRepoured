@@ -24,13 +24,14 @@ public class ItemSwordMoonlight extends ItemSword {
 		super(material);
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (!target.world.isDaytime()) {
 			if (target instanceof Entity) {
 				((Entity) target).attackEntityFrom(DamageSource.GENERIC, 3.0F);
 			}
 		}
-		
+
 		return super.hitEntity(stack, target, attacker);
 	}
 
@@ -42,7 +43,7 @@ public class ItemSwordMoonlight extends ItemSword {
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
-		
+
 		tooltip.add(TextFormatting.BLUE + "+3 " + I18n.format("description.attack_damage_at_night.name"));
 	}
 

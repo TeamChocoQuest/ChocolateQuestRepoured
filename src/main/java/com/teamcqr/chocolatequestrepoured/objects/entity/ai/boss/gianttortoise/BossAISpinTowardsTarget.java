@@ -5,28 +5,26 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 
 public class BossAISpinTowardsTarget extends AbstractCQREntityAI {
 
-	
 	private int INTERNAL_COOLDOWN = 0;
-	
-	static final int SPIN_TIME_MAX = 500; 
+
+	static final int SPIN_TIME_MAX = 500;
 	static final int SPIN_UP_COOLDWON = 100;
 	static final int SPIN_DOWN_COOLDOWN = 100;
 	static final int MOVE_PARTS_COOLDOWN = 50;
-	
-	
+
 	public BossAISpinTowardsTarget(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
-	
+
 	public EntityCQRGiantTortoise getEntity() {
-		return (EntityCQRGiantTortoise)entity;
+		return (EntityCQRGiantTortoise) this.entity;
 	}
-	
+
 	@Override
 	public void updateTask() {
-		if(shouldContinueExecuting()) {
-			
-			switch(getEntity().getCurrentAnimation()) {
+		if (this.shouldContinueExecuting()) {
+
+			switch (this.getEntity().getCurrentAnimation()) {
 			case MOVE_PARTS_IN:
 				break;
 			case MOVE_PARTS_OUT:
@@ -41,12 +39,12 @@ public class BossAISpinTowardsTarget extends AbstractCQREntityAI {
 				break;
 			default:
 				break;
-			
+
 			}
-			
-			INTERNAL_COOLDOWN++;
+
+			this.INTERNAL_COOLDOWN++;
 		}
-		
+
 	}
 
 	@Override
