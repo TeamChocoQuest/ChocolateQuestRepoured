@@ -45,40 +45,40 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.DWARVES_AND_GOLEMS;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return ModSounds.CLASSIC_HURT;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_VILLAGER_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_PLAYER_DEATH;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_DWARF.getLootTable();
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.isFireDamage()) {
+		if (source.isFireDamage()) {
 			return false;
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-	
+
 	@Override
 	public int getTextureCount() {
 		return 3;
 	}
-	
+
 	@Override
 	public boolean canRide() {
 		return true;

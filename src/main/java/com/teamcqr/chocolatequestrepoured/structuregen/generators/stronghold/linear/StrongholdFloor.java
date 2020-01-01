@@ -16,103 +16,102 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdFloor {
-	
+
 	private int floorY;
 	private int roomCount;
-	
+
 	private List<StrongholdRoom> rooms = new ArrayList<>();
 	private List<StrongholdRoom> roomsWithFreeNeighbors = new ArrayList<>();
-	
+
 	private StrongholdRoom[][] roomGrid;
 	private Tuple<Integer, Integer> lastRoomIndexes;
 	private Tuple<Integer, Integer> firstRoomIndexes;
 
 	private StrongholdLinearGenerator generator;
-	
+
 	public StrongholdFloor(int roomCount, StrongholdLinearGenerator generator) {
 		this.generator = generator;
 		this.roomCount = roomCount;
-		roomGrid = new StrongholdRoom[roomCount *2 +2][roomCount *2 +2];
+		this.roomGrid = new StrongholdRoom[roomCount * 2 + 2][roomCount * 2 + 2];
 	}
-	
+
 	public StrongholdLinearGenerator getGenerator() {
 		return this.generator;
 	}
-	
-	//First room always is at [roomCount +2][roomCount +2]
+
+	// First room always is at [roomCount +2][roomCount +2]
 	public void generateRoomPattern() {
 		StrongholdRoom room = new StrongholdRoom(this);
-		room.setGridIndex(roomCount-1, roomCount-1);
-		rooms.add(room);
-		roomsWithFreeNeighbors.add(room);
-		roomGrid[room.getGridIndex().getFirst()][room.getGridIndex().getSecond()] = room;
-		firstRoomIndexes = room.getGridIndex();
-		lastRoomIndexes = firstRoomIndexes;
+		room.setGridIndex(this.roomCount - 1, this.roomCount - 1);
+		this.rooms.add(room);
+		this.roomsWithFreeNeighbors.add(room);
+		this.roomGrid[room.getGridIndex().getFirst()][room.getGridIndex().getSecond()] = room;
+		this.firstRoomIndexes = room.getGridIndex();
+		this.lastRoomIndexes = this.firstRoomIndexes;
 		Random rdm = new Random();
-		for(int i = 0; i < roomCount; i++) {
-			if(roomsWithFreeNeighbors.isEmpty()) {
+		for (int i = 0; i < this.roomCount; i++) {
+			if (this.roomsWithFreeNeighbors.isEmpty()) {
 				break;
 			}
-			StrongholdRoom prevRoom = getRandomUsableRoom(rdm);
-			if(prevRoom != null) {
+			StrongholdRoom prevRoom = this.getRandomUsableRoom(rdm);
+			if (prevRoom != null) {
 				ESkyDirection expansionDir = prevRoom.getRandomFreeDirection(rdm);
 				prevRoom.connectRoomOnSide(expansionDir);
-				Tuple<Integer, Integer> v = getSkyDirectionAsGridVector(expansionDir);
+				Tuple<Integer, Integer> v = this.getSkyDirectionAsGridVector(expansionDir);
 				int gridX = prevRoom.getGridIndex().getFirst() + v.getFirst();
 				int gridZ = prevRoom.getGridIndex().getSecond() + v.getSecond();
-			
-				if(!prevRoom.hasFreeSides()) {
-					roomsWithFreeNeighbors.remove(prevRoom);
+
+				if (!prevRoom.hasFreeSides()) {
+					this.roomsWithFreeNeighbors.remove(prevRoom);
 				}
-				
+
 				StrongholdRoom newRoom = new StrongholdRoom(this);
 				newRoom.connectRoomOnSide(expansionDir.getOpposite());
 				newRoom.setGridIndex(gridX, gridZ);
-				rooms.add(newRoom);
-				roomsWithFreeNeighbors.add(newRoom);
-				roomGrid[gridX][gridZ] = newRoom;
-				lastRoomIndexes = newRoom.getGridIndex();
-				
-				setConnectionStateOnGridForCoordinates(gridX, gridZ);
+				this.rooms.add(newRoom);
+				this.roomsWithFreeNeighbors.add(newRoom);
+				this.roomGrid[gridX][gridZ] = newRoom;
+				this.lastRoomIndexes = newRoom.getGridIndex();
+
+				this.setConnectionStateOnGridForCoordinates(gridX, gridZ);
 			} else {
 				break;
 			}
 		}
 	}
-	
+
 	public void generateRooms(BlockPos upperFloorExitPos, boolean firstStairIsEntranceStair, boolean isLastFloor, PlacementSettings settings, World world, StrongholdLinearDungeon dungeon) {
-		//Entrance stair
-		StrongholdRoom entranceRoom = roomGrid[firstRoomIndexes.getFirst()][firstRoomIndexes.getSecond()];
+		// Entrance stair
+		StrongholdRoom entranceRoom = this.roomGrid[this.firstRoomIndexes.getFirst()][this.firstRoomIndexes.getSecond()];
 		CQStructure stair = null;
-		if(firstStairIsEntranceStair) {
-			stair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, generator.getDunX(), generator.getDunZ(), dungeon.isProtectedFromModifications());
+		if (firstStairIsEntranceStair) {
+			stair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
 		} else {
-			stair = new CQStructure(dungeon.getStairRoom(), dungeon, generator.getDunX(), generator.getDunZ(), dungeon.isProtectedFromModifications());
+			stair = new CQStructure(dungeon.getStairRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
 		}
-		floorY = upperFloorExitPos.getY() - stair.getSizeY();
-		entranceRoom.generateRoom(dungeon, upperFloorExitPos.subtract(new Vec3i(0,stair.getSizeY(),0)), world, settings, stair, true);
-		
-		
-		//Rest of the rooms
-		for(int iX = 0; iX < (roomCount +2); iX++) {
-			for(int iZ = 0; iZ < (roomCount +2); iZ++) {
-				StrongholdRoom room = roomGrid[iX][iZ];
-				if(room != null) {
-					Vec3i v = new Vec3i(room.getGridIndex().getFirst() - firstRoomIndexes.getFirst(), 0, room.getGridIndex().getSecond() - firstRoomIndexes.getSecond());
+		this.floorY = upperFloorExitPos.getY() - stair.getSizeY();
+		entranceRoom.generateRoom(dungeon, upperFloorExitPos.subtract(new Vec3i(0, stair.getSizeY(), 0)), world, settings, stair, true);
+
+		// Rest of the rooms
+		for (int iX = 0; iX < (this.roomCount + 2); iX++) {
+			for (int iZ = 0; iZ < (this.roomCount + 2); iZ++) {
+				StrongholdRoom room = this.roomGrid[iX][iZ];
+				if (room != null) {
+					Vec3i v = new Vec3i(room.getGridIndex().getFirst() - this.firstRoomIndexes.getFirst(), 0, room.getGridIndex().getSecond() - this.firstRoomIndexes.getSecond());
 					System.out.println("V: " + v.toString());
-					BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
+					BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), this.floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
 					System.out.println("Pos: " + pos.toString());
-					//first room
-					if(!(iX == firstRoomIndexes.getFirst() && iZ == firstRoomIndexes.getSecond())) {
-						//Last room
+					// first room
+					if (!(iX == this.firstRoomIndexes.getFirst() && iZ == this.firstRoomIndexes.getSecond())) {
+						// Last room
 						CQStructure struct = null;
-						if(iX == lastRoomIndexes.getFirst() && iZ == lastRoomIndexes.getSecond()) {
-							if(isLastFloor) {
-								struct = new CQStructure(dungeon.getBossRoom(), dungeon, generator.getDunX(), generator.getDunZ(), dungeon.isProtectedFromModifications());
+						if (iX == this.lastRoomIndexes.getFirst() && iZ == this.lastRoomIndexes.getSecond()) {
+							if (isLastFloor) {
+								struct = new CQStructure(dungeon.getBossRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
 								room.generateRoom(dungeon, pos, world, settings, struct, true);
-							} 
-						} 
-						//Normal rooms
+							}
+						}
+						// Normal rooms
 						else {
 							room.generateRoom(dungeon, pos, world, settings);
 						}
@@ -121,22 +120,22 @@ public class StrongholdFloor {
 			}
 		}
 	}
-	
+
 	public BlockPos getLastRoomPastePos(BlockPos upperFloorExitPos, StrongholdLinearDungeon dungeon) {
-		Vec3i v = new Vec3i(lastRoomIndexes.getFirst() - firstRoomIndexes.getFirst(), 0, lastRoomIndexes.getSecond() - firstRoomIndexes.getSecond());
-		BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
+		Vec3i v = new Vec3i(this.lastRoomIndexes.getFirst() - this.firstRoomIndexes.getFirst(), 0, this.lastRoomIndexes.getSecond() - this.firstRoomIndexes.getSecond());
+		BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), this.floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
 		return pos;
 	}
-	
+
 	private void setConnectionStateOnGridForCoordinates(int gridX, int gridZ) {
-		StrongholdRoom roomAtPos = roomGrid[gridX][gridZ];
-		for(ESkyDirection direction : ESkyDirection.values()) {
-			StrongholdRoom room = roomGrid[gridX + getSkyDirectionAsGridVector(direction).getFirst()][gridZ + getSkyDirectionAsGridVector(direction).getSecond()];
-			if(room != null) {
+		StrongholdRoom roomAtPos = this.roomGrid[gridX][gridZ];
+		for (ESkyDirection direction : ESkyDirection.values()) {
+			StrongholdRoom room = this.roomGrid[gridX + this.getSkyDirectionAsGridVector(direction).getFirst()][gridZ + this.getSkyDirectionAsGridVector(direction).getSecond()];
+			if (room != null) {
 				roomAtPos.connectRoomOnSide(direction);
 				room.connectRoomOnSide(direction.getOpposite());
-				if(!room.hasFreeSides()) {
-					roomsWithFreeNeighbors.remove(room);
+				if (!room.hasFreeSides()) {
+					this.roomsWithFreeNeighbors.remove(room);
 				}
 			}
 		}
@@ -145,7 +144,7 @@ public class StrongholdFloor {
 	private Tuple<Integer, Integer> getSkyDirectionAsGridVector(ESkyDirection expansionDir) {
 		int f = 0;
 		int s = 0;
-		switch(expansionDir) {
+		switch (expansionDir) {
 		case EAST:
 			f = 1;
 			break;
@@ -161,20 +160,20 @@ public class StrongholdFloor {
 		default:
 			break;
 		}
-		return new Tuple<>(f,s);
+		return new Tuple<>(f, s);
 	}
 
 	private StrongholdRoom getRandomUsableRoom(Random rdm) {
-		if(!roomsWithFreeNeighbors.isEmpty()) {
-			StrongholdRoom room = roomsWithFreeNeighbors.get(rdm.nextInt(roomsWithFreeNeighbors.size()));
-			while(!room.hasFreeSides() && !roomsWithFreeNeighbors.isEmpty()) {
-				roomsWithFreeNeighbors.remove(room);
-				if(roomsWithFreeNeighbors.isEmpty()) {
+		if (!this.roomsWithFreeNeighbors.isEmpty()) {
+			StrongholdRoom room = this.roomsWithFreeNeighbors.get(rdm.nextInt(this.roomsWithFreeNeighbors.size()));
+			while (!room.hasFreeSides() && !this.roomsWithFreeNeighbors.isEmpty()) {
+				this.roomsWithFreeNeighbors.remove(room);
+				if (this.roomsWithFreeNeighbors.isEmpty()) {
 					return null;
 				}
-				room = roomsWithFreeNeighbors.get(rdm.nextInt(roomsWithFreeNeighbors.size()));
+				room = this.roomsWithFreeNeighbors.get(rdm.nextInt(this.roomsWithFreeNeighbors.size()));
 			}
-			if(roomsWithFreeNeighbors.isEmpty()) {
+			if (this.roomsWithFreeNeighbors.isEmpty()) {
 				return null;
 			}
 			return room;

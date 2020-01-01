@@ -43,7 +43,7 @@ public class ItemDungeonPlacer extends Item {
 	private int iconID;
 
 	public ItemDungeonPlacer(int iconID) {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 		this.iconID = iconID;
 	}
 
@@ -115,8 +115,7 @@ public class ItemDungeonPlacer extends Item {
 					Vec3d pos = playerIn.getPositionVector();
 					Vec3d look = playerIn.getLookVec();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(pos.addVector(0.0D, eye, 0.0D),
-							pos.addVector(64.0D * look.x, eye + 64.0D * look.y, 64.0D * look.z));
+					RayTraceResult result = worldIn.rayTraceBlocks(pos.addVector(0.0D, eye, 0.0D), pos.addVector(64.0D * look.x, eye + 64.0D * look.y, 64.0D * look.z));
 
 					if (result != null) {
 						dungeon.generate(result.getBlockPos(), worldIn);
@@ -135,8 +134,7 @@ public class ItemDungeonPlacer extends Item {
 		@SubscribeEvent
 		public static void syncDungeonPlacers(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()),
-						(EntityPlayerMP) event.player);
+				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()), (EntityPlayerMP) event.player);
 			}
 		}
 

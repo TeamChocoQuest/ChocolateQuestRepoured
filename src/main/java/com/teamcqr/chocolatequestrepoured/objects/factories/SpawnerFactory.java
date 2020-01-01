@@ -27,6 +27,7 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 
 /**
  * A static utility class for generating CQR/vanilla spawners and converting them to/from the other
+ * 
  * @author DerToaster, Meldexun, jdawg3636
  * @version 11 October 2019
  */
@@ -39,15 +40,16 @@ public abstract class SpawnerFactory {
 	/**
 	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined
 	 * dynamically based upon the requested capabilities.
-	 * @param entities Entities for spawner to spawn
-	 * @param multiUseSpawner Determines spawner type. Vanilla = true; CQR = false.
+	 * 
+	 * @param entities                 Entities for spawner to spawn
+	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
 	 * @param spawnerSettingsOverrides Settings to be applied if generating vanilla spawner (can be null if CQR spawner)
-	 * @param world World in which to place spawner
-	 * @param pos Position at which to place spawner
+	 * @param world                    World in which to place spawner
+	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(Entity[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
 		NBTTagCompound[] entCompounds = new NBTTagCompound[entities.length];
-		for(int i = 0; i < entities.length; i++) {
+		for (int i = 0; i < entities.length; i++) {
 			Entity ent = entities[i];
 			NBTTagCompound compound = new NBTTagCompound();
 			ent.writeToNBTOptional(compound);
@@ -55,24 +57,25 @@ public abstract class SpawnerFactory {
 		}
 		placeSpawner(entCompounds, multiUseSpawner, spawnerSettingsOverrides, world, pos);
 	}
-	
+
 	/**
 	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined
 	 * dynamically based upon the requested capabilities.
-	 * @param entities Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
-	 * @param multiUseSpawner Determines spawner type. Vanilla = true; CQR = false.
+	 * 
+	 * @param entities                 Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
+	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
 	 * @param spawnerSettingsOverrides Settings to be applied if generating vanilla spawner (can be null if CQR spawner)
-	 * @param world World in which to place spawner
-	 * @param pos Position at which to place spawner
+	 * @param world                    World in which to place spawner
+	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
 
 		world.setBlockToAir(pos);
 
-		world.setBlockState(pos, (multiUseSpawner == true /*&& spawnerSettingsOverrides != null*/) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
+		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
 
 		TileEntity tile = world.getTileEntity(pos);
-		if(multiUseSpawner) {
+		if (multiUseSpawner) {
 
 			// Vars
 			TileEntityMobSpawner spawner = (TileEntityMobSpawner) tile;
@@ -81,33 +84,39 @@ public abstract class SpawnerFactory {
 
 			// Store entity ids into NBT tag
 			for (int i = 0; i < entities.length; i++) {
-				if(entities[i] != null) {
-					/*NBTTagCompound entityToAddAsNBT = new NBTTagCompound();
-					entityToAddAsNBT.setString("id", EntityList.getEntityString(entities[i]));
-					spawnerEntities.set(i, entityToAddAsNBT);*/
-					//This could actually work
-					/*NBTTagCompound entityTag = new NBTTagCompound();
-					entityTag.setTag("Entity", entities[i].writeToNBT(new NBTTagCompound()));
-					spawnerEntities.appendTag(entityTag);*/
-					//PROBLEM: We should not create these fake entities, we should use the NBT the bottle already has as this should contain all the data
+				if (entities[i] != null) {
+					/*
+					 * NBTTagCompound entityToAddAsNBT = new NBTTagCompound();
+					 * entityToAddAsNBT.setString("id", EntityList.getEntityString(entities[i]));
+					 * spawnerEntities.set(i, entityToAddAsNBT);
+					 */
+					// This could actually work
+					/*
+					 * NBTTagCompound entityTag = new NBTTagCompound();
+					 * entityTag.setTag("Entity", entities[i].writeToNBT(new NBTTagCompound()));
+					 * spawnerEntities.appendTag(entityTag);
+					 */
+					// PROBLEM: We should not create these fake entities, we should use the NBT the bottle already has as this should contain all the data
 					NBTTagCompound compound = new NBTTagCompound();
 					compound.setInteger("Weight", 1);
 					NBTTagCompound tag = entities[i];
 					tag.removeTag("UUID");
 					compound.setTag("Entity", tag);
 					spawnerEntities.appendTag(compound);
-				} /*else {
-					System.out.println("Entity is null?!?!");
-				}*/
+				} /*
+					 * else {
+					 * System.out.println("Entity is null?!?!");
+					 * }
+					 */
 			}
 			spawnerData.setTag("SpawnPotentials", spawnerEntities);
-			
+
 			spawnerData.setInteger("x", pos.getX());
 			spawnerData.setInteger("y", pos.getY());
 			spawnerData.setInteger("z", pos.getZ());
 
 			// Store default settings into NBT
-			if(spawnerSettingsOverrides != null) {
+			if (spawnerSettingsOverrides != null) {
 				spawnerData.setInteger("MinSpawnDelay", spawnerSettingsOverrides.getInteger("MinSpawnDelay"));
 				spawnerData.setInteger("MaxSpawnDelay", spawnerSettingsOverrides.getInteger("MaxSpawnDelay"));
 				spawnerData.setInteger("SpawnCount", spawnerSettingsOverrides.getInteger("SpawnCount"));
@@ -118,16 +127,17 @@ public abstract class SpawnerFactory {
 
 			// Call spawner obj to read data from newly created NBT
 			spawner.readFromNBT(spawnerData);
-			if(spawnerSettingsOverrides != null) spawner.readFromNBT(spawnerSettingsOverrides);
+			if (spawnerSettingsOverrides != null) {
+				spawner.readFromNBT(spawnerSettingsOverrides);
+			}
 			spawner.updateContainingBlockInfo();
 			spawner.update();
 			spawner.markDirty();
-		}
-		else {
-			TileEntitySpawner spawner = (TileEntitySpawner)tile;
+		} else {
+			TileEntitySpawner spawner = (TileEntitySpawner) tile;
 
-			for(int i = 0; i < entities.length && i < 9; i++) {
-				if(entities[i] != null) {
+			for (int i = 0; i < entities.length && i < 9; i++) {
+				if (entities[i] != null) {
 					spawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
 				}
 			}
@@ -144,7 +154,7 @@ public abstract class SpawnerFactory {
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
 		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
-		TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos);
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(pos);
 
 		spawner.getSpawnerBaseLogic().setEntityId(entityResLoc);
 
@@ -166,36 +176,39 @@ public abstract class SpawnerFactory {
 
 	/**
 	 * Converts the CQR spawner at the provided World/BlockPos to a vanilla spawner
+	 * 
 	 * @param spawnerSettings
 	 */
 	public static void convertCQSpawnerToVanillaSpawner(World world, BlockPos pos, @Nullable NBTTagCompound spawnerSettings) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile instanceof TileEntitySpawner) {
-			TileEntitySpawner spawner = (TileEntitySpawner)tile;
-			
-			//Entity[] entities = new Entity[spawner.inventory.getSlots()];
+		if (tile instanceof TileEntitySpawner) {
+			TileEntitySpawner spawner = (TileEntitySpawner) tile;
+
+			// Entity[] entities = new Entity[spawner.inventory.getSlots()];
 			NBTTagCompound[] entities = new NBTTagCompound[spawner.inventory.getSlots()];
-			//Random rand = new Random();
-			
-			for(int i = 0; i < entities.length; i++) {
-				ItemStack stack = spawner.inventory.extractItem(i, spawner.inventory.getStackInSlot(i).getCount(), false);//getStackInSlot(i);
-	    		if(stack != null && !stack.isEmpty() && stack.getCount() >= 1) {
-	    			try {
-	        			NBTTagCompound tag = stack.getTagCompound();
-	            		
-	        			//NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
-	        			entities[i] = tag.getCompoundTag("EntityIn");
-	        			/*entities[i] = createEntityFromNBTWithoutSpawningIt(entityTag, world);
-	        			
-	        			entities[i].setUniqueId(MathHelper.getRandomUUID(rand));*/
-	    			}
-	    			catch(NullPointerException ignored) {}
-	    		} else {
-	    			entities[i] = null;
-	    		}
+			// Random rand = new Random();
+
+			for (int i = 0; i < entities.length; i++) {
+				ItemStack stack = spawner.inventory.extractItem(i, spawner.inventory.getStackInSlot(i).getCount(), false);// getStackInSlot(i);
+				if (stack != null && !stack.isEmpty() && stack.getCount() >= 1) {
+					try {
+						NBTTagCompound tag = stack.getTagCompound();
+
+						// NBTTagCompound entityTag = (NBTTagCompound)tag.getTag("EntityIn");
+						entities[i] = tag.getCompoundTag("EntityIn");
+						/*
+						 * entities[i] = createEntityFromNBTWithoutSpawningIt(entityTag, world);
+						 * 
+						 * entities[i].setUniqueId(MathHelper.getRandomUUID(rand));
+						 */
+					} catch (NullPointerException ignored) {
+					}
+				} else {
+					entities[i] = null;
+				}
 			}
 			world.setBlockToAir(pos);
-			
+
 			placeSpawner(entities, true, spawnerSettings, world, pos);
 		}
 	}
@@ -205,25 +218,27 @@ public abstract class SpawnerFactory {
 	 */
 	public static void convertVanillaSpawnerToCQSpawner(World world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);
-		if(tile != null && tile instanceof TileEntityMobSpawner) {
+		if (tile != null && tile instanceof TileEntityMobSpawner) {
 			TileEntityMobSpawner spawnerMultiUseTile = (TileEntityMobSpawner) tile;
-			
+
 			List<WeightedSpawnerEntity> spawnerEntries = new ArrayList<WeightedSpawnerEntity>();
-			spawnerEntries = ObfuscationReflectionHelper.getPrivateValue(MobSpawnerBaseLogic.class, spawnerMultiUseTile.getSpawnerBaseLogic(), 1 /* It is an array index of getDeclaredFields()*/);
-			if(spawnerEntries != null && !spawnerEntries.isEmpty()) {
+			spawnerEntries = ObfuscationReflectionHelper.getPrivateValue(MobSpawnerBaseLogic.class, spawnerMultiUseTile.getSpawnerBaseLogic(), 1 /* It is an array index of getDeclaredFields() */);
+			if (spawnerEntries != null && !spawnerEntries.isEmpty()) {
 				Iterator<WeightedSpawnerEntity> iterator = spawnerEntries.iterator();
-				
-				//Entity[] entities = new Entity[9];
-				NBTTagCompound[] entityCompound = new NBTTagCompound[9]; 
-				
+
+				// Entity[] entities = new Entity[9];
+				NBTTagCompound[] entityCompound = new NBTTagCompound[9];
+
 				int entriesRead = 0;
-				while(entriesRead < 9 && iterator.hasNext()) {
-					/*Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world);
-					entities[entriesRead] = entity;*/
+				while (entriesRead < 9 && iterator.hasNext()) {
+					/*
+					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world);
+					 * entities[entriesRead] = entity;
+					 */
 					entityCompound[entriesRead] = iterator.next().getNbt();
 					entriesRead++;
 				}
-				//placeSpawner(entities, false, null, world, pos);
+				// placeSpawner(entities, false, null, world, pos);
 				placeSpawner(entityCompound, false, null, world, pos);
 			}
 		}
@@ -235,6 +250,7 @@ public abstract class SpawnerFactory {
 
 	/**
 	 * Converts provided NBT data into an entity in the provided world without actually spawning it
+	 * 
 	 * @return Generated entity object
 	 */
 	public static Entity createEntityFromNBTWithoutSpawningIt(NBTTagCompound tag, World worldIn) {
@@ -248,25 +264,25 @@ public abstract class SpawnerFactory {
 	 * Used internally for the placeSpawner method
 	 */
 	public static ItemStack getSoulBottleItemStackForEntity(Entity entity) {
-		if(entity == null) {
+		if (entity == null) {
 			return null;
 		}
 		NBTTagCompound entityTag = new NBTTagCompound();
-		if(entity.writeToNBTOptional(entityTag)) {
+		if (entity.writeToNBTOptional(entityTag)) {
 			return getSoulBottleItemStackForEntity(entityTag);
 		}
 		return null;
-		
+
 	}
-	
+
 	public static ItemStack getSoulBottleItemStackForEntity(NBTTagCompound entityTag) {
 		ItemStack bottle = new ItemStack(ModItems.SOUL_BOTTLE);
 		bottle.setCount(1);
 		NBTTagCompound mobToSpawnerItem = new NBTTagCompound();
-		
+
 		mobToSpawnerItem.setTag("EntityIn", entityTag);
 		bottle.setTagCompound(mobToSpawnerItem);
 		return bottle;
 	}
-	
+
 }
