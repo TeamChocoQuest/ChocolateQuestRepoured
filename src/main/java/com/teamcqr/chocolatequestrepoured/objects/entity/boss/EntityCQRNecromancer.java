@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -175,6 +176,11 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 			return;
 		}
 		this.summonedMinions.add(summoned);
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.ILLAGER;
 	}
 
 }

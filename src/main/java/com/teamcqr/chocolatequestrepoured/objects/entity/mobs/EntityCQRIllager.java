@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.AbstractIllager.IllagerArmPose;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
@@ -100,6 +101,11 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 			return IllagerArmPose.ATTACKING;
 		}
 		return IllagerArmPose.CROSSED;
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.ILLAGER;
 	}
 
 }

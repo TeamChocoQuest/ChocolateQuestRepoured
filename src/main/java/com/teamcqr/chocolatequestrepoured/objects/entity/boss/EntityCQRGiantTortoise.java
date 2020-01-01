@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
@@ -289,5 +290,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void setCurrentAnimation(ETortoiseAnimState newState) {
 		this.dataManager.set(ANIM_STATE, newState.getID());
 	}
+
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEFINED;
+	}
+	
+	
 
 }
