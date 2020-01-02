@@ -7,8 +7,20 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
  */
 public enum EDungeonGenerator {
 
-	CAVERNS("caverns"), ABANDONED("abandoned"), RUIN("ruin"), NETHER_CITY("nether_city"), FLOATING_NETHER_CITY("floating_nether_city"), TEMPLATE_SURFACE("template_surface"), TEMPLATE_OCEAN_FLOOR("template_ocean_floor"),
-	STRONGHOLD("stronghold"), CLASSIC_STRONGHOLD("classic_stronghold"), JUNGLE_CAVE("jungle_cave"), SWAMP_CAVE("swamp_cave"), GUARDED_CASTLE("guarded_castle"), CASTLE("castle"), VOLCANO("volcano");
+	CAVERNS("caverns"), 
+	ABANDONED("abandoned"), 
+	RUIN("ruin"), 
+	NETHER_CITY("nether_city"), 
+	FLOATING_NETHER_CITY("floating_nether_city"), 
+	TEMPLATE_SURFACE("template_surface"), 
+	TEMPLATE_OCEAN_FLOOR("template_ocean_floor"),
+	STRONGHOLD("stronghold"), 
+	CLASSIC_STRONGHOLD("classic_stronghold"), 
+	JUNGLE_CAVE("jungle_cave"), 
+	SWAMP_CAVE("swamp_cave"), 
+	GUARDED_CASTLE("guarded_castle"), 
+	CASTLE("castle"), 
+	VOLCANO("volcano");
 
 	private String name;
 
