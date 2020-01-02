@@ -11,8 +11,10 @@ import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase
 {
-	private static final float PULL_SPEED = 2.0f;
+	private static final float PULL_SPEED = 1.8f;
+	public static final double STOP_PULL_DISTANCE = 1.5F;
 	private boolean pulling = false;
+	private Vec3d impactLocation = null;
 
 	public ProjectileHookShotHook(World worldIn)
 	{
@@ -63,6 +65,7 @@ public class ProjectileHookShotHook extends ProjectileBase
 			}
 
 			zeroizeVelocity();
+			impactLocation = this.getPositionVector();
 			pulling = true;
 		} 
 	}
@@ -71,21 +74,34 @@ public class ProjectileHookShotHook extends ProjectileBase
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
 
-		if (pulling && !world.isRemote && getThrower() instanceof EntityPlayer)
-		{
+		if (pulling && !world.isRemote && getThrower() instanceof EntityPlayer) {
 			EntityPlayer shootingPlayer = (EntityPlayer)getThrower();
 			Vec3d playerPos = shootingPlayer.getPositionVector();
-			Vec3d hookPos = this.getPositionVector();
-			Vec3d hookDirection = hookPos.subtract(playerPos).normalize().scale(PULL_SPEED);
-			shootingPlayer.setVelocity(hookDirection.x * PULL_SPEED, hookDirection.y * PULL_SPEED, hookDirection.z * PULL_SPEED);
-			shootingPlayer.velocityChanged = true;
+
+			double distanceToHook = playerPos.distanceTo(impactLocation);
+
+			if (distanceToHook < STOP_PULL_DISTANCE) {
+				pulling = false;
+				this.setDead();
+				setShooterVelocity(shootingPlayer, new Vec3d(0, 0, 0));
+			}
+			else {
+				Vec3d hookDirection = impactLocation.subtract(playerPos);
+
+				Vec3d pullVector = hookDirection.normalize().scale(PULL_SPEED);
+				setShooterVelocity(shootingPlayer, pullVector);
+			}
 		}
 	}
 
 	protected void onUpdateInAir(){}
 
-	private void zeroizeVelocity()
-	{
+	private void zeroizeVelocity() {
 		setVelocity(0, 0, 0);
+	}
+
+	private void setShooterVelocity(EntityPlayer shootingPlayer, Vec3d velocityVec) {
+		shootingPlayer.setVelocity(velocityVec.x, velocityVec.y, velocityVec.z);
+		shootingPlayer.velocityChanged = true;
 	}
 }
