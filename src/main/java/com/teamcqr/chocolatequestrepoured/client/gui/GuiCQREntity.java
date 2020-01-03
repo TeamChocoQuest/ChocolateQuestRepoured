@@ -76,7 +76,6 @@ public class GuiCQREntity extends GuiContainer {
 	@Override
 	public void onGuiClosed() {
 		super.onGuiClosed();
-		System.out.println("UPDATE");
 		int healthScaling = this.sliderHealthScaling.getValueInt();
 		int dropChanceHelm = this.sliderDropChanceHelm.getValueInt();
 		int dropChanceChest = this.sliderDropChanceChest.getValueInt();
