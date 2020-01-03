@@ -15,6 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumActionResult;
@@ -24,7 +25,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -54,6 +54,15 @@ public class ItemSoulBottle extends Item {
 			if (!bottle.hasKey(ENTITY_IN_TAG)) {
 				NBTTagCompound entityTag = new NBTTagCompound();
 				entity.writeToNBTOptional(entityTag);
+				entityTag.removeTag("UUIDLeast");
+				entityTag.removeTag("UUIDMost");
+				entityTag.removeTag("Pos");
+				NBTTagList passengers = entityTag.getTagList("Passengers", 10);
+				for (NBTBase passenger : passengers) {
+					((NBTTagCompound) passenger).removeTag("UUIDLeast");
+					((NBTTagCompound) passenger).removeTag("UUIDMost");
+					((NBTTagCompound) passenger).removeTag("Pos");
+				}
 				entity.setDead();
 				for (Entity passenger : entity.getPassengers()) {
 					passenger.setDead();
@@ -92,7 +101,6 @@ public class ItemSoulBottle extends Item {
 		if (!worldIn.isRemote) {
 			Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
 			entity.setPosition(x, y, z);
-			entity.setUniqueId(MathHelper.getRandomUUID());
 			worldIn.spawnEntity(entity);
 
 			NBTTagList list = tag.getTagList("Passengers", 10);
