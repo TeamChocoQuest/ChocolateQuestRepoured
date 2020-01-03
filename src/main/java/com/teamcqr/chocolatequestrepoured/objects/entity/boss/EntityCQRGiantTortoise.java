@@ -5,17 +5,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
@@ -31,6 +25,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -51,6 +46,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
+	protected boolean isInShell = false;
+	protected ETortoiseAnimState currentAnimation = ETortoiseAnimState.NONE;
 
 	static int EAnimStateGlobalID = 0;
 
@@ -151,7 +148,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (sentFromPart) {
+		if (sentFromPart && !isInShell) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// TODO: Play "armor hit" sound
@@ -207,8 +204,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		return this.dataManager.get(MOUTH_OPEN);
 	}
 
-	@SideOnly(Side.CLIENT)
 	public ETortoiseAnimState getCurrentAnimation() {
+		if(!world.isRemote) {
+			return currentAnimation;
+		}
 		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
 		//return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
@@ -230,6 +229,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.onUpdate();
 
 		this.setAir(999);
+		
+		if(this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_OUT) ||
+				this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) ||
+				this.getCurrentAnimation().equals(ETortoiseAnimState.WALKING)) {
+			setInShell(false);
+		} else {
+			setInShell(true);
+		}
 
 		for (EntityCQRGiantTortoisePart part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
@@ -317,12 +324,31 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	public void setCurrentAnimation(ETortoiseAnimState newState) {
+		this.currentAnimation = newState;
 		this.dataManager.set(ANIM_STATE, newState.getID());
 	}
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
+	}
+	
+	public void setInShell(boolean val) {
+		this.isInShell = val;
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		
+		compound.setBoolean("inShell", isInShell);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		
+		this.isInShell = compound.getBoolean("inShell");
 	}
 	
 	

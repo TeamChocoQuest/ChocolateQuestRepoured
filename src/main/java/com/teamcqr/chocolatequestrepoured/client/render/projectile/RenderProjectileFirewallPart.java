@@ -39,7 +39,7 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 		float rotateAngle = new Float(Math.atan2(entity.motionX, entity.motionZ)) - new Float(Math.toRadians(90));
 		this.draw(rotateAngle, bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
 		tessellator.draw();
-		this.draw(rotateAngle + new Float(Math.toRadians(90)), bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
+		this.draw(rotateAngle + new Float(Math.toRadians(180)), bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
 		tessellator.draw();
 
 		GlStateManager.popMatrix();
