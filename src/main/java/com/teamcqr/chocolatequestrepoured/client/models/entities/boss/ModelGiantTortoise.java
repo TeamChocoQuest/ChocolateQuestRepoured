@@ -321,6 +321,7 @@ public class ModelGiantTortoise extends ModelBase {
 					for (ModelRenderer legJoint : this.legJoints) {
 						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
 					}
+					//				"To - From" - "To-From * multiplier"
 					float offsetXZ = 0.5F - (0.5F / 38F) * (ent.getAnimationProgress());
 
 					this.legJointFL.offsetX = -offsetXZ;
