@@ -42,9 +42,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 
 	private BlockPos startPos;
 	private List<BlockPos> structurePosList = new ArrayList<BlockPos>();
+	private List<Rotation> rotList = new ArrayList<Rotation>();
 
 	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
-
+	
 	public GuardedCastleGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
 	}
@@ -126,7 +127,36 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 				if (dungeonToSpawn != null) {
 					// Build the support platform...
 					BlockPos pos = this.structurePosList.get(i);
-
+					
+					int xT = pos.getX();
+					int zT = pos.getZ();
+					
+					Rotation rot = Rotation.values()[new Random().nextInt(4)];
+					int sizeX = dungeonToSpawn.getSizeX();
+					int sizeZ = dungeonToSpawn.getSizeZ();
+					rotList.set(i, Rotation.NONE);
+					if (this.dungeon.rotateDungeon()) {
+						switch (rot) {
+						case CLOCKWISE_90:
+							xT -= sizeX;
+							rotList.set(i, Rotation.CLOCKWISE_90);
+							break;
+						case CLOCKWISE_180:
+							xT -= sizeX;
+							zT -= sizeZ;
+							rotList.set(i, Rotation.CLOCKWISE_180);
+							break;
+						case COUNTERCLOCKWISE_90:
+							zT -= sizeZ;
+							rotList.set(i, Rotation.COUNTERCLOCKWISE_90);
+							break;
+						default:
+							break;
+						}
+						pos = new BlockPos(xT, pos.getY(), zT);
+						this.structurePosList.set(i, pos);
+					}
+					
 					platform.createSupportHill(new Random(), world, new BlockPos(pos.getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ()), dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeZ(), EPosType.DEFAULT);
 
 					// Build the structure...
@@ -161,7 +191,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			PlacementSettings plcmnt = new PlacementSettings();
 			plcmnt.setMirror(Mirror.NONE);
 			plcmnt.setRotation(Rotation.NONE);
-			if (this.dungeon.rotateBuildingsRandomly()) {
+			if (this.dungeon.rotateDungeon()) {
 				plcmnt.setRotation(this.getRandomRotation());
 			}
 			plcmnt.setIntegrity(1.0f);
@@ -169,11 +199,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			int index = 1;
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
-				// TODO: Move this stuff to preprocess to translate the paste position correctly
-				if (this.dungeon.rotateBuildingsRandomly()) {
-					plcmnt.setRotation(this.getRandomRotation());
-				}
 				BlockPos pos = this.toGenerate.get(structure);
+				
+				plcmnt.setRotation(this.rotList.get(index -1));
+				
 				structure.placeBlocksInWorld(world, pos, plcmnt, EPosType.DEFAULT);
 
 				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world);
