@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -30,7 +31,7 @@ public class ItemMobToSpawner extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (!player.world.isRemote) {
+		if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
 			SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
 			entity.setDead();
 			for (Entity passenger : entity.getPassengers()) {
