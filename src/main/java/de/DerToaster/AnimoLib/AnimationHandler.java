@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -13,11 +14,13 @@ public class AnimationHandler {
 	
 	private AnimationGroup current;
 	private final IAnimatedEntity entity;
+	private final ModelBase model;
 	private int animTick = 0;
 	private Map<String, AnimationGroup> animations = new HashMap<>();
 	
-	public AnimationHandler(IAnimatedEntity entity) {
+	public AnimationHandler(IAnimatedEntity entity, ModelBase baseModel) {
 		this.entity = entity;
+		this.model = baseModel;
 	}
 	
 	@Nullable
@@ -36,7 +39,7 @@ public class AnimationHandler {
 				current = null;
 				return;
 			}
-			current.onAnimationTick(tick);
+			current.onAnimationTick(tick, model);
 		}
 	}
 	

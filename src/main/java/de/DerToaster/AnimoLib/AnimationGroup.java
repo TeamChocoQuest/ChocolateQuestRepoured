@@ -3,6 +3,8 @@ package de.DerToaster.AnimoLib;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.model.ModelBase;
+
 public class AnimationGroup {
 	
 	protected List<Animation> subAnimations = new ArrayList<>();
@@ -37,12 +39,12 @@ public class AnimationGroup {
 		return endTick;
 	}
 	
-	public void onAnimationTick(int tick) {
+	public void onAnimationTick(int tick, ModelBase baseModel) {
 		if(!subAnimations.isEmpty()) {
 			if(tick >= startTick && tick <= endTick) {
 				for(Animation anim : subAnimations) {
 					if(anim != null) {
-						anim.onAnimTick(tick);
+						anim.onAnimTick(tick, baseModel);
 					}
 				}
 			}
