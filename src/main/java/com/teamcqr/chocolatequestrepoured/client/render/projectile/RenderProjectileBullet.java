@@ -74,8 +74,9 @@ public class RenderProjectileBullet extends Render<ProjectileBullet> {
 		if (type == 4) {
 			return this.FIRE;
 		} else {
-			System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			return null; // #SHOULD NEVER HAPPEN
+			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
+			//return null; // #SHOULD NEVER HAPPEN
+			return this.IRON;
 		}
 	}
 }
