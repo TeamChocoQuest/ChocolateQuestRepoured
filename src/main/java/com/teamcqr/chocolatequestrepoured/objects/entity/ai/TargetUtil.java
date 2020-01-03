@@ -43,6 +43,9 @@ public class TargetUtil {
 			if (input.isBeingRidden()) {
 				return false;
 			}
+			if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
+				return false;
+			}
 			return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse || input instanceof EntityPig;
 		}
 	};
