@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.entity.passive.AbstractHorse;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -89,9 +88,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 				horse.setHorseTamed(true);
 				horse.setHorseSaddled(true);
 				// Should that stay? -> Arlo says yes.
-				if (horse instanceof EntityHorse) {
-					((EntityHorse) horse).setHorseArmorStack(new ItemStack(Items.IRON_HORSE_ARMOR, 1));
-				}
+				horse.replaceItemInInventory(401, new ItemStack(Items.IRON_HORSE_ARMOR));
 			} else if (this.entityToMount instanceof EntityPig) {
 				((EntityPig) this.entityToMount).setSaddled(true);
 			}
