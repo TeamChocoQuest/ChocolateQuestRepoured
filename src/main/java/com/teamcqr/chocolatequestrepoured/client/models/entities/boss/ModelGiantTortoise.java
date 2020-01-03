@@ -317,7 +317,7 @@ public class ModelGiantTortoise extends ModelBase {
 						feet[i].rotateAngleX += anglePerStep;
 					}
 				} else {
-					this.mainPart.offsetY = 0.15F;
+					this.mainPart.offsetY = 0.5F;
 					for (ModelRenderer legJoint : this.legJoints) {
 						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
 					}

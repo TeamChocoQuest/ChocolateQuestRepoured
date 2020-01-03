@@ -3,6 +3,20 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -15,6 +29,7 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -64,6 +79,20 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		public int getID() {
 			return this.id;
 		}
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(5, new BossAIHealingTurtle(this));
+		this.tasks.addTask(8, new EntityAIAttackRanged(this));
+		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this));
+
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	final float baseWidth = 2.0F;
@@ -180,8 +209,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@SideOnly(Side.CLIENT)
 	public ETortoiseAnimState getCurrentAnimation() {
-		// return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
-		return ETortoiseAnimState.MOVE_PARTS_OUT;
+		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
+		//return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
 
 	@Override
