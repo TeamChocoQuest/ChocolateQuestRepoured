@@ -69,82 +69,53 @@ public abstract class SpawnerFactory {
 	 * @param pos                      Position at which to place spawner
 	 */
 	public static void placeSpawner(NBTTagCompound[] entities, boolean multiUseSpawner, @Nullable NBTTagCompound spawnerSettingsOverrides, World world, BlockPos pos) {
-
-		world.setBlockToAir(pos);
-
 		world.setBlockState(pos, (multiUseSpawner == true /* && spawnerSettingsOverrides != null */) ? Blocks.MOB_SPAWNER.getDefaultState() : ModBlocks.SPAWNER.getDefaultState());
 
-		TileEntity tile = world.getTileEntity(pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
 		if (multiUseSpawner) {
-
-			// Vars
-			TileEntityMobSpawner spawner = (TileEntityMobSpawner) tile;
-			NBTTagCompound spawnerData = new NBTTagCompound();
-			NBTTagList spawnerEntities = spawnerData.getTagList("SpawnPotentials", 10);
+			TileEntityMobSpawner tileEntityMobSpawner = (TileEntityMobSpawner) tileEntity;
+			NBTTagCompound compound = tileEntityMobSpawner.writeToNBT(new NBTTagCompound());
+			NBTTagList spawnPotentials = new NBTTagList();
 
 			// Store entity ids into NBT tag
 			for (int i = 0; i < entities.length; i++) {
 				if (entities[i] != null) {
-					/*
-					 * NBTTagCompound entityToAddAsNBT = new NBTTagCompound();
-					 * entityToAddAsNBT.setString("id", EntityList.getEntityString(entities[i]));
-					 * spawnerEntities.set(i, entityToAddAsNBT);
-					 */
-					// This could actually work
-					/*
-					 * NBTTagCompound entityTag = new NBTTagCompound();
-					 * entityTag.setTag("Entity", entities[i].writeToNBT(new NBTTagCompound()));
-					 * spawnerEntities.appendTag(entityTag);
-					 */
-					// PROBLEM: We should not create these fake entities, we should use the NBT the bottle already has as this should contain all the data
-					NBTTagCompound compound = new NBTTagCompound();
-					compound.setInteger("Weight", 1);
+					NBTTagCompound spawnPotential = new NBTTagCompound();
+					spawnPotential.setInteger("Weight", 1);
 					NBTTagCompound tag = entities[i];
 					tag.removeTag("UUID");
-					compound.setTag("Entity", tag);
-					spawnerEntities.appendTag(compound);
-				} /*
-					 * else {
-					 * System.out.println("Entity is null?!?!");
-					 * }
-					 */
+					tag.removeTag("Pos");
+					spawnPotential.setTag("Entity", tag);
+					spawnPotentials.appendTag(spawnPotential);
+				}
 			}
-			spawnerData.setTag("SpawnPotentials", spawnerEntities);
-
-			spawnerData.setInteger("x", pos.getX());
-			spawnerData.setInteger("y", pos.getY());
-			spawnerData.setInteger("z", pos.getZ());
+			compound.setTag("SpawnPotentials", spawnPotentials);
+			compound.removeTag("SpawnData");
 
 			// Store default settings into NBT
 			if (spawnerSettingsOverrides != null) {
-				spawnerData.setInteger("MinSpawnDelay", spawnerSettingsOverrides.getInteger("MinSpawnDelay"));
-				spawnerData.setInteger("MaxSpawnDelay", spawnerSettingsOverrides.getInteger("MaxSpawnDelay"));
-				spawnerData.setInteger("SpawnCount", spawnerSettingsOverrides.getInteger("SpawnCount"));
-				spawnerData.setInteger("MaxNearbyEntities", spawnerSettingsOverrides.getInteger("MaxNearbyEntities"));
-				spawnerData.setInteger("SpawnRange", spawnerSettingsOverrides.getInteger("SpawnRange"));
-				spawnerData.setInteger("RequiredPlayerRange", spawnerSettingsOverrides.getInteger("RequiredPlayerRange"));
+				compound.setInteger("MinSpawnDelay", spawnerSettingsOverrides.getInteger("MinSpawnDelay"));
+				compound.setInteger("MaxSpawnDelay", spawnerSettingsOverrides.getInteger("MaxSpawnDelay"));
+				compound.setInteger("SpawnCount", spawnerSettingsOverrides.getInteger("SpawnCount"));
+				compound.setInteger("MaxNearbyEntities", spawnerSettingsOverrides.getInteger("MaxNearbyEntities"));
+				compound.setInteger("SpawnRange", spawnerSettingsOverrides.getInteger("SpawnRange"));
+				compound.setInteger("RequiredPlayerRange", spawnerSettingsOverrides.getInteger("RequiredPlayerRange"));
 			}
 
-			// Call spawner obj to read data from newly created NBT
-			spawner.readFromNBT(spawnerData);
-			if (spawnerSettingsOverrides != null) {
-				spawner.readFromNBT(spawnerSettingsOverrides);
-			}
-			spawner.updateContainingBlockInfo();
-			spawner.update();
-			spawner.markDirty();
+			// Read data from modified nbt
+			tileEntityMobSpawner.readFromNBT(compound);
+
+			tileEntityMobSpawner.markDirty();
 		} else {
-			TileEntitySpawner spawner = (TileEntitySpawner) tile;
+			TileEntitySpawner tileEntitySpawner = (TileEntitySpawner) tileEntity;
 
 			for (int i = 0; i < entities.length && i < 9; i++) {
 				if (entities[i] != null) {
-					spawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
+					tileEntitySpawner.inventory.setStackInSlot(i, getSoulBottleItemStackForEntity(entities[i]));
 				}
 			}
 
-			spawner.updateContainingBlockInfo();
-			spawner.update();
-			spawner.markDirty();
+			tileEntitySpawner.markDirty();
 		}
 	}
 
