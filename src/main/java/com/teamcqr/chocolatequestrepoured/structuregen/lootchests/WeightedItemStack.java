@@ -44,8 +44,18 @@ public class WeightedItemStack {
 	}
 
 	public void addToTable(LootTable table) {
-		LootUtils.addItemToTable(table, Item.getByNameOrId(this.itemName), this.weight, 1 + new Random().nextInt(Reference.CONFIG_HELPER_INSTANCE.getMaxLootTablePoolRolls()), ((float) this.weight / 100.0F), this.minCount, this.maxCount,
-				this.enchant ? (float) this.minLvl : 0F, this.enchant ? (float) this.maxLvl : 0F, this.itemName);
+		LootUtils.addItemToTable(
+				table, 
+				Item.getByNameOrId(this.itemName), 
+				this.weight, 
+				1 /*+ new Random().nextInt(Reference.CONFIG_HELPER_INSTANCE.getMaxLootTablePoolRolls())*/, 
+				((float) this.weight / 100.0F), 
+				this.minCount, 
+				this.maxCount,
+				this.enchant ? (float) this.minLvl : 0F, 
+				this.enchant ? (float) this.maxLvl : 0F, 
+				this.itemName
+			);
 	}
 
 	public WeightedItemStack setChance(int chance) {
