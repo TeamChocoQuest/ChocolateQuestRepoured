@@ -126,19 +126,19 @@ public class TileEntityExporter extends TileEntity {
 
 	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) {
 		if (this.relativeMode) {
-			startPos = this.pos.subtract(startPos);
-			endPos = this.pos.subtract(endPos);
+			startPos = this.pos.add(startPos);
+			endPos = this.pos.add(endPos);
 		}
 		if (!world.isRemote) {
 			CQStructure structure = new CQStructure(this.structureName, true);
 			structure.setAuthor(authorName);
-			System.out.println("Server is saving structure...");
+			CQRMain.logger.info("Server is saving structure...");
 			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
-			System.out.println("Done!");
+			CQRMain.logger.info("Done!");
 		} else {
-			System.out.println("Sending structure save request packet...");
+			CQRMain.logger.info("Sending structure save request packet...");
 			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
-			System.out.println("Packet sent!");
+			CQRMain.logger.info("Packet sent!");
 		}
 	}
 
