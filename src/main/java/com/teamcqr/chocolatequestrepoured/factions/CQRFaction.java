@@ -199,6 +199,7 @@ public class CQRFaction {
 					}
 				}
 			});
+			t.setDaemon(true);
 			t.start();
 		}
 	}

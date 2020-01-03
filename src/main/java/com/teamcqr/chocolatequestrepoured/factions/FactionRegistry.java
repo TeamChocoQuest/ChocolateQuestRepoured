@@ -311,6 +311,7 @@ public class FactionRegistry {
 					}
 				}
 			});
+			t.setDaemon(true);
 			t.start();
 		}
 	}
@@ -356,6 +357,7 @@ public class FactionRegistry {
 					}
 				}
 			});
+			t.setDaemon(true);
 			t.start();
 		}
 	}
