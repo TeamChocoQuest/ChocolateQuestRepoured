@@ -1,10 +1,11 @@
 package de.DerToaster.AnimoLib;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 
 public class Animation {
 
-	private final ModelRenderer model;
+	private final String model;
 	private final int duration;
 	private final int startTick;
 	private final float[] rotationFrom;
@@ -12,7 +13,7 @@ public class Animation {
 	private final float[] offsetFrom;
 	private final float[] offsetTo; 
 	
-	public Animation(ModelRenderer what, int howLong, int sinceWhen, float[] fromRotation, float[] toRotatiom, float[] fromOffset, float[] toOffset) {
+	public Animation(String what, int howLong, int sinceWhen, float[] fromRotation, float[] toRotatiom, float[] fromOffset, float[] toOffset) {
 		this.model = what;
 		this.duration = howLong;
 		this.startTick = sinceWhen;
@@ -50,20 +51,33 @@ public class Animation {
 		return f;
 	}
 	
-	public void onAnimTick(int tick) {
+	public void onAnimTick(int tick, ModelBase base) {
 		if(tick < getStartTick()) {
-			setModelToFrom();
+			setModelToFrom(base);
 			return;
 		}
 		if(tick > getEndTick()) {
-			setModelToTo();
+			setModelToTo(base);
 			return;
 		}
-		handleOffsets(tick);
-		handleRotations(tick);
+		handleOffsets(tick, base);
+		handleRotations(tick, base);
 	}
 	
-	private void setModelToFrom() {
+	public ModelRenderer getModel(ModelBase baseModel) {
+		for(ModelRenderer m : baseModel.boxList) {
+			if(m.boxName.equals(this.model)) {
+				return m;
+			}
+		}
+		return null;
+	}
+	
+	private void setModelToFrom(ModelBase base) {
+		ModelRenderer model = getModel(base);
+		if(model == null) {
+			return;
+		}
 		model.offsetX = offsetFrom[0];
 		model.offsetY = offsetFrom[1];
 		model.offsetZ = offsetFrom[2];
@@ -72,7 +86,11 @@ public class Animation {
 		model.rotateAngleZ = rotationFrom[2];
 	}
 	
-	private void setModelToTo() {
+	private void setModelToTo(ModelBase base) {
+		ModelRenderer model = getModel(base);
+		if(model == null) {
+			return;
+		}
 		model.offsetX = offsetTo[0];
 		model.offsetY = offsetTo[1];
 		model.offsetZ = offsetTo[2];
@@ -81,7 +99,11 @@ public class Animation {
 		model.rotateAngleZ = rotationTo[2];
 	}
 	
-	private void handleRotations(int tick) {
+	private void handleRotations(int tick, ModelBase base) {
+		ModelRenderer model = getModel(base);
+		if(model == null) {
+			return;
+		}
 		float dRX = rotationTo[0] - rotationFrom[0];
 		float dRY = rotationTo[1] - rotationFrom[1];
 		float dRZ = rotationTo[2] - rotationFrom[2];
@@ -91,7 +113,11 @@ public class Animation {
 		model.rotateAngleZ = rotationFrom[2] + getMultiplier(tick) * dRZ;
 	}
 	
-	private void handleOffsets(int tick) {
+	private void handleOffsets(int tick, ModelBase base) {
+		ModelRenderer model = getModel(base);
+		if(model == null) {
+			return;
+		}
 		float dX = offsetTo[0] - offsetFrom[0];
 		float dY = offsetTo[1] - offsetFrom[1];
 		float dZ = offsetTo[2] - offsetFrom[2];
