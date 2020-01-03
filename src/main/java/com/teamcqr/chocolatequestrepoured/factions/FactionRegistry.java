@@ -20,14 +20,12 @@ import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.monster.AbstractIllager;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityEndermite;
-import net.minecraft.entity.monster.EntityEvoker;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityIllusionIllager;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
@@ -169,7 +167,7 @@ public class FactionRegistry {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
-		if (entity instanceof EntityIllusionIllager || entity instanceof EntityVex || entity instanceof EntityVindicator || entity instanceof EntityEvoker) {
+		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
 			return this.factions.get(EDefaultFaction.BEASTS.name());
 		}
 
