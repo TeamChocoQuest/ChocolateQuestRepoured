@@ -101,6 +101,8 @@ public class LootUtils {
 		ArrayList<LootFunction> _functions = new ArrayList<LootFunction>();
 		if (item.getItemStackLimit() > 1) {
 			_functions.add(new SetCount(lchance, new RandomValueRange(minQuantity, maxQuantity)));
+		} else {
+			_functions.add(new SetCount(lchance, new RandomValueRange(1)));
 		}
 		if (minLootBonus >= 0 && (maxLootBonus > minLootBonus || maxLootBonus > 0)) {
 			_functions.add(new LootingEnchantBonus(new LootCondition[] {}, new RandomValueRange(minLootBonus, maxLootBonus), 0));
