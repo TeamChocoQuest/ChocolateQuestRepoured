@@ -159,6 +159,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 
 	}
+	
+	@Override
+	public int getAir() {
+		return 100;
+	}
 
 	@Override
 	protected ResourceLocation getLootTable() {
