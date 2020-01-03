@@ -220,7 +220,8 @@ public class ModelGiantTortoise extends ModelBase {
 		switch (ent.getCurrentAnimation()) {
 		// DONE: Change offset of model
 		case MOVE_PARTS_IN:
-			if (ent.getAnimationProgress() >= 150) {
+			/*if (ent.getAnimationProgress() >= 500) {
+				//Animation reset !!REMOVE THIS AFTER TESTING!!
 				resetParts(false);
 				for(ModelRenderer joint : legJoints) {
 					joint.offsetX = 0;
@@ -228,8 +229,9 @@ public class ModelGiantTortoise extends ModelBase {
 					joint.offsetZ = 0;
 				}
 				ent.setAnimationProgress(0);
-			}
+			}*/
 			if (ent.getAnimationProgress() >= 100) {
+				//Move shell down -> 11 Ticks
 				renderSubParts = false;
 				if (ent.getAnimationProgress() > 110) {
 					this.mainPart.offsetY = 0.5F;
@@ -247,6 +249,7 @@ public class ModelGiantTortoise extends ModelBase {
 			} else {
 				this.mainPart.offsetY = 0;
 				if (ent.getAnimationProgress() <= 60) {
+					//Rotate legs and move head -> 60 Ticks
 					this.head.offsetZ = ent.getAnimationProgress() * 0.0125F;
 
 					this.mainPart.offsetY = 0.0025F * (ent.getAnimationProgress());
@@ -256,11 +259,13 @@ public class ModelGiantTortoise extends ModelBase {
 						feet[i].rotateAngleX -= anglePerStep;
 					}
 				} else {
+					//Move parts in -> 38 Ticks
 					this.mainPart.offsetY = 0.15F;
 					for (ModelRenderer legJoint : this.legJoints) {
 						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
 					}
 					float offsetXZ = 0.0125F * (ent.getAnimationProgress() - 59);
+					//System.out.println("offset: " +offsetXZ);
 
 					this.legJointFL.offsetX = -offsetXZ;
 					this.legJointFL.offsetZ = offsetXZ;
@@ -278,8 +283,7 @@ public class ModelGiantTortoise extends ModelBase {
 			ent.setAnimationProgress(ent.getAnimationProgress() + 1);
 			break;
 		case MOVE_PARTS_OUT:
-			//TODO: Adjust order
-			if (ent.getAnimationProgress() >= 150) {
+			/*if (ent.getAnimationProgress() >= 500) {
 				resetParts(false);
 				for(ModelRenderer joint : legJoints) {
 					joint.offsetX = 0;
@@ -287,31 +291,26 @@ public class ModelGiantTortoise extends ModelBase {
 					joint.offsetZ = 0;
 				}
 				ent.setAnimationProgress(0);
-			}
+			}*/
 			if(ent.getAnimationProgress() == 0) {
 				for(int i = 0; i < 4; i++) {
 					knees[i].rotateAngleX -= new Float(Math.toRadians(45));
 					feet[i].rotateAngleX -= new Float(Math.toRadians(45));
+					
+					legJoints[i].offsetX = -0.5F;
+					legJoints[i].offsetZ = -0.5F;
 				}
-				this.mainPart.offsetY = 0;
+				this.mainPart.offsetY = 0.5F;
 				this.head.offsetZ = 0.75F;
 			}
-			if (ent.getAnimationProgress() <= 70) {
-				renderSubParts = false;
-				if (ent.getAnimationProgress() > 10) {
-					this.mainPart.offsetY = 0.5F;
-				}
-				if (ent.getAnimationProgress() <= 10) {
-					this.mainPart.offsetY = 0.05F * (ent.getAnimationProgress()) + 0.15F;
-
-				}
-
-			} else {
+			if (ent.getAnimationProgress() > 98) {
+				renderSubParts = true;
 				this.mainPart.offsetY = 0;
-				if (ent.getAnimationProgress() <= 130) {
-					this.head.offsetZ = -ent.getAnimationProgress() * 0.0125F;
+			} else {
+				if (ent.getAnimationProgress() >= 38) {
+					this.head.offsetZ = 0.75F -(ent.getAnimationProgress() -38) * (0.75F / 60F);
 
-					this.mainPart.offsetY = -0.0025F * (ent.getAnimationProgress());
+					this.mainPart.offsetY = 0.5F + (-0.5F / 60) * (ent.getAnimationProgress() -38);
 
 					for(int i = 0; i < 4; i++) {
 						knees[i].rotateAngleX += anglePerStep;
@@ -322,7 +321,7 @@ public class ModelGiantTortoise extends ModelBase {
 					for (ModelRenderer legJoint : this.legJoints) {
 						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
 					}
-					float offsetXZ = -0.0125F * (ent.getAnimationProgress() - 59);
+					float offsetXZ = 0.5F - (0.5F / 38F) * (ent.getAnimationProgress());
 
 					this.legJointFL.offsetX = -offsetXZ;
 					this.legJointFL.offsetZ = offsetXZ;
