@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -14,10 +16,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
@@ -140,15 +142,15 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 	}
 
-	protected void spawnEntityFromNBT(NBTTagCompound nbt) {
+	protected Entity spawnEntityFromNBT(NBTTagCompound nbt) {
 		Entity entity = EntityList.createEntityFromNBT(nbt, this.world);
 
 		if (entity != null) {
 			entity.setUniqueId(MathHelper.getRandomUUID());
-			Vec3d pos = new Vec3d((double) this.pos.getX() + this.world.rand.nextDouble(), (double) this.pos.getY(), (double) this.pos.getZ() + this.world.rand.nextDouble());
-			if (this.world.getBlockState(new BlockPos(pos)).getMaterial().blocksMovement() || this.world.getBlockState(new BlockPos(pos).offset(EnumFacing.UP)).getMaterial().blocksMovement()) {
-				pos = new Vec3d(this.pos.getX(), this.pos.getY(), this.pos.getZ());
-			}
+			Random rand = new Random();
+			Vec3d pos = new Vec3d(this.pos.getX() + 0.5D, this.pos.getY(), this.pos.getZ() + 0.5D);
+			double offset = entity.width <= 1.2F ? 0.5D - entity.width * 0.4D : 0.02D;
+			pos = pos.addVector(rand.nextDouble() * offset * 2.0D - offset, 0.0D, rand.nextDouble() * offset * 2.0D - offset);
 			entity.setPosition(pos.x, pos.y, pos.z);
 
 			if (entity instanceof EntityLiving) {
@@ -162,7 +164,15 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			}
 
 			this.world.spawnEntity(entity);
+
+			NBTTagList list = nbt.getTagList("Passengers", 10);
+			if (!list.hasNoTags()) {
+				Entity rider = this.spawnEntityFromNBT(list.getCompoundTagAt(0));
+				rider.startRiding(entity);
+			}
 		}
+
+		return entity;
 	}
 
 	protected boolean isNonCreativePlayerInRange(double range) {

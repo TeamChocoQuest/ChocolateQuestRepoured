@@ -132,7 +132,11 @@ public class BlockTable extends Block implements ITileEntityProvider {
 		if (!table.isEmpty()) {
 			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			if (!worldIn.isRemote) {
-				playerIn.inventory.addItemStackToInventory(itemHandler.extractItem(0, 64, false));
+				ItemStack stack = itemHandler.extractItem(0, 64, false);
+				if (!playerIn.inventory.addItemStackToInventory(stack)) {
+					EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F, stack);
+					worldIn.spawnEntity(item);
+				}
 			}
 		}
 		return true;
