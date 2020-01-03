@@ -81,12 +81,12 @@ public class GuiExporter extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		try {
-			int eX = Integer.parseInt(this.edtEndX.getText());
-			int sX = Integer.parseInt(this.edtStartX.getText());
-			int eY = Integer.parseInt(this.edtEndY.getText());
-			int sY = Integer.parseInt(this.edtStartY.getText());
-			int eZ = Integer.parseInt(this.edtEndZ.getText());
-			int sZ = Integer.parseInt(this.edtStartZ.getText());
+			int startX = Integer.parseInt(this.edtStartX.getText());
+			int startY = Integer.parseInt(this.edtStartY.getText());
+			int startZ = Integer.parseInt(this.edtStartZ.getText());
+			int endX = Integer.parseInt(this.edtEndX.getText());
+			int endY = Integer.parseInt(this.edtEndY.getText());
+			int endZ = Integer.parseInt(this.edtEndZ.getText());
 
 			String structName = this.edtName.getText();
 			structName = structName.replaceAll(" ", "_");
@@ -95,16 +95,16 @@ public class GuiExporter extends GuiScreen {
 				structName = "dungeon_export";
 			}
 
-			this.exporter.setValues(sX, sY, sZ, eX, eY, eZ, structName, this.chbxPartsMode.isChecked(), this.chbxRelativeMode.isChecked());
+			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxPartsMode.isChecked(), this.chbxRelativeMode.isChecked());
 
 			CQRMain.NETWORK.sendToServer(new ExporterUpdatePacket(this.exporter));
 
 			if (this.saveStructOnExit) {
-				System.out.println("Saving structure...");
-				this.exporter.saveStructure(this.mc.world, new BlockPos(sX, sY, sZ), new BlockPos(eX, eY, eZ), structName);
+				CQRMain.logger.info("Saving structure...");
+				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), structName);
 			}
 		} catch (NumberFormatException ex) {
-			System.out.println(ex);
+			CQRMain.logger.error(ex);
 		}
 
 		super.onGuiClosed();
