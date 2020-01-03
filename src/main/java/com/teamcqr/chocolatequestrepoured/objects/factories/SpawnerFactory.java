@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
@@ -53,6 +54,15 @@ public abstract class SpawnerFactory {
 			Entity ent = entities[i];
 			NBTTagCompound compound = new NBTTagCompound();
 			ent.writeToNBTOptional(compound);
+			compound.removeTag("UUIDLeast");
+			compound.removeTag("UUIDMost");
+			compound.removeTag("Pos");
+			NBTTagList passengerList = compound.getTagList("Passengers", 10);
+			for (NBTBase passengerTag : passengerList) {
+				((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
+				((NBTTagCompound) passengerTag).removeTag("UUIDMost");
+				((NBTTagCompound) passengerTag).removeTag("Pos");
+			}
 			entCompounds[i] = compound;
 		}
 		placeSpawner(entCompounds, multiUseSpawner, spawnerSettingsOverrides, world, pos);
@@ -82,10 +92,7 @@ public abstract class SpawnerFactory {
 				if (entities[i] != null) {
 					NBTTagCompound spawnPotential = new NBTTagCompound();
 					spawnPotential.setInteger("Weight", 1);
-					NBTTagCompound tag = entities[i];
-					tag.removeTag("UUID");
-					tag.removeTag("Pos");
-					spawnPotential.setTag("Entity", tag);
+					spawnPotential.setTag("Entity", entities[i]);
 					spawnPotentials.appendTag(spawnPotential);
 				}
 			}

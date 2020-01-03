@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -146,7 +145,6 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		Entity entity = EntityList.createEntityFromNBT(nbt, this.world);
 
 		if (entity != null) {
-			entity.setUniqueId(MathHelper.getRandomUUID());
 			Random rand = new Random();
 			Vec3d pos = new Vec3d(this.pos.getX() + 0.5D, this.pos.getY(), this.pos.getZ() + 0.5D);
 			double offset = entity.width <= 1.2F ? 0.5D - entity.width * 0.4D : 0.02D;

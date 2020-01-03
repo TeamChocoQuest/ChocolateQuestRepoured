@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.blocks;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -43,12 +42,7 @@ public class BlockSpawner extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote && playerIn.isCreative()) {
-			if (playerIn.getHeldItem(hand).getItem() == ModItems.SPAWNER_CONVERTER) {
-				return false;
-			} else {
-				playerIn.openGui(CQRMain.INSTANCE, Reference.SPAWNER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
-			}
-
+			playerIn.openGui(CQRMain.INSTANCE, Reference.SPAWNER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
 		}
 		return true;
 	}
