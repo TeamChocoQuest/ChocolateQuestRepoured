@@ -191,22 +191,21 @@ public class CQRMain {
 			installCQ = true;
 		} else if (Reference.CONFIG_HELPER_INSTANCE.reInstallDefaultFiles()) {
 			installCQ = true;
-		} else {
-			if (!CQ_DUNGEON_FOLDER.exists()) {
-				CQ_DUNGEON_FOLDER.mkdir();
-			}
-			if (!CQ_DUNGEON_FOLDER.exists()) {
-				CQ_CHEST_FOLDER.mkdir();
-			}
-			if (!CQ_DUNGEON_FOLDER.exists()) {
-				CQ_STRUCTURE_FILES_FOLDER.mkdir();
-			}
-			if (!CQ_DUNGEON_FOLDER.exists()) {
-				CQ_EXPORT_FILES_FOLDER.mkdir();
-			}
-			if (!CQ_DUNGEON_FOLDER.exists()) {
-				CQ_FACTION_FOLDER.mkdir();
-			}
+		}
+		if (!CQ_DUNGEON_FOLDER.exists()) {
+			CQ_DUNGEON_FOLDER.mkdir();
+		}
+		if (!CQ_CHEST_FOLDER.exists()) {
+			CQ_CHEST_FOLDER.mkdir();
+		}
+		if (!CQ_STRUCTURE_FILES_FOLDER.exists()) {
+			CQ_STRUCTURE_FILES_FOLDER.mkdir();
+		}
+		if (!CQ_EXPORT_FILES_FOLDER.exists()) {
+			CQ_EXPORT_FILES_FOLDER.mkdir();
+		}
+		if (!CQ_FACTION_FOLDER.exists()) {
+			CQ_FACTION_FOLDER.mkdir();
 		}
 
 		if (installCQ) {
