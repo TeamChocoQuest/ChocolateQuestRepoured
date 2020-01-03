@@ -234,7 +234,7 @@ public class CQRMain {
 		System.out.println("Structure Folder Path: " + structureFolder.getAbsolutePath());
 		CQRMain.CQ_STRUCTURE_FILES_FOLDER = structureFolder;
 
-		File exportFolder = new File(CQFolder.getAbsolutePath() + "/exports//");
+		File exportFolder = new File(CQFolder.getAbsolutePath() + "/exporter_output//");
 		if (!exportFolder.exists()) {
 			exportFolder.mkdirs();
 		}
