@@ -2,16 +2,14 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Properties;
-import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.AbandonedDungeon;
@@ -47,191 +45,90 @@ public class DungeonRegistry {
 	private HashMap<Biome, List<DungeonBase>> biomeDungeonMap = new HashMap<Biome, List<DungeonBase>>();;
 	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
 
-	// DONE: Improve this method by splitting it into multiple smaller parts
-	// DONE: It seems that choosing a random dungeon does not work how it should, rewrite this section or correct it
 	public void loadDungeonFiles() {
-		System.out.println("Loading dungeon configs...");
-		if (CQRMain.CQ_DUNGEON_FOLDER.exists() && CQRMain.CQ_DUNGEON_FOLDER.listFiles().length > 0) {
-			System.out.println("Found " + CQRMain.CQ_DUNGEON_FOLDER.listFiles().length + " dungeon configs. Loading...");
-			System.out.println("Searching dungeons in " + CQRMain.CQ_DUNGEON_FOLDER.getAbsolutePath());
-			// DONE: Make config "search" recursive, so that it also search in sub folders
-			for (File dungeonConfigurationFile : this.getAllFilesInFolder(CQRMain.CQ_DUNGEON_FOLDER)) {
-				System.out.println("Loading dungeon configuration " + dungeonConfigurationFile.getName() + "...");
-				Properties dungeonConfig = new Properties();
-				FileInputStream stream = null;
-				try {
-					stream = new FileInputStream(dungeonConfigurationFile);
+		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
+		CQRMain.logger.info("Loading " + files.size() + " dungeon configuration files...");
 
-					dungeonConfig.load(stream);
+		for (File file : files) {
+			Properties dungeonConfig = new Properties();
+			FileInputStream stream = null;
+			try {
+				stream = new FileInputStream(file);
+				dungeonConfig.load(stream);
 
-					String dunType = dungeonConfig.getProperty("generator", "TEMPLATE_SURFACE");
+				String generatorType = dungeonConfig.getProperty("generator", "TEMPLATE_SURFACE");
 
-					if (EDungeonGenerator.isValidDungeonGenerator(dunType)) {
+				if (EDungeonGenerator.isValidDungeonGenerator(generatorType)) {
+					DungeonBase dungeon = this.getDungeonByType(generatorType, file);
 
-						DungeonBase dungeon = this.getDungeonByType(dunType, dungeonConfigurationFile);
-
-						if (dungeon != null) {
-							// Position restriction stuff here
-
-							dungeon = this.handleLockedPos(dungeon, dungeonConfig);
-							// DONE: do biome map filling
-							// Biome map filling
-							String[] biomes = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
-							System.out.println("Biomes where " + dungeon.getDungeonName() + " can spawn: ");
-							for (String b : biomes) {
-								// Add the biome to the map
-								if (b.equalsIgnoreCase("*") || b.equalsIgnoreCase("ALL")) {
-									System.out.println(" - " + b);
-									this.addDungeonToAllBiomes(dungeon);
-								} else {
-									// Getting biomes by type
-									if (this.getBiomeTypeByName(b) != null) {
-										System.out.println(" - " + b);
-										BiomeDictionary.Type biomeType = this.getBiomeTypeByName(b);
-										System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes: ");
-
-										// Biomes of type
+					if (dungeon != null && dungeon.isRegisteredSuccessful()) {
+						if (!this.areDependenciesMissing(dungeon)) {
+							if (PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false)) {
+								// Position restriction stuff here
+								if (this.handleLockedPos(dungeon, dungeonConfig)) {
+									this.dungeonList.add(dungeon);
+								}
+							} else {
+								// Biome map filling
+								String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
+								for (String biomeName : biomeNames) {
+									if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
+										// Add dungeon to all biomes
+										this.addDungeonToAllBiomes(dungeon);
+										break;
+									} else if (this.isBiomeType(biomeName)) {
+										// Add dungeon to all biomes from biome type
+										BiomeDictionary.Type biomeType = this.getBiomeTypeByName(biomeName);
 										for (Biome biome : BiomeDictionary.getBiomes(biomeType)) {
-											if (this.biomeDungeonMap.containsKey(biome)) {
-												this.addDungeonToBiome(dungeon, biome);
-												System.out.println("   - " + biome.getRegistryName().toString());
-											}
+											this.addDungeonToBiome(dungeon, biome);
 										}
 									} else {
-										// Getting biomes by ResLoc:
-										ResourceLocation resLoc = null;
-										if (b.split(":").length == 2) {
-											resLoc = new ResourceLocation(b);
-										} else {
-											resLoc = new ResourceLocation("minecraft", b);
-										}
-										Biome biome = ForgeRegistries.BIOMES.getValue(resLoc);
+										// Add dungeon to biome from registry name
+										Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
 										if (biome != null) {
 											this.addDungeonToBiome(dungeon, biome);
-											System.out.println("   - " + biome.getRegistryName().toString());
 										}
 									}
 								}
-							}
 
-							if (dungeon.isRegisteredSuccessful()) {
-								System.out.println("Successfully registered dungeon " + dungeon.getDungeonName() + "!");
 								this.dungeonList.add(dungeon);
-							} else {
-								System.out.println("Cant load dungeon " + dungeon.getDungeonName() + "!");
 							}
-							System.out.println(" ");
-							System.out.println(" ");
-
+						} else {
+							CQRMain.logger.warn(file.getName() + ": Dungeon is missing mod dependencies!");
 						}
-
 					} else {
-						System.out.println("Cant load dungeon configuration " + dungeonConfigurationFile.getName() + "!");
-						System.out.println("Dungeon generator " + dunType + " is not a valid dungeon generator!");
-					}
-
-					try {
-						stream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-					System.out.println("Failed to load dungeon configuration " + dungeonConfigurationFile.getName() + "!");
-				} finally {
-					try {
-						stream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-
-		} else {
-			System.err.println("There are no dungeon configs :( ");
-		}
-	}
-
-	private DungeonBase handleLockedPos(DungeonBase dungeon, Properties dungeonConfig) {
-		BlockPos lockedPos = new BlockPos(0, 0, 0);
-		boolean posLocked = PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false);
-		if (posLocked) {
-			if (dungeonConfig.containsKey("spawnAt")) {
-				String[] args = dungeonConfig.getProperty("spawnAt", "-;-;-").split(";");
-				if (args.length == 3) {
-					try {
-						int x = Integer.parseInt(args[0]);
-						int y = Integer.parseInt(args[1]);
-						int z = Integer.parseInt(args[2]);
-
-						lockedPos = new BlockPos(x, y, z);
-
-					} catch (NumberFormatException ex) {
-						posLocked = false;
+						CQRMain.logger.warn(file.getName() + ": Couldn't create dungeon for generator type " + generatorType + "!");
 					}
 				} else {
-					posLocked = false;
+					CQRMain.logger.warn(file.getName() + ": Generator type " + generatorType + " is invalid!");
 				}
-			} else {
-				posLocked = false;
+			} catch (IOException e) {
+				CQRMain.logger.error(file.getName() + ": Failed to load file!");
+			} finally {
+				try {
+					stream.close();
+				} catch (IOException e) {
+					CQRMain.logger.error(file.getName() + ": Failed to close input stream!");
+				}
 			}
 		}
-
-		if (posLocked) {
-			System.out.println("Dungeon " + dungeon.getDungeonName() + " will spawn at X=" + lockedPos.getX() + " Y=" + lockedPos.getY() + " Z=" + lockedPos.getZ());
-			dungeon.setLockPos(lockedPos, posLocked);
-		}
-
-		return dungeon;
 	}
 
-	private Set<File> getAllFilesInFolder(File cQ_DUNGEON_FOLDER) {
-		Set<File> files = new HashSet<>();
-
-		for (File f : cQ_DUNGEON_FOLDER.listFiles(new FilenameFilter() {
-
-			String[] fileExtensions = new String[] { "properties", "prop", "cfg" };
-
-			@Override
-			public boolean accept(File file, String var2) {
-				if (file != null) {
-					if (file.isDirectory()) {
-						return !file.getName().equalsIgnoreCase(("disabled"));
-					}
-
-					String fileName = file.getName();
-					int var3 = fileName.lastIndexOf(46);
-					if (var3 > 0 && var3 < fileName.length() - 1) {
-						String var4 = fileName.substring(var3 + 1).toLowerCase(Locale.ENGLISH);
-						String[] var5 = this.fileExtensions;
-						int var6 = var5.length;
-
-						for (int var7 = 0; var7 < var6; ++var7) {
-							String var8 = var5[var7];
-							if (var4.equals(var8)) {
-								return true;
-							}
-						}
-					}
-				}
-
-				return false;
-			}
-		})) {
-			if (f.isDirectory()) {
-				files.addAll(this.getAllFilesInFolder(f));
-			} else {
-				files.add(f);
-			}
+	private boolean handleLockedPos(DungeonBase dungeon, Properties dungeonConfig) {
+		String[] coordinates = dungeonConfig.getProperty("spawnAt", "-;-;-").split(";");
+		try {
+			int x = Integer.parseInt(coordinates[0]);
+			int y = Integer.parseInt(coordinates[1]);
+			int z = Integer.parseInt(coordinates[2]);
+			dungeon.setLockPos(new BlockPos(x, y, z), true);
+		} catch (NumberFormatException e) {
+			CQRMain.logger.error(dungeon.getDungeonName() + ": Failed to read spawn position!");
+			return false;
 		}
-
-		return files;
+		return true;
 	}
 
 	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
-
 		switch (EDungeonGenerator.valueOf(dunType.toUpperCase())) {
 		case ABANDONED:
 			return new AbandonedDungeon(dungeonPropertiesFile);
@@ -259,11 +156,11 @@ public class DungeonRegistry {
 			return new StrongholdLinearDungeon(dungeonPropertiesFile);
 		case JUNGLE_CAVE:
 			// TODO Jungle cave generator
-			System.out.println("Dungeon Generator JUNGLE_CAVE is not yet implemented!");
+			CQRMain.logger.warn("Dungeon Generator JUNGLE_CAVE is not yet implemented!");
 			break;
 		case SWAMP_CAVE:
 			// TODO SWAMP CAVE GENERATOR
-			System.out.println("Dungeon Generator SWAMP_CAVE is not yet implemented!");
+			CQRMain.logger.warn("Dungeon Generator SWAMP_CAVE is not yet implemented!");
 			break;
 		default:
 			return null;
@@ -271,17 +168,17 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public List<DungeonBase> getDungeonsForBiome(Biome b) {
-		if (b != null && this.biomeDungeonMap.containsKey(b) && !this.biomeDungeonMap.get(b).isEmpty()) {
-			return this.biomeDungeonMap.get(b);
+	public List<DungeonBase> getDungeonsForBiome(Biome biome) {
+		if (biome != null && this.biomeDungeonMap.containsKey(biome) && !this.biomeDungeonMap.get(biome).isEmpty()) {
+			return this.biomeDungeonMap.get(biome);
 		}
 		return new ArrayList<DungeonBase>();
 	}
 
-	public void addBiomeEntryToMap(Biome b) {
+	public void addBiomeEntryToMap(Biome biome) {
 		if (this.biomeDungeonMap != null) {
-			if (!this.biomeDungeonMap.containsKey(b)) {
-				this.biomeDungeonMap.put(b, new ArrayList<DungeonBase>());
+			if (!this.biomeDungeonMap.containsKey(biome)) {
+				this.biomeDungeonMap.put(biome, new ArrayList<DungeonBase>());
 			}
 		}
 	}
@@ -299,49 +196,37 @@ public class DungeonRegistry {
 	}
 
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
-		if (this.areDependenciesMissing(dungeon)) {
-			System.out.println("The dungeon " + dungeon.getDungeonName() + " is missing dependencies! It wont spawn naturally");
-			return;
-		}
-		// System.out.println("Dungeon " + dungeon.getDungeonName() + " may spawn in biomes:");
 		for (Biome biome : this.biomeDungeonMap.keySet()) {
 			this.addDungeonToBiome(dungeon, biome);
 		}
 	}
 
 	private void addDungeonToBiome(DungeonBase dungeon, Biome biome) {
-		if (this.areDependenciesMissing(dungeon)) {
-			System.out.println("The dungeon " + dungeon.getDungeonName() + " is missing dependencies! It wont spawn naturally");
-			return;
+		List<DungeonBase> dungeonList = this.biomeDungeonMap.getOrDefault(biome, new ArrayList<DungeonBase>());
+		if (!dungeonList.contains(dungeon)) {
+			dungeonList.add(dungeon);
+			this.biomeDungeonMap.replace(biome, dungeonList);
 		}
-		// if(this.biomeDungeonMap.containsKey(biome)) {
-		List<DungeonBase> dungs = this.biomeDungeonMap.getOrDefault(biome, new ArrayList<DungeonBase>());
-		if (!dungs.contains(dungeon)) {
-			dungs.add(dungeon);
-			this.biomeDungeonMap.replace(biome, dungs);
-			// System.out.println(" - " + biome.getRegistryName());
-		}
-		// }
 	}
 
 	private BiomeDictionary.Type getBiomeTypeByName(String biomeName) {
-		for (BiomeDictionary.Type bType : BiomeDictionary.Type.getAll()) {
-			if (biomeName.equalsIgnoreCase(bType.getName()) || biomeName.equalsIgnoreCase(bType.toString())) {
-				return bType;
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+			if (biomeName.equalsIgnoreCase(biomeType.getName()) || biomeName.equalsIgnoreCase(biomeType.toString())) {
+				return biomeType;
 			}
 		}
 		return null;
 	}
 
+	private boolean isBiomeType(String biomeName) {
+		return this.getBiomeTypeByName(biomeName) != null;
+	}
+
 	public static void loadDungeons() {
-		//// Fills the biomes of the biome-dungeonlist map
-		System.out.println("Registered Biomes: ");
-		for (Biome b : ForgeRegistries.BIOMES.getValuesCollection()) {
-			if (b != null) {
-				CQRMain.dungeonRegistry.addBiomeEntryToMap(b);
-				// System.out.println(" - " + b.getRegistryName().toString());
-			}
+		for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
+			CQRMain.dungeonRegistry.addBiomeEntryToMap(biome);
 		}
+
 		CQRMain.dungeonRegistry.loadDungeonFiles();
 	}
 
