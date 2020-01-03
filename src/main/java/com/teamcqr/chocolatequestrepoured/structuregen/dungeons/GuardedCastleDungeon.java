@@ -33,7 +33,6 @@ public class GuardedCastleDungeon extends DungeonBase {
 	private int maxDistance = 30;
 
 	private boolean buildPaths = true;
-	private boolean rotateBuildingsRandomly = true;
 	private boolean placeInCircle = false;
 	private Block pathBlock = Blocks.GRASS_PATH;
 
@@ -60,7 +59,6 @@ public class GuardedCastleDungeon extends DungeonBase {
 			this.placeInCircle = PropertyFileHelper.getBooleanProperty(prop, "circle", false);
 
 			this.buildPaths = PropertyFileHelper.getBooleanProperty(prop, "buildroads", true);
-			this.rotateBuildingsRandomly = PropertyFileHelper.getBooleanProperty(prop, "rotatebuildings", true);
 
 			this.pathBlock = PropertyFileHelper.getBlockProperty(prop, "pathblock", Blocks.GRASS_PATH);
 
@@ -109,10 +107,6 @@ public class GuardedCastleDungeon extends DungeonBase {
 
 	public Block getPathMaterial() {
 		return this.pathBlock;
-	}
-
-	public boolean rotateBuildingsRandomly() {
-		return this.rotateBuildingsRandomly;
 	}
 
 }
