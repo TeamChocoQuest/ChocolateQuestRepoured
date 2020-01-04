@@ -7,7 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.Rotation;
@@ -110,11 +110,11 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 					break;
 				}
 			}
-			int startX = x - this.structure.getSizeX() / 3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() / 2;
-			int startZ = z - this.structure.getSizeZ() / 3 - Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() / 2;
+			int startX = x - this.structure.getSizeX() / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startZ = z - this.structure.getSizeZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
 
-			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() / 3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() / 2;
-			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() / 3 + Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize() / 2;
+			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
 
 			for (int iX = startX; iX <= endX; iX++) {
 				for (int iZ = startZ; iZ <= endZ; iZ++) {

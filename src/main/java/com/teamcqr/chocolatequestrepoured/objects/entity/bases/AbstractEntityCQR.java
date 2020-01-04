@@ -37,6 +37,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -165,7 +166,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected boolean canDespawn() {
-		return !Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent();
+		return !CQRConfig.general.mobsFromCQSpawnerDontDespawn;
 	}
 
 	@Override
@@ -193,7 +194,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		boolean result = super.attackEntityFrom(source, amount);
-		if (Reference.CONFIG_HELPER_INSTANCE.doesArmorShatterOnMobs() && result) {
+		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
 		}
 		return result;
@@ -233,7 +234,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
-		this.setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
+		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
@@ -558,7 +559,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		z -= (double) spawn.getZ();
 		float distance = (float) Math.sqrt(x * x + z * z);
 
-		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		health *= 1.0F + 0.1F * distance / (float) CQRConfig.mobs.distanceDivisor;
 
 		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			health *= 2.0F;
@@ -699,7 +700,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void updateReputationOnDeath(DamageSource cause) {
 		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction()) {
 			EntityPlayer player = (EntityPlayer) cause.getTrueSource();
-			int range = Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius();
+			int range = CQRConfig.mobs.factionUpdateRadius;
 			double x1 = player.posX - range;
 			double y1 = player.posY - range;
 			double z1 = player.posZ - range;

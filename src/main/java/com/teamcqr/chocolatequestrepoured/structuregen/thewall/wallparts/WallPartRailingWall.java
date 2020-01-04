@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockStoneSlab;
@@ -18,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -34,7 +36,7 @@ public class WallPartRailingWall implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY() - 12;
+		return CQRConfig.wall.topY - 12;
 	}
 
 	@Override
@@ -92,7 +94,7 @@ public class WallPartRailingWall implements IWallPart {
 	}
 
 	private void placeSpawner(BlockPos spawnerPos, World world) {
-		Entity spawnerEnt = EntityList.createEntityByIDFromName(Reference.CONFIG_HELPER_INSTANCE.getWallMob(), world);
+		Entity spawnerEnt = EntityList.createEntityByIDFromName(new ResourceLocation(CQRConfig.wall.mob), world);
 		if (spawnerEnt instanceof EntityLiving) {
 			switch (((EntityLiving) spawnerEnt).getRNG().nextInt(5)) {
 			case 0:

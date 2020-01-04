@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.resources.I18n;
@@ -90,7 +91,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	@Override
 	public void update() {
-		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(Reference.CONFIG_HELPER_INSTANCE.getSpawnerActivationDistance())) {
+		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		}
 	}
@@ -165,7 +166,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			entity.setPosition(pos.x, pos.y, pos.z);
 
 			if (entity instanceof EntityLiving) {
-				if (Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent()) {
+				if (CQRConfig.general.mobsFromCQSpawnerDontDespawn) {
 					((EntityLiving) entity).enablePersistence();
 				}
 
