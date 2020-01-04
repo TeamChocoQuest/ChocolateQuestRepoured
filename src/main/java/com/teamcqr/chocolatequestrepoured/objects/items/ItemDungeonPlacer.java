@@ -103,29 +103,32 @@ public class ItemDungeonPlacer extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (!worldIn.isRemote) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
+		if (playerIn.isCreative()) {
+			if (!worldIn.isRemote) {
+				ItemStack stack = playerIn.getHeldItem(handIn);
 
-			if (stack.hasTagCompound()) {
-				String dungeonName = stack.getTagCompound().getString("dungeonName");
-				DungeonBase dungeon = CQRMain.dungeonRegistry.getDungeon(dungeonName);
+				if (stack.hasTagCompound()) {
+					String dungeonName = stack.getTagCompound().getString("dungeonName");
+					DungeonBase dungeon = CQRMain.dungeonRegistry.getDungeon(dungeonName);
 
-				if (dungeon != null) {
-					double eye = playerIn.getEyeHeight();
-					Vec3d pos = playerIn.getPositionVector();
-					Vec3d look = playerIn.getLookVec();
+					if (dungeon != null) {
+						double eye = playerIn.getEyeHeight();
+						Vec3d pos = playerIn.getPositionVector();
+						Vec3d look = playerIn.getLookVec();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(pos.addVector(0.0D, eye, 0.0D), pos.addVector(64.0D * look.x, eye + 64.0D * look.y, 64.0D * look.z));
+						RayTraceResult result = worldIn.rayTraceBlocks(pos.addVector(0.0D, eye, 0.0D), pos.addVector(96.0D * look.x, eye + 96.0D * look.y, 96.0D * look.z));
 
-					if (result != null) {
-						dungeon.generate(result.getBlockPos(), worldIn);
+						if (result != null) {
+							dungeon.generate(result.getBlockPos(), worldIn);
 
-						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+							playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+						}
 					}
 				}
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)

@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.client.resources.I18n;
@@ -43,12 +44,16 @@ public class ItemSpawnEggCQR extends Item {
 			try {
 				entity = this.entityClass.getConstructor(World.class).newInstance(worldIn);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				e.printStackTrace();
+				CQRMain.logger.error("Failed to spawn entity from preset item!");
+				CQRMain.logger.error(e);
 			}
 			if (entity != null) {
 				entity.setPosition(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
 				this.setEquipment(entity);
 				worldIn.spawnEntity(entity);
+			}
+			if (!player.isCreative()) {
+				player.getHeldItem(hand).shrink(1);
 			}
 		}
 		return EnumActionResult.SUCCESS;
