@@ -91,7 +91,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 						// Checks, if the dungeon generates (calculated by the percentage chance the
 						// dungeon has...
-						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), getSeed(world, chunkX, chunkZ))) {
+						if (DungeonGenUtils.PercentageRandom((new Double(chosenDungeon.getSpawnChance()) /100D), getSeed(world, chunkX, chunkZ))) {
 							boolean dimensionIsOK = false;
 							// This checks the dimension the dungeon can spawn in
 							for (int dimID : chosenDungeon.getAllowedDimensions()) {
