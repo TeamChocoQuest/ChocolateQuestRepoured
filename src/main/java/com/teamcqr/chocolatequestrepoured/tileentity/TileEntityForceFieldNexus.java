@@ -13,8 +13,8 @@ import net.minecraft.tileentity.TileEntity;
  */
 public class TileEntityForceFieldNexus extends TileEntity {
 
-    public TileEntityForceFieldNexus() {
-        super();
-    }
+	public TileEntityForceFieldNexus() {
+		super();
+	}
 
 }

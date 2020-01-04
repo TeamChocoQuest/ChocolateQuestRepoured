@@ -12,13 +12,13 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 
-	//15 is blindness
+	// 15 is blindness
 	protected PotionEffect POTION_EFFECT = new PotionEffect(Potion.getPotionById(15), 40);
-	
+
 	public EntityAIBlindTargetSpell(AbstractEntityCQR entity) {
 		super(entity);
 	}
-	
+
 	public EntityAIBlindTargetSpell(AbstractEntityCQR entity, PotionEffect customEffect) {
 		this(entity);
 		this.POTION_EFFECT = customEffect;
@@ -26,17 +26,17 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected void castSpell() {
-		if(entity.getAttackTarget() != null) {
-			Vec3d v = entity.getAttackTarget().getLookVec();
+		if (this.entity.getAttackTarget() != null) {
+			Vec3d v = this.entity.getAttackTarget().getLookVec();
 			v = v.normalize();
 			v = v.add(v).add(v).add(v);
-			
-			if(entity.getAttackTarget().isPotionApplicable(POTION_EFFECT)) {
-				entity.getAttackTarget().addPotionEffect(POTION_EFFECT);
-				Vec3d newPos = entity.getAttackTarget().getPositionVector().subtract(v);
-				if(entity.world.getBlockState(new BlockPos(newPos).offset(EnumFacing.DOWN)).getMaterial().isSolid()) {
-					entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.7F, 1.1F);
-					entity.attemptTeleport(newPos.x, newPos.y, newPos.z);
+
+			if (this.entity.getAttackTarget().isPotionApplicable(this.POTION_EFFECT)) {
+				this.entity.getAttackTarget().addPotionEffect(this.POTION_EFFECT);
+				Vec3d newPos = this.entity.getAttackTarget().getPositionVector().subtract(v);
+				if (this.entity.world.getBlockState(new BlockPos(newPos).offset(EnumFacing.DOWN)).getMaterial().isSolid()) {
+					this.entity.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.7F, 1.1F);
+					this.entity.attemptTeleport(newPos.x, newPos.y, newPos.z);
 				}
 			}
 		}

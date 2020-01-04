@@ -11,16 +11,16 @@ public class ItemUtil {
 
 	public static boolean hasFullSet(EntityLivingBase entity, Class<? extends Item> itemClass) {
 		Iterator<ItemStack> iterable = entity.getArmorInventoryList().iterator();
-		Class<? extends Item> helm,chest,legs,feet;
+		Class<? extends Item> helm, chest, legs, feet;
 		try {
 			helm = iterable.next().getItem().getClass();
 			chest = iterable.next().getItem().getClass();
 			legs = iterable.next().getItem().getClass();
 			feet = iterable.next().getItem().getClass();
-		} catch(NoSuchElementException ex) {
+		} catch (NoSuchElementException ex) {
 			return false;
 		}
-		
+
 		return helm == itemClass && chest == itemClass && legs == itemClass && feet == itemClass;
 	}
 

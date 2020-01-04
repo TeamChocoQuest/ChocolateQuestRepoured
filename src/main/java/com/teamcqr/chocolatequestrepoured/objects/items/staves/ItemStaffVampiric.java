@@ -28,24 +28,22 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffVampiric extends Item implements IRangedWeapon{
+public class ItemStaffVampiric extends Item implements IRangedWeapon {
 
 	public ItemStaffVampiric() {
-		setMaxDamage(2048);
-		setMaxStackSize(1);
+		this.setMaxDamage(2048);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shoot(stack, worldIn, playerIn, handIn);
+		this.shoot(stack, worldIn, playerIn, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERPEARL_THROW,
-				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
-				false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERPEARL_THROW, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		player.swingArm(handIn);
 
 		if (!worldIn.isRemote) {
@@ -80,7 +78,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon{
 			worldIn.spawnEntity(spell);
 		}
 	}
-	
+
 	@Override
 	public SoundEvent getShootSound() {
 		return SoundEvents.ENTITY_ENDERPEARL_THROW;

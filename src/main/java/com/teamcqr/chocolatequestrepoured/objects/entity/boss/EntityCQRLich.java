@@ -22,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -36,49 +37,49 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
 	protected BlockPos currentPhylacteryPosition = null;
-	
+
 	public EntityCQRLich(World worldIn) {
 		this(worldIn, 1);
 	}
-	
+
 	public EntityCQRLich(World worldIn, int size) {
 		super(worldIn, size);
-		
-		bossInfoServer.setColor(Color.RED);
-		bossInfoServer.setCreateFog(true);
-		bossInfoServer.setOverlay(Overlay.PROGRESS);
-		
-		setSize(0.6F, 1.8F);
+
+		this.bossInfoServer.setColor(Color.RED);
+		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
+
+		this.setSize(0.6F, 1.8F);
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
-		for(Entity ent : summonedMinions) {
-			if(ent == null  || ent.isDead) {
+		for (Entity ent : this.summonedMinions) {
+			if (ent == null || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for(Entity e : tmp) {
+		for (Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
-		//Phylactery
-		if(currentPhylacteryPosition != null) {
-			if(world.getBlockState(currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
-				setMagicArmorActive(true);
+		// Phylactery
+		if (this.currentPhylacteryPosition != null) {
+			if (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY) {
+				this.setMagicArmorActive(true);
 			} else {
 				this.currentPhylacteryPosition = null;
-				setMagicArmorActive(false);
+				this.setMagicArmorActive(false);
 			}
 		}
 	}
-	
+
 	public void setCurrentPhylacteryBlock(BlockPos pos) {
 		this.setMagicArmorActive(true);
 		this.currentPhylacteryPosition = pos;
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -94,22 +95,22 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
-		//Kill minions
-		for(Entity e : summonedMinions) {
-			if(e != null && !e.isDead) {
-				if(e instanceof EntityLivingBase) {
-					((EntityLivingBase)e).onDeath(cause);
+		// Kill minions
+		for (Entity e : this.summonedMinions) {
+			if (e != null && !e.isDead) {
+				if (e instanceof EntityLivingBase) {
+					((EntityLivingBase) e).onDeath(cause);
 				}
-				if(e != null) {
+				if (e != null) {
 					e.setDead();
 				}
 			}
 		}
-		summonedMinions.clear();
-		
+		this.summonedMinions.clear();
+
 		super.onDeath(cause);
 	}
 
@@ -130,12 +131,12 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	public CQRFaction getSummonerFaction() {
-		return getFaction();
+		return this.getFaction();
 	}
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		return summonedMinions;
+		return this.summonedMinions;
 	}
 
 	@Override
@@ -147,25 +148,30 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
 	}
-	
+
 	@Override
 	protected void updateCooldownForMagicArmor() {
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		if(currentPhylacteryPosition != null) {
-			compound.setTag("currentPhylactery", NBTUtil.createPosTag(currentPhylacteryPosition));
+		if (this.currentPhylacteryPosition != null) {
+			compound.setTag("currentPhylactery", NBTUtil.createPosTag(this.currentPhylacteryPosition));
+		}
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		if (compound.hasKey("currentPhylactery")) {
+			this.currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
 		}
 	}
 	
 	@Override
-	public void readEntityFromNBT(NBTTagCompound compound) {
-		super.readEntityFromNBT(compound);
-		if(compound.hasKey("currentPhylactery")) {
-			currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
-		}
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEAD;
 	}
 
 }

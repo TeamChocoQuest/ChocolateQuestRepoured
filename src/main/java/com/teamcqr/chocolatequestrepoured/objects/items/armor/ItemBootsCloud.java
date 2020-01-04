@@ -55,8 +55,7 @@ public class ItemBootsCloud extends ItemArmor {
 
 			if (player.fallDistance >= 1.0F) {
 				for (int i = 0; i < 3; i++) {
-					world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ,
-							(itemRand.nextFloat() - 0.25F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.25F) / 2.0F);
+					world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.25F) / 2.0F, -0.5D, (itemRand.nextFloat() - 0.25F) / 2.0F);
 				}
 
 				player.fallDistance = 0F;
@@ -64,8 +63,7 @@ public class ItemBootsCloud extends ItemArmor {
 		}
 
 		if (player.isSprinting()) {
-			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ,
-					(itemRand.nextFloat() - 0.5F), -0.5D, (itemRand.nextFloat() - 0.5F));
+			world.spawnParticle(EnumParticleTypes.CLOUD, player.posX, player.posY, player.posZ, (itemRand.nextFloat() - 0.5F), -0.5D, (itemRand.nextFloat() - 0.5F));
 		}
 	}
 

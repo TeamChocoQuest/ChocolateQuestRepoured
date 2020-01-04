@@ -11,11 +11,12 @@ import mcalibrary.math.Vector3f;
 public class Utils {
 	/**
 	 * Make a direct NIO FloatBuffer from an array of floats
+	 * 
 	 * @param arr The array
 	 * @return The newly created FloatBuffer
 	 */
 	public static FloatBuffer makeFloatBuffer(float[] arr) {
-		ByteBuffer bb = ByteBuffer.allocateDirect(arr.length*4);
+		ByteBuffer bb = ByteBuffer.allocateDirect(arr.length * 4);
 		bb.order(ByteOrder.nativeOrder());
 		FloatBuffer fb = bb.asFloatBuffer();
 		fb.put(arr);
@@ -25,6 +26,7 @@ public class Utils {
 
 	/**
 	 * Make a direct NIO ByteBuffer from an array of floats
+	 * 
 	 * @param arr The array
 	 * @return The newly created FloatBuffer
 	 */
@@ -37,8 +39,7 @@ public class Utils {
 	}
 
 	/** Get the quaternion from a matrix. We need to transpose the matrix. */
-	public static Quaternion getQuaternionFromMatrix(Matrix4f matrix)
-	{
+	public static Quaternion getQuaternionFromMatrix(Matrix4f matrix) {
 		Matrix4f copy = new Matrix4f(matrix);
 		return new Quaternion(copy.transpose());
 	}

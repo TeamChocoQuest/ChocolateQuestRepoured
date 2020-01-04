@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
@@ -16,32 +17,27 @@ import net.minecraft.world.World;
 public class ItemSpawnerConverter extends Item {
 
 	public ItemSpawnerConverter() {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote) {
-			Block block = worldIn.getBlockState(pos).getBlock();
-			if(block == null) {
-				return EnumActionResult.PASS;
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		Block block = world.getBlockState(pos).getBlock();
+		if (block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
+			if (!world.isRemote) {
+				if (block == Blocks.MOB_SPAWNER) {
+					CQRMain.logger.info("Converting: Vanilla -> CQR");
+					SpawnerFactory.convertVanillaSpawnerToCQSpawner(world, pos);
+				}
+				if (block == ModBlocks.SPAWNER) {
+					CQRMain.logger.info("Converting: CQR -> Vanilla");
+					SpawnerFactory.convertCQSpawnerToVanillaSpawner(world, pos, null);
+				}
 			}
 			player.getCooldownTracker().setCooldown(this, 10);
-			if(block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
-				if(block == Blocks.MOB_SPAWNER) {
-					System.out.println("Converting: Vanilla -> CQR");
-					SpawnerFactory.convertVanillaSpawnerToCQSpawner(worldIn, pos);
-					return EnumActionResult.PASS;
-				}
-				if(block == ModBlocks.SPAWNER) {
-					System.out.println("Converting: CQR -> Vanilla");
-					SpawnerFactory.convertCQSpawnerToVanillaSpawner(worldIn, pos, null);
-					return EnumActionResult.PASS;
-				}
-			} 
+			return EnumActionResult.SUCCESS;
 		}
-		return EnumActionResult.PASS;
+		return EnumActionResult.FAIL;
 	}
 
 }

@@ -15,47 +15,47 @@ import net.minecraft.world.World;
 class SpawnerInfo {
 
 	private BlockPos position;
-	//private TileEntitySpawner spawnerTile;
+	// private TileEntitySpawner spawnerTile;
 	private NBTTagCompound spawnerData = null;
-	
+
 	public SpawnerInfo(BlockSpawner spawnerBlock, BlockPos pos, World world, NBTTagCompound tileTag) {
 		this.position = pos;
-		if(!tileTag.hasNoTags()) {
+		if (!tileTag.hasNoTags()) {
 			this.spawnerData = tileTag.copy();
 		}
-			//DONE: Fix Spawner data not saving ....
+		// DONE: Fix Spawner data not saving ....
 	}
-	
+
 	public SpawnerInfo(NBTTagCompound nbtTag) {
-		if(nbtTag.getString("type").equalsIgnoreCase("cq_spawner")) {
+		if (nbtTag.getString("type").equalsIgnoreCase("cq_spawner")) {
 			this.position = NBTUtil.BlockPosFromNBT(nbtTag.getCompoundTag("position"));
 			this.spawnerData = nbtTag.getCompoundTag("data");
 		}
 	}
-	
+
 	public NBTTagCompound getSpawnerData() {
 		return this.spawnerData;
 	}
-	
+
 	public NBTTagCompound getAsNBTTag() {
 		NBTTagCompound tag = new NBTTagCompound();
-		
+
 		tag.setString("type", "cq_spawner");
-		
-		appendPos(tag);
-		
+
+		this.appendPos(tag);
+
 		NBTTagCompound spawnerTag = new NBTTagCompound();
 		spawnerTag = this.spawnerData;
-		
+
 		tag.setTag("data", spawnerTag);
-		
+
 		return tag;
 	}
-	
+
 	private void appendPos(NBTTagCompound compound) {
 		compound.setTag("position", NBTUtil.BlockPosToNBTTag(this.position));
 	}
-	
+
 	public BlockPos getPos() {
 		return this.position;
 	}

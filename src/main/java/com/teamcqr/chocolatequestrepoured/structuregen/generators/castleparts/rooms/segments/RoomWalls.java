@@ -1,124 +1,98 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import net.minecraft.util.EnumFacing;
-
 import java.util.EnumMap;
 import java.util.Random;
 
-public class RoomWalls
-{
-    //The wall settings for this room
-    private EnumMap<EnumFacing, WallOptions> walls;
+import net.minecraft.util.EnumFacing;
 
-    //A map of adjacent room doors that lead into this room
-    private EnumMap<EnumFacing, DoorPlacement> adjacentDoors;
+public class RoomWalls {
+	// The wall settings for this room
+	private EnumMap<EnumFacing, WallOptions> walls;
 
-    public RoomWalls()
-    {
-        this.walls = new EnumMap<>(EnumFacing.class);
-        this.adjacentDoors = new EnumMap<>(EnumFacing.class);
-    }
+	// A map of adjacent room doors that lead into this room
+	private EnumMap<EnumFacing, DoorPlacement> adjacentDoors;
 
-    public void addOuter(EnumFacing side)
-    {
-        walls.put(side, new WallOptions(true));
-    }
+	public RoomWalls() {
+		this.walls = new EnumMap<>(EnumFacing.class);
+		this.adjacentDoors = new EnumMap<>(EnumFacing.class);
+	}
 
-    public void addInner(EnumFacing side)
-    {
-        walls.put(side, new WallOptions(false));
-    }
+	public void addOuter(EnumFacing side) {
+		this.walls.put(side, new WallOptions(true));
+	}
 
-    public DoorPlacement addCenteredDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type)
-    {
+	public void addInner(EnumFacing side) {
+		this.walls.put(side, new WallOptions(false));
+	}
 
-        if (type == EnumCastleDoorType.RANDOM)
-        {
-            type = EnumCastleDoorType.getRandomRegularType(random);
-        }
+	public DoorPlacement addCenteredDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type) {
 
-        int offset = (wallLength - type.getWidth()) / 2;
+		if (type == EnumCastleDoorType.RANDOM) {
+			type = EnumCastleDoorType.getRandomRegularType(random);
+		}
 
-        return addDoorWithOffset(side, offset, type);
-    }
+		int offset = (wallLength - type.getWidth()) / 2;
 
-    public DoorPlacement addRandomDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type)
-    {
-        if (type == EnumCastleDoorType.RANDOM)
-        {
-            type = EnumCastleDoorType.getRandomRegularType(random);
-        }
+		return this.addDoorWithOffset(side, offset, type);
+	}
 
-        int offset = 1 + random.nextInt(wallLength - type.getWidth() - 1);
+	public DoorPlacement addRandomDoor(Random random, int wallLength, EnumFacing side, EnumCastleDoorType type) {
+		if (type == EnumCastleDoorType.RANDOM) {
+			type = EnumCastleDoorType.getRandomRegularType(random);
+		}
 
-        return addDoorWithOffset(side, offset, type);
-    }
+		int offset = 1 + random.nextInt(wallLength - type.getWidth() - 1);
 
-    private DoorPlacement addDoorWithOffset(EnumFacing side, int offset, EnumCastleDoorType type)
-    {
-        if (walls.containsKey(side))
-        {
-            DoorPlacement door = new DoorPlacement(offset, type);
-            walls.get(side).addDoor(door);
-            return door;
-        }
-        else
-        {
-            return null;
-        }
-    }
+		return this.addDoorWithOffset(side, offset, type);
+	}
 
-    public boolean hasWallOnSide(EnumFacing side)
-    {
-        return walls.containsKey(side);
-    }
+	private DoorPlacement addDoorWithOffset(EnumFacing side, int offset, EnumCastleDoorType type) {
+		if (this.walls.containsKey(side)) {
+			DoorPlacement door = new DoorPlacement(offset, type);
+			this.walls.get(side).addDoor(door);
+			return door;
+		} else {
+			return null;
+		}
+	}
 
-    public boolean hasDoorOnSide(EnumFacing side)
-    {
-        if (walls.containsKey(side))
-        {
-            return walls.get(side).hasDoor();
-        }
-        else
-        {
-            return false;
-        }
-    }
+	public boolean hasWallOnSide(EnumFacing side) {
+		return this.walls.containsKey(side);
+	}
 
-    public DoorPlacement getDoorOnSide(EnumFacing side)
-    {
-        if (walls.containsKey(side) && walls.get(side).hasDoor())
-        {
-            return walls.get(side).getDoor();
-        }
-        else
-        {
-            return null;
-        }
-    }
+	public boolean hasDoorOnSide(EnumFacing side) {
+		if (this.walls.containsKey(side)) {
+			return this.walls.get(side).hasDoor();
+		} else {
+			return false;
+		}
+	}
 
-    public WallOptions getOptionsForSide(EnumFacing side)
-    {
-        return walls.get(side);
-    }
+	public DoorPlacement getDoorOnSide(EnumFacing side) {
+		if (this.walls.containsKey(side) && this.walls.get(side).hasDoor()) {
+			return this.walls.get(side).getDoor();
+		} else {
+			return null;
+		}
+	}
 
-    public void removeWall(EnumFacing side)
-    {
-        walls.remove(side);
-    }
+	public WallOptions getOptionsForSide(EnumFacing side) {
+		return this.walls.get(side);
+	}
 
-    public void registerAdjacentDoor(EnumFacing side, DoorPlacement door)
-    {
-        adjacentDoors.put(side, door);
-    }
+	public void removeWall(EnumFacing side) {
+		this.walls.remove(side);
+	}
 
-    public boolean adjacentRoomHasDoorOnSide(EnumFacing side)
-    {
-        return adjacentDoors.containsKey(side);
-    }
+	public void registerAdjacentDoor(EnumFacing side, DoorPlacement door) {
+		this.adjacentDoors.put(side, door);
+	}
 
-    public DoorPlacement getAdjacentDoor(EnumFacing side)
-    {
-        return adjacentDoors.get(side);
-    }
+	public boolean adjacentRoomHasDoorOnSide(EnumFacing side) {
+		return this.adjacentDoors.containsKey(side);
+	}
+
+	public DoorPlacement getAdjacentDoor(EnumFacing side) {
+		return this.adjacentDoors.get(side);
+	}
 }

@@ -380,4 +380,4 @@ description.staff_thunder.name=Ni ma tu nic #TODO
 description.spear_diamond.name=Ni ma tu nic #TODO
 
 // Mobs
-entity.EntityCQRZombie.name=Zombi(CQR)
+entity.cqr_zombie.name=Zombi(CQR)

@@ -9,9 +9,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise> {
-	
+
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise.png");
-	
+
 	private ModelGiantTortoise model = new ModelGiantTortoise();
 	private int animState = 0;
 	private boolean mouthIsOpen = false;
@@ -24,19 +24,19 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 	protected ResourceLocation getEntityTexture(EntityCQRGiantTortoise entity) {
 		return TEXTURE;
 	}
-	
-	
+
 	@Override
-	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw,
-			float partialTicks) {
+	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		//DONE: Rotate move around z axis when the mouth is open
-		
-		switch(entity.getCurrentAnimation()) {
+		// DONE: Rotate move around z axis when the mouth is open
+
+		switch (entity.getCurrentAnimation()) {
 		case HEALING:
-			/*entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX - 0.5,
-					entity.posY + 1.0D, entity.posZ - 0.5, 1, 1.5, 1);*/
-			//TODO: Heart particles
+			/*
+			 * entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX - 0.5,
+			 * entity.posY + 1.0D, entity.posZ - 0.5, 1, 1.5, 1);
+			 */
+			// TODO: Heart particles
 			break;
 		case MOVE_PARTS_IN:
 			break;
@@ -54,35 +54,34 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 			break;
 		default:
 			break;
-		
+
 		}
-		
-		if(animState < 11 && entity.isMouthOpen() && !mouthIsOpen) {
-			float angle = (animState) * 3.375F;
+
+		if (this.animState < 11 && entity.isMouthOpen() && !this.mouthIsOpen) {
+			float angle = (this.animState) * 3.375F;
 			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
-			
-			animState++;
-			if(animState == 11) {
-				mouthIsOpen = true;
-				animState = 0;
+
+			this.animState++;
+			if (this.animState == 11) {
+				this.mouthIsOpen = true;
+				this.animState = 0;
 			}
 		}
-		
-		else if(animState < 11 && !entity.isMouthOpen() && mouthIsOpen) {
-			//this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
-			float angle = (10 - animState) * 3.375F;
+
+		else if (this.animState < 11 && !entity.isMouthOpen() && this.mouthIsOpen) {
+			// this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
+			float angle = (10 - this.animState) * 3.375F;
 			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
-			
-			animState++;
-			if(animState == 11) {
-				mouthIsOpen = false;
-				animState = 0;
+
+			this.animState++;
+			if (this.animState == 11) {
+				this.mouthIsOpen = false;
+				this.animState = 0;
 			}
+		} else {
+
 		}
-		else {
-			
-		}
-		
+
 	}
 
 }

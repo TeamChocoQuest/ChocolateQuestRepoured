@@ -24,7 +24,10 @@ public class ModItemModels {
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
 		// register custom item models first
-
+		for (Item item : ModItems.ItemRegistrationHandler.SPAWN_EGGS) {
+			String registryName = item.getRegistryName().toString();
+			registerCustomItemModel(item, 0, registryName.substring(0, registryName.length() - 2), "inventory");
+		}
 
 		// register all other item models
 		for (Item item : ModItems.ItemRegistrationHandler.ITEMS) {

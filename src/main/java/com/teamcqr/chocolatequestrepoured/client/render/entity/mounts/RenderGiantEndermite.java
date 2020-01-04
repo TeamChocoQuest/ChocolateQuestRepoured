@@ -11,26 +11,26 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderGiantEndermite extends RenderLiving<EntityGiantEndermite> {
-	
-	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(Reference.MODID,"textures/entity/mounts/giant_endermite.png");
+
+	private static final ResourceLocation ENDERMITE_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_endermite.png");
 
 	public RenderGiantEndermite(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelEnderMite(), 1.5F);
 	}
-	
+
 	@Override
 	protected void preRenderCallback(EntityGiantEndermite entitylivingbaseIn, float partialTickTime) {
 		double width = 2.5D;
 		double height = 2.5D;
 		GL11.glScaled(width, height, width);
-		
+
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
-	
-	protected float getDeathMaxRotation(EntityGiantEndermite entityLivingBaseIn)
-    {
-        return 180.0F;
-    }
+
+	@Override
+	protected float getDeathMaxRotation(EntityGiantEndermite entityLivingBaseIn) {
+		return 180.0F;
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGiantEndermite entity) {
