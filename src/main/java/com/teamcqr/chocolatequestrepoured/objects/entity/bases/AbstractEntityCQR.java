@@ -44,6 +44,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -155,6 +156,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			--this.spellTicks;
 		}
 	}
+	
+	@Override
+	public abstract EnumCreatureAttribute getCreatureAttribute();
 
 	@Override
 	protected boolean canDespawn() {
@@ -186,7 +190,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		boolean result = super.attackEntityFrom(source, amount);
-		if (result) {
+		if (Reference.CONFIG_HELPER_INSTANCE.doesArmorShatterOnMobs() && result) {
 			this.handleArmorBreaking();
 		}
 		return result;

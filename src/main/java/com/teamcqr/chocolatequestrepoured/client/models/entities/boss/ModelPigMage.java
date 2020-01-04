@@ -45,7 +45,7 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedHead = new ModelRenderer(this, 83, 0);
 		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.bipedHead.addBox(-4.0F, -8.0F, -4.0F, 8, 8, 8, 0.0F);
-		this.setRotateAngle(bipedHead, 0.0F, 0.017453292519943295F, 0.0F);
+		this.setRotateAngle(this.bipedHead, 0.0F, 0.017453292519943295F, 0.0F);
 		this.Hood_Left = new ModelRenderer(this, 24, 14);
 		this.Hood_Left.setRotationPoint(4.5F, 0.0F, 0.0F);
 		this.Hood_Left.addBox(0.0F, 0.0F, -9.0F, 0, 11, 9, 0.0F);
@@ -55,7 +55,7 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.Leg_Cape = new ModelRenderer(this, 0, 50);
 		this.Leg_Cape.setRotationPoint(0.0F, 12.0F, 2.0F);
 		this.Leg_Cape.addBox(-4.0F, 0.0F, 0.0F, 8, 12, 0, 0.0F);
-		this.setRotateAngle(Leg_Cape, 0.2792526803190927F, 0.0F, 0.0F);
+		this.setRotateAngle(this.Leg_Cape, 0.2792526803190927F, 0.0F, 0.0F);
 		this.Hood_Rear = new ModelRenderer(this, 42, 23);
 		this.Hood_Rear.setRotationPoint(0.0F, 2.0F, 4.5F);
 		this.Hood_Rear.addBox(-4.5F, -10.5F, 0.0F, 9, 11, 0, 0.0F);
@@ -78,10 +78,10 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
 		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, 0.0F);
 		this.Buckle = new ModelRenderer(this, 78, 2);
-        this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
-        this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
-		
-        this.bipedBody.addChild(this.Buckle);
+		this.Buckle.setRotationPoint(0.0F, 12.0F, -2.1F);
+		this.Buckle.addBox(-2.0F, -2.0F, 0.0F, 4, 4, 0, 0.0F);
+
+		this.bipedBody.addChild(this.Buckle);
 		this.bipedLeftArm.addChild(this.Arm_Left_Bone);
 		this.Hood_Top.addChild(this.Hood_Left);
 		this.bipedRightArm.addChild(this.Arm_Right_Bone);
@@ -91,9 +91,9 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.Hood_Rear.addChild(this.Hood_Top);
 		this.Hood_Top.addChild(this.Hood_Right);
 		this.bipedHead.addChild(this.Eyes);
-		
+
 		this.bipedHeadwear.isHidden = true;
-        this.bipedHeadwear.showModel = false;
+		this.bipedHeadwear.showModel = false;
 	}
 
 	/**

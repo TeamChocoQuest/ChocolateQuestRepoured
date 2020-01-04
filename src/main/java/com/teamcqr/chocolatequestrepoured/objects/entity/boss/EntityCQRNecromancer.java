@@ -24,6 +24,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -40,27 +41,27 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public EntityCQRNecromancer(World worldIn) {
 		super(worldIn, 1);
 	}
-	
+
 	public EntityCQRNecromancer(World worldIn, int size) {
 		super(worldIn, size);
-		
-		bossInfoServer.setColor(Color.RED);
-		bossInfoServer.setCreateFog(true);
-		bossInfoServer.setOverlay(Overlay.PROGRESS);
-		
-		setSize(0.6F, 1.8F);
+
+		this.bossInfoServer.setColor(Color.RED);
+		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
+
+		this.setSize(0.6F, 1.8F);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		
+
 		this.tasks.addTask(7, new EntityAIBlindTargetSpell(this));
 		this.tasks.addTask(7, new EntityAIFangAttack(this));
 		this.tasks.addTask(8, new EntityAIVampiricSpell(this));
-		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0,2.5,0)));
-		
+		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
+
 		this.tasks.addTask(10, new EntityAIAttackRanged(this));
 		this.tasks.addTask(11, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
@@ -68,71 +69,71 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		filterSummonLists();
+		this.filterSummonLists();
 
-		if(summonedSkulls.size() >= 1) {
-			summonedSkulls.get(0).setSide(false);
-			if(summonedSkulls.size() >= 2) {
-				summonedSkulls.get(1).setSide(true);
+		if (this.summonedSkulls.size() >= 1) {
+			this.summonedSkulls.get(0).setSide(false);
+			if (this.summonedSkulls.size() >= 2) {
+				this.summonedSkulls.get(1).setSide(true);
 			}
 		}
-		
-		if(getAttackTarget() != null && !getAttackTarget().isDead && summonedSkulls.size() >= 3) {
-			for(int i = 2; i < summonedSkulls.size(); i++) {
-				EntityFlyingSkullMinion skull = summonedSkulls.get(i);
-				if(!skull.hasTarget()) {
-					skull.setTarget(getAttackTarget());
+
+		if (this.getAttackTarget() != null && !this.getAttackTarget().isDead && this.summonedSkulls.size() >= 3) {
+			for (int i = 2; i < this.summonedSkulls.size(); i++) {
+				EntityFlyingSkullMinion skull = this.summonedSkulls.get(i);
+				if (!skull.hasTarget()) {
+					skull.setTarget(this.getAttackTarget());
 				}
 			}
-			for(int i = 2; i < summonedSkulls.size(); i++) {
-				EntityFlyingSkullMinion skull = summonedSkulls.get(i);
-				if(!skull.isAttacking()) {
+			for (int i = 2; i < this.summonedSkulls.size(); i++) {
+				EntityFlyingSkullMinion skull = this.summonedSkulls.get(i);
+				if (!skull.isAttacking()) {
 					skull.startAttacking();
 				}
 			}
 		}
 	}
-	
+
 	private void filterSummonLists() {
 		List<Entity> tmp = new ArrayList<>();
-		for(Entity ent : summonedMinions) {
-			if(ent == null  || ent.isDead) {
+		for (Entity ent : this.summonedMinions) {
+			if (ent == null || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for(Entity e : tmp) {
+		for (Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
 		tmp.clear();
-		for(Entity ent : summonedSkulls) {
-			if(ent == null  || ent.isDead) {
+		for (Entity ent : this.summonedSkulls) {
+			if (ent == null || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for(Entity e : tmp) {
+		for (Entity e : tmp) {
 			this.summonedSkulls.remove(e);
 		}
 	}
 
 	@Override
 	public void onDeath(DamageSource cause) {
-		//Kill minions
-		for(Entity e : getSummonedEntities()) {
-			if(e != null && !e.isDead) {
-				if(e instanceof EntityLivingBase) {
-					((EntityLivingBase)e).onDeath(cause);
+		// Kill minions
+		for (Entity e : this.getSummonedEntities()) {
+			if (e != null && !e.isDead) {
+				if (e instanceof EntityLivingBase) {
+					((EntityLivingBase) e).onDeath(cause);
 				}
-				if(e != null) {
+				if (e != null) {
 					e.setDead();
 				}
 			}
 		}
-		summonedMinions.clear();
-		
+		this.summonedMinions.clear();
+
 		super.onDeath(cause);
 	}
 
@@ -153,13 +154,13 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 	@Override
 	public CQRFaction getSummonerFaction() {
-		return getFaction();
+		return this.getFaction();
 	}
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		List<Entity> list = new ArrayList<>(summonedMinions);
-		list.addAll(summonedSkulls);
+		List<Entity> list = new ArrayList<>(this.summonedMinions);
+		list.addAll(this.summonedSkulls);
 		return list;
 	}
 
@@ -170,11 +171,16 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
-		if(summoned instanceof EntityFlyingSkullMinion) {
-			summonedSkulls.add((EntityFlyingSkullMinion) summoned);
+		if (summoned instanceof EntityFlyingSkullMinion) {
+			this.summonedSkulls.add((EntityFlyingSkullMinion) summoned);
 			return;
 		}
 		this.summonedMinions.add(summoned);
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.ILLAGER;
 	}
 
 }

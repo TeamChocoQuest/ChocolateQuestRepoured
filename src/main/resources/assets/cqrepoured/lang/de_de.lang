@@ -489,24 +489,24 @@ description.staff_thunder.name=Fehlt #TODO
 description.spear_diamond.name=Fehlt #TODO
 
 // Mobs
-entity.dummy.name=Dummy(CQR)
-entity.dwarf.name=Zwerg(CQR)
-entity.enderman.name=Enderman(CQR)
-entity.goblin.name=Kobold(CQR)
-entity.golem.name=Golem(CQR)
-entity.illager.name=Illager(CQR)
-entity.npc.name=NPC(CQR)
-entity.minotaur.name=Minotaurus(CQR)
-entity.mummy.name=Mummie(CQR)
-entity.ogre.name=Oger(CQR)
-entity.orc.name=Ork(CQR)
-entity.pigman.name=Pigman(CQR)
-entity.pirate.name=Pirat(CQR)
-entity.skeleton.name=Skelett(CQR)
-entity.spectre.name=Spectre(CQR)
-entity.triton.name=Squidward(CQR)
-entity.walker.name=Abyss Walker
-entity.zombie.name=Zombie(CQR)
+entity.cqr_dummy.name=Dummy(CQR)
+entity.cqr_dwarf.name=Zwerg(CQR)
+entity.cqr_enderman.name=Enderman(CQR)
+entity.cqr_goblin.name=Kobold(CQR)
+entity.cqr_golem.name=Golem(CQR)
+entity.cqr_illager.name=Illager(CQR)
+entity.cqr_npc.name=NPC(CQR)
+entity.cqr_minotaur.name=Minotaurus(CQR)
+entity.cqr_mummy.name=Mummie(CQR)
+entity.cqr_ogre.name=Oger(CQR)
+entity.cqr_orc.name=Ork(CQR)
+entity.cqr_pigman.name=Pigman(CQR)
+entity.cqr_pirate.name=Pirat(CQR)
+entity.cqr_skeleton.name=Skelett(CQR)
+entity.cqr_spectre.name=Spectre(CQR)
+entity.cqr_triton.name=Squidward(CQR)
+entity.cqr_walker.name=Abyss Walker
+entity.cqr_zombie.name=Zombie(CQR)
 
 // Bosses
-entity.nether_dragon.name=Wormy Wurm Wyrm
+entity.cqr_nether_dragon.name=Wormy Wurm Wyrm

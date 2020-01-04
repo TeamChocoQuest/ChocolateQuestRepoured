@@ -5,23 +5,23 @@ import net.minecraft.tileentity.BannerPattern;
 
 class BannerLayer {
 
-	 private final BannerPattern pattern;
-     private final EnumDyeColor color;
+	private final BannerPattern pattern;
+	private final EnumDyeColor color;
 
-     public BannerLayer (BannerPattern pattern, EnumDyeColor color) {
+	public BannerLayer(BannerPattern pattern, EnumDyeColor color) {
 
-         this.pattern = pattern;
-         this.color = color;
-     }
+		this.pattern = pattern;
+		this.color = color;
+	}
 
-     public BannerPattern getPattern () {
+	public BannerPattern getPattern() {
 
-         return this.pattern;
-     }
+		return this.pattern;
+	}
 
-     public EnumDyeColor getColor () {
+	public EnumDyeColor getColor() {
 
-         return this.color;
-     }
+		return this.color;
+	}
 
 }

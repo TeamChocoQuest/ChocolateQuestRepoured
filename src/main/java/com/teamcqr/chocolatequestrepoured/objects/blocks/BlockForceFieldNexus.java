@@ -20,10 +20,10 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 	public BlockForceFieldNexus(Material materialIn) {
 		super(materialIn);
 
-		setSoundType(SoundType.METAL);
-		setHardness(45.0F);
-		setResistance(10.0F);
-		setHarvestLevel("pickaxe", 3);
+		this.setSoundType(SoundType.METAL);
+		this.setHardness(45.0F);
+		this.setResistance(10.0F);
+		this.setHarvestLevel("pickaxe", 3);
 	}
 
 	@Nullable
@@ -33,15 +33,17 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 		return tile;
 	}
 
-	/* TODO implement nexus and determine if this is necessary
-	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-		super.onBlockHarvested(worldIn, pos, state, player);
-		TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus) worldIn.getTileEntity(pos);
-		if (nexus.hasData()) {
-			nexus.getRegion().setEnabled(false);
-		}
-	}
-	*/
+	/*
+	 * TODO implement nexus and determine if this is necessary
+	 * 
+	 * @Override
+	 * public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+	 * super.onBlockHarvested(worldIn, pos, state, player);
+	 * TileEntityForceFieldNexus nexus = (TileEntityForceFieldNexus) worldIn.getTileEntity(pos);
+	 * if (nexus.hasData()) {
+	 * nexus.getRegion().setEnabled(false);
+	 * }
+	 * }
+	 */
 
 }

@@ -28,8 +28,7 @@ public class CapabilityExtraItemHandlerStorage implements IStorage<CapabilityExt
 	}
 
 	@Override
-	public void readNBT(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance, EnumFacing side,
-			NBTBase base) {
+	public void readNBT(Capability<CapabilityExtraItemHandler> capability, CapabilityExtraItemHandler instance, EnumFacing side, NBTBase base) {
 		if (!(instance instanceof IItemHandlerModifiable)) {
 			throw new RuntimeException("IItemHandler instance does not implement IItemHandlerModifiable");
 		}

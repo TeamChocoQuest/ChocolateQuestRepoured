@@ -21,7 +21,7 @@ public class ModelCQRMonkeyArmor extends ModelBiped {
 		this.bipedBody = new ModelRenderer(this, 16, 16);
 		this.bipedBody.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.bipedBody.addBox(-4.0F, -0.4F, -6.5F, 8, 12, 4, scale);
-		this.setRotateAngle(bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
+		this.setRotateAngle(this.bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
 
 		this.bipedHead = new ModelRenderer(this, 0, 0);
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);
@@ -30,13 +30,13 @@ public class ModelCQRMonkeyArmor extends ModelBiped {
 		this.bipedRightArm = new ModelRenderer(this, 40, 16);
 		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedRightArm.addBox(-3.0F, 0.0F, -2.0F, 4, 12, 4, scale);
-		this.setRotateAngle(bipedRightArm, -0.2617993877991494F, 0.0F, 0.0F);
+		this.setRotateAngle(this.bipedRightArm, -0.2617993877991494F, 0.0F, 0.0F);
 
 		this.bipedLeftArm = new ModelRenderer(this, 40, 16);
 		this.bipedLeftArm.setRotationPoint(5.0F, 1.5F, -3.0F);
 		this.bipedLeftArm.mirror = true;
 		this.bipedLeftArm.addBox(-1.0F, 0.0F, -2.0F, 4, 12, 4, scale);
-		this.setRotateAngle(bipedLeftArm, -0.2617993877991494F, 0.0F, 0.0F);
+		this.setRotateAngle(this.bipedLeftArm, -0.2617993877991494F, 0.0F, 0.0F);
 
 	}
 
@@ -46,11 +46,11 @@ public class ModelCQRMonkeyArmor extends ModelBiped {
 		modelRenderer.rotateAngleZ = z;
 	}
 
-	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw,
-			float headPitch, float scaleFactor, Entity entityIn) {
+	@Override
+	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
-		this.setRotateAngle(bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
+		this.setRotateAngle(this.bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
 
 		this.bipedRightArm.setRotationPoint(-5.0F, 1.5F, -3.0F);
 		this.bipedHead.setRotationPoint(0.0F, -6.0F, -5.0F);

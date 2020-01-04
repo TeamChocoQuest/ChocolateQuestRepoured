@@ -25,8 +25,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemStaffHealing extends Item {
 
 	public ItemStaffHealing() {
-		setMaxDamage(128);
-		setMaxStackSize(1);
+		this.setMaxDamage(128);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
@@ -36,13 +36,11 @@ public class ItemStaffHealing extends Item {
 
 			if (entity.world.isRemote) {
 				for (int x = 0; x < 5; x++) {
-					entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX + itemRand.nextFloat() - 0.5D,
-							entity.posY + 1.0D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D,
-							itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
+					entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 1.0D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F,
+							itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
 				}
 			}
-			entity.world.playSound(player.posX, player.posY, player.posZ, ModSounds.MAGIC, SoundCategory.MASTER,
-					4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+			entity.world.playSound(player.posX, player.posY, player.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
 

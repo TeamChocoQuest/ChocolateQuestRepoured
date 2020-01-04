@@ -21,6 +21,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -29,61 +30,61 @@ import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
-	
+
 	protected List<Entity> summonedMinions = new ArrayList<>();
 
 	public EntityCQRBoarmage(World world) {
 		this(world, 1);
 	}
-	
+
 	public EntityCQRBoarmage(World worldIn, int size) {
 		super(worldIn, size);
-		bossInfoServer.setColor(Color.RED);
-		bossInfoServer.setCreateFog(true);
-		bossInfoServer.setOverlay(Overlay.PROGRESS);
-		
-		isImmuneToFire = true;
-		
-		setSize(0.6F, 1.8F);
+		this.bossInfoServer.setColor(Color.RED);
+		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
+
+		this.isImmuneToFire = true;
+
+		this.setSize(0.6F, 1.8F);
 	}
-	
+
 	@Override
 	public boolean isImmuneToExplosions() {
 		return true;
 	}
-	
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		List<Entity> tmp = new ArrayList<>();
-		for(Entity ent : summonedMinions) {
-			if(ent == null  || ent.isDead) {
+		for (Entity ent : this.summonedMinions) {
+			if (ent == null || ent.isDead) {
 				tmp.add(ent);
 			}
 		}
-		for(Entity e : tmp) {
+		for (Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
 	}
-	
+
 	@Override
 	public void onDeath(DamageSource cause) {
-		//Kill minions
-		for(Entity e : summonedMinions) {
-			if(e != null && !e.isDead) {
-				if(e instanceof EntityLivingBase) {
-					((EntityLivingBase)e).onDeath(cause);
+		// Kill minions
+		for (Entity e : this.summonedMinions) {
+			if (e != null && !e.isDead) {
+				if (e instanceof EntityLivingBase) {
+					((EntityLivingBase) e).onDeath(cause);
 				}
-				if(e != null) {
+				if (e != null) {
 					e.setDead();
 				}
 			}
 		}
-		summonedMinions.clear();
-		
+		this.summonedMinions.clear();
+
 		super.onDeath(cause);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -132,7 +133,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	@Override
 	public List<Entity> getSummonedEntities() {
-		return summonedMinions;
+		return this.summonedMinions;
 	}
 
 	@Override
@@ -143,6 +144,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
+	}
+
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEAD;
 	}
 
 }

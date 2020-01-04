@@ -480,31 +480,31 @@ description.staff_thunder.name=Missing #TODO
 description.spear_diamond.name=Missing #TODO
 
 // Mobs
-entity.boarman.name=Homem-Porco
-entity.dummy.name=Dummy
-entity.dwarf.name=Anão
-entity.enderman.name=Enderman
-entity.goblin.name=Goblin
-entity.golem.name=Golem
-entity.illager.name=Illager
-entity.npc.name=NPC
-entity.mandril.name=Macaco
-entity.minotaur.name=Minotauro
-entity.mummy.name=Múmia
-entity.ogre.name=Ogre
-entity.orc.name=Orc
-entity.pirate.name=Pirata
-entity.skeleton.name=Esqueleto
-entity.spectre.name=Espectro
-entity.triton.name=Tritão
-entity.walker.name=Walker do Abismo
-entity.zombie.name=Zombie
+entity.cqr_boarman.name=Homem-Porco
+entity.cqr_dummy.name=Dummy
+entity.cqr_dwarf.name=Anão
+entity.cqr_enderman.name=Enderman
+entity.cqr_goblin.name=Goblin
+entity.cqr_golem.name=Golem
+entity.cqr_illager.name=Illager
+entity.cqr_npc.name=NPC
+entity.cqr_mandril.name=Macaco
+entity.cqr_minotaur.name=Minotauro
+entity.cqr_mummy.name=Múmia
+entity.cqr_ogre.name=Ogre
+entity.cqr_orc.name=Orc
+entity.cqr_pirate.name=Pirata
+entity.cqr_skeleton.name=Esqueleto
+entity.cqr_spectre.name=Espectro
+entity.cqr_triton.name=Tritão
+entity.cqr_walker.name=Walker do Abismo
+entity.cqr_zombie.name=Zombie
 
 //Mounts
-entity.giant_endermite.name=Endermite Gigante
-entity.giant_silverfish.name=Silverfish Gigante
-entity.giant_silverfish1.name=Silverfish de Lava Gigante
-entity.giant_silverfish2.name=Silverfish do Pântano Gigante
+entity.cqr_giant_endermite.name=Endermite Gigante
+entity.cqr_giant_silverfish.name=Silverfish Gigante
+entity.cqr_giant_silverfish1.name=Silverfish de Lava Gigante
+entity.cqr_giant_silverfish2.name=Silverfish do Pântano Gigante
 
 // Bosses
-entity.nether_dragon.name=Nether Dragon
+entity.cqr_nether_dragon.name=Nether Dragon

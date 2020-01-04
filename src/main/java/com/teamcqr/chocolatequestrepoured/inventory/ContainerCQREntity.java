@@ -79,7 +79,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 3, 53, 8) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD;
+				return true;
 			}
 
 			@Override

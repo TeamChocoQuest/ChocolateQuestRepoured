@@ -13,7 +13,7 @@ public interface IRangedWeapon {
 	}
 
 	public SoundEvent getShootSound();
-	
+
 	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand);
 
 }

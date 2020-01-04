@@ -20,14 +20,12 @@ import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.monster.AbstractIllager;
 import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.EntityEndermite;
-import net.minecraft.entity.monster.EntityEvoker;
 import net.minecraft.entity.monster.EntityGolem;
-import net.minecraft.entity.monster.EntityIllusionIllager;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntityVex;
-import net.minecraft.entity.monster.EntityVindicator;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.passive.EntityVillager;
@@ -44,56 +42,56 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 public class FactionRegistry {
 
 	private static FactionRegistry instance;
-	
+
 	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
 	private List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
-	
+
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
-	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue(); 
-	
+	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
+
 	public FactionRegistry() {
 		instance = this;
 	}
-	
+
 	public void loadFactions() {
-		loadDefaultFactions();
-		loadFactionsInConfigFolder();
+		this.loadDefaultFactions();
+		this.loadFactionsInConfigFolder();
 	}
-	
+
 	private void loadFactionsInConfigFolder() {
-		//DONE: Load factions from files
+		// DONE: Load factions from files
 		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getNBTFileFilter());
 		int fileCount = files.length;
-		if(fileCount > 0) {
-			ArrayList<String> fIDs = new ArrayList<>(); 
+		if (fileCount > 0) {
+			ArrayList<String> fIDs = new ArrayList<>();
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
-			for(int i = 0; i < fileCount; i++) {
+			for (int i = 0; i < fileCount; i++) {
 				File faction = files[i];
 				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(faction);
-				if(faction != null && root != null && root.getString("type").equalsIgnoreCase("FACTION")) {
+				if (faction != null && root != null && root.getString("type").equalsIgnoreCase("FACTION")) {
 					List<String> fAlly = new ArrayList<>();
 					List<String> fEnemy = new ArrayList<>();
-					//CQRFaction fTmp = 
+					// CQRFaction fTmp =
 					String fName = root.getString("name");
 					int repuChangeAlly = root.getInteger("repuchangekillally");
 					int repuChangeEnemy = root.getInteger("repuchangekillenemy");
 					int repuChangeMember = root.getInteger("repuchangekillmember");
 					EReputationState defRepu = EReputationState.valueOf(root.getString("defaultrelation"));
 					boolean staticRepu = root.getBoolean("staticreputation");
-					//Reputation lists
+					// Reputation lists
 					NBTTagCompound repuTag = root.getCompoundTag("relations");
-					if(!repuTag.hasNoTags()) {
+					if (!repuTag.hasNoTags()) {
 						NBTTagList allyTag = FileIOUtil.getOrCreateTagList(repuTag, "allies", Constants.NBT.TAG_STRING);
-						if(!allyTag.hasNoTags()) {
-							for(int j = 0; j < allyTag.tagCount(); j++) {
+						if (!allyTag.hasNoTags()) {
+							for (int j = 0; j < allyTag.tagCount(); j++) {
 								fAlly.add(allyTag.getStringTagAt(j));
 							}
 						}
 						NBTTagList enemyTag = FileIOUtil.getOrCreateTagList(repuTag, "enemies", Constants.NBT.TAG_STRING);
-						if(!enemyTag.hasNoTags()) {
-							for(int j = 0; j < enemyTag.tagCount(); j++) {
+						if (!enemyTag.hasNoTags()) {
+							for (int j = 0; j < enemyTag.tagCount(); j++) {
 								fEnemy.add(enemyTag.getStringTagAt(j));
 							}
 						}
@@ -101,23 +99,23 @@ public class FactionRegistry {
 					fIDs.set(i, fName);
 					allyTmp.set(i, fAlly);
 					enemyTmp.set(i, fEnemy);
-					
+
 					Optional<Integer> optionMember = Optional.of(repuChangeMember);
 					Optional<Integer> optionAlly = Optional.of(repuChangeAlly);
 					Optional<Integer> optionEnemy = Optional.of(repuChangeEnemy);
-					
+
 					CQRFaction f = new CQRFaction(fName, defRepu, !staticRepu, optionMember, optionAlly, optionEnemy);
-					factions.put(fName, f);
+					this.factions.put(fName, f);
 				}
 			}
-			for(int i = 0; i < fIDs.size(); i++) {
+			for (int i = 0; i < fIDs.size(); i++) {
 				String name = fIDs.get(i);
-				CQRFaction fac = factions.get(name);
-				for(String s : allyTmp.get(i)) {
-					fac.addAlly(factions.get(s));
+				CQRFaction fac = this.factions.get(name);
+				for (String s : allyTmp.get(i)) {
+					fac.addAlly(this.factions.get(s));
 				}
-				for(String s : enemyTmp.get(i)) {
-					fac.addEnemy(factions.get(s));
+				for (String s : enemyTmp.get(i)) {
+					fac.addEnemy(this.factions.get(s));
 				}
 			}
 		}
@@ -126,130 +124,129 @@ public class FactionRegistry {
 	private void loadDefaultFactions() {
 		String[][] allies = new String[EDefaultFaction.values().length][];
 		String[][] enemies = new String[EDefaultFaction.values().length][];
-		for(int i = 0; i < EDefaultFaction.values().length; i++) {
+		for (int i = 0; i < EDefaultFaction.values().length; i++) {
 			EDefaultFaction edf = EDefaultFaction.values()[i];
 			allies[i] = edf.getAllies();
 			enemies[i] = edf.getEnemies();
-			
+
 			Optional<Integer> optionMember = Optional.empty();
 			Optional<Integer> optionAlly = Optional.empty();
 			Optional<Integer> optionEnemy = Optional.empty();
-			
+
 			CQRFaction fac = new CQRFaction(edf.name(), edf.getDefaultReputation(), false, edf.canRepuChange(), optionMember, optionAlly, optionEnemy);
-			factions.put(edf.name(), fac);
+			this.factions.put(edf.name(), fac);
 		}
-		
-		for(int i = 0; i < EDefaultFaction.values().length; i++) {
+
+		for (int i = 0; i < EDefaultFaction.values().length; i++) {
 			String name = EDefaultFaction.values()[i].name();
-			CQRFaction fac = factions.get(name);
-			for(int j = 0; j < allies[i].length; j++) {
-				fac.addAlly(factions.get(allies[i][j]));
+			CQRFaction fac = this.factions.get(name);
+			for (int j = 0; j < allies[i].length; j++) {
+				fac.addAlly(this.factions.get(allies[i][j]));
 			}
-			for(int j = 0; j < enemies[i].length; j++) {
-				fac.addEnemy(factions.get(enemies[i][j]));
+			for (int j = 0; j < enemies[i].length; j++) {
+				fac.addEnemy(this.factions.get(enemies[i][j]));
 			}
 		}
-		
+
 		System.out.println("Default factions loaded and initialized!");
 	}
-	
+
 	public CQRFaction getFactionOf(Entity entity) {
-		if(entity instanceof EntityTameable) {
-			return getFactionOf(((EntityTameable)entity).getOwner());
+		if (entity instanceof EntityTameable) {
+			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		}
-		if(entity instanceof EntityArmorStand) {
-			return factions.get(EDefaultFaction.ALL_ALLY.name());
+		if (entity instanceof EntityArmorStand) {
+			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
-		
-		if(entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
-			return factions.get(EDefaultFaction.VILLAGERS.name());
+
+		if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
+			return this.factions.get(EDefaultFaction.VILLAGERS.name());
 		}
-		
-		if(entity instanceof AbstractEntityCQR) {
-			return ((AbstractEntityCQR)entity).getFaction();
+
+		if (entity instanceof AbstractEntityCQR) {
+			return ((AbstractEntityCQR) entity).getFaction();
 		}
-		
-		
-		if(entity instanceof EntityIllusionIllager || entity instanceof EntityVex || entity instanceof EntityVindicator || entity instanceof EntityEvoker) {
-			return factions.get(EDefaultFaction.BEASTS.name());
+
+		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
+			return this.factions.get(EDefaultFaction.BEASTS.name());
 		}
-		
-		if(entity instanceof EntityEnderman || entity instanceof EntityEndermite || entity instanceof EntityDragon) {
-			return factions.get(EDefaultFaction.ENDERMEN.name());
+
+		if (entity instanceof EntityEnderman || entity instanceof EntityEndermite || entity instanceof EntityDragon) {
+			return this.factions.get(EDefaultFaction.ENDERMEN.name());
 		}
-		
-		if(entity instanceof EntityAnimal) {
-			return factions.get(EDefaultFaction.NEUTRAL.name());
+
+		if (entity instanceof EntityAnimal) {
+			return this.factions.get(EDefaultFaction.NEUTRAL.name());
 		}
-		
-		if(entity instanceof EntityMob) {
-			return factions.get(EDefaultFaction.UNDEAD.name());
+
+		if (entity instanceof EntityMob) {
+			return this.factions.get(EDefaultFaction.UNDEAD.name());
 		}
-		
-		if(entity instanceof EntityWaterMob) {
-			return factions.get(EDefaultFaction.TRITONS.name());
+
+		if (entity instanceof EntityWaterMob) {
+			return this.factions.get(EDefaultFaction.TRITONS.name());
 		}
-		
+
 		return null;
 	}
-	
+
 	public static FactionRegistry instance() {
-		if(instance == null) {
+		if (instance == null) {
 			instance = new FactionRegistry();
 		}
 		return instance;
 	}
 
 	public CQRFaction getFactionInstance(String factionName) {
-		if(factions.containsKey(factionName)) {
-			return factions.get(factionName);
+		if (this.factions.containsKey(factionName)) {
+			return this.factions.get(factionName);
 		}
-		return factions.get(EDefaultFaction.UNDEAD.name());
+		return this.factions.get(EDefaultFaction.UNDEAD.name());
 	}
-	
+
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
-		if(faction.isRepuStatic()) {
+		if (faction.isRepuStatic()) {
 			return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
 		}
-		if(playerFactionRepuMap.containsKey(playerID)) {
-			if(playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
-				return EReputationStateRough.getByRepuScore(playerFactionRepuMap.get(playerID).get(faction.getName()));
+		if (this.playerFactionRepuMap.containsKey(playerID)) {
+			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
+				return EReputationStateRough.getByRepuScore(this.playerFactionRepuMap.get(playerID).get(faction.getName()));
 			}
 		}
 		return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
 	}
-	
+
 	public void incrementRepuOf(EntityPlayer player, String faction, int score) {
-		changeRepuOf(player, faction, Math.abs(score));
+		this.changeRepuOf(player, faction, Math.abs(score));
 	}
-	
+
 	public void decrementRepuOf(EntityPlayer player, String faction, int score) {
-		changeRepuOf(player, faction, -Math.abs(score));
+		this.changeRepuOf(player, faction, -Math.abs(score));
 	}
-	
+
 	public void changeRepuOf(EntityPlayer player, String faction, int score) {
 		boolean flag = false;
-		if(canRepuChange(player)) {
-			if(score < 0) {
-				flag = canDecrementRepu(player, faction);
+		if (this.canRepuChange(player)) {
+			if (score < 0) {
+				flag = this.canDecrementRepu(player, faction);
 			} else {
-				flag = canIncrementRepu(player, faction);
+				flag = this.canIncrementRepu(player, faction);
 			}
 		}
-		if(flag) {
-			Map<String, Integer> factionsOfPlayer = playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
-			int oldScore = factionsOfPlayer.getOrDefault(faction, factions.get(faction).getDefaultReputation().getValue());
+		if (flag) {
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+			int oldScore = factionsOfPlayer.getOrDefault(faction, this.factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
-			playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
+			this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
 			System.out.println("Repu changed!");
 		}
 	}
-	
+
 	public boolean canDecrementRepu(EntityPlayer player, String faction) {
-		if(canRepuChange(player)) {
-			Map<String, Integer> factionsOfPlayer = playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
-			if(factionsOfPlayer != null) {
-				if(factionsOfPlayer.containsKey(faction)) {
+		if (this.canRepuChange(player)) {
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+			if (factionsOfPlayer != null) {
+				if (factionsOfPlayer.containsKey(faction)) {
 					return factionsOfPlayer.get(faction) >= LOWEST_REPU;
 				} else {
 					return true;
@@ -260,12 +257,12 @@ public class FactionRegistry {
 		}
 		return false;
 	}
-	
+
 	public boolean canIncrementRepu(EntityPlayer player, String faction) {
-		if(canRepuChange(player)) {
-			Map<String, Integer> factionsOfPlayer = playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
-			if(factionsOfPlayer != null) {
-				if(factionsOfPlayer.containsKey(faction)) {
+		if (this.canRepuChange(player)) {
+			Map<String, Integer> factionsOfPlayer = this.playerFactionRepuMap.getOrDefault(player.getPersistentID(), new ConcurrentHashMap<>());
+			if (factionsOfPlayer != null) {
+				if (factionsOfPlayer.containsKey(faction)) {
 					return factionsOfPlayer.get(faction) <= HIGHEST_REPU;
 				} else {
 					return true;
@@ -276,72 +273,73 @@ public class FactionRegistry {
 		}
 		return false;
 	}
-	
+
 	private boolean canRepuChange(EntityPlayer player) {
-		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator() || uuidsBeingLoaded.contains(player.getPersistentID()));
+		return !(player.getEntityWorld().getDifficulty().equals(EnumDifficulty.PEACEFUL) || player.isCreative() || player.isSpectator() || this.uuidsBeingLoaded.contains(player.getPersistentID()));
 	}
-	
+
 	public void handlePlayerLogin(PlayerLoggedInEvent event) {
 		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 		File f = new File(path, event.player.getPersistentID() + ".nbt");
-		if(f.exists()) {
+		if (f.exists()) {
 			System.out.println("Loading player reputation...");
 			Thread t = new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-					if(!repuDataList.hasNoTags()) {
-						uuidsBeingLoaded.add(event.player.getPersistentID());
+					if (!repuDataList.hasNoTags()) {
+						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
 						try {
-							Map<String, Integer> mapping = playerFactionRepuMap.get(event.player.getPersistentID());
+							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 							repuDataList.forEach(new Consumer<NBTBase>() {
 
 								@Override
 								public void accept(NBTBase t) {
-									NBTTagCompound tag = (NBTTagCompound)t;
+									NBTTagCompound tag = (NBTTagCompound) t;
 									String fac = tag.getString("factionName");
-									if(factions.containsKey(fac)) {
+									if (FactionRegistry.this.factions.containsKey(fac)) {
 										int reputation = tag.getInteger("reputation");
 										mapping.put(fac, reputation);
 									}
 								}
 							});
 						} finally {
-							uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
 						}
 					}
 				}
 			});
+			t.setDaemon(true);
 			t.start();
 		}
 	}
-	
+
 	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
-		if(playerFactionRepuMap.containsKey(event.player.getPersistentID())) {
+		if (this.playerFactionRepuMap.containsKey(event.player.getPersistentID())) {
 			System.out.println("Saving player reputation...");
 			Thread t = new Thread(new Runnable() {
-				
+
 				@Override
 				public void run() {
-					Map<String, Integer> mapping = playerFactionRepuMap.get(event.player.getPersistentID());
+					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 					Map<String, Integer> entryMapping = new HashMap<>();
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-					File f = FileIOUtil.getOrCreateFile(path, event.player.getPersistentID() +".nbt");
-					if(f != null) {
-						uuidsBeingLoaded.add(event.player.getPersistentID());
+					File f = FileIOUtil.getOrCreateFile(path, event.player.getPersistentID() + ".nbt");
+					if (f != null) {
+						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
 						try {
 							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 							NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-							for(int i = 0; i < repuDataList.tagCount(); i++) {
+							for (int i = 0; i < repuDataList.tagCount(); i++) {
 								NBTTagCompound tag = repuDataList.getCompoundTagAt(i);
-								if(mapping.containsKey(tag.getString("factionName"))) {
+								if (mapping.containsKey(tag.getString("factionName"))) {
 									entryMapping.put(tag.getString("factionName"), i);
 								}
 							}
-							for(Map.Entry<String, Integer> entry : mapping.entrySet()) {
-								if(entryMapping.containsKey(entry.getKey())) {
+							for (Map.Entry<String, Integer> entry : mapping.entrySet()) {
+								if (entryMapping.containsKey(entry.getKey())) {
 									repuDataList.removeTag(entryMapping.get(entry.getKey()));
 								}
 								NBTTagCompound tag = new NBTTagCompound();
@@ -351,14 +349,15 @@ public class FactionRegistry {
 							}
 							root.removeTag("reputationdata");
 							root.setTag("reputationdata", repuDataList);
-							
+
 							FileIOUtil.saveNBTCompoundToFile(root, f);
 						} finally {
-							uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
 						}
 					}
 				}
 			});
+			t.setDaemon(true);
 			t.start();
 		}
 	}

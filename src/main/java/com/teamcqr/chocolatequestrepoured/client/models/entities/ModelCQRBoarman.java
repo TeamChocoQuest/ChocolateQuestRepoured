@@ -16,35 +16,35 @@ public class ModelCQRBoarman extends ModelCQRBiped {
 	public ModelCQRBoarman(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
 		super(modelSize, p_i1149_2_, textureWidthIn, textureHeightIn, true);
 
-		righttusk = new ModelRenderer(this, 56, 16);
-		righttusk.addBox(-1F, -1F, -2F, 1, 2, 2, modelSize);
-		righttusk.setRotationPoint(-2F, -2F, -4F);
-		righttusk.setTextureSize(64, 64);
-		righttusk.mirror = true;
-		setRotation(righttusk, 0F, 0.7853982F, 0F);
-		lefttusk = new ModelRenderer(this, 56, 16);
-		lefttusk.addBox(0F, -1F, -2F, 1, 2, 2, modelSize);
-		lefttusk.setRotationPoint(2F, -2F, -4F);
-		lefttusk.setTextureSize(64, 64);
-		lefttusk.mirror = true;
-		setRotation(lefttusk, 0F, -0.7853982F, 0F);
-		mane01 = new ModelRenderer(this, 56, 18);
-		mane01.addBox(0F, 0F, 0F, 0, 12, 2, modelSize);
-		mane01.setRotationPoint(0F, 0F, 2F);
-		mane01.setTextureSize(64, 64);
-		mane01.mirror = true;
-		setRotation(mane01, 0F, 0.2617994F, 0F);
-		mane02 = new ModelRenderer(this, 60, 18);
-		mane02.addBox(0F, 0F, 0F, 0, 12, 2, modelSize);
-		mane02.setRotationPoint(0F, 0F, 2F);
-		mane02.setTextureSize(64, 64);
-		mane02.mirror = true;
-		setRotation(mane02, 0F, -0.2617994F, 0F);
+		this.righttusk = new ModelRenderer(this, 56, 16);
+		this.righttusk.addBox(-1F, -1F, -2F, 1, 2, 2, modelSize);
+		this.righttusk.setRotationPoint(-2F, -2F, -4F);
+		this.righttusk.setTextureSize(64, 64);
+		this.righttusk.mirror = true;
+		this.setRotation(this.righttusk, 0F, 0.7853982F, 0F);
+		this.lefttusk = new ModelRenderer(this, 56, 16);
+		this.lefttusk.addBox(0F, -1F, -2F, 1, 2, 2, modelSize);
+		this.lefttusk.setRotationPoint(2F, -2F, -4F);
+		this.lefttusk.setTextureSize(64, 64);
+		this.lefttusk.mirror = true;
+		this.setRotation(this.lefttusk, 0F, -0.7853982F, 0F);
+		this.mane01 = new ModelRenderer(this, 56, 18);
+		this.mane01.addBox(0F, 0F, 0F, 0, 12, 2, modelSize);
+		this.mane01.setRotationPoint(0F, 0F, 2F);
+		this.mane01.setTextureSize(64, 64);
+		this.mane01.mirror = true;
+		this.setRotation(this.mane01, 0F, 0.2617994F, 0F);
+		this.mane02 = new ModelRenderer(this, 60, 18);
+		this.mane02.addBox(0F, 0F, 0F, 0, 12, 2, modelSize);
+		this.mane02.setRotationPoint(0F, 0F, 2F);
+		this.mane02.setTextureSize(64, 64);
+		this.mane02.mirror = true;
+		this.setRotation(this.mane02, 0F, -0.2617994F, 0F);
 
-		this.bipedBody.addChild(mane01);
-		this.bipedBody.addChild(mane02);
-		this.bipedHead.addChild(righttusk);
-		this.bipedHead.addChild(lefttusk);
+		this.bipedBody.addChild(this.mane01);
+		this.bipedBody.addChild(this.mane02);
+		this.bipedHead.addChild(this.righttusk);
+		this.bipedHead.addChild(this.lefttusk);
 	}
 
 	// Model from techne
