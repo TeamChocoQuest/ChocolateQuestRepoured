@@ -73,13 +73,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			}
 			if (canBuildRandomDungeons) {
 				// Now check if any dungeons exist for this biome....
-				Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
+				Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16, 100, chunkZ * 16));
 				// No Dungeons for this biome -> ragequit
 				if (this.dungeonRegistry.getDungeonsForBiome(biome).isEmpty()) {
 					return;
 				}
 				// Now check if the dungeon is far away enough from the last one
-				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0) && DungeonGenUtils.isFarAwayEnoughFromSpawn(chunkX, chunkZ)) {
+				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0) && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
 					Random rdm = new Random();
 					rdm.setSeed(getSeed(world, chunkX, chunkZ));
 
