@@ -43,55 +43,59 @@ public class ItemSoulBottle extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
-			NBTTagCompound bottle = stack.getTagCompound();
+		if (player.isCreative()) {
+			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
+				NBTTagCompound bottle = stack.getTagCompound();
 
-			if (bottle == null) {
-				bottle = new NBTTagCompound();
-				stack.setTagCompound(bottle);
-			}
+				if (bottle == null) {
+					bottle = new NBTTagCompound();
+					stack.setTagCompound(bottle);
+				}
 
-			if (!bottle.hasKey(ENTITY_IN_TAG)) {
-				NBTTagCompound entityTag = new NBTTagCompound();
-				entity.writeToNBTOptional(entityTag);
-				entityTag.removeTag("UUIDLeast");
-				entityTag.removeTag("UUIDMost");
-				entityTag.removeTag("Pos");
-				NBTTagList passengers = entityTag.getTagList("Passengers", 10);
-				for (NBTBase passenger : passengers) {
-					((NBTTagCompound) passenger).removeTag("UUIDLeast");
-					((NBTTagCompound) passenger).removeTag("UUIDMost");
-					((NBTTagCompound) passenger).removeTag("Pos");
+				if (!bottle.hasKey(ENTITY_IN_TAG)) {
+					NBTTagCompound entityTag = new NBTTagCompound();
+					entity.writeToNBTOptional(entityTag);
+					entityTag.removeTag("UUIDLeast");
+					entityTag.removeTag("UUIDMost");
+					entityTag.removeTag("Pos");
+					NBTTagList passengers = entityTag.getTagList("Passengers", 10);
+					for (NBTBase passenger : passengers) {
+						((NBTTagCompound) passenger).removeTag("UUIDLeast");
+						((NBTTagCompound) passenger).removeTag("UUIDMost");
+						((NBTTagCompound) passenger).removeTag("Pos");
+					}
+					entity.setDead();
+					for (Entity passenger : entity.getPassengers()) {
+						passenger.setDead();
+					}
+					bottle.setTag(ENTITY_IN_TAG, entityTag);
+					this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
 				}
-				entity.setDead();
-				for (Entity passenger : entity.getPassengers()) {
-					passenger.setDead();
-				}
-				bottle.setTag(ENTITY_IN_TAG, entityTag);
-				this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
 			}
+			return true;
 		}
-
-		return true;
+		return false;
 	}
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
+		if (player.isCreative()) {
+			ItemStack stack = player.getHeldItem(hand);
 
-		if (stack.hasTagCompound()) {
-			NBTTagCompound bottle = stack.getTagCompound();
+			if (stack.hasTagCompound()) {
+				NBTTagCompound bottle = stack.getTagCompound();
 
-			if (bottle.hasKey(ENTITY_IN_TAG)) {
-				if (!worldIn.isRemote) {
-					NBTTagCompound entityTag = (NBTTagCompound) bottle.getTag(ENTITY_IN_TAG);
-					this.createEntityFromNBT(entityTag, worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
+				if (bottle.hasKey(ENTITY_IN_TAG)) {
+					if (!worldIn.isRemote) {
+						NBTTagCompound entityTag = (NBTTagCompound) bottle.getTag(ENTITY_IN_TAG);
+						this.createEntityFromNBT(entityTag, worldIn, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
 
-					if (!(player.isCreative() || player.isSpectator()) || (player.isCreative() && player.isSneaking())) {
-						bottle.removeTag(ENTITY_IN_TAG);
+						if (player.isSneaking()) {
+							bottle.removeTag(ENTITY_IN_TAG);
+						}
 					}
+					return EnumActionResult.SUCCESS;
 				}
-				return EnumActionResult.SUCCESS;
 			}
 		}
 		return EnumActionResult.FAIL;
@@ -99,6 +103,18 @@ public class ItemSoulBottle extends Item {
 
 	private Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, float x, float y, float z) {
 		if (!worldIn.isRemote) {
+			{
+				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+				tag.removeTag("UUIDLeast");
+				tag.removeTag("UUIDMost");
+				tag.removeTag("Pos");
+				NBTTagList passengers = tag.getTagList("Passengers", 10);
+				for (NBTBase passenger : passengers) {
+					((NBTTagCompound) passenger).removeTag("UUIDLeast");
+					((NBTTagCompound) passenger).removeTag("UUIDMost");
+					((NBTTagCompound) passenger).removeTag("Pos");
+				}
+			}
 			Entity entity = EntityList.createEntityFromNBT(tag, worldIn);
 			entity.setPosition(x, y, z);
 			worldIn.spawnEntity(entity);

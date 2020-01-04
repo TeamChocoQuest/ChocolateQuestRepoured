@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -24,7 +24,7 @@ public class PlateauBuilder {
 	Block structureTopBlock = Blocks.GRASS;
 	private static final int TOP_LAYER_HEIGHT = 1;
 
-	public int wallSize = Reference.CONFIG_HELPER_INSTANCE.getSupportHillWallSize();
+	public int wallSize = CQRConfig.general.supportHillWallSize;
 
 	public void load(Block support, Block top) {
 		this.structureBlock = support;

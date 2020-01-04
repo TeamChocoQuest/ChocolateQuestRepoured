@@ -24,8 +24,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -184,11 +184,11 @@ public class DungeonRegistry {
 	}
 
 	public int getDungeonDistance() {
-		return Reference.CONFIG_HELPER_INSTANCE.getDungeonDistance();
+		return CQRConfig.general.dungeonSeparation;
 	}
 
 	public int getDungeonSpawnDistance() {
-		return Reference.CONFIG_HELPER_INSTANCE.getDungeonSpawnDistance();
+		return CQRConfig.general.dungeonSpawnDistance;
 	}
 
 	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {

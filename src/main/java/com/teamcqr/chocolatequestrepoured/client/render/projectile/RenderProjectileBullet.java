@@ -12,10 +12,11 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileBullet extends Render<ProjectileBullet> {
-	public ResourceLocation IRON = new ResourceLocation(Reference.MODID, "textures/entity/bullet_iron_single.png");
-	public ResourceLocation GOLD = new ResourceLocation(Reference.MODID, "textures/entity/bullet_gold_single.png");
-	public ResourceLocation DIAMOND = new ResourceLocation(Reference.MODID, "textures/entity/bullet_diamond_single.png");
-	public ResourceLocation FIRE = new ResourceLocation(Reference.MODID, "textures/entity/bullet_fire_single.png");
+
+	public static final ResourceLocation IRON = new ResourceLocation(Reference.MODID, "textures/entity/bullet_iron_single.png");
+	public static final ResourceLocation GOLD = new ResourceLocation(Reference.MODID, "textures/entity/bullet_gold_single.png");
+	public static final ResourceLocation DIAMOND = new ResourceLocation(Reference.MODID, "textures/entity/bullet_diamond_single.png");
+	public static final ResourceLocation FIRE = new ResourceLocation(Reference.MODID, "textures/entity/bullet_fire_single.png");
 
 	public RenderProjectileBullet(RenderManager renderManager) {
 		super(renderManager);
@@ -60,23 +61,16 @@ public class RenderProjectileBullet extends Render<ProjectileBullet> {
 		int type = entity.getType();
 
 		if (type == 1) {
-			return this.IRON;
+			return IRON;
+		} else if (type == 2) {
+			return GOLD;
+		} else if (type == 3) {
+			return DIAMOND;
+		} else if (type == 4) {
+			return FIRE;
 		}
 
-		if (type == 2) {
-			return this.GOLD;
-		}
-
-		if (type == 3) {
-			return this.DIAMOND;
-		}
-
-		if (type == 4) {
-			return this.FIRE;
-		} else {
-			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			//return null; // #SHOULD NEVER HAPPEN
-			return this.IRON;
-		}
+		return IRON;
 	}
+
 }

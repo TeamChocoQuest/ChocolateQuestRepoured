@@ -5,10 +5,12 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelector;
 import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelectorProvider;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.network.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -30,6 +32,12 @@ public class ItemStructureSelector extends Item {
 
 	public ItemStructureSelector() {
 		this.setMaxStackSize(1);
+	}
+
+	@Override
+	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+		Block block = world.getBlockState(pos).getBlock();
+		return block != ModBlocks.EXPORTER;
 	}
 
 	@Override
