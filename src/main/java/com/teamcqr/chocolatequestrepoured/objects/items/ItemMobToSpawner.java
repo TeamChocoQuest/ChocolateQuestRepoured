@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,27 +24,25 @@ public class ItemMobToSpawner extends Item {
 	}
 
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-		IBlockState state = player.getEntityWorld().getBlockState(pos);
-		return !this.canHarvestBlock(state);
+	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+		Block block = world.getBlockState(pos).getBlock();
+		return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
 	}
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
-			SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
-			entity.setDead();
-			for (Entity passenger : entity.getPassengers()) {
-				passenger.setDead();
+		if (player.isCreative()) {
+			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
+				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
+				entity.setDead();
+				for (Entity passenger : entity.getPassengers()) {
+					passenger.setDead();
+				}
+				this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
 			}
-			this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
+			return true;
 		}
-		return true;
-	}
-
-	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
-		return blockIn.getBlock() != ModBlocks.SPAWNER && blockIn.getBlock() != Blocks.MOB_SPAWNER;
+		return false;
 	}
 
 	private void spawnAdditions(World world, double x, double y, double z) {

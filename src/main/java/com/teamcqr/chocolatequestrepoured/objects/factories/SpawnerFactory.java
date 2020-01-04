@@ -90,6 +90,18 @@ public abstract class SpawnerFactory {
 			// Store entity ids into NBT tag
 			for (int i = 0; i < entities.length; i++) {
 				if (entities[i] != null) {
+					{
+						// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+						entities[i].removeTag("UUIDLeast");
+						entities[i].removeTag("UUIDMost");
+						entities[i].removeTag("Pos");
+						NBTTagList passengers = entities[i].getTagList("Passengers", 10);
+						for (NBTBase passenger : passengers) {
+							((NBTTagCompound) passenger).removeTag("UUIDLeast");
+							((NBTTagCompound) passenger).removeTag("UUIDMost");
+							((NBTTagCompound) passenger).removeTag("Pos");
+						}
+					}
 					NBTTagCompound spawnPotential = new NBTTagCompound();
 					spawnPotential.setInteger("Weight", 1);
 					spawnPotential.setTag("Entity", entities[i]);

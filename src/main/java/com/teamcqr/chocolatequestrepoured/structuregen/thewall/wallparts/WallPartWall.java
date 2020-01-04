@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.init.Blocks;
@@ -22,7 +23,7 @@ public class WallPartWall implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY() - 7;
+		return CQRConfig.wall.topY - 7;
 	}
 
 	@Override
@@ -67,7 +68,7 @@ public class WallPartWall implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL) {
-						world.setBlockState(p, Reference.CONFIG_HELPER_INSTANCE.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
 					}
 
 				}

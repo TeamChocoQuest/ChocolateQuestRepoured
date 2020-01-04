@@ -21,8 +21,8 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -271,7 +271,7 @@ public class CQStructure {
 								}
 								if (bossEnt instanceof AbstractEntityCQRBoss) {
 									((AbstractEntityCQRBoss) bossEnt).onSpawnFromCQRSpawnerInDungeon();
-									((AbstractEntityCQRBoss) bossEnt).setHealingPotions(Reference.CONFIG_HELPER_INSTANCE.getDefaultHealingPotionCount());
+									((AbstractEntityCQRBoss) bossEnt).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 									((AbstractEntityCQRBoss) bossEnt).equipDefaultEquipment(worldIn, vecPos);
 								}
 								worldIn.spawnEntity(bossEnt);

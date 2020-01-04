@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockStoneSlab;
@@ -23,7 +24,7 @@ public class WallPartRailingTower implements IWallPart {
 
 	@Override
 	public int getTopY() {
-		return Reference.CONFIG_HELPER_INSTANCE.getWallTopY() - 12;
+		return CQRConfig.wall.topY - 12;
 	}
 
 	@Override

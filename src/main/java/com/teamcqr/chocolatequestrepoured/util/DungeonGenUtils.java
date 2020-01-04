@@ -91,11 +91,15 @@ public class DungeonGenUtils {
 		return BannerHelper.isCQBanner(banner);
 	}
 
-	public static boolean isFarAwayEnoughFromSpawn(int chunkX, int chunkZ) {
-		if (Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
+	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
+		/*if (Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
 			return true;
-		}
-		return false;
+		}*/
+		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
+		chunkX -= spawnChunk.x;
+		chunkZ -= spawnChunk.z;
+		double dist = Math.sqrt((chunkX * chunkX) + (chunkZ * chunkZ));
+		return dist >= CQRMain.dungeonRegistry.getDungeonSpawnDistance();
 	}
 
 	// IMPORTANT: x and z are the CHUNK's x and z!!

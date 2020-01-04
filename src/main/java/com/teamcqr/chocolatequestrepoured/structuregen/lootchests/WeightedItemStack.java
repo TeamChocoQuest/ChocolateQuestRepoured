@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.lootchests;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.LootUtils;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootTable;
@@ -48,7 +48,7 @@ public class WeightedItemStack {
 				table, 
 				Item.getByNameOrId(this.itemName), 
 				this.weight, 
-				1 + new Random().nextInt(Reference.CONFIG_HELPER_INSTANCE.getMaxLootTablePoolRolls()), 
+				1 + new Random().nextInt(CQRConfig.general.maxLootTablePoolRolls), 
 				((float) this.weight / 100.0F), 
 				this.minCount, 
 				this.maxCount,

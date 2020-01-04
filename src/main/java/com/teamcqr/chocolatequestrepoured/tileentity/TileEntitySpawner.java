@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.resources.I18n;
@@ -15,6 +16,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -89,7 +91,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	@Override
 	public void update() {
-		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(Reference.CONFIG_HELPER_INSTANCE.getSpawnerActivationDistance())) {
+		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isNonCreativePlayerInRange(CQRConfig.general.spawnerActivationDistance)) {
 			this.turnBackIntoEntity();
 		}
 	}
@@ -142,17 +144,29 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	}
 
 	protected Entity spawnEntityFromNBT(NBTTagCompound nbt) {
+		{
+			// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+			nbt.removeTag("UUIDLeast");
+			nbt.removeTag("UUIDMost");
+			nbt.removeTag("Pos");
+			NBTTagList passengers = nbt.getTagList("Passengers", 10);
+			for (NBTBase passenger : passengers) {
+				((NBTTagCompound) passenger).removeTag("UUIDLeast");
+				((NBTTagCompound) passenger).removeTag("UUIDMost");
+				((NBTTagCompound) passenger).removeTag("Pos");
+			}
+		}
 		Entity entity = EntityList.createEntityFromNBT(nbt, this.world);
 
 		if (entity != null) {
 			Random rand = new Random();
 			Vec3d pos = new Vec3d(this.pos.getX() + 0.5D, this.pos.getY(), this.pos.getZ() + 0.5D);
-			double offset = entity.width <= 1.2F ? 0.5D - entity.width * 0.4D : 0.02D;
+			double offset = entity.width < 0.96F ? 0.5D - entity.width * 0.5D : 0.02D;
 			pos = pos.addVector(rand.nextDouble() * offset * 2.0D - offset, 0.0D, rand.nextDouble() * offset * 2.0D - offset);
 			entity.setPosition(pos.x, pos.y, pos.z);
 
 			if (entity instanceof EntityLiving) {
-				if (Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent()) {
+				if (CQRConfig.general.mobsFromCQSpawnerDontDespawn) {
 					((EntityLiving) entity).enablePersistence();
 				}
 

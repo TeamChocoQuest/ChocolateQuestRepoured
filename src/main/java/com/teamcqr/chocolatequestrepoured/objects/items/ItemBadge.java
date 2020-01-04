@@ -70,10 +70,13 @@ public class ItemBadge extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (playerIn.isCreative() && !worldIn.isRemote) {
-			playerIn.openGui(CQRMain.INSTANCE, Reference.BADGE_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
+		if (playerIn.isCreative()) {
+			if (!worldIn.isRemote) {
+				playerIn.openGui(CQRMain.INSTANCE, Reference.BADGE_GUI_ID, worldIn, handIn.ordinal(), 0, 0);
+			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
 	}
 
 	@Override

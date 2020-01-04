@@ -12,7 +12,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/ball_cannon.png");
+
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/ball_cannon.png");
 
 	public RenderProjectileCannonBall(RenderManager renderManager) {
 		super(renderManager);
@@ -54,6 +55,7 @@ public class RenderProjectileCannonBall extends Render<ProjectileCannonBall> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(ProjectileCannonBall entity) {
-		return this.TEXTURE;
+		return TEXTURE;
 	}
+
 }
