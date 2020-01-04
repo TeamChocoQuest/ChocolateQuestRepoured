@@ -147,7 +147,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		if (entity != null) {
 			Random rand = new Random();
 			Vec3d pos = new Vec3d(this.pos.getX() + 0.5D, this.pos.getY(), this.pos.getZ() + 0.5D);
-			double offset = entity.width <= 1.2F ? 0.5D - entity.width * 0.4D : 0.02D;
+			double offset = entity.width < 0.96F ? 0.5D - entity.width * 0.5D : 0.02D;
 			pos = pos.addVector(rand.nextDouble() * offset * 2.0D - offset, 0.0D, rand.nextDouble() * offset * 2.0D - offset);
 			entity.setPosition(pos.x, pos.y, pos.z);
 
