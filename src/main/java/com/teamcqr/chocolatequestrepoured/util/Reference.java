@@ -41,7 +41,7 @@ public class Reference {
 	// Moved to CONFIG_HELPER
 	// public static final double SPAWNER_RANGE = 25.0D;
 
-	public static final ConfigFileHelper CONFIG_HELPER_INSTANCE = new ConfigFileHelper();
+	// public static final ConfigFileHelper CONFIG_HELPER_INSTANCE = new ConfigFileHelper();
 
 	public static final MultiThreadController BLOCK_PLACING_THREADS_INSTANCE = new MultiThreadController(0);
 }

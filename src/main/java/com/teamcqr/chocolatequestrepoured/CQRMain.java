@@ -25,6 +25,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
@@ -135,7 +136,7 @@ public class CQRMain {
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if (Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
+		if (CQRConfig.wall.enabled) {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
@@ -173,8 +174,7 @@ public class CQRMain {
 	private void initConfigFolder(FMLPreInitializationEvent event) {
 		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
 
-		Reference.CONFIG_HELPER_INSTANCE.loadValues(configFile);
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(Reference.CONFIG_HELPER_INSTANCE.getBlockPlacerThreadCount());
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(CQRConfig.advanced.threadCount);
 
 		boolean installCQ = false;
 
@@ -189,7 +189,7 @@ public class CQRMain {
 			CQ_CONFIG_FOLDER.mkdir();
 
 			installCQ = true;
-		} else if (Reference.CONFIG_HELPER_INSTANCE.reInstallDefaultFiles()) {
+		} else if (CQRConfig.general.reinstallDefaultConfigs) {
 			installCQ = true;
 		}
 		if (!CQ_DUNGEON_FOLDER.exists()) {
