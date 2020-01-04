@@ -43,7 +43,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		System.out.println("Firing hookshot");
+		//System.out.println("Firing hookshot");
 
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
@@ -57,7 +57,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon{
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player);
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 10);
+			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}

@@ -31,13 +31,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileCannonBall;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.*;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
@@ -118,6 +112,7 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(ProjectileSpiderBall.class, "projectile_spider_ball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileVampiricSpell.class, "projectile_vampiric_spell", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileHookShotHook.class, "projectile_hookshot_hook", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),

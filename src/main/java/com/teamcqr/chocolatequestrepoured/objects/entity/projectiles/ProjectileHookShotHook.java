@@ -3,18 +3,20 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase
 {
-	private static final float PULL_SPEED = 1.8f;
-	public static final double STOP_PULL_DISTANCE = 1.5F;
+	private static final float PULL_SPEED = 1.8f; //speed that the chain retracts (larger = faster)
+	public static final double HOOK_RANGE = 20.0; //Max range of the hook before it stops extending
+	public static final double STOP_PULL_DISTANCE = 1.5; //If layer gets within this range of hook, stop pulling
 	private boolean pulling = false;
 	private Vec3d impactLocation = null;
+
+	private Vec3d lastShooterPos = null;
+	private int lastMovementCheckTick = 0;
 
 	public ProjectileHookShotHook(World worldIn)
 	{
@@ -40,14 +42,35 @@ public class ProjectileHookShotHook extends ProjectileBase
     @Override
 	public void onUpdate()
 	{
-		if(getThrower() != null && getThrower().isDead)
-		{
+		if(getThrower() != null && getThrower().isDead) {
+			pulling = false;
 			setDead();
 		}
-		
-		else
-		{
-			this.onUpdateInAir();
+		else if (!world.isRemote && getThrower() instanceof EntityPlayer) {
+			EntityPlayer shootingPlayer = (EntityPlayer) getThrower();
+			Vec3d playerPos = shootingPlayer.getPositionVector();
+			double distanceToHook = playerPos.distanceTo(this.getPositionVector());
+
+			if (pulling) {
+				checkForBlockedPath(shootingPlayer);
+
+				if (distanceToHook < STOP_PULL_DISTANCE) {
+					pulling = false;
+					this.setDead();
+					setShooterVelocity(shootingPlayer, new Vec3d(0, 0, 0));
+				} else {
+					Vec3d hookDirection = impactLocation.subtract(playerPos);
+
+					Vec3d pullVector = hookDirection.normalize().scale(PULL_SPEED);
+					setShooterVelocity(shootingPlayer, pullVector);
+				}
+			}
+			else if (distanceToHook > HOOK_RANGE) {
+				zeroizeVelocity();
+				setDead();
+			}
+
+			onUpdateInAir();
 			super.onUpdate();
 		}
 	}
@@ -61,40 +84,13 @@ public class ProjectileHookShotHook extends ProjectileBase
 					
 			if(!state.getBlock().isPassable(world, result.getBlockPos()))
 			{
-				System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
-			}
-
-			zeroizeVelocity();
-			impactLocation = this.getPositionVector();
-			pulling = true;
-		} 
-	}
-
-	@Override
-	public void onEntityUpdate() {
-		super.onEntityUpdate();
-
-		if (pulling && !world.isRemote && getThrower() instanceof EntityPlayer) {
-			EntityPlayer shootingPlayer = (EntityPlayer)getThrower();
-			Vec3d playerPos = shootingPlayer.getPositionVector();
-
-			double distanceToHook = playerPos.distanceTo(impactLocation);
-
-			if (distanceToHook < STOP_PULL_DISTANCE) {
-				pulling = false;
-				this.setDead();
-				setShooterVelocity(shootingPlayer, new Vec3d(0, 0, 0));
-			}
-			else {
-				Vec3d hookDirection = impactLocation.subtract(playerPos);
-
-				Vec3d pullVector = hookDirection.normalize().scale(PULL_SPEED);
-				setShooterVelocity(shootingPlayer, pullVector);
+				//System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
+				zeroizeVelocity();
+				impactLocation = this.getPositionVector(); //should this use the impact block position instead?
+				pulling = true;
 			}
 		}
 	}
-
-	protected void onUpdateInAir(){}
 
 	private void zeroizeVelocity() {
 		setVelocity(0, 0, 0);
@@ -103,5 +99,27 @@ public class ProjectileHookShotHook extends ProjectileBase
 	private void setShooterVelocity(EntityPlayer shootingPlayer, Vec3d velocityVec) {
 		shootingPlayer.setVelocity(velocityVec.x, velocityVec.y, velocityVec.z);
 		shootingPlayer.velocityChanged = true;
+	}
+
+	private void checkForBlockedPath(EntityPlayer shootingPlayer)
+	{
+		if (ticksExisted - lastMovementCheckTick >= 4) //once every 4 ticks ~ 0.2 seconds
+		{
+			Vec3d currentPos = shootingPlayer.getPositionVector();
+			if (lastShooterPos != null)
+			{
+				double distanceTraveled = currentPos.distanceTo(lastShooterPos);
+				if (distanceTraveled < 0.2)
+				{
+					//System.out.println("Cancelling hook because shooter was blocked (dist = " + distanceTraveled + ")");
+					this.zeroizeVelocity();
+					this.setDead();
+					setShooterVelocity(shootingPlayer, new Vec3d(0, 0 ,0));
+				}
+			}
+
+			lastMovementCheckTick = ticksExisted;
+			lastShooterPos = shootingPlayer.getPositionVector();
+		}
 	}
 }
