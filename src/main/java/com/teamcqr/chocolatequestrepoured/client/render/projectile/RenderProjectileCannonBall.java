@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileCannonBall extends Render<ProjectileCannonBall>
 {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/ball_cannon.png");
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/cannon_ball.png");
 	
 	public RenderProjectileCannonBall(RenderManager renderManager) 
 	{

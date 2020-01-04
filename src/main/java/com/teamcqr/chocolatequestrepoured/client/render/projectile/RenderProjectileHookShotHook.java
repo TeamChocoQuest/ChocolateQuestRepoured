@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 {
-	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/ball_cannon.png");
+	public ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID ,"textures/entity/cannon_ball.png");
 
 	public RenderProjectileHookShotHook(RenderManager renderManager)
 	{
