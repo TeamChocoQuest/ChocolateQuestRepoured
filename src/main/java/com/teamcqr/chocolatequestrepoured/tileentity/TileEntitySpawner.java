@@ -15,6 +15,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
@@ -142,6 +143,18 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	}
 
 	protected Entity spawnEntityFromNBT(NBTTagCompound nbt) {
+		{
+			// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity
+			nbt.removeTag("UUIDLeast");
+			nbt.removeTag("UUIDMost");
+			nbt.removeTag("Pos");
+			NBTTagList passengers = nbt.getTagList("Passengers", 10);
+			for (NBTBase passenger : passengers) {
+				((NBTTagCompound) passenger).removeTag("UUIDLeast");
+				((NBTTagCompound) passenger).removeTag("UUIDMost");
+				((NBTTagCompound) passenger).removeTag("Pos");
+			}
+		}
 		Entity entity = EntityList.createEntityFromNBT(nbt, this.world);
 
 		if (entity != null) {
