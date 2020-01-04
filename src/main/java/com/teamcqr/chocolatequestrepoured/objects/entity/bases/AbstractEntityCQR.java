@@ -15,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -35,6 +36,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -66,6 +68,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -156,7 +159,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			--this.spellTicks;
 		}
 	}
-	
+
 	@Override
 	public abstract EnumCreatureAttribute getCreatureAttribute();
 
@@ -423,6 +426,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+			if (entityIn instanceof EntityLivingBase) {
+				((EntityLivingBase) entityIn).heal(2.0F);
+
+				if (!this.world.isRemote) {
+					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + 0.5D * entityIn.height, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+					this.world.playSound(null, entityIn.posX, entityIn.posY, entityIn.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 4.0F, 0.6F + this.rand.nextFloat() * 0.2F);
+				}
+				return true;
+			}
+			return false;
+		}
 		float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		int i = 0;
 
