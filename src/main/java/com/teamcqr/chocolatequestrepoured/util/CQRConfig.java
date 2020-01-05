@@ -27,6 +27,8 @@ public class CQRConfig {
 		public boolean reinstallDefaultConfigs = false;
 		public double spawnerActivationDistance = 25.0D;
 		public int supportHillWallSize = 8;
+		@Config.RangeInt(min = 1, max = 100)
+		public int overallDungeonChance = 75;
 	}
 
 	public static class Mobs {
