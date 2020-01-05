@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -33,10 +36,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		}
 
 		// Check for flat worlds, if dungeons may spawn there
-		boolean flatPass = true;
 		boolean behindWall = false;
 		if (world.getWorldType().equals(WorldType.FLAT) && !CQRConfig.general.dungeonsInFlat) {
-			flatPass = false;
+			return;
 		}
 
 		// Checks if this chunk is in the "wall zone", if yes, abort
@@ -62,7 +64,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						}
 					}
 
-					if (dimensionIsOK && flatPass) {
+					if (dimensionIsOK) {
 						Random rdm = new Random(getSeed(world, chunkX, chunkZ));
 						dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdm);
 						canBuildRandomDungeons = false;
@@ -90,7 +92,8 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						
 						// Chooses a dungeon to generate
 						// TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
-						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
+						//OLD
+						/**int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
 
 						// Checks, if the dungeon generates (calculated by the percentage chance the
@@ -118,6 +121,54 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 								chosenDungeon.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdmGen);
 								// TODO: Check if dungeon is unique or every structure should generate once and
 								// then check if dungeon is already present
+							}
+						}**/
+						//NEW
+						List<DungeonBase> availableDungeons = new ArrayList<>(this.dungeonRegistry.getDungeonsForBiome(biome));
+						final boolean wallFlag = behindWall;
+						//Sort the list; all dungeons that dont fit -> get out!
+						int maxChance = 0;
+						availableDungeons.removeIf(new Predicate<DungeonBase>() {
+
+							@Override
+							public boolean test(DungeonBase t) {
+								boolean dimensionFail = true;
+								// This checks the dimension the dungeon can spawn in
+								for (int dimID : t.getAllowedDimensions()) {
+									if (world.provider.getDimension() == dimID) {
+										dimensionFail = false;
+										break;
+									}
+								}
+								if(dimensionFail) {
+									return true;
+								}
+								if (!wallFlag && t.doesSpawnOnlyBehindWall()) {
+									return true;
+								}
+								if(t.getSpawnChance() <= 0) {
+									return true;
+								}
+								// TODO: Check if dungeon is unique or every structure should generate once and
+								return false;
+							}
+						});
+						//Calculate maxChance
+						for(DungeonBase t : availableDungeons) {
+							maxChance += t.getSpawnChance();
+						}
+						//Dungeon spawning
+						if(!availableDungeons.isEmpty()) {
+							double o = random.nextDouble() * maxChance;
+							for (DungeonBase generator : availableDungeons) {
+								o -= generator.getSpawnChance();
+								if (o <= 0) {
+									System.out.println("Generating dungeon " + generator.getDungeonName() + " at chunkX=" + chunkX + "  chunkZ=" + chunkZ);
+									// DONE: Choose a structure and build it --> Dungeon handles it self!
+									Random rdmGen = new Random(getSeed(world, chunkX, chunkZ));
+									generator.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdmGen);
+									break;
+								}
 							}
 						}
 					}
