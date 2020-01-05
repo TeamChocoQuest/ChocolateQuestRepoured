@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.util.ReflectionHelper;
 
 import com.teamcqr.chocolatequestrepoured.util.data.ArchiveManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ArrayCollectionMapManipulationUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 import com.teamcqr.chocolatequestrepoured.util.data.ObjectSerializationUtil;
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -25,25 +27,36 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  * Intended for use on dungeons but can easily be used for other areas
  *
  * @author jdawg3636
- * GitHub: https://github.com/jdawg3636
+ *         GitHub: https://github.com/jdawg3636
  *
- * @version 22.07.19
+ * @version 05.01.20
  */
 public class ProtectionHandler {
+
+    /* *************** */
+    /* Constants/Setup */
+    /* *************** */
+
+    // Singleton setup
+    private static ProtectionHandler PROTECTION_HANDLER = new ProtectionHandler();
+    private ProtectionHandler() {}
+    public static ProtectionHandler getInstance() { return PROTECTION_HANDLER; }
+
+    // Globally Exempt Blocks (Can always be broken/placed)
+    private ArrayList<Block> getGlobalProtectionExemptBlockTypes() {
+        ArrayList<Block> toReturn = new ArrayList<>();
+        toReturn.add(ModBlocks.PHYLACTERY);
+        return toReturn;
+    }
 
     /* ************ */
     /* Registration */
     /* ************ */
 
-    // Singleton setup
-    private static ProtectionHandler PROTECTION_HANDLER = new ProtectionHandler();
-    private ProtectionHandler() { this.activeRegions = new HashMap<>(); }
-    public static ProtectionHandler getInstance() { return PROTECTION_HANDLER; }
-
     // Region Data
-    private HashMap<Integer, ArrayList<ProtectedRegion>> activeRegions;
+    private HashMap<Integer, ArrayList<ProtectedRegion>> activeRegions = new HashMap<>();
 
-    // ProtectedRegion Serialization
+    // Register
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
         // Create ProtectedRegion obj
@@ -54,6 +67,25 @@ public class ProtectionHandler {
         if(updated == null) updated = new ArrayList<>();
         updated.add(regionToBeRegistered);
         activeRegions.put(dimID, updated);
+        // Serialize to disk
+        serializeToDisc(dimID);
+    }
+
+    // Deregister - Called by ProtectedRegion
+    public void deregister(ProtectedRegion toBeRemoved) {
+        for(Integer key : activeRegions.keySet()) {
+            for(ProtectedRegion region : activeRegions.get(key)) {
+                if(region == toBeRemoved) activeRegions.remove(key);
+            }
+        }
+    }
+
+    /* ************* */
+    /* Serialization */
+    /* ************* */
+
+    // ProtectedRegion Serialization
+    public void serializeToDisc(int dimID) {
         // Register on Disc
         HashMap<String, byte[]> regionsToBeZipped = new HashMap<>();
         for(ProtectedRegion region : activeRegions.get(dimID)) {
@@ -84,20 +116,15 @@ public class ProtectionHandler {
     public void eventHandleEntityDeath(LivingDeathEvent e) {
         // Loop through all dims present in registry
         for(int dimID : activeRegions.keySet()) {
-            // Temp var
-            ArrayList<ProtectedRegion> toRemoveFromRegistry = new ArrayList<>();
             // Loop through all registered regions for dim
             for( ProtectedRegion region : activeRegions.get(dimID) ) {
-                for(BlockPos pos : region.getBlockDependencies()) {
-                    if(pos.equals(e.getEntityLiving().getPosition())) {
-                        toRemoveFromRegistry.add(region);
+                // Loop through all UUIDs of Entity Dependencies
+                for(String depUUID : region.getEntityDependenciesAsUUIDs()) {
+                    // Check if UUIDs Equal
+                    if(depUUID.equals(e.getEntity().getUniqueID().toString())) {
+                        region.removeEntityDependency(depUUID);
                     }
                 }
-            }
-            // Remove flagged regions from registry
-            ArrayList<ProtectedRegion> updated = activeRegions.get(dimID);
-            for(ProtectedRegion pr : toRemoveFromRegistry) {
-                updated.remove(pr);
             }
         }
     }
@@ -116,7 +143,7 @@ public class ProtectionHandler {
                 for(BlockPos pos : region.getBlockDependencies()) {
                     if(e.getPos().equals(pos)) {
                         isBlockDependency = true;
-                        toRemoveFromRegistry.add(region);
+                        region.removeBlockDependency(pos);
                     }
                 }
 
@@ -136,17 +163,18 @@ public class ProtectionHandler {
                 else if(dimID != e.getWorld().provider.getDimension()) {
                     // noop
                 }
+                // Noop if block globally exempt
+                else if(getGlobalProtectionExemptBlockTypes().contains(e.getState().getBlock())) {
+                    // noop
+                }
                 // Otherwise check break pos and cancel if overlapping
                 else if(region.checkIfBlockPosInRegion(e.getPos())) {
                 	if(e.getState().getBlock() != Blocks.MOB_SPAWNER) {
                 		e.setCanceled(true);
                 	}
                 }
+
             }
-            // Remove flagged regions
-            ArrayList<ProtectedRegion> updated = activeRegions.get(dimID);
-            for(ProtectedRegion pr : toRemoveFromRegistry) updated.remove(pr);
-            activeRegions.put(dimID, updated);
         }
 
     }
@@ -157,16 +185,20 @@ public class ProtectionHandler {
         for(int dimID : activeRegions.keySet()) {
             // Loop through all registered regions for dim
             for( ProtectedRegion region : activeRegions.get(dimID) ) {
-                // Noop if global setting disabled
+
                 if(!region.settings.get("preventBlockPlace")) {
                     // noop
                 }
-                // Noop if in creative mode and specific setting disabled
+                // Noop if in creative mode and preventBlockPlaceCreative disabled
                 else if(!region.settings.get("preventBlockPlaceCreative") && e.getPlayer().isCreative()) {
                     // noop
                 }
                 // Noop if different dim
                 else if(dimID != e.getWorld().provider.getDimension()) {
+                    // noop
+                }
+                // Noop if block globally exempt
+                else if(getGlobalProtectionExemptBlockTypes().contains(e.getState().getBlock())) {
                     // noop
                 }
                 // Otherwise check block pos and cancel if overlapping
@@ -175,6 +207,7 @@ public class ProtectionHandler {
                 		e.setCanceled(true);
                 	}
                 }
+
             }
         }
 
