@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -86,7 +87,7 @@ public class CQStructure {
 		this.newBannerPattern = pattern;
 	}
 
-	public CQStructure(File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
+	public CQStructure(@Nonnull File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
 		// System.out.println("Dungeon is null: " + (dungeon == null));
 		EDungeonMobType mobType = null;
 		this.dunX = dunX;
