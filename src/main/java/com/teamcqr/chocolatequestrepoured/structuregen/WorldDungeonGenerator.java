@@ -80,8 +80,14 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				// Now check if the dungeon is far away enough from the last one
 				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0) && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
 					Random rdm = new Random(getSeed(world, chunkX, chunkZ));
-
+					
 					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world, dungeonSeparation) || this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
+						
+						//Overall dungeon spawn chance
+						if(!DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rdm)) {
+							return;
+						}
+						
 						// Chooses a dungeon to generate
 						// TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
 						int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
