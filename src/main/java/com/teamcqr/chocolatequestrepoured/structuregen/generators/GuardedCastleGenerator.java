@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
@@ -105,6 +106,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+		if(centerStructure == null) {
+			CQRMain.logger.error("No center building for guarded castle: " + dungeon.getDungeonName());
+			return;
+		}
 		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
 
 		PlateauBuilder platformCenter = new PlateauBuilder();
