@@ -161,7 +161,11 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			if(floor == null) {
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
-				floor.buildWalls(world);
+				try {
+					floor.buildWalls(world);
+				} catch(NullPointerException ex) {
+					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X " + x + "  Y " + y + "  Z " + z);
+				}
 			}
 		}
 	}
