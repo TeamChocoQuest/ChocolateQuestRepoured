@@ -1,8 +1,12 @@
-goldBlock = minecraft:gold_block,0,0,4,60
-enderPearl = minecraft:ender_pearl,0,0,12,40
-diamond = minecraft:diamond,0,0,6,70
-emerald= minecraft:emerald,0,0,10,80
-goldenApple = minecraft:golden_apple,0,0,4,50
+goldBlock = minecraft:gold_block,0,1,4,60
+enderPearl = minecraft:ender_pearl,0,3,12,40
+diamond = minecraft:diamond,0,2,6,70
+emerald= minecraft:emerald,0,2,10,80
+goldenApple = minecraft:golden_apple,0,1,4,50
+dHelmet = minecraft:diamond_helmet,0,1,1,20,true,25,40,true
+dChestPlate = minecraft:diamond_chestplate,0,1,1,10,true,25,40,true
+dLeggins = minecraft:diamond_leggings,0,1,1,10,true,25,40,true
+dBoots = minecraft:diamond_boots,0,1,1,20,true,25,40,true
 bow = minecraft:bow,0,0,1,30,true,15,45,true
 dSword = minecraft:diamond_sword,0,0,1,20,true,20,30,true
 walkerSword = cqrepoured:sword_walker,0,0,1,5,true,25,50,true
