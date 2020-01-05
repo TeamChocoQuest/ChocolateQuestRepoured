@@ -100,10 +100,21 @@ public class ProtectionHandler {
         HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\prot_region_defs.zip"));
         if(protectedRegionsFromDisc != null) {
             for(String regionFileName : protectedRegionsFromDisc.keySet()) {
-                ArrayList<ProtectedRegion> temp = activeRegions.get(Integer.parseInt(regionFileName.substring(4,5)));
+
+                // Filter Dimension ID from filename (hacky hotfix to support negative dimension ids)
+                String dimIDAsString = "";
+                int dimIDAsStringCursorPos = 4;
+                while(regionFileName.charAt(dimIDAsStringCursorPos) != '\\') {
+                    dimIDAsString += regionFileName.substring(dimIDAsStringCursorPos, dimIDAsStringCursorPos + 1);
+                    dimIDAsStringCursorPos++;
+                }
+
+                ArrayList<ProtectedRegion> temp = activeRegions.get(Integer.parseInt(dimIDAsString));
+                if(e.getWorld().provider.getDimension() != Integer.parseInt(dimIDAsString)) continue;
+                System.out.println("DIM: " + dimIDAsString);
                 if(temp == null) temp = new ArrayList<>();
                 temp.add((ProtectedRegion)ObjectSerializationUtil.readObectFromByteArray(protectedRegionsFromDisc.get(regionFileName)));
-                activeRegions.put(Integer.parseInt(regionFileName.substring(4,5)), temp);
+                activeRegions.put(Integer.parseInt(dimIDAsString), temp);
             }
         }
     }
