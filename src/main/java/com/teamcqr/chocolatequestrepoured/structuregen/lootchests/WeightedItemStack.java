@@ -52,19 +52,6 @@ public class WeightedItemStack {
 	}
 
 	public void addToTable(LootTable table, int indx) {
-		/*LootUtils.addItemToTable(
-				table, 
-				Item.getByNameOrId(this.itemName), 
-				this.weight, 
-				1 + new Random().nextInt(CQRConfig.general.maxLootTablePoolRolls), 
-				((float) this.weight / 100.0F), 
-				this.minCount, 
-				this.maxCount,
-				this.enchant ? (float) this.minLvl : 0F, 
-				this.enchant ? (float) this.maxLvl : 0F, 
-				this.itemName
-			);*/
-		
 		LootCondition condition = new RandomChance(new Float(weight) /100F);
 		LootCondition[] conditionA = new LootCondition[] {condition};
 		
