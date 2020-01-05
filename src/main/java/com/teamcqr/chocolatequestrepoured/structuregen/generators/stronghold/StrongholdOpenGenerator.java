@@ -121,7 +121,12 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding(), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
+		File building = this.dungeon.getEntranceBuilding();
+		if(building == null) {
+			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + getDungeon().getDungeonName());
+			return;
+		}
+		CQStructure structure = new CQStructure(building, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
