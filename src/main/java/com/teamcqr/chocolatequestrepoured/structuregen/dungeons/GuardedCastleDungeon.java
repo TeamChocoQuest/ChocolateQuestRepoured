@@ -77,10 +77,16 @@ public class GuardedCastleDungeon extends DungeonBase {
 
 		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, random);
 		for (int i = 0; i < buildings; i++) {
-			File building = this.getStructureFileFromDirectory(this.structureFolder);/* getRandomBuilding(random); */
+			File building = null;
+			while(building == null) {
+				building = this.getStructureFileFromDirectory(this.structureFolder);/* getRandomBuilding(random); */
+			}
 			((GuardedCastleGenerator) this.generator).addStructure(building);
 			building = this.centerStructureFolder;
-			building = this.getStructureFileFromDirectory(this.centerStructureFolder);
+			building = null;
+			while(building == null) {
+				this.getStructureFileFromDirectory(this.centerStructureFolder);
+			}
 			((GuardedCastleGenerator) this.generator).setCenterStructure(building);
 		}
 		// Generating it...
