@@ -91,39 +91,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 							return;
 						}
 						
-						// Chooses a dungeon to generate
-						//OLD
-						/**int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
-						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
-
-						// Checks, if the dungeon generates (calculated by the percentage chance the
-						// dungeon has...
-						if (DungeonGenUtils.PercentageRandom(chosenDungeon.getSpawnChance(), rdm)) {
-							boolean dimensionIsOK = false;
-							// This checks the dimension the dungeon can spawn in
-							for (int dimID : chosenDungeon.getAllowedDimensions()) {
-								if (world.provider.getDimension() == dimID) {
-									dimensionIsOK = true;
-									break;
-								}
-							}
-
-							boolean wallPass = true;
-							if (!behindWall && chosenDungeon.doesSpawnOnlyBehindWall()) {
-								return;
-							}
-
-							// If the dimension is fine, if yes, it will generate the dungeon
-							if (dimensionIsOK && flatPass && wallPass) {
-								System.out.println("Generating dungeon " + chosenDungeon.getDungeonName() + " at chunkX=" + chunkX + "  chunkZ=" + chunkZ);
-								// DONE: Choose a structure and build it --> Dungeon handles it self!
-								Random rdmGen = new Random(getSeed(world, chunkX, chunkZ));
-								chosenDungeon.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world, world.getChunkFromChunkCoords(chunkX, chunkZ), rdmGen);
-								// TODO: Check if dungeon is unique or every structure should generate once and
-								// then check if dungeon is already present
-							}
-						}**/
-						//NEW
 						List<DungeonBase> availableDungeons = new ArrayList<>(this.dungeonRegistry.getDungeonsForBiome(biome));
 						final boolean wallFlag = behindWall;
 						//Sort the list; all dungeons that dont fit -> get out!
