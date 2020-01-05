@@ -1,8 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.network;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer.FakeDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import io.netty.buffer.ByteBuf;
@@ -11,9 +12,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class DungeonSyncPacket implements IMessage {
 
-	private List<DungeonBase> dungeonList;
-	private HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
-	private HashMap<Integer, String[]> dependencyMap = new HashMap<>();
+	private List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
+	private List<FakeDungeon> fakeDungeonList = new ArrayList<FakeDungeon>();
 
 	public DungeonSyncPacket() {
 
@@ -25,43 +25,36 @@ public class DungeonSyncPacket implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		int size = buf.readInt();
-		for (int i = 0; i < size; i++) {
+		int dungeonCount = buf.readByte();
+		this.fakeDungeonList = new ArrayList<FakeDungeon>(dungeonCount);
+		for (int i = 0; i < dungeonCount; i++) {
 			String name = ByteBufUtils.readUTF8String(buf);
-			int id = buf.readInt();
-			this.dungeonMap.put(name, id);
-
-			// Dependencies
-			int dependencyCount = buf.readInt();
-			String[] dep = new String[dependencyCount];
+			int iconID = buf.readByte();
+			int dependencyCount = buf.readByte();
+			String[] dependencies = new String[dependencyCount];
 			for (int j = 0; j < dependencyCount; j++) {
-				dep[j] = ByteBufUtils.readUTF8String(buf);
+				dependencies[j] = ByteBufUtils.readUTF8String(buf);
 			}
-			this.dependencyMap.put(id, dep);
+
+			this.fakeDungeonList.add(new FakeDungeon(name, iconID, dependencies));
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.dungeonList.size());
+		buf.writeByte(this.dungeonList.size());
 		for (DungeonBase dungeon : this.dungeonList) {
 			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
-			buf.writeInt(dungeon.getIconID());
-
-			// Dependencies
-			buf.writeInt(dungeon.getDependencies().length);
+			buf.writeByte(dungeon.getIconID());
+			buf.writeByte(dungeon.getDependencies().length);
 			for (String dependency : dungeon.getDependencies()) {
 				ByteBufUtils.writeUTF8String(buf, dependency);
 			}
 		}
 	}
 
-	public HashMap<String, Integer> getDungeonMap() {
-		return this.dungeonMap;
-	}
-
-	public HashMap<Integer, String[]> getDependencyMap() {
-		return this.dependencyMap;
+	public List<FakeDungeon> getFakeDungeonList() {
+		return this.fakeDungeonList;
 	}
 
 }
