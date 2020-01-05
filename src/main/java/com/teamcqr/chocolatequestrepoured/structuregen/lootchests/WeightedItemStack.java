@@ -64,9 +64,10 @@ public class WeightedItemStack {
 		ArrayList<LootFunction> functions = new ArrayList<>();
 		functions.add(new SetCount(null, new RandomValueRange(minCount, maxCount)));
 		if(enchant) {
-			functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl, maxLvl), false));
 			if(treasure) {
 				functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl *2, maxLvl *2), true));
+			} else {
+				functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl, maxLvl), false));
 			}
 		}
 		
