@@ -50,6 +50,9 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean PercentageRandom(int number, Random rdm) {
+		if(number >= 100) {
+			return true;
+		}
 		int rdmNmbr = rdm.nextInt(100) + 1;
 		if (number >= rdmNmbr) {
 			return true;
