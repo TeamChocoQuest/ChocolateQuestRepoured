@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -87,8 +88,16 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			boolean isFirst = i == 0;
 			if (isFirst) {
 				stair = this.dungeon.getEntranceStair();
+				if(stair == null) {
+					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: " + getDungeon().getDungeonName());
+					return;
+				}
 			} else {
 				stair = this.dungeon.getStairRoom();
+				if(stair == null) {
+					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: " + getDungeon().getDungeonName());
+					return;
+				}
 			}
 			floor.setIsFirstFloor(isFirst);
 			int dY = initPos.getY() - (new CQStructure(stair, this.dungeon, x, z, false)).getSizeY();
