@@ -1,12 +1,21 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.lootchests;
 
-import java.util.Random;
+import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.LootUtils;
 
 import net.minecraft.item.Item;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryEmpty;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.RandomChance;
+import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetCount;
 
 /**
  * Copyright (c) 29.04.2019
@@ -19,8 +28,7 @@ public class WeightedItemStack {
 	private int minCount;
 	private int maxCount;
 	private int weight;
-	private boolean enchant;
-	@SuppressWarnings("unused")
+	private boolean enchant = false;
 	private boolean treasure;
 	@SuppressWarnings("unused")
 	private int damage;
@@ -43,8 +51,8 @@ public class WeightedItemStack {
 		return this.weight;
 	}
 
-	public void addToTable(LootTable table) {
-		LootUtils.addItemToTable(
+	public void addToTable(LootTable table, int indx) {
+		/*LootUtils.addItemToTable(
 				table, 
 				Item.getByNameOrId(this.itemName), 
 				this.weight, 
@@ -55,7 +63,31 @@ public class WeightedItemStack {
 				this.enchant ? (float) this.minLvl : 0F, 
 				this.enchant ? (float) this.maxLvl : 0F, 
 				this.itemName
-			);
+			);*/
+		
+		LootCondition condition = new RandomChance(new Float(weight) /100F);
+		LootCondition[] conditionA = new LootCondition[] {condition};
+		
+		LootCondition condition2 = new RandomChance(1F- (new Float(weight) /100F));
+		LootCondition[] conditionB = new LootCondition[] {condition2};
+		
+		LootCondition condition3 = new RandomChance(1F);
+		LootCondition[] conditionC = new LootCondition[] {condition3};
+		
+		ArrayList<LootFunction> functions = new ArrayList<>();
+		functions.add(new SetCount(null, new RandomValueRange(minCount, maxCount)));
+		if(enchant) {
+			functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl, maxLvl), treasure));
+		}
+		
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(itemName), weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + itemName);
+		LootEntry entryEmpty = new LootEntryEmpty(100-weight, 0, conditionB, "entry_empty");
+		
+		LootEntry[] entryA = new LootEntry[] {entry, entryEmpty};
+		
+		LootPool pool = new LootPool(entryA, conditionC, new RandomValueRange(1), new RandomValueRange(CQRConfig.general.maxLootTablePoolRolls), "item_" + indx);
+		
+		table.addPool(pool);
 	}
 
 	public WeightedItemStack setChance(int chance) {

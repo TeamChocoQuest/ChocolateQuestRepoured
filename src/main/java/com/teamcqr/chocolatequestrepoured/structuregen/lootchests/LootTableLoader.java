@@ -143,8 +143,10 @@ public class LootTableLoader {
 			if (propFile != null) {
 				List<WeightedItemStack> items = getItemList(propFile);
 
+				int i = 0;
 				for (WeightedItemStack wis : items) {
-					wis.addToTable(lootTable);
+					wis.addToTable(lootTable, i);
+					i++;
 				}
 			}
 		}
