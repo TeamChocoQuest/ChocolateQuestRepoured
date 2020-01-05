@@ -1,6 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import net.minecraftforge.common.config.Config;
+import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 @Config(modid = Reference.MODID)
 public class CQRConfig {
@@ -45,6 +49,18 @@ public class CQRConfig {
 		public boolean obsidianCore = true;
 		public int topY = 140;
 		public int towerDistance = 3;
+	}
+
+	@EventBusSubscriber(modid = Reference.MODID)
+	private static class EventHandler {
+
+		@SubscribeEvent
+		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
+			if (event.getModID().equals(Reference.MODID)) {
+				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+			}
+		}
+
 	}
 
 }
