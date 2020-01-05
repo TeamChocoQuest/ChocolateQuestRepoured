@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -91,7 +92,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						}
 						
 						// Chooses a dungeon to generate
-						// TODO: Add support for unique dungeons, means i need to save the dungeons positions into a file...
 						//OLD
 						/**int strctrIndex = rdm.nextInt(this.dungeonRegistry.getDungeonsForBiome(biome).size());
 						DungeonBase chosenDungeon = this.dungeonRegistry.getDungeonsForBiome(biome).get(strctrIndex);
@@ -157,6 +157,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						for(DungeonBase t : availableDungeons) {
 							maxChance += t.getSpawnChance();
 						}
+						Collections.shuffle(availableDungeons, rdm);
 						//Dungeon spawning
 						if(!availableDungeons.isEmpty()) {
 							double o = random.nextDouble() * maxChance;
