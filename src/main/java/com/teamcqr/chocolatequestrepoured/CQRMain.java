@@ -165,7 +165,7 @@ public class CQRMain {
 		}
 
 		// Register event handling for dungeon protection system
-		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
+		//MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
