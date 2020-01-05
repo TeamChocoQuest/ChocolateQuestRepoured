@@ -33,7 +33,7 @@ public class LootTableLoader {
 			files = CQRMain.CQ_CHEST_FOLDER.listFiles().length - 1;
 		}
 		if (files > 0) {
-			System.out.println("Found " + files + " loot chest configs! Loading...");
+			System.out.println("Found " + (files +1) + " loot chest configs! Loading...");
 			for (File f : CQRMain.CQ_CHEST_FOLDER.listFiles()) {
 				if (f.isFile()) {
 					ELootTable table = null;
