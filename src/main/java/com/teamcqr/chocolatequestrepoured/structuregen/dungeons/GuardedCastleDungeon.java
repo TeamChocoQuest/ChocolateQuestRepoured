@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.GuardedCastleG
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -78,7 +79,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, random);
 		for (int i = 0; i < buildings; i++) {
 			File building = null;
-			int counter = this.structureFolder.listFiles().length;
+			int counter = this.structureFolder.listFiles(FileIOUtil.getNBTFileFilter()).length;
 			while(building == null) {
 				counter--;
 				building = this.getStructureFileFromDirectory(this.structureFolder);/* getRandomBuilding(random); */
@@ -86,7 +87,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 			((GuardedCastleGenerator) this.generator).addStructure(building);
 			building = this.centerStructureFolder;
 			building = null;
-			counter = this.centerStructureFolder.listFiles().length;
+			counter = this.centerStructureFolder.listFiles(FileIOUtil.getNBTFileFilter()).length;
 			while(building == null && counter >= 0) {
 				counter--;
 				this.getStructureFileFromDirectory(this.centerStructureFolder);
