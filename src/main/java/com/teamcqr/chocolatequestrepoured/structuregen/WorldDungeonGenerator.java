@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
@@ -124,7 +123,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						for(DungeonBase t : availableDungeons) {
 							maxChance += t.getSpawnChance();
 						}
-						Collections.shuffle(availableDungeons, rdm);
 						//Dungeon spawning
 						if(!availableDungeons.isEmpty()) {
 							double o = random.nextDouble() * maxChance;
