@@ -158,7 +158,11 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		// build all the structures in the map
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.buildWalls(world);
+			if(floor == null) {
+				CQRMain.logger.error("Floor is null! Not generating it!");
+			} else {
+				floor.buildWalls(world);
+			}
 		}
 	}
 
