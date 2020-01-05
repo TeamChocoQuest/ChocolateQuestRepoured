@@ -122,7 +122,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		File building = this.dungeon.getEntranceBuilding();
-		if(building == null) {
+		if(building == null || dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + getDungeon().getDungeonName());
 			return;
 		}
