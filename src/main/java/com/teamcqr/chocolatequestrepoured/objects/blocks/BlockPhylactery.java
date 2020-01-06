@@ -23,7 +23,7 @@ public class BlockPhylactery extends Block {
 		this.setHardness(0.5F);
 		this.setLightOpacity(8);
 		this.setLightLevel(1.5F);
-		setSoundType(SoundType.GLASS);
+		this.setSoundType(SoundType.GLASS);
 	}
 
 	public BlockPhylactery(Material blockMaterialIn, MapColor blockMapColorIn) {
@@ -31,15 +31,15 @@ public class BlockPhylactery extends Block {
 		this.setHardness(0.5F);
 		this.setLightOpacity(8);
 		this.setLightLevel(1.5F);
-		setSoundType(SoundType.GLASS);
+		this.setSoundType(SoundType.GLASS);
 	}
-	
+
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
 		super.onBlockDestroyedByPlayer(worldIn, pos, state);
 		worldIn.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 1.5F, true);
 	}
-	
+
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
@@ -54,7 +54,7 @@ public class BlockPhylactery extends Block {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Items.AIR;
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;

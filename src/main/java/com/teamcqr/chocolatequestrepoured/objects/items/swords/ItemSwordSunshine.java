@@ -24,6 +24,7 @@ public class ItemSwordSunshine extends ItemSword {
 		super(material);
 	}
 
+	@Override
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		if (target.world.isDaytime()) {
 			if (target instanceof Entity) {

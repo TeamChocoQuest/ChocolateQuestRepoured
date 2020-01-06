@@ -39,11 +39,11 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	public BlockTable() {
 		super(Material.WOOD);
 
-		setSoundType(SoundType.WOOD);
-		setHardness(2.0F);
-		setResistance(15.0F);
-		setHarvestLevel("axe", 0);
-		setDefaultState(blockState.getBaseState().withProperty(TOP, false));
+		this.setSoundType(SoundType.WOOD);
+		this.setHardness(2.0F);
+		this.setResistance(15.0F);
+		this.setHarvestLevel("axe", 0);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(TOP, false));
 	}
 
 	@Override
@@ -101,13 +101,11 @@ public class BlockTable extends Block implements ITileEntityProvider {
 		IBlockState blockstate = worldIn.getBlockState(pos);
 		state = this.getDefaultState();
 
-		if (worldIn.getBlockState(pos.west()).getBlock() == this
-				&& worldIn.getBlockState(pos.east()).getBlock() == this) {
+		if (worldIn.getBlockState(pos.west()).getBlock() == this && worldIn.getBlockState(pos.east()).getBlock() == this) {
 			worldIn.setBlockState(pos, state.withProperty(TOP, true));
 		}
 
-		else if (worldIn.getBlockState(pos.north()).getBlock() == this
-				&& worldIn.getBlockState(pos.south()).getBlock() == this) {
+		else if (worldIn.getBlockState(pos.north()).getBlock() == this && worldIn.getBlockState(pos.south()).getBlock() == this) {
 			worldIn.setBlockState(pos, state.withProperty(TOP, true));
 		}
 
@@ -117,16 +115,14 @@ public class BlockTable extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn,
-			EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		TileEntityTable tile = getTileEntity(worldIn, pos);
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		TileEntityTable tile = this.getTileEntity(worldIn, pos);
 		ItemStack helditem = playerIn.getHeldItem(EnumHand.MAIN_HAND);
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, facing);
 		ItemStack table = itemHandler.getStackInSlot(0);
 
 		if (table.isEmpty() && !helditem.isEmpty()) {
-			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP,
-					SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			if (!worldIn.isRemote) {
 				playerIn.setHeldItem(hand, itemHandler.insertItem(0, helditem, false));
 				tile.setRotation(playerIn);
@@ -134,10 +130,13 @@ public class BlockTable extends Block implements ITileEntityProvider {
 		}
 
 		if (!table.isEmpty()) {
-			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP,
-					SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
+			worldIn.playSound(pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.BLOCKS, 0.5F, worldIn.rand.nextFloat() * 0.4F + 0.8F, false);
 			if (!worldIn.isRemote) {
-				playerIn.inventory.addItemStackToInventory(itemHandler.extractItem(0, 64, false));
+				ItemStack stack = itemHandler.extractItem(0, 64, false);
+				if (!playerIn.inventory.addItemStackToInventory(stack)) {
+					EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5F, pos.getY() + 1.0F, pos.getZ() + 0.5F, stack);
+					worldIn.spawnEntity(item);
+				}
 			}
 		}
 		return true;
@@ -145,7 +144,7 @@ public class BlockTable extends Block implements ITileEntityProvider {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		TileEntityTable tile = getTileEntity(world, pos);
+		TileEntityTable tile = this.getTileEntity(world, pos);
 		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
 		ItemStack stack = itemHandler.getStackInSlot(0);
 

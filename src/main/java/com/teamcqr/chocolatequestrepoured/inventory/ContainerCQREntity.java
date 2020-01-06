@@ -8,12 +8,12 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -29,19 +29,18 @@ public class ContainerCQREntity extends Container {
 
 		for (int i = 0; i < 3; i++) {
 			for (int j = 0; j < 9; j++) {
-				addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 48 + i * 18));
+				this.addSlotToContainer(new Slot(playerInv, j + i * 9 + 9, 8 + j * 18, 48 + i * 18));
 			}
 		}
 
 		for (int k = 0; k < 9; k++) {
-			addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 106));
+			this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 106));
 		}
 
 		this.addSlotToContainer(new SlotItemHandler(inventory, 0, 107, 8) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemArmor
-						&& ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.FEET;
+				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.FEET;
 			}
 
 			@Override
@@ -54,8 +53,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 1, 89, 8) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemArmor
-						&& ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.LEGS;
+				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.LEGS;
 			}
 
 			@Override
@@ -68,8 +66,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 71, 8) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemArmor
-						&& ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.CHEST;
+				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.CHEST;
 			}
 
 			@Override
@@ -82,8 +79,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(inventory, 3, 53, 8) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemArmor
-						&& ((ItemArmor) stack.getItem()).armorType == EntityEquipmentSlot.HEAD;
+				return true;
 			}
 
 			@Override

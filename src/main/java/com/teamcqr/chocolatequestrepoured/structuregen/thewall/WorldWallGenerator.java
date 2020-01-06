@@ -7,7 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPar
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartTower;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartWall;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -25,30 +25,29 @@ import net.minecraftforge.fml.common.IWorldGenerator;
 public class WorldWallGenerator implements IWorldGenerator {
 
 	public WorldWallGenerator() {
-		
+
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator,
-			IChunkProvider chunkProvider) {
-		if(world.isRemote) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		if (world.isRemote) {
 			return;
 		}
 		// Check if it is the wall region
-		if (isWallRegion(chunkX, chunkZ, world)) {
+		if (this.isWallRegion(chunkX, chunkZ, world)) {
 			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
 		}
 		// Z is the z value where the wall is -> generates the wall
-		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance())) {
+		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
-			if(biome instanceof BiomePlains || biome instanceof BiomeSnow) {
-				//Flag for the gate
+			if (biome instanceof BiomePlains || biome instanceof BiomeSnow) {
+				// Flag for the gate
 			}
 			IWallPart wallPart = null;
 			IWallPart railingPart = null;
 			// GENERATE THE WALL
 			// Check wether it should construct a wall part or a tower
-			if (chunkX % Reference.CONFIG_HELPER_INSTANCE.getWallTowerDistance() == 0) {
+			if (chunkX % CQRConfig.wall.towerDistance == 0) {
 				// Build tower
 				wallPart = new WallPartTower();
 				railingPart = new WallPartRailingTower();
@@ -66,32 +65,32 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 
 	}
-	
+
 	private boolean isWallRegion(int chunkX, int chunkZ, World world) {
-		//If the wall is even enabled -> continue
-		if(!Reference.CONFIG_HELPER_INSTANCE.buildWall()) {
+		// If the wall is even enabled -> continue
+		if (!CQRConfig.wall.enabled) {
 			return false;
 		}
-		//Wall is enabled -> check farther
-		//Now check if the world is the overworld...
-		if(world.provider.getDimension() != 0) {
+		// Wall is enabled -> check farther
+		// Now check if the world is the overworld...
+		if (world.provider.getDimension() != 0) {
 			return false;
 		}
-		//The world is the overworld....
-		//Now check the coordinates...
-		if(chunkZ >= 0) {
+		// The world is the overworld....
+		// Now check the coordinates...
+		if (chunkZ >= 0) {
 			return false;
 		}
-		//z is < 0 --> north
-		//Check if the coords are farther south than the wall
-		if(Math.abs(chunkZ) < Math.abs((Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance() -8))) {
+		// z is < 0 --> north
+		// Check if the coords are farther south than the wall
+		if (Math.abs(chunkZ) < Math.abs((CQRConfig.wall.distance - 8))) {
 			return false;
 		}
-		//Check if the coords are farther north than the wall
-		if(Math.abs(chunkZ) > Math.abs((Reference.CONFIG_HELPER_INSTANCE.getWallSpawnDistance() +8))) {
+		// Check if the coords are farther north than the wall
+		if (Math.abs(chunkZ) > Math.abs((CQRConfig.wall.distance + 8))) {
 			return false;
 		}
-		//It is in the region of the wall
+		// It is in the region of the wall
 		return true;
 	}
 

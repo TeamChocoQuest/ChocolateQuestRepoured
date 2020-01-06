@@ -1,126 +1,89 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityTameable;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemLead;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
-	//TODO: Save pet information on entity!!!
-	
-	EntityTameable pet = null;
-	
-	protected final int TAMEABLE_SEARCH_RANGE = 12; 
-	protected final int DISTANCE_TO_TAME = 4;
-	protected boolean tamedNLeashedPet = false;
-	
+	// TODO: Save pet information on entity!!!
+
+	protected static final double PET_SEARCH_RADIUS = 16.0D;
+	protected static final double DISTANCE_TO_PET = 2.0D;
+	protected static final double WALK_SPEED_TO_PET = 1.0D;
+
+	protected EntityTameable entityToTame = null;
+
 	public EntityAITameAndLeashPet(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if(!(entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() instanceof ItemLead || entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() instanceof ItemLead)) {
+		if (!(this.entity.getHeldItemMainhand().getItem() instanceof ItemLead || this.entity.getHeldItemOffhand().getItem() instanceof ItemLead)) {
 			return false;
 		}
-		
-		List<Entity> tameablesInRange = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(
-				entity.getPosition().subtract(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE)),
-				entity.getPosition().add(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE))),
-				TargetUtil.PREDICATE_PETS);
-		//System.out.println("Result of AI: " + ((!tameablesInRange.isEmpty())));
-		return (!tameablesInRange.isEmpty());
+		if (this.entity.ticksExisted % 4 == 0) {
+			Vec3d vec1 = this.entity.getPositionVector().addVector(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
+			Vec3d vec2 = this.entity.getPositionVector().subtract(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
+			AxisAlignedBB aabb = new AxisAlignedBB(vec1, vec2);
+			List<EntityTameable> possiblePets = this.entity.world.getEntitiesWithinAABB(EntityTameable.class, aabb, TargetUtil.PREDICATE_PETS);
+			if (!possiblePets.isEmpty()) {
+				this.entityToTame = TargetUtil.getNearestEntity(this.entity, possiblePets);
+				return true;
+			}
+		}
+		return false;
 	}
+
 	@Override
 	public boolean shouldContinueExecuting() {
-		return shouldExecute();
+		if (!(this.entity.getHeldItemMainhand().getItem() instanceof ItemLead || this.entity.getHeldItemOffhand().getItem() instanceof ItemLead)) {
+			return false;
+		}
+		if (this.entityToTame == null) {
+			return false;
+		}
+		if (!this.entityToTame.isEntityAlive()) {
+			return false;
+		}
+		if (this.entityToTame.getOwnerId() != null) {
+			return false;
+		}
+		if (this.entity.getDistance(this.entityToTame) > 16.0D) {
+			return false;
+		}
+		return this.entity.hasPath();
 	}
-	
+
+	@Override
+	public void startExecuting() {
+		if (this.entity.getDistance(this.entityToTame) > DISTANCE_TO_PET) {
+			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToTame, WALK_SPEED_TO_PET);
+		}
+	}
+
 	@Override
 	public void updateTask() {
-		if(pet == null || pet.isDead) {
-			tamedNLeashedPet = false;
-		}
-		if(!shouldContinueExecuting() || entity == null || (pet != null && pet.isDead) || entity.isDead) {
-			return;
-		}
-		if(tamedNLeashedPet) {
-			return;
-		}
-		if(pet != null && !pet.isDead) {
-			if(entity.getDistance(pet) > DISTANCE_TO_TAME) {
-				entity.getNavigator().tryMoveToEntityLiving(pet, 0.6D);
-				pet.getNavigator().tryMoveToEntityLiving(entity, 0.65D);
-			} else {
-				pet.setTamed(true);
-				pet.setOwnerId(entity.getPersistentID());
-				pet.setLeashHolder(entity, true);
-				tamedNLeashedPet = false;
-			}
+		if (this.entity.getDistance(this.entityToTame) > DISTANCE_TO_PET) {
+			this.entity.getNavigator().tryMoveToEntityLiving(this.entityToTame, WALK_SPEED_TO_PET);
 		} else {
-			List<Entity> tameablesInRange = entity.getEntityWorld().getEntitiesInAABBexcluding(entity, new AxisAlignedBB(
-					entity.getPosition().subtract(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE)),
-					entity.getPosition().add(new Vec3i(TAMEABLE_SEARCH_RANGE, TAMEABLE_SEARCH_RANGE /3, TAMEABLE_SEARCH_RANGE))),
-					TargetUtil.PREDICATE_PETS);
-			if(!tameablesInRange.isEmpty()) {
-				List<Entity> tmp = new ArrayList<Entity>();
-				tameablesInRange.forEach(new Consumer<Entity>() {
-
-					@Override
-					public void accept(Entity t) {
-						if(!(t instanceof EntityTameable)) {
-							return;
-						}
-						if(pet == null && entity != null && t != null && ((EntityTameable)t).getOwnerId() != null && ((EntityTameable)t).getOwnerId().equals(entity.getPersistentID())) {
-							pet = (EntityTameable) t;
-							return;
-						}
-						if(((EntityTameable)t).getOwner() != null) {
-							return;
-						}
-						if(entity.getNavigator().getPathToEntityLiving(t) != null) {
-							tmp.add(t);
-						}
-					}
-				});
-				tameablesInRange = tmp;
-				if(!tameablesInRange.isEmpty()) {
-					tameablesInRange.sort(new Comparator<Entity>() {
-
-						@Override
-						public int compare(Entity e1, Entity e2) {
-							float distE1 = entity.getDistance(e1);
-							float distE2 = entity.getDistance(e2);
-
-							if(distE1 < distE2) {
-								return -1;
-							}
-							if(distE1 > distE2) {
-								return 1;
-							}
-							return 0;
-						}
-					});
-					pet = (EntityTameable) tameablesInRange.get(0);
-				}
-			}
+			this.entityToTame.setOwnerId(this.entity.getPersistentID());
+			this.entityToTame.setTamed(true);
+			this.entityToTame.setLeashHolder(this.entity, true);
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
-		pet = null;
-		tamedNLeashedPet = false;
+		this.entityToTame = null;
+		this.entity.getNavigator().clearPath();
 	}
 
 }

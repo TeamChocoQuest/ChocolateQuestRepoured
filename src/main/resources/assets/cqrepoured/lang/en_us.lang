@@ -271,6 +271,7 @@ item.great_sword_iron.name=Iron Greatsword
 
 //Spears
 item.spear_diamond.name=Diamond Spear
+item.spear_iron.name=Iron Spear
 
 //Staves
 item.staff.name=Staff
@@ -517,7 +518,7 @@ description.badge.name=Creative only item. Right-click with it to open a GUI, it
 description.backpack.name=Right-click to open.
 description.alchemy_bag.name=Right-click to open. Only stores potions.
 //description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
-//description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
+description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 //description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 //description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 //description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
@@ -531,40 +532,41 @@ description.staff_wind.name=Whatever this is supposed to do, it doesn't work yet
 description.staff_poison.name=Whatever this is supposed to do, it doesn't work yet. #TODO
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
+description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
 
 // Mobs
-entity.boarman.name=Boarman
-entity.dummy.name=Dummy
-entity.dwarf.name=Dwarf
-entity.enderman.name=Enderman
-entity.goblin.name=Goblin
-entity.golem.name=Golem
-entity.illager.name=Illager
-entity.npc.name=NPC
-entity.mandril.name=Mandril
-entity.minotaur.name=Minotaur
-entity.mummy.name=Mummy
-entity.ogre.name=Ogre
-entity.orc.name=Orc
-entity.pirate.name=Pirate
-entity.skeleton.name=Skeleton
-entity.spectre.name=Spectre
-entity.triton.name=Triton
-entity.walker.name=Abyss Walker
-entity.zombie.name=Zombie
+entity.cqr_boarman.name=Boarman
+entity.cqr_dummy.name=Dummy
+entity.cqr_dwarf.name=Dwarf
+entity.cqr_enderman.name=Enderman
+entity.cqr_goblin.name=Goblin
+entity.cqr_golem.name=Golem
+entity.cqr_illager.name=Illager
+entity.cqr_npc.name=NPC
+entity.cqr_mandril.name=Mandril
+entity.cqr_minotaur.name=Minotaur
+entity.cqr_mummy.name=Mummy
+entity.cqr_ogre.name=Ogre
+entity.cqr_orc.name=Orc
+entity.cqr_pirate.name=Pirate
+entity.cqr_skeleton.name=Skeleton
+entity.cqr_spectre.name=Spectre
+entity.cqr_triton.name=Triton
+entity.cqr_walker.name=Abyss Walker
+entity.cqr_zombie.name=Zombie
 
 //Mounts
-entity.giant_endermite.name=Giant Endermite
-entity.giant_silverfish.name=Giant Silverfish
-entity.giant_silverfish1.name=Giant Lava Silverfish
-entity.giant_silverfish2.name=Giant Swamp Silverfish
+entity.cqr_giant_endermite.name=Giant Endermite
+entity.cqr_giant_silverfish.name=Giant Silverfish
+entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
+entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
 
 // Bosses
-entity.nether_dragon.name=Nether Dragon
-entity.giant_tortoise.name=Giant Tortoise
-entity.lich.name=Lich
-entity.necromancer.name=Necromancer
-entity.boarmage.name=Boarmage
+entity.cqr_nether_dragon.name=Nether Dragon
+entity.cqr_giant_tortoise.name=Giant Tortoise
+entity.cqr_lich.name=Lich
+entity.cqr_necromancer.name=Necromancer
+entity.cqr_boar_mage.name=Boarmage
 
 //Misc Entities
-entity.summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram

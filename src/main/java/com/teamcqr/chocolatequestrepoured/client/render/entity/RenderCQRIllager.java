@@ -1,15 +1,59 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import java.util.ArrayList;
+import java.util.List;
 
-import net.minecraft.client.model.ModelBiped;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.EnumHandSide;
 
 public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 
-	public RenderCQRIllager(RenderManager rendermanagerIn) {
-		//TODO: Own illager model that extends the biped model
-		super(rendermanagerIn, new ModelBiped(), 0.5F, "entity_mob_cqrillager", 1.0D, 1.0D);
+	public RenderCQRIllager(RenderManager rendermanager) {
+		super(rendermanager, new ModelCQRIllager(0F), 0.5F, "entity_mob_cqrillager", 1.0D, 1.0D);
+
+		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
+		for (LayerRenderer<?> layer : this.layerRenderers) {
+			if (layer instanceof LayerBipedArmor || layer instanceof LayerHeldItem) {
+				toRemove.add(layer);
+			}
+		}
+		for (LayerRenderer<?> layer : toRemove) {
+			this.layerRenderers.remove(layer);
+		}
+		// DONE: Illager armor
+		/*
+		 * this.addLayer(new LayerBipedArmor(this) {
+		 * 
+		 * @Override
+		 * protected void initArmor() {
+		 * this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
+		 * this.modelArmor = new ModelCQRIllagerArmor(1.0F);
+		 * }
+		 * });
+		 */
+
+		this.addLayer(new LayerCQRHeldItem(this) {
+			@Override
+			public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+				if (entity instanceof EntityCQRIllager && (((EntityCQRIllager) entity).isAggressive() || ((EntityCQRIllager) entity).getHeldItemMainhand().getItem() instanceof ItemPotionHealing)) {
+					super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
+				}
+			}
+
+			@Override
+			protected void translateToHand(EnumHandSide hand) {
+				((ModelCQRIllager) this.livingEntityRenderer.getMainModel()).getArm(hand).postRender(0.0625F);
+			}
+		});
 	}
 
 }

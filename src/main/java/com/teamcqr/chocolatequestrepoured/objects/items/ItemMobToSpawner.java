@@ -3,8 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -14,45 +15,42 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class ItemMobToSpawner extends Item {
-	
+
 	public ItemMobToSpawner() {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-		IBlockState state = player.getEntityWorld().getBlockState(pos);
-		return !canHarvestBlock(state);
+	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+		Block block = world.getBlockState(pos).getBlock();
+		return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
 	}
-	
+
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		this.spawnAdditions(entity.world, entity);
-		SpawnerFactory.placeSpawner(new Entity[] {entity}, false, null, player.getEntityWorld(), entity.getPosition());
-		entity.setDead();
+		if (player.isCreative()) {
+			if (!player.world.isRemote && !(entity instanceof MultiPartEntityPart)) {
+				SpawnerFactory.placeSpawner(new Entity[] { entity }, false, null, player.world, new BlockPos(entity));
+				entity.setDead();
+				for (Entity passenger : entity.getPassengers()) {
+					passenger.setDead();
+				}
+				this.spawnAdditions(entity.world, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ);
+			}
+			return true;
+		}
 		return false;
 	}
-	
-	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
-		return blockIn.getBlock() != ModBlocks.SPAWNER && blockIn.getBlock() != Blocks.MOB_SPAWNER;
-	}
-	
-	private void spawnAdditions(World worldIn, Entity entity)
-	{
-		for(int x = 0; x < 5; x++)
-    	{
-    		worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 0.5D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, 0, 0, 0);
-    	}
-		for(int x = 0; x < 10; x++) {
-			worldIn.spawnParticle(EnumParticleTypes.LAVA, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 0.5D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, 0, 0, 0);
+
+	private void spawnAdditions(World world, double x, double y, double z) {
+		if (!world.isRemote) {
+			((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, x, y, z, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			((WorldServer) world).spawnParticle(EnumParticleTypes.LAVA, x, y, z, 8, 0.25D, 0.25D, 0.25D, 0.0D);
+			world.playSound(null, x, y, z, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.PLAYERS, 0.8F, 0.6F + itemRand.nextFloat() * 0.2F);
 		}
-		
-		worldIn.playSound(entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 	}
-	
-	
 
 }

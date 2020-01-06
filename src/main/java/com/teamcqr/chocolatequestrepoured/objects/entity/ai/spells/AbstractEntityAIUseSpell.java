@@ -24,6 +24,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	public boolean shouldExecute() {
 		if (this.entity.getAttackTarget() == null) {
 			this.entity.setSpellCasting(false);
@@ -43,6 +44,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
+	@Override
 	public boolean shouldContinueExecuting() {
 		return this.entity.getAttackTarget() != null && this.spellWarmup > 0;
 	}
@@ -50,6 +52,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting() {
 		this.entity.setSpellCasting(false);
 		this.spellWarmup = this.getCastWarmupTime();
@@ -61,12 +64,13 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			this.entity.playSound(soundevent, 1.0F, 1.0F);
 		}
 
-		this.entity.setSpellType(getSpellType());
+		this.entity.setSpellType(this.getSpellType());
 	}
 
 	/**
 	 * Keep ticking a continuous task that has already been started
 	 */
+	@Override
 	public void updateTask() {
 		this.entity.setSpellCasting(true);
 		--this.spellWarmup;
@@ -77,6 +81,11 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 			this.entity.setSpellType(ESpellType.NONE);
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);
 		}
+	}
+
+	@Override
+	public boolean isInterruptible() {
+		return false;
 	}
 
 	protected abstract void castSpell();

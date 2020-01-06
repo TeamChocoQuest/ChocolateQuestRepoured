@@ -9,9 +9,9 @@ public class BlockPillarDungeonBrick extends BlockRotatedPillar {
 	public BlockPillarDungeonBrick() {
 		super(Material.ROCK);
 
-		setSoundType(SoundType.STONE);
-		setBlockUnbreakable();
-		setHardness(Float.MAX_VALUE);
+		this.setSoundType(SoundType.STONE);
+		this.setBlockUnbreakable();
+		this.setHardness(Float.MAX_VALUE);
 	}
 
 }

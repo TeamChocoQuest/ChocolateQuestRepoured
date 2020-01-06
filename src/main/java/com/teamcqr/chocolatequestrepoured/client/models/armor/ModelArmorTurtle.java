@@ -28,12 +28,12 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 		this.tassetLeft.mirror = true;
 		this.tassetLeft.setRotationPoint(2.0F, -1.2F, -0.2F);
 		this.tassetLeft.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
-		this.setRotateAngle(tassetLeft, 0.0F, 0.0F, -0.4363323129985824F);
+		this.setRotateAngle(this.tassetLeft, 0.0F, 0.0F, -0.4363323129985824F);
 
 		this.tassetRight = new ModelRenderer(this, 0, 52);
 		this.tassetRight.setRotationPoint(-2.0F, -1.2F, -0.2F);
 		this.tassetRight.addBox(-1.5F, 0.0F, -2.5F, 3, 7, 5, scale);
-		this.setRotateAngle(tassetRight, 0.0F, 0.0F, 0.4363323129985824F);
+		this.setRotateAngle(this.tassetRight, 0.0F, 0.0F, 0.4363323129985824F);
 
 		this.bipedHead = new ModelRenderer(this, 30, 46);
 		this.bipedHead.setRotationPoint(0F, 0F, 0F);

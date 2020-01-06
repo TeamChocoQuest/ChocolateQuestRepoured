@@ -6,39 +6,34 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 
-public class RoomDecorTableMedium extends RoomDecorBlocks
-{
+public class RoomDecorTableMedium extends RoomDecorBlocks {
 
-    public RoomDecorTableMedium()
-    {
-        super();
-    }
+	public RoomDecorTableMedium() {
+		super();
+	}
 
-    @Override
-    protected void makeSchematic()
-    {
-        schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
-        schematic.add(new DecoBlockOffset(1, 0, 0, Blocks.OAK_FENCE));
-        schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.OAK_FENCE));
-        schematic.add(new DecoBlockOffset(1, 0, 1, Blocks.OAK_FENCE));
+	@Override
+	protected void makeSchematic() {
+		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockOffset(1, 0, 0, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockOffset(1, 0, 1, Blocks.OAK_FENCE));
 
-        schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_SLAB));
-        schematic.add(new DecoBlockOffset(1, 1, 0, Blocks.WOODEN_SLAB));
-        schematic.add(new DecoBlockOffset(0, 1, 1, Blocks.WOODEN_SLAB));
-        schematic.add(new DecoBlockOffset(1, 1, 1, Blocks.WOODEN_SLAB));
-    }
+		this.schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockOffset(1, 1, 0, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockOffset(0, 1, 1, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockOffset(1, 1, 1, Blocks.WOODEN_SLAB));
+	}
 
-    @Override
-    protected IBlockState getRotatedBlockState(Block block, EnumFacing side)
-    {
-        IBlockState result = block.getDefaultState();
+	@Override
+	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
+		IBlockState result = block.getDefaultState();
 
-        if (block == Blocks.WOODEN_SLAB)
-        {
-            result = result.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-        }
+		if (block == Blocks.WOODEN_SLAB) {
+			result = result.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
+		}
 
-        return result;
-    }
+		return result;
+	}
 
 }
