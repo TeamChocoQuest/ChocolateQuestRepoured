@@ -52,32 +52,32 @@ public class WeightedItemStack {
 	}
 
 	public void addToTable(LootTable table, int indx) {
-		LootCondition condition = new RandomChance(new Float(weight) /100F);
-		LootCondition[] conditionA = new LootCondition[] {condition};
-		
-		LootCondition condition2 = new RandomChance(1F- (new Float(weight) /100F));
-		LootCondition[] conditionB = new LootCondition[] {condition2};
-		
+		LootCondition condition = new RandomChance(new Float(this.weight) / 100F);
+		LootCondition[] conditionA = new LootCondition[] { condition };
+
+		LootCondition condition2 = new RandomChance(1F - (new Float(this.weight) / 100F));
+		LootCondition[] conditionB = new LootCondition[] { condition2 };
+
 		LootCondition condition3 = new RandomChance(1F);
-		LootCondition[] conditionC = new LootCondition[] {condition3};
-		
+		LootCondition[] conditionC = new LootCondition[] { condition3 };
+
 		ArrayList<LootFunction> functions = new ArrayList<>();
-		functions.add(new SetCount(null, new RandomValueRange(minCount, maxCount)));
-		if(enchant) {
-			if(treasure) {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl *2, maxLvl *2), true));
+		functions.add(new SetCount(null, new RandomValueRange(this.minCount, this.maxCount)));
+		if (this.enchant) {
+			if (this.treasure) {
+				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), true));
 			} else {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(minLvl, maxLvl), false));
+				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl, this.maxLvl), false));
 			}
 		}
-		
-		LootEntry entry = new LootEntryItem(Item.getByNameOrId(itemName), weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + itemName);
-		LootEntry entryEmpty = new LootEntryEmpty(100-weight, 0, conditionB, "entry_empty");
-		
-		LootEntry[] entryA = new LootEntry[] {entry, entryEmpty};
-		
+
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);
+		LootEntry entryEmpty = new LootEntryEmpty(100 - this.weight, 0, conditionB, "entry_empty");
+
+		LootEntry[] entryA = new LootEntry[] { entry, entryEmpty };
+
 		LootPool pool = new LootPool(entryA, conditionC, new RandomValueRange(1), new RandomValueRange(CQRConfig.general.maxLootTablePoolRolls), "item_" + indx);
-		
+
 		table.addPool(pool);
 	}
 

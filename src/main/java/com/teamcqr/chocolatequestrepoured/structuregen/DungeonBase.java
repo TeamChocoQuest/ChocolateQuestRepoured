@@ -12,6 +12,7 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -212,7 +213,7 @@ public class DungeonBase {
 			this.fisConfigFile = new FileInputStream(configFile);
 			prop.load(this.fisConfigFile);
 		} catch (FileNotFoundException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
+			CQRMain.logger.error("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
 			try {
 				this.fisConfigFile.close();
@@ -223,7 +224,7 @@ public class DungeonBase {
 			configFile = null;
 			this.registeredSuccessful = false;
 		} catch (IOException e) {
-			System.out.println("Unable to read config file: " + configFile.getName());
+			CQRMain.logger.error("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
 			try {
 				this.fisConfigFile.close();

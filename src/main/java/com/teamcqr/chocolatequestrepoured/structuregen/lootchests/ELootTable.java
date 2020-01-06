@@ -33,16 +33,25 @@ public enum ELootTable {
 	CQ_VANILLA_WOODLAND_MANSION(ModBlocks.EXPORTER_CHEST_VANILLA_MANSION, 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
 
 	// DONE: LOAD LOOT TABLES
-	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_VALUABLE, 0, "cq_treasure", registerChest("cq_treasure"), false), CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
-	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false), CQ_MATERIAL(ModBlocks.EXPORTER_CHEST_UTILITY, 3, "cq_material", registerChest("cq_material"), false),
+	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_VALUABLE, 0, "cq_treasure", registerChest("cq_treasure"), false),
+	CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
+	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false),
+	CQ_MATERIAL(ModBlocks.EXPORTER_CHEST_UTILITY, 3, "cq_material", registerChest("cq_material"), false),
 
-	CQ_CUSTOM_1(ModBlocks.EXPORTER_CHEST_CUSTOM_1, 18, "cq_custom_1", registerChest("custom/cq_1"), true), CQ_CUSTOM_2(ModBlocks.EXPORTER_CHEST_CUSTOM_2, 19, "cq_custom_2", registerChest("custom/cq_2"), true),
-	CQ_CUSTOM_3(ModBlocks.EXPORTER_CHEST_CUSTOM_3, 20, "cq_custom_3", registerChest("custom/cq_3"), true), CQ_CUSTOM_4(ModBlocks.EXPORTER_CHEST_CUSTOM_4, 21, "cq_custom_4", registerChest("custom/cq_4"), true),
-	CQ_CUSTOM_5(ModBlocks.EXPORTER_CHEST_CUSTOM_5, 22, "cq_custom_5", registerChest("custom/cq_5"), true), CQ_CUSTOM_6(ModBlocks.EXPORTER_CHEST_CUSTOM_6, 23, "cq_custom_6", registerChest("custom/cq_6"), true),
-	CQ_CUSTOM_7(ModBlocks.EXPORTER_CHEST_CUSTOM_7, 24, "cq_custom_7", registerChest("custom/cq_7"), true), CQ_CUSTOM_8(ModBlocks.EXPORTER_CHEST_CUSTOM_8, 25, "cq_custom_8", registerChest("custom/cq_8"), true),
-	CQ_CUSTOM_9(ModBlocks.EXPORTER_CHEST_CUSTOM_9, 26, "cq_custom_9", registerChest("custom/cq_9"), true), CQ_CUSTOM_10(ModBlocks.EXPORTER_CHEST_CUSTOM_10, 27, "cq_custom_10", registerChest("custom/cq_10"), true),
-	CQ_CUSTOM_11(ModBlocks.EXPORTER_CHEST_CUSTOM_11, 28, "cq_custom_11", registerChest("custom/cq_11"), true), CQ_CUSTOM_12(ModBlocks.EXPORTER_CHEST_CUSTOM_12, 29, "cq_custom_12", registerChest("custom/cq_12"), true),
-	CQ_CUSTOM_13(ModBlocks.EXPORTER_CHEST_CUSTOM_13, 30, "cq_custom_13", registerChest("custom/cq_13"), true), CQ_CUSTOM_14(ModBlocks.EXPORTER_CHEST_CUSTOM_14, 31, "cq_custom_14", registerChest("custom/cq_14"), true);
+	CQ_CUSTOM_1(ModBlocks.EXPORTER_CHEST_CUSTOM_1, 18, "cq_custom_1", registerChest("custom/cq_1"), true),
+	CQ_CUSTOM_2(ModBlocks.EXPORTER_CHEST_CUSTOM_2, 19, "cq_custom_2", registerChest("custom/cq_2"), true),
+	CQ_CUSTOM_3(ModBlocks.EXPORTER_CHEST_CUSTOM_3, 20, "cq_custom_3", registerChest("custom/cq_3"), true),
+	CQ_CUSTOM_4(ModBlocks.EXPORTER_CHEST_CUSTOM_4, 21, "cq_custom_4", registerChest("custom/cq_4"), true),
+	CQ_CUSTOM_5(ModBlocks.EXPORTER_CHEST_CUSTOM_5, 22, "cq_custom_5", registerChest("custom/cq_5"), true),
+	CQ_CUSTOM_6(ModBlocks.EXPORTER_CHEST_CUSTOM_6, 23, "cq_custom_6", registerChest("custom/cq_6"), true),
+	CQ_CUSTOM_7(ModBlocks.EXPORTER_CHEST_CUSTOM_7, 24, "cq_custom_7", registerChest("custom/cq_7"), true),
+	CQ_CUSTOM_8(ModBlocks.EXPORTER_CHEST_CUSTOM_8, 25, "cq_custom_8", registerChest("custom/cq_8"), true),
+	CQ_CUSTOM_9(ModBlocks.EXPORTER_CHEST_CUSTOM_9, 26, "cq_custom_9", registerChest("custom/cq_9"), true),
+	CQ_CUSTOM_10(ModBlocks.EXPORTER_CHEST_CUSTOM_10, 27, "cq_custom_10", registerChest("custom/cq_10"), true),
+	CQ_CUSTOM_11(ModBlocks.EXPORTER_CHEST_CUSTOM_11, 28, "cq_custom_11", registerChest("custom/cq_11"), true),
+	CQ_CUSTOM_12(ModBlocks.EXPORTER_CHEST_CUSTOM_12, 29, "cq_custom_12", registerChest("custom/cq_12"), true),
+	CQ_CUSTOM_13(ModBlocks.EXPORTER_CHEST_CUSTOM_13, 30, "cq_custom_13", registerChest("custom/cq_13"), true),
+	CQ_CUSTOM_14(ModBlocks.EXPORTER_CHEST_CUSTOM_14, 31, "cq_custom_14", registerChest("custom/cq_14"), true);
 
 	// CQ used:
 	// treasure -->diamond

@@ -88,14 +88,14 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			boolean isFirst = i == 0;
 			if (isFirst) {
 				stair = this.dungeon.getEntranceStair();
-				if(stair == null) {
-					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: " + getDungeon().getDungeonName());
+				if (stair == null) {
+					CQRMain.logger.error("No entrance stair rooms for Stronghold Open Dungeon: " + this.getDungeon().getDungeonName());
 					return;
 				}
 			} else {
 				stair = this.dungeon.getStairRoom();
-				if(stair == null) {
-					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: " + getDungeon().getDungeonName());
+				if (stair == null) {
+					CQRMain.logger.error("No stair rooms for Stronghold Open Dungeon: " + this.getDungeon().getDungeonName());
 					return;
 				}
 			}
@@ -122,8 +122,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		File building = this.dungeon.getEntranceBuilding();
-		if(building == null || dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
-			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + getDungeon().getDungeonName());
+		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
+			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
 			return;
 		}
 		CQStructure structure = new CQStructure(building, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
@@ -158,12 +158,12 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
 		// build all the structures in the map
 		for (StrongholdFloorOpen floor : this.floors) {
-			if(floor == null) {
+			if (floor == null) {
 				CQRMain.logger.error("Floor is null! Not generating it!");
 			} else {
 				try {
 					floor.buildWalls(world);
-				} catch(NullPointerException ex) {
+				} catch (NullPointerException ex) {
 					CQRMain.logger.error("Error whilst trying to construct wall in open stronghold at: X " + x + "  Y " + y + "  Z " + z);
 				}
 			}

@@ -66,11 +66,10 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	public boolean canRide() {
 		return false;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
 
 }
- 

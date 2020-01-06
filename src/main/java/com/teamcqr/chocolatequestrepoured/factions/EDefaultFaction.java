@@ -11,10 +11,12 @@ public enum EDefaultFaction {
 	// OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	INQUISITION(new String[] { "WALKERS", "ILLAGERS", "UNDEAD", "GOBLINS" }, new String[] { "DWARVES_AND_GOLEMS", "NPC", "VILLAGERS" }, EReputationState.NEUTRAL),
 	BEASTS(new String[] { "WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS", "UNDEAD" }, new String[] { "ENDERMEN", "PIRATE" }, EReputationState.ENEMY),
-	VILLAGERS(new String[] { "WALKERS", "UNDEAD", "ILLAGERS" }, new String[] { "NPC", "TRITONS", "PLAYERS" }, EReputationState.NEUTRAL), NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL, false),
+	VILLAGERS(new String[] { "WALKERS", "UNDEAD", "ILLAGERS" }, new String[] { "NPC", "TRITONS", "PLAYERS" }, EReputationState.NEUTRAL),
+	NEUTRAL(new String[] {}, new String[] {}, EReputationState.NEUTRAL, false),
 	TRITONS(new String[] { "WALKERS", "UNDEAD", "PIRATE", "ENDERMEN" }, new String[] { "NPC", "VILLAGERS" }, EReputationState.NEUTRAL),
 	ALL_ALLY(new String[] {}, new String[] { "UNDEAD", "PIRATE", "WALKERS", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "INQUISITION", "BEASTS", "VILLAGERS", "NEUTRAL", "TRITONS", "PLAYERS" }, EReputationState.NEUTRAL, false),
-	MOB_BATTLE_T1(new String[] { "MOB_BATTLE_T2" }, new String[] {}, EReputationState.ENEMY, false), MOB_BATTLE_T2(new String[] { "MOB_BATTLE_T1" }, new String[] {}, EReputationState.ALLY, false),
+	MOB_BATTLE_T1(new String[] { "MOB_BATTLE_T2" }, new String[] {}, EReputationState.ENEMY, false),
+	MOB_BATTLE_T2(new String[] { "MOB_BATTLE_T1" }, new String[] {}, EReputationState.ALLY, false),
 	PLAYERS(new String[] {}, new String[] { "VILLAGERS", "NPC" }, EReputationState.NEUTRAL, false),;
 
 	private String[] enemies;

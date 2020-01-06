@@ -31,7 +31,11 @@ public class ModSounds {
 
 		@SubscribeEvent
 		public static void registerSounds(RegistryEvent.Register<SoundEvent> event) {
-			final SoundEvent[] sounds = { createSoundEvent("item.gun.shoot"), createSoundEvent("item.magic"), createSoundEvent("entity.player.classic_hurt"), createSoundEvent("entity.nether_dragon.hurt"),
+			final SoundEvent[] sounds = {
+					createSoundEvent("item.gun.shoot"),
+					createSoundEvent("item.magic"),
+					createSoundEvent("entity.player.classic_hurt"),
+					createSoundEvent("entity.nether_dragon.hurt"),
 					createSoundEvent("entity.nether_dragon.death") };
 
 			IForgeRegistry<SoundEvent> registry = event.getRegistry();
