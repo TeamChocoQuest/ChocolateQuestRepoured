@@ -19,6 +19,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemSpawnEggCQR extends Item {
 
@@ -60,6 +62,7 @@ public class ItemSpawnEggCQR extends Item {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		return I18n.format("entity.cqr_" + this.entityName + ".name") + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.getName() + ")";
 	}
