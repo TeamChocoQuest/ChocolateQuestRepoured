@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.tileentity;
 
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,7 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class TileEntityForceFieldNexusRenderer extends TileEntitySpecialRenderer<TileEntityForceFieldNexus> {
 
 	private final ModelBase crystal = new ModelNexusCrystal();
-	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation("textures/entity/endercrystal/endercrystal.png");
+	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/nexus_crystal.png");
 	
 	@Override
 	public void render(TileEntityForceFieldNexus te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {

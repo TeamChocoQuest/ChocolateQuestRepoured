@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
@@ -49,8 +52,11 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Simply puts the structure at x,y,z
 		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
-
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world);
+		List<String> bosses = new ArrayList<>();
+		for(UUID id : structure.getBossIDs()) {
+			bosses.add(id.toString());
+		}
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world, bosses);
 		event.setShieldCorePosition(this.structure.getShieldCorePosition());
 		MinecraftForge.EVENT_BUS.post(event);
 	}

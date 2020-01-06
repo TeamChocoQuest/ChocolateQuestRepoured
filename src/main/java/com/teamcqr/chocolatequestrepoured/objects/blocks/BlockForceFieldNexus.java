@@ -16,6 +16,9 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,6 +28,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  * https://github.com/MrMarnic
  */
 public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
+	
+	protected final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1.75, 1);
 
 	public BlockForceFieldNexus(Material materialIn) {
 		super(materialIn);
@@ -42,6 +47,11 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		TileEntityForceFieldNexus tile = new TileEntityForceFieldNexus();
 		return tile;
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return BOUNDING_BOX;
 	}
 
 	/*

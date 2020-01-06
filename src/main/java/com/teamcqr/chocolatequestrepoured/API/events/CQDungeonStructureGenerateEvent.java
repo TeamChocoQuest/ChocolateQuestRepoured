@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.API.events;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -22,13 +24,19 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	private BlockPos dunSize;
 	@Nullable
 	private BlockPos shieldCorePosition = null;
+	private ArrayList<String> bossUUIDs = new ArrayList<>();
 	private World world;
 
-	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, World world) {
+	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, World world, List<String> uuids) {
 		this.generatedDungeon = dungeon;
 		this.dunPosition = position;
 		this.dunSize = size;
 		this.world = world;
+		bossUUIDs.addAll(uuids);
+	}
+	
+	public ArrayList<String> getBossIDs() {
+		return bossUUIDs;
 	}
 
 	public DungeonBase getDungeon() {

@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
@@ -210,6 +213,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		}
 		CQStructure structure = null;
 		// int filesInFolder = dungeon.getBuildingFolder().exists() && dungeon.getBuildingFolder().isDirectory() ? dungeon.getBuildingFolder().listFiles().length : -1;
+		List<String> bosses = new ArrayList<>();
 		for (BlockPos centerPos : this.gridPositions) {
 			// DONE: Choose a building, figure out the size, then build the platform and then the building
 
@@ -234,14 +238,16 @@ public class NetherCityGenerator implements IDungeonGenerator {
 						world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
 					}
 				});
-
+				for(UUID id : structure.getBossIDs()) {
+					bosses.add(id.toString());
+				}
 				structure.placeBlocksInWorld(world, centerPos.add(0, 1, 0), settings, EPosType.CENTER_XZ_LAYER);
 			}
 		}
 		BlockPos posLower = new BlockPos(this.minX - this.dungeon.getDistanceBetweenBuildingCenters(), y, this.minZ - this.dungeon.getDistanceBetweenBuildingCenters());
 		BlockPos posUpper = new BlockPos(this.maxX + this.dungeon.getDistanceBetweenBuildingCenters(), y + this.dungeon.getCaveHeight(), this.maxZ + this.dungeon.getDistanceBetweenBuildingCenters());
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
 		if (centralStructure != null) {
 			event.setShieldCorePosition(centralStructure.getShieldCorePosition());
 		}

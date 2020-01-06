@@ -351,7 +351,7 @@ public class VolcanoGeneratorWithMaps implements IDungeonGenerator {
 		// Protection for the volcano structure, not the dungeon itself
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world);
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world, new ArrayList<String>());
 		MinecraftForge.EVENT_BUS.post(event);
 
 		System.out.println("Tasks added to threads! They should execute now...");
