@@ -10,9 +10,13 @@ public enum ERoomTypeExtended {
 
 	UNSET(false, Rotation.NONE),
 
-	HALLWAY_NS(false, Rotation.NONE), HALLWAY_EW(false, Rotation.CLOCKWISE_90),
+	HALLWAY_NS(false, Rotation.NONE),
+	HALLWAY_EW(false, Rotation.CLOCKWISE_90),
 
-	CROSSING_ENW(false, Rotation.CLOCKWISE_180), CROSSING_NES(false, Rotation.CLOCKWISE_90), CROSSING_WSE(false, Rotation.NONE), CROSSING_NWS(false, Rotation.COUNTERCLOCKWISE_90),
+	CROSSING_ENW(false, Rotation.CLOCKWISE_180),
+	CROSSING_NES(false, Rotation.CLOCKWISE_90),
+	CROSSING_WSE(false, Rotation.NONE),
+	CROSSING_NWS(false, Rotation.COUNTERCLOCKWISE_90),
 
 	CROSSING_NESW(false, Rotation.NONE),
 
@@ -25,9 +29,15 @@ public enum ERoomTypeExtended {
 	 * #######
 	 * S
 	 */
-	ROOM_N(false, Rotation.NONE), ROOM_E(false, Rotation.CLOCKWISE_90), ROOM_S(false, Rotation.CLOCKWISE_180), ROOM_W(false, Rotation.COUNTERCLOCKWISE_90),
+	ROOM_N(false, Rotation.NONE),
+	ROOM_E(false, Rotation.CLOCKWISE_90),
+	ROOM_S(false, Rotation.CLOCKWISE_180),
+	ROOM_W(false, Rotation.COUNTERCLOCKWISE_90),
 
-	CURVE_NE(false, Rotation.CLOCKWISE_90), CURVE_ES(false, Rotation.NONE), CURVE_SW(false, Rotation.COUNTERCLOCKWISE_90), CURVE_WN(false, Rotation.CLOCKWISE_180);
+	CURVE_NE(false, Rotation.CLOCKWISE_90),
+	CURVE_ES(false, Rotation.NONE),
+	CURVE_SW(false, Rotation.COUNTERCLOCKWISE_90),
+	CURVE_WN(false, Rotation.CLOCKWISE_180);
 
 	private boolean mirror;
 	private Rotation rot;

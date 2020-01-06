@@ -34,19 +34,21 @@ public class ModelCQREndermanArmor extends ModelBiped {
 		this.bipedLeftLeg.mirror = true;
 		this.bipedLeftLeg.setRotationPoint(2.0F, -2.0F, 0.0F);
 	}
-	
+
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		/*this.bipedHead.render(scale);
-		this.bipedBody.render(scale);
-		
-		GlStateManager.pushMatrix();
-		GlStateManager.scale(1, 1.5, 1);
-		this.bipedRightArm.render(scale);
-		this.bipedRightLeg.render(scale);
-		this.bipedLeftArm.render(scale);
-		this.bipedLeftLeg.render(scale);
-		GlStateManager.popMatrix();*/
+		/*
+		 * this.bipedHead.render(scale);
+		 * this.bipedBody.render(scale);
+		 * 
+		 * GlStateManager.pushMatrix();
+		 * GlStateManager.scale(1, 1.5, 1);
+		 * this.bipedRightArm.render(scale);
+		 * this.bipedRightLeg.render(scale);
+		 * this.bipedLeftArm.render(scale);
+		 * this.bipedLeftLeg.render(scale);
+		 * GlStateManager.popMatrix();
+		 */
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	}
 

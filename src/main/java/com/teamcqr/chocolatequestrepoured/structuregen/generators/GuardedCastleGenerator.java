@@ -106,8 +106,8 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
-		if(centerStructure == null) {
-			CQRMain.logger.error("No center building for guarded castle: " + dungeon.getDungeonName());
+		if (this.centerStructure == null) {
+			CQRMain.logger.error("No center building for guarded castle: " + this.dungeon.getDungeonName());
 			return;
 		}
 		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
@@ -139,21 +139,21 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 					Rotation rot = Rotation.values()[new Random().nextInt(4)];
 					int sizeX = dungeonToSpawn.getSizeX();
 					int sizeZ = dungeonToSpawn.getSizeZ();
-					rotList.set(i, Rotation.NONE);
+					this.rotList.set(i, Rotation.NONE);
 					if (this.dungeon.rotateDungeon()) {
 						switch (rot) {
 						case CLOCKWISE_90:
 							xT -= sizeX;
-							rotList.set(i, Rotation.CLOCKWISE_90);
+							this.rotList.set(i, Rotation.CLOCKWISE_90);
 							break;
 						case CLOCKWISE_180:
 							xT -= sizeX;
 							zT -= sizeZ;
-							rotList.set(i, Rotation.CLOCKWISE_180);
+							this.rotList.set(i, Rotation.CLOCKWISE_180);
 							break;
 						case COUNTERCLOCKWISE_90:
 							zT -= sizeZ;
-							rotList.set(i, Rotation.COUNTERCLOCKWISE_90);
+							this.rotList.set(i, Rotation.COUNTERCLOCKWISE_90);
 							break;
 						default:
 							break;

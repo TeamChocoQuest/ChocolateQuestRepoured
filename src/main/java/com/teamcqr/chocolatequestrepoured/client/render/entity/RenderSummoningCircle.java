@@ -13,9 +13,12 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderSummoningCircle extends Render<EntitySummoningCircle> {
 
-	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] { new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/zombie.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/skeleton.png"), new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_skull.png"),
-			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_sword.png"), new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/meteor.png") };
+	public static final ResourceLocation[] TEXTURES = new ResourceLocation[] {
+			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/zombie.png"),
+			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/skeleton.png"),
+			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_skull.png"),
+			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/flying_sword.png"),
+			new ResourceLocation(Reference.MODID, "textures/entity/summoning_circles/meteor.png") };
 
 	private final ModelBase model;
 

@@ -177,7 +177,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		}
 		this.summonedMinions.add(summoned);
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;

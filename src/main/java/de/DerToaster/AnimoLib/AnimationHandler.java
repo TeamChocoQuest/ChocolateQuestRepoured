@@ -11,41 +11,41 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class AnimationHandler {
-	
+
 	private AnimationGroup current;
 	private final IAnimatedEntity entity;
 	private final ModelBase model;
 	private int animTick = 0;
 	private Map<String, AnimationGroup> animations = new HashMap<>();
-	
+
 	public AnimationHandler(IAnimatedEntity entity, ModelBase baseModel) {
 		this.entity = entity;
 		this.model = baseModel;
 	}
-	
+
 	@Nullable
 	public AnimationGroup getCurrentRunningAnimation() {
-		current = animations.getOrDefault(entity.getCurrentAnimation(), null);
-		return current;
+		this.current = this.animations.getOrDefault(this.entity.getCurrentAnimation(), null);
+		return this.current;
 	}
-	
+
 	public void registerAnimationGroup(AnimationGroup anim, String id) {
-		animations.put(id, anim);
+		this.animations.put(id, anim);
 	}
-	
+
 	public void onAnimationTick(int tick) {
-		if(current != null) {
-			if(tick > current.getEndTick()) {
-				current = null;
+		if (this.current != null) {
+			if (tick > this.current.getEndTick()) {
+				this.current = null;
 				return;
 			}
-			current.onAnimationTick(tick, model);
+			this.current.onAnimationTick(tick, this.model);
 		}
 	}
-	
+
 	public void onEntityTick() {
-		onAnimationTick(animTick);
-		animTick++;
+		this.onAnimationTick(this.animTick);
+		this.animTick++;
 	}
 
 }

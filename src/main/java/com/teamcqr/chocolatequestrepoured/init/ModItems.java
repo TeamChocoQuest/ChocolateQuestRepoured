@@ -8,7 +8,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
@@ -29,7 +28,19 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
-import com.teamcqr.chocolatequestrepoured.objects.items.*;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
@@ -250,7 +261,8 @@ public class ModItems {
 
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
-			final Item[] items = { setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25), "dagger_iron"),
+			final Item[] items = {
+					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25), "dagger_iron"),
 					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20), "dagger_diamond"),
 					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15), "dagger_ninja"),
 					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10), "dagger_monking"),
@@ -273,20 +285,28 @@ public class ModItems {
 					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 10F, -0.5F), "spear_diamond"),
 					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 10F, -0.5F), "spear_iron"),
 
-					setItemName(new ItemStaff(), "staff"), setItemName(new ItemStaffFire(), "staff_fire"),
-					setItemName(new ItemStaffVampiric(), "staff_vampiric"), setItemName(new ItemStaffWind(), "staff_wind"),
-					setItemName(new ItemStaffPoison(), "staff_poison"), setItemName(new ItemStaffHealing(), "staff_healing"),
-					setItemName(new ItemStaffThunder(), "staff_thunder"), setItemName(new ItemStaffSpider(), "staff_spider"),
+					setItemName(new ItemStaff(), "staff"),
+					setItemName(new ItemStaffFire(), "staff_fire"),
+					setItemName(new ItemStaffVampiric(), "staff_vampiric"),
+					setItemName(new ItemStaffWind(), "staff_wind"),
+					setItemName(new ItemStaffPoison(), "staff_poison"),
+					setItemName(new ItemStaffHealing(), "staff_healing"),
+					setItemName(new ItemStaffThunder(), "staff_thunder"),
+					setItemName(new ItemStaffSpider(), "staff_spider"),
 					setItemName(new ItemStaffGun(), "staff_gun"),
 
-					setItemName(new ItemRevolver(), "revolver"), setItemName(new ItemRevolver(), "captain_revolver"),
+					setItemName(new ItemRevolver(), "revolver"),
+					setItemName(new ItemRevolver(), "captain_revolver"),
 					setItemName(new ItemMusket(), "musket"),
 					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_IRON), "musket_dagger_iron"),
 					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_DIAMOND), "musket_dagger_diamond"),
 					setItemName(new ItemMusketKnife(ModMaterials.ToolMaterials.TOOL_MUSKET_MONKING), "musket_dagger_monking"),
-					setItemName(new ItemBullet(), "bullet_iron"), setItemName(new ItemBullet(), "bullet_gold"),
-					setItemName(new ItemBullet(), "bullet_diamond"), setItemName(new ItemBullet(), "bullet_fire"),
-					setItemName(new ItemCannonBall(), "cannon_ball"), setItemName(new ItemFlamethrower(), "flamethrower"),
+					setItemName(new ItemBullet(), "bullet_iron"),
+					setItemName(new ItemBullet(), "bullet_gold"),
+					setItemName(new ItemBullet(), "bullet_diamond"),
+					setItemName(new ItemBullet(), "bullet_fire"),
+					setItemName(new ItemCannonBall(), "cannon_ball"),
+					setItemName(new ItemFlamethrower(), "flamethrower"),
 
 					setItemName(new ItemHookshotBase(), "hookshoot"),
 
@@ -339,13 +359,24 @@ public class ModItems {
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.LEGS), "leggings_iron_dyable"),
 					setItemName(new ItemArmorDyable(ModMaterials.ArmorMaterials.IRON_DYABLE, -1, EntityEquipmentSlot.FEET), "boots_iron_dyable"),
 
-					setItemName(new Item(), "scale_turtle"), setItemName(new Item(), "leather_bull"), setItemName(new Item(), "horn_bull"), setItemName(new Item(), "ball_slime"), setItemName(new Item(), "leather_spider"),
-					setItemName(new Item(), "bone_monking"), setItemName(new Item(), "giant_spider_poison"), setItemName(new ItemGoldenFeather(), "feather_golden"),
+					setItemName(new Item(), "scale_turtle"),
+					setItemName(new Item(), "leather_bull"),
+					setItemName(new Item(), "horn_bull"),
+					setItemName(new Item(), "ball_slime"),
+					setItemName(new Item(), "leather_spider"),
+					setItemName(new Item(), "bone_monking"),
+					setItemName(new Item(), "giant_spider_poison"),
+					setItemName(new ItemGoldenFeather(), "feather_golden"),
 
-					setItemName(new ItemPotionHealing(), "potion_healing"), setItemName(new ItemTeleportStone(), "teleport_stone"), setItemName(new ItemSoulBottle(), "soul_bottle"),
-					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"), setItemName(new ItemBadge(), "badge"), setItemName(new ItemAlchemyBag(), "alchemy_bag"),
+					setItemName(new ItemPotionHealing(), "potion_healing"),
+					setItemName(new ItemTeleportStone(), "teleport_stone"),
+					setItemName(new ItemSoulBottle(), "soul_bottle"),
+					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"),
+					setItemName(new ItemBadge(), "badge"),
+					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
-					setItemName(new ItemStructureSelector(), "structure_selector"), setItemName(new ItemSpawnerConverter(), "spawner_converter") };
+					setItemName(new ItemStructureSelector(), "structure_selector"),
+					setItemName(new ItemSpawnerConverter(), "spawner_converter") };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
 
