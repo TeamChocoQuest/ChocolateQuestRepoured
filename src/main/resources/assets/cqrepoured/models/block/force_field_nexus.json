@@ -2,8 +2,9 @@
 	"__comment": "Designed by DerToaster98 with Cubik Studio - https://cubik.studio",
 	"parent": "block/block",
 	"textures": {
-		"particle": "cqrepoured:blocks/obsidian",
-		"texture": "cqrepoured:blocks/obsidian",
+		"particle": "minecraft:blocks/obsidian",
+		"texture": "minecraft:blocks/obsidian",
+		"texture2": "minecraft:blocks/end_bricks",
 		"texture3": "cqrepoured:blocks/table"
 	},
 	"elements": [ 	 
@@ -187,6 +188,19 @@
 				"south": { "uv": [ 0, 7, 1.125, 11 ], "texture": "#texture" },
 				"west": { "uv": [ 6.5, 7, 9.5, 11 ], "texture": "#texture" },
 				"east": { "uv": [ 6.5, 7, 9.5, 11 ], "texture": "#texture" }
+			}
+		},
+		{
+			"__comment": "Plateau",
+			"from": [ 0, 0, 0 ],
+			"to": [ 16, 8, 16 ],
+			"faces": {
+				"down": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture2" },
+				"up": { "uv": [ 0, 0, 16, 16 ], "texture": "#texture2" },
+				"north": { "uv": [ 0, 0, 16, 8 ], "texture": "#texture2" },
+				"south": { "uv": [ 0, 0, 16, 8 ], "texture": "#texture2" },
+				"west": { "uv": [ 0, 0, 16, 8 ], "texture": "#texture2" },
+				"east": { "uv": [ 0, 0, 16, 8 ], "texture": "#texture2" }
 			}
 		}
 	],
