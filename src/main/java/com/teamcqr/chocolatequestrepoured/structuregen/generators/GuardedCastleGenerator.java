@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
@@ -46,7 +47,8 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 	private List<Rotation> rotList = new ArrayList<Rotation>();
 
 	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
-
+	private BlockPos shieldPos = null;
+	
 	public GuardedCastleGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
 	}
@@ -119,6 +121,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y, z /*- (centerDun.getSizeZ() /2)*/);
 
 		this.toGenerate.put(centerDun, cenPos);
+		this.shieldPos = centerDun.getShieldCorePosition();
 
 		PlateauBuilder platform = new PlateauBuilder();
 		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -202,20 +205,53 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			plcmnt.setIntegrity(1.0f);
 
 			int index = 1;
+			BlockPos posLower = new BlockPos(x,y,z);
+			BlockPos posUpper = new BlockPos(x,y,z);
+			List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
 				BlockPos pos = this.toGenerate.get(structure);
+				int X = posLower.getX();
+				int Y = posLower.getY();
+				int Z = posLower.getZ();
+				if(pos.getX() < X) {
+					X = pos.getX();
+				}
+				if(pos.getY() < Y) {
+					X = pos.getY();
+				}
+				if(pos.getZ() < Z) {
+					X = pos.getZ();
+				}
+				posLower = new BlockPos(X,Y,Z);
+				
+				int xm = posUpper.getX();
+				int ym = posUpper.getY();
+				int zm = posUpper.getZ();
+				if(pos.getX() + structure.getSizeX() > xm) {
+					xm = pos.getX() + structure.getSizeX();
+				}
+				if(pos.getY() + structure.getSizeY() > ym) {
+					ym = pos.getY() + structure.getSizeY();
+				}
+				if(pos.getZ() + structure.getSizeZ() > zm) {
+					zm = pos.getZ() + structure.getSizeZ();
+				}
+				posUpper = new BlockPos(X,Y,Z);
 
 				plcmnt.setRotation(this.rotList.get(index - 1));
 
 				structure.placeBlocksInWorld(world, pos, plcmnt, EPosType.DEFAULT);
-
-				CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeX(), structure.getSizeY(), structure.getSizeZ()), world);
-				event.setShieldCorePosition(structure.getShieldCorePosition());
-				MinecraftForge.EVENT_BUS.post(event);
+				for(UUID id : structure.getBossIDs()) {
+					bosses.add(id.toString());
+				}
 
 				index++;
 			}
+			
+			CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
+			event.setShieldCorePosition(shieldPos);
+			MinecraftForge.EVENT_BUS.post(event);
 		}
 	}
 
