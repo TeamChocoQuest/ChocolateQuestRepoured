@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -65,7 +66,8 @@ public class CastleGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		this.roomHelper.generate(world, this.dungeon);
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world);
+		//TODO: Add the UUID of the boss as string to the array list below
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, new ArrayList<String>());
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 
