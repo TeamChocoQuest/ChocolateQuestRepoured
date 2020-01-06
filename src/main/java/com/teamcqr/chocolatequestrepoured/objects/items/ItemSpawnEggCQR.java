@@ -61,7 +61,7 @@ public class ItemSpawnEggCQR extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.getName() + ")";
+		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.name() + ")";
 	}
 
 	private void setEquipment(AbstractEntityCQR entity) {
