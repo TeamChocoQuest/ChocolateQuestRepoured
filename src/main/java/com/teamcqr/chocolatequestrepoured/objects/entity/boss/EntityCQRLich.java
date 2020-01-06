@@ -168,7 +168,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 			this.currentPhylacteryPosition = NBTUtil.getPosFromTag(compound.getCompoundTag("currentPhylactery"));
 		}
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;

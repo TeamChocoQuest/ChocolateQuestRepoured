@@ -50,7 +50,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean PercentageRandom(int number, Random rdm) {
-		if(number >= 100) {
+		if (number >= 100) {
 			return true;
 		}
 		int rdmNmbr = rdm.nextInt(100) + 1;
@@ -95,9 +95,11 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
-		/*if (Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
-			return true;
-		}*/
+		/*
+		 * if (Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
+		 * return true;
+		 * }
+		 */
 		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
 		chunkX -= spawnChunk.x;
 		chunkZ -= spawnChunk.z;

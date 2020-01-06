@@ -7,7 +7,6 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -18,6 +17,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 
 public class ItemSpawnEggCQR extends Item {
@@ -61,7 +61,7 @@ public class ItemSpawnEggCQR extends Item {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.format("entity.cqr_" + this.entityName + ".name") + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.getName() + ")";
+		return I18n.translateToLocal("entity.cqr_" + this.entityName + ".name").trim() + " (" + this.mainhand.getDisplayName() + ", " + this.offhand.getDisplayName() + ", " + this.armor.getName() + ")";
 	}
 
 	private void setEquipment(AbstractEntityCQR entity) {

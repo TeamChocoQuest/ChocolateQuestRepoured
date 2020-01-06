@@ -40,9 +40,11 @@ import net.minecraft.world.World;
 public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 
 	public enum EDragonMovementState {
-		CHARGING, FLYING,
+		CHARGING,
+		FLYING,
 		// When it is flying up or down, it will spiral up or down
-		FLYING_UPWARDS, FLYING_DOWNWARDS
+		FLYING_UPWARDS,
+		FLYING_DOWNWARDS
 	}
 
 	public enum ENetherDragonAttacks {
@@ -410,7 +412,7 @@ public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntity
 	public boolean canRide() {
 		return false;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;

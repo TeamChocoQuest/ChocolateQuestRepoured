@@ -31,13 +31,24 @@ public enum EBanners {
 	// GERMANY(EnumDyeColor.RED, new BannerPattern[] {BannerPattern.STRIPE_MIDDLE, BannerPattern.STRIPE_CENTER, BannerPattern.STRAIGHT_CROSS, BannerPattern.CIRCLE_MIDDLE, BannerPattern.STRAIGHT_CROSS}, new EnumDyeColor[]
 	// {EnumDyeColor.WHITE, EnumDyeColor.WHITE, EnumDyeColor.BLACK, EnumDyeColor.WHITE, EnumDyeColor.BLACK}, "Germany"),
 	ILLAGER_BANNER(EnumDyeColor.WHITE,
-			new BannerPattern[] { EBannerPatternsCQ.CQ_BLANK.getPattern(), BannerPattern.RHOMBUS_MIDDLE, BannerPattern.STRIPE_BOTTOM, BannerPattern.STRIPE_CENTER, BannerPattern.BORDER, BannerPattern.STRIPE_MIDDLE,
+			new BannerPattern[] {
+					EBannerPatternsCQ.CQ_BLANK.getPattern(),
+					BannerPattern.RHOMBUS_MIDDLE,
+					BannerPattern.STRIPE_BOTTOM,
+					BannerPattern.STRIPE_CENTER,
+					BannerPattern.BORDER,
+					BannerPattern.STRIPE_MIDDLE,
 					BannerPattern.HALF_HORIZONTAL },
 			new EnumDyeColor[] { EnumDyeColor.WHITE, EnumDyeColor.RED, EnumDyeColor.SILVER, EnumDyeColor.GRAY, EnumDyeColor.SILVER, EnumDyeColor.BLACK, EnumDyeColor.SILVER }, "Pillagers"),
 
 	WALKER_ORDO(EnumDyeColor.WHITE,
-			new BannerPattern[] { EBannerPatternsCQ.CQ_BLANK.getPattern(), EBannerPatternsCQ.WALKER_BORDER.getPattern(), EBannerPatternsCQ.WALKER_BORDER.getPattern(), EBannerPatternsCQ.WALKER_BACKGROUND.getPattern(),
-					EBannerPatternsCQ.WALKER_INNER_BORDER.getPattern(), EBannerPatternsCQ.WALKER_SKULL.getPattern() },
+			new BannerPattern[] {
+					EBannerPatternsCQ.CQ_BLANK.getPattern(),
+					EBannerPatternsCQ.WALKER_BORDER.getPattern(),
+					EBannerPatternsCQ.WALKER_BORDER.getPattern(),
+					EBannerPatternsCQ.WALKER_BACKGROUND.getPattern(),
+					EBannerPatternsCQ.WALKER_INNER_BORDER.getPattern(),
+					EBannerPatternsCQ.WALKER_SKULL.getPattern() },
 			new EnumDyeColor[] { EnumDyeColor.WHITE, EnumDyeColor.PURPLE, EnumDyeColor.PURPLE, EnumDyeColor.BLACK, EnumDyeColor.GRAY, EnumDyeColor.BLACK, }, "Abyss Walker Flag");
 
 	private BannerPattern[] patternList;

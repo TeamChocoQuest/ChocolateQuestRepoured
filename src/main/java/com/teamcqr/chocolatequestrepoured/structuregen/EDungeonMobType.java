@@ -31,12 +31,22 @@ public enum EDungeonMobType {
 	OGRE(new ResourceLocation(Reference.MODID, "ogre"), null, null),
 	TRITON(new ResourceLocation(Reference.MODID, "triton"), null, null);
 
-	static final int[] countMapping = new int[] { 1, 2, 1,
+	static final int[] countMapping = new int[] {
+			1,
+			2,
+			1,
 			// 3,
-			1, 1, 1 };
-	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] { new EDungeonMobType[] { SKELETON }, new EDungeonMobType[] { ZOMBIE, MUMMY }, new EDungeonMobType[] { ILLAGER },
+			1,
+			1,
+			1 };
+	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
+			new EDungeonMobType[] { SKELETON },
+			new EDungeonMobType[] { ZOMBIE, MUMMY },
+			new EDungeonMobType[] { ILLAGER },
 			// new EDungeonMobType[] {GOBLIN, ORC, OGRE},
-			new EDungeonMobType[] { SPECTER }, new EDungeonMobType[] { MINOTAUR }, new EDungeonMobType[] { ENDERMAN }, };
+			new EDungeonMobType[] { SPECTER },
+			new EDungeonMobType[] { MINOTAUR },
+			new EDungeonMobType[] { ENDERMAN }, };
 
 	private ResourceLocation resLoc;
 	private ResourceLocation bossResLoc;

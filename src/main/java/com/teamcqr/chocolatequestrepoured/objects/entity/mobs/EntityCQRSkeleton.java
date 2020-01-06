@@ -48,22 +48,22 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	public boolean canRide() {
 		return true;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
-	
+
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_SKELETON_HURT;
 	}
-	
+
 	@Override
 	protected SoundEvent getAmbientSound() {
 		return SoundEvents.ENTITY_SKELETON_AMBIENT;
 	}
-	
+
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SKELETON_DEATH;

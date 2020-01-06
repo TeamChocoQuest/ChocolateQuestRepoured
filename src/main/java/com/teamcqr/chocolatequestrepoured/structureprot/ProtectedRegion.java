@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
  * @author jdawg3636
  *         GitHub: https://github.com/jdawg3636
  *
- * @version 23.07.19
+ * @version 05.01.20
  */
 public class ProtectedRegion implements Serializable {
 
@@ -28,7 +28,7 @@ public class ProtectedRegion implements Serializable {
 	private transient BlockPos NWCorner;
 	private transient BlockPos SECorner;
 
-	// Dependencies (Things that will remove ProtectedRegion if killed/destroyed)
+	// Dependencies (Things that will remove ProtectedRegion if all are killed/destroyed)
 	private transient ArrayList<String> entityDependencies = new ArrayList<>(); // Stores UUIDs as Strings for ease of serialization
 	private transient ArrayList<BlockPos> blockDependencies = new ArrayList<>();
 
@@ -39,7 +39,7 @@ public class ProtectedRegion implements Serializable {
 	 * Constructors
 	 */
 
-	// Contains all available region settings
+	// Verbose
 	public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, ArrayList<String> entityDependenciesAsUUIDStrings, ArrayList<BlockPos> blockDependencies, HashMap<String, Boolean> settingsOverrides) {
 		// Region Data
 		this.UUID = UUID;
@@ -79,7 +79,7 @@ public class ProtectedRegion implements Serializable {
 		}
 	}
 
-	// Contains only region data and uses default values for all dependency and protection settings
+	// Minimal
 	public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner) {
 		this.UUID = UUID;
 		this.NWCorner = NWCorner;
@@ -182,12 +182,26 @@ public class ProtectedRegion implements Serializable {
 		this.entityDependencies.add(entityUUID);
 	}
 
+	public void removeEntityDependency(String entityUUID) {
+		this.entityDependencies.remove(entityUUID);
+		if (this.entityDependencies.size() == 0 && this.blockDependencies.size() == 0) {
+			ProtectionHandler.getInstance().deregister(this);
+		}
+	}
+
 	public ArrayList<String> getEntityDependenciesAsUUIDs() {
 		return this.entityDependencies;
 	}
 
 	public void addBlockDependency(BlockPos positionOfBlock) {
 		this.blockDependencies.add(positionOfBlock);
+	}
+
+	public void removeBlockDependency(BlockPos toBeRemoved) {
+		this.blockDependencies.remove(toBeRemoved);
+		if (this.blockDependencies.size() == 0 && this.entityDependencies.size() == 0) {
+			ProtectionHandler.getInstance().deregister(this);
+		}
 	}
 
 	public ArrayList<BlockPos> getBlockDependencies() {

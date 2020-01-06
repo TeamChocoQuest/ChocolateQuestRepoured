@@ -82,17 +82,17 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				// Now check if the dungeon is far away enough from the last one
 				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0) && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
 					Random rdm = new Random(getSeed(world, chunkX, chunkZ));
-					
+
 					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world, dungeonSeparation) || this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
-						
-						//Overall dungeon spawn chance
-						if(!DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rdm)) {
+
+						// Overall dungeon spawn chance
+						if (!DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rdm)) {
 							return;
 						}
-						
+
 						List<DungeonBase> availableDungeons = new ArrayList<>(this.dungeonRegistry.getDungeonsForBiome(biome));
 						final boolean wallFlag = behindWall;
-						//Sort the list; all dungeons that dont fit -> get out!
+						// Sort the list; all dungeons that dont fit -> get out!
 						int maxChance = 0;
 						availableDungeons.removeIf(new Predicate<DungeonBase>() {
 
@@ -106,25 +106,25 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 										break;
 									}
 								}
-								if(dimensionFail) {
+								if (dimensionFail) {
 									return true;
 								}
 								if (!wallFlag && t.doesSpawnOnlyBehindWall()) {
 									return true;
 								}
-								if(t.getSpawnChance() <= 0) {
+								if (t.getSpawnChance() <= 0) {
 									return true;
 								}
 								// TODO: Check if dungeon is unique or every structure should generate once and
 								return false;
 							}
 						});
-						//Calculate maxChance
-						for(DungeonBase t : availableDungeons) {
+						// Calculate maxChance
+						for (DungeonBase t : availableDungeons) {
 							maxChance += t.getSpawnChance();
 						}
-						//Dungeon spawning
-						if(!availableDungeons.isEmpty()) {
+						// Dungeon spawning
+						if (!availableDungeons.isEmpty()) {
 							double o = random.nextDouble() * maxChance;
 							for (DungeonBase generator : availableDungeons) {
 								o -= generator.getSpawnChance();

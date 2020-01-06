@@ -80,7 +80,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 		for (int i = 0; i < buildings; i++) {
 			File building = null;
 			int counter = this.structureFolder.listFiles(FileIOUtil.getNBTFileFilter()).length;
-			while(building == null) {
+			while (building == null) {
 				counter--;
 				building = this.getStructureFileFromDirectory(this.structureFolder);/* getRandomBuilding(random); */
 			}
@@ -88,7 +88,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 			building = this.centerStructureFolder;
 			building = null;
 			counter = this.centerStructureFolder.listFiles(FileIOUtil.getNBTFileFilter()).length;
-			while(building == null && counter >= 0) {
+			while (building == null && counter >= 0) {
 				counter--;
 				this.getStructureFileFromDirectory(this.centerStructureFolder);
 			}
