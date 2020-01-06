@@ -145,27 +145,6 @@ public class ProtectionHandler {
             }
         }
     }
-	@SubscribeEvent
-	public void eventHandleEntityDeath(LivingDeathEvent e) {
-		// Loop through all dims present in registry
-		for (int dimID : this.activeRegions.keySet()) {
-			// Temp var
-			ArrayList<ProtectedRegion> toRemoveFromRegistry = new ArrayList<>();
-			// Loop through all registered regions for dim
-			for (ProtectedRegion region : this.activeRegions.get(dimID)) {
-				for (BlockPos pos : region.getBlockDependencies()) {
-					if (pos.equals(e.getEntityLiving().getPosition())) {
-						toRemoveFromRegistry.add(region);
-					}
-				}
-			}
-			// Remove flagged regions from registry
-			ArrayList<ProtectedRegion> updated = this.activeRegions.get(dimID);
-			for (ProtectedRegion pr : toRemoveFromRegistry) {
-				updated.remove(pr);
-			}
-		}
-	}
 
 	@SubscribeEvent
 	public void eventHandleBlockBreak(BlockEvent.BreakEvent e) {
@@ -185,35 +164,6 @@ public class ProtectionHandler {
 					}
 				}
 
-                // Check if already handled
-                if(isBlockDependency) {
-                    // noop
-                }
-                // Noop if global setting disabled
-                else if(!region.settings.get("preventBlockBreak")) {
-                    // noop
-                }
-                // Noop if in creative mode and specific setting disabled
-                else if(!region.settings.get("preventBlockBreakCreative") && e.getPlayer().isCreative()) {
-                    // noop
-                }
-                // Noop if different dim
-                else if(dimID != e.getWorld().provider.getDimension()) {
-                    // noop
-                }
-                // Noop if block globally exempt
-                else if(getGlobalProtectionExemptBlockTypes().contains(e.getState().getBlock())) {
-                    // noop
-                }
-                // Otherwise check break pos and cancel if overlapping
-                else if(region.checkIfBlockPosInRegion(e.getPos())) {
-                	if(e.getState().getBlock() != Blocks.MOB_SPAWNER) {
-                		e.setCanceled(true);
-                	}
-                }
-
-            }
-        }
 				// Check if already handled
 				if (isBlockDependency) {
 					// noop
@@ -246,6 +196,7 @@ public class ProtectionHandler {
 		}
 
 	}
+
 
 	@SubscribeEvent
 	public void eventHandleBlockPlace(BlockEvent.PlaceEvent e) {
