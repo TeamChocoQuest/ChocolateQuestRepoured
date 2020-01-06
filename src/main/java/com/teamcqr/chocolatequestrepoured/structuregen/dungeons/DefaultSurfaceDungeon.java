@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.DefaultSurfaceGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -78,8 +79,8 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 				y += Math.abs(this.yOffset);
 			}
 
-			System.out.println("Placing dungeon: " + this.name);
-			System.out.println("Generating structure " + structureF.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
+			CQRMain.logger.info("Placing dungeon: " + this.name);
+			CQRMain.logger.info("Generating structure " + structureF.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 			DefaultSurfaceGenerator generator = new DefaultSurfaceGenerator(this, structure, settings);
 			generator.generate(world, chunk, x, y, z);
 		}
