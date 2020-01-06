@@ -14,22 +14,18 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.ForgeHooksClient;
 
-public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntityTable> 
-{
+public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntityTable> {
 	@Override
-	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) 
-	{
+	public void render(TileEntityTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
 		ItemStack stack = te.inventory.getStackInSlot(0);
 		float rotation = te.getRotation();
-		
-		if(!stack.isEmpty())
-		{
+
+		if (!stack.isEmpty()) {
 			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, te.getWorld(), null);
 			model = ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false);
-			
-			if(model.isGui3d())
-			{
+
+			if (model.isGui3d()) {
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
 				GlStateManager.enableBlend();
@@ -39,17 +35,16 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 				GlStateManager.translate(x + 0.5, y + 1.25, z + 0.5);
 				GlStateManager.scale(0.5F, 0.5F, 0.5F);
 				GlStateManager.rotate(rotation, 0, -1, 0);
-		
+
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
-		
+
 				GlStateManager.popMatrix();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.disableBlend();
 			}
-			
-			else
-			{
+
+			else {
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1f);
 				GlStateManager.enableBlend();
@@ -60,14 +55,14 @@ public class TileEntityTableRenderer extends TileEntitySpecialRenderer<TileEntit
 				GlStateManager.rotate(90F, 1, 0, 0);
 				GlStateManager.rotate(rotation, 0, 0, 1);
 				GlStateManager.scale(0.7F, 0.7F, 0.7F);
-		
+
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
-		
+
 				GlStateManager.popMatrix();
 				GlStateManager.disableRescaleNormal();
 				GlStateManager.disableBlend();
 			}
-		}		
+		}
 	}
 }

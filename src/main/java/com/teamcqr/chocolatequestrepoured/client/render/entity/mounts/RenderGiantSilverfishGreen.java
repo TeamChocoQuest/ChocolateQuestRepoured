@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderGiantSilverfishGreen extends RenderLiving<EntityGiantSilverfishGreen> {
-	
+
 	static ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/mounts/giant_silverfish_green.png");
 
 	public RenderGiantSilverfishGreen(RenderManager rendermanagerIn) {

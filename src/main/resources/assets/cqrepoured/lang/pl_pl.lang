@@ -363,7 +363,7 @@ description.badge.name=Przedmiot dostępny tylko na kreatywie. LPM na mobie by o
 description.backpack.name=PPM by otworzyć.
 description.alchemy_bag.name=PPM by otworzyć. Przechowuje tylko mikstury.
 //description.woodshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na drewno, zostaniesz do niego przyciągnięty.
-//description.hookshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
+description.hookshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
 //description.longshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
 //description.manualhook.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
 //description.spidershot.name=PPM by wystrzelić sieć. Jeśli sieć natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
@@ -377,6 +377,7 @@ description.staff_wind.name=Cokolwiek to robi, jeszcze nie działa. #TODO
 description.staff_poison.name=Cokolwiek to robi, jeszcze nie działa.. #TODO
 description.staff.name=Ni ma tu nic #TODO
 description.staff_thunder.name=Ni ma tu nic #TODO
+description.spear_diamond.name=Ni ma tu nic #TODO
 
 // Mobs
-entity.EntityCQRZombie.name=Zombi(CQR)
+entity.cqr_zombie.name=Zombi(CQR)

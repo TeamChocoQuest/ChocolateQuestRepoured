@@ -5,6 +5,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.network.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -36,6 +37,8 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 
 @EventBusSubscriber
 public class EventsHandler {
@@ -51,9 +54,11 @@ public class EventsHandler {
 
 			try {
 				LootTableLoader.fillLootTable(table, lootTable);
-				/*if(table.equals(ELootTable.CQ_EQUIPMENT)) {
-					System.out.println(lootTable.toString());
-				}*/
+				/*
+				 * if(table.equals(ELootTable.CQ_EQUIPMENT)) {
+				 * System.out.println(lootTable.toString());
+				 * }
+				 */
 			} catch (Exception ex) {
 				System.err.println("Unable to fill loot table " + event.getName());
 				ex.printStackTrace();
@@ -72,9 +77,7 @@ public class EventsHandler {
 			float amount = event.getAmount();
 			World world = player.world;
 
-			if (player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER_KING
-					|| player.getHeldItemMainhand().getItem() != ModItems.SWORD_WALKER
-					|| player.getRidingEntity() != null || attacker == null) {
+			if (player.getActiveItemStack().getItem() != ModItems.SHIELD_WALKER_KING || player.getHeldItemMainhand().getItem() != ModItems.SWORD_WALKER || player.getRidingEntity() != null || attacker == null) {
 				return;
 			}
 
@@ -96,11 +99,8 @@ public class EventsHandler {
 			BlockPos ep = new BlockPos(i, j, k);
 			BlockPos ep1 = new BlockPos(i, j + 1, k);
 
-			if (world.getCollisionBoxes(player, player.getEntityBoundingBox()).size() == 0
-					&& !world.containsAnyLiquid(attacker.getEntityBoundingBox()) && player.isActiveItemStackBlocking()
-					&& player.getDistanceSq(attacker) >= 25.0D) {
-				if (world.getBlockState(ep).getBlock().isPassable(world, ep)
-						&& world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
+			if (world.getCollisionBoxes(player, player.getEntityBoundingBox()).size() == 0 && !world.containsAnyLiquid(attacker.getEntityBoundingBox()) && player.isActiveItemStackBlocking() && player.getDistanceSq(attacker) >= 25.0D) {
+				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
 					tep = true;
 				} else {
 					tep = false;
@@ -110,17 +110,14 @@ public class EventsHandler {
 			}
 
 			if (tep) {
-				if (world.getBlockState(ep).getBlock().isPassable(world, ep)
-						&& world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
+				if (world.getBlockState(ep).getBlock().isPassable(world, ep) && world.getBlockState(ep1).getBlock().isPassable(world, ep1)) {
 					if (player instanceof EntityPlayerMP) {
 						EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
 						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
-						ParticlesMessageToClient packet = new ParticlesMessageToClient(playerMP.getPositionVector(), 24,
-								12);
+						ParticlesMessageToClient packet = new ParticlesMessageToClient(playerMP.getPositionVector(), 24, 12);
 						CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(playerMP));
-						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER,
-								1.0F, 1.0F);
+						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
 					event.setCanceled(true);
 					tep = false;
@@ -148,35 +145,34 @@ public class EventsHandler {
 
 				if (stack != null) {
 					if (!entity.world.isRemote) {
-						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(),
-								entity.posY, entity.posZ + rand.nextDouble(), stack));
+						entity.world.spawnEntity(new EntityItem(entity.world, entity.posX + rand.nextDouble(), entity.posY, entity.posZ + rand.nextDouble(), stack));
 					}
 				}
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e) {
 		if (!e.getWorld().isRemote) {
 			CQRDataFileManager.getInstance().handleWorldLoad(e.getWorld());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
 		if (!e.getWorld().isRemote) {
 			CQRDataFileManager.getInstance().handleWorldSaving(e.getWorld());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onDungeonGenerate(CQDungeonStructureGenerateEvent e) {
-		if(!e.getWorld().isRemote) {
+		if (!e.getWorld().isRemote) {
 			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getDungeon(), e.getPos());
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
 		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(Reference.MODID, "armor_coloring"));
@@ -187,7 +183,7 @@ public class EventsHandler {
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
 			CQRDataFileManager.getInstance().handleWorldUnload(e.getWorld());
-			
+
 			// Stop export threads
 			if (!CQStructure.runningExportThreads.isEmpty()) {
 				for (Thread t : CQStructure.runningExportThreads) {
@@ -200,6 +196,22 @@ public class EventsHandler {
 				CQStructure.runningExportThreads.clear();
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLogin(PlayerLoggedInEvent event) {
+		if (event.isCanceled()) {
+			return;
+		}
+		FactionRegistry.instance().handlePlayerLogin(event);
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLogout(PlayerLoggedOutEvent event) {
+		if (event.isCanceled()) {
+			return;
+		}
+		FactionRegistry.instance().handlePlayerLogout(event);
 	}
 
 }

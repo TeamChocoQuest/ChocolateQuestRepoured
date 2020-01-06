@@ -13,7 +13,6 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.MobEffects;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -25,6 +24,7 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 		super(worldIn);
 	}
 
+	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 0.9D));
@@ -43,6 +43,7 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 		return null;
 	}
 
+	@Override
 	@Nullable
 	public Entity getControllingPassenger() {
 		return this.getPassengers().isEmpty() ? null : (Entity) this.getPassengers().get(0);
@@ -74,69 +75,44 @@ public abstract class EntityCQRMountBase extends EntityAnimal {
 	@Override
 	public void travel(float strafe, float vertical, float forward) {
 		if (this.isBeingRidden() && this.canBeSteered()) {
-			EntityLivingBase entitylivingbase = (EntityLivingBase) this.getControllingPassenger();
-			this.rotationYaw = entitylivingbase.rotationYaw;
+			EntityLivingBase entity = (EntityLivingBase) this.getControllingPassenger();// this.getPassengers().isEmpty() ? null : (Entity)this.getPassengers().get(0);
+			this.rotationYaw = entity.rotationYaw;
 			this.prevRotationYaw = this.rotationYaw;
-			this.rotationPitch = entitylivingbase.rotationPitch * 0.5F;
+			this.rotationPitch = entity.rotationPitch * 0.5F;
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			this.renderYawOffset = this.rotationYaw;
-			this.rotationYawHead = this.renderYawOffset;
-			strafe = entitylivingbase.moveStrafing * 0.5F;
-			forward = entitylivingbase.moveForward;
-			vertical = entitylivingbase.moveVertical;
-
-			if (forward <= 0.0F) {
-				forward *= 0.25F;
-			}
-
-			if (this.onGround) {
-				this.motionY = 0.5F;
-
-				if (this.isPotionActive(MobEffects.JUMP_BOOST)) {
-					this.motionY += (double) ((float) (this.getActivePotionEffect(MobEffects.JUMP_BOOST).getAmplifier()
-							+ 1) * 0.1F);
-				}
-
-				this.setJumping(true);
-				this.isAirBorne = true;
-
-				if (forward > 0.0F) {
-					float f = MathHelper.sin(this.rotationYaw * 0.017453292F);
-					float f1 = MathHelper.cos(this.rotationYaw * 0.017453292F);
-					this.motionX += (double) (-0.4F * f);
-					this.motionZ += (double) (0.4F * f1);
-				}
-
-			}
-
+			this.rotationYawHead = this.rotationYaw;
+			this.stepHeight = 1.0F;
 			this.jumpMovementFactor = this.getAIMoveSpeed() * 0.1F;
 
+			float v = 0.0F;
+			if (this.isInWater() || this.isInLava()) {
+				v = vertical * 0.5F;
+			}
 			if (this.canPassengerSteer()) {
-				this.setAIMoveSpeed(
-						(float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
-				super.travel(strafe, vertical, forward);
-			} else if (entitylivingbase instanceof EntityPlayer) {
+				float f = (float) this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 0.5F;
+
+				this.setAIMoveSpeed(f);
+				super.travel(entity.moveStrafing * f, v, entity.moveForward * f);
+			} else {
 				this.motionX = 0.0D;
 				this.motionY = 0.0D;
 				this.motionZ = 0.0D;
 			}
 
-			if (this.onGround) {
-				this.setJumping(false);
-			}
-
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double d1 = this.posX - this.prevPosX;
 			double d0 = this.posZ - this.prevPosZ;
-			float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
+			float f1 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
 
-			if (f2 > 1.0F) {
-				f2 = 1.0F;
+			if (f1 > 1.0F) {
+				f1 = 1.0F;
 			}
 
-			this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
+			this.limbSwingAmount += (f1 - this.limbSwingAmount) * 0.4F;
 			this.limbSwing += this.limbSwingAmount;
 		} else {
+			this.stepHeight = 0.5F;
 			this.jumpMovementFactor = 0.02F;
 			super.travel(strafe, vertical, forward);
 		}

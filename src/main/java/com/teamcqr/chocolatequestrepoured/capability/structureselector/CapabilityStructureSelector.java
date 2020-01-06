@@ -12,7 +12,7 @@ public class CapabilityStructureSelector {
 	}
 
 	public BlockPos getPos1() {
-		return pos1;
+		return this.pos1;
 	}
 
 	public void setPos2(BlockPos pos) {
@@ -20,7 +20,19 @@ public class CapabilityStructureSelector {
 	}
 
 	public BlockPos getPos2() {
-		return pos2;
+		return this.pos2;
+	}
+
+	public boolean hasPos1() {
+		return this.pos1 != null;
+	}
+
+	public boolean hasPos2() {
+		return this.pos2 != null;
+	}
+
+	public boolean hasPos1AndPos2() {
+		return this.hasPos1() && this.hasPos2();
 	}
 
 }

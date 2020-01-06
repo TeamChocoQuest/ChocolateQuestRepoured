@@ -15,23 +15,24 @@ public class EntityAIArmorSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	public boolean shouldExecute() {
-		if(super.shouldExecute() && !entity.isMagicArmorActive()) {
-			if(!(entity instanceof EntityCQRLich)) {
-				//TODO: Add staff that can apply armor
-			} return true;
+		if (super.shouldExecute() && !this.entity.isMagicArmorActive()) {
+			if (!(this.entity instanceof EntityCQRLich)) {
+				// TODO: Add staff that can apply armor
+			}
+			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	protected void castSpell() {
-		if(entity instanceof EntityCQRLich) {
-			EntityCQRLich lich = (EntityCQRLich)entity;
-			BlockPos pos = lich.getPosition();//.add(0,1,0);
+		if (this.entity instanceof EntityCQRLich) {
+			EntityCQRLich lich = (EntityCQRLich) this.entity;
+			BlockPos pos = lich.getPosition();// .add(0,1,0);
 			lich.world.setBlockState(pos, ModBlocks.PHYLACTERY.getDefaultState());
 			lich.setCurrentPhylacteryBlock(pos);
 		} else {
-			entity.setMagicArmorCooldown(300);
+			this.entity.setMagicArmorCooldown(300);
 		}
 
 	}
@@ -40,7 +41,7 @@ public class EntityAIArmorSpell extends AbstractEntityAIUseSpell {
 	protected int getCastingTime() {
 		return 200;
 	}
-	
+
 	@Override
 	protected int getCastWarmupTime() {
 		return 100;
@@ -53,7 +54,7 @@ public class EntityAIArmorSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected SoundEvent getSpellPrepareSound() {
-		return getSpellType().getSpellSound();
+		return this.getSpellType().getSpellSound();
 	}
 
 	@Override

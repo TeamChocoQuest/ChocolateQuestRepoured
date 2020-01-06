@@ -26,7 +26,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemPotionHealing extends Item {
 
 	public ItemPotionHealing() {
-		setMaxStackSize(16);
+		this.setMaxStackSize(16);
 	}
 
 	@Override

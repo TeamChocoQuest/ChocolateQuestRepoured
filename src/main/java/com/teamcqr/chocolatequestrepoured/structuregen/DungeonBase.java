@@ -13,9 +13,9 @@ import java.util.Random;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -31,18 +31,18 @@ import net.minecraft.world.chunk.Chunk;
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonBase {
-	
+
 	protected IDungeonGenerator generator;
 	private boolean replaceBanners = false;
-	//private CQFaction owningFaction
+	// private CQFaction owningFaction
 	protected String name;
 	private Item placeItem;
 	protected UUID dunID;
 	protected int underGroundOffset = 0;
 	protected int chance;
 	protected int yOffset = 0;
-	protected int[] allowedDims = {0};
-	protected String[] modDependencies = {Reference.MODID};
+	protected int[] allowedDims = { 0 };
+	protected String[] modDependencies = { Reference.MODID };
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
 	protected boolean protectFromDestruction = false;
@@ -57,27 +57,28 @@ public class DungeonBase {
 	private BlockPos lockedPos = null;
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
-	
+	private boolean rotateDungeon = true;
+
 	public void generate(BlockPos pos, World world) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
 		Random rdm = new Random();
 		rdm.setSeed(WorldDungeonGenerator.getSeed(world, chunk.x, chunk.z));
-		generate(pos.getX(), pos.getZ(), world, chunk, rdm);
+		this.generate(pos.getX(), pos.getZ(), world, chunk, rdm);
 	}
-	
+
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		this.dunID = MathHelper.getRandomUUID();
 	}
-	
+
 	public DungeonBase(File configFile) {
-		//DONE: read values from file
-		Properties prop = loadConfig(configFile);
-		
-		if(prop != null) {
+		// DONE: read values from file
+		Properties prop = this.loadConfig(configFile);
+
+		if (prop != null) {
 			this.name = configFile.getName().replace(".properties", "");
 			this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 20);
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
-			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
+			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[] { 0 });
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", true);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
@@ -86,29 +87,30 @@ public class DungeonBase {
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
-			this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[] {Reference.MODID});
-			if(this.modDependencies.length <= 0 || this.modDependencies == null) {
-				this.modDependencies = new String[] {Reference.MODID};
+			this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[] { Reference.MODID });
+			if (this.modDependencies.length <= 0 || this.modDependencies == null) {
+				this.modDependencies = new String[] { Reference.MODID };
 			}
-		
+
 			this.buildSupportPlatform = PropertyFileHelper.getBooleanProperty(prop, "buildsupportplatform", false);
-			if(this.buildSupportPlatform) {
+			if (this.buildSupportPlatform) {
 				this.supportBlock = PropertyFileHelper.getBlockProperty(prop, "supportblock", Blocks.STONE);
 				this.supportTopBlock = PropertyFileHelper.getBlockProperty(prop, "supportblocktop", Blocks.GRASS);
 			}
 			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
-			
-			closeConfigFile();
+			this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
+
+			this.closeConfigFile();
 		} else {
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		}
 	}
-	
+
 	public void closeConfigFile() {
 		try {
-			fisConfigFile.close();
+			this.fisConfigFile.close();
 		} catch (IOException e) {
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 			e.printStackTrace();
 		}
 	}
@@ -116,41 +118,47 @@ public class DungeonBase {
 	public IDungeonGenerator getGenerator() {
 		return this.generator;
 	}
+
 	public Item getDungeonPlaceItem() {
 		return this.placeItem;
 	}
+
 	public String getDungeonName() {
 		return this.name;
 	}
+
 	public int getSpawnChance() {
 		return this.chance;
 	}
+
 	public int[] getAllowedDimensions() {
 		return this.allowedDims;
 	}
+
 	public boolean isUnique() {
 		return this.unique;
 	}
 
 	public Block getSupportTopBlock() {
-		return supportTopBlock;
+		return this.supportTopBlock;
 	}
 
 	public Block getSupportBlock() {
-		return supportBlock;
+		return this.supportBlock;
 	}
 
 	public int getUnderGroundOffset() {
-		return underGroundOffset;
+		return this.underGroundOffset;
 	}
 
 	public BlockPos getLockedPos() {
-		return lockedPos;
+		return this.lockedPos;
 	}
 
 	public boolean isPosLocked() {
-		return isPosLocked;
+		return this.isPosLocked;
 	}
+
 	public int getIconID() {
 		return this.iconID;
 	}
@@ -159,12 +167,15 @@ public class DungeonBase {
 		this.lockedPos = pos;
 		this.isPosLocked = locked;
 	}
+
 	public boolean isRegisteredSuccessful() {
 		return this.registeredSuccessful;
 	}
+
 	public boolean doBuildSupportPlatform() {
 		return this.buildSupportPlatform;
 	}
+
 	public Block getCoverBlock() {
 		return this.coverBlock;
 	}
@@ -172,100 +183,108 @@ public class DungeonBase {
 	public UUID getDungeonID() {
 		return this.dunID;
 	}
+
 	public boolean isProtectedFromModifications() {
 		return this.protectFromDestruction;
 	}
+
 	public boolean isCoverBlockEnabled() {
 		return this.useCoverBlock;
 	}
+
 	public boolean doesSpawnOnlyBehindWall() {
 		return this.spawnBehindWall;
 	}
+
 	public boolean replaceBanners() {
 		return this.replaceBanners;
 	}
-	
+
+	public boolean rotateDungeon() {
+		return this.rotateDungeon;
+	}
+
 	public Properties loadConfig(File configFile) {
 		Properties prop = new Properties();
-		fisConfigFile = null;
-		registeredSuccessful = true;
+		this.fisConfigFile = null;
+		this.registeredSuccessful = true;
 		try {
-			fisConfigFile = new FileInputStream(configFile);
-			prop.load(fisConfigFile);
+			this.fisConfigFile = new FileInputStream(configFile);
+			prop.load(this.fisConfigFile);
 		} catch (FileNotFoundException e) {
 			System.out.println("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
 			try {
-				fisConfigFile.close();
+				this.fisConfigFile.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			prop = null;
 			configFile = null;
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		} catch (IOException e) {
 			System.out.println("Unable to read config file: " + configFile.getName());
 			e.printStackTrace();
 			try {
-				fisConfigFile.close();
+				this.fisConfigFile.close();
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
 			prop = null;
 			configFile = null;
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		}
-		if(prop != null && configFile != null && fisConfigFile != null) {
+		if (prop != null && configFile != null && this.fisConfigFile != null) {
 			return prop;
 		}
-		registeredSuccessful = false;
+		this.registeredSuccessful = false;
 		return null;
 	}
 
 	public EDungeonMobType getDungeonMob() {
 		return this.dungeonMob;
 	}
-	
+
 	public File getStructureFileFromDirectory(File parentDir) {
-		if(parentDir.isDirectory()) {
-			int fileCount = parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length;
-			if(fileCount > 0) {
+		if (parentDir.isDirectory()) {
+			int fileCount = parentDir.listFiles(FileIOUtil.getNBTFileFilter()).length;
+			if (fileCount > 0) {
 				Random rdm = new Random();
-				List<File> files = getFilesRecursively(parentDir);
+				List<File> files = this.getFilesRecursively(parentDir);
 				fileCount = files.size();
 				return files.get(rdm.nextInt(fileCount));
 			}
 		} else {
-			if(parentDir.getName().contains(".nbt")) {
+			if (parentDir.getName().contains(".nbt")) {
 				return parentDir;
 			}
 		}
 		return null;
 	}
-	
+
 	private List<File> getFilesRecursively(File parentDir) {
-		if(!parentDir.isDirectory() || parentDir.listFiles(DungeonGenUtils.getStructureFileFilter()).length <= 0) {
+		if (!parentDir.isDirectory() || parentDir.listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			return null;
 		}
 		List<File> allFiles = new ArrayList<File>();
 		Queue<File> dirs = new LinkedList<File>();
 		dirs.add(new File(parentDir.getAbsolutePath()));
 		while (!dirs.isEmpty()) {
-		  for (File f : dirs.poll().listFiles(DungeonGenUtils.getStructureFileFilter())) {
-		    if (f.isDirectory()) {
-		      dirs.add(f);
-		    } else if (f.isFile()) {
-		      allFiles.add(f);
-		    }
-		  }
+			for (File f : dirs.poll().listFiles(FileIOUtil.getNBTFileFilter())) {
+				if (f.isDirectory()) {
+					dirs.add(f);
+				} else if (f.isFile()) {
+					allFiles.add(f);
+				}
+			}
 		}
 		return allFiles;
 	}
-	
+
 	public String[] getDependencies() {
 		return this.modDependencies;
 	}
-	
+
 	public int getYOffset() {
 		return Math.abs(this.yOffset);
 	}

@@ -11,8 +11,11 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -22,6 +25,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
@@ -32,6 +36,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -41,6 +47,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -62,6 +69,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -98,10 +106,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
 	protected int spellTicks = 0;
-	
+
+	protected PathNavigate waterNavigator;
+
 	protected ESpellType activeSpell = ESpellType.NONE;
-	private EFaction faction;
-	
+	private CQRFaction factionInstance;
+	private String factionName;
+	private CQRFaction defaultFactionInstance;
+
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
 
@@ -139,19 +151,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(SPELLTYPE, 0);
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 	}
-	
-	 protected void updateAITasks() {
-        super.updateAITasks();
 
-        if (this.spellTicks > 0)
-        {
-            --this.spellTicks;
-        }
-    }
+	@Override
+	protected void updateAITasks() {
+		super.updateAITasks();
+
+		if (this.spellTicks > 0) {
+			--this.spellTicks;
+		}
+	}
+
+	@Override
+	public abstract EnumCreatureAttribute getCreatureAttribute();
 
 	@Override
 	protected boolean canDespawn() {
-		return !Reference.CONFIG_HELPER_INSTANCE.areMobsFromCQSpawnersPersistent();
+		return !CQRConfig.general.mobsFromCQSpawnerDontDespawn;
 	}
 
 	@Override
@@ -179,7 +194,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		boolean result = super.attackEntityFrom(source, amount);
-		if (result) {
+		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
 		}
 		return result;
@@ -210,23 +225,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
-		// this.tasks.addTask(21, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
-		this.setHealingPotions(3);
+		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		float initSizeVar = -0.125F + (this.rand.nextFloat() * 0.25F);
 		this.dataManager.set(SIZE_VAR, initSizeVar);
 		// Adapt size of hitbox
-		this.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
+		super.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
 		// System.out.println("Size Var: " + sizeVariation);
 		return ientitylivingdata;
 	}
@@ -244,6 +259,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
+		}
+		if (this.factionName != null && !this.factionName.equalsIgnoreCase(this.getDefaultFaction().name())) {
+			compound.setString("factionOverride", this.factionName);
 		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
 		compound.setByte("usedHealingPotions", this.usedPotions);
@@ -266,6 +284,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.leaderUUID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("leader"));
 		}
 
+		if (compound.hasKey("factionOverride")) {
+			this.setFaction(compound.getString("factionOverride"));
+		}
+
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
 		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
@@ -273,7 +295,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.spellTicks = compound.getInteger("spellTicks");
 		this.healthScale = compound.getDouble("healthScale");
-		if(this.healthScale <= 1D) {
+		if (this.healthScale <= 1D) {
 			this.healthScale = 1D;
 		}
 	}
@@ -342,8 +364,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!this.world.isRemote && isMagicArmorActive()) {
-			updateCooldownForMagicArmor();
+		if (!this.world.isRemote && this.isMagicArmorActive()) {
+			this.updateCooldownForMagicArmor();
 		}
 		if (!this.world.isRemote && !this.isNonBoss() && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			SpawnerFactory.placeSpawner(new Entity[] { this }, false, null, this.world, this.getPosition());
@@ -405,6 +427,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+			if (entityIn instanceof EntityLivingBase) {
+				((EntityLivingBase) entityIn).heal(2.0F);
+
+				if (!this.world.isRemote) {
+					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + 0.5D * entityIn.height, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+					this.world.playSound(null, entityIn.posX, entityIn.posY, entityIn.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 4.0F, 0.6F + this.rand.nextFloat() * 0.2F);
+				}
+				return true;
+			}
+			return false;
+		}
 		float f = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 		int i = 0;
 
@@ -478,11 +512,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leaderUUID = null;
 			} else {
 				for (Entity entity : this.world.loadedEntityList) {
-                    if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
-                        this.leader = (EntityLivingBase) entity;
-                        return (EntityLivingBase) entity;
-                    }
-                }
+					if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+						this.leader = (EntityLivingBase) entity;
+						return (EntityLivingBase) entity;
+					}
+				}
 			}
 		} else {
 			if (this.leader != null) {
@@ -525,7 +559,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		z -= (double) spawn.getZ();
 		float distance = (float) Math.sqrt(x * x + z * z);
 
-		health *= 1.0F + 0.1F * distance / (float) Reference.CONFIG_HELPER_INSTANCE.getHealthDistanceDivisor();
+		health *= 1.0F + 0.1F * distance / (float) CQRConfig.mobs.distanceDivisor;
 
 		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			health *= 2.0F;
@@ -638,14 +672,25 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.holdingPotion;
 	}
 
-	public abstract EFaction getDefaultFaction();
-	
-	public EFaction getFaction() {
-		return hasLeader() && getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR)getLeader()).getFaction() : (faction != null ? faction : getDefaultFaction());
+	public abstract EDefaultFaction getDefaultFaction();
+
+	public CQRFaction getDefaultFactionInstance() {
+		if (this.defaultFactionInstance == null) {
+			this.defaultFactionInstance = FactionRegistry.instance().getFactionInstance(this.getDefaultFaction().name());
+		}
+		return this.defaultFactionInstance;
 	}
-	
-	public void setFaction(EFaction newFac) {
-		this.faction = newFac;
+
+	public CQRFaction getFaction() {
+		if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
+			this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
+		}
+		return this.hasLeader() && this.getLeader() instanceof AbstractEntityCQR ? ((AbstractEntityCQR) this.getLeader()).getFaction() : (this.factionInstance != null ? this.factionInstance : this.getDefaultFactionInstance());
+	}
+
+	public void setFaction(String newFac) {
+		this.factionInstance = null;
+		this.factionName = newFac;
 	}
 
 	public boolean hasFaction() {
@@ -655,7 +700,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void updateReputationOnDeath(DamageSource cause) {
 		if (cause.getTrueSource() instanceof EntityPlayer && this.hasFaction()) {
 			EntityPlayer player = (EntityPlayer) cause.getTrueSource();
-			int range = Reference.CONFIG_HELPER_INSTANCE.getFactionRepuChangeRadius();
+			int range = CQRConfig.mobs.factionUpdateRadius;
 			double x1 = player.posX - range;
 			double y1 = player.posY - range;
 			double z1 = player.posZ - range;
@@ -664,19 +709,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			double z2 = player.posZ + range;
 			AxisAlignedBB aabb = new AxisAlignedBB(x1, y1, z1, x2, y2, z2);
 
-			List<EFaction> checkedFactions = new ArrayList<EFaction>();
+			List<CQRFaction> checkedFactions = new ArrayList<>();
 			for (AbstractEntityCQR cqrentity : this.world.getEntitiesWithinAABB(AbstractEntityCQR.class, aabb)) {
 				if (cqrentity.hasFaction() && !checkedFactions.contains(cqrentity.getFaction()) && (cqrentity.canEntityBeSeen(this) || cqrentity.canEntityBeSeen(player))) {
-					EFaction faction = cqrentity.getFaction();
+					CQRFaction faction = cqrentity.getFaction();
 					if (this.getFaction().equals(faction)) {
 						// DONE decrement the players repu on this entity's faction
-						faction.decrementReputation(player, EFaction.REPU_DECREMENT_ON_MEMBER_KILL);
+						faction.decrementReputation(player, faction.getRepuMemberKill());
 					} else if (this.getFaction().isEnemy(faction)) {
 						// DONE increment the players repu at CQREntity's faction
-						faction.incrementReputation(player, EFaction.REPU_DECREMENT_ON_ENEMY_KILL);
+						faction.incrementReputation(player, faction.getRepuEnemyKill());
 					} else if (this.getFaction().isAlly(faction)) {
 						// DONE decrement the players repu on CQREntity's faction
-						faction.decrementReputation(player, EFaction.REPU_DECREMENT_ON_ALLY_KILL);
+						faction.decrementReputation(player, faction.getRepuAllyKill());
 					}
 					checkedFactions.add(faction);
 				}
@@ -689,13 +734,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 	}
 
+	public void equipDefaultEquipment(World world, BlockPos pos) {
+		this.setEquipmentBasedOnDifficulty(world.getDifficultyForLocation(pos));
+	}
+
 	public boolean hasCape() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	public ResourceLocation getResourceLocationOfCape() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -806,12 +853,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void rescaleHitbox(double multiplierX, double multiplierY) {
-		double h = this.height * multiplierY;
-		double w = this.width * multiplierX;
+		float h = new Float(this.height * multiplierY);
+		float w = new Float(this.width * multiplierX);
 		this.resizeHitBox(w, h);
 	}
 
-	public void resizeHitBox(double hitboxX, double hitboxY) {
+	public void resizeHitBox(float hitboxX, float hitboxY) {
 		if (this.isChild()) {
 			hitboxX *= 0.5D;
 			hitboxY *= 0.5D;
@@ -830,6 +877,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		double wHalf = hitboxX / 2D;
 		this.setEntityBoundingBox(new AxisAlignedBB(this.posX - wHalf, this.posY, this.posZ - wHalf, this.posX + wHalf, this.posY + hitboxY, this.posZ + wHalf));
+		super.setSize(hitboxX, hitboxY);
 	}
 
 	public void setHealthScale(double hs) {
@@ -864,65 +912,60 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public ItemStack getHeldItemPotion() {
 		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
 	}
-	
+
 	public void setSpellTicks(int val) {
 		this.spellTicks = val;
 	}
 
-	public boolean isSpellcasting()
-    {
-        if (this.world.isRemote)
-        {
-            return this.dataManager.get(SPELLCASTING);
-        }
-        else
-        {
-            return this.spellTicks > 0;
-        }
-    }
-	
+	public boolean isSpellcasting() {
+		if (this.world.isRemote) {
+			return this.dataManager.get(SPELLCASTING);
+		} else {
+			return this.spellTicks > 0;
+		}
+	}
+
 	public void setSpellType(ESpellType type) {
 		this.activeSpell = type;
 		this.dataManager.set(SPELLTYPE, type.getID());
 	}
-	
+
 	public ESpellType getActiveSpell() {
-		if(!world.isRemote) {
+		if (!this.world.isRemote) {
 			return this.activeSpell;
 		}
 		return ESpellType.values()[this.dataManager.get(SPELLTYPE)];
 	}
-	
+
 	public void setSpellCasting(boolean value) {
 		this.dataManager.set(SPELLCASTING, value);
 	}
 
 	public boolean isMagicArmorActive() {
-		if(!world.isRemote) {
-			return armorActive;
+		if (!this.world.isRemote) {
+			return this.armorActive;
 		}
 		return this.dataManager.get(MAGIC_ARMOR_ACTIVE);
 	}
-	
+
 	public void setMagicArmorActive(boolean val) {
-		//TODO: Particles for when it appears and disappears
-		if(val != armorActive) {
-			armorActive = val;
-			setEntityInvulnerable(armorActive);
+		if (val != this.armorActive) {
+			this.armorActive = val;
+			this.setEntityInvulnerable(this.armorActive);
 			this.dataManager.set(MAGIC_ARMOR_ACTIVE, val);
 		}
 	}
-	
+
 	protected void updateCooldownForMagicArmor() {
-		magicArmorCooldown--;
-		if(magicArmorCooldown <= 0) {
-			setMagicArmorActive(false);
+		this.magicArmorCooldown--;
+		if (this.magicArmorCooldown <= 0) {
+			this.setMagicArmorActive(false);
 		}
 	}
-	
+
 	public void setMagicArmorCooldown(int val) {
 		this.magicArmorCooldown = val;
-		setMagicArmorActive(true);
+		this.setMagicArmorActive(true);
 	}
 
 }

@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -20,29 +21,29 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffPoison extends Item implements IRangedWeapon{
+public class ItemStaffPoison extends Item implements IRangedWeapon {
 
 	public ItemStaffPoison() {
-		setMaxDamage(2048);
-		setMaxStackSize(1);
+		this.setMaxDamage(2048);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		shoot(stack, worldIn, playerIn, handIn);
+		this.shoot(stack, worldIn, playerIn, handIn);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player, EnumHand handIn) {
-		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW,
-				SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F,
-				false);
+		worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_SNOWBALL_THROW, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
 		player.swingArm(handIn);
 
 		if (!worldIn.isRemote) {
@@ -64,11 +65,23 @@ public class ItemStaffPoison extends Item implements IRangedWeapon{
 		}
 	}
 
+	@Override
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		shooter.swingArm(handIn);
+
+		if (!worldIn.isRemote) {
+			ProjectilePoisonSpell spell = new ProjectilePoisonSpell(worldIn, shooter);
+			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			v = v.normalize();
+			v = v.scale(2D);
+			spell.setVelocity(v.x, v.y, v.z);
+			worldIn.spawnEntity(spell);
+		}
+	}
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public SoundEvent getShootSound() {
+		return SoundEvents.ENTITY_SNOWBALL_THROW;
 	}
 
 }

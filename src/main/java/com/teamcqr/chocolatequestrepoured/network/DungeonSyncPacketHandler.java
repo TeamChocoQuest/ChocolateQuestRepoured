@@ -13,8 +13,7 @@ public class DungeonSyncPacketHandler implements IMessageHandler<DungeonSyncPack
 	public IMessage onMessage(DungeonSyncPacket message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			if (ctx.side.isClient()) {
-				ItemDungeonPlacer.dungeonMap = message.getDungeonMap();
-				ItemDungeonPlacer.dependencyMap = message.getDependencyMap();
+				ItemDungeonPlacer.fakeDungeonList = message.getFakeDungeonList();
 			}
 		});
 		return null;

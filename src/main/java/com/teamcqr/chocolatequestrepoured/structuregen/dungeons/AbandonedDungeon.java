@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenera
  * GitHub: https://github.com/DerToaster98
  */
 public class AbandonedDungeon extends DefaultSurfaceDungeon {
-	
+
 	public AbandonedDungeon(File configFile) {
 		super(configFile);
 		// TODO Auto-generated constructor stub
@@ -21,6 +21,5 @@ public class AbandonedDungeon extends DefaultSurfaceDungeon {
 	public IDungeonGenerator getGenerator() {
 		return new AbandonedGenerator();
 	}
-	
 
 }

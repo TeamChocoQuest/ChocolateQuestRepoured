@@ -21,26 +21,26 @@ public enum EDungeonGenerator {
 	GUARDED_CASTLE("guarded_castle"),
 	CASTLE("castle"),
 	VOLCANO("volcano");
-	
+
 	private String name;
-	
+
 	EDungeonGenerator(String name) {
 		this.name = name;
 	}
-	
+
 	public String getName() {
 		return this.name;
 	}
-	
+
 	public static boolean isValidDungeonGenerator(String toTest) {
-		
-		for(EDungeonGenerator generator : EDungeonGenerator.values()) {
-			if(toTest.equalsIgnoreCase(generator.getName())) {
+
+		for (EDungeonGenerator generator : EDungeonGenerator.values()) {
+			if (toTest.equalsIgnoreCase(generator.getName())) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-		
+
 }

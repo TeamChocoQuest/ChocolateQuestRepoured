@@ -32,6 +32,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 	public void startExecuting() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		this.updatePath(attackTarget);
+		this.entity.isSwingInProgress = true;
 		this.entity.setActiveHand(EnumHand.MAIN_HAND);
 	}
 
@@ -47,6 +48,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 			}
 			if (canSeeAttackTarget && this.entity.isEntityInFieldOfView(attackTarget)) {
 				if (this.entity.getDistance(attackTarget) > 28.0D) {
+					this.entity.isSwingInProgress = false;
 					this.updatePath(attackTarget);
 				} else if (this.entity.hasPath()) {
 					this.entity.getNavigator().clearPath();
@@ -55,22 +57,16 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 			} else if (this.visionTick > 0) {
 				this.updatePath(attackTarget);
 				this.visionTick--;
+				this.entity.isSwingInProgress = false;
 			}
 		}
-	}
-
-	@Override
-	public void resetTask() {
-		this.visionTick = 0;
-		this.entity.setAttackTarget(null);
-		this.entity.getNavigator().clearPath();
-		this.entity.resetActiveHand();
 	}
 
 	@Override
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 32.0D) {
 			ItemStack stack = this.entity.getHeldItemMainhand();
+			this.entity.isSwingInProgress = false;
 			if (stack.getItem() instanceof ItemBow) {
 				this.attackTick = 60;
 				EntityTippedArrow arrow = new EntityTippedArrow(this.entity.world, this.entity);
@@ -89,7 +85,8 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 			} else if (stack.getItem() instanceof IRangedWeapon) {
 				IRangedWeapon weapon = (IRangedWeapon) stack.getItem();
 				this.attackTick = weapon.getCooldown();
-				weapon.shoot(this.entity.world, this.entity, attackTarget);
+				weapon.shoot(this.entity.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
+				this.entity.playSound(weapon.getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 			}
 		}
 	}

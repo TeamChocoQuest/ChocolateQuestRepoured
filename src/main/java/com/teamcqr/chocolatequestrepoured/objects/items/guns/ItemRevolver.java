@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -21,29 +22,19 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemRevolver extends Item implements IRangedWeapon{
+public class ItemRevolver extends Item implements IRangedWeapon {
 
 	public ItemRevolver() {
-		setMaxDamage(300);
-		setMaxStackSize(1);
+		this.setMaxDamage(300);
+		this.setMaxStackSize(1);
 	}
-
-	/*
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 72000;
-	}
-
-	@Override
-	public EnumAction getItemUseAction(ItemStack stack) {
-		return EnumAction.NONE;
-	}
-	*/
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -61,27 +52,26 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		//System.out.println("Hand: " + handIn.toString());
+		// System.out.println("Hand: " + handIn.toString());
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		boolean flag = !findAmmo(playerIn).isEmpty();
+		boolean flag = !this.findAmmo(playerIn).isEmpty();
 
-		if (!playerIn.capabilities.isCreativeMode && !flag && getBulletStack(stack, playerIn) == ItemStack.EMPTY) {
+		if (!playerIn.capabilities.isCreativeMode && !flag && this.getBulletStack(stack, playerIn) == ItemStack.EMPTY) {
 			if (flag) {
-				shoot(stack, worldIn, playerIn);
+				this.shoot(stack, worldIn, playerIn);
 			}
-			return flag ? new ActionResult(EnumActionResult.PASS, stack)
-					: new ActionResult(EnumActionResult.FAIL, stack);
+			return flag ? new ActionResult(EnumActionResult.PASS, stack) : new ActionResult(EnumActionResult.FAIL, stack);
 		}
 
 		else {
-			shoot(stack, worldIn, playerIn);
+			this.shoot(stack, worldIn, playerIn);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
 	}
 
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 		boolean flag = player.capabilities.isCreativeMode;
-		ItemStack itemstack = findAmmo(player);
+		ItemStack itemstack = this.findAmmo(player);
 
 		if (!itemstack.isEmpty() || flag) {
 			if (!worldIn.isRemote) {
@@ -91,7 +81,7 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 					player.getCooldownTracker().setCooldown(stack.getItem(), 10);
 					worldIn.spawnEntity(bulletE);
 				} else {
-					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
+					ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, this.getBulletType(itemstack));
 					bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
 					player.getCooldownTracker().setCooldown(stack.getItem(), 10);
 					worldIn.spawnEntity(bulletE);
@@ -99,8 +89,7 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 				}
 			}
 
-			worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER,
-					1.0F, 1.0F, false);
+			worldIn.playSound(player.posX, player.posY + player.getEyeHeight(), player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 0.9F + itemRand.nextFloat() * 0.2F, false);
 			player.rotationPitch -= worldIn.rand.nextFloat() * 10;
 
 			if (!flag) {
@@ -113,62 +102,20 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 		}
 	}
 
-	/*
-	@Override
-	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLiving;
-			boolean flag = player.capabilities.isCreativeMode;
-			ItemStack itemstack = findAmmo(player);
-
-			if (!itemstack.isEmpty() || flag) {
-				if (!worldIn.isRemote) {
-					if (flag && itemstack.isEmpty()) {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, 1);
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								10);
-						worldIn.spawnEntity(bulletE);
-					} else {
-						ProjectileBullet bulletE = new ProjectileBullet(worldIn, player, getBulletType(itemstack));
-						bulletE.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 3.5F, 5F);
-						player.getCooldownTracker().setCooldown(player.getHeldItem(player.getActiveHand()).getItem(),
-								10);
-						worldIn.spawnEntity(bulletE);
-						stack.damageItem(1, player);
-					}
-				}
-
-				worldIn.playSound(player.posX, player.posY, player.posZ, SoundsHandler.GUN_SHOOT, SoundCategory.MASTER,
-						1.0F, 1.0F, false);
-				entityLiving.rotationPitch -= worldIn.rand.nextFloat() * 10;
-
-				if (!flag) {
-					itemstack.shrink(1);
-
-					if (itemstack.isEmpty()) {
-						player.inventory.deleteStack(itemstack);
-					}
-				}
-			}
-		}
-	}
-	*/
-
 	protected boolean isBullet(ItemStack stack) {
 		return stack.getItem() instanceof ItemBullet;
 	}
 
 	protected ItemStack findAmmo(EntityPlayer player) {
-		if (isBullet(player.getHeldItem(EnumHand.OFF_HAND))) {
+		if (this.isBullet(player.getHeldItem(EnumHand.OFF_HAND))) {
 			return player.getHeldItem(EnumHand.OFF_HAND);
-		} else if (isBullet(player.getHeldItem(EnumHand.MAIN_HAND))) {
+		} else if (this.isBullet(player.getHeldItem(EnumHand.MAIN_HAND))) {
 			return player.getHeldItem(EnumHand.MAIN_HAND);
 		} else {
 			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
 				ItemStack itemstack = player.inventory.getStackInSlot(i);
 
-				if (isBullet(itemstack)) {
+				if (this.isBullet(itemstack)) {
 					return itemstack;
 				}
 			}
@@ -193,8 +140,9 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 		if (stack.getItem() == ModItems.BULLET_FIRE) {
 			return new ItemStack(ModItems.BULLET_FIRE);
 		} else {
-			System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			return ItemStack.EMPTY; // #SHOULD NEVER HAPPEN
+			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
+			//return ItemStack.EMPTY; // #SHOULD NEVER HAPPEN
+			return new ItemStack(ModItems.BULLET_IRON);
 		}
 	}
 
@@ -216,15 +164,27 @@ public class ItemRevolver extends Item implements IRangedWeapon{
 		}
 
 		else {
-			System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			return 0; // #SHOULD NEVER HAPPEN
+			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
+			//return 0; // #SHOULD NEVER HAPPEN
+			return 1;
 		}
 	}
 
 	@Override
-	public void shoot(World world, Entity shooter, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		
+	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
+		if (!worldIn.isRemote) {
+			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, 1/* 1 is Iron bullet */);
+			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
+			v = v.normalize();
+			v = v.scale(3.5D);
+			bulletE.setVelocity(v.x, v.y, v.z);
+			worldIn.spawnEntity(bulletE);
+		}
+	}
+
+	@Override
+	public SoundEvent getShootSound() {
+		return ModSounds.GUN_SHOOT;
 	}
 
 }

@@ -24,65 +24,65 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * GitHub: https://github.com/DerToaster98
  */
 public class DefaultSurfaceDungeon extends DungeonBase {
-	
-	protected File structureFolderPath; 
-	
+
+	protected File structureFolderPath;
+
 	public DefaultSurfaceDungeon(File configFile) {
 		super(configFile);
-		Properties prop = loadConfig(configFile);
-		if(prop != null) {
+		Properties prop = this.loadConfig(configFile);
+		if (prop != null) {
 			this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structureFolder", "defaultFolder");
-			
-			closeConfigFile();
+
+			this.closeConfigFile();
 		} else {
-			registeredSuccessful = false;
+			this.registeredSuccessful = false;
 		}
 	}
-	
+
 	@Override
 	public IDungeonGenerator getGenerator() {
 		return new DefaultSurfaceGenerator(null, null, null);
 	}
-	
+
 	protected File pickStructure() {
-		if(this.structureFolderPath == null) {
+		if (this.structureFolderPath == null) {
 			return null;
 		}
-		return getStructureFileFromDirectory(this.structureFolderPath);
+		return this.getStructureFileFromDirectory(this.structureFolderPath);
 	}
-	
+
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-		
-		File structureF = pickStructure();
-		if(structureF != null && structureF.exists() && structureF.isFile()) {
+
+		File structureF = this.pickStructure();
+		if (structureF != null && structureF.exists() && structureF.isFile()) {
 			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.protectFromDestruction);
-			
+
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);
 			settings.setRotation(Rotation.NONE);
 			settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 			settings.setIntegrity(1.0F);
-			
+
 			int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
-			//For position locked dungeons, use the positions y
-			if(this.isPosLocked()) {
+			// For position locked dungeons, use the positions y
+			if (this.isPosLocked()) {
 				y = this.getLockedPos().getY();
 			}
-			
-			if(this.getUnderGroundOffset() != 0) {
+
+			if (this.getUnderGroundOffset() != 0) {
 				y -= this.getUnderGroundOffset();
 			}
-			if(this.yOffset != 0) {
+			if (this.yOffset != 0) {
 				y += Math.abs(this.yOffset);
 			}
-			
+
 			System.out.println("Placing dungeon: " + this.name);
 			System.out.println("Generating structure " + structureF.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
 			DefaultSurfaceGenerator generator = new DefaultSurfaceGenerator(this, structure, settings);
 			generator.generate(world, chunk, x, y, z);
 		}
 	}
-	
+
 }

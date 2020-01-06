@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 
 import net.minecraft.nbt.CompressedStreamTools;
@@ -26,113 +25,113 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 public class CQRDataFileManager {
-	
+
 	protected static CQRDataFileManager INSTANCE = null;
-	
+
 	protected final String DATA_FILE_NAME = "cqrdata.nbt";
-	
+
 	private File file;
-	
+
 	private Set<String> uniqueDungeonsSpawnedInWorld = new HashSet<>();
 	private List<DataEntryDungeon> entriesToBeSaved = new ArrayList<>();
 
 	public CQRDataFileManager() {
 		INSTANCE = this;
 	}
-	
+
 	public static CQRDataFileManager getInstance() {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new CQRDataFileManager();
 		}
 		return INSTANCE;
 	}
-	
+
 	public void handleWorldLoad(World world) {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
-		allocateFileObjectInstance(world);
-		//DONE: Load stuff
-		NBTTagCompound rootTag = getRootTag();
-		
-		if(rootTag != null) {
-			//Factions
-			NBTTagCompound factionTag = getOrCreateTag(rootTag, "factiondata");
-			EFaction.loadFromNBT(factionTag);
-			
-			//FIrst we need to empty our lists...
-			entriesToBeSaved.clear();
-			uniqueDungeonsSpawnedInWorld.clear();
-			
-			//Now we can load the stored values
-			NBTTagList nameList = getOrCreateTagList(rootTag, "uniques", Constants.NBT.TAG_STRING);
+		this.allocateFileObjectInstance(world);
+		// DONE: Load stuff
+		NBTTagCompound rootTag = this.getRootTag();
+
+		if (rootTag != null) {
+			// Factions
+			// NBTTagCompound factionTag = getOrCreateTag(rootTag, "factiondata");
+			// EFaction.loadFromNBT(factionTag);
+
+			// FIrst we need to empty our lists...
+			this.entriesToBeSaved.clear();
+			this.uniqueDungeonsSpawnedInWorld.clear();
+
+			// Now we can load the stored values
+			NBTTagList nameList = this.getOrCreateTagList(rootTag, "uniques", Constants.NBT.TAG_STRING);
 			nameList.forEach(new Consumer<NBTBase>() {
 
 				@Override
 				public void accept(NBTBase t) {
-					NBTTagString stringTag = (NBTTagString)t;
-					uniqueDungeonsSpawnedInWorld.add(stringTag.getString());
+					NBTTagString stringTag = (NBTTagString) t;
+					CQRDataFileManager.this.uniqueDungeonsSpawnedInWorld.add(stringTag.getString());
 				}
 			});
 		}
-		
-		//After loading all values, we close the file
-		file = null;
+
+		// After loading all values, we close the file
+		this.file = null;
 	}
-	
+
 	public void handleWorldUnload(World world) {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
-		allocateFileObjectInstance(world);
+		this.allocateFileObjectInstance(world);
 
-		//Finally save all the stuff
-		handleWorldSaving(world);
+		// Finally save all the stuff
+		this.handleWorldSaving(world);
 
-		//Now clear the lists
-		entriesToBeSaved.clear();
-		uniqueDungeonsSpawnedInWorld.clear();
-		
-		file = null;
+		// Now clear the lists
+		this.entriesToBeSaved.clear();
+		this.uniqueDungeonsSpawnedInWorld.clear();
+
+		this.file = null;
 	}
-	
+
 	public void handleWorldSaving(World world) {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
-		allocateFileObjectInstance(world);
-		
-		NBTTagCompound rootTag = getRootTag();
-		
-		if(rootTag != null) {
-			//Factions
-			rootTag.setTag("factiondata", EFaction.saveDataAsNBT());
-			
-			//Save dungeon data
-			if(!entriesToBeSaved.isEmpty()) {
-				NBTTagList structureList = getOrCreateTagList(rootTag, "structuredata", Constants.NBT.TAG_COMPOUND);
-				for(DataEntryDungeon entry : entriesToBeSaved) {
+		this.allocateFileObjectInstance(world);
+
+		NBTTagCompound rootTag = this.getRootTag();
+
+		if (rootTag != null) {
+			// Factions
+			// rootTag.setTag("factiondata", EFaction.saveDataAsNBT(new File(FileIOUtil.getAbsoluteWorldPath())));
+
+			// Save dungeon data
+			if (!this.entriesToBeSaved.isEmpty()) {
+				NBTTagList structureList = this.getOrCreateTagList(rootTag, "structuredata", Constants.NBT.TAG_COMPOUND);
+				for (DataEntryDungeon entry : this.entriesToBeSaved) {
 					structureList.appendTag(entry.getNBT());
 				}
 				rootTag.removeTag("structuredata");
 				rootTag.setTag("structuredata", structureList);
-				entriesToBeSaved.clear();
+				this.entriesToBeSaved.clear();
 			}
-			
-			if(!uniqueDungeonsSpawnedInWorld.isEmpty()) {
-				NBTTagList nameList = getOrCreateTagList(rootTag, "uniques", Constants.NBT.TAG_STRING);
+
+			if (!this.uniqueDungeonsSpawnedInWorld.isEmpty()) {
+				NBTTagList nameList = this.getOrCreateTagList(rootTag, "uniques", Constants.NBT.TAG_STRING);
 				nameList.forEach(new Consumer<NBTBase>() {
 
 					@Override
 					public void accept(NBTBase t) {
-						NBTTagString stringTag = (NBTTagString)t;
-						if(uniqueDungeonsSpawnedInWorld.contains(stringTag.getString())) {
-							uniqueDungeonsSpawnedInWorld.remove(stringTag.getString());
+						NBTTagString stringTag = (NBTTagString) t;
+						if (CQRDataFileManager.this.uniqueDungeonsSpawnedInWorld.contains(stringTag.getString())) {
+							CQRDataFileManager.this.uniqueDungeonsSpawnedInWorld.remove(stringTag.getString());
 						}
 					}
 				});
-				if(!uniqueDungeonsSpawnedInWorld.isEmpty()) {
-					uniqueDungeonsSpawnedInWorld.forEach(new Consumer<String>() {
+				if (!this.uniqueDungeonsSpawnedInWorld.isEmpty()) {
+					this.uniqueDungeonsSpawnedInWorld.forEach(new Consumer<String>() {
 
 						@Override
 						public void accept(String t) {
@@ -142,20 +141,20 @@ public class CQRDataFileManager {
 					});
 
 				}
-				//rootTag.removeTag("uniques");
+				// rootTag.removeTag("uniques");
 				rootTag.setTag("uniques", nameList);
 			}
-			//System.out.println("Saving...");
-			saveToFile(rootTag);
-			
-			file = null;
+			// System.out.println("Saving...");
+			this.saveToFile(rootTag);
+
+			this.file = null;
 		}
 	}
-	
+
 	protected NBTTagList getOrCreateTagList(NBTTagCompound rootTag, String key, int listType) {
 		NBTTagList structureList = new NBTTagList();
-		if(!rootTag.hasKey(key, Constants.NBT.TAG_LIST)) {
-			if(rootTag.hasKey(key)) {
+		if (!rootTag.hasKey(key, Constants.NBT.TAG_LIST)) {
+			if (rootTag.hasKey(key)) {
 				rootTag.removeTag(key);
 			}
 			rootTag.setTag(key, structureList);
@@ -164,10 +163,11 @@ public class CQRDataFileManager {
 		}
 		return structureList;
 	}
+
 	protected NBTTagCompound getOrCreateTag(NBTTagCompound rootTag, String key) {
 		NBTTagCompound comp = new NBTTagCompound();
-		if(!rootTag.hasKey(key, Constants.NBT.TAG_COMPOUND)) {
-			if(rootTag.hasKey(key)) {
+		if (!rootTag.hasKey(key, Constants.NBT.TAG_COMPOUND)) {
+			if (rootTag.hasKey(key)) {
 				rootTag.removeTag(key);
 			}
 			rootTag.setTag(key, comp);
@@ -178,46 +178,46 @@ public class CQRDataFileManager {
 	}
 
 	public void handleDungeonGeneration(DungeonBase dungeon, BlockPos position) {
-		if(dungeon.isUnique()) {
+		if (dungeon.isUnique()) {
 			this.uniqueDungeonsSpawnedInWorld.add(dungeon.getDungeonName());
 		}
 		DataEntryDungeon dataEntry = new DataEntryDungeon(dungeon.getDungeonName(), position);
 		this.entriesToBeSaved.add(dataEntry);
 		System.out.println("Entry added!");
 	}
-	
+
 	private void allocateFileObjectInstance(World world) {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		File worldFile = new File(FileIOUtil.getAbsoluteWorldPath());
 		File folder = new File(worldFile.getAbsolutePath() + "/data/cqr/");
-		if(!folder.exists()) {
+		if (!folder.exists()) {
 			folder.mkdirs();
-		} else if(!folder.isDirectory()) {
+		} else if (!folder.isDirectory()) {
 			folder.delete();
 			folder.mkdirs();
 		}
-		
-		file = new File(folder, DATA_FILE_NAME);
-		if(!file.exists()) {
+
+		this.file = new File(folder, this.DATA_FILE_NAME);
+		if (!this.file.exists()) {
 			try {
-				file.createNewFile();
-				saveToFile(new NBTTagCompound());
+				this.file.createNewFile();
+				this.saveToFile(new NBTTagCompound());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		} else if(!file.isFile()) {
-			file.delete();
+		} else if (!this.file.isFile()) {
+			this.file.delete();
 			try {
-				file.createNewFile();
-				saveToFile(new NBTTagCompound());
+				this.file.createNewFile();
+				this.saveToFile(new NBTTagCompound());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
+
 	protected void saveToFile(NBTTagCompound rootCompound) {
 		try {
 			OutputStream outStream = null;
@@ -228,25 +228,25 @@ public class CQRDataFileManager {
 			e.printStackTrace();
 		}
 	}
-	
+
 	protected NBTTagCompound getRootTag() {
-		if(file.exists() && file.isFile() && file.getName().contains(".nbt")) {
+		if (this.file.exists() && this.file.isFile() && this.file.getName().contains(".nbt")) {
 			InputStream stream = null;
 			try {
-				stream = new FileInputStream(file);
+				stream = new FileInputStream(this.file);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
-			if(stream != null) {
+			if (stream != null) {
 				NBTTagCompound root = null;
 				try {
 					root = CompressedStreamTools.readCompressed(stream);
-				} catch(IOException ex) {
-					//ex.printStackTrace();
+				} catch (IOException ex) {
+					// ex.printStackTrace();
 					System.out.println("It seems the cqr data file is empty. This is not a problem :). Returning empty tag...");
 					root = new NBTTagCompound();
 				}
-				if(root != null) {
+				if (root != null) {
 					return root;
 				}
 			}

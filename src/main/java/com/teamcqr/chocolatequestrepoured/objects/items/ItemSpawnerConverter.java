@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 
@@ -7,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -16,32 +18,35 @@ import net.minecraft.world.World;
 public class ItemSpawnerConverter extends Item {
 
 	public ItemSpawnerConverter() {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 	}
-	
+
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(!worldIn.isRemote) {
-			Block block = worldIn.getBlockState(pos).getBlock();
-			if(block == null) {
-				return EnumActionResult.PASS;
+	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
+		Block block = world.getBlockState(pos).getBlock();
+		return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
+	}
+
+	@Override
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+		if (player.isCreative()) {
+			Block block = world.getBlockState(pos).getBlock();
+			if (block == ModBlocks.SPAWNER || block == Blocks.MOB_SPAWNER) {
+				if (!world.isRemote) {
+					if (block == ModBlocks.SPAWNER) {
+						CQRMain.logger.info("Converting: CQR -> Vanilla");
+						SpawnerFactory.convertCQSpawnerToVanillaSpawner(world, pos, null);
+					}
+					if (block == Blocks.MOB_SPAWNER) {
+						CQRMain.logger.info("Converting: Vanilla -> CQR");
+						SpawnerFactory.convertVanillaSpawnerToCQSpawner(world, pos);
+					}
+					player.getCooldownTracker().setCooldown(this, 10);
+				}
+				return EnumActionResult.SUCCESS;
 			}
-			player.getCooldownTracker().setCooldown(this, 10);
-			if(block == Blocks.MOB_SPAWNER || block == ModBlocks.SPAWNER) {
-				if(block == Blocks.MOB_SPAWNER) {
-					System.out.println("Converting: Vanilla -> CQR");
-					SpawnerFactory.convertVanillaSpawnerToCQSpawner(worldIn, pos);
-					return EnumActionResult.PASS;
-				}
-				if(block == ModBlocks.SPAWNER) {
-					System.out.println("Converting: CQR -> Vanilla");
-					SpawnerFactory.convertCQSpawnerToVanillaSpawner(worldIn, pos, null);
-					return EnumActionResult.PASS;
-				}
-			} 
 		}
-		return EnumActionResult.PASS;
+		return EnumActionResult.FAIL;
 	}
 
 }

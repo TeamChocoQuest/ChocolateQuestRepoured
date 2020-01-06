@@ -1,0 +1,8 @@
+iron = minecraft:iron_ingot,0,7,14,100
+gold = minecraft:gold_ingot,0,5,10,40
+diamond = minecraft:diamond,0,1,3,10
+coal = minecraft:coal,0,4,16,80
+flint = minecraft:flint,0,3,6,60
+redstone = minecraft:redstone,0,5,15,50
+sticks = minecraft:stick,0,2,8,40
+emerald = minecraft:emerald,0,2,6,20

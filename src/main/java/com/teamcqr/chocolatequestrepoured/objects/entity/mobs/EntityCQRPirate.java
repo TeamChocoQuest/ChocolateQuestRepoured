@@ -1,10 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
-import com.teamcqr.chocolatequestrepoured.factions.EFaction;
+import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -26,23 +27,28 @@ public class EntityCQRPirate extends AbstractEntityCQR {
 	}
 
 	@Override
-	public EFaction getDefaultFaction() {
-		return EFaction.PIRATE;
+	public EDefaultFaction getDefaultFaction() {
+		return EDefaultFaction.PIRATE;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_PIRATE.getLootTable();
 	}
-	
+
 	@Override
 	public int getTextureCount() {
 		return 3;
 	}
-	
+
 	@Override
 	public boolean canRide() {
 		return false;
+	}
+	
+	@Override
+	public EnumCreatureAttribute getCreatureAttribute() {
+		return EnumCreatureAttribute.UNDEFINED;
 	}
 
 }

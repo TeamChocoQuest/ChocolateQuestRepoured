@@ -1,8 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
@@ -33,37 +32,39 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeonPlacer extends Item {
 
-	public static HashMap<String, Integer> dungeonMap = new HashMap<String, Integer>();
-	public static HashMap<Integer, String[]> dependencyMap = new HashMap<>();
+	public static List<FakeDungeon> fakeDungeonList = new ArrayList<FakeDungeon>();
 
-	public static final int HIGHEST_ICON_NUMBER = 16;
+	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
 
 	public ItemDungeonPlacer(int iconID) {
-		setMaxStackSize(1);
+		this.setMaxStackSize(1);
 		this.iconID = iconID;
 	}
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
-			for (Entry<String, Integer> entry : dungeonMap.entrySet()) {
-				int iconID = entry.getValue() <= HIGHEST_ICON_NUMBER ? entry.getValue() : 0;
+			for (FakeDungeon fakeDungeon : fakeDungeonList) {
+				int iconID = fakeDungeon.getIconID() <= HIGHEST_ICON_NUMBER ? fakeDungeon.getIconID() : 0;
 				if (iconID == this.iconID) {
 					ItemStack stack = new ItemStack(this);
-					NBTTagCompound compound = new NBTTagCompound();
-					compound.setString("dungeonName", entry.getKey());
-					compound.setInteger("iconID", iconID);
 
-					NBTTagList dependies = new NBTTagList();
-					for (String depend : dependencyMap.get(entry.getValue())) {
-						dependies.appendTag(new NBTTagString(depend));
+					NBTTagCompound compound = new NBTTagCompound();
+					compound.setString("dungeonName", fakeDungeon.getDungeonName());
+					compound.setInteger("iconID", iconID);
+					NBTTagList dependencies = new NBTTagList();
+					for (String dependency : fakeDungeon.getDependencies()) {
+						dependencies.appendTag(new NBTTagString(dependency));
 					}
-					compound.setTag("dependencies", dependies);
+					compound.setTag("dependencies", dependencies);
 					stack.setTagCompound(compound);
+
 					items.add(stack);
 				}
 			}
@@ -76,17 +77,17 @@ public class ItemDungeonPlacer extends Item {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if (stack.getTagCompound().hasKey("dependencies")) {
 			tooltip.add("Mod Dependencies: ");
-			for (NBTBase nbtts : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
-				String depend = nbtts.toString();
-				depend = depend.replaceAll(String.valueOf('"'), "");
-				if (Loader.isModLoaded(depend)) {
-					tooltip.add(TextFormatting.DARK_GREEN + depend + ", ");
+			for (NBTBase nbtTag : stack.getTagCompound().getTagList("dependencies", Constants.NBT.TAG_STRING)) {
+				String dependency = nbtTag.toString().replace("\"", "");
+				if (Loader.isModLoaded(dependency)) {
+					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.DARK_GREEN + dependency);
 				} else {
-					tooltip.add(TextFormatting.RED + depend + ", ");
+					tooltip.add(TextFormatting.GRAY + "- " + TextFormatting.RED + dependency);
 				}
 			}
 		}
@@ -103,40 +104,66 @@ public class ItemDungeonPlacer extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (!worldIn.isRemote) {
-			ItemStack stack = playerIn.getHeldItem(handIn);
+		if (playerIn.isCreative()) {
+			if (!worldIn.isRemote) {
+				ItemStack stack = playerIn.getHeldItem(handIn);
 
-			if (stack.hasTagCompound()) {
-				String dungeonName = stack.getTagCompound().getString("dungeonName");
-				DungeonBase dungeon = CQRMain.dungeonRegistry.getDungeon(dungeonName);
+				if (stack.hasTagCompound()) {
+					String dungeonName = stack.getTagCompound().getString("dungeonName");
+					DungeonBase dungeon = CQRMain.dungeonRegistry.getDungeon(dungeonName);
 
-				if (dungeon != null) {
-					double eye = playerIn.getEyeHeight();
-					Vec3d pos = playerIn.getPositionVector();
-					Vec3d look = playerIn.getLookVec();
+					if (dungeon != null) {
+						Vec3d pos = playerIn.getPositionEyes(1.0F);
+						Vec3d look = playerIn.getLookVec();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(pos.addVector(0.0D, eye, 0.0D),
-							pos.addVector(64.0D * look.x, eye + 64.0D * look.y, 64.0D * look.z));
+						RayTraceResult result = worldIn.rayTraceBlocks(pos, pos.add(look.scale(128.0D)));
 
-					if (result != null) {
-						dungeon.generate(result.getBlockPos(), worldIn);
+						if (result != null) {
+							dungeon.generate(result.getBlockPos(), worldIn);
 
-						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+							playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+						}
 					}
 				}
 			}
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+	}
+
+	public static class FakeDungeon {
+
+		private String dungeonName;
+		private int iconID;
+		private String[] dependencies;
+
+		public FakeDungeon(String dungeonName, int iconID, String[] dependencies) {
+			this.dungeonName = dungeonName;
+			this.iconID = iconID;
+			this.dependencies = dependencies;
+		}
+
+		public String getDungeonName() {
+			return this.dungeonName;
+		}
+
+		public int getIconID() {
+			return this.iconID;
+		}
+
+		public String[] getDependencies() {
+			return this.dependencies;
+		}
+
 	}
 
 	@EventBusSubscriber(modid = Reference.MODID)
-	public static class DungeonPlacerSyncHandler {
+	private static class EventHandler {
 
 		@SubscribeEvent
-		public static void syncDungeonPlacers(PlayerEvent.PlayerLoggedInEvent event) {
+		public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()),
-						(EntityPlayerMP) event.player);
+				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()), (EntityPlayerMP) event.player);
 			}
 		}
 

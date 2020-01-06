@@ -6,62 +6,51 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class ProjectileBase extends EntityThrowable
-{
-	public ProjectileBase(World worldIn) 
-	{
-		super(worldIn);
-	}
-	
-	public ProjectileBase(World worldIn, double x, double y, double z)
-    {
-        super(worldIn, x, y, z);
-    }
+public abstract class ProjectileBase extends EntityThrowable {
 
-    public ProjectileBase(World worldIn, EntityLivingBase shooter)
-    {
-    	super(worldIn, shooter);
-    }
-    
-    @Override
-    public boolean hasNoGravity()
-    {
-        return true;
-    }
-    
-    @Override
-	public void onUpdate()
-	{
-		if(getThrower() != null && getThrower().isDead)
-		{
-			setDead();
-		}
-		
-		else
-		{
-			if(ticksExisted++ > 300)
-			{
-				setDead();
-			}
-			
-			this.onUpdateInAir();
-			super.onUpdate();
-		}
+	public ProjectileBase(World worldIn) {
+		super(worldIn);
+		this.isImmuneToFire = true;
+	}
+
+	public ProjectileBase(World worldIn, double x, double y, double z) {
+		super(worldIn, x, y, z);
+		this.isImmuneToFire = true;
+	}
+
+	public ProjectileBase(World worldIn, EntityLivingBase shooter) {
+		super(worldIn, shooter);
+		this.isImmuneToFire = true;
 	}
 
 	@Override
-	protected void onImpact(RayTraceResult result) 
-	{
-		if(result.typeOfHit == RayTraceResult.Type.BLOCK)
-		{
-			IBlockState state = world.getBlockState(result.getBlockPos());
-					
-			if(!state.getBlock().isPassable(world, result.getBlockPos()))
-			{
-				setDead();
-			}
-		} 
+	public boolean hasNoGravity() {
+		return true;
 	}
 
-	protected void onUpdateInAir(){}
+	@Override
+	public void onUpdate() {
+		if (this.ticksExisted > 80) {
+			this.setDead();
+		}
+
+		super.onUpdate();
+		this.onUpdateInAir();
+	}
+
+	@Override
+	protected void onImpact(RayTraceResult result) {
+		if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+			IBlockState state = this.world.getBlockState(result.getBlockPos());
+
+			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
+				this.setDead();
+			}
+		}
+	}
+
+	protected void onUpdateInAir() {
+
+	}
+
 }
