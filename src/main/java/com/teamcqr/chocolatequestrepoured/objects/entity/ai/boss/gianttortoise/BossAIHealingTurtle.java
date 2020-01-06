@@ -5,66 +5,66 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
 
 public class BossAIHealingTurtle extends AbstractCQREntityAI {
-	
+
 	private boolean healingActive = false;
-	
+
 	private final int healingDuration = 160;
 	private int currHealTicks = 0;
 
 	private long ticksAnimStart = 0;
-	
+
 	public BossAIHealingTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
-	
+
 	private EntityCQRGiantTortoise getBoss() {
-		return (EntityCQRGiantTortoise) entity;
+		return (EntityCQRGiantTortoise) this.entity;
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return (entity.getHealth() / entity.getMaxHealth() <= 0.1F) && !getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && currHealTicks < healingDuration;
+		return (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.1F) && !this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && this.currHealTicks < this.healingDuration;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
-		return !entity.isDead && !getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && currHealTicks < healingDuration;
+		return !this.entity.isDead && !this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && this.currHealTicks < this.healingDuration;
 	}
-	
+
 	@Override
 	public void updateTask() {
-		if(!getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
-			if(getBoss().getCurrentAnimation().equals(ETortoiseAnimState.NONE)) {
-				getBoss().setCurrentAnimation(ETortoiseAnimState.MOVE_PARTS_IN);
-				ticksAnimStart  = entity.ticksExisted;
+		if (!this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
+			if (this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.NONE)) {
+				this.getBoss().setCurrentAnimation(ETortoiseAnimState.MOVE_PARTS_IN);
+				this.ticksAnimStart = this.entity.ticksExisted;
 			}
-			if(getBoss().getCurrentAnimation().equals(ETortoiseAnimState.NONE) || (getBoss().getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) && (entity.ticksExisted - ticksAnimStart) >= 115)) {
-				healingActive = true;
+			if (this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.NONE) || (this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) && (this.entity.ticksExisted - this.ticksAnimStart) >= 115)) {
+				this.healingActive = true;
 			}
-		} 
-		if(healingActive) {
-			if(!getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
-				getBoss().setCurrentAnimation(ETortoiseAnimState.HEALING);
+		}
+		if (this.healingActive) {
+			if (!this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
+				this.getBoss().setCurrentAnimation(ETortoiseAnimState.HEALING);
 			} else {
-				if(currHealTicks >= healingDuration) {
-					//Cancel
-					healingActive = false;
-					getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
+				if (this.currHealTicks >= this.healingDuration) {
+					// Cancel
+					this.healingActive = false;
+					this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 				} else {
-					if(currHealTicks % 2 == 0) {
-						getBoss().heal(1F);
+					if (this.currHealTicks % 2 == 0) {
+						this.getBoss().heal(1F);
 					}
-					currHealTicks++;
+					this.currHealTicks++;
 				}
 			}
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
-		healingActive = false;
+		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
+		this.healingActive = false;
 	}
 
 }

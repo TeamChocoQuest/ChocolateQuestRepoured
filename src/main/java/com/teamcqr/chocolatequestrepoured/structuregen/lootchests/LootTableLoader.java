@@ -24,8 +24,25 @@ public class LootTableLoader {
 	// private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
 
 	// These are all valid file names for the chests!
-	final static String[] validFileNames = { "treasure_chest", "material_chest", "food_chest", "tools_chest", "custom_1", "custom_2", "custom_3", "custom_4", "custom_5", "custom_6", "custom_7", "custom_8", "custom_9", "custom_10",
-			"custom_11", "custom_12", "custom_13", "custom_14" };
+	final static String[] validFileNames = {
+			"treasure_chest",
+			"material_chest",
+			"food_chest",
+			"tools_chest",
+			"custom_1",
+			"custom_2",
+			"custom_3",
+			"custom_4",
+			"custom_5",
+			"custom_6",
+			"custom_7",
+			"custom_8",
+			"custom_9",
+			"custom_10",
+			"custom_11",
+			"custom_12",
+			"custom_13",
+			"custom_14" };
 
 	public void loadConfigs() {
 		int files = -1;
@@ -33,7 +50,7 @@ public class LootTableLoader {
 			files = CQRMain.CQ_CHEST_FOLDER.listFiles().length - 1;
 		}
 		if (files > 0) {
-			System.out.println("Found " + (files +1) + " loot chest configs! Loading...");
+			System.out.println("Found " + (files + 1) + " loot chest configs! Loading...");
 			for (File f : CQRMain.CQ_CHEST_FOLDER.listFiles()) {
 				if (f.isFile()) {
 					ELootTable table = null;

@@ -183,12 +183,14 @@ public class ProtectedRegion implements Serializable {
 	}
 
 	public void removeEntityDependency(String entityUUID) {
-        entityDependencies.remove(entityUUID);
-        if(entityDependencies.size() == 0 && blockDependencies.size() == 0) ProtectionHandler.getInstance().deregister(this);
-    }
+		this.entityDependencies.remove(entityUUID);
+		if (this.entityDependencies.size() == 0 && this.blockDependencies.size() == 0) {
+			ProtectionHandler.getInstance().deregister(this);
+		}
+	}
 
-    public ArrayList<String> getEntityDependenciesAsUUIDs() {
-        return this.entityDependencies;
+	public ArrayList<String> getEntityDependenciesAsUUIDs() {
+		return this.entityDependencies;
 	}
 
 	public void addBlockDependency(BlockPos positionOfBlock) {
@@ -196,12 +198,14 @@ public class ProtectedRegion implements Serializable {
 	}
 
 	public void removeBlockDependency(BlockPos toBeRemoved) {
-        this.blockDependencies.remove(toBeRemoved);
-        if(blockDependencies.size() == 0 && entityDependencies.size() == 0) ProtectionHandler.getInstance().deregister(this);
-    }
+		this.blockDependencies.remove(toBeRemoved);
+		if (this.blockDependencies.size() == 0 && this.entityDependencies.size() == 0) {
+			ProtectionHandler.getInstance().deregister(this);
+		}
+	}
 
-    public ArrayList<BlockPos> getBlockDependencies() {
-        return this.blockDependencies;
+	public ArrayList<BlockPos> getBlockDependencies() {
+		return this.blockDependencies;
 	}
 
 	/*

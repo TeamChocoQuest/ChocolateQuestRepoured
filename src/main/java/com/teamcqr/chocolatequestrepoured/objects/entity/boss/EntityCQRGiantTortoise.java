@@ -77,7 +77,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			return this.id;
 		}
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
@@ -148,7 +148,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (sentFromPart && !isInShell) {
+		if (sentFromPart && !this.isInShell) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// TODO: Play "armor hit" sound
@@ -159,7 +159,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 
 	}
-	
+
 	@Override
 	public int getAir() {
 		return 100;
@@ -210,11 +210,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	public ETortoiseAnimState getCurrentAnimation() {
-		if(!world.isRemote) {
-			return currentAnimation;
+		if (!this.world.isRemote) {
+			return this.currentAnimation;
 		}
 		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
-		//return ETortoiseAnimState.MOVE_PARTS_OUT;
+		// return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
 
 	@Override
@@ -234,13 +234,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.onUpdate();
 
 		this.setAir(999);
-		
-		if(this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_OUT) ||
-				this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) ||
-				this.getCurrentAnimation().equals(ETortoiseAnimState.WALKING)) {
-			setInShell(false);
+
+		if (this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_OUT) || this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) || this.getCurrentAnimation().equals(ETortoiseAnimState.WALKING)) {
+			this.setInShell(false);
 		} else {
-			setInShell(true);
+			this.setInShell(true);
 		}
 
 		for (EntityCQRGiantTortoisePart part : this.parts) {
@@ -337,25 +335,23 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
-	
+
 	public void setInShell(boolean val) {
 		this.isInShell = val;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		
-		compound.setBoolean("inShell", isInShell);
+
+		compound.setBoolean("inShell", this.isInShell);
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		
+
 		this.isInShell = compound.getBoolean("inShell");
 	}
-	
-	
 
 }

@@ -102,7 +102,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 		}
 		return IllagerArmPose.CROSSED;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;

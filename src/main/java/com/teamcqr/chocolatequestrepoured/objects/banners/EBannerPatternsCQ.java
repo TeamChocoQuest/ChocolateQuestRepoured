@@ -10,12 +10,19 @@ public enum EBannerPatternsCQ {
 
 	// TODO Wait for Artsquad to finish the textures
 	// DONE: Add 'blank' cq pattern
-	CQ_BLANK(addPattern("cq_blank", ItemStack.EMPTY)), WITHER_SKULL(addPattern("cq_wither_skull", ItemStack.EMPTY)), WITHER_SKULL_EYES(addPattern("cq_wither_eyes", ItemStack.EMPTY)), FIRE(addPattern("cq_fire", ItemStack.EMPTY)),
-	MAGIC_SMOKE(addPattern("cq_magic", ItemStack.EMPTY)), EMERALD(addPattern("cq_emerald", ItemStack.EMPTY)), BONES(addPattern("cq_bones", ItemStack.EMPTY)),
+	CQ_BLANK(addPattern("cq_blank", ItemStack.EMPTY)),
+	WITHER_SKULL(addPattern("cq_wither_skull", ItemStack.EMPTY)),
+	WITHER_SKULL_EYES(addPattern("cq_wither_eyes", ItemStack.EMPTY)),
+	FIRE(addPattern("cq_fire", ItemStack.EMPTY)),
+	MAGIC_SMOKE(addPattern("cq_magic", ItemStack.EMPTY)),
+	EMERALD(addPattern("cq_emerald", ItemStack.EMPTY)),
+	BONES(addPattern("cq_bones", ItemStack.EMPTY)),
 
-	WALKER_BACKGROUND(addPattern("walker_black_bg", ItemStack.EMPTY)), WALKER_BORDER(addPattern("walker_border", ItemStack.EMPTY)),
+	WALKER_BACKGROUND(addPattern("walker_black_bg", ItemStack.EMPTY)),
+	WALKER_BORDER(addPattern("walker_border", ItemStack.EMPTY)),
 	// WALKER_EYES(addPattern("walker_eyes", null)),
-	WALKER_INNER_BORDER(addPattern("walker_inner_border", ItemStack.EMPTY)), WALKER_SKULL(addPattern("walker_skull", ItemStack.EMPTY)),;
+	WALKER_INNER_BORDER(addPattern("walker_inner_border", ItemStack.EMPTY)),
+	WALKER_SKULL(addPattern("walker_skull", ItemStack.EMPTY)),;
 
 	private BannerPattern mcPattern;
 

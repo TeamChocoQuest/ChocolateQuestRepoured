@@ -140,8 +140,8 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 		if (stack.getItem() == ModItems.BULLET_FIRE) {
 			return new ItemStack(ModItems.BULLET_FIRE);
 		} else {
-			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			//return ItemStack.EMPTY; // #SHOULD NEVER HAPPEN
+			// System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
+			// return ItemStack.EMPTY; // #SHOULD NEVER HAPPEN
 			return new ItemStack(ModItems.BULLET_IRON);
 		}
 	}
@@ -164,8 +164,8 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 		}
 
 		else {
-			//System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
-			//return 0; // #SHOULD NEVER HAPPEN
+			// System.out.println("IT'S A BUG!!!! IF YOU SEE THIS REPORT IT TO MOD'S AUTHOR");
+			// return 0; // #SHOULD NEVER HAPPEN
 			return 1;
 		}
 	}

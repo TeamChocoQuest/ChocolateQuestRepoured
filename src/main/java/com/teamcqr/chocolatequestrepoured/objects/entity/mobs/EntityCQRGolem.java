@@ -76,7 +76,7 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	public boolean canRide() {
 		return true;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
