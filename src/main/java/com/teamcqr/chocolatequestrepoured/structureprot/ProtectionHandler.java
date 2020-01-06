@@ -64,11 +64,20 @@ public class ProtectionHandler {
 	// Register
 	@SubscribeEvent
 	public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
+
 		// Create ProtectedRegion obj
-		ProtectedRegion regionToBeRegistered = new ProtectedRegion(e.getDungeonID().toString(), e.getPos(),
-				new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()), null,
-				(ArrayList<BlockPos>) ArrayCollectionMapManipulationUtil.genericAddValueToArrayish(new ArrayList<BlockPos>(), e.getShieldCorePosition(), null), null);
+		ProtectedRegion regionToBeRegistered = new ProtectedRegion(
+                /* Dungeon UUID        */ e.getDungeonID().toString(),
+                /* NW Corner           */ e.getPos(),
+                /* SE Corner           */ new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()),
+				/* Entity Dependencies */ e.getBossIDs(),
+                /* Block Dependencies  */ (ArrayList<BlockPos>) ArrayCollectionMapManipulationUtil.genericAddValueToArrayish(new ArrayList<BlockPos>(), e.getShieldCorePosition(), null),
+                /* Settings Overrides  */ null
+		);
+
+		// Get Dimension ID
 		int dimID = e.getWorld().provider.getDimension();
+
 		// Register in Memory
 		ArrayList<ProtectedRegion> updated = this.activeRegions.get(dimID);
 		if (updated == null) {
@@ -76,8 +85,10 @@ public class ProtectionHandler {
 		}
 		updated.add(regionToBeRegistered);
 		this.activeRegions.put(dimID, updated);
+
 		// Serialize to disk
 		this.serializeToDisc(dimID);
+
 	}
 
 	// Deregister - Called by ProtectedRegion
