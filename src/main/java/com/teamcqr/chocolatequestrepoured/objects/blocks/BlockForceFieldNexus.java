@@ -32,6 +32,8 @@ public class BlockForceFieldNexus extends Block implements ITileEntityProvider {
 		this.setSoundType(SoundType.METAL);
 		this.setHardness(45.0F);
 		this.setResistance(10.0F);
+		this.setLightLevel(7F);
+		this.setLightOpacity(10);
 		this.setHarvestLevel("pickaxe", 3);
 	}
 

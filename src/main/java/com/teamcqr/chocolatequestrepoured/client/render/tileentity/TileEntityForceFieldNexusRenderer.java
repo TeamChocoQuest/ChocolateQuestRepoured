@@ -29,7 +29,7 @@ public class TileEntityForceFieldNexusRenderer extends TileEntitySpecialRenderer
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
         GlStateManager.enableAlpha();
-        GlStateManager.translate((float)x +0.5F, (float)y + 0.375F, (float)z +0.5F);
+        GlStateManager.translate((float)x +0.5F, (float)y + 0.7F, (float)z +0.5F);
         this.bindTexture(CRYSTAL_TEXTURES);
         float f1 = MathHelper.sin(f * 0.02F) / 2.0F + 0.5F;
         f1 = f1 * f1 + f1;
