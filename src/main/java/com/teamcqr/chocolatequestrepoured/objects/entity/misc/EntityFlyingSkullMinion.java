@@ -79,8 +79,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			Vec3d v = this.direction;
 			v = v.normalize();
 			this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
-
-			this.getLookHelper().setLookPositionWithEntity(this.target, 30, 30);
+			if (this.target != null && !this.target.isDead) {
+				this.getLookHelper().setLookPositionWithEntity(this.target, 30, 30);
+			}
 
 		} else if (this.summoner != null) {
 			Vec3d v = this.summoner.getLookVec();
