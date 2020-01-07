@@ -566,12 +566,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		} else {
 			EnumDifficulty difficulty = this.world.getDifficulty();
 
-			if (difficulty == EnumDifficulty.EASY) {
-				health *= 1F;
+			if (difficulty == EnumDifficulty.NORMAL) {
+				health *= 1.25F;
 			} else if (difficulty == EnumDifficulty.HARD) {
 				health *= 1.5F;
-			} else {
-				health *= 1.25F;
 			}
 		}
 
