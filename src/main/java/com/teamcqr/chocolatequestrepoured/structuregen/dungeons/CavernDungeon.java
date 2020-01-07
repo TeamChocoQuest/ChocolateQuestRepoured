@@ -62,7 +62,7 @@ public class CavernDungeon extends DungeonBase {
 
 	public CavernDungeon(File configFile) {
 		super(configFile);
-		this.protectFromDestruction = false;
+		this.enableProtectionSystem = false;
 		Properties prop = this.loadConfig(configFile);
 		if (prop != null) {
 			// super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);

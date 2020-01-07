@@ -58,7 +58,7 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 
 		File structureF = this.pickStructure();
 		if (structureF != null && structureF.exists() && structureF.isFile()) {
-			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.protectFromDestruction);
+			CQStructure structure = new CQStructure(structureF, this, chunk.x, chunk.z, this.enableProtectionSystem);
 
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);

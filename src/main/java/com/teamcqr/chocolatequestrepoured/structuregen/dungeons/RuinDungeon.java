@@ -69,7 +69,7 @@ public class RuinDungeon extends DefaultSurfaceDungeon {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		File structure = this.pickStructure();
 		if (structure != null) {
-			CQStructure dungeonStructure = new CQStructure(structure, this, chunk.x, chunk.z, this.protectFromDestruction);
+			CQStructure dungeonStructure = new CQStructure(structure, this, chunk.x, chunk.z, this.enableProtectionSystem);
 
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);

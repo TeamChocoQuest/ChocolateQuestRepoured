@@ -36,7 +36,7 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 		// super.generate(x, z, world, chunk, random);
 
 		File structure = this.pickStructure();
-		CQStructure dungeon = new CQStructure(structure, this, chunk.x, chunk.z, this.protectFromDestruction);
+		CQStructure dungeon = new CQStructure(structure, this, chunk.x, chunk.z, this.enableProtectionSystem);
 
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);
