@@ -180,7 +180,7 @@ public class CQRMain {
 		CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons");
 		CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs");
 		CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures");
-		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exports");
+		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output");
 		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
 
 		if (!CQ_CONFIG_FOLDER.exists()) {
