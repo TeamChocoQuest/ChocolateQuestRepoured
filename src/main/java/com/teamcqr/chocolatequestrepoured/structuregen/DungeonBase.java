@@ -46,7 +46,6 @@ public class DungeonBase {
 	protected String[] modDependencies = { Reference.MODID };
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
-	protected boolean protectFromDestruction = false;
 	protected boolean useCoverBlock = false;
 	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
 	private boolean spawnBehindWall = false;
@@ -59,6 +58,14 @@ public class DungeonBase {
 	private boolean isPosLocked = false;
 	protected boolean registeredSuccessful = false;
 	private boolean rotateDungeon = true;
+	
+	//Protection system stuff
+	protected boolean enableProtectionSystem = false;
+	protected boolean allowBlockPlacing = false;
+	protected boolean allowBlockBreaking = false;
+	protected boolean allowFireSpread = false;
+	protected boolean allowMobSpawning = false;
+	protected boolean bypassSecurityChecks = false;
 
 	public void generate(BlockPos pos, World world) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
@@ -81,7 +88,6 @@ public class DungeonBase {
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[] { 0 });
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
-			this.protectFromDestruction = PropertyFileHelper.getBooleanProperty(prop, "protectblocks", true);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
@@ -100,6 +106,14 @@ public class DungeonBase {
 			}
 			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
 			this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
+			
+			//protection system
+			this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
+			this.allowBlockBreaking = !PropertyFileHelper.getBooleanProperty(prop, "blockMining", false);
+			this.allowBlockPlacing = !PropertyFileHelper.getBooleanProperty(prop, "blockBuilding", false);
+			this.allowFireSpread = !PropertyFileHelper.getBooleanProperty(prop, "blockFireSpread", false);
+			this.allowMobSpawning = !PropertyFileHelper.getBooleanProperty(prop, "blockMobSpawning", false);
+			this.bypassSecurityChecks = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
 
 			this.closeConfigFile();
 		} else {
@@ -186,7 +200,7 @@ public class DungeonBase {
 	}
 
 	public boolean isProtectedFromModifications() {
-		return this.protectFromDestruction;
+		return this.enableProtectionSystem;
 	}
 
 	public boolean isCoverBlockEnabled() {
@@ -288,5 +302,22 @@ public class DungeonBase {
 
 	public int getYOffset() {
 		return Math.abs(this.yOffset);
+	}
+	
+	//Protection system
+	public boolean getAllowFireSpread() {
+		return allowFireSpread;
+	}
+	public boolean getAllowBlockPlacing() {
+		return allowBlockPlacing;
+	}
+	public boolean getAllowBlockBreaking() {
+		return allowBlockBreaking;
+	}
+	public boolean getSecurityBypassEnabled() {
+		return bypassSecurityChecks;
+	}
+	public boolean getAllowMobSpawns() {
+		return allowMobSpawning;
 	}
 }
