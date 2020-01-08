@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
+import java.util.List;
 import java.util.Random;
+
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -28,6 +31,7 @@ public class BlockPhylactery extends Block {
 		this.setLightOpacity(8);
 		this.setLightLevel(1.5F);
 		this.setSoundType(SoundType.GLASS);
+		this.setTickRandomly(true);
 	}
 
 	public BlockPhylactery(Material blockMaterialIn, MapColor blockMapColorIn) {
@@ -36,6 +40,7 @@ public class BlockPhylactery extends Block {
 		this.setLightOpacity(8);
 		this.setLightLevel(1.5F);
 		this.setSoundType(SoundType.GLASS);
+		this.setTickRandomly(true);
 	}
 
 	@Override
@@ -73,6 +78,27 @@ public class BlockPhylactery extends Block {
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
+	}
+	
+	@Override
+	public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		super.randomTick(worldIn, pos, state, rand);
+		AxisAlignedBB aabb = new AxisAlignedBB(pos.add(3,2,3), pos.add(-3,-2,-3));
+		List<EntityCQRLich> lichesInRange = worldIn.getEntitiesWithinAABB(EntityCQRLich.class, aabb);
+		if(!lichesInRange.isEmpty()) {
+			int i = 0;
+			while(i < lichesInRange.size()) {
+				EntityCQRLich lich = lichesInRange.get(i);
+				if(lich != null && !lich.isDead) {
+					if(!lich.hasPhylactery()) {
+						lich.setCurrentPhylacteryBlock(pos);
+						i = lichesInRange.size();
+					} else {
+						i++;
+					}
+				}
+			}
+		}
 	}
 
 }
