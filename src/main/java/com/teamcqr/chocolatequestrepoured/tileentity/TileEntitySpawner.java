@@ -21,7 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -34,7 +33,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	public ItemStackHandler inventory = new ItemStackHandler(9);
 	private boolean spawnedInDungeon = false;
-	private String mobOverride = null;
+	private EDungeonMobType mobOverride = null;
 	private int dungeonChunkX = 0;
 	private int dungeonChunkZ = 0;
 
@@ -58,7 +57,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
 		}
 		if (compound.hasKey("overrideMob")) {
-			this.mobOverride = compound.getString("overrideMob");
+			this.mobOverride = EDungeonMobType.byString(compound.getString("overrideMob"));
 		}
 		if (compound.hasKey("dungeonChunkX") && compound.hasKey("dungeonChunkZ")) {
 			this.dungeonChunkX = compound.getInteger("dungeonChunkX");
@@ -74,7 +73,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			compound.setBoolean("isDungeonSpawner", true);
 		}
 		if (this.mobOverride != null) {
-			compound.setString("overrideMob", this.mobOverride);
+			compound.setString("overrideMob", this.mobOverride.name());
 		}
 		if (this.dungeonChunkX != 0 && this.dungeonChunkZ != 0) {
 			compound.setInteger("dungeonChunkX", this.dungeonChunkX);
@@ -98,8 +97,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
 		this.spawnedInDungeon = true;
-		this.mobOverride = mobOverride.name().toUpperCase();
-		// System.out.println("Dungeon mob: " + dungeon.getDungeonMob().name().toUpperCase());
+		this.mobOverride = mobOverride;
 		this.dungeonChunkX = dunChunkX;
 		this.dungeonChunkZ = dunChunkZ;
 
@@ -112,30 +110,12 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				ItemStack stack = this.inventory.getStackInSlot(i);
 
 				if (!stack.isEmpty() && stack.getTagCompound() != null) {
-					// for(int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
-					// DONE: Set "id" section of the nbt tag, type is resourcelocation
 					NBTTagCompound nbt = stack.getTagCompound().getCompoundTag("EntityIn");
-					ResourceLocation resLocCurrent = new ResourceLocation(nbt.getString("id"));
-					// System.out.println("Spawner Entity: " + resLocCurrent.toString());
-					boolean isCurrentCQDummy = (resLocCurrent.getResourceDomain().equalsIgnoreCase(Reference.MODID) && resLocCurrent.getResourcePath().equalsIgnoreCase("dummy"));
-					if (this.mobOverride != null && isCurrentCQDummy && EDungeonMobType.byString(this.mobOverride) != null) {
-						EDungeonMobType newMob = EDungeonMobType.byString(this.mobOverride);
-						// if(!newMob.equals(EDungeonMobType.DONT_REPLACE)) {
-						if (newMob.equals(EDungeonMobType.DEFAULT)) {
-							// DONE: Fix this not working sometimes...
-							nbt.setString("id", EDungeonMobType.getMobTypeDependingOnDistance(/* this.pos.getX() */this.dungeonChunkX * 16, /* this.pos.getZ() */ this.dungeonChunkZ * 16).getEntityResourceLocation().toString());
-						} else {
-							nbt.setString("id", newMob.getEntityResourceLocation().toString());
-						}
-						// }
-					}
-					// System.out.println("Spawning entities...");
-					for (int stackIndex = 0; stackIndex < stack.getCount(); stackIndex++) {
-						this.spawnEntityFromNBT(nbt);
-					}
 
-					this.inventory.setStackInSlot(i, ItemStack.EMPTY);
-					// }
+					while (!stack.isEmpty()) {
+						this.spawnEntityFromNBT(nbt);
+						stack.shrink(1);
+					}
 				}
 			}
 
@@ -156,6 +136,16 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				((NBTTagCompound) passenger).removeTag("Pos");
 			}
 		}
+
+		if (this.mobOverride != null && nbt.getString("id").equals(Reference.MODID + ":dummy")) {
+			if (this.mobOverride == EDungeonMobType.DEFAULT) {
+				EDungeonMobType mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.pos.getX(), this.pos.getZ());
+				nbt.setString("id", mobType.getEntityResourceLocation().toString());
+			} else {
+				nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());
+			}
+		}
+
 		Entity entity = EntityList.createEntityFromNBT(nbt, this.world);
 
 		if (entity != null) {
@@ -189,8 +179,9 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	protected boolean isNonCreativePlayerInRange(double range) {
 		if (range > 0.0D) {
+			double d = range * range;
 			for (EntityPlayer player : this.world.playerEntities) {
-				if (!player.isCreative() && !player.isSpectator() && player.getDistance(this.pos.getX(), this.pos.getY(), this.pos.getZ()) < range) {
+				if (!player.isCreative() && !player.isSpectator() && player.getDistanceSqToCenter(this.pos) < d) {
 					return true;
 				}
 			}
@@ -201,4 +192,5 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	public void setDungeonSpawner() {
 		this.spawnedInDungeon = true;
 	}
+
 }
