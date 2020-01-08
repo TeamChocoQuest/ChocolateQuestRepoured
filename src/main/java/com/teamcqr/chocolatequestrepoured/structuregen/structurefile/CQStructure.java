@@ -285,6 +285,10 @@ public class CQStructure {
 								EntityArmorStand indicator = new EntityArmorStand(worldIn, vecPos.getX(), vecPos.getY(), vecPos.getZ());
 								indicator.setInvisible(true);
 								indicator.setNoGravity(true);
+								NBTTagCompound nbt = new NBTTagCompound();
+								nbt.setBoolean("CustomNameVisible", true);
+								nbt.setBoolean("Invulnerable", true);
+								indicator.readFromNBT(nbt);
 								indicator.setCustomNameTag("Here should be a boss. No this is not a bug! The boss for the race owning this dungeon just isnt implented yet!");
 								worldIn.spawnEntity(indicator);
 							}
