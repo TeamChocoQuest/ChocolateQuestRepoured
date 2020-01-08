@@ -1,3 +1,7 @@
+#############################################################
+#Documentation on the wiki                                  #
+#    https://cq-repoured.fandom.com/wiki/Loot_Configuration #
+#############################################################
 apple = minecraft:apple,0,2,5,50
 bread = minecraft:bread,0,2,5,80
 pork = minecraft:porkchop,0,3,6,70
