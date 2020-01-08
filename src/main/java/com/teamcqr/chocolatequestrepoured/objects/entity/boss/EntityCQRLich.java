@@ -173,5 +173,10 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
+	
+	public boolean hasPhylactery() {
+		return (this.currentPhylacteryPosition != null &&
+			(this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY)); 
+	}
 
 }

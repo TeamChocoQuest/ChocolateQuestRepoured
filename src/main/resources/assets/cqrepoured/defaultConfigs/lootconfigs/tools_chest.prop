@@ -1,3 +1,7 @@
+#############################################################
+#Documentation on the wiki                                  #
+#    https://cq-repoured.fandom.com/wiki/Loot_Configuration #
+#############################################################
 dHelmet = minecraft:diamond_helmet,0,1,1,2
 dChestPlate = minecraft:diamond_chestplate,0,1,1,1
 dLeggins = minecraft:diamond_leggings,0,1,1,1
