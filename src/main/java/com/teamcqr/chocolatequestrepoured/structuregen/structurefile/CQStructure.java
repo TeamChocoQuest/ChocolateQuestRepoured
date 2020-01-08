@@ -289,7 +289,7 @@ public class CQStructure {
 								nbt.setBoolean("CustomNameVisible", true);
 								nbt.setBoolean("Invulnerable", true);
 								indicator.readFromNBT(nbt);
-								indicator.setCustomNameTag("Here should be a boss. No this is not a bug! The boss for the race owning this dungeon just isnt implented yet!");
+								indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
 								worldIn.spawnEntity(indicator);
 							}
 						}
