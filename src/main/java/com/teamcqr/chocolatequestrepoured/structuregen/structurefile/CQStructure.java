@@ -17,7 +17,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
@@ -28,6 +27,7 @@ import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -281,7 +281,12 @@ public class CQStructure {
 								worldIn.spawnEntity(bossEnt);
 								this.bossIDs.add(bossEnt.getPersistentID());
 							} else {
-								worldIn.setBlockState(vecPos, ModBlocks.BOSS_BLOCK.getDefaultState());
+								worldIn.setBlockToAir(vecPos);
+								EntityArmorStand indicator = new EntityArmorStand(worldIn, vecPos.getX(), vecPos.getY(), vecPos.getZ());
+								indicator.setInvisible(true);
+								indicator.setNoGravity(true);
+								indicator.setCustomNameTag("Here should be a boss. No this is not a bug! The boss for the race owning this dungeon just isnt implented yet!");
+								worldIn.spawnEntity(indicator);
 							}
 						}
 					} catch (Exception ex) {
