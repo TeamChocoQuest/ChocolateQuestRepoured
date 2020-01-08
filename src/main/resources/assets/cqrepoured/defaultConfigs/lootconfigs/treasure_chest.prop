@@ -1,3 +1,7 @@
+#############################################################
+#Documentation on the wiki                                  #
+#    https://cq-repoured.fandom.com/wiki/Loot_Configuration #
+#############################################################
 goldBlock = minecraft:gold_block,0,1,4,70
 enderPearl = minecraft:ender_pearl,0,3,12,60
 diamond = minecraft:diamond,0,2,6,80
