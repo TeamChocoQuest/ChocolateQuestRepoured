@@ -96,6 +96,9 @@ public class CQStructure {
 			this.dungeon = dungeon;
 			mobType = dungeon.getDungeonMob();
 		}
+		if(mobType == null) {
+			mobType = EDungeonMobType.DEFAULT;
+		}
 		if (mobType != null && mobType.equals(EDungeonMobType.DEFAULT)) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX * 16, dunZ * 16);
 			this.setNewBannerPattern(mobType.getBanner());
