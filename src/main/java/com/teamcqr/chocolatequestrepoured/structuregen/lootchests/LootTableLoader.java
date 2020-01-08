@@ -70,9 +70,11 @@ public class LootTableLoader {
 		Enumeration<Object> fileEntries = propFile.elements();
 		while (fileEntries.hasMoreElements()) {
 			String entry = (String) fileEntries.nextElement();
-			WeightedItemStack stack = createWeightedItemStack(entry);
-			if (stack != null) {
-				items.add(stack);
+			if(!entry.startsWith("#")) {
+				WeightedItemStack stack = createWeightedItemStack(entry);
+				if (stack != null) {
+					items.add(stack);
+				}
 			}
 		}
 		return items;
