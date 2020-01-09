@@ -212,41 +212,41 @@ public enum ELootTable {
 	static String getAssignedFileName(ELootTable table) {
 		switch (table) {
 		case CQ_CUSTOM_1:
-			return "custom_1" + ".prop";
+			return "custom_1";
 		case CQ_CUSTOM_10:
-			return "custom_10" + ".prop";
+			return "custom_10";
 		case CQ_CUSTOM_11:
-			return "custom_11" + ".prop";
+			return "custom_11";
 		case CQ_CUSTOM_12:
-			return "custom_12" + ".prop";
+			return "custom_12";
 		case CQ_CUSTOM_13:
-			return "custom_13" + ".prop";
+			return "custom_13";
 		case CQ_CUSTOM_14:
-			return "custom_14" + ".prop";
+			return "custom_14";
 		case CQ_CUSTOM_2:
-			return "custom_2" + ".prop";
+			return "custom_2";
 		case CQ_CUSTOM_3:
-			return "custom_3" + ".prop";
+			return "custom_3";
 		case CQ_CUSTOM_4:
-			return "custom_4" + ".prop";
+			return "custom_4";
 		case CQ_CUSTOM_5:
-			return "custom_5" + ".prop";
+			return "custom_5";
 		case CQ_CUSTOM_6:
-			return "custom_6" + ".prop";
+			return "custom_6";
 		case CQ_CUSTOM_7:
-			return "custom_7" + ".prop";
+			return "custom_7";
 		case CQ_CUSTOM_8:
-			return "custom_8" + ".prop";
+			return "custom_8";
 		case CQ_CUSTOM_9:
-			return "custom_9" + ".prop";
+			return "custom_9";
 		case CQ_EQUIPMENT:
-			return "tools_chest" + ".prop";
+			return "tools_chest";
 		case CQ_FOOD:
-			return "food_chest" + ".prop";
+			return "food_chest";
 		case CQ_MATERIAL:
-			return "material_chest" + ".prop";
+			return "material_chest";
 		case CQ_TREASURE:
-			return "treasure_chest" + ".prop";
+			return "treasure_chest";
 		default:
 			return null;
 		}

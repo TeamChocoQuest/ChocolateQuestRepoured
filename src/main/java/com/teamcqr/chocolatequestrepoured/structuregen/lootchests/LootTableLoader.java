@@ -2,17 +2,29 @@ package com.teamcqr.chocolatequestrepoured.structuregen.lootchests;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import com.google.common.collect.Queues;
+import com.google.common.io.Files;
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraftforge.common.ForgeHooks;
 
 /**
  * Copyright (c) 29.04.2019
@@ -45,22 +57,11 @@ public class LootTableLoader {
 			"custom_14" };
 
 	public void loadConfigs() {
-		int files = -1;
-		if (CQRMain.CQ_CHEST_FOLDER != null && CQRMain.CQ_CHEST_FOLDER.exists()) {
-			files = CQRMain.CQ_CHEST_FOLDER.listFiles().length - 1;
-		}
-		if (files > 0) {
-			System.out.println("Found " + (files + 1) + " loot chest configs! Loading...");
-			for (File f : CQRMain.CQ_CHEST_FOLDER.listFiles()) {
-				if (f.isFile()) {
-					ELootTable table = null;
-
-					table = ELootTable.getAssignedLootTable(f.getName());
-
-					if (table != null) {
-						System.out.println("Loading loot config " + f.getName() + "...");
-					}
-				}
+		if (CQRMain.CQ_CHEST_FOLDER.exists()) {
+			File[] files = CQRMain.CQ_CHEST_FOLDER.listFiles();
+			CQRMain.logger.info("Loading " + files.length + " loot chest configs.");
+			for (File f : files) {
+				ELootTable.getAssignedLootTable(f.getName());
 			}
 		}
 	}
@@ -81,7 +82,6 @@ public class LootTableLoader {
 	}
 
 	private static WeightedItemStack createWeightedItemStack(String entry) {
-		// 1 2 3 4 5 6 7 8 9
 		// String format: ID = ITEM, DAMAGE, MIN_COUNT, MAX_COUNT, CHANCE, ENCHANT, MIN_LVL, MAX_LVL, TREASURE
 		StringTokenizer tokenizer = new StringTokenizer(entry, ",");
 		int tokenCount = tokenizer.countTokens();
@@ -97,7 +97,6 @@ public class LootTableLoader {
 			boolean treasure = false;
 
 			item = ((String) tokenizer.nextElement()).trim();
-			// System.out.println("Item: " + item);
 			damage = Integer.parseInt(((String) tokenizer.nextElement()).trim());
 			min_count = Integer.parseInt(((String) tokenizer.nextElement()).trim());
 			max_count = Integer.parseInt(((String) tokenizer.nextElement()).trim());
@@ -115,7 +114,7 @@ public class LootTableLoader {
 			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure);
 			return itemstack;
 		} else {
-			System.err.println("Config string is invalid! Not enough arguments!");
+			CQRMain.logger.error("Config string is invalid! Not enough arguments!");
 			return null;
 		}
 	}
@@ -129,46 +128,105 @@ public class LootTableLoader {
 		return false;
 	}
 
-	public static void fillLootTable(ELootTable whatTable, LootTable lootTable) {
-		Properties propFile = null;
+	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
+		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.getAssignedFileName(ELootTable.valueOf(name)) + ".json");
+		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.getAssignedFileName(ELootTable.valueOf(name)) + ".prop");
+		InputStream inputStream = null;
 
-		File file = null;
-
-		try {
-			file = new File(CQRMain.CQ_CHEST_FOLDER.getAbsolutePath(), ELootTable.getAssignedFileName(whatTable));
-		} catch (Exception ex) {
-			file = null;
-			ex.printStackTrace();
-		}
-		if (file != null && file.exists()) {
-			propFile = new Properties();
-
-			FileInputStream fis = null;
+		if (jsonFile.exists()) {
 			try {
-				fis = new FileInputStream(file);
-				propFile.load(fis);
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				propFile = null;
-				file = null;
-				fis = null;
-			} catch (IOException e) {
-				e.printStackTrace();
-				propFile = null;
-				file = null;
-				fis = null;
+				inputStream = new FileInputStream(jsonFile);
+				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
+
+				ThreadLocal<Deque> lootContext = getLootContext();
+				Deque que = lootContext.get();
+				if (que == null) {
+					que = Queues.newArrayDeque();
+					lootContext.set(que);
+				}
+
+				que.push(createLootTableContext(name));
+				lootTable = getGsonInstance().fromJson(s, LootTable.class);
+				que.pop();
+
+				if (lootTable != null) {
+					lootTable.freeze();
+				}
+			} catch (IOException | JsonParseException e) {
+				CQRMain.logger.error(e);
 			}
 
-			if (propFile != null) {
-				List<WeightedItemStack> items = getItemList(propFile);
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				CQRMain.logger.error(e);
+			}
+		} else if (propFile.exists()) {
+			try {
+				inputStream = new FileInputStream(propFile);
+				Properties properties = new Properties();
+				properties.load(inputStream);
 
-				int i = 0;
-				for (WeightedItemStack wis : items) {
-					wis.addToTable(lootTable, i);
-					i++;
+				List<WeightedItemStack> items = getItemList(properties);
+
+				for (int i = 0; i < items.size(); i++) {
+					items.get(i).addToTable(lootTable, i);
 				}
+			} catch (IOException e) {
+				CQRMain.logger.error(e);
+			}
+
+			try {
+				inputStream.close();
+			} catch (IOException e) {
+				CQRMain.logger.error(e);
 			}
 		}
+
+		return lootTable;
+	}
+
+	private static ThreadLocal<Deque> lootContext = null;
+
+	private static ThreadLocal<Deque> getLootContext() {
+		if (lootContext != null) {
+			return lootContext;
+		}
+		try {
+			Field f = ForgeHooks.class.getDeclaredField("lootContext");
+			f.setAccessible(true);
+			return (ThreadLocal<Deque>) f.get(null);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error(e);
+		}
+		return null;
+	}
+
+	private static Object createLootTableContext(ResourceLocation name) {
+		try {
+			Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
+			c.setAccessible(true);
+			return c.newInstance(name, true);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+			CQRMain.logger.error(e);
+		}
+		return null;
+	}
+
+	private static Gson GsonInstance = null;
+
+	private static Gson getGsonInstance() {
+		if (GsonInstance != null) {
+			return GsonInstance;
+		}
+		try {
+			Field f = LootTableManager.class.getDeclaredField("GSON_INSTANCE");
+			f.setAccessible(true);
+			return (Gson) f.get(null);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error(e);
+		}
+		return null;
 	}
 
 }

@@ -23,12 +23,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -45,23 +43,11 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
-		LootTable lootTable = event.getTable();
-		ResourceLocation resLoc = event.getName();
-		if (ELootTable.valueOf(resLoc) != null) {
-			ELootTable table = ELootTable.valueOf(resLoc);
-			// System.out.println("Loaded loottable is a cq one....");
-			// System.out.println("Exchanging loot...");
-
+		if (ELootTable.valueOf(event.getName()) != null) {
 			try {
-				LootTableLoader.fillLootTable(table, lootTable);
-				/*
-				 * if(table.equals(ELootTable.CQ_EQUIPMENT)) {
-				 * System.out.println(lootTable.toString());
-				 * }
-				 */
-			} catch (Exception ex) {
-				System.err.println("Unable to fill loot table " + event.getName());
-				ex.printStackTrace();
+				event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
+			} catch (Exception e) {
+				CQRMain.logger.error("Unable to fill loot table " + event.getName());
 			}
 		}
 	}
