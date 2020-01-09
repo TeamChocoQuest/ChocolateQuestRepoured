@@ -14,5 +14,8 @@ public class SyncFactionPacketHandler implements IMessageHandler<SyncFactionData
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	//TODO: Add stuff that enters the received values into the faction GUI
+	//TODO: Request will be sent when the faction GUI is opened
 
 }
