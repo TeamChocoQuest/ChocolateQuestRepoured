@@ -33,6 +33,9 @@ public class CQRConfig {
 		public int supportHillWallSize = 8;
 		@Config.RangeInt(min = 1, max = 100)
 		public int overallDungeonChance = 75;
+		public boolean moreDungeonsBehindWall = true;
+		@Config.RangeInt(min = 1, max = 10)
+		public int densityBehindWallFactor = 2;
 	}
 
 	public static class Mobs {
