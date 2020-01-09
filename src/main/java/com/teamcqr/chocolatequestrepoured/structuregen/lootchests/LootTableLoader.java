@@ -134,6 +134,7 @@ public class LootTableLoader {
 		InputStream inputStream = null;
 
 		if (jsonFile.exists()) {
+			//Load json loot table
 			try {
 				inputStream = new FileInputStream(jsonFile);
 				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
@@ -162,6 +163,7 @@ public class LootTableLoader {
 				CQRMain.logger.error(e);
 			}
 		} else if (propFile.exists()) {
+			//Load prop file and fill loot table
 			try {
 				inputStream = new FileInputStream(propFile);
 				Properties properties = new Properties();
