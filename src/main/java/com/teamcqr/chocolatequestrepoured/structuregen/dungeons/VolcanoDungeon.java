@@ -51,7 +51,6 @@ public class VolcanoDungeon extends DungeonBase {
 	private double steepness = 0.075D;
 	private double lavaChance = 0.005D;
 	private double magmaChance = 0.1;
-	private EStrongholdType strongholdType = EStrongholdType.LINEAR;
 	private String rampMobName = "minecraft:zombie";
 	private Block stoneBlock = Blocks.STONE;
 	private Block lavaBlock = Blocks.LAVA;
@@ -85,7 +84,6 @@ public class VolcanoDungeon extends DungeonBase {
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
-			this.strongholdType = EStrongholdType.getByName(prop.getProperty("strongholdType", "LINEAR").toUpperCase());
 
 			this.closeConfigFile();
 		} else {
