@@ -195,6 +195,11 @@ public class DungeonRegistry {
 				this.biomeDungeonMap.put(biome.getRegistryName(), new ArrayList<DungeonBase>());
 			}
 		}
+		for(BiomeDictionary.Type type : BiomeDictionary.getTypes(biome)) {
+			if(!biomeTypeDungeonMap.containsKey(type)) {
+				biomeTypeDungeonMap.put(type, new ArrayList<DungeonBase>());
+			}
+		}
 	}
 
 	public int getDungeonDistance() {
@@ -212,6 +217,11 @@ public class DungeonRegistry {
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
 		for (ResourceLocation biome : this.biomeDungeonMap.keySet()) {
 			this.addDungeonToBiome(dungeon, biome);
+		}
+		for(BiomeDictionary.Type type : this.biomeTypeDungeonMap.keySet()) {
+			List<DungeonBase> lTmp = this.biomeTypeDungeonMap.getOrDefault(type, new ArrayList<DungeonBase>());
+			lTmp.add(dungeon);
+			this.biomeTypeDungeonMap.replace(type, lTmp);
 		}
 	}
 
