@@ -87,7 +87,7 @@ public class DungeonRegistry {
 										}
 										List<DungeonBase> dungeonTmp = biomeTypeDungeonMap.getOrDefault(biomeType, new ArrayList<DungeonBase>());
 										dungeonTmp.add(dungeon);
-										biomeTypeDungeonMap.replace(biomeType, dungeonTmp);
+										biomeTypeDungeonMap.put(biomeType, dungeonTmp);
 									} else {
 										// Add dungeon to biome from registry name
 										Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
