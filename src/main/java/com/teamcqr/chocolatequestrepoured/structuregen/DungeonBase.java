@@ -150,6 +150,15 @@ public class DungeonBase {
 		return this.allowedDims;
 	}
 
+	public boolean isDimensionAllowed(int dimension) {
+		for (int dim : this.getAllowedDimensions()) {
+			if (dim == dimension) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public boolean isUnique() {
 		return this.unique;
 	}

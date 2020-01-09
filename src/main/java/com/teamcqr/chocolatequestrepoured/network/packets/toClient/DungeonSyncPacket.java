@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toClient;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer.FakeDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
@@ -12,21 +12,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class DungeonSyncPacket implements IMessage {
 
-	private List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
-	private List<FakeDungeon> fakeDungeonList = new ArrayList<FakeDungeon>();
+	private Set<DungeonBase> dungeonSet = new HashSet<DungeonBase>();
+	private Set<FakeDungeon> fakeDungeonSet = new HashSet<FakeDungeon>();
 
 	public DungeonSyncPacket() {
 
 	}
 
-	public DungeonSyncPacket(List<DungeonBase> dungeons) {
-		this.dungeonList = dungeons;
+	public DungeonSyncPacket(Set<DungeonBase> dungeons) {
+		this.dungeonSet = dungeons;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		int dungeonCount = buf.readByte();
-		this.fakeDungeonList = new ArrayList<FakeDungeon>(dungeonCount);
+		this.fakeDungeonSet = new HashSet<FakeDungeon>(dungeonCount);
 		for (int i = 0; i < dungeonCount; i++) {
 			String name = ByteBufUtils.readUTF8String(buf);
 			int iconID = buf.readByte();
@@ -36,14 +36,14 @@ public class DungeonSyncPacket implements IMessage {
 				dependencies[j] = ByteBufUtils.readUTF8String(buf);
 			}
 
-			this.fakeDungeonList.add(new FakeDungeon(name, iconID, dependencies));
+			this.fakeDungeonSet.add(new FakeDungeon(name, iconID, dependencies));
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeByte(this.dungeonList.size());
-		for (DungeonBase dungeon : this.dungeonList) {
+		buf.writeByte(this.dungeonSet.size());
+		for (DungeonBase dungeon : this.dungeonSet) {
 			ByteBufUtils.writeUTF8String(buf, dungeon.getDungeonName());
 			buf.writeByte(dungeon.getIconID());
 			buf.writeByte(dungeon.getDependencies().length);
@@ -53,8 +53,8 @@ public class DungeonSyncPacket implements IMessage {
 		}
 	}
 
-	public List<FakeDungeon> getFakeDungeonList() {
-		return this.fakeDungeonList;
+	public Set<FakeDungeon> getFakeDungeonList() {
+		return this.fakeDungeonSet;
 	}
 
 }

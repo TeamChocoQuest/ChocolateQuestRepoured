@@ -1,13 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -19,8 +20,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
+ * Copyright (c) 29.04.2019<br>
+ * Developed by DerToaster98<br>
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonGenUtils {
@@ -53,18 +54,11 @@ public class DungeonGenUtils {
 		if (number >= 100) {
 			return true;
 		}
-		int rdmNmbr = rdm.nextInt(100) + 1;
-		if (number >= rdmNmbr) {
-			return true;
-		}
-		return false;
+		return rdm.nextInt(100) < number;
 	}
 
 	public static boolean PercentageRandom(double number, long seed) {
-		Random rdm = new Random();
-		rdm.setSeed(seed);
-		number *= 100;
-		return PercentageRandom(((Double) number).intValue(), rdm);
+		return PercentageRandom((int) (number * 100), new Random(seed));
 	}
 
 	public static int getIntBetweenBorders(int min, int max, Random rdm) {
@@ -94,60 +88,60 @@ public class DungeonGenUtils {
 		return BannerHelper.isCQBanner(banner);
 	}
 
+	public static boolean isInWallRange(World world, int chunkX, int chunkZ) {
+		// Check if the wall is enabled
+		if (!CQRConfig.wall.enabled) {
+			return false;
+		}
+		// Check if the world is the overworld
+		if (world.provider.getDimension() != 0) {
+			return false;
+		}
+		// Check the coordinates
+		if (chunkZ < -CQRConfig.wall.distance - 12) {
+			return false;
+		}
+		if (chunkZ > -CQRConfig.wall.distance + 12) {
+			return false;
+		}
+
+		return true;
+	}
+
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
-		/*
-		 * if (Math.abs(chunkX) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance()) && Math.abs(chunkZ) >= Math.abs(CQRMain.dungeonRegistry.getDungeonSpawnDistance())) {
-		 * return true;
-		 * }
-		 */
 		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
-		chunkX -= spawnChunk.x;
-		chunkZ -= spawnChunk.z;
-		double dist = Math.sqrt((chunkX * chunkX) + (chunkZ * chunkZ));
-		return dist >= CQRMain.dungeonRegistry.getDungeonSpawnDistance();
+		int x = chunkX - spawnChunk.x;
+		int z = chunkZ - spawnChunk.z;
+		return Math.sqrt(x * x + z * z) >= CQRConfig.general.dungeonSpawnDistance;
 	}
 
-	// IMPORTANT: x and z are the CHUNK's x and z!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(int x, int z, World world, int dungeonSeparation) {
-		return isFarAwayEnoughFromLocationSpecifics(new BlockPos(x, 0, z), world, dungeonSeparation);
-	}
-
-	// IMPORTANT: pos is a CHUNKPOS!!!
-	public static boolean isFarAwayEnoughFromLocationSpecifics(BlockPos pos, World world, int dungeonSeparation) {
-		if (CQRMain.dungeonRegistry.getCoordinateSpecificsMap() != null && CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet().size() > 0) {
-			for (BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
-				// Chunk chunk = world.getChunkFromBlockCoords(dunPos);
-				BlockPos chunkPos = new BlockPos(Math.abs(dunPos.getX() / 16), 0, Math.abs(dunPos.getZ() / 16));
-				if (Math.abs(chunkPos.getDistance(Math.abs(pos.getX()), 0, Math.abs(pos.getZ()))) < dungeonSeparation) {
-					return false;
-				}
+	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int dungeonSeparation) {
+		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificsMap()) {
+			int x = chunkX - dungeon.getLockedPos().getX() * 16;
+			int z = chunkZ - dungeon.getLockedPos().getZ() * 16;
+			if (Math.sqrt(x * x + z * z) < dungeonSeparation) {
+				return false;
 			}
 		}
 
 		return true;
 	}
 
-	public static List<DungeonBase> getLocSpecDungeonsForChunk(int chunkX, int chunkZ, World world) {
-		List<DungeonBase> ret = new ArrayList<DungeonBase>();
+	public static Set<DungeonBase> getLocSpecDungeonsForChunk(World world, int chunkX, int chunkZ) {
+		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
 
-		for (BlockPos dunPos : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().keySet()) {
-			Chunk dunChun = world.getChunkFromBlockCoords(dunPos);
-			if (dunChun.x == chunkX && dunChun.z == chunkZ) {
-				for (DungeonBase db : CQRMain.dungeonRegistry.getCoordinateSpecificsMap().get(dunPos)) {
-					ret.add(db);
-				}
+		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificsMap()) {
+			Chunk chunk = world.getChunkFromBlockCoords(dungeon.getLockedPos());
+			if (chunk.x == chunkX && chunk.z == chunkZ && dungeon.isDimensionAllowed(world.provider.getDimension())) {
+				dungeons.add(dungeon);
 			}
 		}
 
-		if (ret.isEmpty()) {
-			return null;
+		if (dungeons.size() > 1) {
+			CQRMain.logger.warn("Found " + dungeons.size() + " coordinate specific dungeons for chunkX=" + chunkX + ", chunkZ=" + chunkZ + "!");
 		}
 
-		return ret;
-	}
-
-	public static List<DungeonBase> getLocSpecDungeonsForChunk(Chunk chunk, World world) {
-		return getLocSpecDungeonsForChunk(chunk.x, chunk.z, world);
+		return dungeons;
 	}
 
 	/*
