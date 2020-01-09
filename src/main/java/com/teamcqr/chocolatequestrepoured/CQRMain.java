@@ -138,30 +138,17 @@ public class CQRMain {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
-		// Instantiating banners
-		try {
-			logger.info("Loading banner configuration...");
-			for (EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
-				cqPattern.getPattern();
-			}
-		} catch (Exception e) {
-			logger.error("Failed to instantiate banners!");
-			logger.error(e);
-		}
-		// Instantiating loot tables for entities
-		try {
-			logger.info("Loading entity loot table configuration...");
-			for (ELootTablesNormal eltn : ELootTablesNormal.values()) {
-				eltn.getLootTable();
-			}
-			for (ELootTablesBoss eltn : ELootTablesBoss.values()) {
-				eltn.getLootTable();
-			}
-		} catch (Exception e) {
-			logger.error("Failed to instantiate entity loot tables!");
-			logger.error(e);
-		}
-
+		//Instantiating enums
+		//loot tables
+		ELootTable.values();
+		//Banners
+		EBannerPatternsCQ.values();
+		//Normal entity loot
+		ELootTablesNormal.values();
+		//Boss loot
+		ELootTablesBoss.values();
+		
+		
 		// Register event handling for dungeon protection system
 		// MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
