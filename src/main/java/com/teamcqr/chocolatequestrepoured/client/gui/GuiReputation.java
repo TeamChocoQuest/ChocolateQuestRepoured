@@ -25,6 +25,7 @@ public class GuiReputation extends GuiScreen {
 	// Lang keys
 	protected final String lblFactionButtonLangKey = "gui.repu.faction";
 	protected final String lblReputationBarLangKey = "gui.repu.reputation";
+	//POST ALPHA
 	protected final String lblMembersKilledLangKey = "gui.repu.memberskilled";
 	protected final String lblDungeonsConqueredLangKey = "gui.repu.dungeonsconquered";
 
