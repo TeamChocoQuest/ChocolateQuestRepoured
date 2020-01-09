@@ -59,8 +59,6 @@ public class CQRMain {
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static IProxy proxy;
 
-	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
-
 	public static Logger logger = null;
 
 	public static File CQ_CONFIG_FOLDER = null;
@@ -138,17 +136,16 @@ public class CQRMain {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
-		//Instantiating enums
-		//loot tables
+		// Instantiating enums
+		// loot tables
 		ELootTable.values();
-		//Banners
+		// Banners
 		EBannerPatternsCQ.values();
-		//Normal entity loot
+		// Normal entity loot
 		ELootTablesNormal.values();
-		//Boss loot
+		// Boss loot
 		ELootTablesBoss.values();
-		
-		
+
 		// Register event handling for dungeon protection system
 		// MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
@@ -230,7 +227,7 @@ public class CQRMain {
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
 
-		DungeonRegistry.loadDungeons();
+		DungeonRegistry.getInstance().loadDungeons();
 	}
 
 }
