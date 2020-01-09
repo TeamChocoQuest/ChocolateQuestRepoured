@@ -276,6 +276,10 @@ public class VolcanoGenerator implements IDungeonGenerator {
 			this.generateHoles(blocks, airBlocks);
 			// System.out.println("Calculated air for holes!");
 		}
+		
+		for(BlockPos p : airBlocksThroat) {
+			world.setBlockToAir(p);
+		}
 
 		ThreadingUtil.passListWithBlocksToThreads(blocks, this.dungeon.getUpperMainBlock(), world, 150, true);
 		if (this.dungeon.generateOres()) {
@@ -286,9 +290,6 @@ public class VolcanoGenerator implements IDungeonGenerator {
 		}
 
 		// System.out.println("Placing blocks...");
-		for(BlockPos p : airBlocksThroat) {
-			world.setBlockToAir(p);
-		}
 		//ThreadingUtil.passListWithBlocksToThreads(lava, this.dungeon.getLavaBlock(), world, 150, true);
 		for(BlockPos p : lava) {
 			world.setBlockState(p, this.dungeon.getLavaBlock().getDefaultState());
