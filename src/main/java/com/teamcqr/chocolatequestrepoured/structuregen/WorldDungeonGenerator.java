@@ -48,7 +48,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 			// Check wether the generated chunk is farther north than the wall...
 			if (CQRConfig.wall.enabled && chunkZ < 0 && Math.abs(chunkZ) > Math.abs(CQRConfig.wall.distance)) {
-				dungeonSeparation /= 2;
+				if(CQRConfig.general.moreDungeonsBehindWall) {
+					dungeonSeparation /= CQRConfig.general.densityBehindWallFactor;
+				}
 				behindWall = true;
 			}
 
