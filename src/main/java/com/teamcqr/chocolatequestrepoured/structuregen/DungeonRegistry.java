@@ -54,10 +54,7 @@ public class DungeonRegistry {
 	}
 
 	public void loadDungeonFiles() {
-		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] {
-				"properties",
-				"prop",
-				"cfg" }, true);
+		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
 		CQRMain.logger.info("Loading " + files.size() + " dungeon configuration files...");
 
 		for (File file : files) {
@@ -73,37 +70,34 @@ public class DungeonRegistry {
 					DungeonBase dungeon = this.getDungeonByType(generatorType, file);
 
 					if (dungeon != null && dungeon.isRegisteredSuccessful()) {
-						if (dungeon.getSpawnChance() > 0) {
-							if (!this.areDependenciesMissing(dungeon)) {
-								if (PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false)) {
-									// Position restriction stuff here
-									if (this.handleLockedPos(dungeon, dungeonConfig)) {
-										this.coordinateSpecificDungeons.add(dungeon);
-									}
-								} else {
-									// Biome map filling
-									String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] {
-											"PLAINS" });
-									for (String biomeName : biomeNames) {
-										if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
-											// Add dungeon to all biomes
-											this.addDungeonToAllBiomes(dungeon);
-											this.addDungeonToAllBiomeTypes(dungeon);
-											break;
-										} else if (this.isBiomeType(biomeName)) {
-											// Add dungeon to all biomes from biome type
-											this.addDungeonToBiomeType(dungeon, this.getBiomeTypeByName(biomeName));
-										} else {
-											// Add dungeon to biome from registry name
-											this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
-										}
+						if (!this.areDependenciesMissing(dungeon)) {
+							if (PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false)) {
+								// Position restriction stuff here
+								if (this.handleLockedPos(dungeon, dungeonConfig)) {
+									this.coordinateSpecificDungeons.add(dungeon);
+								}
+							} else  if (dungeon.getSpawnChance() > 0) {
+								// Biome map filling
+								String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
+								for (String biomeName : biomeNames) {
+									if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
+										// Add dungeon to all biomes
+										this.addDungeonToAllBiomes(dungeon);
+										this.addDungeonToAllBiomeTypes(dungeon);
+										break;
+									} else if (this.isBiomeType(biomeName)) {
+										// Add dungeon to all biomes from biome type
+										this.addDungeonToBiomeType(dungeon, this.getBiomeTypeByName(biomeName));
+									} else {
+										// Add dungeon to biome from registry name
+										this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
 									}
 								}
 							} else {
-								CQRMain.logger.warn(file.getName() + ": Dungeon is missing mod dependencies!");
+								CQRMain.logger.warn(file.getName() + ": Dungeon spawnrate is set to or below 0!");
 							}
 						} else {
-							CQRMain.logger.warn(file.getName() + ": Dungeon spawnrate is set to or below 0!");
+							CQRMain.logger.warn(file.getName() + ": Dungeon is missing mod dependencies!");
 						}
 
 						this.dungeonSet.add(dungeon);
