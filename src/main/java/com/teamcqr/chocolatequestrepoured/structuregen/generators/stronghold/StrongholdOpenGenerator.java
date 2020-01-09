@@ -82,10 +82,29 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		BlockPos initPos = new BlockPos(x, y, z);
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getYOffset(),0));
 		// initPos = initPos.subtract(new Vec3i(0,dungeon.getUnderGroundOffset(),0));
+		
+		int rgd = getDungeon().getRandomRoomCountForFloor();
+		if (rgd < 2) {
+			rgd = 2;
+		}
+		if (rgd % 2 != 0) {
+			rgd++;
+		}
+		rgd = (new Double(Math.ceil(Math.sqrt(rgd)))).intValue();
+		if(rgd % 2 == 0) {
+			rgd++;
+		}
+		
+		StrongholdFloorOpen prevFloor = null;
 		for (int i = 0; i < this.floors.length; i++) {
-			StrongholdFloorOpen floor = new StrongholdFloorOpen(this);
-			File stair = null;
 			boolean isFirst = i == 0;
+			StrongholdFloorOpen floor = null;
+			if(isFirst) {
+				floor = new StrongholdFloorOpen(this, rgd, ((Double)Math.floor(rgd /2)).intValue(), ((Double)Math.floor(rgd /2)).intValue());
+			} else {
+				floor = new StrongholdFloorOpen(this, rgd, prevFloor.getExitStairIndexes().getFirst(), prevFloor.getExitStairIndexes().getSecond());
+			}
+			File stair = null;
 			if (isFirst) {
 				stair = this.dungeon.getEntranceStair();
 				if (stair == null) {
@@ -111,10 +130,17 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 				if ((i + 1) == this.floors.length) {
 					floor.setExitIsBossRoom(true);
 				}
-				floor.setEntranceStairPosition(stair, initPos.getX(), initPos.getY(), initPos.getZ());
+				
+				if(isFirst) {
+					floor.setEntranceStairPosition(stair, initPos.getX(), initPos.getY(), initPos.getZ());
+				} else {
+					floor.setEntranceStairPosition(stair, prevFloor.getExitCoordinates().getFirst(), initPos.getY(), prevFloor.getExitCoordinates().getSecond());
+				}
+				
 				floor.calculatePositions();
 				initPos = new BlockPos(floor.getExitCoordinates().getFirst(), initPos.getY(), floor.getExitCoordinates().getSecond());
 			}
+			prevFloor = floor;
 			this.floors[i] = floor;
 		}
 	}

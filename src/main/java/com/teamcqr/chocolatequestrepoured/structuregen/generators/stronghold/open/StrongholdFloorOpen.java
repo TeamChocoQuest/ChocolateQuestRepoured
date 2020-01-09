@@ -31,33 +31,31 @@ public class StrongholdFloorOpen {
 	private boolean exitStairIsBossRoom = false;
 	private boolean isFirstFloor = false;
 
-	public StrongholdFloorOpen(StrongholdOpenGenerator generator) {
+	public StrongholdFloorOpen(StrongholdOpenGenerator generator, int roomCount) {
+		this(generator, roomCount, new Random().nextInt(roomCount), new Random().nextInt(roomCount));
+	}
+	
+	public StrongholdFloorOpen(StrongholdOpenGenerator generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ) {
 		this.generator = generator;
-		int rgd = generator.getDungeon().getRandomRoomCountForFloor();
-		if (rgd < 2) {
-			rgd = 2;
-		}
-		if (rgd % 2 != 0) {
-			rgd++;
-		}
-		rgd = (new Double(Math.ceil(Math.sqrt(rgd)))).intValue();
-		this.sideLength = rgd;
-		this.roomGrid = new BlockPos[rgd][rgd];
+		this.sideLength = roomCount;
+		this.roomGrid = new BlockPos[roomCount][roomCount];
 
-		int iX, iZ, iX2, iZ2;
+		int iX2, iZ2;
+		this.entranceStairIndex = new Tuple<>(entranceStairIndexX, entranceStairIndexZ);
 		Random rdm = new Random();
-		iX = rdm.nextInt(rgd);
-		iZ = rdm.nextInt(rgd);
-		this.entranceStairIndex = new Tuple<>(iX, iZ);
-		iX2 = rdm.nextInt(rgd);
-		iZ2 = rdm.nextInt(rgd);
-		while (iX2 == iX) {
-			iX2 = rdm.nextInt(rgd);
+		iX2 = rdm.nextInt(roomCount);
+		iZ2 = rdm.nextInt(roomCount);
+		while (iX2 == entranceStairIndexX) {
+			iX2 = rdm.nextInt(roomCount);
 		}
-		while (iZ2 == iZ) {
-			iZ2 = rdm.nextInt(rgd);
+		while (iZ2 == entranceStairIndexZ) {
+			iZ2 = rdm.nextInt(roomCount);
 		}
 		this.exitStairIndex = new Tuple<>(iX2, iZ2);
+	}
+	
+	public Tuple<Integer, Integer> getExitStairIndexes() {
+		return exitStairIndex;
 	}
 
 	public void setEntranceStairPosition(@Nonnull File entranceStair, int x, int y, int z) {
