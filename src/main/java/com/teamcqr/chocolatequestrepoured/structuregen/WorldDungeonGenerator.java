@@ -15,6 +15,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 
 /**
@@ -76,7 +77,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				// Now check if any dungeons exist for this biome....
 				Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16, 100, chunkZ * 16));
 				// No Dungeons for this biome -> ragequit
-				if (this.dungeonRegistry.getDungeonsForBiome(biome).isEmpty()) {
+				if (this.dungeonRegistry.getDungeonsForBiome(biome, BiomeDictionary.getTypes(biome)).isEmpty()) {
 					return;
 				}
 				// Now check if the dungeon is far away enough from the last one
@@ -91,7 +92,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 							return;
 						}
 
-						List<DungeonBase> availableDungeons = new ArrayList<>(this.dungeonRegistry.getDungeonsForBiome(biome));
+						List<DungeonBase> availableDungeons = new ArrayList<>(this.dungeonRegistry.getDungeonsForBiome(biome, BiomeDictionary.getTypes(biome)));
 						final boolean wallFlag = behindWall;
 						// Sort the list; all dungeons that dont fit -> get out!
 						int maxChance = 0;
