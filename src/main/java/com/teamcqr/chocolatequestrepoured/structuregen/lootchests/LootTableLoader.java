@@ -60,9 +60,6 @@ public class LootTableLoader {
 		if (CQRMain.CQ_CHEST_FOLDER.exists()) {
 			File[] files = CQRMain.CQ_CHEST_FOLDER.listFiles();
 			CQRMain.logger.info("Loading " + files.length + " loot chest configs.");
-			for (File f : files) {
-				ELootTable.getAssignedLootTable(f.getName());
-			}
 		}
 	}
 
