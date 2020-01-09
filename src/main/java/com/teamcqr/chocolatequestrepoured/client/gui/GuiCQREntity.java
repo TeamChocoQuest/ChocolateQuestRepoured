@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.gui;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.SyncEntityPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SyncEntityPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

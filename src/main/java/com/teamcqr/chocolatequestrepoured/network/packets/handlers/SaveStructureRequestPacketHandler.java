@@ -1,6 +1,7 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.SaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.world.World;

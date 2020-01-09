@@ -6,7 +6,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelector;
 import com.teamcqr.chocolatequestrepoured.capability.structureselector.CapabilityStructureSelectorProvider;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.network.StructureSelectorPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

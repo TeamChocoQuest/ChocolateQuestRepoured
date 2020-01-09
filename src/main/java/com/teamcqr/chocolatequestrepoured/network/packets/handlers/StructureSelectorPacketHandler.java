@@ -1,6 +1,7 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 
 import net.minecraft.entity.player.EntityPlayer;

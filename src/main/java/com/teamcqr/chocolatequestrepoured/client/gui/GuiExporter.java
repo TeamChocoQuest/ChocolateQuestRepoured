@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.gui;
 import java.io.IOException;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.ExporterUpdatePacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
 
 import net.minecraft.client.Minecraft;

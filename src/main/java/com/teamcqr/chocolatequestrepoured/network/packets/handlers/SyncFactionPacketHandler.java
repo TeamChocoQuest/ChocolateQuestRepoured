@@ -1,4 +1,7 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
+
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SyncFactionDataReply;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.SyncFactionDataRequest;
 
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
