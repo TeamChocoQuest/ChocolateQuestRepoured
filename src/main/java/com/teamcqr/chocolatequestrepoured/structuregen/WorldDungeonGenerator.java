@@ -81,6 +81,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				}
 				// Now check if the dungeon is far away enough from the last one
 				if ((chunkX % dungeonSeparation == 0 && chunkZ % dungeonSeparation == 0) && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)) {
+					//System.out.println("Trying to spawn dungeon in biome: " + biome.getRegistryName().toString());
 					Random rdm = new Random(getSeed(world, chunkX, chunkZ));
 
 					if (DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(chunkX, chunkZ, world, dungeonSeparation) || this.dungeonRegistry.getCoordinateSpecificsMap().isEmpty()) {
