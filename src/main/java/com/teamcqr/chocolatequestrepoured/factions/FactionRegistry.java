@@ -205,15 +205,19 @@ public class FactionRegistry {
 	}
 
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
+		return EReputationStateRough.getByRepuScore(getExactReputationOf(playerID, faction));
+	}
+	
+	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
 		if (faction.isRepuStatic()) {
-			return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
+			return faction.getDefaultReputation().getValue();
 		}
 		if (this.playerFactionRepuMap.containsKey(playerID)) {
 			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
-				return EReputationStateRough.getByRepuScore(this.playerFactionRepuMap.get(playerID).get(faction.getName()));
+				return this.playerFactionRepuMap.get(playerID).get(faction.getName());
 			}
 		}
-		return EReputationStateRough.getByRepuScore(faction.getDefaultReputation().getValue());
+		return faction.getDefaultReputation().getValue();
 	}
 
 	public void incrementRepuOf(EntityPlayer player, String faction, int score) {
@@ -360,6 +364,10 @@ public class FactionRegistry {
 			t.setDaemon(true);
 			t.start();
 		}
+	}
+
+	public List<CQRFaction> getLoadedFactions() {
+		return new ArrayList<CQRFaction>(factions.values());
 	}
 
 }
