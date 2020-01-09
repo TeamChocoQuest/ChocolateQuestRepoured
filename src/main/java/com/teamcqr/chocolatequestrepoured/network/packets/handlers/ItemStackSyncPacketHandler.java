@@ -1,8 +1,9 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;

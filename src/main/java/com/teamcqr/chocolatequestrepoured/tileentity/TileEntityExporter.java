@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.client.gui.GuiExporter;
-import com.teamcqr.chocolatequestrepoured.network.SaveStructureRequestPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.SaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.client.Minecraft;

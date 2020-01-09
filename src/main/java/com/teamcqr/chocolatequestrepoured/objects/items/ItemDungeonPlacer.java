@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.DungeonSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

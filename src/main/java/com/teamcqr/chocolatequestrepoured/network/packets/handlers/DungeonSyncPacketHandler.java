@@ -1,5 +1,6 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;

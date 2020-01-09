@@ -14,7 +14,7 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.ExtendedReachAttackPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExtendedReachAttackPacket;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.Minecraft;

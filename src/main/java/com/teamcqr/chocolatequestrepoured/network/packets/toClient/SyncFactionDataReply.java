@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.network;
+package com.teamcqr.chocolatequestrepoured.network.packets.toClient;
 
 import java.util.UUID;
 

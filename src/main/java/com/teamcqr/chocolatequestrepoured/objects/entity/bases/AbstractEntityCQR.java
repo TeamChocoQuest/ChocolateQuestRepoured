@@ -16,7 +16,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
-import com.teamcqr.chocolatequestrepoured.network.ItemStackSyncPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
