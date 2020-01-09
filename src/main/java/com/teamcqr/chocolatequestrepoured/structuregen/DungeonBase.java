@@ -93,7 +93,7 @@ public class DungeonBase {
 			this.iconID = PropertyFileHelper.getIntProperty(prop, "icon", 0);
 			this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
 			this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
-			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dungeonMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
+			this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dummyReplacement", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 			this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[] { Reference.MODID });
 			if (this.modDependencies.length <= 0 || this.modDependencies == null) {
 				this.modDependencies = new String[] { Reference.MODID };
