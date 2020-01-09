@@ -29,4 +29,8 @@ public class SyncFactionDataRequest implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, requestingPlayer.toString());
 	}
 
+	public UUID getPlayerUUID() {
+		return requestingPlayer;
+	}
+
 }
