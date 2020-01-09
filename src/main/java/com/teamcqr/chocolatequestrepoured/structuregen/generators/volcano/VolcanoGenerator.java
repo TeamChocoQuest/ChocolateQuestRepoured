@@ -123,6 +123,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 		List<BlockPos> blocksLower = new ArrayList<BlockPos>();
 		List<BlockPos> lava = new ArrayList<BlockPos>();
 		List<BlockPos> airBlocks = new ArrayList<BlockPos>();
+		List<BlockPos> airBlocksThroat = new ArrayList<BlockPos>();
 		List<BlockPos> magma = new ArrayList<BlockPos>();
 		List<BlockPos> stairBlocks = new ArrayList<BlockPos>();
 		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
@@ -140,7 +141,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 		// Lower "cave" part
 		int lowYMax = this.minY + (new Double(0.1 * this.maxHeight).intValue());
 		int[] radiusArr = new int[(int) (lowYMax * 0.9)];
-		for (int iY = 0; iY <= lowYMax - 2; iY++) {
+		for (int iY = 0; iY <= lowYMax + 5; iY++) {
 			int radius = new Double(Math.sqrt(-1.0 * new Double((iY - lowYMax) / (10.0 * this.dungeon.getSteepness()))) + (double) this.minRadius).intValue();
 			if (iY < radiusArr.length) {
 				radiusArr[iY] = radius;
@@ -260,6 +261,8 @@ public class VolcanoGenerator implements IDungeonGenerator {
 									blocks.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
 								}
 							}
+						} else {
+							airBlocksThroat.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
 						}
 					}
 				}
@@ -283,10 +286,23 @@ public class VolcanoGenerator implements IDungeonGenerator {
 		}
 
 		// System.out.println("Placing blocks...");
-		ThreadingUtil.passListWithBlocksToThreads(lava, this.dungeon.getLavaBlock(), world, 150, true);
-		ThreadingUtil.passListWithBlocksToThreads(magma, this.dungeon.getMagmaBlock(), world, 150, true);
-		ThreadingUtil.passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150, true);
+		for(BlockPos p : airBlocksThroat) {
+			world.setBlockToAir(p);
+		}
+		//ThreadingUtil.passListWithBlocksToThreads(lava, this.dungeon.getLavaBlock(), world, 150, true);
+		for(BlockPos p : lava) {
+			world.setBlockState(p, this.dungeon.getLavaBlock().getDefaultState());
+		}
+		//ThreadingUtil.passListWithBlocksToThreads(magma, this.dungeon.getMagmaBlock(), world, 150, true);
+		for(BlockPos p : magma) {
+			world.setBlockState(p, this.dungeon.getMagmaBlock().getDefaultState());
+		}
+		//ThreadingUtil.passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150, true);
+		for(BlockPos p : airBlocks) {
+			world.setBlockToAir(p);
+		}
 		ThreadingUtil.passListWithBlocksToThreads(blocksLower, this.dungeon.getLowerMainBlock(), this.dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue(), world, 150);
+		
 		if (this.dungeon.doBuildStairs()) {
 			ThreadingUtil.passListWithBlocksToThreads(stairBlocks, this.dungeon.getRampBlock(), world, 150, true);
 		}
