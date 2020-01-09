@@ -83,17 +83,14 @@ public class DungeonRegistry {
 										// Add dungeon to all biomes from biome type
 										BiomeDictionary.Type biomeType = this.getBiomeTypeByName(biomeName);
 										for (Biome biome : BiomeDictionary.getBiomes(biomeType)) {
-											this.addDungeonToBiome(dungeon, biome);
+											this.addDungeonToBiome(dungeon, biome.getRegistryName());
 										}
 										List<DungeonBase> dungeonTmp = biomeTypeDungeonMap.getOrDefault(biomeType, new ArrayList<DungeonBase>());
 										dungeonTmp.add(dungeon);
 										biomeTypeDungeonMap.put(biomeType, dungeonTmp);
 									} else {
 										// Add dungeon to biome from registry name
-										Biome biome = ForgeRegistries.BIOMES.getValue(new ResourceLocation(biomeName));
-										if (biome != null) {
-											this.addDungeonToBiome(dungeon, biome);
-										}
+										this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
 									}
 								}
 
@@ -225,10 +222,6 @@ public class DungeonRegistry {
 		}
 	}
 
-	private void addDungeonToBiome(DungeonBase dungeon, Biome biome) {
-		addDungeonToBiome(dungeon, biome.getRegistryName());
-	}
-	
 	private void addDungeonToBiome(DungeonBase dungeon, ResourceLocation biome) {
 		List<DungeonBase> dungeonList = this.biomeDungeonMap.getOrDefault(biome, new ArrayList<DungeonBase>());
 		if (!dungeonList.contains(dungeon)) {
