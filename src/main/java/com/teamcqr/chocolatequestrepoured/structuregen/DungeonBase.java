@@ -65,6 +65,8 @@ public class DungeonBase {
 	protected boolean allowBlockBreaking = false;
 	protected boolean allowFireSpread = false;
 	protected boolean allowMobSpawning = false;
+	protected boolean allowExplosionTNT = true;
+	protected boolean allowExplosionOther = false;
 	protected boolean bypassSecurityChecks = false;
 
 	@Override
@@ -118,6 +120,8 @@ public class DungeonBase {
 			this.allowBlockPlacing = !PropertyFileHelper.getBooleanProperty(prop, "blockBuilding", false);
 			this.allowFireSpread = !PropertyFileHelper.getBooleanProperty(prop, "blockFireSpread", false);
 			this.allowMobSpawning = !PropertyFileHelper.getBooleanProperty(prop, "blockMobSpawning", false);
+			this.allowExplosionTNT = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionTNT", false);
+			this.allowExplosionOther = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionOther", false);
 			this.bypassSecurityChecks = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
 
 			this.closeConfigFile();
@@ -333,5 +337,11 @@ public class DungeonBase {
 	}
 	public boolean getAllowMobSpawns() {
 		return allowMobSpawning;
+	}
+	public boolean getAllowExplosionTNT() {
+		return allowExplosionTNT;
+	}
+	public boolean getAllowExplosionOther() {
+		return allowExplosionOther;
 	}
 }
