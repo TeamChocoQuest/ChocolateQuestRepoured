@@ -34,11 +34,12 @@ public class HookShotPullPacketHandler implements IMessageHandler<HookShotPullPa
     }
 
     private void processMessage(final HookShotPullPacket message, MessageContext ctx) {
+        EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
+
         if (message.isPulling())
         {
             System.out.println("Received a pull message. Impacted @ " + message.getImpactLocation());
 
-            EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
             Vec3d playerPos = player.getPositionVector();
 
             double distanceToHook = playerPos.distanceTo(message.getImpactLocation());
@@ -54,6 +55,10 @@ public class HookShotPullPacketHandler implements IMessageHandler<HookShotPullPa
 
             player.setVelocity(pullV.x, pullV.y, pullV.z);
             player.velocityChanged = true;
+        }
+        else
+        {
+            player.setVelocity(0, 0, 0);
         }
     }
 }

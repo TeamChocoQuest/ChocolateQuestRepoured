@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase {
 	private static final double PULL_SPEED = 1.8f; //speed that the chain retracts (larger = faster)
-	public static final double STOP_PULL_DISTANCE = 1.5; //If layer gets within this range of hook, stop pulling
+	public static final double STOP_PULL_DISTANCE = 2.0; //If layer gets within this range of hook, stop pulling
 	private boolean pulling = false; //if the hook has impacted and is currently pulling the player
 	private Vec3d impactLocation = null; //where the hook intersects a block
 	private double hookRange = 20.0; //Max range of the hook before it stops extending
@@ -42,29 +42,30 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	public void onUpdate() {
 		if (this.getThrower() != null && this.getThrower().isDead) {
-			this.pulling = false;
-			this.setDead();
+			pulling = false;
+			setDead();
 		} else if (!this.world.isRemote && this.getThrower() instanceof EntityPlayerMP) {
 			EntityPlayerMP shootingPlayer = (EntityPlayerMP) this.getThrower();
 			Vec3d playerPos = shootingPlayer.getPositionVector();
 			double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
-			if (this.pulling) {
-				this.checkForBlockedPath(shootingPlayer);
+			if (pulling) {
+				checkForBlockedPath(shootingPlayer);
 
 				if (distanceToHook < STOP_PULL_DISTANCE) {
-					this.pulling = false;
-					this.setDead();
+					pulling = false;
+					sendClientStopPacket(shootingPlayer);
+					setDead();
 				}
 				else {
-					this.setShooterVelocity(shootingPlayer);
+					sendClientPullPacket(shootingPlayer);
 				}
 			} else if (distanceToHook > hookRange) {
-				this.zeroizeHookVelocity();
-				this.setDead();
+				zeroizeHookVelocity();
+				setDead();
 			}
 
-			this.onUpdateInAir();
+			onUpdateInAir();
 			super.onUpdate();
 		}
 	}
@@ -87,8 +88,13 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.setVelocity(0, 0, 0);
 	}
 
-	private void setShooterVelocity(EntityPlayerMP shootingPlayer) {
+	private void sendClientPullPacket(EntityPlayerMP shootingPlayer) {
 		HookShotPullPacket pullPacket = new HookShotPullPacket(true, PULL_SPEED, impactLocation);
+		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+	}
+
+	private void sendClientStopPacket(EntityPlayerMP shootingPlayer) {
+		HookShotPullPacket pullPacket = new HookShotPullPacket(false, 0.0, impactLocation);
 		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
 	}
 
@@ -98,7 +104,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			Vec3d currentPos = shootingPlayer.getPositionVector();
 			if (this.lastShooterPos != null) {
 				double distanceTraveled = currentPos.distanceTo(this.lastShooterPos);
-				if (distanceTraveled < 0.2) {
+				if (distanceTraveled < 0.4) {
 					// System.out.println("Cancelling hook because shooter was blocked (dist = " + distanceTraveled + ")");
 					this.zeroizeHookVelocity();
 					this.setDead();
