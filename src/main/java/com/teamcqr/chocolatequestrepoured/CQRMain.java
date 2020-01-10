@@ -22,7 +22,6 @@ import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
@@ -202,20 +201,6 @@ public class CQRMain {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		proxy.init();
-
-		// Instantiating the ELootTable class
-		try {
-			if (ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation() != null) {
-				logger.info("Loading chest loot table configuration...");
-				LootTableLoader lootTableLoader = new LootTableLoader();
-				lootTableLoader.loadConfigs();
-			} else {
-				throw new Exception("Couldn't load loot table configs!!!");
-			}
-		} catch (Exception e) {
-			logger.error("Failed to instantiate the loot tables or to exchange the files!");
-			logger.error(e);
-		}
 
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());

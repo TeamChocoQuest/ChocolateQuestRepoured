@@ -33,8 +33,6 @@ import net.minecraftforge.common.ForgeHooks;
  */
 public class LootTableLoader {
 
-	// private static final WeightedItemStack airEntryBase = new WeightedItemStack("minecraft:air", 0, 1, 2, 100, false, 1, 2, false);
-
 	// These are all valid file names for the chests!
 	final static String[] validFileNames = {
 			"treasure_chest",
@@ -55,13 +53,6 @@ public class LootTableLoader {
 			"custom_12",
 			"custom_13",
 			"custom_14" };
-
-	public void loadConfigs() {
-		if (CQRMain.CQ_CHEST_FOLDER.exists()) {
-			File[] files = CQRMain.CQ_CHEST_FOLDER.listFiles();
-			CQRMain.logger.info("Loading " + files.length + " loot chest configs.");
-		}
-	}
 
 	private static List<WeightedItemStack> getItemList(Properties propFile) {
 		List<WeightedItemStack> items = new ArrayList<WeightedItemStack>();
