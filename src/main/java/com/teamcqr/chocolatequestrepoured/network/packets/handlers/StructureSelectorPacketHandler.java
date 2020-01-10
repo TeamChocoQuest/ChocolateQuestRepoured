@@ -18,7 +18,7 @@ public class StructureSelectorPacketHandler implements IMessageHandler<Structure
 	public IMessage onMessage(StructureSelectorPacket message, MessageContext ctx) {
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
-			ItemStack stack = player.getHeldItem(EnumHand.values()[message.getHand()]);
+			ItemStack stack = player.getHeldItem(message.getHand());
 			if (stack.getItem() instanceof ItemStructureSelector) {
 				ItemStructureSelector.setFirstPos(stack, player.getPosition(), player);
 			}

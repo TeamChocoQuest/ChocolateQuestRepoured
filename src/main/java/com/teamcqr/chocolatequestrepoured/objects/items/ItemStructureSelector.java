@@ -128,7 +128,7 @@ public class ItemStructureSelector extends Item {
 			if (stack.getItem() instanceof ItemStructureSelector) {
 				if (player.isSneaking()) {
 					ItemStructureSelector.setFirstPos(stack, event.getPos(), player);
-					CQRMain.NETWORK.sendToServer(new StructureSelectorPacket(event.getHand().ordinal()));
+					CQRMain.NETWORK.sendToServer(new StructureSelectorPacket(event.getHand()));
 				}
 			}
 		}
