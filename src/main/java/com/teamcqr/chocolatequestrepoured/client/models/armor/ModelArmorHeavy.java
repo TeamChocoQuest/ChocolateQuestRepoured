@@ -6,7 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
  * ModelCustomArmor - Silentine
  * Created using Tabula 7.0.1
  */
-public class ModelArmorHeavyIron extends ModelCustomArmorBase {
+public class ModelArmorHeavy extends ModelCustomArmorBase {
 	public ModelRenderer pauldronR1;
 	public ModelRenderer pauldronR2;
 	public ModelRenderer skirtR;
@@ -16,7 +16,7 @@ public class ModelArmorHeavyIron extends ModelCustomArmorBase {
 	public ModelRenderer pauldronL2;
 	public ModelRenderer skirtL;
 
-	public ModelArmorHeavyIron(float scale) {
+	public ModelArmorHeavy(float scale) {
 		super(scale, 128, 128);
 
 		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
