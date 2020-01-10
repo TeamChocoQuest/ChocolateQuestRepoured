@@ -23,7 +23,7 @@ public class BannerHelper {
 
 	public static boolean isCQBanner(TileEntityBanner bannerTile) {
 		List<BannerPattern> patterns = ReflectionHelper.getPrivateValue(TileEntityBanner.class, bannerTile, 4);
-		if (!patterns.isEmpty()) {
+		if (patterns != null && !patterns.isEmpty()) {
 			for (EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
 				if (patterns.contains(cqPattern.getPattern())) {
 					return true;
