@@ -67,6 +67,11 @@ public class DungeonBase {
 	protected boolean allowMobSpawning = false;
 	protected boolean bypassSecurityChecks = false;
 
+	@Override
+	public String toString() {
+		return this.name;
+	}
+
 	public void generate(BlockPos pos, World world) {
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
 		Random rdm = new Random();

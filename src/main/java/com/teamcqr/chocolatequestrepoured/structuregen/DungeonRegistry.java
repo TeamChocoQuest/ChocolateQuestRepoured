@@ -53,6 +53,14 @@ public class DungeonRegistry {
 		return instance;
 	}
 
+	public void reloadDungeonFiles() {
+		this.dungeonSet.clear();
+		this.biomeDungeonMap.clear();
+		this.biomeTypeDungeonMap.clear();
+		this.coordinateSpecificDungeons.clear();
+		this.loadDungeons();
+	}
+
 	public void loadDungeonFiles() {
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
 		CQRMain.logger.info("Loading " + files.size() + " dungeon configuration files...");
