@@ -46,7 +46,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				// TODO adjust to hookshoot
+				// TODO adjust to hookshot
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});
@@ -79,7 +79,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, hookRange);
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
+			player.getCooldownTracker().setCooldown(stack.getItem(), cooldownTicks);
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}
