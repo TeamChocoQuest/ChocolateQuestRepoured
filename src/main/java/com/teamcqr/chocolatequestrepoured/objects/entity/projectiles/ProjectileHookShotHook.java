@@ -11,7 +11,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase {
-	private static final double PULL_SPEED = 1.8f; // speed that the chain retracts (larger = faster)
+	public static final double PULL_SPEED = 1.8f; // speed that the chain retracts (larger = faster)
 	public static final double HOOK_RANGE = 20.0; // Max range of the hook before it stops extending
 	public static final double STOP_PULL_DISTANCE = 1.5; // If layer gets within this range of hook, stop pulling
 	private boolean pulling = false;
@@ -54,9 +54,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 					this.pulling = false;
 					this.setDead();
 				} else {
-					//Vec3d hookDirection = this.impactLocation.subtract(playerPos);
-
-					//Vec3d pullVector = hookDirection.normalize().scale(PULL_SPEED);
 					this.setShooterVelocity(shootingPlayer);
 				}
 			} else if (distanceToHook > HOOK_RANGE) {
