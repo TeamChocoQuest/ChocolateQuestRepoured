@@ -84,7 +84,7 @@ public class DungeonRegistry {
 								if (this.handleLockedPos(dungeon, dungeonConfig)) {
 									this.coordinateSpecificDungeons.add(dungeon);
 								}
-							} else  if (dungeon.getSpawnChance() > 0) {
+							} else if (dungeon.getSpawnChance() > 0) {
 								// Biome map filling
 								String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
 								for (String biomeName : biomeNames) {
@@ -185,35 +185,26 @@ public class DungeonRegistry {
 		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
 
 		Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 0, chunkZ * 16 + 1));
-		for (DungeonBase dungeon : this.biomeDungeonMap.get(biome.getRegistryName())) {
-			if (dungeon.isDimensionAllowed(world.provider.getDimension()) && (behindWall || !dungeon.doesSpawnOnlyBehindWall())) {
-				dungeons.add(dungeon);
-			}
-		}
-		for (BiomeDictionary.Type biomeType : BiomeDictionary.getTypes(biome)) {
-			for (DungeonBase dungeon : this.biomeTypeDungeonMap.get(biomeType)) {
+		Set<DungeonBase> biomeDungeonSet = this.biomeDungeonMap.get(biome.getRegistryName());
+		if (biomeDungeonSet != null) {
+			for (DungeonBase dungeon : biomeDungeonSet) {
 				if (dungeon.isDimensionAllowed(world.provider.getDimension()) && (behindWall || !dungeon.doesSpawnOnlyBehindWall())) {
 					dungeons.add(dungeon);
 				}
 			}
+		} else {
+			this.biomeDungeonMap.put(biome.getRegistryName(), new HashSet<DungeonBase>());
 		}
-
-		return dungeons;
-	}
-
-	public Set<DungeonBase> getDungeonsForBiome(Biome biome) {
-		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
-
-		if (biome != null) {
-			Set<DungeonBase> biomeDungeonSet = this.biomeDungeonMap.get(biome.getRegistryName());
-			if (biomeDungeonSet != null) {
-				dungeons.addAll(biomeDungeonSet);
-			}
-			for (BiomeDictionary.Type biomeType : BiomeDictionary.getTypes(biome)) {
-				Set<DungeonBase> biomeTypeDungeonSet = this.biomeTypeDungeonMap.get(biomeType);
-				if (biomeTypeDungeonSet != null) {
-					dungeons.addAll(biomeTypeDungeonSet);
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.getTypes(biome)) {
+			Set<DungeonBase> biomeTypeDungeonSet = this.biomeTypeDungeonMap.get(biomeType);
+			if (biomeTypeDungeonSet != null) {
+				for (DungeonBase dungeon : biomeTypeDungeonSet) {
+					if (dungeon.isDimensionAllowed(world.provider.getDimension()) && (behindWall || !dungeon.doesSpawnOnlyBehindWall())) {
+						dungeons.add(dungeon);
+					}
 				}
+			} else {
+				this.biomeTypeDungeonMap.put(biomeType, new HashSet<DungeonBase>());
 			}
 		}
 
