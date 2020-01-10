@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPullPacket;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,8 +40,16 @@ public class HookShotPullPacketHandler implements IMessageHandler<HookShotPullPa
 
             EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
             Vec3d playerPos = player.getPositionVector();
-            Vec3d hookDirection = message.getImpactLocation().subtract(playerPos);
 
+            double distanceToHook = playerPos.distanceTo(message.getImpactLocation());
+
+            //Check to see if we are already at the hook
+            if (distanceToHook < ProjectileHookShotHook.STOP_PULL_DISTANCE) {
+                player.setVelocity(0 , 0 ,0);
+                return;
+            }
+
+            Vec3d hookDirection = message.getImpactLocation().subtract(playerPos);
             Vec3d pullV = hookDirection.normalize().scale(message.getVelocity());
 
             player.setVelocity(pullV.x, pullV.y, pullV.z);
