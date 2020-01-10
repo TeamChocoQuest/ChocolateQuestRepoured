@@ -1,12 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toServer;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class ExtendedReachAttackPacket implements IMessage {
+
 	private int entityId;
-	private int isExtended;
+	private boolean isExtended;
 
 	public ExtendedReachAttackPacket() {
 
@@ -14,19 +14,19 @@ public class ExtendedReachAttackPacket implements IMessage {
 
 	public ExtendedReachAttackPacket(int entityId, boolean isExtended) {
 		this.entityId = entityId;
-		this.isExtended = isExtended ? 1 : 0;
+		this.isExtended = isExtended;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf byteBuf) {
-		this.entityId = ByteBufUtils.readVarInt(byteBuf, 4);
-		this.isExtended = ByteBufUtils.readVarInt(byteBuf, 1);
+		this.entityId = byteBuf.readInt();
+		this.isExtended = byteBuf.readBoolean();
 	}
 
 	@Override
 	public void toBytes(ByteBuf byteBuf) {
-		ByteBufUtils.writeVarInt(byteBuf, this.entityId, 4);
-		ByteBufUtils.writeVarInt(byteBuf, this.isExtended, 1);
+		byteBuf.writeInt(this.entityId);
+		byteBuf.writeBoolean(this.isExtended);
 	}
 
 	public int getEntityId() {
@@ -34,6 +34,7 @@ public class ExtendedReachAttackPacket implements IMessage {
 	}
 
 	public boolean getIsExtended() {
-		return (this.isExtended == 1);
+		return this.isExtended;
 	}
+
 }

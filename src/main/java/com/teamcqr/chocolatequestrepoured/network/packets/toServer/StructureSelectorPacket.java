@@ -1,31 +1,32 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toServer;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class StructureSelectorPacket implements IMessage {
 
-	private int hand;
+	private EnumHand hand;
 
 	public StructureSelectorPacket() {
 
 	}
 
-	public StructureSelectorPacket(int hand) {
+	public StructureSelectorPacket(EnumHand hand) {
 		this.hand = hand;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.hand = buf.readInt();
+		this.hand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.hand);
+		buf.writeBoolean(this.hand == EnumHand.MAIN_HAND ? true : false);
 	}
 
-	public int getHand() {
+	public EnumHand getHand() {
 		return this.hand;
 	}
 
