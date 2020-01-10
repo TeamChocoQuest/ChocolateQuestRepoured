@@ -33,10 +33,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemHookshotBase extends Item implements IRangedWeapon {
+	private double hookRange;
+	private int cooldownTicks;
 
-	public ItemHookshotBase() {
+	public ItemHookshotBase(double range, int cooldownTicks) {
 		this.setMaxDamage(300);
 		this.setMaxStackSize(1);
+		this.hookRange = range;
+		this.cooldownTicks = cooldownTicks;
 
 		this.addPropertyOverride(new ResourceLocation("hook_shot"), new IItemPropertyGetter() {
 			@Override
@@ -73,7 +77,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 
 		if (!worldIn.isRemote) {
-			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player);
+			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, hookRange);
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
 			worldIn.spawnEntity(hookEntity);

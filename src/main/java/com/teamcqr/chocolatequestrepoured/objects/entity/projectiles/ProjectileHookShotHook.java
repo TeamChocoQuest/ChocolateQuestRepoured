@@ -11,25 +11,27 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class ProjectileHookShotHook extends ProjectileBase {
-	public static final double PULL_SPEED = 1.8f; // speed that the chain retracts (larger = faster)
-	public static final double HOOK_RANGE = 20.0; // Max range of the hook before it stops extending
-	public static final double STOP_PULL_DISTANCE = 1.5; // If layer gets within this range of hook, stop pulling
-	private boolean pulling = false;
-	private Vec3d impactLocation = null;
+	private static final double PULL_SPEED = 1.8f; //speed that the chain retracts (larger = faster)
+	public static final double STOP_PULL_DISTANCE = 1.5; //If layer gets within this range of hook, stop pulling
+	private boolean pulling = false; //if the hook has impacted and is currently pulling the player
+	private Vec3d impactLocation = null; //where the hook intersects a block
+	private double hookRange = 20.0; //Max range of the hook before it stops extending
 
-	private Vec3d lastShooterPos = null;
-	private int lastMovementCheckTick = 0;
+	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
+	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
 
 	public ProjectileHookShotHook(World worldIn) {
 		super(worldIn);
 	}
 
-	public ProjectileHookShotHook(World worldIn, double x, double y, double z) {
+	public ProjectileHookShotHook(World worldIn, double x, double y, double z, double range) {
 		super(worldIn, x, y, z);
+		this.hookRange = range;
 	}
 
-	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter) {
+	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range) {
 		super(worldIn, shooter);
+		this.hookRange = range;
 	}
 
 	@Override
@@ -53,11 +55,12 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				if (distanceToHook < STOP_PULL_DISTANCE) {
 					this.pulling = false;
 					this.setDead();
-				} else {
+				}
+				else {
 					this.setShooterVelocity(shootingPlayer);
 				}
-			} else if (distanceToHook > HOOK_RANGE) {
-				this.zeroizeVelocity();
+			} else if (distanceToHook > hookRange) {
+				this.zeroizeHookVelocity();
 				this.setDead();
 			}
 
@@ -73,14 +76,14 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 			if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
 				System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
-				this.zeroizeVelocity();
+				this.zeroizeHookVelocity();
 				this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
 				this.pulling = true;
 			}
 		}
 	}
 
-	private void zeroizeVelocity() {
+	private void zeroizeHookVelocity() {
 		this.setVelocity(0, 0, 0);
 	}
 
@@ -97,7 +100,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				double distanceTraveled = currentPos.distanceTo(this.lastShooterPos);
 				if (distanceTraveled < 0.2) {
 					// System.out.println("Cancelling hook because shooter was blocked (dist = " + distanceTraveled + ")");
-					this.zeroizeVelocity();
+					this.zeroizeHookVelocity();
 					this.setDead();
 				}
 			}
