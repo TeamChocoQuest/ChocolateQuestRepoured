@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemHookshotBase extends Item implements IRangedWeapon {
+public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
 	public ItemHookshotBase() {
 		this.setMaxDamage(300);
@@ -42,7 +42,7 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				// TODO adjust to hookshoot
+				// TODO adjust to hookshot
 				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
 			}
 		});
@@ -52,11 +52,15 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT)) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.hookshot.name"));
+			tooltip.add(TextFormatting.BLUE + I18n.format(getTranslationKey()));
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
 	}
+
+	abstract String getTranslationKey();
+
+	abstract double getHookRange();
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -73,17 +77,13 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 
 		if (!worldIn.isRemote) {
-			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player);
+			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, getHookRange());
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
-			player.getCooldownTracker().setCooldown(stack.getItem(), 60);
+			player.getCooldownTracker().setCooldown(stack.getItem(), getCooldown());
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
 		}
 		worldIn.playSound(player.posX, player.posY, player.posZ, ModSounds.GUN_SHOOT, SoundCategory.MASTER, 1.0F, 1.0F, false);
-	}
-
-	protected boolean isBullet(ItemStack stack) {
-		return stack.getItem() instanceof ItemBullet;
 	}
 
 	@Override

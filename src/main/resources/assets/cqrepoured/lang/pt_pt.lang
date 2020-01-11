@@ -267,6 +267,10 @@ item.bullet_fire.name=Balas Ardentes
 item.cannon_ball.name=Bala de canhão
 item.flamethrower.name=Lança-chamas
 
+//Hookshots
+item.hookshot.name=Missing #TODO
+item.longshot.name=Missing #TODO
+
 //Cloud Items
 item.boots_cloud.name=Botas de Nuvem
 item.feather_golden.name=Pena Dourada
@@ -464,7 +468,7 @@ description.backpack.name=Right-click para abrir
 description.alchemy_bag.name=Right-click para abrir. Apenas pode levar poções
 //description.woodshot.name=Right-click para atirar gancho. Se bater num bloco de madeira, vais ser puxado para ele
 description.hookshot.name=Right-click para atirar gancho.Se bater num bloco, vais ser puxado para ele.
-//description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
+description.longshot.name=Right-click para atirar gancho. Se bater num bloco, vais ser puxado para ele.
 //description.manualhook.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
 //description.spidershot.name=Right-click para atirar rede.Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
 //description.hooksword.name=Right-click para atirar gancho. Se bater num bloco, podes fazer right-click para te aproximares dele, e shift+right-click para te afastares.
