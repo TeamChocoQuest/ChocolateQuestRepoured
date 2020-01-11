@@ -11,6 +11,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIMoveOutOfShell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAISpinTowardsTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -82,8 +84,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
+		this.tasks.addTask(6, new BossAISpinTowardsTarget(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(11, new BossAIMoveOutOfShell(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
