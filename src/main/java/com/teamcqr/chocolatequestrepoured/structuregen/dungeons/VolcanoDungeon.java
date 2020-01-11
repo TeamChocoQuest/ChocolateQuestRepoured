@@ -25,18 +25,6 @@ import net.minecraft.world.chunk.Chunk;
 public class VolcanoDungeon extends DungeonBase {
 
 	// For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
-
-	public enum EStrongholdType {
-		LINEAR, OPEN,;
-
-		public static EStrongholdType getByName(String s) {
-			if (EStrongholdType.valueOf(s) != null) {
-				return EStrongholdType.valueOf(s);
-			}
-			return LINEAR;
-		}
-	}
-
 	private boolean buildStairwell = true;
 	private boolean buildDungeon = false;
 	private boolean damagedVolcano = true;
@@ -58,6 +46,33 @@ public class VolcanoDungeon extends DungeonBase {
 	private Block rampBlock = Blocks.NETHERRACK;
 	private Block lowerStoneBlock = Blocks.COBBLESTONE;
 	private Block pillarBlock = ModBlocks.GRANITE_LARGE;
+	
+	//STronghold
+	private int minStrongholdFloors = 3;
+	private int maxStrongholdFloors = 5;
+	private int strongholdSideLength = 3;
+	private int minStrongholdRooms = 26;
+	private int maxStrongholdRooms = 32;
+	private int roomSizeX = 15;
+	private int roomSizeY = 10;
+	private int roomSizeZ = 15;
+	private File curveENFolder;
+	private File curveNEFolder;
+	private File curveSEFolder;
+	private File curveESFolder;
+	private File curveWSFolder;
+	private File curveSWFolder;
+	private File curveNWFolder;
+	private File curveWNFolder;
+	private File hallSNFolder;
+	private File hallNSFolder;
+	private File hallWEFolder;
+	private File hallEWFolder;
+	private File stairNFolder;
+	private File stairEFolder;
+	private File stairSFolder;
+	private File stairWFolder;
+	private File bossFolder;
 
 	public VolcanoDungeon(File configFile) {
 		super(configFile);
@@ -84,7 +99,36 @@ public class VolcanoDungeon extends DungeonBase {
 			this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 			this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 			this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
-
+			
+			//Stronghold
+			this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", 3);
+			this.maxStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "maxStrongholdFloors", 5);
+			this.strongholdSideLength = PropertyFileHelper.getIntProperty(prop, "strongholdSideLength", 3);
+			this.strongholdSideLength = this.strongholdSideLength < 3 ? 3 : this.strongholdSideLength;
+			this.strongholdSideLength += this.strongholdSideLength % 2 == 0 ? 1 : 0; 
+			this.minStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "minStrongholdRooms", 24);
+			this.maxStrongholdRooms = PropertyFileHelper.getIntProperty(prop, "maxStrongholdRooms", 80);
+			this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
+			this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
+			this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 15);
+			this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "volcano/rooms/curves/EN");
+			this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "volcano/rooms/curves/ES");
+			this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "volcano/rooms/curves/NE");
+			this.curveNWFolder = PropertyFileHelper.getFileProperty(prop, "curveNWFolder", "volcano/rooms/curves/NW");
+			this.curveSEFolder = PropertyFileHelper.getFileProperty(prop, "curveSEFolder", "volcano/rooms/curves/SE");
+			this.curveSWFolder = PropertyFileHelper.getFileProperty(prop, "curveSWFolder", "volcano/rooms/curves/SW");
+			this.curveWNFolder = PropertyFileHelper.getFileProperty(prop, "curveWNFolder", "volcano/rooms/curves/WN");
+			this.curveWSFolder = PropertyFileHelper.getFileProperty(prop, "curveWSFolder", "volcano/rooms/curves/WS");
+			this.hallEWFolder = PropertyFileHelper.getFileProperty(prop, "hallwayEWFolder", "volcano/rooms/hallway/EW");
+			this.hallNSFolder = PropertyFileHelper.getFileProperty(prop, "hallwayNSFolder", "volcano/rooms/hallway/NS");
+			this.hallSNFolder = PropertyFileHelper.getFileProperty(prop, "hallwaySNFolder", "volcano/rooms/hallway/SN");
+			this.hallWEFolder = PropertyFileHelper.getFileProperty(prop, "hallwayWEFolder", "volcano/rooms/hallway/WE");
+			this.stairEFolder = PropertyFileHelper.getFileProperty(prop, "stairEFolder", "volcano/stairs/E");
+			this.stairNFolder = PropertyFileHelper.getFileProperty(prop, "stairNFolder", "volcano/stairs/N");
+			this.stairSFolder = PropertyFileHelper.getFileProperty(prop, "stairSFolder", "volcano/stairs/S");
+			this.stairWFolder = PropertyFileHelper.getFileProperty(prop, "stairWFolder", "volcano/stairs/W");
+			this.bossFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "volcano/rooms/boss/");
+			
 			this.closeConfigFile();
 		} else {
 			this.registeredSuccessful = false;
