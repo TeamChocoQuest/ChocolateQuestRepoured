@@ -68,14 +68,12 @@ public class ProtectionHandler {
         // Convert Settings Overrides to HashMap
         HashMap<String, Boolean> settingsOverrides = new HashMap<>();
         settingsOverrides.put("preventBlockBreak", !e.getDungeon().getAllowBlockBreaking());
-        settingsOverrides.put("preventBlockBreakCreative", !e.getDungeon().getSecurityBypassEnabled());
         settingsOverrides.put("preventBlockPlace", !e.getDungeon().getAllowBlockPlacing());
-        settingsOverrides.put("preventBlockPlaceCreative", !e.getDungeon().getSecurityBypassEnabled());
-     // settingsOverrides.put("preventExplosionTNT", false);
-     // settingsOverrides.put("preventExplosionOther", true);
+        settingsOverrides.put("preventExplosionTNT", !e.getDungeon().getAllowExplosionTNT());
+        settingsOverrides.put("preventExplosionOther", !e.getDungeon().getAllowExplosionOther());
         settingsOverrides.put("preventFireSpread", !e.getDungeon().getAllowFireSpread());
         settingsOverrides.put("preventNaturalMobSpawn", !e.getDungeon().getAllowMobSpawns());
-     // settingsOverrides.put("requireDependencies", true);
+        settingsOverrides.put("requireDependencies", !e.getDungeon().getSecurityBypassEnabled());
 
         // Create ProtectedRegion obj
         ProtectedRegion regionToBeRegistered = new ProtectedRegion(
