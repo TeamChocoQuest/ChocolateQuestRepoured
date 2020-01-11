@@ -160,6 +160,10 @@ item.bullet_fire.name=Ogniste Naboje
 item.cannon_ball.name=Kula Armatnia
 item.flamethrower.name=Miotacz Płomieni
 
+//Hookshots
+item.hookshot.name=Ni ma tu nic #TODO
+item.longshot.name=Ni ma tu nic #TODO
+
 //Cloud Items
 item.boots_cloud.name=Podniebne Sandały
 item.feather_golden.name=Złote Pióro
@@ -364,7 +368,7 @@ description.backpack.name=PPM by otworzyć.
 description.alchemy_bag.name=PPM by otworzyć. Przechowuje tylko mikstury.
 //description.woodshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na drewno, zostaniesz do niego przyciągnięty.
 description.hookshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
-//description.longshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
+description.longshot.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, zostaniesz do niego przyciągnięty.
 //description.manualhook.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
 //description.spidershot.name=PPM by wystrzelić sieć. Jeśli sieć natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
 //description.hooksword.name=PPM by wystrzelić hak. Jeśli hak natrafi na blok, możesz przytrzymać PPM by się do niego przyciągnąć oraz skradać się aby się od niego oddalić.
