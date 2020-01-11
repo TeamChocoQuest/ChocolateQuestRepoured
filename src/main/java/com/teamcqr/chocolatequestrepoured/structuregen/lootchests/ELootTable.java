@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.lootchests;
 import java.util.ArrayList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
@@ -17,41 +17,41 @@ import net.minecraft.world.storage.loot.LootTableList;
  */
 public enum ELootTable {
 
-	CQ_VANILLA_MINESHAFT(ModBlocks.EXPORTER_CHEST_VANILLA_MINESHAFT, 4, "vanilla_mineshaft", LootTableList.CHESTS_ABANDONED_MINESHAFT, false),
-	CQ_VANILLA_PYRAMID(ModBlocks.EXPORTER_CHEST_VANILLA_PYRAMID, 5, "vanilla_pyramid", LootTableList.CHESTS_DESERT_PYRAMID, false),
-	CQ_VANILLA_END_CITY(ModBlocks.EXPORTER_CHEST_VANILLA_END_CITY, 6, "vanilla_end_city", LootTableList.CHESTS_END_CITY_TREASURE, false),
-	CQ_VANILLA_IGLOO(ModBlocks.EXPORTER_CHEST_VANILLA_IGLOO, 7, "vanilla_igloo", LootTableList.CHESTS_IGLOO_CHEST, false),
-	CQ_VANILLA_JUNGLE(ModBlocks.EXPORTER_CHEST_VANILLA_JUNGLE, 8, "vanilla_jungle", LootTableList.CHESTS_JUNGLE_TEMPLE, false),
-	CQ_VANILLA_JUNGLE_DISPENSER(ModBlocks.EXPORTER_CHEST_VANILLA_JUNGLE_DISPENSER, 9, "vanilla_jungle_dispenser", LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, false),
-	CQ_VANILLA_NETHER_FORTRESS(ModBlocks.EXPORTER_CHEST_VANILLA_NETHER, 10, "vanilla_nether", LootTableList.CHESTS_NETHER_BRIDGE, false),
-	CQ_VANILLA_DUNGEON(ModBlocks.EXPORTER_CHEST_VANILLA_DUNGEON, 11, "vanilla_simple_dungeon", LootTableList.CHESTS_SIMPLE_DUNGEON, false),
-	CQ_VANILLA_BONUS_CHEST(ModBlocks.EXPORTER_CHEST_VANILLA_BONUS, 12, "vanilla_bonus", LootTableList.CHESTS_SPAWN_BONUS_CHEST, false),
-	CQ_VANILLA_STRONGHOLD_CORRIDOR(ModBlocks.EXPORTER_CHEST_VANILLA_STRONGHOLD, 13, "vanilla_stronghold_corridor", LootTableList.CHESTS_STRONGHOLD_CORRIDOR, false),
-	CQ_VANILLA_STRONGHOLD_STOREROOM(ModBlocks.EXPORTER_CHEST_VANILLA_STRONGHOLD_STOREROOM, 14, "vanilla_stronghold_storeroom", LootTableList.CHESTS_STRONGHOLD_CROSSING, false),
-	CQ_VANILLA_STRONGHOLD_LIBRARY(ModBlocks.EXPORTER_CHEST_VANILLA_STRONGHOLD_LIBRARY, 15, "vanilla_stronghold_library", LootTableList.CHESTS_STRONGHOLD_LIBRARY, false),
-	CQ_VANILLA_BLACKSMITH(ModBlocks.EXPORTER_CHEST_VANILLA_BLACKSMITH, 16, "vanilla_blacksmith", LootTableList.CHESTS_VILLAGE_BLACKSMITH, false),
-	CQ_VANILLA_WOODLAND_MANSION(ModBlocks.EXPORTER_CHEST_VANILLA_MANSION, 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
+	CQ_VANILLA_MINESHAFT(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_mineshaft"), 4, "vanilla_mineshaft", LootTableList.CHESTS_ABANDONED_MINESHAFT, false),
+	CQ_VANILLA_PYRAMID(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_pyramid"), 5, "vanilla_pyramid", LootTableList.CHESTS_DESERT_PYRAMID, false),
+	CQ_VANILLA_END_CITY(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_end_city"), 6, "vanilla_end_city", LootTableList.CHESTS_END_CITY_TREASURE, false),
+	CQ_VANILLA_IGLOO(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_igloo"), 7, "vanilla_igloo", LootTableList.CHESTS_IGLOO_CHEST, false),
+	CQ_VANILLA_JUNGLE(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_jungle"), 8, "vanilla_jungle", LootTableList.CHESTS_JUNGLE_TEMPLE, false),
+	CQ_VANILLA_JUNGLE_DISPENSER(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_jungle_dispenser"), 9, "vanilla_jungle_dispenser", LootTableList.CHESTS_JUNGLE_TEMPLE_DISPENSER, false),
+	CQ_VANILLA_NETHER_FORTRESS(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_nether"), 10, "vanilla_nether", LootTableList.CHESTS_NETHER_BRIDGE, false),
+	CQ_VANILLA_DUNGEON(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_dungeon"), 11, "vanilla_simple_dungeon", LootTableList.CHESTS_SIMPLE_DUNGEON, false),
+	CQ_VANILLA_BONUS_CHEST(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_bonus"), 12, "vanilla_bonus", LootTableList.CHESTS_SPAWN_BONUS_CHEST, false),
+	CQ_VANILLA_STRONGHOLD_CORRIDOR(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_stronghold"), 13, "vanilla_stronghold_corridor", LootTableList.CHESTS_STRONGHOLD_CORRIDOR, false),
+	CQ_VANILLA_STRONGHOLD_STOREROOM(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_stronghold_storeroom"), 14, "vanilla_stronghold_storeroom", LootTableList.CHESTS_STRONGHOLD_CROSSING, false),
+	CQ_VANILLA_STRONGHOLD_LIBRARY(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_stronghold_library"), 15, "vanilla_stronghold_library", LootTableList.CHESTS_STRONGHOLD_LIBRARY, false),
+	CQ_VANILLA_BLACKSMITH(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_blacksmith"), 16, "vanilla_blacksmith", LootTableList.CHESTS_VILLAGE_BLACKSMITH, false),
+	CQ_VANILLA_WOODLAND_MANSION(new ResourceLocation(Reference.MODID, "exporter_chest_vanilla_mansion"), 17, "vanilla_mansion", LootTableList.CHESTS_WOODLAND_MANSION, false),
 
 	// DONE: LOAD LOOT TABLES
-	CQ_TREASURE(ModBlocks.EXPORTER_CHEST_VALUABLE, 0, "cq_treasure", registerChest("cq_treasure"), false),
-	CQ_EQUIPMENT(ModBlocks.EXPORTER_CHEST_EQUIPMENT, 1, "cq_equipment", registerChest("cq_equipment"), false),
-	CQ_FOOD(ModBlocks.EXPORTER_CHEST_FOOD, 2, "cq_food", registerChest("cq_food"), false),
-	CQ_MATERIAL(ModBlocks.EXPORTER_CHEST_UTILITY, 3, "cq_material", registerChest("cq_material"), false),
+	CQ_TREASURE(new ResourceLocation(Reference.MODID, "exporter_chest_valuable"), 0, "cq_treasure", registerChest("cq_treasure"), false),
+	CQ_EQUIPMENT(new ResourceLocation(Reference.MODID, "exporter_chest_equipment"), 1, "cq_equipment", registerChest("cq_equipment"), false),
+	CQ_FOOD(new ResourceLocation(Reference.MODID, "exporter_chest_food"), 2, "cq_food", registerChest("cq_food"), false),
+	CQ_MATERIAL(new ResourceLocation(Reference.MODID, "exporter_chest_utility"), 3, "cq_material", registerChest("cq_material"), false),
 
-	CQ_CUSTOM_1(ModBlocks.EXPORTER_CHEST_CUSTOM_1, 18, "cq_custom_1", registerChest("custom/cq_1"), true),
-	CQ_CUSTOM_2(ModBlocks.EXPORTER_CHEST_CUSTOM_2, 19, "cq_custom_2", registerChest("custom/cq_2"), true),
-	CQ_CUSTOM_3(ModBlocks.EXPORTER_CHEST_CUSTOM_3, 20, "cq_custom_3", registerChest("custom/cq_3"), true),
-	CQ_CUSTOM_4(ModBlocks.EXPORTER_CHEST_CUSTOM_4, 21, "cq_custom_4", registerChest("custom/cq_4"), true),
-	CQ_CUSTOM_5(ModBlocks.EXPORTER_CHEST_CUSTOM_5, 22, "cq_custom_5", registerChest("custom/cq_5"), true),
-	CQ_CUSTOM_6(ModBlocks.EXPORTER_CHEST_CUSTOM_6, 23, "cq_custom_6", registerChest("custom/cq_6"), true),
-	CQ_CUSTOM_7(ModBlocks.EXPORTER_CHEST_CUSTOM_7, 24, "cq_custom_7", registerChest("custom/cq_7"), true),
-	CQ_CUSTOM_8(ModBlocks.EXPORTER_CHEST_CUSTOM_8, 25, "cq_custom_8", registerChest("custom/cq_8"), true),
-	CQ_CUSTOM_9(ModBlocks.EXPORTER_CHEST_CUSTOM_9, 26, "cq_custom_9", registerChest("custom/cq_9"), true),
-	CQ_CUSTOM_10(ModBlocks.EXPORTER_CHEST_CUSTOM_10, 27, "cq_custom_10", registerChest("custom/cq_10"), true),
-	CQ_CUSTOM_11(ModBlocks.EXPORTER_CHEST_CUSTOM_11, 28, "cq_custom_11", registerChest("custom/cq_11"), true),
-	CQ_CUSTOM_12(ModBlocks.EXPORTER_CHEST_CUSTOM_12, 29, "cq_custom_12", registerChest("custom/cq_12"), true),
-	CQ_CUSTOM_13(ModBlocks.EXPORTER_CHEST_CUSTOM_13, 30, "cq_custom_13", registerChest("custom/cq_13"), true),
-	CQ_CUSTOM_14(ModBlocks.EXPORTER_CHEST_CUSTOM_14, 31, "cq_custom_14", registerChest("custom/cq_14"), true);
+	CQ_CUSTOM_1(new ResourceLocation(Reference.MODID, "exporter_chest_custom_1"), 18, "cq_custom_1", registerChest("custom/cq_1"), true),
+	CQ_CUSTOM_2(new ResourceLocation(Reference.MODID, "exporter_chest_custom_2"), 19, "cq_custom_2", registerChest("custom/cq_2"), true),
+	CQ_CUSTOM_3(new ResourceLocation(Reference.MODID, "exporter_chest_custom_3"), 20, "cq_custom_3", registerChest("custom/cq_3"), true),
+	CQ_CUSTOM_4(new ResourceLocation(Reference.MODID, "exporter_chest_custom_4"), 21, "cq_custom_4", registerChest("custom/cq_4"), true),
+	CQ_CUSTOM_5(new ResourceLocation(Reference.MODID, "exporter_chest_custom_5"), 22, "cq_custom_5", registerChest("custom/cq_5"), true),
+	CQ_CUSTOM_6(new ResourceLocation(Reference.MODID, "exporter_chest_custom_6"), 23, "cq_custom_6", registerChest("custom/cq_6"), true),
+	CQ_CUSTOM_7(new ResourceLocation(Reference.MODID, "exporter_chest_custom_7"), 24, "cq_custom_7", registerChest("custom/cq_7"), true),
+	CQ_CUSTOM_8(new ResourceLocation(Reference.MODID, "exporter_chest_custom_8"), 25, "cq_custom_8", registerChest("custom/cq_8"), true),
+	CQ_CUSTOM_9(new ResourceLocation(Reference.MODID, "exporter_chest_custom_9"), 26, "cq_custom_9", registerChest("custom/cq_9"), true),
+	CQ_CUSTOM_10(new ResourceLocation(Reference.MODID, "exporter_chest_custom_10"), 27, "cq_custom_10", registerChest("custom/cq_10"), true),
+	CQ_CUSTOM_11(new ResourceLocation(Reference.MODID, "exporter_chest_custom_11"), 28, "cq_custom_11", registerChest("custom/cq_11"), true),
+	CQ_CUSTOM_12(new ResourceLocation(Reference.MODID, "exporter_chest_custom_12"), 29, "cq_custom_12", registerChest("custom/cq_12"), true),
+	CQ_CUSTOM_13(new ResourceLocation(Reference.MODID, "exporter_chest_custom_13"), 30, "cq_custom_13", registerChest("custom/cq_13"), true),
+	CQ_CUSTOM_14(new ResourceLocation(Reference.MODID, "exporter_chest_custom_14"), 31, "cq_custom_14", registerChest("custom/cq_14"), true);
 
 	// CQ used:
 	// treasure -->diamond
@@ -59,13 +59,13 @@ public enum ELootTable {
 	// food --> porkchop
 	// tools/weapons/armor --> pickaxe iron
 
-	private Block block;
+	private ResourceLocation block;
 	private int ID;
 	private String name;
 	private ResourceLocation resourceLocation;
 	private boolean isCustomChest;
 
-	ELootTable(Block block, int id, String name, ResourceLocation loottable, boolean customChest) {
+	ELootTable(ResourceLocation block, int id, String name, ResourceLocation loottable, boolean customChest) {
 		this.block = block;
 		this.ID = id;
 		this.name = name;
@@ -89,7 +89,7 @@ public enum ELootTable {
 		return this.ID;
 	}
 
-	public Block getAssignedExporterBlock() {
+	public ResourceLocation getAssignedExporterBlock() {
 		return this.block;
 	}
 
@@ -100,12 +100,12 @@ public enum ELootTable {
 	public static ELootTable valueOf(Block b) {
 		if (DungeonGenUtils.isLootChest(b)) {
 			for (ELootTable elt : ELootTable.values()) {
-				/*
-				 * System.out.println("Block of ELT is null: " + (elt.block == null));
-				 * System.out.println("RL of ELT is null: " + (elt.block.getRegistryName() == null));
-				 * System.out.println("RL of B is null: " + (b.getRegistryName() == null));
-				 */
-				if (b.getRegistryName().getResourceDomain() == elt.block.getRegistryName().getResourceDomain() && b.getRegistryName().getResourcePath() == elt.block.getRegistryName().getResourcePath()/* Block.isEqualTo(b, elt.block) */) {
+				
+				 System.out.println("Block of ELT is null: " + (elt.block == null));
+				 System.out.println("RL of ELT is null: " + (elt.block == null));
+				 System.out.println("RL of B is null: " + (b.getRegistryName() == null));
+				
+				if (b.getRegistryName().getResourceDomain() == elt.block.getResourceDomain() && b.getRegistryName().getResourcePath() == elt.block.getResourcePath()/* Block.isEqualTo(b, elt.block) */) {
 					return elt;
 				}
 			}
