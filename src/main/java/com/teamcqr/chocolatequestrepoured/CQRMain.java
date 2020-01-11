@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -35,6 +36,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -146,7 +148,7 @@ public class CQRMain {
 		ELootTablesBoss.values();
 
 		// Register event handling for dungeon protection system
-		// MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
+		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
