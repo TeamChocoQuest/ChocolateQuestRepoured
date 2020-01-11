@@ -69,6 +69,7 @@ public class ProtectedRegion implements Serializable {
         this.settings.put("preventExplosionOther", true);
         this.settings.put("preventFireSpread", true);
         this.settings.put("preventNaturalMobSpawn", true);
+        this.settings.put("requireDependencies", true);
         // Protection Settings Overrides
         if (settingsOverrides != null) {
             for (String setting : settingsOverrides.keySet()) {
@@ -77,21 +78,10 @@ public class ProtectedRegion implements Serializable {
                 }
             }
         }
-    }
-
-    // Minimal
-    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner) {
-        this.UUID = UUID;
-        this.NWCorner = NWCorner;
-        this.SECorner = SECorner;
-        this.settings.put("preventBlockBreak", true);
-        this.settings.put("preventBlockBreakCreative", false);
-        this.settings.put("preventBlockPlace", true);
-        this.settings.put("preventBlockPlaceCreative", false);
-        this.settings.put("preventExplosionTNT", false);
-        this.settings.put("preventExplosionOther", true);
-        this.settings.put("preventFireSpread", true);
-        this.settings.put("preventNaturalMobSpawn", true);
+        // Initial Dependency Check
+        if(this.settings.get("requireDependencies") && this.entityDependencies.size() == 0 && this.blockDependencies.size() == 0) {
+            ProtectionHandler.getInstance().deregister(this);
+        }
     }
 
     /*

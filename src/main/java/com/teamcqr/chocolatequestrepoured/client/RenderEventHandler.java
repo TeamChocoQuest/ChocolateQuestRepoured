@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client;
 
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 
 import net.minecraft.client.model.ModelBiped.ArmPose;
@@ -22,11 +23,11 @@ public class RenderEventHandler {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife) {
 			GlStateManager.pushMatrix();
 		}
 
-		if (itemMain instanceof ItemMusket) {
+		if (itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife) {
 			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
@@ -39,7 +40,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90));
 			}
 		}
-		if (itemOff instanceof ItemMusket) {
+		if (itemOff instanceof ItemMusket || itemOff instanceof ItemMusketKnife) {
 			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().leftArmPose = ArmPose.BOW_AND_ARROW;
 			} else {
@@ -58,7 +59,7 @@ public class RenderEventHandler {
 	public static void onRenderPlayerPost(RenderPlayerEvent.Post event) {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
-		if (itemMain instanceof ItemRevolver && !(itemMain instanceof ItemMusket)) {
+		if (itemMain instanceof ItemRevolver && !(itemMain instanceof ItemMusket || itemMain instanceof ItemMusketKnife)) {
 			if (event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
@@ -75,7 +76,7 @@ public class RenderEventHandler {
 				event.getRenderer().getMainModel().bipedRightArm.postRender(1F);
 			}
 		}
-		if (itemOff instanceof ItemRevolver && !(itemOff instanceof ItemMusket)) {
+		if (itemOff instanceof ItemRevolver && !(itemOff instanceof ItemMusket  || itemOff instanceof ItemMusketKnife)) {
 			if (!(event.getEntityPlayer().getPrimaryHand() == EnumHandSide.LEFT)) {
 				event.getRenderer().getMainModel().bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
 				event.getRenderer().getMainModel().bipedLeftArm.postRender(1F);
@@ -93,7 +94,7 @@ public class RenderEventHandler {
 			}
 		}
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife) {
 			GlStateManager.popMatrix();
 		}
 	}

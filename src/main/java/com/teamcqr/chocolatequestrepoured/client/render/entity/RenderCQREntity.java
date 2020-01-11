@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLe
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -95,7 +96,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 			// Main arm
 			if (!itemMainHand.isEmpty()) {
-				if (itemMainHand.getItem() instanceof ItemMusket) {
+				if (itemMainHand.getItem() instanceof ItemMusket || itemMainHand.getItem() instanceof ItemMusketKnife) {
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderOffItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
@@ -124,7 +125,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			if (!itemOffHand.isEmpty()) {
 				// if(itemOffHand.getItem() instanceof ItemShield) {
 
-				if (itemOffHand.getItem() instanceof ItemMusket) {
+				if (itemOffHand.getItem() instanceof ItemMusket || itemOffHand.getItem() instanceof ItemMusketKnife) {
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderMainItem = true;
 				} else if (itemMainHand.getItem() instanceof ItemRevolver) {

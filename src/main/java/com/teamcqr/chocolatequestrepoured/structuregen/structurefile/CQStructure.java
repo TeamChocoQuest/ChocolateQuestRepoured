@@ -70,11 +70,13 @@ public class CQStructure {
 	@Nullable
 	private DungeonBase dungeon = null;
 
-	private int dunX, dunZ;
+	//private int dunX, dunZ;
 
 	// DONE: move structure origin to the center of it -> "Placing Config"
 
 	private HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
+	
+	EDungeonMobType dungeonMobForPlacement = null;
 
 	private boolean buildShieldCore;
 
@@ -90,8 +92,8 @@ public class CQStructure {
 	public CQStructure(@Nonnull File file, @Nullable DungeonBase dungeon, int dunX, int dunZ, boolean hasShield) {
 		// System.out.println("Dungeon is null: " + (dungeon == null));
 		EDungeonMobType mobType = null;
-		this.dunX = dunX;
-		this.dunZ = dunZ;
+		//this.dunX = dunX;
+		//this.dunZ = dunZ;
 		if (dungeon != null) {
 			this.dungeon = dungeon;
 			mobType = dungeon.getDungeonMob();
@@ -103,6 +105,7 @@ public class CQStructure {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(dunX * 16, dunZ * 16);
 			this.setNewBannerPattern(mobType.getBanner());
 		}
+		this.dungeonMobForPlacement = mobType;
 		// Handled in TileEntitySpawner
 		/*
 		 * if(dungeon.getDungeonMob().equals(EDungeonMobType.DEFAULT) && (dunX != 0 && dunZ != 0)) {
@@ -253,10 +256,10 @@ public class CQStructure {
 	private void placeBossBlocks(World worldIn, BlockPos pos, PlacementSettings settings) {
 		if (this.bossCount > 0 && this.bossCompound != null) {
 			if (this.dungeon != null) {
-				EDungeonMobType mobType = this.dungeon.getDungeonMob() != null ? this.dungeon.getDungeonMob() : EDungeonMobType.DEFAULT;
+				/*EDungeonMobType mobType = this.dungeon.getDungeonMob() != null ? this.dungeon.getDungeonMob() : EDungeonMobType.DEFAULT;
 				if (mobType.equals(EDungeonMobType.DEFAULT)) {
 					mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.dunX, this.dunZ);
-				}
+				}*/
 
 				for (int i = 0; i < this.bossCount; i++) {
 					try {
@@ -266,9 +269,9 @@ public class CQStructure {
 							vecPos = vecPos.add(pos);
 
 							// DONE: Place spawner for right boss
-							if (mobType.getBossResourceLocation() != null) {
+							if (dungeonMobForPlacement.getBossResourceLocation() != null) {
 								worldIn.setBlockToAir(vecPos);
-								Entity bossEnt = EntityList.createEntityByIDFromName(mobType.getBossResourceLocation(), worldIn);
+								Entity bossEnt = EntityList.createEntityByIDFromName(dungeonMobForPlacement.getBossResourceLocation(), worldIn);
 								bossEnt.setPosition(vecPos.getX(), vecPos.getY() + 0.25, vecPos.getZ());
 								if (bossEnt instanceof EntityLiving) {
 									((EntityLiving) bossEnt).enablePersistence();
@@ -282,14 +285,16 @@ public class CQStructure {
 								this.bossIDs.add(bossEnt.getPersistentID());
 							} else {
 								worldIn.setBlockToAir(vecPos);
-								EntityArmorStand indicator = new EntityArmorStand(worldIn, vecPos.getX(), vecPos.getY(), vecPos.getZ());
-								indicator.setInvisible(true);
-								indicator.setNoGravity(true);
-								NBTTagCompound nbt = new NBTTagCompound();
-								nbt.setBoolean("CustomNameVisible", true);
-								nbt.setBoolean("Invulnerable", true);
-								indicator.readFromNBT(nbt);
+								
+								final EntityArmorStand indicator = new EntityArmorStand(worldIn);
 								indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
+								indicator.setLocationAndAngles(vecPos.getX() +0.5D, vecPos.getY(), vecPos.getZ() +0.5D, 0, 0);
+								indicator.setEntityInvulnerable(true);
+								indicator.setInvisible(true);
+								indicator.setAlwaysRenderNameTag(true);
+								indicator.setSilent(true);
+								indicator.setNoGravity(true);
+								
 								worldIn.spawnEntity(indicator);
 							}
 						}

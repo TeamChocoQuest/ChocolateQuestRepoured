@@ -22,8 +22,8 @@ import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -36,6 +36,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -58,8 +59,6 @@ public class CQRMain {
 
 	@SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.COMMON_PROXY_CLASS)
 	public static IProxy proxy;
-
-	public static DungeonRegistry dungeonRegistry = new DungeonRegistry();
 
 	public static Logger logger = null;
 
@@ -138,19 +137,18 @@ public class CQRMain {
 			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
-		//Instantiating enums
-		//loot tables
+		// Instantiating enums
+		// loot tables
 		ELootTable.values();
-		//Banners
+		// Banners
 		EBannerPatternsCQ.values();
-		//Normal entity loot
+		// Normal entity loot
 		ELootTablesNormal.values();
-		//Boss loot
+		// Boss loot
 		ELootTablesBoss.values();
-		
-		
+
 		// Register event handling for dungeon protection system
-		// MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
+		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
@@ -206,20 +204,6 @@ public class CQRMain {
 	public void init(FMLInitializationEvent event) {
 		proxy.init();
 
-		// Instantiating the ELootTable class
-		try {
-			if (ELootTable.CQ_VANILLA_WOODLAND_MANSION.getResourceLocation() != null) {
-				logger.info("Loading chest loot table configuration...");
-				LootTableLoader lootTableLoader = new LootTableLoader();
-				lootTableLoader.loadConfigs();
-			} else {
-				throw new Exception("Couldn't load loot table configs!!!");
-			}
-		} catch (Exception e) {
-			logger.error("Failed to instantiate the loot tables or to exchange the files!");
-			logger.error(e);
-		}
-
 		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
@@ -230,7 +214,7 @@ public class CQRMain {
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
 
-		DungeonRegistry.loadDungeons();
+		DungeonRegistry.getInstance().loadDungeons();
 	}
 
 }

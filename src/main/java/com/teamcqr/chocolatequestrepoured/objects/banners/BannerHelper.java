@@ -22,11 +22,10 @@ public class BannerHelper {
 	}
 
 	public static boolean isCQBanner(TileEntityBanner bannerTile) {
-		List<BannerPattern> patterns = new ArrayList<>();
-		patterns = ReflectionHelper.getPrivateValue(TileEntityBanner.class, bannerTile, 4);
-		if (bannerTile != null && !patterns.isEmpty()) {
+		List<BannerPattern> patterns = ReflectionHelper.getPrivateValue(TileEntityBanner.class, bannerTile, 4);
+		if (patterns != null && !patterns.isEmpty()) {
 			for (EBannerPatternsCQ cqPattern : EBannerPatternsCQ.values()) {
-				if (bannerTile.getPatternList().contains(cqPattern.getPattern())) {
+				if (patterns.contains(cqPattern.getPattern())) {
 					return true;
 				}
 			}

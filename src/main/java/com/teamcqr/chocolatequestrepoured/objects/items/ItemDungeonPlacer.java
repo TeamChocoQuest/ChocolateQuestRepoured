@@ -1,11 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -37,7 +39,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDungeonPlacer extends Item {
 
-	public static List<FakeDungeon> fakeDungeonList = new ArrayList<FakeDungeon>();
+	public static Set<FakeDungeon> fakeDungeonSet = new HashSet<FakeDungeon>();
 
 	public static final int HIGHEST_ICON_NUMBER = 19;
 	private int iconID;
@@ -50,7 +52,7 @@ public class ItemDungeonPlacer extends Item {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
-			for (FakeDungeon fakeDungeon : fakeDungeonList) {
+			for (FakeDungeon fakeDungeon : fakeDungeonSet) {
 				int iconID = fakeDungeon.getIconID() <= HIGHEST_ICON_NUMBER ? fakeDungeon.getIconID() : 0;
 				if (iconID == this.iconID) {
 					ItemStack stack = new ItemStack(this);
@@ -110,7 +112,7 @@ public class ItemDungeonPlacer extends Item {
 
 				if (stack.hasTagCompound()) {
 					String dungeonName = stack.getTagCompound().getString("dungeonName");
-					DungeonBase dungeon = CQRMain.dungeonRegistry.getDungeon(dungeonName);
+					DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
 
 					if (dungeon != null) {
 						Vec3d pos = playerIn.getPositionEyes(1.0F);
@@ -163,7 +165,7 @@ public class ItemDungeonPlacer extends Item {
 		@SubscribeEvent
 		public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
 			if (!event.player.world.isRemote) {
-				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(CQRMain.dungeonRegistry.getLoadedDungeons()), (EntityPlayerMP) event.player);
+				CQRMain.NETWORK.sendTo(new DungeonSyncPacket(DungeonRegistry.getInstance().getLoadedDungeons()), (EntityPlayerMP) event.player);
 			}
 		}
 

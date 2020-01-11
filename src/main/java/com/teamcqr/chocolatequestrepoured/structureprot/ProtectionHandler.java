@@ -65,6 +65,16 @@ public class ProtectionHandler {
     @SubscribeEvent
     public void eventHandleDungeonSpawn(CQDungeonStructureGenerateEvent e) {
 
+        // Convert Settings Overrides to HashMap
+        HashMap<String, Boolean> settingsOverrides = new HashMap<>();
+        settingsOverrides.put("preventBlockBreak", !e.getDungeon().getAllowBlockBreaking());
+        settingsOverrides.put("preventBlockPlace", !e.getDungeon().getAllowBlockPlacing());
+        settingsOverrides.put("preventExplosionTNT", !e.getDungeon().getAllowExplosionTNT());
+        settingsOverrides.put("preventExplosionOther", !e.getDungeon().getAllowExplosionOther());
+        settingsOverrides.put("preventFireSpread", !e.getDungeon().getAllowFireSpread());
+        settingsOverrides.put("preventNaturalMobSpawn", !e.getDungeon().getAllowMobSpawns());
+        settingsOverrides.put("requireDependencies", !e.getDungeon().getSecurityBypassEnabled());
+
         // Create ProtectedRegion obj
         ProtectedRegion regionToBeRegistered = new ProtectedRegion(
                 /* Dungeon UUID        */ e.getDungeonID().toString(),
@@ -72,7 +82,7 @@ public class ProtectionHandler {
                 /* SE Corner           */ new BlockPos(e.getPos().getX() + e.getSize().getX(), e.getPos().getY() + e.getSize().getY(), e.getPos().getZ() + e.getSize().getZ()),
                 /* Entity Dependencies */ e.getBossIDs(),
                 /* Block Dependencies  */ (ArrayList<BlockPos>) ArrayCollectionMapManipulationUtil.genericAddValueToArrayish(new ArrayList<BlockPos>(), e.getShieldCorePosition(), null),
-                /* Settings Overrides  */ null
+                /* Settings Overrides  */ settingsOverrides
         );
 
         // Get Dimension ID

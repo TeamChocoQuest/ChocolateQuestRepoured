@@ -49,8 +49,9 @@ public class ItemArmorHeavy extends ItemArmor {
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		// return super.getArmorModel(entityLiving, itemStack, armorSlot, _default);
 		if (itemStack.getItem() instanceof ItemArmor) {
+			//This is supposed! Reason: If future version have a separate model for the heavy diamond armor, adaption isnt really needed
 			if (((ItemArmor) itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
-				// TODO: Diamond armor
+				return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyDiamondArmorLegs : ModArmorModels.heavyDiamondArmor;
 			} else {
 				return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 			}
