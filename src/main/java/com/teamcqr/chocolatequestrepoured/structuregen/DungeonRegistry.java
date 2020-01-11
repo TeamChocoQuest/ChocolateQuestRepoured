@@ -13,7 +13,6 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.AbandonedDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
@@ -21,7 +20,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDu
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
@@ -143,8 +141,6 @@ public class DungeonRegistry {
 
 	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
 		switch (EDungeonGenerator.valueOf(dunType.toUpperCase())) {
-		case ABANDONED:
-			return new AbandonedDungeon(dungeonPropertiesFile);
 		case CASTLE:
 			return new CastleDungeon(dungeonPropertiesFile);
 		case CAVERNS:
@@ -153,8 +149,6 @@ public class DungeonRegistry {
 			return new FloatingNetherCity(dungeonPropertiesFile);
 		case NETHER_CITY:
 			return new ClassicNetherCity(dungeonPropertiesFile);
-		case RUIN:
-			return new RuinDungeon(dungeonPropertiesFile);
 		case STRONGHOLD:
 			return new StrongholdOpenDungeon(dungeonPropertiesFile);
 		case TEMPLATE_OCEAN_FLOOR:
