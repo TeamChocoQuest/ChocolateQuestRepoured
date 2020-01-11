@@ -74,7 +74,11 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.5D);
-			ball.setVelocity(v.x, v.y, v.z);
+			//ball.setVelocity(v.x, v.y, v.z);
+			ball.motionX = v.x;
+			ball.motionY = v.y;
+			ball.motionZ = v.z;
+			ball.velocityChanged = true;
 			worldIn.spawnEntity(ball);
 		}
 	}

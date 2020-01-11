@@ -33,7 +33,11 @@ public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
 
 		for (Vec3d v : velocities) {
 			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
-			proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
+			//proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
+			proj.motionX = v.x * 0.5D;
+			proj.motionY = v.y * 0.5D;
+			proj.motionZ = v.z * 0.5D;
+			proj.velocityChanged = true;
 			this.entity.world.spawnEntity(proj);
 		}
 	}
