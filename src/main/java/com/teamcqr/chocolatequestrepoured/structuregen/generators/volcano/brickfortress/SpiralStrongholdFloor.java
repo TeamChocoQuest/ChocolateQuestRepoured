@@ -161,7 +161,7 @@ public class SpiralStrongholdFloor {
 			double dx = iX - entranceIndex.getFirst();
 			double dz = iZ - entranceIndex.getSecond();
 			double distance = Math.sqrt(dx * dx + dz * dz);
-			System.out.println("Indx: " + iX + "|" + iZ + "  Distance: " + distance);
+			//System.out.println("Indx: " + iX + "|" + iZ + "  Distance: " + distance);
 			boolean distBool = distance <= 1;
 			if(distBool) {
 				switch(entranceRoomType) {
