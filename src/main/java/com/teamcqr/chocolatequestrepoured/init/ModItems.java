@@ -28,19 +28,20 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshot;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemLongshot;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
@@ -308,7 +309,8 @@ public class ModItems {
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
 
-					setItemName(new ItemHookshotBase(), "hookshoot"),
+					setItemName(new ItemHookshot(), "hookshot"),
+					setItemName(new ItemLongshot(), "longshot"),
 
 					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),

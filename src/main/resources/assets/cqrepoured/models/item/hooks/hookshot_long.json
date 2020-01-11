@@ -1,9 +1,9 @@
 {
 	"credit": "Made by Silentine, with Blockbench",
 	"textures": {
-		"0": "cqrepoured:items/hookshoot/hookshoot",
-		"1": "cqrepoured:items/hookshoot/hookshoot_arrow",
-		"particle": "cqrepoured:items/hookshoot/hookshoot"
+		"0": "cqrepoured:items/hookshot/longshot",
+		"1": "cqrepoured:items/hookshot/hookshot_arrow",
+		"particle": "cqrepoured:items/hookshot/longshot"
 	},
 	"elements": [
 		{

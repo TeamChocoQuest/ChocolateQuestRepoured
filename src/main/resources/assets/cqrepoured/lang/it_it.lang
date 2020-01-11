@@ -270,6 +270,10 @@ item.bullet_fire.name=Proiettili Incendiari
 item.cannon_ball.name=Palla Di Cannone
 item.flamethrower.name=Lanciafiamme
 
+//Hookshots
+item.hookshot.name=Missing #TODO
+item.longshot.name=Missing #TODO
+
 //Cloud Items
 item.boots_cloud.name=Stivali Nuvola
 item.feather_golden.name=Piuma D'Oro
@@ -474,7 +478,7 @@ description.backpack.name=Fare clic con il tasto destro per aprire.
 description.alchemy_bag.name=Fare clic con il tasto destro per aprire. Memorizza solo pozioni.
 //description.woodshot.name=Fare clic con il tasto destro del mouse per sparare. Una volta che il gancio colpisce un blocco di legno, verrai tirato su di esso.
 description.hookshot.name=Fare clic con il tasto destro del mouse per sparare. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
-//description.longshot.name=tasto destro del mouse per sparare gancio. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
+description.longshot.name=tasto destro del mouse per sparare gancio. Una volta che il gancio colpisce un blocco, verrai tirato su di esso.
 //description.manualhook.name=Fare clic con il tasto destro del mouse per sparare. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.
 //description.spidershot.name=Fare clic con il tasto destro del mouse per Lanciare ragnatele. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.
 //description.hooksword.name=Fare clic con il tasto destro del mouse per sparare. Una volta che il gancio colpisce un blocco, puoi tenere premuto il tasto destro del mouse per avvicinarti ad esso e sgattaiolare mentre lo fai per allontanarti da esso.

@@ -48,14 +48,26 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 			if (this.dungeon.rotateDungeon()) {
 				switch (this.rot) {
 				case CLOCKWISE_90:
-					x -= sizeX;
+					x -= sizeZ;
+					{
+						int i = sizeX;
+						int j = sizeZ;
+						sizeX = j;
+						sizeZ = i;
+					}
 					break;
 				case CLOCKWISE_180:
 					x -= sizeX;
 					z -= sizeZ;
 					break;
 				case COUNTERCLOCKWISE_90:
-					z -= sizeZ;
+					z -= sizeX;
+					{
+						int i = sizeX;
+						int j = sizeZ;
+						sizeX = j;
+						sizeZ = i;
+					}
 					break;
 				default:
 					break;
