@@ -34,7 +34,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	@Override
 	public void updateTask() {
 		if (!this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
-			if (this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.NONE)) {
+			if (this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.WALKING)) {
 				this.getBoss().setCurrentAnimation(ETortoiseAnimState.MOVE_PARTS_IN);
 				this.ticksAnimStart = this.entity.ticksExisted;
 			}

@@ -3,18 +3,16 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.AbandonedDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
@@ -22,31 +20,44 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDu
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.RuinDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
+ * Copyright (c) 29.04.2019<br>
+ * Developed by DerToaster98<br>
  * GitHub: https://github.com/DerToaster98
  */
 public class DungeonRegistry {
 
-	protected List<DungeonBase> dungeonList = new ArrayList<DungeonBase>();
-	private HashMap<ResourceLocation, List<DungeonBase>> biomeDungeonMap = new HashMap<ResourceLocation, List<DungeonBase>>();
-	private HashMap<BiomeDictionary.Type, List<DungeonBase>> biomeTypeDungeonMap = new  HashMap<>();
-	private HashMap<BlockPos, List<DungeonBase>> coordinateSpecificDungeons = new HashMap<BlockPos, List<DungeonBase>>();
+	private static DungeonRegistry instance = new DungeonRegistry();
+
+	private Set<DungeonBase> dungeonSet = new HashSet<DungeonBase>();
+	private Map<ResourceLocation, Set<DungeonBase>> biomeDungeonMap = new HashMap<ResourceLocation, Set<DungeonBase>>();
+	private Map<BiomeDictionary.Type, Set<DungeonBase>> biomeTypeDungeonMap = new HashMap<BiomeDictionary.Type, Set<DungeonBase>>();
+	private Set<DungeonBase> coordinateSpecificDungeons = new HashSet<DungeonBase>();
+
+	public static DungeonRegistry getInstance() {
+		return instance;
+	}
+
+	public void reloadDungeonFiles() {
+		this.dungeonSet.clear();
+		this.biomeDungeonMap.clear();
+		this.biomeTypeDungeonMap.clear();
+		this.coordinateSpecificDungeons.clear();
+		this.loadDungeons();
+	}
 
 	public void loadDungeonFiles() {
 		Collection<File> files = FileUtils.listFiles(CQRMain.CQ_DUNGEON_FOLDER, new String[] { "properties", "prop", "cfg" }, true);
@@ -69,36 +80,33 @@ public class DungeonRegistry {
 							if (PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false)) {
 								// Position restriction stuff here
 								if (this.handleLockedPos(dungeon, dungeonConfig)) {
-									this.dungeonList.add(dungeon);
+									this.coordinateSpecificDungeons.add(dungeon);
 								}
-							} else {
+							} else if (dungeon.getSpawnChance() > 0) {
 								// Biome map filling
 								String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
 								for (String biomeName : biomeNames) {
 									if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
 										// Add dungeon to all biomes
 										this.addDungeonToAllBiomes(dungeon);
+										this.addDungeonToAllBiomeTypes(dungeon);
 										break;
 									} else if (this.isBiomeType(biomeName)) {
 										// Add dungeon to all biomes from biome type
-										BiomeDictionary.Type biomeType = this.getBiomeTypeByName(biomeName);
-										for (Biome biome : BiomeDictionary.getBiomes(biomeType)) {
-											this.addDungeonToBiome(dungeon, biome.getRegistryName());
-										}
-										List<DungeonBase> dungeonTmp = biomeTypeDungeonMap.getOrDefault(biomeType, new ArrayList<DungeonBase>());
-										dungeonTmp.add(dungeon);
-										biomeTypeDungeonMap.put(biomeType, dungeonTmp);
+										this.addDungeonToBiomeType(dungeon, this.getBiomeTypeByName(biomeName));
 									} else {
 										// Add dungeon to biome from registry name
 										this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
 									}
 								}
-
-								this.dungeonList.add(dungeon);
+							} else {
+								CQRMain.logger.warn(file.getName() + ": Dungeon spawnrate is set to or below 0!");
 							}
 						} else {
 							CQRMain.logger.warn(file.getName() + ": Dungeon is missing mod dependencies!");
 						}
+
+						this.dungeonSet.add(dungeon);
 					} else {
 						CQRMain.logger.warn(file.getName() + ": Couldn't create dungeon for generator type " + generatorType + "!");
 					}
@@ -133,8 +141,6 @@ public class DungeonRegistry {
 
 	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
 		switch (EDungeonGenerator.valueOf(dunType.toUpperCase())) {
-		case ABANDONED:
-			return new AbandonedDungeon(dungeonPropertiesFile);
 		case CASTLE:
 			return new CastleDungeon(dungeonPropertiesFile);
 		case CAVERNS:
@@ -143,8 +149,6 @@ public class DungeonRegistry {
 			return new FloatingNetherCity(dungeonPropertiesFile);
 		case NETHER_CITY:
 			return new ClassicNetherCity(dungeonPropertiesFile);
-		case RUIN:
-			return new RuinDungeon(dungeonPropertiesFile);
 		case STRONGHOLD:
 			return new StrongholdOpenDungeon(dungeonPropertiesFile);
 		case TEMPLATE_OCEAN_FLOOR:
@@ -171,68 +175,77 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public Set<DungeonBase> getDungeonsForBiome(Biome biome, Set<BiomeDictionary.Type> types) {
-		Set<DungeonBase> dungeons = new HashSet<>();
-		if (biome != null && this.biomeDungeonMap.containsKey(biome.getRegistryName()) && !this.biomeDungeonMap.get(biome.getRegistryName()).isEmpty()) {
-			dungeons.addAll(biomeDungeonMap.get(biome.getRegistryName()));
-		}
-		if(!types.isEmpty()) {
-			for(BiomeDictionary.Type type : types) {
-				if(type != null && biomeTypeDungeonMap.containsKey(type) && !this.biomeTypeDungeonMap.get(type).isEmpty()) {
-					dungeons.addAll(biomeTypeDungeonMap.get(type));
+	public Set<DungeonBase> getDungeonsForChunk(World world, int chunkX, int chunkZ, boolean behindWall) {
+		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
+
+		Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 0, chunkZ * 16 + 1));
+		Set<DungeonBase> biomeDungeonSet = this.biomeDungeonMap.get(biome.getRegistryName());
+		if (biomeDungeonSet != null) {
+			for (DungeonBase dungeon : biomeDungeonSet) {
+				if (dungeon.isDimensionAllowed(world.provider.getDimension()) && (behindWall || !dungeon.doesSpawnOnlyBehindWall())) {
+					dungeons.add(dungeon);
 				}
 			}
+		} else {
+			this.biomeDungeonMap.put(biome.getRegistryName(), new HashSet<DungeonBase>());
 		}
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.getTypes(biome)) {
+			Set<DungeonBase> biomeTypeDungeonSet = this.biomeTypeDungeonMap.get(biomeType);
+			if (biomeTypeDungeonSet != null) {
+				for (DungeonBase dungeon : biomeTypeDungeonSet) {
+					if (dungeon.isDimensionAllowed(world.provider.getDimension()) && (behindWall || !dungeon.doesSpawnOnlyBehindWall())) {
+						dungeons.add(dungeon);
+					}
+				}
+			} else {
+				this.biomeTypeDungeonMap.put(biomeType, new HashSet<DungeonBase>());
+			}
+		}
+
 		return dungeons;
 	}
 
-	public void addBiomeEntryToMap(Biome biome) {
-		if (this.biomeDungeonMap != null) {
-			if (!this.biomeDungeonMap.containsKey(biome.getRegistryName())) {
-				this.biomeDungeonMap.put(biome.getRegistryName(), new ArrayList<DungeonBase>());
-			}
-		}
-		for(BiomeDictionary.Type type : BiomeDictionary.getTypes(biome)) {
-			if(!biomeTypeDungeonMap.containsKey(type)) {
-				biomeTypeDungeonMap.put(type, new ArrayList<DungeonBase>());
-			}
-		}
-	}
-
-	public int getDungeonDistance() {
-		return CQRConfig.general.dungeonSeparation;
-	}
-
-	public int getDungeonSpawnDistance() {
-		return CQRConfig.general.dungeonSpawnDistance;
-	}
-
-	public HashMap<BlockPos, List<DungeonBase>> getCoordinateSpecificsMap() {
+	public Set<DungeonBase> getCoordinateSpecificsMap() {
 		return this.coordinateSpecificDungeons;
 	}
 
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
-		for (ResourceLocation biome : this.biomeDungeonMap.keySet()) {
-			this.addDungeonToBiome(dungeon, biome);
+		for (Set<DungeonBase> dungeonSet : this.biomeDungeonMap.values()) {
+			dungeonSet.add(dungeon);
 		}
-		for(BiomeDictionary.Type type : this.biomeTypeDungeonMap.keySet()) {
-			List<DungeonBase> lTmp = this.biomeTypeDungeonMap.getOrDefault(type, new ArrayList<DungeonBase>());
-			lTmp.add(dungeon);
-			this.biomeTypeDungeonMap.replace(type, lTmp);
+	}
+
+	private void addDungeonToAllBiomeTypes(DungeonBase dungeon) {
+		for (Set<DungeonBase> dungeonSet : this.biomeTypeDungeonMap.values()) {
+			dungeonSet.add(dungeon);
 		}
 	}
 
 	private void addDungeonToBiome(DungeonBase dungeon, ResourceLocation biome) {
-		List<DungeonBase> dungeonList = this.biomeDungeonMap.getOrDefault(biome, new ArrayList<DungeonBase>());
-		if (!dungeonList.contains(dungeon)) {
-			dungeonList.add(dungeon);
-			this.biomeDungeonMap.replace(biome, dungeonList);
+		Set<DungeonBase> dungeonSet = this.biomeDungeonMap.get(biome);
+		if (dungeonSet != null) {
+			dungeonSet.add(dungeon);
+		} else {
+			dungeonSet = new HashSet<DungeonBase>();
+			dungeonSet.add(dungeon);
+			this.biomeDungeonMap.put(biome, dungeonSet);
 		}
 	}
 
-	private BiomeDictionary.Type getBiomeTypeByName(String biomeName) {
+	private void addDungeonToBiomeType(DungeonBase dungeon, BiomeDictionary.Type biomeType) {
+		Set<DungeonBase> dungeonSet = this.biomeTypeDungeonMap.get(biomeType);
+		if (dungeonSet != null) {
+			dungeonSet.add(dungeon);
+		} else {
+			dungeonSet = new HashSet<DungeonBase>();
+			dungeonSet.add(dungeon);
+			this.biomeTypeDungeonMap.put(biomeType, dungeonSet);
+		}
+	}
+
+	private BiomeDictionary.Type getBiomeTypeByName(String biomeTypeName) {
 		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
-			if (biomeName.equalsIgnoreCase(biomeType.getName()) || biomeName.equalsIgnoreCase(biomeType.toString())) {
+			if (biomeTypeName.equalsIgnoreCase(biomeType.getName())) {
 				return biomeType;
 			}
 		}
@@ -243,16 +256,19 @@ public class DungeonRegistry {
 		return this.getBiomeTypeByName(biomeName) != null;
 	}
 
-	public static void loadDungeons() {
+	public void loadDungeons() {
 		for (Biome biome : ForgeRegistries.BIOMES.getValuesCollection()) {
-			CQRMain.dungeonRegistry.addBiomeEntryToMap(biome);
+			this.biomeDungeonMap.put(biome.getRegistryName(), new HashSet<DungeonBase>());
+		}
+		for (BiomeDictionary.Type biomeType : BiomeDictionary.Type.getAll()) {
+			this.biomeTypeDungeonMap.put(biomeType, new HashSet<DungeonBase>());
 		}
 
-		CQRMain.dungeonRegistry.loadDungeonFiles();
+		this.loadDungeonFiles();
 	}
 
 	public DungeonBase getDungeon(String name) {
-		for (DungeonBase dungeon : this.dungeonList) {
+		for (DungeonBase dungeon : this.dungeonSet) {
 			if (dungeon.getDungeonName().equals(name)) {
 				return dungeon;
 			}
@@ -260,8 +276,8 @@ public class DungeonRegistry {
 		return null;
 	}
 
-	public List<DungeonBase> getLoadedDungeons() {
-		return this.dungeonList;
+	public Set<DungeonBase> getLoadedDungeons() {
+		return this.dungeonSet;
 	}
 
 	private boolean areDependenciesMissing(DungeonBase dungeon) {

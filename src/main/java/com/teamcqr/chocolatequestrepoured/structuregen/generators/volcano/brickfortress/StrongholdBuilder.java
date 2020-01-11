@@ -1,9 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
+import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
+import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.util.EnumFacing;
@@ -12,7 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class EntranceBuilder {
+public class StrongholdBuilder {
 
 	private BlockPos startPos;
 	private VolcanoDungeon dungeon;
@@ -20,7 +24,7 @@ public class EntranceBuilder {
 	private EnumFacing direction;
 	private World world;
 
-	public EntranceBuilder(BlockPos start, int distanceToWall, VolcanoDungeon dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilder(BlockPos start, int distanceToWall, VolcanoDungeon dungeon, EnumFacing expansionDirection, World world) {
 		this.startPos = start;
 		this.dungeon = dungeon;
 		this.blocksRemainingToWall = distanceToWall;
@@ -53,6 +57,15 @@ public class EntranceBuilder {
 		for (int i = 0; i < (this.blocksRemainingToWall / 3) + 2; i++) {
 			this.buildSegment(pos);
 			pos = pos.add(expansionVector);
+		}
+		
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
+		try {
+			stronghold.calculateFloors(pos);
+			stronghold.calculateFloorCoordinates(pos);
+			stronghold.buildFloors(pos);
+		} catch(Exception ex) {
+			//IGnore
 		}
 	}
 

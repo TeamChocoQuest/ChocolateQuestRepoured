@@ -39,7 +39,11 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
 		for (Vec3d v : velocities) {
 			ProjectilePoisonSpell proj = new ProjectilePoisonSpell(this.entity.world, this.entity);
-			proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
+			//proj.setVelocity(v.x * SPEED_MULTIPLIER, v.y * SPEED_MULTIPLIER, v.z * SPEED_MULTIPLIER);
+			proj.motionX = v.x * SPEED_MULTIPLIER;
+			proj.motionY = v.y * SPEED_MULTIPLIER;
+			proj.motionZ = v.z * SPEED_MULTIPLIER;
+			proj.velocityChanged = true;
 			this.entity.world.spawnEntity(proj);
 		}
 	}

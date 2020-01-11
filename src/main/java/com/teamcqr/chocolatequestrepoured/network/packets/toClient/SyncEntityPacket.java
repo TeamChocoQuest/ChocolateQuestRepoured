@@ -32,25 +32,25 @@ public class SyncEntityPacket implements IMessage {
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		this.entityId = buf.readInt();
-		this.healthScaling = buf.readInt();
-		this.dropChanceHelm = buf.readInt();
-		this.dropChanceChest = buf.readInt();
-		this.dropChanceLegs = buf.readInt();
-		this.dropChanceFeet = buf.readInt();
-		this.dropChanceMainhand = buf.readInt();
-		this.dropChanceOffhand = buf.readInt();
+		this.healthScaling = buf.readShort();
+		this.dropChanceHelm = buf.readByte();
+		this.dropChanceChest = buf.readByte();
+		this.dropChanceLegs = buf.readByte();
+		this.dropChanceFeet = buf.readByte();
+		this.dropChanceMainhand = buf.readByte();
+		this.dropChanceOffhand = buf.readByte();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
 		buf.writeInt(this.entityId);
-		buf.writeInt(this.healthScaling);
-		buf.writeInt(this.dropChanceHelm);
-		buf.writeInt(this.dropChanceChest);
-		buf.writeInt(this.dropChanceLegs);
-		buf.writeInt(this.dropChanceFeet);
-		buf.writeInt(this.dropChanceMainhand);
-		buf.writeInt(this.dropChanceOffhand);
+		buf.writeShort(this.healthScaling);
+		buf.writeByte(this.dropChanceHelm);
+		buf.writeByte(this.dropChanceChest);
+		buf.writeByte(this.dropChanceLegs);
+		buf.writeByte(this.dropChanceFeet);
+		buf.writeByte(this.dropChanceMainhand);
+		buf.writeByte(this.dropChanceOffhand);
 	}
 
 	public int getEntityId() {

@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ParticlesMessageToClient;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -23,10 +22,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
@@ -90,8 +91,9 @@ public class EventsHandler {
 					tep = true;
 				} else {
 					tep = false;
-					ParticlesMessageToClient packet = new ParticlesMessageToClient(player.getPositionVector(), 12, 12);
-					CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(player));
+					if (!world.isRemote) {
+						((WorldServer) world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+					}
 				}
 			}
 
@@ -101,8 +103,9 @@ public class EventsHandler {
 						EntityPlayerMP playerMP = (EntityPlayerMP) player;
 
 						playerMP.connection.setPlayerLocation(d, d1, d2, playerMP.rotationYaw, playerMP.rotationPitch);
-						ParticlesMessageToClient packet = new ParticlesMessageToClient(playerMP.getPositionVector(), 24, 12);
-						CQRMain.NETWORK.sendToAllAround(packet, packet.getTargetPoint(playerMP));
+						if (!world.isRemote) {
+							((WorldServer) world).spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.height * 0.5D, player.posZ, 12, 0.25D, 0.25D, 0.25D, 0.0D);
+						}
 						world.playSound(null, d, d1, d2, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.MASTER, 1.0F, 1.0F);
 					}
 					event.setCanceled(true);

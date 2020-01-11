@@ -74,7 +74,11 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.5D);
-			spell.setVelocity(v.x, v.y, v.z);
+			//spell.setVelocity(v.x, v.y, v.z);
+			spell.motionX = v.x;
+			spell.motionY = v.y;
+			spell.motionZ = v.z;
+			spell.velocityChanged = true;
 			worldIn.spawnEntity(spell);
 		}
 	}

@@ -11,7 +11,7 @@ import net.minecraft.util.math.MathHelper;
 /**
  * CQRTurtleBossShell - DerToaster Created using Tabula 7.0.1
  */
-public class ModelGiantTortoise extends ModelBase {
+public class ModelGiantTortoise extends /*AnimationModelBase<EntityCQRGiantTortoise>*/ModelBase {
 	public ModelRenderer mainPart;
 	public ModelRenderer belly;
 	public ModelRenderer top;
@@ -208,169 +208,21 @@ public class ModelGiantTortoise extends ModelBase {
 	}
 
 	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		boolean renderSubParts = true;
 		EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise) entity;
 
 		if (ent.shouldModelReset()) {
-			this.resetParts(true);
+			this.resetParts(false);
 			ent.setAnimationChanged(false);
 		}
-		float anglePerStep = new Float(Math.toRadians(45)) / 60;
-		switch (ent.getCurrentAnimation()) {
-		// DONE: Change offset of model
-		case MOVE_PARTS_IN:
-			/*
-			 * if (ent.getAnimationProgress() >= 500) {
-			 * //Animation reset !!REMOVE THIS AFTER TESTING!!
-			 * resetParts(false);
-			 * for(ModelRenderer joint : legJoints) {
-			 * joint.offsetX = 0;
-			 * joint.offsetY = 0;
-			 * joint.offsetZ = 0;
-			 * }
-			 * ent.setAnimationProgress(0);
-			 * }
-			 */
-			if (ent.getAnimationProgress() >= 100) {
-				// Move shell down -> 11 Ticks
-				renderSubParts = false;
-				if (ent.getAnimationProgress() > 110) {
-					this.mainPart.offsetY = 0.5F;
-				}
-				if (ent.getAnimationProgress() <= 110) {
-					this.mainPart.offsetY = 0.05F * (ent.getAnimationProgress() - 100) + 0.15F;
-
-				} else if (ent.getAnimationProgress() <= 111) {
-					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.75, 0.125, 0.75);
-					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.75, 0.125, 0.75);
-					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.75, -0.125, 0.75);
-					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.75, -0.125, 0.75);
-				}
-
-			} else {
-				this.mainPart.offsetY = 0;
-				if (ent.getAnimationProgress() <= 60) {
-					// Rotate legs and move head -> 60 Ticks
-					this.head.offsetZ = ent.getAnimationProgress() * 0.0125F;
-
-					this.mainPart.offsetY = 0.0025F * (ent.getAnimationProgress());
-
-					for (int i = 0; i < 4; i++) {
-						this.knees[i].rotateAngleX -= anglePerStep;
-						this.feet[i].rotateAngleX -= anglePerStep;
-					}
-				} else {
-					// Move parts in -> 38 Ticks
-					this.mainPart.offsetY = 0.15F;
-					for (ModelRenderer legJoint : this.legJoints) {
-						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
-					}
-					float offsetXZ = 0.0125F * (ent.getAnimationProgress() - 59);
-					// System.out.println("offset: " +offsetXZ);
-
-					this.legJointFL.offsetX = -offsetXZ;
-					this.legJointFL.offsetZ = offsetXZ;
-
-					this.legJointBL.offsetX = -offsetXZ;
-					this.legJointBL.offsetZ = -offsetXZ;
-
-					this.legJointFR.offsetX = offsetXZ;
-					this.legJointFR.offsetZ = offsetXZ;
-
-					this.legJointBR.offsetX = offsetXZ;
-					this.legJointBR.offsetZ = -offsetXZ;
-				}
-			}
-			ent.setAnimationProgress(ent.getAnimationProgress() + 1);
-			break;
-		case MOVE_PARTS_OUT:
-			/*
-			 * if (ent.getAnimationProgress() >= 500) {
-			 * resetParts(false);
-			 * for(ModelRenderer joint : legJoints) {
-			 * joint.offsetX = 0;
-			 * joint.offsetY = 0;
-			 * joint.offsetZ = 0;
-			 * }
-			 * ent.setAnimationProgress(0);
-			 * }
-			 */
-			if (ent.getAnimationProgress() == 0) {
-				for (int i = 0; i < 4; i++) {
-					this.knees[i].rotateAngleX -= new Float(Math.toRadians(45));
-					this.feet[i].rotateAngleX -= new Float(Math.toRadians(45));
-
-					this.legJoints[i].offsetX = -0.5F;
-					this.legJoints[i].offsetZ = -0.5F;
-				}
-				this.mainPart.offsetY = 0.5F;
-				this.head.offsetZ = 0.75F;
-			}
-			if (ent.getAnimationProgress() > 98) {
-				renderSubParts = true;
-				this.mainPart.offsetY = 0;
-			} else {
-				if (ent.getAnimationProgress() >= 38) {
-					this.head.offsetZ = 0.75F - (ent.getAnimationProgress() - 38) * (0.75F / 60F);
-
-					this.mainPart.offsetY = 0.5F + (-0.5F / 60) * (ent.getAnimationProgress() - 38);
-
-					for (int i = 0; i < 4; i++) {
-						this.knees[i].rotateAngleX += anglePerStep;
-						this.feet[i].rotateAngleX += anglePerStep;
-					}
-				} else {
-					this.mainPart.offsetY = 0.5F;
-					for (ModelRenderer legJoint : this.legJoints) {
-						legJoint.offsetY = -0.00125F * ent.getAnimationProgress();
-					}
-					// "To - From" - "To-From * multiplier"
-					float offsetXZ = 0.5F - (0.5F / 38F) * (ent.getAnimationProgress());
-
-					this.legJointFL.offsetX = -offsetXZ;
-					this.legJointFL.offsetZ = offsetXZ;
-
-					this.legJointBL.offsetX = -offsetXZ;
-					this.legJointBL.offsetZ = -offsetXZ;
-
-					this.legJointFR.offsetX = offsetXZ;
-					this.legJointFR.offsetZ = offsetXZ;
-
-					this.legJointBR.offsetX = offsetXZ;
-					this.legJointBR.offsetZ = -offsetXZ;
-				}
-			}
-			ent.setAnimationProgress(ent.getAnimationProgress() + 1);
-			break;
-		case HEALING:
-			renderSubParts = false;
-			this.mainPart.offsetY = 0.5F;
-			break;
-		case NONE:
-			renderSubParts = false;
-			this.mainPart.offsetY = 0.5F;
-			break;
-		case SPIN:
-			renderSubParts = false;
-			this.mainPart.offsetY = 0.5F;
-			break;
-		case SPIN_DOWN:
-			renderSubParts = false;
-			this.mainPart.offsetY = 0.5F;
-			break;
-		case SPIN_UP:
-			renderSubParts = false;
-			this.mainPart.offsetY = 0.5F;
-			break;
-		case WALKING:
-			break;
-		}
-
 		for (ModelRenderer part : this.subParts) {
 			part.showModel = renderSubParts;
 		}
-		this.mainPart.render(f5);
+		
+		super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		
+		this.mainPart.render(scale);
 	}
 
 	private void resetParts(boolean applyOffsets) {
@@ -418,40 +270,142 @@ public class ModelGiantTortoise extends ModelBase {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		boolean renderParts = true;
-		EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise) entityIn;
-		switch (ent.getCurrentAnimation()) {
+		EntityCQRGiantTortoise entity = (EntityCQRGiantTortoise) entityIn;
+		float anglePerStep = new Float(Math.toRadians(45)) / 60;
+		switch (entity.getCurrentAnimation()) {
 		case MOVE_PARTS_IN:
+			if (entity.getAnimationProgress() >= 100) {
+				// Move shell down -> 11 Ticks
+				renderParts = false;
+				if (entity.getAnimationProgress() > 110) {
+					this.mainPart.offsetY = 0.5F;
+				}
+				if (entity.getAnimationProgress() <= 110) {
+					this.mainPart.offsetY = 0.05F * (entity.getAnimationProgress() - 100) + 0.15F;
+
+				} else if (entity.getAnimationProgress() <= 111) {
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.75, 0.125, 0.75);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.75, 0.125, 0.75);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, 0.75, -0.125, 0.75);
+					entity.getEntityWorld().spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, entity.posX, entity.posY, entity.posZ, -0.75, -0.125, 0.75);
+				}
+
+			} else {
+				this.mainPart.offsetY = 0;
+				if (entity.getAnimationProgress() <= 60) {
+					// Rotate legs and move head -> 60 Ticks
+					this.head.offsetZ = entity.getAnimationProgress() * 0.0125F;
+
+					this.mainPart.offsetY = 0.0025F * (entity.getAnimationProgress());
+
+					for (int i = 0; i < 4; i++) {
+						this.knees[i].rotateAngleX -= anglePerStep;
+						this.feet[i].rotateAngleX -= anglePerStep;
+					}
+				} else {
+					// Move parts in -> 38 Ticks
+					this.mainPart.offsetY = 0.15F;
+					for (ModelRenderer legJoint : this.legJoints) {
+						legJoint.offsetY = -0.00125F * entity.getAnimationProgress();
+					}
+					float offsetXZ = 0.0125F * (entity.getAnimationProgress() - 59);
+					// System.out.println("offset: " +offsetXZ);
+
+					this.legJointFL.offsetX = -offsetXZ;
+					this.legJointFL.offsetZ = offsetXZ;
+
+					this.legJointBL.offsetX = -offsetXZ;
+					this.legJointBL.offsetZ = -offsetXZ;
+
+					this.legJointFR.offsetX = offsetXZ;
+					this.legJointFR.offsetZ = offsetXZ;
+
+					this.legJointBR.offsetX = offsetXZ;
+					this.legJointBR.offsetZ = -offsetXZ;
+				}
+			}
+			entity.setAnimationProgress(entity.getAnimationProgress() + 1);
 			break;
 		case MOVE_PARTS_OUT:
+			if (entity.getAnimationProgress() == 0) {
+				for (int i = 0; i < 4; i++) {
+					this.knees[i].rotateAngleX -= new Float(Math.toRadians(45));
+					this.feet[i].rotateAngleX -= new Float(Math.toRadians(45));
+
+					this.legJoints[i].offsetX = -0.5F;
+					this.legJoints[i].offsetZ = -0.5F;
+				}
+				this.mainPart.offsetY = 0.5F;
+				this.head.offsetZ = 0.75F;
+			}
+			if (entity.getAnimationProgress() > 98) {
+				renderParts = true;
+				this.mainPart.offsetY = 0;
+			} else {
+				if (entity.getAnimationProgress() >= 38) {
+					this.head.offsetZ = 0.75F - (entity.getAnimationProgress() - 38) * (0.75F / 60F);
+
+					this.mainPart.offsetY = 0.5F + (-0.5F / 60) * (entity.getAnimationProgress() - 38);
+
+					for (int i = 0; i < 4; i++) {
+						this.knees[i].rotateAngleX += anglePerStep;
+						this.feet[i].rotateAngleX += anglePerStep;
+					}
+				} else {
+					this.mainPart.offsetY = 0.5F;
+					for (ModelRenderer legJoint : this.legJoints) {
+						legJoint.offsetY = -0.00125F * entity.getAnimationProgress();
+					}
+					// "To - From" - "To-From * multiplier"
+					float offsetXZ = 0.5F - (0.5F / 38F) * (entity.getAnimationProgress());
+
+					this.legJointFL.offsetX = -offsetXZ;
+					this.legJointFL.offsetZ = offsetXZ;
+
+					this.legJointBL.offsetX = -offsetXZ;
+					this.legJointBL.offsetZ = -offsetXZ;
+
+					this.legJointFR.offsetX = offsetXZ;
+					this.legJointFR.offsetZ = offsetXZ;
+
+					this.legJointBR.offsetX = offsetXZ;
+					this.legJointBR.offsetZ = -offsetXZ;
+				}
+			}
+			entity.setAnimationProgress(entity.getAnimationProgress() + 1);
 			break;
 		case SPIN:
 			renderParts = false;
 			// Spinning: Do this with OpenGL in render method, use limbSwingAmount for this
 			this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + 0.25F;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case SPIN_DOWN:
 			renderParts = false;
 
-			if (ent.getAnimationProgress() >= 250) {
+			if (entity.getAnimationProgress() >= 250) {
 				// ent.setCurrentAnimation(ETortoiseAnimState.NONE);
 				// ent.setAnimationProgress(0);
 			} else {
-				ent.setAnimationProgress(ent.getAnimationProgress() + 1);
-				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F / 50F) * (250 - ent.getAnimationProgress())) / 20F);
+				entity.setAnimationProgress(entity.getAnimationProgress() + 1);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F / 50F) * (250 - entity.getAnimationProgress())) / 20F);
 			}
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case SPIN_UP:
 			renderParts = false;
 
-			if (ent.getAnimationProgress() >= 250) {
+			if (entity.getAnimationProgress() >= 250) {
 				// ent.setCurrentAnimation(ETortoiseAnimState.SPIN);
 				// ent.setAnimationProgress(0);
 				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + 0.25F;
 			} else {
-				ent.setAnimationProgress(ent.getAnimationProgress() + 1);
-				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F / 50F) * ent.getAnimationProgress()) / 20F);
+				entity.setAnimationProgress(entity.getAnimationProgress() + 1);
+				this.mainPart.rotateAngleY = this.mainPart.rotateAngleY + (((1F / 50F) * entity.getAnimationProgress()) / 20F);
 			}
+			this.mainPart.offsetY = 0.5F;
 			break;
 		case WALKING:
 			this.legJointFL.rotateAngleY = -0.7853981633974483F + (MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount);
@@ -462,13 +416,14 @@ public class ModelGiantTortoise extends ModelBase {
 			break;
 		case HEALING:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 
-			this.mainPart.rotateAngleZ = (float) Math.toRadians(120 * Math.cos(ageInTicks) / 8F);
+			//this.mainPart.rotateAngleZ = (float) Math.toRadians(120 * Math.cos(ageInTicks) / 8F);
 			this.mainPart.rotateAngleY = (float) Math.toRadians(120 * Math.sin(ageInTicks) / 8F);
-
 			break;
 		case NONE:
 			renderParts = false;
+			this.mainPart.offsetY = 0.5F;
 			break;
 		default:
 			break;
