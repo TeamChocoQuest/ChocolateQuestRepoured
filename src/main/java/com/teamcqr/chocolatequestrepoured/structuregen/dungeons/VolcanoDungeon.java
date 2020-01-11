@@ -8,8 +8,10 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.ESpiralStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -188,6 +190,88 @@ public class VolcanoDungeon extends DungeonBase {
 
 	public int getInnerRadius() {
 		return this.innerRadius;
+	}
+	
+	public File getRoomNBTFileForType(ESpiralStrongholdRoomType type) {
+		File dir = null;
+		switch(type) {
+		case BOSS:
+			dir = bossFolder;
+			break;
+		case CURVE_EN:
+			dir = curveENFolder;
+			break;
+		case CURVE_ES:
+			dir = curveESFolder;
+			break;
+		case CURVE_NE:
+			dir = curveNEFolder;
+			break;
+		case CURVE_NW:
+			dir = curveNWFolder;
+			break;
+		case CURVE_SE:
+			dir = curveSEFolder;
+			break;
+		case CURVE_SW:
+			dir = curveSWFolder;
+			break;
+		case CURVE_WN:
+			dir = curveWNFolder;
+			break;
+		case CURVE_WS:
+			dir = curveWSFolder;
+			break;
+		case HALLWAY_EW:
+			dir = hallEWFolder;
+			break;
+		case HALLWAY_NS:
+			dir = hallNSFolder;
+			break;
+		case HALLWAY_SN:
+			dir = hallSNFolder;
+			break;
+		case HALLWAY_WE:
+			dir = hallWEFolder;
+			break;
+		case STAIR_EE:
+			dir = stairEFolder;
+			break;
+		case STAIR_NN:
+			dir = stairNFolder;
+			break;
+		case STAIR_SS:
+			dir = stairSFolder;
+			break;
+		case STAIR_WW:
+			dir = stairWFolder;
+			break;
+		default:
+			break;
+		}
+		if(dir != null && dir.isDirectory() && dir.list(FileIOUtil.getNBTFileFilter()).length > 0) {
+			return getStructureFileFromDirectory(dir);
+		}
+		return null;
+	}
+	
+	public int getFloorCount(Random rdm) {
+		return DungeonGenUtils.getIntBetweenBorders(minStrongholdFloors, maxStrongholdFloors, rdm);
+	}
+	public int getFloorSideLength() {
+		return strongholdSideLength;
+	}
+	public int getStrongholdRoomCount(Random rdm) {
+		return DungeonGenUtils.getIntBetweenBorders(minStrongholdRooms, maxStrongholdRooms, rdm);
+	}
+	public int getRoomSizeX() {
+		return roomSizeX;
+	}
+	public int getRoomSizeY() {
+		return roomSizeY;
+	}
+	public int getRoomSizeZ() {
+		return roomSizeZ;
 	}
 
 	public boolean doBuildStairs() {
