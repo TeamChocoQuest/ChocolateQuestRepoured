@@ -298,6 +298,10 @@ item.bullet_fire.name=Fiery Bullets
 item.cannon_ball.name=Cannon Ball
 item.flamethrower.name=Flamethrower
 
+//Hookshots
+item.hookshot.name=Hookshot
+item.longshot.name=Longshot
+
 //Cloud Items
 item.boots_cloud.name=Cloud Boots
 item.feather_golden.name=Golden Feather
@@ -519,7 +523,7 @@ description.backpack.name=Right-click to open.
 description.alchemy_bag.name=Right-click to open. Only stores potions.
 //description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
 description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
-//description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
+description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 //description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 //description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 //description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
