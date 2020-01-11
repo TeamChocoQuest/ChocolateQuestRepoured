@@ -104,8 +104,9 @@ public enum ELootTable {
 				/* System.out.println("Block of ELT is null: " + (elt.block == null));
 				 System.out.println("RL of ELT is null: " + (elt.block == null));
 				 System.out.println("RL of B is null: " + (b.getRegistryName() == null));*/
-				
-				if (b.getRegistryName().getResourceDomain() == elt.block.getResourceDomain() && b.getRegistryName().getResourcePath() == elt.block.getResourcePath()/* Block.isEqualTo(b, elt.block) */) {
+				//System.out.println("BLOCK: " + b.getRegistryName().toString());
+				//System.out.println("TABLE: " + elt.getAssignedExporterBlock().toString());
+				if (b.getRegistryName().getResourceDomain().equalsIgnoreCase(elt.block.getResourceDomain()) && b.getRegistryName().getResourcePath().equalsIgnoreCase(elt.block.getResourcePath())/* Block.isEqualTo(b, elt.block) */) {
 					return elt;
 				}
 			}
