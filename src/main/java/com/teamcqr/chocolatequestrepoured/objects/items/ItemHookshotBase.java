@@ -93,7 +93,11 @@ public class ItemHookshotBase extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
-			bulletE.setVelocity(v.x, v.y, v.z);
+			//bulletE.setVelocity(v.x, v.y, v.z);
+			bulletE.motionX = v.x;
+			bulletE.motionY = v.y;
+			bulletE.motionZ = v.z;
+			bulletE.velocityChanged = true;
 			worldIn.spawnEntity(bulletE);
 		}
 	}

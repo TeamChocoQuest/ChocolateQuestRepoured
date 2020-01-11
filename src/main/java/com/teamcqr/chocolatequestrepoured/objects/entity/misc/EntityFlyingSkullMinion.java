@@ -78,7 +78,11 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			}
 			Vec3d v = this.direction;
 			v = v.normalize();
-			this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
+			//this.setVelocity(v.x * 0.4F, v.y * 0.25F, v.z * 0.4F);
+			this.motionX = v.x * 0.4D;
+			this.motionY = v.y * 0.25D;
+			this.motionZ = v.z * 0.4D;
+			this.velocityChanged = true;
 			if (this.target != null && !this.target.isDead) {
 				this.getLookHelper().setLookPositionWithEntity(this.target, 30, 30);
 			}
@@ -95,7 +99,11 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 				Vec3d velo = targetPos.subtract(this.getPositionVector());
 				velo = velo.normalize();
 				velo = velo.scale(0.2);
-				this.setVelocity(velo.x, velo.y * 1.5, velo.z);
+				//this.setVelocity(velo.x, velo.y * 1.5, velo.z);
+				this.motionX = velo.x;
+				this.motionY = velo.y * 2.5D;
+				this.motionZ = velo.z;
+				this.velocityChanged = true;
 			}
 		}
 	}

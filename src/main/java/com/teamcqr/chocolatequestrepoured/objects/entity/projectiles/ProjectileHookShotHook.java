@@ -82,11 +82,18 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void zeroizeVelocity() {
-		this.setVelocity(0, 0, 0);
+		//this.setVelocity(0, 0, 0);
+		this.motionX = 0;
+		this.motionY = 0;
+		this.motionZ = 0;
+		this.velocityChanged = true;
 	}
 
 	private void setShooterVelocity(EntityPlayer shootingPlayer, Vec3d velocityVec) {
-		shootingPlayer.setVelocity(velocityVec.x, velocityVec.y, velocityVec.z);
+		//shootingPlayer.setVelocity(velocityVec.x, velocityVec.y, velocityVec.z);
+		shootingPlayer.motionX = velocityVec.x;
+		shootingPlayer.motionY = velocityVec.y;
+		shootingPlayer.motionZ = velocityVec.z;
 		shootingPlayer.velocityChanged = true;
 	}
 

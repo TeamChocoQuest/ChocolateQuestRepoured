@@ -89,7 +89,11 @@ public class EntitySummoningCircle extends EntityLivingBase {
 				summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
 
 				if (this.velForSummon != null) {
-					summon.setVelocity(this.velForSummon.x, this.velForSummon.y, this.velForSummon.z);
+					//summon.setVelocity(this.velForSummon.x, this.velForSummon.y, this.velForSummon.z);
+					summon.motionX = this.velForSummon.x;
+					summon.motionY = this.velForSummon.y;
+					summon.motionZ = this.velForSummon.z;
+					summon.velocityChanged = true;
 				}
 
 				this.world.spawnEntity(summon);
