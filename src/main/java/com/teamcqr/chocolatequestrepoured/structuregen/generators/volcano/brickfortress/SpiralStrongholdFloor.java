@@ -49,8 +49,9 @@ public class SpiralStrongholdFloor {
 						if(roomCount == 0) {
 							//TODO: Adjust iteration to iterate "in a circle" (like the actual walking direction) so we can use the roomCount check to determine if we are in the last room
 						}
-						else if(isLastRoom(iX, iZ)) {
+						if(isLastRoom(iX, iZ)) {
 							handleLastRoom(iX, iZ, rev);
+							System.out.println("Last room at: " + iX +" | " + iZ);
 						} else {
 							//Curves / Edges
 							if(iX == 0 && iZ == 0) {
@@ -158,12 +159,14 @@ public class SpiralStrongholdFloor {
 			}
 		}
 		coordinateGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entrancePos;
-		int x = (exitIndex.getFirst() - entranceIndex.getFirst()) * roomSizeX;
-		x += entrancePos.getX();
-		int z = (exitIndex.getSecond() - entranceIndex.getSecond()) * roomSizeZ;
-		z += entrancePos.getZ();
-		coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()] = new BlockPos(x,y,z);
-		exitCoordinates = new Tuple<>(x, z);
+		if(!this.isLastFloor) {
+			int x = (exitIndex.getFirst() - entranceIndex.getFirst()) * roomSizeX;
+			x += entrancePos.getX();
+			int z = (exitIndex.getSecond() - entranceIndex.getSecond()) * roomSizeZ;
+			z += entrancePos.getZ();
+			coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()] = new BlockPos(x,y,z);
+			exitCoordinates = new Tuple<>(x, z);
+		}
 	}
 	
 	public Tuple<Integer, Integer> getExitCoordinates() {
@@ -208,7 +211,9 @@ public class SpiralStrongholdFloor {
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = type;
 	}
 	public void overrideLastRoomType(ESpiralStrongholdRoomType type) {
-		roomGrid[exitIndex.getFirst()][exitIndex.getSecond()] = type;
+		if(!isLastFloor) {
+			roomGrid[exitIndex.getFirst()][exitIndex.getSecond()] = type;
+		}
 	}
 
 	public ESpiralStrongholdRoomType[][] getRoomGrid() {
