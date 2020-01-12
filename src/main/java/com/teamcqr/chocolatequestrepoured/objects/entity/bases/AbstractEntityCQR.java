@@ -133,7 +133,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
-		this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
+		if(worldIn.isRemote) {
+			this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
+		}
 		// this.setSize(0.6F * (1.0F + this.getSizeVariation() * 0.8F), 1.8F * (1.0F + this.getSizeVariation()));
 		this.experienceValue = 5;
 	}
