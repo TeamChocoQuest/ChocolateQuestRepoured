@@ -139,10 +139,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 					int xT = pos.getX();
 					int zT = pos.getZ();
 
-					Rotation rot = Rotation.values()[new Random().nextInt(4)];
+					Rotation rot = this.dungeon.rotateDungeon() ? Rotation.values()[new Random().nextInt(4)] : Rotation.NONE;
 					int sizeX = dungeonToSpawn.getSizeX();
 					int sizeZ = dungeonToSpawn.getSizeZ();
-					this.rotList.set(i, Rotation.NONE);
+					this.rotList.set(i, rot);
 					if (this.dungeon.rotateDungeon()) {
 						switch (rot) {
 						case CLOCKWISE_90:

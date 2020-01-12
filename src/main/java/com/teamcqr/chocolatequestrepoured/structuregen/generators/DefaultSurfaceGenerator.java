@@ -45,6 +45,7 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 		if (this.dungeon.doBuildSupportPlatform()) {
 			int sizeX = this.structure.getSizeX();
 			int sizeZ = this.structure.getSizeZ();
+			this.rot = Rotation.NONE;
 			if (this.dungeon.rotateDungeon()) {
 				switch (this.rot) {
 				case CLOCKWISE_90:
