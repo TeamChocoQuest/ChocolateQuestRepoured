@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -37,6 +38,7 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(10, new EntityAILeapAtTarget(this, 0.6F));
+		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
