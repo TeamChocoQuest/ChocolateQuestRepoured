@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -35,6 +36,7 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
+		this.tasks.addTask(10, new EntityAILeapAtTarget(this, 0.6F));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
