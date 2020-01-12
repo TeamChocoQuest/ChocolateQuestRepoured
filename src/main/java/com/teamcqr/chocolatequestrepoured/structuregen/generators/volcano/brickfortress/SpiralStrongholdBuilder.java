@@ -66,16 +66,17 @@ public class SpiralStrongholdBuilder {
 			} else {
 				floorRoomCount = roomCount;
 			}
-			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount +1);
+			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount +2);
 			floor.calculateRoomGrid(entranceType, i % 2 == 0);
 			floor.calculateCoordinates(y, dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();
-			entranceType = floor.getExitRoomType();
 			if(i != 0) {
 				floor.overrideFirstRoomType(ESpiralStrongholdRoomType.NONE);
 			}
 			if(i == (floors.length -1)) {
 				floor.overrideLastRoomType(ESpiralStrongholdRoomType.BOSS);
+			} else {
+				entranceType = floor.getExitRoomType();
 			}
 			y += dungeon.getRoomSizeY();
 			floors[i] = floor;
