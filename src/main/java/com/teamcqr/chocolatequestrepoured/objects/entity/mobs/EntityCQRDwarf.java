@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -35,6 +36,12 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 			this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.SHIELD));
 		}
 		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(helmets[this.rand.nextInt(helmets.length)]));
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
 	@Override
