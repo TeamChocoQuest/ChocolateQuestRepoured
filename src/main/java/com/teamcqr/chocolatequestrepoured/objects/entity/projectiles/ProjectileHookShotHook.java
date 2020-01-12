@@ -85,7 +85,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void zeroizeHookVelocity() {
-		this.setVelocity(0, 0, 0);
+		//this.setVelocity(0, 0, 0);
+		this.motionX = 0;
+		this.motionY = 0;
+		this.motionZ = 0;
+		this.velocityChanged = true;
 	}
 
 	private void sendClientPullPacket(EntityPlayerMP shootingPlayer) {
