@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.event;
 
+import java.util.Arrays;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -23,7 +25,7 @@ public class GuiEventHandler {
 			if (gui.modID.equals(Reference.MODID) && gui.parentScreen instanceof GuiModList) {
 				Minecraft mc = Minecraft.getMinecraft();
 				ScaledResolution scaled = new ScaledResolution(mc);
-				event.getButtonList().add(new GuiButtonReloadDungeons(0, scaled.getScaledWidth() - 102, 2, 100, 20, "reload dungeons"));
+				event.getButtonList().add(new GuiButtonReloadDungeons(0, scaled.getScaledWidth() - 102, 2, 100, 20, "Reload Dungeons", gui, mc.world == null));
 			}
 		}
 	}
@@ -38,8 +40,20 @@ public class GuiEventHandler {
 
 	private static class GuiButtonReloadDungeons extends GuiButton {
 
-		public GuiButtonReloadDungeons(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText) {
+		private GuiConfig gui;
+
+		public GuiButtonReloadDungeons(int buttonId, int x, int y, int widthIn, int heightIn, String buttonText, GuiConfig gui, boolean enabled) {
 			super(buttonId, x, y, widthIn, heightIn, buttonText);
+			this.gui = gui;
+			this.enabled = enabled;
+		}
+
+		@Override
+		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
+			super.drawButton(mc, mouseX, mouseY, partialTicks);
+			if (this.isMouseOver()) {
+				this.gui.drawToolTip(Arrays.asList("Reloads all dungeon files located in config/CQR/dungeons.", "Only works while in the main menu."), mouseX, mouseY);
+			}
 		}
 
 	}
