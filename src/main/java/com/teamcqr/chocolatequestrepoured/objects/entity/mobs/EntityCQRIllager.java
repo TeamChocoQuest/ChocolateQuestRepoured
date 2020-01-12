@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
@@ -34,6 +35,12 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 		super.entityInit();
 
 		this.dataManager.register(IS_AGGRESSIVE, false);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
 	@Override
