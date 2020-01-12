@@ -129,7 +129,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Client only
 	@SideOnly(Side.CLIENT)
-	protected int currentSpeechBubbleID = 0;
+	protected int currentSpeechBubbleID;
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
