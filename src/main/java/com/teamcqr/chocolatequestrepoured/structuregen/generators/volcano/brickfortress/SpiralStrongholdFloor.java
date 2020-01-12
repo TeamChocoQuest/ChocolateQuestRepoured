@@ -1,7 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
+import java.io.File;
+
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+
+import net.minecraft.init.Blocks;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class SpiralStrongholdFloor {
 
@@ -200,8 +211,26 @@ public class SpiralStrongholdFloor {
 		return roomGrid;
 	}
 	
-	public void buildRooms(BlockPos firstRoomPosition) {
-		
+	public void buildRooms(VolcanoDungeon dungeon, int dunX, int dunZ, World world) {
+		PlacementSettings settings = new PlacementSettings();
+		settings.setMirror(Mirror.NONE);
+		settings.setRotation(Rotation.NONE);
+		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
+		settings.setIntegrity(1.0F);
+		for(int iX = 0; iX < sideLength; iX++) {
+			for(int iZ = 0; iZ < sideLength; iZ++) {
+				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
+					ESpiralStrongholdRoomType type = roomGrid[iX][iZ];
+					if(type != null && !type.equals(ESpiralStrongholdRoomType.NONE)) {
+						File file = dungeon.getRoomNBTFileForType(type);
+						if(file != null) {
+							CQStructure room = new CQStructure(file, dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
+							room.placeBlocksInWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER);
+						}
+					}
+				}
+			}
+		}
 	}
 	public ESpiralStrongholdRoomType getExitRoomType() {
 		return roomGrid[exitIndex.getFirst()][exitIndex.getSecond()];
