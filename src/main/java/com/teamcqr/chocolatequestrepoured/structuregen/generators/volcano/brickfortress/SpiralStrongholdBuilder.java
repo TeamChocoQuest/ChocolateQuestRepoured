@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class SpiralStrongholdBuilder {
 
@@ -48,6 +49,7 @@ public class SpiralStrongholdBuilder {
 			break;
 		
 		}
+		int y = strongholdEntrancePos.getY();
 		for(int i = 0; i < floors.length; i++) {
 			int floorRoomCount = maxRoomsPerFloor;
 			if(roomCount >= maxRoomsPerFloor) {
@@ -57,12 +59,21 @@ public class SpiralStrongholdBuilder {
 			}
 			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount);
 			floor.calculateRoomGrid(entranceType, i % 2 == 0);
+			floor.calculateCoordinates(y, dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
+			posTuple = floor.getExitCoordinates();
 			entranceType = floor.getExitRoomType();
+			if(i != 0) {
+				floor.overrideFirstRoomType(ESpiralStrongholdRoomType.NONE);
+			}
+			if(i == (floors.length -1)) {
+				floor.overrideLastRoomType(ESpiralStrongholdRoomType.BOSS);
+			}
+			y += dungeon.getRoomSizeY();
 		}
 	}
 	
 	public void calculateFloorCoordinates(BlockPos strongholdEntrancePos) {
-		BlockPos currentPos = strongholdEntrancePos;
+		/*BlockPos currentPos = strongholdEntrancePos;
 		for(int i = 0; i < floors.length; i++) {
 			SpiralStrongholdFloor floor = floors[i];
 			if(i != 0) {
@@ -73,14 +84,14 @@ public class SpiralStrongholdBuilder {
 			}
 			floor.calculateCoordinates(currentPos.getY(), dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 			currentPos.add(0,dungeon.getRoomSizeY(),0);
-		}
+		}*/
 	}
 	
-	public void buildFloors(BlockPos strongholdEntrancePos) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world) {
 		BlockPos currentPos = strongholdEntrancePos;
 		for(int i = 0; i < floors.length; i++) {
 			SpiralStrongholdFloor floor = floors[i];
-			floor.buildRooms(currentPos);
+			floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world);
 			currentPos.add(0,dungeon.getRoomSizeY(),0);
 			currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
 		}

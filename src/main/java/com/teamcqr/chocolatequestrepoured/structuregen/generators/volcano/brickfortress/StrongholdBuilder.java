@@ -63,7 +63,7 @@ public class StrongholdBuilder {
 		try {
 			stronghold.calculateFloors(pos);
 			stronghold.calculateFloorCoordinates(pos);
-			stronghold.buildFloors(pos);
+			stronghold.buildFloors(pos, world);
 		} catch(Exception ex) {
 			//IGnore
 		}
