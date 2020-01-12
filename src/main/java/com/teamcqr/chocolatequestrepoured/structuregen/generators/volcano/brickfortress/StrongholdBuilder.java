@@ -60,13 +60,12 @@ public class StrongholdBuilder {
 		}
 		
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
-		try {
+		//try {
 			stronghold.calculateFloors(pos);
-			stronghold.calculateFloorCoordinates(pos);
 			stronghold.buildFloors(pos, world);
-		} catch(Exception ex) {
+		/*} catch(Exception ex) {
 			//IGnore
-		}
+		}*/
 	}
 
 	private void buildSegment(BlockPos startPosCentered) {
