@@ -32,7 +32,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 		if (this.entity.ticksExisted % 4 == 0) {
 			Vec3d vec1 = this.entity.getPositionVector().addVector(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(PET_SEARCH_RADIUS, PET_SEARCH_RADIUS * 0.5D, PET_SEARCH_RADIUS);
-			AxisAlignedBB aabb = new AxisAlignedBB(vec1, vec2);
+			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<EntityTameable> possiblePets = this.entity.world.getEntitiesWithinAABB(EntityTameable.class, aabb, TargetUtil.PREDICATE_PETS);
 			if (!possiblePets.isEmpty()) {
 				this.entityToTame = TargetUtil.getNearestEntity(this.entity, possiblePets);
