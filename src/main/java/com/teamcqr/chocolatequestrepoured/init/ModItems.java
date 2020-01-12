@@ -13,7 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
@@ -403,7 +403,7 @@ public class ModItems {
 			registerSpawnEggs(EntityCQRDummy.class, "dummy", registry);
 			registerSpawnEggs(EntityCQRDwarf.class, "dwarf", registry);
 			registerSpawnEggs(EntityCQREnderman.class, "enderman", registry);
-			registerSpawnEggs(EntityCQRGoblin.class, "goblin", registry);
+			registerSpawnEggs(EntityCQRGremlin.class, "gremlin", registry);
 			registerSpawnEggs(EntityCQRGolem.class, "golem", registry);
 			registerSpawnEggs(EntityCQRIllager.class, "illager", registry);
 			registerSpawnEggs(EntityCQRMandril.class, "mandril", registry);
