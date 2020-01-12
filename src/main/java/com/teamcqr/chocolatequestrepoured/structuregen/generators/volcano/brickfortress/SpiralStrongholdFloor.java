@@ -39,14 +39,17 @@ public class SpiralStrongholdFloor {
 	
 	public void calculateRoomGrid(ESpiralStrongholdRoomType entranceRoomType, boolean rev) {
 		this.entranceRoomType = entranceRoomType;
-		for(int iX = 0; iX < sideLength && roomCount > 0; iX++) {
-			for(int iZ = 0; iZ < sideLength && roomCount > 0; iZ++) {
+		for(int iX = 0; iX < sideLength; iX++) {
+			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
 					roomCount--;
 					if(iX == entranceIndex.getFirst() && iZ == entranceIndex.getSecond()) {
 						roomGrid[iX][iZ] = entranceRoomType;
 					} else {
-						if(isLastRoom(iX, iZ) || (roomCount == 0 && isLastFloor)) {
+						if(roomCount == 0) {
+							//TODO: Adjust iteration to iterate "in a circle" (like the actual walking direction) so we can use the roomCount check to determine if we are in the last room
+						}
+						else if(isLastRoom(iX, iZ)) {
 							handleLastRoom(iX, iZ, rev);
 						} else {
 							//Curves / Edges
@@ -168,9 +171,6 @@ public class SpiralStrongholdFloor {
 	}
 
 	private boolean isLastRoom(int iX, int iZ) {
-		if(roomCount == 0) {
-			return true;
-		}
 		if((iX == entranceIndex.getFirst() -1 || iX == entranceIndex.getFirst() +1 || iX == entranceIndex.getFirst())
 			&& (iZ == entranceIndex.getSecond() -1 || iZ == entranceIndex.getSecond() +1 || iZ == entranceIndex.getSecond())) {
 			double dx = iX - entranceIndex.getFirst();
