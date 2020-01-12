@@ -141,22 +141,26 @@ public class SpiralStrongholdFloor {
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
-					if(iX != entranceIndex.getFirst() && iZ != entranceIndex.getSecond()) {
+					//if(iX != entranceIndex.getFirst() && iZ != entranceIndex.getSecond()) {
 						ESpiralStrongholdRoomType room = roomGrid[iX][iZ];
 						if(room != null && !room.equals(ESpiralStrongholdRoomType.NONE)) {
 							int x = (iX - entranceIndex.getFirst()) * roomSizeX;
 							x += entrancePos.getX();
 							int z = (iZ - entranceIndex.getSecond()) * roomSizeZ;
 							z += entrancePos.getZ();
-							BlockPos curPos = new BlockPos(x,y,z);
-							coordinateGrid[iX][iZ] = curPos;
+							coordinateGrid[iX][iZ] = new BlockPos(x,y,z);
 						}
-					}
+					//}
 				}
 			}
 		}
-		BlockPos exitP = coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()];
-		exitCoordinates = new Tuple<>(exitP.getX(), exitP.getZ());
+		coordinateGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entrancePos;
+		int x = (exitIndex.getFirst() - entranceIndex.getFirst()) * roomSizeX;
+		x += entrancePos.getX();
+		int z = (exitIndex.getSecond() - entranceIndex.getSecond()) * roomSizeZ;
+		z += entrancePos.getZ();
+		coordinateGrid[exitIndex.getFirst()][exitIndex.getSecond()] = new BlockPos(x,y,z);
+		exitCoordinates = new Tuple<>(x, z);
 	}
 	
 	public Tuple<Integer, Integer> getExitCoordinates() {

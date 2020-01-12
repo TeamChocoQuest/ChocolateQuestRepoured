@@ -27,6 +27,7 @@ public class SpiralStrongholdBuilder {
 	
 	public void calculateFloors(BlockPos strongholdEntrancePos) {
 		Tuple<Integer, Integer> posTuple = new Tuple<>(strongholdEntrancePos.getX(), strongholdEntrancePos.getZ());
+		int middle = (int) Math.floor(dungeon.getFloorSideLength() / 2 );
 		int entranceX = 0;
 		int entranceZ = 0;
 		int roomCount = dungeon.getStrongholdRoomCount(rdm);
@@ -35,15 +36,23 @@ public class SpiralStrongholdBuilder {
 		switch(allowedDirection) {
 		case EAST:
 			entranceType = ESpiralStrongholdRoomType.CURVE_ES;
+			entranceX = dungeon.getFloorSideLength() -1;
+			entranceZ = middle;
 			break;
 		case NORTH:
 			entranceType = ESpiralStrongholdRoomType.CURVE_NE;
+			entranceX = middle;
+			entranceZ = dungeon.getFloorSideLength() -1;
 			break;
 		case SOUTH:
 			entranceType = ESpiralStrongholdRoomType.CURVE_SW;
+			entranceX = middle;
+			entranceZ = 0;
 			break;
 		case WEST:
 			entranceType = ESpiralStrongholdRoomType.CURVE_WN;
+			entranceX = 0;
+			entranceZ = middle;
 			break;
 		default:
 			break;
@@ -69,6 +78,7 @@ public class SpiralStrongholdBuilder {
 				floor.overrideLastRoomType(ESpiralStrongholdRoomType.BOSS);
 			}
 			y += dungeon.getRoomSizeY();
+			floors[i] = floor;
 		}
 	}
 	
