@@ -54,7 +54,7 @@ public class StrongholdBuilder {
 		// DONE: Place fire pots and "porch"
 		BlockPos pos = this.startPos;// .add(expansionV);
 
-		for (int i = 0; i < (this.blocksRemainingToWall / 3) + 2; i++) {
+		for (int i = 0; i < (this.blocksRemainingToWall / 6) + 2; i++) {
 			this.buildSegment(pos);
 			pos = pos.add(expansionVector);
 		}

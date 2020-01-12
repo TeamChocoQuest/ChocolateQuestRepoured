@@ -226,10 +226,12 @@ public class SpiralStrongholdFloor {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
 					ESpiralStrongholdRoomType type = roomGrid[iX][iZ];
 					if(type != null && !type.equals(ESpiralStrongholdRoomType.NONE)) {
-						File file = dungeon.getRoomNBTFileForType(type);
-						if(file != null) {
-							CQStructure room = new CQStructure(file, dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
-							room.placeBlocksInWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER);
+						if(dungeon != null && world != null) {
+							File file = dungeon.getRoomNBTFileForType(type);
+							if(file != null) {
+								CQStructure room = new CQStructure(file, dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
+								room.placeBlocksInWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER);
+							}
 						}
 					}
 				}
