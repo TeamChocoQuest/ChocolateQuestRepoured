@@ -7,6 +7,7 @@ public enum EBaseHealths {
 	ENDERMAN(40.0F),
 	GOBLIN(20.0F),
 	GOLEM(40.0F),
+	GREMLIN(30.0F),
 	ILLAGER(25.0F),
 	MINOTAUR(30.0F),
 	MUMMY(20.0F),
@@ -30,7 +31,8 @@ public enum EBaseHealths {
 	GIANT_TORTOISE(500.0F),
 	LICH(200.0F),
 	NECROMANCER(150.0F),
-	BOAR_MAGE(250.0F),;
+	BOAR_MAGE(250.0F), 
+	;
 
 	private float baseHealth;
 

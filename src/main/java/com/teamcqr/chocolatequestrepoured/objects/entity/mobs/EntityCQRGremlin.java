@@ -10,9 +10,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRGoblin extends AbstractEntityCQR {
+public class EntityCQRGremlin extends AbstractEntityCQR {
 
-	public EntityCQRGoblin(World worldIn) {
+	public EntityCQRGremlin(World worldIn) {
 		super(worldIn);
 	}
 
@@ -23,17 +23,17 @@ public class EntityCQRGoblin extends AbstractEntityCQR {
 
 	@Override
 	public float getBaseHealth() {
-		return EBaseHealths.GOBLIN.getValue();
+		return EBaseHealths.GREMLIN.getValue();
 	}
 
 	@Override
 	public EDefaultFaction getDefaultFaction() {
-		return EDefaultFaction.GOBLINS;
+		return EDefaultFaction.GREMLINS;
 	}
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesNormal.ENTITY_GOBLIN.getLootTable();
+		return ELootTablesNormal.ENTITY_GREMLIN.getLootTable();
 	}
 
 	@Override

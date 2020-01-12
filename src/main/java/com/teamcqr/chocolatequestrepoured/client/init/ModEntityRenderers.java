@@ -8,7 +8,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMa
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGoblin;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGolem;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRIllager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMandril;
@@ -54,7 +54,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGoblin;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
@@ -130,7 +130,7 @@ public class ModEntityRenderers {
 		// Enderman
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, renderManager -> new RenderCQREnderman(renderManager));
 		// Goblin
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGoblin.class, renderManager -> new RenderCQRGoblin(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGremlin.class, renderManager -> new RenderCQRGremlin(renderManager));
 		// Golem
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, renderManager -> new RenderCQRGolem(renderManager));
 		// Illager

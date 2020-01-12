@@ -14,6 +14,7 @@ public enum ELootTablesNormal {
 	ENTITY_ENDERMAN("enderman"),
 	ENTITY_GOBLIN("goblin"),
 	ENTITY_GOLEM("golem_small"),
+	ENTITY_GREMLIN("gremlin"),
 	ENTITY_MINOTAUR("minotaur"),
 	ENTITY_MONKEY("monkey"),
 	ENTITY_MUMMY("mummy"),
@@ -34,7 +35,8 @@ public enum ELootTablesNormal {
 	ENTITY_POLLO("mounts/pollo"),
 	ENTITY_GIANT_SILVERFISH("mounts/silverfish"),
 	ENTITY_GIANT_SILVERFISH_RED("mounts/silverfish_red"),
-	ENTITY_GIANT_SILVERFISH_GREEN("mounts/silverfish_green"),;
+	ENTITY_GIANT_SILVERFISH_GREEN("mounts/silverfish_green"), 
+	;
 
 	private final ResourceLocation loottable;
 
