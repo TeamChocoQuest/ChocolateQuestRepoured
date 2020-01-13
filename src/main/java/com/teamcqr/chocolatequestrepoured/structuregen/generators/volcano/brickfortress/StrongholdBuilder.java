@@ -59,13 +59,13 @@ public class StrongholdBuilder {
 			pos = pos.add(expansionVector);
 		}
 		
+		buildStronghold(pos, world);
+	}
+
+	private void buildStronghold(BlockPos pos, World world2) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
-		//try {
-			stronghold.calculateFloors(pos);
-			stronghold.buildFloors(pos, world);
-		/*} catch(Exception ex) {
-			//IGnore
-		}*/
+		stronghold.calculateFloors(pos);
+		stronghold.buildFloors(pos, world);
 	}
 
 	private void buildSegment(BlockPos startPosCentered) {

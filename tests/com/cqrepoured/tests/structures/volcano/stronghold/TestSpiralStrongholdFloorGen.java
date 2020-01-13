@@ -21,8 +21,8 @@ class TestSpiralStrongholdFloorGen {
 
 	@Test
 	void test() {
-		int sideL = 5;
-		SpiralStrongholdFloor floor = new SpiralStrongholdFloor(new Tuple<>(0,0), 0, Math.floorDiv(sideL, 2), false, sideL, (sideL * 4) -3);
+		int sideL = 3;
+		SpiralStrongholdFloor floor = new SpiralStrongholdFloor(new Tuple<>(0,0), 0, Math.floorDiv(sideL, 2), false, sideL, (sideL * 4) -4);
 		floor.calculateRoomGrid(ESpiralStrongholdRoomType.CURVE_WN, false);
 		floor.calculateCoordinates(10, 15, 15);
 		//floor.buildRooms(null, 100, 100, null);
