@@ -202,7 +202,9 @@ public class SpiralStrongholdFloor {
 	public Tuple<Integer, Integer> getExitCoordinates() {
 		return exitCoordinates;
 	}
-
+	public Tuple<Integer, Integer> getExitIndex() {
+		return exitIndex;
+	}
 	
 	public void overrideFirstRoomType(ESpiralStrongholdRoomType type) {
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = type;
