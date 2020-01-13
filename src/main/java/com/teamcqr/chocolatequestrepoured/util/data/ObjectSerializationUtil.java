@@ -18,7 +18,7 @@ public class ObjectSerializationUtil {
 		return toReturn.toByteArray();
 	}
 
-	public static Object readObectFromByteArray(byte[] serializedObj) {
+	public static Object readObjectFromByteArray(byte[] serializedObj) {
 		ByteArrayInputStream toReturn = new ByteArrayInputStream(serializedObj);
 		try {
 			return new ObjectInputStream(toReturn).readObject();
