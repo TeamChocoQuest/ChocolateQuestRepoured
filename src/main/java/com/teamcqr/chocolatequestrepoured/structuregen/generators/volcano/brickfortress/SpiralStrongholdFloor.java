@@ -21,7 +21,6 @@ public class SpiralStrongholdFloor {
 	private Tuple<Integer, Integer> exitCoordinates;
 	private Tuple<Integer, Integer> exitIndex;
 	private boolean isLastFloor = false;
-	private ESpiralStrongholdRoomType entranceRoomType;
 	private int sideLength;
 	private int roomCount;
 	private ESpiralStrongholdRoomType[][] roomGrid;
@@ -38,75 +37,106 @@ public class SpiralStrongholdFloor {
 	}
 	
 	public void calculateRoomGrid(ESpiralStrongholdRoomType entranceRoomType, boolean rev) {
-		this.entranceRoomType = entranceRoomType;
-		for(int iX = 0; iX < sideLength; iX++) {
-			for(int iZ = 0; iZ < sideLength; iZ++) {
-				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
-					roomCount--;
-					if(iX == entranceIndex.getFirst() && iZ == entranceIndex.getSecond()) {
-						roomGrid[iX][iZ] = entranceRoomType;
-					} else {
-						if(roomCount == 0) {
-							//TODO: Adjust iteration to iterate "in a circle" (like the actual walking direction) so we can use the roomCount check to determine if we are in the last room
-						}
-						if(isLastRoom(iX, iZ)) {
-							handleLastRoom(iX, iZ, rev);
-							System.out.println("Last room at: " + iX +" | " + iZ);
-						} else {
-							//Curves / Edges
-							if(iX == 0 && iZ == 0) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.CURVE_NE : ESpiralStrongholdRoomType.CURVE_EN; 
-								continue;
-							}
-							if(iX == 0 && iZ == (sideLength -1)) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.CURVE_ES : ESpiralStrongholdRoomType.CURVE_SE;
-								continue;
-							}
-							if(iX == (sideLength -1) && iZ == 0) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.CURVE_WN : ESpiralStrongholdRoomType.CURVE_NW;
-								continue;
-							}
-							if(iX == (sideLength -1) && iZ == (sideLength -1)) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.CURVE_WS : ESpiralStrongholdRoomType.CURVE_SW;
-								continue;
-							}
-							
-							//Hallways / Straight
-							if(iZ == 0) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.HALLWAY_WE : ESpiralStrongholdRoomType.HALLWAY_EW;
-								continue;
-							}
-							if(iZ == (sideLength -1)) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.HALLWAY_EW : ESpiralStrongholdRoomType.HALLWAY_WE;
-								continue;
-							}
-							if(iX == 0) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.HALLWAY_NS : ESpiralStrongholdRoomType.HALLWAY_SN;
-								continue;
-							}
-							if(iX == (sideLength -1)) {
-								roomGrid[iX][iZ] = rev ? ESpiralStrongholdRoomType.HALLWAY_SN : ESpiralStrongholdRoomType.HALLWAY_NS;
-								continue;
-							}
-						}
-					}
+		int x = entranceIndex.getFirst();
+		int z = entranceIndex.getSecond();
+		while(roomCount > 0) {
+			roomCount--;
+			if(roomCount == 0) {
+				exitIndex = new Tuple<>(x,z);
+				if(isLastFloor) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.BOSS;
+				} else {
+					roomGrid[x][z] = getExitRoomType(x, z, rev);
 				}
+				break;
+			}
+			if(x == 0 && z == 0) {
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NE;
+					x += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_EN;
+					z += 1;
+				}
+				continue;
+			}
+			if(x == (sideLength -1) && z == (sideLength -1)) {
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SW;
+					x -= 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WS;
+					z -= 1;
+				}
+				continue;
+			}
+			if(x == 0 && z == (sideLength -1)) {
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_ES;
+					z -= 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SE;
+					x += 1;
+				}
+				continue;
+			}
+			if(x == (sideLength -1) && z == 0) {
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WN;
+					z += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NW;
+					x -= 1;
+				}
+				continue;
+			}
+			if(x == 0) {
+				//Left side
+				if(!rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_SN;
+					z += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_NS;
+					z -= 1;
+				}
+				continue;
+			}
+			if(x == (sideLength -1)) {
+				//Right side
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_SN;
+					z += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_NS;
+					z -= 1;
+				}
+				continue;
+			}
+			if(z == 0) {
+				//Bottom side
+				if(rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_WE;
+					x += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_EW;
+					x -= 1;
+				}
+				continue;
+			}
+			if(z == (sideLength -1)) {
+				//Top side
+				if(!rev) {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_WE;
+					x += 1;
+				} else {
+					roomGrid[x][z] = ESpiralStrongholdRoomType.HALLWAY_EW;
+					x -= 1;
+				}
+				continue;
 			}
 		}
+		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entranceRoomType;
 		System.out.println("Done");
-	}
-	
-	private void handleLastRoom(int iX, int iZ, boolean rev) {
-		ESpiralStrongholdRoomType room = ESpiralStrongholdRoomType.NONE;
-		if(isLastFloor && roomCount == 0) {
-			//This is the last floor, we wont go higher, we place the boss room here
-			room = ESpiralStrongholdRoomType.BOSS;
-		} else {
-			//STairs in corners
-			room = getExitRoomType(iX, iZ, rev);
-		}
-		exitIndex = new Tuple<>(iX, iZ);
-		roomGrid[iX][iZ] = room;
 	}
 	
 	private ESpiralStrongholdRoomType getExitRoomType(int iX, int iZ, boolean rev) {
@@ -173,39 +203,6 @@ public class SpiralStrongholdFloor {
 		return exitCoordinates;
 	}
 
-	private boolean isLastRoom(int iX, int iZ) {
-		if((iX == entranceIndex.getFirst() -1 || iX == entranceIndex.getFirst() +1 || iX == entranceIndex.getFirst())
-			&& (iZ == entranceIndex.getSecond() -1 || iZ == entranceIndex.getSecond() +1 || iZ == entranceIndex.getSecond())) {
-			double dx = iX - entranceIndex.getFirst();
-			double dz = iZ - entranceIndex.getSecond();
-			double distance = Math.sqrt(dx * dx + dz * dz);
-			//System.out.println("Indx: " + iX + "|" + iZ + "  Distance: " + distance);
-			boolean distBool = distance <= 1;
-			if(distBool) {
-				switch(entranceRoomType) {
-				case CURVE_ES:
-					return iX == entranceIndex.getFirst() && iZ == (entranceIndex.getSecond() +1);
-				case CURVE_NE:
-					return (iX == (entranceIndex.getFirst() -1) && iZ == entranceIndex.getSecond());
-				case CURVE_SW:
-					return (iX == (entranceIndex.getFirst() +1) && iZ == entranceIndex.getSecond());
-				case CURVE_WN:
-					return (iX == entranceIndex.getFirst() && iZ == (entranceIndex.getSecond() -1));
-				case STAIR_EE:
-					return (iX == (entranceIndex.getFirst() -1) && iZ == entranceIndex.getSecond());
-				case STAIR_NN:
-					return (iX == entranceIndex.getFirst() && iZ == (entranceIndex.getSecond() -1));
-				case STAIR_SS:
-					return (iX == entranceIndex.getFirst() && iZ == (entranceIndex.getSecond() +1));
-				case STAIR_WW:
-					return (iX == (entranceIndex.getFirst() +1) && iZ == entranceIndex.getSecond());
-				default:
-					break;
-				}
-			}
-		}
-		return false;
-	}
 	
 	public void overrideFirstRoomType(ESpiralStrongholdRoomType type) {
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = type;
