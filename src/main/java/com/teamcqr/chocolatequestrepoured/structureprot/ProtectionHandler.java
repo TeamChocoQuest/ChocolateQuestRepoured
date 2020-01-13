@@ -149,7 +149,7 @@ public class ProtectionHandler {
                 if (temp == null) {
                     temp = new ArrayList<>();
                 }
-                temp.add((ProtectedRegion) ObjectSerializationUtil.readObectFromByteArray(protectedRegionsFromDisc.get(regionFileName)));
+                temp.add((ProtectedRegion) ObjectSerializationUtil.readObjectFromByteArray(protectedRegionsFromDisc.get(regionFileName)));
                 this.activeRegions.put(Integer.parseInt(dimIDAsString), temp);
             }
         }
