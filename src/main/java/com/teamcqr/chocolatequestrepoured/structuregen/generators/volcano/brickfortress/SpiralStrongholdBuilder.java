@@ -73,6 +73,8 @@ public class SpiralStrongholdBuilder {
 			if(i != 0) {
 				floor.overrideFirstRoomType(ESpiralStrongholdRoomType.NONE);
 			}
+			entranceX = floor.getExitIndex().getFirst();
+			entranceZ = floor.getExitIndex().getSecond();
 			if(i == (floors.length -1)) {
 				floor.overrideLastRoomType(ESpiralStrongholdRoomType.BOSS);
 			} else {
@@ -104,7 +106,21 @@ public class SpiralStrongholdBuilder {
 			SpiralStrongholdFloor floor = floors[i];
 			floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world);
 			currentPos.add(0,dungeon.getRoomSizeY(),0);
-			currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
+			System.out.println("###### FLOOR " + (i +1) +" ######" );
+			for(int x = 0; x < dungeon.getFloorSideLength(); x++) {
+				for(int z = 0; z < dungeon.getFloorSideLength(); z++) {
+					if(x == 0 || x == (dungeon.getFloorSideLength() -1) || z == 0 || z == (dungeon.getFloorSideLength() -1)) {
+						if(floor.getRoomGrid() != null && floor.getRoomGrid()[x][z] != null) {
+							System.out.println("Room at " + x + " | " + z + " is type: " + floor.getRoomGrid()[x][z].toString());
+						}
+					}
+				}
+			}
+			System.out.println("");
+			System.out.println("");
+			if(i < (floors.length -1)) {
+				currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
+			}
 		}
 	}
 
