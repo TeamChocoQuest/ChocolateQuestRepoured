@@ -69,7 +69,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 	@Override
 	public EDefaultFaction getDefaultFaction() {
-		return EDefaultFaction.BEASTS;
+		return EDefaultFaction.ILLAGERS;
 	}
 
 	@Override

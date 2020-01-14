@@ -168,7 +168,7 @@ public class FactionRegistry {
 		}
 
 		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
-			return this.factions.get(EDefaultFaction.BEASTS.name());
+			return this.factions.get(EDefaultFaction.ILLAGERS.name());
 		}
 
 		if (entity instanceof EntityEnderman || entity instanceof EntityEndermite || entity instanceof EntityDragon) {
