@@ -23,17 +23,20 @@ public class ProtectedRegion implements Serializable {
      * Variables
      */
 
+    // Version (for serialization)
+    private static final long serialVersionUID = 3744789699577710821L;
+
     // Region Data
     private String UUID;
     private transient BlockPos NWCorner;
     private transient BlockPos SECorner;
 
     // Dependencies (Things that will remove ProtectedRegion if all are killed/destroyed)
-    private transient ArrayList<String> entityDependencies = new ArrayList<>(); // Stores UUIDs as Strings for ease of serialization
-    private transient ArrayList<BlockPos> blockDependencies = new ArrayList<>();
+    private transient ArrayList<String> entityDependencies; // Stores UUIDs as Strings for ease of serialization
+    private transient ArrayList<BlockPos> blockDependencies;
 
     // Settings
-    public transient HashMap<String, Boolean> settings = new HashMap<>();
+    public transient HashMap<String, Boolean> settings;
 
     /*
      * Constructors
@@ -45,6 +48,11 @@ public class ProtectedRegion implements Serializable {
         this.UUID = UUID;
         this.NWCorner = NWCorner;
         this.SECorner = SECorner;
+        // Dependencies
+        this.entityDependencies = new ArrayList<>();
+        this.blockDependencies = new ArrayList<>();
+        // Settings
+        this.settings = new HashMap<>();
         // Dependencies
         if (entityDependenciesAsUUIDStrings != null) {
             for (String entry : entityDependenciesAsUUIDStrings) {
@@ -60,16 +68,8 @@ public class ProtectedRegion implements Serializable {
                 }
             }
         }
-        // Protection Settings Defaults
-        this.settings.put("preventBlockBreak", true);
-        this.settings.put("preventBlockBreakCreative", false);
-        this.settings.put("preventBlockPlace", true);
-        this.settings.put("preventBlockPlaceCreative", false);
-        this.settings.put("preventExplosionTNT", false);
-        this.settings.put("preventExplosionOther", true);
-        this.settings.put("preventFireSpread", true);
-        this.settings.put("preventNaturalMobSpawn", true);
-        this.settings.put("requireDependencies", true);
+        // Apply Default Settings
+        applyDefaultSettings();
         // Protection Settings Overrides
         if (settingsOverrides != null) {
             for (String setting : settingsOverrides.keySet()) {
@@ -146,6 +146,7 @@ public class ProtectedRegion implements Serializable {
         }
         // Read Settings Values
         this.settings = new HashMap<>();
+        this.applyDefaultSettings();
         int settingCount = stream.readInt();
         for (int i = 0; i < settingCount; i++) {
             this.settings.put((String) stream.readObject(), stream.readBoolean());
@@ -197,6 +198,19 @@ public class ProtectedRegion implements Serializable {
     /*
      * Util
      */
+
+    // Protection Settings Defaults
+    public void applyDefaultSettings() {
+        this.settings.put("preventBlockBreak", true);
+        this.settings.put("preventBlockBreakCreative", false);
+        this.settings.put("preventBlockPlace", true);
+        this.settings.put("preventBlockPlaceCreative", false);
+        this.settings.put("preventExplosionTNT", false);
+        this.settings.put("preventExplosionOther", true);
+        this.settings.put("preventFireSpread", true);
+        this.settings.put("preventNaturalMobSpawn", true);
+        this.settings.put("requireDependencies", true);
+    }
 
     // Assumes correct world
     public boolean checkIfBlockPosInRegion(BlockPos toCheck) {
