@@ -14,6 +14,7 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	public EntityCQRGremlin(World worldIn) {
 		super(worldIn);
+		setSize(1F, 1.2F);
 	}
 
 	@Override
@@ -43,7 +44,12 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	@Override
 	public boolean canRide() {
-		return true;
+		return false;
+	}
+	
+	@Override
+	public boolean isSitting() {
+		return false;
 	}
 
 	@Override

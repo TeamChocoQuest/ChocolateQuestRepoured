@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 
 public class RenderCQRGremlin extends RenderCQREntity<EntityCQRGremlin> {
@@ -17,14 +20,14 @@ public class RenderCQRGremlin extends RenderCQREntity<EntityCQRGremlin> {
 
 		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
 		for (LayerRenderer<?> layer : this.layerRenderers) {
-			if (layer instanceof LayerBipedArmor) {
+			if (layer instanceof LayerBipedArmor || layer instanceof LayerHeldItem || layer instanceof LayerCQREntityPotion) {
 				toRemove.add(layer);
 			}
 		}
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
-
+		addLayer(new LayerCQRHeldItem(this));
 	}
 
 	@Override

@@ -545,6 +545,7 @@ entity.cqr_dwarf.name=Dwarf
 entity.cqr_enderman.name=Enderman
 entity.cqr_goblin.name=Goblin
 entity.cqr_golem.name=Golem
+entity.cqr_gremlin.name=Gremlin
 entity.cqr_illager.name=Illager
 entity.cqr_npc.name=NPC
 entity.cqr_mandril.name=Mandril
