@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.factions;
 public enum EDefaultFaction {
 
 	UNDEAD(new String[] { "WALKERS", "VILLAGERS", "PLAYERS", "TRITONS" }, new String[] { "GOBLIN", "ENDERMEN" }, EReputationState.ENEMY, false),
-	PIRATE(new String[] { "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS", "TRITONS" }, new String[] { "ILLAGERS" }, EReputationState.ENEMY),
+	PIRATE(new String[] { "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS", "TRITONS", "UNDEAD" }, new String[] { "ILLAGERS" }, EReputationState.ENEMY),
 	WALKERS(new String[] { "UNDEAD", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "PLAYERS", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "NPC" }, new String[] {}, EReputationState.ARCH_ENEMY, false),
 	DWARVES_AND_GOLEMS(new String[] { "WALKERS", "ENDERMEN", "ILLAGERS", "UNDEAD" }, new String[] { "VILLAGERS", "NPC", "INQUISITION" }, EReputationState.ACCEPTED),
 	GOBLINS(new String[] { "OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS" }, new String[] { "ENDERMEN", "ILLAGERS" }, EReputationState.ENEMY),
@@ -18,7 +18,7 @@ public enum EDefaultFaction {
 	MOB_BATTLE_T1(new String[] { "MOB_BATTLE_T2" }, new String[] {}, EReputationState.ENEMY, false),
 	MOB_BATTLE_T2(new String[] { "MOB_BATTLE_T1" }, new String[] {}, EReputationState.ALLY, false),
 	PLAYERS(new String[] {}, new String[] { "VILLAGERS", "NPC" }, EReputationState.NEUTRAL, false), 
-	ILLAGERS(new String[] {"TRITONS", "VILLAGERS", "DWARVES_AND_GOLEMS", "UNDEAD", "PIRATE"}, new String[] {"GREMLINS, PIRATE, ENDERMEN"}, EReputationState.ENEMY, false),
+	ILLAGERS(new String[] {"TRITONS", "VILLAGERS", "DWARVES_AND_GOLEMS", "UNDEAD"}, new String[] {"GREMLINS, PIRATE, ENDERMEN"}, EReputationState.ENEMY, false),
 	GREMLINS(new String[] {"DWARVES_AND_GOLEMS", "GOBLINS"}, new String[] {}, EReputationState.ENEMY, false),;
 
 	private String[] enemies;
