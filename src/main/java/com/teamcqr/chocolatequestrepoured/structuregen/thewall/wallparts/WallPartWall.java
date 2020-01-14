@@ -68,7 +68,7 @@ public class WallPartWall implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL) {
-						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState(), 2);
 					}
 
 				}
@@ -87,7 +87,7 @@ public class WallPartWall implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL2) {
-						world.setBlockState(p, Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, Blocks.STONEBRICK.getDefaultState(), 2);
 					}
 
 				}

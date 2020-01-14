@@ -82,7 +82,7 @@ public class WallPartTower implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL) {
-						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
+						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState(), 2);
 					}
 
 				}
@@ -120,7 +120,7 @@ public class WallPartTower implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL3) {
-						world.setBlockState(p, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH));
+						world.setBlockState(p, Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH), 2);
 					}
 
 				}

@@ -85,7 +85,7 @@ public class WallPartRailingWall implements IWallPart {
 				public void run() {
 
 					for (BlockPos p : posL) {
-						world.setBlockState(p, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true));
+						world.setBlockState(p, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true), 2);
 					}
 
 				}
