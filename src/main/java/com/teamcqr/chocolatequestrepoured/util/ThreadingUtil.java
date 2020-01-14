@@ -91,17 +91,17 @@ public class ThreadingUtil {
 				bplistTMP.add(bp);
 				// One Task contains 50 blocks to place
 				if (counter % entriesPerPartList == 0) {
-					final BlockPos[] blocks = (BlockPos[]) bplistTMP.toArray();
+					final Object[] blocks = bplistTMP.toArray();
 					Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 
 						@Override
 						public void run() {
-							for (BlockPos b : blocks) {
-								if (b != null) {
+							for (Object b : blocks) {
+								if (b != null && b instanceof BlockPos) {
 									if (Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-										world.setBlockToAir(b);
+										world.setBlockToAir((BlockPos) b);
 									} else {
-										world.setBlockState(b, blockToPlace.getDefaultState(), 2);
+										world.setBlockState((BlockPos) b, blockToPlace.getDefaultState(), 2);
 									}
 								}
 							}
@@ -113,16 +113,16 @@ public class ThreadingUtil {
 				}
 				counter++;
 			}
-			final BlockPos[] blocks = (BlockPos[]) bplistTMP.toArray();
+			final Object[] blocks = bplistTMP.toArray();
 			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
 
 				@Override
 				public void run() {
-					for (BlockPos b : blocks) {
-						if (Block.isEqualTo(blockToPlace, Blocks.AIR)) {
-							world.setBlockToAir(b);
+					for (Object b : blocks) {
+						if (Block.isEqualTo(blockToPlace, Blocks.AIR) && b instanceof BlockPos) {
+							world.setBlockToAir((BlockPos) b);
 						} else {
-							world.setBlockState(b, blockToPlace.getDefaultState(), 2);
+							world.setBlockState((BlockPos) b, blockToPlace.getDefaultState(), 2);
 						}
 					}
 
