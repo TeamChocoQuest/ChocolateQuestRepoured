@@ -2,12 +2,14 @@ package de.DerToaster.SimpleThreading;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class MultiThreadController {
 
 	private List<SimpleThread> threads = new ArrayList<SimpleThread>();
 
-	// private Queue<Runnable> tasksToAdd = new ConcurrentLinkedQueue<>();
+	private Queue<Runnable> tasksToAdd = new ConcurrentLinkedQueue<>();
 
 	private int nextThreadID = 0;
 
@@ -35,16 +37,16 @@ public class MultiThreadController {
 	}
 
 	public void addTask(Runnable task) {
-		// this.tasksToAdd.add(task);
+		this.tasksToAdd.add(task);
 
-		if (this.nextThreadID >= this.threads.size()) {
+		/*if (this.nextThreadID >= this.threads.size()) {
 			this.nextThreadID = 0;
 		}
 
 		SimpleThread st = this.threads.get(this.nextThreadID);
 		st.addTask(task);
 
-		this.nextThreadID++;
+		this.nextThreadID++;*/
 
 		/*
 		 * boolean taskNotAdded = true;
@@ -75,6 +77,17 @@ public class MultiThreadController {
 		 * }
 		 */
 		// }
+	}
+	
+	public Runnable getNextTask() {
+		return this.tasksToAdd.poll();
+	}
+
+	public int getRemainingTasks() {
+		if(this.tasksToAdd.isEmpty()) {
+			return 0;
+		}
+		return this.tasksToAdd.size();
 	}
 
 }
