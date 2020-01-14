@@ -53,13 +53,7 @@ class SimpleThread extends Thread {
 
 			this.unlockQueue();
 
-			/*
-			 * try {
-			 * sleep(1);
-			 * } catch (InterruptedException e) {
-			 * e.printStackTrace();
-			 * }
-			 */
+
 			this.run();
 		}
 	}
@@ -79,5 +73,5 @@ class SimpleThread extends Thread {
 	public Thread getMainThread() {
 		return this.mainThread;
 	}
-
+	
 }
