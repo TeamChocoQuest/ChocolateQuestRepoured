@@ -83,7 +83,7 @@ public class PlateauBuilder {
 				for (int y = 0; y <= maxHeight; ++y) {
 					// This generates the "cube" that goes under the structure
 					if ((x > this.wallSize) && (z > this.wallSize) && (x < sizeX - this.wallSize) && (z < sizeZ - this.wallSize)) {
-						world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState());
+						world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
 					}
 					// This generates the fancy "curved" walls around the cube
 					else {
@@ -96,7 +96,7 @@ public class PlateauBuilder {
 						noiseVar += Math.max(0.0F, (this.wallSize - (sizeZ - z)) / 8.0F);
 						double value = (p.getNoiseAt(x + startX, y, z + startZ) + p2.getNoiseAt(x + startX, y, z + startZ) + noiseVar) / 3.0D + y / (maxHeight == 0 ? 1 : maxHeight) * 0.25D;
 						if (value < 0.5D) {
-							world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState());
+							world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
 						}
 					}
 				}
@@ -104,7 +104,7 @@ public class PlateauBuilder {
 				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);//
 																											// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
 				if (maxHeight <= startY) {
-					world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState());
+					world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState(), 2);
 				}
 			}
 		}
@@ -153,7 +153,7 @@ public class PlateauBuilder {
 							if (Block.isEqualTo(fillBlock, Blocks.AIR)) {
 								world.setBlockToAir(startPos.add(iX, iY, iZ));
 							} else {
-								world.setBlockState(startPos.add(iX, iY, iZ), fillBlock.getDefaultState());
+								world.setBlockState(startPos.add(iX, iY, iZ), fillBlock.getDefaultState(), 2);
 							}
 						}
 					}
