@@ -190,7 +190,9 @@ public class ProtectionHandler {
             ArrayList<ProtectedRegion> toRemoveFromRegistry = new ArrayList<>();
             // Loop through all registered regions for dim
             for (ProtectedRegion region : this.activeRegions.get(dimID)) {
-
+            	if(region == null) {
+            		continue;
+            	}
                 // Check if block is a dependency
                 boolean isBlockDependency = false;
                 for (BlockPos pos : region.getBlockDependencies()) {
