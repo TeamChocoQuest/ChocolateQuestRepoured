@@ -317,7 +317,10 @@ public class ProtectionHandler {
         for (int dimID : this.activeRegions.keySet()) {
             // Loop through all registered regions for dim
             for (ProtectedRegion region : this.activeRegions.get(dimID)) {
-                // Noop if setting disabled
+            	if(region == null) {
+            		continue;
+            	}
+            	// Noop if setting disabled
                 if (!region.settings.get("preventNaturalMobSpawn")) {
                     // noop
                 }
