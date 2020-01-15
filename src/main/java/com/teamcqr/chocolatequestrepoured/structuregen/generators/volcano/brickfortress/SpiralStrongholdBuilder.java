@@ -34,7 +34,7 @@ public class SpiralStrongholdBuilder {
 		final int maxRoomsPerFloor = dungeon.getFloorSideLength() * 4 -4;
 		ESpiralStrongholdRoomType entranceType = ESpiralStrongholdRoomType.NONE;
 		switch(allowedDirection) {
-		case EAST:
+		case WEST:
 			entranceType = ESpiralStrongholdRoomType.CURVE_ES;
 			entranceX = dungeon.getFloorSideLength() -1;
 			entranceZ = middle;
@@ -49,7 +49,7 @@ public class SpiralStrongholdBuilder {
 			entranceX = middle;
 			entranceZ = 0;
 			break;
-		case WEST:
+		case EAST:
 			entranceType = ESpiralStrongholdRoomType.CURVE_WN;
 			entranceX = 0;
 			entranceZ = middle;
@@ -83,21 +83,6 @@ public class SpiralStrongholdBuilder {
 			y += dungeon.getRoomSizeY();
 			floors[i] = floor;
 		}
-	}
-	
-	public void calculateFloorCoordinates(BlockPos strongholdEntrancePos) {
-		/*BlockPos currentPos = strongholdEntrancePos;
-		for(int i = 0; i < floors.length; i++) {
-			SpiralStrongholdFloor floor = floors[i];
-			if(i != 0) {
-				floor.overrideFirstRoomType(ESpiralStrongholdRoomType.NONE);
-			}
-			if(i == (floors.length -1)) {
-				floor.overrideLastRoomType(ESpiralStrongholdRoomType.BOSS);
-			}
-			floor.calculateCoordinates(currentPos.getY(), dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
-			currentPos.add(0,dungeon.getRoomSizeY(),0);
-		}*/
 	}
 	
 	public void buildFloors(BlockPos strongholdEntrancePos, World world) {
