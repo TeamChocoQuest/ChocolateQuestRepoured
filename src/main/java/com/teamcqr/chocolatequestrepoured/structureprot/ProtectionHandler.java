@@ -121,6 +121,9 @@ public class ProtectionHandler {
         // Register on Disc
         HashMap<String, byte[]> regionsToBeZipped = new HashMap<>();
         for (ProtectedRegion region : this.activeRegions.get(dimID)) {
+        	if(region == null) {
+        		continue;
+        	}
             regionsToBeZipped.put("dim_" + dimID + "\\" + region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region));
         }
         FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\prot_region_defs.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
@@ -165,6 +168,9 @@ public class ProtectionHandler {
         for (int dimID : this.activeRegions.keySet()) {
             // Loop through all registered regions for dim
             for (ProtectedRegion region : this.activeRegions.get(dimID)) {
+            	if(region == null) {
+            		continue;
+            	}
                 // Loop through all UUIDs of Entity Dependencies
                 for (String depUUID : region.getEntityDependenciesAsUUIDs()) {
                     // Check if UUIDs Equal
