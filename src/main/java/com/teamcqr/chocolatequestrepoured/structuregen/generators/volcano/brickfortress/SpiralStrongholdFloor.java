@@ -136,7 +136,7 @@ public class SpiralStrongholdFloor {
 			}
 		}
 		roomGrid[entranceIndex.getFirst()][entranceIndex.getSecond()] = entranceRoomType;
-		System.out.println("Done");
+		//System.out.println("Done");
 	}
 	
 	private ESpiralStrongholdRoomType getExitRoomType(int iX, int iZ, boolean rev) {
