@@ -23,3 +23,4 @@ run
 TexturesCopy
 #Working files(e.g. GIMP files)
 *.xcf
+logs
