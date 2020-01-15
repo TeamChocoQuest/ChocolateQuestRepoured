@@ -175,16 +175,14 @@ public class SpiralStrongholdFloor {
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
-					//if(iX != entranceIndex.getFirst() && iZ != entranceIndex.getSecond()) {
-						ESpiralStrongholdRoomType room = roomGrid[iX][iZ];
-						if(room != null && !room.equals(ESpiralStrongholdRoomType.NONE)) {
-							int x = (iX - entranceIndex.getFirst()) * roomSizeX;
-							x += entrancePos.getX();
-							int z = (iZ - entranceIndex.getSecond()) * roomSizeZ;
-							z += entrancePos.getZ();
-							coordinateGrid[iX][iZ] = new BlockPos(x,y,z);
-						}
-					//}
+					ESpiralStrongholdRoomType room = roomGrid[iX][iZ];
+					if(room != null && !room.equals(ESpiralStrongholdRoomType.NONE)) {
+						int x = (iX - entranceIndex.getFirst()) * roomSizeX;
+						x += entrancePos.getX();
+						int z = (iZ - entranceIndex.getSecond()) * roomSizeZ;
+						z += entrancePos.getZ();
+						coordinateGrid[iX][iZ] = new BlockPos(x,y,z);
+					}
 				}
 			}
 		}
