@@ -16,6 +16,8 @@ public class CQRConfig {
 
 	public static class Advanced {
 		public int threadCount = 4;
+		@Config.RangeInt(min = 1)
+		public int tickRateForTasks = 5;
 	}
 
 	public static class General {
