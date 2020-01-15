@@ -241,6 +241,9 @@ public class ProtectionHandler {
         for (int dimID : this.activeRegions.keySet()) {
             // Loop through all registered regions for dim
             for (ProtectedRegion region : this.activeRegions.get(dimID)) {
+            	if(region == null) {
+            		continue;
+            	}
 
                 if (!region.settings.get("preventBlockPlace")) {
                     // noop
