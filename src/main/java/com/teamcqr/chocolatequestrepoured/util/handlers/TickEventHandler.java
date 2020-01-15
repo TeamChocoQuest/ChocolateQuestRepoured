@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.Side;
 @EventBusSubscriber
 public class TickEventHandler {
 	
-	static final int RATE = 20;
+	static final int RATE = 5;
 	static int cooldown = 0;
 	
 	@SubscribeEvent
@@ -23,7 +23,7 @@ public class TickEventHandler {
 				Runnable task = Reference.BLOCK_PLACING_THREADS_INSTANCE.getNextTask();
 				if(task != null) {
 					task.run();
-					System.out.println("Waiting tasks: " + Reference.BLOCK_PLACING_THREADS_INSTANCE.getRemainingTasks());
+					//System.out.println("Waiting tasks: " + Reference.BLOCK_PLACING_THREADS_INSTANCE.getRemainingTasks());
 				}
 			}
 		}
