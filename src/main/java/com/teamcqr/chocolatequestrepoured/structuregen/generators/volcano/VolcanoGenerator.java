@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairC
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.init.Blocks;
@@ -277,11 +278,12 @@ public class VolcanoGenerator implements IDungeonGenerator {
 			// System.out.println("Calculated air for holes!");
 		}
 		
-		for(BlockPos p : airBlocksThroat) {
+		ThreadingUtil.passListWithBlocksToThreads(airBlocksThroat, Blocks.AIR, world, 5000, true);
+		/*for(BlockPos p : airBlocksThroat) {
 			world.setBlockToAir(p);
-		}
+		}*/
 
-		ThreadingUtil.passListWithBlocksToThreads(blocks, this.dungeon.getUpperMainBlock(), world, 150, true);
+		ThreadingUtil.passListWithBlocksToThreads(blocks, this.dungeon.getUpperMainBlock(), world, 5000, true);
 		if (this.dungeon.generateOres()) {
 			// System.out.println("Generating ore...");
 			this.generateOres(world, blocks);
@@ -290,22 +292,22 @@ public class VolcanoGenerator implements IDungeonGenerator {
 		}
 
 		// System.out.println("Placing blocks...");
-		//ThreadingUtil.passListWithBlocksToThreads(lava, this.dungeon.getLavaBlock(), world, 150, true);
-		for(BlockPos p : lava) {
-			world.setBlockState(p, this.dungeon.getLavaBlock().getDefaultState());
-		}
-		//ThreadingUtil.passListWithBlocksToThreads(magma, this.dungeon.getMagmaBlock(), world, 150, true);
-		for(BlockPos p : magma) {
-			world.setBlockState(p, this.dungeon.getMagmaBlock().getDefaultState());
-		}
-		//ThreadingUtil.passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 150, true);
-		for(BlockPos p : airBlocks) {
+		ThreadingUtil.passListWithBlocksToThreads(lava, this.dungeon.getLavaBlock(), world, 5000, true);
+		/*for(BlockPos p : lava) {
+			world.setBlockState(p, this.dungeon.getLavaBlock().getDefaultState(), 2);
+		}*/
+		ThreadingUtil.passListWithBlocksToThreads(magma, this.dungeon.getMagmaBlock(), world, 5000, true);
+		/*for(BlockPos p : magma) {
+			world.setBlockState(p, this.dungeon.getMagmaBlock().getDefaultState(), 2);
+		}*/
+		ThreadingUtil.passListWithBlocksToThreads(airBlocks, Blocks.AIR, world, 5000, true);
+		/*for(BlockPos p : airBlocks) {
 			world.setBlockToAir(p);
-		}
-		ThreadingUtil.passListWithBlocksToThreads(blocksLower, this.dungeon.getLowerMainBlock(), this.dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue(), world, 150);
+		}*/
+		ThreadingUtil.passListWithBlocksToThreads(blocksLower, this.dungeon.getLowerMainBlock(), this.dungeon.getMagmaBlock(), new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue(), world, 5000);
 		
 		if (this.dungeon.doBuildStairs()) {
-			ThreadingUtil.passListWithBlocksToThreads(stairBlocks, this.dungeon.getRampBlock(), world, 150, true);
+			ThreadingUtil.passListWithBlocksToThreads(stairBlocks, this.dungeon.getRampBlock(), world, 5000, true);
 		}
 		if (this.dungeon.doBuildDungeon()) {
 			this.generatePillars(pillarCenters, lowYMax + 10, world);
@@ -327,12 +329,18 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		if (this.dungeon.doBuildDungeon()) {
-			StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
-			entranceBuilder.generate();
+			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
+			Runnable strongholdTask = new Runnable() {
+				
+				@Override
+				public void run() {
+					entranceBuilder.generate();
+				}
+			};
+			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(strongholdTask);
 		}
 
 		// Generates the stronghold
-		// TODO: Generate stronghold -> like a good old rogue dungeon
 
 		// IMPORTANT: Entrance + Staircase: Same as original
 
@@ -354,45 +362,51 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
 		// DONE Fill chests on path
-		Random rdm = new Random();
-		for (BlockPos pos : this.spawnersNChestsOnPath) {
-			if (rdm.nextBoolean()) {
-				world.setBlockState(pos, Blocks.CHEST.getDefaultState());
-				TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
-				int eltID = this.dungeon.getChestIDs()[rdm.nextInt(this.dungeon.getChestIDs().length)];
-				if (chest != null) {
-					ResourceLocation resLoc = null;
-					try {
-						resLoc = ELootTable.valueOf(eltID).getResourceLocation();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
-					if (resLoc != null) {
-						long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
-						chest.setLootTable(resLoc, seed);
+		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		final int[] chestIDs = this.dungeon.getChestIDs();
+		Runnable chestPlaceTask = new Runnable() {
+			
+			@Override
+			public void run() {
+				Random rdm = new Random();
+				for (BlockPos pos : positions) {
+					if (rdm.nextBoolean()) {
+						world.setBlockState(pos, Blocks.CHEST.getDefaultState());
+						TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
+						int eltID = chestIDs[rdm.nextInt(chestIDs.length)];
+						if (chest != null) {
+							ResourceLocation resLoc = null;
+							try {
+								resLoc = ELootTable.valueOf(eltID).getResourceLocation();
+							} catch (Exception ex) {
+								ex.printStackTrace();
+							}
+							if (resLoc != null) {
+								long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
+								chest.setLootTable(resLoc, seed);
+							}
+						}
 					}
 				}
 			}
-		}
+		};
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
 		// DONE Place spawners for dwarves/golems/whatever on path
-		for (BlockPos pos : this.spawnersNChestsOnPath) {
-			/*
-			 * world.setBlockState(pos.add(0,1,0), Blocks.MOB_SPAWNER.getDefaultState());
-			 * 
-			 * TileEntityMobSpawner spawner = (TileEntityMobSpawner)world.getTileEntity(pos.add(0,1,0));
-			 * 
-			 * spawner.getSpawnerBaseLogic().setEntityId(this.dungeon.getMob());
-			 * //System.out.println("Spawner Mob: " + this.dungeon.getMob().toString());
-			 * spawner.updateContainingBlockInfo();
-			 * 
-			 * spawner.update();
-			 */
-			SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0, 1, 0), this.dungeon.getRampMob());
-		}
+		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		Runnable placeSpawnerTask = new Runnable() {
+			
+			@Override
+			public void run() {
+				for (BlockPos pos : positions) {
+					SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0, 1, 0), dungeon.getRampMob());
+				}
+			}
+		};
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);
 	}
 
 	@Override
@@ -406,7 +420,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 				}
 			}
 
-			ThreadingUtil.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 50, true);
+			ThreadingUtil.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 10000, true);
 		}
 		// DONE Pass the list to a simplethread to place the blocks
 	}
