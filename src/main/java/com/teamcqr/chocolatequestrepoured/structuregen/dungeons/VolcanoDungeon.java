@@ -161,7 +161,7 @@ public class VolcanoDungeon extends DungeonBase {
 
 		System.out.println("Generating dungeon " + this.name + "... ");
 
-		this.generator = new VolcanoGenerator(this);
+		this.generator = getGenerator();
 
 		this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, true), z);
 
