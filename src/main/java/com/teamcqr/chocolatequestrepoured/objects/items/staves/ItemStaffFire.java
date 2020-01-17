@@ -88,11 +88,13 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 		x *= 1.0F - Math.abs(y);
 		z *= 1.0F - Math.abs(y);
 
-		for (int i = 0; i < 50; i++) {
-			double flameRandomMotion = itemRand.nextDouble() + 0.2D;
-			float height = shooter.height;
-			world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
-					(y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
+		if(world.isRemote) {
+			for (int i = 0; i < 50; i++) {
+				double flameRandomMotion = itemRand.nextDouble() + 0.2D;
+				float height = shooter.height;
+				world.spawnParticle(EnumParticleTypes.FLAME, true, shooter.posX, shooter.posY + height, shooter.posZ, (x + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion,
+						(y + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion, (z + (itemRand.nextDouble() - 0.5D) / 3.0D) * flameRandomMotion);
+			}
 		}
 
 		if (!world.isRemote) {
