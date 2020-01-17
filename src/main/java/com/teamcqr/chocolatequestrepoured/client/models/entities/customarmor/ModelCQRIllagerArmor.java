@@ -17,12 +17,12 @@ public class ModelCQRIllagerArmor extends ModelBiped {
 		super(scale);
 		this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
-		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale);
+		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale + 0.125F);
 
 		this.bipedRightLeg = new ModelRenderer(this, 0, 16);
 		this.bipedRightLeg.mirror = true;
 		this.bipedRightLeg.setRotationPoint(-2.0F, 12.0F, 0.0F);
-		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale);
+		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale + 0.125F);
 
 		this.bipedBody = new ModelRenderer(this, 16, 16);
 		this.bipedBody.addBox(-4.0F, 1.0F, -2.0F, 8, 12, 4, scale + 0.75F);
