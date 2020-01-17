@@ -52,7 +52,7 @@ public class ModelCQRGremlin extends ModelCQRBiped {
         this.setRotateAngle(bipedLeftArm, -0.3839724354387525F, 0.0F, 0.0F);
         this.bipedBody = new ModelRenderer(this, 16, 16);
         this.bipedBody.setRotationPoint(0.0F, 13.0F, -4.0F);
-        this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, 0.0F);
+        this.bipedBody.addBox(-4.0F, 0.0F, -2.0F, 8, 12, 4, modelSize);
         this.setRotateAngle(bipedBody, 1.0471975511965976F, 0.0F, 0.0F);
         this.hornR1 = new ModelRenderer(this, 56, 0);
         this.hornR1.setRotationPoint(-3.5F, -3.5F, -3.5F);
@@ -82,12 +82,6 @@ public class ModelCQRGremlin extends ModelCQRBiped {
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) { 
     	this.isRiding = false;
        super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-    	this.bipedBody.render(scale);
-        this.bipedLeftArm.render(scale);
-        this.bipedRightLeg.render(scale);
-        this.bipedHead.render(scale);
-        this.bipedLeftLeg.render(scale);
-        this.bipedRightArm.render(scale);
     }
     
     @Override
