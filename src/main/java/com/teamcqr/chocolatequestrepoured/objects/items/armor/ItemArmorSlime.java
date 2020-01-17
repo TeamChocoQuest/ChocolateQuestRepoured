@@ -17,14 +17,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorSlime extends ItemArmor {
+public class ItemArmorSlime extends ArmorCQRBase {
 
 	private AttributeModifier health;
 	private AttributeModifier knockBack;
@@ -59,9 +58,7 @@ public class ItemArmorSlime extends ItemArmor {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.slimeArmorLegs : ModArmorModels.slimeArmor;
 	}
 
