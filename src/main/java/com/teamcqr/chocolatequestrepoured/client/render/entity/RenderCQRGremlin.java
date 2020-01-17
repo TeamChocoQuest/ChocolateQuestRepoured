@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRGremlinArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
@@ -28,6 +29,13 @@ public class RenderCQRGremlin extends RenderCQREntity<EntityCQRGremlin> {
 			this.layerRenderers.remove(layer);
 		}
 		addLayer(new LayerCQRHeldItem(this));
+		addLayer(new LayerBipedArmor(this) {
+			@Override
+			protected void initArmor() {
+				this.modelLeggings = new ModelCQRGremlinArmor(0.5F, true);
+				this.modelArmor = new ModelCQRGremlinArmor(1.0F, false);
+			}
+		});
 	}
 
 	@Override
