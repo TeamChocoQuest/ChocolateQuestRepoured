@@ -31,7 +31,6 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DefaultSurfaceDungeon dungeon;
-	private Rotation rot = Rotation.values()[new Random().nextInt(4)];
 
 	public DefaultSurfaceGenerator(DefaultSurfaceDungeon dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
@@ -45,34 +44,31 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 		if (this.dungeon.doBuildSupportPlatform()) {
 			int sizeX = this.structure.getSizeX();
 			int sizeZ = this.structure.getSizeZ();
-			this.rot = Rotation.NONE;
-			if (this.dungeon.rotateDungeon()) {
-				switch (this.rot) {
-				case CLOCKWISE_90:
-					x -= sizeZ;
-					{
-						int i = sizeX;
-						int j = sizeZ;
-						sizeX = j;
-						sizeZ = i;
-					}
-					break;
-				case CLOCKWISE_180:
-					x -= sizeX;
-					z -= sizeZ;
-					break;
-				case COUNTERCLOCKWISE_90:
-					z -= sizeX;
-					{
-						int i = sizeX;
-						int j = sizeZ;
-						sizeX = j;
-						sizeZ = i;
-					}
-					break;
-				default:
-					break;
+			switch (this.placeSettings.getRotation()) {
+			case CLOCKWISE_90:
+				x -= sizeZ;
+				{
+					int i = sizeX;
+					int j = sizeZ;
+					sizeX = j;
+					sizeZ = i;
 				}
+				break;
+			case CLOCKWISE_180:
+				x -= sizeX;
+				z -= sizeZ;
+				break;
+			case COUNTERCLOCKWISE_90:
+				z -= sizeX;
+				{
+					int i = sizeX;
+					int j = sizeZ;
+					sizeX = j;
+					sizeZ = i;
+				}
+				break;
+			default:
+				break;
 			}
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -83,7 +79,7 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Simply puts the structure at x,y,z
-		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings.setRotation(this.rot), EPosType.DEFAULT);
+		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
 
 		List<String> bosses = new ArrayList<>();
 		for(UUID id : structure.getBossIDs()) {
@@ -113,29 +109,39 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			if (this.dungeon.rotateDungeon()) {
-				int sizeX = this.structure.getSizeX();
-				int sizeZ = this.structure.getSizeZ();
-				switch (this.rot) {
-				case CLOCKWISE_90:
-					x -= sizeX;
-					break;
-				case CLOCKWISE_180:
-					x -= sizeX;
-					z -= sizeZ;
-					break;
-				case COUNTERCLOCKWISE_90:
-					z -= sizeZ;
-					break;
-				default:
-					break;
+			int sizeX = this.structure.getSizeX();
+			int sizeZ = this.structure.getSizeZ();
+			switch (this.placeSettings.getRotation()) {
+			case CLOCKWISE_90:
+				x -= sizeZ;
+				{
+					int i = sizeX;
+					int j = sizeZ;
+					sizeX = j;
+					sizeZ = i;
 				}
+				break;
+			case CLOCKWISE_180:
+				x -= sizeX;
+				z -= sizeZ;
+				break;
+			case COUNTERCLOCKWISE_90:
+				z -= sizeX;
+				{
+					int i = sizeX;
+					int j = sizeZ;
+					sizeX = j;
+					sizeZ = i;
+				}
+				break;
+			default:
+				break;
 			}
-			int startX = x - this.structure.getSizeX() / 3 - CQRConfig.general.supportHillWallSize / 2;
-			int startZ = z - this.structure.getSizeZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startX = x - sizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startZ = z - sizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
 
-			int endX = x + this.structure.getSizeX() + this.structure.getSizeX() / 3 + CQRConfig.general.supportHillWallSize / 2;
-			int endZ = z + this.structure.getSizeZ() + this.structure.getSizeZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endX = x + sizeX + sizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endZ = z + sizeZ + sizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
 
 			for (int iX = startX; iX <= endX; iX++) {
 				for (int iZ = startZ; iZ <= endZ; iZ++) {
