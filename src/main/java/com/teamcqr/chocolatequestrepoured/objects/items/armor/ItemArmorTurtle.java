@@ -26,7 +26,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -38,7 +37,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorTurtle extends ItemArmor {
+public class ItemArmorTurtle extends ArmorCQRBase {
 
 	private AttributeModifier health;
 
@@ -57,13 +56,6 @@ public class ItemArmorTurtle extends ItemArmor {
 		}
 
 		return multimap;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	@Nullable
-	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
 
 	@Override
@@ -129,6 +121,11 @@ public class ItemArmorTurtle extends ItemArmor {
 			}
 		}
 
+	}
+
+	@Override
+	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
 
 }
