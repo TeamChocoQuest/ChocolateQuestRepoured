@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 public class ModelCQRIllagerArmor extends ModelBiped {
 
 	public ModelCQRIllagerArmor(float scale) {
+		super(scale);
 		this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 12.0F, 0.0F);
 		this.bipedLeftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale);
@@ -24,12 +25,11 @@ public class ModelCQRIllagerArmor extends ModelBiped {
 		this.bipedRightLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, scale);
 
 		this.bipedBody = new ModelRenderer(this, 16, 16);
-		// this.bipedBody.addBox(-4.0F, 0.0F, -3.0F, 8, 12, 6, scale);
-		this.bipedBody.addBox(-4.0F, 0.0F, -3.0F, 8, 18, 6, scale + 0.5F);
+		this.bipedBody.addBox(-4.0F, 1.0F, -2.0F, 8, 12, 4, scale + 0.75F);
 
 		this.bipedHead = new ModelRenderer(this, 0, 0);
 		this.bipedHead.setRotationPoint(0.0F, 0.0F, 0.0F);
-		this.bipedHead.addBox(-4.0F, -10.0F, -4.0F, 8, 10, 8, scale);
+		this.bipedHead.addBox(-4.0F, -10.0F, -4.0F, 8, 8, 8, scale);
 
 		this.bipedRightArm = new ModelRenderer(this, 40, 16);
 		this.bipedRightArm.addBox(-3.0F, -2.0F, -2.0F, 4, 12, 4, scale);
@@ -53,6 +53,9 @@ public class ModelCQRIllagerArmor extends ModelBiped {
 		this.bipedLeftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount * 0.5F;
 		this.bipedRightLeg.rotateAngleY = 0.0F;
 		this.bipedLeftLeg.rotateAngleY = 0.0F;
+		
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		
 		if (!ent.isAggressive() && !(ent.getHeldItemMainhand().getItem() instanceof ItemPotionHealing)) {
 			/*
 			 * this.arms.rotationPointY = 3.0F;
@@ -62,9 +65,19 @@ public class ModelCQRIllagerArmor extends ModelBiped {
 			float angle = new Float(Math.toRadians(-42.97));
 			this.setRotateAngle(this.bipedLeftArm, angle, 0, 0);
 			this.setRotateAngle(this.bipedRightArm, angle, 0, 0);
-		} else {
-			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		}
+		
+		if (this.isRiding)
+        {
+            //this.bipedRightArm.rotateAngleX += -((float)Math.PI / 5F);
+            //this.bipedLeftArm.rotateAngleX += -((float)Math.PI / 5F);
+            this.bipedRightLeg.rotateAngleX = -1.4137167F;
+            this.bipedRightLeg.rotateAngleY = ((float)Math.PI / 10F);
+            this.bipedRightLeg.rotateAngleZ = 0.07853982F;
+            this.bipedLeftLeg.rotateAngleX = -1.4137167F;
+            this.bipedLeftLeg.rotateAngleY = -((float)Math.PI / 10F);
+            this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
+        }
 
 		AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = ((EntityCQRIllager) entityIn).getIllagerArmPose();
 
