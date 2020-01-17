@@ -11,9 +11,11 @@ public class ModelCQREndermanArmor extends ModelBiped {
 
 	public boolean isCarrying;
 	public boolean isAttacking;
+	public boolean isLegs;
 
 	public ModelCQREndermanArmor(float scale, boolean legs) {
 		super(scale);
+		this.isLegs = legs;
 		this.bipedHead.setRotationPoint(0.0F, -14.0F, 0.0F);
 		this.bipedHeadwear.setRotationPoint(0.0F, -14.0F, 0.0F);
 		this.bipedBody.setRotationPoint(0.0F, -14.0F, 0.0F);
@@ -21,14 +23,22 @@ public class ModelCQREndermanArmor extends ModelBiped {
 		this.bipedLeftArm.setRotationPoint(5.0F, -12.0F, 0.0F);
 		if (legs) {
 			this.bipedRightLeg = new ModelRenderer(this, 0, 16);
-			this.bipedRightLeg.addBox(-2.0F, 4.0F, -2.0F, 4, 12, 4, scale);
+			this.bipedRightLeg.addBox(-2.0F, 3.75F, -2.0F, 4, 12, 4, scale );
 			this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-			this.bipedLeftLeg.addBox(-2.0F, 4.0F, -2.0F, 4, 12, 4, scale);
+			this.bipedLeftLeg.addBox(-2.0F, 3.75F, -2.0F, 4, 12, 4, scale);
+			
+			ModelRenderer abR = new ModelRenderer(this, 0, 16);
+			abR.addBox(-2, 13.5F, -2, 4, 12, 4, scale);
+			this.bipedRightLeg.addChild(abR);
+			
+			ModelRenderer abL = new ModelRenderer(this, 0, 16);
+			abL.addBox(-2, 13.5F, -2, 4, 12, 4, scale);
+			this.bipedLeftLeg.addChild(abL);
 		} else {
 			this.bipedRightLeg = new ModelRenderer(this, 0, 16);
-			this.bipedRightLeg.addBox(-2.0F, 18.0F, -2.0F, 4, 12, 4, scale);
+			this.bipedRightLeg.addBox(-2.0F, 17.25F, -2.0F, 4, 12, 4, scale);
 			this.bipedLeftLeg = new ModelRenderer(this, 0, 16);
-			this.bipedLeftLeg.addBox(-2.0F, 18.0F, -2.0F, 4, 12, 4, scale);
+			this.bipedLeftLeg.addBox(-2.0F, 17.25F, -2.0F, 4, 12, 4, scale);
 		}
 		this.bipedRightLeg.setRotationPoint(-2.0F, -2.0F, 0.0F);
 		this.bipedLeftLeg.mirror = true;
@@ -37,19 +47,20 @@ public class ModelCQREndermanArmor extends ModelBiped {
 
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		/*
-		 * this.bipedHead.render(scale);
-		 * this.bipedBody.render(scale);
-		 * 
-		 * GlStateManager.pushMatrix();
-		 * GlStateManager.scale(1, 1.5, 1);
-		 * this.bipedRightArm.render(scale);
-		 * this.bipedRightLeg.render(scale);
-		 * this.bipedLeftArm.render(scale);
-		 * this.bipedLeftLeg.render(scale);
-		 * GlStateManager.popMatrix();
-		 */
+		
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		  
+		  /*if(this.isLegs) {
+			  GlStateManager.pushMatrix();
+			  GlStateManager.scale(1, 1.5, 1);
+			  
+			  this.bipedRightLeg.render(scale);
+			  this.bipedLeftLeg.render(scale);
+			  
+			  GlStateManager.popMatrix();
+		  }*/
+		 
+		
 	}
 
 	@Override
