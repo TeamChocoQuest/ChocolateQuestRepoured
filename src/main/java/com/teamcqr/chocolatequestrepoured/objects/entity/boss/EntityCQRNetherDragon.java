@@ -4,6 +4,12 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIChargeAtTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAISpiralUpOrDown;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 
@@ -37,7 +43,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
+public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 
 	public enum EDragonMovementState {
 		CHARGING,
@@ -123,6 +129,19 @@ public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntity
 		}
 
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIAttackRanged(this, 1.1, 30, 60, 40));
+		this.tasks.addTask(6, new BossAIChargeAtTarget(this));
+		//this.tasks.addTask(7, new BossAIFlyToLocation(this));
+		this.tasks.addTask(8, new BossAISpiralUpOrDown(this));
+		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
@@ -235,7 +254,7 @@ public class EntityCQRNetherDragon extends /* AbstractEntityCQR */AbstractEntity
 		 * }
 		 */
 
-		// TODO: Attack stuff
+		// TODO: Attack stuff -> in updateAI
 
 	}
 

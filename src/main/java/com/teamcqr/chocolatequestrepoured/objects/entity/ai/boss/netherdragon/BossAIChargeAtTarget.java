@@ -4,7 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon.ENetherDragonAttacks;
 
-public class BossAIChargeAtPlayer extends AbstractCQREntityAI {
+public class BossAIChargeAtTarget extends AbstractCQREntityAI {
 
 	protected static final int maxTargetDistance = 128;
 	protected static final double chargingSpeed = 2.5D;
@@ -13,7 +13,7 @@ public class BossAIChargeAtPlayer extends AbstractCQREntityAI {
 
 	private int attackCooldown = 40;
 
-	public BossAIChargeAtPlayer(EntityCQRNetherDragon dragon) {
+	public BossAIChargeAtTarget(EntityCQRNetherDragon dragon) {
 		super(dragon);
 	}
 
