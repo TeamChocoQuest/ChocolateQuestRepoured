@@ -5,7 +5,6 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -31,7 +30,6 @@ public class CastleDungeon extends DungeonBase {
 	private Block roofBlock = Blocks.OAK_STAIRS;
 	private Block floorBlock = Blocks.PLANKS;
 	private Block stairBlock = Blocks.STONE_BRICK_STAIRS;
-	private EDungeonMobType bossMob = EDungeonMobType.DEFAULT;
 
 	@Override
 	public IDungeonGenerator getGenerator() {
@@ -40,7 +38,6 @@ public class CastleDungeon extends DungeonBase {
 
 	public CastleDungeon(File configFile) {
 		super(configFile);
-		boolean success = true;
 		Properties prop = this.loadConfig(configFile);
 		if (prop != null) {
 			this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
@@ -51,8 +48,6 @@ public class CastleDungeon extends DungeonBase {
 			this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
 			this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
 			this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
-
-			this.bossMob = EDungeonMobType.byString(prop.getProperty("bossMob", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
 
 			this.random = new Random();
 
@@ -120,7 +115,4 @@ public class CastleDungeon extends DungeonBase {
 		return this.random;
 	}
 
-	public EDungeonMobType getBossMob() {
-		return this.bossMob;
-	}
 }

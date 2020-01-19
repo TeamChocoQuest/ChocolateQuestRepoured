@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
+import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorBull;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorHeavy;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTransparent;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTurtle;
@@ -14,6 +15,9 @@ public class ModArmorModels {
 
 	public static ModelArmorTurtle turtleArmor = new ModelArmorTurtle(0.5F);
 	public static ModelArmorTurtle turtleArmorLegs = new ModelArmorTurtle(0.25F);
+	
+	public static ModelArmorBull bullArmor = new ModelArmorBull(0.5F);
+	public static ModelArmorBull bullArmorLegs = new ModelArmorBull(0.25F);
 
 	//This is supposed! Reason: If future version have a separate model for the heavy diamond armor, adaption isnt really needed
 	public static ModelArmorHeavy heavyIronArmor = new ModelArmorHeavy(1F);
