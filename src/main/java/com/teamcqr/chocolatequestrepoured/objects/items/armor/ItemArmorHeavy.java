@@ -14,6 +14,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemArmorHeavy extends ArmorCQRBase {
 
@@ -49,6 +51,7 @@ public class ItemArmorHeavy extends ArmorCQRBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		ModelBiped armor = armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 		if (itemStack.getItem() instanceof ItemArmor) {

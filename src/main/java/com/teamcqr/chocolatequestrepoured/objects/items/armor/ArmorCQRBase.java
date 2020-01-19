@@ -18,6 +18,7 @@ public abstract class ArmorCQRBase extends ItemArmor {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
 	}
 
+	@SideOnly(Side.CLIENT)
 	public abstract ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot);
 
 	@Override
