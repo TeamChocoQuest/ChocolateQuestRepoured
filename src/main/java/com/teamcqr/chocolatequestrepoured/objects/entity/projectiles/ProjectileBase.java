@@ -20,6 +20,7 @@ public abstract class ProjectileBase extends EntityThrowable {
 
 	public ProjectileBase(World worldIn, EntityLivingBase shooter) {
 		super(worldIn, shooter);
+		this.thrower = shooter;
 		this.isImmuneToFire = true;
 	}
 
