@@ -59,6 +59,7 @@ public class ItemBackpack extends ArmorCQRBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return ModArmorModels.backpack;
 	}
