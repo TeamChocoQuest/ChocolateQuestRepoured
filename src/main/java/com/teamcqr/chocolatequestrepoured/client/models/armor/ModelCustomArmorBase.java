@@ -237,6 +237,11 @@ public class ModelCustomArmorBase extends ModelBiped {
 			this.bipedRightLeg.isHidden = true;
 			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			return;
+		} else {
+			this.bipedLeftLeg.showModel = true;
+			this.bipedRightLeg.showModel = true;
+			this.bipedLeftLeg.isHidden = false;
+			this.bipedRightLeg.isHidden = false;
 		}
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 	}
