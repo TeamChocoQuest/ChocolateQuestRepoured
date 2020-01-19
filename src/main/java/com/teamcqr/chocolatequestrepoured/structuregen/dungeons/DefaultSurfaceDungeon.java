@@ -62,7 +62,11 @@ public class DefaultSurfaceDungeon extends DungeonBase {
 
 			PlacementSettings settings = new PlacementSettings();
 			settings.setMirror(Mirror.NONE);
-			settings.setRotation(Rotation.NONE);
+			if (this.rotateDungeon()) {
+				settings.setRotation(Rotation.values()[random.nextInt(4)]);
+			} else {
+				settings.setRotation(Rotation.NONE);
+			}
 			settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 			settings.setIntegrity(1.0F);
 

@@ -100,7 +100,6 @@ public class ItemArmorTurtle extends ArmorCQRBase {
 					double x = entity.posX - hitVec.x;
 					double z = entity.posZ - hitVec.z;
 					double yaw = Math.toDegrees(Math.atan2(-x, z));
-					double yaw2 = (double) entity.renderYawOffset;
 
 					if (ItemUtil.compareRotations((double) entity.renderYawOffset, yaw, 50.0D)) {
 						double y = (entity.posY + (double) entity.height * 0.5D) - hitVec.y;
@@ -124,6 +123,7 @@ public class ItemArmorTurtle extends ArmorCQRBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
