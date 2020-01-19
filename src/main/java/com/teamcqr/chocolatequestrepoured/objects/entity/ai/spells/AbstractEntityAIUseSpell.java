@@ -26,6 +26,9 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 	 */
 	@Override
 	public boolean shouldExecute() {
+		if(!this.entity.isReadyToCastSpell()) {
+			return false;
+		}
 		if (this.entity.getAttackTarget() == null) {
 			this.entity.setSpellCasting(false);
 			this.entity.setSpellType(ESpellType.NONE);
@@ -77,6 +80,7 @@ public abstract class AbstractEntityAIUseSpell extends AbstractCQREntityAI {
 
 		if (this.spellWarmup == 0) {
 			this.castSpell();
+			this.entity.startSpellDelay();
 			this.entity.setSpellCasting(false);
 			this.entity.setSpellType(ESpellType.NONE);
 			this.entity.playSound(this.getSpellType().getSpellSound(), 1.0F, 1.0F);

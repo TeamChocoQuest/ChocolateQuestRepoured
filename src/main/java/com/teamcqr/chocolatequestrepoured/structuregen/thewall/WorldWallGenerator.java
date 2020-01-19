@@ -33,6 +33,9 @@ public class WorldWallGenerator implements IWorldGenerator {
 		if (world.isRemote) {
 			return;
 		}
+		if(world.provider.getDimension() != 0) {
+			return;
+		}
 		// Check if it is the wall region
 		if (this.isWallRegion(chunkX, chunkZ, world)) {
 			// TODO: Spawn some camps or outposts here or place random enemies.... Maybe even add a dungeon type that can spawn here?
