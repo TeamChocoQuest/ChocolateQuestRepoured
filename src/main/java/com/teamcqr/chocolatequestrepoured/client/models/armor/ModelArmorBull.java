@@ -21,8 +21,9 @@ public class ModelArmorBull extends ModelCustomArmorBase {
     public ModelRenderer shoulderHornL2;
     public ModelRenderer shoulderHornL3;
 
-    public ModelArmorBull(float scale) {
-    	super(scale, 128, 128);
+    public ModelArmorBull(float scaleIn) {
+    	super(scaleIn, 128, 128);
+    	float scale = scaleIn * 0.75F;
         this.pauldronL1 = new ModelRenderer(this, 64, 0);
         this.pauldronL1.setRotationPoint(2.5F, 1.0F, 0.0F);
         this.pauldronL1.addBox(0.0F, -1.0F, -2.0F, 3, 2, 4, scale);
