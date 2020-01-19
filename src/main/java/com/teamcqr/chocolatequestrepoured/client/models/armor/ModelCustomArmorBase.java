@@ -231,9 +231,11 @@ public class ModelCustomArmorBase extends ModelBiped {
 			this.isRiding = false;
 		}
 		if(entityIn instanceof EntityCQRTriton) {
-			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			this.bipedLeftLeg.showModel = false;
 			this.bipedRightLeg.showModel = false;
+			this.bipedLeftLeg.isHidden = true;
+			this.bipedRightLeg.isHidden = true;
+			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			return;
 		}
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
