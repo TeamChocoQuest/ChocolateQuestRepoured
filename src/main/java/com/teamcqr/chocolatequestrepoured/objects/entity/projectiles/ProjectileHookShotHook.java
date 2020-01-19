@@ -28,6 +28,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
 
+	//Impact position is a position instead of Rotations, but the structure stores 3 floats so it works nicely
 	protected static final DataParameter<Rotations> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
 	protected static final DataParameter<Boolean> IS_PULLING = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Optional<UUID>> SHOOTER_UUID = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
@@ -99,7 +100,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				IBlockState state = this.world.getBlockState(result.getBlockPos());
 
 				if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-					System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
+					//System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
 					this.zeroizeHookVelocity();
 					this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
 					dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
@@ -157,7 +158,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			if (shooterUUID.isPresent() && player.getUniqueID() == shooterUUID.get()) {
 				// Calculate the vector between this player and the hook
 				Vec3d playerPos = player.getPositionVector();
-				Vec3d impactLocation = getImpactLocationVec3d();
+				Vec3d impactLocation = this.getPositionVector();
 
 				double distanceToHook = playerPos.distanceTo(impactLocation);
 
@@ -187,7 +188,10 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.dataManager.set(IMPACT_POS, new Rotations(x, y, z));
 
 		this.dataManager.set(IS_PULLING, compound.getBoolean("cqrdata.isPulling"));
-		this.dataManager.set(SHOOTER_UUID, Optional.of(compound.getUniqueId("cqrdata.shooterUUID")));
+
+		if (compound.hasKey("cqrdata.shooterUUID")) {
+			this.dataManager.set(SHOOTER_UUID, Optional.of(compound.getUniqueId("cqrdata.shooterUUID")));
+		}
 	}
 
 	@Override
@@ -202,13 +206,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		UUID shooter;
 		if (this.dataManager.get(SHOOTER_UUID).isPresent())
 		{
-			shooter = this.dataManager.get(SHOOTER_UUID).get();
+			compound.setUniqueId("cqrdata.shooterUUID", this.dataManager.get(SHOOTER_UUID).get());
 		}
-		else
-		{
-			shooter = UUID.fromString("0");
-		}
-		compound.setUniqueId("cqrdata.shooterUUID", shooter);
 	}
 
 	private void startPulling()
