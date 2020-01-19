@@ -85,10 +85,10 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 
 	private void placeBossSpawner(World world, CastleDungeon dungeon, BlockPos pos) {
 		ResourceLocation resLoc;
-		if (dungeon.getBossMob() == EDungeonMobType.DEFAULT) {
+		if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
 			resLoc = EDungeonMobType.getMobTypeDependingOnDistance(pos.getX(), pos.getZ()).getBossResourceLocation();
 		} else {
-			resLoc = dungeon.getBossMob().getBossResourceLocation();
+			resLoc = dungeon.getDungeonMob().getBossResourceLocation();
 		}
 		Entity mobEntity = EntityList.createEntityByIDFromName(resLoc, world);
 
