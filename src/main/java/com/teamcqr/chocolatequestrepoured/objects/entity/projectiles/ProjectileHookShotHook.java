@@ -1,8 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPullPacket;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,9 +21,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ProjectileHookShotHook extends ProjectileBase {
 	public static final double STOP_PULL_DISTANCE = 2.0; //If layer gets within this range of hook, stop pulling
@@ -63,6 +67,10 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	public void onUpdate() {
 		super.onUpdate();
 
+		if (this.thrower == null) {
+			this.setDead();
+		}
+
 		if (this.getThrower() != null && this.getThrower().isDead) {
 			stopPulling();
 			setDead();
@@ -88,7 +96,9 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			}
 
 		} else if (isPulling()) {
-			pullIfClientIsShooter();
+			if (this.world.isRemote) {
+				pullIfClientIsShooter();
+			}
 		}
 	}
 
@@ -147,6 +157,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	private void pullIfClientIsShooter()
 	{
 		//Must be client side to check this
