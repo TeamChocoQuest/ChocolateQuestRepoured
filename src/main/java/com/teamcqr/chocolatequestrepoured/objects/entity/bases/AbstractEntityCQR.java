@@ -113,6 +113,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private CQRFaction defaultFactionInstance;
 
 	protected boolean armorActive = false;
+	protected boolean readyToCastSpell = true;
+	protected int delayBetweenSpells = 100;
+	protected int spellDelay = 0;
 	protected int magicArmorCooldown = 300;
 
 	// Sync with client
@@ -156,6 +159,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void updateAITasks() {
 		super.updateAITasks();
 
+		if(spellDelay <= 0) {
+			this.readyToCastSpell = true;
+		} else {
+			spellDelay--;
+		}
+		
 		if (this.spellTicks > 0) {
 			--this.spellTicks;
 		}
@@ -262,6 +271,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			compound.setString("factionOverride", this.factionName);
 		}
 		compound.setInteger("textureIndex", this.dataManager.get(TEXTURE_INDEX));
+		compound.setInteger("spellDelay", this.spellDelay);
+		compound.setBoolean("readyToCastSpell", this.readyToCastSpell);
 		compound.setByte("usedHealingPotions", this.usedPotions);
 		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
@@ -284,6 +295,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (compound.hasKey("factionOverride")) {
 			this.setFaction(compound.getString("factionOverride"));
+		}
+		
+		if(compound.hasKey("readyToCastSpell")) {
+			this.readyToCastSpell = compound.getBoolean("readyToCastSpell");
+		}
+		if(compound.hasKey("spellDelay")) {
+			this.spellDelay = compound.getInteger("spellDelay");
 		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
@@ -964,6 +982,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void setMagicArmorCooldown(int val) {
 		this.magicArmorCooldown = val;
 		this.setMagicArmorActive(true);
+	}
+	
+	public void startSpellDelay() {
+		this.spellDelay = delayBetweenSpells;
+		this.readyToCastSpell = false;
+	}
+
+	public boolean isReadyToCastSpell() {
+		return readyToCastSpell;
 	}
 
 }

@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structureprot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
@@ -172,12 +174,20 @@ public class ProtectionHandler {
             		continue;
             	}
                 // Loop through all UUIDs of Entity Dependencies
+            	List<String> toRemove = new ArrayList<>();
                 for (String depUUID : region.getEntityDependenciesAsUUIDs()) {
                     // Check if UUIDs Equal
                     if (depUUID.equals(e.getEntity().getUniqueID().toString())) {
-                        region.removeEntityDependency(depUUID);
+                        toRemove.add(depUUID);
                     }
                 }
+                toRemove.forEach(new Consumer<String>() {
+
+					@Override
+					public void accept(String t) {
+						region.removeEntityDependency(t);
+					}
+				});
             }
         }
     }
