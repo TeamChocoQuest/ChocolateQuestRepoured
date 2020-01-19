@@ -157,8 +157,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			if (shooterUUID.isPresent() && player.getUniqueID() == shooterUUID.get()) {
 				// Calculate the vector between this player and the hook
 				Vec3d playerPos = player.getPositionVector();
-				Rotations impactLocFloat = dataManager.get(IMPACT_POS);
-				Vec3d impactLocation = new Vec3d(impactLocFloat.getX(), impactLocFloat.getY(), impactLocFloat.getZ());
+				Vec3d impactLocation = getImpactLocationVec3d();
 
 				double distanceToHook = playerPos.distanceTo(impactLocation);
 
@@ -243,5 +242,17 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		{
 			return null;
 		}
+	}
+
+	@Nullable
+	public Vec3d getImpactLocation()
+	{
+		return getImpactLocationVec3d();
+	}
+
+	private Vec3d getImpactLocationVec3d()
+	{
+		Rotations impactLocFloat = dataManager.get(IMPACT_POS);
+		return new Vec3d(impactLocFloat.getX(), impactLocFloat.getY(), impactLocFloat.getZ());
 	}
 }
