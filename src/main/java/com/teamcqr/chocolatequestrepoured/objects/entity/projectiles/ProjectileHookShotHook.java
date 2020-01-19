@@ -21,6 +21,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,6 +49,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range) {
 		super(worldIn, shooter);
+		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID()));
 		this.hookRange = range;
 	}
 
@@ -67,12 +69,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-
-		if (this.thrower == null) {
-			this.setDead();
-		}
-
 		if (this.getThrower() != null && this.getThrower().isDead) {
+			//System.out.println("Thrower is dead");
 			stopPulling();
 			setDead();
 		} else if (!this.world.isRemote && this.getThrower() instanceof EntityPlayerMP) {
@@ -81,9 +79,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
 			if (isPulling()) {
+				System.out.println("pulling");
 				checkForBlockedPath(shootingPlayer);
 
 				if (distanceToHook < STOP_PULL_DISTANCE) {
+					//System.out.println("Pull distance is below stop distance");
 					stopPulling();
 					//sendClientStopPacket(shootingPlayer);
 					setDead();
@@ -92,13 +92,28 @@ public class ProjectileHookShotHook extends ProjectileBase {
 					//sendClientPullPacket(shootingPlayer);
 				}
 			} else if (distanceToHook > hookRange) {
+				//System.out.println("Out of range");
 				zeroizeHookVelocity();
 				setDead();
 			}
 
 		} else if (isPulling()) {
 			if (this.world.isRemote) {
+				//System.out.println("Client pulling");
 				pullIfClientIsShooter();
+			}
+		}
+	}
+	
+	@Override
+	public void onEntityUpdate() {
+		super.onEntityUpdate();
+		if (this.getThrower() == null && this.getShooterUUID() == null) {
+			//System.out.println("thrower is null");
+			this.setDead();
+		} else if(this.getThrower() == null) {
+			if(!this.world.isRemote) {
+				this.thrower = (EntityLivingBase) ((WorldServer)this.world).getEntityFromUuid(this.getShooterUUID());
 			}
 		}
 	}
