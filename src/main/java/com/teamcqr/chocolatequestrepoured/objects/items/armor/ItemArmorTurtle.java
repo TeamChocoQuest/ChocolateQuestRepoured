@@ -123,6 +123,7 @@ public class ItemArmorTurtle extends ArmorCQRBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}

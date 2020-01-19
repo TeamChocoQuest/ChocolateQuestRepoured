@@ -20,7 +20,6 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
@@ -69,6 +68,7 @@ public class ItemArmorBull extends ArmorCQRBase {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.bullArmorLegs : ModArmorModels.bullArmor;
 	}
