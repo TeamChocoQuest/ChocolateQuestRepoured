@@ -178,7 +178,14 @@ public class ReflectionHelper {
 			}
 
 			// Combine Arrays
-			fieldsFromClass = (Field[]) ArrayCollectionMapManipulationUtil.combineArrays(fieldsFromClass, fieldsFromSuperclass);
+			//fieldsFromClass = (Field[]) ArrayCollectionMapManipulationUtil.combineArrays(fieldsFromClass, fieldsFromSuperclass);
+			Object[] tmpArr = ArrayCollectionMapManipulationUtil.combineArrays(fieldsFromClass, fieldsFromSuperclass);
+			fieldsFromClass = new Field[tmpArr.length];
+			for(int i = 0; i < tmpArr.length; i++) {
+				if(tmpArr[i] instanceof Field) {
+					fieldsFromClass[i] = (Field) tmpArr[i];
+				}
+			}
 
 		}
 
