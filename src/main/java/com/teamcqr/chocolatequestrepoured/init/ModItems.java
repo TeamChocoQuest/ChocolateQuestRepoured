@@ -39,6 +39,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSuperTool;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
@@ -243,6 +244,7 @@ public class ModItems {
 	public static final Item FEATHER_GOLDEN = Null();
 
 	// Other
+	public static final Item SUPER_TOOL = Null();
 	public static final Item POTION_HEALING = Null();
 	public static final Item TELEPORT_STONE = Null();
 	public static final Item SOUL_BOTTLE = Null();
@@ -370,6 +372,7 @@ public class ModItems {
 					setItemName(new Item(), "giant_spider_poison"),
 					setItemName(new ItemGoldenFeather(), "feather_golden"),
 
+					setItemName(new ItemSuperTool(), "super_tool"),
 					setItemName(new ItemPotionHealing(), "potion_healing"),
 					setItemName(new ItemTeleportStone(), "teleport_stone"),
 					setItemName(new ItemSoulBottle(), "soul_bottle"),
