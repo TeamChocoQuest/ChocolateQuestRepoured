@@ -289,7 +289,9 @@ public class ProtectionHandler {
         for (int dimID : this.activeRegions.keySet()) {
             // Check explosion pos against all active regions
             for (ProtectedRegion region : this.activeRegions.get(dimID)) {
-
+            	if(region == null) {
+            		continue;
+            	}
                 // Noop if different dim
                 if (dimID != e.getWorld().provider.getDimension()) {
                     // noop
