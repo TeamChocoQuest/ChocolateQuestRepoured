@@ -52,6 +52,9 @@ public abstract class SpawnerFactory {
 		NBTTagCompound[] entCompounds = new NBTTagCompound[entities.length];
 		for (int i = 0; i < entities.length; i++) {
 			Entity ent = entities[i];
+			if(ent == null) {
+				continue;
+			}
 			NBTTagCompound compound = new NBTTagCompound();
 			ent.writeToNBTOptional(compound);
 			compound.removeTag("UUIDLeast");
