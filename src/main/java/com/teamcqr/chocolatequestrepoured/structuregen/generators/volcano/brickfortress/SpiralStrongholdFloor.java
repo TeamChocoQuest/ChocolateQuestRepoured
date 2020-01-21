@@ -52,40 +52,40 @@ public class SpiralStrongholdFloor {
 			}
 			if(x == 0 && z == 0) {
 				if(rev) {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NE;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SE;
 					x += 1;
 				} else {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_EN;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_ES;
 					z += 1;
 				}
 				continue;
 			}
 			if(x == (sideLength -1) && z == (sideLength -1)) {
 				if(rev) {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SW;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NW;
 					x -= 1;
 				} else {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WS;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WN;
 					z -= 1;
 				}
 				continue;
 			}
 			if(x == 0 && z == (sideLength -1)) {
 				if(rev) {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_ES;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_EN;
 					z -= 1;
 				} else {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SE;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NE;
 					x += 1;
 				}
 				continue;
 			}
 			if(x == (sideLength -1) && z == 0) {
 				if(rev) {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WN;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_WS;
 					z += 1;
 				} else {
-					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_NW;
+					roomGrid[x][z] = ESpiralStrongholdRoomType.CURVE_SW;
 					x -= 1;
 				}
 				continue;

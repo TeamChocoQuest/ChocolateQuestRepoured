@@ -30,7 +30,8 @@ import net.minecraftforge.common.MinecraftForge;
  * GitHub: https://github.com/DerToaster98
  */
 public class VolcanoGenerator implements IDungeonGenerator {
-
+	//GENERATION TIME TOTAL: ~1.5 minutes
+	
 	// DONE: Make chests and blocks (stoneMat, CobbleMat, lavaMat, magmaMat, pathMat) customisable
 	// DONE: Lower chest and spawner chance
 

@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGeneratorWithArray;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.ESpiralStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -31,6 +32,7 @@ public class VolcanoDungeon extends DungeonBase {
 	private boolean buildDungeon = false;
 	private boolean damagedVolcano = true;
 	private boolean ores = true;
+	private boolean useArrayGenerator = false;
 	private int oreConcentration = 5;
 	private int maxHoleSize = 9;
 	private int minHeight = 100;
@@ -82,6 +84,7 @@ public class VolcanoDungeon extends DungeonBase {
 		if (prop != null) {
 			this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
 			this.buildDungeon = PropertyFileHelper.getBooleanProperty(prop, "buildDungeon", true);
+			this.useArrayGenerator = PropertyFileHelper.getBooleanProperty(prop, "useLessLagGenerator", false);
 			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
 			this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", 130);
 			this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", 5);
@@ -139,25 +142,12 @@ public class VolcanoDungeon extends DungeonBase {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return new VolcanoGenerator(this);
+		return useArrayGenerator ? new VolcanoGeneratorWithArray(this) : new VolcanoGenerator(this);
 	}
 
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-
-		// This generator sadly is too slow for no reason so we use the old one *sigh*
-		/*
-		 * System.out.println("Generating dungeon " + this.name + "... with maps");
-		 * 
-		 * //this.generator = new VolcanoGenerator(this);
-		 * this.generator = new VolcanoGeneratorWithMaps(this);
-		 * 
-		 * this.generator.generate(world, chunk, x, DungeonGenUtils.getHighestYAt(chunk, x, z, true), z);
-		 * 
-		 * 
-		 * System.out.println("Done!");
-		 */
 
 		System.out.println("Generating dungeon " + this.name + "... ");
 

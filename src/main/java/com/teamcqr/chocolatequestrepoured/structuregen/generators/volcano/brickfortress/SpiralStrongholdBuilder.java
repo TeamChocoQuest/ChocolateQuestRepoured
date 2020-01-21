@@ -35,22 +35,22 @@ public class SpiralStrongholdBuilder {
 		ESpiralStrongholdRoomType entranceType = ESpiralStrongholdRoomType.NONE;
 		switch(allowedDirection) {
 		case WEST:
-			entranceType = ESpiralStrongholdRoomType.CURVE_ES;
+			entranceType = ESpiralStrongholdRoomType.CURVE_EN;
 			entranceX = dungeon.getFloorSideLength() -1;
 			entranceZ = middle;
 			break;
 		case NORTH:
-			entranceType = ESpiralStrongholdRoomType.CURVE_NE;
+			entranceType = ESpiralStrongholdRoomType.CURVE_SE;
 			entranceX = middle;
 			entranceZ = dungeon.getFloorSideLength() -1;
 			break;
 		case SOUTH:
-			entranceType = ESpiralStrongholdRoomType.CURVE_SW;
+			entranceType = ESpiralStrongholdRoomType.CURVE_NW;
 			entranceX = middle;
 			entranceZ = 0;
 			break;
 		case EAST:
-			entranceType = ESpiralStrongholdRoomType.CURVE_WN;
+			entranceType = ESpiralStrongholdRoomType.CURVE_WS;
 			entranceX = 0;
 			entranceZ = middle;
 			break;
