@@ -195,6 +195,7 @@ gui.alchemy_bag.name=Alchemy Bag
 description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
 
 //Other
+item.super_tool.name=Super Tool (Creative Only)
 item.potion_healing.name=Healing Potion
 item.teleport_stone.name=Teleport Stone
 item.soul_bottle.name=Soul Bottle
