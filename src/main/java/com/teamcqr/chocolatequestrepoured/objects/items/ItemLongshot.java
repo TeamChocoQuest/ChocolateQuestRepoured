@@ -12,7 +12,7 @@ public class ItemLongshot extends ItemHookshotBase {
 
     @Override
     double getHookRange() {
-        return 40.0;
+        return 30.0;
     }
 
     @Override
