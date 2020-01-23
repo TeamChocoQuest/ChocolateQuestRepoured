@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPullPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShitPlayerStopPacket;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -78,6 +78,13 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		// Make player move very slowly while the hook is flying
+		if (!isPulling() && this.getThrower() instanceof EntityPlayerMP) {
+			zeroizePlayerVelocity((EntityPlayerMP)this.getThrower());
+		}
+
+		// Remove the projectile if the shooter is dead
 		if (this.getThrower() != null && this.getThrower().isDead) {
 			stopPulling();
 			setDead();
@@ -155,14 +162,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.velocityChanged = true;
 	}
 
-	private void sendClientPullPacket(EntityPlayerMP shootingPlayer) {
-		HookShotPullPacket pullPacket = new HookShotPullPacket(true, getPullSpeed(), impactLocation);
-		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
-	}
-
-	private void sendClientStopPacket(EntityPlayerMP shootingPlayer) {
-		HookShotPullPacket pullPacket = new HookShotPullPacket(false, 0.0, impactLocation);
-		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+	private void zeroizePlayerVelocity(EntityPlayerMP shootingPlayer) {
+		if (!this.world.isRemote) {
+			HookShitPlayerStopPacket pullPacket = new HookShitPlayerStopPacket();
+			CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+		}
 	}
 
 	// Check for no movement in the shooting player and stop pulling if they are blocked
