@@ -161,13 +161,9 @@ public class DungeonRegistry {
 			return new VolcanoDungeon(dungeonPropertiesFile);
 		case CLASSIC_STRONGHOLD:
 			return new StrongholdLinearDungeon(dungeonPropertiesFile);
-		case JUNGLE_CAVE:
-			// TODO Jungle cave generator
-			CQRMain.logger.warn("Dungeon Generator JUNGLE_CAVE is not yet implemented!");
-			break;
-		case SWAMP_CAVE:
+		case GREEN_CAVE:
 			// TODO SWAMP CAVE GENERATOR
-			CQRMain.logger.warn("Dungeon Generator SWAMP_CAVE is not yet implemented!");
+			CQRMain.logger.warn("Dungeon Generator GREEN_CAVE is not yet implemented!");
 			break;
 		default:
 			return null;
