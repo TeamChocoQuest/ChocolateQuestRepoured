@@ -16,8 +16,7 @@ public enum EDungeonGenerator {
 	TEMPLATE_OCEAN_FLOOR("template_ocean_floor"),
 	STRONGHOLD("stronghold"),
 	CLASSIC_STRONGHOLD("classic_stronghold"),
-	JUNGLE_CAVE("jungle_cave"),
-	SWAMP_CAVE("swamp_cave"),
+	GREEN_CAVE("green_cave"),
 	GUARDED_CASTLE("guarded_castle"),
 	CASTLE("castle"),
 	VOLCANO("volcano");
