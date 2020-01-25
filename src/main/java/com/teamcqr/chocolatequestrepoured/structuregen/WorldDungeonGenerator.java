@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -43,7 +44,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if (DungeonGenUtils.isInWallRange(world, chunkX, chunkZ)) {
 			return;
 		}
-
+		
 		boolean behindWall = false;
 		int dungeonSeparation = CQRConfig.general.dungeonSeparation;
 
@@ -58,6 +59,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
 		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)
 				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
+			//Check if there is a village structure nearby
+			int checkDist = 160;
+			if(world.getVillageCollection().getNearestVillage(new BlockPos(chunkX * 16, world.getHeight(chunkX, chunkZ), chunkZ * 16), checkDist) != null) {
+				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
+				return;
+			}
+			
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
 
 			// Overall dungeon spawn chance
