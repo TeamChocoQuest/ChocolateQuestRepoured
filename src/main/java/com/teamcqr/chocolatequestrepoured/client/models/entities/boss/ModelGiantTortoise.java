@@ -1,13 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
 
 /**
  * CQRTurtleBossShell - DerToaster Created using Tabula 7.0.1
@@ -236,54 +232,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		boolean renderSubParts = true;
-		EntityCQRGiantTortoise ent = (EntityCQRGiantTortoise) entity;
-
-		if (ent.shouldModelReset()) {
-			this.resetParts(false);
-			ent.setAnimationChanged(false);
-		}
-		for (ModelRenderer part : this.subParts) {
-			part.showModel = renderSubParts;
-		}
-		
-		super.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-		
+		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		this.mainPart.render(scale);
-	}
-
-	private void resetParts(boolean applyOffsets) {
-		this.mainPart.offsetY = 0F;
-		this.head.offsetZ = -9F;
-		this.jaw.rotateAngleX = 0F;
-
-		for (ModelRenderer joint : this.legJoints) {
-			if (applyOffsets) {
-				joint.offsetX = -5F;
-				joint.offsetY = -5F;
-				joint.offsetZ = -5F;
-			}
-		}
-		this.setRotateAngle(this.legJointFL, 0, -0.7853981633974483F, 0);
-		this.setRotateAngle(this.legJointFR, 0, 0.7853981633974483F, 0);
-		this.setRotateAngle(this.legJointBR, 0, 2.356194490192345F, 0);
-		this.setRotateAngle(this.legJointBL, 0, -2.356194490192345F, 0);
-		for (ModelRenderer knee : this.knees) {
-			this.setRotateAngle(knee, -0.7853981633974483F, 0F, 0F);
-			if (applyOffsets) {
-				knee.offsetX = -4F;
-				knee.offsetY = 0F;
-				knee.offsetZ = 0F;
-			}
-		}
-		for (ModelRenderer foot : this.feet) {
-			this.setRotateAngle(foot, 0.7853981633974483F, 0F, 0F);
-			if (applyOffsets) {
-				foot.offsetX = -3.5F;
-				foot.offsetY = 0F;
-				foot.offsetZ = 0F;
-			}
-		}
 	}
 
 	/**
@@ -297,7 +247,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
-		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		resetToDefaultPose();
+		/*super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		boolean renderParts = true;
 		EntityCQRGiantTortoise entity = (EntityCQRGiantTortoise) entityIn;
 		float anglePerStep = new Float(Math.toRadians(45)) / 60;
@@ -460,6 +411,6 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		}
 
-		// DONE: Properly make leg animation
+		// DONE: Properly make leg animation*/
 	}
 }
