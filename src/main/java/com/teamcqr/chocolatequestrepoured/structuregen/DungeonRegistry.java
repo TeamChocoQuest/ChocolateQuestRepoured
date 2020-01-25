@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.apache.commons.io.FileUtils;
 
@@ -46,6 +47,8 @@ public class DungeonRegistry {
 	private Map<ResourceLocation, Set<DungeonBase>> biomeDungeonMap = new HashMap<ResourceLocation, Set<DungeonBase>>();
 	private Map<BiomeDictionary.Type, Set<DungeonBase>> biomeTypeDungeonMap = new HashMap<BiomeDictionary.Type, Set<DungeonBase>>();
 	private Set<DungeonBase> coordinateSpecificDungeons = new HashSet<DungeonBase>();
+	
+	private Map<World, Set<String>> worldDungeonSpawnedMap = new HashMap<World, Set<String>>();
 
 	public static DungeonRegistry getInstance() {
 		return instance;
@@ -197,6 +200,14 @@ public class DungeonRegistry {
 				this.biomeTypeDungeonMap.put(biomeType, new HashSet<DungeonBase>());
 			}
 		}
+		
+		//Handling unique dungeons
+		dungeons.removeIf(new Predicate<DungeonBase>() {
+			@Override
+			public boolean test(DungeonBase t) {
+				return hasUniqueDungeonAlreadyBeenSpawned(world, t.getDungeonName());
+			}
+		});
 
 		return dungeons;
 	}
@@ -282,6 +293,33 @@ public class DungeonRegistry {
 				return true;
 			}
 		}
+		return false;
+	}
+	
+	public void insertDungeonEntries(World world, String... dungeonNames) {
+		Set<String> set = new HashSet<String>();
+		for(String s : dungeonNames) {
+			set.add(s);
+		}
+		insertDungeonEntries(world, set);
+	}
+	
+	public void insertDungeonEntries(World world, Set<String> dungeonNames) {
+		Set<String> spawnedDungeons = worldDungeonSpawnedMap.getOrDefault(world, new HashSet<String>());
+		//Load NBT file and store the values
+		for(String s : dungeonNames) {
+			spawnedDungeons.add(s);
+		}
+		worldDungeonSpawnedMap.put(world, spawnedDungeons);
+	}
+	
+	public boolean hasUniqueDungeonAlreadyBeenSpawned(World world, String dungeonName) {
+		for(String s : worldDungeonSpawnedMap.getOrDefault(world, new HashSet<String>())) {
+			if(dungeonName.equalsIgnoreCase(s)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
