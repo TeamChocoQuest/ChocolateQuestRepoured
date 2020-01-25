@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPullPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShitPlayerStopPacket;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -26,9 +26,17 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ProjectileHookShotHook extends ProjectileBase {
+	private enum HookPhase
+	{
+		OUT,
+		BACK
+	}
+
 	public static final double STOP_PULL_DISTANCE = 2.0; //If layer gets within this range of hook, stop pulling
 	private Vec3d impactLocation = null; //where the hook intersects a block
 	private double hookRange = 20.0; //Max range of the hook before it stops extending
+	private HookPhase phase = HookPhase.OUT; //Out for moving away from shooter, back for coming back
+	private Vec3d startLocation = null;
 
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
@@ -50,6 +58,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range) {
 		super(worldIn, shooter);
 		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID()));
+		this.startLocation = shooter.getPositionVector();
 		this.hookRange = range;
 	}
 
@@ -69,37 +78,41 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		// Make player move very slowly while the hook is flying
+		if (!isPulling() && this.getThrower() instanceof EntityPlayerMP) {
+			zeroizePlayerVelocity((EntityPlayerMP)this.getThrower());
+		}
+
+		// Remove the projectile if the shooter is dead
 		if (this.getThrower() != null && this.getThrower().isDead) {
-			//System.out.println("Thrower is dead");
 			stopPulling();
 			setDead();
+
 		} else if (!this.world.isRemote && this.getThrower() instanceof EntityPlayerMP) {
 			EntityPlayerMP shootingPlayer = (EntityPlayerMP) this.getThrower();
 			Vec3d playerPos = shootingPlayer.getPositionVector();
 			double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
 			if (isPulling()) {
-				System.out.println("pulling");
 				checkForBlockedPath(shootingPlayer);
 
 				if (distanceToHook < STOP_PULL_DISTANCE) {
-					//System.out.println("Pull distance is below stop distance");
 					stopPulling();
-					//sendClientStopPacket(shootingPlayer);
 					setDead();
 				}
-				else {
-					//sendClientPullPacket(shootingPlayer);
-				}
-			} else if (distanceToHook > hookRange) {
-				//System.out.println("Out of range");
+
+			} else if (this.phase == HookPhase.OUT && distanceToHook > hookRange) {
+				reverseHookVelocity();
+				this.phase = HookPhase.BACK;
+
+			} else if (this.phase == HookPhase.BACK && distanceToHook < STOP_PULL_DISTANCE) {
 				zeroizeHookVelocity();
 				setDead();
 			}
 
 		} else if (isPulling()) {
 			if (this.world.isRemote) {
-				//System.out.println("Client pulling");
 				pullIfClientIsShooter();
 			}
 		}
@@ -109,7 +122,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	public void onEntityUpdate() {
 		super.onEntityUpdate();
 		if (this.getThrower() == null && this.getShooterUUID() == null) {
-			//System.out.println("thrower is null");
 			this.setDead();
 		} else if(this.getThrower() == null) {
 			if(!this.world.isRemote) {
@@ -125,7 +137,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				IBlockState state = this.world.getBlockState(result.getBlockPos());
 
 				if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-					//System.out.println("Hit " + state.getBlock() + " block at " + result.getBlockPos());
 					this.zeroizeHookVelocity();
 					this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
 					dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
@@ -144,14 +155,18 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.velocityChanged = true;
 	}
 
-	private void sendClientPullPacket(EntityPlayerMP shootingPlayer) {
-		HookShotPullPacket pullPacket = new HookShotPullPacket(true, getPullSpeed(), impactLocation);
-		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+	private void reverseHookVelocity() {
+		this.motionX = -this.motionX;
+		this.motionY = -this.motionY;
+		this.motionZ = -this.motionZ;
+		this.velocityChanged = true;
 	}
 
-	private void sendClientStopPacket(EntityPlayerMP shootingPlayer) {
-		HookShotPullPacket pullPacket = new HookShotPullPacket(false, 0.0, impactLocation);
-		CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+	private void zeroizePlayerVelocity(EntityPlayerMP shootingPlayer) {
+		if (!this.world.isRemote) {
+			HookShitPlayerStopPacket pullPacket = new HookShitPlayerStopPacket();
+			CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
+		}
 	}
 
 	// Check for no movement in the shooting player and stop pulling if they are blocked
