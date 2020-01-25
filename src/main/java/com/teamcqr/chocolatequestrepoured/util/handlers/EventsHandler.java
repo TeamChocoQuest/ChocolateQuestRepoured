@@ -158,7 +158,7 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onDungeonGenerate(CQDungeonStructureGenerateEvent e) {
 		if (!e.getWorld().isRemote) {
-			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getDungeon(), e.getPos());
+			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getWorld(), e.getDungeon(), e.getPos());
 		}
 	}
 

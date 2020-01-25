@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
@@ -73,6 +74,18 @@ public class CQRDataFileManager {
 					CQRDataFileManager.this.uniqueDungeonsSpawnedInWorld.add(stringTag.getString());
 				}
 			});
+			NBTTagList dungeonsSpawned = this.getOrCreateTagList(rootTag, "structuredata", Constants.NBT.TAG_COMPOUND);
+			Set<String> dungeonNames = new HashSet<String>();
+			dungeonsSpawned.forEach(new Consumer<NBTBase>() {
+
+				@Override
+				public void accept(NBTBase tag) {
+					NBTTagCompound nbt = (NBTTagCompound) tag;
+					dungeonNames.add(nbt.getString("name"));
+				}
+				
+			});
+			DungeonRegistry.getInstance().insertDungeonEntries(world, dungeonNames);
 		}
 
 		// After loading all values, we close the file
@@ -177,10 +190,12 @@ public class CQRDataFileManager {
 		return comp;
 	}
 
-	public void handleDungeonGeneration(DungeonBase dungeon, BlockPos position) {
+	public void handleDungeonGeneration(World world, DungeonBase dungeon, BlockPos position) {
 		if (dungeon.isUnique()) {
 			this.uniqueDungeonsSpawnedInWorld.add(dungeon.getDungeonName());
 		}
+		DungeonRegistry.getInstance().insertDungeonEntries(world, dungeon.getDungeonName());
+		
 		DataEntryDungeon dataEntry = new DataEntryDungeon(dungeon.getDungeonName(), position);
 		this.entriesToBeSaved.add(dataEntry);
 		System.out.println("Entry added!");
