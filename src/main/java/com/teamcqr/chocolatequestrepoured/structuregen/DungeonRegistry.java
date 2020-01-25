@@ -201,11 +201,12 @@ public class DungeonRegistry {
 			}
 		}
 		
-		//Handling unique dungeons
+		//Handling unique dungeons and dungeon dependencies
 		dungeons.removeIf(new Predicate<DungeonBase>() {
 			@Override
 			public boolean test(DungeonBase t) {
-				return hasUniqueDungeonAlreadyBeenSpawned(world, t.getDungeonName());
+				boolean dependenciesMissing = t.dependsOnOtherStructures() && isDungeonMissingDependencies(world, t);
+				return hasUniqueDungeonAlreadyBeenSpawned(world, t.getDungeonName()) || dependenciesMissing;
 			}
 		});
 
@@ -320,6 +321,22 @@ public class DungeonRegistry {
 			}
 		}
 		
+		return false;
+	}
+	
+	private boolean isDungeonMissingDependencies(World world, DungeonBase t) {
+		Set<String> spawned = worldDungeonSpawnedMap.getOrDefault(world, new HashSet<String>());
+		if(spawned.size() <= 0) {
+			return true;
+		}
+		for(String s : t.getDungeonDependencies()) {
+			int size = spawned.size();
+			spawned.add(s);
+			if(spawned.size() != size) {
+				spawned.remove(s);
+				return true;
+			}
+		}
 		return false;
 	}
 
