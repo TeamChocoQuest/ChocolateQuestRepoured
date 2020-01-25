@@ -24,11 +24,16 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
+		//Check if structures can actually spawn in the world
+		if(!world.getWorldInfo().isMapFeaturesEnabled()) {
+			return;
+		}
+				
 		// Check for flat world type and if dungeons may spawn there
 		if (world.getWorldType() == WorldType.FLAT && !CQRConfig.general.dungeonsInFlat) {
 			return;
 		}
-
+		
 		// Spawn all coordinate specific dungeons for this chunk
 		Set<DungeonBase> coordinateSpecificDungeons = DungeonGenUtils.getLocSpecDungeonsForChunk(world, chunkX, chunkZ);
 		if (!coordinateSpecificDungeons.isEmpty()) {
