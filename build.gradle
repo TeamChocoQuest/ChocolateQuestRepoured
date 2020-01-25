@@ -4,7 +4,6 @@ buildscript {
         maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
-		deobfCompile "net.ilexiconn:llibrary:1.7.19-1.12.2" 
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }
@@ -27,7 +26,16 @@ minecraft {
     makeObfSourceJar = false
 }
 
-dependencies {}
+repositories { 
+	maven { 
+		url "https://maven.mcmoddev.com/" 
+	} 
+} 
+
+dependencies {
+    compile files("lib/llibrary-1.7.19-1.12.2.jar") 
+}
+
 
 processResources {
 
