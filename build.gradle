@@ -26,17 +26,6 @@ minecraft {
     makeObfSourceJar = false
 }
 
-repositories { 
-	maven { 
-		url "https://maven.mcmoddev.com/" 
-	} 
-} 
-
-dependencies {
-    compile files("lib/llibrary-1.7.19-1.12.2.jar") 
-}
-
-
 processResources {
 
     inputs.property "version", project.version
