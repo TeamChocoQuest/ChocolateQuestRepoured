@@ -22,6 +22,7 @@ import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -40,9 +41,12 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
+	private int lastPositionSaveTick = 0;
 
-	//Impact position is a position instead of Rotations, but the structure stores 3 floats so it works nicely
+	//These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
 	protected static final DataParameter<Rotations> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
+	protected static final DataParameter<Rotations> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
+
 	protected static final DataParameter<Boolean> IS_PULLING = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Optional<UUID>> SHOOTER_UUID = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
@@ -57,8 +61,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range) {
 		super(worldIn, shooter);
-		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID()));
+		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID())); //only need to set this once
+
 		this.startLocation = shooter.getPositionVector();
+		setShooterPosition(this.startLocation);
+
 		this.hookRange = range;
 	}
 
@@ -71,6 +78,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	protected void entityInit() {
 		super.entityInit();
 		dataManager.register(IMPACT_POS, new Rotations(0F, 0F, 0F));
+		dataManager.register(SHOOTER_POS, new Rotations(0F, 0F, 0F));
 		dataManager.register(IS_PULLING, false);
 		dataManager.register(SHOOTER_UUID, Optional.absent());
 	}
@@ -78,6 +86,9 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		//Save the position of the shooting player so clients can look it up
+		periodicSaveShooterPosition();
 
 		// Make player move very slowly while the hook is flying
 		if (!isPulling() && this.getThrower() instanceof EntityPlayerMP) {
@@ -228,6 +239,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		float z = compound.getFloat("cqrdata.impactZ");
 		this.dataManager.set(IMPACT_POS, new Rotations(x, y, z));
 
+		x = compound.getFloat("cqrdata.shooterX");
+		y = compound.getFloat("cqrdata.shooterY");
+		z = compound.getFloat("cqrdata.shooterZ");
+		this.dataManager.set(SHOOTER_POS, new Rotations(x, y, z));
+
 		this.dataManager.set(IS_PULLING, compound.getBoolean("cqrdata.isPulling"));
 
 		if (compound.hasKey("cqrdata.shooterUUID")) {
@@ -241,6 +257,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		compound.setFloat("cqrdata.impactX", impactLocation.getX());
 		compound.setFloat("cqrdata.impactY", impactLocation.getY());
 		compound.setFloat("cqrdata.impactZ", impactLocation.getZ());
+
+		Rotations shooterPosition = this.dataManager.get(SHOOTER_POS);
+		compound.setFloat("cqrdata.shooterX", shooterPosition.getX());
+		compound.setFloat("cqrdata.shooterY", shooterPosition.getY());
+		compound.setFloat("cqrdata.shooterZ", shooterPosition.getZ());
 
 		compound.setBoolean("cqrdata.isPulling", this.dataManager.get(IS_PULLING));
 
@@ -269,6 +290,27 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	protected double getPullSpeed()
 	{
 		return 1.8; //determined from trial and error on what felt like a good speed
+	}
+
+	private void periodicSaveShooterPosition()
+	{
+		if (!this.world.isRemote && this.ticksExisted - this.lastPositionSaveTick >= 20) {
+			if (this.thrower != null) {
+				this.lastPositionSaveTick = this.ticksExisted;
+				setShooterPosition(this.thrower.getPositionVector());
+			}
+		}
+	}
+
+	private void setShooterPosition(Vec3d shooterPos)
+	{
+		this.dataManager.set(SHOOTER_POS, new Rotations((float)shooterPos.x, (float)shooterPos.y, (float)shooterPos.z));
+	}
+
+	public Vec3d getShooterPosition()
+	{
+		Rotations pos = this.dataManager.get(SHOOTER_POS);
+		return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Nullable
