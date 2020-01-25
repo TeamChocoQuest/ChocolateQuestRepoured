@@ -4,6 +4,7 @@ buildscript {
         maven { url = "https://files.minecraftforge.net/maven" }
     }
     dependencies {
+		deobfCompile "net.ilexiconn:llibrary:1.7.19-1.12.2" 
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
     }
 }

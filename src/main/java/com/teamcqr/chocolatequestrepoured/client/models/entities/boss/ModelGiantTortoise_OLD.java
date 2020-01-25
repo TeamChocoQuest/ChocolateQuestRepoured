@@ -2,8 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
-import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
@@ -12,106 +11,106 @@ import net.minecraft.util.math.MathHelper;
 /**
  * CQRTurtleBossShell - DerToaster Created using Tabula 7.0.1
  */
-public class ModelGiantTortoise extends AdvancedModelBase {
-	public AdvancedModelRenderer mainPart;
-	public AdvancedModelRenderer belly;
-	public AdvancedModelRenderer top;
-	public AdvancedModelRenderer neck;
-	public AdvancedModelRenderer top1;
-	public AdvancedModelRenderer top2;
-	public AdvancedModelRenderer top3;
-	public AdvancedModelRenderer top4;
-	public AdvancedModelRenderer head;
-	public AdvancedModelRenderer jaw;
+public class ModelGiantTortoise_OLD extends /*AnimationModelBase<EntityCQRGiantTortoise>*/ModelBase {
+	public ModelRenderer mainPart;
+	public ModelRenderer belly;
+	public ModelRenderer top;
+	public ModelRenderer neck;
+	public ModelRenderer top1;
+	public ModelRenderer top2;
+	public ModelRenderer top3;
+	public ModelRenderer top4;
+	public ModelRenderer head;
+	public ModelRenderer jaw;
 	// Leg FL
-	public AdvancedModelRenderer legJointFL;
-	public AdvancedModelRenderer legFL;
-	public AdvancedModelRenderer footFL;
+	public ModelRenderer legJointFL;
+	public ModelRenderer legFL;
+	public ModelRenderer footFL;
 
 	// Leg FR
-	public AdvancedModelRenderer legJointFR;
-	public AdvancedModelRenderer legFR;
-	public AdvancedModelRenderer footFR;
+	public ModelRenderer legJointFR;
+	public ModelRenderer legFR;
+	public ModelRenderer footFR;
 
 	// Leg BL
-	public AdvancedModelRenderer legJointBL;
-	public AdvancedModelRenderer legBL;
-	public AdvancedModelRenderer footBL;
+	public ModelRenderer legJointBL;
+	public ModelRenderer legBL;
+	public ModelRenderer footBL;
 
 	// Leg BR
-	public AdvancedModelRenderer legJointBR;
-	public AdvancedModelRenderer legBR;
-	public AdvancedModelRenderer footBR;
+	public ModelRenderer legJointBR;
+	public ModelRenderer legBR;
+	public ModelRenderer footBR;
 
-	private AdvancedModelRenderer[] subParts = new AdvancedModelRenderer[14];
-	private AdvancedModelRenderer[] legJoints = new AdvancedModelRenderer[4];
-	private AdvancedModelRenderer[] knees = new AdvancedModelRenderer[4];
-	private AdvancedModelRenderer[] feet = new AdvancedModelRenderer[4];
+	private ModelRenderer[] subParts = new ModelRenderer[14];
+	private ModelRenderer[] legJoints = new ModelRenderer[4];
+	private ModelRenderer[] knees = new ModelRenderer[4];
+	private ModelRenderer[] feet = new ModelRenderer[4];
 
-	public ModelGiantTortoise() {
+	public ModelGiantTortoise_OLD() {
 		this.textureWidth = 192;
 		this.textureHeight = 192;
 
-		this.mainPart = new AdvancedModelRenderer(this, 0, 0);
+		this.mainPart = new ModelRenderer(this, 0, 0);
 		this.mainPart.setRotationPoint(0.0F, 11.0F, 0.0F);
 		this.mainPart.addBox(-16.0F, -8.0F, -16.0F, 32, 14, 32, 0.0F);
 
-		this.top = new AdvancedModelRenderer(this, 0, 80);
+		this.top = new ModelRenderer(this, 0, 80);
 		this.top.setRotationPoint(0.0F, -10.0F, 0.0F);
 		this.top.addBox(-14.0F, 0.0F, -14.0F, 28, 2, 28, 0.0F);
 
-		this.belly = new AdvancedModelRenderer(this, 0, 46);
+		this.belly = new ModelRenderer(this, 0, 46);
 		this.belly.setRotationPoint(-10.0F, 2.0F, -14.0F);
 		this.belly.addBox(0.0F, 4.0F, 0.0F, 20, 2, 28, 0.0F);
 
-		this.neck = new AdvancedModelRenderer(this, 50, 120);
+		this.neck = new ModelRenderer(this, 50, 120);
 		this.neck.setRotationPoint(0.0F, 0.0F, -17.0F);
 		this.neck.addBox(-5.0F, -5.0F, -1.0F, 10, 10, 2, 0.0F);
 
-		this.top1 = new AdvancedModelRenderer(this, 0, 120);
+		this.top1 = new ModelRenderer(this, 0, 120);
 		this.top1.setRotationPoint(7.0F, -2.0F, 7.0F);
 		this.top1.addBox(-5.0F, 0.0F, -5.0F, 10, 2, 10, 0.0F);
 
-		this.top2 = new AdvancedModelRenderer(this, 0, 120);
+		this.top2 = new ModelRenderer(this, 0, 120);
 		this.top2.setRotationPoint(7.0F, -2.0F, -7.0F);
 		this.top2.addBox(-5.0F, 0.0F, -5.0F, 10, 2, 10, 0.0F);
 
-		this.top3 = new AdvancedModelRenderer(this, 0, 120);
+		this.top3 = new ModelRenderer(this, 0, 120);
 		this.top3.setRotationPoint(-7.0F, -2.0F, -7.0F);
 		this.top3.addBox(-5.0F, 0.0F, -5.0F, 10, 2, 10, 0.0F);
 
-		this.top4 = new AdvancedModelRenderer(this, 0, 120);
+		this.top4 = new ModelRenderer(this, 0, 120);
 		this.top4.setRotationPoint(-7.0F, -2.0F, 7.0F);
 		this.top4.addBox(-5.0F, 0.0F, -5.0F, 10, 2, 10, 0.0F);
 
 		// Sub Parts
-		this.head = new AdvancedModelRenderer(this, 140, 60);
+		this.head = new ModelRenderer(this, 140, 60);
 		this.head.setRotationPoint(0.0F, 0.0F, 0.0F);
 		this.head.addBox(-4.5F, -4.0F, -9.0F, 9, 7, 9, 0.0F);
 		this.subParts[0] = this.head;
 
-		this.jaw = new AdvancedModelRenderer(this, 140, 80);
+		this.jaw = new ModelRenderer(this, 140, 80);
 		this.jaw.setRotationPoint(0.0F, 3.5F, -1.0F);
 		this.jaw.addBox(-4.5F, -0.5F, -8.0F, 9, 1, 8, 0.0F);
 		this.subParts[1] = this.jaw;
 
 		// this.setRotateAngle(jaw, 0.4363323129985824F, 0.0F, 0.0F);
 		// leg Front Left
-		this.legJointFL = new AdvancedModelRenderer(this, 0, 140);
+		this.legJointFL = new ModelRenderer(this, 0, 140);
 		this.legJointFL.setRotationPoint(13.0F, 3.5F, -13.0F);
 		this.legJointFL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
 		this.setRotateAngle(this.legJointFL, 0.0F, -0.7853981633974483F, 0.0F);
 		this.subParts[2] = this.legJointFL;
 		this.legJoints[0] = this.legJointFL;
 
-		this.legFL = new AdvancedModelRenderer(this, 140, 0);
+		this.legFL = new ModelRenderer(this, 140, 0);
 		this.legFL.setRotationPoint(0.0F, -4.0F, -5.0F);
 		this.legFL.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
 		this.setRotateAngle(this.legFL, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[3] = this.legFL;
 		this.knees[0] = this.legFL;
 
-		this.footFL = new AdvancedModelRenderer(this, 140, 25);
+		this.footFL = new ModelRenderer(this, 140, 25);
 		this.footFL.setRotationPoint(0.0F, 8.0F, 0.5F);
 		this.footFL.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
 		this.setRotateAngle(this.footFL, 0.7853981633974483F, 0.0F, 0.0F);
@@ -119,21 +118,21 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.feet[0] = this.footFL;
 
 		// Leg Front Right
-		this.legJointFR = new AdvancedModelRenderer(this, 0, 140);
+		this.legJointFR = new ModelRenderer(this, 0, 140);
 		this.legJointFR.setRotationPoint(-13.0F, 3.5F, -13.0F);
 		this.legJointFR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
 		this.setRotateAngle(this.legJointFR, 0.0F, 0.7853981633974483F, 0.0F);
 		this.subParts[5] = this.legJointFR;
 		this.legJoints[1] = this.legJointFR;
 
-		this.legFR = new AdvancedModelRenderer(this, 140, 0);
+		this.legFR = new ModelRenderer(this, 140, 0);
 		this.legFR.setRotationPoint(0.0F, -4.0F, -5.0F);
 		this.legFR.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
 		this.setRotateAngle(this.legFR, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[6] = this.legFR;
 		this.knees[1] = this.legFR;
 
-		this.footFR = new AdvancedModelRenderer(this, 140, 25);
+		this.footFR = new ModelRenderer(this, 140, 25);
 		this.footFR.setRotationPoint(0.0F, 8.0F, 0.5F);
 		this.footFR.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
 		this.setRotateAngle(this.footFR, 0.7853981633974483F, 0.0F, 0.0F);
@@ -141,21 +140,21 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.feet[1] = this.footFR;
 
 		// Leg Back Right
-		this.legJointBR = new AdvancedModelRenderer(this, 0, 140);
+		this.legJointBR = new ModelRenderer(this, 0, 140);
 		this.legJointBR.setRotationPoint(-13.0F, 3.5F, 13.0F);
 		this.legJointBR.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
 		this.setRotateAngle(this.legJointBR, 0.0F, 2.356194490192345F, 0.0F);
 		this.subParts[8] = this.legJointBR;
 		this.legJoints[2] = this.legJointBR;
 
-		this.legBR = new AdvancedModelRenderer(this, 140, 0);
+		this.legBR = new ModelRenderer(this, 140, 0);
 		this.legBR.setRotationPoint(0.0F, -4.0F, -5.0F);
 		this.legBR.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
 		this.setRotateAngle(this.legBR, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[9] = this.legBR;
 		this.knees[2] = this.legBR;
 
-		this.footBR = new AdvancedModelRenderer(this, 140, 25);
+		this.footBR = new ModelRenderer(this, 140, 25);
 		this.footBR.setRotationPoint(0.0F, 8.0F, 0.5F);
 		this.footBR.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
 		this.setRotateAngle(this.footBR, 0.7853981633974483F, 0.0F, 0.0F);
@@ -163,21 +162,21 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.feet[2] = this.footBR;
 
 		// Leg Back Left
-		this.legJointBL = new AdvancedModelRenderer(this, 0, 140);
+		this.legJointBL = new ModelRenderer(this, 0, 140);
 		this.legJointBL.setRotationPoint(13.0F, 3.5F, 13.0F);
 		this.legJointBL.addBox(-5.0F, -5.0F, -5.0F, 10, 10, 10, 0.0F);
 		this.setRotateAngle(this.legJointBL, 0.0F, -2.356194490192345F, 0.0F);
 		this.subParts[11] = this.legJointBL;
 		this.legJoints[3] = this.legJointBL;
 
-		this.legBL = new AdvancedModelRenderer(this, 140, 0);
+		this.legBL = new ModelRenderer(this, 140, 0);
 		this.legBL.setRotationPoint(0.0F, -4.0F, -5.0F);
 		this.legBL.addBox(-4.0F, 0.0F, 0.0F, 8, 8, 8, 0.0F);
 		this.setRotateAngle(this.legBL, -0.7853981633974483F, 0.0F, 0.0F);
 		this.subParts[12] = this.legBL;
 		this.knees[3] = this.legBL;
 
-		this.footBL = new AdvancedModelRenderer(this, 140, 25);
+		this.footBL = new ModelRenderer(this, 140, 25);
 		this.footBL.setRotationPoint(0.0F, 8.0F, 0.5F);
 		this.footBL.addBox(-3.5F, 0.0F, 0.0F, 7, 8, 7, 0.0F);
 		this.setRotateAngle(this.footBL, 0.7853981633974483F, 0.0F, 0.0F);
@@ -206,32 +205,6 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.mainPart.addChild(this.top);
 		this.mainPart.addChild(this.legJointBL);
 		this.top.addChild(this.top1);
-		
-		//LLib stuff
-		updateDefaultPose();
-		
-		this.belly.scaleChildren = true;
-		this.footBL.scaleChildren = true;
-		this.footBR.scaleChildren = true;
-		this.footFL.scaleChildren = true;
-		this.footFR.scaleChildren = true;
-		this.head.scaleChildren = true;
-		this.jaw.scaleChildren = true;
-		this.legBL.scaleChildren = true;
-		this.legBR.scaleChildren = true;
-		this.legFL.scaleChildren = true;
-		this.legFR.scaleChildren = true;
-		this.legJointBL.scaleChildren = true;
-		this.legJointBR.scaleChildren = true;
-		this.legJointFL.scaleChildren = true;
-		this.legJointFR.scaleChildren = true;
-		this.mainPart.scaleChildren = true;
-		this.neck.scaleChildren = true;
-		this.top.scaleChildren = true;
-		this.top1.scaleChildren = true;
-		this.top2.scaleChildren = true;
-		this.top3.scaleChildren = true;
-		this.top4.scaleChildren = true;
 	}
 
 	@Override
