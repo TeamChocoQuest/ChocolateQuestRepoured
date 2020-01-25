@@ -22,7 +22,6 @@ import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -33,10 +32,39 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		BACK
 	}
 
+	private enum PullStatus
+	{
+		NOT_PULLING (0),
+		PULLING_PLAYER (1),
+		PULLING_ENTITY (2);
+
+		private final int value;
+
+		PullStatus(int valIn) {
+			this.value = valIn;
+		}
+
+		public int toInt()
+		{
+			return this.value;
+		}
+
+		public static PullStatus fromInt(int value)
+		{
+			for (PullStatus ps : PullStatus.values()) {
+				if (ps.value == value) {
+					return ps;
+				}
+			}
+			return NOT_PULLING;
+		}
+	}
+
 	public static final double STOP_PULL_DISTANCE = 2.0; //If layer gets within this range of hook, stop pulling
 	private Vec3d impactLocation = null; //where the hook intersects a block
 	private double hookRange = 20.0; //Max range of the hook before it stops extending
 	private HookPhase phase = HookPhase.OUT; //Out for moving away from shooter, back for coming back
+	private PullStatus pullStatus = PullStatus.NOT_PULLING; //Whether the hook is pulling something
 	private Vec3d startLocation = null;
 
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
@@ -47,7 +75,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	protected static final DataParameter<Rotations> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
 	protected static final DataParameter<Rotations> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
 
-	protected static final DataParameter<Boolean> IS_PULLING = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> PULL_STATUS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> SHOOTER_UUID = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public ProjectileHookShotHook(World worldIn) {
@@ -79,7 +107,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		super.entityInit();
 		dataManager.register(IMPACT_POS, new Rotations(0F, 0F, 0F));
 		dataManager.register(SHOOTER_POS, new Rotations(0F, 0F, 0F));
-		dataManager.register(IS_PULLING, false);
+		dataManager.register(PULL_STATUS, PullStatus.NOT_PULLING.toInt());
 		dataManager.register(SHOOTER_UUID, Optional.absent());
 	}
 
@@ -91,7 +119,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		periodicSaveShooterPosition();
 
 		// Make player move very slowly while the hook is flying
-		if (!isPulling() && this.getThrower() instanceof EntityPlayerMP) {
+		if (!isPullingPlayer() && this.getThrower() instanceof EntityPlayerMP) {
 			zeroizePlayerVelocity((EntityPlayerMP)this.getThrower());
 		}
 
@@ -105,7 +133,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			Vec3d playerPos = shootingPlayer.getPositionVector();
 			double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
-			if (isPulling()) {
+			if (isPullingPlayer()) {
 				checkForBlockedPath(shootingPlayer);
 
 				if (distanceToHook < STOP_PULL_DISTANCE) {
@@ -122,7 +150,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				setDead();
 			}
 
-		} else if (isPulling()) {
+		} else if (isPullingPlayer()) {
 			if (this.world.isRemote) {
 				pullIfClientIsShooter();
 			}
@@ -153,7 +181,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 					dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
 					dataManager.set(IMPACT_POS, new Rotations((float) impactLocation.x, (float) impactLocation.y, (float) impactLocation.z));
 
-					startPulling();
+					startPullingPlayer();
 				}
 			}
 		}
@@ -244,7 +272,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		z = compound.getFloat("cqrdata.shooterZ");
 		this.dataManager.set(SHOOTER_POS, new Rotations(x, y, z));
 
-		this.dataManager.set(IS_PULLING, compound.getBoolean("cqrdata.isPulling"));
+		this.dataManager.set(PULL_STATUS, compound.getInteger("cqrdata.pullStatus"));
 
 		if (compound.hasKey("cqrdata.shooterUUID")) {
 			this.dataManager.set(SHOOTER_UUID, Optional.of(compound.getUniqueId("cqrdata.shooterUUID")));
@@ -263,28 +291,30 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		compound.setFloat("cqrdata.shooterY", shooterPosition.getY());
 		compound.setFloat("cqrdata.shooterZ", shooterPosition.getZ());
 
-		compound.setBoolean("cqrdata.isPulling", this.dataManager.get(IS_PULLING));
+		compound.setInteger("cqrdata.pullStatus", this.dataManager.get(PULL_STATUS));
 
-		UUID shooter;
 		if (this.dataManager.get(SHOOTER_UUID).isPresent())
 		{
 			compound.setUniqueId("cqrdata.shooterUUID", this.dataManager.get(SHOOTER_UUID).get());
 		}
 	}
 
-	private void startPulling()
-	{
-		dataManager.set(IS_PULLING, true);
+	private void startPullingPlayer() {
+		this.pullStatus = PullStatus.PULLING_PLAYER;
+		dataManager.set(PULL_STATUS, this.pullStatus.toInt());
 	}
 
-	private void stopPulling()
-	{
-		dataManager.set(IS_PULLING, true);
+	private void stopPulling() {
+		this.pullStatus = PullStatus.NOT_PULLING;
+		dataManager.set(PULL_STATUS, this.pullStatus.toInt());
 	}
 
-	public boolean isPulling()
-	{
-		return dataManager.get(IS_PULLING);
+	public boolean isPullingPlayer() {
+		return getPullStatus() == PullStatus.PULLING_PLAYER;
+	}
+
+	private PullStatus getPullStatus() {
+		return PullStatus.fromInt(dataManager.get(PULL_STATUS));
 	}
 
 	protected double getPullSpeed()
