@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.boss;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise_OLD;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -12,11 +12,11 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise.png");
 
-	private ModelGiantTortoise model = new ModelGiantTortoise();
+	private ModelGiantTortoise_OLD model = new ModelGiantTortoise_OLD();
 	private int animState = 0;
 	private boolean mouthIsOpen = false;
 
-	public RenderCQRGiantTortoise(RenderManager rendermanagerIn, ModelGiantTortoise modelbaseIn, float shadowsizeIn) {
+	public RenderCQRGiantTortoise(RenderManager rendermanagerIn, ModelGiantTortoise_OLD modelbaseIn, float shadowsizeIn) {
 		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
 	}
 

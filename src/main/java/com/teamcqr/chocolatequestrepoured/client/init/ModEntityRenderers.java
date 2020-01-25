@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise_OLD;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNecromancer;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
@@ -176,7 +176,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, renderManager -> new RenderCQRNetherDragonSegment(renderManager));
 
 		// Giant Tortoise
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, renderManager -> new RenderCQRGiantTortoise(renderManager, new ModelGiantTortoise(), 1.5F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, renderManager -> new RenderCQRGiantTortoise(renderManager, new ModelGiantTortoise_OLD(), 1.5F));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, renderManager -> new RenderCQRGiantTortoisePart(renderManager));
 
 		// Lich

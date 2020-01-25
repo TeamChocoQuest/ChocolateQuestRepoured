@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -49,7 +50,13 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
+		
+		renderChain(entity);
+		
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+	}
+
+	private void renderChain(ProjectileHookShotHook entity) {
 	}
 
 	@Override
