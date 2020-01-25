@@ -1,9 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
+
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * CQRTurtleBossShell - DerToaster Created using Tabula 7.0.1
@@ -247,8 +251,12 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		for(AdvancedModelRenderer box : subParts) {
+			box.showModel = true;
+		}
 		resetToDefaultPose();
-		/*super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		
 		boolean renderParts = true;
 		EntityCQRGiantTortoise entity = (EntityCQRGiantTortoise) entityIn;
 		float anglePerStep = new Float(Math.toRadians(45)) / 60;
@@ -279,8 +287,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					this.mainPart.offsetY = 0.0025F * (entity.getAnimationProgress());
 
 					for (int i = 0; i < 4; i++) {
-						this.knees[i].rotateAngleX -= anglePerStep;
-						this.feet[i].rotateAngleX -= anglePerStep;
+						this.knees[i].rotateAngleX -= anglePerStep * (entity.getAnimationProgress() +1);
+						this.feet[i].rotateAngleX -= anglePerStep * (entity.getAnimationProgress() +1);
 					}
 				} else {
 					// Move parts in -> 38 Ticks
@@ -308,13 +316,13 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			break;
 		case MOVE_PARTS_OUT:
 			if (entity.getAnimationProgress() == 0) {
-				for (int i = 0; i < 4; i++) {
-					this.knees[i].rotateAngleX -= new Float(Math.toRadians(45));
-					this.feet[i].rotateAngleX -= new Float(Math.toRadians(45));
+				/*for (int i = 0; i < 4; i++) {
+					//this.knees[i].rotateAngleX -= new Float(Math.toRadians(45));
+					//this.feet[i].rotateAngleX -= new Float(Math.toRadians(45));
 
 					this.legJoints[i].offsetX = -0.5F;
 					this.legJoints[i].offsetZ = -0.5F;
-				}
+				}*/
 				this.mainPart.offsetY = 0.5F;
 				this.head.offsetZ = 0.75F;
 			}
@@ -328,8 +336,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					this.mainPart.offsetY = 0.5F + (-0.5F / 60) * (entity.getAnimationProgress() - 38);
 
 					for (int i = 0; i < 4; i++) {
-						this.knees[i].rotateAngleX += anglePerStep;
-						this.feet[i].rotateAngleX += anglePerStep;
+						this.knees[i].rotateAngleX += anglePerStep  * (entity.getAnimationProgress() -37) -new Float(Math.toRadians(45));
+						this.feet[i].rotateAngleX += anglePerStep  * (entity.getAnimationProgress() -37) -new Float(Math.toRadians(45));
 					}
 				} else {
 					this.mainPart.offsetY = 0.5F;
@@ -339,17 +347,17 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					// "To - From" - "To-From * multiplier"
 					float offsetXZ = 0.5F - (0.5F / 38F) * (entity.getAnimationProgress());
 
-					this.legJointFL.offsetX = -offsetXZ;
-					this.legJointFL.offsetZ = offsetXZ;
+					this.legJointFL.offsetX = -offsetXZ ;
+					this.legJointFL.offsetZ = offsetXZ ;
 
-					this.legJointBL.offsetX = -offsetXZ;
-					this.legJointBL.offsetZ = -offsetXZ;
+					this.legJointBL.offsetX = -offsetXZ ;
+					this.legJointBL.offsetZ = -offsetXZ ;
 
-					this.legJointFR.offsetX = offsetXZ;
-					this.legJointFR.offsetZ = offsetXZ;
+					this.legJointFR.offsetX = offsetXZ ;
+					this.legJointFR.offsetZ = offsetXZ ;
 
-					this.legJointBR.offsetX = offsetXZ;
-					this.legJointBR.offsetZ = -offsetXZ;
+					this.legJointBR.offsetX = offsetXZ ;
+					this.legJointBR.offsetZ = -offsetXZ ;
 				}
 			}
 			entity.setAnimationProgress(entity.getAnimationProgress() + 1);
@@ -409,8 +417,11 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		if (renderParts) {
 			this.head.rotateAngleX = headPitch * 0.017453292F;
 			this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+		} 
+		for(AdvancedModelRenderer box : subParts) {
+			box.showModel = renderParts;
 		}
 
-		// DONE: Properly make leg animation*/
+		// DONE: Properly make leg animation
 	}
 }
