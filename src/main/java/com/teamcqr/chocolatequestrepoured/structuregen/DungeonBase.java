@@ -44,6 +44,7 @@ public class DungeonBase {
 	protected int yOffset = 0;
 	protected int[] allowedDims = { 0 };
 	protected String[] modDependencies = { Reference.MODID };
+	protected String[] dungeonDependencies = {};
 	protected boolean unique = false;
 	protected boolean buildSupportPlatform = true;
 	protected boolean useCoverBlock = false;
@@ -113,6 +114,7 @@ public class DungeonBase {
 			}
 			this.coverBlock = PropertyFileHelper.getBlockProperty(prop, "coverblock", Blocks.AIR);
 			this.rotateDungeon = PropertyFileHelper.getBooleanProperty(prop, "rotateDungeon", true);
+			this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[] {});
 			
 			//protection system
 			this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
@@ -343,5 +345,12 @@ public class DungeonBase {
 	}
 	public boolean getAllowExplosionOther() {
 		return allowExplosionOther;
+	}
+	
+	public boolean dependsOnOtherStructures() {
+		return this.dungeonDependencies.length > 0;
+	}
+	public String[] getDungeonDependencies() {
+		return this.dungeonDependencies;
 	}
 }
