@@ -259,7 +259,7 @@ public class VolcanoGeneratorWithArray implements IDungeonGenerator {
 		//DONE: Rewrite to a list thing, multiple 3dim Arrays are too large, they cause out of memory exceptions
 		List<BlockPlacement> blocksTmp = new ArrayList<>();
 		int counter = 0;
-		for(int iy = 255; iy >= 0; iy++) {
+		for(int iy = 255; iy >= 0; iy--) {
 			for(int ix = 0; ix < blocks.length; ix++) {
 				if(blocks[ix][iy] == null) {
 					continue;
