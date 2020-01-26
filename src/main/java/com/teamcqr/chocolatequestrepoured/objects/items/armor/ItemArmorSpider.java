@@ -7,19 +7,21 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumBlockRenderType;
@@ -31,7 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorSpider extends ItemArmor {
+public class ItemArmorSpider extends ArmorCQRBase {
 
 	private AttributeModifier movementSpeed;
 
@@ -183,6 +185,11 @@ public class ItemArmorSpider extends ItemArmor {
 				}
 			}
 		}
+	}
+
+	@Override
+	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.spiderArmorLegs : ModArmorModels.spiderArmor;
 	}
 
 }
