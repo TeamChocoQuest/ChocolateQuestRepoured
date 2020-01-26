@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.init;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorBull;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorHeavy;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorInquisition;
+import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorSpider;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTransparent;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTurtle;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelBackpack;
@@ -30,5 +31,7 @@ public class ModArmorModels {
 	public static ModelArmorInquisition inquisitionArmor = new ModelArmorInquisition(1F);
 	public static ModelArmorInquisition inquisitionArmorLegs = new ModelArmorInquisition(0.5F);
 	
+	public static ModelArmorSpider spiderArmor = new ModelArmorSpider(1F);
+	public static ModelArmorSpider spiderArmorLegs = new ModelArmorSpider(0.5F);
 
 }
