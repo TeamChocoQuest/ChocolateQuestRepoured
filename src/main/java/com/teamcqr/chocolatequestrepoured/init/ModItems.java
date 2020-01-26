@@ -13,8 +13,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
@@ -28,24 +28,25 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRTriton;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRZombie;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshot;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemLongshot;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBullBattleAxe;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSuperTool;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemDungeonPlacer;
-import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorHeavy;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorInquisition;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSlime;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
@@ -84,7 +85,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemArmor;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -338,10 +338,10 @@ public class ModItems {
 					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.LEGS), "leggings_spider"),
 					setItemName(new ItemArmorSpider(ModMaterials.ArmorMaterials.ARMOR_SPIDER, -1, EntityEquipmentSlot.FEET), "boots_spider"),
 
-					setItemName(new ItemArmor(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.HEAD), "helmet_inquisition"),
-					setItemName(new ItemArmor(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST), "chestplate_inquisition"),
-					setItemName(new ItemArmor(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.LEGS), "leggings_inquisition"),
-					setItemName(new ItemArmor(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.FEET), "boots_inquisition"),
+					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.HEAD), "helmet_inquisition"),
+					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.CHEST), "chestplate_inquisition"),
+					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.LEGS), "leggings_inquisition"),
+					setItemName(new ItemArmorInquisition(ModMaterials.ArmorMaterials.ARMOR_INQUISITION, -1, EntityEquipmentSlot.FEET), "boots_inquisition"),
 
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.HEAD), "helmet_heavy_diamond"),
 					setItemName(new ItemArmorHeavy(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND, -1, EntityEquipmentSlot.CHEST), "chestplate_heavy_diamond"),
