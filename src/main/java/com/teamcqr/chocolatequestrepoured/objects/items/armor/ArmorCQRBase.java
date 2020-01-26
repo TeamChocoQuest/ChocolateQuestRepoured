@@ -27,23 +27,36 @@ public abstract class ArmorCQRBase extends ItemArmor {
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		ModelBiped armor = getBipedArmorModel(entityLiving, itemStack, armorSlot);
 
-		armor.bipedBody.showModel = armorSlot == EntityEquipmentSlot.CHEST;
-		armor.bipedBody.showModel = _default.bipedBody.showModel;
-
-		armor.bipedHead.showModel = armorSlot == EntityEquipmentSlot.HEAD;
-		armor.bipedHead.showModel = _default.bipedHead.showModel;
-
-		armor.bipedRightLeg.showModel = armorSlot == EntityEquipmentSlot.LEGS || armorSlot == EntityEquipmentSlot.FEET;
-		armor.bipedRightLeg.showModel = _default.bipedRightLeg.showModel;
-
-		armor.bipedLeftLeg.showModel = armorSlot == EntityEquipmentSlot.LEGS || armorSlot == EntityEquipmentSlot.FEET;
-		armor.bipedLeftLeg.showModel = _default.bipedLeftLeg.showModel;
-
-		armor.bipedRightArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
-		armor.bipedRightArm.showModel = _default.bipedRightArm.showModel;
-
-		armor.bipedLeftArm.showModel = armorSlot == EntityEquipmentSlot.CHEST;
-		armor.bipedLeftArm.showModel = _default.bipedLeftArm.showModel;
+		armor.bipedBody.showModel = false;
+		armor.bipedHead.showModel = false;
+		armor.bipedHeadwear.showModel = false;
+		armor.bipedLeftArm.showModel = false;
+		armor.bipedLeftLeg.showModel = false;
+		armor.bipedRightArm.showModel = false;
+		armor.bipedRightLeg.showModel = false;
+		
+		switch(armorSlot) {
+		case CHEST:
+			armor.bipedBody.showModel = _default.bipedBody.showModel;
+			armor.bipedLeftArm.showModel = _default.bipedLeftArm.showModel;
+			armor.bipedRightArm.showModel = _default.bipedRightArm.showModel;
+			break;
+		case FEET:
+			armor.bipedLeftLeg.showModel = _default.bipedLeftLeg.showModel;
+			armor.bipedRightLeg.showModel = _default.bipedRightLeg.showModel;
+			break;
+		case HEAD:
+			armor.bipedHead.showModel = _default.bipedHead.showModel;
+			armor.bipedHeadwear.showModel = _default.bipedHeadwear.showModel;
+			break;
+		case LEGS:
+			armor.bipedLeftLeg.showModel = _default.bipedLeftLeg.showModel;
+			armor.bipedRightLeg.showModel = _default.bipedRightLeg.showModel;
+			break;
+		default:
+			break;
+		
+		}
 
 		armor.isRiding = _default.isRiding;
 		armor.isSneak = _default.isSneak;
@@ -52,10 +65,9 @@ public abstract class ArmorCQRBase extends ItemArmor {
 		armor.rightArmPose = _default.leftArmPose;
 		
 		copyAnglesAndPositions(_default, armor);
-
 		return armor;
 	}
-
+	
 	private void copyAnglesAndPositions(ModelBiped source, ModelBiped dest) {
 		ModelBase.copyModelAngles(source.bipedBody, dest.bipedBody);
 		copyAngles(source.bipedBody, dest.bipedBody);
