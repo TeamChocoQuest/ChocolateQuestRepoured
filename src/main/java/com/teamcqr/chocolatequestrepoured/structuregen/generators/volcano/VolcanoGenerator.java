@@ -181,6 +181,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 				stairRadius = i >= 0 ? radiusArr[i] : radiusArr[0];
 
 				// Calculates the position of the entrance to the stronghold
+				//TODO: Respect all cases
 				if (this.dungeon.doBuildDungeon() && i == 0) {
 					this.entranceDistToWall = (radiusArr[i] / 3);
 					int vecI = radiusArr[i] - this.entranceDistToWall;

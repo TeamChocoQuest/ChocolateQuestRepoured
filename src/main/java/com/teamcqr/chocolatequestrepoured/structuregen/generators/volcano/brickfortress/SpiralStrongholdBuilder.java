@@ -14,6 +14,7 @@ public class SpiralStrongholdBuilder {
 	private ESkyDirection allowedDirection;
 	private VolcanoDungeon dungeon;
 	private SpiralStrongholdFloor[] floors;
+	private int floorCount = 0;
 	
 	private Random rdm;
 	
@@ -22,7 +23,8 @@ public class SpiralStrongholdBuilder {
 		this.allowedDirection = expansionDirection;
 		this.dungeon = dungeon;
 		
-		this.floors = new SpiralStrongholdFloor[dungeon.getFloorCount(this.rdm)];
+		floorCount = dungeon.getFloorCount(this.rdm);
+		this.floors = new SpiralStrongholdFloor[floorCount];
 	}
 	
 	public void calculateFloors(BlockPos strongholdEntrancePos) {
@@ -60,11 +62,16 @@ public class SpiralStrongholdBuilder {
 		}
 		int y = strongholdEntrancePos.getY();
 		for(int i = 0; i < floors.length; i++) {
+			if(posTuple == null || roomCount <= 0) {
+				floorCount--;
+				continue;
+			}
 			int floorRoomCount = maxRoomsPerFloor;
 			if(roomCount >= maxRoomsPerFloor) {
 				roomCount -= maxRoomsPerFloor;
 			} else {
 				floorRoomCount = roomCount;
+				roomCount = 0;
 			}
 			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount);
 			floor.calculateRoomGrid(entranceType, (i +1) % 2 == 0);
@@ -87,7 +94,7 @@ public class SpiralStrongholdBuilder {
 	
 	public void buildFloors(BlockPos strongholdEntrancePos, World world) {
 		BlockPos currentPos = strongholdEntrancePos;
-		for(int i = 0; i < floors.length; i++) {
+		for(int i = 0; i < floorCount; i++) {
 			SpiralStrongholdFloor floor = floors[i];
 			floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world);
 			currentPos.add(0,dungeon.getRoomSizeY(),0);
@@ -103,7 +110,7 @@ public class SpiralStrongholdBuilder {
 			}
 			System.out.println("");
 			System.out.println("");
-			if(i < (floors.length -1)) {
+			if(i < (floorCount -1)) {
 				currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
 			}
 		}
