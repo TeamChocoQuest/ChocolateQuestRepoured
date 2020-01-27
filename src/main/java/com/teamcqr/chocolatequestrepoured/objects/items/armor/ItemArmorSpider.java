@@ -187,6 +187,7 @@ public class ItemArmorSpider extends ArmorCQRBase {
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.spiderArmorLegs : ModArmorModels.spiderArmor;
