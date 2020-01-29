@@ -1,11 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
@@ -16,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Copyright (c) 29.04.2019
@@ -44,21 +39,23 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y, z), this.structure.getSizeX(), this.structure.getSizeZ(), EPosType.DEFAULT);
+			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y, z), this.structure.getSize().getX(), this.structure.getSize().getZ(), EPosType.DEFAULT);
 		}
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Simply puts the structure at x,y,z
-		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
-		List<String> bosses = new ArrayList<>();
-		for(UUID id : structure.getBossIDs()) {
-			bosses.add(id.toString());
-		}
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world, bosses);
-		event.setShieldCorePosition(this.structure.getShieldCorePosition());
-		MinecraftForge.EVENT_BUS.post(event);
+		this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
+		/*
+		 * List<String> bosses = new ArrayList<>();
+		 * for(UUID id : structure.getBossIDs()) {
+		 * bosses.add(id.toString());
+		 * }
+		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world, bosses);
+		 * event.setShieldCorePosition(this.structure.getShieldCorePosition());
+		 * MinecraftForge.EVENT_BUS.post(event);
+		 */
 	}
 
 	@Override

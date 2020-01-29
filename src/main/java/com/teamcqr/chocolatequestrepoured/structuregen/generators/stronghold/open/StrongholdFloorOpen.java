@@ -131,8 +131,8 @@ public class StrongholdFloorOpen {
 				}
 
 				if (p != null && structure != null) {
-					CQStructure struct = new CQStructure(structure, this.generator.getDungeon(), this.generator.getDunX(), this.generator.getDunZ(), this.generator.getDungeon().isProtectedFromModifications());
-					struct.placeBlocksInWorld(world, p, this.generator.getPlacementSettings(), EPosType.CENTER_XZ_LAYER);
+					CQStructure struct = new CQStructure(structure);
+					struct.addBlocksToWorld(world, p, this.generator.getPlacementSettings(), EPosType.CENTER_XZ_LAYER, this.generator.getDungeon(), this.generator.getDunX(), this.generator.getDunZ());
 				}
 			}
 		}

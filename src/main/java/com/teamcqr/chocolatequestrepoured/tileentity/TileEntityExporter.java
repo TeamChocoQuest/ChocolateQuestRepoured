@@ -130,10 +130,10 @@ public class TileEntityExporter extends TileEntity {
 			endPos = this.pos.add(endPos);
 		}
 		if (!world.isRemote) {
-			CQStructure structure = new CQStructure(this.structureName, true);
-			structure.setAuthor(authorName);
 			CQRMain.logger.info("Server is saving structure...");
-			structure.save(world, startPos, endPos, this.partModeUsing, this.user);
+			CQStructure structure = new CQStructure(this.structureName);
+			structure.takeBlocksFromWorld(world, startPos, endPos, this.partModeUsing);
+			structure.writeToFile(this.user);
 			CQRMain.logger.info("Done!");
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");

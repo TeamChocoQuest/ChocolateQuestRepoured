@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 public class PasteHelper {
 
 	public static BlockPos getNewBlockPosForCorrectRotatedPlacement(BlockPos oldCenteredPastePos, CQStructure structure, Rotation rotation, EPosType posType) {
-		return getNewBlockPosForCorrectRotatedPlacement(oldCenteredPastePos, structure.getSizeX(), structure.getSizeZ(), rotation, posType);
+		return getNewBlockPosForCorrectRotatedPlacement(oldCenteredPastePos, structure.getSize().getX(), structure.getSize().getZ(), rotation, posType);
 	}
 
 	public static BlockPos getNewBlockPosForCorrectRotatedPlacement(BlockPos oldCenteredPastePos, int sizeX, int sizeZ, Rotation rotation, EPosType posType) {
