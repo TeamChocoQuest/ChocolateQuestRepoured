@@ -65,7 +65,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)
 				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
 			//Check if there is a village structure nearby
-			int checkDist = 160;
+			int checkDist = 20;
 			if(world.getVillageCollection().getNearestVillage(new BlockPos(chunkX * 16, world.getHeight(chunkX, chunkZ), chunkZ * 16), checkDist) != null) {
 				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
 				return;
