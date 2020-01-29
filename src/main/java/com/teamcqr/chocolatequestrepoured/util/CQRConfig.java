@@ -18,6 +18,18 @@ public class CQRConfig {
 		public int threadCount = 4;
 		@Config.RangeInt(min = 1)
 		public int tickRateForTasks = 5;
+
+		public boolean dungeonGenerationDelay = true;
+		@Config.RangeInt(min = 1, max = 1000)
+		public int dungeonGenerationMax = 4;
+		@Config.RangeInt(min = 1, max = 10)
+		public int dungeonGenerationFrequencyInLoaded = 1;
+		@Config.RangeInt(min = 1, max = 10)
+		public int dungeonGenerationCountInLoaded = 1;
+		@Config.RangeInt(min = 1, max = 10)
+		public int dungeonGenerationFrequencyInUnloaded = 1;
+		@Config.RangeInt(min = 1, max = 10)
+		public int dungeonGenerationCountInUnloaded = 1;
 	}
 
 	public static class General {

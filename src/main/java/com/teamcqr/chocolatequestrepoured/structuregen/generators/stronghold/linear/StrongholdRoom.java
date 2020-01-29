@@ -140,19 +140,19 @@ public class StrongholdRoom {
 		CQStructure structure = null;
 		switch (this.layout) {
 		case CURVE:
-			structure = new CQStructure(dungeon.getCurveRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getCurveRoom());
 			break;
 		case DEAD_END:
-			structure = new CQStructure(dungeon.getDeadEndRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getDeadEndRoom());
 			break;
 		case FOUR_SIDED:
-			structure = new CQStructure(dungeon.getCrossingRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getCrossingRoom());
 			break;
 		case HALLWAY:
-			structure = new CQStructure(dungeon.getHallwayRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getHallwayRoom());
 			break;
 		case T_CROSSING:
-			structure = new CQStructure(dungeon.getTCrossingRoom(), dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX(), dungeon.isProtectedFromModifications());
+			structure = new CQStructure(dungeon.getTCrossingRoom());
 			break;
 		default:
 			break;
@@ -164,8 +164,8 @@ public class StrongholdRoom {
 
 	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings, CQStructure structure, boolean ignoreRotating) {
 		settings.setRotation(this.roomtype.getRotation());
-		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos, structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
-		structure.placeBlocksInWorld(world, pastePos, settings, EPosType.CENTER_XZ_LAYER);
+		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos, structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER);
+		structure.addBlocksToWorld(world, pastePos, settings, EPosType.DEFAULT, dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX());
 		System.out.println("Generating room: LAYOUT =  " + this.layout.toString() + "    TYPE: " + this.roomtype.toString() + "    AT: " + pastePos.toString());
 	}
 

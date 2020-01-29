@@ -1,9 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
-import com.teamcqr.chocolatequestrepoured.util.NBTUtil;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
-import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 /**
@@ -11,71 +12,44 @@ import net.minecraft.util.math.BlockPos;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-class LootChestInfo {
+public class LootChestInfo {
 
-	private int type; // The "type" of the chest, e.g.: 0 = utility, 1 = food, 2 = weapons, 3 = armor, 4 = resources, 5 = bossloot, 6 = defaultLoot, 7 = endcity loot, 8 = jungle loot, ...
 	private BlockPos position;
-	private int rotation; // 0 = north, 1 = east, 2 = south, 3 = west
-	private boolean isDoubleChest;
-	private boolean redstoneChest;
+	private EnumFacing facing;
+	private ELootTable lootTable;
 
-	public LootChestInfo(Block chestBlock, BlockPos position, int type) {
-		// TODO: Check if chest is double chest
-		// TODO: Check chests rotation
-		this.isDoubleChest = false;
-		this.redstoneChest = false;
-		this.rotation = 0;
+	public LootChestInfo(BlockPos position, EnumFacing facing, ELootTable lootTable) {
 		this.position = position;
-		// TODO: Get Type of chest via comparing blocktypes and then set the type
-		this.type = type;
+		this.facing = facing;
+		this.lootTable = lootTable;
+	}
+
+	public LootChestInfo(NBTTagCompound compound) {
+		this.position = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
+		this.facing = EnumFacing.getHorizontal(compound.getInteger("facing"));
+		this.lootTable = ELootTable.valueOf(compound.getInteger("loottable"));
 	}
 
 	public NBTTagCompound getAsNBTTag() {
-		NBTTagCompound tag = new NBTTagCompound();
+		NBTTagCompound compound = new NBTTagCompound();
 
-		tag.setString("type", "lootchest");
-		tag.setBoolean("doublechest", this.isDoubleChest);
-		tag.setBoolean("redstonechest", this.redstoneChest);
-		tag.setInteger("rotation", this.rotation);
-		tag.setInteger("loottable", this.type);
+		compound.setTag("position", NBTUtil.createPosTag(this.position));
+		compound.setInteger("facing", this.facing.getHorizontalIndex());
+		compound.setInteger("loottable", this.lootTable.getID());
 
-		NBTTagCompound posTag = NBTUtil.BlockPosToNBTTag(this.position);
-
-		tag.setTag("position", posTag);
-
-		return tag;
+		return compound;
 	}
 
-	public LootChestInfo(NBTTagCompound nbtTag) {
-		if (nbtTag.getString("type").equalsIgnoreCase("lootchest")) {
-			this.isDoubleChest = nbtTag.getBoolean("doublechest");
-			this.rotation = nbtTag.getInteger("rotation");
-			this.redstoneChest = nbtTag.getBoolean("redstonechest");
-			this.type = nbtTag.getInteger("loottable");
-
-			NBTTagCompound posTag = nbtTag.getCompoundTag("position");
-			int x = posTag.getInteger("x");
-			int y = posTag.getInteger("y");
-			int z = posTag.getInteger("z");
-
-			this.position = new BlockPos(x, y, z);
-		}
-	}
-
-	public BlockPos getPos() {
+	public BlockPos getPosition() {
 		return this.position;
 	}
 
-	public Boolean isRedstoneChest() {
-		return this.redstoneChest;
+	public EnumFacing getFacing() {
+		return this.facing;
 	}
 
-	public int getLootType() {
-		return this.type;
-	}
-
-	public void setType(int type) {
-		this.type = type;
+	public ELootTable getLootTable() {
+		return this.lootTable;
 	}
 
 }

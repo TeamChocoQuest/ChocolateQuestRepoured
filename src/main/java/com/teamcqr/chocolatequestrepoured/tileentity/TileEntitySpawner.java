@@ -5,7 +5,6 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -95,7 +94,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 	}
 
-	public void setInDungeon(DungeonBase dungeon, int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
+	public void setInDungeon(int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = mobOverride;
 		this.dungeonChunkX = dunChunkX;
