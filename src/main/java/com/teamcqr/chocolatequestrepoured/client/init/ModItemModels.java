@@ -1,12 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -23,6 +26,10 @@ public class ModItemModels {
 
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
+		for (Block block : BlockExporterChest.EXPORTER_CHESTS) {
+			ModelLoader.setCustomStateMapper(block, stateMapper -> Collections.EMPTY_MAP);
+		}
+
 		// register custom item models first
 		for (Item item : ModItems.ItemRegistrationHandler.SPAWN_EGGS) {
 			String registryName = item.getRegistryName().toString();
