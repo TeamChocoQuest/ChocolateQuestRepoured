@@ -1,12 +1,12 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cqrepoured:items/dungeon_placers/grass",
-		"1": "cqrepoured:items/dungeon_placers/planks",
-		"2": "cqrepoured:items/dungeon_placers/planks_bright",
-		"3": "cqrepoured:items/dungeon_placers/wood",
-		"4": "cqrepoured:items/dungeon_placers/planks_door",
-		"particle": "cqrepoured:items/dungeon_placers/grass"
+		"0": "Outpost3dmodel/grass",
+		"1": "Outpost3dmodel/planks",
+		"2": "Outpost3dmodel/planks_bright",
+		"3": "Outpost3dmodel/wood",
+		"4": "Outpost3dmodel/planks_door",
+		"particle": "Outpost3dmodel/grass"
 	},
 	"elements": [
 		{
@@ -347,8 +347,41 @@
 		}
 	],
 	"display": {
+		"thirdperson_righthand": {
+			"rotation": [65, 29, 0],
+			"translation": [0, 2.5, 3],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [65, -53, 0],
+			"translation": [0, 3, 3],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [-1, 36, 4],
+			"translation": [2.5, 5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"firstperson_lefthand": {
+			"rotation": [-1, 36, 4],
+			"translation": [2.5, 5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
 		"ground": {
-			"translation": [0, 7.25, 0]
+			"translation": [0, 0.5, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"gui": {
+			"rotation": [22, 60, 1],
+			"translation": [0, 2, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"head": {
+			"translation": [0, 14.4, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 0, 0],
+			"translation": [0, 0, -8]
 		}
 	},
 	"groups": [
