@@ -60,8 +60,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	private void computeNotFittingStructures() {
 		for (File f : this.dungeon.getRoomFolder().listFiles(FileIOUtil.getNBTFileFilter())) {
-			CQStructure struct = new CQStructure(f, this.dungeon, 0, 0, false);
-			if (struct != null && (struct.getSizeX() != this.structureBounds.getFirst() || struct.getSizeZ() != this.structureBounds.getSecond())) {
+			CQStructure struct = new CQStructure(f);
+			if (struct != null && (struct.getSize().getX() != this.structureBounds.getFirst() || struct.getSize().getZ() != this.structureBounds.getSecond())) {
 				this.blacklistedRooms.add(f.getParent() + "/" + f.getName());
 			}
 		}
@@ -119,11 +119,11 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 				}
 			}
 			floor.setIsFirstFloor(isFirst);
-			int dY = initPos.getY() - (new CQStructure(stair, this.dungeon, x, z, false)).getSizeY();
+			int dY = initPos.getY() - new CQStructure(stair).getSize().getY();
 			if (dY <= (this.dungeon.getRoomSizeY() + 2)) {
 				this.floors[i - 1].setExitIsBossRoom(true);
 			} else {
-				initPos = initPos.subtract(new Vec3i(0, (new CQStructure(stair, this.dungeon, x, z, false)).getSizeY(), 0));
+				initPos = initPos.subtract(new Vec3i(0, new CQStructure(stair).getSize().getY(), 0));
 				if (!isFirst) {
 					initPos = initPos.add(0, this.dungeon.getRoomSizeY(), 0);
 				}
@@ -152,13 +152,13 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
 			return;
 		}
-		CQStructure structure = new CQStructure(building, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
+		CQStructure structure = new CQStructure(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
+			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER);
 		}
-		structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER);
+		structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
 
 		/*
 		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());

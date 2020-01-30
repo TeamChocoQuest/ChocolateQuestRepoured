@@ -28,7 +28,6 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
-import com.teamcqr.chocolatequestrepoured.util.handlers.TileEntityHandler;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -204,7 +203,6 @@ public class CQRMain {
 	public void init(FMLInitializationEvent event) {
 		proxy.init();
 
-		TileEntityHandler.registerTileEntity();
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();

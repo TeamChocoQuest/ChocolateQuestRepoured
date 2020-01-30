@@ -1,11 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -18,7 +14,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Copyright (c) 29.04.2019
@@ -41,30 +36,28 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
 		// Builds the support hill;
 		if (this.dungeon.doBuildSupportPlatform()) {
-			int sizeX = this.structure.getSizeX();
-			int sizeZ = this.structure.getSizeZ();
+			int sizeX = this.structure.getSize().getX();
+			int sizeZ = this.structure.getSize().getZ();
 			switch (this.placeSettings.getRotation()) {
 			case CLOCKWISE_90:
-				x -= sizeZ;
-				{
-					int i = sizeX;
-					int j = sizeZ;
-					sizeX = j;
-					sizeZ = i;
-				}
+				x -= sizeZ; {
+				int i = sizeX;
+				int j = sizeZ;
+				sizeX = j;
+				sizeZ = i;
+			}
 				break;
 			case CLOCKWISE_180:
 				x -= sizeX;
 				z -= sizeZ;
 				break;
 			case COUNTERCLOCKWISE_90:
-				z -= sizeX;
-				{
-					int i = sizeX;
-					int j = sizeZ;
-					sizeX = j;
-					sizeZ = i;
-				}
+				z -= sizeX; {
+				int i = sizeX;
+				int j = sizeZ;
+				sizeX = j;
+				sizeZ = i;
+			}
 				break;
 			default:
 				break;
@@ -78,16 +71,18 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Simply puts the structure at x,y,z
-		this.structure.placeBlocksInWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT);
+		this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
 
-		List<String> bosses = new ArrayList<>();
-		for(UUID id : structure.getBossIDs()) {
-			bosses.add(id.toString());
-		}
-		
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(this.structure.getSizeX(), this.structure.getSizeY(), this.structure.getSizeZ()), world, bosses);
-		event.setShieldCorePosition(this.structure.getShieldCorePosition());
-		MinecraftForge.EVENT_BUS.post(event);
+		/*
+		 * List<String> bosses = new ArrayList<>();
+		 * for(UUID id : structure.getBossIDs()) {
+		 * bosses.add(id.toString());
+		 * }
+		 * 
+		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), this.structure.getSize(), world, bosses);
+		 * event.setShieldCorePosition(this.structure.getShieldCorePosition());
+		 * MinecraftForge.EVENT_BUS.post(event);
+		 */
 	}
 
 	@Override
@@ -108,30 +103,28 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			int sizeX = this.structure.getSizeX();
-			int sizeZ = this.structure.getSizeZ();
+			int sizeX = this.structure.getSize().getX();
+			int sizeZ = this.structure.getSize().getZ();
 			switch (this.placeSettings.getRotation()) {
 			case CLOCKWISE_90:
-				x -= sizeZ;
-				{
-					int i = sizeX;
-					int j = sizeZ;
-					sizeX = j;
-					sizeZ = i;
-				}
+				x -= sizeZ; {
+				int i = sizeX;
+				int j = sizeZ;
+				sizeX = j;
+				sizeZ = i;
+			}
 				break;
 			case CLOCKWISE_180:
 				x -= sizeX;
 				z -= sizeZ;
 				break;
 			case COUNTERCLOCKWISE_90:
-				z -= sizeX;
-				{
-					int i = sizeX;
-					int j = sizeZ;
-					sizeX = j;
-					sizeZ = i;
-				}
+				z -= sizeX; {
+				int i = sizeX;
+				int j = sizeZ;
+				sizeX = j;
+				sizeZ = i;
+			}
 				break;
 			default:
 				break;

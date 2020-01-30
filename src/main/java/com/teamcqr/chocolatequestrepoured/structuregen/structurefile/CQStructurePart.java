@@ -4,30 +4,32 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
-
-import com.google.common.collect.Lists;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
-import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockSpawner;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.ITemplateProcessor;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
@@ -38,216 +40,216 @@ import net.minecraft.world.gen.structure.template.Template;
  */
 public class CQStructurePart extends Template {
 
-	private List<BannerInfo> banners = new ArrayList<BannerInfo>();
-	private List<SpawnerInfo> spawners = new ArrayList<SpawnerInfo>();
-	private List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
-	private List<ForceFieldNexusInfo> forceFieldCores = new ArrayList<ForceFieldNexusInfo>();
+	private final List<BlockPos> banners = new ArrayList<BlockPos>();
+	private final List<BlockPos> spawners = new ArrayList<BlockPos>();
+	private final List<LootChestInfo> chests = new ArrayList<LootChestInfo>();
+	private final List<BlockPos> forceFieldCores = new ArrayList<BlockPos>();
+	private final List<BlockPos> bosses = new ArrayList<BlockPos>();
 
-	private EDungeonMobType dungeonMob = EDungeonMobType.DEFAULT;
+	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
+		this.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
 
-	private List<BossInfo> bosses = new ArrayList<>();
-
-	private EBanners newBannerPattern = EBanners.WALKER_BANNER;
-
-	@Nullable
-	DungeonBase dungeon;
-	int dunX, dunZ = 0;
-
-	private int part_id;
-
-	public CQStructurePart(@Nullable DungeonBase dungeon, int posOfDunX, int posOfDunZ, EDungeonMobType mob) {
-		super();
-		if (dungeon != null) {
-			this.dungeon = dungeon;
-			this.dungeonMob = mob;
-		}
-		this.dunX = posOfDunX;
-		this.dunZ = posOfDunZ;
-	}
-
-	public void setNewBannerPattern(EBanners pattern) {
-		this.newBannerPattern = pattern;
-	}
-
-	public void setDungeonMob(EDungeonMobType type) {
-		this.dungeonMob = type;
-	}
-
-	public CQStructurePart(int part_id) {
-		super();
-
-		this.setPartId(part_id);
-	}
-
-	// CONFIRMED WORKING
-	// @SuppressWarnings("unchecked")
-	@SuppressWarnings("unchecked")
-	@Override
-	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean takeEntities, Block toIgnore) {
-		// System.out.println("Scanning blocks...");
 		this.banners.clear();
 		this.chests.clear();
 		this.spawners.clear();
 		this.forceFieldCores.clear();
-		// System.out.println("Super class scan....");
-		super.takeBlocksFromWorld(worldIn, startPos, endPos.subtract(startPos), takeEntities, toIgnore);
-		// System.out.println("Filling special lists...");
-		List<Template.BlockInfo> blocks = Lists.<Template.BlockInfo>newArrayList();
-		Field superBlockField;
+		this.bosses.clear();
+
 		try {
-			boolean outsideOfDevEnv = false;
+			Field field = null;
 			try {
-				superBlockField = Template.class.getDeclaredField("blocks");
-			} catch (NoSuchFieldException ex) {
-				// ex.printStackTrace();
-				outsideOfDevEnv = true;
-				System.out.println("It seems we're not in the dev environment... Using obfuscated field name...");
-				superBlockField = null;
-			}
-			if (outsideOfDevEnv) {
+				field = Template.class.getDeclaredField("blocks");
+			} catch (NoSuchFieldException e) {
+				CQRMain.logger.info("Failed to get field by name \"blocks\". Using obfuscated name \"field_186270_a\"");
 				try {
-					superBlockField = Template.class.getDeclaredField("field_186270_a");
-				} catch (NoSuchFieldException ex) {
-					ex.printStackTrace();
-					superBlockField = null;
+					field = Template.class.getDeclaredField("field_186270_a");
+				} catch (NoSuchFieldException e1) {
+					e1.printStackTrace();
+					return;
 				}
 			}
+			field.setAccessible(true);
+			List<Template.BlockInfo> blocks = (List<BlockInfo>) field.get(this);
+			List<Integer> removeEntries = new ArrayList<Integer>();
 
-			if (superBlockField != null) {
-				superBlockField.setAccessible(true);
-
-				try {
-					blocks = (List<Template.BlockInfo>) superBlockField.get(this);
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				}
-			}
-			// DONE: Scan blocks for: Nullblocks, CQ-Spawners, CQ-Chests and banners with CQ-designs, store their indexes in the right lists. NOTE: All Indexes are also present in the removeEntries Array
-			// after filtering, remove the entries and add them into their currect lists
-
-			List<Template.BlockInfo> removeEntries = new ArrayList<Template.BlockInfo>();
 			for (int i = 0; i < blocks.size(); i++) {
-				Template.BlockInfo bi = blocks.get(i);
-				Block currentBlock = bi.blockState.getBlock();
+				Template.BlockInfo blockInfo = blocks.get(i);
+				Block currentBlock = blockInfo.blockState.getBlock();
 
-				// DONE: Fix bug: vanilla containers have no inventory?!?!
-				// Problem: Does not even get the data from the super call ?!?!
-				// Cause of it: chests item map is empty ???
-				// Problem begins here: The chest tiledata's contents only contain air ?!?!
-
-				// Banner - Floor
-				if (Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER)) {
-					// DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					TileEntity te = worldIn.getTileEntity(startPos.add(bi.pos));
-					if (te != null && te instanceof TileEntityBanner) {
-						if (DungeonGenUtils.isCQBanner((TileEntityBanner) te)) {
-							BannerInfo bai = new BannerInfo(bi.pos);
-							this.banners.add(bai);
-						}
-					}
-				}
-				// Wallbanner
-				if (Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
-					// DONE: Check if banner has a CQ pattern, if yes, add it to the list, it only needs the location
-					TileEntity te = worldIn.getTileEntity(startPos.add(bi.pos));
-					if (te != null && te instanceof TileEntityBanner) {
-						if (DungeonGenUtils.isCQBanner((TileEntityBanner) te)) {
-							BannerInfo bai = new BannerInfo(bi.pos);
-							this.banners.add(bai);
-						}
-					}
-				}
-
-				// NULL Block
+				// Removing null blocks
 				if (Block.isEqualTo(currentBlock, ModBlocks.NULL_BLOCK)) {
-					// DONE: remove the block entry, so that blocks don't get replaced when pasting
-					removeEntries.add(bi);
+					removeEntries.add(i);
 				}
 
-				// CQ-Spawners
-				// DONE: Wait for spawner block and tileentity
-				if (Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
-					SpawnerInfo si = new SpawnerInfo((BlockSpawner) currentBlock, bi.pos, worldIn, bi.tileentityData);
-					this.spawners.add(si);
-					removeEntries.add(bi);
-				}
+				// Saving banner info
+				if (Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER) || Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
+					TileEntity tileEntity = worldIn.getTileEntity(startPos.add(blockInfo.pos));
 
-				// Chests
-				if (DungeonGenUtils.isLootChest(currentBlock)) {
-					ELootTable elt = ELootTable.valueOf(currentBlock);
-					if (elt != null) {
-						LootChestInfo lci = new LootChestInfo(currentBlock, bi.pos, elt.getID());
-						this.chests.add(lci);
-						removeEntries.add(bi);
+					if (tileEntity != null && tileEntity instanceof TileEntityBanner && DungeonGenUtils.isCQBanner((TileEntityBanner) tileEntity)) {
+						this.banners.add(blockInfo.pos);
 					}
 				}
 
-				// Force Field cores
-				if (Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
-					ForceFieldNexusInfo ffni = new ForceFieldNexusInfo(bi.pos);
-					this.forceFieldCores.add(ffni);
-					removeEntries.add(bi);
+				// Saving spawner info
+				if (Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
+					this.spawners.add(blockInfo.pos);
 				}
 
-				// Boss blocks
+				// Saving loot chest info
+				if (DungeonGenUtils.isLootChest(currentBlock)) {
+					LootChestInfo lootChestInfo = new LootChestInfo(blockInfo.pos, blockInfo.blockState.getValue(BlockHorizontal.FACING), ELootTable.valueOf(currentBlock));
+					this.chests.add(lootChestInfo);
+					removeEntries.add(i);
+				}
+
+				// Saving force field nexus info
+				if (Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
+					this.forceFieldCores.add(blockInfo.pos);
+					removeEntries.add(i);
+				}
+
+				// Saving boss info
 				if (Block.isEqualTo(currentBlock, ModBlocks.BOSS_BLOCK)) {
-					BossInfo boi = new BossInfo(bi.pos);
-					this.bosses.add(boi);
-					removeEntries.add(bi);
+					this.bosses.add(blockInfo.pos);
+					removeEntries.add(i);
 				}
 			}
-			// And now: remove all the entries we want to be gone....
+
 			for (int i = 0; i < removeEntries.size(); i++) {
-				// int index = removeEntries.get(i);
-				blocks.remove(removeEntries.get(i));
+				blocks.remove(removeEntries.get(i) - i);
 			}
-			// exchange the field values
-			try {
-				if (superBlockField != null) {
-					superBlockField.set(this, blocks);
-					superBlockField.setAccessible(false);
-				}
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			}
-		} catch (SecurityException e) {
-			e.printStackTrace();
+		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			CQRMain.logger.error(e);
 		}
-		// System.out.println("Blocks scanned!");
+	}
+
+	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
+		this.addBlocksToWorld(worldIn, pos, placementIn);
+
+		if (replaceBanners) {
+			for (BlockPos bannerPos : this.banners) {
+				BlockPos transformedPos = transformedBlockPos(placementIn, bannerPos).add(pos);
+				TileEntity tileEntity = worldIn.getTileEntity(transformedPos);
+
+				if (tileEntity instanceof TileEntityBanner) {
+					((TileEntityBanner) tileEntity).setItemValues(dungeonBanner.getBanner(), true);
+				} else {
+					CQRMain.logger.warn("Failed to place banner at " + transformedPos);
+				}
+			}
+		}
+
+		for (BlockPos spawnerPos : this.spawners) {
+			BlockPos transformedPos = transformedBlockPos(placementIn, spawnerPos).add(pos);
+			TileEntity tileEntity = worldIn.getTileEntity(transformedPos);
+
+			if (tileEntity instanceof TileEntitySpawner) {
+				((TileEntitySpawner) tileEntity).setInDungeon(dungeonChunkX, dungeonChunkZ, dungeonMob);
+			} else {
+				CQRMain.logger.warn("Failed to place spawner at " + transformedPos);
+			}
+		}
+
+		for (LootChestInfo lootChestInfo : this.chests) {
+			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
+
+			if (worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2)) {
+				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
+
+				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
+				tileEntityChest.setLootTable(lootChestInfo.getLootTable().getResourceLocation(), seed);
+			} else {
+				CQRMain.logger.warn("Failed to place loot chest at " + transformedPos);
+			}
+		}
+
+		for (BlockPos nexusPos : this.forceFieldCores) {
+			BlockPos transformedPos = transformedBlockPos(placementIn, nexusPos).add(pos);
+
+			if (hasShield) {
+				if (worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 2)) {
+					// TODO add nexus to protection system
+				} else {
+					CQRMain.logger.warn("Failed to place force field nexus at " + transformedPos);
+				}
+			} else {
+				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
+			}
+		}
+
+		for (BlockPos bossPos : this.bosses) {
+			BlockPos transformedPos = transformedBlockPos(placementIn, bossPos).add(pos);
+
+			if (worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2)) {
+				if (dungeonMob.getBossResourceLocation() != null) {
+					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);
+
+					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
+					if (entity instanceof EntityLiving) {
+						((EntityLiving) entity).enablePersistence();
+					}
+					if (entity instanceof AbstractEntityCQRBoss) {
+						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon();
+						((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
+						((AbstractEntityCQRBoss) entity).equipDefaultEquipment(worldIn, transformedPos);
+					}
+					worldIn.spawnEntity(entity);
+
+					// TODO add boss to protection system
+				} else {
+					EntityArmorStand indicator = new EntityArmorStand(worldIn);
+					indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
+					indicator.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
+					indicator.setEntityInvulnerable(true);
+					indicator.setInvisible(true);
+					indicator.setAlwaysRenderNameTag(true);
+					indicator.setSilent(true);
+					indicator.setNoGravity(true);
+
+					worldIn.spawnEntity(indicator);
+				}
+			} else {
+				CQRMain.logger.warn("Failed to place boss at " + transformedPos);
+			}
+		}
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		NBTTagCompound tag = super.writeToNBT(nbt);
 
-		NBTTagList bannerTags = new NBTTagList();
-		for (BannerInfo bi : this.banners) {
-			bannerTags.appendTag(bi.getAsNBTTag());
+		tag.removeTag("author");
+
+		NBTTagList bannerTagList = new NBTTagList();
+		for (BlockPos pos : this.banners) {
+			bannerTagList.appendTag(NBTUtil.createPosTag(pos));
 		}
 
-		NBTTagList chestTags = new NBTTagList();
-		for (LootChestInfo lci : this.chests) {
-			chestTags.appendTag(lci.getAsNBTTag());
+		NBTTagList spawnerTagList = new NBTTagList();
+		for (BlockPos pos : this.spawners) {
+			spawnerTagList.appendTag(NBTUtil.createPosTag(pos));
 		}
 
-		NBTTagList spawnerTags = new NBTTagList();
-		for (SpawnerInfo si : this.spawners) {
-			spawnerTags.appendTag(si.getAsNBTTag());
+		NBTTagList chestTagList = new NBTTagList();
+		for (LootChestInfo lootChestInfo : this.chests) {
+			chestTagList.appendTag(lootChestInfo.getAsNBTTag());
 		}
 
-		NBTTagList forcefieldcoreTags = new NBTTagList();
-		for (ForceFieldNexusInfo ffni : this.forceFieldCores) {
-			forcefieldcoreTags.appendTag(ffni.getAsNBTTag());
+		NBTTagList forceFieldNexusTagList = new NBTTagList();
+		for (BlockPos pos : this.forceFieldCores) {
+			forceFieldNexusTagList.appendTag(NBTUtil.createPosTag(pos));
 		}
 
-		tag.setTag("banners", bannerTags);
-		tag.setTag("chests", chestTags);
-		tag.setTag("spawners", spawnerTags);
-		tag.setTag("forcefieldcores", forcefieldcoreTags);
+		NBTTagList bossTagList = new NBTTagList();
+		for (BlockPos pos : this.bosses) {
+			bossTagList.appendTag(NBTUtil.createPosTag(pos));
+		}
+
+		tag.setTag("banners", bannerTagList);
+		tag.setTag("spawners", spawnerTagList);
+		tag.setTag("chests", chestTagList);
+		tag.setTag("forcefieldcores", forceFieldNexusTagList);
+		tag.setTag("bosses", bossTagList);
 
 		return tag;
 	}
@@ -257,117 +259,40 @@ public class CQStructurePart extends Template {
 		super.read(compound);
 
 		this.banners.clear();
-		NBTTagList bannerTag = compound.getTagList("banners", 10);
-		for (int i = 0; i < bannerTag.tagCount(); i++) {
-			NBTTagCompound tag = bannerTag.getCompoundTagAt(i);
-			this.banners.add(new BannerInfo(tag));
-		}
-
 		this.spawners.clear();
-		NBTTagList spawnerTag = compound.getTagList("spawners", 10);
-		for (int i = 0; i < spawnerTag.tagCount(); i++) {
-			NBTTagCompound tag = spawnerTag.getCompoundTagAt(i);
-			// DONE: Add functionaliy to spawner info
-			this.spawners.add(new SpawnerInfo(tag));
+		this.chests.clear();
+		this.forceFieldCores.clear();
+		this.bosses.clear();
+
+		NBTTagList bannerTagList = compound.getTagList("banners", 10);
+		for (int i = 0; i < bannerTagList.tagCount(); i++) {
+			NBTTagCompound tag = bannerTagList.getCompoundTagAt(i);
+			this.banners.add(NBTUtil.getPosFromTag(tag));
 		}
 
-		this.chests.clear();
-		NBTTagList chestTag = compound.getTagList("chests", 10);
-		for (int i = 0; i < chestTag.tagCount(); i++) {
-			NBTTagCompound tag = chestTag.getCompoundTagAt(i);
+		NBTTagList spawnerTagList = compound.getTagList("spawners", 10);
+		for (int i = 0; i < spawnerTagList.tagCount(); i++) {
+			NBTTagCompound tag = spawnerTagList.getCompoundTagAt(i);
+			this.spawners.add(NBTUtil.getPosFromTag(tag));
+		}
+
+		NBTTagList chestTagList = compound.getTagList("chests", 10);
+		for (int i = 0; i < chestTagList.tagCount(); i++) {
+			NBTTagCompound tag = chestTagList.getCompoundTagAt(i);
 			this.chests.add(new LootChestInfo(tag));
 		}
 
-		this.forceFieldCores.clear();
-		NBTTagList coresTag = compound.hasKey("forcefieldcores") ? compound.getTagList("forcefieldcores", 10) : new NBTTagList();
-		for (int i = 0; i < coresTag.tagCount(); i++) {
-			NBTTagCompound tag = coresTag.getCompoundTagAt(i);
-			this.forceFieldCores.add(new ForceFieldNexusInfo(tag));
-		}
-	}
-
-	@Override
-	public void addBlocksToWorld(World worldIn, BlockPos pos, ITemplateProcessor templateProcessor, PlacementSettings placementIn, int flags) {
-		super.addBlocksToWorld(worldIn, pos, templateProcessor, placementIn, flags);
-
-		// Now we want to place the banners first......
-		// DONE: Wait for banner patterns, then do this
-		if (this.dungeon.replaceBanners() && this.banners != null && !this.banners.isEmpty() && this.newBannerPattern != null) {
-			for (BannerInfo bi : this.banners) {
-				if (bi != null) {
-					BlockPos bannerPos = transformedBlockPos(placementIn, bi.getPos()).add(pos);
-					try {
-						TileEntityBanner banner = (TileEntityBanner) worldIn.getTileEntity(bannerPos);
-						if (BannerHelper.isCQBanner(banner)) {
-							// TODO: Set banners new base color
-							// DONE: Place replaced banners
-							// DONE: "Clean" the banner
-							// DONE: Repaint the banner
-							banner.setItemValues(this.newBannerPattern.getBanner(), true);
-						}
-					} catch (ClassCastException ex) {
-
-					}
-				}
-			}
-		}
-		// Then, we place the chests and set their loot tables.....
-		if (this.chests != null && !this.chests.isEmpty()) {
-			for (LootChestInfo lci : this.chests) {
-				if (lci != null) {
-					BlockPos chestPos = transformedBlockPos(placementIn, lci.getPos()).add(pos);
-					Block chestBlock = lci.isRedstoneChest() ? Blocks.TRAPPED_CHEST : Blocks.CHEST;
-					worldIn.setBlockState(chestPos, chestBlock.getDefaultState());
-					TileEntityChest chest = (TileEntityChest) worldIn.getTileEntity(chestPos);
-					// DONE: Wait for loot tables to be finished, get the right one and add it below
-					long seed = WorldDungeonGenerator.getSeed(worldIn, chestPos.getX(), chestPos.getZ());
-					chest.setLootTable(ELootTable.valueOf(lci.getLootType()).getResourceLocation(), seed);
-				}
-			}
+		NBTTagList coresTagList = compound.getTagList("forcefieldcores", 10);
+		for (int i = 0; i < coresTagList.tagCount(); i++) {
+			NBTTagCompound tag = coresTagList.getCompoundTagAt(i);
+			this.forceFieldCores.add(NBTUtil.getPosFromTag(tag));
 		}
 
-		// And at last, we place the spawners....
-		if (this.spawners != null && !this.spawners.isEmpty()) {
-			for (SpawnerInfo si : this.spawners) {
-				// DONE: Place spawners
-				BlockPos spawnerPos = transformedBlockPos(placementIn, si.getPos()).add(pos);
-				worldIn.setBlockState(spawnerPos, ModBlocks.SPAWNER.getDefaultState());
-				TileEntity te = worldIn.getTileEntity(spawnerPos);
-
-				// Problem is here: it somehow fails to properly "set" the data to the tile entity .... >:( --> solved
-				NBTTagCompound tileData = si.getSpawnerData();
-				tileData.setInteger("x", spawnerPos.getX());
-				tileData.setInteger("y", spawnerPos.getY());
-				tileData.setInteger("z", spawnerPos.getZ());
-
-				((TileEntitySpawner) te).setDungeonSpawner();
-
-				if (this.dungeon != null) {
-					((TileEntitySpawner) te).setInDungeon(this.dungeon, this.dunX, this.dunZ, this.dungeonMob);
-				}
-
-				te.readFromNBT(tileData);
-				te.mirror(placementIn.getMirror());
-				te.rotate(placementIn.getRotation());
-			}
+		NBTTagList bossTagList = compound.getTagList("bosses", 10);
+		for (int i = 0; i < bossTagList.tagCount(); i++) {
+			NBTTagCompound tag = bossTagList.getCompoundTagAt(i);
+			this.bosses.add(NBTUtil.getPosFromTag(tag));
 		}
-		// Done :D
-	}
-
-	public int getPartId() {
-		return this.part_id;
-	}
-
-	public void setPartId(int part_id) {
-		this.part_id = part_id;
-	}
-
-	public List<ForceFieldNexusInfo> getFieldCores() {
-		return new ArrayList<ForceFieldNexusInfo>(this.forceFieldCores);
-	}
-
-	public List<BossInfo> getBosses() {
-		return this.bosses;
 	}
 
 }
