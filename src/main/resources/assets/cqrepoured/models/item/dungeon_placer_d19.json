@@ -1,12 +1,12 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"7": "cqrepoured:items/fire",
-		"8": "cqrepoured:items/grass",
-		"9": "cqrepoured:items/planks",
-		"12": "cqrepoured:items/stone",
-		"14": "cqrepoured:items/wood",
-		"15": "cqrepoured:items/wool"
+		"7": "cqrepoured:items/dungeon_placers/fire",
+		"8": "cqrepoured:items/dungeon_placers/grass",
+		"9": "cqrepoured:items/dungeon_placers/planks",
+		"12": "cqrepoured:items/dungeon_placers/stone",
+		"14": "cqrepoured:items/dungeon_placers/wood",
+		"15": "cqrepoured:items/dungeon_placers/wool"
 	},
 	"elements": [
 		{
