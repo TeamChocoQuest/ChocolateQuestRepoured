@@ -176,18 +176,22 @@ public class CQRMain {
 		}
 		if (!CQ_DUNGEON_FOLDER.exists()) {
 			CQ_DUNGEON_FOLDER.mkdir();
+			installCQ = true;
 		}
 		if (!CQ_CHEST_FOLDER.exists()) {
 			CQ_CHEST_FOLDER.mkdir();
+			installCQ = true;
 		}
 		if (!CQ_STRUCTURE_FILES_FOLDER.exists()) {
 			CQ_STRUCTURE_FILES_FOLDER.mkdir();
+			installCQ = true;
 		}
 		if (!CQ_EXPORT_FILES_FOLDER.exists()) {
 			CQ_EXPORT_FILES_FOLDER.mkdir();
 		}
 		if (!CQ_FACTION_FOLDER.exists()) {
 			CQ_FACTION_FOLDER.mkdir();
+			installCQ = true;
 		}
 
 		if (installCQ) {
