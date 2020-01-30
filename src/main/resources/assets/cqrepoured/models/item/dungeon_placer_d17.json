@@ -1,12 +1,12 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "Outpost3dmodel/grass",
-		"1": "Outpost3dmodel/planks",
-		"2": "Outpost3dmodel/planks_bright",
-		"3": "Outpost3dmodel/wood",
-		"4": "Outpost3dmodel/planks_door",
-		"particle": "Outpost3dmodel/grass"
+		"0": "cqrepoured:items/grass",
+		"1": "cqrepoured:items/planks",
+		"2": "cqrepoured:items/planks_bright",
+		"3": "cqrepoured:items/wood",
+		"4": "cqrepoured:items/planks_door",
+		"particle": "cqrepoured:items/grass"
 	},
 	"elements": [
 		{
