@@ -1,6 +1,0 @@
-{
-   "parent": "block/cube_all",
-   "textures": {
-       "all": "cqrepoured:blocks/exporter_chest_custom_5"
-   }
-}

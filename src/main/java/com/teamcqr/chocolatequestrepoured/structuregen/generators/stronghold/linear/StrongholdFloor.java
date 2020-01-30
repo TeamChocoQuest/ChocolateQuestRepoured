@@ -85,12 +85,12 @@ public class StrongholdFloor {
 		StrongholdRoom entranceRoom = this.roomGrid[this.firstRoomIndexes.getFirst()][this.firstRoomIndexes.getSecond()];
 		CQStructure stair = null;
 		if (firstStairIsEntranceStair) {
-			stair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
+			stair = new CQStructure(dungeon.getEntranceStairRoom());
 		} else {
-			stair = new CQStructure(dungeon.getStairRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
+			stair = new CQStructure(dungeon.getStairRoom());
 		}
-		this.floorY = upperFloorExitPos.getY() - stair.getSizeY();
-		entranceRoom.generateRoom(dungeon, upperFloorExitPos.subtract(new Vec3i(0, stair.getSizeY(), 0)), world, settings, stair, true);
+		this.floorY = upperFloorExitPos.getY() - stair.getSize().getY();
+		entranceRoom.generateRoom(dungeon, upperFloorExitPos.subtract(new Vec3i(0, stair.getSize().getY(), 0)), world, settings, stair, true);
 
 		// Rest of the rooms
 		for (int iX = 0; iX < (this.roomCount + 2); iX++) {
@@ -107,7 +107,7 @@ public class StrongholdFloor {
 						CQStructure struct = null;
 						if (iX == this.lastRoomIndexes.getFirst() && iZ == this.lastRoomIndexes.getSecond()) {
 							if (isLastFloor) {
-								struct = new CQStructure(dungeon.getBossRoom(), dungeon, this.generator.getDunX(), this.generator.getDunZ(), dungeon.isProtectedFromModifications());
+								struct = new CQStructure(dungeon.getBossRoom());
 								room.generateRoom(dungeon, pos, world, settings, struct, true);
 							}
 						}

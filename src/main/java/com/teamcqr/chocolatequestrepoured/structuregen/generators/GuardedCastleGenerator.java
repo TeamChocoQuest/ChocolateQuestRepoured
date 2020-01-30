@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -26,7 +24,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Copyright (c) 29.04.2019
@@ -48,7 +45,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 
 	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
 	private BlockPos shieldPos = null;
-	
+
 	public GuardedCastleGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
 	}
@@ -112,16 +109,16 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			CQRMain.logger.error("No center building for guarded castle: " + this.dungeon.getDungeonName());
 			return;
 		}
-		CQStructure centerDun = new CQStructure(this.centerStructure, this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
+		CQStructure centerDun = new CQStructure(this.centerStructure);
 
 		PlateauBuilder platformCenter = new PlateauBuilder();
 		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-		platformCenter.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), centerDun.getSizeX(), centerDun.getSizeZ(), EPosType.DEFAULT);
+		platformCenter.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), centerDun.getSize().getX(), centerDun.getSize().getZ(), EPosType.DEFAULT);
 
 		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y, z /*- (centerDun.getSizeZ() /2)*/);
 
 		this.toGenerate.put(centerDun, cenPos);
-		this.shieldPos = centerDun.getShieldCorePosition();
+		// this.shieldPos = centerDun.getShieldCorePosition();
 
 		PlateauBuilder platform = new PlateauBuilder();
 		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -130,7 +127,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			if (i < this.chosenStructures.size()) {
 				System.out.println("Building support platform " + (i + 1) + "...");
 				// DONE: Load structures from file method !!HIGH PRIORITY!!
-				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
+				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
 
 				if (dungeonToSpawn != null) {
 					// Build the support platform...
@@ -140,8 +137,8 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 					int zT = pos.getZ();
 
 					Rotation rot = this.dungeon.rotateDungeon() ? Rotation.values()[new Random().nextInt(4)] : Rotation.NONE;
-					int sizeX = dungeonToSpawn.getSizeX();
-					int sizeZ = dungeonToSpawn.getSizeZ();
+					int sizeX = dungeonToSpawn.getSize().getX();
+					int sizeZ = dungeonToSpawn.getSize().getZ();
 					this.rotList.set(i, rot);
 					if (this.dungeon.rotateDungeon()) {
 						switch (rot) {
@@ -165,7 +162,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 						this.structurePosList.set(i, pos);
 					}
 
-					platform.createSupportHill(new Random(), world, new BlockPos(pos.getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ()), dungeonToSpawn.getSizeX(), dungeonToSpawn.getSizeZ(), EPosType.DEFAULT);
+					platform.createSupportHill(new Random(), world, new BlockPos(pos.getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ()), dungeonToSpawn.getSize().getX(), dungeonToSpawn.getSize().getZ(), EPosType.DEFAULT);
 
 					// Build the structure...
 					/*
@@ -205,8 +202,8 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			plcmnt.setIntegrity(1.0f);
 
 			int index = 1;
-			BlockPos posLower = new BlockPos(x,y,z);
-			BlockPos posUpper = new BlockPos(x,y,z);
+			BlockPos posLower = new BlockPos(x, y, z);
+			BlockPos posUpper = new BlockPos(x, y, z);
 			List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
@@ -214,44 +211,48 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 				int X = posLower.getX();
 				int Y = posLower.getY();
 				int Z = posLower.getZ();
-				if(pos.getX() < X) {
+				if (pos.getX() < X) {
 					X = pos.getX();
 				}
-				if(pos.getY() < Y) {
+				if (pos.getY() < Y) {
 					X = pos.getY();
 				}
-				if(pos.getZ() < Z) {
+				if (pos.getZ() < Z) {
 					X = pos.getZ();
 				}
-				posLower = new BlockPos(X,Y,Z);
-				
+				posLower = new BlockPos(X, Y, Z);
+
 				int xm = posUpper.getX();
 				int ym = posUpper.getY();
 				int zm = posUpper.getZ();
-				if(pos.getX() + structure.getSizeX() > xm) {
-					xm = pos.getX() + structure.getSizeX();
+				if (pos.getX() + structure.getSize().getX() > xm) {
+					xm = pos.getX() + structure.getSize().getX();
 				}
-				if(pos.getY() + structure.getSizeY() > ym) {
-					ym = pos.getY() + structure.getSizeY();
+				if (pos.getY() + structure.getSize().getY() > ym) {
+					ym = pos.getY() + structure.getSize().getY();
 				}
-				if(pos.getZ() + structure.getSizeZ() > zm) {
-					zm = pos.getZ() + structure.getSizeZ();
+				if (pos.getZ() + structure.getSize().getZ() > zm) {
+					zm = pos.getZ() + structure.getSize().getZ();
 				}
-				posUpper = new BlockPos(X,Y,Z);
+				posUpper = new BlockPos(X, Y, Z);
 
 				plcmnt.setRotation(this.rotList.get(index - 1));
 
-				structure.placeBlocksInWorld(world, pos, plcmnt, EPosType.DEFAULT);
-				for(UUID id : structure.getBossIDs()) {
-					bosses.add(id.toString());
-				}
+				structure.addBlocksToWorld(world, pos, plcmnt, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
+				/*
+				 * for (UUID id : structure.getBossIDs()) {
+				 * bosses.add(id.toString());
+				 * }
+				 */
 
 				index++;
 			}
-			
-			CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
-			event.setShieldCorePosition(shieldPos);
-			MinecraftForge.EVENT_BUS.post(event);
+
+			/*
+			 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
+			 * event.setShieldCorePosition(shieldPos);
+			 * MinecraftForge.EVENT_BUS.post(event);
+			 */
 		}
 	}
 
@@ -385,11 +386,11 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			for (CQStructure structure : this.toGenerate.keySet()) {
-				int startX = this.toGenerate.get(structure).getX() - structure.getSizeX() / 3 - CQRConfig.general.supportHillWallSize / 2;
-				int startZ = this.toGenerate.get(structure).getZ() - structure.getSizeZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
+				int startX = this.toGenerate.get(structure).getX() - structure.getSize().getX() / 3 - CQRConfig.general.supportHillWallSize / 2;
+				int startZ = this.toGenerate.get(structure).getZ() - structure.getSize().getZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
 
-				int endX = this.toGenerate.get(structure).getX() + structure.getSizeX() + structure.getSizeX() / 3 + CQRConfig.general.supportHillWallSize / 2;
-				int endZ = this.toGenerate.get(structure).getZ() + structure.getSizeZ() + structure.getSizeZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
+				int endX = this.toGenerate.get(structure).getX() + structure.getSize().getX() + structure.getSize().getX() / 3 + CQRConfig.general.supportHillWallSize / 2;
+				int endZ = this.toGenerate.get(structure).getZ() + structure.getSize().getZ() + structure.getSize().getZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
 
 				for (int iX = startX; iX <= endX; iX++) {
 					for (int iZ = startZ; iZ <= endZ; iZ++) {

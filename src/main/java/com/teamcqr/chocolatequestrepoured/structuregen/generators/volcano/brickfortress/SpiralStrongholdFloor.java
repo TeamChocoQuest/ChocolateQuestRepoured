@@ -231,8 +231,8 @@ public class SpiralStrongholdFloor {
 						if(dungeon != null && world != null) {
 							File file = dungeon.getRoomNBTFileForType(type);
 							if(file != null) {
-								CQStructure room = new CQStructure(file, dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
-								room.placeBlocksInWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER);
+								CQStructure room = new CQStructure(file);
+								room.addBlocksToWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER, dungeon, dunX, dunZ);
 							}
 						}
 					}

@@ -79,13 +79,13 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Builds the chains
 		// TODO: Methods to get central buildings
 		BlockPos center = new BlockPos(x, y, z);
-		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure(), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
-		center = new BlockPos(center.getX() - censtruct.getSizeX(), y, center.getZ() - censtruct.getSizeZ());
+		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure());
+		center = new BlockPos(center.getX() - censtruct.getSize().getX(), y, center.getZ() - censtruct.getSize().getZ());
 		this.buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center));
 
 		for (BlockPos bp : this.structureMap.keySet()) {
-			CQStructure structure = new CQStructure(this.structureMap.get(bp), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
-			BlockPos pastePos = bp.subtract(structure.getSizeAsVec());
+			CQStructure structure = new CQStructure(this.structureMap.get(bp));
+			BlockPos pastePos = bp.subtract(structure.getSize());
 			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());
 
 			this.buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp));
@@ -163,7 +163,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	 * 
 	 */
 	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk) {
-		int radius = structure.getSizeX() > structure.getSizeZ() ? structure.getSizeX() : structure.getSizeZ();
+		int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
 
 		// r = sqrt(((Longer side of building) / 2)^2 *2) +5
 		radius = new Double(Math.sqrt(Math.pow((double) radius / 2.0D, 2.0D) * 2.0D) + 5).intValue();
@@ -188,7 +188,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 		center = center.add(0, 1, 0);
 
-		structure.placeBlocksInWorld(world, center, settings, EPosType.CENTER_XZ_LAYER);
+		structure.addBlocksToWorld(world, center, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
 
 		/*
 		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeAsVec()), world);

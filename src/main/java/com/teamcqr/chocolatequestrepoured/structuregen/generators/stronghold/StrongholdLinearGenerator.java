@@ -86,13 +86,13 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 			initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
 
-		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding(), this.dungeon, chunk.x, chunk.z, this.dungeon.isProtectedFromModifications());
+		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding());
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSizeX(), structure.getSizeZ(), EPosType.CENTER_XZ_LAYER);
+			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER);
 		}
-		structure.placeBlocksInWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER);
+		structure.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
 	}
 
 	@Override

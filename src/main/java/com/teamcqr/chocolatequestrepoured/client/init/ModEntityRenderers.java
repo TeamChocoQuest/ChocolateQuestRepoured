@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise_OLD;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNecromancer;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
@@ -9,8 +8,8 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMa
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGolem;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRIllager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMandril;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMinotaur;
@@ -39,6 +38,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
@@ -55,8 +55,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
-import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
+import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMinotaur;
@@ -84,6 +84,7 @@ import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNo
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishRed;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityPollo;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChest;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 
@@ -103,6 +104,7 @@ public class ModEntityRenderers {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTable.class, new TileEntityTableRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporter.class, new TileEntityExporterRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityForceFieldNexus.class, new TileEntityForceFieldNexusRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityExporterChest.class, new TileEntityExporterChestRenderer());
 	}
 
 	protected static void registerProjectileAndMiscRenderers() {
