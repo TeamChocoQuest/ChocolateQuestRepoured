@@ -1,13 +1,13 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cqrepoured:items/stone_door",
-		"1": "cqrepoured:items/stone",
-		"2": "cqrepoured:items/wood",
-		"3": "cqrepoured:items/planks",
-		"4": "cqrepoured:items/planks_bright",
-		"5": "cqrepoured:items/grass",
-		"particle": "cqrepoured:items/stone_door"
+		"0": "cqrepoured:items/dungeon_placers/stone_door",
+		"1": "cqrepoured:items/dungeon_placers/stone",
+		"2": "cqrepoured:items/dungeon_placers/wood",
+		"3": "cqrepoured:items/dungeon_placers/planks",
+		"4": "cqrepoured:items/dungeon_placers/planks_bright",
+		"5": "cqrepoured:items/dungeon_placers/grass",
+		"particle": "cqrepoured:items/dungeon_placers/stone_door"
 	},
 	"elements": [
 		{

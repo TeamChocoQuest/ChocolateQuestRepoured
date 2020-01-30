@@ -1,12 +1,12 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "cqrepoured:items/grass",
-		"1": "cqrepoured:items/planks",
-		"2": "cqrepoured:items/planks_bright",
-		"3": "cqrepoured:items/wood",
-		"4": "cqrepoured:items/planks_door",
-		"particle": "cqrepoured:items/grass"
+		"0": "cqrepoured:items/dungeon_placers/grass",
+		"1": "cqrepoured:items/dungeon_placers/planks",
+		"2": "cqrepoured:items/dungeon_placers/planks_bright",
+		"3": "cqrepoured:items/dungeon_placers/wood",
+		"4": "cqrepoured:items/dungeon_placers/planks_door",
+		"particle": "cqrepoured:items/dungeon_placers/grass"
 	},
 	"elements": [
 		{
