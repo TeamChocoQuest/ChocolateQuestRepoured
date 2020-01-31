@@ -272,9 +272,13 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 		
 		this.legJointFR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.legJointFR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * 0.7F * limbSwingAmount;
 		this.legJointFL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+		this.legJointFL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 0.7F * limbSwingAmount;
 		this.legJointBR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+		this.legJointBR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 0.7F * limbSwingAmount;
 		this.legJointBL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.legJointBL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * 0.7F * limbSwingAmount;
 		
 		/*super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		//Default animations (e.g. walking, flying....)
