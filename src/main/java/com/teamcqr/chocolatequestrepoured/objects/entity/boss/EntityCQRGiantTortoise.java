@@ -18,6 +18,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQR
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import io.netty.buffer.ByteBuf;
+import net.ilexiconn.llibrary.server.animation.Animation;
+import net.ilexiconn.llibrary.server.animation.AnimationAI;
+import net.ilexiconn.llibrary.server.animation.AnimationHandler;
+import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -42,7 +46,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
+public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
@@ -57,6 +61,29 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private ETortoiseAnimState lastTickAnim = ETortoiseAnimState.NONE;
 	@SideOnly(Side.CLIENT)
 	private boolean animationChanged = false;
+	
+	
+	//Animations
+	private Animation animation = NO_ANIMATION;
+	private int animationTick;
+	public AnimationAI currentAnim;
+	
+	private static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(60);
+	private static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(50);
+	private static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50);
+	private static final Animation ANIMATION_SPIN_UP = Animation.create(40);
+	private static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
+	private static final Animation ANIMATION_DEATH = Animation.create(300);
+	
+	private static final Animation[] ANIMATIONS = {
+			ANIMATION_SHOOT_BUBBLES, 
+			ANIMATION_MOVE_LEGS_IN, 
+			ANIMATION_MOVE_LEGS_OUT, 
+			ANIMATION_SPIN_UP, 
+			ANIMATION_SPIN_DOWN, 
+			ANIMATION_DEATH
+		};
+	//End of Animations
 
 	public enum ETortoiseAnimState {
 		SPIN_UP, SPIN_DOWN, SPIN, MOVE_PARTS_IN, MOVE_PARTS_OUT, WALKING, HEALING, NONE;
@@ -356,6 +383,50 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.readEntityFromNBT(compound);
 
 		this.isInShell = compound.getBoolean("inShell");
+	}
+	
+	//IAnimatedEntity Interface
+	@Override
+	public int getAnimationTick() {
+		return animationTick;
+	}
+	
+	@Override
+	public void setAnimationTick(int tick) {
+		this.animationTick = tick;
+	}
+	
+	@Override
+	public Animation getAnimation() {
+		return this.animation;
+	}
+	
+	@Override
+	public void setAnimation(Animation animation) {
+		if(animation == NO_ANIMATION) {
+			onAnimationFinish(this.animation);
+			setAnimationTick(0);
+		}
+		this.animation = animation;
+	}
+	
+	@Override
+	public Animation[] getAnimations() {
+		return ANIMATIONS;
+	}
+	
+	protected void onAnimationFinish(Animation animation) {
+		
+	}
+	
+	public Animation getDeathAnimation() {
+		return ANIMATION_DEATH;
+	}
+	
+	protected void onDeathAIUpdate() {
+		if(getAnimation() != ANIMATION_DEATH) {
+			AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_DEATH);
+		}
 	}
 
 }
