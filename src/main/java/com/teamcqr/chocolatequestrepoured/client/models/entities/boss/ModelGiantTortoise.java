@@ -286,6 +286,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
 					animator.move(head, 0, 0, 0.75F *16);
 				animator.endKeyframe();
+				animator.setStaticKeyframe(5);
 		}
 		
 		/*
@@ -299,12 +300,12 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 				//animator.setStaticKeyframe(49);
 				//animator.endKeyframe();
 				//Move legs out
+			for(int i = 0; i < legJoints.length; i++) {
+				animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
+				animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+				animator.move(legJoints[i], 0, -1, 0);
+			}
 				animator.startKeyframe(turtle.getAnimation().getDuration() /2);
-					for(int i = 0; i < legJoints.length; i++) {
-						animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
-						animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
-						animator.move(legJoints[i], 0, -1, 0);
-					}
 					animator.move(mainPart, 0, 0.4F *16, 0);
 					//move thing works in pixels, 16 is equals to 1 block
 					animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
@@ -391,16 +392,16 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			this.head.rotateAngleY = netHeadYaw * 0.017453292F;
 			
 			this.legJointFR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-			this.legJointFR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 0.7853981633974483F;
+			this.legJointFR.rotateAngleY = MathHelper.sin(limbSwing * 0.6662F) * limbSwingAmount + 0.7853981633974483F;
 			
 			this.legJointFL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
-			this.legJointFL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount - 0.7853981633974483F;
+			this.legJointFL.rotateAngleY = MathHelper.sin(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount - 0.7853981633974483F;
 			
 			this.legJointBR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
-			this.legJointBR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount + 2.356194490192345F;
+			this.legJointBR.rotateAngleY = MathHelper.sin(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount + 2.356194490192345F;
 			
 			this.legJointBL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-			this.legJointBL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount - 2.356194490192345F;
+			this.legJointBL.rotateAngleY = MathHelper.sin(limbSwing * 0.6662F) * limbSwingAmount - 2.356194490192345F;
 		}
 		for(AdvancedModelRenderer box : subParts) {
 			box.showModel = showSubParts;
