@@ -11,13 +11,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIMoveOutOfShell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAISpinTowardsTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
-import io.netty.buffer.ByteBuf;
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
@@ -48,32 +46,26 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 
-	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
-
+	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
-	protected boolean isInShell = false;
 	protected ETortoiseAnimState currentAnimation = ETortoiseAnimState.NONE;
 
 	static int EAnimStateGlobalID = 0;
 
-	@SideOnly(Side.CLIENT)
-	private ETortoiseAnimState lastTickAnim = ETortoiseAnimState.NONE;
-	@SideOnly(Side.CLIENT)
-	private boolean animationChanged = false;
-	
-	
 	//Animations
 	private Animation animation = NO_ANIMATION;
 	private int animationTick;
 	public AnimationAI currentAnim;
 	
-	private static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(60);
-	private static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(50);
-	private static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50);
-	private static final Animation ANIMATION_SPIN_UP = Animation.create(40);
-	private static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
-	private static final Animation ANIMATION_DEATH = Animation.create(300);
+	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
+	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(50);
+	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50);
+	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
+	public static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
+	public static final Animation ANIMATION_IDLE = Animation.create(100);
+	public static final Animation ANIMATION_DEATH = Animation.create(300);
 	
 	private static final Animation[] ANIMATIONS = {
 			ANIMATION_SHOOT_BUBBLES, 
@@ -81,6 +73,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			ANIMATION_MOVE_LEGS_OUT, 
 			ANIMATION_SPIN_UP, 
 			ANIMATION_SPIN_DOWN, 
+			ANIMATION_IDLE,
 			ANIMATION_DEATH
 		};
 	//End of Animations
@@ -114,7 +107,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(6, new BossAISpinTowardsTarget(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
-		this.tasks.addTask(11, new BossAIMoveOutOfShell(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
@@ -155,8 +147,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(MOUTH_OPEN, false);
 		this.dataManager.register(ANIM_STATE, ETortoiseAnimState.NONE.getID());
+		this.dataManager.register(IN_SHELL, true);
 	}
 
 	@Override
@@ -179,11 +171,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (sentFromPart && !this.isInShell) {
+		if (sentFromPart && !this.isInShell()) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// TODO: Play "armor hit" sound
 		return true;
+	}
+
+	public boolean isInShell() {
+		return dataManager.get(IN_SHELL);
 	}
 
 	@Override
@@ -232,32 +228,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	}
 
-	public void setMouthOpen(boolean open) {
-		this.dataManager.set(MOUTH_OPEN, open);
-	}
-
-	public boolean isMouthOpen() {
-		return this.dataManager.get(MOUTH_OPEN);
-	}
-
 	public ETortoiseAnimState getCurrentAnimation() {
 		if (!this.world.isRemote) {
 			return this.currentAnimation;
 		}
 		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
 		// return ETortoiseAnimState.MOVE_PARTS_OUT;
-	}
-
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		super.writeSpawnData(buffer);
-		buffer.writeBoolean(this.dataManager.get(MOUTH_OPEN));
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		super.readSpawnData(additionalData);
-		this.dataManager.set(MOUTH_OPEN, additionalData.readBoolean());
 	}
 
 	@Override
@@ -277,15 +253,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 
 		this.alignParts();
-
-		if (this.getWorld().isRemote) {
-			if (!this.lastTickAnim.equals(this.getCurrentAnimation()) && this.getAnimationProgress() > 2) {
-				this.setAnimationProgress(0);
-				this.animationChanged = true;
-			}
-
-			this.lastTickAnim = this.getCurrentAnimation();
-		}
 	}
 
 	private void alignParts() {
@@ -332,29 +299,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		return SoundEvents.ENTITY_SLIME_HURT;
 	}
 
-	@SideOnly(Side.CLIENT)
-	public int getAnimationProgress() {
-		return this.animationProgress;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void setAnimationProgress(int newProg) {
-		this.animationProgress = newProg;
-	}
-
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public boolean shouldModelReset() {
-		return this.animationChanged;
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void setAnimationChanged(boolean newVal) {
-		this.animationChanged = newVal;
 	}
 
 	public void setCurrentAnimation(ETortoiseAnimState newState) {
@@ -368,21 +315,21 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	public void setInShell(boolean val) {
-		this.isInShell = val;
+		this.dataManager.set(IN_SHELL, val);
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 
-		compound.setBoolean("inShell", this.isInShell);
+		compound.setBoolean("inShell", isInShell());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 
-		this.isInShell = compound.getBoolean("inShell");
+		setInShell(compound.getBoolean("inShell"));
 	}
 	
 	//IAnimatedEntity Interface
@@ -426,6 +373,18 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void onDeathAIUpdate() {
 		if(getAnimation() != ANIMATION_DEATH) {
 			AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_DEATH);
+		}
+	}
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		
+		if(getAnimation() != NO_ANIMATION) {
+			animationTick++;
+			if(world.isRemote && animationTick >= animation.getDuration()) {
+				setAnimation(NO_ANIMATION);
+			}
 		}
 	}
 

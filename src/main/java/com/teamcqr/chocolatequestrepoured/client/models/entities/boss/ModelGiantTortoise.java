@@ -252,6 +252,90 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, turtle);
 		
 		//Animation code here
+		
+		/*
+		 * Move in shell animation
+		 */
+		animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_MOVE_LEGS_IN);
+			//Make legs straight
+			animator.startKeyframe(25);
+				for(int i = 0; i < legJoints.length; i++) {
+					animator.rotate(knees[i], (float) Math.toRadians(45), 0, 0);
+					animator.rotate(feet[i], (float) Math.toRadians(45), 0, 0);
+				}
+				animator.move(mainPart, 0, 0.5F, 0);
+			animator.endKeyframe();
+			//Move legs in
+			animator.startKeyframe(25);
+				float offsetXZ = 0.5F;
+				animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
+				animator.move(legJointBL, -offsetXZ, 0, -offsetXZ);
+				animator.move(legJointFR, offsetXZ, 0, offsetXZ);
+				animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
+				animator.move(head, 0, 0, 0.75F);
+			animator.endKeyframe();
+			//How long does it stay like this?
+		animator.setStaticKeyframe(50);
+		animator.resetKeyframe(1);
+		
+		/*
+		 * Move out of shell animation
+		 */
+		animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_MOVE_LEGS_OUT);
+			//Prepare
+			animator.startKeyframe(1);
+				animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
+				animator.move(legJointBL, -offsetXZ, 0, -offsetXZ);
+				animator.move(legJointFR, offsetXZ, 0, offsetXZ);
+				animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
+				animator.move(head, 0, 0, 0.75F);
+				for(int i = 0; i < legJoints.length; i++) {
+					animator.rotate(knees[i], (float) Math.toRadians(45), 0, 0);
+					animator.rotate(feet[i], (float) Math.toRadians(45), 0, 0);
+				}
+				animator.move(mainPart, 0, 0.15F, 0);
+			animator.endKeyframe();
+			//Move legs out
+			animator.startKeyframe(24);
+				animator.move(legJointFL, offsetXZ, 0, -offsetXZ);
+				animator.move(legJointBL, offsetXZ, 0, offsetXZ);
+				animator.move(legJointFR, -offsetXZ, 0, -offsetXZ);
+				animator.move(legJointBR, -offsetXZ, 0, offsetXZ);
+				animator.move(head, 0, 0, -0.75F);
+			animator.endKeyframe();
+			//Make legs curvy again
+			animator.startKeyframe(25);
+				for(int i = 0; i < legJoints.length; i++) {
+					animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
+					animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+				}
+				animator.move(mainPart, 0, -0.15F, 0);
+			animator.endKeyframe();
+		animator.resetKeyframe(1);
+		
+		/*
+		 * Shoot bubbles animation
+		 */
+		animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_SHOOT_BUBBLES);
+			animator.startKeyframe(10);
+				animator.rotate(jaw, 0, 0, (float) Math.toRadians(33.75));
+			animator.endKeyframe();
+			animator.startKeyframe(10);
+				animator.rotate(jaw, 0, (float)Math.toRadians(11.25), 0);
+			animator.endKeyframe();
+			animator.startKeyframe(20);
+				animator.rotate(jaw, 0, -(float)Math.toRadians(22.5), 0);
+			animator.endKeyframe();
+			animator.startKeyframe(20);
+				animator.rotate(jaw, 0, (float)Math.toRadians(22.5), 0);
+			animator.endKeyframe();
+			animator.startKeyframe(10);
+				animator.rotate(jaw, 0, -(float)Math.toRadians(11.25), 0);
+			animator.endKeyframe();
+			animator.startKeyframe(10);
+				animator.rotate(jaw, 0, 0, -(float)Math.toRadians(33.75));
+			animator.endKeyframe();
+		animator.resetKeyframe(1);
 	}
 
 	/**
@@ -268,17 +352,28 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		resetToDefaultPose();
 
-		this.head.rotateAngleX = headPitch * 0.017453292F;
-		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+		EntityCQRGiantTortoise turtle = (EntityCQRGiantTortoise)entityIn;
 		
-		this.legJointFR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.legJointFR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 0.7853981633974483F;
-		this.legJointFL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
-		this.legJointFL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount - 0.7853981633974483F;
-		this.legJointBR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
-		this.legJointBR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount + 2.356194490192345F;
-		this.legJointBL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
-		this.legJointBL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount - 2.356194490192345F;
+		boolean showSubParts = true;
+		if(turtle.isInShell()) {
+			showSubParts = false;
+			this.mainPart.offsetY = 0.5F; 
+		} else {
+			this.head.rotateAngleX = headPitch * 0.017453292F;
+			this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+			
+			this.legJointFR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.legJointFR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount + 0.7853981633974483F;
+			this.legJointFL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+			this.legJointFL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount - 0.7853981633974483F;
+			this.legJointBR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+			this.legJointBR.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI) * limbSwingAmount + 2.356194490192345F;
+			this.legJointBL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+			this.legJointBL.rotateAngleY = MathHelper.cos(limbSwing * 0.6662F) * limbSwingAmount - 2.356194490192345F;
+		}
+		for(AdvancedModelRenderer box : subParts) {
+			box.showModel = showSubParts;
+		}
 		
 		/*super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		//Default animations (e.g. walking, flying....)

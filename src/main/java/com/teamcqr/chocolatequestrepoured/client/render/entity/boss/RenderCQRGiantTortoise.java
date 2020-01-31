@@ -12,10 +12,6 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise.png");
 
-	private ModelGiantTortoise model = new ModelGiantTortoise();
-	private int animState = 0;
-	private boolean mouthIsOpen = false;
-
 	public RenderCQRGiantTortoise(RenderManager rendermanagerIn, ModelGiantTortoise modelbaseIn, float shadowsizeIn) {
 		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
 	}
@@ -56,32 +52,6 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 			break;
 
 		}
-
-		if (this.animState < 11 && entity.isMouthOpen() && !this.mouthIsOpen) {
-			float angle = (this.animState) * 3.375F;
-			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
-
-			this.animState++;
-			if (this.animState == 11) {
-				this.mouthIsOpen = true;
-				this.animState = 0;
-			}
-		}
-
-		else if (this.animState < 11 && !entity.isMouthOpen() && this.mouthIsOpen) {
-			// this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
-			float angle = (10 - this.animState) * 3.375F;
-			this.model.jaw.rotateAngleZ = new Float(Math.toRadians(angle));
-
-			this.animState++;
-			if (this.animState == 11) {
-				this.mouthIsOpen = false;
-				this.animState = 0;
-			}
-		} else {
-
-		}
-
 	}
 
 }
