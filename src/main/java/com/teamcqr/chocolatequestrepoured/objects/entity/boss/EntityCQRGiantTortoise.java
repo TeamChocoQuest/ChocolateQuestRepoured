@@ -133,8 +133,48 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				return false;
 			}
 		});
-		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
+			@Override
+			public boolean shouldExecute() {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldExecute()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean shouldContinueExecuting() {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldContinueExecuting()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+		});
+		this.tasks.addTask(20, new EntityAIMoveToHome(this) {
+			@Override
+			public boolean shouldExecute() {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldExecute()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean shouldContinueExecuting() {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldContinueExecuting()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+		});
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -389,6 +429,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void setAnimation(Animation animation) {
 		if(animation == NO_ANIMATION) {
 			onAnimationFinish(this.animation);
+			this.animation = animation;
 			setAnimationTick(0);
 		}
 		else if(this.animation != animation) {
