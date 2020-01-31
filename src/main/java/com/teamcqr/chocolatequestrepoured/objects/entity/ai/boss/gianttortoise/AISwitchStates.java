@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
+import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 
 public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 
@@ -62,6 +63,8 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 	public void resetTask() {
 		super.resetTask();
 		turtle.setAnimationTick(0);
+		turtle.currentAnim = null;
+		turtle.setAnimation(IAnimatedEntity.NO_ANIMATION);
 		turtle.setInShell(turtle.getTargetedState() < 0);
 		turtle.changedState();
 		turtle.targetNewState(0);

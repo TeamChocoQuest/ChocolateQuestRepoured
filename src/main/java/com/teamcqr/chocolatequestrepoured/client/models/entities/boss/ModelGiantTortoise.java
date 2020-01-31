@@ -256,29 +256,37 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		//Animation code here
 		
 		/*
-		 * Move in shell animation
+		 * Move in shell animation - DONE
 		 */
 		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_MOVE_LEGS_IN) {
 			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_MOVE_LEGS_IN);
 				//Make legs straight
-				animator.startKeyframe(25);
+				animator.startKeyframe(turtle.getAnimation().getDuration() /2);
 					for(int i = 0; i < legJoints.length; i++) {
-						animator.rotate(knees[i], (float) Math.toRadians(45), 0, 0);
-						animator.rotate(feet[i], (float) Math.toRadians(45), 0, 0);
+						animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
+						animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+						animator.move(legJoints[i], 0, -1, 0);
 					}
-					animator.move(mainPart, 0, 0.5F, 0);
+					animator.move(mainPart, 0, 0.4F *16, 0);
 				animator.endKeyframe();
 				//Move legs in
-				animator.startKeyframe(25);
-					float offsetXZ = 0.5F;
+				animator.startKeyframe(turtle.getAnimation().getDuration() /2);
+					for(int i = 0; i < legJoints.length; i++) {
+						animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
+						animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+						animator.move(legJoints[i], 0, -1, 0);
+					}
+					animator.move(mainPart, 0, 0.4F *16, 0);
+					//move thing works in pixels, 16 is equals to 1 block
+					float offsetXZ = 16;
 					animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
 					animator.move(legJointBL, -offsetXZ, 0, -offsetXZ);
 					animator.move(legJointFR, offsetXZ, 0, offsetXZ);
 					animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
-					animator.move(head, 0, 0, 0.75F);
+					animator.move(head, 0, 0, 0.75F *16);
 				animator.endKeyframe();
+				animator.resetKeyframe(1);
 				//How long does it stay like this?
-			//animator.resetKeyframe(1);
 		}
 		
 		/*
@@ -288,17 +296,18 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_MOVE_LEGS_OUT);
 				//Prepare
 				animator.startKeyframe(1);
-				float offsetXZ = 0.5F;
-					animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
-					animator.move(legJointBL, -offsetXZ, 0, -offsetXZ);
-					animator.move(legJointFR, offsetXZ, 0, offsetXZ);
-					animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
+				float offsetXZ = 0.5F *16;
+					animator.move(legJointFL, offsetXZ, 0, -offsetXZ);
+					animator.move(legJointBL, offsetXZ, 0, offsetXZ);
+					animator.move(legJointFR, -offsetXZ, 0, -offsetXZ);
+					animator.move(legJointBR, -offsetXZ, 0, offsetXZ);
 					animator.move(head, 0, 0, 0.75F);
 					for(int i = 0; i < legJoints.length; i++) {
 						animator.rotate(knees[i], (float) Math.toRadians(45), 0, 0);
 						animator.rotate(feet[i], (float) Math.toRadians(45), 0, 0);
 					}
 					animator.move(mainPart, 0, 0.15F, 0);
+				animator.setStaticKeyframe(49);
 				animator.endKeyframe();
 				//Move legs out
 				animator.startKeyframe(24);
@@ -306,13 +315,13 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					animator.move(legJointBL, offsetXZ, 0, offsetXZ);
 					animator.move(legJointFR, -offsetXZ, 0, -offsetXZ);
 					animator.move(legJointBR, -offsetXZ, 0, offsetXZ);
-					animator.move(head, 0, 0, -0.75F);
+					animator.move(head, 0, 0, 0.75F *16);
 				animator.endKeyframe();
 				//Make legs curvy again
 				animator.startKeyframe(25);
 					for(int i = 0; i < legJoints.length; i++) {
-						animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
-						animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+						animator.rotate(knees[i], (float) Math.toRadians(45), 0, 0);
+						animator.rotate(feet[i], (float) Math.toRadians(45), 0, 0);
 					}
 					animator.move(mainPart, 0, -0.15F, 0);
 				animator.endKeyframe();
@@ -367,7 +376,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 				showSubParts = true;
 			} else {
 				showSubParts = false;
-				//this.mainPart.offsetY = 0.5F; 
+				this.mainPart.offsetY = 0.5F; 
 			}
 		} else {
 			this.head.rotateAngleX = headPitch * 0.017453292F;

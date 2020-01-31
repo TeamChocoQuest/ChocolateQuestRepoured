@@ -65,7 +65,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public AnimationAI currentAnim;
 	
 	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
-	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(50);
+	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50);
 	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
 	public static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
@@ -391,9 +391,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			onAnimationFinish(this.animation);
 			setAnimationTick(0);
 		}
-		if(this.animation != animation) {
-			AnimationHandler.INSTANCE.sendAnimationMessage(this, this.animation);
+		else if(this.animation != animation) {
 			this.animation = animation;
+			//AnimationHandler.INSTANCE.sendAnimationMessage(this, this.animation);
 		}
 		
 	}
@@ -425,12 +425,24 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			animationTick++;
 			if(world.isRemote && animationTick >= animation.getDuration()) {
 				setAnimation(NO_ANIMATION);
+				AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
 			}
 		}
 	}
 	
 	public void targetNewState(int newStateID) {
-		this.targetedState = newStateID;
+		if(newStateID != this.targetedState) {
+			this.targetedState = newStateID;
+			if(newStateID != 0) {
+				if(newStateID < 0) {
+					AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_IN);
+				} else {
+					AnimationHandler.INSTANCE.sendAnimationMessage(this, ANIMATION_MOVE_LEGS_OUT);
+				}
+			} else {
+				AnimationHandler.INSTANCE.sendAnimationMessage(this, NO_ANIMATION);
+			}
+		}
 	}
 	public int getTargetedState() {
 		return targetedState;
