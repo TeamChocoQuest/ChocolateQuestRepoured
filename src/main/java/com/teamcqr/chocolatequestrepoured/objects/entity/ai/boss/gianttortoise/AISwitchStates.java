@@ -38,7 +38,7 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean isAutomatic() {
-		return true;
+		return false;
 	}
 	
 	@Override
