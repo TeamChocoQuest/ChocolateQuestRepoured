@@ -23,7 +23,13 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		return (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.1F) && !this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && this.currHealTicks < this.healingDuration;
+		return (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && !this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.SPIN) && this.currHealTicks < this.healingDuration;
+	}
+	
+	@Override
+	public void startExecuting() {
+		super.startExecuting();
+		updateTask();
 	}
 
 	@Override
@@ -51,9 +57,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 					this.healingActive = false;
 					this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 				} else {
-					if (this.currHealTicks % 2 == 0) {
-						this.getBoss().heal(1F);
-					}
+					this.getBoss().heal(1F);
 					this.currHealTicks++;
 				}
 			}

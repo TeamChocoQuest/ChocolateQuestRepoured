@@ -10,8 +10,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAISpinTowardsTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -48,12 +48,17 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
 	protected ETortoiseAnimState currentAnimation = ETortoiseAnimState.NONE;
 
 	static int EAnimStateGlobalID = 0;
 
+	public static final int TARGET_MOVE_OUT = 1;
+	public static final int TARGET_MOVE_IN = -1;
+	private int targetedState = 0;
+	
 	//Animations
 	private Animation animation = NO_ANIMATION;
 	private int animationTick;
@@ -99,17 +104,48 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			return this.id;
 		}
 	}
-
+	
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new AISwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
-		this.tasks.addTask(6, new BossAISpinTowardsTarget(this));
+		//this.tasks.addTask(6, new BossAISpinTowardsTarget(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(10, new EntityAIAttack(this) {
+			@Override
+			public boolean shouldExecute() {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldExecute()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+			
+			@Override
+			public boolean shouldContinueExecuting() {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldContinueExecuting()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
+				}
+				return false;
+			}
+		});
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this) {
+			@Override
+			public boolean shouldExecute() {
+				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell()) {
+					return true;
+				} else if(super.shouldExecute()){
+					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_IN);
+				}
+				return false;
+			}
+		});
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -149,6 +185,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.dataManager.register(ANIM_STATE, ETortoiseAnimState.NONE.getID());
 		this.dataManager.register(IN_SHELL, true);
+		this.dataManager.register(IN_SHELL_BYPASS, false);
 	}
 
 	@Override
@@ -180,6 +217,13 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	public boolean isInShell() {
 		return dataManager.get(IN_SHELL);
+	}
+	
+	public boolean bypassInShell() {
+		return dataManager.get(IN_SHELL_BYPASS);
+	}
+	public void setBypassInShell(boolean val) {
+		this.dataManager.set(IN_SHELL_BYPASS, val);
 	}
 
 	@Override
@@ -241,13 +285,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super.onUpdate();
 
 		this.setAir(999);
-
-		if (this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_OUT) || this.getCurrentAnimation().equals(ETortoiseAnimState.MOVE_PARTS_IN) || this.getCurrentAnimation().equals(ETortoiseAnimState.WALKING)) {
-			this.setInShell(false);
-		} else {
-			this.setInShell(true);
-		}
-
 		for (EntityCQRGiantTortoisePart part : this.parts) {
 			this.world.updateEntityWithOptionalForce(part, true);
 		}
@@ -354,7 +391,11 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			onAnimationFinish(this.animation);
 			setAnimationTick(0);
 		}
-		this.animation = animation;
+		if(this.animation != animation) {
+			AnimationHandler.INSTANCE.sendAnimationMessage(this, this.animation);
+			this.animation = animation;
+		}
+		
 	}
 	
 	@Override
@@ -386,6 +427,19 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				setAnimation(NO_ANIMATION);
 			}
 		}
+	}
+	
+	public void targetNewState(int newStateID) {
+		this.targetedState = newStateID;
+	}
+	public int getTargetedState() {
+		return targetedState;
+	}
+	public boolean wantsToChangeState() {
+		return targetedState != 0;
+	}
+	public void changedState() {
+		this.targetedState = 0;
 	}
 
 }

@@ -28,11 +28,6 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 		switch (entity.getCurrentAnimation()) {
 		case HEALING:
-			/*
-			 * entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX - 0.5,
-			 * entity.posY + 1.0D, entity.posZ - 0.5, 1, 1.5, 1);
-			 */
-			// TODO: Heart particles
 			break;
 		case MOVE_PARTS_IN:
 			break;
