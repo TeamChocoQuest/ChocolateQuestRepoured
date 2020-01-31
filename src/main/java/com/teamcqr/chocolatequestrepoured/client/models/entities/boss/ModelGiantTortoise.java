@@ -2,11 +2,12 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
+import net.ilexiconn.llibrary.client.model.ModelAnimator;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
+import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 
 /**
@@ -48,6 +49,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 	private AdvancedModelRenderer[] knees = new AdvancedModelRenderer[4];
 	private AdvancedModelRenderer[] feet = new AdvancedModelRenderer[4];
 
+	private ModelAnimator animator;
+	
 	public ModelGiantTortoise() {
 		this.textureWidth = 192;
 		this.textureHeight = 192;
@@ -208,6 +211,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		this.top.addChild(this.top1);
 		
 		//LLib stuff
+		animator = ModelAnimator.create();
 		updateDefaultPose();
 		
 		this.belly.scaleChildren = true;
@@ -236,8 +240,18 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+		EntityCQRGiantTortoise turtle = (EntityCQRGiantTortoise)entity;
+		animate(turtle, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		
 		this.mainPart.render(scale);
+	}
+
+	public void animate(IAnimatedEntity iAnimated, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		animator.update(iAnimated);
+		EntityCQRGiantTortoise turtle = (EntityCQRGiantTortoise)iAnimated;
+		setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, turtle);
+		
+		//Animation code here
 	}
 
 	/**
@@ -252,6 +266,18 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		resetToDefaultPose();
+
+		this.head.rotateAngleX = headPitch * 0.017453292F;
+		this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+		
+		this.legJointFR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		this.legJointFL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+		this.legJointBR.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F +(float)Math.PI)* 1.4F * limbSwingAmount;
+		this.legJointBL.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+		
+		/*super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+		//Default animations (e.g. walking, flying....)
 		for(AdvancedModelRenderer box : subParts) {
 			box.showModel = true;
 		}
@@ -316,13 +342,13 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			break;
 		case MOVE_PARTS_OUT:
 			if (entity.getAnimationProgress() == 0) {
-				/*for (int i = 0; i < 4; i++) {
+				//for (int i = 0; i < 4; i++) {
 					//this.knees[i].rotateAngleX -= new Float(Math.toRadians(45));
 					//this.feet[i].rotateAngleX -= new Float(Math.toRadians(45));
 
-					this.legJoints[i].offsetX = -0.5F;
-					this.legJoints[i].offsetZ = -0.5F;
-				}*/
+					//this.legJoints[i].offsetX = -0.5F;
+					//this.legJoints[i].offsetZ = -0.5F;
+				//}
 				this.mainPart.offsetY = 0.5F;
 				this.head.offsetZ = 0.75F;
 			}
@@ -420,7 +446,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		} 
 		for(AdvancedModelRenderer box : subParts) {
 			box.showModel = renderParts;
-		}
+		}*/
 
 		// DONE: Properly make leg animation
 	}
