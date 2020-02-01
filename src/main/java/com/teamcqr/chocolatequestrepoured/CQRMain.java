@@ -67,6 +67,7 @@ public class CQRMain {
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	public static File CQ_FACTION_FOLDER = null;
+	public static File CQ_ITEM_FOLDER = null;
 
 	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
 	public static List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
@@ -166,6 +167,7 @@ public class CQRMain {
 		CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures");
 		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output");
 		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
+		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
 
 		if (!CQ_CONFIG_FOLDER.exists()) {
 			CQ_CONFIG_FOLDER.mkdir();
@@ -191,6 +193,10 @@ public class CQRMain {
 		}
 		if (!CQ_FACTION_FOLDER.exists()) {
 			CQ_FACTION_FOLDER.mkdir();
+			installCQ = true;
+		}
+		if (!CQ_ITEM_FOLDER.exists()) {
+			CQ_ITEM_FOLDER.mkdir();
 			installCQ = true;
 		}
 
