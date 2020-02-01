@@ -153,7 +153,8 @@ public class CQStructurePart extends Template {
 		for (LootChestInfo lootChestInfo : this.chests) {
 			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
 
-			if (worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2)) {
+			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
+				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
@@ -166,21 +167,25 @@ public class CQStructurePart extends Template {
 		for (BlockPos nexusPos : this.forceFieldCores) {
 			BlockPos transformedPos = transformedBlockPos(placementIn, nexusPos).add(pos);
 
-			if (hasShield) {
-				if (worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState(), 2)) {
+			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
+				if (hasShield) {
+					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withRotation(placementIn.getRotation()), 2);
+
 					// TODO add nexus to protection system
 				} else {
-					CQRMain.logger.warn("Failed to place force field nexus at " + transformedPos);
+					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
 				}
 			} else {
-				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
+				CQRMain.logger.warn("Failed to place force field nexus at " + transformedPos);
 			}
 		}
 
 		for (BlockPos bossPos : this.bosses) {
 			BlockPos transformedPos = transformedBlockPos(placementIn, bossPos).add(pos);
 
-			if (worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2)) {
+			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
+				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
+
 				if (dungeonMob.getBossResourceLocation() != null) {
 					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);
 
