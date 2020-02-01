@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
@@ -16,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -35,7 +37,28 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 public class CQStructure {
 
 	public static final String CQR_FILE_VERSION = "1.0.0";
-	public static final List<Thread> runningExportThreads = new ArrayList<Thread>();
+	public static final List<Thread> RUNNING_EXPORT_THREADS = new ArrayList<Thread>();
+	private static final Comparator SORTER = new Comparator<Entry<BlockPos, CQStructurePart>>() {
+		@Override
+		public int compare(Entry<BlockPos, CQStructurePart> var1, Entry<BlockPos, CQStructurePart> var2) {
+			BlockPos pos1 = var1.getKey();
+			BlockPos pos2 = var2.getKey();
+			if (pos1.getX() < pos2.getX()) {
+				return -1;
+			} else if (pos1.getX() > pos2.getX()) {
+				return 1;
+			} else if (pos1.getZ() < pos2.getZ()) {
+				return -1;
+			} else if (pos1.getZ() > pos2.getZ()) {
+				return 1;
+			} else if (pos1.getY() < pos2.getY()) {
+				return -1;
+			} else if (pos1.getY() > pos2.getY()) {
+				return 1;
+			}
+			return 0;
+		}
+	};
 	private final HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
 	private final File file;
 	private String author = "DerToaster98";
@@ -124,14 +147,19 @@ public class CQStructure {
 		EBanners dungeonBanner = dungeonMobType.getBanner();
 		boolean hasShield = dungeon.isProtectedFromModifications();
 
-		int i = 0;
-		for (Entry<BlockPos, CQStructurePart> entry : this.structures.entrySet()) {
+		int j = 0;
+		List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<Entry<BlockPos, CQStructurePart>>(this.structures.entrySet());
+		list.sort(SORTER);
+		for (int i = 0; i < list.size(); i++) {
+			Entry<BlockPos, CQStructurePart> entry = list.get(i);
 			BlockPos offsetVec = CQStructurePart.transformedBlockPos(placementIn, entry.getKey());
 			BlockPos pastePos = pos.add(offsetVec);
 			CQStructurePart structure = entry.getValue();
 
-			if (DungeonGenerationHandler.isAreaLoaded(worldIn, pastePos, structure, placementIn.getRotation()) && i < 4) {
-				i++;
+			CQRMain.logger.info(entry.getKey());
+
+			if (DungeonGenerationHandler.isAreaLoaded(worldIn, pastePos, structure, placementIn.getRotation()) && j < CQRConfig.advanced.dungeonGenerationMax) {
+				j++;
 				structure.addBlocksToWorld(worldIn, pastePos, placementIn, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
 			} else {
 				DungeonGenerationHandler.addCQStructurePart(worldIn, structure, placementIn, pastePos, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
@@ -167,10 +195,10 @@ public class CQStructure {
 					e.printStackTrace();
 				}
 
-				CQStructure.runningExportThreads.remove(Thread.currentThread());
+				CQStructure.RUNNING_EXPORT_THREADS.remove(Thread.currentThread());
 			}
 		});
-		CQStructure.runningExportThreads.add(fileSaveThread);
+		CQStructure.RUNNING_EXPORT_THREADS.add(fileSaveThread);
 		fileSaveThread.setDaemon(true);
 		fileSaveThread.start();
 	}

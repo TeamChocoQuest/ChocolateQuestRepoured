@@ -140,6 +140,7 @@ public class DungeonGenerationHandler {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		CQRMain.logger.info("Saved " + this.dungeonPartList.size() + " parts to generate");
 	}
 
@@ -155,8 +156,8 @@ public class DungeonGenerationHandler {
 					BlockPos pos = structurePart.getPos();
 
 					if (DungeonGenerationHandler.isAreaLoaded(this.world, pos, part, settings.getRotation())) {
-						part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(), structurePart.getDungeonBanner(),
-								structurePart.isHasShield());
+						part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(),
+								structurePart.getDungeonBanner(), structurePart.isHasShield());
 						toRemove.add(i);
 						if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInLoaded) {
 							break;
@@ -173,8 +174,8 @@ public class DungeonGenerationHandler {
 						PlacementSettings settings = structurePart.getSettings();
 						BlockPos pos = structurePart.getPos();
 
-						part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(), structurePart.getDungeonBanner(),
-								structurePart.isHasShield());
+						part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(),
+								structurePart.getDungeonBanner(), structurePart.isHasShield());
 						toRemove.add(i);
 						if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInUnloaded) {
 							break;
