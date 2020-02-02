@@ -47,7 +47,7 @@ public class CQStructurePart extends Template {
 	private final List<BlockPos> bosses = new ArrayList<BlockPos>();
 
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
-		this.takeBlocksFromWorld(worldIn, startPos, endPos, true, Blocks.STRUCTURE_VOID);
+		this.takeBlocksFromWorld(worldIn, startPos, endPos.subtract(startPos), true, Blocks.STRUCTURE_VOID);
 
 		this.banners.clear();
 		this.chests.clear();
