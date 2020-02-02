@@ -90,7 +90,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		super(worldIn, shooter);
 		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID())); //only need to set this once
 
-		setShooterPosition(shooter.getPositionVector().addVector(0, shooter.getEyeHeight(), 0));
+		setShooterPosition(shooter.getPositionVector().addVector(0, shooter.getEyeHeight() * 0.6, 0));
 
 		this.hookRange = range;
 	}
