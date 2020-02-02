@@ -8,6 +8,7 @@ import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShitPlayerStopPacket;
 
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
@@ -70,6 +71,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
 	private int lastPositionSaveTick = 0;
+	private ItemHookshotBase hookshot = null;
 
 	//These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
 	protected static final DataParameter<Rotations> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
@@ -87,7 +89,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.hookRange = range;
 	}
 
-	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range) {
+	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range, ItemHookshotBase hookshot) {
 		super(worldIn, shooter);
 		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID())); //only need to set this once
 
@@ -95,6 +97,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		setShooterPosition(this.startLocation);
 
 		this.hookRange = range;
+		this.hookshot = hookshot;
 	}
 
 	@Override
@@ -142,8 +145,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				}
 
 			} else if (this.phase == HookPhase.OUT && distanceToHook > hookRange) {
-				reverseHookVelocity();
-				this.phase = HookPhase.BACK;
+				startRetractingHook();
 
 			} else if (this.phase == HookPhase.BACK && distanceToHook < STOP_PULL_DISTANCE) {
 				zeroizeHookVelocity();
@@ -172,16 +174,22 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if (!this.world.isRemote) {
-			if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
+			if (this.phase == HookPhase.OUT && result.typeOfHit == RayTraceResult.Type.BLOCK) {
 				IBlockState state = this.world.getBlockState(result.getBlockPos());
 
 				if (!state.getBlock().isPassable(this.world, result.getBlockPos())) {
-					this.zeroizeHookVelocity();
-					this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
-					dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
-					dataManager.set(IMPACT_POS, new Rotations((float) impactLocation.x, (float) impactLocation.y, (float) impactLocation.z));
+					if (hookshot.canLatchToBlock(state.getBlock())) {
+						this.zeroizeHookVelocity();
+						this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
+						dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
+						dataManager.set(IMPACT_POS, new Rotations((float) impactLocation.x, (float) impactLocation.y, (float) impactLocation.z));
 
-					startPullingPlayer();
+						startPullingPlayer();
+					}
+					else {
+						//Hit something but this hookshot cannot latch to it, send the hook back
+						startRetractingHook();
+					}
 				}
 			}
 		}
@@ -194,7 +202,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.velocityChanged = true;
 	}
 
-	private void reverseHookVelocity() {
+	private void startRetractingHook() {
+		this.phase = HookPhase.BACK;
 		this.motionX = -this.motionX;
 		this.motionY = -this.motionY;
 		this.motionZ = -this.motionZ;
