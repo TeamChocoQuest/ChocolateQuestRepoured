@@ -109,7 +109,7 @@ public class CQStructure {
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
-			structure.takeBlocksFromWorld(worldIn, startPos, endPos1);
+			structure.takeBlocksFromWorld(worldIn, startPos1, endPos1);
 			this.structures.put(BlockPos.ORIGIN, structure);
 		}
 	}
