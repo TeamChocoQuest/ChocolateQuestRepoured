@@ -65,7 +65,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private double hookRange = 20.0; //Max range of the hook before it stops extending
 	private HookPhase phase = HookPhase.OUT; //Out for moving away from shooter, back for coming back
 	private PullStatus pullStatus = PullStatus.NOT_PULLING; //Whether the hook is pulling something
-	private Vec3d startLocation = null;
 
 	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
@@ -91,8 +90,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		super(worldIn, shooter);
 		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID())); //only need to set this once
 
-		this.startLocation = shooter.getPositionVector();
-		setShooterPosition(this.startLocation);
+		setShooterPosition(shooter.getPositionVector().addVector(0, shooter.getEyeHeight(), 0));
 
 		this.hookRange = range;
 	}
