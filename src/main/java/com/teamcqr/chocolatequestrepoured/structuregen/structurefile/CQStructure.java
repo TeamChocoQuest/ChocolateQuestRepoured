@@ -92,13 +92,13 @@ public class CQStructure {
 						BlockPos partEndPos = partStartPos.add(new BlockPos(16, 16, 16));
 
 						if (x == xIterations) {
-							partEndPos = new BlockPos(endPos1.getX() - partStartPos.getX(), partEndPos.getY(), partEndPos.getZ());
+							partEndPos = new BlockPos(endPos1.getX() /*- partStartPos.getX()*/, partEndPos.getY(), partEndPos.getZ());
 						}
 						if (y == yIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), endPos1.getY() - partStartPos.getY(), partEndPos.getZ());
+							partEndPos = new BlockPos(partEndPos.getX(), endPos1.getY() /*- partStartPos.getY()*/, partEndPos.getZ());
 						}
 						if (z == zIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos1.getZ() - partStartPos.getZ());
+							partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos1.getZ() /*- partStartPos.getZ()*/);
 						}
 
 						CQStructurePart structurePart = new CQStructurePart();
