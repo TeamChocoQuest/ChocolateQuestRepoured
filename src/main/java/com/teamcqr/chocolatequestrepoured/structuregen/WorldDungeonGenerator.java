@@ -74,7 +74,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
 
 			// Overall dungeon spawn chance
-			if (DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
+			if (DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rand) || CQRConfig.general.overallDungeonChance >= 100) {
 				Set<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ, behindWall);
 
 				if (!possibleDungeons.isEmpty()) {
