@@ -174,15 +174,15 @@ public class EventsHandler {
 			CQRDataFileManager.getInstance().handleWorldUnload(e.getWorld());
 
 			// Stop export threads
-			if (!CQStructure.runningExportThreads.isEmpty()) {
-				for (Thread t : CQStructure.runningExportThreads) {
+			if (!CQStructure.RUNNING_EXPORT_THREADS.isEmpty()) {
+				for (Thread t : CQStructure.RUNNING_EXPORT_THREADS) {
 					try {
 						t.stop();
 					} catch (Exception ex) {
 
 					}
 				}
-				CQStructure.runningExportThreads.clear();
+				CQStructure.RUNNING_EXPORT_THREADS.clear();
 			}
 		}
 	}

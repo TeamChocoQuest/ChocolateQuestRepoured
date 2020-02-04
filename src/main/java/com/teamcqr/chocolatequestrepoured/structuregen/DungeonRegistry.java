@@ -206,7 +206,7 @@ public class DungeonRegistry {
 			@Override
 			public boolean test(DungeonBase t) {
 				boolean dependenciesMissing = t.dependsOnOtherStructures() && isDungeonMissingDependencies(world, t);
-				return hasUniqueDungeonAlreadyBeenSpawned(world, t.getDungeonName()) || dependenciesMissing;
+				return (t.isUnique() && hasUniqueDungeonAlreadyBeenSpawned(world, t.getDungeonName())) || dependenciesMissing;
 			}
 		});
 
