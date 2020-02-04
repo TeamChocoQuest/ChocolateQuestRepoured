@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShitPlayerStopPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import net.minecraft.block.state.IBlockState;
@@ -210,7 +210,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	private void zeroizePlayerVelocity(EntityPlayerMP shootingPlayer) {
 		if (!this.world.isRemote) {
-			HookShitPlayerStopPacket pullPacket = new HookShitPlayerStopPacket();
+			HookShotPlayerStopPacket pullPacket = new HookShotPlayerStopPacket();
 			CQRMain.NETWORK.sendTo(pullPacket, shootingPlayer);
 		}
 	}
