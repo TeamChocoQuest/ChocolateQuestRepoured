@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 
 public class ItemHookshot extends ItemHookshotBase {
     public ItemHookshot() {
-        super();
+        super("hookshot");
     }
 
     @Override
