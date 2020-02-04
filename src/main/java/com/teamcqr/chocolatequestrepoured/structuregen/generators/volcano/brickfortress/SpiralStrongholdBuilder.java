@@ -100,7 +100,7 @@ public class SpiralStrongholdBuilder {
 			SpiralStrongholdFloor floor = floors[i];
 			floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world);
 			currentPos.add(0,dungeon.getRoomSizeY(),0);
-			System.out.println("###### FLOOR " + (i +1) +" ######" );
+			/*System.out.println("###### FLOOR " + (i +1) +" ######" );
 			for(int x = 0; x < dungeon.getFloorSideLength(); x++) {
 				for(int z = 0; z < dungeon.getFloorSideLength(); z++) {
 					if(x == 0 || x == (dungeon.getFloorSideLength() -1) || z == 0 || z == (dungeon.getFloorSideLength() -1)) {
@@ -111,7 +111,7 @@ public class SpiralStrongholdBuilder {
 				}
 			}
 			System.out.println("");
-			System.out.println("");
+			System.out.println("");*/
 			if(i < (floorCount -1)) {
 				currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
 			}
