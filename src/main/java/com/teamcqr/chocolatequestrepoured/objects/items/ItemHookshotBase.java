@@ -44,10 +44,10 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
 	private enum BlockGroup
 	{
-		SOLID("ALL_SOLID"),
-		WOOD("ALL_WOOD"),
-		STONE("ALL_STONE"),
-		DIRT("ALL_DIRT");
+		BASE_SOLID("BASE_SOLID"),
+		BASE_WOOD("BASE_WOOD"),
+		BASE_STONE("BASE_STONE"),
+		BASE_DIRT("BASE_DIRT");
 
 		private final String configName;
 
@@ -72,13 +72,13 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 		{
 			switch (this)
 			{
-				case SOLID:
+				case BASE_SOLID:
 					return true;
-				case WOOD:
+				case BASE_WOOD:
 					return BlockUtil.VANILLA_WOOD_SET.contains(block);
-				case STONE:
+				case BASE_STONE:
 					return BlockUtil.VANILLA_STONE_SET.contains(block);
-				case DIRT:
+				case BASE_DIRT:
 					return BlockUtil.VANILLA_DIRT_SET.contains(block);
 				default:
 					return false;
