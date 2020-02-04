@@ -75,7 +75,7 @@ public class CQStructure {
 
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean usePartMode) {
 		BlockPos startPos1 = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
-		BlockPos endPos1 = new BlockPos(Math.max(startPos.getX() + 1, endPos.getX()), Math.max(startPos.getY(), endPos.getY()) + 1, Math.max(startPos.getZ(), endPos.getZ()) + 1);
+		BlockPos endPos1 = new BlockPos(Math.max(startPos.getX(), endPos.getX()) +1, Math.max(startPos.getY(), endPos.getY()) + 1, Math.max(startPos.getZ(), endPos.getZ()) + 1);
 
 		this.size = new BlockPos(endPos1.getX() - startPos1.getX(), endPos1.getY() - startPos1.getY(), endPos1.getZ() - startPos1.getZ());
 		this.structures.clear();
@@ -89,16 +89,16 @@ public class CQStructure {
 				for (int z = 0; z <= zIterations; z++) {
 					for (int y = 0; y <= yIterations; y++) {
 						BlockPos partStartPos = startPos1.add(16 * x, 16 * y, 16 * z);
-						BlockPos partEndPos = new BlockPos(16, 16, 16);
+						BlockPos partEndPos = partStartPos.add(new BlockPos(16, 16, 16));
 
 						if (x == xIterations) {
-							partEndPos = new BlockPos(endPos1.getX() - partStartPos.getX(), partEndPos.getY(), partEndPos.getZ());
+							partEndPos = new BlockPos(endPos1.getX() /*- partStartPos.getX()*/, partEndPos.getY(), partEndPos.getZ());
 						}
 						if (y == yIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), endPos1.getY() - partStartPos.getY(), partEndPos.getZ());
+							partEndPos = new BlockPos(partEndPos.getX(), endPos1.getY() /*- partStartPos.getY()*/, partEndPos.getZ());
 						}
 						if (z == zIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos1.getZ() - partStartPos.getZ());
+							partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos1.getZ() /*- partStartPos.getZ()*/);
 						}
 
 						CQStructurePart structurePart = new CQStructurePart();
@@ -109,7 +109,7 @@ public class CQStructure {
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
-			structure.takeBlocksFromWorld(worldIn, startPos, this.size);
+			structure.takeBlocksFromWorld(worldIn, startPos1, endPos1);
 			this.structures.put(BlockPos.ORIGIN, structure);
 		}
 	}

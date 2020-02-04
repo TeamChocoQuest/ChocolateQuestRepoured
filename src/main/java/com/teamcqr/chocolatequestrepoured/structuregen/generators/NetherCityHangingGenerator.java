@@ -26,6 +26,8 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class NetherCityHangingGenerator implements IDungeonGenerator {
 
+	//TODO: Air bubble around the whole thing
+	
 	private FloatingNetherCity dungeon;
 	private int islandCount = 1;
 	private int islandDistance = 1;
