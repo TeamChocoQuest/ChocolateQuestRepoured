@@ -333,11 +333,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	private void periodicSaveShooterPosition()
 	{
-		if (!this.world.isRemote && this.ticksExisted - this.lastPositionSaveTick >= 20) {
-			if (this.thrower != null) {
-				this.lastPositionSaveTick = this.ticksExisted;
-				setShooterPosition(this.thrower.getPositionVector());
-			}
+		if (!this.world.isRemote && this.thrower != null) {
+		    setShooterPosition(this.thrower.getPositionVector());
 		}
 	}
 
