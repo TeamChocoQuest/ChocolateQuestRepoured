@@ -33,7 +33,7 @@ public class SpiralStrongholdBuilder {
 		int entranceX = 0;
 		int entranceZ = 0;
 		int roomCount = dungeon.getStrongholdRoomCount(rdm);
-		final int maxRoomsPerFloor = dungeon.getFloorSideLength() * 4 -4;
+		final int maxRoomsPerFloor = dungeon.getFloorSideLength() * 4 -4 -1 /* We subtract one cause the room above the stair does not count as room*/;
 		ESpiralStrongholdRoomType entranceType = ESpiralStrongholdRoomType.NONE;
 		switch(allowedDirection) {
 		case WEST:
