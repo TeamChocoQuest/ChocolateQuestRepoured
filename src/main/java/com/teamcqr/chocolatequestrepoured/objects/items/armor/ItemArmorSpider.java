@@ -67,6 +67,9 @@ public class ItemArmorSpider extends ArmorCQRBase {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if (ItemUtil.hasFullSet(player, ItemArmorSpider.class)) {
+			if(player.isSpectator()) {
+				return;
+			}
 			if (player.collidedHorizontally) {
 				if (world.isRemote) {
 					if (player.moveForward > 0) {
