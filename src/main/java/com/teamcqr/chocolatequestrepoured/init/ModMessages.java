@@ -14,7 +14,7 @@ import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ArmorCooldown
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSyncPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SyncEntityPacket;
-import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShitPlayerStopPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExporterUpdatePacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExtendedReachAttackPacket;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.SaveStructureRequestPacket;
@@ -32,7 +32,7 @@ public class ModMessages {
 		CQRMain.NETWORK.registerMessage(DungeonSyncPacketHandler.class, DungeonSyncPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(ArmorCooldownSyncPacketHandler.class, ArmorCooldownSyncPacket.class, messageID++, Side.CLIENT);
 		CQRMain.NETWORK.registerMessage(ItemStackSyncPacketHandler.class, ItemStackSyncPacket.class, messageID++, Side.CLIENT);
-		CQRMain.NETWORK.registerMessage(HookShotPlayerStopPacketHandler.class, HookShitPlayerStopPacket.class, messageID++, Side.CLIENT);
+		CQRMain.NETWORK.registerMessage(HookShotPlayerStopPacketHandler.class, HookShotPlayerStopPacket.class, messageID++, Side.CLIENT);
 
 		CQRMain.NETWORK.registerMessage(SaveStructureRequestPacketHandler.class, SaveStructureRequestPacket.class, Reference.SAVE_STRUCUTRE_REQUEST_MESSAGE_ID, Side.SERVER);
 		CQRMain.NETWORK.registerMessage(ExporterUpdatePacketHandler.class, ExporterUpdatePacket.class, messageID++, Side.SERVER);
