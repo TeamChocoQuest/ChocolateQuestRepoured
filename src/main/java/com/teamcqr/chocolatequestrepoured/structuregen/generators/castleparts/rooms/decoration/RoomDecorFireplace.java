@@ -13,6 +13,10 @@ public class RoomDecorFireplace extends RoomDecorBlocks {
 		this.schematic.add(new DecoBlockOffset(1, 0, 0, Blocks.NETHERRACK));
 		this.schematic.add(new DecoBlockOffset(2, 0, 0, Blocks.BRICK_BLOCK));
 
+		this.schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.BRICK_BLOCK));
+		this.schematic.add(new DecoBlockOffset(1, 0, 1, Blocks.BRICK_BLOCK));
+		this.schematic.add(new DecoBlockOffset(2, 0, 1, Blocks.BRICK_BLOCK));
+
 		this.schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.BRICK_BLOCK));
 		this.schematic.add(new DecoBlockOffset(1, 1, 0, Blocks.FIRE));
 		this.schematic.add(new DecoBlockOffset(2, 1, 0, Blocks.BRICK_BLOCK));
