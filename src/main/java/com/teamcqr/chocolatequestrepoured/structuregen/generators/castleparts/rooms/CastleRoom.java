@@ -75,7 +75,7 @@ public abstract class CastleRoom {
 
 	protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
-	public void decorate(World world, CastleDungeon dungeon) {
+	public void decorate(World world, CastleDungeon dungeon, BlockPos castleStartPosition) {
 		; // Default is no decoration
 	}
 

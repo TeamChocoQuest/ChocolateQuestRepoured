@@ -124,7 +124,7 @@ public class CastleRoomSelector {
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
-			cell.getRoom().decorate(world, dungeon);
+			cell.getRoom().decorate(world, dungeon, this.startPos);
 		}
 	}
 
