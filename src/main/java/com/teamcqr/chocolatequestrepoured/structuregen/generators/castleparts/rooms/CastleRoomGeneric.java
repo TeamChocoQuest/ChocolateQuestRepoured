@@ -1,9 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
@@ -12,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorNone;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
@@ -20,6 +15,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public abstract class CastleRoomGeneric extends CastleRoom {
 	protected static final int MAX_DECO_ATTEMPTS = 3;
@@ -38,11 +37,11 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 	}
 
 	@Override
-	public void decorate(World world, CastleDungeon dungeon) {
+	public void decorate(World world, CastleDungeon dungeon, BlockPos castleStartPosition) {
 		this.addEdgeDecoration(world, dungeon);
-		this.addSpawners(world, dungeon);
+		this.addSpawners(world, dungeon, castleStartPosition);
 		this.addChests(world, dungeon);
-		this.fillEmptySpaceWithAir(world, dungeon);
+		this.fillEmptySpaceWithAir(world);
 	}
 
 	private void addChests(World world, CastleDungeon dungeon) {
@@ -89,7 +88,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		}
 	}
 
-	private void addSpawners(World world, CastleDungeon dungeon) {
+	private void addSpawners(World world, CastleDungeon dungeon, BlockPos castleLocation) {
 		ArrayList<BlockPos> spawnPositions = this.getDecorationFirstLayer();
 		spawnPositions.removeAll(this.decoMap);
 
@@ -100,7 +99,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 
 			ResourceLocation resLoc;
 			if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
-				resLoc = EDungeonMobType.getMobTypeDependingOnDistance(pos.getX(), pos.getZ()).getEntityResourceLocation();
+				resLoc = EDungeonMobType.getMobTypeDependingOnDistance(castleLocation.getX(), castleLocation.getZ()).getEntityResourceLocation();
 			} else {
 				resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
 			}
@@ -112,7 +111,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		}
 	}
 
-	private void fillEmptySpaceWithAir(World world, CastleDungeon dungeon) {
+	private void fillEmptySpaceWithAir(World world) {
 		HashSet<BlockPos> emptySpaces = new HashSet<>(this.decoArea);
 		emptySpaces.removeAll(this.decoMap);
 
