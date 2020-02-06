@@ -94,15 +94,16 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 
 		int spawnerCount = this.getSpawnerCount();
 
+		ResourceLocation resLoc;
+		if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
+			resLoc = EDungeonMobType.getMobTypeDependingOnDistance(castleLocation.getX(), castleLocation.getZ()).getEntityResourceLocation();
+		} else {
+			resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
+		}
+
 		for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++) {
 			BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));
-
-			ResourceLocation resLoc;
-			if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
-				resLoc = EDungeonMobType.getMobTypeDependingOnDistance(castleLocation.getX(), castleLocation.getZ()).getEntityResourceLocation();
-			} else {
-				resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
-			}
+			
 			Entity mobEntity = EntityList.createEntityByIDFromName(resLoc, world);
 
 			SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
