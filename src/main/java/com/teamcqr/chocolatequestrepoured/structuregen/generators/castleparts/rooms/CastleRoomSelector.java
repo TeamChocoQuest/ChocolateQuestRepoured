@@ -13,6 +13,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
@@ -20,6 +21,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
@@ -121,11 +123,24 @@ public class CastleRoomSelector {
 			cell.getRoom().generate(world, dungeon);
 		}
 
+		ResourceLocation mobResLoc = getRoomMobType(dungeon);
+
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
-			cell.getRoom().decorate(world, dungeon, this.startPos);
+			cell.getRoom().decorate(world, dungeon, mobResLoc);
 		}
+	}
+
+	private ResourceLocation getRoomMobType(CastleDungeon dungeon) {
+		ResourceLocation resLoc;
+		if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
+			resLoc = EDungeonMobType.getMobTypeDependingOnDistance(startPos.getX(), startPos.getZ()).getEntityResourceLocation();
+		} else {
+			resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
+		}
+
+		return resLoc;
 	}
 
 	private void generateRoofs(World world, CastleDungeon dungeon) {
