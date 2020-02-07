@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -75,7 +76,7 @@ public abstract class CastleRoom {
 
 	protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
-	public void decorate(World world, CastleDungeon dungeon, BlockPos castleStartPosition) {
+	public void decorate(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
 		; // Default is no decoration
 	}
 
