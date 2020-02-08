@@ -253,7 +253,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
 		// DONE: Play "armor hit" sound
-		else if(world.isRemote) {
+		else if(this.isInShell() && world.isRemote) {
 			world.playSound(posX, posY, posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1, 1, true);
 		}
 		return true;
