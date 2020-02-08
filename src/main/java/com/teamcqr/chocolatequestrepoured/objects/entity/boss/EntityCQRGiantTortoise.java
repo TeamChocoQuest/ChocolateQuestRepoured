@@ -35,7 +35,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
@@ -59,6 +58,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final int TARGET_MOVE_OUT = 1;
 	public static final int TARGET_MOVE_IN = -1;
 	private int targetedState = 0;
+	private boolean partSoundFlag = false;
 	
 	//Animations
 	private Animation animation = NO_ANIMATION;
@@ -244,17 +244,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
+		partSoundFlag = true;
 		return this.attackEntityFrom(source, damage, true);
 	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		//System.out.println("class direct: " + source.getImmediateSource().getClass().getName());
+		//System.out.println("class true: " + source.getTrueSource().getClass().getName());
 		if (sentFromPart && !this.isInShell()) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
-		}
-		// DONE: Play "armor hit" sound
-		else if(this.isInShell() && world.isRemote) {
-			world.playSound(posX, posY, posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1, 1, true);
 		}
 		return true;
 	}
@@ -377,6 +376,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		if(partSoundFlag) {
+			partSoundFlag = false;
+			return SoundEvents.ENTITY_BLAZE_HURT;
+		}
 		return SoundEvents.ENTITY_SLIME_HURT;
 	}
 
