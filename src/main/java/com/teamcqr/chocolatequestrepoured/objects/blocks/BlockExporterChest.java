@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.blocks;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporterChest;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -30,6 +31,7 @@ public class BlockExporterChest extends BlockHorizontal {
 
 	public static final Set<BlockExporterChest> EXPORTER_CHESTS = new HashSet<BlockExporterChest>();
 
+	public final ELootTable lootTable;
 	public final ResourceLocation itemTexture;
 
 	protected static final AxisAlignedBB NORTH_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0D, 0.9375D, 0.875D, 0.9375D);
@@ -38,16 +40,17 @@ public class BlockExporterChest extends BlockHorizontal {
 	protected static final AxisAlignedBB EAST_CHEST_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 1.0D, 0.875D, 0.9375D);
 	protected static final AxisAlignedBB NOT_CONNECTED_AABB = new AxisAlignedBB(0.0625D, 0.0D, 0.0625D, 0.9375D, 0.875D, 0.9375D);
 
-	public BlockExporterChest(String resourceName) {
-		this(new ResourceLocation(resourceName));
+	public BlockExporterChest(ELootTable lootTable, String resourceName) {
+		this(lootTable, new ResourceLocation(resourceName));
 	}
 
-	public BlockExporterChest(String resourceDomain, String resourcePath) {
-		this(new ResourceLocation(resourceDomain, resourcePath));
+	public BlockExporterChest(ELootTable lootTable, String resourceDomain, String resourcePath) {
+		this(lootTable, new ResourceLocation(resourceDomain, resourcePath));
 	}
 
-	public BlockExporterChest(ResourceLocation itemTexture) {
+	public BlockExporterChest(ELootTable lootTable, ResourceLocation itemTexture) {
 		super(Material.WOOD);
+		this.lootTable = lootTable;
 		this.itemTexture = itemTexture;
 		EXPORTER_CHESTS.add(this);
 	}

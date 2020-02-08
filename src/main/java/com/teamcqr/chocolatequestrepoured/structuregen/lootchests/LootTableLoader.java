@@ -15,10 +15,12 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
+import org.apache.commons.io.IOUtils;
+
 import com.google.common.collect.Queues;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
-import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 import net.minecraft.util.ResourceLocation;
@@ -33,33 +35,12 @@ import net.minecraftforge.common.ForgeHooks;
  */
 public class LootTableLoader {
 
-	// These are all valid file names for the chests!
-	final static String[] validFileNames = {
-			"treasure_chest",
-			"material_chest",
-			"food_chest",
-			"tools_chest",
-			"custom_1",
-			"custom_2",
-			"custom_3",
-			"custom_4",
-			"custom_5",
-			"custom_6",
-			"custom_7",
-			"custom_8",
-			"custom_9",
-			"custom_10",
-			"custom_11",
-			"custom_12",
-			"custom_13",
-			"custom_14" };
-
 	private static List<WeightedItemStack> getItemList(Properties propFile) {
 		List<WeightedItemStack> items = new ArrayList<WeightedItemStack>();
 		Enumeration<Object> fileEntries = propFile.elements();
 		while (fileEntries.hasMoreElements()) {
 			String entry = (String) fileEntries.nextElement();
-			if(!entry.startsWith("#")) {
+			if (!entry.startsWith("#")) {
 				WeightedItemStack stack = createWeightedItemStack(entry);
 				if (stack != null) {
 					items.add(stack);
@@ -107,22 +88,13 @@ public class LootTableLoader {
 		}
 	}
 
-	static boolean isNameValid(String fileName) {
-		for (int i = 0; i < validFileNames.length; i++) {
-			if (validFileNames[i].equalsIgnoreCase(fileName)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
-		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.getAssignedFileName(ELootTable.valueOf(name)) + ".json");
-		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.getAssignedFileName(ELootTable.valueOf(name)) + ".prop");
+		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.valueOf(name).getFileName() + ".json");
+		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.valueOf(name).getFileName() + ".prop");
 		InputStream inputStream = null;
 
 		if (jsonFile.exists()) {
-			//Load json loot table
+			// Load json loot table
 			try {
 				inputStream = new FileInputStream(jsonFile);
 				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
@@ -141,17 +113,13 @@ public class LootTableLoader {
 				if (lootTable != null) {
 					lootTable.freeze();
 				}
-			} catch (IOException | JsonParseException e) {
-				CQRMain.logger.error(e);
-			}
-
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-				CQRMain.logger.error(e);
+			} catch (IOException | JsonSyntaxException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
+			} finally {
+				IOUtils.closeQuietly(inputStream);
 			}
 		} else if (propFile.exists()) {
-			//Load prop file and fill loot table
+			// Load prop file and fill loot table
 			try {
 				inputStream = new FileInputStream(propFile);
 				Properties properties = new Properties();
@@ -163,60 +131,32 @@ public class LootTableLoader {
 					items.get(i).addToTable(lootTable, i);
 				}
 			} catch (IOException e) {
-				CQRMain.logger.error(e);
-			}
-
-			try {
-				inputStream.close();
-			} catch (IOException e) {
-				CQRMain.logger.error(e);
+				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
+			} finally {
+				IOUtils.closeQuietly(inputStream);
 			}
 		}
 
 		return lootTable;
 	}
 
-	private static ThreadLocal<Deque> lootContext = null;
-
-	private static ThreadLocal<Deque> getLootContext() {
-		if (lootContext != null) {
-			return lootContext;
-		}
-		try {
-			Field f = ForgeHooks.class.getDeclaredField("lootContext");
-			f.setAccessible(true);
-			return (ThreadLocal<Deque>) f.get(null);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error(e);
-		}
-		return null;
+	private static ThreadLocal<Deque> getLootContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field f = ForgeHooks.class.getDeclaredField("lootContext");
+		f.setAccessible(true);
+		return (ThreadLocal<Deque>) f.get(null);
 	}
 
-	private static Object createLootTableContext(ResourceLocation name) {
-		try {
-			Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
-			c.setAccessible(true);
-			return c.newInstance(name, true);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
-			CQRMain.logger.error(e);
-		}
-		return null;
+	private static Object createLootTableContext(ResourceLocation name)
+			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
+		c.setAccessible(true);
+		return c.newInstance(name, true);
 	}
 
-	private static Gson GsonInstance = null;
-
-	private static Gson getGsonInstance() {
-		if (GsonInstance != null) {
-			return GsonInstance;
-		}
-		try {
-			Field f = LootTableManager.class.getDeclaredField("GSON_INSTANCE");
-			f.setAccessible(true);
-			return (Gson) f.get(null);
-		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error(e);
-		}
-		return null;
+	private static Gson getGsonInstance() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
+		Field f = LootTableManager.class.getDeclaredField("GSON_INSTANCE");
+		f.setAccessible(true);
+		return (Gson) f.get(null);
 	}
 
 }

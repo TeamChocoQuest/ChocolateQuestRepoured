@@ -30,6 +30,6 @@ public class CastleRoomKitchen extends CastleRoomGeneric {
 
 	@Override
 	public int[] getChestIDs() {
-		return new int[] { ELootTable.CQ_FOOD.getID() };
+		return new int[] { ELootTable.CQ_FOOD.ordinal() };
 	}
 }

@@ -29,6 +29,6 @@ public class CastleRoomArmory extends CastleRoomGeneric {
 
 	@Override
 	public int[] getChestIDs() {
-		return new int[] { ELootTable.CQ_EQUIPMENT.getID() };
+		return new int[] { ELootTable.CQ_EQUIPMENT.ordinal() };
 	}
 }

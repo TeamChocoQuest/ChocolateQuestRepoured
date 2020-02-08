@@ -397,7 +397,7 @@ public class ModItems {
 			}
 
 			for (int i = 0; i <= ItemDungeonPlacer.HIGHEST_ICON_NUMBER; i++) {
-				Item item = setItemNameAndTab(new ItemDungeonPlacer(i), "dungeon_placer_d" + i, CQRMain.CQRDungeonPlacerTab);
+				Item item = setItemNameAndTab(new ItemDungeonPlacer(i), "dungeon_placer_d" + i, CQRMain.CQR_DUNGEON_PLACER_TAB);
 				registry.register(item);
 				ITEMS.add(item);
 			}
@@ -426,7 +426,7 @@ public class ModItems {
 		private static void registerSpawnEggs(Class<? extends AbstractEntityCQR> entityClass, String entityName, IForgeRegistry<Item> registry) {
 			List<Item> spawnEggList = ItemSpawnEggCQR.getItemList(entityClass, entityName);
 			for (int i = 0; i < spawnEggList.size(); i++) {
-				Item item = setItemNameAndTab(spawnEggList.get(i), "cqr_" + entityName + "_spawn_egg_" + i, CQRMain.CQRSpawnEggTab);
+				Item item = setItemNameAndTab(spawnEggList.get(i), "cqr_" + entityName + "_spawn_egg_" + i, CQRMain.CQR_SPAWN_EGG_TAB);
 				registry.register(item);
 				ITEMS.add(item);
 				SPAWN_EGGS.add(item);
@@ -434,7 +434,7 @@ public class ModItems {
 		}
 
 		private static Item setItemName(Item item, String name) {
-			return setItemNameAndTab(item, name, CQRMain.CQRItemsTab);
+			return setItemNameAndTab(item, name, CQRMain.CQR_ITEMS_TAB);
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
