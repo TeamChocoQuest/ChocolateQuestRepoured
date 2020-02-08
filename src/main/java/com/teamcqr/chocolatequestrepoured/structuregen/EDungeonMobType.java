@@ -95,7 +95,7 @@ public enum EDungeonMobType {
 		 * 
 		 */
 
-		int index = new Double(distToSpawn / CQRConfig.mobs.distanceDivisor).intValue();
+		int index = new Double(distToSpawn / CQRConfig.mobs.mobTypeChangeDistance).intValue();
 		// System.out.println("Index: " + index);
 		// if the index is larger than array size +1 -> RANDOM
 		Random rdm = new Random();

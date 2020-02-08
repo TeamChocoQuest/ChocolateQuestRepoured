@@ -55,6 +55,7 @@ public class CQRConfig {
 		public boolean armorShattersOnMobs = true;
 		public int defaultHealingPotionCount = 1;
 		public int distanceDivisor = 1000;
+		public int mobTypeChangeDistance = 1500;
 		public int factionUpdateRadius = 100;
 	}
 
