@@ -4,8 +4,10 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiant
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise> {
@@ -28,6 +30,7 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 		switch (entity.getCurrentAnimation()) {
 		case HEALING:
+			Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.HEART, true, x - 1F, y, z - 1F, 2, 4, 2, 5);
 			break;
 		case MOVE_PARTS_IN:
 			break;
