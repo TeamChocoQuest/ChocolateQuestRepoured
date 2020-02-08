@@ -35,6 +35,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
@@ -65,8 +66,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public AnimationAI currentAnim;
 	
 	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
-	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30);
-	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50);
+	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
+	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
 	public static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
 	public static final Animation ANIMATION_IDLE = Animation.create(100);
@@ -251,7 +252,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if (sentFromPart && !this.isInShell()) {
 			return super.attackEntityFrom(source, amount, sentFromPart);
 		}
-		// TODO: Play "armor hit" sound
+		// DONE: Play "armor hit" sound
+		if(world.isRemote) {
+			world.playSound(posX, posY, posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1, 1, true);
+		}
 		return true;
 	}
 
