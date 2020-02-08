@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -34,9 +33,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -48,7 +45,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:llibrary@[1.7.19]")
+@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION, dependencies = "required-after:llibrary@[1.7.19]; required:forge@14.23.5.2847")
 public class CQRMain {
 
 	@Instance
@@ -69,22 +66,19 @@ public class CQRMain {
 	public static File CQ_FACTION_FOLDER = null;
 	public static File CQ_ITEM_FOLDER = null;
 
-	public static List<ResourceLocation> CQ_LOOT_TABLES = new ArrayList<ResourceLocation>();
-	public static List<ResourceLocation> CQ_DUNGEON_LOOT = new ArrayList<ResourceLocation>();
-
-	public static CreativeTabs CQRItemsTab = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
+	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
-	public static CreativeTabs CQRBlocksTab = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
+	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
-	public static CreativeTabs CQRBannersTab = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
+	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Items.BANNER);
@@ -97,21 +91,21 @@ public class CQRMain {
 			for (ItemStack stack : banners) {
 				itemList.add(stack);
 			}
-		};
+		}
 	};
-	public static CreativeTabs CQRDungeonPlacerTab = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
+	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
-	public static CreativeTabs CQRExporterChestTab = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
+	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
-	public static CreativeTabs CQRSpawnEggTab = new CreativeTabs("CQR Spawn Eggs") {
+	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs("CQR Spawn Eggs") {
 		@Override
 		public ItemStack getTabIconItem() {
 			return new ItemStack(Items.SPAWN_EGG);
@@ -138,13 +132,9 @@ public class CQRMain {
 		}
 
 		// Instantiating enums
-		// loot tables
 		ELootTable.values();
-		// Banners
 		EBannerPatternsCQ.values();
-		// Normal entity loot
 		ELootTablesNormal.values();
-		// Boss loot
 		ELootTablesBoss.values();
 
 		// Register event handling for dungeon protection system
@@ -155,8 +145,6 @@ public class CQRMain {
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
-		Configuration configFile = new Configuration(event.getSuggestedConfigurationFile());
-
 		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(CQRConfig.advanced.threadCount);
 
 		boolean installCQ = false;
@@ -204,7 +192,7 @@ public class CQRMain {
 			try {
 				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER.toPath());
 			} catch (URISyntaxException | IOException e) {
-				logger.error(e);
+				logger.error("Failed to copy config files", e);
 			}
 		}
 	}

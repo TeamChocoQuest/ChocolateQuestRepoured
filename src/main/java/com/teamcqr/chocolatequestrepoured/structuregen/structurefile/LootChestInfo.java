@@ -27,7 +27,7 @@ public class LootChestInfo {
 	public LootChestInfo(NBTTagCompound compound) {
 		this.position = NBTUtil.getPosFromTag(compound.getCompoundTag("position"));
 		this.facing = EnumFacing.getHorizontal(compound.getInteger("facing"));
-		this.lootTable = ELootTable.valueOf(compound.getInteger("loottable"));
+		this.lootTable = ELootTable.values()[compound.getInteger("loottable")];
 	}
 
 	public NBTTagCompound getAsNBTTag() {
@@ -35,7 +35,7 @@ public class LootChestInfo {
 
 		compound.setTag("position", NBTUtil.createPosTag(this.position));
 		compound.setInteger("facing", this.facing.getHorizontalIndex());
-		compound.setInteger("loottable", this.lootTable.getID());
+		compound.setInteger("loottable", this.lootTable.ordinal());
 
 		return compound;
 	}

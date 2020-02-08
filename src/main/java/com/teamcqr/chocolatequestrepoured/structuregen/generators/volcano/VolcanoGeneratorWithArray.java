@@ -388,7 +388,7 @@ public class VolcanoGeneratorWithArray implements IDungeonGenerator {
 						if (chest != null) {
 							ResourceLocation resLoc = null;
 							try {
-								resLoc = ELootTable.valueOf(eltID).getResourceLocation();
+								resLoc = ELootTable.values()[eltID].getResourceLocation();
 							} catch (Exception ex) {
 								ex.printStackTrace();
 							}

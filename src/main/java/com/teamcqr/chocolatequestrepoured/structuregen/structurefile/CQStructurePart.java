@@ -2,18 +2,19 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -46,8 +47,8 @@ public class CQStructurePart extends Template {
 	private final List<BlockPos> forceFieldCores = new ArrayList<BlockPos>();
 	private final List<BlockPos> bosses = new ArrayList<BlockPos>();
 
-	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
-		this.takeBlocksFromWorld(worldIn, startPos, endPos.subtract(startPos), true, Blocks.STRUCTURE_VOID);
+	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos size) {
+		this.takeBlocksFromWorld(worldIn, startPos, size, true, Blocks.STRUCTURE_VOID);
 
 		this.banners.clear();
 		this.chests.clear();
@@ -55,72 +56,66 @@ public class CQStructurePart extends Template {
 		this.forceFieldCores.clear();
 		this.bosses.clear();
 
-		try {
-			Field field = null;
-			try {
-				field = Template.class.getDeclaredField("blocks");
-			} catch (NoSuchFieldException e) {
-				CQRMain.logger.info("Failed to get field by name \"blocks\". Using obfuscated name \"field_186270_a\"");
-				try {
-					field = Template.class.getDeclaredField("field_186270_a");
-				} catch (NoSuchFieldException e1) {
-					e1.printStackTrace();
-					return;
-				}
+		List<Template.BlockInfo> blocks = this.getBlockInfoList();
+		List<Integer> removeEntries = new ArrayList<Integer>();
+
+		for (int i = 0; i < blocks.size(); i++) {
+			Template.BlockInfo blockInfo = blocks.get(i);
+			Block currentBlock = blockInfo.blockState.getBlock();
+
+			// Removing null blocks
+			if (Block.isEqualTo(currentBlock, ModBlocks.NULL_BLOCK)) {
+				removeEntries.add(i);
 			}
-			field.setAccessible(true);
-			List<Template.BlockInfo> blocks = (List<BlockInfo>) field.get(this);
-			List<Integer> removeEntries = new ArrayList<Integer>();
 
-			for (int i = 0; i < blocks.size(); i++) {
-				Template.BlockInfo blockInfo = blocks.get(i);
-				Block currentBlock = blockInfo.blockState.getBlock();
+			// Saving banner info
+			if (Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER) || Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
+				TileEntity tileEntity = worldIn.getTileEntity(startPos.add(blockInfo.pos));
 
-				// Removing null blocks
-				if (Block.isEqualTo(currentBlock, ModBlocks.NULL_BLOCK)) {
-					removeEntries.add(i);
-				}
-
-				// Saving banner info
-				if (Block.isEqualTo(currentBlock, Blocks.STANDING_BANNER) || Block.isEqualTo(currentBlock, Blocks.WALL_BANNER)) {
-					TileEntity tileEntity = worldIn.getTileEntity(startPos.add(blockInfo.pos));
-
-					if (tileEntity != null && tileEntity instanceof TileEntityBanner && DungeonGenUtils.isCQBanner((TileEntityBanner) tileEntity)) {
-						this.banners.add(blockInfo.pos);
-					}
-				}
-
-				// Saving spawner info
-				if (Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
-					this.spawners.add(blockInfo.pos);
-				}
-
-				// Saving loot chest info
-				if (DungeonGenUtils.isLootChest(currentBlock)) {
-					LootChestInfo lootChestInfo = new LootChestInfo(blockInfo.pos, blockInfo.blockState.getValue(BlockHorizontal.FACING), ELootTable.valueOf(currentBlock));
-					this.chests.add(lootChestInfo);
-					removeEntries.add(i);
-				}
-
-				// Saving force field nexus info
-				if (Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
-					this.forceFieldCores.add(blockInfo.pos);
-					removeEntries.add(i);
-				}
-
-				// Saving boss info
-				if (Block.isEqualTo(currentBlock, ModBlocks.BOSS_BLOCK)) {
-					this.bosses.add(blockInfo.pos);
-					removeEntries.add(i);
+				if (tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
+					this.banners.add(blockInfo.pos);
 				}
 			}
 
-			for (int i = 0; i < removeEntries.size(); i++) {
-				blocks.remove(removeEntries.get(i) - i);
+			// Saving spawner info
+			if (Block.isEqualTo(currentBlock, ModBlocks.SPAWNER)) {
+				this.spawners.add(blockInfo.pos);
 			}
-		} catch (SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			CQRMain.logger.error(e);
+
+			// Saving loot chest info
+			if (currentBlock instanceof BlockExporterChest) {
+				LootChestInfo lootChestInfo = new LootChestInfo(blockInfo.pos, blockInfo.blockState.getValue(BlockHorizontal.FACING), ((BlockExporterChest) currentBlock).lootTable);
+				this.chests.add(lootChestInfo);
+				removeEntries.add(i);
+			}
+
+			// Saving force field nexus info
+			if (Block.isEqualTo(currentBlock, ModBlocks.FORCE_FIELD_NEXUS)) {
+				this.forceFieldCores.add(blockInfo.pos);
+				removeEntries.add(i);
+			}
+
+			// Saving boss info
+			if (Block.isEqualTo(currentBlock, ModBlocks.BOSS_BLOCK)) {
+				this.bosses.add(blockInfo.pos);
+				removeEntries.add(i);
+			}
 		}
+
+		for (int i = 0; i < removeEntries.size(); i++) {
+			blocks.remove(removeEntries.get(i) - i);
+		}
+	}
+
+	private List<Template.BlockInfo> getBlockInfoList() {
+		try {
+			Field field = Template.class.getDeclaredField("blocks");
+			field.setAccessible(true);
+			return (List<BlockInfo>) field.get(this);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error("Error while taking blocks from world", e);
+		}
+		return Collections.emptyList();
 	}
 
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
