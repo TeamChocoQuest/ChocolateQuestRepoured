@@ -120,7 +120,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldExecute()){
+				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -130,7 +130,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldContinueExecuting()){
+				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -141,7 +141,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldExecute()){
+				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -151,7 +151,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldContinueExecuting()){
+				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -162,7 +162,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldExecute()){
+				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -172,7 +172,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldContinueExecuting()){
+				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -183,7 +183,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
-				} else if(super.shouldExecute()){
+				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_IN);
 				}
 				return false;
@@ -378,7 +378,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		if(partSoundFlag) {
+		if(partSoundFlag && !isInShell()) {
 			partSoundFlag = false;
 			return SoundEvents.ENTITY_SLIME_HURT;
 		}
