@@ -59,6 +59,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final int TARGET_MOVE_IN = -1;
 	private int targetedState = 0;
 	private boolean partSoundFlag = false;
+	private int timesHealed = 1;
+	private boolean isHealing = false;
 	
 	//Animations
 	private Animation animation = NO_ANIMATION;
@@ -116,7 +118,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldExecute()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -126,7 +128,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldContinueExecuting()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -137,7 +139,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldExecute()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -147,7 +149,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldContinueExecuting()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -158,7 +160,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(20, new EntityAIMoveToHome(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldExecute()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -168,7 +170,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldContinueExecuting()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -179,7 +181,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell()) {
+				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell() && !isHealing) {
 					return true;
 				} else if(super.shouldExecute()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_IN);
@@ -406,6 +408,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 
+		compound.setInteger("timesHealed", timesHealed);
 		compound.setBoolean("inShell", isInShell());
 	}
 
@@ -413,6 +416,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 
+		setTimesHealed(compound.getInteger("timesHealed"));
+		if(getTimesHealed() < 1) {
+			setTimesHealed(1);
+		}
 		setInShell(compound.getBoolean("inShell"));
 	}
 	
@@ -500,6 +507,20 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 	public void changedState() {
 		this.targetedState = 0;
+	}
+	
+	public int getTimesHealed() {
+		return timesHealed;
+	}
+	public void setTimesHealed(int val) {
+		this.timesHealed = val;
+	}
+	public void setHealing(boolean val) {
+		this.isHealing = val;
+	}
+	
+	public boolean isHealing() {
+		return isHealing;
 	}
 
 }
