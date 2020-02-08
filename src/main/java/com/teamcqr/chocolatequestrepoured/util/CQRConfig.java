@@ -40,7 +40,6 @@ public class CQRConfig {
 		public int dungeonSpawnDistance = 25;
 		public boolean dungeonsInFlat = false;
 		public int maxLootTablePoolRolls = 1;
-		public int mobTypeChangeDistance = 1500;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		public boolean reinstallDefaultConfigs = false;
 		public double spawnerActivationDistance = 25.0D;
