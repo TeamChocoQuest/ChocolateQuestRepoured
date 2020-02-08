@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiant
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.EnumParticleTypes;
@@ -25,12 +24,9 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 	@Override
 	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		// DONE: Rotate move around z axis when the mouth is open
-
 		switch (entity.getCurrentAnimation()) {
 		case HEALING:
-			Minecraft.getMinecraft().world.spawnParticle(EnumParticleTypes.HEART, true, x - 1F, y, z - 1F, 2, 4, 2, 5);
 			break;
 		case MOVE_PARTS_IN:
 			break;
@@ -50,6 +46,7 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 			break;
 
 		}
+		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 }
