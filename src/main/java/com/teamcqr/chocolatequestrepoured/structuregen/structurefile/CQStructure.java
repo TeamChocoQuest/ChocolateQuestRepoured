@@ -75,12 +75,12 @@ public class CQStructure {
 
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean usePartMode) {
 		BlockPos startPos1 = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
-		BlockPos endPos1 = new BlockPos(Math.max(startPos.getX(), endPos.getX()) +1, Math.max(startPos.getY(), endPos.getY()) + 1, Math.max(startPos.getZ(), endPos.getZ()) + 1);
+		BlockPos endPos1 = new BlockPos(Math.max(startPos.getX(), endPos.getX()) + 1, Math.max(startPos.getY(), endPos.getY()) + 1, Math.max(startPos.getZ(), endPos.getZ()) + 1);
 
 		this.size = new BlockPos(endPos1.getX() - startPos1.getX(), endPos1.getY() - startPos1.getY(), endPos1.getZ() - startPos1.getZ());
 		this.structures.clear();
 
-		if (usePartMode && (this.size.getX() > 17 || this.size.getY() > 17 || this.size.getZ() > 17)) {
+		if (usePartMode && (this.size.getX() > 16 || this.size.getY() > 16 || this.size.getZ() > 16)) {
 			int xIterations = this.size.getX() / 16;
 			int yIterations = this.size.getY() / 16;
 			int zIterations = this.size.getZ() / 16;
@@ -89,27 +89,19 @@ public class CQStructure {
 				for (int z = 0; z <= zIterations; z++) {
 					for (int y = 0; y <= yIterations; y++) {
 						BlockPos partStartPos = startPos1.add(16 * x, 16 * y, 16 * z);
-						BlockPos partEndPos = partStartPos.add(new BlockPos(16, 16, 16));
-
-						if (x == xIterations) {
-							partEndPos = new BlockPos(endPos1.getX() /*- partStartPos.getX()*/, partEndPos.getY(), partEndPos.getZ());
-						}
-						if (y == yIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), endPos1.getY() /*- partStartPos.getY()*/, partEndPos.getZ());
-						}
-						if (z == zIterations) {
-							partEndPos = new BlockPos(partEndPos.getX(), partEndPos.getY(), endPos1.getZ() /*- partStartPos.getZ()*/);
-						}
+						int x1 = x == xIterations ? endPos1.getX() - partStartPos.getX() : 16;
+						int y1 = y == yIterations ? endPos1.getY() - partStartPos.getY() : 16;
+						int z1 = z == zIterations ? endPos1.getZ() - partStartPos.getZ() : 16;
 
 						CQStructurePart structurePart = new CQStructurePart();
-						structurePart.takeBlocksFromWorld(worldIn, partStartPos, partEndPos);
+						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1));
 						this.structures.put(partStartPos.subtract(startPos1), structurePart);
 					}
 				}
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
-			structure.takeBlocksFromWorld(worldIn, startPos1, endPos1);
+			structure.takeBlocksFromWorld(worldIn, startPos1, this.size);
 			this.structures.put(BlockPos.ORIGIN, structure);
 		}
 	}
@@ -156,8 +148,6 @@ public class CQStructure {
 			BlockPos pastePos = pos.add(offsetVec);
 			CQStructurePart structure = entry.getValue();
 
-			CQRMain.logger.info(entry.getKey());
-
 			if (DungeonGenerationHandler.isAreaLoaded(worldIn, pastePos, structure, placementIn.getRotation()) && j < CQRConfig.advanced.dungeonGenerationMax) {
 				j++;
 				structure.addBlocksToWorld(worldIn, pastePos, placementIn, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
@@ -171,32 +161,29 @@ public class CQStructure {
 		this.author = author.getName();
 		NBTTagCompound compound = CQStructure.this.writeToNBT(new NBTTagCompound());
 
-		Thread fileSaveThread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				if (!CQStructure.this.file.exists()) {
-					try {
-						CQStructure.this.file.createNewFile();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-
+		Thread fileSaveThread = new Thread(() -> {
+			if (!CQStructure.this.file.exists()) {
 				try {
-					CQRMain.logger.info("Exporting " + CQStructure.this.file.getName() + "...");
-
-					OutputStream outputStream = new FileOutputStream(CQStructure.this.file);
-					CompressedStreamTools.writeCompressed(compound, outputStream);
-					outputStream.close();
-
-					author.sendMessage(new TextComponentString("Exported " + CQStructure.this.file.getName() + " successfully!"));
-					CQRMain.logger.info("Exported " + CQStructure.this.file.getName() + " successfully!");
+					CQStructure.this.file.createNewFile();
 				} catch (IOException e) {
-					e.printStackTrace();
+					CQRMain.logger.error("Failed to create file " + CQStructure.this.file.getName(), e);
 				}
-
-				CQStructure.RUNNING_EXPORT_THREADS.remove(Thread.currentThread());
 			}
+
+			try {
+				CQRMain.logger.info("Exporting " + CQStructure.this.file.getName() + "...");
+
+				OutputStream outputStream = new FileOutputStream(CQStructure.this.file);
+				CompressedStreamTools.writeCompressed(compound, outputStream);
+				outputStream.close();
+
+				author.sendMessage(new TextComponentString("Exported " + CQStructure.this.file.getName() + " successfully!"));
+				CQRMain.logger.info("Exported " + CQStructure.this.file.getName() + " successfully!");
+			} catch (IOException e) {
+				CQRMain.logger.error("Failed to write dungeon to file " + CQStructure.this.file.getName(), e);
+			}
+
+			CQStructure.RUNNING_EXPORT_THREADS.remove(Thread.currentThread());
 		});
 		CQStructure.RUNNING_EXPORT_THREADS.add(fileSaveThread);
 		fileSaveThread.setDaemon(true);
@@ -210,7 +197,7 @@ public class CQStructure {
 			this.readFromNBT(compound);
 			inputStream.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			CQRMain.logger.error("Failed to read file " + this.file.getName(), e);
 		}
 	}
 

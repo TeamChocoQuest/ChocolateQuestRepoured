@@ -49,7 +49,7 @@ public class RoomDecorChest extends RoomDecorBlocks {
 				int eltID = chestIDs[dungeon.getRandom().nextInt(chestIDs.length)];
 				ResourceLocation resLoc = null;
 				try {
-					resLoc = ELootTable.valueOf(eltID).getResourceLocation();
+					resLoc = ELootTable.values()[eltID].getResourceLocation();
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}

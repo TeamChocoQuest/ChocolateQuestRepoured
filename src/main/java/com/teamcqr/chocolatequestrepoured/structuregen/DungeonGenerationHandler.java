@@ -85,6 +85,7 @@ public class DungeonGenerationHandler {
 		if (!world.isRemote) {
 			DungeonGenerationHandler.createInstance(world);
 			DungeonGenerationHandler.getInstance(world).loadData();
+			CQRMain.logger.info("Loaded " + DungeonGenerationHandler.getInstance(world).dungeonPartList.size() + " parts to generate");
 		}
 	}
 
@@ -96,6 +97,7 @@ public class DungeonGenerationHandler {
 
 	public static void handleWorldUnload(World world) {
 		if (!world.isRemote) {
+			CQRMain.logger.info("Saved " + DungeonGenerationHandler.getInstance(world).dungeonPartList.size() + " parts to generate");
 			DungeonGenerationHandler.deleteInstance(world);
 		}
 	}
@@ -115,11 +117,11 @@ public class DungeonGenerationHandler {
 				this.dungeonPartList.addAll(this.readList(compound.getTagList("parts", 10)));
 				inputStream.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				CQRMain.logger.error("Failed to load dungeon parts", e);
 			}
 		}
 
-		CQRMain.logger.info("Loaded " + this.dungeonPartList.size() + " parts to generate");
+		// CQRMain.logger.info("Loaded " + this.dungeonPartList.size() + " parts to generate");
 	}
 
 	private void saveData() {
@@ -127,7 +129,7 @@ public class DungeonGenerationHandler {
 			try {
 				this.file.createNewFile();
 			} catch (IOException e) {
-				e.printStackTrace();
+				CQRMain.logger.error("Failed to create file for dungeon parts", e);
 			}
 		}
 
@@ -138,10 +140,10 @@ public class DungeonGenerationHandler {
 			CompressedStreamTools.writeCompressed(compound, outputStream);
 			outputStream.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			CQRMain.logger.error("Failed to save dungeon parts", e);
 		}
 
-		CQRMain.logger.info("Saved " + this.dungeonPartList.size() + " parts to generate");
+		// CQRMain.logger.info("Saved " + this.dungeonPartList.size() + " parts to generate");
 	}
 
 	private void tick() {
@@ -166,27 +168,27 @@ public class DungeonGenerationHandler {
 				}
 			}
 
-			if (this.world.getTotalWorldTime() % CQRConfig.advanced.dungeonGenerationFrequencyInUnloaded == 0) {
-				if (toRemove.isEmpty()) {
-					for (int i = 0; i < this.dungeonPartList.size(); i++) {
-						StructurePart structurePart = this.dungeonPartList.get(i);
-						CQStructurePart part = structurePart.getPart();
-						PlacementSettings settings = structurePart.getSettings();
-						BlockPos pos = structurePart.getPos();
+			if (toRemove.isEmpty() && this.world.getTotalWorldTime() % CQRConfig.advanced.dungeonGenerationFrequencyInUnloaded == 0) {
+				for (int i = 0; i < this.dungeonPartList.size(); i++) {
+					StructurePart structurePart = this.dungeonPartList.get(i);
+					CQStructurePart part = structurePart.getPart();
+					PlacementSettings settings = structurePart.getSettings();
+					BlockPos pos = structurePart.getPos();
 
-						part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(),
-								structurePart.getDungeonBanner(), structurePart.isHasShield());
-						toRemove.add(i);
-						if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInUnloaded) {
-							break;
-						}
+					part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(), structurePart.getDungeonBanner(),
+							structurePart.isHasShield());
+					toRemove.add(i);
+					if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInUnloaded) {
+						break;
 					}
 				}
 			}
 
-			if (toRemove.size() > 0) {
-				CQRMain.logger.info("Forced/Post generating " + toRemove.size() + " structure parts. " + (this.dungeonPartList.size() - toRemove.size()) + " parts left.");
-			}
+			/*
+			 * if (!toRemove.isEmpty()) {
+			 * CQRMain.logger.info("Forced/Post generating " + toRemove.size() + " structure parts. " + (this.dungeonPartList.size() - toRemove.size()) + " parts left.");
+			 * }
+			 */
 
 			for (int i = 0; i < toRemove.size(); i++) {
 				this.dungeonPartList.remove((int) toRemove.get(i) - i);
