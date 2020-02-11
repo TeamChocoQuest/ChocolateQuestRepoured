@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangA
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -69,6 +70,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
