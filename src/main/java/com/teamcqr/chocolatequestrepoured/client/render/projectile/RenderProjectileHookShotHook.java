@@ -73,8 +73,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
         GlStateManager.glLineWidth(6.0F);
 
 		//DONE: render chain elements
-		Vec3d entityEyePos = entity.getPositionVector().add(new Vec3d(0, entity.getEyeHeight(), 0));
-		Vec3d v = entity.getPositionVector().subtract(entityEyePos);//.add(new Vec3d(0,1.7,0));
+		Vec3d v = entity.getPositionVector().subtract(entity.getShooterPosition());//.add(new Vec3d(0,1.7,0));
 		int iterations = (int) Math.ceil(v.lengthVector());
 		v = v.normalize();
 		Vec3d loc = entity.getShooterPosition().add(v);
