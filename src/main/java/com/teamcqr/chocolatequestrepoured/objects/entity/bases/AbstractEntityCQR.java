@@ -204,7 +204,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		//DONE: Check if attacker is a InF entity, if yes: amount /= 10
-		ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+		ResourceLocation resLoc = EntityList.getKey(source.getImmediateSource());
 		if(resLoc != null && CQRConfig.advanced.enableSpecialFeatures && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
 			amount /= 10;
 			if(getRNG().nextDouble() <= 0.05D) {
