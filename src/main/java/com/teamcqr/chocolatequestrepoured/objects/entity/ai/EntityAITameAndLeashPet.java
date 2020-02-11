@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.passive.EntityTameable;

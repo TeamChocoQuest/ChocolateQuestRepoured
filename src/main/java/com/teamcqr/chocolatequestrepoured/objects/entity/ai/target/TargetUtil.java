@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 
 import java.util.Comparator;
 import java.util.List;

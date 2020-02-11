@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
