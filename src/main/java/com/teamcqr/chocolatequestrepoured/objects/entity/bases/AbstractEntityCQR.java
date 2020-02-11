@@ -43,6 +43,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -202,6 +203,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		//DONE: Check if attacker is a InF entity, if yes: amount /= 10
+		ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+		if(resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			amount /= 10;
+			attackEntityAsMob(source.getTrueSource());
+		}
+		
 		boolean result = super.attackEntityFrom(source, amount);
 		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
@@ -462,7 +470,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) entityIn).getCreatureAttribute());
 			i += EnchantmentHelper.getKnockbackModifier(this);
 		}
-
+		//InF compat
+		ResourceLocation resLoc = EntityList.getKey(entityIn);
+		if(resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			f *= 10;
+		}
+		//End of InF compat
 		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
 
 		if (flag) {
