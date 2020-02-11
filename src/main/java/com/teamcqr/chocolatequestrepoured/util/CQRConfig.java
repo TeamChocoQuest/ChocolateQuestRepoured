@@ -30,6 +30,8 @@ public class CQRConfig {
 		public int dungeonGenerationCountInLoaded = 1;
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInUnloaded = 1;
+		
+		public boolean enableSpecialFeatures = true;
 	}
 
 	public static class General {
