@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
@@ -99,6 +100,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override
