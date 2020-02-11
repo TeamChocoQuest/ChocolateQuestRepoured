@@ -57,11 +57,12 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 
+		this.tasks.addTask(6, new EntityAISummonMinionSpell(this));
+		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
 		this.tasks.addTask(7, new EntityAIBlindTargetSpell(this));
 		this.tasks.addTask(7, new EntityAIFangAttack(this));
 		this.tasks.addTask(8, new EntityAIVampiricSpell(this));
-		this.tasks.addTask(6, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
-
+		
 		this.tasks.addTask(10, new EntityAIAttackRanged(this));
 		this.tasks.addTask(11, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
