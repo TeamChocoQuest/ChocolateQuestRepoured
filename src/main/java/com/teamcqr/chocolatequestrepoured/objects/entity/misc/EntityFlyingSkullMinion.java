@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.TargetUtil;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.material.Material;
