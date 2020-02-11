@@ -207,7 +207,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
 		if(resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
 			amount /= 10;
-			attackEntityAsMob(source.getTrueSource());
+			if(getRNG().nextDouble() <= 0.05D) {
+				attackEntityAsMob(source.getTrueSource());
+			}
 		}
 		
 		boolean result = super.attackEntityFrom(source, amount);
