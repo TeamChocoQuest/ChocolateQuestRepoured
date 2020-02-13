@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 import java.util.HashSet;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -46,6 +47,26 @@ public class EntityBubble extends EntityLivingBase {
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		flyTicks += 5;
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	public boolean shouldDismountInWater(Entity rider) {
+		return false;
+	}
+	
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return true;
+	}
+	
+	@Override
+	public boolean getIsInvulnerable() {
+		return true;
 	}
 	
 	@Override
