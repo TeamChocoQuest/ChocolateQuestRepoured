@@ -584,7 +584,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public abstract float getBaseHealth();
 
-	public void setBaseHealthForPosition(double x, double z, float health) {
+	public float calculateBaseHealth(double x, double z, float health) {
 		BlockPos spawn = this.world.getSpawnPoint();
 		x -= (double) spawn.getX();
 		z -= (double) spawn.getZ();
@@ -605,7 +605,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		health *= this.healthScale;
-
+		return health;
+	}
+	
+	public void setBaseHealth(BlockPos pos, float health) {
+		health = calculateBaseHealth(pos.getX(), pos.getZ(), health);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
 	}
@@ -762,7 +766,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePositionCQR(this.getPosition());
-		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+		//this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
 	}
 
 	public void equipDefaultEquipment(World world, BlockPos pos) {
