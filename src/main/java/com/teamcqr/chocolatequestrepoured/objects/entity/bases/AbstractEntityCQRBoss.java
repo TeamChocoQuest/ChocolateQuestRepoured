@@ -1,8 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
@@ -88,6 +92,19 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	public void enableBossBar(boolean enabled) {
 		this.bossInfoServer.setVisible(enabled);
+	}
+	
+	@Override
+	public float calculateBaseHealth(double x, double z, float health) {
+		float hp = super.calculateBaseHealth(x, z, health);
+		
+		float multiplier = 1F;
+		
+		multiplier += world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x -100, 0, z -100, x +100, 255, z +100)).size() * CQRConfig.mobs.bossHealthMultiplierPerPlayer;
+		
+		hp *= multiplier;
+		
+		return hp;
 	}
 
 	@Override
