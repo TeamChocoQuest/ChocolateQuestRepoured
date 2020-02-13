@@ -65,7 +65,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	//Animations
 	private Animation animation = NO_ANIMATION;
 	private int animationTick;
-	public AnimationAI currentAnim;
+	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 	
 	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
