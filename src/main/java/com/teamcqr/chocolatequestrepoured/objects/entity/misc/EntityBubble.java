@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 public class EntityBubble extends EntityLivingBase {
 
 	private int flyTicks = 0;
+	private int riderLessTicks = 0;
 
 	protected static final int FLY_TIME_MAX = 70;
 
@@ -68,6 +69,11 @@ public class EntityBubble extends EntityLivingBase {
 	public boolean getIsInvulnerable() {
 		return true;
 	}
+
+	@Override
+	public boolean hasNoGravity() {
+		return true;
+	}
 	
 	@Override
 	public void onLivingUpdate() {
@@ -79,8 +85,11 @@ public class EntityBubble extends EntityLivingBase {
 
 		flyTicks++;
 
-		if (!isBeingRidden() || getLowestRidingEntity() == null) {
-			setDead();
+		if (isInLava() || !isBeingRidden() || getLowestRidingEntity() == null) {
+			riderLessTicks++;
+			if(riderLessTicks >= 20) {
+				setDead();
+			}
 		}
 
 		Material mat = world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + getLowestRidingEntity().height), MathHelper.floor(posZ))).getMaterial();
