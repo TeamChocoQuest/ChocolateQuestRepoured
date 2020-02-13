@@ -201,7 +201,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationProgress = 0;
 
 	public EntityCQRGiantTortoise(World worldIn) {
-		// super(worldIn, size);
 		super(worldIn, 1);
 
 		this.bossInfoServer.setColor(Color.GREEN);
