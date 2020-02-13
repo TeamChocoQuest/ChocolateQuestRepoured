@@ -90,9 +90,9 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(6, new EntityAISummonMeteors(this));
-		this.tasks.addTask(7, new EntityAIExplosionRay(this));
-		this.tasks.addTask(7, new EntityAIExplosionSpell(this));
+		this.tasks.addTask(7, new EntityAISummonMeteors(this));
+		this.tasks.addTask(8, new EntityAIExplosionRay(this));
+		this.tasks.addTask(9, new EntityAIExplosionSpell(this));
 		this.tasks.addTask(6, new EntityAISummonFireWall(this));
 		this.tasks.addTask(10, new EntityAIAttackRanged(this));
 		this.tasks.addTask(11, new EntityAIAttack(this));
