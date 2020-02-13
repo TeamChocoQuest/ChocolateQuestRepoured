@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -31,31 +32,22 @@ public class ProjectileBubble extends ProjectileBase {
 	}
 	
 	@Override
-	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote) {
-			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
-				if (result.entityHit instanceof EntityLivingBase) {
-					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
-
-					if (result.entityHit == this.shooter) {
-						return;
-					}
-
-					entity.attackEntityFrom(DamageSource.MAGIC, this.damage);
-					float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
-					this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
-					
-					EntityBubble bubbles = new EntityBubble(world);
-					bubbles.moveToBlockPosAndAngles(entity.getPosition().add(0,0.25,0), entity.rotationYaw, entity.rotationPitch);
-					world.spawnEntity(bubbles);
-					
-					entity.startRiding(bubbles, true);
-					
-					this.setDead();
-				}
-			}
-			super.onImpact(result);
+	public void applyEntityCollision(Entity entityHit) {
+		if (entityHit == this.shooter) {
+			return;
 		}
+
+		entityHit.attackEntityFrom(DamageSource.MAGIC, this.damage);
+		float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
+		this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
+		
+		EntityBubble bubbles = new EntityBubble(world);
+		bubbles.moveToBlockPosAndAngles(entityHit.getPosition().add(0,0.25,0), entityHit.rotationYaw, entityHit.rotationPitch);
+		world.spawnEntity(bubbles);
+		
+		entityHit.startRiding(bubbles, true);
+		
+		this.setDead();
 	}
 	
 	@Override
