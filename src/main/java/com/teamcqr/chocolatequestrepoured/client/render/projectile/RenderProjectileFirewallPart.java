@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.projectile;
 
+import org.lwjgl.opengl.GL11;
+
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 
 import net.minecraft.client.Minecraft;
@@ -22,62 +24,41 @@ public class RenderProjectileFirewallPart extends Render<ProjectileFireWallPart>
 	@Override
 	public void doRender(ProjectileFireWallPart entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-
 		GlStateManager.disableLighting();
 		TextureMap texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
 		TextureAtlasSprite textureatlassprite = texturemap.getAtlasSprite("minecraft:blocks/fire_layer_0");
-		TextureAtlasSprite textureatlassprite1 = texturemap.getAtlasSprite("minecraft:blocks/fire_layer_1");
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-		float f = entity.width * 1.4F;
+		GlStateManager.translate((float)x, (float)y, (float)z);
+
+		float f = Math.min(entity.width, entity.height) * 1.8F;
 		GlStateManager.scale(f, f, f);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder bufferbuilder = tessellator.getBuffer();
 		float f1 = 0.5F;
-		float f3 = entity.height / f;
-		float f4 = (float) (entity.posY - entity.getEntityBoundingBox().minY);
-		float rotateAngle = new Float(Math.atan2(entity.motionX, entity.motionZ)) - new Float(Math.toRadians(90));
-		this.draw(rotateAngle, bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
-		tessellator.draw();
-		this.draw(rotateAngle + new Float(Math.toRadians(180)), bufferbuilder, f1, f3, f4, textureatlassprite, textureatlassprite1);
-		tessellator.draw();
+		float f4 = (float)(entity.posY - entity.getEntityBoundingBox().minY);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		float f5 = 0.0F;
+		float f6 = textureatlassprite.getMaxU();
+		float f7 = textureatlassprite.getMinV();
+		float f8 = textureatlassprite.getMinU();
+		float f9 = textureatlassprite.getMaxV();
+
+		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		int iterations = 8;
+		float rot = (360F / iterations);
+		for(int i = 0; i < iterations; i++) {
+			bufferbuilder.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			bufferbuilder.pos((f1 - 0.0F), (0.0F - f4), f5).tex(f8, f9).endVertex();
+			bufferbuilder.pos((-f1 - 0.0F), (0.0F - f4), f5).tex(f6, f9).endVertex();
+			bufferbuilder.pos((-f1 - 0.0F), (1.4F - f4), f5).tex(f6, f7).endVertex();
+			bufferbuilder.pos((f1 - 0.0F), (1.4F - f4), f5).tex(f8, f7).endVertex();
+			tessellator.draw();
+			GlStateManager.rotate(rot, 0F, 1F, 0F);
+		}
 
 		GlStateManager.popMatrix();
 		GlStateManager.enableLighting();
-	}
-
-	private void draw(float rotateAngle, BufferBuilder bufferbuilder, float f1, float f3, float f4, TextureAtlasSprite textureatlassprite, TextureAtlasSprite textureatlassprite1) {
-		GlStateManager.rotate(rotateAngle, 0.0F, 1.0F, 0.0F);
-		GlStateManager.translate(0.0F, 0.0F, -0.3F + (float) ((int) f3) * 0.02F);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		float f5 = 0.0F;
-		int i = 0;
-		bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-
-		while (f3 > 0.0F) {
-			TextureAtlasSprite textureatlassprite2 = i % 2 == 0 ? textureatlassprite : textureatlassprite1;
-			this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			float f6 = textureatlassprite2.getMinU();
-			float f7 = textureatlassprite2.getMinV();
-			float f8 = textureatlassprite2.getMaxU();
-			float f9 = textureatlassprite2.getMaxV();
-
-			if (i / 2 % 2 == 0) {
-				float f10 = f8;
-				f8 = f6;
-				f6 = f10;
-			}
-
-			bufferbuilder.pos((double) (f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f8, (double) f9).endVertex();
-			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (0.0F - f4), (double) f5).tex((double) f6, (double) f9).endVertex();
-			bufferbuilder.pos((double) (-f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f6, (double) f7).endVertex();
-			bufferbuilder.pos((double) (f1 - 0.0F), (double) (1.4F - f4), (double) f5).tex((double) f8, (double) f7).endVertex();
-			f3 -= 0.45F;
-			f4 -= 0.45F;
-			f1 *= 0.9F;
-			f5 += 0.03F;
-			++i;
-		}
 	}
 
 	@Override
