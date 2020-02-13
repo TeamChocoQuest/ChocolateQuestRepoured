@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
+import java.util.HashSet;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -22,12 +24,12 @@ public class EntityBubble extends EntityLivingBase {
 
 	@Override
 	public Iterable<ItemStack> getArmorInventoryList() {
-		return null;
+		return new HashSet<ItemStack>();
 	}
 
 	@Override
 	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class EntityBubble extends EntityLivingBase {
 
 	@Override
 	public EnumHandSide getPrimaryHand() {
-		return null;
+		return EnumHandSide.LEFT;
 	}
 	
 	@Override
