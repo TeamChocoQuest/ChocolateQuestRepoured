@@ -192,12 +192,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		return new PathNavigateGround(this, worldIn) {
+		PathNavigate navigator = new PathNavigateGround(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
 				return 128.0F;
 			}
 		};
+		((PathNavigateGround) navigator).setEnterDoors(this.canOpenDoors());
+		((PathNavigateGround) navigator).setBreakDoors(this.canOpenDoors());
+		return navigator;
 	}
 
 	@Override
@@ -537,23 +540,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public PathNavigate getNavigator() {
-		PathNavigate navigator = super.getNavigator();
-		if(navigator instanceof PathNavigateGround) {
-			if(canOpenDoors()) {
-				((PathNavigateGround)navigator).setEnterDoors(true);
-			}
-			((PathNavigateGround)navigator).setBreakDoors(true);
-		}
-		
 		if (this.isRiding()) {
 			Entity ridden = this.getRidingEntity();
-			if (ridden != null) {
-				if (ridden instanceof EntityLiving) {
-					navigator = ((EntityLiving) ridden).getNavigator();
-				}
+			if (ridden instanceof EntityLiving) {
+				return ((EntityLiving) ridden).getNavigator();
 			}
 		}
-		return navigator;
+		return super.getNavigator();
 	}
 
 	// Chocolate Quest Repoured
