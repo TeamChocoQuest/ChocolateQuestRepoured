@@ -66,7 +66,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		if (attackTarget != null) {
 			AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - CQRConfig.mobs.alertRadius /2, entity.posY - CQRConfig.mobs.alertRadius /3, entity.posZ - CQRConfig.mobs.alertRadius /2, entity.posX + CQRConfig.mobs.alertRadius /2, entity.posY + CQRConfig.mobs.alertRadius /3, entity.posZ + CQRConfig.mobs.alertRadius /2);
 			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.PREDICATE_ALLIES(entity.getFaction()));
-			if(!possibleEnts.isEmpty() && possibleEnts.size() >= 3) {
+			if(!possibleEnts.isEmpty() && possibleEnts.size() >= 5) {
 				possibleEnts.sort(new Comparator<Entity>() {
 
 					@Override
@@ -86,7 +86,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 						return 0;
 					}
 				});
-				entity.getNavigator().tryMoveToEntityLiving(possibleEnts.get(0), this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5);
+				entity.getNavigator().tryMoveToEntityLiving(possibleEnts.get(0), this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2);
 				flag = false;
 			}
 			
