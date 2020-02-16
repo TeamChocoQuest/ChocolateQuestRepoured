@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 

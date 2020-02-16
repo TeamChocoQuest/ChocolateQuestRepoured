@@ -22,15 +22,15 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -43,6 +43,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -202,6 +203,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		//DONE: Check if attacker is a InF entity, if yes: amount /= 10
+		if(CQRConfig.advanced.enableSpecialFeatures && source != null && source.getImmediateSource() != null) {
+			ResourceLocation resLoc = EntityList.getKey(source.getImmediateSource());
+			if(resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+				amount /= 10;
+				if(getRNG().nextDouble() <= 0.05D) {
+					attackEntityAsMob(source.getTrueSource());
+				}
+			}
+		}
+		
 		boolean result = super.attackEntityFrom(source, amount);
 		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
@@ -462,7 +474,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) entityIn).getCreatureAttribute());
 			i += EnchantmentHelper.getKnockbackModifier(this);
 		}
-
+		//InF compat
+		ResourceLocation resLoc = EntityList.getKey(entityIn);
+		if(resLoc != null && CQRConfig.advanced.enableSpecialFeatures && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			f *= 10;
+		}
+		//End of InF compat
 		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
 
 		if (flag) {
@@ -569,7 +586,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public abstract float getBaseHealth();
 
-	public void setBaseHealthForPosition(double x, double z, float health) {
+	public float calculateBaseHealth(double x, double z, float health) {
 		BlockPos spawn = this.world.getSpawnPoint();
 		x -= (double) spawn.getX();
 		z -= (double) spawn.getZ();
@@ -590,7 +607,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		health *= this.healthScale;
-
+		return health;
+	}
+	
+	public void setBaseHealth(BlockPos pos, float health) {
+		health = calculateBaseHealth(pos.getX(), pos.getZ(), health);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
 	}
@@ -747,7 +768,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePositionCQR(this.getPosition());
-		this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+		//this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
+		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
 	}
 
 	public void equipDefaultEquipment(World world, BlockPos pos) {

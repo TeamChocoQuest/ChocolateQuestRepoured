@@ -1,5 +1,5 @@
-The Chinese CN language file for Chocolate Quest Repoured Mod!
-This translation was created by Moko
+The English CN language file for Chocolate Quest Repoured Mod!
+This translation was created by basically Moko#0842
 
 
 //CreativeTabs
@@ -10,6 +10,23 @@ itemGroup.ChocolateQuestRepouredBannerTab=旗帜
 itemGroup.ChocolateQuestRepouredExporterChests=输出箱
 
 //Banners
+item.banner.cqrepoured_cq_blank.white=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.orange=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.magenta=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.light_blue=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.yellow=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.lime=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.pink=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.gray=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.silver=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.cyan=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.purple=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.blue=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.brown=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.green=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.red=CQR-旗帜标记
+item.banner.cqrepoured_cq_blank.black=CQR-旗帜标记
+
 item.banner.cqrepoured_cq_wither_eyes.white=白色凋零之眼
 item.banner.cqrepoured_cq_wither_eyes.orange=橙色凋零之眼
 item.banner.cqrepoured_cq_wither_eyes.magenta=品红色凋零之眼
@@ -167,12 +184,18 @@ item.banner.cqrepoured_walker_skull.black=黑色漫步者脸庞
 
 
 //Gui
+gui.repu.name=声望
+gui.repu.faction=阵营
+gui.repu.reputation=您的声望
+gui.repu.memberskilled=遇害成员
+gui.repu.dungeonsconquered=被毁房屋
 gui.drops.name=掉落物
 gui.backpack.name=背包
-gui.alchemy_bag.name=炼金术之袋
+gui.alchemy_bag.name=炼金药袋
 description.gui_exporter.name=用于导出地牢的创造模式专用方块。 选择要导出的区域， 然后保存它。
 
 //Other
+item.super_tool.name=超级工具 (创造模式限定)
 item.potion_healing.name=治疗药水
 item.teleport_stone.name=传送石
 item.soul_bottle.name=瓶中灵魂
@@ -180,7 +203,7 @@ item.mob_to_spawner_tool.name=生物生成器
 item.spawner_converter.name=刷怪笼转换器
 item.badge.name=徽章
 item.backpack.name=背包
-item.alchemy_bag.name=炼金术之袋
+item.alchemy_bag.name=炼金药袋
 item.structure_selector.name=选择选择器助手
 
 //Dragon Items
@@ -247,6 +270,10 @@ item.great_sword_bull.name=公牛巨剑
 item.great_sword_diamond.name=钻石巨剑
 item.great_sword_iron.name=铁质巨剑
 
+//Spears
+item.spear_diamond.name=钻石矛
+item.spear_iron.name=铁质矛
+
 //Staves
 item.staff.name=法杖
 item.staff_fire.name=烈焰法杖
@@ -273,8 +300,8 @@ item.cannon_ball.name=火炮炮弹
 item.flamethrower.name=火焰喷射器
 
 //Hookshots
-item.hookshot.name=丢失 #TODO
-item.longshot.name=丢失 #TODO
+item.hookshot.name=抓钩
+item.longshot.name=加长抓钩
 
 //Cloud Items
 item.boots_cloud.name=云靴
@@ -331,6 +358,18 @@ item.chestplate_heavy_iron.name=重型铁质胸甲
 item.leggings_heavy_iron.name=重型铁质腿甲
 item.boots_heavy_iron.name=重型铁质靴子
 
+//Dyable Iron Armor
+item.helmet_iron_dyable.name=染色铁质头盔
+item.chestplate_iron_dyable.name=染色铁质胸甲
+item.leggings_iron_dyable.name=染色铁质腿甲
+item.boots_iron_dyable.name=染色铁质靴子
+
+//Dyable Diamond Armor
+item.helmet_diamond_dyable.name=染色钻石头盔
+item.chestplate_diamond_dyable.name=染色钻石胸甲
+item.leggings_diamond_dyable.name=染色钻石腿甲
+item.boots_diamond_dyable.name=染色钻石靴子
+
 //Blocks
 tile.exporter.name=输出方块
 tile.spawner.name=生物生成器
@@ -342,7 +381,7 @@ tile.table_birch.name=白桦木桌
 tile.table_jungle.name=丛林木桌
 tile.table_acacia.name=金合欢木桌
 tile.table_dark.name=深色橡木桌
-tile.boss_block.name=老怪（Boss）方块
+tile.boss_block.name=Boss方块
 tile.force_field_nexus.name=力场关系(NYI)
 
 //Andesite blocks
@@ -444,6 +483,9 @@ tile.exporter_chest_custom_12.name=输出箱 - 自定义 12
 tile.exporter_chest_custom_13.name=输出箱 - 自定义 13
 tile.exporter_chest_custom_14.name=输出箱 - 自定义 14
 
+//technical
+tile.phylactery.name=巫妖的命匣
+
 //Descriptions
 description.spider_armor.name=穿上蜘蛛铠甲如同变成蜘蛛。 全套装备可以让你攀爬墙壁并且跳得更高。
 description.spider_sword.name=毒液从尖牙中流出，使这把看似简单的剑成为英雄之刃，一旦你的敌人被这把剑咬住，巨蛛尸罗的毒液就不停的喷涌。
@@ -495,7 +537,7 @@ description.staff_wind.name=不管这是做什么的，现在还不起作用。 
 description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
 description.staff.name=丢失 #TODO
 description.staff_thunder.name=丢失 #TODO
-description.spear_diamond.name=丢失 #TODO
+description.spear_diamond.name=制作精良的制式武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
 
 // Mobs
 entity.cqr_boarman.name=野猪人
@@ -504,6 +546,7 @@ entity.cqr_dwarf.name=矮人
 entity.cqr_enderman.name=末影人
 entity.cqr_goblin.name=哥布林
 entity.cqr_golem.name=铁傀儡
+entity.cqr_gremlin.name=小鬼
 entity.cqr_illager.name=卫道士
 entity.cqr_npc.name=NPC
 entity.cqr_mandril.name=山魈
@@ -521,8 +564,15 @@ entity.cqr_zombie.name=僵尸
 //Mounts
 entity.cqr_giant_endermite.name=巨型末影螨
 entity.cqr_giant_silverfish.name=巨型蠹虫
-entity.cqr_giant_silverfish1.name=巨型熔岩蠹虫
+entity.cqr_giant_silverfish1.name=巨型岩浆蠹虫
 entity.cqr_giant_silverfish2.name=巨型沼泽蠹虫
 
 // Bosses
-entity.cqr_nether_dragon.name=下界魔龙
+entity.cqr_nether_dragon.name=下界妖龙
+entity.cqr_giant_tortoise.name=巨龟
+entity.cqr_lich.name=巫妖
+entity.cqr_necromancer.name=亡灵巫师
+entity.cqr_boar_mage.name=野猪法师
+
+//Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>五角星召唤物

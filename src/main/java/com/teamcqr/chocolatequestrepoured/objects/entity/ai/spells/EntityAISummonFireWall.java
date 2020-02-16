@@ -52,12 +52,12 @@ public class EntityAISummonFireWall extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected int getCastingTime() {
-		return 40;
+		return 30;
 	}
 
 	@Override
 	protected int getCastingInterval() {
-		return 80;
+		return 40;
 	}
 
 	@Override

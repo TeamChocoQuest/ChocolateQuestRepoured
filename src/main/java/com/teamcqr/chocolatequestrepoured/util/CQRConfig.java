@@ -30,6 +30,8 @@ public class CQRConfig {
 		public int dungeonGenerationCountInLoaded = 1;
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInUnloaded = 1;
+		
+		public boolean enableSpecialFeatures = true;
 	}
 
 	public static class General {
@@ -57,6 +59,8 @@ public class CQRConfig {
 		public int distanceDivisor = 1000;
 		public int mobTypeChangeDistance = 1500;
 		public int factionUpdateRadius = 100;
+		@Config.RangeDouble(min=0D)
+		public double bossHealthMultiplierPerPlayer = 0.1F;
 	}
 
 	public static class Wall {

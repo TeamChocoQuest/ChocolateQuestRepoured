@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
@@ -18,6 +17,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIArmor
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
@@ -94,6 +95,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	@Override

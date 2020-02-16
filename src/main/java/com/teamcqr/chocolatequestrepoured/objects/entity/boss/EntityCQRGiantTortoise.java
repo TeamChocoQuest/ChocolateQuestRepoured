@@ -5,13 +5,13 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -65,7 +65,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	//Animations
 	private Animation animation = NO_ANIMATION;
 	private int animationTick;
-	public AnimationAI currentAnim;
+	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 	
 	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
@@ -201,7 +201,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationProgress = 0;
 
 	public EntityCQRGiantTortoise(World worldIn) {
-		// super(worldIn, size);
 		super(worldIn, 1);
 
 		this.bossInfoServer.setColor(Color.GREEN);
