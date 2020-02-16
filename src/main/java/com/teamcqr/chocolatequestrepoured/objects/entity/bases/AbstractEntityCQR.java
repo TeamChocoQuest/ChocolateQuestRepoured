@@ -222,7 +222,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		
 		//If we are attacked and the attacker isnt one of our friends we call for help
 		if(source.getTrueSource() != null && !getFaction().isAlly(source.getTrueSource())) {
-			alertNearbies();
+			if(getHealth() / getMaxHealth() <= 0.95) {
+				alertNearbies();
+			}
 		}
 		
 		return result;
