@@ -1049,11 +1049,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public void onAlert(AbstractEntityCQR alertingEntity) {
-		if(getAttackTarget() == null || getDistance(getAttackTarget()) >= 10) {
-			this.setAttackTarget(alertingEntity.getAttackingEntity());
-		}
 		if(getNavigator().getPathToEntityLiving(alertingEntity) != null) {
-			getNavigator().tryMoveToEntityLiving(alertingEntity, getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.75);
+			if(getAttackTarget() == null || getDistance(getAttackTarget()) >= 10) {
+				this.setAttackTarget(alertingEntity.getAttackingEntity());
+				getNavigator().tryMoveToEntityLiving(alertingEntity, getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.75);
+			}
 		}
 	}
 	
