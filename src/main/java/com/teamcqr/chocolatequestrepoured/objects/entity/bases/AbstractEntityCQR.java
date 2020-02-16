@@ -66,6 +66,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
@@ -1049,7 +1050,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public void onAlert(AbstractEntityCQR alertingEntity) {
-		if(getNavigator().getPathToEntityLiving(alertingEntity) != null && getNavigator().getPathToEntityLiving(alertingEntity).getCurrentPathLength() <= 25) {
+		Path path = getNavigator().getPathToEntityLiving(alertingEntity);
+		if(path != null && path.getCurrentPathLength() <= 25) {
 			if(getAttackTarget() == null || getDistance(getAttackTarget()) >= 10) {
 				this.setAttackTarget(alertingEntity.getAttackingEntity());
 				getNavigator().tryMoveToEntityLiving(alertingEntity, getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2.5);
