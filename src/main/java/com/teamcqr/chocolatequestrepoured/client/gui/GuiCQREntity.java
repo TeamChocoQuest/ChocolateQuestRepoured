@@ -38,7 +38,7 @@ public class GuiCQREntity extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 108, 16, "Health ", " %", 1, 200, this.entity.getHealthScale() * 100.0D, false, true);
+		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 108, 16, "Health Scale ", " %", 1, 1000, this.entity.getHealthScale() * 100.0D, false, true);
 		this.sliderDropChanceHelm = new GuiSlider(0, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D, false, true);
 		this.sliderDropChanceChest = new GuiSlider(0, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
 		this.sliderDropChanceLegs = new GuiSlider(0, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.LEGS) * 100.0D, false, true);
