@@ -31,6 +31,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeash
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -218,6 +219,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
 		}
+		
+		//If we are attacked and the attacker isnt one of our friends we call for help
+		if(source.getTrueSource() != null && !getFaction().isAlly(source.getTrueSource())) {
+			alertNearbies();
+		}
+		
 		return result;
 	}
 
@@ -1013,6 +1020,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean isReadyToCastSpell() {
 		return readyToCastSpell;
+	}
+	
+	public void alertNearbies() {
+		AxisAlignedBB aabb = new AxisAlignedBB(this.posX - CQRConfig.mobs.alertRadius, this.posY - CQRConfig.mobs.alertRadius /2, this.posZ - CQRConfig.mobs.alertRadius, this.posX + CQRConfig.mobs.alertRadius, this.posY + CQRConfig.mobs.alertRadius /2, this.posZ + CQRConfig.mobs.alertRadius);
+		List<Entity> possibleEnts = world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.PREDICATE_ALLIES(getFaction()));
+		if(!possibleEnts.isEmpty()) {
+			for(Entity ent : possibleEnts) {
+				if(ent instanceof AbstractEntityCQR) {
+					((AbstractEntityCQR)ent).onAlert(this);
+				}
+			}
+		}
+	}
+	
+	public void onAlert(AbstractEntityCQR alertingEntity) {
+		if(getNavigator().getPathToEntityLiving(alertingEntity) != null) {
+			getNavigator().tryMoveToEntityLiving(alertingEntity, onGroundSpeedFactor * 1.2);
+		}
 	}
 
 }
