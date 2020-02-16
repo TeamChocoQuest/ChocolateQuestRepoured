@@ -5,14 +5,10 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.init.*;
 import org.apache.logging.log4j.Logger;
 
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
-import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
-import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
@@ -139,9 +135,11 @@ public class CQRMain {
 
 		// Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
+		MinecraftForge.EVENT_BUS.register(ModSerializers.class);
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
+		//ModSerializers.registerSerializers();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {

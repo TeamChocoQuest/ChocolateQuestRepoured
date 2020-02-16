@@ -57,18 +57,26 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 
 		GlStateManager.disableRescaleNormal();
 		GlStateManager.popMatrix();
-		
+
 		renderChain(entity);
 		
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	private void renderChain(ProjectileHookShotHook entity) {
-		//DONE: render chain elements
+        GlStateManager.pushMatrix();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA,
+				GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        //GlStateManager.color(0.0F, 1.0F, 0.0F, 0.75F);
+        GlStateManager.disableTexture2D();
+        //GlStateManager.glLineWidth(6.0F);
+
 		Vec3d v = entity.getPositionVector().subtract(entity.getShooterPosition());//.add(new Vec3d(0,1.7,0));
 		int iterations = (int) Math.ceil(v.lengthVector());
 		v = v.normalize();
 		Vec3d loc = entity.getShooterPosition().add(v);
+		System.out.println("Drawing chain from " + entity.getShooterPosition().toString() + " to " + entity.getPositionVector().toString());
 		
 		//Offsets for camera
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
@@ -82,6 +90,10 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 
 			loc = loc.add(v);
 		}
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.popMatrix();
 	}
 
 	@Override

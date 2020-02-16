@@ -80,6 +80,10 @@ public abstract class CastleRoom {
 		; // Default is no decoration
 	}
 
+	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation) {
+		; // Default is no boss
+	}
+
 	protected void generateWalls(World world, CastleDungeon dungeon) {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			if (this.walls.hasWallOnSide(side)) {

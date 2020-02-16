@@ -67,6 +67,14 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 		this.placeTorches(world, nwCorner);
 	}
 
+	@Override
+	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation) {
+		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
+		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
+
+		SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
+	}
+
 	private void placeTorches(World world, BlockPos nwCorner) {
 		IBlockState torchBase = Blocks.TORCH.getDefaultState();
 		world.setBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH));
