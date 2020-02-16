@@ -123,24 +123,24 @@ public class CastleRoomSelector {
 			cell.getRoom().generate(world, dungeon);
 		}
 
-		ResourceLocation mobResLoc = getRoomMobType(dungeon);
+		EDungeonMobType mobType = selectCastleMobType(dungeon);
+		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
+		ResourceLocation bossResLoc = mobType.getBossResourceLocation();
 
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
 			cell.getRoom().decorate(world, dungeon, mobResLoc);
+			cell.getRoom().placeBoss(world, dungeon, bossResLoc);
 		}
 	}
 
-	private ResourceLocation getRoomMobType(CastleDungeon dungeon) {
-		ResourceLocation resLoc;
-		if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
-			resLoc = EDungeonMobType.getMobTypeDependingOnDistance(startPos.getX(), startPos.getZ()).getEntityResourceLocation();
-		} else {
-			resLoc = dungeon.getDungeonMob().getEntityResourceLocation();
+	private EDungeonMobType selectCastleMobType(CastleDungeon dungeon) {
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(startPos.getX(), startPos.getZ());
 		}
-
-		return resLoc;
+		return mobType;
 	}
 
 	private void generateRoofs(World world, CastleDungeon dungeon) {
