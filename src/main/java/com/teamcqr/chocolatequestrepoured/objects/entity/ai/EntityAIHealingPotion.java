@@ -1,6 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import java.util.Comparator;
+import java.util.List;
+
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 
 import net.minecraft.block.state.IBlockState;
@@ -9,6 +14,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
@@ -56,13 +62,43 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			}
 		}
 
+		boolean flag = true;
 		if (attackTarget != null) {
-			this.updateRotation(attackTarget, 2.5F, 2.5F);
+			AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - CQRConfig.mobs.alertRadius /2, entity.posY - CQRConfig.mobs.alertRadius /3, entity.posZ - CQRConfig.mobs.alertRadius /2, entity.posX + CQRConfig.mobs.alertRadius /2, entity.posY + CQRConfig.mobs.alertRadius /3, entity.posZ + CQRConfig.mobs.alertRadius /2);
+			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.PREDICATE_ALLIES(entity.getFaction()));
+			if(!possibleEnts.isEmpty() && possibleEnts.size() >= 3) {
+				possibleEnts.sort(new Comparator<Entity>() {
 
+					@Override
+					public int compare(Entity o1, Entity o2) {
+						AxisAlignedBB aabb1 = new AxisAlignedBB(o1.posX - 4, o1.posY -2, o1.posZ -4, o1.posX +4, o1.posY +2, o1.posZ +4);
+						List<Entity> l1 = o1.world.getEntitiesInAABBexcluding(o1, aabb1, TargetUtil.PREDICATE_ALLIES(((AbstractEntityCQR) o1).getFaction()));
+						AxisAlignedBB aabb2 = new AxisAlignedBB(o2.posX - 4, o2.posY -2, o2.posZ -4, o2.posX +4, o2.posY +2, o2.posZ +4);
+						List<Entity> l2 = o2.world.getEntitiesInAABBexcluding(o2, aabb2, TargetUtil.PREDICATE_ALLIES(((AbstractEntityCQR) o2).getFaction()));
+						
+						if(l1.isEmpty() || l2.size() > l1.size()) {
+							return -1;
+						}
+						if(l2.isEmpty() || l1.size() > l2.size()) {
+							return 1;
+						}
+						
+						return 0;
+					}
+				});
+				entity.getNavigator().tryMoveToEntityLiving(possibleEnts.get(0), this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5);
+				flag = false;
+			}
+			
 			boolean canMoveBackwards = this.canMoveBackwards();
+			
+			if(flag) {
+				//No larger group in range
+				this.updateRotation(attackTarget, 2.5F, 2.5F);
 
-			if (canMoveBackwards) {
-				EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
+				if (canMoveBackwards) {
+					EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
+				}
 			}
 
 			if (!this.isHealing) {
@@ -81,8 +117,6 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		double z = entity.posZ - this.entity.posZ;
 		double d = Math.sqrt(x * x + z * z);
 
-		double radian1 = Math.atan2(-x, z);
-		double radian2 = Math.atan2(-y, d);
 		float yaw = (float) Math.toDegrees(Math.atan2(-x, z));
 		float pitch = (float) Math.toDegrees(Math.atan2(-y, d));
 		this.entity.rotationYaw += MathHelper.clamp(MathHelper.wrapDegrees(yaw - this.entity.rotationYaw), -deltaYaw, deltaYaw);
