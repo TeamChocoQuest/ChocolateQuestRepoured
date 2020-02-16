@@ -521,5 +521,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public boolean isHealing() {
 		return isHealing;
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return false;
+	}
 
 }

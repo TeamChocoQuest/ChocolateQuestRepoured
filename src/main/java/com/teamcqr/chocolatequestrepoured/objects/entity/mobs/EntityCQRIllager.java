@@ -115,4 +115,10 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 		return EnumCreatureAttribute.ILLAGER;
 	}
 
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
+	
+		
 }

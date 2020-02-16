@@ -68,5 +68,10 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SKELETON_DEATH;
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
 
 }

@@ -186,4 +186,9 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		return EnumCreatureAttribute.ILLAGER;
 	}
 
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
+	
 }
