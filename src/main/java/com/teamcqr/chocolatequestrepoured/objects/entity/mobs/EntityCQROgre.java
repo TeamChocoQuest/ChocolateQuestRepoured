@@ -57,5 +57,10 @@ public class EntityCQROgre extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
 
 }

@@ -50,6 +50,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -244,6 +245,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
+		if(canOpenDoors()) {
+			this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
+		}
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(9, new EntityAIBackstab(this));
@@ -532,15 +536,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public PathNavigate getNavigator() {
+		PathNavigate navigator = super.getNavigator();
+		if(navigator instanceof PathNavigateGround) {
+			if(canOpenDoors()) {
+				((PathNavigateGround)navigator).setEnterDoors(true);
+			}
+			((PathNavigateGround)navigator).setBreakDoors(true);
+		}
+		
 		if (this.isRiding()) {
 			Entity ridden = this.getRidingEntity();
 			if (ridden != null) {
 				if (ridden instanceof EntityLiving) {
-					return ((EntityLiving) ridden).getNavigator();
+					navigator = ((EntityLiving) ridden).getNavigator();
 				}
 			}
 		}
-		return super.getNavigator();
+		return navigator;
 	}
 
 	// Chocolate Quest Repoured
@@ -1044,5 +1056,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			getNavigator().tryMoveToEntityLiving(alertingEntity, getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.75);
 		}
 	}
+	
+	public abstract boolean canOpenDoors();
 
 }

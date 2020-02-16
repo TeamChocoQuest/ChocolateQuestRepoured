@@ -436,5 +436,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return false;
+	}
 
 }

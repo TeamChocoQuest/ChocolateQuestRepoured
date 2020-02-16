@@ -149,4 +149,8 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
 
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
 }

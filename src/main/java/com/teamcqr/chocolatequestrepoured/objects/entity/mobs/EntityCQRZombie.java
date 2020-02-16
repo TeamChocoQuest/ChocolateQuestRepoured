@@ -69,5 +69,10 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
 
 }
