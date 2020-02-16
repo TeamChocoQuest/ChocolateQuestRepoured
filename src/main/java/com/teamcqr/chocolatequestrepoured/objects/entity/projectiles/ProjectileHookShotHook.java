@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
@@ -20,13 +21,17 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Rotations;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Copyright (c) 15 Feb 2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
+ */
 public class ProjectileHookShotHook extends ProjectileBase {
 	private enum HookPhase
 	{
@@ -75,8 +80,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private ItemHookshotBase hookshot = null;
 
 	//These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
-	protected static final DataParameter<Rotations> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
-	protected static final DataParameter<Rotations> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.ROTATIONS);
+	protected static final DataParameter<Vec3d> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
+	protected static final DataParameter<Vec3d> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
 
 	protected static final DataParameter<Integer> PULL_STATUS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.VARINT);
 	protected static final DataParameter<Optional<UUID>> SHOOTER_UUID = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.OPTIONAL_UNIQUE_ID);
@@ -108,8 +113,9 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataManager.register(IMPACT_POS, new Rotations(0F, 0F, 0F));
-		dataManager.register(SHOOTER_POS, new Rotations(0F, 0F, 0F));
+		dataManager.register(IMPACT_POS, new Vec3d(0, 0, 0));
+		dataManager.register(SHOOTER_POS, new Vec3d(0, 0, 0));
+
 		dataManager.register(PULL_STATUS, PullStatus.NOT_PULLING.toInt());
 		dataManager.register(SHOOTER_UUID, Optional.absent());
 	}
@@ -193,7 +199,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 							this.zeroizeHookVelocity();
 							this.impactLocation = this.getPositionVector(); // should this use the impact block position instead?
 							dataManager.set(SHOOTER_UUID, Optional.of(thrower.getUniqueID()));
-							dataManager.set(IMPACT_POS, new Rotations((float) impactLocation.x, (float) impactLocation.y, (float) impactLocation.z));
+							dataManager.set(IMPACT_POS, impactLocation);
 
 							startPullingShooter();
 						} else {
@@ -288,15 +294,15 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
-		float x = compound.getFloat("cqrdata.impactX");
-		float y = compound.getFloat("cqrdata.impactY");
-		float z = compound.getFloat("cqrdata.impactZ");
-		this.dataManager.set(IMPACT_POS, new Rotations(x, y, z));
+		double x = compound.getDouble("cqrdata.impactX");
+		double y = compound.getDouble("cqrdata.impactY");
+		double z = compound.getDouble("cqrdata.impactZ");
+		this.dataManager.set(IMPACT_POS, new Vec3d(x, y, z));
 
-		x = compound.getFloat("cqrdata.shooterX");
-		y = compound.getFloat("cqrdata.shooterY");
-		z = compound.getFloat("cqrdata.shooterZ");
-		this.dataManager.set(SHOOTER_POS, new Rotations(x, y, z));
+		x = compound.getDouble("cqrdata.shooterX");
+		y = compound.getDouble("cqrdata.shooterY");
+		z = compound.getDouble("cqrdata.shooterZ");
+		this.dataManager.set(SHOOTER_POS, new Vec3d(x, y, z));
 
 		this.dataManager.set(PULL_STATUS, compound.getInteger("cqrdata.pullStatus"));
 
@@ -307,15 +313,15 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		Rotations impactLocation = this.dataManager.get(IMPACT_POS);
-		compound.setFloat("cqrdata.impactX", impactLocation.getX());
-		compound.setFloat("cqrdata.impactY", impactLocation.getY());
-		compound.setFloat("cqrdata.impactZ", impactLocation.getZ());
+		Vec3d impactLocation = this.dataManager.get(IMPACT_POS);
+		compound.setDouble("cqrdata.impactX", impactLocation.x);
+		compound.setDouble("cqrdata.impactY", impactLocation.y);
+		compound.setDouble("cqrdata.impactZ", impactLocation.z);
 
-		Rotations shooterPosition = this.dataManager.get(SHOOTER_POS);
-		compound.setFloat("cqrdata.shooterX", shooterPosition.getX());
-		compound.setFloat("cqrdata.shooterY", shooterPosition.getY());
-		compound.setFloat("cqrdata.shooterZ", shooterPosition.getZ());
+		Vec3d shooterPosition = this.dataManager.get(SHOOTER_POS);
+		compound.setDouble("cqrdata.shooterX", shooterPosition.x);
+		compound.setDouble("cqrdata.shooterY", shooterPosition.y);
+		compound.setDouble("cqrdata.shooterZ", shooterPosition.z);
 
 		compound.setInteger("cqrdata.pullStatus", this.dataManager.get(PULL_STATUS));
 
@@ -366,13 +372,12 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	private void setShooterPosition(Vec3d shooterPos)
 	{
-		this.dataManager.set(SHOOTER_POS, new Rotations((float)shooterPos.x, (float)shooterPos.y, (float)shooterPos.z));
+		this.dataManager.set(SHOOTER_POS, shooterPos);
 	}
 
 	public Vec3d getShooterPosition()
 	{
-		Rotations pos = this.dataManager.get(SHOOTER_POS);
-		return new Vec3d(pos.getX(), pos.getY(), pos.getZ());
+		return this.dataManager.get(SHOOTER_POS);
 	}
 
 	@Nullable
@@ -391,12 +396,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Nullable
 	public Vec3d getImpactLocation()
 	{
-		return getImpactLocationVec3d();
-	}
-
-	private Vec3d getImpactLocationVec3d()
-	{
-		Rotations impactLocFloat = dataManager.get(IMPACT_POS);
-		return new Vec3d(impactLocFloat.getX(), impactLocFloat.getY(), impactLocFloat.getZ());
+		return dataManager.get(IMPACT_POS);
 	}
 }
