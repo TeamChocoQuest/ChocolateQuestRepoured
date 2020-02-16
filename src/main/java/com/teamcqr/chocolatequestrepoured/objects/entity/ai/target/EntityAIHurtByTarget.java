@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
@@ -82,7 +83,11 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		return this.entity.getFaction().isAlly(possibleAlly);
+		if (!this.entity.getFaction().isAlly(possibleAlly)) {
+			return false;
+		}
+		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
+		return path != null && path.getCurrentPathLength() <= 20;
 		// return this.entity.getEntitySenses().canSee(possibleAlly);
 	}
 
