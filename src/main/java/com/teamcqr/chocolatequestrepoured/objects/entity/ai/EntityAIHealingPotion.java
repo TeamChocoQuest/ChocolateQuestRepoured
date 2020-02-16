@@ -62,7 +62,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 			boolean canMoveBackwards = this.canMoveBackwards();
 
 			if (canMoveBackwards) {
-				EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue(), this.entity.rotationYawHead);
+				EntityUtil.move2D(this.entity, 0.0D, -0.2D, this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.5, this.entity.rotationYawHead);
 			}
 
 			if (!this.isHealing) {
