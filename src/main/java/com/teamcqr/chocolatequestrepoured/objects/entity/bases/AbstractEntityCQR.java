@@ -1037,7 +1037,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onAlert(AbstractEntityCQR alertingEntity) {
 		if(getNavigator().getPathToEntityLiving(alertingEntity) != null) {
 			this.setAttackTarget(alertingEntity.getAttackingEntity());
-			getNavigator().tryMoveToEntityLiving(alertingEntity, 2);
+			getNavigator().tryMoveToEntityLiving(alertingEntity, getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 1.75);
 		}
 	}
 
