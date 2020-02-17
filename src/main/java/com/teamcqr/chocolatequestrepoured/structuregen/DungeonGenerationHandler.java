@@ -85,7 +85,7 @@ public class DungeonGenerationHandler {
 		if (!world.isRemote) {
 			DungeonGenerationHandler.createInstance(world);
 			DungeonGenerationHandler.getInstance(world).loadData();
-			//CQRMain.logger.info("Loaded " + DungeonGenerationHandler.getInstance(world).dungeonPartList.size() + " parts to generate");
+			CQRMain.logger.info("Loaded " + DungeonGenerationHandler.getInstance(world).dungeonPartList.size() + " parts to generate");
 		}
 	}
 
