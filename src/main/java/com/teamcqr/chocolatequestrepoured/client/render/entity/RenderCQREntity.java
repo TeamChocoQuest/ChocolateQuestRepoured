@@ -70,7 +70,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		if (entitylivingbaseIn.getTextureCount() > 1) {
 			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() + ".png");
 		}
-		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
+		double width = this.widthScale * (1.0D + 0.5D * entitylivingbaseIn.getSizeVariation());
 		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
