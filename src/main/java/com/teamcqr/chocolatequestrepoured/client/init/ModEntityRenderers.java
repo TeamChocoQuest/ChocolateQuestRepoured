@@ -135,7 +135,7 @@ public class ModEntityRenderers {
 		// Dummy
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, renderManager -> new RenderCQREntity<EntityCQRDummy>(renderManager, "entity_mob_cqrdummy"));
 		// Dwarf
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, renderManager -> new RenderCQREntity<EntityCQRDwarf>(renderManager, "entity_mob_cqrdwarf", 0.9D, 0.65D));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, renderManager -> new RenderCQREntity<EntityCQRDwarf>(renderManager, "entity_mob_cqrdwarf", 0.9D, 0.45D));
 		// Enderman
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, renderManager -> new RenderCQREnderman(renderManager));
 		// Goblin
