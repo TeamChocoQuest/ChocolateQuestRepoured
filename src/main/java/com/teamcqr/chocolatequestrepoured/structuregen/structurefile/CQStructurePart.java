@@ -112,12 +112,13 @@ public class CQStructurePart extends Template {
 		//1.12 obfuscated Name: ;field_186270_a
 		Field field = null;
 		try {
-			field = Template.class.getDeclaredField("blocks");
-			
+			//Assuming we're in obfuscated environment...
+			field = Template.class.getDeclaredField("field_186270_a");
 		}
 		catch(NoSuchFieldException | NoSuchFieldError e) {
 			try {
-				field = Template.class.getDeclaredField("field_186270_a");
+				//We are in the deobfuscated dev environment, using original field name value
+				field = Template.class.getDeclaredField("blocks");
 			}  catch (NoSuchFieldException | NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
