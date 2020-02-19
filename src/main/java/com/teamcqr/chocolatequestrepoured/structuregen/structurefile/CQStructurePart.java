@@ -109,28 +109,27 @@ public class CQStructurePart extends Template {
 
 	@SuppressWarnings("unchecked")
 	private List<Template.BlockInfo> getBlockInfoList() {
-		//1.12 obfuscated Name: field_186270_a
+		//1.12 obfuscated Name: ;field_186270_a
+		Field field = null;
 		try {
-			Field field = Template.class.getDeclaredField("blocks");
-			field.setAccessible(true);
-			return (List<BlockInfo>) field.get(this);
+			field = Template.class.getDeclaredField("blocks");
+			
 		}
 		catch(NoSuchFieldException | NoSuchFieldError e) {
 			try {
-				Field fieldObf = Template.class.getDeclaredField("field_186270_a");
-				fieldObf.setAccessible(true);
-				return (List<BlockInfo>) fieldObf.get(this);
-			}  catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | NoSuchFieldError e1) {
+				field = Template.class.getDeclaredField("field_186270_a");
+			}  catch (NoSuchFieldException | NoSuchFieldError e1) {
 				e1.printStackTrace();
 			}
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+		} 
+		if(field != null) {
+			field.setAccessible(true);
+			try {
+				return (List<BlockInfo>) field.get(this);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
-		/*catch (IllegalArgumentException | IllegalAccessException |  SecurityException e) {
-			CQRMain.logger.error("Error while taking blocks from world", e);
-		}*/
 		return Collections.emptyList();
 	}
 
