@@ -20,7 +20,6 @@ import net.minecraft.util.EntitySelectors;
 
 public class TargetUtil {
 
-	private static Predicate<AbstractEntityCQR> predicate;
 	public static final Predicate<EntityLivingBase> PREDICATE_ATTACK_TARGET = new Predicate<EntityLivingBase>() {
 		@Override
 		public boolean apply(EntityLivingBase input) {
