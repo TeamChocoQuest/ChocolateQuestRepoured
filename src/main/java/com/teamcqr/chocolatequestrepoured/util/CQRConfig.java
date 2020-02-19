@@ -19,15 +19,21 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1)
 		public int tickRateForTasks = 5;
 
+		@Config.Comment("Enable/Disable dungeon generation in parts instead of generating dungeons completely at once.")
 		public boolean dungeonGenerationDelay = true;
-		@Config.RangeInt(min = 1, max = 1000)
+		@Config.Comment("When a dungeon is generated x parts are generted initially and the rest is generated over time.")
+		@Config.RangeInt(min = 0, max = 1000)
 		public int dungeonGenerationMax = 4;
+		@Config.Comment("Every x ticks not yet generated dungeon parts in loaded chunks will be generated.")
 		@Config.RangeInt(min = 1, max = 200)
 		public int dungeonGenerationFrequencyInLoaded = 1;
+		@Config.Comment("Every x ticks not yet generated dungeon parts in unloaded chunks will be generated. Will only happen when no dungeon parts were generated in loaded chunks.")
 		@Config.RangeInt(min = 1, max = 200)
 		public int dungeonGenerationFrequencyInUnloaded = 1;
+		@Config.Comment("Generate up to x not yet generated dungeon parts in loaded chunks.")
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInLoaded = 1;
+		@Config.Comment("Generate up to x not yet generated dungeon parts in unloaded chunks. Will only happen when no dungeon parts were generated in loaded chunks.")
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInUnloaded = 1;
 		
