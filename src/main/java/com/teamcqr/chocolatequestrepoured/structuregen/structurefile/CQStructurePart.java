@@ -110,7 +110,12 @@ public class CQStructurePart extends Template {
 	@SuppressWarnings("unchecked")
 	private List<Template.BlockInfo> getBlockInfoList() {
 		try {
-			Field field = Template.class.getDeclaredField("blocks");
+			Field field = null;
+			try {
+				field = Template.class.getDeclaredField("blocks");
+			} catch (NoSuchFieldException e) {
+				field = Template.class.getDeclaredField("field_186270_a");
+			}
 			field.setAccessible(true);
 			return (List<BlockInfo>) field.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
