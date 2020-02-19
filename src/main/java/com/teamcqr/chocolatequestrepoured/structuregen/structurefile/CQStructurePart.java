@@ -107,6 +107,7 @@ public class CQStructurePart extends Template {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Template.BlockInfo> getBlockInfoList() {
 		try {
 			Field field = Template.class.getDeclaredField("blocks");

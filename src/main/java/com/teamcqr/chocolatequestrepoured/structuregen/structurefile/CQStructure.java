@@ -38,7 +38,7 @@ public class CQStructure {
 
 	public static final String CQR_FILE_VERSION = "1.0.0";
 	public static final List<Thread> RUNNING_EXPORT_THREADS = new ArrayList<Thread>();
-	private static final Comparator SORTER = new Comparator<Entry<BlockPos, CQStructurePart>>() {
+	private static final Comparator<Entry<BlockPos, CQStructurePart>> SORTER = new Comparator<Entry<BlockPos, CQStructurePart>>() {
 		@Override
 		public int compare(Entry<BlockPos, CQStructurePart> var1, Entry<BlockPos, CQStructurePart> var2) {
 			BlockPos pos1 = var1.getKey();
