@@ -27,7 +27,7 @@ public class ModItemModels {
 	@SubscribeEvent
 	public static void registerItemModels(ModelRegistryEvent event) {
 		for (Block block : BlockExporterChest.EXPORTER_CHESTS) {
-			ModelLoader.setCustomStateMapper(block, stateMapper -> Collections.EMPTY_MAP);
+			ModelLoader.setCustomStateMapper(block, stateMapper -> Collections.emptyMap());
 		}
 
 		// register custom item models first
