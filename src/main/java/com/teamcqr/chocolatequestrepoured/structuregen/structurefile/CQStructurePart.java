@@ -121,7 +121,7 @@ public class CQStructurePart extends Template {
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
 		this.addBlocksToWorld(worldIn, pos, placementIn);
 
-		if (replaceBanners) {
+		if (replaceBanners && dungeonBanner != null) {
 			for (BlockPos bannerPos : this.banners) {
 				BlockPos transformedPos = transformedBlockPos(placementIn, bannerPos).add(pos);
 				TileEntity tileEntity = worldIn.getTileEntity(transformedPos);
