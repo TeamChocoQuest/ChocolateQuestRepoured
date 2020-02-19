@@ -120,6 +120,7 @@ public class CQStructurePart extends Template {
 				//We are in the deobfuscated dev environment, using original field name value
 				field = Template.class.getDeclaredField("blocks");
 			}  catch (NoSuchFieldException | NoSuchFieldError e1) {
+				e.printStackTrace();
 				e1.printStackTrace();
 			}
 		} 
