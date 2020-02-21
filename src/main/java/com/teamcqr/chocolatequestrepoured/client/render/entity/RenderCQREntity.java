@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerCustomHead;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.item.EnumAction;
@@ -62,6 +63,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		if (model instanceof ModelCQRBiped) {
 			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
 			this.addLayer(new LayerCQRSpeechbubble(this));
+			this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
 		}
 	}
 
