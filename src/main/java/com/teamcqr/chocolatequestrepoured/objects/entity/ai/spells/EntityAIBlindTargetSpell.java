@@ -18,6 +18,11 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAIUseSpell {
 	public EntityAIBlindTargetSpell(AbstractEntityCQR entity) {
 		super(entity);
 	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
+	}
 
 	public EntityAIBlindTargetSpell(AbstractEntityCQR entity, PotionEffect customEffect) {
 		this(entity);
