@@ -106,31 +106,31 @@ public class ItemDungeonPlacer extends Item {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-		if (playerIn.isCreative()) {
-			if (!worldIn.isRemote) {
-				ItemStack stack = playerIn.getHeldItem(handIn);
+		if (!worldIn.isRemote) {
+			ItemStack stack = playerIn.getHeldItem(handIn);
 
-				if (stack.hasTagCompound()) {
-					String dungeonName = stack.getTagCompound().getString("dungeonName");
-					DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
+			if (stack.hasTagCompound()) {
+				String dungeonName = stack.getTagCompound().getString("dungeonName");
+				DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
 
-					if (dungeon != null) {
-						Vec3d pos = playerIn.getPositionEyes(1.0F);
-						Vec3d look = playerIn.getLookVec();
+				if (dungeon != null) {
+					Vec3d pos = playerIn.getPositionEyes(1.0F);
+					Vec3d look = playerIn.getLookVec();
 
-						RayTraceResult result = worldIn.rayTraceBlocks(pos, pos.add(look.scale(128.0D)));
+					RayTraceResult result = worldIn.rayTraceBlocks(pos, pos.add(look.scale(128.0D)));
 
-						if (result != null) {
-							dungeon.generate(result.getBlockPos(), worldIn);
+					if (result != null) {
+						dungeon.generate(result.getBlockPos(), worldIn);
 
-							playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
+						if(!(playerIn.isCreative() || playerIn.isSpectator())) {
+							stack.shrink(1);
 						}
 					}
 				}
 			}
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 		}
-		return new ActionResult<ItemStack>(EnumActionResult.FAIL, playerIn.getHeldItem(handIn));
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 
 	public static class FakeDungeon {
