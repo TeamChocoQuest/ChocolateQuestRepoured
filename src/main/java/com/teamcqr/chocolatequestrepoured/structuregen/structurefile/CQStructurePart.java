@@ -109,28 +109,18 @@ public class CQStructurePart extends Template {
 
 	@SuppressWarnings("unchecked")
 	private List<Template.BlockInfo> getBlockInfoList() {
-		//1.12 obfuscated Name: ;field_186270_a
-		Field field = null;
 		try {
-			//Assuming we're in obfuscated environment...
-			field = Template.class.getDeclaredField("field_186270_a");
-		}
-		catch(NoSuchFieldException | NoSuchFieldError e) {
+			// 1.12 obfuscated name: field_186270_a
+			Field field = null;
 			try {
-				//We are in the deobfuscated dev environment, using original field name value
+				field = Template.class.getDeclaredField("field_186270_a");
+			} catch (NoSuchFieldException e) {
 				field = Template.class.getDeclaredField("blocks");
-			}  catch (NoSuchFieldException | NoSuchFieldError e1) {
-				e.printStackTrace();
-				e1.printStackTrace();
 			}
-		} 
-		if(field != null) {
 			field.setAccessible(true);
-			try {
-				return (List<BlockInfo>) field.get(this);
-			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
-			}
+			return (List<BlockInfo>) field.get(this);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error("Error while taking blocks from world", e);
 		}
 		return Collections.emptyList();
 	}
