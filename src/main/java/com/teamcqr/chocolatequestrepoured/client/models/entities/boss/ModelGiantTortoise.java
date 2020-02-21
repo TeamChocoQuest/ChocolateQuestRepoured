@@ -347,6 +347,18 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					//animator.rotate(jaw, 0, 0, -(float)Math.toRadians(33.75));
 			animator.endKeyframe();
 		}
+		
+		/*
+		 * Spin animation
+		 */
+		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_SPIN) {
+			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_SPIN);
+			
+			animator.startKeyframe(10);
+			animator.rotate(mainPart, 0, (float) Math.toRadians(360), 0);
+			animator.endKeyframe();
+		}
+		
 	}
 
 	/**

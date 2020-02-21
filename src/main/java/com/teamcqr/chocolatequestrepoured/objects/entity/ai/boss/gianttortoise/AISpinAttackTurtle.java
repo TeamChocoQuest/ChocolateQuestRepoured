@@ -13,8 +13,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public Animation getAnimation() {
-		// TODO Auto-generated method stub
-		return null;
+		return EntityCQRGiantTortoise.ANIMATION_SPIN;
 	}
 
 	@Override
