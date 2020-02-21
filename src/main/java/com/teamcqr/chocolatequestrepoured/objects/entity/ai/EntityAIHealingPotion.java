@@ -137,9 +137,9 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 	}
 
 	private boolean canMoveBackwards() {
-		double sin = Math.sin(Math.toRadians(this.entity.rotationYaw));
-		double cos = Math.cos(Math.toRadians(this.entity.rotationPitch));
-		BlockPos pos = new BlockPos(this.entity).add(-sin, -0.001D, -cos);
+		double sin = -Math.sin(Math.toRadians(this.entity.rotationYaw));
+		double cos = Math.cos(Math.toRadians(this.entity.rotationYaw));
+		BlockPos pos = new BlockPos(this.entity.posX - sin, this.entity.posY - 0.001D, this.entity.posZ - cos);
 		IBlockState state = this.entity.world.getBlockState(pos);
 		return state.isSideSolid(this.entity.world, pos, EnumFacing.UP);
 	}
