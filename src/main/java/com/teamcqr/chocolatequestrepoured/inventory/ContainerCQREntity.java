@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.Capability
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +15,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -129,6 +131,19 @@ public class ContainerCQREntity extends Container {
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
 				return "cqrepoured:items/empty_slot_badge";
+			}
+		});
+		this.addSlotToContainer(new SlotItemHandler(extraInventory, 2, 125, 26) {
+			@Override
+			public boolean isItemValid(ItemStack stack) {
+				return stack.getItem() instanceof ItemArrow || stack.getItem() instanceof ItemBullet;
+			}
+
+			@Override
+			@Nullable
+			@SideOnly(Side.CLIENT)
+			public String getSlotTexture() {
+				return "cqrepoured:items/empty_slot_arrow";
 			}
 		});
 	}
