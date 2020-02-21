@@ -79,7 +79,7 @@ public class ItemSoulBottle extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if (player.isCreative()) {
+		if (!player.isSpectator()) {
 			ItemStack stack = player.getHeldItem(hand);
 
 			if (stack.hasTagCompound()) {
@@ -92,6 +92,10 @@ public class ItemSoulBottle extends Item {
 
 						if (player.isSneaking()) {
 							bottle.removeTag(ENTITY_IN_TAG);
+						}
+						
+						if(!player.isCreative()) {
+							stack.shrink(1);
 						}
 					}
 					return EnumActionResult.SUCCESS;
