@@ -12,7 +12,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	private boolean healingActive = false;
 
 	private final int healingDuration = 160;
-	private final int MIN_HEALING_AMOUNT = 10;
+	private final int MIN_HEALING_AMOUNT = 50;
 	private int currHealTicks = 0;
 
 	public BossAIHealingTurtle(EntityCQRGiantTortoise entity) {
