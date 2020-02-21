@@ -88,6 +88,8 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
             boolean flag = this.entity.getEntitySenses().canSee(entitylivingbase);
             boolean flag1 = this.seeTime > 0;
 
+            attackTime--;
+            
             if (flag != flag1)
             {
                 this.seeTime = 0;
@@ -139,7 +141,7 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
                     this.strafingBackwards = true;
                 }
 
-                this.entity.getMoveHelper().strafe(this.strafingBackwards ? -0.5F : 0.5F, this.strafingClockwise ? 0.5F : -0.5F);
+                this.entity.getMoveHelper().strafe((float) (this.strafingBackwards ? -0.5F * moveSpeedAmp : 0.5F* moveSpeedAmp) , this.strafingClockwise ? 0.5F : -0.5F);
                 this.entity.faceEntity(entitylivingbase, 30.0F, 30.0F);
             }
             else
@@ -147,28 +149,26 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
                 this.entity.getLookHelper().setLookPositionWithEntity(entitylivingbase, 30.0F, 30.0F);
             }
 
-            if (this.entity.isHandActive())
-            {
+           // if (this.entity.isHandActive())
+           // {
                 if (!flag && this.seeTime < -60)
                 {
                     this.entity.resetActiveHand();
                 }
                 else if (flag)
                 {
-                    int i = this.entity.getItemInUseMaxCount();
-
-                    if (i >= 20)
+                    if (attackTime <= 0)
                     {
                         this.entity.resetActiveHand();
                         performAttack(entitylivingbase);
                         this.attackTime = this.attackCooldown;
                     }
                 }
-            }
-            else if (--this.attackTime <= 0 && this.seeTime >= -60)
-            {
-                this.entity.setActiveHand(EnumHand.MAIN_HAND);
-            }
+            // }
+           // else if (--this.attackTime <= 0 && this.seeTime >= -60)
+           // {
+             //   this.entity.setActiveHand(EnumHand.MAIN_HAND);
+           // }
         }
     }
 
@@ -176,7 +176,6 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
 		ItemStack stack = this.entity.getHeldItemMainhand();
 		this.entity.isSwingInProgress = false;
 		if (stack.getItem() instanceof ItemBow) {
-			this.attackTick = 60;
 			EntityTippedArrow arrow = new EntityTippedArrow(this.entity.world, this.entity);
 			double x = attackTarget.posX - this.entity.posX;
 			double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
@@ -192,8 +191,8 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
 			this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 		} else if (stack.getItem() instanceof IRangedWeapon) {
 			IRangedWeapon weapon = (IRangedWeapon) stack.getItem();
-			this.attackTick = weapon.getCooldown();
 			weapon.shoot(this.entity.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
+			attackCooldown = weapon.getCooldown();
 			this.entity.playSound(weapon.getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 		}
 	}
