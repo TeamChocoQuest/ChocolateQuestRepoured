@@ -53,6 +53,7 @@ public enum EBanners {
 	
 	GREMLIN_BANNER(EnumDyeColor.GRAY,
 			new BannerPattern[] {
+					EBannerPatternsCQ.CQ_BLANK.getPattern(),
 					BannerPattern.STRIPE_SMALL,
 					BannerPattern.STRIPE_CENTER,
 					BannerPattern.DIAGONAL_RIGHT_MIRROR,
@@ -61,6 +62,7 @@ public enum EBanners {
 					BannerPattern.GRADIENT
 			},
 			new EnumDyeColor[] {
+					EnumDyeColor.WHITE,
 					EnumDyeColor.RED,
 					EnumDyeColor.GRAY,
 					EnumDyeColor.GRAY,
