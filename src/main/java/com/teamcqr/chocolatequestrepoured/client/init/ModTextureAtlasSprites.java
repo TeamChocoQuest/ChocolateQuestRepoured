@@ -19,6 +19,7 @@ public class ModTextureAtlasSprites {
 		map.registerSprite(new ResourceLocation(Reference.MODID, "items/empty_slot_sword"));
 		map.registerSprite(new ResourceLocation(Reference.MODID, "items/empty_slot_potion"));
 		map.registerSprite(new ResourceLocation(Reference.MODID, "items/empty_slot_badge"));
+		map.registerSprite(new ResourceLocation(Reference.MODID, "items/empty_slot_arrow"));
 	}
 
 }

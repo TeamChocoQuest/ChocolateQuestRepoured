@@ -271,7 +271,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
 		this.setEquipmentBasedOnDifficulty(difficulty);
 		this.setEnchantmentBasedOnDifficulty(difficulty);
 		float initSizeVar = -0.125F + (this.rand.nextFloat() * 0.25F);
@@ -396,7 +396,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BadgeSlot);
+		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BADGE);
 		if (badge.getItem() instanceof ItemBadge) {
 			IItemHandler capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			for (int i = 0; i < capability.getSlots(); i++) {
@@ -417,9 +417,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.setDead();
 		}
 
-		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		if (!this.world.isRemote && stack != this.prevPotion) {
-			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.PotionSlot.getIndex(), stack));
+			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
 	}
@@ -698,7 +698,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.holdingPotion) {
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 		} else {
-			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
+			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack);
 		}
 	}
 
@@ -714,9 +714,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void swapWeaponAndPotionSlotItemStacks() {
 		ItemStack stack1 = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack2);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack1);
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack1);
 		this.holdingPotion = !this.holdingPotion;
 	}
 
@@ -830,7 +830,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.FEET));
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.MAINHAND));
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.OFFHAND));
-		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot));
+		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
 	}
 
 	@Override
@@ -843,7 +843,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.setDropChance(EntityEquipmentSlot.FEET, additionalData.readFloat());
 		this.setDropChance(EntityEquipmentSlot.MAINHAND, additionalData.readFloat());
 		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, ByteBufUtils.readItemStack(additionalData));
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ByteBufUtils.readItemStack(additionalData));
 	}
 
 	public void setArmPose(ECQREntityArmPoses pose) {
@@ -959,11 +959,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public ItemStack getHeldItemWeapon() {
-		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot) : this.getHeldItemMainhand();
+		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION) : this.getHeldItemMainhand();
 	}
 
 	public ItemStack getHeldItemPotion() {
-		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 	}
 
 	public void setSpellTicks(int val) {
