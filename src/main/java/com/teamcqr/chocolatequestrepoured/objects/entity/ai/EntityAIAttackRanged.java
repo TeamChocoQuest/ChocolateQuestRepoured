@@ -1,12 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.projectile.EntityTippedArrow;
+import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -69,7 +72,13 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 			this.entity.isSwingInProgress = false;
 			if (stack.getItem() instanceof ItemBow) {
 				this.attackTick = 60;
-				EntityTippedArrow arrow = new EntityTippedArrow(this.entity.world, this.entity);
+				EntityArrow arrow = null;
+				ItemStack arrowItem = this.entity.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
+				if(arrowItem == null || arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
+					//arrow = new EntityTippedArrow(this.entity.world, this.entity);
+					arrowItem = new ItemStack(Items.ARROW, 1);
+				} 
+				arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.entity.world, arrowItem, this.entity);
 				double x = attackTarget.posX - this.entity.posX;
 				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
 				double z = attackTarget.posZ - this.entity.posZ;
