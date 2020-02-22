@@ -30,7 +30,6 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public boolean shouldExecute() {
-		System.out.println("Trying to execute SPIN");
 		cooldown--;
 		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
 			getBoss().setWantsToSpin(true);
@@ -92,7 +91,8 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			this.getBoss().setInShell(true);
 			getBoss().motionX = movementVector.x;
 			getBoss().motionZ = movementVector.z;
-			getBoss().motionY = movementVector.y /2;
+			getBoss().motionY = 3* movementVector.y /2;
+			getBoss().velocityChanged = true;
 		} else if(getBoss().getAnimationTick() < 20) {
 			this.getBoss().setSpinning(false);
 			//TODO: Shoot bubbles
