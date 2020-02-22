@@ -70,6 +70,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public void updateTask() {
 		super.updateTask();
+		this.getBoss().setSpinning(false);
 		if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
 			if(getBoss().collidedHorizontally || movementVector == null) {
 				calculateVelocity();
