@@ -76,8 +76,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
 		int iterations = (int) Math.ceil(v.lengthVector());
 		v = v.normalize();
 		Vec3d loc = entity.getShooterPosition().add(v);
-		System.out.println("Drawing chain from " + entity.getShooterPosition().toString() + " to " + entity.getPositionVector().toString());
-		
+
 		//Offsets for camera
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
         double xo = player.lastTickPosX + (player.posX - player.lastTickPosX) /* (double)partialTicks*/;
