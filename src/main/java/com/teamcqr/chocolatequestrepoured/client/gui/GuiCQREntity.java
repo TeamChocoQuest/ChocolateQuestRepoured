@@ -46,7 +46,7 @@ public class GuiCQREntity extends GuiContainer {
 		this.sliderDropChanceFeet = new GuiSlider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.FEET) * 100.0D, false, true);
 		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
 		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
-		this.sliderSizeScaling = new GuiSlider(7, 5, 125, 108, 16, "Size Scale ", " %", 2, 200, this.entity.getSizeVariation() * 100.0D, false, true);
+		this.sliderSizeScaling = new GuiSlider(7, 5, 125, 108, 16, "Size Scale ", " %", 2, 400, this.entity.getSizeVariation() * 100.0D, false, true);
 		this.buttonList.add(this.sliderHealthScaling);
 		this.buttonList.add(this.sliderDropChanceHelm);
 		this.buttonList.add(this.sliderDropChanceChest);
