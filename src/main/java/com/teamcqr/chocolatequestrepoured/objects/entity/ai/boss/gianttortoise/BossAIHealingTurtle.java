@@ -27,7 +27,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		this.healingActive = false;
-		if(!getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= MIN_HEALING_AMOUNT) {
+		if(!getBoss().isSpinning() && !getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= MIN_HEALING_AMOUNT) {
 			((EntityCQRGiantTortoise) this.entity).setHealing(true);
 			if(((EntityCQRGiantTortoise) this.entity).isInShell()) {
 				this.healingActive = true;

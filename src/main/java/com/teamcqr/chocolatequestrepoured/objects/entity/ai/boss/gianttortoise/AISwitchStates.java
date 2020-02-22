@@ -30,7 +30,7 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public boolean shouldExecute() {
-		if(turtle.wantsToChangeState() && !turtle.isStunned()) {
+		if(turtle.wantsToChangeState() && !turtle.isStunned() && !turtle.isSpinning()) {
 			return true;
 		}
 		return false;
