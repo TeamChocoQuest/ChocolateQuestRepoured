@@ -33,7 +33,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		cooldown--;
 		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
 			getBoss().setWantsToSpin(true);
-			if(getBoss().isInShell()) {
+			if(getBoss().isInShell() && getBoss().isReadyToSpin()) {
 				getBoss().setCanBeStunned(false);
 				getBoss().setSpinning(true);
 				getBoss().setWantsToSpin(false);
@@ -62,6 +62,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setSpinning(true);
 		this.getBoss().setCanBeStunned(false);
 		this.getBoss().setInShell(true);
+		this.getBoss().setReadyToSpin(false);
 		getBoss().setAnimation(getAnimation());
 		getBoss().currentAnim = this;
 		getBoss().setAnimationTick(0);
@@ -93,6 +94,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	public void resetTask() {
 		super.resetTask();
 		this.getBoss().setSpinning(false);
+		this.getBoss().setReadyToSpin(true);
 		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		cooldown = COOLDOWN;

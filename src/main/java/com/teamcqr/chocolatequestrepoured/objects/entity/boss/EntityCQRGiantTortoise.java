@@ -63,6 +63,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private boolean stunned = false;
 	private boolean canBeStunned = true;
 	private boolean wantsToSpin = false;
+	private boolean readyToSpin = true;
 	private boolean spinning = false;
 	private int timesHealed = 1;
 	private boolean isHealing = false;
@@ -304,6 +305,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	public void setStunned(boolean value) {
 		this.stunned = value;
+		this.readyToSpin = !stunned;
 	}
 	
 	public boolean bypassInShell() {
@@ -456,6 +458,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	public void setInShell(boolean val) {
 		this.dataManager.set(IN_SHELL, val);
+		this.readyToSpin = val;
 	}
 
 	@Override
@@ -571,6 +574,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 	public void setHealing(boolean val) {
 		this.isHealing = val;
+		this.readyToSpin = !isHealing;
 	}
 	
 	public boolean isHealing() {
@@ -579,6 +583,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	public void setSpinning(boolean value) {
 		this.spinning = value;
+		this.readyToSpin = !spinning;
 	}
 	
 	public boolean isSpinning() {
@@ -596,6 +601,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	public boolean wantsToSpin() {
 		return wantsToSpin;
+	}
+	
+	public void setReadyToSpin(boolean value) {
+		this.readyToSpin = value;
+	}
+	
+	public boolean isReadyToSpin() {
+		return readyToSpin;
 	}
 
 }
