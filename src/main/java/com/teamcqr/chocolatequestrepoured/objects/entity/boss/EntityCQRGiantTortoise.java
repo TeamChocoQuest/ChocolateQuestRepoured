@@ -424,7 +424,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			v = v.normalize();
 			v = v.scale(1.5D);
 			entityIn.motionX = v.x;
-			entityIn.motionY = v.y;
+			entityIn.motionY = v.y +0.75;
 			entityIn.motionZ = v.z;
 		}
 	}
