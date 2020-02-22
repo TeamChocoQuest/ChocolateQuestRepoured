@@ -379,8 +379,8 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			animator.move(legJointFR, offsetXZ, 0, offsetXZ);
 			animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
 			
-			animator.endKeyframe();
 			animator.setStaticKeyframe(60);
+			animator.endKeyframe();
 			
 			animator.resetKeyframe(20);
 		}
