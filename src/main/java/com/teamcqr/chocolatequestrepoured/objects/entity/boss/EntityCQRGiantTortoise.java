@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
@@ -30,6 +29,7 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -77,7 +77,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
 	public static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
-	public static final Animation ANIMATION_SPIN = Animation.create(140).setLooping(true);
+	public static final Animation ANIMATION_SPIN = Animation.create(200).setLooping(false);
 	public static final Animation ANIMATION_IDLE = Animation.create(100);
 	public static final Animation ANIMATION_STUNNED = Animation.create(200).setLooping(false);
 	public static final Animation ANIMATION_DEATH = Animation.create(300);
@@ -124,7 +124,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		this.tasks.addTask(8, new EntityAIAttackRanged(this));
+		//this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -266,6 +266,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
+		}
+		
+		if(source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
+			if(getRNG().nextBoolean() && !sentFromPart) {
+				sentFromPart = true;
+			}
+		}
+		
+		if(!sentFromPart) {
+			amount = 0;
 		}
 		if (sentFromPart && !this.isInShell()) {
 			if(stunned) {
