@@ -14,18 +14,12 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRMummy extends AbstractEntityCQR {
 
 	public EntityCQRMummy(World worldIn) {
 		super(worldIn);
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
 	}
 
 	@Override
@@ -84,7 +78,7 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return true;

@@ -16,8 +16,9 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 
 public class EntityCQREnderman extends AbstractEntityCQR {
 
@@ -30,57 +31,49 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
-	}
-	
-	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(14, new EntityAIFireFighter(this));
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(super.attackEntityFrom(source, amount)) {
-			if(source instanceof EntityDamageSourceIndirect) {
-				 for (int i = 0; i < 64; ++i)
-		            {
-		                if (this.teleportRandomly())
-		                {
-		                    return true;
-		                }
-		            }
+		if (super.attackEntityFrom(source, amount)) {
+			if (source instanceof EntityDamageSourceIndirect) {
+				for (int i = 0; i < 64; ++i) {
+					if (this.teleportRandomly()) {
+						return true;
+					}
+				}
 
-		            return false;
+				return false;
 			}
 		}
 		return super.attackEntityFrom(source, amount);
 	}
-	
-	protected boolean teleportRandomly()
-    {
-        double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        double d1 = this.posY + (double)(this.rand.nextInt(64) - 32);
-        double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
-        return this.teleportTo(d0, d1, d2);
-    }
-	
-	private boolean teleportTo(double x, double y, double z)
-    {
-        net.minecraftforge.event.entity.living.EnderTeleportEvent event = new net.minecraftforge.event.entity.living.EnderTeleportEvent(this, x, y, z, 0);
-        if (net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event)) return false;
-        boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 
-        if (flag)
-        {
-            this.world.playSound((EntityPlayer)null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
-            this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
-        }
+	protected boolean teleportRandomly() {
+		double d0 = this.posX + (this.rand.nextDouble() - 0.5D) * 64.0D;
+		double d1 = this.posY + (double) (this.rand.nextInt(64) - 32);
+		double d2 = this.posZ + (this.rand.nextDouble() - 0.5D) * 64.0D;
+		return this.teleportTo(d0, d1, d2);
+	}
 
-        return flag;
-    }
+	private boolean teleportTo(double x, double y, double z) {
+		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
+		if (MinecraftForge.EVENT_BUS.post(event)) {
+			return false;
+		}
+		boolean flag = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+
+		if (flag) {
+			this.world.playSound((EntityPlayer) null, this.prevPosX, this.prevPosY, this.prevPosZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, this.getSoundCategory(), 1.0F, 1.0F);
+			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1.0F, 1.0F);
+		}
+
+		return flag;
+	}
 
 	@Override
 	public float getBaseHealth() {
@@ -153,4 +146,5 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	public boolean canOpenDoors() {
 		return true;
 	}
+
 }

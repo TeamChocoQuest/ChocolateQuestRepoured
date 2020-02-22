@@ -10,7 +10,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRZombie extends AbstractEntityCQR {
@@ -18,11 +17,6 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	public EntityCQRZombie(World worldIn) {
 		super(worldIn);
 		this.setSize(0.6F, 1.95F);
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
 	}
 
 	@Override
@@ -69,7 +63,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return true;

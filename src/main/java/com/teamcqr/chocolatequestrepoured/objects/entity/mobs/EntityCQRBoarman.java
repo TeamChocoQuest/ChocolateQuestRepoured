@@ -1,21 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarman extends AbstractEntityCQR {
@@ -25,13 +20,6 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 		this.setSize(0.95F, 2.0F);
 	}
 
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_IRON));
-		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(Items.IRON_CHESTPLATE));
-		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
-	}
-	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
@@ -90,9 +78,10 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return true;
 	}
+
 }

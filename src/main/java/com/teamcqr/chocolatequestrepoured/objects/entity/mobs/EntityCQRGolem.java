@@ -12,7 +12,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRGolem extends AbstractEntityCQR {
@@ -22,15 +21,10 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.GOLEM.getValue();
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
@@ -90,7 +84,7 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return true;

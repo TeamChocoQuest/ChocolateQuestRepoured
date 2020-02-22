@@ -12,7 +12,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRWalker extends AbstractEntityCQR {
@@ -21,11 +20,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 		super(worldIn);
 	}
 
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
-	}
-	
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
@@ -77,7 +71,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return true;
