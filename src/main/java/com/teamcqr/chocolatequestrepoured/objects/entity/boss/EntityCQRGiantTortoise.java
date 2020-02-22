@@ -420,11 +420,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F + (world.getDifficulty().getDifficultyId() *2F));
 			Vec3d v = entityIn.getPositionVector().subtract(getPositionVector());
 			v = v.normalize();
-			v = v.scale(4D);
+			v = v.scale(1.5D);
 			entityIn.motionX = v.x;
 			entityIn.motionY = v.y;
 			entityIn.motionZ = v.z;
 		}
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
 	}
 	
 	@Override
