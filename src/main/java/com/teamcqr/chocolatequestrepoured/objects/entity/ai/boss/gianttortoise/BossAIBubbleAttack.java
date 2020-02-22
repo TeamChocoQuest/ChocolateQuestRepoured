@@ -160,11 +160,10 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	}
 
 	private void doAttack() {
-		//TODO: Attack code
 		Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector());
 		v = v.addVector(entity.getRNG().nextDouble() -0.5D, 0D, entity.getRNG().nextDouble() -0.5D);
 		v = v.normalize();
-		v = v.scale(1.8);
+		v = v.scale(1.4);
 		ProjectileBubble bubble = new ProjectileBubble(entity.world, entity);
 		Vec3d p = entity.getPositionEyes(1F);
 		bubble.setPosition(p.x, p.y, p.z);
