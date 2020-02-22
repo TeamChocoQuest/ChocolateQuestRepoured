@@ -80,6 +80,8 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			getBoss().motionX = movementVector.x;
 			getBoss().motionZ = movementVector.z;
 			getBoss().motionY = movementVector.y /2;
+		} else if(getBoss().getAnimationTick() < 20) {
+			//TODO: Shoot bubbles
 		}
 	}
 	
