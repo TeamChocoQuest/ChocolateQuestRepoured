@@ -130,7 +130,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
 					return true;
-				} else if(super.shouldExecute() && !isHealing){
+				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -140,7 +140,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
 					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing){
+				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -151,7 +151,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
-				} else if(super.shouldExecute() && !isHealing){
+				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -161,7 +161,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing){
+				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -172,7 +172,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
-				} else if(super.shouldExecute() && !isHealing){
+				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -182,7 +182,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldContinueExecuting() {
 				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing){
+				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
 				}
 				return false;
@@ -193,7 +193,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
-				} else if(super.shouldExecute() && !isHealing){
+				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning()){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_IN);
 				}
 				return false;
