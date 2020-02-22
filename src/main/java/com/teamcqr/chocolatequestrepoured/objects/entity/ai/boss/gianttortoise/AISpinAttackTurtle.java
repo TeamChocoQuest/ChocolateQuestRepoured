@@ -11,8 +11,8 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private Vec3d movementVector;
 	
-	private static final int COOLDOWN = 100;
-	private int cooldown = 0;
+	private static final int COOLDOWN = 60;
+	private int cooldown = COOLDOWN /2;
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -30,6 +30,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public boolean shouldExecute() {
+		System.out.println("Trying to execute SPIN");
 		cooldown--;
 		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
 			getBoss().setWantsToSpin(true);
@@ -108,6 +109,9 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		cooldown = COOLDOWN;
+		if(!(getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead)) {
+			cooldown /= 3;
+		}
 		getBoss().setAnimationTick(0);
 	}
 

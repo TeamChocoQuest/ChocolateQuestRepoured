@@ -125,8 +125,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		//this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		this.tasks.addTask(10, new EntityAIAttack(this) {
+		/*this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
@@ -146,7 +145,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				}
 				return false;
 			}
-		});
+		});*/
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -272,6 +271,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
 			if(getRNG().nextBoolean() && !sentFromPart) {
 				sentFromPart = true;
+			}
+		}
+		
+		if(getAttackTarget() == null || getAttackTarget().isDead && source.getTrueSource() instanceof EntityLivingBase) {
+			if(!getFaction().isAlly(source.getTrueSource()) && getDistance(source.getTrueSource()) <= 32) {
+				setAttackTarget((EntityLivingBase) source.getTrueSource());
 			}
 		}
 		
