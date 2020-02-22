@@ -181,6 +181,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 				ItemStack bullet = cqrEnt.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
 				if(bullet != null && !bullet.isEmpty() && (bullet.getItem() instanceof ItemBullet)) {
 					bulletStack = bullet;
+					bullet.shrink(1);
 				}
 			}
 			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, getBulletType(bulletStack));
