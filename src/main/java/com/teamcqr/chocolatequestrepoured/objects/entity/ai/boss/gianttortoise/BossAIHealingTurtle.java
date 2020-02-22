@@ -27,7 +27,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	@Override
 	public boolean shouldExecute() {
 		this.healingActive = false;
-		if((this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= MIN_HEALING_AMOUNT) {
+		if(!getBoss().isStunned() && (this.entity.getHealth() / this.entity.getMaxHealth() <= 0.2F) && this.currHealTicks < this.getHealingAmount() && this.getHealingAmount() >= MIN_HEALING_AMOUNT) {
 			((EntityCQRGiantTortoise) this.entity).setHealing(true);
 			if(((EntityCQRGiantTortoise) this.entity).isInShell()) {
 				this.healingActive = true;
@@ -43,6 +43,8 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
+		this.getBoss().setCanBeStunned(false);
+		this.getBoss().setStunned(false);
 		this.currHealTicks = 0;
 		updateTask();
 	}
@@ -71,10 +73,13 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 					// Cancel
 					this.healingActive = false;
 					((EntityCQRGiantTortoise) this.entity).setTimesHealed(((EntityCQRGiantTortoise) this.entity).getTimesHealed() +1);
+					this.getBoss().setCanBeStunned(true);
 					this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 				} else {
 					((WorldServer)entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY, entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
 					this.getBoss().heal(1F);
+					this.getBoss().setCanBeStunned(false);
+					this.getBoss().setStunned(false);
 				}
 				this.currHealTicks++;
 			}
@@ -91,6 +96,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	@Override
 	public void resetTask() {
 		super.resetTask();
+		this.getBoss().setCanBeStunned(true);
 		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		this.currHealTicks = 0;
 		((EntityCQRGiantTortoise) this.entity).setHealing(false);
