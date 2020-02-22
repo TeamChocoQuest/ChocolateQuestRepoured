@@ -93,17 +93,17 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public void enableBossBar(boolean enabled) {
 		this.bossInfoServer.setVisible(enabled);
 	}
-	
+
 	@Override
 	public float calculateBaseHealth(double x, double z, float health) {
 		float hp = super.calculateBaseHealth(x, z, health);
-		
+
 		float multiplier = 1F;
-		
-		multiplier += world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x -100, 0, z -100, x +100, 255, z +100)).size() * CQRConfig.mobs.bossHealthMultiplierPerPlayer;
-		
+
+		multiplier += this.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x - 100, 0, z - 100, x + 100, 255, z + 100)).size() * CQRConfig.mobs.bossHealthMultiplierPerPlayer;
+
 		hp *= multiplier;
-		
+
 		return hp;
 	}
 

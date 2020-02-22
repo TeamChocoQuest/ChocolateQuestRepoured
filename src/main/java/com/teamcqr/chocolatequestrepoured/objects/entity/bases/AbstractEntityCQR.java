@@ -99,7 +99,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected byte usedPotions = (byte) 0;
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
+	public boolean prevSneaking;
+	public boolean prevSitting;
 	protected int spellTicks = 0;
+	protected float sizeScaling = 1.0F;
 
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private CQRFaction factionInstance;
@@ -114,7 +117,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
+	// protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
@@ -132,13 +135,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
 		}
 		this.experienceValue = 5;
+		this.setSize(this.getDefaultWidth(), this.getDefaultHeight());
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(SIZE_VAR, 0.0F);
+		// this.dataManager.register(SIZE_VAR, 1.0F);
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
@@ -253,11 +257,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
-		float initSizeVar = -0.125F + (this.rand.nextFloat() * 0.25F);
-		this.dataManager.set(SIZE_VAR, initSizeVar);
-		// Adapt size of hitbox
-		super.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
-		// System.out.println("Size Var: " + sizeVariation);
 		return livingdata;
 	}
 
@@ -279,7 +278,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setInteger("spellDelay", this.spellDelay);
 		compound.setBoolean("readyToCastSpell", this.readyToCastSpell);
 		compound.setByte("usedHealingPotions", this.usedPotions);
-		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
+		compound.setFloat("sizeScaling", this.sizeScaling);
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
@@ -311,7 +310,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
-		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
+		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.spellTicks = compound.getInteger("spellTicks");
@@ -399,6 +398,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
+
+		if (this.isSneaking() && !this.prevSneaking) {
+			this.resize(1.0F, 0.8F);
+		} else if (!this.isSneaking() && this.prevSneaking) {
+			this.resize(1.0F, 1.25F);
+		}
+		if (this.isSitting() && !this.prevSitting) {
+			this.resize(1.0F, 0.75F);
+		} else if (!this.isSitting() && this.prevSitting) {
+			this.resize(1.0F, 4.0F / 3.0F);
+		}
+		this.prevSneaking = this.isSneaking();
+		this.prevSitting = this.isSitting();
 	}
 
 	@Override
@@ -518,7 +530,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeFloat(this.dataManager.get(SIZE_VAR));
+		buffer.writeFloat(this.getSizeVariation());
 		buffer.writeDouble(this.getHealthScale());
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.HEAD));
 		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.CHEST));
@@ -531,7 +543,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
-		this.dataManager.set(SIZE_VAR, additionalData.readFloat());
+		this.setSizeVariation(additionalData.readFloat());
 		this.setHealthScale(additionalData.readDouble());
 		this.setDropChance(EntityEquipmentSlot.HEAD, additionalData.readFloat());
 		this.setDropChance(EntityEquipmentSlot.CHEST, additionalData.readFloat());
@@ -777,11 +789,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public void setSizeVariation(float size) {
-		this.dataManager.set(SIZE_VAR, size);
+		this.resize(size / this.sizeScaling, size / this.sizeScaling);
+		this.sizeScaling = size;
 	}
 
 	public float getSizeVariation() {
-		return this.dataManager.get(SIZE_VAR);
+		return this.sizeScaling;
 	}
 
 	public void setSitting(boolean sitting) {
@@ -957,5 +970,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public abstract boolean canOpenDoors();
+
+	public float getDefaultWidth() {
+		return 0.6F;
+	}
+
+	public float getDefaultHeight() {
+		return 1.95F;
+	}
+
+	public void resize(float widthScale, float heightSacle) {
+		this.setSize(this.width * widthScale, this.height * heightSacle);
+	}
 
 }

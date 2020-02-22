@@ -13,7 +13,6 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	public EntityCQRGremlin(World worldIn) {
 		super(worldIn);
-		setSize(1F, 1.2F);
 	}
 
 	@Override
@@ -54,6 +53,21 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	@Override
 	public boolean canOpenDoors() {
 		return false;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.7F;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return 1.0F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.2F;
 	}
 
 }

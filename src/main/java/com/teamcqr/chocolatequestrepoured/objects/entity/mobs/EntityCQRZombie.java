@@ -16,7 +16,6 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 
 	public EntityCQRZombie(World worldIn) {
 		super(worldIn);
-		this.setSize(0.6F, 1.95F);
 	}
 
 	@Override

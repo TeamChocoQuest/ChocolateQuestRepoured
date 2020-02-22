@@ -18,7 +18,6 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	public EntityCQRDwarf(World worldIn) {
 		super(worldIn);
-		this.setSize(0.55F, 1.4F);
 	}
 
 	@Override
@@ -83,6 +82,21 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	@Override
 	public boolean canOpenDoors() {
 		return true;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.85F;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return 0.54F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.235F;
 	}
 
 }

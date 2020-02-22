@@ -84,4 +84,19 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 		return true;
 	}
 
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.84F;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return 0.6F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.9F;
+	}
+
 }

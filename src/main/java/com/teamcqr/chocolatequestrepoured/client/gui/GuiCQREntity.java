@@ -29,6 +29,7 @@ public class GuiCQREntity extends GuiContainer {
 	private GuiSlider sliderDropChanceFeet;
 	private GuiSlider sliderDropChanceMainhand;
 	private GuiSlider sliderDropChanceOffhand;
+	private GuiSlider sliderSizeScaling;
 
 	public GuiCQREntity(Container inventorySlotsIn, AbstractEntityCQR entity) {
 		super(inventorySlotsIn);
@@ -39,12 +40,13 @@ public class GuiCQREntity extends GuiContainer {
 	public void initGui() {
 		super.initGui();
 		this.sliderHealthScaling = new GuiSlider(0, 5, 5, 108, 16, "Health Scale ", " %", 1, 1000, this.entity.getHealthScale() * 100.0D, false, true);
-		this.sliderDropChanceHelm = new GuiSlider(0, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D, false, true);
-		this.sliderDropChanceChest = new GuiSlider(0, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
-		this.sliderDropChanceLegs = new GuiSlider(0, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.LEGS) * 100.0D, false, true);
-		this.sliderDropChanceFeet = new GuiSlider(0, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.FEET) * 100.0D, false, true);
-		this.sliderDropChanceMainhand = new GuiSlider(0, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
-		this.sliderDropChanceOffhand = new GuiSlider(0, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
+		this.sliderDropChanceHelm = new GuiSlider(1, 5, 25, 108, 16, "Drop helm ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.HEAD) * 100.0D, false, true);
+		this.sliderDropChanceChest = new GuiSlider(2, 5, 45, 108, 16, "Drop chest ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.CHEST) * 100.0D, false, true);
+		this.sliderDropChanceLegs = new GuiSlider(3, 5, 65, 108, 16, "Drop legs ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.LEGS) * 100.0D, false, true);
+		this.sliderDropChanceFeet = new GuiSlider(4, 5, 85, 108, 16, "Drop feet ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.FEET) * 100.0D, false, true);
+		this.sliderDropChanceMainhand = new GuiSlider(5, 5, 105, 108, 16, "Drop mainhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.MAINHAND) * 100.0D, false, true);
+		this.sliderDropChanceOffhand = new GuiSlider(6, 5, 125, 108, 16, "Drop offhand ", " %", 0, 100, this.entity.getDropChance(EntityEquipmentSlot.OFFHAND) * 100.0D, false, true);
+		this.sliderSizeScaling = new GuiSlider(7, 5, 125, 108, 16, "Size Scale ", " %", 2, 200, this.entity.getSizeVariation() * 100.0D, false, true);
 		this.buttonList.add(this.sliderHealthScaling);
 		this.buttonList.add(this.sliderDropChanceHelm);
 		this.buttonList.add(this.sliderDropChanceChest);
@@ -52,6 +54,7 @@ public class GuiCQREntity extends GuiContainer {
 		this.buttonList.add(this.sliderDropChanceFeet);
 		this.buttonList.add(this.sliderDropChanceMainhand);
 		this.buttonList.add(this.sliderDropChanceOffhand);
+		this.buttonList.add(this.sliderSizeScaling);
 	}
 
 	@Override
@@ -83,6 +86,7 @@ public class GuiCQREntity extends GuiContainer {
 		int dropChanceFeet = this.sliderDropChanceFeet.getValueInt();
 		int dropChanceMainhand = this.sliderDropChanceMainhand.getValueInt();
 		int dropChanceOffhand = this.sliderDropChanceOffhand.getValueInt();
+		int sizeScaling = this.sliderSizeScaling.getValueInt();
 
 		this.entity.setHealthScale((double) healthScaling / 100.0D);
 		this.entity.setDropChance(EntityEquipmentSlot.HEAD, (float) dropChanceHelm / 100.0F);
@@ -91,8 +95,9 @@ public class GuiCQREntity extends GuiContainer {
 		this.entity.setDropChance(EntityEquipmentSlot.FEET, (float) dropChanceFeet / 100.0F);
 		this.entity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) dropChanceMainhand / 100.0F);
 		this.entity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) dropChanceOffhand / 100.0F);
+		this.entity.setSizeVariation((float) sizeScaling / 100.0F);
 
-		CQRMain.NETWORK.sendToServer(new SyncEntityPacket(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand));
+		CQRMain.NETWORK.sendToServer(new SyncEntityPacket(this.entity.getEntityId(), healthScaling, dropChanceHelm, dropChanceChest, dropChanceLegs, dropChanceFeet, dropChanceMainhand, dropChanceOffhand, sizeScaling));
 	}
 
 	@Override
