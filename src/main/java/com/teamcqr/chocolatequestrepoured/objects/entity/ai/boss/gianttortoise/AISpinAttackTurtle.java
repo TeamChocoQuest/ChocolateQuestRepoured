@@ -16,7 +16,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
-		setMutexBits(8);
+		//setMutexBits(8);
 	}
 
 	private EntityCQRGiantTortoise getBoss() {
@@ -70,7 +70,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		this.getBoss().setSpinning(false);
+		//this.getBoss().setSpinning(false);
 		if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
 			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20) {
 				calculateVelocity();
@@ -82,7 +82,10 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			getBoss().motionZ = movementVector.z;
 			getBoss().motionY = movementVector.y /2;
 		} else if(getBoss().getAnimationTick() < 20) {
+			this.getBoss().setSpinning(false);
 			//TODO: Shoot bubbles
+		} else {
+			this.getBoss().setSpinning(false);
 		}
 	}
 	

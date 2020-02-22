@@ -51,6 +51,7 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 		super.startExecuting();
 		turtle.currentAnim = this;
 		turtle.setAnimationTick(0);
+		turtle.setInShell(true);
 		if(turtle.getTargetedState() < 0) {
 			turtle.setAnimation(animationIn);
 		} else {
