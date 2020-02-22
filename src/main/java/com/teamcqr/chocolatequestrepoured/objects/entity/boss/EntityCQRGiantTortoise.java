@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIStunTurtle;
@@ -61,6 +62,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private boolean partSoundFlag = false;
 	private boolean stunned = false;
 	private boolean canBeStunned = true;
+	private boolean wantsToSpin = false;
 	private boolean spinning = false;
 	private int timesHealed = 1;
 	private boolean isHealing = false;
@@ -121,12 +123,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(1, new AISwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
-		//this.tasks.addTask(6, new BossAISpinTowardsTarget(this));
+		this.tasks.addTask(6, new AISpinAttackTurtle(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
 					return true;
 				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -136,7 +138,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
 					return true;
 				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -147,7 +149,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
 				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -157,7 +159,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
 				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -168,7 +170,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(20, new EntityAIMoveToHome(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
 				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -178,7 +180,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			
 			@Override
 			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
 				} else if(super.shouldContinueExecuting() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
@@ -189,7 +191,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
-				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned()) {
+				if(super.shouldExecute() && ((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
 					return true;
 				} else if(super.shouldExecute() && !isHealing){
 					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_IN);
@@ -581,6 +583,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public boolean canOpenDoors() {
 		return false;
+	}
+	
+	public void setWantsToSpin(boolean value) {
+		this.wantsToSpin = value;
+	}
+	
+	public boolean wantsToSpin() {
+		return wantsToSpin;
 	}
 
 }
