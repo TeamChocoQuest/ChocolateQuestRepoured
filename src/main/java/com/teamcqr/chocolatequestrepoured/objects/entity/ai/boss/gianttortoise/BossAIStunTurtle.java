@@ -39,6 +39,7 @@ public class BossAIStunTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		super.startExecuting();
 		getBoss().setStunned(true);
 		getBoss().setCanBeStunned(false);
+		getBoss().setAnimation(getAnimation());
 		getBoss().currentAnim = this;
 		getBoss().setAnimationTick(0);
 	}
