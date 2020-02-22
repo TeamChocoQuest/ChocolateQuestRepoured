@@ -17,7 +17,6 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 
 	public EntityCQRBoarman(World worldIn) {
 		super(worldIn);
-		this.setSize(0.95F, 2.0F);
 	}
 
 	@Override

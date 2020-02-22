@@ -9,7 +9,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRM
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.monster.AbstractIllager;
 import net.minecraft.entity.monster.AbstractIllager.IllagerArmPose;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;

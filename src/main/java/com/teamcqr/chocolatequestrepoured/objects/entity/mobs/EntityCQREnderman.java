@@ -24,8 +24,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 
 	public EntityCQREnderman(World worldIn) {
 		super(worldIn);
-
-		this.setSize(0.6F, 2.9F);
 		this.stepHeight = 1.0F;
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
 	}
@@ -86,11 +84,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getSizeVariation() {
-		return 0F;
-	}
-
-	@Override
 	protected SoundEvent getAmbientSound() {
 		return /* this.isScreaming() ? SoundEvents.ENTITY_ENDERMEN_SCREAM : */ SoundEvents.ENTITY_ENDERMEN_AMBIENT;
 	}
@@ -103,11 +96,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
-	}
-
-	@Override
-	public float getEyeHeight() {
-		return 2.55F;
 	}
 
 	@Override
@@ -145,6 +133,21 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	@Override
 	public boolean canOpenDoors() {
 		return true;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.875F;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return 0.6F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 2.9F;
 	}
 
 }

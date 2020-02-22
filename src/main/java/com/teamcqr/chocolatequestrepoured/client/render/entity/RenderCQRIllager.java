@@ -19,7 +19,7 @@ import net.minecraft.util.EnumHandSide;
 public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 
 	public RenderCQRIllager(RenderManager rendermanager) {
-		super(rendermanager, new ModelCQRIllager(0F), 0.5F, "entity_mob_cqrillager", 1.0D, 1.0D);
+		super(rendermanager, new ModelCQRIllager(0.0F), 0.5F, "entity_mob_cqrillager", 0.9375D, 0.9375D);
 
 		List<LayerRenderer<?>> toRemove = new ArrayList<LayerRenderer<?>>();
 		for (LayerRenderer<?> layer : this.layerRenderers) {
@@ -32,14 +32,13 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 		}
 		// DONE: Illager armor
 		this.addLayer(new LayerBipedArmor(this) {
-		 
-		 @Override
-		 protected void initArmor() {
-		 this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
-		 this.modelArmor = new ModelCQRIllagerArmor(1.0F);
-		 }
-		 });
-		
+
+			@Override
+			protected void initArmor() {
+				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
+				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
+			}
+		});
 
 		this.addLayer(new LayerCQRHeldItem(this) {
 			@Override

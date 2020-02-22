@@ -42,11 +42,6 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getSizeVariation() {
-		return 0F;
-	}
-
-	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
 	}
