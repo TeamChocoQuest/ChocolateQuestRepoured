@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIBubbleAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIStunTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -73,7 +74,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationTick;
 	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 	
-	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(80);
+	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(40).setLooping(true);
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
@@ -125,6 +126,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
+		this.tasks.addTask(7, new BossAIBubbleAttack(this));
 		/*this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -614,6 +616,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	public boolean isReadyToSpin() {
 		return readyToSpin;
+	}
+	
+	@Override
+	public Vec3d getPositionEyes(float partialTicks) {
+		Vec3d headPos = parts[this.parts.length - 1].getPositionVector();
+		return headPos.add(headPos.subtract(posX, 0, posZ)).normalize().scale(0.25D);
 	}
 
 }
