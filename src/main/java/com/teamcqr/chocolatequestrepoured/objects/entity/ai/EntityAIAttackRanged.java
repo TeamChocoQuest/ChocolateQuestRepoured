@@ -77,7 +77,9 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 				if(arrowItem == null || arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
 					//arrow = new EntityTippedArrow(this.entity.world, this.entity);
 					arrowItem = new ItemStack(Items.ARROW, 1);
-				} 
+				} else {
+					arrowItem.shrink(1);
+				}
 				arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.entity.world, arrowItem, this.entity);
 				double x = attackTarget.posX - this.entity.posX;
 				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
