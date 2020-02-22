@@ -37,11 +37,6 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 	}
 	
 	@Override
-	public boolean isAutomatic() {
-		return false;
-	}
-	
-	@Override
 	public void updateTask() {
 		super.updateTask();
 	}
@@ -59,6 +54,16 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 			turtle.setAnimation(animationOut);
 		}
 		turtle.setBypassInShell(true);
+	}
+	
+	@Override
+	public boolean isAutomatic() {
+		return false;
+	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
 	}
 	
 	@Override

@@ -57,6 +57,16 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	}
 	
 	@Override
+	public boolean isAutomatic() {
+		return false;
+	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
+	}
+	
+	@Override
 	public void startExecuting() {
 		super.startExecuting();
 		this.getBoss().setSpinning(true);

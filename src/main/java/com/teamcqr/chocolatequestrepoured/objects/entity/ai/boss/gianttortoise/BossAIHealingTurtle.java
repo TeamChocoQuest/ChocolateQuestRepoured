@@ -41,6 +41,11 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	}
 	
 	@Override
+	public boolean isInterruptible() {
+		return false;
+	}
+	
+	@Override
 	public void startExecuting() {
 		super.startExecuting();
 		this.getBoss().setCanBeStunned(false);
