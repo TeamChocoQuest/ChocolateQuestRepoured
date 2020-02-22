@@ -7,7 +7,6 @@ import net.ilexiconn.llibrary.client.model.tools.AdvancedModelBase;
 import net.ilexiconn.llibrary.client.model.tools.AdvancedModelRenderer;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
@@ -355,15 +354,16 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_SPIN) {
 			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_SPIN);
 			
-			/*animator.startKeyframe(10);
-			animator.rotate(mainPart, 0, (float) Math.toRadians(360), 0);
-			animator.endKeyframe();*/
-			float angle = (1 / 360) * turtle.getAnimationTick();
+			int TIME_FOR_ONE_SPIN = 20;
+			animator.startKeyframe(turtle.getAnimation().getDuration());
+			animator.rotate(mainPart, 0, (float) Math.toRadians(360 * (turtle.getAnimation().getDuration() / TIME_FOR_ONE_SPIN)), 0);
+			animator.endKeyframe();
+			/*float angle = (1 / 360) * turtle.getAnimationTick();
 			angle -= angle > 360 ? ((angle / 360) -1) * 360 : 0;
 			angle *= 10;
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate((float) Math.toRadians(angle), 0, 1, 0);
-			GlStateManager.popMatrix();
+			GlStateManager.popMatrix();*/
 		}
 		
 		/*
