@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
@@ -11,7 +12,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private Vec3d movementVector;
 	
-	private static final int COOLDOWN = 60;
+	private static final int COOLDOWN = 40;
 	private int cooldown = COOLDOWN /2;
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
@@ -47,7 +48,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && getBoss() != null && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead;
+		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= 1 && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead;
 	}
 	
 	private void calculateVelocity() {
@@ -63,7 +64,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean isInterruptible() {
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -82,7 +83,11 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	public void updateTask() {
 		super.updateTask();
 		//this.getBoss().setSpinning(false);
-		if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
+		if(getBoss().getSpinsBlocked() >= 1) {
+			this.getBoss().setSpinning(false);
+			this.getBoss().setStunned(true);
+		}
+		else if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
 			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20) {
 				calculateVelocity();
 			}
@@ -95,9 +100,20 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			getBoss().velocityChanged = true;
 		} else if(getBoss().getAnimationTick() < 20) {
 			this.getBoss().setSpinning(false);
-			//TODO: Shoot bubbles
+			Vec3d v = new Vec3d(entity.getRNG().nextDouble() -0.5D, 0.125D * (entity.getRNG().nextDouble() -0.5D), entity.getRNG().nextDouble() -0.5D);
+			v = v.normalize();
+			v = v.scale(1.4);
+			entity.faceEntity(entity.getAttackTarget(), 30, 30);
+			ProjectileBubble bubble = new ProjectileBubble(entity.world, entity);
+			bubble.motionX = v.x;
+			bubble.motionY = v.y;
+			bubble.motionZ = v.z;
+			bubble.velocityChanged = true;
+			entity.world.spawnEntity(bubble);
+			
 		} else {
 			this.getBoss().setSpinning(false);
+			getBoss().resetSpinsBlocked();
 		}
 	}
 	
@@ -113,6 +129,10 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			cooldown /= 3;
 		}
 		getBoss().setAnimationTick(0);
+		if(getBoss().getSpinsBlocked() >= 1) {
+			this.getBoss().setStunned(true);
+		}
+		getBoss().resetSpinsBlocked();
 	}
 
 }

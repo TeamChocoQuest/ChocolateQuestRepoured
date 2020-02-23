@@ -37,6 +37,8 @@ public class BossAIStunTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
+		getBoss().setReadyToSpin(false);
+		getBoss().setSpinning(false);
 		getBoss().setStunned(true);
 		getBoss().setCanBeStunned(false);
 		getBoss().setAnimation(getAnimation());

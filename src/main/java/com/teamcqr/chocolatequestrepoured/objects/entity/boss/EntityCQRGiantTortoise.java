@@ -9,7 +9,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIBubbleAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIStunTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -23,6 +22,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
@@ -32,6 +32,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemShield;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -66,6 +67,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private boolean wantsToSpin = false;
 	private boolean readyToSpin = true;
 	private boolean spinning = false;
+	private int spinsBlocked = 0;
 	private int timesHealed = 1;
 	private boolean isHealing = false;
 	
@@ -74,7 +76,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationTick;
 	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 	
-	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(40).setLooping(true);
+	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(40).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
@@ -126,8 +128,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		this.tasks.addTask(7, new BossAIBubbleAttack(this));
-		/*this.tasks.addTask(10, new EntityAIAttack(this) {
+		//this.tasks.addTask(7, new BossAIBubbleAttack(this));
+		this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
@@ -147,7 +149,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				}
 				return false;
 			}
-		});*/
+		});
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -354,8 +356,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -436,16 +436,52 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
-		super.collideWithEntity(entityIn);
 		if(isSpinning()) {
-			entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F + (world.getDifficulty().getDifficultyId() *2F));
+			boolean blocked = false;
+			if(entityIn instanceof EntityLiving) {
+				System.out.println("Collided is living...");
+				if(((EntityLiving)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
+					this.setStunned(true);
+					this.setSpinning(false);
+					this.setCanBeStunned(true);
+					if(getRNG().nextBoolean()) {
+						spinsBlocked++;
+					}
+					spinsBlocked++;
+					blocked = true;
+					System.out.println("Blocked spins: " + spinsBlocked);
+				}
+			}
+			
+			if(!blocked) {
+				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F + (world.getDifficulty().getDifficultyId() *2F));
+			}
 			Vec3d v = entityIn.getPositionVector().subtract(getPositionVector());
 			v = v.normalize();
-			v = v.scale(1.5D);
+			if(blocked) {
+				v = v.scale(0.8D);
+			} else {
+				v = v.scale(1.5D);
+			}
 			entityIn.motionX = v.x;
 			entityIn.motionY = v.y +0.75;
 			entityIn.motionZ = v.z;
+			entityIn.velocityChanged = true;
+			if(blocked) {
+				v = v.scale(1.7D);
+				this.motionX = -v.x;
+				this.motionY = v.y +0.25;
+				this.motionZ = -v.z;
+				this.velocityChanged = true;
+			}
+		} else {
+			super.collideWithEntity(entityIn);
 		}
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
 	}
 	
 	@Override
@@ -460,7 +496,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
+		return EnumCreatureAttribute.ARTHROPOD;
 	}
 
 	public void setInShell(boolean val) {
@@ -622,6 +658,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public Vec3d getPositionEyes(float partialTicks) {
 		Vec3d headPos = parts[this.parts.length - 1].getPositionVector();
 		return headPos.add(headPos.subtract(posX, 0, posZ)).normalize().scale(0.25D);
+	}
+	
+	public int getSpinsBlocked() {
+		return spinsBlocked;
+	}
+	
+	public void resetSpinsBlocked() {
+		spinsBlocked = 0;
 	}
 
 }
