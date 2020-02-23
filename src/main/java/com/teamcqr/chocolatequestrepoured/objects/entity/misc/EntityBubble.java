@@ -77,7 +77,7 @@ public class EntityBubble extends EntityLivingBase {
 	
 	@Override
 	public void onLivingUpdate() {
-		if(getLowestRidingEntity() == null) {
+		if(getLowestRidingEntity() == null || getPassengers().isEmpty()) {
 			setDead();
 			return;
 		}
