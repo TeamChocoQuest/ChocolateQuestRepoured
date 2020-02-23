@@ -332,12 +332,6 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			animator.startKeyframe(turtle.getAnimation().getDuration());
 			animator.rotate(mainPart, 0, (float) Math.toRadians(360 * (turtle.getAnimation().getDuration() / TIME_FOR_ONE_SPIN)), 0);
 			animator.endKeyframe();
-			/*float angle = (1 / 360) * turtle.getAnimationTick();
-			angle -= angle > 360 ? ((angle / 360) -1) * 360 : 0;
-			angle *= 10;
-			GlStateManager.pushMatrix();
-			GlStateManager.rotate((float) Math.toRadians(angle), 0, 1, 0);
-			GlStateManager.popMatrix();*/
 		}
 		
 		/*
