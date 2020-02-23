@@ -18,7 +18,7 @@ public class EntityBubble extends EntityLivingBase {
 	private int flyTicks = 0;
 	private int riderLessTicks = 0;
 
-	protected static final int FLY_TIME_MAX = 70;
+	protected static final int FLY_TIME_MAX = 140;
 
 	public EntityBubble(World worldIn) {
 		super(worldIn);
