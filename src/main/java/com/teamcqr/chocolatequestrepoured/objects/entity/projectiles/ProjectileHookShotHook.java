@@ -316,7 +316,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private void changeState(EnumHookState stateIn) {
         this.travelState = stateIn;
         dataManager.set(PULL_STATUS, this.travelState.toInt());
-        System.out.println("Hook state changed to " + this.travelState.name());
+        //System.out.println("Hook state changed to " + this.travelState.name());
         ticksThisState = 0;
     }
 
