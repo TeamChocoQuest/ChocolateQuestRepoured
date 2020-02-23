@@ -27,6 +27,10 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	public BossAIBubbleAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
+	
+	private EntityCQRGiantTortoise getBoss() {
+		return (EntityCQRGiantTortoise) this.entity;
+	}
 
 	@Override
 	public Animation getAnimation() {
@@ -37,18 +41,22 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
 	public boolean shouldExecute() {
-		return this.entity.getAttackTarget() == null ? false : this.isBowInMainhand();
-	}
-
-	protected boolean isBowInMainhand() {
-		return true;
+		if(this.entity.getAttackTarget() != null && !(getBoss().isStunned() || getBoss().isHealing() || getBoss().isSpinning() || getBoss().wantsToSpin())) {
+			getBoss().setWantsToSpin(false);
+			if(getBoss().isInShell()) {
+				getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
+				return false;
+			}
+			return true;
+		}
+		return false;
 	}
 
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
 	public boolean shouldContinueExecuting() {
-		return (this.shouldExecute() || !this.entity.getNavigator().noPath()) && this.isBowInMainhand();
+		return (this.shouldExecute() || !this.entity.getNavigator().noPath()) && getBoss().isInShell();
 	}
 
 	/**
@@ -160,6 +168,7 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	}
 
 	private void doAttack() {
+		System.out.println("ATTACK IN PROGRESS");
 		Vec3d v = entity.getAttackTarget().getPositionVector().subtract(entity.getPositionVector());
 		v = v.addVector(entity.getRNG().nextDouble() -0.5D, 0D, entity.getRNG().nextDouble() -0.5D);
 		v = v.normalize();
