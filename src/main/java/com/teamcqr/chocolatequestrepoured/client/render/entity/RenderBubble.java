@@ -33,7 +33,7 @@ public class RenderBubble extends Render<EntityBubble> {
 	@Override
 	public void doRender(EntityBubble entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
+		GlStateManager.translate((float) x, (float) y - entity.height /2, (float) z);
 
 		double scale = 2.0D + entity.getLowestRidingEntity().height * 0.7D;
 		
