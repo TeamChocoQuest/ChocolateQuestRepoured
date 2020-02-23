@@ -75,13 +75,13 @@ public class ProjectileHookShotHook extends ProjectileBase {
     private int ticksThisState = 0;
 	private Entity pulledEntity = null;
 
-	private Vec3d lastShooterPos = null; //last recorded position of the shooter - used to detect blocked path
-	private int lastMovementCheckTick = 0; //tick count of last time shooter position was recorded
+	private Vec3d lastCheckedPosition = null; //last recorded position of the shooter - used to detect blocked path
+	private int lastMovementCheckTick = 0; //tick count of last time shooter/entity position was recorded
 	private int lastPositionSaveTick = 0;
 	private ItemHookshotBase hookshot = null;
 
 	//These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
-	protected static final DataParameter<Vec3d> IMPACT_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
+	protected static final DataParameter<Vec3d> DESTINATION_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
 	protected static final DataParameter<Vec3d> SHOOTER_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
 
 	protected static final DataParameter<Integer> PULL_STATUS = EntityDataManager.createKey(ProjectileHookShotHook.class, DataSerializers.VARINT);
@@ -116,7 +116,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataManager.register(IMPACT_POS, new Vec3d(0, 0, 0));
+		dataManager.register(DESTINATION_POS, new Vec3d(0, 0, 0));
 		dataManager.register(SHOOTER_POS, new Vec3d(0, 0, 0));
 
 		dataManager.register(PULL_STATUS, EnumHookState.SHOOT.toInt());
@@ -144,26 +144,10 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		} else if (!this.world.isRemote) {
 			hookStateMachine();
 
-			/*
-			else if (this.phase == HookPhase.BACK && distanceToHook < STOP_PULL_DISTANCE) {
-				if (isPullingEntity()) {
-					this.pulledEntity.motionX = 0;
-					this.pulledEntity.motionY = 0;
-					this.pulledEntity.motionZ = 0;
-					this.pulledEntity.velocityChanged = true;
-				}
-				zeroizeHookVelocity();
-				setDead();
-			}
-			else if (isPullingEntity()) {
-				this.pulledEntity.motionX = this.motionX;
-				this.pulledEntity.motionY = this.motionY;
-				this.pulledEntity.motionZ = this.motionZ;
-				this.pulledEntity.velocityChanged = true;
-			} */
-
 		} else if (isPullingShooter() && this.world.isRemote) {
 			pullIfClientIsShooter();
+		} else if (isPullingPlayer() && this.world.isRemote) {
+			pullIfClientIsPulledEntity();
 		}
 	}
 
@@ -263,7 +247,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void retractPullEntityState() {
-		//TODO: Check for blocked entity path
+		checkForEntityBlockedPath();
+
 		if (this.pulledEntity instanceof EntityPlayerMP) {
 			;
 		} else {
@@ -293,17 +278,16 @@ public class ProjectileHookShotHook extends ProjectileBase {
         if (this.ticksThisState >= 1) {
             this.zeroizeHookVelocity();
             this.impactLocation = this.getPositionVector();
-            dataManager.set(IMPACT_POS, impactLocation);
+            dataManager.set(DESTINATION_POS, impactLocation);
             changeState(EnumHookState.LATCHED_PULL_SHOOTER);
         }
 	}
 
 	private void latchedPullShooterState() {
 	    if (this.getThrower() instanceof EntityPlayerMP) {
-            EntityPlayerMP shootingPlayer = (EntityPlayerMP) this.getThrower();
-            checkForBlockedPath(shootingPlayer);
+            checkForShooterBlockedPath();
 
-            Vec3d playerPos = shootingPlayer.getPositionVector();
+            Vec3d playerPos = this.getThrower().getPositionVector();
             double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
             if (distanceToHook < STOP_PULL_DISTANCE) {
@@ -315,7 +299,9 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
     private void triggerEntityPull(Entity entityHit) {
 		this.pulledEntity = entityHit;
-		dataManager.set(PULLING_UUID, Optional.of(this.pulledEntity.getPersistentID()));
+		if (this.pulledEntity instanceof EntityPlayerMP) {
+			dataManager.set(PULLING_UUID, Optional.of(this.pulledEntity.getPersistentID()));
+		}
 		changeState(EnumHookState.PRE_PULL_ENTITY);
 	}
 
@@ -366,21 +352,36 @@ public class ProjectileHookShotHook extends ProjectileBase {
     }
 
 	// Check for no movement in the shooting player and stop pulling if they are blocked
-	private void checkForBlockedPath(EntityPlayer shootingPlayer) {
-		if (this.ticksExisted - this.lastMovementCheckTick >= 4) // once every 4 ticks ~ 0.2 seconds
+	private void checkForShooterBlockedPath() {
+		if ((this.ticksExisted - this.lastMovementCheckTick >= 4) && (this.getThrower() != null)) // once every 4 ticks ~ 0.2 seconds
 		{
-			Vec3d currentPos = shootingPlayer.getPositionVector();
-			if (this.lastShooterPos != null) {
-				double distanceTraveled = currentPos.distanceTo(this.lastShooterPos);
+			Vec3d currentPos = this.getThrower().getPositionVector();
+			if (this.lastCheckedPosition != null) {
+				double distanceTraveled = currentPos.distanceTo(this.lastCheckedPosition);
 				if (distanceTraveled < 0.4) {
-					// System.out.println("Cancelling hook because shooter was blocked (dist = " + distanceTraveled + ")");
-					this.zeroizeHookVelocity();
-					this.setDead();
+					changeState(EnumHookState.STOPPED);
 				}
 			}
 
 			this.lastMovementCheckTick = this.ticksExisted;
-			this.lastShooterPos = shootingPlayer.getPositionVector();
+			this.lastCheckedPosition = this.getThrower().getPositionVector();
+		}
+	}
+
+	// Check for no movement in the entity being pulled and stop pulling if it is blocked
+	private void checkForEntityBlockedPath() {
+		if (this.ticksExisted - this.lastMovementCheckTick >= 4) // once every 4 ticks ~ 0.2 seconds
+		{
+			Vec3d currentPos = pulledEntity.getPositionVector();
+			if (this.lastCheckedPosition != null) {
+				double distanceTraveled = currentPos.distanceTo(this.lastCheckedPosition);
+				if (distanceTraveled < 0.4) {
+					changeState(EnumHookState.STOPPED);
+				}
+			}
+
+			this.lastMovementCheckTick = this.ticksExisted;
+			this.lastCheckedPosition = pulledEntity.getPositionVector();
 		}
 	}
 
@@ -395,24 +396,58 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			if (shooterUUID.isPresent() && player.getUniqueID() == shooterUUID.get()) {
 				// Calculate the vector between this player and the hook
 				Vec3d playerPos = player.getPositionVector();
-				Vec3d impactLocation = this.getPositionVector();
+				Vec3d latchPos = getDestinationPosition();
 
-				double distanceToHook = playerPos.distanceTo(impactLocation);
+				if (latchPos != null) {
+					double distanceToHook = playerPos.distanceTo(latchPos);
 
-				// Might want to notify server we stopped pulling here...or just let server handle it all
-				if (distanceToHook < ProjectileHookShotHook.STOP_PULL_DISTANCE) {
-					player.setVelocity(0, 0, 0);
+					// Server does this check too but also do it here so it stops pulling at the right time
+					if (distanceToHook < ProjectileHookShotHook.STOP_PULL_DISTANCE) {
+						player.setVelocity(0, 0, 0);
+						player.velocityChanged = true;
+
+						return;
+					}
+
+					// Pull the player to the hook by swtting their velocity to point towards the latch location
+					Vec3d hookDirection = latchPos.subtract(playerPos);
+					Vec3d pullV = hookDirection.normalize().scale(getTravelSpeed());
+
+					player.setVelocity(pullV.x, pullV.y, pullV.z);
 					player.velocityChanged = true;
-
-					return;
 				}
+			}
+		}
+	}
 
-				// Pull the player to the hook by swtting their velocity to point towards the latch location
-				Vec3d hookDirection = impactLocation.subtract(playerPos);
-				Vec3d pullV = hookDirection.normalize().scale(getPullSpeed());
+	@SideOnly(Side.CLIENT)
+	private void pullIfClientIsPulledEntity()
+	{
+		//Must be client side to check this
+		if (this.world.isRemote) {
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			Optional<UUID> pulledUUID = dataManager.get(PULLING_UUID);
+			// If this client's player is the shooting player
+			if (pulledUUID.isPresent() && player.getUniqueID() == pulledUUID.get()) {
+				// Calculate the vector between this player and the hook
+				Vec3d playerPos = player.getPositionVector();
+				Vec3d destPos = getDestinationPosition();
 
-				player.setVelocity(pullV.x, pullV.y, pullV.z);
-				player.velocityChanged = true;
+				if (destPos != null) {
+					double distanceToHook = playerPos.distanceTo(destPos);
+
+					// Server does this check too but also do it here so it stops pulling at the right time
+					if (distanceToHook < ProjectileHookShotHook.STOP_PULL_DISTANCE) {
+						player.setVelocity(0, 0, 0);
+						player.velocityChanged = true;
+
+						return;
+					}
+
+					//Set the player's velocity to the hook velocity to simulate being pulled by the hook
+					player.setVelocity(this.motionX, this.motionY, this.motionZ);
+					player.velocityChanged = true;
+				}
 			}
 		}
 	}
@@ -422,7 +457,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		double x = compound.getDouble("cqrdata.impactX");
 		double y = compound.getDouble("cqrdata.impactY");
 		double z = compound.getDouble("cqrdata.impactZ");
-		this.dataManager.set(IMPACT_POS, new Vec3d(x, y, z));
+		this.dataManager.set(DESTINATION_POS, new Vec3d(x, y, z));
 
 		x = compound.getDouble("cqrdata.shooterX");
 		y = compound.getDouble("cqrdata.shooterY");
@@ -438,7 +473,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
-		Vec3d impactLocation = this.dataManager.get(IMPACT_POS);
+		Vec3d impactLocation = this.dataManager.get(DESTINATION_POS);
 		compound.setDouble("cqrdata.impactX", impactLocation.x);
 		compound.setDouble("cqrdata.impactY", impactLocation.y);
 		compound.setDouble("cqrdata.impactZ", impactLocation.z);
@@ -460,26 +495,19 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		changeState(EnumHookState.STOPPED);
 	}
 
-	/*
-	private void startPullingEntity(Entity entityIn) {
-		this.pulledEntity = entityIn;
-		this.travelState = EnumHookState.PULLING_ENTITY;
-		dataManager.set(PULL_STATUS, this.travelState.toInt());
-	} */
-
 	public boolean isPullingShooter() {
 		return getTravelState() == EnumHookState.LATCHED_PULL_SHOOTER;
 	}
 
-	public boolean isPullingEntity() {
-		return getTravelState() == EnumHookState.RETRACT_PULL_ENTITY;
+	public boolean isPullingPlayer() {
+		return ((getTravelState() == EnumHookState.RETRACT_PULL_ENTITY) && (getPulledPlayerUUID() != null));
 	}
 
 	private EnumHookState getTravelState() {
 		return EnumHookState.fromInt(dataManager.get(PULL_STATUS));
 	}
 
-	protected double getPullSpeed()
+	public double getTravelSpeed()
 	{
 		return 1.8; //determined from trial and error on what felt like a good speed
 	}
@@ -517,9 +545,21 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		}
 	}
 
-	@Nullable
-	public Vec3d getImpactLocation()
+	public UUID getPulledPlayerUUID()
 	{
-		return dataManager.get(IMPACT_POS);
+		if (this.dataManager.get(PULLING_UUID).isPresent())
+		{
+			return this.dataManager.get(PULLING_UUID).get();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	@Nullable
+	public Vec3d getDestinationPosition()
+	{
+		return dataManager.get(DESTINATION_POS);
 	}
 }

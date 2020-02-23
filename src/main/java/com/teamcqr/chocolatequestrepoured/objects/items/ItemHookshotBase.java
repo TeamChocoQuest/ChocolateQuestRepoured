@@ -195,7 +195,7 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
 		if (!worldIn.isRemote) {
 			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, getHookRange(), this);
-			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.0F, 0F);
+			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, (float)hookEntity.getTravelSpeed(), 0F);
 			player.getCooldownTracker().setCooldown(stack.getItem(), getCooldown());
 			worldIn.spawnEntity(hookEntity);
 			stack.damageItem(1, player);
