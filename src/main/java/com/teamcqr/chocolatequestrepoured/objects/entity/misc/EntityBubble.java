@@ -77,6 +77,10 @@ public class EntityBubble extends EntityLivingBase {
 	
 	@Override
 	public void onLivingUpdate() {
+		if(getLowestRidingEntity() == null) {
+			setDead();
+			return;
+		}
 		super.onLivingUpdate();
 
 		this.motionX = 0;
@@ -89,6 +93,7 @@ public class EntityBubble extends EntityLivingBase {
 			riderLessTicks++;
 			if(riderLessTicks >= 20) {
 				setDead();
+				return;
 			}
 		}
 
@@ -99,6 +104,7 @@ public class EntityBubble extends EntityLivingBase {
 		}
 		if ((flyTicks >= FLY_TIME_MAX) || ((getLowestRidingEntity().collidedVertically) && (!getPassengers().get(0).onGround))) {
 			setDead();
+			return;
 		}
 	}
 
