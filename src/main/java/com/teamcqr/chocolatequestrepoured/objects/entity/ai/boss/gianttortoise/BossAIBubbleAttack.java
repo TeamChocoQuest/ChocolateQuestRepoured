@@ -101,6 +101,7 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 				attackTicks++;
 				if (attackTicks >= MAX_ATTACK_TICKS) {
 					attackTicks = 0;
+					attackInProgress = false;
 					this.attackTime = this.attackCooldown;
 					// TODO: Reset animation
 				}
@@ -173,9 +174,10 @@ public class BossAIBubbleAttack extends AnimationAI<EntityCQRGiantTortoise> {
 		v = v.addVector(entity.getRNG().nextDouble() -0.5D, 0D, entity.getRNG().nextDouble() -0.5D);
 		v = v.normalize();
 		v = v.scale(1.4);
+		entity.faceEntity(entity.getAttackTarget(), 30, 30);
 		ProjectileBubble bubble = new ProjectileBubble(entity.world, entity);
-		Vec3d p = entity.getPositionEyes(1F);
-		bubble.setPosition(p.x, p.y, p.z);
+		//Vec3d p = entity.getPositionEyes(1F);
+		//bubble.setPosition(p.x, p.y, p.z);
 		bubble.motionX = v.x;
 		bubble.motionY = v.y;
 		bubble.motionZ = v.z;

@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class ProjectileBubble extends ProjectileBase {
 	
-	private EntityLivingBase shooter;
+	private Entity shooter;
 	protected float damage;
 
 	public ProjectileBubble(World worldIn) {
