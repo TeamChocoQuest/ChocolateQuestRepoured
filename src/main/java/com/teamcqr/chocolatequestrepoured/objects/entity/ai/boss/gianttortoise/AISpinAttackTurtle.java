@@ -130,6 +130,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		}
 		getBoss().setAnimationTick(0);
 		if(getBoss().getSpinsBlocked() >= 1) {
+			cooldown *= 6;
 			this.getBoss().setStunned(true);
 		}
 		getBoss().resetSpinsBlocked();
