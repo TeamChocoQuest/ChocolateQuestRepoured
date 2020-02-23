@@ -276,7 +276,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		}
 		
-		if(getAttackTarget() == null || getAttackTarget().isDead && source.getTrueSource() instanceof EntityLivingBase) {
+		if((getAttackTarget() == null || getAttackTarget().isDead) && source.getTrueSource() instanceof EntityLivingBase && source.getTrueSource() != null) {
 			if(!getFaction().isAlly(source.getTrueSource()) && getDistance(source.getTrueSource()) <= 32) {
 				setAttackTarget((EntityLivingBase) source.getTrueSource());
 			}
