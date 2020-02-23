@@ -276,7 +276,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(!sentFromPart) {
 			amount = 0;
 		}
-		if (sentFromPart && !this.isInShell()) {
+		if (sentFromPart && (!this.isInShell() || source.isCreativePlayer() || source == DamageSource.IN_WALL)) {
 			if(stunned) {
 				amount *= 2F;
 			}
