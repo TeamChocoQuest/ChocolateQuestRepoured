@@ -7,19 +7,12 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	public EntityCQRGremlin(World worldIn) {
 		super(worldIn);
-		setSize(1F, 1.2F);
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
 	}
 
 	@Override
@@ -46,7 +39,7 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	public boolean canRide() {
 		return false;
 	}
-	
+
 	@Override
 	public boolean isSitting() {
 		return false;
@@ -55,6 +48,26 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
+	}
+
+	@Override
+	public boolean canOpenDoors() {
+		return false;
+	}
+
+	@Override
+	public float getEyeHeight() {
+		return this.height * 0.7F;
+	}
+
+	@Override
+	public float getDefaultWidth() {
+		return 1.0F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.2F;
 	}
 
 }

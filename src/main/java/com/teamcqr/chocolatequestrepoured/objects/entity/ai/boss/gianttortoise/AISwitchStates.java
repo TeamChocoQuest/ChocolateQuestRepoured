@@ -30,14 +30,9 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public boolean shouldExecute() {
-		if(turtle.wantsToChangeState()) {
+		if(turtle.wantsToChangeState() && !turtle.isStunned() && !turtle.isSpinning()) {
 			return true;
 		}
-		return false;
-	}
-	
-	@Override
-	public boolean isAutomatic() {
 		return false;
 	}
 	
@@ -50,13 +45,25 @@ public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 	public void startExecuting() {
 		super.startExecuting();
 		turtle.currentAnim = this;
+		turtle.setReadyToSpin(false);
 		turtle.setAnimationTick(0);
+		turtle.setInShell(true);
 		if(turtle.getTargetedState() < 0) {
 			turtle.setAnimation(animationIn);
 		} else {
 			turtle.setAnimation(animationOut);
 		}
 		turtle.setBypassInShell(true);
+	}
+	
+	@Override
+	public boolean isAutomatic() {
+		return false;
+	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
 	}
 	
 	@Override

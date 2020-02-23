@@ -29,7 +29,7 @@ public enum EDungeonMobType {
 	GOBLIN(new ResourceLocation(Reference.MODID, "goblin"), null, null),
 	MUMMY(new ResourceLocation(Reference.MODID, "mummy"), null, null),
 	OGRE(new ResourceLocation(Reference.MODID, "ogre"), null, null),
-	GREMLIN(new ResourceLocation(Reference.MODID, "gremlin"), null, null),
+	GREMLIN(new ResourceLocation(Reference.MODID, "gremlin"), null, EBanners.GREMLIN_BANNER),
 	TRITON(new ResourceLocation(Reference.MODID, "triton"), null, null);
 
 	static final int[] countMapping = new int[] {

@@ -107,9 +107,16 @@ public class CQStructurePart extends Template {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	private List<Template.BlockInfo> getBlockInfoList() {
 		try {
-			Field field = Template.class.getDeclaredField("blocks");
+			// 1.12 obfuscated name: field_186270_a
+			Field field = null;
+			try {
+				field = Template.class.getDeclaredField("field_186270_a");
+			} catch (NoSuchFieldException e) {
+				field = Template.class.getDeclaredField("blocks");
+			}
 			field.setAccessible(true);
 			return (List<BlockInfo>) field.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
@@ -121,7 +128,7 @@ public class CQStructurePart extends Template {
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
 		this.addBlocksToWorld(worldIn, pos, placementIn);
 
-		if (replaceBanners) {
+		if (replaceBanners && dungeonBanner != null) {
 			for (BlockPos bannerPos : this.banners) {
 				BlockPos transformedPos = transformedBlockPos(placementIn, bannerPos).add(pos);
 				TileEntity tileEntity = worldIn.getTileEntity(transformedPos);
@@ -191,7 +198,6 @@ public class CQStructurePart extends Template {
 					if (entity instanceof AbstractEntityCQRBoss) {
 						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon();
 						((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
-						((AbstractEntityCQRBoss) entity).equipDefaultEquipment(worldIn, transformedPos);
 					}
 					worldIn.spawnEntity(entity);
 

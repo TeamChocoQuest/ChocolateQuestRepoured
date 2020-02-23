@@ -100,5 +100,10 @@ public class EntityAIFangAttack extends AbstractEntityAIUseSpell {
 	protected ESpellType getSpellType() {
 		return ESpellType.SUMMON_FANGS;
 	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
+	}
 
 }

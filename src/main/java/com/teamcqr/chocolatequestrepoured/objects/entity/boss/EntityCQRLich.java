@@ -180,5 +180,10 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		return (this.currentPhylacteryPosition != null &&
 			(this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY)); 
 	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
 
 }

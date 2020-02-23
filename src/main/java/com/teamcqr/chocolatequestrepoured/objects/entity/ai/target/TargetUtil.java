@@ -4,6 +4,8 @@ import java.util.Comparator;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBase;
 
 import net.minecraft.entity.Entity;
@@ -30,6 +32,21 @@ public class TargetUtil {
 			return true;
 		}
 	};
+	
+	public static final Predicate<? super Entity> PREDICATE_ALLIES(CQRFaction faction) {
+		Predicate<Entity> predicate = new Predicate<Entity>() {
+
+			@Override
+			public boolean apply(Entity input) {
+				if(input instanceof AbstractEntityCQR) {
+					return faction.isAlly(((AbstractEntityCQR)input).getFaction());
+				}
+				return false;
+			}
+		};
+		return predicate;
+	}
+		
 
 	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = new Predicate<EntityLiving>() {
 		@Override

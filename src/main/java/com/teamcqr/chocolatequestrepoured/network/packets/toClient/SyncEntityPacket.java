@@ -13,12 +13,13 @@ public class SyncEntityPacket implements IMessage {
 	private int dropChanceFeet;
 	private int dropChanceMainhand;
 	private int dropChanceOffhand;
+	private int sizeScaling;
 
 	public SyncEntityPacket() {
 
 	}
 
-	public SyncEntityPacket(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand) {
+	public SyncEntityPacket(int entityId, int healthScaling, int dropChanceHelm, int dropChanceChest, int dropChanceLegs, int dropChanceFeet, int dropChanceMainhand, int dropChanceOffhand, int sizeScaling) {
 		this.entityId = entityId;
 		this.healthScaling = healthScaling;
 		this.dropChanceHelm = dropChanceHelm;
@@ -27,6 +28,7 @@ public class SyncEntityPacket implements IMessage {
 		this.dropChanceFeet = dropChanceFeet;
 		this.dropChanceMainhand = dropChanceMainhand;
 		this.dropChanceOffhand = dropChanceOffhand;
+		this.sizeScaling = sizeScaling;
 	}
 
 	@Override
@@ -39,6 +41,7 @@ public class SyncEntityPacket implements IMessage {
 		this.dropChanceFeet = buf.readByte();
 		this.dropChanceMainhand = buf.readByte();
 		this.dropChanceOffhand = buf.readByte();
+		this.sizeScaling = buf.readShort();
 	}
 
 	@Override
@@ -51,6 +54,7 @@ public class SyncEntityPacket implements IMessage {
 		buf.writeByte(this.dropChanceFeet);
 		buf.writeByte(this.dropChanceMainhand);
 		buf.writeByte(this.dropChanceOffhand);
+		buf.writeShort(this.sizeScaling);
 	}
 
 	public int getEntityId() {
@@ -83,6 +87,10 @@ public class SyncEntityPacket implements IMessage {
 
 	public int getDropChanceOffhand() {
 		return this.dropChanceOffhand;
+	}
+
+	public int getSizeScaling() {
+		return this.sizeScaling;
 	}
 
 }

@@ -8,18 +8,12 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRDummy extends AbstractEntityCQR {
 
 	public EntityCQRDummy(World worldIn) {
 		super(worldIn);
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
 	}
 
 	@Override
@@ -48,11 +42,6 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	public float getSizeVariation() {
-		return 0F;
-	}
-
-	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
 	}
@@ -70,6 +59,11 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
+	}
+
+	@Override
+	public boolean canOpenDoors() {
+		return false;
 	}
 
 }

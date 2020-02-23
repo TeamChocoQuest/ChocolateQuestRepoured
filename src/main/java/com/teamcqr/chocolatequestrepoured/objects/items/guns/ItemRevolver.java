@@ -8,6 +8,8 @@ import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
@@ -173,7 +175,16 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	@Override
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
-			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, 1/* 1 is Iron bullet */);
+			ItemStack bulletStack = new ItemStack(ModItems.BULLET_IRON, 1);
+			if(shooter instanceof AbstractEntityCQR) {
+				AbstractEntityCQR cqrEnt = (AbstractEntityCQR) shooter;
+				ItemStack bullet = cqrEnt.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
+				if(bullet != null && !bullet.isEmpty() && (bullet.getItem() instanceof ItemBullet)) {
+					bulletStack = bullet;
+					bullet.shrink(1);
+				}
+			}
+			ProjectileBullet bulletE = new ProjectileBullet(worldIn, shooter, getBulletType(bulletStack));
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
