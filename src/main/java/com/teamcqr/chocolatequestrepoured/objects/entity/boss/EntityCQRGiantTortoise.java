@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
@@ -22,7 +21,6 @@ import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityMultiPart;
@@ -76,22 +74,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationTick;
 	public AnimationAI<EntityCQRGiantTortoise> currentAnim;
 	
-	public static final Animation ANIMATION_SHOOT_BUBBLES = Animation.create(40).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
-	public static final Animation ANIMATION_SPIN_UP = Animation.create(40);
-	public static final Animation ANIMATION_SPIN_DOWN = Animation.create(40);
 	public static final Animation ANIMATION_SPIN = Animation.create(200).setLooping(false);
 	public static final Animation ANIMATION_IDLE = Animation.create(100);
 	public static final Animation ANIMATION_STUNNED = Animation.create(200).setLooping(false);
 	public static final Animation ANIMATION_DEATH = Animation.create(300);
 	
 	private static final Animation[] ANIMATIONS = {
-			ANIMATION_SHOOT_BUBBLES, 
 			ANIMATION_MOVE_LEGS_IN, 
 			ANIMATION_MOVE_LEGS_OUT, 
-			ANIMATION_SPIN_UP, 
-			ANIMATION_SPIN_DOWN,
 			ANIMATION_SPIN,
 			ANIMATION_IDLE,
 			ANIMATION_STUNNED,
@@ -128,8 +120,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		//this.tasks.addTask(7, new BossAIBubbleAttack(this));
-		this.tasks.addTask(10, new EntityAIAttack(this) {
+		/*this.tasks.addTask(10, new EntityAIAttack(this) {
 			@Override
 			public boolean shouldExecute() {
 				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
@@ -149,7 +140,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				}
 				return false;
 			}
-		});
+		});*/
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -265,8 +256,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		//System.out.println("class direct: " + source.getImmediateSource().getClass().getName());
-		//System.out.println("class true: " + source.getTrueSource().getClass().getName());
 		if(source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
@@ -438,9 +427,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void collideWithEntity(Entity entityIn) {
 		if(isSpinning()) {
 			boolean blocked = false;
-			if(entityIn instanceof EntityLiving) {
+			if(entityIn instanceof EntityLivingBase) {
 				System.out.println("Collided is living...");
-				if(((EntityLiving)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
+				if(((EntityLivingBase)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
 					this.setStunned(true);
 					this.setSpinning(false);
 					this.setCanBeStunned(true);
