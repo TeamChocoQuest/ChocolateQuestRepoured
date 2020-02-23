@@ -23,7 +23,7 @@ public class CapabilityHandler {
 			event.addCapability(new ResourceLocation(Reference.MODID, "armor_slime"), CapabilitySlimeArmorProvider.createProvider());
 		}
 		if (event.getObject() instanceof AbstractEntityCQR) {
-			event.addCapability(new ResourceLocation(Reference.MODID, "extra_item_slot"), CapabilityExtraItemHandlerProvider.createProvider(2));
+			event.addCapability(new ResourceLocation(Reference.MODID, "extra_item_slot"), CapabilityExtraItemHandlerProvider.createProvider(3));
 		}
 	}
 

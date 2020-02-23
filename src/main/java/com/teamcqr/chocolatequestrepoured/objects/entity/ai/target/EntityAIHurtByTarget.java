@@ -6,11 +6,14 @@ import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI {
@@ -21,29 +24,20 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 
 	public EntityAIHurtByTarget(AbstractEntityCQR entity) {
 		super(entity);
-		this.predicateAlly = new Predicate<EntityLiving>() {
-			@Override
-			public boolean apply(EntityLiving input) {
-				if (input == null) {
-					return false;
-				}
-				if (!EntitySelectors.IS_ALIVE.apply(input)) {
-					return false;
-				}
-				if (!EntityAIHurtByTarget.this.isSuitableAlly(input)) {
-					return false;
-				}
-				return true;
+		this.predicateAlly = input -> {
+			if (input == null) {
+				return false;
 			}
+			if (!EntitySelectors.IS_ALIVE.apply(input)) {
+				return false;
+			}
+			return EntityAIHurtByTarget.this.isSuitableAlly(input);
 		};
 	}
 
 	@Override
 	public boolean shouldExecute() {
 		if (this.entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			return false;
-		}
-		if (this.entity.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
 			return false;
 		}
 		if (this.entity.getRevengeTimer() == this.prevRevengeTimer) {
@@ -62,30 +56,26 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (!this.entity.isInSightRange(revengeTarget)) {
 			return false;
 		}
-		EntityLivingBase target = this.entity.getAttackTarget();
-		if (target != null && this.entity.getEntitySenses().canSee(target) && this.entity.getDistance(target) < this.entity.getDistance(revengeTarget) + 4.0D) {
-			return false;
-		}
 		this.attackTarget = revengeTarget;
 		return true;
 	}
 
 	@Override
 	public void startExecuting() {
-		this.entity.setAttackTarget(this.attackTarget);
 		this.prevRevengeTimer = this.entity.getRevengeTimer();
+		this.trySetAttackTarget(this.entity);
 		this.callForHelp();
 	}
 
 	protected void callForHelp() {
-		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(16.0D);
+		double radius = CQRConfig.mobs.alertRadius;
+		Vec3d eyeVec = this.entity.getPositionEyes(1.0F);
+		Vec3d vec1 = eyeVec.subtract(radius, radius * 0.5D, radius);
+		Vec3d vec2 = eyeVec.addVector(radius, radius * 0.5D, radius);
+		AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
-		int size = allies.size();
-		for (int i = 0; i < size; i++) {
-			EntityLiving ally = allies.get(i);
-			if (ally.getAttackTarget() == null) {
-				allies.get(i).setAttackTarget(this.attackTarget);
-			}
+		for (EntityLiving ally : allies) {
+			this.trySetAttackTarget(ally);
 		}
 	}
 
@@ -96,7 +86,21 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		if (!this.entity.getFaction().isAlly(possibleAlly)) {
 			return false;
 		}
-		return this.entity.getEntitySenses().canSee(possibleAlly);
+		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
+		return path != null && path.getCurrentPathLength() <= 20;
+		// return this.entity.getEntitySenses().canSee(possibleAlly);
+	}
+
+	protected boolean trySetAttackTarget(EntityLiving entityLiving) {
+		if (entityLiving.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
+			return false;
+		}
+		EntityLivingBase oldAttackTarget = entityLiving.getAttackTarget();
+		if (oldAttackTarget != null && entityLiving.getEntitySenses().canSee(oldAttackTarget) && entityLiving.getDistance(oldAttackTarget) < entityLiving.getDistance(this.attackTarget) + 4.0D) {
+			return false;
+		}
+		entityLiving.setAttackTarget(this.attackTarget);
+		return true;
 	}
 
 }

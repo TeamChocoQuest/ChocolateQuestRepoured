@@ -347,6 +347,51 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 					//animator.rotate(jaw, 0, 0, -(float)Math.toRadians(33.75));
 			animator.endKeyframe();
 		}
+		
+		/*
+		 * Spin animation
+		 */
+		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_SPIN) {
+			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_SPIN);
+			
+			int TIME_FOR_ONE_SPIN = 20;
+			animator.startKeyframe(turtle.getAnimation().getDuration());
+			animator.rotate(mainPart, 0, (float) Math.toRadians(360 * (turtle.getAnimation().getDuration() / TIME_FOR_ONE_SPIN)), 0);
+			animator.endKeyframe();
+			/*float angle = (1 / 360) * turtle.getAnimationTick();
+			angle -= angle > 360 ? ((angle / 360) -1) * 360 : 0;
+			angle *= 10;
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate((float) Math.toRadians(angle), 0, 1, 0);
+			GlStateManager.popMatrix();*/
+		}
+		
+		/*
+		 * Stun animation
+		 */
+		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_STUNNED) {
+			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_STUNNED);
+			
+			animator.startKeyframe(20);
+			
+			float offsetXZ = 16;
+			for(int i = 0; i < legJoints.length; i++) {
+				animator.move(legJoints[i], 0, -1, 0);
+				animator.rotate(knees[i], -(float) Math.toRadians(45), 0, 0);
+				animator.rotate(feet[i], -(float) Math.toRadians(45), 0, 0);
+			}
+			animator.move(head, 0, 0, 0.75F *16);
+			animator.move(legJointFL, -offsetXZ, 0, offsetXZ);
+			animator.move(legJointBL, -offsetXZ, 0, -offsetXZ);
+			animator.move(legJointFR, offsetXZ, 0, offsetXZ);
+			animator.move(legJointBR, offsetXZ, 0, -offsetXZ);
+			
+			animator.setStaticKeyframe(60);
+			animator.endKeyframe();
+			
+			//animator.resetKeyframe(20);
+		}
+		
 	}
 
 	/**

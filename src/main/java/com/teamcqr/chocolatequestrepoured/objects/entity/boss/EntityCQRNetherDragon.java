@@ -155,11 +155,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.NETHER_DRAGON.getValue();
 	}
@@ -435,6 +430,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
+	}
+	
+	@Override
+	public boolean canOpenDoors() {
+		return false;
 	}
 
 }

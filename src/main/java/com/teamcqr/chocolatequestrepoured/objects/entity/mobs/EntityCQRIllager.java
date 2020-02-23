@@ -10,13 +10,15 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.monster.AbstractIllager.IllagerArmPose;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.DifficultyInstance;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,16 +38,11 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 
 		this.dataManager.register(IS_AGGRESSIVE, false);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-	}
-
-	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
-
 	}
 
 	@Override
@@ -113,6 +110,26 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
+	}
+
+	@Override
+	public boolean canOpenDoors() {
+		return true;
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.VINDICATION_ILLAGER_AMBIENT;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_VINDICATION_ILLAGER_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_ILLAGER_DEATH;
 	}
 
 }

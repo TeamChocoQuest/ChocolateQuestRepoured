@@ -51,7 +51,8 @@ public class PasteHelper {
 		 * 
 		 * return translatedPastePos;
 		 */
-		int x, z;
+		int x;
+		int z;
 		if (sizeX == sizeZ) {
 			switch (rotation) {
 			case CLOCKWISE_180:

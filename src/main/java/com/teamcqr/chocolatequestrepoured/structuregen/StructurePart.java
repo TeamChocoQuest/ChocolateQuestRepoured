@@ -47,7 +47,7 @@ public class StructurePart {
 		compound.setInteger("dungeonChunkZ", this.dungeonChunkZ);
 		compound.setString("dungeonMob", this.dungeonMobType.toString());
 		compound.setBoolean("replaceBanners", this.replaceBanners);
-		compound.setString("dungeonBanner", this.dungeonBanner.toString());
+		compound.setString("dungeonBanner", this.dungeonBanner != null ? this.dungeonBanner.toString() : "");
 		compound.setBoolean("hasShield", this.hasShield);
 		return compound;
 	}

@@ -49,6 +49,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,23 +91,18 @@ import net.minecraftforge.items.IItemHandler;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
 
-	// Client side visable vars:
-	// - usedPotions
-	// - sizeVariation
-	// - sitting
-
 	protected BlockPos homePosition;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
 	protected boolean holdingPotion;
 	protected ResourceLocation lootTable;
 	protected byte usedPotions = (byte) 0;
-	protected boolean sittingState = false;
 	protected double healthScale = 1D;
 	public ItemStack prevPotion;
+	public boolean prevSneaking;
+	public boolean prevSitting;
 	protected int spellTicks = 0;
-
-	protected PathNavigate waterNavigator;
+	protected float sizeScaling = 1.0F;
 
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private CQRFaction factionInstance;
@@ -121,7 +117,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
+	// protected static final DataParameter<Float> SIZE_VAR = EntityDataManager.<Float>createKey(AbstractEntityCQR.class, DataSerializers.FLOAT);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
@@ -135,18 +131,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public AbstractEntityCQR(World worldIn) {
 		super(worldIn);
-		if(worldIn.isRemote) {
+		if (worldIn.isRemote) {
 			this.currentSpeechBubbleID = this.getRNG().nextInt(ESpeechBubble.values().length);
 		}
-		// this.setSize(0.6F * (1.0F + this.getSizeVariation() * 0.8F), 1.8F * (1.0F + this.getSizeVariation()));
 		this.experienceValue = 5;
+		this.setSize(this.getDefaultWidth(), this.getDefaultHeight());
 	}
 
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(SIZE_VAR, 0F);
+		// this.dataManager.register(SIZE_VAR, 1.0F);
 		this.dataManager.register(IS_SITTING, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
@@ -160,12 +156,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected void updateAITasks() {
 		super.updateAITasks();
 
-		if(spellDelay <= 0) {
+		if (this.spellDelay <= 0) {
 			this.readyToCastSpell = true;
 		} else {
-			spellDelay--;
+			this.spellDelay--;
 		}
-		
+
 		if (this.spellTicks > 0) {
 			--this.spellTicks;
 		}
@@ -189,12 +185,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		return new PathNavigateGround(this, worldIn) {
+		PathNavigate navigator = new PathNavigateGround(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
 				return 128.0F;
 			}
 		};
+		((PathNavigateGround) navigator).setEnterDoors(this.canOpenDoors());
+		((PathNavigateGround) navigator).setBreakDoors(this.canOpenDoors());
+		return navigator;
 	}
 
 	@Override
@@ -203,30 +202,31 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		//DONE: Check if attacker is a InF entity, if yes: amount /= 10
-		if(CQRConfig.advanced.enableSpecialFeatures && source != null && source.getImmediateSource() != null) {
+		// Check if attacker is a InF entity, if yes: amount /= 10
+		if (CQRConfig.advanced.enableSpecialFeatures && source != null && source.getImmediateSource() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getImmediateSource());
-			if(resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			if (resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
 				amount /= 10;
-				if(getRNG().nextDouble() <= 0.05D) {
-					attackEntityAsMob(source.getTrueSource());
+				if (this.getRNG().nextDouble() <= 0.05D) {
+					this.attackEntityAsMob(source.getTrueSource());
 				}
 			}
 		}
-		
+
 		boolean result = super.attackEntityFrom(source, amount);
 		if (CQRConfig.mobs.armorShattersOnMobs && result) {
 			this.handleArmorBreaking();
 		}
+
 		return result;
 	}
 
 	@Override
 	public void onDeath(DamageSource cause) {
-		// this.isDead = true;
 		if (this.isHoldingPotion()) {
 			this.swapWeaponAndPotionSlotItemStacks();
 		}
+
 		super.onDeath(cause);
 
 		this.updateReputationOnDeath(cause);
@@ -235,6 +235,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
+		if (this.canOpenDoors()) {
+			this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
+		}
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 		this.tasks.addTask(8, new EntityAIAttackRanged(this));
 		this.tasks.addTask(9, new EntityAIBackstab(this));
@@ -252,21 +255,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		IEntityLivingData ientitylivingdata = super.onInitialSpawn(difficulty, livingdata);
 		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BadgeSlot, new ItemStack(ModItems.BADGE));
-		this.setEquipmentBasedOnDifficulty(difficulty);
-		this.setEnchantmentBasedOnDifficulty(difficulty);
-		float initSizeVar = -0.125F + (this.rand.nextFloat() * 0.25F);
-		this.dataManager.set(SIZE_VAR, initSizeVar);
-		// Adapt size of hitbox
-		super.setSize(0.6F * (1F + initSizeVar * 0.8F), 1.8F * (1F + initSizeVar));
-		// System.out.println("Size Var: " + sizeVariation);
-		return ientitylivingdata;
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
+		return livingdata;
 	}
-
-	@Override
-	protected abstract void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty);
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
@@ -286,7 +278,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setInteger("spellDelay", this.spellDelay);
 		compound.setBoolean("readyToCastSpell", this.readyToCastSpell);
 		compound.setByte("usedHealingPotions", this.usedPotions);
-		compound.setFloat("sizeVariation", this.dataManager.get(SIZE_VAR));
+		compound.setFloat("sizeScaling", this.sizeScaling);
 		compound.setBoolean("isSitting", this.dataManager.get(IS_SITTING));
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
@@ -308,23 +300,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (compound.hasKey("factionOverride")) {
 			this.setFaction(compound.getString("factionOverride"));
 		}
-		
-		if(compound.hasKey("readyToCastSpell")) {
+
+		if (compound.hasKey("readyToCastSpell")) {
 			this.readyToCastSpell = compound.getBoolean("readyToCastSpell");
 		}
-		if(compound.hasKey("spellDelay")) {
+		if (compound.hasKey("spellDelay")) {
 			this.spellDelay = compound.getInteger("spellDelay");
 		}
 
 		this.dataManager.set(TEXTURE_INDEX, compound.getInteger("textureIndex"));
 		this.usedPotions = compound.getByte("usedHealingPotions");
-		this.dataManager.set(SIZE_VAR, compound.getFloat("sizeVariation"));
+		this.sizeScaling = compound.hasKey("sizeScaling") ? compound.getFloat("sizeScaling") : 1.0F;
 		this.dataManager.set(IS_SITTING, compound.getBoolean("isSitting"));
 		this.holdingPotion = compound.getBoolean("holdingPotion");
 		this.spellTicks = compound.getInteger("spellTicks");
 		this.healthScale = compound.getDouble("healthScale");
-		if (this.healthScale <= 1D) {
-			this.healthScale = 1D;
+		if (this.healthScale <= 1.0D) {
+			this.healthScale = 1.0D;
 		}
 	}
 
@@ -379,7 +371,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BadgeSlot);
+		ItemStack badge = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.BADGE);
 		if (badge.getItem() instanceof ItemBadge) {
 			IItemHandler capability = badge.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 			for (int i = 0; i < capability.getSlots(); i++) {
@@ -392,6 +384,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
 		if (!this.world.isRemote && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
 		}
@@ -400,11 +393,24 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.setDead();
 		}
 
-		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		ItemStack stack = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		if (!this.world.isRemote && stack != this.prevPotion) {
-			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.PotionSlot.getIndex(), stack));
+			CQRMain.NETWORK.sendToAll(new ItemStackSyncPacket(this.getEntityId(), EntityEquipmentExtraSlot.POTION.getIndex(), stack));
 		}
 		this.prevPotion = stack;
+
+		if (this.isSneaking() && !this.prevSneaking) {
+			this.resize(1.0F, 0.8F);
+		} else if (!this.isSneaking() && this.prevSneaking) {
+			this.resize(1.0F, 1.25F);
+		}
+		if (this.isSitting() && !this.prevSitting) {
+			this.resize(1.0F, 0.75F);
+		} else if (!this.isSitting() && this.prevSitting) {
+			this.resize(1.0F, 4.0F / 3.0F);
+		}
+		this.prevSneaking = this.isSneaking();
+		this.prevSitting = this.isSitting();
 	}
 
 	@Override
@@ -415,16 +421,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
-		// if (!this.world.isRemote) {
-		// if (this.sittingState != this.dataManager.get(IS_SITTING)) {
-		// this.sittingState = this.dataManager.get(IS_SITTING);
-		// if (this.sittingState) {
-		// this.rescaleHitbox(1.0D, 0.8D);
-		// } else {
-		// this.rescaleHitbox(1.0D, (double) this.height / 0.8D);
-		// }
-		// }
-		// }
 		super.onLivingUpdate();
 	}
 
@@ -474,12 +470,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			f += EnchantmentHelper.getModifierForCreature(this.getHeldItemMainhand(), ((EntityLivingBase) entityIn).getCreatureAttribute());
 			i += EnchantmentHelper.getKnockbackModifier(this);
 		}
-		//InF compat
+		// InF compat
 		ResourceLocation resLoc = EntityList.getKey(entityIn);
-		if(resLoc != null && CQRConfig.advanced.enableSpecialFeatures && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+		if (resLoc != null && CQRConfig.advanced.enableSpecialFeatures && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
 			f *= 10;
 		}
-		//End of InF compat
+		// End of InF compat
 		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
 
 		if (flag) {
@@ -525,13 +521,37 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public PathNavigate getNavigator() {
 		if (this.isRiding()) {
 			Entity ridden = this.getRidingEntity();
-			if (ridden != null) {
-				if (ridden instanceof EntityLiving) {
-					return ((EntityLiving) ridden).getNavigator();
-				}
+			if (ridden instanceof EntityLiving) {
+				return ((EntityLiving) ridden).getNavigator();
 			}
 		}
 		return super.getNavigator();
+	}
+
+	@Override
+	public void writeSpawnData(ByteBuf buffer) {
+		buffer.writeFloat(this.getSizeVariation());
+		buffer.writeDouble(this.getHealthScale());
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.HEAD));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.CHEST));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.LEGS));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.FEET));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.MAINHAND));
+		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.OFFHAND));
+		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
+	}
+
+	@Override
+	public void readSpawnData(ByteBuf additionalData) {
+		this.setSizeVariation(additionalData.readFloat());
+		this.setHealthScale(additionalData.readDouble());
+		this.setDropChance(EntityEquipmentSlot.HEAD, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.CHEST, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.LEGS, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.FEET, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, additionalData.readFloat());
+		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, ByteBufUtils.readItemStack(additionalData));
 	}
 
 	// Chocolate Quest Repoured
@@ -609,26 +629,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		health *= this.healthScale;
 		return health;
 	}
-	
+
 	public void setBaseHealth(BlockPos pos, float health) {
-		health = calculateBaseHealth(pos.getX(), pos.getZ(), health);
+		health = this.calculateBaseHealth(pos.getX(), pos.getZ(), health);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 		this.setHealth(health);
 	}
 
 	public void handleArmorBreaking() {
-		if (!this.world.isRemote) {
-			// Example:
-			// A U Triggered?
-			// 3 0 N
-			// 2 1 Y
-			// 1 2 Y
-			// 0 3 Y
-
-			if (this.usedPotions + 1 < this.getHealingPotions()) {
-				return;
-			}
-
+		if (!this.world.isRemote && this.usedPotions + 1 > this.getHealingPotions()) {
 			boolean armorBroke = false;
 			float hpPrcntg = this.getHealth() / this.getMaxHealth();
 
@@ -683,7 +692,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.holdingPotion) {
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack);
 		} else {
-			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack);
+			this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack);
 		}
 	}
 
@@ -699,9 +708,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void swapWeaponAndPotionSlotItemStacks() {
 		ItemStack stack1 = this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		ItemStack stack2 = this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, stack2);
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, stack1);
+		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, stack1);
 		this.holdingPotion = !this.holdingPotion;
 	}
 
@@ -768,12 +777,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void onSpawnFromCQRSpawnerInDungeon() {
 		this.setHomePositionCQR(this.getPosition());
-		//this.setBaseHealthForPosition(this.posX, this.posZ, this.getBaseHealth());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
-	}
-
-	public void equipDefaultEquipment(World world, BlockPos pos) {
-		this.setEquipmentBasedOnDifficulty(world.getDifficultyForLocation(pos));
 	}
 
 	public boolean hasCape() {
@@ -784,9 +788,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return null;
 	}
 
+	public void setSizeVariation(float size) {
+		this.resize(size / this.sizeScaling, size / this.sizeScaling);
+		this.sizeScaling = size;
+	}
+
 	public float getSizeVariation() {
-		// return this.sizeVariation;
-		return this.dataManager.get(SIZE_VAR);
+		return this.sizeScaling;
 	}
 
 	public void setSitting(boolean sitting) {
@@ -803,32 +811,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean isChatting() {
 		return this.dataManager.get(TALKING);
-	}
-
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeFloat(this.dataManager.get(SIZE_VAR));
-		buffer.writeDouble(this.getHealthScale());
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.HEAD));
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.CHEST));
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.LEGS));
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.FEET));
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.MAINHAND));
-		buffer.writeFloat(this.getDropChance(EntityEquipmentSlot.OFFHAND));
-		ByteBufUtils.writeItemStack(buffer, this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot));
-	}
-
-	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		this.dataManager.set(SIZE_VAR, additionalData.readFloat());
-		this.setHealthScale(additionalData.readDouble());
-		this.setDropChance(EntityEquipmentSlot.HEAD, additionalData.readFloat());
-		this.setDropChance(EntityEquipmentSlot.CHEST, additionalData.readFloat());
-		this.setDropChance(EntityEquipmentSlot.LEGS, additionalData.readFloat());
-		this.setDropChance(EntityEquipmentSlot.FEET, additionalData.readFloat());
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, additionalData.readFloat());
-		this.setDropChance(EntityEquipmentSlot.OFFHAND, additionalData.readFloat());
-		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.PotionSlot, ByteBufUtils.readItemStack(additionalData));
 	}
 
 	public void setArmPose(ECQREntityArmPoses pose) {
@@ -890,36 +872,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return true;
 	}
 
-	public void rescaleHitbox(double multiplierX, double multiplierY) {
-		float h = new Float(this.height * multiplierY);
-		float w = new Float(this.width * multiplierX);
-		this.resizeHitBox(w, h);
-	}
-
-	public void resizeHitBox(float hitboxX, float hitboxY) {
-		if (this.isChild()) {
-			hitboxX *= 0.5D;
-			hitboxY *= 0.5D;
-		}
-		float oldW = this.width;
-		float oldH = this.height;
-		this.height = (float) hitboxY;
-		this.width = (float) hitboxX;
-
-		if (hitboxX < oldW) {
-			// AxisAlignedBB aabb = getEntityBoundingBox();
-			if (!this.world.isRemote) {
-				this.posY += (oldH - this.height) / 2F;
-			}
-		}
-
-		double wHalf = hitboxX / 2D;
-		this.setEntityBoundingBox(new AxisAlignedBB(this.posX - wHalf, this.posY, this.posZ - wHalf, this.posX + wHalf, this.posY + hitboxY, this.posZ + wHalf));
-		super.setSize(hitboxX, hitboxY);
-	}
-
-	public void setHealthScale(double hs) {
-		this.healthScale = hs;
+	public void setHealthScale(double healthScale) {
+		this.healthScale = healthScale;
 	}
 
 	public double getHealthScale() {
@@ -944,11 +898,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public ItemStack getHeldItemWeapon() {
-		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot) : this.getHeldItemMainhand();
+		return this.isHoldingPotion() ? this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION) : this.getHeldItemMainhand();
 	}
 
 	public ItemStack getHeldItemPotion() {
-		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.PotionSlot);
+		return this.isHoldingPotion() ? this.getHeldItemMainhand() : this.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION);
 	}
 
 	public void setSpellTicks(int val) {
@@ -1005,14 +959,28 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.magicArmorCooldown = val;
 		this.setMagicArmorActive(true);
 	}
-	
+
 	public void startSpellDelay() {
-		this.spellDelay = delayBetweenSpells;
+		this.spellDelay = this.delayBetweenSpells;
 		this.readyToCastSpell = false;
 	}
 
 	public boolean isReadyToCastSpell() {
-		return readyToCastSpell;
+		return this.readyToCastSpell;
+	}
+
+	public abstract boolean canOpenDoors();
+
+	public float getDefaultWidth() {
+		return 0.6F;
+	}
+
+	public float getDefaultHeight() {
+		return 1.95F;
+	}
+
+	public void resize(float widthScale, float heightSacle) {
+		this.setSize(this.width * widthScale, this.height * heightSacle);
 	}
 
 }

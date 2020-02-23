@@ -21,8 +21,10 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
+import net.minecraft.client.renderer.entity.layers.LayerCustomHead;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
@@ -62,6 +64,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		if (model instanceof ModelCQRBiped) {
 			this.addLayer(new LayerCQRLeaderFeather(this, ((ModelCQRBiped) model).bipedHead));
 			this.addLayer(new LayerCQRSpeechbubble(this));
+			this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
 		}
 	}
 
@@ -70,8 +73,8 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		if (entitylivingbaseIn.getTextureCount() > 1) {
 			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() + ".png");
 		}
-		double width = this.widthScale * (1.0D + 0.8D * entitylivingbaseIn.getSizeVariation());
-		double height = this.heightScale * (1.0D + entitylivingbaseIn.getSizeVariation());
+		double width = this.widthScale * entitylivingbaseIn.getSizeVariation();
+		double height = this.heightScale * entitylivingbaseIn.getSizeVariation();
 		GL11.glScaled(width, height, width);
 		super.preRenderCallback(entitylivingbaseIn, partialTickTime);
 	}
@@ -199,6 +202,13 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
 		return this.texture;
+	}
+
+	@Override
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
+		this.shadowSize *= ((AbstractEntityCQR) entityIn).getSizeVariation();
+		super.doRenderShadowAndFire(entityIn, x, y, z, yaw, partialTicks);
+		this.shadowSize /= ((AbstractEntityCQR) entityIn).getSizeVariation();
 	}
 
 }

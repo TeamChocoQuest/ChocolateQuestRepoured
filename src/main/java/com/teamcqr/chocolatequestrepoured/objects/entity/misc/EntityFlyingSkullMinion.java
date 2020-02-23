@@ -129,7 +129,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 
 	private void explode(float strengthMultiplier) {
 		if (this.world != null) {
-			if (this.summoner != null) {
+			if (this.summoner != null && !this.summoner.isDead && !this.isDead) {
 				this.world.newExplosion(this.summoner, this.getPosition().getX(), this.getPosition().getY(), this.getPosition().getZ(), 0.5F * strengthMultiplier, true, false);
 			}
 			this.world.spawnParticle(EnumParticleTypes.FLAME, this.getPosition().getX(), this.getPosition().getY() + 0.02, this.getPosition().getZ(), 0.5F, 0.0F, 0.5F, 1);

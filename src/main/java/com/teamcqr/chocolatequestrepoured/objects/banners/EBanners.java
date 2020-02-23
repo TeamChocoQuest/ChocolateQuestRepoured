@@ -49,7 +49,28 @@ public enum EBanners {
 					EBannerPatternsCQ.WALKER_BACKGROUND.getPattern(),
 					EBannerPatternsCQ.WALKER_INNER_BORDER.getPattern(),
 					EBannerPatternsCQ.WALKER_SKULL.getPattern() },
-			new EnumDyeColor[] { EnumDyeColor.WHITE, EnumDyeColor.PURPLE, EnumDyeColor.PURPLE, EnumDyeColor.BLACK, EnumDyeColor.GRAY, EnumDyeColor.BLACK, }, "Abyss Walker Flag");
+			new EnumDyeColor[] { EnumDyeColor.WHITE, EnumDyeColor.PURPLE, EnumDyeColor.PURPLE, EnumDyeColor.BLACK, EnumDyeColor.GRAY, EnumDyeColor.BLACK, }, "Abyss Walker Flag"),
+	
+	GREMLIN_BANNER(EnumDyeColor.GRAY,
+			new BannerPattern[] {
+					EBannerPatternsCQ.CQ_BLANK.getPattern(),
+					BannerPattern.STRIPE_SMALL,
+					BannerPattern.STRIPE_CENTER,
+					BannerPattern.DIAGONAL_RIGHT_MIRROR,
+					BannerPattern.FLOWER,
+					BannerPattern.GRADIENT_UP,
+					BannerPattern.GRADIENT
+			},
+			new EnumDyeColor[] {
+					EnumDyeColor.WHITE,
+					EnumDyeColor.RED,
+					EnumDyeColor.GRAY,
+					EnumDyeColor.GRAY,
+					EnumDyeColor.WHITE,
+					EnumDyeColor.RED,
+					EnumDyeColor.BLACK
+			}, "Gremlins"),
+	;
 
 	private BannerPattern[] patternList;
 	private EnumDyeColor[] colorList;

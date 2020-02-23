@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity;
 
 public enum EntityEquipmentExtraSlot {
 
-	PotionSlot(0), BadgeSlot(1);
+	POTION(0), BADGE(1), ARROW(2);
 
 	private final int index;
 
