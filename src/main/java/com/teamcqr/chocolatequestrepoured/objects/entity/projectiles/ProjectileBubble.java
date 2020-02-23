@@ -3,9 +3,11 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemShield;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -45,6 +47,10 @@ public class ProjectileBubble extends ProjectileBase {
 	@Override
 	public void applyEntityCollision(Entity entityHit) {
 		if (entityHit == this.shooter) {
+			return;
+		}
+		
+		if(entityHit instanceof EntityLiving && ((EntityLiving)entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
 			return;
 		}
 
