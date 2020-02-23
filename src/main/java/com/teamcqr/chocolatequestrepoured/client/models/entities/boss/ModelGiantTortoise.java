@@ -323,32 +323,6 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 		}
 		
 		/*
-		 * Shoot bubbles animation
-		 */
-		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_SHOOT_BUBBLES) {
-			animator.setAnimation(EntityCQRGiantTortoise.ANIMATION_SHOOT_BUBBLES);
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					animator.rotate(jaw, 0, 0, (float) Math.toRadians(33.75));
-				animator.endKeyframe();
-				animator.setStaticKeyframe(5 * turtle.getAnimation().getDuration() / 6);
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					animator.rotate(head, 0, (float)Math.toRadians(11.25), 0);
-				animator.endKeyframe();
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					animator.rotate(head, 0, -(float)Math.toRadians(11.25), 0);
-				animator.endKeyframe();
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					animator.rotate(head, 0, (float)Math.toRadians(11.25), 0);
-				animator.endKeyframe();
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					animator.rotate(head, 0, -(float)Math.toRadians(11.25), 0);
-				animator.endKeyframe();
-				animator.startKeyframe(turtle.getAnimation().getDuration() / 6);
-					//animator.rotate(jaw, 0, 0, -(float)Math.toRadians(33.75));
-			animator.endKeyframe();
-		}
-		
-		/*
 		 * Spin animation
 		 */
 		if(turtle.getAnimation() == EntityCQRGiantTortoise.ANIMATION_SPIN) {
