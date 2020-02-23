@@ -13,10 +13,10 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private Vec3d movementVector;
 	
-	private static final int COOLDOWN = 40;
+	private static final int COOLDOWN = 10;
 	private int cooldown = COOLDOWN /2;
 	private int previousBlocks = 0;
-	private static final int MAX_BLOCKED_SPINS = 4;
+	private static final int MAX_BLOCKED_SPINS = 1;
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -37,6 +37,8 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		cooldown--;
 		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
 			getBoss().setWantsToSpin(true);
+			cooldown = 0;
+			previousBlocks = 0;
 			if(getBoss().isInShell() && getBoss().isReadyToSpin()) {
 				getBoss().setCanBeStunned(false);
 				getBoss().setSpinning(true);
@@ -91,10 +93,10 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			this.getBoss().setStunned(true);
 		}
 		else if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
-			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20 || previousBlocks < getBoss().getSpinsBlocked()) {
+			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20 || previousBlocks != getBoss().getSpinsBlocked()) {
 				calculateVelocity();
 				float damage = 4F;
-				if(previousBlocks < getBoss().getSpinsBlocked()) {
+				if(previousBlocks != getBoss().getSpinsBlocked()) {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
 				}

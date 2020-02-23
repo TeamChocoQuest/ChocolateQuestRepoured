@@ -428,17 +428,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		if(isSpinning()) {
 			boolean blocked = false;
 			if(entityIn instanceof EntityLivingBase) {
-				System.out.println("Collided is living...");
 				if(((EntityLivingBase)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
-					this.setStunned(true);
-					this.setSpinning(false);
-					this.setCanBeStunned(true);
+					//this.setStunned(true);
+					//this.setSpinning(false);
+					//this.setCanBeStunned(true);
 					if(getRNG().nextBoolean()) {
 						spinsBlocked++;
 					}
 					spinsBlocked++;
 					blocked = true;
-					System.out.println("Blocked spins: " + spinsBlocked);
 				}
 			}
 			
