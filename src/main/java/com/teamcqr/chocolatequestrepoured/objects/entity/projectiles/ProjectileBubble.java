@@ -4,10 +4,13 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class ProjectileBubble extends ProjectileBase {
@@ -30,13 +33,23 @@ public class ProjectileBubble extends ProjectileBase {
 		this.isImmuneToFire = true;
 	}
 	
+	protected void onImpact(RayTraceResult result) {
+		if (!this.world.isRemote) {
+			if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+				applyEntityCollision(result.entityHit);
+			}
+
+			super.onImpact(result);
+		}
+	}
+	
 	@Override
 	public void applyEntityCollision(Entity entityHit) {
 		if (entityHit == this.shooter) {
 			return;
 		}
 
-		entityHit.attackEntityFrom(DamageSource.MAGIC, this.damage);
+		entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(shooter, this), this.damage);
 		float pitch = (1.0F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F) * 0.7F;
 		this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_PLAYER_SWIM, SoundCategory.PLAYERS, 4, pitch, true);
 		
