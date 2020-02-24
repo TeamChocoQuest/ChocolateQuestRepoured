@@ -61,6 +61,7 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -82,6 +83,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -114,6 +116,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int delayBetweenSpells = 100;
 	protected int spellDelay = 0;
 	protected int magicArmorCooldown = 300;
+	
+	//Pathing AI stuff
+	protected BlockPos[] pathPoints = new BlockPos[] {};
+	protected boolean pathIsLoop = false;
+	protected int currentTargetPoint = 0;
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
@@ -283,6 +290,18 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
 		compound.setInteger("spellTicks", this.spellTicks);
+		
+		if(pathPoints.length > 0) {
+			NBTTagCompound pathTag = new NBTTagCompound();
+			pathTag.setInteger("pointcount", pathPoints.length);
+			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
+			for(int i = 0; i < this.pathPoints.length; i++) {
+				pathPoints.set(i, NBTUtil.createPosTag(this.pathPoints[i]));
+			}
+			pathTag.setTag("points", pathPoints);
+			
+			compound.setTag("pathingAI", pathTag);
+		}
 	}
 
 	@Override
@@ -317,6 +336,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.healthScale = compound.getDouble("healthScale");
 		if (this.healthScale <= 1.0D) {
 			this.healthScale = 1.0D;
+		}
+		
+		if(compound.hasKey("pathingAI")) {
+			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
+			int pointcount = compound.getInteger("pointcount");
+			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
+			this.pathPoints = new BlockPos[pointcount];
+			for(int i = 0; i < this.pathPoints.length; i++) {
+				this.pathPoints[i] = NBTUtil.getPosFromTag((NBTTagCompound) pathPoints.get(i));
+			}
 		}
 	}
 
@@ -981,6 +1010,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void resize(float widthScale, float heightSacle) {
 		this.setSize(this.width * widthScale, this.height * heightSacle);
+	}
+	
+	public BlockPos[] getGuardPathPoints() {
+		return this.pathPoints;
+	}
+	
+	public boolean isGuardPathLoop() {
+		return this.pathIsLoop;
+	}
+	
+	public int getCurrentGuardPathTargetPoint() {
+		return currentTargetPoint;
+	}
+	
+	public void setCurrentGuardPathTargetPoint(int value) {
+		this.currentTargetPoint = value;
 	}
 
 }
