@@ -196,7 +196,7 @@ public class CQStructurePart extends Template {
 						((EntityLiving) entity).enablePersistence();
 					}
 					if (entity instanceof AbstractEntityCQRBoss) {
-						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon();
+						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(placementIn);
 						((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 					}
 					worldIn.spawnEntity(entity);
