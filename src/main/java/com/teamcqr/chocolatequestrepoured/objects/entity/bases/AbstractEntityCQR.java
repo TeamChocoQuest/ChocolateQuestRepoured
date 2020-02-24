@@ -93,7 +93,7 @@ import net.minecraftforge.items.IItemHandler;
 
 public abstract class AbstractEntityCQR extends EntityCreature implements IMob, IEntityAdditionalSpawnData {
 
-	protected BlockPos homePosition;
+	protected BlockPos homePosition = null;
 	protected UUID leaderUUID;
 	protected EntityLivingBase leader = null;
 	protected boolean holdingPotion;
@@ -1029,6 +1029,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	
 	public void setCurrentGuardPathTargetPoint(int value) {
 		this.currentTargetPoint = value;
+	}
+	
+	public void addPathPoint(BlockPos position) {
+		if(getHomePositionCQR() == null) {
+			setHomePositionCQR(position);
+		}
+		BlockPos[] newPosArr = new BlockPos[this.pathPoints.length +1];
+		for(int i = 0; i < this.pathPoints.length; i++) {
+			newPosArr[i] = this.pathPoints[i];
+		}
+		position = position.subtract(getHomePositionCQR());
+		newPosArr[this.pathPoints.length] = position;
+		this.pathPoints = newPosArr;
+	}
+	
+	public void clearPathPoints() {
+		this.pathPoints = new BlockPos[] {};
 	}
 
 }
