@@ -81,6 +81,8 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.util.Constants;
@@ -804,9 +806,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon() {
+	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings) {
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
+		
+		//Recalculate path points
+		if(this.pathPoints.length > 0) {
+			for(int i = 0; i < this.pathPoints.length; i++) {
+				pathPoints[i] = Template.transformedBlockPos(placementSettings, pathPoints[i]);
+			}
+		}
 	}
 
 	public boolean hasCape() {
