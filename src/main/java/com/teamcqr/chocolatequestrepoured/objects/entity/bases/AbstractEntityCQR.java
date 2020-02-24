@@ -1010,6 +1010,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void resize(float widthScale, float heightSacle) {
 		this.setSize(this.width * widthScale, this.height * heightSacle);
+		if(this.stepHeight * heightSacle >= 1.0) {
+			this.stepHeight *= heightSacle;
+		}
 	}
 	
 	public BlockPos[] getGuardPathPoints() {
