@@ -20,10 +20,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.EnumDifficulty;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
@@ -35,6 +37,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 	private EDungeonMobType mobOverride = null;
 	private int dungeonChunkX = 0;
 	private int dungeonChunkZ = 0;
+	public Rotation rot = Rotation.NONE;
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, @Nullable EnumFacing facing) {
@@ -62,6 +65,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.dungeonChunkX = compound.getInteger("dungeonChunkX");
 			this.dungeonChunkZ = compound.getInteger("dungeonChunkZ");
 		}
+		this.rot = Rotation.values()[compound.getInteger("rot")];
 	}
 
 	@Override
@@ -78,6 +82,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			compound.setInteger("dungeonChunkX", this.dungeonChunkX);
 			compound.setInteger("dungeonChunkZ", this.dungeonChunkZ);
 		}
+		compound.setInteger("rot", this.rot.ordinal());
 		return compound;
 	}
 
@@ -160,7 +165,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				}
 
 				if (this.spawnedInDungeon && entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon();
+					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(new PlacementSettings().setRotation(this.rot));
 				}
 			}
 
