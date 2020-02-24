@@ -147,6 +147,7 @@ public class CQStructurePart extends Template {
 
 			if (tileEntity instanceof TileEntitySpawner) {
 				((TileEntitySpawner) tileEntity).setInDungeon(dungeonChunkX, dungeonChunkZ, dungeonMob);
+				((TileEntitySpawner) tileEntity).rot = placementIn.getRotation();
 			} else {
 				CQRMain.logger.warn("Failed to place spawner at " + transformedPos);
 			}
