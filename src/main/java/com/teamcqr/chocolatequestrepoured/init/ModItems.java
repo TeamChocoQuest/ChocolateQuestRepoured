@@ -36,6 +36,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemGoldenFeather;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshot;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemLongshot;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemMobToSpawner;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemPathTool;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
@@ -255,7 +256,8 @@ public class ModItems {
 	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
-
+	public static final Item PATH_TOOL = Null();
+	
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
 
@@ -381,6 +383,7 @@ public class ModItems {
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
 
 					setItemName(new ItemStructureSelector(), "structure_selector"),
+					setItemName(new ItemPathTool(), "path_tool"),
 					setItemName(new ItemSpawnerConverter(), "spawner_converter") };
 
 			IForgeRegistry<Item> registry = event.getRegistry();
