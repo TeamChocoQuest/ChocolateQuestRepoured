@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -209,6 +210,12 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
+
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SNOW_LAYER);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TORCH);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.OAK_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.IRON_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_WIRE);
 	}
 
 }
