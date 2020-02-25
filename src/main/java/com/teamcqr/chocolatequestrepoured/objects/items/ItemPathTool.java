@@ -107,19 +107,19 @@ public class ItemPathTool extends Item {
 					} else if(i == path.length -1) {
 						particle = EnumParticleTypes.FLAME;
 					}
-					BlockPos pos = path[i];
-					pos = pos.add(0.5, 0.5, 0.5);
+					Vec3d pos = new Vec3d(path[i]);
+					pos = pos.addVector(-0.5, 0.5, -0.5);
 					if(i > 0) {
 						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i-1]));
 						double dist = v.lengthVector();
 						v = v.normalize();
 						//Draw connection lines
 						for(double j = 0.25; j <  dist; j += 0.25) {
-							worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, true, pos.getX() - j * v.x, pos.getY() - j * v.y, pos.getZ() - j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
+							worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, true, pos.x - j * v.x, pos.y - j * v.y, pos.z - j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
 						}
 					}
 						//Draw start point
-					worldIn.spawnParticle(particle, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0, 0.001, 0, 10);
 				}
 			}
 		}
