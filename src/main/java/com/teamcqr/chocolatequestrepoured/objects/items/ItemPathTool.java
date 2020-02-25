@@ -101,23 +101,25 @@ public class ItemPathTool extends Item {
 			//Draw path
 			if(path.length > 0) {
 				for(int i = 0; i < path.length; i++) {
-					BlockPos pos = path[i].add(0, 0.25, 0);
+					EnumParticleTypes particle = EnumParticleTypes.VILLAGER_HAPPY;
+					if(i == 0) {
+						particle = EnumParticleTypes.TOTEM;
+					} else if(i == path.length -1) {
+						particle = EnumParticleTypes.FLAME;
+					}
+					BlockPos pos = path[i].add(0, 0.75, 0);
 					if(i > 0) {
-						//Draw point
-						worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 5);
-						
 						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i-1]));
 						double dist = v.lengthVector();
 						v = v.normalize();
 						v = v.scale(2D);
 						//Draw connection lines
-						for(double j = 0.5; j <  2* dist; j += 1) {
-							worldIn.spawnParticle(EnumParticleTypes.PORTAL, true, pos.getX() + j * v.x, pos.getY() + j * v.y, pos.getZ() + j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
+						for(double j = 0.5; j <  2* dist; j += 0.25) {
+							worldIn.spawnParticle(EnumParticleTypes.PORTAL, true, pos.getX() - j * v.x, pos.getY() - j * v.y, pos.getZ() - j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
 						}
-					} else {
-						//Draw start point
-						worldIn.spawnParticle(EnumParticleTypes.TOTEM, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 10);
 					}
+						//Draw start point
+					worldIn.spawnParticle(particle, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 10);
 				}
 			}
 		}
