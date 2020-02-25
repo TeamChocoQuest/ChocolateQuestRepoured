@@ -114,7 +114,7 @@ public class ItemPathTool extends Item {
 						double dist = v.lengthVector();
 						v = v.normalize();
 						//Draw connection lines
-						for(double j = 0.25; j <  dist; j += 0.25) {
+						for(double j = 0.25; j <  dist; j += 0.5) {
 							worldIn.spawnParticle(EnumParticleTypes.CRIT_MAGIC, true, pos.x - j * v.x, pos.y - j * v.y, pos.z - j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
 						}
 					}
