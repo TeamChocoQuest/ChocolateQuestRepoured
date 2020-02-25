@@ -41,8 +41,8 @@ public class ItemPathTool extends Item {
 		 */
 		if(!player.world.isRemote) {
 			CapabilityPathTool capa = stack.getCapability(CapabilityPathToolProvider.PATH_TOOL, null);
-			if(entity instanceof AbstractEntityCQR && capa.getPathPoints().length > 0) {
-				if(player.isSneaking()) {
+			if(entity instanceof AbstractEntityCQR) {
+				if(player.isSneaking() && capa.getPathPoints().length > 0) {
 					((AbstractEntityCQR)entity).setPath(capa.getPathPoints());
 					//((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.VILLAGER_HAPPY, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 				} else {
