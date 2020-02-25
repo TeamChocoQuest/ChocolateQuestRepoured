@@ -285,19 +285,34 @@ public class CQStructure {
 		}
 		*/
 
-		NBTTagList nbtTagList = compound.getTagList("parts", 9);
-		for (int i = 0; i < nbtTagList.tagCount(); i++) {
-			NBTTagList nbtTagList1 = (NBTTagList) nbtTagList.get(i);
-			List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<>(nbtTagList1.tagCount());
-			for (int j = 0; j < nbtTagList1.tagCount(); j++) {
-				NBTTagCompound partCompound = nbtTagList1.getCompoundTagAt(j);
+		// compatibility with older version for now
+		if (compound.getString("cqr_file_version").equals("1.0.0")) {
+			NBTTagList nbtTagList = compound.getTagList("parts", 10);
+			List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<>(nbtTagList.tagCount());
+			for (int i = 0; i < nbtTagList.tagCount(); i++) {
+				NBTTagCompound partCompound = nbtTagList.getCompoundTagAt(i);
 				BlockPos offset = NBTUtil.getPosFromTag(partCompound.getCompoundTag("offset"));
 				CQStructurePart structurePart = new CQStructurePart();
 
 				structurePart.read(partCompound);
-				list.add(new SimpleEntry<>(offset, structurePart));
+				list.add(new AbstractMap.SimpleEntry(offset, structurePart));
 			}
 			this.structures.add(list);
+		} else {
+			NBTTagList nbtTagList = compound.getTagList("parts", 9);
+			for (int i = 0; i < nbtTagList.tagCount(); i++) {
+				NBTTagList nbtTagList1 = (NBTTagList) nbtTagList.get(i);
+				List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<>(nbtTagList1.tagCount());
+				for (int j = 0; j < nbtTagList1.tagCount(); j++) {
+					NBTTagCompound partCompound = nbtTagList1.getCompoundTagAt(j);
+					BlockPos offset = NBTUtil.getPosFromTag(partCompound.getCompoundTag("offset"));
+					CQStructurePart structurePart = new CQStructurePart();
+
+					structurePart.read(partCompound);
+					list.add(new SimpleEntry<>(offset, structurePart));
+				}
+				this.structures.add(list);
+			}
 		}
 	}
 
