@@ -108,7 +108,7 @@ public class ItemPathTool extends Item {
 						particle = EnumParticleTypes.FLAME;
 					}
 					Vec3d pos = new Vec3d(path[i]);
-					pos = pos.addVector(-0.5, 0.5, -0.5);
+					pos = pos.addVector(0.5, 0.5, 0.5);
 					if(i > 0) {
 						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i-1]));
 						double dist = v.lengthVector();
@@ -119,7 +119,10 @@ public class ItemPathTool extends Item {
 						}
 					}
 						//Draw start point
-					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0, 0.001, 0, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0.2, 0.1, 0.2, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0.2, 0.1, -0.2, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, -0.2, 0.1, 0.2, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, -0.2, 0.1, -0.2, 10);
 				}
 			}
 		}
