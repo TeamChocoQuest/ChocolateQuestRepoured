@@ -112,7 +112,7 @@ public class ItemPathTool extends Item {
 						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i-1]));
 						double dist = v.lengthVector();
 						v = v.normalize();
-						v = v.scale(2D);
+						v = v.scale(0.25D);
 						//Draw connection lines
 						for(double j = 0.25; j <  4* dist; j += 0.25) {
 							worldIn.spawnParticle(EnumParticleTypes.PORTAL, true, pos.getX() - j * v.x, pos.getY() - j * v.y, pos.getZ() - j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
