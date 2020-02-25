@@ -66,7 +66,7 @@ public class Structure {
 			NBTTagList nbtTagList2 = (NBTTagList) nbtTagList1.get(i);
 			List<IStructure> partList = new ArrayList<>(nbtTagList2.tagCount());
 			for (int j = 0; j < nbtTagList2.tagCount(); j++) {
-				partList.add(this.createFromNBT(compound));
+				partList.add(this.createFromNBT(nbtTagList2.getCompoundTagAt(j)));
 			}
 			this.list.add(partList);
 		}
