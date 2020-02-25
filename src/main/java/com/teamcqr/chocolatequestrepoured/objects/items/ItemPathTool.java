@@ -15,7 +15,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -87,6 +89,37 @@ public class ItemPathTool extends Item {
 			}
 		} else {
 			tooltip.add("No Path stored");
+		}
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		if(isSelected && entityIn instanceof EntityPlayer && entityIn.world.isRemote) {
+			CapabilityPathTool capa = stack.getCapability(CapabilityPathToolProvider.PATH_TOOL, null);
+			BlockPos[] path = capa.getPathPoints();
+			//Draw path
+			if(path.length > 0) {
+				for(int i = 0; i < path.length; i++) {
+					BlockPos pos = path[i].add(0, 0.25, 0);
+					if(i > 0) {
+						//Draw point
+						worldIn.spawnParticle(EnumParticleTypes.VILLAGER_HAPPY, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 5);
+						
+						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i-1]));
+						double dist = v.lengthVector();
+						v = v.normalize();
+						v = v.scale(2D);
+						//Draw connection lines
+						for(double j = 0.5; j <  2* dist; j += 1) {
+							worldIn.spawnParticle(EnumParticleTypes.PORTAL, true, pos.getX() + j * v.x, pos.getY() + j * v.y, pos.getZ() + j * v.z, v.x * 0.1, v.y * 0.1, v.z * 0.1, 3);
+						}
+					} else {
+						//Draw start point
+						worldIn.spawnParticle(EnumParticleTypes.TOTEM, true, pos.getX(), pos.getY(), pos.getZ(), 0, 0.001, 0, 10);
+					}
+				}
+			}
 		}
 	}
 	
