@@ -1,9 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.capability.pathtool.CapabilityPathTool;
 import com.teamcqr.chocolatequestrepoured.capability.pathtool.CapabilityPathToolProvider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -74,6 +77,18 @@ public class ItemPathTool extends Item {
 		return EnumActionResult.SUCCESS;
 	}
 	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		CapabilityPathTool capability = stack.getCapability(CapabilityPathToolProvider.PATH_TOOL, null);
+		if(capability.getPathPoints().length > 0) {
+			tooltip.add("Path points: ");
+			for(int i = 0; i < capability.getPathPoints().length; i++) {
+				tooltip.add("  - " + capability.getPathPoints()[i].toString());
+			}
+		} else {
+			tooltip.add("No Path stored");
+		}
+	}
 	
 	/*
 	 * Methods to edit capability
