@@ -300,7 +300,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			pathTag.setInteger("pointcount", pathPoints.length);
 			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < this.pathPoints.length; i++) {
-				pathPoints.set(i, NBTUtil.createPosTag(this.pathPoints[i]));
+				pathPoints.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
 			}
 			pathTag.setTag("points", pathPoints);
 			
@@ -348,7 +348,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
 			this.pathPoints = new BlockPos[pointcount];
 			for(int i = 0; i < this.pathPoints.length; i++) {
-				this.pathPoints[i] = NBTUtil.getPosFromTag((NBTTagCompound) pathPoints.get(i));
+				this.pathPoints[i] = NBTUtil.getPosFromTag(pathPoints.getCompoundTagAt(i));
 			}
 		}
 	}
