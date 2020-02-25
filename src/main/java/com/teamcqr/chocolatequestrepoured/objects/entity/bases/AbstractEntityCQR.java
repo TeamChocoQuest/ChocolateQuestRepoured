@@ -22,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
@@ -252,8 +253,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(9, new EntityAIBackstab(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(16, new EntityAISearchMount(this));
+		this.tasks.addTask(16, new EntityAIFollowPath(this));
 		this.tasks.addTask(17, new EntityAITameAndLeashPet(this));
+		this.tasks.addTask(18, new EntityAISearchMount(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this));
 
