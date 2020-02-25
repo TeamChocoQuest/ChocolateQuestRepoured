@@ -20,7 +20,7 @@ public class CapabilityPathToolStorage implements IStorage<CapabilityPathTool> {
 			compound.setInteger("pointcount", points.length);
 			NBTTagList pathPoints = compound.getTagList("points", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < points.length; i++) {
-				pathPoints.set(i, NBTUtil.createPosTag(points[i]));
+				pathPoints.appendTag(NBTUtil.createPosTag(points[i]));
 			}
 			compound.setTag("points", pathPoints);
 		}
@@ -35,7 +35,7 @@ public class CapabilityPathToolStorage implements IStorage<CapabilityPathTool> {
 			int points = compound.getInteger("pointcount");
 			final BlockPos[] path = new BlockPos[points];
 			for(int i = 0; i < points; i++) {
-				path[i] = NBTUtil.getPosFromTag((NBTTagCompound) pathPoints.get(i));
+				path[i] = NBTUtil.getPosFromTag((NBTTagCompound) pathPoints.getCompoundTagAt(i));
 			}
 			instance.setPathPoints(path);
 		}
