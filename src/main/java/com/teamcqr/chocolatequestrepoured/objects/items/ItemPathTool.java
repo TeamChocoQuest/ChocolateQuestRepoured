@@ -119,7 +119,7 @@ public class ItemPathTool extends Item {
 						}
 					}
 						//Draw start point
-					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0.0, 0.1, 0.0, 10);
+					worldIn.spawnParticle(particle, true, pos.x, pos.y, pos.z, 0.0, 0.025, 0.0, 10);
 				}
 			}
 		}
