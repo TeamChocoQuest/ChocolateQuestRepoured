@@ -7,19 +7,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class StructurePart {
+public class StructurePart implements IStructure {
 
-	private CQStructurePart part = null;
-	private PlacementSettings settings = new PlacementSettings();
-	private BlockPos pos = new BlockPos(0, 0, 0);
-	private int dungeonChunkX = 0;
-	private int dungeonChunkZ = 0;
-	private EDungeonMobType dungeonMobType = EDungeonMobType.DEFAULT;
-	private boolean replaceBanners = false;
-	private EBanners dungeonBanner = EBanners.WALKER_BANNER;
-	private boolean hasShield = false;
+	private CQStructurePart part;
+	private PlacementSettings settings;
+	private BlockPos pos;
+	private int dungeonChunkX;
+	private int dungeonChunkZ;
+	private EDungeonMobType dungeonMobType;
+	private boolean replaceBanners;
+	private EBanners dungeonBanner;
+	private boolean hasShield;
 
 	public StructurePart(NBTTagCompound compound) {
 		this.readFromNBT(compound);
@@ -37,10 +38,21 @@ public class StructurePart {
 		this.hasShield = hasShield;
 	}
 
+	@Override
+	public void generate(World world) {
+		this.part.addBlocksToWorld(world, this.pos, this.settings, this.dungeonChunkX, this.dungeonChunkZ, this.dungeonMobType, this.replaceBanners, this.dungeonBanner, this.hasShield);
+	}
+
+	@Override
+	public boolean canGenerate(World world) {
+		return world.isAreaLoaded(this.pos, this.pos.add(this.part.getSize().rotate(this.settings.getRotation())));
+	}
+
+	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
-		NBTTagCompound partCompound = this.part.writeToNBT(new NBTTagCompound());
-		compound.setTag("part", partCompound);
+		compound.setString("id", "structurePart");
+		compound.setTag("part", this.part.writeToNBT(new NBTTagCompound()));
 		compound.setInteger("rot", this.settings.getRotation().ordinal());
 		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
 		compound.setInteger("dungeonChunkX", this.dungeonChunkX);
@@ -52,6 +64,7 @@ public class StructurePart {
 		return compound;
 	}
 
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		this.part = new CQStructurePart();
 		this.part.read(compound.getCompoundTag("part"));
@@ -65,6 +78,7 @@ public class StructurePart {
 		this.hasShield = compound.getBoolean("hasShield");
 	}
 
+	/*
 	public CQStructurePart getPart() {
 		return this.part;
 	}
@@ -100,5 +114,6 @@ public class StructurePart {
 	public boolean isHasShield() {
 		return this.hasShield;
 	}
+	*/
 
 }

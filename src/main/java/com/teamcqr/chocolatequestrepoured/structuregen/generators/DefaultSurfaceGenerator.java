@@ -1,8 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
+import com.teamcqr.chocolatequestrepoured.structuregen.StructurePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.SupportHillPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -25,6 +30,8 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DefaultSurfaceDungeon dungeon;
+	private List<SupportHillPart> supportHillParts;
+	private List<List<StructurePart>> structureParts;
 
 	public DefaultSurfaceGenerator(DefaultSurfaceDungeon dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
@@ -64,14 +71,14 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 			}
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), sizeX, sizeZ, EPosType.DEFAULT);
+			this.supportHillParts = supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), sizeX, sizeZ, EPosType.DEFAULT);
 		}
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
 		// Simply puts the structure at x,y,z
-		this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
+		this.structureParts = this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
 
 		/*
 		 * List<String> bosses = new ArrayList<>();
@@ -87,7 +94,12 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
-		// Does nothing here
+		Structure structure = new Structure(world);
+		structure.addList(this.supportHillParts);
+		for (List<StructurePart> list : this.structureParts) {
+			structure.addList(list);
+		}
+		DungeonGenerationHandler.addStructure(world, structure);
 	}
 
 	@Override

@@ -6,18 +6,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.structuregen.StructurePart;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 
 /**
  * Copyright (c) 29.04.2019
@@ -36,7 +38,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  */
 public class CQStructure {
 
-	public static final String CQR_FILE_VERSION = "1.0.0";
+	public static final String CQR_FILE_VERSION = "1.0.1";
 	public static final List<Thread> RUNNING_EXPORT_THREADS = new ArrayList<Thread>();
 	private static final Comparator<Entry<BlockPos, CQStructurePart>> SORTER = new Comparator<Entry<BlockPos, CQStructurePart>>() {
 		@Override
@@ -59,10 +61,11 @@ public class CQStructure {
 			return 0;
 		}
 	};
-	private final HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
+	// private final HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
 	private final File file;
 	private String author = "DerToaster98";
 	private BlockPos size = new BlockPos(0, 0, 0);
+	private final List<List<Map.Entry<BlockPos, CQStructurePart>>> structures = new ArrayList<>();
 
 	public CQStructure(String name) {
 		this.file = new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt");
@@ -80,6 +83,7 @@ public class CQStructure {
 		this.size = new BlockPos(endPos1.getX() - startPos1.getX(), endPos1.getY() - startPos1.getY(), endPos1.getZ() - startPos1.getZ());
 		this.structures.clear();
 
+		List<Map.Entry<BlockPos, CQStructurePart>> list = new ArrayList<>();
 		if (usePartMode && (this.size.getX() > 16 || this.size.getY() > 16 || this.size.getZ() > 16)) {
 			int xIterations = this.size.getX() / 16;
 			int yIterations = this.size.getY() / 16;
@@ -94,19 +98,27 @@ public class CQStructure {
 						int z1 = z == zIterations ? endPos1.getZ() - partStartPos.getZ() : 16;
 
 						CQStructurePart structurePart = new CQStructurePart();
-						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1));
-						this.structures.put(partStartPos.subtract(startPos1), structurePart);
+						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1), false);
+						list.add(new AbstractMap.SimpleEntry(partStartPos.subtract(startPos1), structurePart));
 					}
 				}
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
-			structure.takeBlocksFromWorld(worldIn, startPos1, this.size);
-			this.structures.put(BlockPos.ORIGIN, structure);
+			structure.takeBlocksFromWorld(worldIn, startPos1, this.size, false);
+			list.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
 		}
+		this.structures.add(list);
+		
+
+		List<Map.Entry<BlockPos, CQStructurePart>> list1 = new ArrayList<>();
+		CQStructurePart structure = new CQStructurePart();
+		structure.takeBlocksFromWorld(worldIn, startPos1, this.size, true);
+		list1.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
+		this.structures.add(list1);
 	}
 
-	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, EPosType posType, DungeonBase dungeon, int dungeonChunkX, int dungeonChunkZ) {
+	public List<List<StructurePart>> addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, EPosType posType, DungeonBase dungeon, int dungeonChunkX, int dungeonChunkZ) {
 		// X and Z values are the lower ones of the positions ->
 		// N-S ->
 		// E-W ->
@@ -139,6 +151,7 @@ public class CQStructure {
 		EBanners dungeonBanner = dungeonMobType.getBanner();
 		boolean hasShield = dungeon.isProtectedFromModifications();
 
+		/*
 		int j = 0;
 		List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<Entry<BlockPos, CQStructurePart>>(this.structures.entrySet());
 		list.sort(SORTER);
@@ -155,6 +168,17 @@ public class CQStructure {
 				DungeonGenerationHandler.addCQStructurePart(worldIn, structure, placementIn, pastePos, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
 			}
 		}
+		*/
+
+		List<List<StructurePart>> list = new ArrayList<>(this.structures.size());
+		for (List<Entry<BlockPos, CQStructurePart>> list1 : this.structures) {
+			List<StructurePart> list2 = new ArrayList<>(list1.size());
+			for (Entry<BlockPos, CQStructurePart> entry : list1) {
+				list2.add(new StructurePart(entry.getValue(), placementIn, pos.add(Template.transformedBlockPos(placementIn, entry.getKey())), dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield));
+			}
+			list.add(list2);
+		}
+		return list;
 	}
 
 	public void writeToFile(EntityPlayer author) {
@@ -207,6 +231,7 @@ public class CQStructure {
 		compound.setString("author", this.author);
 		compound.setTag("size", NBTUtil.createPosTag(this.size));
 
+		/*
 		NBTTagList nbtTagList = new NBTTagList();
 		for (Entry<BlockPos, CQStructurePart> entry : this.structures.entrySet()) {
 			BlockPos offset = entry.getKey();
@@ -216,6 +241,23 @@ public class CQStructure {
 			partCompound.setTag("offset", NBTUtil.createPosTag(offset));
 			structurePart.writeToNBT(partCompound);
 			nbtTagList.appendTag(partCompound);
+		}
+		compound.setTag("parts", nbtTagList);
+		*/
+
+		NBTTagList nbtTagList = new NBTTagList();
+		for (List<Entry<BlockPos, CQStructurePart>> list : this.structures) {
+			NBTTagList nbtTagList1 = new NBTTagList();
+			for (Entry<BlockPos, CQStructurePart> entry : list) {
+				BlockPos offset = entry.getKey();
+				CQStructurePart structurePart = entry.getValue();
+				NBTTagCompound partCompound = new NBTTagCompound();
+
+				partCompound.setTag("offset", NBTUtil.createPosTag(offset));
+				structurePart.writeToNBT(partCompound);
+				nbtTagList1.appendTag(partCompound);
+			}
+			nbtTagList.appendTag(nbtTagList1);
 		}
 		compound.setTag("parts", nbtTagList);
 
@@ -231,6 +273,7 @@ public class CQStructure {
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 		this.structures.clear();
 
+		/*
 		NBTTagList nbtTagList = compound.getTagList("parts", 10);
 		for (int i = 0; i < nbtTagList.tagCount(); i++) {
 			NBTTagCompound partCompound = nbtTagList.getCompoundTagAt(i);
@@ -239,6 +282,22 @@ public class CQStructure {
 
 			structurePart.read(partCompound);
 			this.structures.put(offset, structurePart);
+		}
+		*/
+
+		NBTTagList nbtTagList = compound.getTagList("parts", 9);
+		for (int i = 0; i < nbtTagList.tagCount(); i++) {
+			NBTTagList nbtTagList1 = (NBTTagList) nbtTagList.get(i);
+			List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<>(nbtTagList1.tagCount());
+			for (int j = 0; j < nbtTagList1.tagCount(); j++) {
+				NBTTagCompound partCompound = nbtTagList1.getCompoundTagAt(j);
+				BlockPos offset = NBTUtil.getPosFromTag(partCompound.getCompoundTag("offset"));
+				CQStructurePart structurePart = new CQStructurePart();
+
+				structurePart.read(partCompound);
+				list.add(new SimpleEntry<>(offset, structurePart));
+			}
+			this.structures.add(list);
 		}
 	}
 

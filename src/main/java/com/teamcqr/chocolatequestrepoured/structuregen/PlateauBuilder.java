@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -22,7 +24,7 @@ public class PlateauBuilder {
 
 	Block structureBlock = Blocks.STONE;
 	Block structureTopBlock = Blocks.GRASS;
-	private static final int TOP_LAYER_HEIGHT = 1;
+	public static final int TOP_LAYER_HEIGHT = 1;
 
 	public int wallSize = CQRConfig.general.supportHillWallSize;
 
@@ -31,7 +33,7 @@ public class PlateauBuilder {
 		this.structureTopBlock = top;
 	}
 
-	public void createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+	public List<SupportHillPart> createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
 		BlockPos pos = startPos;
 		switch (posType) {
 		case CENTER_XZ_LAYER:
@@ -49,7 +51,7 @@ public class PlateauBuilder {
 		default:
 			break;
 		}
-		this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
+		return this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
 
 	// Coordinates are the N_W Corner!!
@@ -63,6 +65,7 @@ public class PlateauBuilder {
 	 * 
 	 * Note: Forge allows async threads modifying things of main thread
 	 */
+	/*
 	private void generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
@@ -108,6 +111,27 @@ public class PlateauBuilder {
 				}
 			}
 		}
+	}
+	*/
+
+	private List<SupportHillPart> generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
+		sizeX += this.wallSize * 2;
+		sizeZ += this.wallSize * 2;
+
+		startX -= this.wallSize;
+		startZ -= this.wallSize;
+
+		int xIterations = sizeX / 16;
+		int zIterations = sizeZ / 16;
+
+		List<SupportHillPart> list = new ArrayList<>(xIterations * zIterations);
+		for (int x = 0; x <= xIterations; x++) {
+			for (int z = 0; z <= zIterations; z++) {
+				SupportHillPart part = new SupportHillPart(new BlockPos(startX, startY, startZ), sizeX, sizeZ, startX + 16 * x, startZ + 16 * z, x == xIterations ? sizeX % 16 : 16, z == zIterations ? sizeZ % 16 : 16, this.wallSize, this.structureBlock, this.structureTopBlock);
+				list.add(part);
+			}
+		}
+		return list;
 	}
 
 	// These methods are used to dig out random caves
