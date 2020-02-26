@@ -71,7 +71,7 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 			}
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			this.supportHillParts = supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), sizeX, sizeZ, EPosType.DEFAULT);
+			this.supportHillParts = supportBuilder.createSupportHillList(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), sizeX, sizeZ, EPosType.DEFAULT);
 		}
 	}
 
