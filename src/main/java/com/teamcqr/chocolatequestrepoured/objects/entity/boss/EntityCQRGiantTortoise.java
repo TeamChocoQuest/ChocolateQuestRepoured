@@ -20,6 +20,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -29,6 +30,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemShield;
 import net.minecraft.nbt.NBTTagCompound;
@@ -377,7 +379,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void breakBlocksInWay() {
 		for(BlockPos pos : BlockPos.getAllInBoxMutable(getPosition().add(this.width +1, this.height, this.width +1), getPosition().add(-this.width -1, -1, -this.width -1))) {
-			if(!world.getBlockState(pos).getBlock().isCollidable()) {
+			Block block = world.getBlockState(pos).getBlock();
+			if(!block.isCollidable() && !(block == Blocks.FLOWING_WATER || block == Blocks.WATER || block == Blocks.FLOWING_LAVA || block == Blocks.LAVA)) {
 				world.setBlockToAir(pos);
 			}
 		}
