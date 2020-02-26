@@ -20,6 +20,7 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.AnimationHandler;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -29,6 +30,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemShield;
 import net.minecraft.nbt.NBTTagCompound;
@@ -37,7 +39,9 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
@@ -250,16 +254,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-		partSoundFlag = true;
 		return this.attackEntityFrom(source, damage, true);
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		if(source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
 		}
+		partSoundFlag = sentFromPart;
 		
 		if(source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
 			if(getRNG().nextBoolean() && !sentFromPart) {
@@ -370,6 +374,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 
 		this.alignParts();
+		this.breakBlocksInWay();
+	}
+
+	private void breakBlocksInWay() {
+		for(BlockPos pos : BlockPos.getAllInBoxMutable(getPosition().add(this.width +1, this.height, this.width +1), getPosition().add(-this.width -1, -1, -this.width -1))) {
+			Block block = world.getBlockState(pos).getBlock();
+			if((!block.isCollidable() || block.isPassable(world, pos)) && !(block == Blocks.FLOWING_WATER || block == Blocks.WATER || block == Blocks.FLOWING_LAVA || block == Blocks.LAVA)) {
+				world.setBlockToAir(pos);
+			}
+		}
 	}
 
 	private void alignParts() {
@@ -460,6 +474,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.motionY = v.y +0.25;
 				this.motionZ = -v.z;
 				this.velocityChanged = true;
+				
+				world.playSound(posX, posY, posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 			}
 		} else {
 			super.collideWithEntity(entityIn);

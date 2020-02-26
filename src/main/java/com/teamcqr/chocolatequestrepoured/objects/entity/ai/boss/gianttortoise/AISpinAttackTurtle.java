@@ -35,7 +35,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public boolean shouldExecute() {
 		cooldown--;
-		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
+		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0 && !getBoss().isHealing()) {
 			getBoss().setWantsToSpin(true);
 			cooldown = 0;
 			previousBlocks = 0;
@@ -53,7 +53,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead;
+		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && !getBoss().isHealing();
 	}
 	
 	private void calculateVelocity() {
@@ -69,7 +69,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean isInterruptible() {
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -100,14 +100,16 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
 				}
-				getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+				if(!getBoss().collidedHorizontally) {
+					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+				}
 			}
 			this.getBoss().setSpinning(true);
 			this.getBoss().setCanBeStunned(false);
 			this.getBoss().setInShell(true);
 			getBoss().motionX = movementVector.x;
 			getBoss().motionZ = movementVector.z;
-			getBoss().motionY = 3* movementVector.y /2;
+			getBoss().motionY = 0.25* movementVector.y;
 			getBoss().velocityChanged = true;
 		} else if(getBoss().getAnimationTick() < 20) {
 			this.getBoss().setSpinning(false);
