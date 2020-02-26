@@ -380,7 +380,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private void breakBlocksInWay() {
 		for(BlockPos pos : BlockPos.getAllInBoxMutable(getPosition().add(this.width +1, this.height, this.width +1), getPosition().add(-this.width -1, -1, -this.width -1))) {
 			Block block = world.getBlockState(pos).getBlock();
-			if(!block.isCollidable() && !(block == Blocks.FLOWING_WATER || block == Blocks.WATER || block == Blocks.FLOWING_LAVA || block == Blocks.LAVA)) {
+			if((!block.isCollidable() || block.isPassable(world, pos)) && !(block == Blocks.FLOWING_WATER || block == Blocks.WATER || block == Blocks.FLOWING_LAVA || block == Blocks.LAVA)) {
 				world.setBlockToAir(pos);
 			}
 		}
