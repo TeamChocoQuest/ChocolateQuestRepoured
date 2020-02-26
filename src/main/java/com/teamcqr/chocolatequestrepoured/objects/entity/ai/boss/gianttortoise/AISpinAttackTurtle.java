@@ -35,7 +35,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public boolean shouldExecute() {
 		cooldown--;
-		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0) {
+		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0 && !getBoss().isHealing()) {
 			getBoss().setWantsToSpin(true);
 			cooldown = 0;
 			previousBlocks = 0;
@@ -53,7 +53,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead;
+		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && !getBoss().isHealing();
 	}
 	
 	private void calculateVelocity() {
