@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -94,7 +95,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	// DONE: add noise in crater like in new version that is too slow
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// X Y Z mark the C E N T E R / Middle of the crater!!!!
 		this.centerLoc = new BlockPos(x, y, z);
 
@@ -329,7 +330,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.doBuildDungeon()) {
 			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
 			Runnable strongholdTask = new Runnable() {
@@ -357,12 +358,12 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Fill chests on path
 		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		final int[] chestIDs = this.dungeon.getChestIDs();
@@ -396,7 +397,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Place spawners for dwarves/golems/whatever on path
 		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		Runnable placeSpawnerTask = new Runnable() {
@@ -412,7 +413,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.isCoverBlockEnabled()) {
 			List<BlockPos> coverBlocks = new ArrayList<>();
 

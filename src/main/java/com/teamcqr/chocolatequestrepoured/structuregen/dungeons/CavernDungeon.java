@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CavernGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -113,6 +114,7 @@ public class CavernDungeon extends DungeonBase {
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
 
+		List<List<? extends IStructure>> lists = new ArrayList<>();
 		List<CavernGenerator> caves = new ArrayList<CavernGenerator>();
 		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
 		HashMap<CavernGenerator, Integer> zMap = new HashMap<CavernGenerator, Integer>();
@@ -142,7 +144,7 @@ public class CavernDungeon extends DungeonBase {
 			// Let the cave calculate its air blocks...
 			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random),
 					DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, random));
-			cave.preProcess(world, chunk, x + distance.getX(), y, z + distance.getZ());
+			cave.preProcess(world, chunk, x + distance.getX(), y, z + distance.getZ(), lists);
 
 			distance = new Vec3i(0, 0, 0);
 			int vLength = DungeonGenUtils.getIntBetweenBorders(this.minRoomDistance, this.maxRoomDistance, random);
@@ -160,7 +162,7 @@ public class CavernDungeon extends DungeonBase {
 		for (int i = 0; i < caves.size(); i++) {
 			CavernGenerator cave = caves.get(i);
 			// Dig out the cave...
-			cave.buildStructure(world, chunk, xMap.get(cave), y - 1, zMap.get(cave));
+			cave.buildStructure(world, chunk, xMap.get(cave), y - 1, zMap.get(cave), lists);
 
 			// connect the tunnels
 			cave.generateTunnel(centerLoc.add(0, 1, 0), cave.getCenter(), world);
@@ -171,12 +173,12 @@ public class CavernDungeon extends DungeonBase {
 			// Place a loot chest....
 			if (this.lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
 				world.setBlockState(cave.getCenter().add(0, -4, 0), Blocks.CHEST.getDefaultState());
-				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() - 4, cave.getCenter().getZ());
+				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() - 4, cave.getCenter().getZ(), lists);
 			}
 
 			// Place a spawner...
 			if (this.placeSpawners) {
-				cave.placeSpawners(world, chunk, cave.getCenter().getX(), y, cave.getCenter().getZ());
+				cave.placeSpawners(world, chunk, cave.getCenter().getX(), y, cave.getCenter().getZ(), lists);
 			}
 		}
 		Random rdmCI = new Random();

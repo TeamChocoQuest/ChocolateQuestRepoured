@@ -1,12 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -47,7 +51,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Calculate the grid for the buildings
 		int rowsX = this.dungeon.getXRows();
 		int rowsZ = this.dungeon.getZRows();
@@ -85,7 +89,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Dig out the big air pocket or the small ones
 		if (this.dungeon.makeSpaceForBuildings()) {
 			/*
@@ -167,7 +171,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Place the buildings
 		// Random rdm = new Random();
 
@@ -203,7 +207,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					}
 				});
 
-				centralStructure.addBlocksToWorld(world, new BlockPos(x, y + 1, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
+				for (List<? extends IStructure> list : centralStructure.addBlocksToWorld(world, new BlockPos(x, y + 1, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
+					lists.add(list);
 			}
 		}
 		CQStructure structure = null;
@@ -238,7 +243,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				 * bosses.add(id.toString());
 				 * }
 				 */
-				structure.addBlocksToWorld(world, centerPos.add(0, 1, 0), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
+				for (List<? extends IStructure> list : structure.addBlocksToWorld(world, centerPos.add(0, 1, 0), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
+					lists.add(list);
 			}
 		}
 		BlockPos posLower = new BlockPos(this.minX - this.dungeon.getDistanceBetweenBuildingCenters(), y, this.minZ - this.dungeon.getDistanceBetweenBuildingCenters());
@@ -254,12 +260,12 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// UNUSED HERE
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Maybe place some ghast spawners over the city and a nether dragon? -> Complete factory first
 		if (this.dungeon.placeSpawnersAboveBuildings()) {
 			int spawnerY = y + (new Double(this.dungeon.getCaveHeight() * 0.9).intValue());
@@ -297,7 +303,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// UNUSED HERE, it would place blocks above the nether
 	}
 

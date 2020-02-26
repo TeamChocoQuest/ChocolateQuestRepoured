@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
@@ -42,7 +43,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		Random rdm = new Random();
 		long seed = WorldDungeonGenerator.getSeed(world, chunk.x + y * x - z, chunk.z + y * z + x);
 		rdm.setSeed(seed);
@@ -76,44 +77,44 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Builds the platforms
 		// Builds the chains
 		// TODO: Methods to get central buildings
 		BlockPos center = new BlockPos(x, y, z);
 		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure());
 		center = new BlockPos(center.getX() - censtruct.getSize().getX(), y, center.getZ() - censtruct.getSize().getZ());
-		this.buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center));
+		this.buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center), lists);
 
 		for (BlockPos bp : this.structureMap.keySet()) {
 			CQStructure structure = new CQStructure(this.structureMap.get(bp));
 			BlockPos pastePos = bp.subtract(structure.getSize());
 			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());
 
-			this.buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp));
+			this.buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp), lists);
 		}
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Builds the structures
 
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Unused
 
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Unused
 
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Unused or maybe later implemented
 
 	}
@@ -164,7 +165,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	 * # # # # # # # # 3 4
 	 * 
 	 */
-	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk) {
+	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
 		int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
 
 		// r = sqrt(((Longer side of building) / 2)^2 *2) +5
@@ -190,7 +191,8 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 		center = center.add(0, 1, 0);
 
-		structure.addBlocksToWorld(world, center, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
+		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, center, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
+			lists.add(list);
 
 		/*
 		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, pos, new BlockPos(structure.getSizeAsVec()), world);

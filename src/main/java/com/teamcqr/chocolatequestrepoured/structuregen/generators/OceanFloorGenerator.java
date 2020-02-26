@@ -1,7 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.List;
 import java.util.Random;
 
+import org.omg.CosNaming.IstringHelper;
+
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
@@ -34,19 +38,21 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Builds the support hill;
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y, z), this.structure.getSize().getX(), this.structure.getSize().getZ(), EPosType.DEFAULT);
+			lists.add(supportBuilder.createSupportHillList(new Random(), world, new BlockPos(x, y, z), this.structure.getSize().getX(), this.structure.getSize().getZ(), EPosType.DEFAULT));
 		}
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Simply puts the structure at x,y,z
-		this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z);
+		for (List<? extends IStructure> list : this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z))
+			lists.add(list);
+
 		/*
 		 * List<String> bosses = new ArrayList<>();
 		 * for(UUID id : structure.getBossIDs()) {
@@ -59,25 +65,25 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// UNUSED HERE
 
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// UNUSED HERE
 
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// UNUSED HERE
 
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// MAKES NO SENSE HERE, COVER BLOCK WOULD BE AT WATER SURFACE
 	}
 
