@@ -37,6 +37,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
@@ -250,16 +251,16 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-		partSoundFlag = true;
 		return this.attackEntityFrom(source, damage, true);
 	}
-
+	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		if(source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
 		}
+		partSoundFlag = sentFromPart;
 		
 		if(source.getTrueSource() instanceof EntityLivingBase && !(source.getTrueSource() instanceof EntityPlayer)) {
 			if(getRNG().nextBoolean() && !sentFromPart) {
@@ -460,6 +461,8 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 				this.motionY = v.y +0.25;
 				this.motionZ = -v.z;
 				this.velocityChanged = true;
+				
+				world.playSound(posX, posY, posZ, SoundEvents.ENTITY_BLAZE_HURT, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 			}
 		} else {
 			super.collideWithEntity(entityIn);
