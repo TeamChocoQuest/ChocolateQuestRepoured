@@ -57,7 +57,6 @@ public class ItemSuperTool extends Item
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) 
 	{
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		NBTTagCompound stackTag = stack.getTagCompound();
 		
 	/*	if(stackTag == null)
 		{
