@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -36,7 +38,28 @@ public class CQRConfig {
 		@Config.Comment("Generate up to x not yet generated dungeon parts in unloaded chunks. Will only happen when no dungeon parts were generated in loaded chunks.")
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInUnloaded = 1;
-		
+
+		public String[] specialBlocks = {
+				"torch",
+				"ladder",
+				"wall_sign",
+				"bed",
+				"skull",
+				"wall_banner",
+				"lever",
+				"redstone_torch",
+				"wooden_button",
+				"stone_button",
+				"tripwire_hook",
+				"wooden_door",
+				"spruce_door",
+				"birch_door",
+				"jungle_door",
+				"acacia_door",
+				"dark_oak_door",
+				"iron_door",
+				"cqrepoured:unlit_torch" };
+
 		public boolean enableSpecialFeatures = true;
 	}
 
@@ -66,7 +89,7 @@ public class CQRConfig {
 		public int mobTypeChangeDistance = 1500;
 		public int factionUpdateRadius = 100;
 		public int alertRadius = 20;
-		@Config.RangeDouble(min=0D)
+		@Config.RangeDouble(min = 0D)
 		public double bossHealthMultiplierPerPlayer = 0.1F;
 	}
 
@@ -86,6 +109,7 @@ public class CQRConfig {
 		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(Reference.MODID)) {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
+				CQStructurePart.updateSpecialBlocks();
 			}
 		}
 

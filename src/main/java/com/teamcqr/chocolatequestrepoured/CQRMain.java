@@ -5,10 +5,15 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.init.*;
 import org.apache.logging.log4j.Logger;
 
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
+import com.teamcqr.chocolatequestrepoured.init.ModMessages;
+import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
@@ -140,7 +145,7 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
-		//ModSerializers.registerSerializers();
+		// ModSerializers.registerSerializers();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -210,28 +215,7 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
-
-		//CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SNOW_LAYER);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TORCH);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.OAK_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SPRUCE_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.ACACIA_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.BIRCH_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.JUNGLE_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.DARK_OAK_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.IRON_DOOR);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WALL_BANNER);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LADDER);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.BED);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.STONE_BUTTON);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WOODEN_BUTTON);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LEVER);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WALL_SIGN);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_TORCH);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.UNLIT_REDSTONE_TORCH);
-		CQStructurePart.SPECIAL_BLOCKS.add(ModBlocks.UNLIT_TORCH);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TRIPWIRE_HOOK);
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_WIRE);
+		CQStructurePart.updateSpecialBlocks();
 	}
 
 }

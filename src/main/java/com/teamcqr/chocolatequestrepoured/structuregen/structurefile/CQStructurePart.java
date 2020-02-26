@@ -34,10 +34,12 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 /**
  * Copyright (c) 29.04.2019
@@ -372,6 +374,15 @@ public class CQStructurePart extends Template {
 		for (int i = 0; i < bossTagList.tagCount(); i++) {
 			NBTTagCompound tag = bossTagList.getCompoundTagAt(i);
 			this.bosses.add(NBTUtil.getPosFromTag(tag));
+		}
+	}
+
+	public static void updateSpecialBlocks() {
+		for (String s : CQRConfig.advanced.specialBlocks) {
+			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
+			if (b != null) {
+				CQStructurePart.SPECIAL_BLOCKS.add(b);
+			}
 		}
 	}
 
