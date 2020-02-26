@@ -33,7 +33,7 @@ public class PlateauBuilder {
 		this.structureTopBlock = top;
 	}
 
-	public List<SupportHillPart> createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+	public void createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
 		BlockPos pos = startPos;
 		switch (posType) {
 		case CENTER_XZ_LAYER:
@@ -51,7 +51,28 @@ public class PlateauBuilder {
 		default:
 			break;
 		}
-		return this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
+		this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
+	}
+
+	public List<SupportHillPart> createSupportHillList(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+		BlockPos pos = startPos;
+		switch (posType) {
+		case CENTER_XZ_LAYER:
+			pos = startPos.subtract(new Vec3i(sizeX / 2, 0, sizeZ / 2));
+			break;
+		case CORNER_NE:
+			pos = startPos.subtract(new Vec3i(sizeX, 0, 0));
+			break;
+		case CORNER_SE:
+			pos = startPos.subtract(new Vec3i(sizeX, 0, sizeZ));
+			break;
+		case CORNER_SW:
+			pos = startPos.subtract(new Vec3i(0, 0, sizeZ));
+			break;
+		default:
+			break;
+		}
+		return this.generateSupportHillList(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
 
 	// Coordinates are the N_W Corner!!
@@ -65,7 +86,6 @@ public class PlateauBuilder {
 	 * 
 	 * Note: Forge allows async threads modifying things of main thread
 	 */
-	/*
 	private void generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		System.out.println("Trying to construct support platform...");
 
@@ -112,9 +132,8 @@ public class PlateauBuilder {
 			}
 		}
 	}
-	*/
 
-	private List<SupportHillPart> generateSupportHill(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
+	private List<SupportHillPart> generateSupportHillList(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		sizeX += this.wallSize * 2;
 		sizeZ += this.wallSize * 2;
 
