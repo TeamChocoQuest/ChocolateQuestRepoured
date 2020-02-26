@@ -211,7 +211,7 @@ public class CQRMain {
 
 		DungeonRegistry.getInstance().loadDungeons();
 
-		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SNOW_LAYER);
+		//CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SNOW_LAYER);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TORCH);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.OAK_DOOR);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SPRUCE_DOOR);
