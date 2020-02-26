@@ -109,11 +109,11 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			this.getBoss().setInShell(true);
 			getBoss().motionX = movementVector.x;
 			getBoss().motionZ = movementVector.z;
-			getBoss().motionY = 3* movementVector.y /2;
+			getBoss().motionY = 0.25* movementVector.y;
 			getBoss().velocityChanged = true;
 		} else if(getBoss().getAnimationTick() < 20) {
 			this.getBoss().setSpinning(false);
-			Vec3d v = new Vec3d(entity.getRNG().nextDouble() -0.5D, /*0.125D * (entity.getRNG().nextDouble() -0.5D)*/0, entity.getRNG().nextDouble() -0.5D);
+			Vec3d v = new Vec3d(entity.getRNG().nextDouble() -0.5D, 0.125D * (entity.getRNG().nextDouble() -0.5D), entity.getRNG().nextDouble() -0.5D);
 			v = v.normalize();
 			v = v.scale(1.4);
 			entity.faceEntity(entity.getAttackTarget(), 30, 30);
