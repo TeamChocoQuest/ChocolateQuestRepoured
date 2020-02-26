@@ -214,6 +214,11 @@ public class CQRMain {
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SNOW_LAYER);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TORCH);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.OAK_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.SPRUCE_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.ACACIA_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.BIRCH_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.JUNGLE_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.DARK_OAK_DOOR);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.IRON_DOOR);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WALL_BANNER);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LADDER);
@@ -221,6 +226,7 @@ public class CQRMain {
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.STONE_BUTTON);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WOODEN_BUTTON);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LEVER);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WALL_SIGN);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_TORCH);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.UNLIT_REDSTONE_TORCH);
 		CQStructurePart.SPECIAL_BLOCKS.add(ModBlocks.UNLIT_TORCH);
