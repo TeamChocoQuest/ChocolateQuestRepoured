@@ -100,7 +100,9 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
 				}
-				getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+				if(!getBoss().collidedHorizontally) {
+					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+				}
 			}
 			this.getBoss().setSpinning(true);
 			this.getBoss().setCanBeStunned(false);
