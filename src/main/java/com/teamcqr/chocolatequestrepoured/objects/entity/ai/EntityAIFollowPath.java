@@ -32,7 +32,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI {
 			width = 1;
 		}
 		width *= width;
-		if(entity.getDistance(pos.x, pos.y, pos.z) <= width +1) {
+		if(entity.getDistance(pos.x, pos.y, pos.z) <= (width +1) /2) {
 			//Cycle to next position
 			int newIndex = isReversingPath ? entity.getCurrentGuardPathTargetPoint() -1 : entity.getCurrentGuardPathTargetPoint() +1;
 			if(newIndex == entity.getGuardPathPoints().length) {
