@@ -69,7 +69,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean isInterruptible() {
-		return true;
+		return false;
 	}
 	
 	@Override
