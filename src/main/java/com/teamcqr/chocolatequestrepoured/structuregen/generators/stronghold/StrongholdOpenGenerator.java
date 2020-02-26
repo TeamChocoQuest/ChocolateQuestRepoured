@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -76,7 +77,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		this.dunX = x;
 		this.dunZ = z;
 		BlockPos initPos = new BlockPos(x, y, z);
@@ -146,7 +147,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		File building = this.dungeon.getEntranceBuilding();
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
@@ -181,7 +182,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// build all the structures in the map
 		for (StrongholdFloorOpen floor : this.floors) {
 			if (floor == null) {
@@ -197,17 +198,17 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Unused
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Unused
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// MAKES SENSE ONLY FOR ENTRANCE BUILDING
 	}
 

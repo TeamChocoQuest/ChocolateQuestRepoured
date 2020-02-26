@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
@@ -48,7 +49,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	private List<BlockPos> floorBlocks = new ArrayList<BlockPos>();
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE: calculate air blocks
 		Perlin3D perlin1 = new Perlin3D(world.getSeed(), 4, new Random());
 		Perlin3D perlin2 = new Perlin3D(world.getSeed(), 32, new Random());
@@ -99,7 +100,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z) {
+	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		for (BlockPos bp : this.airBlocks) {
 			// if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getAirBlock())) {
 			if (Block.isEqualTo(this.dungeon.getAirBlock(), Blocks.AIR)) {
@@ -117,12 +118,12 @@ public class CavernGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z) {
+	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		System.out.println("Generated " + this.dungeon.getDungeonName() + " at X: " + x + "  Y: " + y + "  Z: " + z);
 	}
 
 	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z) {
+	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		BlockPos start = new BlockPos(x, y, z);
 		world.setBlockState(start, Blocks.CHEST.getDefaultState());
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
@@ -142,7 +143,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z) {
+	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		BlockPos spawnerPos = new BlockPos(x, y, z);
 
 		SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getMob());
@@ -260,7 +261,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z) {
+	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// MAKES NO SENSE FOR A CAVE
 	}
 
