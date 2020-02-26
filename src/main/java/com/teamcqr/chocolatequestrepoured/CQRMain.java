@@ -215,6 +215,16 @@ public class CQRMain {
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TORCH);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.OAK_DOOR);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.IRON_DOOR);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WALL_BANNER);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LADDER);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.BED);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.STONE_BUTTON);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.WOODEN_BUTTON);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.LEVER);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_TORCH);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.UNLIT_REDSTONE_TORCH);
+		CQStructurePart.SPECIAL_BLOCKS.add(ModBlocks.UNLIT_TORCH);
+		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.TRIPWIRE_HOOK);
 		CQStructurePart.SPECIAL_BLOCKS.add(Blocks.REDSTONE_WIRE);
 	}
 
