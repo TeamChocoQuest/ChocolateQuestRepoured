@@ -39,6 +39,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
@@ -371,6 +372,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		}
 
 		this.alignParts();
+		this.breakBlocksInWay();
+	}
+
+	private void breakBlocksInWay() {
+		for(BlockPos pos : BlockPos.getAllInBoxMutable(getPosition().add(this.width +1, this.height, this.width +1), getPosition().add(-this.width -1, -1, -this.width -1))) {
+			if(!world.getBlockState(pos).getBlock().isCollidable()) {
+				world.setBlockToAir(pos);
+			}
+		}
 	}
 
 	private void alignParts() {
