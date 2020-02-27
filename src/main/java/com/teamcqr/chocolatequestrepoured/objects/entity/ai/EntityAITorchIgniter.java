@@ -22,6 +22,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 	public EntityAITorchIgniter(AbstractEntityCQR ent) {
 		super(ent);
+		this.setMutexBits(1);
 		this.world = ent.getEntityWorld();
 	}
 
