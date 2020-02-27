@@ -101,7 +101,7 @@ public class GuiExporter extends GuiScreen {
 
 			if (this.saveStructOnExit) {
 				CQRMain.logger.info("Saving structure...");
-				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), structName);
+				this.exporter.saveStructure(this.mc.world, new BlockPos(startX, startY, startZ), new BlockPos(endX, endY, endZ), this.mc.player);
 			}
 		} catch (NumberFormatException ex) {
 			CQRMain.logger.error(ex);
