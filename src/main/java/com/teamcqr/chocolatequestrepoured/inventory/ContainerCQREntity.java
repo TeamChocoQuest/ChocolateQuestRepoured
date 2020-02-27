@@ -162,11 +162,22 @@ public class ContainerCQREntity extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 
+			// custom slot priority: FEET -> LEGS -> CHEST -> HEAD (helmet) -> POTION -> BADGE -> ARROW -> OFFHAND (shield) -> MAINHAND -> OFFHAND (other) -> HEAD (other)
 			if (index > 35) {
 				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
+			} else if (this.mergeItemStack(itemstack1, 36, 39, false)) {
+				return itemstack;
+			} else if (EntityLiving.getSlotForItemStack(itemstack1) == EntityEquipmentSlot.HEAD && this.mergeItemStack(itemstack1, 39, 40, false)) {
+				return itemstack;
+			} else if (this.mergeItemStack(itemstack1, 42, 45, false)) {
+				return itemstack;
+			} else if (itemstack1.getItem() instanceof ItemShield && this.mergeItemStack(itemstack1, 41, 42, false)) {
+				return itemstack;
+			} else if (!this.mergeItemStack(itemstack1, 41, 43, false)) {
+				return itemstack;
+			} else if (!this.mergeItemStack(itemstack1, 39, 40, false)) {
 				return ItemStack.EMPTY;
 			}
 
