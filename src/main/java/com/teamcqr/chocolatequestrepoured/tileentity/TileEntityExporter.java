@@ -124,7 +124,7 @@ public class TileEntityExporter extends TileEntity {
 		this.user = player;
 	}
 
-	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, String authorName) {
+	public void saveStructure(World world, BlockPos startPos, BlockPos endPos, EntityPlayer author) {
 		if (this.relativeMode) {
 			startPos = this.pos.add(startPos);
 			endPos = this.pos.add(endPos);
@@ -133,11 +133,11 @@ public class TileEntityExporter extends TileEntity {
 			CQRMain.logger.info("Server is saving structure...");
 			CQStructure structure = new CQStructure(this.structureName);
 			structure.takeBlocksFromWorld(world, startPos, endPos, this.partModeUsing);
-			structure.writeToFile(this.user);
+			structure.writeToFile(author);
 			CQRMain.logger.info("Done!");
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");
-			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, authorName, this.structureName, true, this.partModeUsing));
+			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, true, this.partModeUsing));
 			CQRMain.logger.info("Packet sent!");
 		}
 	}
