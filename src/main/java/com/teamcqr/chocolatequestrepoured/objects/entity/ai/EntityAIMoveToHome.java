@@ -8,6 +8,7 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI {
 
 	public EntityAIMoveToHome(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(1);
 	}
 
 	@Override

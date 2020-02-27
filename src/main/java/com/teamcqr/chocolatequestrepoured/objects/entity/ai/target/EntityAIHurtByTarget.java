@@ -24,6 +24,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 
 	public EntityAIHurtByTarget(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(1);
 		this.predicateAlly = input -> {
 			if (input == null) {
 				return false;
@@ -96,7 +97,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 			return false;
 		}
 		EntityLivingBase oldAttackTarget = entityLiving.getAttackTarget();
-		if (oldAttackTarget != null && entityLiving.getEntitySenses().canSee(oldAttackTarget) && entityLiving.getDistance(oldAttackTarget) < entityLiving.getDistance(this.attackTarget) + 4.0D) {
+		if (oldAttackTarget != null && entityLiving.getEntitySenses().canSee(oldAttackTarget) && entityLiving.getDistance(oldAttackTarget) < entityLiving.getDistance(this.attackTarget)) {
 			return false;
 		}
 		entityLiving.setAttackTarget(this.attackTarget);

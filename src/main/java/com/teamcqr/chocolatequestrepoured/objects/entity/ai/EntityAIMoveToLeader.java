@@ -9,6 +9,7 @@ public class EntityAIMoveToLeader extends AbstractCQREntityAI {
 
 	public EntityAIMoveToLeader(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(1);
 	}
 
 	@Override

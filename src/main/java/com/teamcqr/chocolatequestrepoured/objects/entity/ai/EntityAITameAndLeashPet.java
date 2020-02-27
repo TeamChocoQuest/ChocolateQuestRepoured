@@ -22,7 +22,7 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
 	public EntityAITameAndLeashPet(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
+		this.setMutexBits(1);
 	}
 
 	@Override
