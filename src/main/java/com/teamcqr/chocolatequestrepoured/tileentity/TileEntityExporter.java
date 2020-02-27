@@ -27,7 +27,7 @@ public class TileEntityExporter extends TileEntity {
 	public int endY = 0;
 	public int endZ = 0;
 	public String structureName = "NoName";
-	public boolean partModeUsing = false;
+	public boolean partModeUsing = true;
 	public boolean relativeMode = false;
 
 	private BlockPos minPos = new BlockPos(0, 0, 0);
