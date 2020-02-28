@@ -65,10 +65,10 @@ public class CastleGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		this.roomHelper.generate(world, this.dungeon);
+		ArrayList<String> bossUuids = new ArrayList<>();
+		this.roomHelper.generate(world, this.dungeon, bossUuids);
 
-		//TODO: Add the UUID of the boss as string to the array list below
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, new ArrayList<String>());
+		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, bossUuids);
 		MinecraftForge.EVENT_BUS.post(event);
 	}
 

@@ -20,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+
 public class CastleRoomRoofBossMain extends CastleRoom {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
@@ -68,11 +70,14 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 	}
 
 	@Override
-	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation) {
+	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
 
 		SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
+		if (mobEntity != null) {
+			bossUuids.add(mobEntity.getUniqueID().toString());
+		}
 	}
 
 	private void placeTorches(World world, BlockPos nwCorner) {
