@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 
@@ -16,6 +17,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -67,9 +70,9 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		}
 	}
 
-	public static final double STOP_PULL_DISTANCE = 2.0; //If layer gets within this range of hook, stop pulling
+    private static final double STOP_LATCH_DISTANCE = 3.0; //Stop pulling shooter at this distance
+	private static final double STOP_PULL_DISTANCE = 2.0; //Stop pulling hooked entity at this distance
 	private Vec3d startLocation = null;
-	private Vec3d impactLocation = null; //where the hook intersects a block
 	private double hookRange = 20.0; //Max range of the hook before it stops extending
 	private EnumHookState travelState = EnumHookState.SHOOT; //Whether the hook is pulling something
     private int ticksThisState = 0;
@@ -79,6 +82,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private int lastMovementCheckTick = 0; //tick count of last time shooter/entity position was recorded
 	private int lastPositionSaveTick = 0;
 	private ItemHookshotBase hookshot = null;
+	private ItemStack shooterItemStack = null;
 
 	//These positions are 3d locations instead of Rotations, but the structure stores 3 floats so it works nicely
 	protected static final DataParameter<Vec3d> DESTINATION_POS = EntityDataManager.createKey(ProjectileHookShotHook.class, ModSerializers.VEC3D);
@@ -97,15 +101,18 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		this.hookRange = range;
 	}
 
-	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, double range, ItemHookshotBase hookshot) {
+	public ProjectileHookShotHook(World worldIn, EntityLivingBase shooter, ItemHookshotBase hookshot, ItemStack stack) {
 		super(worldIn, shooter);
 		this.dataManager.set(SHOOTER_UUID, Optional.of(shooter.getPersistentID())); //only need to set this once
 
 		this.startLocation = calcShooterBodyPosition();
 		setShooterPosition(this.startLocation);
 
-		this.hookRange = range;
 		this.hookshot = hookshot;
+		this.hookRange = hookshot.getHookRange();
+		this.shooterItemStack = stack;
+
+		setHookItemShootingTag(true);
 	}
 
 	@Override
@@ -140,6 +147,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		if (this.getThrower() != null && this.getThrower().isDead) {
 			stopPulling();
 			setDead();
+			setHookItemShootingTag(false);
 
 		} else if (!this.world.isRemote) {
 			hookStateMachine();
@@ -177,6 +185,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			case STOPPED:
 				this.setDead();
 				this.zeroizeHookVelocity();
+				this.setHookItemShootingTag(false);
 				break;
 		}
 
@@ -188,6 +197,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		super.onEntityUpdate();
 		if (this.getThrower() == null && this.getShooterUUID() == null) {
 			this.setDead();
+			setHookItemShootingTag(false);
 		} else if(this.getThrower() == null) {
 			if(!this.world.isRemote) {
 				this.thrower = (EntityLivingBase) ((WorldServer)this.world).getEntityFromUuid(this.getShooterUUID());
@@ -219,7 +229,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void shootState() {
-        if (getDistanceToHook() > hookRange) {
+        if (getDistanceToHook() > this.hookRange) {
             triggerNoLatchRetract();
         }
     }
@@ -232,10 +242,8 @@ public class ProjectileHookShotHook extends ProjectileBase {
     }
 
     private void noLatchRetractState() {
-        if (getPositionVector().distanceTo(startLocation) < STOP_PULL_DISTANCE) {
-        	changeState(EnumHookState.STOPPED);
-        	zeroizeHookVelocity();
-        	setDead();
+        if (getPositionVector().distanceTo(startLocation) < STOP_LATCH_DISTANCE) {
+			stopPulling();
 		}
     }
 
@@ -254,11 +262,11 @@ public class ProjectileHookShotHook extends ProjectileBase {
 		} else {
 			if (this.getPositionVector().distanceTo(startLocation) < STOP_PULL_DISTANCE) {
 				zeroizeHookVelocity();
-				changeState(EnumHookState.STOPPED);
+				stopPulling();
 			}
 
 			if (this.pulledEntity.getPositionVector().distanceTo(this.startLocation) < STOP_PULL_DISTANCE) {
-				changeState(EnumHookState.STOPPED); //will kill the hook next tick
+				stopPulling(); //will kill the hook next tick
 				this.pulledEntity.motionX = 0.0;
 				this.pulledEntity.motionY = 0.0;
 				this.pulledEntity.motionZ = 0.0;
@@ -277,8 +285,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private void preLatchState() {
         if (this.ticksThisState >= 1) {
             this.zeroizeHookVelocity();
-            this.impactLocation = this.getPositionVector();
-            dataManager.set(DESTINATION_POS, impactLocation);
+            dataManager.set(DESTINATION_POS, this.getPositionVector());
             changeState(EnumHookState.LATCHED_PULL_SHOOTER);
         }
 	}
@@ -290,9 +297,10 @@ public class ProjectileHookShotHook extends ProjectileBase {
             Vec3d playerPos = this.getThrower().getPositionVector();
             double distanceToHook = playerPos.distanceTo(this.getPositionVector());
 
-            if (distanceToHook < STOP_PULL_DISTANCE) {
-                stopPulling();
-                setDead();
+            if (distanceToHook < STOP_LATCH_DISTANCE) {
+            	//setHookItemShootingTag(false);
+            	//setDead();
+				stopPulling();
             }
         }
     }
@@ -359,7 +367,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			if (this.lastCheckedPosition != null) {
 				double distanceTraveled = currentPos.distanceTo(this.lastCheckedPosition);
 				if (distanceTraveled < 0.4) {
-					changeState(EnumHookState.STOPPED);
+					stopPulling();
 				}
 			}
 
@@ -376,7 +384,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			if (this.lastCheckedPosition != null) {
 				double distanceTraveled = currentPos.distanceTo(this.lastCheckedPosition);
 				if (distanceTraveled < 0.4) {
-					changeState(EnumHookState.STOPPED);
+					stopPulling();
 				}
 			}
 
@@ -402,7 +410,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 					double distanceToHook = playerPos.distanceTo(latchPos);
 
 					// Server does this check too but also do it here so it stops pulling at the right time
-					if (distanceToHook < ProjectileHookShotHook.STOP_PULL_DISTANCE) {
+					if (distanceToHook < STOP_LATCH_DISTANCE) {
 						player.setVelocity(0, 0, 0);
 						player.velocityChanged = true;
 
@@ -561,5 +569,13 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	public Vec3d getDestinationPosition()
 	{
 		return dataManager.get(DESTINATION_POS);
+	}
+
+	private void setHookItemShootingTag(boolean isShooting) {
+		if (this.shooterItemStack.hasTagCompound()) {
+			NBTTagCompound hookNbt = this.shooterItemStack.getTagCompound();
+			hookNbt.setBoolean("isShooting", isShooting);
+			this.shooterItemStack.setTagCompound(hookNbt);
+		}
 	}
 }
