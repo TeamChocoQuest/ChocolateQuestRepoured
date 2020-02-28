@@ -147,7 +147,6 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
-		// ModSerializers.registerSerializers();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
