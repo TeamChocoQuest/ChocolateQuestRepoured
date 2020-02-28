@@ -80,7 +80,7 @@ public abstract class CastleRoom {
 		; // Default is no decoration
 	}
 
-	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation) {
+	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		; // Default is no boss
 	}
 
