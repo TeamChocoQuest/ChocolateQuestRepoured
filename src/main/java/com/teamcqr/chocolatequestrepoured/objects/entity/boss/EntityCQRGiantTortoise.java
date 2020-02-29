@@ -279,6 +279,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		
 		if(!sentFromPart) {
 			amount = 0;
+			world.playSound(posX, posY, posZ, getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 		}
 		if (sentFromPart && (!this.isInShell() || source.isCreativePlayer() || source == DamageSource.IN_WALL)) {
 			if(stunned) {
