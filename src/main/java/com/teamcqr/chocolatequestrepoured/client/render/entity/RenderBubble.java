@@ -33,13 +33,19 @@ public class RenderBubble extends Render<EntityBubble> {
 	@Override
 	public void doRender(EntityBubble entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y - entity.height /2, (float) z);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
+		GlStateManager.enableNormalize();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.translate((float) x, (float) y - 2 * entity.height + entity.getPassengerHeight(), (float) z);
 
-		double scale = 2.0D + entity.getLowestRidingEntity().height * 0.7D;
+		float scale = 2.0F + entity.getPassengerHeight();
 		
-		GL11.glScaled(scale, scale, scale);
+		GL11.glScalef(scale, scale, scale);
 		this.bindTexture(this.getEntityTexture(entity));
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		GlStateManager.disableBlend();
+		GlStateManager.disableNormalize();
 		GlStateManager.popMatrix();
 	}
 	
