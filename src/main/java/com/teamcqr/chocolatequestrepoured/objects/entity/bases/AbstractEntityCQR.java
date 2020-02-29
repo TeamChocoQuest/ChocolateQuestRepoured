@@ -299,6 +299,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			NBTTagCompound pathTag = new NBTTagCompound();
 			pathTag.setInteger("pointcount", pathPoints.length);
 			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
+			if(pathPoints.tagCount() != this.pathPoints.length) {
+				pathPoints = new NBTTagList();
+			}
 			for(int i = 0; i < this.pathPoints.length; i++) {
 				pathPoints.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
 			}
