@@ -112,7 +112,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			this.getBoss().setInShell(true);
 			getBoss().motionX = movementVector.x;
 			getBoss().motionZ = movementVector.z;
-			getBoss().motionY = 0.25* movementVector.y;
+			getBoss().motionY = entity.collidedHorizontally ? movementVector.y : 0.5 * movementVector.y;
 			getBoss().velocityChanged = true;
 		} else if(getBoss().getAnimationTick() < 20) {
 			this.getBoss().setSpinning(false);
