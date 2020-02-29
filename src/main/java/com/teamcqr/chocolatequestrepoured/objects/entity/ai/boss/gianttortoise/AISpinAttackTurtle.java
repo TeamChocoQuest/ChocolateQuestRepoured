@@ -58,6 +58,9 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private void calculateVelocity() {
 		this.movementVector = getBoss().getAttackTarget().getPositionVector().subtract(getBoss().getPositionVector());
+		if(this.movementVector.y > 2) {
+			this.movementVector = this.movementVector.subtract(0, this.movementVector.y -2, 0);
+		}
 		this.movementVector = this.movementVector.normalize();
 		this.movementVector = this.movementVector.scale(1.125D);
 	}
