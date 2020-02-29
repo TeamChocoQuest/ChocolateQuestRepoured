@@ -17,6 +17,9 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	private int cooldown = COOLDOWN /2;
 	private int previousBlocks = 0;
 	private static final int MAX_BLOCKED_SPINS = 1;
+	
+	private final int AFTER_IDLE_TIME = 20;
+	private final int BUBBLE_SHOOT_DURATION = 40;
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -95,7 +98,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			this.getBoss().setSpinning(false);
 			this.getBoss().setStunned(true);
 		}
-		else if(getBoss().getAnimationTick() > 20 && getAnimation().getDuration() - getBoss().getAnimationTick() > 20) {
+		else if(getBoss().getAnimationTick() > BUBBLE_SHOOT_DURATION && getAnimation().getDuration() - getBoss().getAnimationTick() > AFTER_IDLE_TIME) {
 			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20 || previousBlocks != getBoss().getSpinsBlocked()) {
 				calculateVelocity();
 				float damage = 4F;
@@ -114,7 +117,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 			getBoss().motionZ = movementVector.z;
 			getBoss().motionY = entity.collidedHorizontally ? movementVector.y : 0.5 * movementVector.y;
 			getBoss().velocityChanged = true;
-		} else if(getBoss().getAnimationTick() < 20) {
+		} else if(getBoss().getAnimationTick() <= BUBBLE_SHOOT_DURATION) {
 			this.getBoss().setSpinning(false);
 			Vec3d v = new Vec3d(entity.getRNG().nextDouble() -0.5D, 0.125D * (entity.getRNG().nextDouble() -0.5D), entity.getRNG().nextDouble() -0.5D);
 			v = v.normalize();
