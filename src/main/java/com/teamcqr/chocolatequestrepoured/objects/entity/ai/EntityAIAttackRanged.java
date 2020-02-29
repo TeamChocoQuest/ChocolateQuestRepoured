@@ -18,7 +18,6 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 
 	public EntityAIAttackRanged(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(3);
 	}
 
 	@Override

@@ -27,7 +27,6 @@ public class EntityAIAttackRangedStrafing extends EntityAIAttack {
 		this.moveSpeedAmp = moveSpeedAmp;
         this.attackCooldown = attackCooldown;
         this.maxAttackDistance = maxAttackDistance * maxAttackDistance;
-        this.setMutexBits(3);
 	}
 	
 	public void setAttackCooldown(int value)

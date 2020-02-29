@@ -99,15 +99,14 @@ public class CastleRoomSelector {
 		this.roomRandomizer.add(EnumRoomType.BEDROOM, 2);
 	}
 
-	public void generate(World world, CastleDungeon dungeon) {
+	public void generate(World world, CastleDungeon dungeon, ArrayList<String> bossUuids) {
 		// Roofs come first so rooms overwrite roof blocks
 		this.generateRoofs(world, dungeon);
 
-		this.generateAndDecorateRooms(world, dungeon);
-
+		this.generateAndDecorateRooms(world, dungeon, bossUuids);
 	}
 
-	private void generateAndDecorateRooms(World world, CastleDungeon dungeon) {
+	private void generateAndDecorateRooms(World world, CastleDungeon dungeon, ArrayList<String> bossUuids) {
 		// Start with the entire list of populated cells
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(RoomGridCell::isPopulated);
 		ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
@@ -131,7 +130,7 @@ public class CastleRoomSelector {
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
 			cell.getRoom().decorate(world, dungeon, mobResLoc);
-			cell.getRoom().placeBoss(world, dungeon, bossResLoc);
+			cell.getRoom().placeBoss(world, dungeon, bossResLoc, bossUuids);
 		}
 	}
 

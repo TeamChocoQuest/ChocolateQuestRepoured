@@ -25,6 +25,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	public EntityAIFireFighter(AbstractEntityCQR ent) {
 		super(ent);
+		this.setMutexBits(1);
 		this.world = ent.getEntityWorld();
 	}
 
