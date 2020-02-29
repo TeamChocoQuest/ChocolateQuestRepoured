@@ -124,27 +124,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(5, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		/*this.tasks.addTask(10, new EntityAIAttack(this) {
-			@Override
-			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
-					return true;
-				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-			
-			@Override
-			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
-					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-		});*/
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -392,7 +371,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		Vec3d v = new Vec3d(0, 0, this.baseWidth / 2 + this.baseWidth * 0.1);
 		v = VectorUtil.rotateVectorAroundY(v, this.rotationYawHead);
 
-		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + 0.5, this.posZ + v.z);
+		float vy = isInShell() || this.getAnimation() == ANIMATION_STUNNED ? 0.1F : 0.5F; 
+		
+		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
 		this.parts[this.parts.length - 1].setRotation(this.rotationYawHead, this.rotationPitch);
 
 		v = VectorUtil.rotateVectorAroundY(v, 45D);
