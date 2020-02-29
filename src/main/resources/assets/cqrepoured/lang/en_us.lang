@@ -205,6 +205,7 @@ item.badge.name=Badge
 item.backpack.name=Backpack
 item.alchemy_bag.name=Alchemy Bag
 item.structure_selector.name=Selection Selector Helper
+item.path_tool.name=Path Tool
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
