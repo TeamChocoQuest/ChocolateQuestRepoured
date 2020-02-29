@@ -572,7 +572,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void setHookItemShootingTag(boolean isShooting) {
-		if (this.shooterItemStack.hasTagCompound()) {
+		if (this.shooterItemStack != null && this.shooterItemStack.hasTagCompound()) {
 			NBTTagCompound hookNbt = this.shooterItemStack.getTagCompound();
 			hookNbt.setBoolean("isShooting", isShooting);
 			this.shooterItemStack.setTagCompound(hookNbt);
