@@ -28,11 +28,11 @@ public class CastleAddonRoof implements ICastleAddon {
 
 	@Override
 	public void generate(World world, CastleDungeon dungeon) {
-		RoofType type = RoofType.FOURSIDED;
+		RoofType type = RoofType.TWOSIDED;
 		switch (type) {
 		case TWOSIDED: {
-			break;
-		}
+			generateTwoSided(world, dungeon);
+		}	break;
 		case FOURSIDED:
 		default: {
 			this.generateFourSided(world, dungeon);
@@ -40,8 +40,78 @@ public class CastleAddonRoof implements ICastleAddon {
 		}
 	}
 
-	private void generateTwoSided(ArrayList<BlockPlacement> roofBlocks) {
+	private void generateTwoSided(World world, CastleDungeon dungeon) {
+		int roofX;
+		int roofZ;
+		int roofLenX;
+		int roofLenZ;
+		int underLenX = this.sizeX;
+		int underLenZ = this.sizeZ;
+		int x = this.startPos.getX();
+		int y = this.startPos.getY();
+		int z = this.startPos.getZ();
+		IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
+		boolean xIsLongSide;
 
+		if (sizeX > sizeZ) {
+			xIsLongSide = true;
+		}
+		else if (sizeX < sizeZ) {
+			xIsLongSide = false;
+		}
+		else {
+			xIsLongSide = dungeon.getRandom().nextBoolean();
+		}
+
+		do {
+			// Add the foundation under the roof
+			IBlockState state = dungeon.getWallBlock().getDefaultState();
+			for (int i = 0; i < underLenX; i++) {
+				world.setBlockState(new BlockPos(x + i, y, z), state);
+				world.setBlockState((new BlockPos(x + i, y, z + underLenZ - 1)), state);
+			}
+			for (int j = 0; j < underLenZ; j++) {
+				world.setBlockState(new BlockPos(x, y, z + j), state);
+				world.setBlockState(new BlockPos(x + underLenX - 1, y, z + j), state);
+			}
+
+			if (xIsLongSide) {
+				roofX = x - 1;
+				roofZ = z - 1;
+				roofLenX = sizeX + 2;
+				roofLenZ = underLenZ + 2;
+
+				for (int i = 0; i < roofLenX; i++) {
+					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
+					world.setBlockState(new BlockPos(roofX + i, y, roofZ), blockState);
+
+					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+					world.setBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState);
+				}
+
+				z++;
+				underLenZ -= 2;
+			}
+			else {
+				roofX = x - 1;
+				roofZ = z - 1;
+				roofLenX = underLenX + 2;
+				roofLenZ = sizeZ + 2;
+
+				for (int i = 0; i < roofLenZ; i++) {
+					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+					world.setBlockState(new BlockPos(roofX, y, roofZ + i), blockState);
+
+					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+					world.setBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState);
+				}
+
+				x++;
+				underLenX -= 2;
+			}
+
+			y++;
+		} while (underLenX >= 0 && underLenZ >= 0);
 	}
 
 	private void generateFourSided(World world, CastleDungeon dungeon) {
