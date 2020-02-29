@@ -22,6 +22,7 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 
 	public EntityAIIdleSit(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(2);
 		this.predicate = new Predicate<AbstractEntityCQR>() {
 			@Override
 			public boolean apply(AbstractEntityCQR input) {

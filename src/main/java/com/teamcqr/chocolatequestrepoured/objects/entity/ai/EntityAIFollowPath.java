@@ -10,7 +10,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI {
 	
 	public EntityAIFollowPath(AbstractEntityCQR entity) {
 		super(entity);
-		setMutexBits(8);
+		this.setMutexBits(1);
 	}
 
 	@Override
@@ -49,8 +49,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI {
 			entity.setCurrentGuardPathTargetPoint(newIndex);
 			pos = new Vec3d(entity.getGuardPathPoints()[entity.getCurrentGuardPathTargetPoint()]).add(new Vec3d(entity.getHomePositionCQR())).addVector(0.5,0,0.5);
 		}
-		entity.getMoveHelper().setMoveTo(pos.x, pos.y, pos.z, 1.0);
-		super.updateTask();
+		this.entity.getNavigator().tryMoveToXYZ(pos.x, pos.y, pos.z, 0.75D);
 	}
 
 }

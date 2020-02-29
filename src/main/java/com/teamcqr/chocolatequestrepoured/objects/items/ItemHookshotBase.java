@@ -40,6 +40,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+/**
+ * Copyright (c) 15 Feb 2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
+ */
 public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
 	private enum BlockGroup
@@ -175,9 +180,9 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 		}
 	}
 
-	abstract String getTranslationKey();
+	public abstract String getTranslationKey();
 
-	abstract double getHookRange();
+	public abstract double getHookRange();
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
@@ -194,7 +199,7 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 	public void shoot(ItemStack stack, World worldIn, EntityPlayer player) {
 
 		if (!worldIn.isRemote) {
-			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, getHookRange(), this);
+			ProjectileHookShotHook hookEntity = new ProjectileHookShotHook(worldIn, player, this, stack);
 			hookEntity.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, (float)hookEntity.getTravelSpeed(), 0F);
 			player.getCooldownTracker().setCooldown(stack.getItem(), getCooldown());
 			worldIn.spawnEntity(hookEntity);

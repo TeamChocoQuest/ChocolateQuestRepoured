@@ -1,17 +1,22 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
+/**
+ * Copyright (c) 15 Feb 2019
+ * Developed by KalgogSmash
+ * GitHub: https://github.com/KalgogSmash
+ */
 public class ItemLongshot extends ItemHookshotBase {
     public ItemLongshot() {
         super("longshot");
     }
 
     @Override
-    String getTranslationKey() {
+    public String getTranslationKey() {
         return "description.longshot.name";
     }
 
     @Override
-    double getHookRange() {
+    public double getHookRange() {
         return 30.0;
     }
 

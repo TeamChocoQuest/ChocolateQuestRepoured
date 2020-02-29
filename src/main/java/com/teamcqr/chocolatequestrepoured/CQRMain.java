@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
+import com.teamcqr.chocolatequestrepoured.command.CommandExport;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
@@ -43,6 +44,7 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -145,7 +147,6 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
-		// ModSerializers.registerSerializers();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -216,6 +217,11 @@ public class CQRMain {
 
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructurePart.updateSpecialBlocks();
+	}
+
+	@EventHandler
+	public static void registerCommands(FMLServerStartingEvent event) {
+		event.registerServerCommand(new CommandExport());
 	}
 
 }
