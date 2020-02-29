@@ -39,7 +39,7 @@ public class RenderBubble extends Render<EntityBubble> {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.translate((float) x, (float) y - 2 * entity.height + 0.5*entity.getPassengerHeight(), (float) z);
 
-		float scale = 2.0F + entity.getPassengerHeight();
+		float scale = 2.25F + entity.getPassengerHeight();
 		
 		GL11.glScalef(scale, scale, scale);
 		this.bindTexture(this.getEntityTexture(entity));
