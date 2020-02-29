@@ -50,6 +50,10 @@ public class ProjectileBubble extends ProjectileBase {
 			return;
 		}
 		
+		if(entityHit instanceof EntityBubble || entityHit instanceof ProjectileBubble) {
+			return;
+		}
+		
 		if(entityHit.isRiding() && entityHit.getRidingEntity() instanceof EntityBubble) {
 			return;
 		}
