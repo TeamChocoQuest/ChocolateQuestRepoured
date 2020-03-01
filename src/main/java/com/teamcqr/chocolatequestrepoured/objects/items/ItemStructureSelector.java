@@ -58,7 +58,7 @@ public class ItemStructureSelector extends Item {
 					pos1 = pos1.subtract(pos);
 					pos2 = pos2.subtract(pos);
 				}
-				tileEntity.setValues(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), tileEntity.structureName, tileEntity.partModeUsing, tileEntity.relativeMode);
+				tileEntity.setValues(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), tileEntity.structureName, tileEntity.partMode, tileEntity.relativeMode, tileEntity.ignoreEntities);
 			}
 		} else {
 			if (player.isSneaking()) {

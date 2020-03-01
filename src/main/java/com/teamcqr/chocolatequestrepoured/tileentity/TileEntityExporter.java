@@ -27,8 +27,9 @@ public class TileEntityExporter extends TileEntity {
 	public int endY = 0;
 	public int endZ = 0;
 	public String structureName = "NoName";
-	public boolean partModeUsing = true;
+	public boolean partMode = true;
 	public boolean relativeMode = false;
+	public boolean ignoreEntities = true;
 
 	private BlockPos minPos = new BlockPos(0, 0, 0);
 	private BlockPos maxPos = new BlockPos(0, 0, 0);
@@ -43,8 +44,9 @@ public class TileEntityExporter extends TileEntity {
 		compound.setInteger("EndY", this.endY);
 		compound.setInteger("EndZ", this.endZ);
 		compound.setString("StructureName", this.structureName);
-		compound.setBoolean("PartMode", this.partModeUsing);
+		compound.setBoolean("PartMode", this.partMode);
 		compound.setBoolean("RelativeMode", this.relativeMode);
+		compound.setBoolean("IgnoreEntities", this.ignoreEntities);
 		return compound;
 	}
 
@@ -56,8 +58,9 @@ public class TileEntityExporter extends TileEntity {
 		this.endY = compound.getInteger("EndY");
 		this.endZ = compound.getInteger("EndZ");
 		this.structureName = compound.getString("StructureName");
-		this.partModeUsing = compound.getBoolean("PartMode");
+		this.partMode = compound.getBoolean("PartMode");
 		this.relativeMode = compound.getBoolean("RelativeMode");
+		this.ignoreEntities = compound.getBoolean("IgnoreEntities");
 
 		this.onPositionsChanged();
 	}
@@ -75,7 +78,7 @@ public class TileEntityExporter extends TileEntity {
 		this.setExporterData(compound);
 	}
 
-	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode, boolean useRelativeMode) {
+	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode, boolean useRelativeMode, boolean useSmartMode) {
 		this.startX = sX;
 		this.startY = sY;
 		this.startZ = sZ;
@@ -83,8 +86,9 @@ public class TileEntityExporter extends TileEntity {
 		this.endY = eY;
 		this.endZ = eZ;
 		this.structureName = structName;
-		this.partModeUsing = usePartMode;
+		this.partMode = usePartMode;
 		this.relativeMode = useRelativeMode;
+		this.ignoreEntities = useSmartMode;
 
 		this.onPositionsChanged();
 
@@ -132,12 +136,12 @@ public class TileEntityExporter extends TileEntity {
 		if (!world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
 			CQStructure structure = new CQStructure(this.structureName);
-			structure.takeBlocksFromWorld(world, startPos, endPos, this.partModeUsing);
+			structure.takeBlocksFromWorld(world, startPos, endPos, this.partMode, this.ignoreEntities);
 			structure.writeToFile(author);
 			CQRMain.logger.info("Done!");
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");
-			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, true, this.partModeUsing));
+			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, true, this.partMode, this.ignoreEntities));
 			CQRMain.logger.info("Packet sent!");
 		}
 	}
@@ -170,7 +174,6 @@ public class TileEntityExporter extends TileEntity {
 
 	@Override
 	public double getMaxRenderDistanceSquared() {
-		// return 65536.0D;
 		double d = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16;
 		return d * d;
 	}
