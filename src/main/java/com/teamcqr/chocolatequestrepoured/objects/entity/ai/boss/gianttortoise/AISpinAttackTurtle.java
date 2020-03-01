@@ -18,7 +18,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	private int previousBlocks = 0;
 	private static final int MAX_BLOCKED_SPINS = 1;
 	
-	private final int AFTER_IDLE_TIME = 20;
+	private final int AFTER_IDLE_TIME = 5;
 	private final int BUBBLE_SHOOT_DURATION = 40;
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
@@ -149,7 +149,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		}
 		getBoss().setAnimationTick(0);
 		if(getBoss().getSpinsBlocked() >= MAX_BLOCKED_SPINS) {
-			cooldown *= 2;
+			cooldown *= 1.5;
 			this.getBoss().setStunned(true);
 		}
 		getBoss().resetSpinsBlocked();

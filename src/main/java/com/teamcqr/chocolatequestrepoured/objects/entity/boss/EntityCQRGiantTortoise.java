@@ -82,7 +82,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
 	public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
 	public static final Animation ANIMATION_IDLE = Animation.create(100);
-	public static final Animation ANIMATION_STUNNED = Animation.create(200).setLooping(false);
+	public static final Animation ANIMATION_STUNNED = Animation.create(140).setLooping(false);
 	public static final Animation ANIMATION_DEATH = Animation.create(300);
 	
 	private static final Animation[] ANIMATIONS = {
