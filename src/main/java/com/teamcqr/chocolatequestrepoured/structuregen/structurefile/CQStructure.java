@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,29 +38,7 @@ import net.minecraft.world.gen.structure.template.Template;
 public class CQStructure {
 
 	public static final String CQR_FILE_VERSION = "1.0.1";
-	public static final List<Thread> RUNNING_EXPORT_THREADS = new ArrayList<Thread>();
-	private static final Comparator<Entry<BlockPos, CQStructurePart>> SORTER = new Comparator<Entry<BlockPos, CQStructurePart>>() {
-		@Override
-		public int compare(Entry<BlockPos, CQStructurePart> var1, Entry<BlockPos, CQStructurePart> var2) {
-			BlockPos pos1 = var1.getKey();
-			BlockPos pos2 = var2.getKey();
-			if (pos1.getX() < pos2.getX()) {
-				return -1;
-			} else if (pos1.getX() > pos2.getX()) {
-				return 1;
-			} else if (pos1.getZ() < pos2.getZ()) {
-				return -1;
-			} else if (pos1.getZ() > pos2.getZ()) {
-				return 1;
-			} else if (pos1.getY() < pos2.getY()) {
-				return -1;
-			} else if (pos1.getY() > pos2.getY()) {
-				return 1;
-			}
-			return 0;
-		}
-	};
-	// private final HashMap<BlockPos, CQStructurePart> structures = new HashMap<BlockPos, CQStructurePart>();
+	public static final List<Thread> RUNNING_EXPORT_THREADS = new ArrayList<>();
 	private final File file;
 	private String author = "DerToaster98";
 	private BlockPos size = new BlockPos(0, 0, 0);
@@ -76,7 +53,7 @@ public class CQStructure {
 		this.readFromFile();
 	}
 
-	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean usePartMode) {
+	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean usePartMode, boolean ignoreEntities) {
 		BlockPos startPos1 = new BlockPos(Math.min(startPos.getX(), endPos.getX()), Math.min(startPos.getY(), endPos.getY()), Math.min(startPos.getZ(), endPos.getZ()));
 		BlockPos endPos1 = new BlockPos(Math.max(startPos.getX(), endPos.getX()) + 1, Math.max(startPos.getY(), endPos.getY()) + 1, Math.max(startPos.getZ(), endPos.getZ()) + 1);
 
@@ -98,22 +75,21 @@ public class CQStructure {
 						int z1 = z == zIterations ? endPos1.getZ() - partStartPos.getZ() : 16;
 
 						CQStructurePart structurePart = new CQStructurePart();
-						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1), false);
+						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1), false, ignoreEntities);
 						list.add(new AbstractMap.SimpleEntry(partStartPos.subtract(startPos1), structurePart));
 					}
 				}
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
-			structure.takeBlocksFromWorld(worldIn, startPos1, this.size, false);
+			structure.takeBlocksFromWorld(worldIn, startPos1, this.size, false, ignoreEntities);
 			list.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
 		}
 		this.structures.add(list);
-		
 
 		List<Map.Entry<BlockPos, CQStructurePart>> list1 = new ArrayList<>();
 		CQStructurePart structure = new CQStructurePart();
-		structure.takeBlocksFromWorld(worldIn, startPos1, this.size, true);
+		structure.takeBlocksFromWorld(worldIn, startPos1, this.size, true, ignoreEntities);
 		list1.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
 		this.structures.add(list1);
 	}
@@ -145,30 +121,11 @@ public class CQStructure {
 
 		EDungeonMobType dungeonMobType = dungeon.getDungeonMob();
 		if (dungeonMobType == EDungeonMobType.DEFAULT) {
-			dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(dungeonChunkX * 16, dungeonChunkZ * 16);
+			dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(dungeonChunkX, dungeonChunkZ);
 		}
 		boolean replaceBanners = dungeon.replaceBanners();
 		EBanners dungeonBanner = dungeonMobType.getBanner();
 		boolean hasShield = dungeon.isProtectedFromModifications();
-
-		/*
-		int j = 0;
-		List<Entry<BlockPos, CQStructurePart>> list = new ArrayList<Entry<BlockPos, CQStructurePart>>(this.structures.entrySet());
-		list.sort(SORTER);
-		for (int i = 0; i < list.size(); i++) {
-			Entry<BlockPos, CQStructurePart> entry = list.get(i);
-			BlockPos offsetVec = CQStructurePart.transformedBlockPos(placementIn, entry.getKey());
-			BlockPos pastePos = pos.add(offsetVec);
-			CQStructurePart structure = entry.getValue();
-
-			if (DungeonGenerationHandler.isAreaLoaded(worldIn, pastePos, structure, placementIn.getRotation()) && j < CQRConfig.advanced.dungeonGenerationMax) {
-				j++;
-				structure.addBlocksToWorld(worldIn, pastePos, placementIn, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
-			} else {
-				DungeonGenerationHandler.addCQStructurePart(worldIn, structure, placementIn, pastePos, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield);
-			}
-		}
-		*/
 
 		List<List<StructurePart>> list = new ArrayList<>(this.structures.size());
 		for (List<Entry<BlockPos, CQStructurePart>> list1 : this.structures) {
@@ -231,20 +188,6 @@ public class CQStructure {
 		compound.setString("author", this.author);
 		compound.setTag("size", NBTUtil.createPosTag(this.size));
 
-		/*
-		NBTTagList nbtTagList = new NBTTagList();
-		for (Entry<BlockPos, CQStructurePart> entry : this.structures.entrySet()) {
-			BlockPos offset = entry.getKey();
-			CQStructurePart structurePart = entry.getValue();
-			NBTTagCompound partCompound = new NBTTagCompound();
-
-			partCompound.setTag("offset", NBTUtil.createPosTag(offset));
-			structurePart.writeToNBT(partCompound);
-			nbtTagList.appendTag(partCompound);
-		}
-		compound.setTag("parts", nbtTagList);
-		*/
-
 		NBTTagList nbtTagList = new NBTTagList();
 		for (List<Entry<BlockPos, CQStructurePart>> list : this.structures) {
 			NBTTagList nbtTagList1 = new NBTTagList();
@@ -266,24 +209,12 @@ public class CQStructure {
 
 	public void readFromNBT(NBTTagCompound compound) {
 		if (!compound.getString("cqr_file_version").equals(CQR_FILE_VERSION)) {
-			CQRMain.logger.warn("Warning! Trying to create structure from a file which was exported with a older/newer version of CQR!");
+			CQRMain.logger.warn("Warning! Trying to create structure from a file which was exported with a older/newer version of CQR! Got " + compound.getString("cqr_file_version") + " but expected " + CQR_FILE_VERSION);
 		}
 
 		this.author = compound.getString("author");
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
 		this.structures.clear();
-
-		/*
-		NBTTagList nbtTagList = compound.getTagList("parts", 10);
-		for (int i = 0; i < nbtTagList.tagCount(); i++) {
-			NBTTagCompound partCompound = nbtTagList.getCompoundTagAt(i);
-			BlockPos offset = NBTUtil.getPosFromTag(partCompound.getCompoundTag("offset"));
-			CQStructurePart structurePart = new CQStructurePart();
-
-			structurePart.read(partCompound);
-			this.structures.put(offset, structurePart);
-		}
-		*/
 
 		// compatibility with older version for now
 		if (compound.getString("cqr_file_version").equals("1.0.0")) {

@@ -60,6 +60,8 @@ public class CQRConfig {
 				"iron_door",
 				"cqrepoured:unlit_torch" };
 
+		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
+
 		public boolean enableSpecialFeatures = true;
 	}
 
@@ -110,6 +112,7 @@ public class CQRConfig {
 			if (event.getModID().equals(Reference.MODID)) {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
 				CQStructurePart.updateSpecialBlocks();
+				CQStructurePart.updateSpecialEntities();
 			}
 		}
 

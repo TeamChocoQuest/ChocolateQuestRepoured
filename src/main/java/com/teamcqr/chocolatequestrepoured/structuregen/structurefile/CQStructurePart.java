@@ -49,6 +49,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class CQStructurePart extends Template {
 
 	public static final Set<Block> SPECIAL_BLOCKS = new HashSet<>();
+	public static final Set<String> SPECIAL_ENTITIES = new HashSet<>();
 
 	private final List<BlockPos> banners = new ArrayList<>();
 	private final List<BlockPos> spawners = new ArrayList<>();
@@ -56,7 +57,7 @@ public class CQStructurePart extends Template {
 	private final List<BlockPos> forceFieldCores = new ArrayList<>();
 	private final List<BlockPos> bosses = new ArrayList<>();
 
-	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos size, boolean takeSpecialBlocks) {
+	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos size, boolean takeSpecialBlocks, boolean ignoreEntities) {
 		if (size.getX() >= 1 && size.getY() >= 1 && size.getZ() >= 1) {
 			BlockPos blockpos = startPos.add(size).add(-1, -1, -1);
 			List<Template.BlockInfo> list = new ArrayList<>();
@@ -129,6 +130,18 @@ public class CQStructurePart extends Template {
 
 			if (takeSpecialBlocks) {
 				this.takeEntitiesFromWorld(worldIn, blockpos1, blockpos2.add(1, 1, 1));
+				if (ignoreEntities) {
+					List<Template.EntityInfo> entities = this.getEntityInfoList();
+					List<Integer> toRemove = new ArrayList<>();
+					for (int i = 0; i < entities.size(); i++) {
+						if (!SPECIAL_ENTITIES.contains(entities.get(i).entityData.getString("id"))) {
+							toRemove.add(i);
+						}
+					}
+					for (int i = 0; i < toRemove.size(); i++) {
+						entities.remove(toRemove.get(i) - i);
+					}
+				}
 			} else {
 				List<Template.EntityInfo> entities = this.getEntityInfoList();
 				entities.clear();
@@ -378,11 +391,19 @@ public class CQStructurePart extends Template {
 	}
 
 	public static void updateSpecialBlocks() {
+		CQStructurePart.SPECIAL_BLOCKS.clear();
 		for (String s : CQRConfig.advanced.specialBlocks) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				CQStructurePart.SPECIAL_BLOCKS.add(b);
 			}
+		}
+	}
+
+	public static void updateSpecialEntities() {
+		CQStructurePart.SPECIAL_ENTITIES.clear();
+		for (String s : CQRConfig.advanced.specialEntities) {
+			CQStructurePart.SPECIAL_ENTITIES.add(s);
 		}
 	}
 
