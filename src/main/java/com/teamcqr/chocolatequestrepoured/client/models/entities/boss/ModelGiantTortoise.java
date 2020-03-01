@@ -346,7 +346,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 				setRotateAngle(this.feet[i], (float) (this.feet[i].defaultRotationX - Math.toRadians(45)), this.feet[i].defaultRotationY, 0);
 			}
 			
-			float offsetXZ = 0.85F;
+			float offsetXZ = 0.95F;
 			this.legJointFL.offsetX = -offsetXZ ;
 			this.legJointFL.offsetZ = offsetXZ ;
 
@@ -364,7 +364,7 @@ public class ModelGiantTortoise extends AdvancedModelBase {
 			
 			animator.startKeyframe(20);
 			
-			offsetXZ = 16F;
+			offsetXZ = 18F;
 			animator.move(head, 0, 0, -0.75F *16);
 			animator.move(legJointFL, offsetXZ, 0, -offsetXZ);
 			animator.move(legJointBL, offsetXZ, 0, offsetXZ);
