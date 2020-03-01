@@ -22,7 +22,7 @@ public class EntityBubble extends EntityLiving {
 	private int riderLessTicks = 0;
 
 	protected static final int FLY_TIME_MAX = 140;
-	protected static final float BASE_SIZE = 0.5F;
+	public static final float BASE_SIZE = 0.5F;
 	
 	protected static final DataParameter<Float> PASSENGER_HEIGHT = EntityDataManager.<Float>createKey(EntityBubble.class, DataSerializers.FLOAT);
 
