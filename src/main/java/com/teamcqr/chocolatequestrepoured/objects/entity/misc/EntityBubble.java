@@ -22,11 +22,13 @@ public class EntityBubble extends EntityLiving {
 	private int riderLessTicks = 0;
 
 	protected static final int FLY_TIME_MAX = 140;
+	protected static final float BASE_SIZE = 0.5F;
 	
 	protected static final DataParameter<Float> PASSENGER_HEIGHT = EntityDataManager.<Float>createKey(EntityBubble.class, DataSerializers.FLOAT);
 
 	public EntityBubble(World worldIn) {
 		super(worldIn);
+		setSize(BASE_SIZE, BASE_SIZE);
 	}
 
 	@Override
@@ -126,11 +128,22 @@ public class EntityBubble extends EntityLiving {
 			return;
 		}
 		this.dataManager.set(PASSENGER_HEIGHT, passenger.height);
+		float size = passenger.height > passenger.width ? passenger.height : passenger.width;
+		this.resize(size / BASE_SIZE);
 		super.addPassenger(passenger);
 	}
 	
 	public float getPassengerHeight() {
 		return this.dataManager.get(PASSENGER_HEIGHT);
+	}
+	
+	@Override
+	public double getMountedYOffset() {
+		return 0;//this.height /4D;
+	}
+	
+	public void resize(float scale) {
+		this.setSize(this.width * scale, this.height * scale);
 	}
 
 }
