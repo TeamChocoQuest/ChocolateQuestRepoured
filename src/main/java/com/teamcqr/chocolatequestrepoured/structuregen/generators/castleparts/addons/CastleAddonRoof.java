@@ -32,7 +32,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 	@Override
 	public void generate(World world, CastleDungeon dungeon) {
-		RoofType type = RoofType.TWO_SIDED;
+		RoofType type = dungeon.getRandomRoofType();
 		switch (type) {
 			case TWO_SIDED: {
 				generateTwoSided(world, dungeon);
