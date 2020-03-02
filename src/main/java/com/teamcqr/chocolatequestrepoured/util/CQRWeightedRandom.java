@@ -1,10 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class WeightedRandom<T> {
+public class CQRWeightedRandom<T> {
 	private class WeightedObject {
 		Object object;
 		int weight;
@@ -19,7 +20,7 @@ public class WeightedRandom<T> {
 	private List<WeightedObject> items;
 	private int totalWeight = 0;
 
-	public WeightedRandom(Random random) {
+	public CQRWeightedRandom(Random random) {
 		this.random = random;
 		this.items = new ArrayList<>();
 	}
@@ -38,16 +39,25 @@ public class WeightedRandom<T> {
 		this.items.clear();
 	}
 
+	@Nullable
 	public T next() {
-		int seed = this.random.nextInt(this.totalWeight);
-		int total = 0;
-		for (WeightedObject item : this.items) {
-			total += item.weight;
-			if (total > seed) {
-				return (T) item.object;
-			}
-		}
+		if (this.numItems() > 0) {
+			if (this.totalWeight > 0) {
+				int seed = this.random.nextInt(this.totalWeight);
+				int total = 0;
+				for (WeightedObject item : this.items) {
+					total += item.weight;
+					if (total > seed) {
+						return (T) item.object;
+					}
+				}
 
-		return null;
+				return null;
+			} else {
+				return (T) items.get(0);
+			}
+		} else {
+			return null;
+		}
 	}
 }

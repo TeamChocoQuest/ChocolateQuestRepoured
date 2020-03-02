@@ -2,15 +2,15 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 
 public class DecorationSelector {
-	private WeightedRandom<IRoomDecor> edgeDecor;
-	private WeightedRandom<IRoomDecor> midDecor;
+	private CQRWeightedRandom<IRoomDecor> edgeDecor;
+	private CQRWeightedRandom<IRoomDecor> midDecor;
 
 	public DecorationSelector(Random random) {
-		this.edgeDecor = new WeightedRandom<>(random);
-		this.midDecor = new WeightedRandom<>(random);
+		this.edgeDecor = new CQRWeightedRandom<>(random);
+		this.midDecor = new CQRWeightedRandom<>(random);
 	}
 
 	public void registerEdgeDecor(EnumRoomDecor decor, int weight) {

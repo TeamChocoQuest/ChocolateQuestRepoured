@@ -7,9 +7,11 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -31,6 +33,8 @@ public class CastleDungeon extends DungeonBase {
 	private Block floorBlock = Blocks.PLANKS;
 	private Block stairBlock = Blocks.STONE_BRICK_STAIRS;
 
+	private CQRWeightedRandom<CastleAddonRoof.RoofType> roofRandomizer;
+
 	@Override
 	public IDungeonGenerator getGenerator() {
 		return new CastleGenerator(this);
@@ -50,6 +54,12 @@ public class CastleDungeon extends DungeonBase {
 			this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
 
 			this.random = new Random();
+
+			this.roofRandomizer = new CQRWeightedRandom<>(random);
+			int weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
+			this.roofRandomizer.add(CastleAddonRoof.RoofType.TWO_SIDED, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
+			this.roofRandomizer.add(CastleAddonRoof.RoofType.FOUR_SIDED, weight);
 
 			this.closeConfigFile();
 		} else {
@@ -113,6 +123,10 @@ public class CastleDungeon extends DungeonBase {
 
 	public Random getRandom() {
 		return this.random;
+	}
+
+	public CastleAddonRoof.RoofType getRandomRoofType() {
+		return roofRandomizer.next();
 	}
 
 }
