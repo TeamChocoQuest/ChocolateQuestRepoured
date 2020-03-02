@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
-import java.util.ArrayList;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -13,7 +10,14 @@ import net.minecraft.world.World;
 
 public class CastleAddonRoof implements ICastleAddon {
 	public enum RoofType {
-		TWOSIDED, FOURSIDED
+		TWO_SIDED(0),
+		FOUR_SIDED(1);
+
+		public final int value;
+
+		RoofType (int valueIn) {
+			this.value = valueIn;
+		}
 	}
 
 	private BlockPos startPos;
@@ -28,15 +32,16 @@ public class CastleAddonRoof implements ICastleAddon {
 
 	@Override
 	public void generate(World world, CastleDungeon dungeon) {
-		RoofType type = RoofType.TWOSIDED;
+		RoofType type = RoofType.TWO_SIDED;
 		switch (type) {
-		case TWOSIDED: {
-			generateTwoSided(world, dungeon);
-		}	break;
-		case FOURSIDED:
-		default: {
-			this.generateFourSided(world, dungeon);
-		}
+			case TWO_SIDED: {
+				generateTwoSided(world, dungeon);
+				break;
+			}
+			case FOUR_SIDED:
+			default: {
+				this.generateFourSided(world, dungeon);
+			}
 		}
 	}
 

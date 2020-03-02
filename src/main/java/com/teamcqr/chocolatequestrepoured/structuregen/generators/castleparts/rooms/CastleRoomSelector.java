@@ -18,7 +18,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.WeightedRandom;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -75,7 +75,7 @@ public class CastleRoomSelector {
 	private RoomGrid grid;
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
-	private WeightedRandom<EnumRoomType> roomRandomizer;
+	private CQRWeightedRandom<EnumRoomType> roomRandomizer;
 
 	public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random) {
 		this.startPos = startPos;
@@ -91,7 +91,7 @@ public class CastleRoomSelector {
 		// Add padding floors so that we can build walkable roofs on top of the highest rooms
 		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, numSlotsX, numSlotsZ, random);
 
-		this.roomRandomizer = new WeightedRandom<EnumRoomType>(random);
+		this.roomRandomizer = new CQRWeightedRandom<EnumRoomType>(random);
 
 		this.roomRandomizer.add(EnumRoomType.KITCHEN, 2);
 		this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, 2);
