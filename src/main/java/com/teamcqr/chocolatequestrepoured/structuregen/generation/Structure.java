@@ -39,6 +39,10 @@ public class Structure {
 			return new SupportHillPart(compound);
 		} else if (name.equals("structurePart")) {
 			return new StructurePart(compound);
+		} else if (name.equals("blockStatePart")) {
+			return new BlockStatePart(compound);
+		} else if (name.equals("blockPart")) {
+			return new BlockPart(compound);
 		} else if (name.equals("randomBlobPart")) {
 			return new RandomBlobPart(compound);
 		}
