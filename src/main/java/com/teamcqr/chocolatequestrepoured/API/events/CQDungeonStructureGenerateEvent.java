@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

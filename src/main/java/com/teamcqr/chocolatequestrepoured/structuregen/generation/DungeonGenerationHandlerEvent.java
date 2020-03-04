@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 

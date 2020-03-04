@@ -7,12 +7,12 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
