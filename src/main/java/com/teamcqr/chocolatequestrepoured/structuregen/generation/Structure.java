@@ -26,7 +26,7 @@ public class Structure {
 	}
 
 	public void addList(List<? extends IStructure> list) {
-		if (list != null) {
+		if (list != null && !list.isEmpty()) {
 			this.list.add(list);
 		} else {
 			CQRMain.logger.info("tried to add null");
@@ -66,7 +66,10 @@ public class Structure {
 			NBTTagList nbtTagList2 = (NBTTagList) nbtTagList1.get(i);
 			List<IStructure> partList = new ArrayList<>(nbtTagList2.tagCount());
 			for (int j = 0; j < nbtTagList2.tagCount(); j++) {
-				partList.add(this.createFromNBT(nbtTagList2.getCompoundTagAt(j)));
+				IStructure part = this.createFromNBT(nbtTagList2.getCompoundTagAt(j));
+				if (part != null) {
+					partList.add(part);
+				}
 			}
 			this.list.add(partList);
 		}

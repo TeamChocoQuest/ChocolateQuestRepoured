@@ -147,7 +147,9 @@ public class PlateauBuilder {
 		List<SupportHillPart> list = new ArrayList<>(xIterations * zIterations);
 		for (int x = 0; x <= xIterations; x++) {
 			for (int z = 0; z <= zIterations; z++) {
-				SupportHillPart part = new SupportHillPart(new BlockPos(startX, startY, startZ), sizeX, sizeZ, startX + 16 * x, startZ + 16 * z, x == xIterations ? sizeX % 16 : 16, z == zIterations ? sizeZ % 16 : 16, this.wallSize, this.structureBlock, this.structureTopBlock);
+				int partSizeX = x == xIterations ? sizeX % 16 : 16;
+				int partSizeZ = z == zIterations ? sizeZ % 16 : 16;
+				SupportHillPart part = new SupportHillPart(new BlockPos(startX, startY, startZ), sizeX, sizeZ, startX + 16 * x, startZ + 16 * z, partSizeX, partSizeZ, this.wallSize, this.structureBlock, this.structureTopBlock);
 				list.add(part);
 			}
 		}

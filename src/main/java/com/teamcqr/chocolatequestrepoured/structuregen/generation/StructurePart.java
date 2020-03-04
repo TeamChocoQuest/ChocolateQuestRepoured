@@ -52,6 +52,7 @@ public class StructurePart implements IStructure {
 	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
+
 		compound.setString("id", "structurePart");
 		compound.setTag("part", this.part.writeToNBT(new NBTTagCompound()));
 		compound.setInteger("rot", this.settings.getRotation().ordinal());
@@ -62,6 +63,7 @@ public class StructurePart implements IStructure {
 		compound.setBoolean("replaceBanners", this.replaceBanners);
 		compound.setString("dungeonBanner", this.dungeonBanner != null ? this.dungeonBanner.toString() : "");
 		compound.setBoolean("hasShield", this.hasShield);
+
 		return compound;
 	}
 
@@ -78,43 +80,5 @@ public class StructurePart implements IStructure {
 		this.dungeonBanner = EBanners.valueOf(compound.getString("dungeonBanner"));
 		this.hasShield = compound.getBoolean("hasShield");
 	}
-
-	/*
-	public CQStructurePart getPart() {
-		return this.part;
-	}
-
-	public PlacementSettings getSettings() {
-		return this.settings;
-	}
-
-	public BlockPos getPos() {
-		return this.pos;
-	}
-
-	public int getDungeonChunkX() {
-		return this.dungeonChunkX;
-	}
-
-	public int getDungeonChunkZ() {
-		return this.dungeonChunkZ;
-	}
-
-	public EDungeonMobType getDungeonMobType() {
-		return this.dungeonMobType;
-	}
-
-	public boolean isReplaceBanners() {
-		return this.replaceBanners;
-	}
-
-	public EBanners getDungeonBanner() {
-		return this.dungeonBanner;
-	}
-
-	public boolean isHasShield() {
-		return this.hasShield;
-	}
-	*/
 
 }
