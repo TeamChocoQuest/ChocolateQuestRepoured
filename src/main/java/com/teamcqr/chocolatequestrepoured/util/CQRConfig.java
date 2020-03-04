@@ -17,15 +17,13 @@ public class CQRConfig {
 	public static Wall wall = new Wall();
 
 	public static class Advanced {
+		@Config.RangeInt(min = 0, max = 10)
 		public int threadCount = 4;
-		@Config.RangeInt(min = 1)
+		@Config.RangeInt(min = 1, max = 10)
 		public int tickRateForTasks = 5;
 
 		@Config.Comment("Enable/Disable dungeon generation in parts instead of generating dungeons completely at once.")
 		public boolean dungeonGenerationDelay = true;
-		@Config.Comment("When a dungeon is generated x parts are generted initially and the rest is generated over time.")
-		@Config.RangeInt(min = 0, max = 1000)
-		public int dungeonGenerationMax = 4;
 		@Config.Comment("Every x ticks not yet generated dungeon parts in loaded chunks will be generated.")
 		@Config.RangeInt(min = 1, max = 200)
 		public int dungeonGenerationFrequencyInLoaded = 1;
@@ -39,6 +37,7 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1, max = 10)
 		public int dungeonGenerationCountInUnloaded = 1;
 
+		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = {
 				"torch",
 				"ladder",
@@ -60,24 +59,29 @@ public class CQRConfig {
 				"iron_door",
 				"cqrepoured:unlit_torch" };
 
+		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
 
 		public boolean enableSpecialFeatures = true;
 	}
 
 	public static class General {
-		@Config.Comment("")
 		@Config.RangeInt(min = 16, max = 128)
 		public int despawnDistance = 48;
+		@Config.RangeInt(min = 1, max = 1000)
 		public int dungeonSeparation = 20;
+		@Config.RangeInt(min = 0, max = 1000)
 		public int dungeonSpawnDistance = 25;
 		public boolean dungeonsInFlat = false;
+		@Config.RangeInt(min = 1, max = 10)
 		public int maxLootTablePoolRolls = 1;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		public boolean reinstallDefaultConfigs = false;
+		@Config.RangeDouble(min = 0.0D, max = 100.0D)
 		public double spawnerActivationDistance = 25.0D;
+		@Config.RangeInt(min = 0, max = 32)
 		public int supportHillWallSize = 8;
-		@Config.RangeInt(min = 1, max = 100)
+		@Config.RangeInt(min = 0, max = 100)
 		public int overallDungeonChance = 75;
 		public boolean moreDungeonsBehindWall = true;
 		@Config.RangeInt(min = 1, max = 10)
@@ -86,21 +90,29 @@ public class CQRConfig {
 
 	public static class Mobs {
 		public boolean armorShattersOnMobs = true;
+		@Config.RangeInt(min = 0, max = 16)
 		public int defaultHealingPotionCount = 1;
+		@Config.RangeInt(min = 1, max = 100000)
 		public int distanceDivisor = 1000;
+		@Config.RangeInt(min = 1, max = 100000)
 		public int mobTypeChangeDistance = 1500;
+		@Config.RangeInt(min = 0, max = 128)
 		public int factionUpdateRadius = 100;
+		@Config.RangeInt(min = 0, max = 128)
 		public int alertRadius = 20;
-		@Config.RangeDouble(min = 0D)
-		public double bossHealthMultiplierPerPlayer = 0.1F;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double bossHealthMultiplierPerPlayer = 0.1D;
 	}
 
 	public static class Wall {
+		@Config.RangeInt(min = 0, max = 1000)
 		public int distance = 500;
 		public boolean enabled = true;
 		public String mob = "cqrepoured:spectre";
 		public boolean obsidianCore = true;
+		@Config.RangeInt(min = 80, max = 240)
 		public int topY = 140;
+		@Config.RangeInt(min = 0, max = 10)
 		public int towerDistance = 3;
 	}
 
