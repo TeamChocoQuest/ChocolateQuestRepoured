@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -24,23 +25,23 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		//Check if structures can actually spawn in the world
-		if(!world.getWorldInfo().isMapFeaturesEnabled()) {
+		// Check if structures can actually spawn in the world
+		if (!world.getWorldInfo().isMapFeaturesEnabled()) {
 			return;
 		}
-				
+
 		// Check for flat world type and if dungeons may spawn there
 		if (world.getWorldType() == WorldType.FLAT && !CQRConfig.general.dungeonsInFlat) {
 			return;
 		}
-		
+
 		// Spawn all coordinate specific dungeons for this chunk
 		Set<DungeonBase> coordinateSpecificDungeons = DungeonGenUtils.getLocSpecDungeonsForChunk(world, chunkX, chunkZ);
 		if (!coordinateSpecificDungeons.isEmpty()) {
 			for (DungeonBase dungeon : coordinateSpecificDungeons) {
 				CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
-				Random rand = new Random(getSeed(world, chunkX, chunkZ));
-				dungeon.generate(dungeon.getLockedPos().getX(), dungeon.getLockedPos().getZ(), world, world.getChunkFromChunkCoords(chunkX, chunkZ), rand);
+				BlockPos pos = dungeon.getLockedPos();
+				dungeon.generate(new BlockPos(pos.getX(), 0, pos.getZ()), world);
 			}
 			return;
 		}
@@ -49,7 +50,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		if (DungeonGenUtils.isInWallRange(world, chunkX, chunkZ)) {
 			return;
 		}
-		
+
 		boolean behindWall = false;
 		int dungeonSeparation = CQRConfig.general.dungeonSeparation;
 
@@ -64,13 +65,13 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
 		if ((chunkX - spawnChunk.x) % dungeonSeparation == 0 && (chunkZ - spawnChunk.z) % dungeonSeparation == 0 && DungeonGenUtils.isFarAwayEnoughFromSpawn(world, chunkX, chunkZ)
 				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
-			//Check if there is a village structure nearby
+			// Check if there is a village structure nearby
 			int checkDist = 20;
-			if(world.getVillageCollection().getNearestVillage(new BlockPos(chunkX * 16, world.getHeight(chunkX, chunkZ), chunkZ * 16), checkDist) != null) {
+			if (world.getVillageCollection().getNearestVillage(new BlockPos(chunkX * 16, world.getHeight(chunkX, chunkZ), chunkZ * 16), checkDist) != null) {
 				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
 				return;
 			}
-			
+
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
 
 			// Overall dungeon spawn chance
@@ -87,7 +88,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						d -= dungeon.getSpawnChance();
 						if (d <= 0) {
 							CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
-							dungeon.generate(chunkX * 16 + 1, chunkZ * 16 + 1, world, world.getChunkFromChunkCoords(chunkX, chunkZ), rand);
+							dungeon.generate(new BlockPos(chunkX * 16 + 1, 0, chunkZ * 16 + 1), world);
 							return;
 						}
 					}

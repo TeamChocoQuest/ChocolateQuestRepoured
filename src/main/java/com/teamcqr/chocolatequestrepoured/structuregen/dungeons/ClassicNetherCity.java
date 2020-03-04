@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.NetherCityGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;

@@ -6,8 +6,8 @@ import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.DungeonSyncPacket;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.util.ITooltipFlag;

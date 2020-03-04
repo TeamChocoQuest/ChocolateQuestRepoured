@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;

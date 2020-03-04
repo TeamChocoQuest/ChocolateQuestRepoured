@@ -1,7 +1,8 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;

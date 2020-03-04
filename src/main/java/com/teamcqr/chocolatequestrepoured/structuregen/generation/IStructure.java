@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

@@ -1,6 +1,7 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 
 import net.minecraft.nbt.NBTTagCompound;

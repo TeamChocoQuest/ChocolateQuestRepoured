@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.io.File;
 import java.io.FileInputStream;

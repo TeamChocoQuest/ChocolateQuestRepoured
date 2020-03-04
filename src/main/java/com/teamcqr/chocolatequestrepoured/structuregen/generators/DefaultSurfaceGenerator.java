@@ -3,13 +3,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
-import com.teamcqr.chocolatequestrepoured.structuregen.StructurePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.SupportHillPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.StructurePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;

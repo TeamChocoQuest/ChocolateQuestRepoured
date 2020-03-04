@@ -13,8 +13,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
