@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class BlockPart implements IStructure {
@@ -47,7 +46,7 @@ public class BlockPart implements IStructure {
 		for (BlockPos.MutableBlockPos position : BlockPos.getAllInBoxMutable(BlockPos.ORIGIN, this.size.add(-1, -1, -1))) {
 			Block block = this.blocks[position.getX()][position.getY()][position.getZ()];
 			if (block != null) {
-				world.setBlockState(position.toImmutable(), block.getDefaultState(), 2);
+				world.setBlockState(pos.add(position), block.getDefaultState(), 2);
 			}
 		}
 	}
@@ -87,6 +86,7 @@ public class BlockPart implements IStructure {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
+		this.blocks = new Block[this.size.getX()][this.size.getY()][this.size.getZ()];
 
 		NBTTagList nbtTagList = compound.getTagList("blocks", 10);
 		for (int x = 0; x < this.size.getX(); x++) {
@@ -199,10 +199,11 @@ public class BlockPart implements IStructure {
 				for (int y = 0; y <= yIterations; y++) {
 					for (int z = 0; z <= zIterations; z++) {
 						BlockPos partStartPos = pos.add(x * 16, y * 16, z * 16);
-						BlockPos partEndPos = partStartPos.add(x == xIterations ? x % 16 : 16, y == yIterations ? y % 16 : 16, z == zIterations ? z % 16 : 16);
+						BlockPos partEndPos = partStartPos.add(x == xIterations ? blockArray.length - x * 16 : 16, y == yIterations ? blockArray[x].length - y * 16 : 16, z == zIterations ? blockArray[x][y].length - z * 16 : 16);
 						BlockPos partSize = partEndPos.subtract(partStartPos);
 						BlockPos partOffset = partStartPos.subtract(pos);
 						Block[][][] blocks = new Block[partSize.getX()][partSize.getY()][partSize.getZ()];
+						boolean empty = true;
 
 						for (int x1 = 0; x1 < partSize.getX(); x1++) {
 							for (int y1 = 0; y1 < partSize.getY(); y1++) {
@@ -212,12 +213,17 @@ public class BlockPart implements IStructure {
 									int z2 = partOffset.getZ() + z1;
 									if (x2 < blockArray.length && y2 < blockArray[x2].length && z2 < blockArray[x2][y2].length) {
 										blocks[x1][y1][z1] = blockArray[x2][y2][z2];
+										if (empty && blocks[x1][y1][z1] != null) {
+											empty = false;
+										}
 									}
 								}
 							}
 						}
 
-						list.add(new BlockPart(partStartPos, partSize, blocks));
+						if (!empty) {
+							list.add(new BlockPart(partStartPos, partSize, blocks));
+						}
 					}
 				}
 			}

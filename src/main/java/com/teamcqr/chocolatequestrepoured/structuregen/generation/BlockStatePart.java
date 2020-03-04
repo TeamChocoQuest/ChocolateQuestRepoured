@@ -89,6 +89,7 @@ public class BlockStatePart implements IStructure {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
 		this.size = NBTUtil.getPosFromTag(compound.getCompoundTag("size"));
+		this.blockstates = new IBlockState[this.size.getX()][this.size.getY()][this.size.getZ()];
 
 		NBTTagList nbtTagList = compound.getTagList("blocks", 10);
 		for (int x = 0; x < this.size.getX(); x++) {
@@ -202,10 +203,11 @@ public class BlockStatePart implements IStructure {
 				for (int y = 0; y <= yIterations; y++) {
 					for (int z = 0; z <= zIterations; z++) {
 						BlockPos partStartPos = pos.add(x * 16, y * 16, z * 16);
-						BlockPos partEndPos = partStartPos.add(x == xIterations ? x % 16 : 16, y == yIterations ? y % 16 : 16, z == zIterations ? z % 16 : 16);
+						BlockPos partEndPos = partStartPos.add(x == xIterations ? blockStateArray.length - x * 16 : 16, y == yIterations ? blockStateArray[x].length - y * 16 : 16, z == zIterations ? blockStateArray[x][y].length - z * 16 : 16);
 						BlockPos partSize = partEndPos.subtract(partStartPos);
 						BlockPos partOffset = partStartPos.subtract(pos);
 						IBlockState[][][] blockstates = new IBlockState[partSize.getX()][partSize.getY()][partSize.getZ()];
+						boolean empty = true;
 
 						for (int x1 = 0; x1 < partSize.getX(); x1++) {
 							for (int y1 = 0; y1 < partSize.getY(); y1++) {
@@ -215,12 +217,17 @@ public class BlockStatePart implements IStructure {
 									int z2 = partOffset.getZ() + z1;
 									if (x2 < blockStateArray.length && y2 < blockStateArray[x2].length && z2 < blockStateArray[x2][y2].length) {
 										blockstates[x1][y1][z1] = blockStateArray[x2][y2][z2];
+										if (empty && blockstates[x1][y1][z1] != null) {
+											empty = false;
+										}
 									}
 								}
 							}
 						}
 
-						list.add(new BlockStatePart(partStartPos, partSize, blockstates));
+						if (!empty) {
+							list.add(new BlockStatePart(partStartPos, partSize, blockstates));
+						}
 					}
 				}
 			}
