@@ -94,6 +94,7 @@ public class SupportHillPart implements IStructure {
 	@Override
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
+
 		compound.setString("id", "supportHillPart");
 		compound.setTag("startPos", NBTUtil.createPosTag(this.startPos));
 		compound.setInteger("sizeX", this.sizeX);
@@ -105,6 +106,7 @@ public class SupportHillPart implements IStructure {
 		compound.setInteger("wallSize", this.wallSize);
 		compound.setString("structureBlock", this.structureBlock.getRegistryName().toString());
 		compound.setString("structureTopBlock", this.structureTopBlock.getRegistryName().toString());
+
 		return compound;
 	}
 
