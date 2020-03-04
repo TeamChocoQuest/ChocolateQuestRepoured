@@ -106,7 +106,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			BlockPos cUpper = new BlockPos(this.maxX, y + this.dungeon.getCaveHeight(), this.maxZ).add(this.dungeon.getDistanceBetweenBuildingCenters() * 0.1, 0, this.dungeon.getDistanceBetweenBuildingCenters() * 0.05);
 
 			PlateauBuilder pB = new PlateauBuilder();
-			pB.makeRandomBlob(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ), world);
+			// pB.makeRandomBlob(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ), world);
+			lists.add(pB.makeRandomBlobList(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, 4, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ)));
 			// }
 		}
 

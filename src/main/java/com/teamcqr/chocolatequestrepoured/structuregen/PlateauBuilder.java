@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.RandomBlobPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -206,6 +207,26 @@ public class PlateauBuilder {
 				}
 			}
 		}
+	}
+
+	public List<RandomBlobPart> makeRandomBlobList(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
+		BlockPos size = new BlockPos((endPos.getX() - startPos.getX()) * 1.25D, (endPos.getY() - startPos.getY()) * 1.25D, (endPos.getZ() - startPos.getZ()) * 1.25D);
+
+		int xIterations = size.getX() / 16;
+		int yIterations = size.getY() / 16;
+		int zIterations = size.getZ() / 16;
+
+		List<RandomBlobPart> list = new ArrayList<>(size.getX() * size.getY() * size.getZ());
+		for (int x = 0; x <= xIterations; x++) {
+			for (int y = 0; y <= yIterations; y++) {
+				for (int z = 0; z <= zIterations; z++) {
+					BlockPos partOffset = new BlockPos(x * 16, y * 16, z * 16);
+					BlockPos partSize = new BlockPos(x == xIterations ? x % 16 : 16, y == yIterations ? y % 16 : 16, z == zIterations ? z % 16 : 16);
+					list.add(new RandomBlobPart(fillBlock, startPos, size, partOffset, partSize, wallSize));
+				}
+			}
+		}
+		return list;
 	}
 
 }
