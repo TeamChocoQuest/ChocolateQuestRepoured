@@ -12,6 +12,8 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -283,18 +285,10 @@ public class DungeonBase {
 	}
 
 	public File getStructureFileFromDirectory(File parentDir) {
-		if (parentDir.isDirectory()) {
-			int fileCount = parentDir.listFiles(FileIOUtil.getNBTFileFilter()).length;
-			if (fileCount > 0) {
-				Random rdm = new Random();
-				List<File> files = this.getFilesRecursively(parentDir);
-				fileCount = files.size();
-				return files.get(rdm.nextInt(fileCount));
-			}
-		} else {
-			if (parentDir.getName().contains(".nbt")) {
-				return parentDir;
-			}
+		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
+		if (!files.isEmpty()) {
+			Random rand = new Random();
+			return files.get(rand.nextInt(files.size()));
 		}
 		return null;
 	}
