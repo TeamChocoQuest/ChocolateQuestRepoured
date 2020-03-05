@@ -7,7 +7,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -33,7 +33,8 @@ public class CastleDungeon extends DungeonBase {
 	private Block floorBlock = Blocks.PLANKS;
 	private Block stairBlock = Blocks.STONE_BRICK_STAIRS;
 
-	private CQRWeightedRandom<CastleAddonRoof.RoofType> roofRandomizer;
+	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
+	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
 
 	@Override
 	public IDungeonGenerator getGenerator() {
@@ -55,11 +56,21 @@ public class CastleDungeon extends DungeonBase {
 
 			this.random = new Random();
 
-			this.roofRandomizer = new CQRWeightedRandom<>(random);
+			this.roofTypeRandomizer = new CQRWeightedRandom<>(random);
 			int weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
-			this.roofRandomizer.add(CastleAddonRoof.RoofType.TWO_SIDED, weight);
+			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
-			this.roofRandomizer.add(CastleAddonRoof.RoofType.FOUR_SIDED, weight);
+			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+
+			this.windowTypeRandomizer = new CQRWeightedRandom<>(random);
+			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
+			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.BASIC_GLASS, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightCrossGlass", 1);
+			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.CROSS_GLASS, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightSquareBars", 1);
+			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.SQUARE_BARS, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightOpenSlit", 1);
+			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.OPEN_SLIT, weight);
 
 			this.closeConfigFile();
 		} else {
@@ -125,8 +136,11 @@ public class CastleDungeon extends DungeonBase {
 		return this.random;
 	}
 
-	public CastleAddonRoof.RoofType getRandomRoofType() {
-		return roofRandomizer.next();
+	public RandomCastleConfigOptions.RoofType getRandomRoofType() {
+		return roofTypeRandomizer.next();
 	}
 
+	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
+		return windowTypeRandomizer.next();
+	}
 }

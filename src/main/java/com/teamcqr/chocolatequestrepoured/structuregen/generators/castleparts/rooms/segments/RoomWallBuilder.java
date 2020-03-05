@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -24,6 +25,7 @@ public class RoomWallBuilder {
 	protected int height;
 	protected EnumFacing side;
 	protected Random random;
+	protected RandomCastleConfigOptions.WindowType windowType = RandomCastleConfigOptions.WindowType.BASIC_GLASS;
 
 	public RoomWallBuilder(BlockPos wallStart, int height, int length, WallOptions options, EnumFacing side) {
 		this.height = height;
@@ -45,6 +47,7 @@ public class RoomWallBuilder {
 		IBlockState blockToBuild;
 
 		EnumFacing iterDirection;
+		this.windowType = dungeon.getRandomWindowType();
 
 		if (this.side.getAxis() == EnumFacing.Axis.X) {
 			iterDirection = EnumFacing.SOUTH;
@@ -63,7 +66,7 @@ public class RoomWallBuilder {
 
 	protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon) {
 		if (this.options.hasWindow()) {
-			return this.getBlockWindowBasicGlass(pos, dungeon);
+			return this.getWindowBlock(pos, dungeon);
 		} else if (this.options.hasDoor()) {
 			return this.getDoorBlock(pos, dungeon);
 		} else {
@@ -249,23 +252,65 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
+	protected IBlockState getWindowBlock(BlockPos pos, CastleDungeon dungeon) {
+		switch (this.windowType) {
+			case BASIC_GLASS:
+				return getBlockWindowBasicGlass(pos, dungeon);
+			case CROSS_GLASS:
+				return getBlockWindowCrossGlass(pos, dungeon);
+			case SQUARE_BARS:
+				return getBlockWindowSquareBars(pos, dungeon);
+			case OPEN_SLIT:
+			default:
+				return getBlockWindowOpenSlit(pos, dungeon);
+		}
+	}
+
 	private IBlockState getBlockWindowBasicGlass(BlockPos pos, CastleDungeon dungeon) {
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
 
-		if ((y == 3 || y == 4) && (dist == this.length / 2)) {
+		if ((y == 2 || y == 3) && (dist == this.length / 2)) {
 			return Blocks.GLASS_PANE.getDefaultState();
 		} else {
 			return dungeon.getWallBlock().getDefaultState();
 		}
 	}
 
-	private IBlockState getBlockWindowBasicBars(BlockPos pos, CastleDungeon dungeon) {
-		int y = pos.getY();
+	private IBlockState getBlockWindowCrossGlass(BlockPos pos, CastleDungeon dungeon) {
+		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
+		int halfDist = this.length / 2;
 
-		if ((y == 3 || y == 4) && (dist == this.length / 2)) {
+		if ((dist == halfDist - 1 && y == 3) ||
+				(dist == halfDist && y >= 2 && y <= 4) ||
+				(dist == halfDist + 1 && y == 3)){
+			return Blocks.GLASS_PANE.getDefaultState();
+		} else {
+			return dungeon.getWallBlock().getDefaultState();
+		}
+	}
+
+	private IBlockState getBlockWindowSquareBars(BlockPos pos, CastleDungeon dungeon) {
+		int y = pos.getY() - this.wallStart.getY();
+		int dist = this.getLengthPoint(pos);
+		int halfDist = length / 2;
+
+		if (((y == 2) || (y == 3)) &&
+				((dist == halfDist) || (dist == halfDist + 1)))  {
 			return Blocks.IRON_BARS.getDefaultState();
+		} else {
+			return dungeon.getWallBlock().getDefaultState();
+		}
+	}
+
+	private IBlockState getBlockWindowOpenSlit(BlockPos pos, CastleDungeon dungeon) {
+		int y = pos.getY() - this.wallStart.getY();
+		int dist = this.getLengthPoint(pos);
+		int halfDist = length / 2;
+
+		if ((y == 2) && (dist >= halfDist - 1) && (dist <= halfDist + 1))  {
+			return Blocks.AIR.getDefaultState();
 		} else {
 			return dungeon.getWallBlock().getDefaultState();
 		}
