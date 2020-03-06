@@ -8,12 +8,12 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.BlockPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacement;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
@@ -301,15 +301,44 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		});*/
 		
 		int pY = 256 /16;
-		int pX = blocks.length;
-		int pZ = blocks.length;
+		int pX = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
+		int pZ = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
+		List<IStructure> parts = new ArrayList<>();
+		Block[][][] lagBlocks = new Block[blocks.length][256][blocks.length];
 		for(int iY = 0; iY < pY; iY++) {
 			for(int iX = 0; iX < pX; iX++) {
 				for(int iZ = 0; iZ < pZ; iZ++) {
-					
+					final Block[][][] partBlocks = new Block[16][16][16];
+					boolean flag = false;
+					for(int iy = iY * 16; iy < (iY * 16 +16) && iy < 256; iy++) {
+						for(int ix = iX *16; ix < (iX * 16 +16) && ix < blocks.length; ix++) {
+							for(int iz = iZ * 16; iz < (iZ * 16 +16) && iz < blocks.length; iz++) {
+								Block block = blocks[ix][iy][iz]; 
+								if(block != null) {
+									flag = true;
+									if(block.getTickRandomly() || block.getLightValue(block.getDefaultState()) > 0) {
+										lagBlocks[ix][iy][iz] = block;
+									} else {
+										partBlocks[ix -iX *16][iy -iY *16][iz -iZ *16] = block;
+									}
+									
+								}
+							}
+						}
+					}
+					if(flag) {
+						BlockPart part = new BlockPart(referenceLoc.add(iX *16, iY *16, iZ *16), new BlockPos(16,16,16), partBlocks);
+						parts.add(part);
+					}
 				}
 			}
 		}
+		
+		if(!parts.isEmpty()) {
+			lists.add(parts);
+		}
+		
+		lists.add(BlockPart.split(referenceLoc, lagBlocks));
 		
 		if (this.dungeon.doBuildDungeon()) {
 			this.generatePillars(pillarCenters, lowYMax + 10, world);

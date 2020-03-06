@@ -1,11 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
@@ -23,6 +26,7 @@ public class StrongholdBuilder {
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
+	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 
 	public StrongholdBuilder(BlockPos start, int distanceToWall, VolcanoDungeon dungeon, EnumFacing expansionDirection, World world) {
 		this.startPos = start;
@@ -157,6 +161,10 @@ public class StrongholdBuilder {
 		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
 			this.world.setBlockState(p, ModBlocks.GRANITE_SQUARE.getDefaultState());
 		}
+	}
+
+	public List<List<? extends IStructure>> getStrongholdParts() {
+		return strongholdParts;
 	}
 
 }
