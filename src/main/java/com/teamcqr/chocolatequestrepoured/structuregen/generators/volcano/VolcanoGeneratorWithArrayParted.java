@@ -540,7 +540,11 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 			for (BlockPos p : this.getSphereBlocks(center, radius)) {
 				BlockPos v = p.subtract(centerLoc);
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.AIR;
+				try {
+					blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.AIR;
+				} catch(ArrayIndexOutOfBoundsException ex) {
+					//Ignore
+				}
 			}
 
 		}
