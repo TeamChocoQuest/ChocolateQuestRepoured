@@ -36,27 +36,6 @@ public class DungeonGenerationHandler {
 		}
 	}
 
-	/*
-	 * public static void addCQStructurePart(World world, CQStructurePart part, PlacementSettings settings, BlockPos pos, int dungeonChunkX, int dungeonChunkZ, DungeonBase dungeon) {
-	 * EDungeonMobType dungeonMobType = dungeon.getDungeonMob();
-	 * if (dungeonMobType == EDungeonMobType.DEFAULT) {
-	 * dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(dungeonChunkX, dungeonChunkZ);
-	 * }
-	 * boolean replaceBanners = dungeon.replaceBanners();
-	 * EBanners dungeonBanner = dungeonMobType.getBanner();
-	 * boolean hasShield = dungeon.isProtectedFromModifications();
-	 * 
-	 * DungeonGenerationHandler instance = getInstance(world);
-	 * instance.dungeonPartList.add(new StructurePart(part, settings, pos, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield));
-	 * }
-	 * 
-	 * public static void addCQStructurePart(World world, CQStructurePart part, PlacementSettings settings, BlockPos pos, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMobType, boolean replaceBanners, EBanners dungeonBanner,
-	 * boolean hasShield) {
-	 * DungeonGenerationHandler instance = getInstance(world);
-	 * instance.dungeonPartList.add(new StructurePart(part, settings, pos, dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield));
-	 * }
-	 */
-
 	public static void addStructure(World world, Structure structure) {
 		DungeonGenerationHandler instance = getInstance(world);
 		instance.dungeonPartList.add(structure);
@@ -114,20 +93,20 @@ public class DungeonGenerationHandler {
 			try {
 				InputStream inputStream = new FileInputStream(this.file);
 				NBTTagCompound compound = CompressedStreamTools.readCompressed(inputStream);
-				this.dungeonPartList.clear();
-				this.dungeonPartList.addAll(this.readList(compound.getTagList("parts", 10)));
+				this.readFromNBT(compound);
 				inputStream.close();
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to load dungeon parts", e);
 			}
 		}
-
-		// CQRMain.logger.info("Loaded " + this.dungeonPartList.size() + " parts to generate");
 	}
 
 	private void saveData() {
 		if (!this.file.exists()) {
 			try {
+				if (!this.file.getParentFile().exists()) {
+					this.file.getParentFile().mkdirs();
+				}
 				this.file.createNewFile();
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to create file for dungeon parts", e);
@@ -136,66 +115,24 @@ public class DungeonGenerationHandler {
 
 		try {
 			OutputStream outputStream = new FileOutputStream(this.file);
-			NBTTagCompound compound = new NBTTagCompound();
-			compound.setTag("parts", this.writeList(this.dungeonPartList));
+			NBTTagCompound compound = this.writeToNBT();
 			CompressedStreamTools.writeCompressed(compound, outputStream);
 			outputStream.close();
 		} catch (IOException e) {
 			CQRMain.logger.error("Failed to save dungeon parts", e);
 		}
-
-		// CQRMain.logger.info("Saved " + this.dungeonPartList.size() + " parts to generate");
 	}
 
 	private void tick() {
 		if (!this.dungeonPartList.isEmpty()) {
 			List<Integer> toRemove = new ArrayList<>();
 
-			/*
-			 * if (this.world.getTotalWorldTime() % CQRConfig.advanced.dungeonGenerationFrequencyInLoaded == 0) {
-			 * for (int i = 0; i < this.dungeonPartList.size(); i++) {
-			 * StructurePart structurePart = this.dungeonPartList.get(i);
-			 * CQStructurePart part = structurePart.getPart();
-			 * PlacementSettings settings = structurePart.getSettings();
-			 * BlockPos pos = structurePart.getPos();
-			 * 
-			 * if (DungeonGenerationHandler.isAreaLoaded(this.world, pos, part, settings.getRotation())) {
-			 * part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(),
-			 * structurePart.getDungeonBanner(), structurePart.isHasShield());
-			 * toRemove.add(i);
-			 * if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInLoaded) {
-			 * break;
-			 * }
-			 * }
-			 * }
-			 * }
-			 * 
-			 * if (toRemove.isEmpty() && this.world.getTotalWorldTime() % CQRConfig.advanced.dungeonGenerationFrequencyInUnloaded == 0) {
-			 * for (int i = 0; i < this.dungeonPartList.size(); i++) {
-			 * StructurePart structurePart = this.dungeonPartList.get(i);
-			 * CQStructurePart part = structurePart.getPart();
-			 * PlacementSettings settings = structurePart.getSettings();
-			 * BlockPos pos = structurePart.getPos();
-			 * 
-			 * part.addBlocksToWorld(this.world, pos, settings, structurePart.getDungeonChunkX(), structurePart.getDungeonChunkZ(), structurePart.getDungeonMobType(), structurePart.isReplaceBanners(), structurePart.getDungeonBanner(),
-			 * structurePart.isHasShield());
-			 * toRemove.add(i);
-			 * if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInUnloaded) {
-			 * break;
-			 * }
-			 * }
-			 * }
-			 *
-			 * if (!toRemove.isEmpty()) {
-			 * CQRMain.logger.info("Forced/Post generating " + toRemove.size() + " structure parts. " + (this.dungeonPartList.size() - toRemove.size()) + " parts left.");
-			 * }
-			 */
-
 			for (int i = 0; i < this.dungeonPartList.size(); i++) {
 				Structure structure = this.dungeonPartList.get(i);
 				structure.tick(this.world);
 				if (structure.isGenerated()) {
 					toRemove.add(i);
+					CQRMain.logger.info("Generated dungeon!");
 				}
 			}
 
@@ -205,20 +142,25 @@ public class DungeonGenerationHandler {
 		}
 	}
 
-	private List<Structure> readList(NBTTagList nbtTagList) {
-		List<Structure> list = new ArrayList<>(nbtTagList.tagCount());
-		for (int i = 0; i < nbtTagList.tagCount(); i++) {
-			list.add(new Structure(this.world, nbtTagList.getCompoundTagAt(i)));
+	private NBTTagCompound writeToNBT() {
+		NBTTagCompound compound = new NBTTagCompound();
+
+		NBTTagList nbtTagList = new NBTTagList();
+		for (int i = 0; i < this.dungeonPartList.size(); i++) {
+			nbtTagList.appendTag(this.dungeonPartList.get(i).writeToNBT());
 		}
-		return list;
+		compound.setTag("parts", nbtTagList);
+
+		return compound;
 	}
 
-	private NBTTagList writeList(List<Structure> list) {
-		NBTTagList nbtTagList = new NBTTagList();
-		for (int i = 0; i < list.size(); i++) {
-			nbtTagList.appendTag(list.get(i).writeToNBT());
+	private void readFromNBT(NBTTagCompound compound) {
+		this.dungeonPartList.clear();
+
+		NBTTagList nbtTagList = compound.getTagList("parts", 10);
+		for (int i = 0; i < nbtTagList.tagCount(); i++) {
+			this.dungeonPartList.add(new Structure(this.world, nbtTagList.getCompoundTagAt(i)));
 		}
-		return nbtTagList;
 	}
 
 }
