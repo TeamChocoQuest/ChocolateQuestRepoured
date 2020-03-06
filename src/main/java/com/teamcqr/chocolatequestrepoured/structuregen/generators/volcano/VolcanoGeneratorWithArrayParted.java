@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
 
@@ -559,7 +558,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				for (int iX = 0; iX <= 6; iX++) {
 					for (int iZ = 0; iZ <= 6; iZ++) {
 						//pillarBlocks.add(center.add(iX, iY, iZ));
-						pillarBlocks.add(new AbstractMap.SimpleEntry(center.subtract(referenceLoc).add(iX, iY, iZ), this.dungeon.getPillarBlock()));
+						pillarBlocks.add(new AbstractMap.SimpleEntry<BlockPos, Block>(center.subtract(referenceLoc).add(iX, iY, iZ), this.dungeon.getPillarBlock()));
 					}
 				}
 			}
