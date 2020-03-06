@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
@@ -341,7 +344,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		lists.add(BlockPart.split(referenceLoc, lagBlocks));
 		
 		if (this.dungeon.doBuildDungeon()) {
-			this.generatePillars(pillarCenters, lowYMax + 10, world);
+			this.generatePillars(pillarCenters, lowYMax + 10, world, lists);
 		}
 
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
@@ -549,20 +552,22 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		}
 	}
 
-	private void generatePillars(List<BlockPos> centers, int maxY, World world) {
-		List<BlockPos> pillarBlocks = new ArrayList<BlockPos>();
+	private void generatePillars(List<BlockPos> centers, int maxY, World world, List<List<? extends IStructure>> structureParts) {
 		for (BlockPos center : centers) {
+			//List<BlockPos> pillarBlocks = new ArrayList<BlockPos>();
+			List<Entry<BlockPos, Block>> pillarBlocks = new ArrayList<>();
 			for (int iY = 0; iY <= maxY; iY++) {
 				for (int iX = -3; iX <= 3; iX++) {
 					for (int iZ = -3; iZ <= 3; iZ++) {
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, 3, center)) {
-							pillarBlocks.add(center.add(iX, iY, iZ));
+							//pillarBlocks.add(center.add(iX, iY, iZ));
+							pillarBlocks.add(new AbstractMap.SimpleEntry(center.add(iX, iY, iZ), this.dungeon.getPillarBlock()));
 						}
 					}
 				}
 			}
+			structureParts.add(BlockPart.split(center, pillarBlocks));
 		}
-		ThreadingUtil.passListWithBlocksToThreads(pillarBlocks, this.dungeon.getPillarBlock(), world, pillarBlocks.size(), true);
 	}
 
 	private int getMinY(BlockPos center, int radius, World world) {
