@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
@@ -15,7 +18,7 @@ public class SpiralStrongholdBuilder {
 	private VolcanoDungeon dungeon;
 	private SpiralStrongholdFloor[] floors;
 	private int floorCount = 0;
-	
+	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 	private Random rdm;
 	
 	public SpiralStrongholdBuilder(ESkyDirection expansionDirection, VolcanoDungeon dungeon, Random rdm) {
@@ -95,11 +98,12 @@ public class SpiralStrongholdBuilder {
 	}
 	
 	public void buildFloors(BlockPos strongholdEntrancePos, World world) {
-		BlockPos currentPos = strongholdEntrancePos;
+		//BlockPos currentPos = strongholdEntrancePos;
+		List<List<? extends IStructure>> floors = new ArrayList<>();
 		for(int i = 0; i < floorCount; i++) {
-			SpiralStrongholdFloor floor = floors[i];
-			floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world);
-			currentPos.add(0,dungeon.getRoomSizeY(),0);
+			SpiralStrongholdFloor floor = this.floors[i];
+			floors.addAll(floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world));
+			//currentPos.add(0,dungeon.getRoomSizeY(),0);
 			/*System.out.println("###### FLOOR " + (i +1) +" ######" );
 			for(int x = 0; x < dungeon.getFloorSideLength(); x++) {
 				for(int z = 0; z < dungeon.getFloorSideLength(); z++) {
@@ -112,10 +116,15 @@ public class SpiralStrongholdBuilder {
 			}
 			System.out.println("");
 			System.out.println("");*/
-			if(i < (floorCount -1)) {
+			/*if(i < (floorCount -1)) {
 				currentPos = new BlockPos(floor.getExitCoordinates().getFirst(), currentPos.getY(), floor.getExitCoordinates().getSecond());
-			}
+			}*/
 		}
+		strongholdParts.addAll(floors);
+	}
+
+	public List<List<? extends IStructure>> getStrongholdParts() {
+		return strongholdParts;
 	}
 
 }
