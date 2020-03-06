@@ -385,14 +385,8 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.doBuildDungeon()) {
 			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
-			Runnable strongholdTask = new Runnable() {
-				
-				@Override
-				public void run() {
-					entranceBuilder.generate();
-				}
-			};
-			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(strongholdTask);
+			entranceBuilder.generate();
+			lists.addAll(entranceBuilder.getStrongholdParts());
 		}
 
 		// Generates the stronghold
