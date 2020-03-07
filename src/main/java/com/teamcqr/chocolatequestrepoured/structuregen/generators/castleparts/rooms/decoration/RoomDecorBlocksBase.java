@@ -15,7 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public abstract class RoomDecorBlocks implements IRoomDecor {
+public abstract class RoomDecorBlocksBase implements IRoomDecor {
 	protected class DecoBlockOffset {
 		public Vec3i offset;
 		public Block block;
@@ -33,7 +33,7 @@ public abstract class RoomDecorBlocks implements IRoomDecor {
 
 	protected List<DecoBlockOffset> schematic; // Array of blockstates and their offsets
 
-	protected RoomDecorBlocks() {
+	protected RoomDecorBlocksBase() {
 		this.schematic = new ArrayList<>();
 		this.makeSchematic();
 	}

@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 
-public class RoomDecorTorch extends RoomDecorBlocks {
+public class RoomDecorTorch extends RoomDecorBlocksBase {
 	public RoomDecorTorch() {
 		super();
 	}

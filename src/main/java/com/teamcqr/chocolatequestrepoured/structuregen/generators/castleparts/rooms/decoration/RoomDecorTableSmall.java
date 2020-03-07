@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 
-public class RoomDecorTableSmall extends RoomDecorBlocks {
+public class RoomDecorTableSmall extends RoomDecorBlocksBase {
 	public RoomDecorTableSmall() {
 		super();
 	}

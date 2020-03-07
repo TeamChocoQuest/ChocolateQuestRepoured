@@ -331,8 +331,28 @@ public abstract class CastleRoom {
 	 */
 	protected ArrayList<BlockPos> getDecorationEdge(EnumFacing side) {
 		// First get all blocks that are not occupied by walls
-		ArrayList<BlockPos> result = this.getDecorationFirstLayer();
+		ArrayList<BlockPos> result = this.getDecorationLayer(0);
 
+		removeAllButEdge(result, side);
+		result.removeIf(p -> this.decoMap.contains(p)); // Remove block if it is occupied already
+
+		return result;
+	}
+
+	/*
+	 * Get a list of blocks that make up the ring of potential painting locations
+	 */
+	protected ArrayList<BlockPos> getPaintingEdge(EnumFacing side) {
+		// First get all blocks that are not occupied by walls
+		ArrayList<BlockPos> result = this.getDecorationLayer(2);
+
+		removeAllButEdge(result, side);
+		result.removeIf(p -> this.decoMap.contains(p)); // Remove block if it is occupied already
+
+		return result;
+	}
+
+	private void removeAllButEdge(ArrayList<BlockPos> blockList, EnumFacing side) {
 		BlockPos topLeft = this.getDecorationStartPos();
 		final int xStart = topLeft.getX();
 		final int zStart = topLeft.getZ();
@@ -340,22 +360,18 @@ public abstract class CastleRoom {
 		final int zEnd = zStart + (this.getDecorationLengthZ() - 1);
 
 		if (side == EnumFacing.NORTH) {
-			result.removeIf(p -> p.getZ() != zStart);
-			result.sort(Comparator.comparingInt(BlockPos::getX));
+			blockList.removeIf(p -> p.getZ() != zStart);
+			blockList.sort(Comparator.comparingInt(BlockPos::getX));
 		} else if (side == EnumFacing.SOUTH) {
-			result.removeIf(p -> p.getZ() != zEnd);
-			result.sort(Comparator.comparingInt(BlockPos::getX).reversed());
+			blockList.removeIf(p -> p.getZ() != zEnd);
+			blockList.sort(Comparator.comparingInt(BlockPos::getX).reversed());
 		} else if (side == EnumFacing.WEST) {
-			result.removeIf(p -> p.getX() != xStart);
-			result.sort(Comparator.comparingInt(BlockPos::getZ));
+			blockList.removeIf(p -> p.getX() != xStart);
+			blockList.sort(Comparator.comparingInt(BlockPos::getZ));
 		} else if (side == EnumFacing.EAST) {
-			result.removeIf(p -> p.getX() != xEnd);
-			result.sort(Comparator.comparingInt(BlockPos::getZ).reversed());
+			blockList.removeIf(p -> p.getX() != xEnd);
+			blockList.sort(Comparator.comparingInt(BlockPos::getZ).reversed());
 		}
-
-		result.removeIf(p -> this.decoMap.contains(p)); // Remove block if it is occupied already
-
-		return result;
 	}
 
 	/*
@@ -363,12 +379,13 @@ public abstract class CastleRoom {
 	 * of a room that can be decorated. In other words, the layer just above the floor
 	 * that is not already occupied by walls.
 	 */
-	protected ArrayList<BlockPos> getDecorationFirstLayer() {
+	protected ArrayList<BlockPos> getDecorationLayer(int layer) {
 		ArrayList<BlockPos> result = this.getDecorationArea();
 
 		if (!result.isEmpty()) {
 			BlockPos lowerUpperLeft = result.get(0);
-			result.removeIf(p -> p.getY() != lowerUpperLeft.getY());
+			int y = lowerUpperLeft.getY() + layer;
+			result.removeIf(p -> p.getY() != y);
 		}
 
 		return result;

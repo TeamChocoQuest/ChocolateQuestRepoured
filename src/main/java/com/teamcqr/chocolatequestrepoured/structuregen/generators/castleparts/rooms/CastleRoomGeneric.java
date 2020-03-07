@@ -2,10 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.DecorationSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorChest;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorNone;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.*;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -38,6 +35,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 	@Override
 	public void decorate(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
 		this.addEdgeDecoration(world, dungeon);
+		this.addPaintings(world);
 		this.addSpawners(world, mobResourceLocation);
 		this.addChests(world, dungeon);
 		this.fillEmptySpaceWithAir(world);
@@ -87,8 +85,27 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		}
 	}
 
+	private void addPaintings(World world) {
+		for (EnumFacing side : EnumFacing.HORIZONTALS) {
+			if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
+				ArrayList<BlockPos> edge = this.getPaintingEdge(side);
+				for (BlockPos pos : edge) {
+					if (this.decoMap.contains(pos)) {
+						// This position is already decorated, so keep going
+						continue;
+					}
+
+					if (RoomDecorTypes.PAINTING.wouldFit(pos, side, this.decoArea, this.decoMap))
+					{
+						RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.decoArea, this.decoMap);
+					}
+				}
+			}
+		}
+	}
+
 	private void addSpawners(World world, ResourceLocation mobResourceLocation) {
-		ArrayList<BlockPos> spawnPositions = this.getDecorationFirstLayer();
+		ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
 		spawnPositions.removeAll(this.decoMap);
 
 		int spawnerCount = this.getSpawnerCount();
