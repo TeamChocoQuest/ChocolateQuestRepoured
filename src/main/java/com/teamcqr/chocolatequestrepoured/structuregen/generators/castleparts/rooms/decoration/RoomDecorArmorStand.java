@@ -6,7 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class RoomDecorArmorStand extends RoomDecorEntity {
+public class RoomDecorArmorStand extends RoomDecorEntityBase {
 	public RoomDecorArmorStand() {
 		super();
 		this.footprint.add(new Vec3i(0, 0, 0));

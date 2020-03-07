@@ -14,7 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class RoomDecorBed extends RoomDecorBlocks {
+public class RoomDecorBed extends RoomDecorBlocksBase {
 	public RoomDecorBed() {
 		super();
 	}

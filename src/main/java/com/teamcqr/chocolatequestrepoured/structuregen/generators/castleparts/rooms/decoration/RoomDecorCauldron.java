@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.init.Blocks;
 
-public class RoomDecorCauldron extends RoomDecorBlocks {
+public class RoomDecorCauldron extends RoomDecorBlocksBase {
 	public RoomDecorCauldron() {
 		super();
 	}
