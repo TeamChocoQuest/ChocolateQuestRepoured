@@ -133,6 +133,49 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		
 		int yMax = ((this.minY + this.maxHeight) < 256 ? this.maxHeight : (255 - this.minY));
 
+		
+
+		// Upper volcano part
+		for (int iY = 0; iY < yMax; iY++) {
+			// RADIUS = baseRAD - (level/steepness)^1/3
+			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY / this.steepness)).intValue();
+			int innerRadius = this.minRadius; // DONE calculate minRadius
+
+			for (int iX = -radiusOuter * 2; iX <= radiusOuter * 2; iX++) {
+				for (int iZ = -radiusOuter * 2; iZ <= radiusOuter * 2; iZ++) {
+					// First check if it is within the base radius...
+					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter * 2, this.centerLoc)) {
+						// If it is at the bottom and also inside the inner radius -> lava
+						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, this.centerLoc)) {
+							// Else it is a wall block
+							// SO now we decide what the wall is gonna be...
+							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
+								// It is lava :D
+								blocks[iX + r][iY + this.minY +5][iZ + r] = dungeon.getLavaBlock();
+							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), rdm.nextLong())) {
+								// It is magma
+								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
+							} else {
+								// It is stone or ore
+								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
+									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1));
+									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1)) {
+										BlockPos v = bp.subtract(referenceLoc);
+										blocks[v.getX()][bp.getY()][v.getZ()] = this.dungeon.getUpperMainBlock();
+									}
+								} else {
+									blockList.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
+									blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getUpperMainBlock();
+								}
+							}
+						} else {
+							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR;
+						}
+					}
+				}
+			}
+		}
+		
 		// Lower "cave" part
 		int[] radiusArr = new int[(int) (lowYMax * 0.9)];
 		for (int iY = 0; iY <= lowYMax + 5; iY++) {
@@ -166,7 +209,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		}
-
+		
 		// Infamous nether staircase
 		EStairSection currStairSection = StairCaseHelper.getRandomStartSection();
 		this.entranceDirection = currStairSection.getSuccessor();
@@ -187,7 +230,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 					for (int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
 						// Pillars
 						if (this.dungeon.doBuildDungeon() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
-							pillarCenters.add(new BlockPos(iX + x, yStairCase - 3, iZ + z));
+							pillarCenters.add(new BlockPos(iX /*+ x*/, yStairCase - 3, iZ /*+ z*/));
 						}
 						// Stairwell -> check if it is in the volcano
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1, this.centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2, this.centerLoc)) {
@@ -210,47 +253,6 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			}
 		}
 
-		// Upper volcano part
-		for (int iY = 0; iY < yMax; iY++) {
-			// RADIUS = baseRAD - (level/steepness)^1/3
-			int radiusOuter = new Double(this.baseRadius - Math.cbrt(iY / this.steepness)).intValue();
-			int innerRadius = this.minRadius; // DONE calculate minRadius
-
-			for (int iX = -radiusOuter * 2; iX <= radiusOuter * 2; iX++) {
-				for (int iZ = -radiusOuter * 2; iZ <= radiusOuter * 2; iZ++) {
-					// First check if it is within the base radius...
-					if (DungeonGenUtils.isInsideCircle(iX, iZ, radiusOuter * 2, this.centerLoc)) {
-						// If it is at the bottom and also inside the inner radius -> lava
-						if (!DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius, this.centerLoc)) {
-							// Else it is a wall block
-							// SO now we decide what the wall is gonna be...
-							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
-								// It is lava :D
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getLavaBlock();
-							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), rdm.nextLong())) {
-								// It is magma
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
-							} else {
-								// It is stone or ore
-								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1));
-									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1)) {
-										BlockPos v = bp.subtract(referenceLoc);
-										blocks[v.getX()][bp.getY()][v.getZ()] = this.dungeon.getUpperMainBlock();
-									}
-								} else {
-									blockList.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
-									blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getUpperMainBlock();
-								}
-							}
-						} else {
-							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR;
-						}
-					}
-				}
-			}
-		}
-
 		if (this.dungeon.isVolcanoDamaged()) {
 			generateHoles(blockList, blocks, r);
 		}
@@ -259,49 +261,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			this.generateOres(blockList, blocks, r);
 		}
 		
-		//DONE: Rewrite to a list thing, multiple 3dim Arrays are too large, they cause out of memory exceptions
-		/*List<BlockPlacement> blocksTmp = new ArrayList<>();
-		int counter = 0;
-		for(int iy = 255; iy >= 0; iy--) {
-			for(int ix = 0; ix < blocks.length; ix++) {
-				if(blocks[ix][iy] == null) {
-					continue;
-				}
-				for(int iz = 0; iz < blocks[ix][iy].length; iz++) {
-					if(blocks[ix][iy][iz] == null) {
-						continue;
-					}
-					blocksTmp.add(new BlockPlacement(referenceLoc.add(ix,iy,iz), blocks[ix][iy][iz].getDefaultState()));
-					counter++;
-					if(counter >= 2500) {
-						Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-							final List<BlockPlacement> bs = new ArrayList<BlockPlacement>(blocksTmp);
-							
-							@Override
-							public void run() {
-								for(BlockPlacement bp : this.bs) {
-									bp.build(world);
-								}
-							}
-						});
-						
-						counter = 0;
-						blocksTmp.clear();
-					}
-				}
-			}
-		}
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-			final List<BlockPlacement> bs = new ArrayList<BlockPlacement>(blocksTmp);
-			
-			@Override
-			public void run() {
-				for(BlockPlacement bp : this.bs) {
-					bp.build(world);
-				}
-			}
-		});*/
-		
+		//Generate parts for generation
 		int pY = 256 /16;
 		int pX = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
 		int pZ = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
@@ -563,7 +523,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 			try {
-				structureParts.add(BlockPart.split(center.subtract(referenceLoc), pillarBlocks));
+				structureParts.add(BlockPart.split(center.subtract(referenceLoc).add(-1,0,-1), pillarBlocks));
 			} catch(ArrayIndexOutOfBoundsException e1) {
 				
 			} catch(NegativeArraySizeException e2) {
