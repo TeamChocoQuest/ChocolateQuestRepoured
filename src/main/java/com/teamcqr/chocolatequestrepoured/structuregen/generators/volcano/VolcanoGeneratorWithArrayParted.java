@@ -1,9 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
@@ -151,7 +149,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 							// SO now we decide what the wall is gonna be...
 							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
 								// It is lava :D
-								blocks[iX + r][iY + this.minY +5][iZ + r] = dungeon.getLavaBlock();
+								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getLavaBlock();
 							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), rdm.nextLong())) {
 								// It is magma
 								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
@@ -303,7 +301,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		lists.add(BlockPart.split(referenceLoc, lagBlocks));
 		
 		if (this.dungeon.doBuildDungeon()) {
-			this.generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc, lists);
+			lists.add(generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc));
 		}
 
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
@@ -509,27 +507,21 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		}
 	}
 
-	private void generatePillars(List<BlockPos> centers, int maxY, World world, BlockPos referenceLoc, List<List<? extends IStructure>> structureParts) {
+	private List<IStructure> generatePillars(List<BlockPos> centers, int maxY, World world, BlockPos referenceLoc) {
+		List<IStructure> parts = new ArrayList<>();
 		for (BlockPos center : centers) {
 			center = center.add(-3, 0, -3);
-			//List<BlockPos> pillarBlocks = new ArrayList<BlockPos>();
-			List<Entry<BlockPos, Block>> pillarBlocks = new ArrayList<>();
+			final Block[][][] blocks = new Block[7][maxY][7];
 			for (int iY = 0; iY < maxY; iY++) {
-				for (int iX = 0; iX <= 6; iX++) {
-					for (int iZ = 0; iZ <= 6; iZ++) {
-						//pillarBlocks.add(center.add(iX, iY, iZ));
-						pillarBlocks.add(new AbstractMap.SimpleEntry<BlockPos, Block>(center.subtract(referenceLoc).add(iX, iY, iZ), this.dungeon.getPillarBlock()));
+				for (int iX = 0; iX < 7; iX++) {
+					for (int iZ = 0; iZ < 7; iZ++) {
+						blocks[iX][iY][iZ] = dungeon.getPillarBlock();
 					}
 				}
 			}
-			try {
-				structureParts.add(BlockPart.split(center.subtract(referenceLoc).add(-1,0,-1), pillarBlocks));
-			} catch(ArrayIndexOutOfBoundsException e1) {
-				
-			} catch(NegativeArraySizeException e2) {
-				
-			}
+			parts.add(new BlockPart(referenceLoc.add(center), new BlockPos(7,maxY,7), blocks));
 		}
+		return parts;
 	}
 
 	private int getMinY(BlockPos center, int radius, World world) {
