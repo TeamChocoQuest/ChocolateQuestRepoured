@@ -17,22 +17,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 public abstract class RoomDecorBlocksBase implements IRoomDecor {
-	protected class DecoBlockOffset {
-		public Vec3i offset;
-		public Block block;
 
-		protected DecoBlockOffset(int x, int y, int z, Block block) {
-			this.offset = new Vec3i(x, y, z);
-			this.block = block;
-		}
-
-		protected DecoBlockOffset(Vec3i offset, Block block) {
-			this.offset = offset;
-			this.block = block;
-		}
-	}
-
-	protected List<DecoBlockOffset> schematic; // Array of blockstates and their offsets
+	protected List<DecoBlockBase> schematic; // Array of blockstates and their offsets
 
 	protected RoomDecorBlocksBase() {
 		this.schematic = new ArrayList<>();
@@ -43,9 +29,9 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 	@Override
 	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
-		ArrayList<DecoBlockOffset> rotated = this.alignSchematic(side);
+		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
 
-		for (DecoBlockOffset placement : rotated) {
+		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
 			if (!decoArea.contains(pos) || decoMap.contains(pos)) {
 				return false;
@@ -57,21 +43,21 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 	@Override
 	public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		ArrayList<DecoBlockOffset> rotated = this.alignSchematic(side);
+		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
 
-		for (DecoBlockOffset placement : rotated) {
+		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			world.setBlockState(pos, this.getRotatedBlockState(placement.block, side));
+			world.setBlockState(pos, placement.getState(side));
 			decoMap.add(pos);
 		}
 
 	}
 
-	protected ArrayList<DecoBlockOffset> alignSchematic(EnumFacing side) {
-		ArrayList<DecoBlockOffset> result = new ArrayList<>();
+	protected ArrayList<DecoBlockBase> alignSchematic(EnumFacing side) {
+		ArrayList<DecoBlockBase> result = new ArrayList<>();
 
-		for (DecoBlockOffset p : this.schematic) {
-			result.add(new DecoBlockOffset(DungeonGenUtils.rotateVec3i(p.offset, side), p.block));
+		for (DecoBlockBase p : this.schematic) {
+			result.add(new DecoBlockBase(DungeonGenUtils.rotateVec3i(p.offset, side), p.block));
 		}
 
 		return result;

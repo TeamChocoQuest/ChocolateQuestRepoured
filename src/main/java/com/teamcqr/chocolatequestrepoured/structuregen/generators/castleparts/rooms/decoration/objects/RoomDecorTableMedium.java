@@ -14,15 +14,15 @@ public class RoomDecorTableMedium extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.OAK_FENCE));
-		this.schematic.add(new DecoBlockOffset(1, 0, 0, Blocks.OAK_FENCE));
-		this.schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.OAK_FENCE));
-		this.schematic.add(new DecoBlockOffset(1, 0, 1, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockBase(1, 0, 0, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockBase(0, 0, 1, Blocks.OAK_FENCE));
+		this.schematic.add(new DecoBlockBase(1, 0, 1, Blocks.OAK_FENCE));
 
-		this.schematic.add(new DecoBlockOffset(0, 1, 0, Blocks.WOODEN_SLAB));
-		this.schematic.add(new DecoBlockOffset(1, 1, 0, Blocks.WOODEN_SLAB));
-		this.schematic.add(new DecoBlockOffset(0, 1, 1, Blocks.WOODEN_SLAB));
-		this.schematic.add(new DecoBlockOffset(1, 1, 1, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockBase(0, 1, 0, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockBase(1, 1, 0, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockBase(0, 1, 1, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockBase(1, 1, 1, Blocks.WOODEN_SLAB));
 	}
 
 	@Override

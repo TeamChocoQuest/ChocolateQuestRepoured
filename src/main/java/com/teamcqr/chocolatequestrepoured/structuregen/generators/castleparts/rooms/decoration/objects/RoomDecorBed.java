@@ -21,16 +21,16 @@ public class RoomDecorBed extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.BED));
-		this.schematic.add(new DecoBlockOffset(0, 0, 1, Blocks.BED));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.BED));
+		this.schematic.add(new DecoBlockBase(0, 0, 1, Blocks.BED));
 	}
 
 	@Override
 	public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		ArrayList<DecoBlockOffset> rotated = this.alignSchematic(side);
+		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
 		boolean head = true;
 
-		for (DecoBlockOffset placement : rotated) {
+		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
 			IBlockState blockState = this.getRotatedBlockState(placement.block, side);
 
