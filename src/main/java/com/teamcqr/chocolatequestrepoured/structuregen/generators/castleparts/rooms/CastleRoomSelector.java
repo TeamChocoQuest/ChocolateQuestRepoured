@@ -57,6 +57,7 @@ public class CastleRoomSelector {
 		}
 	}
 
+	private static final int FLOORS_PER_LAYER = 2;
 	private static final int MAX_LAYERS = 5;
 	private static final int PADDING_FLOORS = 2;
 	private static final int MIN_TOWER_FLOORS = 3;
@@ -65,6 +66,7 @@ public class CastleRoomSelector {
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
 	private BlockPos startPos;
+	private CastleDungeon dungeon;
 	private int floorHeight;
 	private int roomSize;
 	private int minRoomsForBoss;
@@ -75,28 +77,43 @@ public class CastleRoomSelector {
 	private RoomGrid grid;
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
-	private CQRWeightedRandom<EnumRoomType> roomRandomizer;
 
-	public CastleRoomSelector(BlockPos startPos, int roomSize, int floorHeight, int floorsPerLayer, int numSlotsX, int numSlotsZ, Random random) {
+	public CastleRoomSelector(BlockPos startPos, CastleDungeon dungeon) {
 		this.startPos = startPos;
-		this.floorHeight = floorHeight;
-		this.roomSize = roomSize;
-		this.floorsPerLayer = floorsPerLayer;
+		this.dungeon = dungeon;
+		this.floorHeight = dungeon.getFloorHeight();
+		this.roomSize = dungeon.getRoomSize();
+		this.floorsPerLayer = FLOORS_PER_LAYER;
 		this.maxFloors = floorsPerLayer * MAX_LAYERS;
 		this.minRoomsForBoss = (int) (Math.ceil((double) MIN_BOSS_ROOM_SIZE / (roomSize - 1)));
-		this.random = random;
+		this.random = dungeon.getRandom();
 		this.castleRoofs = new ArrayList<>();
 		this.supportAreas = new ArrayList<>();
 
+		int gridSizeX = dungeon.getMaxSize() / this.roomSize;
+		int gridSizeZ = dungeon.getMaxSize() / this.roomSize;
+
 		// Add padding floors so that we can build walkable roofs on top of the highest rooms
-		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, numSlotsX, numSlotsZ, random);
+		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, gridSizeX, gridSizeZ, random);
+	}
 
-		this.roomRandomizer = new CQRWeightedRandom<EnumRoomType>(random);
+	public void randomizeCastle() {
+		this.addMainBuilding();
 
-		this.roomRandomizer.add(EnumRoomType.KITCHEN, 2);
-		this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, 2);
-		this.roomRandomizer.add(EnumRoomType.ARMORY, 2);
-		this.roomRandomizer.add(EnumRoomType.BEDROOM, 2);
+		this.addBossRooms();
+		this.addHallways();
+		this.addStairCases();
+
+		this.randomizeRooms();
+		this.linkCells();
+
+		this.determineRoofs();
+		this.determineWalls();
+
+		this.placeOuterDoors();
+		this.placeTowers();
+		this.pathBetweenRooms();
+
 	}
 
 	public void generate(World world, CastleDungeon dungeon, ArrayList<String> bossUuids) {
@@ -146,25 +163,6 @@ public class CastleRoomSelector {
 		for (CastleAddonRoof roof : this.castleRoofs) {
 			roof.generate(world, dungeon);
 		}
-	}
-
-	public void randomizeCastle() {
-		this.addMainBuilding();
-
-		this.addBossRooms();
-		this.addHallways();
-		this.addStairCases();
-
-		this.randomizeRooms();
-		this.linkCells();
-
-		this.determineRoofs();
-		this.determineWalls();
-
-		this.placeOuterDoors();
-		this.placeTowers();
-		this.pathBetweenRooms();
-
 	}
 
 	private void addMainBuilding() {
@@ -366,7 +364,7 @@ public class CastleRoomSelector {
 			int availableX = this.grid.getContiguousUntypedRoomsX(rootCell.getGridPosition());
 			int availableZ = this.grid.getContiguousUntypedRoomsZ(rootCell.getGridPosition());
 
-			EnumRoomType type = this.roomRandomizer.next();
+			EnumRoomType type = this.dungeon.getRandomRoom();
 			int maxX = Math.min(type.getMaxXCells(), availableX);
 			int maxZ = Math.min(type.getMaxZCells(), availableZ);
 

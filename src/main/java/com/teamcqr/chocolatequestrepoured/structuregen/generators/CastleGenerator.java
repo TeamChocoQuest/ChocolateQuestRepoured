@@ -31,7 +31,6 @@ public class CastleGenerator implements IDungeonGenerator {
 	private int totalX;
 	private int totalY;
 	private int totalZ;
-	private static final int FLOORS_PER_LAYER = 2;
 
 	public CastleGenerator(CastleDungeon dungeon) {
 		this.dungeon = dungeon;
@@ -42,13 +41,7 @@ public class CastleGenerator implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		int maxRoomsX;
-		int maxRoomsZ;
-
-		maxRoomsX = this.maxSize / this.roomSize;
-		maxRoomsZ = this.maxSize / this.roomSize;
-
-		this.roomHelper = new CastleRoomSelector(new BlockPos(x, y, z), this.dungeon.getRoomSize(), this.dungeon.getFloorHeight(), FLOORS_PER_LAYER, maxRoomsX, maxRoomsZ, this.random);
+		this.roomHelper = new CastleRoomSelector(new BlockPos(x, y, z), this.dungeon);
 		this.roomHelper.randomizeCastle();
 
 		// Builds the support hill;
