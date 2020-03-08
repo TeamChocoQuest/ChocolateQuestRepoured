@@ -4,24 +4,31 @@ import java.util.HashSet;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBubble extends EntityLivingBase {
+public class EntityBubble extends EntityLiving {
 
 	private int flyTicks = 0;
 	private int riderLessTicks = 0;
 
 	protected static final int FLY_TIME_MAX = 140;
+	public static final float BASE_SIZE = 0.5F;
+	
+	protected static final DataParameter<Float> PASSENGER_HEIGHT = EntityDataManager.<Float>createKey(EntityBubble.class, DataSerializers.FLOAT);
 
 	public EntityBubble(World worldIn) {
 		super(worldIn);
+		setSize(BASE_SIZE, BASE_SIZE);
 	}
 
 	@Override
@@ -57,7 +64,7 @@ public class EntityBubble extends EntityLivingBase {
 	
 	@Override
 	public boolean shouldRiderSit() {
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -106,6 +113,37 @@ public class EntityBubble extends EntityLivingBase {
 			setDead();
 			return;
 		}
+	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+
+		this.dataManager.register(PASSENGER_HEIGHT, 0F);
+	}
+	
+	@Override
+	protected void addPassenger(Entity passenger) {
+		if(getPassengers().size() > 1) {
+			return;
+		}
+		this.dataManager.set(PASSENGER_HEIGHT, passenger.height);
+		float size = passenger.height > passenger.width ? passenger.height : passenger.width;
+		this.resize(size / BASE_SIZE);
+		super.addPassenger(passenger);
+	}
+	
+	public float getPassengerHeight() {
+		return this.dataManager.get(PASSENGER_HEIGHT);
+	}
+	
+	@Override
+	public double getMountedYOffset() {
+		return 0;//this.height /4D;
+	}
+	
+	public void resize(float scale) {
+		this.setSize(this.width * scale, this.height * scale);
 	}
 
 }

@@ -6,18 +6,16 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
-
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -572,7 +570,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void setHookItemShootingTag(boolean isShooting) {
-		if (this.shooterItemStack.hasTagCompound()) {
+		if (this.shooterItemStack != null && this.shooterItemStack.hasTagCompound()) {
 			NBTTagCompound hookNbt = this.shooterItemStack.getTagCompound();
 			hookNbt.setBoolean("isShooting", isShooting);
 			this.shooterItemStack.setTagCompound(hookNbt);

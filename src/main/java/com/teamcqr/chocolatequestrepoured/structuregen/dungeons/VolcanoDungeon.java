@@ -5,10 +5,10 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGeneratorWithArray;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGeneratorWithArrayParted;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.ESpiralStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -142,7 +142,8 @@ public class VolcanoDungeon extends DungeonBase {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		return useArrayGenerator ? new VolcanoGeneratorWithArray(this) : new VolcanoGenerator(this);
+		//return useArrayGenerator ? new VolcanoGeneratorWithArray(this) : new VolcanoGenerator(this);
+		return new VolcanoGeneratorWithArrayParted(this);
 	}
 
 	@Override

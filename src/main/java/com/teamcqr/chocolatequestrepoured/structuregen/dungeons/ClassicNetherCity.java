@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.NetherCityGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -91,7 +91,7 @@ public class ClassicNetherCity extends DungeonBase {
 	@Override
 	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
 		super.generate(x, z, world, chunk, random);
-		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + this.posY + "  Z: " + z + "  ...");
+		CQRMain.logger.info("Generating structure " + this.name + " at X: " + x + "  Y: " + this.posY + "  Z: " + z + "  ...");
 		if (this.structCount != this.buildingFolder.listFiles().length) {
 			for (File f : this.buildingFolder.listFiles()) {
 				CQStructure cqs = new CQStructure(f);
@@ -109,8 +109,6 @@ public class ClassicNetherCity extends DungeonBase {
 
 		IDungeonGenerator generator = new NetherCityGenerator(this);
 		generator.generate(world, chunk, x, this.posY, z);
-
-		System.out.println("Generated " + this.getDungeonName() + " at X: " + x + "  Y: " + this.posY + "  Z: " + z);
 	}
 
 	public int getCaveHeight() {

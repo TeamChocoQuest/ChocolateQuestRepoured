@@ -52,7 +52,7 @@ public class BossAIStunTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		getBoss().setStunned(true);
 		getBoss().setCanBeStunned(false);
 		
-		if(getBoss().getAnimationTick() >= 10 && getBoss().getAnimationTick() <= 90) {
+		if(getBoss().getAnimationTick() >= 10 && getBoss().getAnimationTick() <= getAnimation().getDuration() -10) {
 			getBoss().setInShell(false);
 		} else {
 			getBoss().setInShell(true);
