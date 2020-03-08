@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AIApproachTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
@@ -80,9 +81,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	public static final Animation ANIMATION_MOVE_LEGS_IN = Animation.create(30).setLooping(false);
 	public static final Animation ANIMATION_MOVE_LEGS_OUT = Animation.create(50).setLooping(false);
-	public static final Animation ANIMATION_SPIN = Animation.create(200).setLooping(false);
+	public static final Animation ANIMATION_SPIN = Animation.create(250).setLooping(false);
 	public static final Animation ANIMATION_IDLE = Animation.create(100);
-	public static final Animation ANIMATION_STUNNED = Animation.create(200).setLooping(false);
+	public static final Animation ANIMATION_STUNNED = Animation.create(140).setLooping(false);
 	public static final Animation ANIMATION_DEATH = Animation.create(300);
 	
 	private static final Animation[] ANIMATIONS = {
@@ -122,29 +123,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new AISwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
-		this.tasks.addTask(5, new BossAIHealingTurtle(this));
+		this.tasks.addTask(4, new BossAIHealingTurtle(this));
+		this.tasks.addTask(5, new AIApproachTarget(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		/*this.tasks.addTask(10, new EntityAIAttack(this) {
-			@Override
-			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
-					return true;
-				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-			
-			@Override
-			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()) {
-					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning() && !wantsToSpin()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-		});*/
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -279,6 +260,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		
 		if(!sentFromPart) {
 			amount = 0;
+			world.playSound(posX, posY, posZ, getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 		}
 		if (sentFromPart && (!this.isInShell() || source.isCreativePlayer() || source == DamageSource.IN_WALL)) {
 			if(stunned) {
@@ -391,7 +373,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		Vec3d v = new Vec3d(0, 0, this.baseWidth / 2 + this.baseWidth * 0.1);
 		v = VectorUtil.rotateVectorAroundY(v, this.rotationYawHead);
 
-		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + 0.5, this.posZ + v.z);
+		float vy = isInShell() || this.getAnimation() == ANIMATION_STUNNED ? 0.1F : 0.5F; 
+		
+		this.parts[this.parts.length - 1].setPosition(this.posX + v.x, this.posY + vy, this.posZ + v.z);
 		this.parts[this.parts.length - 1].setRotation(this.rotationYawHead, this.rotationPitch);
 
 		v = VectorUtil.rotateVectorAroundY(v, 45D);

@@ -12,17 +12,19 @@ public class SaveStructureRequestPacket implements IMessage {
 	private String author;
 	private String structureName;
 	private boolean usePartMode;
+	private boolean ignoreEntities;
 
 	public SaveStructureRequestPacket() {
 
 	}
 
-	public SaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean hasShield, boolean partMode) {
+	public SaveStructureRequestPacket(BlockPos startPos, BlockPos endPos, String authorName, String name, boolean hasShield, boolean partMode, boolean ignoreEntities) {
 		this.startPos = startPos;
 		this.endPos = endPos;
 		this.author = authorName;
 		this.structureName = name;
 		this.usePartMode = partMode;
+		this.ignoreEntities = ignoreEntities;
 	}
 
 	@Override
@@ -32,6 +34,7 @@ public class SaveStructureRequestPacket implements IMessage {
 		this.author = ByteBufUtils.readUTF8String(buf);
 		this.structureName = ByteBufUtils.readUTF8String(buf);
 		this.usePartMode = buf.readBoolean();
+		this.ignoreEntities = buf.readBoolean();
 	}
 
 	@Override
@@ -47,6 +50,7 @@ public class SaveStructureRequestPacket implements IMessage {
 		ByteBufUtils.writeUTF8String(buf, this.author);
 		ByteBufUtils.writeUTF8String(buf, this.structureName);
 		buf.writeBoolean(this.usePartMode);
+		buf.writeBoolean(this.ignoreEntities);
 	}
 
 	public BlockPos getStartPos() {
@@ -67,6 +71,10 @@ public class SaveStructureRequestPacket implements IMessage {
 
 	public Boolean usePartMode() {
 		return this.usePartMode;
+	}
+
+	public boolean ignoreEntities() {
+		return this.ignoreEntities;
 	}
 
 }

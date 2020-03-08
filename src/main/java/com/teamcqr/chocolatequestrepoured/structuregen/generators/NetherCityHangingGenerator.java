@@ -6,10 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -63,7 +63,8 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		BlockPos upper = new BlockPos(x + distMax, y + (this.dungeon.getYFactorHeight() * 1.5D), z + distMax);
 		if (this.dungeon.digAirCave()) {
 			PlateauBuilder pb = new PlateauBuilder();
-			pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
+			// pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
+			lists.add(pb.makeRandomBlobList(rdm, Blocks.AIR, lower, upper, 4, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
 		}
 
 		for (int i = 0; i < this.islandCount; i++) {

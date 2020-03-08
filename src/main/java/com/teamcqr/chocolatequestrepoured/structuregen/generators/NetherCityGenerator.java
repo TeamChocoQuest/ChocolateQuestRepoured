@@ -7,12 +7,10 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
@@ -108,7 +106,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			BlockPos cUpper = new BlockPos(this.maxX, y + this.dungeon.getCaveHeight(), this.maxZ).add(this.dungeon.getDistanceBetweenBuildingCenters() * 0.1, 0, this.dungeon.getDistanceBetweenBuildingCenters() * 0.05);
 
 			PlateauBuilder pB = new PlateauBuilder();
-			pB.makeRandomBlob(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ), world);
+			// pB.makeRandomBlob(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ), world);
+			lists.add(pB.makeRandomBlobList(new Random(), this.dungeon.getAirPocketBlock(), cLower, cUpper, 4, WorldDungeonGenerator.getSeed(world, this.minX, this.maxZ)));
 			// }
 		}
 
@@ -290,8 +289,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 				try {
 					if (this.dungeon.spawnersAreSingleUse()) {
-						SpawnerFactory.placeSpawner(new Entity[] {
-								EntityList.createEntityByIDFromName(this.dungeon.getSpawnerMob(), world) }, false, null, world, spawnerPos);
+						SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getSpawnerMob(), world) }, false, null, world, spawnerPos);
 					} else {
 						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getSpawnerMob());
 					}

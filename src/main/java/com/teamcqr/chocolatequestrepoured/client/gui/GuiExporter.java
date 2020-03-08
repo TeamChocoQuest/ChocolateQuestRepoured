@@ -26,7 +26,7 @@ public class GuiExporter extends GuiScreen {
 
 	private GuiButtonExt btnExport;
 	private GuiTextField edtName, edtEndX, edtEndY, edtEndZ, edtStartX, edtStartY, edtStartZ;
-	private GuiCheckBox chbxPartsMode, chbxRelativeMode;
+	private GuiCheckBox chbxPartsMode, chbxRelativeMode, chbxIgnoreEntities;
 
 	public GuiExporter(TileEntityExporter exporter) {
 		this.mc = Minecraft.getMinecraft();
@@ -45,8 +45,9 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartY.setText(String.valueOf(this.exporter.startY));
 		this.edtStartZ.setText(String.valueOf(this.exporter.startZ));
 		this.edtName.setText(this.exporter.structureName);
-		this.chbxPartsMode.setIsChecked(this.exporter.partModeUsing);
+		this.chbxPartsMode.setIsChecked(this.exporter.partMode);
 		this.chbxRelativeMode.setIsChecked(this.exporter.relativeMode);
+		this.chbxIgnoreEntities.setIsChecked(this.exporter.ignoreEntities);
 	}
 
 	@Override
@@ -68,13 +69,15 @@ public class GuiExporter extends GuiScreen {
 		this.edtStartZ = new GuiTextField(3, this.fontRenderer, this.width / 2 - 70 + 50 + 50, this.height / 2 - 30, 40, 20);
 		this.edtStartZ.setText(String.valueOf(this.exporter.startZ));
 
-		this.chbxPartsMode = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Use Part Mode", this.exporter.partModeUsing);
+		this.chbxPartsMode = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 40, "Use Part Mode", this.exporter.partMode);
 		this.chbxRelativeMode = new GuiCheckBox(5, this.width / 2 + 30, this.height / 2 + 40, "Use Relative Mode", this.exporter.relativeMode);
+		this.chbxIgnoreEntities = new GuiCheckBox(5, this.width / 2 - 70, this.height / 2 + 60, "Ignore Entities", this.exporter.ignoreEntities);
 
-		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 60, 140, 20, "Export");
+		this.btnExport = new GuiButtonExt(4, this.width / 2 - 70, this.height / 2 + 80, 140, 20, "Export");
 
 		this.buttonList.add(this.chbxPartsMode);
 		this.buttonList.add(this.chbxRelativeMode);
+		this.buttonList.add(this.chbxIgnoreEntities);
 		this.buttonList.add(this.btnExport);
 	}
 
@@ -95,7 +98,7 @@ public class GuiExporter extends GuiScreen {
 				structName = "dungeon_export";
 			}
 
-			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxPartsMode.isChecked(), this.chbxRelativeMode.isChecked());
+			this.exporter.setValues(startX, startY, startZ, endX, endY, endZ, structName, this.chbxPartsMode.isChecked(), this.chbxRelativeMode.isChecked(), this.chbxIgnoreEntities.isChecked());
 
 			CQRMain.NETWORK.sendToServer(new ExporterUpdatePacket(this.exporter));
 
@@ -189,6 +192,8 @@ public class GuiExporter extends GuiScreen {
 			this.drawHoveringText(I18n.format("description.gui_exporter_part_mode.name"), this.width / 2 - 170, this.height / 2 + 30);
 		} else if (this.chbxRelativeMode.isMouseOver()) {
 			this.drawHoveringText(I18n.format("description.gui_exporter_relative_mode.name"), this.width / 2 - 170, this.height / 2 + 30);
+		} else if (this.chbxIgnoreEntities.isMouseOver()) {
+			this.drawHoveringText(I18n.format("description.gui_exporter_ignore_entities.name"), this.width / 2 - 170, this.height / 2 + 30);
 		}
 
 		super.drawScreen(mouseX, mouseY, partialTicks);

@@ -217,6 +217,7 @@ public class CQRMain {
 
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructurePart.updateSpecialBlocks();
+		CQStructurePart.updateSpecialEntities();
 	}
 
 	@EventHandler

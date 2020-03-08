@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.DungeonGenerationHandler;
-import com.teamcqr.chocolatequestrepoured.structuregen.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.Structure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

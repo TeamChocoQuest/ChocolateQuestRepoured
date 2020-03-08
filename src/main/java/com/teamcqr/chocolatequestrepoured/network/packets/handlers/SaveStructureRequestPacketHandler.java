@@ -20,7 +20,7 @@ public class SaveStructureRequestPacketHandler implements IMessageHandler<SaveSt
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
 				CQStructure structure = new CQStructure(message.getName());
-				structure.takeBlocksFromWorld(world, message.getStartPos(), message.getEndPos(), message.usePartMode());
+				structure.takeBlocksFromWorld(world, message.getStartPos(), message.getEndPos(), message.usePartMode(), message.ignoreEntities());
 				structure.writeToFile(player);
 			}
 		});

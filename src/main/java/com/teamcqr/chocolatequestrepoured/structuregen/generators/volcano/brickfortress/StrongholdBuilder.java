@@ -1,15 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +28,7 @@ public class StrongholdBuilder {
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
+	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 
 	public StrongholdBuilder(BlockPos start, int distanceToWall, VolcanoDungeon dungeon, EnumFacing expansionDirection, World world) {
 		this.startPos = start;
@@ -66,20 +72,31 @@ public class StrongholdBuilder {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
 		stronghold.buildFloors(pos.add(0,-1,0), world);
+		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 
 	private void buildSegment(BlockPos startPosCentered) {
+		Block[][][] blocks;
+		IBlockState[][][] states;
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2, air1, air2;
+		int sizeX, sizeZ;
 		corner1 = null;
 		corner2 = null;
+		//Pillars are in the middle of the part (on the expansion axis)
 		pillar1 = null;
 		pillar2 = null;
+		//marks the positions of the torches
 		torch1 = null;
 		torch2 = null;
+		//these mark the corners of the complete part
 		air1 = null;
 		air2 = null;
 		switch (this.direction) {
 		case EAST:
+			sizeX = 4;
+			sizeZ = 7;
+			blocks = new Block[3][4][5];
+			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, -3);
 			corner2 = startPosCentered.add(3, 0, 3);
 			air1 = startPosCentered.add(0, 1, -2);
@@ -90,6 +107,10 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, -1);
 			break;
 		case NORTH:
+			sizeX = 7;
+			sizeZ = 4;
+			blocks = new Block[5][4][3];
+			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(-3, 0, 0);
 			corner2 = startPosCentered.add(3, 0, -3);
 			air1 = startPosCentered.add(-2, 1, 0);
@@ -100,6 +121,10 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(-1, 4, -1);
 			break;
 		case SOUTH:
+			sizeX = 7;
+			sizeZ = 4;
+			blocks = new Block[5][4][3];
+			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(3, 0, 0);
 			corner2 = startPosCentered.add(-3, 0, 3);
 			air1 = startPosCentered.add(2, 1, 0);
@@ -110,6 +135,10 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, 1);
 			break;
 		case WEST:
+			sizeX = 4;
+			sizeZ = 7;
+			blocks = new Block[3][4][5];
+			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, 3);
 			corner2 = startPosCentered.add(-3, 0, -3);
 			air1 = startPosCentered.add(0, 1, 2);
@@ -157,6 +186,10 @@ public class StrongholdBuilder {
 		for (BlockPos p : BlockPos.getAllInBox(start.add(0, ceilingHeight + 1, 0), endP.add(0, ceilingHeight + 1, 0))) {
 			this.world.setBlockState(p, ModBlocks.GRANITE_SQUARE.getDefaultState());
 		}
+	}
+
+	public List<List<? extends IStructure>> getStrongholdParts() {
+		return strongholdParts;
 	}
 
 }
