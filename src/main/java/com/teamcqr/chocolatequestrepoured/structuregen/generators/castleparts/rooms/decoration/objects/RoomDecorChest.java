@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -24,18 +25,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CHEST));
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.CHEST) {
-			result = result.withProperty(BlockFurnace.FACING, side.getOpposite());
-		}
-
-		return result;
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.CHEST.getDefaultState(), BlockChest.FACING, EnumFacing.SOUTH));
 	}
 
 	@Override

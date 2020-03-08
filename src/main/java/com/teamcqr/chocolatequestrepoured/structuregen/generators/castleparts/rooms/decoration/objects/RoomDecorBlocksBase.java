@@ -57,16 +57,9 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 		ArrayList<DecoBlockBase> result = new ArrayList<>();
 
 		for (DecoBlockBase p : this.schematic) {
-			result.add(new DecoBlockBase(DungeonGenUtils.rotateVec3i(p.offset, side), p.block));
+			result.add(new DecoBlockBase(DungeonGenUtils.rotateVec3i(p.offset, side), p.getState(side)));
 		}
 
 		return result;
-	}
-
-	/*
-	 * This can be overridden so individual block properties can be changed
-	 */
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		return block.getDefaultState();
 	}
 }

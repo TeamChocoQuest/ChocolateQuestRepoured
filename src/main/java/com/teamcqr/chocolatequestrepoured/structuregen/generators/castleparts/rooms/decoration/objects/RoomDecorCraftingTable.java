@@ -9,6 +9,6 @@ public class RoomDecorCraftingTable extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CRAFTING_TABLE));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CRAFTING_TABLE.getDefaultState()));
 	}
 }

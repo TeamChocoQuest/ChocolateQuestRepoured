@@ -9,7 +9,7 @@ public class RoomDecorTableSmall extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, ModBlocks.TABLE_OAK));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, ModBlocks.TABLE_OAK.getDefaultState()));
 	}
 
 }

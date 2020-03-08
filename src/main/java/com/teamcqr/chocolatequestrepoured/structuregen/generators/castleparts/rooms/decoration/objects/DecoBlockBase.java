@@ -7,19 +7,19 @@ import net.minecraft.util.math.Vec3i;
 
 public class DecoBlockBase {
     public Vec3i offset;
-    public Block block;
+    public IBlockState blockState;
 
-    protected DecoBlockBase(int x, int y, int z, Block block) {
+    protected DecoBlockBase(int x, int y, int z, IBlockState block) {
         this.offset = new Vec3i(x, y, z);
-        this.block = block;
+        this.blockState = block;
     }
 
-    protected DecoBlockBase(Vec3i offset, Block block) {
+    protected DecoBlockBase(Vec3i offset, IBlockState block) {
         this.offset = offset;
-        this.block = block;
+        this.blockState = block;
     }
 
     protected IBlockState getState(EnumFacing side) {
-        return block.getDefaultState();
+        return blockState;
     }
 }
