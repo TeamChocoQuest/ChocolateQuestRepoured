@@ -12,7 +12,9 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockRotatedPillar;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -74,17 +76,24 @@ public class StrongholdBuilder {
 	}
 
 	private void buildSegment(BlockPos startPosCentered) {
+		Block[][][] blocks;
+		IBlockState[][][] states;
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2, air1, air2;
 		corner1 = null;
 		corner2 = null;
+		//Pillars are in the middle of the part (on the expansion axis)
 		pillar1 = null;
 		pillar2 = null;
+		//marks the positions of the torches
 		torch1 = null;
 		torch2 = null;
+		//these mark the corners of the complete part
 		air1 = null;
 		air2 = null;
 		switch (this.direction) {
 		case EAST:
+			blocks = new Block[3][4][5];
+			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, -3);
 			corner2 = startPosCentered.add(3, 0, 3);
 			air1 = startPosCentered.add(0, 1, -2);
@@ -95,6 +104,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, -1);
 			break;
 		case NORTH:
+			blocks = new Block[5][4][3];
+			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(-3, 0, 0);
 			corner2 = startPosCentered.add(3, 0, -3);
 			air1 = startPosCentered.add(-2, 1, 0);
@@ -105,6 +116,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(-1, 4, -1);
 			break;
 		case SOUTH:
+			blocks = new Block[5][4][3];
+			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(3, 0, 0);
 			corner2 = startPosCentered.add(-3, 0, 3);
 			air1 = startPosCentered.add(2, 1, 0);
@@ -115,6 +128,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, 1);
 			break;
 		case WEST:
+			blocks = new Block[3][4][5];
+			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, 3);
 			corner2 = startPosCentered.add(-3, 0, -3);
 			air1 = startPosCentered.add(0, 1, 2);
