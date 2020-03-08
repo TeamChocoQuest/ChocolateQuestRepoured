@@ -21,39 +21,9 @@ public class RoomDecorBed extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.BED));
-		this.schematic.add(new DecoBlockBase(0, 0, 1, Blocks.BED));
-	}
-
-	@Override
-	public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
-		boolean head = true;
-
-		for (DecoBlockBase placement : rotated) {
-			BlockPos pos = start.add(placement.offset);
-			IBlockState blockState = this.getRotatedBlockState(placement.block, side);
-
-			if (head) {
-				blockState = blockState.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
-				head = false;
-			} else {
-				blockState = blockState.withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
-			}
-
-			world.setBlockState(pos, blockState);
-			decoMap.add(pos);
-		}
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.BED) {
-			result = result.withProperty(BlockBed.FACING, side);
-		}
-
-		return result;
+		IBlockState head = Blocks.BED.getDefaultState().withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, head, BlockBed.FACING, EnumFacing.NORTH));
+		IBlockState foot = Blocks.BED.getDefaultState().withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+		this.schematic.add(new DecoBlockRotating(0, 0, 1, foot, BlockBed.FACING, EnumFacing.NORTH));
 	}
 }

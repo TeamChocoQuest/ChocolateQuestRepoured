@@ -13,17 +13,6 @@ public class RoomDecorFurnace extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.FURNACE));
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.FURNACE) {
-			result = result.withProperty(BlockFurnace.FACING, side.getOpposite());
-		}
-
-		return result;
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.FURNACE.getDefaultState(), BlockFurnace.FACING, EnumFacing.SOUTH));
 	}
 }

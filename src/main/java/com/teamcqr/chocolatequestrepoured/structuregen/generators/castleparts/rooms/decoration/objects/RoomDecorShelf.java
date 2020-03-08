@@ -13,24 +13,13 @@ public class RoomDecorShelf extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 2, 0, Blocks.WOODEN_SLAB));
-		this.schematic.add(new DecoBlockBase(1, 2, 0, Blocks.WOODEN_SLAB));
+		this.schematic.add(new DecoBlockBase(0, 2, 0, Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)));
+		this.schematic.add(new DecoBlockBase(1, 2, 0, Blocks.WOODEN_SLAB.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM)));
 
-		this.schematic.add(new DecoBlockBase(0, 1, 0, Blocks.AIR));
-		this.schematic.add(new DecoBlockBase(1, 1, 0, Blocks.AIR));
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR));
-		this.schematic.add(new DecoBlockBase(1, 0, 0, Blocks.AIR));
+		this.schematic.add(new DecoBlockBase(0, 1, 0, Blocks.AIR.getDefaultState()));
+		this.schematic.add(new DecoBlockBase(1, 1, 0, Blocks.AIR.getDefaultState()));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR.getDefaultState()));
+		this.schematic.add(new DecoBlockBase(1, 0, 0, Blocks.AIR.getDefaultState()));
 
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.WOODEN_SLAB) {
-			result = result.withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.BOTTOM);
-		}
-
-		return result;
 	}
 }

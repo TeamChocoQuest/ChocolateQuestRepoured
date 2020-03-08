@@ -13,21 +13,10 @@ public class RoomDecorTorch extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 2, 0, Blocks.TORCH));
+		this.schematic.add(new DecoBlockRotating(0, 2, 0, Blocks.TORCH.getDefaultState(), BlockTorch.FACING, EnumFacing.SOUTH));
 
-		this.schematic.add(new DecoBlockBase(0, 1, 0, Blocks.AIR));
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR));
+		this.schematic.add(new DecoBlockBase(0, 1, 0, Blocks.AIR.getDefaultState()));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR.getDefaultState()));
 
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.TORCH) {
-			result = result.withProperty(BlockTorch.FACING, side.getOpposite());
-		}
-
-		return result;
 	}
 }

@@ -13,17 +13,6 @@ public class RoomDecorAnvil extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.ANVIL));
-	}
-
-	@Override
-	protected IBlockState getRotatedBlockState(Block block, EnumFacing side) {
-		IBlockState result = block.getDefaultState();
-
-		if (block == Blocks.ANVIL) {
-			result = result.withProperty(BlockAnvil.FACING, side.getOpposite().rotateY());
-		}
-
-		return result;
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.ANVIL.getDefaultState(), BlockAnvil.FACING, EnumFacing.WEST));
 	}
 }

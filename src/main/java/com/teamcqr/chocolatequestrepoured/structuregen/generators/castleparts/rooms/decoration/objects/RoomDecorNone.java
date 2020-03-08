@@ -9,6 +9,6 @@ public class RoomDecorNone extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.AIR.getDefaultState()));
 	}
 }
