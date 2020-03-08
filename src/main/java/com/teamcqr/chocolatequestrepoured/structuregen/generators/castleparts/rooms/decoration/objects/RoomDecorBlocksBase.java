@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -47,10 +48,13 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			world.setBlockState(pos, placement.getState(side));
-			decoMap.add(pos);
-		}
+			IBlockState stateToPlace = placement.getState(side);
+			world.setBlockState(pos, stateToPlace);
 
+			if (stateToPlace.getBlock() != Blocks.AIR) {
+				decoMap.add(pos);
+			}
+		}
 	}
 
 	protected ArrayList<DecoBlockBase> alignSchematic(EnumFacing side) {
