@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -35,6 +36,7 @@ public class CastleDungeon extends DungeonBase {
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
+	private CQRWeightedRandom<EnumRoomType> roomRandomizer;
 
 	private int minSpawnerRolls = 1;
 	private int maxSpawnerRolls = 3;
@@ -60,8 +62,18 @@ public class CastleDungeon extends DungeonBase {
 
 			this.random = new Random();
 
+			this.roomRandomizer = new CQRWeightedRandom<>(random);
+			int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
+			this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightArmory", 1);
+			this.roomRandomizer.add(EnumRoomType.ARMORY, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroom", 1);
+			this.roomRandomizer.add(EnumRoomType.BEDROOM, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightKitchen", 1);
+			this.roomRandomizer.add(EnumRoomType.KITCHEN, weight);
+
 			this.roofTypeRandomizer = new CQRWeightedRandom<>(random);
-			int weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
+			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
 			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
 			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
@@ -142,6 +154,10 @@ public class CastleDungeon extends DungeonBase {
 
 	public Random getRandom() {
 		return this.random;
+	}
+
+	public EnumRoomType getRandomRoom() {
+		return roomRandomizer.next();
 	}
 
 	public RandomCastleConfigOptions.RoofType getRandomRoofType() {
