@@ -36,6 +36,10 @@ public class CastleDungeon extends DungeonBase {
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
 
+	private int minSpawnerRolls = 1;
+	private int maxSpawnerRolls = 3;
+	private int spawnerRollChance = 100;
+
 	@Override
 	public IDungeonGenerator getGenerator() {
 		return new CastleGenerator(this);
@@ -71,6 +75,10 @@ public class CastleDungeon extends DungeonBase {
 			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.SQUARE_BARS, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightOpenSlit", 1);
 			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.OPEN_SLIT, weight);
+
+			this.minSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "minSpawnerRolls", 1);
+			this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
+			this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
 
 			this.closeConfigFile();
 		} else {
@@ -142,5 +150,25 @@ public class CastleDungeon extends DungeonBase {
 
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
 		return windowTypeRandomizer.next();
+	}
+
+	public int randomizeRoomSpawnerCount() {
+		int numRolls;
+		int result = 0;
+		if (minSpawnerRolls >= maxSpawnerRolls) {
+			numRolls = minSpawnerRolls;
+		} else {
+			numRolls = DungeonGenUtils.getIntBetweenBorders(minSpawnerRolls, maxSpawnerRolls, random);
+		}
+
+		for (int i = 0; i < numRolls; i++) {
+			if (spawnerRollChance > 0) {
+				if (DungeonGenUtils.PercentageRandom(spawnerRollChance, random)) {
+					result++;
+				}
+			}
+		}
+
+		return result;
 	}
 }

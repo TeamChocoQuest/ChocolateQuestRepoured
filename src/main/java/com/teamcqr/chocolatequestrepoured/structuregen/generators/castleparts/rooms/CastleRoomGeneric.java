@@ -39,7 +39,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		this.addEdgeDecoration(world, dungeon);
 		this.addPaintings(world);
 		this.addMidDecoration(world, dungeon);
-		this.addSpawners(world, mobResourceLocation);
+		this.addSpawners(world, dungeon, mobResourceLocation);
 		this.addChests(world, dungeon);
 		this.fillEmptySpaceWithAir(world);
 	}
@@ -138,11 +138,11 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		}
 	}
 
-	private void addSpawners(World world, ResourceLocation mobResourceLocation) {
+	private void addSpawners(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
 		ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
 		spawnPositions.removeAll(this.decoMap);
 
-		int spawnerCount = this.getSpawnerCount();
+		int spawnerCount = dungeon.randomizeRoomSpawnerCount();
 
 		for (int i = 0; (i < spawnerCount && !spawnPositions.isEmpty()); i++) {
 			BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));

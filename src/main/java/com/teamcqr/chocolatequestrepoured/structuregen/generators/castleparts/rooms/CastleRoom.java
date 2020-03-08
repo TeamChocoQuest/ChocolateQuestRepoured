@@ -461,10 +461,6 @@ public abstract class CastleRoom {
 		return null;
 	}
 
-	protected int getSpawnerCount() {
-		return 2;
-	}
-
 	public int getOffsetX() {
 		return this.offsetX;
 	}
