@@ -79,6 +79,7 @@ public class StrongholdBuilder {
 		Block[][][] blocks;
 		IBlockState[][][] states;
 		BlockPos corner1, corner2, pillar1, pillar2, torch1, torch2, air1, air2;
+		int sizeX, sizeZ;
 		corner1 = null;
 		corner2 = null;
 		//Pillars are in the middle of the part (on the expansion axis)
@@ -92,6 +93,8 @@ public class StrongholdBuilder {
 		air2 = null;
 		switch (this.direction) {
 		case EAST:
+			sizeX = 4;
+			sizeZ = 7;
 			blocks = new Block[3][4][5];
 			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, -3);
@@ -104,6 +107,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, -1);
 			break;
 		case NORTH:
+			sizeX = 7;
+			sizeZ = 4;
 			blocks = new Block[5][4][3];
 			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(-3, 0, 0);
@@ -116,6 +121,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(-1, 4, -1);
 			break;
 		case SOUTH:
+			sizeX = 7;
+			sizeZ = 4;
 			blocks = new Block[5][4][3];
 			states = new IBlockState[5][4][3];
 			corner1 = startPosCentered.add(3, 0, 0);
@@ -128,6 +135,8 @@ public class StrongholdBuilder {
 			torch2 = startPosCentered.add(1, 4, 1);
 			break;
 		case WEST:
+			sizeX = 4;
+			sizeZ = 7;
 			blocks = new Block[3][4][5];
 			states = new IBlockState[3][4][5];
 			corner1 = startPosCentered.add(0, 0, 3);
