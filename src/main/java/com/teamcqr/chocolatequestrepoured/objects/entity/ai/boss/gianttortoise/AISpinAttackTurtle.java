@@ -20,6 +20,8 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private final int AFTER_IDLE_TIME = 5;
 	private final int BUBBLE_SHOOT_DURATION = 40;
+	
+	static final int MIN_DISTANCE_TO_BEGIN_SPIN = 16; 
 
 	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -38,7 +40,14 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	@Override
 	public boolean shouldExecute() {
 		cooldown--;
-		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && cooldown <= 0 && !getBoss().isHealing()) {
+		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead) {
+			if(getBoss().getDistance(getBoss().getAttackTarget()) > MIN_DISTANCE_TO_BEGIN_SPIN) {
+				return false;
+			}
+		} else {
+			return false;
+		}
+		if(cooldown <= 0 && !getBoss().isHealing()) {
 			getBoss().setWantsToSpin(true);
 			cooldown = 0;
 			previousBlocks = 0;
