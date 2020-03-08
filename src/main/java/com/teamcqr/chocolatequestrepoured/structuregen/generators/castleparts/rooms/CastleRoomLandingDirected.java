@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -37,7 +38,7 @@ public class CastleRoomLandingDirected extends CastleRoom {
 							blockToBuild = dungeon.getFloorBlock().getDefaultState();
 						} else if (x < this.openingWidth || ((x >= this.openingSeparation + this.openingWidth) && (x < this.openingSeparation + this.openingWidth * 2))) {
 							if (z == this.stairZ) {
-								EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.stairStartSide));
+								EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.stairStartSide));
 								blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 							}
 						} else {

@@ -59,7 +59,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 		this.roomType = EnumRoomType.STAIRCASE_BOSS;
 
 		this.doorSide = doorSide;
-		this.numRotations = this.getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
+		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 
 		this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
 		this.lenX = this.endX + 1;
@@ -118,7 +118,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 		} else if (y == this.maxHeightIdx) {
 			if (x >= this.upperStairXStartIdx && x <= this.upperStairXEndIdx) {
 				if (z == TOP_LANDING_BUFFER_Z) {
-					EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
+					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 					return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 				} else if (z < TOP_LANDING_BUFFER_Z) {
 					return dungeon.getWallBlock().getDefaultState();
@@ -147,7 +147,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 
 	private IBlockState getLowerStair1Block(int x, int y, int z) {
 		if (y == this.lowerLandingMaxHeightIdx - (this.lowerStair1XEndIdx - x)) {
-			EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.EAST, this.numRotations);
+			EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.EAST, this.numRotations);
 			return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 		} else if (y <= this.lowerLandingMaxHeightIdx - (this.lowerLanding1XEndIdx - x)) {
 			return Blocks.STONEBRICK.getDefaultState();
@@ -158,7 +158,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 
 	private IBlockState getLowerStair2Block(int x, int y, int z) {
 		if (y == this.lowerLandingMaxHeightIdx - (x - this.lowerStair2XStartIdx)) {
-			EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.WEST, this.numRotations);
+			EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.WEST, this.numRotations);
 			return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 		} else if (y <= this.lowerLandingMaxHeightIdx - (x - this.lowerStair2XStartIdx)) {
 			return Blocks.STONEBRICK.getDefaultState();
@@ -177,7 +177,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 
 	private IBlockState getMidStairBlock(int x, int y, int z) {
 		if (y == this.mainLandingMaxHeightIdx - (this.endZ - z - MAIN_LANDING_Z)) {
-			EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
+			EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
 			return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 		} else if (y < this.mainLandingMaxHeightIdx - (this.endZ - z - MAIN_LANDING_Z)) {
 			return Blocks.STONEBRICK.getDefaultState();
@@ -188,7 +188,7 @@ public class CastleRoomBossStairMain extends CastleRoom {
 
 	private IBlockState getUpperStairBlock(int x, int y, int z) {
 		if (y == (this.maxHeightIdx - (z - TOP_LANDING_BUFFER_Z))) {
-			EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
+			EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 			return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 		} else if ((y < this.maxHeightIdx - (z - TOP_LANDING_BUFFER_Z))) {
 			return Blocks.STONEBRICK.getDefaultState();

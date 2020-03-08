@@ -171,24 +171,6 @@ public abstract class CastleRoom {
 		}
 	}
 
-	protected int getNumYRotationsFromStartToEndFacing(EnumFacing start, EnumFacing end) {
-		int rotations = 0;
-		if (start.getAxis().isHorizontal() && end.getAxis().isHorizontal()) {
-			while (start != end) {
-				start = start.rotateY();
-				rotations++;
-			}
-		}
-		return rotations;
-	}
-
-	protected EnumFacing rotateFacingNTimesAboutY(EnumFacing facing, int n) {
-		for (int i = 0; i < n; i++) {
-			facing = facing.rotateY();
-		}
-		return facing;
-	}
-
 	protected BlockPos getInteriorBuildStart() {
 		return this.origin.add(this.offsetX, 0, this.offsetZ);
 	}

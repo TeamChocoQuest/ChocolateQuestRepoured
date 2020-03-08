@@ -39,7 +39,7 @@ public class CastleRoomBossLandingMain extends CastleRoom {
 		super(startPos, sideLength, height);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
-		this.numRotations = this.getNumYRotationsFromStartToEndFacing(EnumFacing.NORTH, this.doorSide);
+		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 		this.defaultCeiling = true;
 
 		this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
@@ -92,7 +92,7 @@ public class CastleRoomBossLandingMain extends CastleRoom {
 				if (z < this.stairsDownZIdx) {
 					blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
 				} else if (z == this.stairsDownZIdx) {
-					EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
+					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 					blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 				} else {
 					return Blocks.AIR.getDefaultState();
