@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
+
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -28,14 +30,11 @@ public class BlockPart implements IStructure {
 		this.pos = pos;
 		this.size = size;
 		this.blocks = new Block[this.size.getX()][this.size.getY()][this.size.getZ()];
-		for (int x = 0; x < this.size.getX(); x++) {
-			for (int y = 0; y < this.size.getY(); y++) {
-				for (int z = 0; z < this.size.getZ(); z++) {
-					if (x < blocks.length && y < blocks[x].length && z < blocks[x][y].length) {
-						this.blocks[x][y][z] = blocks[x][y][z];
-					} else {
-						this.blocks[x][y][z] = null;
-					}
+
+		for (int x = 0; x < this.size.getX() && x < blocks.length; x++) {
+			for (int y = 0; y < this.size.getY() && y < blocks[x].length; y++) {
+				for (int z = 0; z < this.size.getZ() && z < blocks[x][y].length; z++) {
+					this.blocks[x][y][z] = blocks[x][y][z];
 				}
 			}
 		}
@@ -43,12 +42,7 @@ public class BlockPart implements IStructure {
 
 	@Override
 	public void generate(World world) {
-		for (BlockPos.MutableBlockPos position : BlockPos.getAllInBoxMutable(BlockPos.ORIGIN, this.size.add(-1, -1, -1))) {
-			Block block = this.blocks[position.getX()][position.getY()][position.getZ()];
-			if (block != null) {
-				world.setBlockState(pos.add(position), block.getDefaultState(), 2);
-			}
-		}
+		BlockPlacingHelper.setBlockStates(world, this.pos, this.blocks, 3);
 	}
 
 	@Override
@@ -70,6 +64,7 @@ public class BlockPart implements IStructure {
 				for (int z = 0; z < this.size.getZ(); z++) {
 					NBTTagCompound tag = new NBTTagCompound();
 					Block block = this.blocks[x][y][z];
+
 					if (block != null) {
 						tag.setString("block", block.getRegistryName().toString());
 					}
@@ -93,10 +88,9 @@ public class BlockPart implements IStructure {
 			for (int y = 0; y < this.size.getY(); y++) {
 				for (int z = 0; z < this.size.getZ(); z++) {
 					NBTTagCompound tag = nbtTagList.getCompoundTagAt(x * this.size.getY() * this.size.getZ() + y * this.size.getZ() + z);
+
 					if (tag.hasKey("block")) {
 						this.blocks[x][y][z] = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(tag.getString("block")));
-					} else {
-						this.blocks[x][y][z] = null;
 					}
 				}
 			}
@@ -187,19 +181,19 @@ public class BlockPart implements IStructure {
 		return Collections.emptyList();
 	}
 
-	public static List<BlockPart> split(BlockPos pos, Block[][][] blockArray) {
+	public static List<BlockPart> split(BlockPos pos, Block[][][] array) {
 		List<BlockPart> list = new ArrayList<>();
 
-		if (blockArray.length > 0 && blockArray[0].length > 0 && blockArray[0][0].length > 0) {
-			int xIterations = blockArray.length / 16;
-			int yIterations = blockArray[0].length / 16;
-			int zIterations = blockArray[0][0].length / 16;
+		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
+			int xIterations = array.length / 16;
+			int yIterations = array[0].length / 16;
+			int zIterations = array[0][0].length / 16;
 
-			for (int x = 0; x <= xIterations; x++) {
-				for (int y = 0; y <= yIterations; y++) {
+			for (int y = 0; y <= yIterations; y++) {
+				for (int x = 0; x <= xIterations; x++) {
 					for (int z = 0; z <= zIterations; z++) {
 						BlockPos partStartPos = pos.add(x * 16, y * 16, z * 16);
-						BlockPos partEndPos = partStartPos.add(x == xIterations ? blockArray.length - x * 16 : 16, y == yIterations ? blockArray[x].length - y * 16 : 16, z == zIterations ? blockArray[x][y].length - z * 16 : 16);
+						BlockPos partEndPos = partStartPos.add(x == xIterations ? array.length - x * 16 : 16, y == yIterations ? array[x].length - y * 16 : 16, z == zIterations ? array[x][y].length - z * 16 : 16);
 						BlockPos partSize = partEndPos.subtract(partStartPos);
 						BlockPos partOffset = partStartPos.subtract(pos);
 						Block[][][] blocks = new Block[partSize.getX()][partSize.getY()][partSize.getZ()];
@@ -211,8 +205,53 @@ public class BlockPart implements IStructure {
 									int x2 = partOffset.getX() + x1;
 									int y2 = partOffset.getY() + y1;
 									int z2 = partOffset.getZ() + z1;
-									if (x2 < blockArray.length && y2 < blockArray[x2].length && z2 < blockArray[x2][y2].length) {
-										blocks[x1][y1][z1] = blockArray[x2][y2][z2];
+									if (x2 < array.length && y2 < array[x2].length && z2 < array[x2][y2].length) {
+										blocks[x1][y1][z1] = array[x2][y2][z2];
+										if (empty && blocks[x1][y1][z1] != null) {
+											empty = false;
+										}
+									}
+								}
+							}
+						}
+
+						if (!empty) {
+							list.add(new BlockPart(partStartPos, partSize, blocks));
+						}
+					}
+				}
+			}
+		}
+
+		return list;
+	}
+
+	public static List<BlockPart> split(BlockPos pos, Block[][][] array, int size) {
+		List<BlockPart> list = new ArrayList<>();
+
+		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
+			int xIterations = array.length / size;
+			int yIterations = array[0].length / size;
+			int zIterations = array[0][0].length / size;
+
+			for (int y = 0; y <= yIterations; y++) {
+				for (int x = 0; x <= xIterations; x++) {
+					for (int z = 0; z <= zIterations; z++) {
+						BlockPos partStartPos = pos.add(x * size, y * size, z * size);
+						BlockPos partEndPos = partStartPos.add(x == xIterations ? array.length - x * size : size, y == yIterations ? array[x].length - y * size : size, z == zIterations ? array[x][y].length - z * size : size);
+						BlockPos partSize = partEndPos.subtract(partStartPos);
+						BlockPos partOffset = partStartPos.subtract(pos);
+						Block[][][] blocks = new Block[partSize.getX()][partSize.getY()][partSize.getZ()];
+						boolean empty = true;
+
+						for (int x1 = 0; x1 < partSize.getX(); x1++) {
+							for (int y1 = 0; y1 < partSize.getY(); y1++) {
+								for (int z1 = 0; z1 < partSize.getZ(); z1++) {
+									int x2 = partOffset.getX() + x1;
+									int y2 = partOffset.getY() + y1;
+									int z2 = partOffset.getZ() + z1;
+									if (x2 < array.length && y2 < array[x2].length && z2 < array[x2][y2].length) {
+										blocks[x1][y1][z1] = array[x2][y2][z2];
 										if (empty && blocks[x1][y1][z1] != null) {
 											empty = false;
 										}
