@@ -1,7 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -30,8 +31,9 @@ public class CastleRoomHallway extends CastleRoomGeneric {
 		this.defaultFloor = true;
 		this.defaultCeiling = true;
 
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 10);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 15);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+
 	}
 
 	@Override
