@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -22,7 +23,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom {
 		super(startPos, sideLength, height);
 		this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
 		this.doorSide = doorSide;
-		this.numRotations = this.getNumYRotationsFromStartToEndFacing(EnumFacing.SOUTH, this.doorSide);
+		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.doorSide);
 		this.defaultCeiling = false;
 
 		this.upperStairWidth = 0;
@@ -84,7 +85,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom {
 
 	private void buildUpperStair(int x, int z, World world, CastleDungeon dungeon) {
 		int stairHeight = this.centerStairLength + (z - PLATFORM_LENGTH);
-		EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
+		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
 		IBlockState blockToBuild;
 		for (int y = 1; y < this.height; y++) {
 			if (y < stairHeight) {
@@ -100,7 +101,7 @@ public class CastleRoomStaircaseDirected extends CastleRoom {
 
 	private void buildLowerStair(int x, int z, World world, CastleDungeon dungeon) {
 		int stairHeight = this.centerStairLength - (z - PLATFORM_LENGTH + 1);
-		EnumFacing stairFacing = this.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
+		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 		IBlockState blockToBuild;
 		for (int y = 1; y < this.height; y++) {
 			if (y < stairHeight) {

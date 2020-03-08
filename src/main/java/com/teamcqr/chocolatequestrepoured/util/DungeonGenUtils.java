@@ -201,4 +201,22 @@ public class DungeonGenUtils {
 			return new Vec3i(offset.getZ(), offset.getY(), maxXIndex - offset.getX());
 		}
 	}
+
+	public static int getCWRotationsBetween(EnumFacing start, EnumFacing end) {
+		int rotations = 0;
+		if (start.getAxis().isHorizontal() && end.getAxis().isHorizontal()) {
+			while (start != end) {
+				start = start.rotateY();
+				rotations++;
+			}
+		}
+		return rotations;
+	}
+
+	public static EnumFacing rotateFacingNTimesAboutY(EnumFacing facing, int n) {
+		for (int i = 0; i < n; i++) {
+			facing = facing.rotateY();
+		}
+		return facing;
+	}
 }
