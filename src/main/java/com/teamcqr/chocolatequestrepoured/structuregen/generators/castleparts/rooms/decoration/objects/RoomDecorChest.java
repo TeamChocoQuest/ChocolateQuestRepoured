@@ -24,7 +24,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.CHEST));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CHEST));
 	}
 
 	@Override

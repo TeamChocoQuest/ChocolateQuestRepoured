@@ -9,6 +9,6 @@ public class RoomDecorBrewingStand extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.BREWING_STAND));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.BREWING_STAND));
 	}
 }

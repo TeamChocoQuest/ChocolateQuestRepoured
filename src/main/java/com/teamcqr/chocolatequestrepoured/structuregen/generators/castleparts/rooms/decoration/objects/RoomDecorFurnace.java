@@ -13,7 +13,7 @@ public class RoomDecorFurnace extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockOffset(0, 0, 0, Blocks.FURNACE));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.FURNACE));
 	}
 
 	@Override
