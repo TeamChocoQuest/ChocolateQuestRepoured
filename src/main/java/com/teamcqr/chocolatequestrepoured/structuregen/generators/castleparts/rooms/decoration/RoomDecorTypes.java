@@ -18,6 +18,7 @@ public class RoomDecorTypes {
     public static final IRoomDecor TABLE_1x1 = new RoomDecorTableSmall();
     public static final IRoomDecor TABLE_2x2 = new RoomDecorTableMedium();
     public static final IRoomDecor TORCH = new RoomDecorTorch();
+    public static final IRoomDecor WATER_BASIN = new RoomDecorWaterBasin();
 
     public static final RoomDecorPainting PAINTING = new RoomDecorPainting();
 }
