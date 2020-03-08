@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -14,11 +15,11 @@ public class CastleRoomAlchemyLab extends CastleRoomGeneric {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 4);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.CAULDRON, 1);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.BREW_STAND, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 4);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.CAULDRON, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BREW_STAND, 1);
 	}
 
 	@Override

@@ -3,6 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.*;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorChest;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorNone;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -36,6 +38,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 	public void decorate(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
 		this.addEdgeDecoration(world, dungeon);
 		this.addPaintings(world);
+		this.addMidDecoration(world, dungeon);
 		this.addSpawners(world, mobResourceLocation);
 		this.addChests(world, dungeon);
 		this.fillEmptySpaceWithAir(world);
@@ -52,34 +55,65 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 	}
 
 	private void addEdgeDecoration(World world, CastleDungeon dungeon) {
-		for (EnumFacing side : EnumFacing.HORIZONTALS) {
-			if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
-				ArrayList<BlockPos> edge = this.getDecorationEdge(side);
-				for (BlockPos pos : edge) {
-					if (this.decoMap.contains(pos)) {
-						// This position is already decorated, so keep going
-						continue;
-					}
-
-					int attempts = 0;
-
-					while (attempts < MAX_DECO_ATTEMPTS) {
-						IRoomDecor decor = this.decoSelector.randomEdgeDecor();
-						if (decor.wouldFit(pos, side, this.decoArea, this.decoMap)) {
-							decor.build(world, this, dungeon, pos, side, this.decoMap);
-
-							// If we added air here then this is a candidate spot for a chest
-							if (decor instanceof RoomDecorNone) {
-								this.possibleChestLocs.put(pos, side);
-							}
-							break;
+		if (this.decoSelector.edgeDecorRegistered()) {
+			for (EnumFacing side : EnumFacing.HORIZONTALS) {
+				if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
+					ArrayList<BlockPos> edge = this.getDecorationEdge(side);
+					for (BlockPos pos : edge) {
+						if (this.decoMap.contains(pos)) {
+							// This position is already decorated, so keep going
+							continue;
 						}
-						++attempts;
+
+						int attempts = 0;
+
+						while (attempts < MAX_DECO_ATTEMPTS) {
+							IRoomDecor decor = this.decoSelector.randomEdgeDecor();
+							if (decor.wouldFit(pos, side, this.decoArea, this.decoMap)) {
+								decor.build(world, this, dungeon, pos, side, this.decoMap);
+
+								// If we added air here then this is a candidate spot for a chest
+								if (decor instanceof RoomDecorNone) {
+									this.possibleChestLocs.put(pos, side);
+								}
+								break;
+							}
+							++attempts;
+						}
+						if (attempts >= MAX_DECO_ATTEMPTS) {
+							world.setBlockState(pos, Blocks.AIR.getDefaultState());
+							this.decoMap.add(pos);
+						}
 					}
-					if (attempts >= MAX_DECO_ATTEMPTS) {
-						world.setBlockState(pos, Blocks.AIR.getDefaultState());
-						this.decoMap.add(pos);
+				}
+			}
+		}
+	}
+
+	private void addMidDecoration(World world, CastleDungeon dungeon) {
+		if (this.decoSelector.midDecorRegistered()) {
+			ArrayList<BlockPos> area = this.getDecorationLayer(0);
+			for (BlockPos pos : area) {
+				if (this.decoMap.contains(pos)) {
+					// This position is already decorated, so keep going
+					continue;
+				}
+
+				int attempts = 0;
+
+				while (attempts < MAX_DECO_ATTEMPTS) {
+					IRoomDecor decor = this.decoSelector.randomMidDecor();
+					EnumFacing side = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
+					if (decor.wouldFit(pos, side, this.decoArea, this.decoMap)) {
+						decor.build(world, this, dungeon, pos, side, this.decoMap);
+
+						break;
 					}
+					++attempts;
+				}
+				if (attempts >= MAX_DECO_ATTEMPTS) {
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+					this.decoMap.add(pos);
 				}
 			}
 		}
@@ -95,8 +129,8 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 						continue;
 					}
 
-					if (RoomDecorTypes.PAINTING.wouldFit(pos, side, this.decoArea, this.decoMap))
-					{
+					if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.decoArea, this.decoMap)) &&
+							(DungeonGenUtils.PercentageRandom(15, this.random))) {
 						RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.decoArea, this.decoMap);
 					}
 				}

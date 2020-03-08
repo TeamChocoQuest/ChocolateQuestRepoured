@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
@@ -24,12 +24,12 @@ public class CastleRoomBedroom extends CastleRoomGeneric {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 4);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 1);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_SM, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.FIREPLACE, 1);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.BED, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 4);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TABLE_1x1, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FIREPLACE, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BED, 2);
 
 		List<EnumDyeColor> possibleColors = Arrays.asList(EnumDyeColor.values());
 		Collections.shuffle(possibleColors);

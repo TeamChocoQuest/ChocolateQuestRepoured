@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.util.EnumFacing;

@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import java.util.ArrayList;
 import java.util.HashSet;

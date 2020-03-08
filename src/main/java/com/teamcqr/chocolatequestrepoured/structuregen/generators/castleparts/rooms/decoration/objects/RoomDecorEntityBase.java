@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.init.Blocks;

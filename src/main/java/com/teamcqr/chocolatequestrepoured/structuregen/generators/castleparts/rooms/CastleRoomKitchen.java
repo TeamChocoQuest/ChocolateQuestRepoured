@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.EnumRoomDecor;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
 import net.minecraft.util.math.BlockPos;
@@ -15,12 +15,15 @@ public class CastleRoomKitchen extends CastleRoomGeneric {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.NONE, 3);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TORCH, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.SHELF, 3);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.TABLE_SM, 2);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.CRAFTING_TABLE, 1);
-		this.decoSelector.registerEdgeDecor(EnumRoomDecor.FURNACE, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 3);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 3);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TABLE_1x1, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.CRAFTING_TABLE, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FURNACE, 1);
+
+		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 10);
+		this.decoSelector.registerMidDecor(RoomDecorTypes.TABLE_2x2, 1);
 	}
 
 	@Override

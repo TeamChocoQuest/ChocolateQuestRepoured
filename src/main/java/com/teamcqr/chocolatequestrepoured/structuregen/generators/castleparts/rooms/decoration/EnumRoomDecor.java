@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.*;
+
 import java.util.function.Supplier;
 
 public enum EnumRoomDecor {

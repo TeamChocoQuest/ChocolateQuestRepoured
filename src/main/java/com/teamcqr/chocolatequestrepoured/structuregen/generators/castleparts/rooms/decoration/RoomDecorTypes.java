@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.*;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.paintings.RoomDecorPainting;
 
 public class RoomDecorTypes {

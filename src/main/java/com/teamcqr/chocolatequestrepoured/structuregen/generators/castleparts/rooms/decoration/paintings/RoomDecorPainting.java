@@ -1,19 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.paintings;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorEntityBase;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import scala.collection.mutable.HashEntry;
 
 import java.util.*;
 
