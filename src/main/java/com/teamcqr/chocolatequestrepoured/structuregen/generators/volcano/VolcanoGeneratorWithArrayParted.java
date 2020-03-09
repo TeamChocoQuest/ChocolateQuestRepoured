@@ -8,7 +8,7 @@ import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateE
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.BlockPart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
@@ -287,7 +287,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 						}
 					}
 					if(flag) {
-						BlockPart part = new BlockPart(referenceLoc.add(iX *16, iY *16, iZ *16), new BlockPos(16,16,16), partBlocks);
+						ExtendedBlockStatePart part = new ExtendedBlockStatePart(referenceLoc.add(iX *16, iY *16, iZ *16), new BlockPos(16,16,16), partBlocks);
 						parts.add(part);
 					}
 				}
@@ -298,7 +298,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			lists.add(parts);
 		}
 		
-		lists.add(BlockPart.split(referenceLoc, lagBlocks));
+		lists.add(ExtendedBlockStatePart.split(referenceLoc, lagBlocks));
 		
 		if (this.dungeon.doBuildDungeon()) {
 			lists.add(generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc));
@@ -519,7 +519,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 					}
 				}
 			}
-			parts.add(new BlockPart(referenceLoc.add(center), new BlockPos(7,maxY,7), blocks));
+			parts.add(new ExtendedBlockStatePart(referenceLoc.add(center), new BlockPos(7,maxY,7), blocks));
 		}
 		return parts;
 	}
