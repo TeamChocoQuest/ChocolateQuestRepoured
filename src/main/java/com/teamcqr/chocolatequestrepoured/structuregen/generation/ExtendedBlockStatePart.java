@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +15,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
@@ -27,15 +29,43 @@ public class ExtendedBlockStatePart implements IStructure {
 		this.readFromNBT(compound);
 	}
 
-	public ExtendedBlockStatePart(BlockPos pos, BlockPos size, ExtendedBlockState[][][] extendedstates) {
+	public ExtendedBlockStatePart(BlockPos pos, BlockPos size, Block[][][] blockArray) {
 		this.pos = pos;
 		this.size = size;
 		this.extendedstates = new ExtendedBlockState[this.size.getX()][this.size.getY()][this.size.getZ()];
 
-		for (int x = 0; x < this.size.getX() && x < extendedstates.length; x++) {
-			for (int y = 0; y < this.size.getY() && y < extendedstates[x].length; y++) {
-				for (int z = 0; z < this.size.getZ() && z < extendedstates[x][y].length; z++) {
-					this.extendedstates[x][y][z] = extendedstates[x][y][z];
+		for (int x = 0; x < this.size.getX() && x < blockArray.length; x++) {
+			for (int y = 0; y < this.size.getY() && y < blockArray[x].length; y++) {
+				for (int z = 0; z < this.size.getZ() && z < blockArray[x][y].length; z++) {
+					this.extendedstates[x][y][z] = new ExtendedBlockState(blockArray[x][y][z].getDefaultState(), null);
+				}
+			}
+		}
+	}
+
+	public ExtendedBlockStatePart(BlockPos pos, BlockPos size, IBlockState[][][] blockStateArray) {
+		this.pos = pos;
+		this.size = size;
+		this.extendedstates = new ExtendedBlockState[this.size.getX()][this.size.getY()][this.size.getZ()];
+
+		for (int x = 0; x < this.size.getX() && x < blockStateArray.length; x++) {
+			for (int y = 0; y < this.size.getY() && y < blockStateArray[x].length; y++) {
+				for (int z = 0; z < this.size.getZ() && z < blockStateArray[x][y].length; z++) {
+					this.extendedstates[x][y][z] = new ExtendedBlockState(blockStateArray[x][y][z], null);
+				}
+			}
+		}
+	}
+
+	public ExtendedBlockStatePart(BlockPos pos, BlockPos size, ExtendedBlockState[][][] extendedBlockStateArray) {
+		this.pos = pos;
+		this.size = size;
+		this.extendedstates = new ExtendedBlockState[this.size.getX()][this.size.getY()][this.size.getZ()];
+
+		for (int x = 0; x < this.size.getX() && x < extendedBlockStateArray.length; x++) {
+			for (int y = 0; y < this.size.getY() && y < extendedBlockStateArray[x].length; y++) {
+				for (int z = 0; z < this.size.getZ() && z < extendedBlockStateArray[x][y].length; z++) {
+					this.extendedstates[x][y][z] = extendedBlockStateArray[x][y][z];
 				}
 			}
 		}
@@ -112,15 +142,79 @@ public class ExtendedBlockStatePart implements IStructure {
 		}
 	}
 
-	public static List<ExtendedBlockStatePart> split(Map<BlockPos, ExtendedBlockState> map) {
-		return ExtendedBlockStatePart.split(new ArrayList(map.entrySet()));
+	public static List<ExtendedBlockStatePart> splitBlockMap(Map<BlockPos, Block> map) {
+		return ExtendedBlockStatePart.splitBlockList(new ArrayList(map.entrySet()));
 	}
 
-	public static List<ExtendedBlockStatePart> split(BlockPos pos, Map<BlockPos, ExtendedBlockState> map) {
-		return ExtendedBlockStatePart.split(pos, new ArrayList(map.entrySet()));
+	public static List<ExtendedBlockStatePart> splitBlockMap(BlockPos pos, Map<BlockPos, Block> map) {
+		return ExtendedBlockStatePart.splitBlockList(pos, new ArrayList(map.entrySet()));
 	}
 
-	public static List<ExtendedBlockStatePart> split(List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
+	public static List<ExtendedBlockStatePart> splitBlockStateMap(Map<BlockPos, IBlockState> map) {
+		return ExtendedBlockStatePart.splitBlockStateList(new ArrayList(map.entrySet()));
+	}
+
+	public static List<ExtendedBlockStatePart> splitBlockStateMap(BlockPos pos, Map<BlockPos, IBlockState> map) {
+		return ExtendedBlockStatePart.splitBlockStateList(pos, new ArrayList(map.entrySet()));
+	}
+
+	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(Map<BlockPos, ExtendedBlockState> map) {
+		return ExtendedBlockStatePart.splitExtendedBlockStateList(new ArrayList(map.entrySet()));
+	}
+
+	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(BlockPos pos, Map<BlockPos, ExtendedBlockState> map) {
+		return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, new ArrayList(map.entrySet()));
+	}
+
+	public static List<ExtendedBlockStatePart> splitBlockList(List<Map.Entry<BlockPos, Block>> entryList) {
+		if (!entryList.isEmpty()) {
+			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
+			for (Map.Entry<BlockPos, Block> entry : entryList) {
+				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
+			}
+			return ExtendedBlockStatePart.splitExtendedBlockStateList(list);
+		}
+
+		return Collections.emptyList();
+	}
+
+	public static List<ExtendedBlockStatePart> splitBlockList(BlockPos pos, List<Map.Entry<BlockPos, Block>> entryList) {
+		if (!entryList.isEmpty()) {
+			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
+			for (Map.Entry<BlockPos, Block> entry : entryList) {
+				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
+			}
+			return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, list);
+		}
+
+		return Collections.emptyList();
+	}
+
+	public static List<ExtendedBlockStatePart> splitBlockStateList(List<Map.Entry<BlockPos, IBlockState>> entryList) {
+		if (!entryList.isEmpty()) {
+			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
+			for (Map.Entry<BlockPos, IBlockState> entry : entryList) {
+				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
+			}
+			return ExtendedBlockStatePart.splitExtendedBlockStateList(list);
+		}
+
+		return Collections.emptyList();
+	}
+
+	public static List<ExtendedBlockStatePart> splitBlockStateList(BlockPos pos, List<Map.Entry<BlockPos, IBlockState>> entryList) {
+		if (!entryList.isEmpty()) {
+			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
+			for (Map.Entry<BlockPos, IBlockState> entry : entryList) {
+				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
+			}
+			return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, list);
+		}
+
+		return Collections.emptyList();
+	}
+
+	public static List<ExtendedBlockStatePart> splitExtendedBlockStateList(List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			int startX = entryList.get(0).getKey().getX();
 			int startY = entryList.get(0).getKey().getY();
@@ -164,7 +258,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
-	public static List<ExtendedBlockStatePart> split(BlockPos pos, List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
+	public static List<ExtendedBlockStatePart> splitExtendedBlockStateList(BlockPos pos, List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			int endX = entryList.get(0).getKey().getX();
 			int endY = entryList.get(0).getKey().getY();
@@ -196,87 +290,90 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	public static List<ExtendedBlockStatePart> split(BlockPos pos, Block[][][] array) {
+		return ExtendedBlockStatePart.split(pos, array, 16);
+	}
+
+	public static List<ExtendedBlockStatePart> split(BlockPos pos, IBlockState[][][] array) {
+		return ExtendedBlockStatePart.split(pos, array, 16);
+	}
+
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, ExtendedBlockState[][][] array) {
-		List<ExtendedBlockStatePart> list = new ArrayList<>();
+		return ExtendedBlockStatePart.split(pos, array, 16);
+	}
 
+	public static List<ExtendedBlockStatePart> split(BlockPos pos, Block[][][] array, int size) {
 		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
-			int xIterations = array.length / 16;
-			int yIterations = array[0].length / 16;
-			int zIterations = array[0][0].length / 16;
-
-			for (int x = 0; x <= xIterations; x++) {
-				for (int y = 0; y <= yIterations; y++) {
-					for (int z = 0; z <= zIterations; z++) {
-						BlockPos partStartPos = pos.add(x * 16, y * 16, z * 16);
-						BlockPos partEndPos = partStartPos.add(x == xIterations ? array.length - x * 16 : 16, y == yIterations ? array[x].length - y * 16 : 16, z == zIterations ? array[x][y].length - z * 16 : 16);
-						BlockPos partSize = partEndPos.subtract(partStartPos);
-						BlockPos partOffset = partStartPos.subtract(pos);
-						ExtendedBlockState[][][] extendedstates = new ExtendedBlockState[partSize.getX()][partSize.getY()][partSize.getZ()];
-						boolean empty = true;
-
-						for (int x1 = 0; x1 < partSize.getX(); x1++) {
-							for (int y1 = 0; y1 < partSize.getY(); y1++) {
-								for (int z1 = 0; z1 < partSize.getZ(); z1++) {
-									int x2 = partOffset.getX() + x1;
-									int y2 = partOffset.getY() + y1;
-									int z2 = partOffset.getZ() + z1;
-									if (x2 < array.length && y2 < array[x2].length && z2 < array[x2][y2].length) {
-										extendedstates[x1][y1][z1] = array[x2][y2][z2];
-										if (empty && extendedstates[x1][y1][z1] != null) {
-											empty = false;
-										}
-									}
-								}
-							}
-						}
-
-						if (!empty) {
-							list.add(new ExtendedBlockStatePart(partStartPos, partSize, extendedstates));
+			ExtendedBlockState[][][] blocks = new ExtendedBlockState[array.length][array[0].length][array[0][0].length];
+			for (int x = 0; x < blocks.length; x++) {
+				for (int y = 0; y < blocks[x].length && y < array[x].length; y++) {
+					for (int z = 0; z < blocks[x][y].length && z < array[x][y].length; z++) {
+						if (array[x][y][z] != null) {
+							blocks[x][y][z] = new ExtendedBlockState(array[x][y][z].getDefaultState(), null);
 						}
 					}
 				}
 			}
+
+			return ExtendedBlockStatePart.split(pos, blocks, size);
 		}
 
-		return list;
+		return Collections.emptyList();
+	}
+
+	public static List<ExtendedBlockStatePart> split(BlockPos pos, IBlockState[][][] array, int size) {
+		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
+			ExtendedBlockState[][][] blocks = new ExtendedBlockState[array.length][array[0].length][array[0][0].length];
+			for (int x = 0; x < blocks.length; x++) {
+				for (int y = 0; y < blocks[x].length && y < array[x].length; y++) {
+					for (int z = 0; z < blocks[x][y].length && z < array[x][y].length; z++) {
+						if (array[x][y][z] != null) {
+							blocks[x][y][z] = new ExtendedBlockState(array[x][y][z], null);
+						}
+					}
+				}
+			}
+
+			return ExtendedBlockStatePart.split(pos, blocks, size);
+		}
+
+		return Collections.emptyList();
 	}
 
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, ExtendedBlockState[][][] array, int size) {
 		List<ExtendedBlockStatePart> list = new ArrayList<>();
 
 		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
-			int xIterations = array.length / size;
-			int yIterations = array[0].length / size;
-			int zIterations = array[0][0].length / size;
-
-			for (int x = 0; x <= xIterations; x++) {
-				for (int y = 0; y <= yIterations; y++) {
-					for (int z = 0; z <= zIterations; z++) {
-						BlockPos partStartPos = pos.add(x * size, y * size, z * size);
-						BlockPos partEndPos = partStartPos.add(x == xIterations ? array.length - x * size : size, y == yIterations ? array[x].length - y * size : size, z == zIterations ? array[x][y].length - z * size : size);
-						BlockPos partSize = partEndPos.subtract(partStartPos);
-						BlockPos partOffset = partStartPos.subtract(pos);
-						ExtendedBlockState[][][] extendedstates = new ExtendedBlockState[partSize.getX()][partSize.getY()][partSize.getZ()];
+			int xIterations = MathHelper.ceil(array.length / size);
+			int yIterations = MathHelper.ceil(array[0].length / size);
+			int zIterations = MathHelper.ceil(array[0][0].length / size);
+			for (int y = 0; y < yIterations; y++) {
+				for (int x = 0; x < xIterations; x++) {
+					for (int z = 0; z < zIterations; z++) {
+						int partOffsetX = x * size;
+						int partOffsetY = y * size;
+						int partOffsetZ = z * size;
+						int partSizeX = x == xIterations - 1 ? array.length - partOffsetX : size;
+						int partSizeY = y == yIterations - 1 ? array[0].length - partOffsetY : size;
+						int partSizeZ = z == zIterations - 1 ? array[0][0].length - partOffsetZ : size;
+						ExtendedBlockState[][][] blocks = new ExtendedBlockState[partSizeX][partSizeY][partSizeZ];
 						boolean empty = true;
 
-						for (int x1 = 0; x1 < partSize.getX(); x1++) {
-							for (int y1 = 0; y1 < partSize.getY(); y1++) {
-								for (int z1 = 0; z1 < partSize.getZ(); z1++) {
-									int x2 = partOffset.getX() + x1;
-									int y2 = partOffset.getY() + y1;
-									int z2 = partOffset.getZ() + z1;
-									if (x2 < array.length && y2 < array[x2].length && z2 < array[x2][y2].length) {
-										extendedstates[x1][y1][z1] = array[x2][y2][z2];
-										if (empty && extendedstates[x1][y1][z1] != null) {
-											empty = false;
-										}
+						for (int x1 = 0; x1 < partSizeX; x1++) {
+							int x2 = x1 + partOffsetX;
+							for (int y1 = 0; y1 < partSizeY && y1 < array[x2].length; y1++) {
+								int y2 = y1 + partOffsetY;
+								for (int z1 = 0; z1 < partSizeZ && z1 < array[x2][y2].length; z1++) {
+									blocks[x1][y1][z1] = array[x2][y2][z1 + partOffsetZ];
+									if (empty && blocks[x1][y1][z1] != null) {
+										empty = false;
 									}
 								}
 							}
 						}
 
 						if (!empty) {
-							list.add(new ExtendedBlockStatePart(partStartPos, partSize, extendedstates));
+							list.add(new ExtendedBlockStatePart(pos.add(partOffsetX, partOffsetY, partOffsetZ), new BlockPos(partSizeX, partSizeY, partSizeZ), blocks));
 						}
 					}
 				}
@@ -286,7 +383,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		return list;
 	}
 
-	public class ExtendedBlockState {
+	public static class ExtendedBlockState {
 
 		private IBlockState state;
 		private NBTTagCompound tileentitydata;
