@@ -37,7 +37,9 @@ public class ExtendedBlockStatePart implements IStructure {
 		for (int x = 0; x < this.size.getX() && x < blockArray.length; x++) {
 			for (int y = 0; y < this.size.getY() && y < blockArray[x].length; y++) {
 				for (int z = 0; z < this.size.getZ() && z < blockArray[x][y].length; z++) {
-					this.extendedstates[x][y][z] = new ExtendedBlockState(blockArray[x][y][z].getDefaultState(), null);
+					if (blockArray[x][y][z] != null) {
+						this.extendedstates[x][y][z] = new ExtendedBlockState(blockArray[x][y][z].getDefaultState(), null);
+					}
 				}
 			}
 		}
@@ -51,7 +53,9 @@ public class ExtendedBlockStatePart implements IStructure {
 		for (int x = 0; x < this.size.getX() && x < blockStateArray.length; x++) {
 			for (int y = 0; y < this.size.getY() && y < blockStateArray[x].length; y++) {
 				for (int z = 0; z < this.size.getZ() && z < blockStateArray[x][y].length; z++) {
-					this.extendedstates[x][y][z] = new ExtendedBlockState(blockStateArray[x][y][z], null);
+					if (blockStateArray[x][y][z] != null) {
+						this.extendedstates[x][y][z] = new ExtendedBlockState(blockStateArray[x][y][z], null);
+					}
 				}
 			}
 		}
