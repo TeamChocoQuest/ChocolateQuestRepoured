@@ -260,6 +260,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		}
 		
 		//Generate parts for generation
+		/*
 		int pY = 256 /16;
 		int pX = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
 		int pZ = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
@@ -299,6 +300,8 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		}
 		
 		lists.add(ExtendedBlockStatePart.split(referenceLoc, lagBlocks));
+		*/
+		lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
 		
 		if (this.dungeon.doBuildDungeon()) {
 			lists.add(generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc));
