@@ -9,8 +9,10 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
@@ -37,6 +39,39 @@ import net.minecraftforge.common.MinecraftForge;
  * GitHub: https://github.com/DerToaster98
  */
 public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
+	
+	public void generate(World world, Chunk chunk, int x, int y, int z) {
+		/*
+		 * int median = 0;
+		 * int cant = 0;
+		 * for(int iX = 0; iX < x; iX++) {
+		 * for(int iZ = 0; iZ < z; iZ++) {
+		 * int height = world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY();
+		 * median += height;
+		 * cant++;
+		 * }
+		 * }
+		 * y = median /cant;
+		 */
+		if (world.isRemote) {
+			return;
+		}
+
+		Structure structure = new Structure(world);
+		List<List<? extends IStructure>> lists = new ArrayList<>();
+
+		this.preProcess(world, chunk, x, y, z, lists);
+		this.postProcess(world, chunk, x, y, z, lists);
+		this.fillChests(world, chunk, x, y, z, lists);
+		this.placeSpawners(world, chunk, x, y, z, lists);
+		this.buildStructure(world, chunk, x, y, z, lists);
+		this.placeCoverBlocks(world, chunk, x, y, z, lists);
+
+		for (List<? extends IStructure> list : lists) {
+			structure.addList(list);
+		}
+		DungeonGenerationHandler.addStructure(world, structure);
+	}
 	//GENERATION TIME TOTAL: ~4.5 minutes
 	/*
 	 * !!! Experimental !!!
