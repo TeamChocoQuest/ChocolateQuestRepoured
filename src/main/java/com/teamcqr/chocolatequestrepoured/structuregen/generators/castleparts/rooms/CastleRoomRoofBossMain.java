@@ -1,7 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.ArrayList;
+
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import net.minecraft.block.BlockColored;
@@ -19,8 +20,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
 
 public class CastleRoomRoofBossMain extends CastleRoom {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
@@ -67,6 +66,10 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 
 	@Override
 	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+		if(bossResourceLocation == null) {
+			return;
+		}
+		
 		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
 
