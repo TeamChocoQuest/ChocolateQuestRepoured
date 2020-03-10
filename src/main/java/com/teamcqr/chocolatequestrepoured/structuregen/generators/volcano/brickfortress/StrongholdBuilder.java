@@ -131,7 +131,7 @@ public class StrongholdBuilder {
 			air1 = startPosCentered.add(0, 1, 2);
 			air2 = startPosCentered.add(-3, 5, 2);
 			pillar1 = startPosCentered.add(-1, 0, -2);
-			pillar1 = startPosCentered.add(-1, 0, 2);
+			pillar2 = startPosCentered.add(-1, 0, 2);
 			torch1 = startPosCentered.add(-1, 4, -1);
 			torch2 = startPosCentered.add(-1, 4, 1);
 			break;
