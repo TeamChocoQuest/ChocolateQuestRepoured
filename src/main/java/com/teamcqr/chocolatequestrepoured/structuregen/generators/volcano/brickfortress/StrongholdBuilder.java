@@ -65,7 +65,7 @@ public class StrongholdBuilder {
 			pos = pos.add(expansionVector);
 		}
 		
-		buildStronghold(pos, world);
+		buildStronghold(pos.add(0,-1,0), world);
 	}
 
 	private void buildStronghold(BlockPos pos, World world2) {
