@@ -38,6 +38,7 @@ public class ItemBubbleGun extends Item implements IRangedWeapon {
 		if(entityLiving instanceof EntityPlayer) {
 			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, 30);
 		}
+		stack.damageItem(1, entityLiving);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 	
