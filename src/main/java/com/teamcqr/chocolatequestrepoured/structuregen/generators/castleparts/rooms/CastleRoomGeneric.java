@@ -31,7 +31,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 
 	@Override
 	public void generateRoom(World world, CastleDungeon dungeon) {
-		this.setupDecoration(world);
+
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 			if (DungeonGenUtils.PercentageRandom(50, this.random)) {
 				IRoomDecor chest = new RoomDecorChest();
 				BlockPos pos = (BlockPos) this.possibleChestLocs.keySet().toArray()[this.random.nextInt(this.possibleChestLocs.size())];
-				chest.build(world, this, dungeon, pos, this.possibleChestLocs.get(pos), this.decoMap);
+				chest.build(world, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 				if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
 					ArrayList<BlockPos> edge = this.getDecorationEdge(side);
 					for (BlockPos pos : edge) {
-						if (this.decoMap.contains(pos)) {
+						if (this.usedDecoPositions.contains(pos)) {
 							// This position is already decorated, so keep going
 							continue;
 						}
@@ -69,8 +69,8 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 
 						while (attempts < MAX_DECO_ATTEMPTS) {
 							IRoomDecor decor = this.decoSelector.randomEdgeDecor();
-							if (decor.wouldFit(pos, side, this.decoArea, this.decoMap)) {
-								decor.build(world, this, dungeon, pos, side, this.decoMap);
+							if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) {
+								decor.build(world, this, dungeon, pos, side, this.usedDecoPositions);
 
 								// If we added air here then this is a candidate spot for a chest
 								if (decor instanceof RoomDecorNone) {
@@ -82,7 +82,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 						}
 						if (attempts >= MAX_DECO_ATTEMPTS) {
 							world.setBlockState(pos, Blocks.AIR.getDefaultState());
-							this.decoMap.add(pos);
+							this.usedDecoPositions.add(pos);
 						}
 					}
 				}
@@ -94,7 +94,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 		if (this.decoSelector.midDecorRegistered()) {
 			ArrayList<BlockPos> area = this.getDecorationLayer(0);
 			for (BlockPos pos : area) {
-				if (this.decoMap.contains(pos)) {
+				if (this.usedDecoPositions.contains(pos)) {
 					// This position is already decorated, so keep going
 					continue;
 				}
@@ -104,8 +104,8 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 				while (attempts < MAX_DECO_ATTEMPTS) {
 					IRoomDecor decor = this.decoSelector.randomMidDecor();
 					EnumFacing side = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
-					if (decor.wouldFit(pos, side, this.decoArea, this.decoMap)) {
-						decor.build(world, this, dungeon, pos, side, this.decoMap);
+					if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) {
+						decor.build(world, this, dungeon, pos, side, this.usedDecoPositions);
 
 						break;
 					}
@@ -113,7 +113,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 				}
 				if (attempts >= MAX_DECO_ATTEMPTS) {
 					world.setBlockState(pos, Blocks.AIR.getDefaultState());
-					this.decoMap.add(pos);
+					this.usedDecoPositions.add(pos);
 				}
 			}
 		}
@@ -124,14 +124,14 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 			if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
 				ArrayList<BlockPos> edge = this.getPaintingEdge(side);
 				for (BlockPos pos : edge) {
-					if (this.decoMap.contains(pos)) {
+					if (this.usedDecoPositions.contains(pos)) {
 						// This position is already decorated, so keep going
 						continue;
 					}
 
-					if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.decoArea, this.decoMap)) &&
+					if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
 							(DungeonGenUtils.PercentageRandom(15, this.random))) {
-						RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.decoArea, this.decoMap);
+						RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.possibleDecoPositions, this.usedDecoPositions);
 					}
 				}
 			}
@@ -140,7 +140,7 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 
 	private void addSpawners(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
 		ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
-		spawnPositions.removeAll(this.decoMap);
+		spawnPositions.removeAll(this.usedDecoPositions);
 
 		int spawnerCount = dungeon.randomizeRoomSpawnerCount();
 
@@ -150,14 +150,14 @@ public abstract class CastleRoomGeneric extends CastleRoom {
 			Entity mobEntity = EntityList.createEntityByIDFromName(mobResourceLocation, world);
 
 			SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
-			this.decoMap.add(pos);
+			this.usedDecoPositions.add(pos);
 			spawnPositions.remove(pos);
 		}
 	}
 
 	private void fillEmptySpaceWithAir(World world) {
-		HashSet<BlockPos> emptySpaces = new HashSet<>(this.decoArea);
-		emptySpaces.removeAll(this.decoMap);
+		HashSet<BlockPos> emptySpaces = new HashSet<>(this.possibleDecoPositions);
+		emptySpaces.removeAll(this.usedDecoPositions);
 
 		for (BlockPos emptyPos : emptySpaces) {
 			world.setBlockState(emptyPos, Blocks.AIR.getDefaultState());

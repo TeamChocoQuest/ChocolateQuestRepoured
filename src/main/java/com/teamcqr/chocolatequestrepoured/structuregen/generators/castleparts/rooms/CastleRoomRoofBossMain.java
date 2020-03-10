@@ -53,14 +53,10 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 		for (int x = 0; x < BOSS_ROOM_STATIC_SIZE; x++) {
 			for (int y = 0; y < 8; y++) {
 				for (int z = 0; z < BOSS_ROOM_STATIC_SIZE; z++) {
-					if (x == 8 && z == 8 && y == 1) {
-						this.placeBossSpawner(world, dungeon, nwCorner.add(x, y, z));
-					} else {
-						blockToBuild = this.getBlockToBuild(x, y, z);
-						pos = nwCorner.add(x, y, z);
+					blockToBuild = this.getBlockToBuild(x, y, z);
+					pos = nwCorner.add(x, y, z);
 
-						world.setBlockState(pos, blockToBuild);
-					}
+					world.setBlockState(pos, blockToBuild);
 				}
 			}
 		}
@@ -94,18 +90,6 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 
 	private BlockPos getBossRoomBuildStartPosition() {
 		return this.getNonWallStartPos().add(this.bossBuildOffset);
-	}
-
-	private void placeBossSpawner(World world, CastleDungeon dungeon, BlockPos pos) {
-		ResourceLocation resLoc;
-		if (dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
-			resLoc = EDungeonMobType.getMobTypeDependingOnDistance(pos.getX(), pos.getZ()).getBossResourceLocation();
-		} else {
-			resLoc = dungeon.getDungeonMob().getBossResourceLocation();
-		}
-		Entity mobEntity = EntityList.createEntityByIDFromName(resLoc, world);
-
-		SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
 	}
 
 	private IBlockState getBlockToBuild(int x, int y, int z) {

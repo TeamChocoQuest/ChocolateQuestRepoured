@@ -17,11 +17,12 @@ public class CastleRoomArmory extends CastleRoomGeneric {
 
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 3);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.UNLIT_TORCH, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 3);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.ANVIL, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.ARMOR_STAND, 1);
 
-		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 10);
+		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 15);
 		this.decoSelector.registerMidDecor(RoomDecorTypes.TABLE_2x2, 1);
 	}
 
