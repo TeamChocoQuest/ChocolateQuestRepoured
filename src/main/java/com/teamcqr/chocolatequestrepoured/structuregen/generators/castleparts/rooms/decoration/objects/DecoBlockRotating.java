@@ -1,12 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import javafx.beans.property.Property;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockTorch;
+
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3i;
 
