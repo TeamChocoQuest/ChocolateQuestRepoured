@@ -35,20 +35,19 @@ public class Structure {
 
 	private IStructure createFromNBT(NBTTagCompound compound) {
 		String name = compound.getString("id");
-		if (name.equals("structurePart")) {
+
+		switch (name) {
+		case "structurePart":
 			return new StructurePart(compound);
-		} else if (name.equals("extendedBlockStatePart")) {
+		case "extendedBlockStatePart":
 			return new ExtendedBlockStatePart(compound);
-		} else if (name.equals("blockStatePart")) {
-			return new BlockStatePart(compound);
-		} else if (name.equals("blockPart")) {
-			return new BlockPart(compound);
-		} else if (name.equals("supportHillPart")) {
+		case "supportHillPart":
 			return new SupportHillPart(compound);
-		} else if (name.equals("randomBlobPart")) {
+		case "randomBlobPart":
 			return new RandomBlobPart(compound);
+		default:
+			return null;
 		}
-		return null;
 	}
 
 	public NBTTagCompound writeToNBT() {

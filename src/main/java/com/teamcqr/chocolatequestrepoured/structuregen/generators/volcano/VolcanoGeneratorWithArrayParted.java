@@ -1,26 +1,29 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.BlockPart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -228,7 +231,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 					for (int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
 						// Pillars
 						if (this.dungeon.doBuildDungeon() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
-							pillarCenters.add(new BlockPos(iX /*+ x*/, yStairCase - 3, iZ /*+ z*/));
+							pillarCenters.add(new BlockPos(iX +r, yStairCase - 3, iZ +r));
 						}
 						// Stairwell -> check if it is in the volcano
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1, this.centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2, this.centerLoc)) {
@@ -259,51 +262,15 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			this.generateOres(blockList, blocks, r);
 		}
 		
-		//Generate parts for generation
-		int pY = 256 /16;
-		int pX = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
-		int pZ = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
-		List<IStructure> parts = new ArrayList<>();
-		Block[][][] lagBlocks = new Block[blocks.length][256][blocks.length];
-		for(int iY = 0; iY < pY; iY++) {
-			for(int iX = 0; iX < pX; iX++) {
-				for(int iZ = 0; iZ < pZ; iZ++) {
-					final Block[][][] partBlocks = new Block[16][16][16];
-					boolean flag = false;
-					for(int iy = iY * 16; iy < (iY * 16 +16) && iy < 256; iy++) {
-						for(int ix = iX *16; ix < (iX * 16 +16) && ix < blocks.length; ix++) {
-							for(int iz = iZ * 16; iz < (iZ * 16 +16) && iz < blocks.length; iz++) {
-								Block block = blocks[ix][iy][iz]; 
-								if(block != null) {
-									flag = true;
-									if(block.getTickRandomly() || block.getLightValue(block.getDefaultState()) > 0) {
-										lagBlocks[ix][iy][iz] = block;
-									} else {
-										partBlocks[ix -iX *16][iy -iY *16][iz -iZ *16] = block;
-									}
-									
-								}
-							}
-						}
-					}
-					if(flag) {
-						BlockPart part = new BlockPart(referenceLoc.add(iX *16, iY *16, iZ *16), new BlockPos(16,16,16), partBlocks);
-						parts.add(part);
-					}
-				}
+		if (this.dungeon.doBuildDungeon()) {
+			for(BlockPos center : pillarCenters) {
+				this.generatePillars(center, 2, lowYMax +10, blocks, dungeon.getPillarBlock());
 			}
 		}
 		
-		if(!parts.isEmpty()) {
-			lists.add(parts);
-		}
+		//Generate parts for generation
+		lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
 		
-		lists.add(BlockPart.split(referenceLoc, lagBlocks));
-		
-		if (this.dungeon.doBuildDungeon()) {
-			lists.add(generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc));
-		}
-
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
 		//TODO Add bosses
@@ -368,9 +335,9 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Fill chests on path
-		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		//final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		final int[] chestIDs = this.dungeon.getChestIDs();
-		Runnable chestPlaceTask = new Runnable() {
+		/*Runnable chestPlaceTask = new Runnable() {
 			
 			@Override
 			public void run() {
@@ -396,13 +363,40 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);*/
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		Random rdm = new Random();
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			if(rdm.nextBoolean()) {
+				Block block = Blocks.CHEST;
+				IBlockState state = block.getDefaultState();
+				TileEntityChest chest = (TileEntityChest)block.createTileEntity(world, state);
+				
+				int eltID = chestIDs[rdm.nextInt(chestIDs.length)];
+				if (chest != null) {
+					ResourceLocation resLoc = null;
+					try {
+						resLoc = ELootTable.values()[eltID].getResourceLocation();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+					if (resLoc != null) {
+						long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
+						chest.setLootTable(resLoc, seed);
+					}
+				}
+				
+				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+				stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+			}
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Place spawners for dwarves/golems/whatever on path
-		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		/*final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		Runnable placeSpawnerTask = new Runnable() {
 			
 			@Override
@@ -412,7 +406,19 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);*/
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			Block block = Blocks.MOB_SPAWNER;
+			IBlockState state = block.getDefaultState();
+			TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state);
+			spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
+			spawner.updateContainingBlockInfo();
+			
+			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
+			stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
@@ -506,22 +512,19 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 		}
 	}
-
-	private List<IStructure> generatePillars(List<BlockPos> centers, int maxY, World world, BlockPos referenceLoc) {
-		List<IStructure> parts = new ArrayList<>();
-		for (BlockPos center : centers) {
-			center = center.add(-3, 0, -3);
-			final Block[][][] blocks = new Block[7][maxY][7];
-			for (int iY = 0; iY < maxY; iY++) {
-				for (int iX = 0; iX < 7; iX++) {
-					for (int iZ = 0; iZ < 7; iZ++) {
-						blocks[iX][iY][iZ] = dungeon.getPillarBlock();
+	
+	private void generatePillars(BlockPos centerAsIndexes, int radius, int height, Block[][][] blocks, Block pillarBlock) {
+		for(int iY = 0; iY < height; iY++) {
+			for(int iX = -radius; iX <= radius; iX++) {
+				for(int iZ = -radius; iZ <= radius; iZ++) {
+					try {
+						blocks[iX + centerAsIndexes.getX()][iY + centerAsIndexes.getY()][iZ + centerAsIndexes.getZ()] = pillarBlock;
+					} catch(ArrayIndexOutOfBoundsException ex) {
+						continue;
 					}
 				}
 			}
-			parts.add(new BlockPart(referenceLoc.add(center), new BlockPos(7,maxY,7), blocks));
 		}
-		return parts;
 	}
 
 	private int getMinY(BlockPos center, int radius, World world) {

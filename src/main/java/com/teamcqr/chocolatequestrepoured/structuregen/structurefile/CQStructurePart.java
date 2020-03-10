@@ -9,6 +9,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
@@ -18,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
+import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.block.Block;
@@ -34,9 +37,12 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
@@ -48,8 +54,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
  */
 public class CQStructurePart extends Template {
 
-	public static final Set<Block> SPECIAL_BLOCKS = new HashSet<>();
-	public static final Set<String> SPECIAL_ENTITIES = new HashSet<>();
+	private static final Set<Block> SPECIAL_BLOCKS = new HashSet<>();
+	private static final Set<String> SPECIAL_ENTITIES = new HashSet<>();
 
 	private final List<BlockPos> banners = new ArrayList<>();
 	private final List<BlockPos> spawners = new ArrayList<>();
@@ -149,72 +155,102 @@ public class CQStructurePart extends Template {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	private static Field blocksField = null;
+
 	private List<Template.BlockInfo> getBlockInfoList() {
 		try {
-			// 1.12 obfuscated name: field_186270_a
-			Field field = null;
-			try {
-				field = Template.class.getDeclaredField("field_186270_a");
-			} catch (NoSuchFieldException e) {
-				field = Template.class.getDeclaredField("blocks");
+			if (blocksField == null) {
+				try {
+					blocksField = Template.class.getDeclaredField("field_186270_a");
+				} catch (NoSuchFieldException e) {
+					blocksField = Template.class.getDeclaredField("blocks");
+				}
+				blocksField.setAccessible(true);
 			}
-			field.setAccessible(true);
-			return (List<BlockInfo>) field.get(this);
+			return (List<BlockInfo>) blocksField.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Error while taking blocks from world", e);
+			CQRMain.logger.error("Failed to get value of Template.blocks field", e);
 		}
 		return Collections.emptyList();
 	}
+
+	private static Field entitiesField = null;
 
 	private List<Template.EntityInfo> getEntityInfoList() {
 		try {
-			Field field = null;
-			try {
-				field = Template.class.getDeclaredField("field_186271_b");
-			} catch (NoSuchFieldException e) {
-				field = Template.class.getDeclaredField("entities");
+			if (entitiesField == null) {
+				try {
+					entitiesField = Template.class.getDeclaredField("field_186271_b");
+				} catch (NoSuchFieldException e) {
+					entitiesField = Template.class.getDeclaredField("entities");
+				}
+				entitiesField.setAccessible(true);
 			}
-			field.setAccessible(true);
-			return (List<Template.EntityInfo>) field.get(this);
+			return (List<Template.EntityInfo>) entitiesField.get(this);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Error while taking blocks from world", e);
+			CQRMain.logger.error("Failed to get value of Template.entities field", e);
 		}
 		return Collections.emptyList();
 	}
 
+	private static Field sizeField = null;
+
 	private void setSize(BlockPos size) {
 		try {
-			Field field = null;
-			try {
-				field = Template.class.getDeclaredField("field_186272_c");
-			} catch (NoSuchFieldException e) {
-				field = Template.class.getDeclaredField("size");
+			if (sizeField == null) {
+				try {
+					sizeField = Template.class.getDeclaredField("field_186272_c");
+				} catch (NoSuchFieldException e) {
+					sizeField = Template.class.getDeclaredField("size");
+				}
+				sizeField.setAccessible(true);
 			}
-			field.setAccessible(true);
-			field.set(this, size);
+			sizeField.set(this, size);
 		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
-			CQRMain.logger.error("Error while taking blocks from world", e);
+			CQRMain.logger.error("Failed to set value of Template.size field", e);
 		}
 	}
 
+	private static Method takeEntitiesFromWorldMethod = null;
+
 	private void takeEntitiesFromWorld(World worldIn, BlockPos startPos, BlockPos endPos) {
 		try {
-			Method method = null;
-			try {
-				method = Template.class.getDeclaredMethod("func_186255_a", World.class, BlockPos.class, BlockPos.class);
-			} catch (NoSuchMethodException e) {
-				method = Template.class.getDeclaredMethod("takeEntitiesFromWorld", World.class, BlockPos.class, BlockPos.class);
+			if (takeEntitiesFromWorldMethod == null) {
+				try {
+					takeEntitiesFromWorldMethod = Template.class.getDeclaredMethod("func_186255_a", World.class, BlockPos.class, BlockPos.class);
+				} catch (NoSuchMethodException e) {
+					takeEntitiesFromWorldMethod = Template.class.getDeclaredMethod("takeEntitiesFromWorld", World.class, BlockPos.class, BlockPos.class);
+				}
+				takeEntitiesFromWorldMethod.setAccessible(true);
 			}
-			method.setAccessible(true);
-			method.invoke(this, worldIn, startPos, endPos);
+			takeEntitiesFromWorldMethod.invoke(this, worldIn, startPos, endPos);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			CQRMain.logger.error("Error while taking blocks from world", e);
+			CQRMain.logger.error("Failed to invoke Template.takeEntitiesFromWorld method", e);
+		}
+	}
+
+	private static Method addEntitiesToWorldMethod = null;
+
+	private void addEntitiesToWorld(World worldIn, BlockPos pos, Mirror mirrorIn, Rotation rotationIn, @Nullable StructureBoundingBox aabb) {
+		try {
+			if (addEntitiesToWorldMethod == null) {
+				try {
+					addEntitiesToWorldMethod = Template.class.getDeclaredMethod("abc", World.class, BlockPos.class, Mirror.class, Rotation.class, StructureBoundingBox.class);
+				} catch (NoSuchMethodException e) {
+					addEntitiesToWorldMethod = Template.class.getDeclaredMethod("addEntitiesToWorld", World.class, BlockPos.class, Mirror.class, Rotation.class, StructureBoundingBox.class);
+				}
+				addEntitiesToWorldMethod.setAccessible(true);
+			}
+			addEntitiesToWorldMethod.invoke(this, worldIn, pos, mirrorIn, rotationIn, aabb);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			CQRMain.logger.error("Failed to invoke Template.addEntitiesToWorld method", e);
 		}
 	}
 
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
-		this.addBlocksToWorld(worldIn, pos, placementIn);
+		// this.addBlocksToWorld(worldIn, pos, placementIn);
+		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
+		this.addEntitiesToWorld(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
 
 		if (replaceBanners && dungeonBanner != null) {
 			for (BlockPos bannerPos : this.banners) {
