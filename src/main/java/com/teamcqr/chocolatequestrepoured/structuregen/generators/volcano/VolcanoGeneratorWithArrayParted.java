@@ -1,11 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
-import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
@@ -15,12 +16,14 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairC
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -332,9 +335,9 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Fill chests on path
-		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		//final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		final int[] chestIDs = this.dungeon.getChestIDs();
-		Runnable chestPlaceTask = new Runnable() {
+		/*Runnable chestPlaceTask = new Runnable() {
 			
 			@Override
 			public void run() {
@@ -360,13 +363,40 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);*/
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		Random rdm = new Random();
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			if(rdm.nextBoolean()) {
+				Block block = Blocks.CHEST;
+				IBlockState state = block.getDefaultState();
+				TileEntityChest chest = (TileEntityChest)block.createTileEntity(world, state);
+				
+				int eltID = chestIDs[rdm.nextInt(chestIDs.length)];
+				if (chest != null) {
+					ResourceLocation resLoc = null;
+					try {
+						resLoc = ELootTable.values()[eltID].getResourceLocation();
+					} catch (Exception ex) {
+						ex.printStackTrace();
+					}
+					if (resLoc != null) {
+						long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
+						chest.setLootTable(resLoc, seed);
+					}
+				}
+				
+				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+				stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+			}
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE Place spawners for dwarves/golems/whatever on path
-		final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
+		/*final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		Runnable placeSpawnerTask = new Runnable() {
 			
 			@Override
@@ -376,7 +406,19 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);
+		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);*/
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			Block block = Blocks.MOB_SPAWNER;
+			IBlockState state = block.getDefaultState();
+			TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state);
+			spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
+			spawner.updateContainingBlockInfo();
+			
+			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
+			stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
