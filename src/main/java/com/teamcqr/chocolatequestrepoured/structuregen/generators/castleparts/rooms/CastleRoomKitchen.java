@@ -17,12 +17,13 @@ public class CastleRoomKitchen extends CastleRoomGeneric {
 
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 3);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.UNLIT_TORCH, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 3);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TABLE_1x1, 2);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.CRAFTING_TABLE, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FURNACE, 1);
 
-		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 10);
+		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 20);
 		this.decoSelector.registerMidDecor(RoomDecorTypes.TABLE_2x2, 1);
 	}
 
