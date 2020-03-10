@@ -417,9 +417,9 @@ public class ExtendedBlockStatePart implements IStructure {
 		List<ExtendedBlockStatePart> list = new ArrayList<>();
 
 		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
-			int xIterations = MathHelper.ceil(array.length / size);
-			int yIterations = MathHelper.ceil(array[0].length / size);
-			int zIterations = MathHelper.ceil(array[0][0].length / size);
+			int xIterations = MathHelper.ceil((double) array.length / size);
+			int yIterations = MathHelper.ceil((double) array[0].length / size);
+			int zIterations = MathHelper.ceil((double) array[0][0].length / size);
 			for (int y = 0; y < yIterations; y++) {
 				for (int x = 0; x < xIterations; x++) {
 					for (int z = 0; z < zIterations; z++) {
