@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 
 import net.minecraft.block.Block;
@@ -461,7 +463,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		private IBlockState state;
 		private NBTTagCompound tileentitydata;
 
-		public ExtendedBlockState(IBlockState state, NBTTagCompound tileentitydata) {
+		public ExtendedBlockState(IBlockState state, @Nullable NBTTagCompound tileentitydata) {
 			this.state = state;
 			this.tileentitydata = tileentitydata;
 		}

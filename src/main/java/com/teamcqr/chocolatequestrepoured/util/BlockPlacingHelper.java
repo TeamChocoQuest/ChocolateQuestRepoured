@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -168,11 +169,11 @@ public class BlockPlacingHelper {
 		}
 
 		for (BlockPos pos : relightBlock) {
-			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getY(), pos.getZ());
+			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
 		}
 
 		for (BlockPos pos : propagateSkylightOcclusion) {
-			propagateSkylightOcclusion(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getZ());
+			propagateSkylightOcclusion(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getZ() & 15);
 		}
 
 		world.profiler.startSection("checkLight");
@@ -251,14 +252,14 @@ public class BlockPlacingHelper {
 
 					if (j1 > 0) {
 						if (j >= i1) {
-							relightBlock.add(new BlockPos(i, j + 1, k));
+							relightBlock.add(pos.up());
 						}
 					} else if (j == i1 - 1) {
-						relightBlock.add(new BlockPos(i, j, k));
+						relightBlock.add(pos);
 					}
 
 					if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
-						propagateSkylightOcclusion.add(new BlockPos(i, 0, k));
+						propagateSkylightOcclusion.add(pos);
 					}
 				}
 
