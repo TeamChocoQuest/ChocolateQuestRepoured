@@ -143,6 +143,7 @@ public class BlockPlacingHelper {
 			}
 			pos = pos.toImmutable();
 			Chunk chunk = world.getChunkFromBlockCoords(pos);
+			generateSkylightMap.add(chunk);
 			IBlockState oldState = chunk.getBlockState(pos);
 			int oldLight = oldState.getLightValue(world, pos);
 			int oldOpacity = oldState.getLightOpacity(world, pos);
@@ -177,6 +178,9 @@ public class BlockPlacingHelper {
 		world.profiler.startSection("checkLight");
 		for (BlockPos pos : lightUpdates) {
 			world.checkLight(pos);
+		}
+		for (Chunk chunk : generateSkylightMap) {
+			chunk.checkLight();
 		}
 		world.profiler.endSection();
 
