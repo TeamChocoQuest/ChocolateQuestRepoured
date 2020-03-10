@@ -146,30 +146,54 @@ public class ExtendedBlockStatePart implements IStructure {
 		}
 	}
 
+	/**
+	 * @param map BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockMap(Map<BlockPos, Block> map) {
 		return ExtendedBlockStatePart.splitBlockList(new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param pos Start position
+	 * @param map BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockMap(BlockPos pos, Map<BlockPos, Block> map) {
 		return ExtendedBlockStatePart.splitBlockList(pos, new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param map BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateMap(Map<BlockPos, IBlockState> map) {
 		return ExtendedBlockStatePart.splitBlockStateList(new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param pos Start position
+	 * @param map BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateMap(BlockPos pos, Map<BlockPos, IBlockState> map) {
 		return ExtendedBlockStatePart.splitBlockStateList(pos, new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param map BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(Map<BlockPos, ExtendedBlockState> map) {
 		return ExtendedBlockStatePart.splitExtendedBlockStateList(new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param pos Start position
+	 * @param map BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(BlockPos pos, Map<BlockPos, ExtendedBlockState> map) {
 		return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, new ArrayList(map.entrySet()));
 	}
 
+	/**
+	 * @param entryList BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockList(List<Map.Entry<BlockPos, Block>> entryList) {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
@@ -182,6 +206,10 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos       Start position
+	 * @param entryList BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockList(BlockPos pos, List<Map.Entry<BlockPos, Block>> entryList) {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
@@ -194,6 +222,9 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param entryList BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateList(List<Map.Entry<BlockPos, IBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
@@ -206,6 +237,10 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos       Start position
+	 * @param entryList BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateList(BlockPos pos, List<Map.Entry<BlockPos, IBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
@@ -218,6 +253,9 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param entryList BlockPos keys are coordinates in the world
+	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateList(List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			int startX = entryList.get(0).getKey().getX();
@@ -249,7 +287,7 @@ public class ExtendedBlockStatePart implements IStructure {
 				}
 			}
 
-			ExtendedBlockState[][][] extendedstates = new ExtendedBlockState[endX - startX][endY - startY][endZ - startZ];
+			ExtendedBlockState[][][] extendedstates = new ExtendedBlockState[endX - startX + 1][endY - startY + 1][endZ - startZ + 1];
 
 			for (Map.Entry<BlockPos, ExtendedBlockState> entry : entryList) {
 				BlockPos pos = entry.getKey();
@@ -262,6 +300,10 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos       Start position
+	 * @param entryList BlockPos keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateList(BlockPos pos, List<Map.Entry<BlockPos, ExtendedBlockState>> entryList) {
 		if (!entryList.isEmpty()) {
 			int endX = entryList.get(0).getKey().getX();
@@ -294,18 +336,35 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, Block[][][] array) {
 		return ExtendedBlockStatePart.split(pos, array, 16);
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, IBlockState[][][] array) {
 		return ExtendedBlockStatePart.split(pos, array, 16);
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, ExtendedBlockState[][][] array) {
 		return ExtendedBlockStatePart.split(pos, array, 16);
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 * @param size  Size of the parts
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, Block[][][] array, int size) {
 		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
 			ExtendedBlockState[][][] blocks = new ExtendedBlockState[array.length][array[0].length][array[0][0].length];
@@ -325,6 +384,11 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 * @param size  Size of the parts
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, IBlockState[][][] array, int size) {
 		if (array.length > 0 && array[0].length > 0 && array[0][0].length > 0) {
 			ExtendedBlockState[][][] blocks = new ExtendedBlockState[array.length][array[0].length][array[0][0].length];
@@ -344,6 +408,11 @@ public class ExtendedBlockStatePart implements IStructure {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * @param pos   Start position
+	 * @param array Array keys are the relative coordinates to the start position
+	 * @param size  Size of the parts
+	 */
 	public static List<ExtendedBlockStatePart> split(BlockPos pos, ExtendedBlockState[][][] array, int size) {
 		List<ExtendedBlockStatePart> list = new ArrayList<>();
 
