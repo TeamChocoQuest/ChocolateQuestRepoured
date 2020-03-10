@@ -334,36 +334,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// DONE Fill chests on path
-		//final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
 		final int[] chestIDs = this.dungeon.getChestIDs();
-		/*Runnable chestPlaceTask = new Runnable() {
-			
-			@Override
-			public void run() {
-				Random rdm = new Random();
-				for (BlockPos pos : positions) {
-					if (rdm.nextBoolean()) {
-						world.setBlockState(pos, Blocks.CHEST.getDefaultState());
-						TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
-						int eltID = chestIDs[rdm.nextInt(chestIDs.length)];
-						if (chest != null) {
-							ResourceLocation resLoc = null;
-							try {
-								resLoc = ELootTable.values()[eltID].getResourceLocation();
-							} catch (Exception ex) {
-								ex.printStackTrace();
-							}
-							if (resLoc != null) {
-								long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
-								chest.setLootTable(resLoc, seed);
-							}
-						}
-					}
-				}
-			}
-		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(chestPlaceTask);*/
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random rdm = new Random();
 		for(BlockPos pos : this.spawnersNChestsOnPath) {
@@ -395,18 +366,6 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// DONE Place spawners for dwarves/golems/whatever on path
-		/*final List<BlockPos> positions = new ArrayList<>(this.spawnersNChestsOnPath);
-		Runnable placeSpawnerTask = new Runnable() {
-			
-			@Override
-			public void run() {
-				for (BlockPos pos : positions) {
-					SpawnerFactory.createSimpleMultiUseSpawner(world, pos.add(0, 1, 0), dungeon.getRampMob());
-				}
-			}
-		};
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(placeSpawnerTask);*/
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		for(BlockPos pos : this.spawnersNChestsOnPath) {
 			Block block = Blocks.MOB_SPAWNER;
@@ -416,7 +375,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			spawner.updateContainingBlockInfo();
 			
 			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
-			stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+			stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
 		}
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
