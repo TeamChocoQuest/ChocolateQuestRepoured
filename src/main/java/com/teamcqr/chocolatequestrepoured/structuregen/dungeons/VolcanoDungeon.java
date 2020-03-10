@@ -6,8 +6,6 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGeneratorWithArray;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGeneratorWithArrayParted;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.ESpiralStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -32,7 +30,6 @@ public class VolcanoDungeon extends DungeonBase {
 	private boolean buildDungeon = false;
 	private boolean damagedVolcano = true;
 	private boolean ores = true;
-	private boolean useArrayGenerator = false;
 	private int oreConcentration = 5;
 	private int maxHoleSize = 9;
 	private int minHeight = 100;
@@ -84,7 +81,6 @@ public class VolcanoDungeon extends DungeonBase {
 		if (prop != null) {
 			this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);
 			this.buildDungeon = PropertyFileHelper.getBooleanProperty(prop, "buildDungeon", true);
-			this.useArrayGenerator = PropertyFileHelper.getBooleanProperty(prop, "useLessLagGenerator", false);
 			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minHeight", 100);
 			this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxHeight", 130);
 			this.innerRadius = PropertyFileHelper.getIntProperty(prop, "innerRadius", 5);
@@ -142,7 +138,6 @@ public class VolcanoDungeon extends DungeonBase {
 
 	@Override
 	public IDungeonGenerator getGenerator() {
-		//return useArrayGenerator ? new VolcanoGeneratorWithArray(this) : new VolcanoGenerator(this);
 		return new VolcanoGeneratorWithArrayParted(this);
 	}
 
