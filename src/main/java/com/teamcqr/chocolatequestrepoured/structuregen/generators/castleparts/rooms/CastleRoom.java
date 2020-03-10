@@ -44,8 +44,9 @@ public abstract class CastleRoom {
 
 	protected RoomWalls walls; // the walls of this room
 	protected HashSet<EnumFacing> adjacentWalls; // track which adjacent rooms have walls
-	protected HashSet<BlockPos> decoMap;
-	protected HashSet<BlockPos> decoArea;
+	protected HashSet<BlockPos> possibleDecoPositions; // set of possible decoration positions
+	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
+	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
 	public CastleRoom(BlockPos startPos, int sideLength, int height) {
 		this.origin = new BlockPos(startPos);
@@ -58,11 +59,12 @@ public abstract class CastleRoom {
 		this.height = height;
 		this.walls = new RoomWalls();
 		this.adjacentWalls = new HashSet<>();
-		this.decoMap = new HashSet<>();
-		this.decoArea = new HashSet<>();
+		this.usedDecoPositions = new HashSet<>();
+		this.possibleDecoPositions = new HashSet<>();
 	}
 
 	public void generate(World world, CastleDungeon dungeon) {
+		this.setupDecoration(world);
 		this.generateRoom(world, dungeon);
 		this.generateWalls(world, dungeon);
 
@@ -239,7 +241,7 @@ public abstract class CastleRoom {
 	}
 
 	protected void setupDecoration(World world) {
-		this.decoArea = new HashSet<>(this.getDecorationArea());
+		this.possibleDecoPositions = new HashSet<>(this.getDecorationArea());
 		this.setDoorAreasToAir(world);
 	}
 
@@ -281,7 +283,7 @@ public abstract class CastleRoom {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
 							world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
-							this.decoMap.add(toAdd);
+							this.usedDecoPositions.add(toAdd);
 						}
 					}
 				} else {
@@ -299,7 +301,7 @@ public abstract class CastleRoom {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
 							world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
-							this.decoMap.add(toAdd);
+							this.usedDecoPositions.add(toAdd);
 						}
 					}
 				}
@@ -316,7 +318,7 @@ public abstract class CastleRoom {
 		ArrayList<BlockPos> result = this.getDecorationLayer(0);
 
 		removeAllButEdge(result, side);
-		result.removeIf(p -> this.decoMap.contains(p)); // Remove block if it is occupied already
+		result.removeIf(p -> this.usedDecoPositions.contains(p)); // Remove block if it is occupied already
 
 		return result;
 	}
@@ -329,7 +331,7 @@ public abstract class CastleRoom {
 		ArrayList<BlockPos> result = this.getDecorationLayer(2);
 
 		removeAllButEdge(result, side);
-		result.removeIf(p -> this.decoMap.contains(p)); // Remove block if it is occupied already
+		result.removeIf(p -> this.usedDecoPositions.contains(p)); // Remove block if it is occupied already
 
 		return result;
 	}
