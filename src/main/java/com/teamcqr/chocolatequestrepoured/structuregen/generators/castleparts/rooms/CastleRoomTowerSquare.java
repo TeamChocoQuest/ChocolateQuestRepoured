@@ -76,6 +76,10 @@ public class CastleRoomTowerSquare extends CastleRoom {
 						blockToBuild = dungeon.getWallBlock().getDefaultState();
 					}
 
+					if (blockToBuild.getBlock() != Blocks.AIR) {
+						this.usedDecoPositions.add(pos);
+					}
+
 					world.setBlockState(pos, blockToBuild);
 				}
 			}
