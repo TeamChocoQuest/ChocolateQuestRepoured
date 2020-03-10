@@ -11,6 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
@@ -51,6 +53,12 @@ public class ItemBubbleGun extends Item implements IRangedWeapon {
 		double z = Math.cos(Math.toRadians(entity.rotationYaw));
 		double y = -Math.sin(Math.toRadians(entity.rotationPitch));
 		shootBubbles(new Vec3d(x,y,z), entity);
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
 	}
 	
 	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
