@@ -43,6 +43,12 @@ public class ItemBubbleGun extends Item implements IRangedWeapon {
 	}
 	
 	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
+		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
+		stack.damageItem(1, entityLiving);
+	}
+	
+	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
 		if(entityIn instanceof EntityLivingBase && ((EntityLivingBase) entityIn).isHandActive() && ((EntityLivingBase) entityIn).getActiveItemStack() == stack) {
 			shootBubbles((EntityLivingBase) entityIn);
