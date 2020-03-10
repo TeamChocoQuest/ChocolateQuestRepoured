@@ -23,6 +23,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -124,6 +125,10 @@ public class BlockPlacingHelper {
 	}
 
 	public static void setBlockStates(World world, Map<BlockPos, IBlockState> map, int flags) {
+		if (!world.isRemote && world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+			return;
+		}
+
 		Set<Chunk> generateSkylightMap = new HashSet<>();
 		Set<BlockPos> relightBlock = new HashSet<>();
 		Set<BlockPos> propagateSkylightOcclusion = new HashSet<>();
@@ -133,12 +138,15 @@ public class BlockPlacingHelper {
 		for (Map.Entry<BlockPos, IBlockState> entry : map.entrySet()) {
 			BlockPos pos = entry.getKey();
 			IBlockState newState = entry.getValue();
+			if (world.isOutsideBuildHeight(pos)) {
+				continue;
+			}
+			pos = pos.toImmutable();
 			Chunk chunk = world.getChunkFromBlockCoords(pos);
 			IBlockState oldState = chunk.getBlockState(pos);
 			int oldLight = oldState.getLightValue(world, pos);
 			int oldOpacity = oldState.getLightOpacity(world, pos);
 
-			// IBlockState iblockstate = chunk.setBlockState(pos, newState);
 			IBlockState iblockstate = setBlockState(world, chunk, pos, newState, generateSkylightMap, relightBlock, propagateSkylightOcclusion);
 
 			if (iblockstate != null) {
@@ -146,10 +154,10 @@ public class BlockPlacingHelper {
 					lightUpdates.add(pos);
 				}
 
-				if (!world.captureBlockSnapshots) {
-					blockUpdates.add(new BlockUpdate(world, pos, chunk, oldState, newState, flags));
-				} else {
+				if (world.captureBlockSnapshots && !world.isRemote) {
 					world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos, oldState, flags));
+				} else {
+					blockUpdates.add(new BlockUpdate(world, pos, chunk, oldState, newState, flags));
 				}
 			}
 		}
@@ -166,9 +174,11 @@ public class BlockPlacingHelper {
 			propagateSkylightOcclusion(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getZ());
 		}
 
+		world.profiler.startSection("checkLight");
 		for (BlockPos pos : lightUpdates) {
 			world.checkLight(pos);
 		}
+		world.profiler.endSection();
 
 		for (BlockPlacingHelper.BlockUpdate blockUpdate : blockUpdates) {
 			blockUpdate.markAndNotifyBlock();
