@@ -154,6 +154,12 @@ public abstract class SpawnerFactory {
 		spawner.updateContainingBlockInfo();
 		spawner.update();
 	}
+	
+	public static TileEntityMobSpawner getSpawnerTile(World world, ResourceLocation entity, BlockPos pos) {
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(pos);
+		spawner.getSpawnerBaseLogic().setEntityId(entity);
+		return spawner;
+	}
 
 	/**
 	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a
