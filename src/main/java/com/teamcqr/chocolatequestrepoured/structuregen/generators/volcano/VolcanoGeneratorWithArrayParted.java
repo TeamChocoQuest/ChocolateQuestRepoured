@@ -228,7 +228,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 					for (int iZ = -stairRadius; iZ <= stairRadius; iZ++) {
 						// Pillars
 						if (this.dungeon.doBuildDungeon() && i == -3 && StairCaseHelper.isPillarCenterLocation(iX, iZ, stairRadius)) {
-							pillarCenters.add(new BlockPos(iX /*+ x*/, yStairCase - 3, iZ /*+ z*/));
+							pillarCenters.add(new BlockPos(iX +r, yStairCase - 3, iZ +r));
 						}
 						// Stairwell -> check if it is in the volcano
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1, this.centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2, this.centerLoc)) {
@@ -259,54 +259,15 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 			this.generateOres(blockList, blocks, r);
 		}
 		
-		//Generate parts for generation
-		/*
-		int pY = 256 /16;
-		int pX = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
-		int pZ = blocks.length /16 + (blocks.length %16 != 0 ? 1 : 0);
-		List<IStructure> parts = new ArrayList<>();
-		Block[][][] lagBlocks = new Block[blocks.length][256][blocks.length];
-		for(int iY = 0; iY < pY; iY++) {
-			for(int iX = 0; iX < pX; iX++) {
-				for(int iZ = 0; iZ < pZ; iZ++) {
-					final Block[][][] partBlocks = new Block[16][16][16];
-					boolean flag = false;
-					for(int iy = iY * 16; iy < (iY * 16 +16) && iy < 256; iy++) {
-						for(int ix = iX *16; ix < (iX * 16 +16) && ix < blocks.length; ix++) {
-							for(int iz = iZ * 16; iz < (iZ * 16 +16) && iz < blocks.length; iz++) {
-								Block block = blocks[ix][iy][iz]; 
-								if(block != null) {
-									flag = true;
-									if(block.getTickRandomly() || block.getLightValue(block.getDefaultState()) > 0) {
-										lagBlocks[ix][iy][iz] = block;
-									} else {
-										partBlocks[ix -iX *16][iy -iY *16][iz -iZ *16] = block;
-									}
-									
-								}
-							}
-						}
-					}
-					if(flag) {
-						ExtendedBlockStatePart part = new ExtendedBlockStatePart(referenceLoc.add(iX *16, iY *16, iZ *16), new BlockPos(16,16,16), partBlocks);
-						parts.add(part);
-					}
-				}
+		if (this.dungeon.doBuildDungeon()) {
+			for(BlockPos center : pillarCenters) {
+				this.generatePillars(center, 2, lowYMax +10, blocks, dungeon.getPillarBlock());
 			}
 		}
 		
-		if(!parts.isEmpty()) {
-			lists.add(parts);
-		}
-		
-		lists.add(ExtendedBlockStatePart.split(referenceLoc, lagBlocks));
-		*/
+		//Generate parts for generation
 		lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
 		
-		if (this.dungeon.doBuildDungeon()) {
-			lists.add(generatePillars(pillarCenters, lowYMax + 10, world, referenceLoc));
-		}
-
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
 		//TODO Add bosses
@@ -509,22 +470,19 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 		}
 	}
-
-	private List<IStructure> generatePillars(List<BlockPos> centers, int maxY, World world, BlockPos referenceLoc) {
-		List<IStructure> parts = new ArrayList<>();
-		for (BlockPos center : centers) {
-			center = center.add(-3, 0, -3);
-			final Block[][][] blocks = new Block[7][maxY][7];
-			for (int iY = 0; iY < maxY; iY++) {
-				for (int iX = 0; iX < 7; iX++) {
-					for (int iZ = 0; iZ < 7; iZ++) {
-						blocks[iX][iY][iZ] = dungeon.getPillarBlock();
+	
+	private void generatePillars(BlockPos centerAsIndexes, int radius, int height, Block[][][] blocks, Block pillarBlock) {
+		for(int iY = 0; iY < height; iY++) {
+			for(int iX = -radius; iX <= radius; iX++) {
+				for(int iZ = -radius; iZ <= radius; iZ++) {
+					try {
+						blocks[iX + centerAsIndexes.getX()][iY + centerAsIndexes.getY()][iZ + centerAsIndexes.getZ()] = pillarBlock;
+					} catch(ArrayIndexOutOfBoundsException ex) {
+						continue;
 					}
 				}
 			}
-			parts.add(new ExtendedBlockStatePart(referenceLoc.add(center), new BlockPos(7,maxY,7), blocks));
 		}
-		return parts;
 	}
 
 	private int getMinY(BlockPos center, int radius, World world) {
