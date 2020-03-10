@@ -13,6 +13,7 @@ import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
@@ -66,11 +67,23 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 
 	@Override
 	public void placeBoss(World world, CastleDungeon dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		if(bossResourceLocation == null) {
+			
+			EntityArmorStand indicator = new EntityArmorStand(world);
+			indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
+			indicator.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+			indicator.setEntityInvulnerable(true);
+			indicator.setInvisible(true);
+			indicator.setAlwaysRenderNameTag(true);
+			indicator.setSilent(true);
+			indicator.setNoGravity(true);
+
+			world.spawnEntity(indicator);
+			
 			return;
 		}
 		
-		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		Entity mobEntity = EntityList.createEntityByIDFromName(bossResourceLocation, world);
 
 		SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
