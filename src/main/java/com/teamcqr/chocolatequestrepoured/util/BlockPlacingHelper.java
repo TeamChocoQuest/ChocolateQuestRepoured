@@ -163,9 +163,10 @@ public class BlockPlacingHelper {
 			}
 		}
 
-		for (Chunk chunk : generateSkylightMap) {
+		/*for (Chunk chunk : generateSkylightMap) {
 			chunk.generateSkylightMap();
-		}
+			chunk.checkLight();
+		}*/
 
 		for (BlockPos pos : relightBlock) {
 			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
@@ -181,9 +182,8 @@ public class BlockPlacingHelper {
 		}
 		for (Chunk chunk : generateSkylightMap) {
 			chunk.generateSkylightMap();
-			chunk.setLightPopulated(false);
-			//That is needed so the blocks actually render
 			chunk.checkLight();
+			//TODO: Call chunk.onLoad() for every chunk the structure covers once it generated completely
 		}
 		world.profiler.endSection();
 
