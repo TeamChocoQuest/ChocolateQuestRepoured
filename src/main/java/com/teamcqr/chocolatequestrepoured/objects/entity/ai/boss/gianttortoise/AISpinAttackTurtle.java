@@ -19,7 +19,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	private static final int MAX_BLOCKED_SPINS = 1;
 	
 	private final int AFTER_IDLE_TIME = 5;
-	private final int BUBBLE_SHOOT_DURATION = 40;
+	private final int BUBBLE_SHOOT_DURATION = 20;
 	
 	static final int MIN_DISTANCE_TO_BEGIN_SPIN = 16; 
 
