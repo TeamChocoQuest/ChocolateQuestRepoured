@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -181,6 +180,9 @@ public class BlockPlacingHelper {
 			world.checkLight(pos);
 		}
 		for (Chunk chunk : generateSkylightMap) {
+			chunk.generateSkylightMap();
+			chunk.setLightPopulated(false);
+			//That is needed so the blocks actually render
 			chunk.checkLight();
 		}
 		world.profiler.endSection();
