@@ -72,15 +72,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		}
 		DungeonGenerationHandler.addStructure(world, structure);
 	}
-	//GENERATION TIME TOTAL: ~4.5 minutes
-	/*
-	 * !!! Experimental !!!
-	 * This is NOT finished and does not work at the moment!!
-	 */
-	
-	// DONE: Make chests and blocks (stoneMat, CobbleMat, lavaMat, magmaMat, pathMat) customisable
-	// DONE: Lower chest and spawner chance
-
+	//GENERATION TIME TOTAL: ~15-30 seconds
 	/**
 	 * Generate: Given height, given base radius, given top inner radius
 	 * steepness: In %
