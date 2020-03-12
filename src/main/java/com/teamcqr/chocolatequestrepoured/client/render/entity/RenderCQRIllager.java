@@ -4,16 +4,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRIllagerArmor;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHandSide;
 
 public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
@@ -30,15 +33,6 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 		for (LayerRenderer<?> layer : toRemove) {
 			this.layerRenderers.remove(layer);
 		}
-		// DONE: Illager armor
-		this.addLayer(new LayerBipedArmor(this) {
-
-			@Override
-			protected void initArmor() {
-				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
-				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
-			}
-		});
 
 		this.addLayer(new LayerCQRHeldItem(this) {
 			@Override
@@ -51,6 +45,31 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 			@Override
 			protected void translateToHand(EnumHandSide hand) {
 				((ModelCQRIllager) this.livingEntityRenderer.getMainModel()).getArm(hand).postRender(0.0625F);
+			}
+		});
+		/*
+		this.addLayer(new LayerBipedArmor(this) {
+
+			@Override
+			protected void initArmor() {
+				this.modelLeggings = new ModelCQRIllagerArmor(0.5F);
+				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
+			}
+		});
+		*/
+		this.addLayer(new LayerCQREntityArmor(this) {
+			@Override
+			public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, -0.125D, 0.0D);
+				this.rotate(modelRenderer, true);
+			}
+
+			@Override
+			public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.scale(1.1875D, 1.125D, 1.375D);
+				this.rotate(modelRenderer, true);
 			}
 		});
 	}
