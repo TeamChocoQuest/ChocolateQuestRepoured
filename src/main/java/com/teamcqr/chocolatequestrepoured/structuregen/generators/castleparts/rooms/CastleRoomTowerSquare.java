@@ -16,8 +16,9 @@ public class CastleRoomTowerSquare extends CastleRoom {
 	private BlockPos pillarStart;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(BlockPos startPos, int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow) {
-		super(startPos, sideLength, height);
+	public CastleRoomTowerSquare(BlockPos startPos, int sideLength, int height, EnumFacing connectedSide,
+								 int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
 		this.buildLengthX = towerSize;

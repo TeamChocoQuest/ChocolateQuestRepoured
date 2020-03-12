@@ -19,8 +19,8 @@ public class CastleRoomStaircaseDirected extends CastleRoom {
 	private int centerStairWidth;
 	private int centerStairLength;
 
-	public CastleRoomStaircaseDirected(BlockPos startPos, int sideLength, int height, EnumFacing doorSide) {
-		super(startPos, sideLength, height);
+	public CastleRoomStaircaseDirected(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.doorSide);

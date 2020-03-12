@@ -7,8 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
-	public CastleRoomWalkableRoofTower(BlockPos startPos, int sideLength, int height, CastleRoomTowerSquare tower) {
-		super(startPos, sideLength, height);
+	public CastleRoomWalkableRoofTower(BlockPos startPos, int sideLength, int height, CastleRoomTowerSquare tower, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.WALKABLE_TOWER_ROOF;
 		this.pathable = false;
 		this.offsetX = tower.getOffsetX();

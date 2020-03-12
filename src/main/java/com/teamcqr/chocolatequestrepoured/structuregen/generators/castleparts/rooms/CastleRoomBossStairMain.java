@@ -54,8 +54,8 @@ public class CastleRoomBossStairMain extends CastleRoom {
 	private int mainLandingMaxHeightIdx;
 	private int lowerLandingMaxHeightIdx;
 
-	public CastleRoomBossStairMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide) {
-		super(startPos, sideLength, height);
+	public CastleRoomBossStairMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_BOSS;
 
 		this.doorSide = doorSide;

@@ -168,11 +168,16 @@ public class CastleGearedMobFactory {
 	}
 	
 	private EGearTier getGearTier(int floor) {
-		int index = floor;
+		int index;
 		int tierCount = EGearTier.values().length;
-		if(floorCount >= tierCount) {
-			index *= tierCount / floorCount;
+		if(floorCount > tierCount) {
+			index = (int)(((double)floor / (double)floorCount) * (double)tierCount);
+		} else {
+			index = floor;
 		}
+
+		//sanity check, just so we don't do out of bounds
+		index = Integer.min(tierCount - 1, index);
 		
 		return EGearTier.values()[index];
 	}

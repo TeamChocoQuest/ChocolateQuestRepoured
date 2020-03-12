@@ -13,8 +13,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoom {
 	private EnumFacing firstStairSide;
 	private BlockPos pillarStart;
 
-	public CastleRoomStaircaseSpiral(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomStaircaseSpiral(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_SPIRAL;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;

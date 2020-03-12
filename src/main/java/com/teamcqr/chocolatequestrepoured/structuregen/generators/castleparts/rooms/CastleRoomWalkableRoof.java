@@ -10,8 +10,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomWalkableRoof extends CastleRoom {
-	public CastleRoomWalkableRoof(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomWalkableRoof(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.WALKABLE_ROOF;
 		this.pathable = false;
 	}

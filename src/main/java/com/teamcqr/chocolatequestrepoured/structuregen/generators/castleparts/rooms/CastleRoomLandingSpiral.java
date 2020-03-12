@@ -12,8 +12,8 @@ import net.minecraft.world.World;
 public class CastleRoomLandingSpiral extends CastleRoom {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
-	public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow) {
-		super(startPos, sideLength, height);
+	public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_SPIRAL;
 		this.stairsBelow = stairsBelow;
 		this.defaultCeiling = true;
