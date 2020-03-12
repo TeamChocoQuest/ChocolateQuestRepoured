@@ -118,17 +118,6 @@ public class ModelCQRMonkey extends ModelCQRBiped {
 	}
 
 	@Override
-	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-		this.bipedBody.render(scale);
-		this.bipedLeftLeg.render(scale);
-		this.bipedRightLeg.render(scale);
-		this.bipedHead.render(scale);
-		this.bipedRightArm.render(scale);
-		this.bipedLeftArm.render(scale);
-	}
-
-	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 
