@@ -286,10 +286,6 @@ public class DungeonRegistry {
 		Set<DungeonBase> dungeonSet = this.biomeDungeonMap.get(biome);
 		if (dungeonSet != null) {
 			dungeonSet.remove(dungeon);
-		} else {
-			dungeonSet = new HashSet<DungeonBase>();
-			dungeonSet.remove(dungeon);
-			this.biomeDungeonMap.put(biome, dungeonSet);
 		}
 	}
 
@@ -297,10 +293,6 @@ public class DungeonRegistry {
 		Set<DungeonBase> dungeonSet = this.biomeTypeDungeonMap.get(biomeType);
 		if (dungeonSet != null) {
 			dungeonSet.remove(dungeon);
-		} else {
-			dungeonSet = new HashSet<DungeonBase>();
-			dungeonSet.remove(dungeon);
-			this.biomeTypeDungeonMap.put(biomeType, dungeonSet);
 		}
 	}
 
