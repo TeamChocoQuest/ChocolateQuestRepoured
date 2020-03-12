@@ -99,4 +99,14 @@ public class RandomBlobPart implements IStructure {
 		this.wallSize = compound.getInteger("wallSize");
 	}
 
+	@Override
+	public BlockPos getPos() {
+		return this.startPos.add(this.partOffset);
+	}
+
+	@Override
+	public BlockPos getSize() {
+		return this.partSize;
+	}
+
 }

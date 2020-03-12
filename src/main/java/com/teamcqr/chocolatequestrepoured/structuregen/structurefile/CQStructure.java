@@ -66,9 +66,9 @@ public class CQStructure {
 			int yIterations = this.size.getY() / 16;
 			int zIterations = this.size.getZ() / 16;
 
-			for (int x = 0; x <= xIterations; x++) {
-				for (int z = 0; z <= zIterations; z++) {
-					for (int y = 0; y <= yIterations; y++) {
+			for (int y = 0; y <= yIterations; y++) {
+				for (int x = 0; x <= xIterations; x++) {
+					for (int z = 0; z <= zIterations; z++) {
 						BlockPos partStartPos = startPos1.add(16 * x, 16 * y, 16 * z);
 						int x1 = x == xIterations ? endPos1.getX() - partStartPos.getX() : 16;
 						int y1 = y == yIterations ? endPos1.getY() - partStartPos.getY() : 16;
