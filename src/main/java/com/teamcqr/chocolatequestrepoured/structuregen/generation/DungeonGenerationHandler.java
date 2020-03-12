@@ -39,6 +39,7 @@ public class DungeonGenerationHandler {
 	public static void addStructure(World world, Structure structure) {
 		DungeonGenerationHandler instance = getInstance(world);
 		instance.dungeonPartList.add(structure);
+		structure.addLightParts();
 	}
 
 	private static DungeonGenerationHandler getInstance(World world) {
