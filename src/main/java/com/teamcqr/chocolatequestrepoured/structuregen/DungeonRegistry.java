@@ -89,6 +89,8 @@ public class DungeonRegistry {
 							} else if (dungeon.getSpawnChance() > 0) {
 								// Biome map filling
 								String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
+								//Biome blacklist
+								String[] biomeNamesBlackList = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "disallowedBiomes", new String[] {});
 								for (String biomeName : biomeNames) {
 									if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
 										// Add dungeon to all biomes
@@ -101,6 +103,22 @@ public class DungeonRegistry {
 									} else {
 										// Add dungeon to biome from registry name
 										this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
+									}
+								}
+								if(biomeNamesBlackList.length > 0) {
+									for(String nope : biomeNamesBlackList) {
+										if(nope.equalsIgnoreCase("*") || nope.equalsIgnoreCase("ALL")) {
+											//Remove from everything
+											this.removeDungeonFromAllBiomes(dungeon);
+											this.removeDungeonFromAllBiomeTypes(dungeon);
+											break;
+										} else if(this.isBiomeType(nope)) {
+											//Remove from type
+											this.removeDungeonFromBiomeType(dungeon, this.getBiomeTypeByName(nope));
+										} else {
+											//Remove from biome
+											this.removeDungeonFromBiome(dungeon, new ResourceLocation(nope));
+										}
 									}
 								}
 							} else {
@@ -248,6 +266,40 @@ public class DungeonRegistry {
 		} else {
 			dungeonSet = new HashSet<DungeonBase>();
 			dungeonSet.add(dungeon);
+			this.biomeTypeDungeonMap.put(biomeType, dungeonSet);
+		}
+	}
+	
+	private void removeDungeonFromAllBiomes(DungeonBase dungeon) {
+		for (Set<DungeonBase> dungeonSet : this.biomeDungeonMap.values()) {
+			dungeonSet.remove(dungeon);
+		}
+	}
+	
+	private void removeDungeonFromAllBiomeTypes(DungeonBase dungeon) {
+		for (Set<DungeonBase> dungeonSet : this.biomeTypeDungeonMap.values()) {
+			dungeonSet.remove(dungeon);
+		}
+	}
+
+	private void removeDungeonFromBiome(DungeonBase dungeon, ResourceLocation biome) {
+		Set<DungeonBase> dungeonSet = this.biomeDungeonMap.get(biome);
+		if (dungeonSet != null) {
+			dungeonSet.remove(dungeon);
+		} else {
+			dungeonSet = new HashSet<DungeonBase>();
+			dungeonSet.remove(dungeon);
+			this.biomeDungeonMap.put(biome, dungeonSet);
+		}
+	}
+
+	private void removeDungeonFromBiomeType(DungeonBase dungeon, BiomeDictionary.Type biomeType) {
+		Set<DungeonBase> dungeonSet = this.biomeTypeDungeonMap.get(biomeType);
+		if (dungeonSet != null) {
+			dungeonSet.remove(dungeon);
+		} else {
+			dungeonSet = new HashSet<DungeonBase>();
+			dungeonSet.remove(dungeon);
 			this.biomeTypeDungeonMap.put(biomeType, dungeonSet);
 		}
 	}
