@@ -114,10 +114,17 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 	}
 
 	protected void rotate(ModelRenderer modelRenderer, boolean reset) {
-		float f = reset ? -1.0F : 1.0F;
-		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), f, 0.0F, 0.0F);
-		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, f, 0.0F);
-		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, f);
+		if (reset) {
+			float f = -1.0F;
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), f, 0.0F, 0.0F);
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, f, 0.0F);
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, f);
+		} else {
+			float f = 1.0F;
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, f);
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, f, 0.0F);
+			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), f, 0.0F, 0.0F);
+		}
 	}
 
 }
