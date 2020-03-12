@@ -1,5 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.client.models.armor;
 
+import java.util.Deque;
+import java.util.LinkedList;
+
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQREnderman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGremlin;
@@ -10,10 +14,12 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.AbstractIllager;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
@@ -29,19 +35,19 @@ public class ModelCustomArmorBase extends ModelBiped {
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
 		if (entityIn instanceof EntityArmorStand) {
-			rotationAnglesArmorStand(entityIn);
-		} else if(entityIn instanceof EntityCQREnderman) {
+			this.rotationAnglesArmorStand(entityIn);
+		} else if (entityIn instanceof EntityCQREnderman) {
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-			rotationAnglesEnderman(entityIn);
-		} else if(entityIn instanceof EntityCQRGolem) {
+			this.rotationAnglesEnderman(entityIn);
+		} else if (entityIn instanceof EntityCQRGolem) {
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 			this.bipedRightLeg.offsetX -= 3F / 16F;
 			this.bipedLeftLeg.offsetX -= 1F / 16F;
-		} else if(entityIn instanceof EntityCQRGremlin) {
+		} else if (entityIn instanceof EntityCQRGremlin) {
 			this.isRiding = false;
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-			rotationAnglesGremlin(limbSwing, limbSwingAmount, entityIn);
-		} else if(entityIn instanceof EntityCQRIllager) {
+			this.rotationAnglesGremlin(limbSwing, limbSwingAmount, entityIn);
+		} else if (entityIn instanceof EntityCQRIllager) {
 			this.bipedHead.rotateAngleY = netHeadYaw * 0.017453292F;
 			this.bipedHead.rotateAngleX = headPitch * 0.017453292F;
 			EntityCQRIllager ent = (EntityCQRIllager) entityIn;
@@ -49,24 +55,23 @@ public class ModelCustomArmorBase extends ModelBiped {
 			this.bipedLeftLeg.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount * 0.5F;
 			this.bipedRightLeg.rotateAngleY = 0.0F;
 			this.bipedLeftLeg.rotateAngleY = 0.0F;
-			
+
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-			
+
 			if (!ent.isAggressive() && !(ent.getHeldItemMainhand().getItem() instanceof ItemPotionHealing)) {
 				float angle = new Float(Math.toRadians(-42.97));
 				ModelCustomArmorBase.setRotationAngle(this.bipedLeftArm, angle, 0, 0);
 				ModelCustomArmorBase.setRotationAngle(this.bipedRightArm, angle, 0, 0);
 			}
-			
-			if (this.isRiding)
-	        {
-	            this.bipedRightLeg.rotateAngleX = -1.4137167F;
-	            this.bipedRightLeg.rotateAngleY = ((float)Math.PI / 10F);
-	            this.bipedRightLeg.rotateAngleZ = 0.07853982F;
-	            this.bipedLeftLeg.rotateAngleX = -1.4137167F;
-	            this.bipedLeftLeg.rotateAngleY = -((float)Math.PI / 10F);
-	            this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
-	        }
+
+			if (this.isRiding) {
+				this.bipedRightLeg.rotateAngleX = -1.4137167F;
+				this.bipedRightLeg.rotateAngleY = ((float) Math.PI / 10F);
+				this.bipedRightLeg.rotateAngleZ = 0.07853982F;
+				this.bipedLeftLeg.rotateAngleX = -1.4137167F;
+				this.bipedLeftLeg.rotateAngleY = -((float) Math.PI / 10F);
+				this.bipedLeftLeg.rotateAngleZ = -0.07853982F;
+			}
 
 			AbstractIllager.IllagerArmPose abstractillager$illagerarmpose = ((EntityCQRIllager) entityIn).getIllagerArmPose();
 
@@ -95,8 +100,7 @@ public class ModelCustomArmorBase extends ModelBiped {
 					this.bipedLeftArm.rotateAngleZ -= MathHelper.cos(ageInTicks * 0.09F) * 0.05F + 0.05F;
 					this.bipedRightArm.rotateAngleX += MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
 					this.bipedLeftArm.rotateAngleX -= MathHelper.sin(ageInTicks * 0.067F) * 0.05F;
-				}
-				else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.BOW_AND_ARROW) {
+				} else if (abstractillager$illagerarmpose == AbstractIllager.IllagerArmPose.BOW_AND_ARROW) {
 					this.bipedRightArm.rotateAngleY = -0.1F + this.bipedHead.rotateAngleY;
 					this.bipedRightArm.rotateAngleX = -((float) Math.PI / 2F) + this.bipedHead.rotateAngleX;
 					this.bipedLeftArm.rotateAngleX = -0.9424779F + this.bipedHead.rotateAngleX;
@@ -104,17 +108,14 @@ public class ModelCustomArmorBase extends ModelBiped {
 					this.bipedLeftArm.rotateAngleZ = ((float) Math.PI / 2F);
 				}
 			}
-		}
-		else if(entityIn instanceof EntityCQRMandril) {
+		} else if (entityIn instanceof EntityCQRMandril) {
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
-			rotationAnglesMandril(entityIn);
-		}
-		
-		else {
+			this.rotationAnglesMandril(entityIn);
+		} else {
 			super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		}
 	}
-	
+
 	private void rotationAnglesMandril(Entity entityIn) {
 		ModelCustomArmorBase.setRotationAngle(this.bipedBody, 0.39269908169872414F, 0.0F, 0.0F);
 
@@ -125,18 +126,17 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	private void rotationAnglesGremlin(float limbSwing, float limbSwingAmount, Entity entityIn) {
 		this.bipedLeftArm.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount * 0.5F;
-        this.bipedRightArm.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount * 0.5F;
-        
+		this.bipedRightArm.rotateAngleX += MathHelper.cos(limbSwing * 0.6662F + (float) Math.PI) * 1.4F * limbSwingAmount * 0.5F;
 
-        this.bipedBody.setRotationPoint(0.0F, 13.0F, -4.0F);
+		this.bipedBody.setRotationPoint(0.0F, 13.0F, -4.0F);
 		this.bipedRightArm.setRotationPoint(-4.0F, 14.5F, -2.5F);
 		this.bipedLeftArm.setRotationPoint(4.0F, 14.5F, -1.5F);
 		this.bipedRightLeg.setRotationPoint(-2.0F, 18.0F, 6.0F);
 		this.bipedLeftLeg.setRotationPoint(2.0F, 18.0F, 6.0F);
 		this.bipedHead.setRotationPoint(0.0F, 10.0F, -4.0F);
 		this.bipedHeadwear.setRotationPoint(0.0F, 10.0F, -4.0F);
-		ModelCustomArmorBase.setRotationAngle(bipedBody, 1.0471975511965976F, 0.0F, 0.0F);
-		
+		ModelCustomArmorBase.setRotationAngle(this.bipedBody, 1.0471975511965976F, 0.0F, 0.0F);
+
 		copyModelAngles(this.bipedHead, this.bipedHeadwear);
 	}
 
@@ -227,16 +227,164 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		if(entityIn instanceof EntityCQRGremlin) {
+		if (entityIn instanceof EntityCQRGremlin) {
 			this.isRiding = false;
 		}
-		if(entityIn instanceof EntityCQRTriton) {
+		if (entityIn instanceof EntityCQRTriton) {
 			this.bipedLeftLeg.showModel = false;
 			this.bipedRightLeg.showModel = false;
-			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
-			return;
-		} 
+		}
 		super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+	}
+
+	private Deque<Float> rotations = new LinkedList<>();
+
+	public void render(Entity entity, float scale, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
+		this.applyRotations(model);
+
+		GlStateManager.pushMatrix();
+
+		if (this.isChild) {
+			GlStateManager.scale(0.75F, 0.75F, 0.75F);
+			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
+
+			GlStateManager.pushMatrix();
+			layer.setupHeadOffsets(this.bipedHead, slot);
+			this.bipedHead.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.popMatrix();
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(0.5F, 0.5F, 0.5F);
+			GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
+
+			GlStateManager.pushMatrix();
+			layer.setupBodyOffsets(this.bipedBody, slot);
+			this.bipedBody.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupRightArmOffsets(this.bipedRightArm, slot);
+			this.bipedRightArm.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupLeftArmOffsets(this.bipedLeftArm, slot);
+			this.bipedLeftArm.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupRightLegOffsets(this.bipedRightLeg, slot);
+			this.bipedRightLeg.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
+			this.bipedLeftLeg.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupHeadwearOffsets(this.bipedHeadwear, slot);
+			this.bipedHeadwear.render(scale);
+			GlStateManager.popMatrix();
+		} else {
+			if (entity.isSneaking()) {
+				GlStateManager.translate(0.0F, 0.2F, 0.0F);
+			}
+
+			GlStateManager.pushMatrix();
+			layer.setupHeadOffsets(this.bipedHead, slot);
+			this.bipedHead.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupBodyOffsets(this.bipedBody, slot);
+			this.bipedBody.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupRightArmOffsets(this.bipedRightArm, slot);
+			this.bipedRightArm.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupLeftArmOffsets(this.bipedLeftArm, slot);
+			this.bipedLeftArm.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupRightLegOffsets(this.bipedRightLeg, slot);
+			this.bipedRightLeg.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
+			this.bipedLeftLeg.render(scale);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			layer.setupHeadwearOffsets(this.bipedHeadwear, slot);
+			this.bipedHeadwear.render(scale);
+			GlStateManager.popMatrix();
+		}
+
+		GlStateManager.popMatrix();
+
+		this.resetRotations();
+	}
+
+	public void applyRotations(ModelBiped model) {
+		this.applyRotations(this.bipedHeadwear, model.bipedHeadwear);
+		this.applyRotations(this.bipedHead, model.bipedHead);
+		this.applyRotations(this.bipedBody, model.bipedBody);
+		this.applyRotations(this.bipedLeftArm, model.bipedLeftArm);
+		this.applyRotations(this.bipedRightArm, model.bipedRightArm);
+		this.applyRotations(this.bipedLeftLeg, model.bipedLeftLeg);
+		this.applyRotations(this.bipedRightLeg, model.bipedRightLeg);
+	}
+
+	public void applyRotations(ModelRenderer target, ModelRenderer source) {
+		this.rotations.push(target.offsetX);
+		this.rotations.push(target.offsetY);
+		this.rotations.push(target.offsetZ);
+		this.rotations.push(target.rotateAngleX);
+		this.rotations.push(target.rotateAngleY);
+		this.rotations.push(target.rotateAngleZ);
+		this.rotations.push(target.rotationPointX);
+		this.rotations.push(target.rotationPointY);
+		this.rotations.push(target.rotationPointZ);
+
+		target.offsetX = source.offsetX;
+		target.offsetY = source.offsetY;
+		target.offsetZ = source.offsetZ;
+		target.rotateAngleX = source.rotateAngleX;
+		target.rotateAngleY = source.rotateAngleY;
+		target.rotateAngleZ = source.rotateAngleZ;
+		target.rotationPointX = source.rotationPointX;
+		target.rotationPointY = source.rotationPointY;
+		target.rotationPointZ = source.rotationPointZ;
+	}
+
+	public void resetRotations() {
+		this.resetRotations(this.bipedHeadwear);
+		this.resetRotations(this.bipedHead);
+		this.resetRotations(this.bipedBody);
+		this.resetRotations(this.bipedLeftArm);
+		this.resetRotations(this.bipedRightArm);
+		this.resetRotations(this.bipedLeftLeg);
+		this.resetRotations(this.bipedRightLeg);
+	}
+
+	public void resetRotations(ModelRenderer target) {
+		target.offsetX = this.rotations.pop();
+		target.offsetY = this.rotations.pop();
+		target.offsetZ = this.rotations.pop();
+		target.rotateAngleX = this.rotations.pop();
+		target.rotateAngleY = this.rotations.pop();
+		target.rotateAngleZ = this.rotations.pop();
+		target.rotationPointX = this.rotations.pop();
+		target.rotationPointY = this.rotations.pop();
+		target.rotationPointZ = this.rotations.pop();
 	}
 
 	public static void setRotationAngle(ModelRenderer modelRenderer, float x, float y, float z) {

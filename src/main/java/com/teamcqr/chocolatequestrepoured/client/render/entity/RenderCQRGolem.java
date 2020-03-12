@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRGolem;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRGolemSmallArmor;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRGolem;
 
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -26,6 +26,7 @@ public class RenderCQRGolem extends RenderCQREntity<EntityCQRGolem> {
 			this.layerRenderers.remove(layer);
 		}
 
+		/*
 		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
@@ -33,6 +34,8 @@ public class RenderCQRGolem extends RenderCQREntity<EntityCQRGolem> {
 				this.modelArmor = new ModelCQRGolemSmallArmor(1.0F);
 			}
 		});
+		*/
+		this.addLayer(new LayerCQREntityArmor(this));
 	}
 
 }
