@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -24,8 +23,8 @@ public class CastleRoomHallway extends CastleRoomGeneric {
 
 	private Alignment alignment;
 
-	public CastleRoomHallway(BlockPos startPos, int sideLength, int height, Alignment alignment) {
-		super(startPos, sideLength, height);
+	public CastleRoomHallway(BlockPos startPos, int sideLength, int height, Alignment alignment, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.HALLWAY;
 		this.alignment = alignment;
 		this.defaultFloor = true;

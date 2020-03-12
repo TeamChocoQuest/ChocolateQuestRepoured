@@ -35,8 +35,8 @@ public class CastleRoomBossLandingMain extends CastleRoom {
 	private int stairOpeningZStartIdx;
 	private int stairOpeningZEndIdx;
 
-	public CastleRoomBossLandingMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide) {
-		super(startPos, sideLength, height);
+	public CastleRoomBossLandingMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);

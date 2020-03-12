@@ -17,8 +17,8 @@ import net.minecraft.world.World;
 public class CastleRoomBedroom extends CastleRoomGeneric {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroom(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomBedroom(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.BEDROOM;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

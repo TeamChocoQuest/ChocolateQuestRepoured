@@ -26,8 +26,8 @@ public class CastleRoomRoofBossMain extends CastleRoom {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 
-	public CastleRoomRoofBossMain(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomRoofBossMain(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_MAIN;
 		this.pathable = false;
 	}

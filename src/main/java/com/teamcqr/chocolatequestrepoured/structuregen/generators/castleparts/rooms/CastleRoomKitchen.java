@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomKitchen extends CastleRoomGeneric {
-	public CastleRoomKitchen(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomKitchen(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.KITCHEN;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

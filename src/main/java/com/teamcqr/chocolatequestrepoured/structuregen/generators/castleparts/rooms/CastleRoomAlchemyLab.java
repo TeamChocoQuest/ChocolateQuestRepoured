@@ -7,8 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomAlchemyLab extends CastleRoomGeneric {
-	public CastleRoomAlchemyLab(BlockPos startPos, int sideLength, int height) {
-		super(startPos, sideLength, height);
+	public CastleRoomAlchemyLab(BlockPos startPos, int sideLength, int height, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.ALCHEMY_LAB;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

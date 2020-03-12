@@ -9,8 +9,8 @@ import net.minecraft.world.World;
 public class CastleRoomBossLandingEmpty extends CastleRoom {
 	private EnumFacing doorSide;
 
-	public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide) {
-		super(startPos, sideLength, height);
+	public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.pathable = false;
 		this.doorSide = doorSide;

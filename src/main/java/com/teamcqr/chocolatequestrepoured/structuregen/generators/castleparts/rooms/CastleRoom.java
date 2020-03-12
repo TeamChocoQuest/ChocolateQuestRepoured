@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
@@ -31,6 +32,7 @@ public abstract class CastleRoom {
 	protected int buildLengthZ; // actual length of constructed part of room
 	protected int offsetX; // x offset from origin that actual room starts
 	protected int offsetZ; // z offset from origin that actual room starts
+	protected int floor;
 
 	protected int maxSlotsUsed = 1; // Max number of contiguous room grid slots this can occupy
 
@@ -48,7 +50,7 @@ public abstract class CastleRoom {
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
-	public CastleRoom(BlockPos startPos, int sideLength, int height) {
+	public CastleRoom(BlockPos startPos, int sideLength, int height, int floor) {
 		this.origin = new BlockPos(startPos);
 		this.buildStartPos = new BlockPos(startPos);
 		this.sideLength = sideLength;
@@ -57,6 +59,7 @@ public abstract class CastleRoom {
 		this.buildLengthX = this.sideLength;
 		this.buildLengthZ = this.sideLength;
 		this.height = height;
+		this.floor = floor;
 		this.walls = new RoomWalls();
 		this.adjacentWalls = new HashSet<>();
 		this.usedDecoPositions = new HashSet<>();
@@ -78,7 +81,7 @@ public abstract class CastleRoom {
 
 	protected abstract void generateRoom(World world, CastleDungeon dungeon);
 
-	public void decorate(World world, CastleDungeon dungeon, ResourceLocation mobResourceLocation) {
+	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
 		; // Default is no decoration
 	}
 
