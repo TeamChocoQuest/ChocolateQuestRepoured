@@ -4,19 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRIllager;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRIllagerArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRIllager;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 
-import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.EnumHandSide;
 
 public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
@@ -47,7 +44,7 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 				((ModelCQRIllager) this.livingEntityRenderer.getMainModel()).getArm(hand).postRender(0.0625F);
 			}
 		});
-		/*
+		
 		this.addLayer(new LayerBipedArmor(this) {
 
 			@Override
@@ -56,8 +53,8 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 				this.modelArmor = new ModelCQRIllagerArmor(1.0F);
 			}
 		});
-		*/
-		this.addLayer(new LayerCQREntityArmor(this) {
+		//WIP
+		/*this.addLayer(new LayerCQREntityArmor(this) {
 			@Override
 			public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
 				this.rotate(modelRenderer, false);
@@ -71,7 +68,7 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 				GlStateManager.scale(1.1875D, 1.125D, 1.375D);
 				this.rotate(modelRenderer, true);
 			}
-		});
+		});*/
 	}
 
 }
