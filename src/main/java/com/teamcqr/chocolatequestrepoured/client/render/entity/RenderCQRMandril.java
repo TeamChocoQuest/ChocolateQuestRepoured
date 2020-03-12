@@ -54,6 +54,20 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 				GlStateManager.translate(0.0D, 0.0D, -0.25D);
 				this.rotate(modelRenderer, true);
 			}
+
+			@Override
+			public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.125D, 0.0D);
+				this.rotate(modelRenderer, true);
+			}
+
+			@Override
+			public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.125D, 0.0D);
+				this.rotate(modelRenderer, true);
+			}
 		});
 	}
 
