@@ -174,12 +174,7 @@ public class ModelCQRIllager extends ModelCQRBiped {
 
 		EntityCQRIllager abstractillager = (EntityCQRIllager) entityIn;
 
-		if (abstractillager.isAggressive() || abstractillager.getHeldItemMainhand().getItem() instanceof ItemPotionHealing) {
-			this.bipedRightArm.showModel = true;
-			this.bipedLeftArm.showModel = true;
-		} else {
-			this.bipedRightArm.showModel = false;
-			this.bipedLeftArm.showModel = false;
+		if (!(abstractillager.isAggressive() || abstractillager.getHeldItemMainhand().getItem() instanceof ItemPotionHealing)) {
 			this.bipedRightArm.rotateAngleX = -0.75F;
 			this.bipedRightArm.rotateAngleY = 0.0F;
 			this.bipedRightArm.rotateAngleZ = 0.0F;
@@ -193,19 +188,8 @@ public class ModelCQRIllager extends ModelCQRBiped {
 			this.bipedLeftArm.rotationPointX = 5.0F;
 			this.bipedLeftArm.rotationPointY = 2.0F;
 			this.bipedLeftArm.rotationPointZ = 0.0F;
-			/*
-			this.copyModelAnglesWithoutRotationPoint(this.arms, this.bipedRightArm);
-			this.copyModelAnglesWithoutRotationPoint(this.arms, this.bipedLeftArm);
-			*/
 		}
-	}
 
-	/*
-	private void copyModelAnglesWithoutRotationPoint(ModelRenderer source, ModelRenderer dest) {
-		dest.rotateAngleX = source.rotateAngleX;
-		dest.rotateAngleY = source.rotateAngleY;
-		dest.rotateAngleZ = source.rotateAngleZ;
 	}
-	*/
 
 }
