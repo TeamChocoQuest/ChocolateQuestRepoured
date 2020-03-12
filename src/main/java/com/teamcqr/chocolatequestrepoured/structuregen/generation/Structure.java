@@ -152,13 +152,11 @@ public class Structure {
 				this.list.remove(0);
 
 				if (this.list.size() == 1) {
-					CQRMain.logger.info("Started calculating light.");
 					for (int x = this.startX; x < this.endX + 16; x += 16) {
 						for (int z = this.startZ; z < this.endZ + 16; z += 16) {
 							world.getChunkFromChunkCoords(x >> 4, z >> 4).generateSkylightMap();
 						}
 					}
-					CQRMain.logger.info("Finished calculating light.");
 				}
 			}
 		}
@@ -180,7 +178,6 @@ public class Structure {
 			}
 		}
 		this.list.add(lightParts);
-		CQRMain.logger.info(lightParts.size() + " light parts");
 	}
 
 }
