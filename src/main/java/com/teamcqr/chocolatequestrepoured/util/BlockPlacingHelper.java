@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -164,9 +163,10 @@ public class BlockPlacingHelper {
 			}
 		}
 
-		for (Chunk chunk : generateSkylightMap) {
+		/*for (Chunk chunk : generateSkylightMap) {
 			chunk.generateSkylightMap();
-		}
+			chunk.checkLight();
+		}*/
 
 		for (BlockPos pos : relightBlock) {
 			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
@@ -181,7 +181,9 @@ public class BlockPlacingHelper {
 			world.checkLight(pos);
 		}
 		for (Chunk chunk : generateSkylightMap) {
+			chunk.generateSkylightMap();
 			chunk.checkLight();
+			//TODO: Call chunk.onLoad() for every chunk the structure covers once it generated completely
 		}
 		world.profiler.endSection();
 

@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AIApproachTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
@@ -124,7 +123,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(1, new AISwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
 		this.tasks.addTask(2, new BossAIStunTurtle(this));
 		this.tasks.addTask(4, new BossAIHealingTurtle(this));
-		this.tasks.addTask(5, new AIApproachTarget(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
 			@Override
