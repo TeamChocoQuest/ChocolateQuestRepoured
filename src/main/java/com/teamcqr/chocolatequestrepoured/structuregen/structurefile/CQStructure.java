@@ -121,7 +121,7 @@ public class CQStructure {
 
 		EDungeonMobType dungeonMobType = dungeon.getDungeonMob();
 		if (dungeonMobType == EDungeonMobType.DEFAULT) {
-			dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(dungeonChunkX, dungeonChunkZ);
+			dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(dungeonChunkX *16, dungeonChunkZ *16);
 		}
 		boolean replaceBanners = dungeon.replaceBanners();
 		EBanners dungeonBanner = dungeonMobType.getBanner();
