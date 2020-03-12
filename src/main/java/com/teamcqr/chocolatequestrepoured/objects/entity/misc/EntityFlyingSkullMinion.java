@@ -39,20 +39,26 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.isExplosion()) {
+			return false;
+		}
 		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
 			this.explode(10F);
+			this.setDead();
 			return true;
 		}
 		if (this.getRNG().nextInt(10) == 9) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
+			this.setDead();
 			return true;
 		}
-		this.explode();
+		this.explode(1.25F);
+		this.setDead();
 		return true;
 	}
 
@@ -70,7 +76,8 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		super.onLivingUpdate();
 		// If we hit a wall we explode
 		if (!this.isInsideOfMaterial(Material.AIR)) {
-			this.explode();
+			this.explode(1.25F);
+			this.setDead();
 		}
 		if (this.attacking) {
 			if (this.target != null && !this.target.isDead) {
@@ -122,11 +129,6 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		this.explode(1.25F);
 	}
 
-	private void explode() {
-		this.explode(1F);
-		this.setDead();
-	}
-
 	private void explode(float strengthMultiplier) {
 		if (this.world != null) {
 			if (this.summoner != null && !this.summoner.isDead && !this.isDead) {
@@ -166,7 +168,7 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			compound.setTag("targetID", net.minecraft.nbt.NBTUtil.createUUIDTag(this.target.getPersistentID()));
 		}
 	}
-
+	
 	public boolean isAttacking() {
 		return this.attacking;
 	}
