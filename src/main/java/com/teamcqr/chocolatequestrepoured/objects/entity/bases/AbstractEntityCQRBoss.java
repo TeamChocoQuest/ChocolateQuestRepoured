@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
@@ -18,6 +19,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	protected String assignedRegionID = null;
 
 	protected final BossInfoServer bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
+	public int deathTicks = 0;
 
 	public AbstractEntityCQRBoss(World worldIn, int size) {
 		super(worldIn);
@@ -118,6 +120,23 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
 		this.bossInfoServer.setName(this.getDisplayName());
+	}
+	
+	@Override
+	protected void onDeathUpdate() {
+		//super.onDeathUpdate();
+		++this.deathTicks;
+		if (this.deathTicks >= 180 && this.deathTicks <= 200)
+        {
+            float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+            float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+            float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
+        }
+		if (this.deathTicks == 200 && !this.world.isRemote)
+        {
+            this.setDead();
+        }
 	}
 
 }
