@@ -64,21 +64,27 @@ public class CQRConfig {
 	}
 
 	public static class General {
+		@Config.Comment("Unused currently.")
 		@Config.RangeInt(min = 16, max = 128)
 		public int despawnDistance = 48;
+		@Config.Comment("Distance in chunks between each dungeon. Recommend to not set this a value lower than 10.")
 		@Config.RangeInt(min = 1, max = 1000)
 		public int dungeonSeparation = 20;
+		@Config.Comment("Distance in chunks to the worlds spawn point in which no dungeons can generate.")
 		@Config.RangeInt(min = 0, max = 1000)
 		public int dungeonSpawnDistance = 25;
+		@Config.Comment("Enable/Disable dungeon generation in super flat worlds.")
 		public boolean dungeonsInFlat = false;
 		@Config.RangeInt(min = 1, max = 10)
 		public int maxLootTablePoolRolls = 1;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
+		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
 		@Config.RangeDouble(min = 0.0D, max = 100.0D)
 		public double spawnerActivationDistance = 25.0D;
 		@Config.RangeInt(min = 0, max = 32)
 		public int supportHillWallSize = 8;
+		@Config.Comment("Chance in percent to generate a dungeon.")
 		@Config.RangeInt(min = 0, max = 100)
 		public int overallDungeonChance = 75;
 		public boolean moreDungeonsBehindWall = true;
