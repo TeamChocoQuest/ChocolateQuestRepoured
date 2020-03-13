@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
 import net.minecraft.block.state.IBlockState;
@@ -9,7 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomStaircaseSpiral extends CastleRoom {
+public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private EnumFacing firstStairSide;
 	private BlockPos pillarStart;
 
@@ -21,6 +23,10 @@ public class CastleRoomStaircaseSpiral extends CastleRoom {
 
 		this.firstStairSide = EnumFacing.NORTH;
 		this.recalcPillarStart();
+
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 4);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.UNLIT_TORCH, 1);
 	}
 
 	@Override
@@ -41,13 +47,22 @@ public class CastleRoomStaircaseSpiral extends CastleRoom {
 						blockToBuild = dungeon.getFloorBlock().getDefaultState();
 					} else if (stairs.isPartOfStairs(pos)) {
 						blockToBuild = stairs.getBlock(pos);
+						this.usedDecoPositions.add(pos);
 					} else if (y == this.height - 1) {
 						blockToBuild = dungeon.getWallBlock().getDefaultState();
 					}
+
 					world.setBlockState(pos, blockToBuild);
 				}
 			}
 		}
+	}
+
+	@Override
+	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, dungeon);
+		this.addPaintings(world);
+		this.addSpawners(world, dungeon, mobFactory);
 	}
 
 	public EnumFacing getLastStairSide() {

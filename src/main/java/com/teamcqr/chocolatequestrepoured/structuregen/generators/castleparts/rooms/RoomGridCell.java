@@ -34,13 +34,13 @@ public class RoomGridCell {
 	private boolean reachable = false;
 	private boolean floorHasLanding = false;
 	private boolean partOfMainStruct = false;
-	private CastleRoom room;
+	private CastleRoomBase room;
 	private boolean narrow;
 	private HashSet<RoomGridCell> linkedCells; // cells that are connected to this room (no walls between)
 	private HashSet<RoomGridCell> pathableCells; // cells on the same floor that are potentially reachable
 	private boolean isBossArea = false;
 
-	public RoomGridCell(int floor, int x, int z, CastleRoom room) {
+	public RoomGridCell(int floor, int x, int z, CastleRoomBase room) {
 		this.room = room;
 		this.gridPosition = new RoomGridPosition(floor, x, z);
 		this.linkedCells = new HashSet<>();
@@ -132,11 +132,11 @@ public class RoomGridCell {
 		return (Math.hypot(distX, distZ));
 	}
 
-	public CastleRoom getRoom() {
+	public CastleRoomBase getRoom() {
 		return this.room;
 	}
 
-	public void setRoom(CastleRoom room) {
+	public void setRoom(CastleRoomBase room) {
 		this.room = room;
 		this.state = CellState.POPULATED;
 	}

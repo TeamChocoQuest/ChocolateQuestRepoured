@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoom;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -37,7 +37,7 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 	}
 
 	@Override
-	public void build(World world, CastleRoom room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+	public void build(World world, CastleRoomBase room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
 		ArrayList<Vec3i> rotated = this.alignFootprint(this.footprint, side);
 
 		for (Vec3i placement : rotated) {
