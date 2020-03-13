@@ -136,7 +136,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
 	        }
 			this.setNoGravity(true);
-			 this.move(MoverType.SELF, 0.0D, 0.1, 0.0D);
+			 this.move(MoverType.SELF, 0.0D, 0.05, 0.0D);
 			if (this.deathTicks == 200 && !this.world.isRemote)
 	        {
 	            this.setDead();
