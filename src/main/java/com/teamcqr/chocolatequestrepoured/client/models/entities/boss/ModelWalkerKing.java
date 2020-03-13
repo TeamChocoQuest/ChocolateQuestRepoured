@@ -9,7 +9,7 @@ public class ModelWalkerKing extends ModelCQRBiped {
 	}
 
 	public ModelWalkerKing(float size, float p_i1149_2_, int width, int height) {
-		super(size, p_i1149_2_, width, height, false);
+		super(size, p_i1149_2_, width, height, true);
 	}
 
 }
