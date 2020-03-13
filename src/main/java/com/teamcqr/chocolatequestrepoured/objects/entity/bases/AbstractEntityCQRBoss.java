@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
@@ -138,6 +140,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			 this.move(MoverType.SELF, 0, 1, 0);
 			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote)
 	        {
+				world.playSound(posX, posY, posZ, getFinalDeathSound(), SoundCategory.HOSTILE, 4, 1, false);
 	            this.setDead();
 	            if(doesExplodeOnDeath()) {
 	            	world.createExplosion(this, posX, posY, posZ, 8.0F, true);
@@ -146,6 +149,10 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 		}
 	}
 	
+	protected SoundEvent  getFinalDeathSound() {
+		return getDeathSound();
+	}
+
 	protected boolean doesExplodeOnDeath() {
 		return false;
 	}
