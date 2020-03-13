@@ -116,7 +116,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromLocationSpecifics(World world, int chunkX, int chunkZ, int dungeonSeparation) {
-		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificsMap()) {
+		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
 			int x = chunkX - dungeon.getLockedPos().getX() * 16;
 			int z = chunkZ - dungeon.getLockedPos().getZ() * 16;
 			if (Math.sqrt(x * x + z * z) < dungeonSeparation) {
@@ -130,7 +130,7 @@ public class DungeonGenUtils {
 	public static Set<DungeonBase> getLocSpecDungeonsForChunk(World world, int chunkX, int chunkZ) {
 		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
 
-		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificsMap()) {
+		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
 			Chunk chunk = world.getChunkFromBlockCoords(dungeon.getLockedPos());
 			if (chunk.x == chunkX && chunk.z == chunkZ && dungeon.isDimensionAllowed(world.provider.getDimension())) {
 				dungeons.add(dungeon);
