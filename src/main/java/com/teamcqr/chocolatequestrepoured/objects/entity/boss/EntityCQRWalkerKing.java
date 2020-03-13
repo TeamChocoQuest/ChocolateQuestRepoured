@@ -12,6 +12,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -103,6 +104,14 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		this.heal(20F);
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
+			amount *= 2;
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 	
 	@Override
