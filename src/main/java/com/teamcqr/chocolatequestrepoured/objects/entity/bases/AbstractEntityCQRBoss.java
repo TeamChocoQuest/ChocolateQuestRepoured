@@ -137,7 +137,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
 	        }
 			this.setNoGravity(true);
-			 this.move(MoverType.SELF, 0, 0.0000000000001, 0);
+			 this.move(MoverType.SELF, 0, 10 / MAX_DEATH_TICKS, 0);
 			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote)
 	        {
 				world.playSound(posX, posY, posZ, getFinalDeathSound(), SoundCategory.HOSTILE, 4, 1, false);
