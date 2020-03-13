@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerBossDeath;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerBoss;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -24,7 +25,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerBoss> {
 	protected void renderModel(EntityCQRWalkerBoss entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		if (entitylivingbaseIn.deathTicks > 0)
         {
-            float f = (float)entitylivingbaseIn.deathTicks / 200.0F;
+            float f = (float)entitylivingbaseIn.deathTicks / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
             GlStateManager.depthFunc(515);
             GlStateManager.enableAlpha();
             GlStateManager.alphaFunc(516, f);

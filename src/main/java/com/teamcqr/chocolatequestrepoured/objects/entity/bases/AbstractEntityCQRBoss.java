@@ -20,7 +20,6 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	protected String assignedRegionID = null;
 
 	protected final BossInfoServer bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
-	public int deathTicks = 0;
 
 	public AbstractEntityCQRBoss(World worldIn, int size) {
 		super(worldIn);
@@ -128,7 +127,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 		if(usesEnderDragonDeath()) {
 			//super.onDeathUpdate();
 			++this.deathTicks;
-			if (this.deathTicks >= 180 && this.deathTicks <= 200)
+			if (this.deathTicks >= 180 && this.deathTicks <= MAX_DEATH_TICKS)
 	        {
 	            float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
 	            float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
