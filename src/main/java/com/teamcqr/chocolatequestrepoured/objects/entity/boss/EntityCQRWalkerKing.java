@@ -107,6 +107,13 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		if(source == DamageSource.WITHER) {
+			this.heal(amount /2);
+			return true;
+		}
+		if(source == DamageSource.FALL) {
+			return true;
+		}
 		active = true;
 		activationCooldown = 80;
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
