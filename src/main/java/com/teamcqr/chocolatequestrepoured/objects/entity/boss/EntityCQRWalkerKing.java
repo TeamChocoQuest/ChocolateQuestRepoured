@@ -99,6 +99,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	};
 	
 	@Override
+	protected SoundEvent getFinalDeathSound() {
+		return SoundEvents.ENTITY_ENDERMEN_DEATH;
+	}
+	
+	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
