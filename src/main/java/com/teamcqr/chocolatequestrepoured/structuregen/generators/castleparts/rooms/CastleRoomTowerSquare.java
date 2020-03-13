@@ -9,7 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomTowerSquare extends CastleRoom {
+public class CastleRoomTowerSquare extends CastleRoomBase {
 	private static final int MIN_SIZE = 5;
 	private EnumFacing connectedSide;
 	private int stairYOffset;

@@ -10,7 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomLandingDirected extends CastleRoom {
+public class CastleRoomLandingDirected extends CastleRoomBase {
 	private int openingWidth;
 	private int openingSeparation;
 	private int stairZ;

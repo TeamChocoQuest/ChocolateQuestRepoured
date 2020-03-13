@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class CastleRoomBossLandingMain extends CastleRoom {
+public class CastleRoomBossLandingMain extends CastleRoomBase {
 	private static final int ROOMS_LONG = 2;
 	private static final int ROOMS_SHORT = 1;
 	private static final int LANDING_LENGTH_X = 3;

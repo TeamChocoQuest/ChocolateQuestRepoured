@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomRoofBossEmpty extends CastleRoom {
+public class CastleRoomRoofBossEmpty extends CastleRoomBase {
 	public CastleRoomRoofBossEmpty(BlockPos startPos, int sideLength, int height, int floor) {
 		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_EMPTY;

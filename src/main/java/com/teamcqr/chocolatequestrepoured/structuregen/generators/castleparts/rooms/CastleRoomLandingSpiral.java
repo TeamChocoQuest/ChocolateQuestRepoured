@@ -9,7 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomLandingSpiral extends CastleRoom {
+public class CastleRoomLandingSpiral extends CastleRoomBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
 	public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
