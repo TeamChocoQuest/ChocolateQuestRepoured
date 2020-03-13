@@ -135,12 +135,19 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
 	        }
 			this.setNoGravity(true);
-			 this.move(MoverType.SELF, 0.0D, 0.00625, 0.0D);
-			if (this.deathTicks == 200 && !this.world.isRemote)
+			 this.move(MoverType.SELF, posX, posY + 0.2, posZ);
+			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote)
 	        {
 	            this.setDead();
+	            if(doesExplodeOnDeath()) {
+	            	world.createExplosion(this, posX, posY, posZ, 8.0F, true);
+	            }
 	        }
 		}
+	}
+	
+	protected boolean doesExplodeOnDeath() {
+		return false;
 	}
 	
 	protected boolean usesEnderDragonDeath() {
