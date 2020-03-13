@@ -23,6 +23,10 @@ import net.minecraft.world.World;
 
 public class EntityCQRWalkerBoss extends AbstractEntityCQRBoss {
 
+	public EntityCQRWalkerBoss(World world) {
+		this(world, 1);
+	}
+	
 	public EntityCQRWalkerBoss(World worldIn, int size) {
 		super(worldIn, size);
 		
