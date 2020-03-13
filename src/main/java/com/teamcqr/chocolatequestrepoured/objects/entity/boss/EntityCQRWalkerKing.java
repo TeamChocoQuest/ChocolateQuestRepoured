@@ -62,9 +62,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// strike lightning
 				lightningTick = 0;
 				borderLightning = 50;
-				int x = -15 + getRNG().nextInt(31);
-				int z = -15 + getRNG().nextInt(31);
-				int y = -5 + getRNG().nextInt(11);
+				int x = -20 + getRNG().nextInt(41);
+				int z = -15 + getRNG().nextInt(41);
+				int y = -10 + getRNG().nextInt(21);
 				
 				EntityLightningBolt entitybolt = new EntityLightningBolt(world, posX +x, posY +y, posZ +z, false);
 				world.spawnEntity(entitybolt);
