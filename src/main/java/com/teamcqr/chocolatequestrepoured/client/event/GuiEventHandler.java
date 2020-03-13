@@ -31,10 +31,9 @@ public class GuiEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onActionPerformedEvent(GuiScreenEvent.ActionPerformedEvent.Pre event) {
+	public static void onActionPerformedEvent(GuiScreenEvent.ActionPerformedEvent.Post event) {
 		if (event.getButton() instanceof GuiButtonReloadDungeons && Minecraft.getMinecraft().world == null) {
-			DungeonRegistry.getInstance().reloadDungeonFiles();
-			event.setCanceled(true);
+			DungeonRegistry.getInstance().reloadDungeons();
 		}
 	}
 

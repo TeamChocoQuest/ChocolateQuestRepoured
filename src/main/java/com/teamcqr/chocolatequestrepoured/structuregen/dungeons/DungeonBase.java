@@ -96,9 +96,9 @@ public class DungeonBase {
 
 		if (prop != null) {
 			this.name = configFile.getName().replace(".properties", "");
-			this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 20);
+			this.chance = PropertyFileHelper.getIntProperty(prop, "weight", 0);
 			this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
-			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[] { 0 });
+			this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[0]);
 			this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 			this.useCoverBlock = PropertyFileHelper.getBooleanProperty(prop, "usecoverblock", false);
 			this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);

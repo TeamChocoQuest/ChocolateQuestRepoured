@@ -188,15 +188,15 @@ public class GuiExporter extends GuiScreen {
 		this.drawString(this.fontRenderer, "End Y", this.width / 2 - 20, this.height / 2, 10526880);
 		this.drawString(this.fontRenderer, "End Z", this.width / 2 + 30, this.height / 2, 10526880);
 
-		if (this.chbxPartsMode.isMouseOver()) {
-			this.drawHoveringText(I18n.format("description.gui_exporter_part_mode.name"), this.width / 2 - 170, this.height / 2 + 30);
-		} else if (this.chbxRelativeMode.isMouseOver()) {
-			this.drawHoveringText(I18n.format("description.gui_exporter_relative_mode.name"), this.width / 2 - 170, this.height / 2 + 30);
-		} else if (this.chbxIgnoreEntities.isMouseOver()) {
-			this.drawHoveringText(I18n.format("description.gui_exporter_ignore_entities.name"), this.width / 2 - 170, this.height / 2 + 30);
-		}
-
 		super.drawScreen(mouseX, mouseY, partialTicks);
+
+		if (this.chbxPartsMode.isMouseOver()) {
+			this.drawHoveringText(I18n.format("description.gui_exporter_part_mode.name"), mouseX, mouseY);
+		} else if (this.chbxRelativeMode.isMouseOver()) {
+			this.drawHoveringText(I18n.format("description.gui_exporter_relative_mode.name"), mouseX, mouseY);
+		} else if (this.chbxIgnoreEntities.isMouseOver()) {
+			this.drawHoveringText(I18n.format("description.gui_exporter_ignore_entities.name"), mouseX, mouseY);
+		}
 	}
 
 	@Override

@@ -85,19 +85,18 @@ public class ModelCQRIllager extends ModelCQRBiped {
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		if (entityIn instanceof EntityCQRIllager) {
-			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			EntityCQRIllager abstractillager = (EntityCQRIllager) entityIn;
 
 			if (abstractillager.isAggressive() || abstractillager.getHeldItemMainhand().getItem() instanceof ItemPotionHealing) {
 				this.bipedRightArm.showModel = true;
 				this.bipedLeftArm.showModel = true;
-				this.bipedRightArm.render(scale);
-				this.bipedLeftArm.render(scale);
 			} else {
-				this.arms.render(scale);
 				this.bipedRightArm.showModel = false;
 				this.bipedLeftArm.showModel = false;
+				this.arms.render(scale);
 			}
+
+			super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		}
 	}
 
@@ -172,6 +171,25 @@ public class ModelCQRIllager extends ModelCQRBiped {
 			this.bipedLeftArm.rotateAngleY = this.bipedHead.rotateAngleY - 0.4F;
 			this.bipedLeftArm.rotateAngleZ = ((float) Math.PI / 2F);
 		}
+
+		EntityCQRIllager abstractillager = (EntityCQRIllager) entityIn;
+
+		if (!(abstractillager.isAggressive() || abstractillager.getHeldItemMainhand().getItem() instanceof ItemPotionHealing)) {
+			this.bipedRightArm.rotateAngleX = -0.75F;
+			this.bipedRightArm.rotateAngleY = 0.0F;
+			this.bipedRightArm.rotateAngleZ = 0.0F;
+			this.bipedRightArm.rotationPointX = -5.0F;
+			this.bipedRightArm.rotationPointY = 2.0F;
+			this.bipedRightArm.rotationPointZ = 0.0F;
+			this.bipedRightArm.offsetY = -0.0F;
+			this.bipedLeftArm.rotateAngleX = -0.75F;
+			this.bipedLeftArm.rotateAngleY = 0.0F;
+			this.bipedLeftArm.rotateAngleZ = 0.0F;
+			this.bipedLeftArm.rotationPointX = 5.0F;
+			this.bipedLeftArm.rotationPointY = 2.0F;
+			this.bipedLeftArm.rotationPointZ = 0.0F;
+		}
+
 	}
 
 }

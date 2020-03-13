@@ -478,4 +478,14 @@ public class ExtendedBlockStatePart implements IStructure {
 
 	}
 
+	@Override
+	public BlockPos getPos() {
+		return this.pos;
+	}
+
+	@Override
+	public BlockPos getSize() {
+		return this.size;
+	}
+
 }

@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IStructure {
@@ -12,5 +13,9 @@ public interface IStructure {
 	public NBTTagCompound writeToNBT();
 
 	public void readFromNBT(NBTTagCompound compound);
+
+	public BlockPos getPos();
+
+	public BlockPos getSize();
 
 }
