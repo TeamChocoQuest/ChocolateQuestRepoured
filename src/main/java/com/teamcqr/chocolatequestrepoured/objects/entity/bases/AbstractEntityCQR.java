@@ -135,6 +135,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> SPELLTYPE = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 
+	public int deathTicks = 0;
+	public static float MAX_DEATH_TICKS = 200;
+	
 	// Client only
 	@SideOnly(Side.CLIENT)
 	protected int currentSpeechBubbleID;

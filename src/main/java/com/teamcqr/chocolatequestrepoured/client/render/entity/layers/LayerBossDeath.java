@@ -30,7 +30,7 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
             Tessellator tessellator = Tessellator.getInstance();
             BufferBuilder bufferbuilder = tessellator.getBuffer();
             RenderHelper.disableStandardItemLighting();
-            float f = ((float)entitylivingbaseIn.deathTicks + partialTicks) / 200.0F;
+            float f = ((float)entitylivingbaseIn.deathTicks + partialTicks) / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
             float f1 = 0.0F;
 
             if (f > 0.8F)
