@@ -125,21 +125,31 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	
 	@Override
 	protected void onDeathUpdate() {
-		//super.onDeathUpdate();
-		++this.deathTicks;
-		if (this.deathTicks >= 180 && this.deathTicks <= 200)
-        {
-            float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
-            float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-            float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-            this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
-        }
-		this.setNoGravity(true);
-		 this.move(MoverType.SELF, 0.0D, 0.1, 0.0D);
-		if (this.deathTicks == 200 && !this.world.isRemote)
-        {
-            this.setDead();
-        }
+		if(usesEnderDragonDeath()) {
+			//super.onDeathUpdate();
+			++this.deathTicks;
+			if (this.deathTicks >= 180 && this.deathTicks <= 200)
+	        {
+	            float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+	            float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+	            float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
+	        }
+			this.setNoGravity(true);
+			 this.move(MoverType.SELF, 0.0D, 0.1, 0.0D);
+			if (this.deathTicks == 200 && !this.world.isRemote)
+	        {
+	            this.setDead();
+	        }
+		}
+	}
+	
+	protected boolean usesEnderDragonDeath() {
+		return false;
+	}
+	
+	protected EnumParticleTypes getDeathAnimParticles() {
+		return EnumParticleTypes.EXPLOSION_HUGE;
 	}
 
 }
