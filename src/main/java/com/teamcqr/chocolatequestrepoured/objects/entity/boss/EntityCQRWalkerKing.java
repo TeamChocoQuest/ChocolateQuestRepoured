@@ -120,10 +120,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	protected boolean usesEnderDragonDeath() {
 		return true;
 	}
+
+	@Override
+	protected boolean doesExplodeOnDeath() {
+		return true;
+	}
 	
 	@Override
 	protected EnumParticleTypes getDeathAnimParticles() {
-		return EnumParticleTypes.DRAGON_BREATH;
+		return EnumParticleTypes.EXPLOSION_LARGE;
 	}
 	
 }

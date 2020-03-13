@@ -34,6 +34,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
             GlStateManager.alphaFunc(516, 0.1F);
             GlStateManager.depthFunc(514);
         }
+		this.bindEntityTexture(entitylivingbaseIn);
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 	}
 
