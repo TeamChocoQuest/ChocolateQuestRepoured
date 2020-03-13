@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,11 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
+	
+	private int lightningTick = 0;
+	private int borderLightning = 20;
+	private boolean active = false;
+	private int activationCooldown = 80;
 
 	public EntityCQRWalkerKing(World world) {
 		this(world, 1);
@@ -39,6 +45,53 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.bossInfoServer.setPlayEndBossMusic(true);
 	}
 
+	
+	@Override
+	public void onLivingUpdate() {
+		if(active) {
+			if(getAttackTarget() == null && !world.isRemote) {
+				activationCooldown--;
+				if(activationCooldown < 0) {
+					active = false;
+					world.getWorldInfo().setThundering(false);
+					activationCooldown = 80;
+				}
+			} 
+			lightningTick++;
+			if(lightningTick > borderLightning) {
+				// strike lightning
+				lightningTick = 0;
+				borderLightning = 50;
+				int x = -15 + getRNG().nextInt(31);
+				int z = -15 + getRNG().nextInt(31);
+				int y = -5 + getRNG().nextInt(11);
+				
+				EntityLightningBolt entitybolt = new EntityLightningBolt(world, posX +x, posY +y, posZ +z, false);
+				world.spawnEntity(entitybolt);
+			}
+		}
+		super.onLivingUpdate();
+	}
+
+	@Override
+	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+		this.heal(20F);
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		active = true;
+		activationCooldown = 80;
+		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+			world.getWorldInfo().setCleanWeatherTime(0);
+			world.getWorldInfo().setRainTime(400);
+			world.getWorldInfo().setThunderTime(200);
+			world.getWorldInfo().setRaining(true);
+			world.getWorldInfo().setThundering(true);
+		}
+		return super.attackEntityFrom(source, amount, sentFromPart);
+	}
+	
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
@@ -119,6 +172,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		
 		return sword;
+	}
+	
+	@Override
+	public void onDeath(DamageSource cause) {
+		world.getWorldInfo().setThundering(false);
+		super.onDeath(cause);
 	}
 	
 	@Override
