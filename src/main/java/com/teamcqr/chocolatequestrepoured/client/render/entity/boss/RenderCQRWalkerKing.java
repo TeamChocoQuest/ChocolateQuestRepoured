@@ -12,7 +12,7 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerBoss> {
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn, ModelBase model, String entityName) {
 		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
 		
-		this.addLayer(new LayerBossDeath(191,0,255,0));
+		this.addLayer(new LayerBossDeath(191,0,255));
 	}
 
 }
