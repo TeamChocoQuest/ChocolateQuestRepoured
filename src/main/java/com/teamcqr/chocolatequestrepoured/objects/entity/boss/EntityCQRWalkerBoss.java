@@ -15,6 +15,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.BossInfo.Color;
@@ -113,6 +114,16 @@ public class EntityCQRWalkerBoss extends AbstractEntityCQRBoss {
 		}
 		
 		return sword;
+	}
+	
+	@Override
+	protected boolean usesEnderDragonDeath() {
+		return true;
+	}
+	
+	@Override
+	protected EnumParticleTypes getDeathAnimParticles() {
+		return EnumParticleTypes.DRAGON_BREATH;
 	}
 	
 }
