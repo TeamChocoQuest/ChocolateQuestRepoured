@@ -46,7 +46,7 @@ public class EntityCQRWalkerBoss extends AbstractEntityCQRBoss {
 	
 	@Override
 	public boolean hasCape() {
-		return true;
+		return this.deathTicks <= 0;
 	}
 	
 	@Override
