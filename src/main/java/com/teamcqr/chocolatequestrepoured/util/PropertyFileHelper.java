@@ -16,7 +16,7 @@ public class PropertyFileHelper {
 
 	public static int getIntProperty(Properties file, String path, int defVal) {
 		String s = file.getProperty(path);
-		if (s == null) {
+		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
 
@@ -32,7 +32,7 @@ public class PropertyFileHelper {
 
 	public static double getDoubleProperty(Properties file, String path, double defVal) {
 		String s = file.getProperty(path);
-		if (s == null) {
+		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
 
@@ -48,53 +48,47 @@ public class PropertyFileHelper {
 
 	public static int[] getIntArrayProperty(Properties file, String path, int[] defVal) {
 		String s = file.getProperty(path);
-		int[] retIntArr = null;
-		if (s != null) {
-			String[] splitStr = s.split(",");
-			retIntArr = new int[splitStr.length];
-			for (int i = 0; i < splitStr.length; i++) {
-				String tmp = splitStr[i].trim();
-				retIntArr[i] = Integer.parseInt(tmp);
-			}
+		if (s == null || s.isEmpty()) {
+			return defVal;
 		}
-		if (retIntArr == null) {
-			retIntArr = defVal;
+
+		String[] splitStr = s.split(",");
+		int[] retIntArr = new int[splitStr.length];
+		for (int i = 0; i < splitStr.length; i++) {
+			String tmp = splitStr[i].trim();
+			retIntArr[i] = Integer.parseInt(tmp);
 		}
+
 		return retIntArr;
 	}
 
 	public static String[] getStringArrayProperty(Properties file, String path, String[] defVal) {
-		String s = file.getProperty(path, null);
-		String[] retVal = null;
+		String s = file.getProperty(path);
+		if (s == null || s.isEmpty()) {
+			return defVal;
+		}
 
-		if (s != null) {
-			String[] splitSTr = s.split(",");
-			retVal = new String[splitSTr.length];
-			for (int i = 0; i < splitSTr.length; i++) {
-				String tmp = splitSTr[i].trim();
-				retVal[i] = tmp;
-				if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
-					return new String[] { "*" };
-				}
+		String[] splitSTr = s.split(",");
+		String[] retVal = new String[splitSTr.length];
+		for (int i = 0; i < splitSTr.length; i++) {
+			String tmp = splitSTr[i].trim();
+			retVal[i] = tmp;
+			if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
+				return new String[] { "*" };
 			}
 		}
-		if (retVal == null) {
-			retVal = defVal;
-		}
+
 		return retVal;
 
 	}
 
 	public static boolean getBooleanProperty(Properties file, String path, boolean defVal) {
-		String s = file.getProperty(path, defVal ? "true" : "false");
-		if (s != null) {
-			s = s.trim();
-			if (s.equalsIgnoreCase("true")) {
-				return true;
-			}
-			return false;
+		String s = file.getProperty(path);
+		if (s == null || s.isEmpty()) {
+			return defVal;
 		}
-		return defVal;
+
+		return s.trim().equalsIgnoreCase("true");
 	}
 
 	public static Block getBlockProperty(Properties file, String path, Block defVal) {
