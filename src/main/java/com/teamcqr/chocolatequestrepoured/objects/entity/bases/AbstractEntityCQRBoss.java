@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -133,6 +134,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
             float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
             this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
         }
+		this.setNoGravity(true);
+		 this.move(MoverType.SELF, 0.0D, 0.1, 0.0D);
 		if (this.deathTicks == 200 && !this.world.isRemote)
         {
             this.setDead();
