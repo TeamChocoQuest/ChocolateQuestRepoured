@@ -14,7 +14,8 @@ import net.minecraft.util.ResourceLocation;
 public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 	
 	private static final ResourceLocation WALKER_KING_EXPLODING = new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king_exploding.png");
-
+	private static final ResourceLocation TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/walker_king.png");
+	
 	public RenderCQRWalkerKing(RenderManager rendermanagerIn, ModelBase model, String entityName) {
 		super(rendermanagerIn, model, 0.5F, entityName, 1D, 1D);
 		
@@ -34,8 +35,13 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
             GlStateManager.alphaFunc(516, 0.1F);
             GlStateManager.depthFunc(514);
         }
-		this.bindEntityTexture(entitylivingbaseIn);
+		this.bindTexture(getEntityTexture(entitylivingbaseIn));
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	}
+	
+	@Override
+	protected ResourceLocation getEntityTexture(EntityCQRWalkerKing entity) {
+		return TEXTURES;
 	}
 
 }
