@@ -47,7 +47,7 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
             GlStateManager.enableCull();
             GlStateManager.depthMask(false);
             GlStateManager.pushMatrix();
-            GlStateManager.translate(0.0F, -1.0F, -2.0F);
+            GlStateManager.translate(0.0F, -1.0F, 0.0F);
 
             for (int i = 0; (float)i < (f + f * f) / 2.0F * 60.0F; ++i)
             {
