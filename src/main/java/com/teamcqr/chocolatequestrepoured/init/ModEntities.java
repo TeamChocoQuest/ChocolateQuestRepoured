@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
@@ -103,6 +104,7 @@ public class ModEntities {
 	public static final EntityEntry LICH = Null();
 	public static final EntityEntry BOAR_MAGE = Null();
 	public static final EntityEntry NECROMANCER = Null();
+	public static final EntityEntry WALKER_KING = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -159,6 +161,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRLich.class, "lich", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRWalkerBoss.class, "walker_king", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),

@@ -38,17 +38,17 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	private final String entityName;
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String entityName) {
-		this(rendermanagerIn, entityName, 1.0D, 1.0D);
+	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
+		this(rendermanagerIn, textureName, 1.0D, 1.0D);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, String entityName, double widthScale, double heightScale) {
-		this(rendermanagerIn, new ModelCQRBiped(0.0F, true), 0.5F, entityName, widthScale, heightScale);
+	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
+		this(rendermanagerIn, new ModelCQRBiped(0.0F, true), 0.5F, textureName, widthScale, heightScale);
 	}
 
-	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String entityName, double widthScale, double heightScale) {
+	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
-		this.entityName = entityName;
+		this.entityName = textureName;
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
 		// Random rand = new Random();
 		this.widthScale = widthScale;// + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
