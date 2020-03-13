@@ -76,6 +76,10 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 						AxisAlignedBB aabb2 = new AxisAlignedBB(o2.posX - 4, o2.posY -2, o2.posZ -4, o2.posX +4, o2.posY +2, o2.posZ +4);
 						List<Entity> l2 = o2.world.getEntitiesInAABBexcluding(o2, aabb2, TargetUtil.PREDICATE_ALLIES(((AbstractEntityCQR) o2).getFaction()));
 						
+						if(l1.size() == l2.size()) {
+							return 0;
+						}
+						
 						if(l1.isEmpty() || l2.size() > l1.size()) {
 							return -1;
 						}

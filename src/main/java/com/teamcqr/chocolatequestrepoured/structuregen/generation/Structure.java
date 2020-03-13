@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -8,13 +9,20 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class Structure {
 
 	private final World world;
-	private List<List<? extends IStructure>> list = new ArrayList<>();
+	private final List<List<? extends IStructure>> list = new LinkedList<>();
 	private int tick;
+	private int startX = Integer.MAX_VALUE;
+	private int startY = Integer.MAX_VALUE;
+	private int startZ = Integer.MAX_VALUE;
+	private int endX = Integer.MIN_VALUE;
+	private int endY = Integer.MIN_VALUE;
+	private int endZ = Integer.MIN_VALUE;
 
 	public Structure(World world, NBTTagCompound compound) {
 		this.world = world;
@@ -28,8 +36,27 @@ public class Structure {
 	public void addList(List<? extends IStructure> list) {
 		if (list != null && !list.isEmpty()) {
 			this.list.add(list);
+			for (IStructure istructure : list) {
+				BlockPos startPos = istructure.getPos();
+				BlockPos endPos = startPos.add(istructure.getSize());
+				if (startPos.getX() < startX) {
+					startX = startPos.getX();
+				} else if (endPos.getX() > endX) {
+					endX = endPos.getX();
+				}
+				if (startPos.getY() < startY) {
+					startY = startPos.getY();
+				} else if (endPos.getY() > endY) {
+					endY = endPos.getY();
+				}
+				if (startPos.getZ() < startZ) {
+					startZ = startPos.getZ();
+				} else if (endPos.getZ() > endZ) {
+					endZ = endPos.getZ();
+				}
+			}
 		} else {
-			CQRMain.logger.info("tried to add null");
+			CQRMain.logger.warn("Tried to add null or an empty list to structure.");
 		}
 	}
 
@@ -45,6 +72,8 @@ public class Structure {
 			return new SupportHillPart(compound);
 		case "randomBlobPart":
 			return new RandomBlobPart(compound);
+		case "lightPart":
+			return new LightPart(compound);
 		default:
 			return null;
 		}
@@ -67,8 +96,8 @@ public class Structure {
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
+		this.list.clear();
 		NBTTagList nbtTagList1 = compound.getTagList("list", 9);
-		this.list = new ArrayList<>(nbtTagList1.tagCount());
 		for (int i = 0; i < nbtTagList1.tagCount(); i++) {
 			NBTTagList nbtTagList2 = (NBTTagList) nbtTagList1.get(i);
 			List<IStructure> partList = new ArrayList<>(nbtTagList2.tagCount());
@@ -121,12 +150,34 @@ public class Structure {
 
 			if (partList.isEmpty()) {
 				this.list.remove(0);
+
+				if (this.list.size() == 1) {
+					for (int x = this.startX; x < this.endX + 16; x += 16) {
+						for (int z = this.startZ; z < this.endZ + 16; z += 16) {
+							world.getChunkFromChunkCoords(x >> 4, z >> 4).generateSkylightMap();
+						}
+					}
+				}
 			}
 		}
 	}
 
 	public boolean isGenerated() {
 		return this.list.isEmpty();
+	}
+
+	public void addLightParts() {
+		List<LightPart> lightParts = new ArrayList<>();
+		int partSize = 24;
+		for (int y = this.startY; y <= this.endY; y += partSize) {
+			for (int x = this.startX; x <= this.endX; x += partSize) {
+				for (int z = this.startZ; z <= this.endZ; z += partSize) {
+					BlockPos pos = new BlockPos(x, y, z);
+					lightParts.add(new LightPart(pos, pos.add(partSize - 1, partSize - 1, partSize - 1)));
+				}
+			}
+		}
+		this.list.add(lightParts);
 	}
 
 }

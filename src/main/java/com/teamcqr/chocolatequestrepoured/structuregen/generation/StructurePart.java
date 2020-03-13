@@ -10,6 +10,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 
 public class StructurePart implements IStructure {
 
@@ -79,6 +80,16 @@ public class StructurePart implements IStructure {
 		this.replaceBanners = compound.getBoolean("replaceBanners");
 		this.dungeonBanner = EBanners.valueOf(compound.getString("dungeonBanner"));
 		this.hasShield = compound.getBoolean("hasShield");
+	}
+
+	@Override
+	public BlockPos getPos() {
+		return this.pos;
+	}
+
+	@Override
+	public BlockPos getSize() {
+		return Template.transformedBlockPos(this.settings, this.part.getSize());
 	}
 
 }

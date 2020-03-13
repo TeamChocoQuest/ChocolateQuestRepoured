@@ -143,7 +143,6 @@ public class BlockPlacingHelper {
 			}
 			pos = pos.toImmutable();
 			Chunk chunk = world.getChunkFromBlockCoords(pos);
-			generateSkylightMap.add(chunk);
 			IBlockState oldState = chunk.getBlockState(pos);
 			int oldLight = oldState.getLightValue(world, pos);
 			int oldOpacity = oldState.getLightOpacity(world, pos);
@@ -158,15 +157,15 @@ public class BlockPlacingHelper {
 				if (world.captureBlockSnapshots && !world.isRemote) {
 					world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos, oldState, flags));
 				} else {
-					blockUpdates.add(new BlockUpdate(world, pos, chunk, oldState, newState, flags));
+					blockUpdates.add(new BlockUpdate(world, pos, chunk, iblockstate, newState, flags));
 				}
 			}
 		}
 
-		/*for (Chunk chunk : generateSkylightMap) {
+		/*
+		for (Chunk chunk : generateSkylightMap) {
 			chunk.generateSkylightMap();
-			chunk.checkLight();
-		}*/
+		}
 
 		for (BlockPos pos : relightBlock) {
 			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
@@ -180,12 +179,8 @@ public class BlockPlacingHelper {
 		for (BlockPos pos : lightUpdates) {
 			world.checkLight(pos);
 		}
-		for (Chunk chunk : generateSkylightMap) {
-			chunk.generateSkylightMap();
-			chunk.checkLight();
-			//TODO: Call chunk.onLoad() for every chunk the structure covers once it generated completely
-		}
 		world.profiler.endSection();
+		*/
 
 		for (BlockPlacingHelper.BlockUpdate blockUpdate : blockUpdates) {
 			blockUpdate.markAndNotifyBlock();
@@ -349,21 +344,21 @@ public class BlockPlacingHelper {
 		private World world;
 		private BlockPos pos;
 		private Chunk chunk;
-		private IBlockState oldState;
+		private IBlockState iblockstate;
 		private IBlockState newState;
 		private int flags;
 
-		public BlockUpdate(World world, BlockPos pos, Chunk chunk, IBlockState oldState, IBlockState newState, int flags) {
+		public BlockUpdate(World world, BlockPos pos, Chunk chunk, IBlockState iblockstate, IBlockState newState, int flags) {
 			this.world = world;
 			this.pos = pos;
 			this.chunk = chunk;
-			this.oldState = oldState;
+			this.iblockstate = iblockstate;
 			this.newState = newState;
 			this.flags = flags;
 		}
 
 		public void markAndNotifyBlock() {
-			this.world.markAndNotifyBlock(this.pos, this.chunk, this.oldState, this.newState, this.flags);
+			this.world.markAndNotifyBlock(this.pos, this.chunk, this.iblockstate, this.newState, this.flags);
 		}
 
 	}

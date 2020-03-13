@@ -6,12 +6,15 @@ import java.util.List;
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRMonkey;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.customarmor.ModelCQRMonkeyArmor;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRMandril;
 
+import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 
 public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 
@@ -28,11 +31,42 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 			this.layerRenderers.remove(layer);
 		}
 
+		/*
 		this.addLayer(new LayerBipedArmor(this) {
 			@Override
 			protected void initArmor() {
 				this.modelLeggings = new ModelCQRMonkeyArmor(0.5F);
 				this.modelArmor = new ModelCQRMonkeyArmor(1.0F);
+			}
+		});
+		*/
+		this.addLayer(new LayerCQREntityArmor(this) {
+			@Override
+			public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.5D, 0.0D);
+				this.rotate(modelRenderer, true);
+			}
+
+			@Override
+			public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.0D, -0.25D);
+				this.rotate(modelRenderer, true);
+			}
+
+			@Override
+			public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.125D, 0.0D);
+				this.rotate(modelRenderer, true);
+			}
+
+			@Override
+			public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+				this.rotate(modelRenderer, false);
+				GlStateManager.translate(0.0D, 0.125D, 0.0D);
+				this.rotate(modelRenderer, true);
 			}
 		});
 	}

@@ -140,7 +140,7 @@ public class CastleRoomSelector {
 			cell.getRoom().generate(world, dungeon);
 		}
 
-		EDungeonMobType mobType = selectCastleMobType(dungeon);
+		EDungeonMobType mobType = selectCastleMobType(world, dungeon);
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
 		ResourceLocation bossResLoc = mobType.getBossResourceLocation();
 		CastleGearedMobFactory mobFactory = new CastleGearedMobFactory(usedFloors, mobResLoc, random);
@@ -153,10 +153,10 @@ public class CastleRoomSelector {
 		}
 	}
 
-	private EDungeonMobType selectCastleMobType(CastleDungeon dungeon) {
+	private EDungeonMobType selectCastleMobType(World world, CastleDungeon dungeon) {
 		EDungeonMobType mobType = dungeon.getDungeonMob();
 		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(startPos.getX(), startPos.getZ());
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, startPos.getX(), startPos.getZ());
 		}
 		return mobType;
 	}

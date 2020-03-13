@@ -43,11 +43,6 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 		this.dataManager.set(IDENTITY_HIDDEN, false);
 	}
 
-	/*@Override
-	public float getSizeVariation() {
-		return 0F;
-	}*/
-
 	public boolean isIdentityHidden() {
 		return this.dataManager.get(IDENTITY_HIDDEN);
 	}

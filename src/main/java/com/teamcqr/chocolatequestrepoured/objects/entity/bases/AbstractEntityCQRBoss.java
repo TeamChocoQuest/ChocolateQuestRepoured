@@ -2,10 +2,12 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
@@ -118,6 +120,35 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
 		this.bossInfoServer.setName(this.getDisplayName());
+	}
+	
+	@Override
+	protected void onDeathUpdate() {
+		if(usesEnderDragonDeath()) {
+			//super.onDeathUpdate();
+			++this.deathTicks;
+			if (this.deathTicks >= 180 && this.deathTicks <= MAX_DEATH_TICKS)
+	        {
+	            float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+	            float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+	            float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
+	        }
+			this.setNoGravity(true);
+			 this.move(MoverType.SELF, 0.0D, 0.00625, 0.0D);
+			if (this.deathTicks == 200 && !this.world.isRemote)
+	        {
+	            this.setDead();
+	        }
+		}
+	}
+	
+	protected boolean usesEnderDragonDeath() {
+		return false;
+	}
+	
+	protected EnumParticleTypes getDeathAnimParticles() {
+		return EnumParticleTypes.EXPLOSION_HUGE;
 	}
 
 }

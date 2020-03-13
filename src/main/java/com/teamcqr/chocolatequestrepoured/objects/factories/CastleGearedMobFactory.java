@@ -45,17 +45,14 @@ public class CastleGearedMobFactory {
 			mainHand = new ItemStack(ModItems.STAFF_HEALING, 1);
 			break;
 		case STAFF:
-			switch(random.nextInt(4)) {
+			switch(random.nextInt(3)) {
 			case 0:
-				mainHand = new ItemStack(ModItems.STAFF_FIRE);
-				break;
-			case 1:
 				mainHand = new ItemStack(ModItems.STAFF_POISON);
 				break;
-			case 2:
+			case 1:
 				mainHand = new ItemStack(ModItems.STAFF_THUNDER);
 				break;
-			case 3:
+			case 2:
 				mainHand = new ItemStack(ModItems.STAFF_VAMPIRIC);
 				break;
 			}

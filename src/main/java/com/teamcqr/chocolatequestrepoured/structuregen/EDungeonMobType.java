@@ -9,6 +9,8 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public enum EDungeonMobType {
 
@@ -32,15 +34,8 @@ public enum EDungeonMobType {
 	GREMLIN(new ResourceLocation(Reference.MODID, "gremlin"), null, EBanners.GREMLIN_BANNER),
 	TRITON(new ResourceLocation(Reference.MODID, "triton"), null, null);
 
-	static final int[] countMapping = new int[] {
-			1,
-			2,
-			1,
-			// 3,
-			1,
-			1,
-			1 };
-	static final EDungeonMobType[][] mobWheel = new EDungeonMobType[][] {
+	private static final Random RAND = new Random();
+	private static final EDungeonMobType[][] MOB_WHEEL = new EDungeonMobType[][] {
 			new EDungeonMobType[] { SKELETON },
 			new EDungeonMobType[] { ZOMBIE, MUMMY },
 			new EDungeonMobType[] { ILLAGER },
@@ -71,46 +66,30 @@ public enum EDungeonMobType {
 		return this.banner;
 	}
 
-	// DONE: Rewrite this to return the mob type and not the mob itself
+	/**
+	 * The parameters x and z are block coordinates!<br>
+	 * <br>
+	 * Mob spawns depending on distance: Raising from near to far:<br>
+	 * Skeleton<br>
+	 * Zombie/Mummy<br>
+	 * Illager<br>
+	 * (Goblin/Orc/Ogre currently disabled)<br>
+	 * Specter<br>
+	 * Minotaur<br>
+	 * Endermen<br>
+	 */
+	public static EDungeonMobType getMobTypeDependingOnDistance(World world, int x, int z) {
+		BlockPos spawnPoint = world.getSpawnPoint();
+		int x1 = x - spawnPoint.getX();
+		int z1 = z - spawnPoint.getZ();
+		int distToSpawn = (int) Math.sqrt((double) (x1 * x1 + z1 * z1));
+		int index = distToSpawn / CQRConfig.mobs.mobTypeChangeDistance;
 
-	// X and Z are B L O C K x and z, not chunk x and z!!!
-	public static EDungeonMobType getMobTypeDependingOnDistance(int x, int z) {
-		// System.out.println("X: " + x);
-		// System.out.println("Z: " + z);
-		double distToSpawn = Math.sqrt(x * x + z * z);
-		// System.out.println("DistToSpawn: " + distToSpawn);
-
-		/*
-		 * Mob spawns depending on distance: Raising from near to far
-		 * 
-		 * Skeleton
-		 * Zombie
-		 * Illager
-		 * Goblin/Orc/Ogre -> Random
-		 * Specter
-		 * Minotaur?
-		 * Endermen
-		 * 
-		 * Distances: Config option for delimitter
-		 * 
-		 */
-
-		int index = new Double(distToSpawn / CQRConfig.mobs.mobTypeChangeDistance).intValue();
-		// System.out.println("Index: " + index);
-		// if the index is larger than array size +1 -> RANDOM
-		Random rdm = new Random();
-		int indx = -1;
-		if (index >= countMapping.length) {
-			indx = rdm.nextInt(countMapping.length);
-		} else {
-			indx = index;
-		}
-		// System.out.println("Indx: " + indx);
-		if (indx >= 0) {
-			return mobWheel[indx][rdm.nextInt(countMapping[indx])];
+		if (index >= MOB_WHEEL.length) {
+			index = RAND.nextInt(MOB_WHEEL.length);
 		}
 
-		return SKELETON;
+		return MOB_WHEEL[index][RAND.nextInt(MOB_WHEEL[index].length)];
 	}
 
 	@Nullable

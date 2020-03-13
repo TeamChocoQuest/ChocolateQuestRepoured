@@ -193,6 +193,9 @@ gui.drops.name=Drops
 gui.backpack.name=Backpack
 gui.alchemy_bag.name=Alchemy Bag
 description.gui_exporter.name=Creative only block for exporting dungeons. Select the area you want to export, and then save it.
+description.gui_exporter_part_mode.name=Splits the structure into 16x16x16 cubes for usually faster exportation and generation. Recommended to keep checked.
+description.gui_exporter_relative_mode.name=Uses coordinates relative to the exporter block. The Selection Helper item takes care wether this is checked or not.
+description.gui_exporter_ignore_entities.name=Ignores all entities which are not listed in cqrepoured.cfg -> advanced -> specialEntities. Recommended to keep checked.
 
 //Other
 item.super_tool.name=Super Tool (Creative Only)
