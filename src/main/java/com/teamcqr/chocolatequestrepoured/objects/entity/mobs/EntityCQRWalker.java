@@ -39,7 +39,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_WITHER_AMBIENT;
+		return SoundEvents.ENTITY_ENDERMEN_AMBIENT;
 	}
 
 	@Override
