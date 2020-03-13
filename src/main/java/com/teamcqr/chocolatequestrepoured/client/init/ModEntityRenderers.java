@@ -51,7 +51,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
@@ -201,7 +201,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRMage(renderManager, new ModelNecromancer(0F), "entity_cqr_necromancer"));
 		
 		// Walker King
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerBoss.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
 	}
 
 }
