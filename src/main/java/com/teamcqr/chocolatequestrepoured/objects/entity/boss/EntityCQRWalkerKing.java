@@ -23,13 +23,13 @@ import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
-public class EntityCQRWalkerBoss extends AbstractEntityCQRBoss {
+public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
-	public EntityCQRWalkerBoss(World world) {
+	public EntityCQRWalkerKing(World world) {
 		this(world, 1);
 	}
 	
-	public EntityCQRWalkerBoss(World worldIn, int size) {
+	public EntityCQRWalkerKing(World worldIn, int size) {
 		super(worldIn, size);
 		
 		this.bossInfoServer.setColor(Color.PURPLE);
