@@ -16,13 +16,11 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
 	private final int red;
 	private final int green;
 	private final int blue;
-	private final int alpha;
 	
-	public LayerBossDeath(int red, int green, int blue, int alpha) {
+	public LayerBossDeath(int red, int green, int blue) {
 		this.red = red;
 		this.green = green;
 		this.blue = blue;
-		this.alpha = alpha;
 	}
 
 	@Override
@@ -62,11 +60,11 @@ public class LayerBossDeath implements LayerRenderer<AbstractEntityCQRBoss> {
                 float f2 = random.nextFloat() * 20.0F + 5.0F + f1 * 10.0F;
                 float f3 = random.nextFloat() * 2.0F + 1.0F + f1 * 2.0F;
                 bufferbuilder.begin(6, DefaultVertexFormats.POSITION_COLOR);
-                bufferbuilder.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, (int)(255.0F * (1.0F - f1))).endVertex();
-                bufferbuilder.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
-                bufferbuilder.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
-                bufferbuilder.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(red, green, blue, alpha).endVertex();
-                bufferbuilder.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, alpha).endVertex();
+                bufferbuilder.pos(0.0D, 0.0D, 0.0D).color(red, green, blue, (int)(255.0F * (1.0F - f1))).endVertex();
+                bufferbuilder.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, 0).endVertex();
+                bufferbuilder.pos(0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, 0).endVertex();
+                bufferbuilder.pos(0.0D, (double)f2, (double)(1.0F * f3)).color(red, green, blue, 0).endVertex();
+                bufferbuilder.pos(-0.866D * (double)f3, (double)f2, (double)(-0.5F * f3)).color(red, green, blue, 0).endVertex();
                 tessellator.draw();
             }
 
