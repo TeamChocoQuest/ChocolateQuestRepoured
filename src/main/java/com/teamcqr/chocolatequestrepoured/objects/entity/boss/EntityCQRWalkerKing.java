@@ -128,7 +128,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	protected EnumParticleTypes getDeathAnimParticles() {
-		return EnumParticleTypes.EXPLOSION_LARGE;
+		return EnumParticleTypes.EXPLOSION_HUGE;
 	}
 	
 }
