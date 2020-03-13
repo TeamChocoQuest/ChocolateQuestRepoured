@@ -18,11 +18,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 
 public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
@@ -48,6 +52,29 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void onLivingUpdate() {
+		if(fallDistance > 12 && !world.isRemote) {
+			BlockPos teleportPos = null;
+			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
+			if(getAttackTarget() != null) {
+				Vec3d v = getPositionVector().subtract(getAttackTarget().getPositionVector());
+				v = v.normalize();
+				v = v.subtract(0, v.y, 0);
+				v = v.scale(2);
+				teleportPos = new BlockPos(getAttackTarget().getPositionVector().add(v));
+			} else if(getHomePositionCQR() != null) {
+				teleportPos = getHomePositionCQR();
+			}
+			if(teleport) {
+				//spawn cloud
+				for(int ix = -1; ix <= 1; ix++) {
+					for(int iz = -1; iz <= 1; iz++) {
+						((WorldServer)world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY +2, posZ +iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+					}
+				}
+				world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
+				attemptTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
+			}
+		}
 		if(active) {
 			if(getAttackTarget() == null && !world.isRemote) {
 				activationCooldown--;
@@ -72,7 +99,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		super.onLivingUpdate();
 	}
-
+	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
 		this.heal(20F);
