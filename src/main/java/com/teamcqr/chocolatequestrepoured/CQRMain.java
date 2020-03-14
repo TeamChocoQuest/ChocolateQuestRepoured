@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
+import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
@@ -140,6 +141,7 @@ public class CQRMain {
 		EBannerPatternsCQ.values();
 		ELootTablesNormal.values();
 		ELootTablesBoss.values();
+		EBanners.values();
 
 		// Register event handling for dungeon protection system
 		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
