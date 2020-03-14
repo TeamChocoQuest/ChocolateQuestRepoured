@@ -22,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class CastleRoomRoofBossMain extends CastleRoom {
+public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 

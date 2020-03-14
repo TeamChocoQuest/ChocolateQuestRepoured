@@ -6,7 +6,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomBossLandingEmpty extends CastleRoom {
+public class CastleRoomBossLandingEmpty extends CastleRoomBase {
 	private EnumFacing doorSide;
 
 	public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {

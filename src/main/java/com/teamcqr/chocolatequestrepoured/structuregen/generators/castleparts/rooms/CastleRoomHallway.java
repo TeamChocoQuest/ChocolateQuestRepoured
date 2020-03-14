@@ -8,7 +8,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class CastleRoomHallway extends CastleRoomGeneric {
+public class CastleRoomHallway extends CastleRoomGenericBase {
 	public enum Alignment {
 		VERTICAL, HORIZONTAL;
 

@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -39,7 +40,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return SoundEvents.ENTITY_WITHER_AMBIENT;
+		return SoundEvents.ENTITY_ENDERMEN_AMBIENT;
 	}
 
 	@Override
@@ -60,6 +61,14 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	@Override
 	public int getTextureCount() {
 		return 1;
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
+			amount *= 2;
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override

@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import net.minecraft.util.math.BlockPos;
 
 public class RoomFactoryCastle {
-	public static CastleRoomGeneric CreateGenericRoom(EnumRoomType type, BlockPos startPos, int sideLength, int height, int floor) {
+	public static CastleRoomGenericBase CreateGenericRoom(EnumRoomType type, BlockPos startPos, int sideLength, int height, int floor) {
 		switch (type) {
 		case KITCHEN:
 			return new CastleRoomKitchen(startPos, sideLength, height, floor);
