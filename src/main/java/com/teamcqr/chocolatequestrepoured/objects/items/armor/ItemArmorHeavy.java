@@ -43,11 +43,7 @@ public class ItemArmorHeavy extends ArmorCQRBase {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if (!world.isRemote) {
-			if (!player.onGround) {
-				player.jumpMovementFactor = ((float) Math.max(0.015D, player.jumpMovementFactor - 0.01F));
-			}
-		}
+		player.jumpMovementFactor *= 0.94F;
 	}
 
 	@Override
