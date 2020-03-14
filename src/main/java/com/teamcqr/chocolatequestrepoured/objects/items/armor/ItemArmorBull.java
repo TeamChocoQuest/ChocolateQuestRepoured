@@ -20,6 +20,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextFormatting;
@@ -27,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorBull extends ArmorCQRBase {
+public class ItemArmorBull extends ItemArmor {
 
 	private AttributeModifier strength;
 
@@ -69,7 +70,8 @@ public class ItemArmorBull extends ArmorCQRBase {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
+	@Nullable
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.bullArmorLegs : ModArmorModels.bullArmor;
 	}
 
