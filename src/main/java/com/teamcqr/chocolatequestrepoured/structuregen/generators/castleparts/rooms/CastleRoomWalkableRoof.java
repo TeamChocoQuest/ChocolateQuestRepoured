@@ -4,20 +4,21 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WalkableRoofWallBuilder;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomWalkableRoof extends CastleRoomBase {
-	public CastleRoomWalkableRoof(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomWalkableRoof(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.WALKABLE_ROOF;
 		this.pathable = false;
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (BlockPos pos : this.getDecorationArea()) {
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}
@@ -29,8 +30,8 @@ public class CastleRoomWalkableRoof extends CastleRoomBase {
 	}
 
 	@Override
-	protected void createAndGenerateWallBuilder(World world, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
+	protected void createAndGenerateWallBuilder(BlockStateGenArray genArray, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
 		RoomWallBuilder builder = new WalkableRoofWallBuilder(wallStart, this.height, wallLength, this.walls.getOptionsForSide(side), side);
-		builder.generate(world, dungeon);
+		builder.generate(genArray, dungeon);
 	}
 }

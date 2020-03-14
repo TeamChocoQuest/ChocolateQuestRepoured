@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -26,8 +27,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 
-	public CastleRoomRoofBossMain(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomRoofBossMain(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_MAIN;
 		this.pathable = false;
 	}
@@ -41,11 +42,11 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	protected void generateWalls(World world, CastleDungeon dungeon) {
+	protected void generateWalls(BlockStateGenArray genArray, CastleDungeon dungeon) {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos nwCorner = this.origin;
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -56,7 +57,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 					blockToBuild = this.getBlockToBuild(x, y, z);
 					pos = nwCorner.add(x, y, z);
 
-					world.setBlockState(pos, blockToBuild);
+					genArray.add(pos, blockToBuild);
 				}
 			}
 		}

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.a
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.world.World;
 
 /**
@@ -9,5 +10,5 @@ import net.minecraft.world.World;
  * https://github.com/kalgogsmash
  */
 public interface ICastleAddon {
-	public void generate(World world, CastleDungeon dungeon);
+	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon);
 }

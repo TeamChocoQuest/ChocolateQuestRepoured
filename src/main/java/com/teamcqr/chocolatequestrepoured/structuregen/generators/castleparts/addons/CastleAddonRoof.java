@@ -3,11 +3,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.a
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleAddonRoof implements ICastleAddon {
 
@@ -22,21 +22,21 @@ public class CastleAddonRoof implements ICastleAddon {
 	}
 
 	@Override
-	public void generate(World world, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		RandomCastleConfigOptions.RoofType type = dungeon.getRandomRoofType();
 		switch (type) {
 			case TWO_SIDED: {
-				generateTwoSided(world, dungeon);
+				this.generateTwoSided(genArray, dungeon);
 				break;
 			}
 			case FOUR_SIDED:
 			default: {
-				this.generateFourSided(world, dungeon);
+				this.generateFourSided(genArray, dungeon);
 			}
 		}
 	}
 
-	private void generateTwoSided(World world, CastleDungeon dungeon) {
+	private void generateTwoSided(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		int roofX;
 		int roofZ;
 		int roofLenX;
@@ -63,12 +63,12 @@ public class CastleAddonRoof implements ICastleAddon {
 			// Add the foundation under the roof
 			IBlockState state = dungeon.getWallBlock().getDefaultState();
 			for (int i = 0; i < underLenX; i++) {
-				world.setBlockState(new BlockPos(x + i, y, z), state);
-				world.setBlockState((new BlockPos(x + i, y, z + underLenZ - 1)), state);
+				genArray.add(x + i, y, z, state);
+				genArray.add(x + i, y, z + underLenZ - 1, state);
 			}
 			for (int j = 0; j < underLenZ; j++) {
-				world.setBlockState(new BlockPos(x, y, z + j), state);
-				world.setBlockState(new BlockPos(x + underLenX - 1, y, z + j), state);
+				genArray.add(x, y, z + j, state);
+				genArray.add(x + underLenX - 1, y, z + j, state);
 			}
 
 			if (xIsLongSide) {
@@ -79,10 +79,10 @@ public class CastleAddonRoof implements ICastleAddon {
 
 				for (int i = 0; i < roofLenX; i++) {
 					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
-					world.setBlockState(new BlockPos(roofX + i, y, roofZ), blockState);
+					genArray.add(roofX + i, y, roofZ, blockState);
 
 					blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
-					world.setBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState);
+					genArray.add(roofX + i, y, roofZ + roofLenZ - 1, blockState);
 				}
 
 				z++;
@@ -96,10 +96,10 @@ public class CastleAddonRoof implements ICastleAddon {
 
 				for (int i = 0; i < roofLenZ; i++) {
 					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
-					world.setBlockState(new BlockPos(roofX, y, roofZ + i), blockState);
+					genArray.add(roofX, y, roofZ + i, blockState);
 
 					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
-					world.setBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState);
+					genArray.add(roofX + roofLenX - 1, y, roofZ + i, blockState);
 				}
 
 				x++;
@@ -110,7 +110,7 @@ public class CastleAddonRoof implements ICastleAddon {
 		} while (underLenX >= 0 && underLenZ >= 0);
 	}
 
-	private void generateFourSided(World world, CastleDungeon dungeon) {
+	private void generateFourSided(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		int roofX;
 		int roofZ;
 		int roofLenX;
@@ -125,12 +125,12 @@ public class CastleAddonRoof implements ICastleAddon {
 			// Add the foundation under the roof
 			IBlockState state = dungeon.getWallBlock().getDefaultState();
 			for (int i = 0; i < underLenX; i++) {
-				world.setBlockState(new BlockPos(x + i, y, z), state);
-				world.setBlockState((new BlockPos(x + i, y, z + underLenZ - 1)), state);
+				genArray.add(x + i, y, z, state);
+				genArray.add(x + i, y, z + underLenZ - 1, state);
 			}
 			for (int j = 0; j < underLenZ; j++) {
-				world.setBlockState(new BlockPos(x, y, z + j), state);
-				world.setBlockState(new BlockPos(x + underLenX - 1, y, z + j), state);
+				genArray.add(x, y, z + j, state);
+				genArray.add(x + underLenX - 1, y, z + j, state);
 			}
 
 			roofX = x - 1;
@@ -150,7 +150,7 @@ public class CastleAddonRoof implements ICastleAddon {
 					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_RIGHT);
 				}
 
-				world.setBlockState(new BlockPos(roofX + i, y, roofZ), blockState);
+				genArray.add(roofX + i, y, roofZ, blockState);
 			}
 			// add the south row
 			for (int i = 0; i < roofLenX; i++) {
@@ -164,16 +164,16 @@ public class CastleAddonRoof implements ICastleAddon {
 					blockState = blockState.withProperty(BlockStairs.SHAPE, BlockStairs.EnumShape.INNER_LEFT);
 				}
 
-				world.setBlockState(new BlockPos(roofX + i, y, roofZ + roofLenZ - 1), blockState);
+				genArray.add(roofX + i, y, roofZ + roofLenZ - 1, blockState);
 			}
 
 			for (int i = 0; i < roofLenZ; i++) {
 				IBlockState blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
-				world.setBlockState(new BlockPos(roofX, y, roofZ + i), blockState);
+				genArray.add(roofX, y, roofZ + i, blockState);
 
 				blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
 
-				world.setBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState);
+				genArray.add(roofX + roofLenX - 1, y, roofZ + i, blockState);
 			}
 
 			x++;

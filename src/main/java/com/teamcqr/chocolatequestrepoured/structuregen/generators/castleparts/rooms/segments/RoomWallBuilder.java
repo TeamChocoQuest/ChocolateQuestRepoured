@@ -5,6 +5,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -42,7 +43,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	public void generate(World world, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
@@ -59,7 +60,7 @@ public class RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				world.setBlockState(pos, blockToBuild);
+				genArray.add(pos, blockToBuild);
 			}
 		}
 	}

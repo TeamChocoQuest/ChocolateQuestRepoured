@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
 import net.minecraft.block.state.IBlockState;
@@ -15,8 +15,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private EnumFacing firstStairSide;
 	private BlockPos pillarStart;
 
-	public CastleRoomStaircaseSpiral(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomStaircaseSpiral(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_SPIRAL;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;
@@ -26,7 +26,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		this.recalcPillarStart();
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
@@ -48,17 +48,17 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 						blockToBuild = dungeon.getWallBlock().getDefaultState();
 					}
 
-					world.setBlockState(pos, blockToBuild);
+					genArray.add(pos, blockToBuild);
 				}
 			}
 		}
 	}
 
 	@Override
-	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-		this.addEdgeDecoration(world, dungeon);
-		this.addWallDecoration(world, dungeon);
-		this.addSpawners(world, dungeon, mobFactory);
+	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, genArray, dungeon);
+		this.addWallDecoration(world, genArray, dungeon);
+		this.addSpawners(world, genArray, dungeon, mobFactory);
 	}
 
 	public EnumFacing getLastStairSide() {

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -19,8 +20,8 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private int centerStairWidth;
 	private int centerStairLength;
 
-	public CastleRoomStaircaseDirected(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomStaircaseDirected(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_DIRECTED;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.doorSide);
@@ -41,18 +42,17 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
-		IBlockState blockToBuild;
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
 				this.buildFloorBlock(x, z, world, dungeon);
 
 				if (z < 2) {
-					this.buildPlatform(x, z, world, dungeon);
+					this.buildPlatform(x, z, genArray, dungeon);
 				} else if (((x < this.upperStairWidth) || (x >= this.centerStairWidth + this.upperStairWidth)) && z < this.upperStairLength + PLATFORM_LENGTH) {
-					this.buildUpperStair(x, z, world, dungeon);
+					this.buildUpperStair(x, z, genArray, dungeon);
 				} else if (((x >= this.upperStairWidth) || (x < this.centerStairWidth + this.upperStairWidth)) && z <= this.centerStairLength + PLATFORM_LENGTH) {
-					this.buildLowerStair(x, z, world, dungeon);
+					this.buildLowerStair(x, z, genArray, dungeon);
 				}
 			}
 		}
@@ -83,7 +83,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		world.setBlockState(this.origin.add(x, 0, z), blockToBuild);
 	}
 
-	private void buildUpperStair(int x, int z, World world, CastleDungeon dungeon) {
+	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		int stairHeight = this.centerStairLength + (z - PLATFORM_LENGTH);
 		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
 		IBlockState blockToBuild;
@@ -95,11 +95,11 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			world.setBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
 		}
 	}
 
-	private void buildLowerStair(int x, int z, World world, CastleDungeon dungeon) {
+	private void buildLowerStair(int x, int z, BlockStateGenArray world, CastleDungeon dungeon) {
 		int stairHeight = this.centerStairLength - (z - PLATFORM_LENGTH + 1);
 		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 		IBlockState blockToBuild;
@@ -111,11 +111,11 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			world.setBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			world.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
 		}
 	}
 
-	private void buildPlatform(int x, int z, World world, CastleDungeon dungeon) {
+	private void buildPlatform(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		IBlockState blockToBuild;
 		int platformHeight = this.centerStairLength; // the stair length is also the platform height
 
@@ -125,7 +125,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			world.setBlockState(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
 		}
 	}
 

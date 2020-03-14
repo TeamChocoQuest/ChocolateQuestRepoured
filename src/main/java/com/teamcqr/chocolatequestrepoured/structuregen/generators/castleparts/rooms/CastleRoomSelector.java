@@ -18,8 +18,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -66,7 +66,7 @@ public class CastleRoomSelector {
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
-	private BlockPos startPos;
+	private BlockStateGenArray genArray;
 	private CastleDungeon dungeon;
 	private int floorHeight;
 	private int roomSize;
@@ -79,8 +79,8 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
 
-	public CastleRoomSelector(BlockPos startPos, CastleDungeon dungeon) {
-		this.startPos = startPos;
+	public CastleRoomSelector(BlockStateGenArray genArray, CastleDungeon dungeon) {
+		this.genArray = genArray;
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
@@ -117,14 +117,14 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, CastleDungeon dungeon, ArrayList<String> bossUuids) {
+	public void generate(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Roofs come first so rooms overwrite roof blocks
-		this.generateRoofs(world, dungeon);
+		this.generateRoofs(genArray, dungeon);
 
-		this.generateAndDecorateRooms(world, dungeon, bossUuids);
+		this.generateAndDecorateRooms(world, startPos, dungeon, genArray, bossUuids);
 	}
 
-	private void generateAndDecorateRooms(World world, CastleDungeon dungeon, ArrayList<String> bossUuids) {
+	private void generateAndDecorateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Start with the entire list of populated cells
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(RoomGridCell::isPopulated);
 		ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
@@ -132,15 +132,15 @@ public class CastleRoomSelector {
 		// Generate walkable roofs first since they are lowest priority, other rooms may occupy same BlockPos
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getRoom() instanceof CastleRoomWalkableRoof)) {
 			toGenerate.remove(cell);
-			cell.getRoom().generate(world, dungeon);
+			cell.getRoom().generate(world, genArray, dungeon);
 		}
 
 		// Generate all other cells
 		for (RoomGridCell cell : toGenerate) {
-			cell.getRoom().generate(world, dungeon);
+			cell.getRoom().generate(world, genArray, dungeon);
 		}
 
-		EDungeonMobType mobType = selectCastleMobType(world, dungeon);
+		EDungeonMobType mobType = selectCastleMobType(world, startPos, dungeon);
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
 		ResourceLocation bossResLoc = mobType.getBossResourceLocation();
 		CastleGearedMobFactory mobFactory = new CastleGearedMobFactory(usedFloors, mobResLoc, random);
@@ -148,12 +148,12 @@ public class CastleRoomSelector {
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
-			cell.getRoom().decorate(world, dungeon, mobFactory);
+			cell.getRoom().decorate(world, genArray, dungeon, mobFactory);
 			cell.getRoom().placeBoss(world, dungeon, bossResLoc, bossUuids);
 		}
 	}
 
-	private EDungeonMobType selectCastleMobType(World world, CastleDungeon dungeon) {
+	private EDungeonMobType selectCastleMobType(World world, BlockPos startPos, CastleDungeon dungeon) {
 		EDungeonMobType mobType = dungeon.getDungeonMob();
 		if (mobType == EDungeonMobType.DEFAULT) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, startPos.getX(), startPos.getZ());
@@ -161,9 +161,9 @@ public class CastleRoomSelector {
 		return mobType;
 	}
 
-	private void generateRoofs(World world, CastleDungeon dungeon) {
+	private void generateRoofs(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (CastleAddonRoof roof : this.castleRoofs) {
-			roof.generate(world, dungeon);
+			roof.generate(genArray, dungeon);
 		}
 	}
 
@@ -267,7 +267,7 @@ public class CastleRoomSelector {
 	private void addSupportIfFirstLayer(int layer, int gridIndexX, int gridIndexZ, int roomsX, int roomsZ) {
 		if (layer == 0) {
 			// get NW corner of the area and move it NW 1 square because of the extra N and W walls on the sides
-			BlockPos startCorner = this.getRoomStart(0, gridIndexX, gridIndexZ).north().west();
+			BlockPos startCorner = this.getRoomStart(0, gridIndexX, gridIndexZ);
 
 			this.supportAreas.add(new SupportArea(startCorner, roomsX, roomsZ));
 		}
@@ -989,21 +989,15 @@ public class CastleRoomSelector {
 	}
 
 	private BlockPos getRoomStart(int floor, int x, int z) {
-		return this.startPos.add(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
+		return new BlockPos(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
 	}
 
 	private BlockPos getRoomStart(RoomGridCell selection) {
-		int gridX = selection.getGridX();
-		int floor = selection.getFloor();
-		int gridZ = selection.getGridZ();
-		return this.startPos.add(gridX * this.roomSize, floor * this.floorHeight, gridZ * this.roomSize);
+		return getRoomStart(selection.getFloor(), selection.getGridX(), selection.getGridZ());
 	}
 
 	private BlockPos getRoomStart(RoomGridPosition position) {
-		int gridX = position.getX();
-		int floor = position.getFloor();
-		int gridZ = position.getZ();
-		return this.startPos.add(gridX * this.roomSize, floor * this.floorHeight, gridZ * this.roomSize);
+		return getRoomStart(position.getFloor(), position.getX(), position.getZ());
 	}
 
 }

@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -16,8 +17,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	private int stairZ;
 	private EnumFacing stairStartSide;
 
-	public CastleRoomLandingDirected(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomLandingDirected(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_DIRECTED;
 		this.openingWidth = stairsBelow.getUpperStairWidth();
 		this.stairZ = stairsBelow.getUpperStairEndZ() + 1;
@@ -27,7 +28,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		IBlockState blockToBuild;
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
@@ -46,7 +47,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 						}
 					}
 
-					world.setBlockState(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild);
+					genArray.add(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild);
 				}
 			}
 		}
