@@ -14,9 +14,7 @@ public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 4);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.UNLIT_TORCH, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 5);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 2);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.CAULDRON, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BREW_STAND, 1);
