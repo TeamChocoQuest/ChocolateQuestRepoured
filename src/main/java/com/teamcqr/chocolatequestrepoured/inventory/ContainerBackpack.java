@@ -1,9 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.inventory;
 
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemShulkerBox;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -32,17 +35,26 @@ public class ContainerBackpack extends Container {
 				this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142));
 			} else {
 				this.addSlotToContainer(new Slot(playerInv, k, 8 + k * 18, 142) {
+
 					@Override
 					public boolean canTakeStack(EntityPlayer playerIn) {
 						return false;
 					}
+
 				});
 			}
 		}
 
 		for (int l = 0; l < 3; l++) {
 			for (int m = 0; m < 9; m++) {
-				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 9, 8 + m * 18, 18 + l * 18));
+				this.addSlotToContainer(new SlotItemHandler(inventory, m + l * 9, 8 + m * 18, 18 + l * 18) {
+
+					@Override
+					public boolean isItemValid(ItemStack stack) {
+						return !(stack.getItem() instanceof ItemShulkerBox) && !(stack.getItem() instanceof ItemBackpack);
+					}
+
+				});
 			}
 		}
 	}

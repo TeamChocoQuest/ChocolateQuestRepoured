@@ -8,6 +8,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.BossInfo;
@@ -135,12 +137,24 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            this.world.spawnParticle(getDeathAnimParticles(), this.posX + (double)f, this.posY + 2.0D + (double)f1, this.posZ + (double)f2, 0.0D, 0.0D, 0.0D);
 	        }
 			this.setNoGravity(true);
-			 this.move(MoverType.SELF, 0.0D, 0.00625, 0.0D);
-			if (this.deathTicks == 200 && !this.world.isRemote)
+			 this.move(MoverType.SELF, 0, 10 / MAX_DEATH_TICKS / 3, 0);
+			if (this.deathTicks == MAX_DEATH_TICKS && !this.world.isRemote)
 	        {
+				world.playSound(posX, posY, posZ, getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 	            this.setDead();
+	            if(doesExplodeOnDeath()) {
+	            	world.createExplosion(this, posX, posY, posZ, 8.0F, true);
+	            }
 	        }
 		}
+	}
+	
+	protected SoundEvent  getFinalDeathSound() {
+		return getDeathSound();
+	}
+
+	protected boolean doesExplodeOnDeath() {
+		return false;
 	}
 	
 	protected boolean usesEnderDragonDeath() {

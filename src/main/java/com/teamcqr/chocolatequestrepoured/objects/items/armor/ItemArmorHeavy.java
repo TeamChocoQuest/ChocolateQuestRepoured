@@ -14,10 +14,8 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorHeavy extends ArmorCQRBase {
+public class ItemArmorHeavy extends ItemArmor {
 
 	private AttributeModifier movementSpeed;
 	private AttributeModifier knockbackResistance;
@@ -43,26 +41,21 @@ public class ItemArmorHeavy extends ArmorCQRBase {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		if (!world.isRemote) {
-			if (!player.onGround) {
-				player.jumpMovementFactor = ((float) Math.max(0.015D, player.jumpMovementFactor - 0.01F));
-			}
-		}
+		player.jumpMovementFactor *= 0.94F;
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
-		ModelBiped armor = armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
-		if (itemStack.getItem() instanceof ItemArmor) {
-			//This is supposed! Reason: If future version have a separate model for the heavy diamond armor, adaption isnt really needed
-			if (((ItemArmor) itemStack.getItem()).getArmorMaterial().equals(ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND)) {
-				armor = armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyDiamondArmorLegs : ModArmorModels.heavyDiamondArmor;
-			} else {
-				armor = armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
-			}
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		ArmorMaterial armorMaterial = ((ItemArmor) itemStack.getItem()).getArmorMaterial();
+
+		if (armorMaterial == ModMaterials.ArmorMaterials.ARMOR_HEAVY_DIAMOND) {
+			return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyDiamondArmorLegs : ModArmorModels.heavyDiamondArmor;
+		} else if (armorMaterial == ModMaterials.ArmorMaterials.ARMOR_HEAVY_IRON) {
+			return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.heavyIronArmorLegs : ModArmorModels.heavyIronArmor;
 		}
-		return armor;
+
+		return null;
+
 	}
 
 }

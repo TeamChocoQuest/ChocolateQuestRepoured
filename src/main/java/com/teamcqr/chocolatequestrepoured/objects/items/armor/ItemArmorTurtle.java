@@ -26,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -37,7 +38,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorTurtle extends ArmorCQRBase {
+public class ItemArmorTurtle extends ItemArmor {
 
 	private AttributeModifier health;
 
@@ -88,6 +89,13 @@ public class ItemArmorTurtle extends ArmorCQRBase {
 		return minutes + ":" + seconds;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
+		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
+	}
+
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EventHandler {
 
@@ -120,12 +128,6 @@ public class ItemArmorTurtle extends ArmorCQRBase {
 			}
 		}
 
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
-		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.turtleArmorLegs : ModArmorModels.turtleArmor;
 	}
 
 }
