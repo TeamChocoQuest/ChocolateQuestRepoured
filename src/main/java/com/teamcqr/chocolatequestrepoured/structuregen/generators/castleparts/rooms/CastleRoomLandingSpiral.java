@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
@@ -9,7 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomLandingSpiral extends CastleRoomBase {
+public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
 	public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
@@ -38,6 +39,7 @@ public class CastleRoomLandingSpiral extends CastleRoomBase {
 					if (y == 0) {
 						if (stairs.isPartOfStairs(pos)) {
 							blockToBuild = stairs.getBlock(pos);
+							this.usedDecoPositions.add(pos);
 						} else {
 							blockToBuild = dungeon.getFloorBlock().getDefaultState();
 						}
@@ -46,5 +48,12 @@ public class CastleRoomLandingSpiral extends CastleRoomBase {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, dungeon);
+		this.addWallDecoration(world, dungeon);
+		this.addSpawners(world, dungeon, mobFactory);
 	}
 }

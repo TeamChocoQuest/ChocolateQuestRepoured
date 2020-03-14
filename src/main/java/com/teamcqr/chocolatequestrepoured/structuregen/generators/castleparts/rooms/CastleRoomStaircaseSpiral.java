@@ -23,10 +23,6 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 
 		this.firstStairSide = EnumFacing.NORTH;
 		this.recalcPillarStart();
-
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 4);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TORCH, 1);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.UNLIT_TORCH, 1);
 	}
 
 	@Override

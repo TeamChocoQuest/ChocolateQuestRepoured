@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -11,7 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class CastleRoomBossStairMain extends CastleRoomBase {
+public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	private EnumFacing doorSide;
 	private int numRotations;
 	private static final int ROOMS_LONG = 2;
@@ -105,6 +106,10 @@ public class CastleRoomBossStairMain extends CastleRoomBase {
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
 					world.setBlockState(this.origin.add(offset), blockToBuild);
+
+					if (blockToBuild.getBlock() != Blocks.AIR) {
+						this.usedDecoPositions.add(this.origin.add(offset));
+					}
 				}
 			}
 		}
@@ -203,6 +208,13 @@ public class CastleRoomBossStairMain extends CastleRoomBase {
 		} else {
 			return Blocks.AIR.getDefaultState();
 		}
+	}
+
+	@Override
+	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, dungeon);
+		this.addWallDecoration(world, dungeon);
+		this.addSpawners(world, dungeon, mobFactory);
 	}
 
 	@Override
