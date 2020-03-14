@@ -22,6 +22,7 @@ import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumBlockRenderType;
@@ -33,7 +34,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemArmorSpider extends ArmorCQRBase {
+public class ItemArmorSpider extends ItemArmor {
 
 	private AttributeModifier movementSpeed;
 
@@ -67,7 +68,7 @@ public class ItemArmorSpider extends ArmorCQRBase {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
 		if (ItemUtil.hasFullSet(player, ItemArmorSpider.class)) {
-			if(player.isSpectator()) {
+			if (player.isSpectator()) {
 				return;
 			}
 			if (player.collidedHorizontally) {
@@ -190,9 +191,10 @@ public class ItemArmorSpider extends ArmorCQRBase {
 		}
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public ModelBiped getBipedArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot) {
+	@SideOnly(Side.CLIENT)
+	@Nullable
+	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.spiderArmorLegs : ModArmorModels.spiderArmor;
 	}
 

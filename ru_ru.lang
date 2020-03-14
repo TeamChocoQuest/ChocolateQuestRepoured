@@ -1,0 +1,576 @@
+
+
+//CreativeTabs
+itemGroup.ChocolateQuestRepouredBlocksTab=CQR Блоки
+itemGroup.ChocolateQuestRepouredItemsTab=CQR Предметы
+itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Подземелья
+itemGroup.ChocolateQuestRepouredBannerTab=Баннеры
+itemGroup.ChocolateQuestRepouredExporterChests=Экспортер Сундуки
+
+//Banners
+item.banner.cqrepoured_cq_blank.white=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.orange=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.magenta=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.light_blue=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.yellow=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.lime=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.pink=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.gray=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.silver=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.cyan=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.purple=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.blue=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.brown=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.green=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.red=CQR-маркер баннера
+item.banner.cqrepoured_cq_blank.black=CQR-маркер баннера
+
+item.banner.cqrepoured_cq_wither_eyes.white=Череп иссушителя с белыми глазами
+item.banner.cqrepoured_cq_wither_eyes.orange=Череп иссушителя с оранжевыми глазами
+item.banner.cqrepoured_cq_wither_eyes.magenta=Череп иссушителя с пурпурными глазами
+item.banner.cqrepoured_cq_wither_eyes.light_blue=Череп иссушителя с Светло-Голубыми глазами
+item.banner.cqrepoured_cq_wither_eyes.yellow=Череп иссушителя с желтыми глазами
+item.banner.cqrepoured_cq_wither_eyes.lime=Череп иссушителя с лаймовыми глазами
+item.banner.cqrepoured_cq_wither_eyes.pink=Череп иссушителя с розовыми глазами
+item.banner.cqrepoured_cq_wither_eyes.gray=Череп иссушителя с серыми глазами
+item.banner.cqrepoured_cq_wither_eyes.silver=Череп иссушителя с серебристыми глазами
+item.banner.cqrepoured_cq_wither_eyes.cyan=Череп иссушителя с голубыми глазами
+item.banner.cqrepoured_cq_wither_eyes.purple=Череп иссушителя с фиолетовыми глазами
+item.banner.cqrepoured_cq_wither_eyes.blue=Череп иссушителя с синими глазами
+item.banner.cqrepoured_cq_wither_eyes.brown=Череп иссушителя с коричневыми глазами
+item.banner.cqrepoured_cq_wither_eyes.green=Череп иссушителя с зелеными глазами
+item.banner.cqrepoured_cq_wither_eyes.red=Череп иссушителя с красными глазами
+item.banner.cqrepoured_cq_wither_eyes.black=Череп иссушителя с черными глазами
+
+item.banner.cqrepoured_cq_wither_skull.white=Белый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.orange=Oранжевый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.magenta=Пурпурный череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.light_blue=Светло-Синий череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.yellow=Желтый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.lime=Лаймовый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.pink=Pозовый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.gray=Серый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.silver=Серебристый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.cyan=Голубой череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.purple=Фиолетовый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.blue=Синий череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.brown=Коричневый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.green=Зеленый череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.red=Красный череп иссушителя
+item.banner.cqrepoured_cq_wither_skull.black=Черный череп иссушителя
+
+item.banner.cqrepoured_cq_fire.white=Белое пламя
+item.banner.cqrepoured_cq_fire.orange=Оранжевое пламя
+item.banner.cqrepoured_cq_fire.magenta=Пурпурное пламя
+item.banner.cqrepoured_cq_fire.light_blue=Светло-Синее пламя
+item.banner.cqrepoured_cq_fire.yellow=Желтое пламя
+item.banner.cqrepoured_cq_fire.lime=Лаймовое пламя
+item.banner.cqrepoured_cq_fire.pink=Pозовое пламя
+item.banner.cqrepoured_cq_fire.gray=Серое пламя
+item.banner.cqrepoured_cq_fire.silver=Серебристое пламя
+item.banner.cqrepoured_cq_fire.cyan=Голубое пламя
+item.banner.cqrepoured_cq_fire.purple=Фиолетовое пламя
+item.banner.cqrepoured_cq_fire.blue=Синее пламя
+item.banner.cqrepoured_cq_fire.brown=Коричневое пламя
+item.banner.cqrepoured_cq_fire.green=Зеленое пламя
+item.banner.cqrepoured_cq_fire.red=Красное пламя
+item.banner.cqrepoured_cq_fire.black=Черное пламя
+
+item.banner.cqrepoured_cq_emerald.white=Белый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.orange=Oранжевый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.magenta=Пурпурный изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.light_blue=Светло-Синий изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.yellow=Желтый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.lime=Лаймовый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.pink=Pозовый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.gray=Серый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.silver=Серебристый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.cyan=Голубой изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.purple=Фиолетовый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.blue=Синий изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.brown=Коричневый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.green=Зеленый изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.red=Красный изумрудный самоцвет
+item.banner.cqrepoured_cq_emerald.black=Черный изумрудный самоцвет
+
+item.banner.cqrepoured_cq_bones.white=Белые кости мертвых
+item.banner.cqrepoured_cq_bones.orange=Oранжевые кости мертвых
+item.banner.cqrepoured_cq_bones.magenta=Пурпурные кости мертвых
+item.banner.cqrepoured_cq_bones.light_blue=Светло-Синие кости мертвых
+item.banner.cqrepoured_cq_bones.yellow=Желтые кости мертвых
+item.banner.cqrepoured_cq_bones.lime=Лаймовые кости мертвых
+item.banner.cqrepoured_cq_bones.pink=Pозовые кости мертвых
+item.banner.cqrepoured_cq_bones.gray=Серые кости мертвых
+item.banner.cqrepoured_cq_bones.silver=Серебристые кости мертвых
+item.banner.cqrepoured_cq_bones.cyan=Голубые кости мертвых
+item.banner.cqrepoured_cq_bones.purple=Фиолетовые кости мертвых
+item.banner.cqrepoured_cq_bones.blue=Синие кости мертвых
+item.banner.cqrepoured_cq_bones.brown=Коричневые кости мертвых
+item.banner.cqrepoured_cq_bones.green=Зеленые кости мертвых
+item.banner.cqrepoured_cq_bones.red=Красные кости мертвых
+item.banner.cqrepoured_cq_bones.black=Черные кости мертвых
+
+item.banner.cqrepoured_walker_black_bg.white=Белое полотно флага
+item.banner.cqrepoured_walker_black_bg.orange=Oранжевое полотно флага
+item.banner.cqrepoured_walker_black_bg.magenta=Пурпурное полотно флага
+item.banner.cqrepoured_walker_black_bg.light_blue=Светло-Синее полотно флага
+item.banner.cqrepoured_walker_black_bg.yellow=Желтое полотно флага
+item.banner.cqrepoured_walker_black_bg.lime=Лаймовое полотно флага
+item.banner.cqrepoured_walker_black_bg.pink=Pозовое полотно флага
+item.banner.cqrepoured_walker_black_bg.gray=Серое полотно флага
+item.banner.cqrepoured_walker_black_bg.silver=Серебристое полотно флага
+item.banner.cqrepoured_walker_black_bg.cyan=Голубое полотно флага
+item.banner.cqrepoured_walker_black_bg.purple=Фиолетовое полотно флага
+item.banner.cqrepoured_walker_black_bg.blue=Синее полотно флага
+item.banner.cqrepoured_walker_black_bg.brown=Коричневое полотно флага
+item.banner.cqrepoured_walker_black_bg.green=Зеленое полотно флага
+item.banner.cqrepoured_walker_black_bg.red=Красное полотно флага
+item.banner.cqrepoured_walker_black_bg.black=Черное полотно флага
+
+
+item.banner.cqrepoured_walker_border.white=Белый выступающий бордюр
+item.banner.cqrepoured_walker_border.orange=Oранжевый выступающий бордюр
+item.banner.cqrepoured_walker_border.magenta=Пурпурный выступающий бордюр
+item.banner.cqrepoured_walker_border.light_blue=Синий выступающий бордюр
+item.banner.cqrepoured_walker_border.yellow=Желтый выступающий бордюр
+item.banner.cqrepoured_walker_border.lime=Лаймовый выступающий бордюр
+item.banner.cqrepoured_walker_border.pink=Pозовый выступающий бордюр
+item.banner.cqrepoured_walker_border.gray=Серый выступающий бордюр
+item.banner.cqrepoured_walker_border.silver=Серебристый выступающий бордюр
+item.banner.cqrepoured_walker_border.cyan=Голубой выступающий бордюр
+item.banner.cqrepoured_walker_border.purple=Фиолетовый выступающий бордюр
+item.banner.cqrepoured_walker_border.blue=Синий выступающий бордюр
+item.banner.cqrepoured_walker_border.brown=Коричневый выступающий бордюр
+item.banner.cqrepoured_walker_border.green=Зеленый выступающий бордюр
+item.banner.cqrepoured_walker_border.red=Красный выступающий бордюр
+item.banner.cqrepoured_walker_border.black=Черный выступающий бордюр
+
+item.banner.cqrepoured_walker_inner_border.white=Белая рваное полотно
+item.banner.cqrepoured_walker_inner_border.orange=Oранжевое рваное полотно
+item.banner.cqrepoured_walker_inner_border.magenta=Пуропурное рваное полотно
+item.banner.cqrepoured_walker_inner_border.light_blue=Светло-Синее рваное полотно
+item.banner.cqrepoured_walker_inner_border.yellow=Желтое рваное полотно
+item.banner.cqrepoured_walker_inner_border.lime=Лаймовое рваное полотно
+item.banner.cqrepoured_walker_inner_border.pink=Pозовое рваное полотно
+item.banner.cqrepoured_walker_inner_border.gray=Серое рваное полотно
+item.banner.cqrepoured_walker_inner_border.silver=Серебристое рваное полотно
+item.banner.cqrepoured_walker_inner_border.cyan=Голубое рваное полотно
+item.banner.cqrepoured_walker_inner_border.purple=Фиолетовое рваное полотно
+item.banner.cqrepoured_walker_inner_border.blue=Синее рваное полотно
+item.banner.cqrepoured_walker_inner_border.brown=Коричневое рваное полотно
+item.banner.cqrepoured_walker_inner_border.green=Зеленое рваное полотно
+item.banner.cqrepoured_walker_inner_border.red=Красное рваное полотно
+item.banner.cqrepoured_walker_inner_border.black=Черное рваное полотно
+
+
+item.banner.cqrepoured_walker_skull.white=Белое лицо ходока
+item.banner.cqrepoured_walker_skull.orange=Oранжевое лицо ходока
+item.banner.cqrepoured_walker_skull.magenta=Пурпурное лицо ходока
+item.banner.cqrepoured_walker_skull.light_blue=Светло-Синее лицо ходока
+item.banner.cqrepoured_walker_skull.yellow=Желтое лицо ходока
+item.banner.cqrepoured_walker_skull.lime=Лаймовое лицо ходока
+item.banner.cqrepoured_walker_skull.pink=Розовое лицо ходока
+item.banner.cqrepoured_walker_skull.gray=Серое лицо ходока
+item.banner.cqrepoured_walker_skull.silver=Серебристое лицо ходока
+item.banner.cqrepoured_walker_skull.cyan=Голубое лицо ходока
+item.banner.cqrepoured_walker_skull.purple=Фиолетовое лицо ходока
+item.banner.cqrepoured_walker_skull.blue=Синее лицо ходока
+item.banner.cqrepoured_walker_skull.brown=Коричневое лицо ходока
+item.banner.cqrepoured_walker_skull.green=Зеленое лицо ходока
+item.banner.cqrepoured_walker_skull.red=Красное лицо ходока
+item.banner.cqrepoured_walker_skull.black=Черное лицо ходока
+
+
+//Gui
+gui.repu.name=Репутация
+gui.repu.faction=Фракция
+gui.repu.reputation=Ваша репутация
+gui.repu.memberskilled=Убитые участники
+gui.repu.dungeonsconquered=Разрушенные дома
+gui.drops.name=Дроп
+gui.backpack.name=Рюкзак
+gui.alchemy_bag.name=Алхимический Мешок
+description.gui_exporter.name=Креативный блок, только для экспорта подземелий. Выберите область, которую вы хотите экспортировать, а затем сохраните ее.
+
+//Other
+item.super_tool.name=Супер Инструмент(Только Творческий)
+item.potion_healing.name=Целебное зелье
+item.teleport_stone.name=Телепортационный Камень
+item.soul_bottle.name=Бутылка Души
+item.mob_to_spawner_tool.name=Инструмент для спавнера мобов
+item.spawner_converter.name=Преобразователь Спавнера
+item.badge.name=Значок
+item.backpack.name=Рюкзак
+item.alchemy_bag.name=Алхимический Мешок
+item.structure_selector.name=Помощьник селектора селекции
+
+//Dragon Items
+item.helmet_dragon.name=Драконий шлем
+
+//Daggers
+item.dagger_iron.name=Железный Кинжал
+item.dagger_diamond.name=Алмазный Кинжал
+item.dagger_monking.name=Монашеский Кинжал
+item.dagger_ninja.name=Кинжал Ниндзя
+
+//Swords
+item.sword_turtle.name=Черепаший Меч
+item.sword_spider.name=Паучий Меч
+item.battle_axe_bull.name=Бычий Боевой Топор
+item.sword_moonlight.name=Лунный Свет
+item.sword_sunshine.name=Солнечное Сияние
+
+//Shields
+item.cqr_shield_r01.name=Щит Свинозомби
+item.cqr_shield_r02.name=Щит Пирата
+item.cqr_shield_r03.name=Щит Призрака
+item.cqr_shield_r04.name=Щит Гоблина
+item.cqr_shield_r05.name=Щит Мумии
+item.cqr_shield_r06.name=Радужный Щит
+item.cqr_shield_r07.name=Проржавевший Щит
+item.cqr_shield_r08.name=Черепаший Щит
+item.cqr_shield_r09.name=Щит Тритона
+
+//Walker set
+item.sword_walker.name=Меч Ходока
+item.shield_walker_king.name=Королевский Щит Ходока
+
+//Shields
+item.shield_bull.name=Щит Ледяного Быка
+item.shield_carl.name=Карл
+item.shield_dragonslayer.name=Драконий Щит
+item.shield_fire.name=Огненный Щит
+item.shield_goblin.name=Щит Гоблина
+item.shield_monking.name=Щит Обезьяны
+item.shield_moon.name=Лунный Щит
+item.shield_mummy.name=Перевязанный Щит
+item.shield_pigman.name=Щит Свинозомби
+item.shield_pirate.name=Щит Пирата
+item.shield_pirate2.name=Щит Пирата
+item.shield_rainbow.name=Радужный Щит
+item.shield_reflective.name=Зеркальный Щит
+item.shield_rusted.name=Проржавевший Щит
+item.shield_skeleton_friends.name=Щит Скелетона
+item.shield_specter.name=Щит Призрака
+item.shield_spider.name=Паучий Щит
+item.shield_sun.name=Солнечный Щит
+item.shield_tomb.name=Могильный Щит
+item.shield_triton.name=Щит Тритона
+item.shield_turtle.name=Черепаший Пехотный Щит
+item.shield_warped.name=Деформированный Щит
+item.shield_walker.name=Щит Ходока
+item.shield_walker_normal.name=Щит Ходока
+item.shield_zombie.name=Щит Зомби
+
+//Great Swords
+item.great_sword_monking.name=Монашеский Великий Меч
+item.great_sword_bull.name=Большой Меч Быка
+item.great_sword_diamond.name=Алмазный Большой Меч
+item.great_sword_iron.name=Железный Большой Меч
+
+//Spears
+item.spear_diamond.name=Алмазное Копье
+item.spear_iron.name=Железное Копье
+
+//Staves
+item.staff.name=Посох
+item.staff_fire.name=Огненный Посох
+item.staff_vampiric.name=Вампирский Посох
+item.staff_wind.name=Посох Ветра
+item.staff_poison.name=Отравляющий Посох
+item.staff_spider.name=Паучий Посох
+item.staff_gun.name=Оружейный Посох
+item.staff_healing.name=Исцеляющий Посох
+item.staff_thunder.name=Громовой Посох
+
+//Guns
+item.revolver.name=Револьвер
+item.captain_revolver.name=Револьвер Капитана
+item.musket.name=Mушкет
+item.musket_dagger_iron.name=Мушкет с железным кинжалом
+item.musket_dagger_diamond.name=Мушкет с алмазным кинжалом
+item.musket_dagger_monking.name=Мушкет с монашеским кинжалом
+item.bullet_iron.name=Железные Пули
+item.bullet_gold.name=Золотые Пули
+item.bullet_diamond.name=Алмазные Пули
+item.bullet_fire.name=Огненные Пули
+item.cannon_ball.name=Пушечное ядро
+item.flamethrower.name=Огнемет
+
+//Hookshots
+item.hookshot.name=Выстрел крюком
+item.longshot.name=Длинный выстрел
+
+//Cloud Items
+item.boots_cloud.name=Облачные Ботинки
+item.feather_golden.name=Золотое Перо
+
+//Monking Items
+item.bone_monking.name=Монашеская Кость
+
+//Inquisition Armor
+item.helmet_inquisition.name=Шлем Инквизиции
+item.chestplate_inquisition.name=Нагрудник Инквизиции
+item.leggings_inquisition.name=Поножи Инквизиции
+item.boots_inquisition.name=Ботинки Инквизиции
+
+//Bull Armor
+item.helmet_bull.name=Бычий Шлем
+item.chestplate_bull.name=Бычий Нагрудник
+item.leggings_bull.name=Бычьи Поножи
+item.boots_bull.name=Бычьи Ботинки
+item.leather_bull.name=Бычья Кожа
+item.horn_bull.name=Бычий Рог
+
+//Turtle Armor
+item.helmet_turtle.name=Черепаший Шлем
+item.chestplate_turtle.name=Черепаший Нагрудник
+item.leggings_turtle.name=Черепашьи Поножи
+item.boots_turtle.name=Черепашьи Ботинки
+item.scale_turtle.name=Черепашья Пластина
+
+//Slime Armor
+item.helmet_slime.name=Шлем из Слизи
+item.chestplate_slime.name=Нагрудник из Слизи
+item.leggings_slime.name=Поножи из Слизи
+item.boots_slime.name=Ботинки из Слизи
+item.ball_slime.name=Регенерирующий Слизистый Шар
+
+//Spider Armor
+item.helmet_spider.name=Паучий Шлем
+item.chestplate_spider.name=Паучий Нагрудник
+item.leggings_spider.name=Паучьи Поножи
+item.boots_spider.name=Паучьи Батинки
+item.leather_spider.name=Паучья Кожа
+item.giant_spider_poison.name=Гигантский Ядовитый Паук
+
+//Heavy Diamond Armor
+item.helmet_heavy_diamond.name=Тяжелый Алмазный Шлем
+item.chestplate_heavy_diamond.name=Тяжелый Алмазный Нагрудник
+item.leggings_heavy_diamond.name=Тяжелые Алмазные Поножи
+item.boots_heavy_diamond.name=Тяжелые Алмазные Ботинки
+
+//Heavy Iron Armor
+item.helmet_heavy_iron.name=Тяжелый Железный Шлем
+item.chestplate_heavy_iron.name=Тяжелый Железный Нагрудник
+item.leggings_heavy_iron.name=Тяжелые Железные Поножи
+item.boots_heavy_iron.name=Тяжелые Железные Ботинки
+
+//Dyable Iron Armor
+item.helmet_iron_dyable.name=Покрашенный Железный Шлем
+item.chestplate_iron_dyable.name=Покрашенный Железный Нагрудник
+item.leggings_iron_dyable.name=Покрашенные Железные Поножи
+item.boots_iron_dyable.name=Покрашенные Железные Ботинки
+
+//Dyable Diamond Armor
+item.helmet_diamond_dyable.name=Покрашенный Алмазный Шлем
+item.chestplate_diamond_dyable.name=Покрашенный Алмазный Нагрудник
+item.leggings_diamond_dyable.name=Покрашенные Алмазные Поножи
+item.boots_diamond_dyable.name=Покрашенные Алмазные Ботинки
+
+//Blocks
+tile.exporter.name=Блок Экспортер
+tile.spawner.name=Спавнер
+tile.null_block.name=Нулевой блок
+tile.unlit_torch.name=Незажженый факел
+tile.table_oak.name=Дубовый стол
+tile.table_spruce.name=Еловый стол
+tile.table_birch.name=Березовый стол
+tile.table_jungle.name=Тропический стол
+tile.table_acacia.name=Aкациевый стол
+tile.table_dark.name=Темно-Дубовый стол
+tile.boss_block.name=Босс Блок
+tile.force_field_nexus.name=Силовое Поле Нексуса (NYI)
+
+//Andesite blocks
+tile.andesite_carved.name=Резной Андезит
+tile.andesite_pillar.name=Андезитовый Столб
+tile.andesite_cube.name=Андезитовый Куб
+tile.andesite_scale.name=Андезитовая Шкала
+tile.andesite_square.name=Андезитовая Площадь
+tile.andesite_small.name=Маленькие Андезитовые Кирпичи
+tile.andesite_large.name=Большие Андезитовые Кирпичи
+
+//Diorite blocks
+tile.diorite_carved.name=Резной Диорит
+tile.diorite_pillar.name=Диоритовый Столб
+tile.diorite_cube.name=Диоритовый Куб
+tile.diorite_scale.name=Диоритовая Шкала
+tile.diorite_square.name=Диоритовая Площадь
+tile.diorite_small.name=Маленькие Диоритовые Кирпичи
+tile.diorite_large.name=Большие Диоритовые Кирпичи
+
+//Diorite blocks
+tile.granite_carved.name=Резной Гранит
+tile.granite_pillar.name=Гранитный Столб
+tile.granite_cube.name=Гранитный Куб
+tile.granite_scale.name=Гранитная Шкала
+tile.granite_square.name=Гранитная Площадь
+tile.granite_small.name=Маленькие Гранитные Кирпичи
+tile.granite_large.name=Большие Гранитные Кирпичи
+
+//Prismarine blocks
+tile.prismarine_carved.name=Резной Призмарин
+tile.prismarine_pillar.name=Призмариновый Столб
+tile.prismarine_cube.name=Призмариновый Куб
+tile.prismarine_square.name=Призмариновая Площадь
+tile.prismarine_small.name=Маленькие Призмариновые Кирпичи
+tile.prismarine_large.name=Большие Призмариновые Кирпичи
+
+//Endstone blocks
+tile.endstone_carved.name=Резной Эндстоун
+tile.endstone_pillar.name=Эндстоуновый Столб
+tile.endstone_cube.name=Эндстоуновый Куб
+tile.endstone_scale.name=Эндстоуновая Шкала
+tile.endstone_square.name=Эндстоуновая Площадь
+tile.endstone_small.name=Маленькие Эндстоуновые Кирпичи
+
+//Purpur blocks
+tile.purpur_carved.name=Резной Пурпур
+tile.purpur_cube.name=Пурпурный Столб
+tile.purpur_scale.name=Пурпурная Шкала
+tile.purpur_small.name=Маленькие Пурпурные Кирпичи
+tile.purpur_large.name=Большие Пурпурные Кирпичи
+
+//Red Netherbrick blocks
+tile.red_netherbrick_carved.name=Резной Красный Незерак
+tile.red_netherbrick_pillar.name=Столб из Красного Незерака
+tile.red_netherbrick_cube.name=Куб из Красного Незерака
+tile.red_netherbrick_scale.name=Шкала из Красного Незерака
+tile.red_netherbrick_square.name=Площадь из Красного Незерака
+tile.red_netherbrick_large.name=Большой Красный Незерак
+
+//Stone blocks
+tile.stone_pillar.name=Каменный Столб
+tile.stone_cube.name=Каменный Куб
+tile.stone_scale.name=Каменная Шкала
+tile.stone_square.name=Каменная Площадь
+tile.stone_small.name=Маленькие Каменные Кирпичи
+
+//Exporter chests
+tile.exporter_chest_valuable.name=Экспортер Сундук Сокровища
+tile.exporter_chest_food.name=Экспортер Сундук Еда
+tile.exporter_chest_equipment.name=Экспортер Сундук Оборудование
+tile.exporter_chest_utility.name=Экспортер Сундук Утилиты
+tile.exporter_chest_vanilla_blacksmith.name=Экспортер Сундук - Деревенский Кузнец
+tile.exporter_chest_vanilla_bonus.name=Экспортер Сундук - Бонусный сундук
+tile.exporter_chest_vanilla_dungeon.name=Экспортер Сундук - Подземелье
+tile.exporter_chest_vanilla_end_city.name=Экспортер Сундук - Город Края
+tile.exporter_chest_vanilla_igloo.name=Экспортер Сундук - Иглу
+tile.exporter_chest_vanilla_jungle.name=Экспортер Сундук - Сундук джунглей
+tile.exporter_chest_vanilla_jungle_dispenser.name=Экспортер Сундук - Дозатор джунглей
+tile.exporter_chest_vanilla_mansion.name=Экспортер Сундук - Лесной Особняк
+tile.exporter_chest_vanilla_mineshaft.name=Экспортер Сундук - Шахта
+tile.exporter_chest_vanilla_nether.name=Экспортер Сундук - Крепость незера
+tile.exporter_chest_vanilla_pyramid.name=Экспортер Сундук - Пирамида
+tile.exporter_chest_vanilla_stronghold.name=Экспортер Сундук - Крепостной Коридор
+tile.exporter_chest_vanilla_stronghold_library.name=Экспортер Сундук - Крепостная Библиотека
+tile.exporter_chest_vanilla_stronghold_storeroom.name=Экспортер Сундук - Крепостная Шахта
+tile.exporter_chest_custom_1.name=Экспортер Сундук - Custom 1
+tile.exporter_chest_custom_2.name=Экспортер Сундук - Custom 2
+tile.exporter_chest_custom_3.name=Экспортер Сундук - Custom 3
+tile.exporter_chest_custom_4.name=Экспортер Сундук - Custom 4
+tile.exporter_chest_custom_5.name=Экспортер Сундук - Custom 5
+tile.exporter_chest_custom_6.name=Экспортер Сундук - Custom 6
+tile.exporter_chest_custom_7.name=Экспортер Сундук - Custom 7
+tile.exporter_chest_custom_8.name=Экспортер Сундук - Custom 8
+tile.exporter_chest_custom_9.name=Экспортер Сундук - Custom 9
+tile.exporter_chest_custom_10.name=Экспортер Сундук - Custom 10
+tile.exporter_chest_custom_11.name=Экспортер Сундук - Custom 11
+tile.exporter_chest_custom_12.name=Экспортер Сундук - Custom 12
+tile.exporter_chest_custom_13.name=Экспортер Сундук - Custom 13
+tile.exporter_chest_custom_14.name=Экспортер Сундук - Custom 14
+
+//technical
+tile.phylactery.name=Талисман Лича
+
+//Descriptions
+description.spider_armor.name=Носите паука, чтобы стать пауком. Полный комплект позволяет лазить по стенам и прыгать гораздо выше.
+description.spider_sword.name=Вытекая из клыков, которые сделали этот простой меч клинком героя, яд Шелоба не может быть остановлен, как только ваш враг был ранен этим клинком.
+description.bull_armor.name=Носите быка, чтобы стать быком. Полный комплект позволяет вам мчаться вперед с огромной скоростью и уничтожать все на своем пути.
+description.great_sword.name=Удерживайте правую кнопку мыши, чтобы нанести удар по большой площади.
+description.turtle_armor.name=Сила черепахи, если вы создадите полный комплект из ее панциря, позволит вам гораздо быстрее восстановить здоровье. Панцирь предотвращает большую часть повреждений сзади.
+description.slime_armor.name=С полным набором регенерирующей слизи, касающейся вашей кожи, вы можете чувствовать, что ваше максимальное здоровье переполняется, и всякий раз, когда вы повреждены, может появиться небольшая слизь, которая может восстановить ваше здоровье, если вы сможете достичь ее.
+description.cloud_boots.name=Те, кто ступает к ангелам, как говорят пророки, не могут сделать ничего плохого. Один прыжок становится прыжком, быстрая ходьба нарушает скорость звука, никакое падение не может остановить избранных, и с этими ботинками это включает вас.
+//description.dragon_helmet.name=Вы можете чувствовать, как сила дракона течет по вашим венам. Атаки, которые когда-то были угрозой для вас, теперь кажутся бессмысленными, но ваши собственные удары вдвое сильнее!
+description.dagger.name=Щелкните правой кнопкой мыши во время движения, чтобы прыгнуть вперед
+description.ninja_dagger.name=Щелкните правой кнопкой мыши во время движения, чтобы прыгнуть вперед. Говорят, что обладатель этого кинжала мог по своему желанию исчезнуть без следа. Вы, вероятно, можете имитировать это поведение с помощью Shift + правой кнопкой мыши , но пока вы исчезнете из поля зрения, вы не уйдете далеко.
+description.bull_battle_axe.name=Грукс щелкнуть правой кнопкой мыши по земле. Произвести землетрясение. Путешествие вперед. Разбивает очень хорошо  врагов. Грукс отличный.
+description.walker_set.name=Легенда гласит, что любой, кто выпустил стрелу по ходячему королю, обнаружил меч в своей спине и короля за ними. Может быть, сбор его меча и щита даст вам ту же способность?
+description.gun.name=Кликните правой кнопкой мыши, чтобы выстрелить, требуются пули.
+description.bullet_damage.name=Пулевое повреждение
+description.bullet_fire.name=Поджигает при попадании
+description.fire_rate.name=Скорострельность
+description.accuracy.name=Точность
+description.click_shift.name=Удерживайте Shift для просмотра описания
+description.rear_damage.name=Тыльное повреждение
+description.charging.name=Зарядка...
+description.turtle_armor_charging.name=Способность к перезарядке, оставшееся время: 
+description.healing_potion.name=Пейте, чтобы восстановить 2 сердца.
+description.teleport_stone.name=Мистический объект, созданный древней расой. Удерживайте правую кнопку мыши, чтобы установить позицию, а затем сделайте это снова, чтобы телепортироваться туда. Shift+Правый клик, чтобы удалить сохраненное местоположение.
+description.teleport_stone_position.name=Текущее Положение
+description.staff_fire.name=Огонь пожирает тех, кто встанет на вашем пути, просто щелкните правой кнопкой мыши, и они почувствуют ваш гнев. Также зажигаются факелы.
+description.staff_spider.name=Щелкните правой кнопкой мыши, чтобы стрелять
+description.staff_gun.name=Это пистолет на палке. Черт, эти гномы - гении!
+description.staff_healing.name=Клик левой кнопкой мыши восстанавливает здоровье, которое вам нужно, я на самом деле не помню, что это делает, но мне пришлось сделать описания для всех этих вещей из жадности.
+description.contains.name=Содержит:
+description.empty.name=Пусто
+description.soul_bottle.name=Кликни левой кнопкой мыши по мобу, чтобы сохранить ее, а правой-чтобы вызвать этого моба. Может быть превращен в спавнер и для этого моба.
+description.flamethrower.name=Опытный образец Undertech Fyrebird mk7 22 мм сопло пламегаситель блок. Н ажатие п равой кнопки мыши должно выбрасывать огонь прямо в перед. Внутренние гелевые картриджи должны быть способны извлекать слизь из любой точки инвентаря. Текущая модель требует регулярной перезагрузки, так как никакого регенерирующего источника слизи обнаружено не было
+description.badge.name=Только творческий элемент. Щелкните правой кнопкой мыши с ним, чтобы открыть графический интерфейс , элементы, помещенные в этот графический интерфейс, могут быть доступны позже, щелкнув левой кнопкой мыши любой моб с этим значком снова, и будут отброшены, когда прикрепленный моб будет убит.
+description.backpack.name=Щелкните правой кнопкой мыши, чтобы открыть его.
+description.alchemy_bag.name=Щелкните правой кнопкой мыши, чтобы открыть его. Хранит только зелья.
+//description.woodshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в деревянный блок, вы будете притянуты к нему.
+description.hookshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в блок, вы будете притянуты к нему.
+description.longshot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крючок попадет в блок, вы будете притянуты к нему.
+//description.manualhook.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
+//description.spidershot.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
+//description.hooksword.name=Щелкните правой кнопкой мыши, чтобы стрелять крючком. Как только крюк коснется блока, вы можете удерживать правую кнопку мыши, чтобы приблизиться к нему, и подкрасться при этом, чтобы отойти от него.
+description.moonlight.name=Надпись на клинке гласит: «Мою силу можно разбудить только при свете луны».
+description.sunshine.name=Надпись на клинке гласит: «Мою силу можно разбудить только при свете солнца».
+description.attack_damage_at_night.name=Урон от атаки в течение ночи
+description.attack_damage_at_day.name=Урон от атаки в течение дня
+description.staff_vampiric.name=Этот стержень излучает темную энергию, когда вы держите его в руке. Если вы поднесете его к уху, то услышите его требование. Его призыв прост: "щелкните правой кнопкой мыши со мной", и когда вы это сделаете, то увидите, что снаряд он действительно испускает. Хотя повреждение незначительное, если вы посадите его правильно, Он исцелит вас, когда ударит.
+description.staff_wind.name=Что бы это ни должно было сделать, оно пока не работает. #TODO
+description.staff_poison.name=Что бы это ни должно было сделать, оно пока не работает.. #TODO
+description.staff.name=Недостающий #TODO
+description.staff_thunder.name=Недостающий #TODO
+description.spear_diamond.name=Хорошо сделанное оружие с большей досягаемостью, чем мечи. Щелкните правой кнопкой мыши, чтобы зарядить удлиненную тягу.
+
+// Mobs
+entity.cqr_boarman.name=Человек-Кабан
+entity.cqr_dummy.name=Чучело
+entity.cqr_dwarf.name=Гном
+entity.cqr_enderman.name=Эндермен
+entity.cqr_goblin.name=Гоблин
+entity.cqr_golem.name=Голем
+entity.cqr_gremlin.name=Гремлин
+entity.cqr_illager.name=Иллагер
+entity.cqr_npc.name=NPC
+entity.cqr_mandril.name=Мандрил
+entity.cqr_minotaur.name=Mинотавр
+entity.cqr_mummy.name=Mумия
+entity.cqr_ogre.name=Oгр
+entity.cqr_orc.name=Oрк
+entity.cqr_pirate.name=Пират
+entity.cqr_skeleton.name=Скелетон
+entity.cqr_spectre.name=Призрак
+entity.cqr_triton.name=Tритон
+entity.cqr_walker.name=Ходок Бездны
+entity.cqr_zombie.name=Зомбие
+
+//Mounts
+entity.cqr_giant_endermite.name=Гигантский Эндермит
+entity.cqr_giant_silverfish.name=Гигантская Серебряная Рыба
+entity.cqr_giant_silverfish1.name=Гигантская Лавовая Серебряная Рыба
+entity.cqr_giant_silverfish2.name=Гигантская БолотнаяСеребряная Рыба
+
+// Bosses
+entity.cqr_nether_dragon.name=Незер-Дракон
+entity.cqr_giant_tortoise.name=Гигантская Черепаха
+entity.cqr_lich.name=Лич
+entity.cqr_necromancer.name=Некромант
+entity.cqr_boar_mage.name=Маг-Кабан
+
+//Misc Entities
+entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>вызывающая пентаграмма
