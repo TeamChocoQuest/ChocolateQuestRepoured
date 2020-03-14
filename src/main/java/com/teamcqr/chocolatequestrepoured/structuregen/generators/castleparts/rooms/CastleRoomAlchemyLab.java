@@ -6,7 +6,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomAlchemyLab extends CastleRoomGeneric {
+public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
 	public CastleRoomAlchemyLab(BlockPos startPos, int sideLength, int height, int floor) {
 		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.ALCHEMY_LAB;

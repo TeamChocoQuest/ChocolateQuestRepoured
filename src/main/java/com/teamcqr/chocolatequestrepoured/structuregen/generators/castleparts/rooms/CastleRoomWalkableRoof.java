@@ -9,7 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomWalkableRoof extends CastleRoom {
+public class CastleRoomWalkableRoof extends CastleRoomBase {
 	public CastleRoomWalkableRoof(BlockPos startPos, int sideLength, int height, int floor) {
 		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.WALKABLE_ROOF;

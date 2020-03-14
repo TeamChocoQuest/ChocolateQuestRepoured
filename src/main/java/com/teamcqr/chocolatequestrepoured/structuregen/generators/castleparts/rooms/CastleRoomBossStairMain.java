@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-public class CastleRoomBossStairMain extends CastleRoom {
+public class CastleRoomBossStairMain extends CastleRoomBase {
 	private EnumFacing doorSide;
 	private int numRotations;
 	private static final int ROOMS_LONG = 2;

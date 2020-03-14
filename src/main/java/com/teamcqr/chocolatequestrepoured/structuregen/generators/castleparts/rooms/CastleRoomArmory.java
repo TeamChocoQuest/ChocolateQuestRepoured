@@ -7,7 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomArmory extends CastleRoomGeneric {
+public class CastleRoomArmory extends CastleRoomGenericBase {
 	public CastleRoomArmory(BlockPos startPos, int sideLength, int height, int floor) {
 		super(startPos, sideLength, height, floor);
 		this.roomType = EnumRoomType.ARMORY;

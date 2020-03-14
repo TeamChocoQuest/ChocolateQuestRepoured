@@ -14,7 +14,7 @@ import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomBedroom extends CastleRoomGeneric {
+public class CastleRoomBedroom extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
 	public CastleRoomBedroom(BlockPos startPos, int sideLength, int height, int floor) {
