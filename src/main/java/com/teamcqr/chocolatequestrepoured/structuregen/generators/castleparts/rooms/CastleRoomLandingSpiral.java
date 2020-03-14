@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
 import net.minecraft.block.state.IBlockState;
@@ -13,15 +14,15 @@ import net.minecraft.world.World;
 public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
-	public CastleRoomLandingSpiral(BlockPos startPos, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomLandingSpiral(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_SPIRAL;
 		this.stairsBelow = stairsBelow;
 		this.defaultCeiling = true;
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.origin.getY(), this.stairsBelow.getCenterZ());
@@ -44,16 +45,16 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 							blockToBuild = dungeon.getFloorBlock().getDefaultState();
 						}
 					}
-					world.setBlockState(pos, blockToBuild);
+					genArray.add(pos, blockToBuild);
 				}
 			}
 		}
 	}
 
 	@Override
-	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-		this.addEdgeDecoration(world, dungeon);
-		this.addWallDecoration(world, dungeon);
-		this.addSpawners(world, dungeon, mobFactory);
+	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, genArray, dungeon);
+		this.addWallDecoration(world, genArray, dungeon);
+		this.addSpawners(world, genArray, dungeon, mobFactory);
 	}
 }

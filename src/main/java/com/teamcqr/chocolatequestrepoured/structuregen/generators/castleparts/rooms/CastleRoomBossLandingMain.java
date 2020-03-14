@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.BlockStairs;
@@ -36,8 +37,8 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private int stairOpeningZStartIdx;
 	private int stairOpeningZEndIdx;
 
-	public CastleRoomBossLandingMain(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomBossLandingMain(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
@@ -64,7 +65,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
@@ -73,7 +74,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					world.setBlockState(this.origin.add(offset), blockToBuild);
+					genArray.add(this.origin.add(offset), blockToBuild);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
 						this.usedDecoPositions.add(this.origin.add(offset));
@@ -113,10 +114,10 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-		this.addEdgeDecoration(world, dungeon);
-		this.addWallDecoration(world, dungeon);
-		this.addSpawners(world, dungeon, mobFactory);
+	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, genArray, dungeon);
+		this.addWallDecoration(world, genArray, dungeon);
+		this.addSpawners(world, genArray, dungeon, mobFactory);
 	}
 
 	@Override

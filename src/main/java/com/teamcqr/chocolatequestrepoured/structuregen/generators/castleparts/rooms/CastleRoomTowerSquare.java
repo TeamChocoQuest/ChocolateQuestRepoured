@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
 import net.minecraft.block.state.IBlockState;
@@ -16,9 +17,9 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	private BlockPos pillarStart;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(BlockPos startPos, int sideLength, int height, EnumFacing connectedSide,
+	public CastleRoomTowerSquare(BlockPos startOffset, int sideLength, int height, EnumFacing connectedSide,
 								 int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
-		super(startPos, sideLength, height, floor);
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
 		this.buildLengthX = towerSize;
@@ -57,7 +58,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
 
 		BlockPos pos;
@@ -81,7 +82,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 						this.usedDecoPositions.add(pos);
 					}
 
-					world.setBlockState(pos, blockToBuild);
+					genArray.add(pos, blockToBuild);
 				}
 			}
 		}

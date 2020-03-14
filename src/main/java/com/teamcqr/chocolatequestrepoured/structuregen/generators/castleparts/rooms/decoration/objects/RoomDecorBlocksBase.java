@@ -7,6 +7,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.state.IBlockState;
@@ -41,13 +42,13 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 	}
 
 	@Override
-	public void build(World world, CastleRoomBase room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
 		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
 			IBlockState stateToPlace = placement.getState(side);
-			world.setBlockState(pos, stateToPlace);
+			genArray.add(pos, stateToPlace);
 
 			if (stateToPlace.getBlock() != Blocks.AIR) {
 				decoMap.add(pos);

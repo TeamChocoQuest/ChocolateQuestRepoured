@@ -2,21 +2,22 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomRoofBossEmpty extends CastleRoomBase {
-	public CastleRoomRoofBossEmpty(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomRoofBossEmpty(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_EMPTY;
 		this.pathable = false;
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 	}
 
 	@Override
-	protected void generateWalls(World world, CastleDungeon dungeon) {
+	protected void generateWalls(BlockStateGenArray genArray, CastleDungeon dungeon) {
 	}
 }

@@ -4,12 +4,13 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class CastleRoomArmory extends CastleRoomGenericBase {
-	public CastleRoomArmory(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomArmory(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.ARMORY;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
@@ -25,8 +26,8 @@ public class CastleRoomArmory extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
-		super.generateRoom(world, dungeon);
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+		super.generateRoom(world, genArray, dungeon);
 	}
 
 	@Override

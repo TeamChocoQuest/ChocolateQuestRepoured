@@ -11,6 +11,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -24,24 +26,18 @@ import net.minecraftforge.common.MinecraftForge;
 public class CastleGenerator implements IDungeonGenerator {
 
 	private CastleDungeon dungeon;
-	private int maxSize;
-	private int roomSize;
 	private Random random;
 	private CastleRoomSelector roomHelper;
-	private int totalX;
-	private int totalY;
-	private int totalZ;
 
 	public CastleGenerator(CastleDungeon dungeon) {
 		this.dungeon = dungeon;
-		this.maxSize = this.dungeon.getMaxSize();
-		this.roomSize = this.dungeon.getRoomSize();
 		this.random = this.dungeon.getRandom();
 	}
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		this.roomHelper = new CastleRoomSelector(new BlockPos(x, y, z), this.dungeon);
+		BlockStateGenArray genArray = new BlockStateGenArray(dungeon.getMaxSize(), 256, dungeon.getMaxSize());
+		this.roomHelper = new CastleRoomSelector(genArray, this.dungeon);
 		this.roomHelper.randomizeCastle();
 
 		// Builds the support hill;
@@ -61,8 +57,8 @@ public class CastleGenerator implements IDungeonGenerator {
 		ArrayList<String> bossUuids = new ArrayList<>();
 		this.roomHelper.generate(world, this.dungeon, bossUuids);
 
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, bossUuids);
-		MinecraftForge.EVENT_BUS.post(event);
+		//CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, bossUuids);
+		//MinecraftForge.EVENT_BUS.post(event);
 	}
 
 	@Override

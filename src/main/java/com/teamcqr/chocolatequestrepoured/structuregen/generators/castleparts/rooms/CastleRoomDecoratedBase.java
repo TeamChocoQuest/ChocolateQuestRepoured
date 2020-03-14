@@ -8,11 +8,13 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorNone;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -24,23 +26,23 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected DecorationSelector decoSelector;
     protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
-    CastleRoomDecoratedBase(BlockPos startPos, int sideLength, int height, int floor) {
-        super(startPos, sideLength, height, floor);
+    CastleRoomDecoratedBase(BlockPos startOffset, int sideLength, int height, int floor) {
+        super(startOffset, sideLength, height, floor);
         this.decoSelector = new DecorationSelector(this.random);
         this.possibleChestLocs = new HashMap<>();
     }
 
-    protected void addChests(World world, CastleDungeon dungeon) {
+    protected void addChests(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         if (this.getChestIDs() != null && !this.possibleChestLocs.isEmpty()) {
             if (DungeonGenUtils.PercentageRandom(50, this.random)) {
                 IRoomDecor chest = new RoomDecorChest();
                 BlockPos pos = (BlockPos) this.possibleChestLocs.keySet().toArray()[this.random.nextInt(this.possibleChestLocs.size())];
-                chest.build(world, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);
+                chest.build(world, genArray, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);
             }
         }
     }
 
-    protected void addEdgeDecoration(World world, CastleDungeon dungeon) {
+    protected void addEdgeDecoration(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         if (this.decoSelector.edgeDecorRegistered()) {
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
                 if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
@@ -56,7 +58,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                         while (attempts < MAX_DECO_ATTEMPTS) {
                             IRoomDecor decor = this.decoSelector.randomEdgeDecor();
                             if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) {
-                                decor.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                                decor.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
 
                                 // If we added air here then this is a candidate spot for a chest
                                 if (decor instanceof RoomDecorNone) {
@@ -76,7 +78,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         }
     }
 
-    protected void addMidDecoration(World world, CastleDungeon dungeon) {
+    protected void addMidDecoration(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         if (this.decoSelector.midDecorRegistered()) {
             ArrayList<BlockPos> area = this.getDecorationLayer(0);
             for (BlockPos pos : area) {
@@ -91,7 +93,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     IRoomDecor decor = this.decoSelector.randomMidDecor();
                     EnumFacing side = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
                     if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) {
-                        decor.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                        decor.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
 
                         break;
                     }
@@ -105,7 +107,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         }
     }
 
-    protected void addSpawners(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+    protected void addSpawners(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
         ArrayList<BlockPos> spawnPositions = this.getDecorationLayer(0);
         spawnPositions.removeAll(this.usedDecoPositions);
 
@@ -122,7 +124,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         }
     }
 
-    protected void addWallDecoration(World world, CastleDungeon dungeon) {
+    protected void addWallDecoration(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         int torchPercent = LIGHT_LEVEL * 3;
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
@@ -135,10 +137,10 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     }
                     if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
                             (DungeonGenUtils.PercentageRandom(torchPercent, this.random))) {
-                        RoomDecorTypes.TORCH.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                        RoomDecorTypes.TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
                     } else if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
                             (DungeonGenUtils.PercentageRandom(5, this.random))) {
-                        RoomDecorTypes.UNLIT_TORCH.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                        RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
                     } else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
                             (DungeonGenUtils.PercentageRandom(15, this.random))) {
                         RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.possibleDecoPositions, this.usedDecoPositions);

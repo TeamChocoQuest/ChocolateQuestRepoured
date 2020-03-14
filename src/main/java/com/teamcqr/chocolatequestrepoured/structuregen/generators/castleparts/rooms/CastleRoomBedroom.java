@@ -7,6 +7,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,8 +18,8 @@ import net.minecraft.world.World;
 public class CastleRoomBedroom extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroom(BlockPos startPos, int sideLength, int height, int floor) {
-		super(startPos, sideLength, height, floor);
+	public CastleRoomBedroom(BlockPos startOffset, int sideLength, int height, int floor) {
+		super(startOffset, sideLength, height, floor);
 		this.roomType = EnumRoomType.BEDROOM;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
@@ -36,8 +37,8 @@ public class CastleRoomBedroom extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(World world, CastleDungeon dungeon) {
-		super.generateRoom(world, dungeon);
+	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+		super.generateRoom(world, genArray, dungeon);
 	}
 
 	@Override

@@ -55,4 +55,8 @@ public class VectorUtil {
 		return new Vec3i(Math.floor(res.x), Math.floor(res.y), Math.floor(res.z));
 	}
 
+	public static Vec3i vectorAdd(Vec3i start, int x, int y, int z) {
+		return new Vec3i(start.getX() + x, start.getY() + y, start.getZ() + z);
+	}
+
 }

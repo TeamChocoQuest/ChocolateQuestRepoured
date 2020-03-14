@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -49,9 +50,9 @@ public abstract class CastleRoomBase {
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
-	public CastleRoomBase(BlockPos startPos, int sideLength, int height, int floor) {
-		this.origin = new BlockPos(startPos);
-		this.buildStartPos = new BlockPos(startPos);
+	public CastleRoomBase(BlockPos startOffset, int sideLength, int height, int floor) {
+		this.origin = new BlockPos(startOffset);
+		this.buildStartPos = new BlockPos(startOffset);
 		this.sideLength = sideLength;
 		this.offsetX = 0;
 		this.offsetZ = 0;
@@ -65,22 +66,22 @@ public abstract class CastleRoomBase {
 		this.possibleDecoPositions = new HashSet<>();
 	}
 
-	public void generate(World world, CastleDungeon dungeon) {
-		this.setupDecoration(world);
-		this.generateRoom(world, dungeon);
-		this.generateWalls(world, dungeon);
+	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+		this.setupDecoration(genArray);
+		this.generateRoom(world, genArray, dungeon);
+		this.generateWalls(genArray, dungeon);
 
 		if (this.defaultFloor) {
-			this.generateDefaultFloor(world, dungeon);
+			this.generateDefaultFloor(genArray, dungeon);
 		}
 		if (this.defaultCeiling) {
-			this.generateDefaultCeiling(world, dungeon);
+			this.generateDefaultCeiling(genArray, dungeon);
 		}
 	}
 
-	protected abstract void generateRoom(World world, CastleDungeon dungeon);
+	protected abstract void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon);
 
-	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
 		; // Default is no decoration
 	}
 
@@ -88,7 +89,7 @@ public abstract class CastleRoomBase {
 		; // Default is no boss
 	}
 
-	protected void generateWalls(World world, CastleDungeon dungeon) {
+	protected void generateWalls(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			if (this.walls.hasWallOnSide(side)) {
 				int wallLength = (side.getAxis() == EnumFacing.Axis.X) ? this.buildLengthZ : this.buildLengthX;
@@ -101,14 +102,14 @@ public abstract class CastleRoomBase {
 					wallStart = new BlockPos(this.getExteriorBuildStart());
 				}
 
-				this.createAndGenerateWallBuilder(world, dungeon, side, wallLength, wallStart);
+				this.createAndGenerateWallBuilder(genArray, dungeon, side, wallLength, wallStart);
 			}
 		}
 	}
 
-	protected void createAndGenerateWallBuilder(World world, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
+	protected void createAndGenerateWallBuilder(BlockStateGenArray genArray, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
 		RoomWallBuilder builder = new RoomWallBuilder(wallStart, this.height, wallLength, this.walls.getOptionsForSide(side), side);
-		builder.generate(world, dungeon);
+		builder.generate(genArray, dungeon);
 	}
 
 	public boolean canBuildDoorOnSide(EnumFacing side) {
@@ -135,30 +136,30 @@ public abstract class CastleRoomBase {
 		return this.roomType.isPathable();
 	}
 
-	protected void generateDefaultCeiling(World world, CastleDungeon dungeon) {
+	protected void generateDefaultCeiling(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				world.setBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlock().getDefaultState());
+				genArray.add(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlock().getDefaultState());
 			}
 		}
 	}
 
-	protected void generateDefaultFloor(World world, CastleDungeon dungeon) {
+	protected void generateDefaultFloor(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos pos = this.getNonWallStartPos();
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				world.setBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon));
+				genArray.add(pos.add(x, 0, z), this.getFloorBlock(dungeon));
 			}
 		}
 	}
 
-    protected void fillEmptySpaceWithAir(World world) {
+    protected void fillEmptySpaceWithAir(BlockStateGenArray genArray) {
         HashSet<BlockPos> emptySpaces = new HashSet<>(this.possibleDecoPositions);
         emptySpaces.removeAll(this.usedDecoPositions);
 
         for (BlockPos emptyPos : emptySpaces) {
-            world.setBlockState(emptyPos, Blocks.AIR.getDefaultState());
+            genArray.add(emptyPos, Blocks.AIR.getDefaultState());
         }
     }
 
@@ -251,12 +252,12 @@ public abstract class CastleRoomBase {
 		this.adjacentWalls.add(side);
 	}
 
-	protected void setupDecoration(World world) {
+	protected void setupDecoration(BlockStateGenArray genArray) {
 		this.possibleDecoPositions = new HashSet<>(this.getDecorationArea());
-		this.setDoorAreasToAir(world);
+		this.setDoorAreasToAir(genArray);
 	}
 
-	protected void setDoorAreasToAir(World world) {
+	protected void setDoorAreasToAir(BlockStateGenArray genArray) {
 		BlockPos toAdd;
 		BlockPos topLeft = this.getDecorationStartPos();
 		int xStart = topLeft.getX();
@@ -293,7 +294,7 @@ public abstract class CastleRoomBase {
 					for (int x = doorStart; x <= doorEnd; x++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState());
 							this.usedDecoPositions.add(toAdd);
 						}
 					}
@@ -311,7 +312,7 @@ public abstract class CastleRoomBase {
 					for (int z = doorStart; z <= doorEnd; z++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							world.setBlockState(toAdd, Blocks.AIR.getDefaultState());
+							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState());
 							this.usedDecoPositions.add(toAdd);
 						}
 					}
