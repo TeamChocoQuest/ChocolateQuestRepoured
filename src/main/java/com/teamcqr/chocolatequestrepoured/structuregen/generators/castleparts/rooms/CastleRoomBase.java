@@ -337,7 +337,7 @@ public abstract class CastleRoomBase {
 	/*
 	 * Get a list of blocks that make up the ring of potential painting locations
 	 */
-	protected ArrayList<BlockPos> getPaintingEdge(EnumFacing side) {
+	protected ArrayList<BlockPos> getWallDecorationEdge(EnumFacing side) {
 		// First get all blocks that are not occupied by walls
 		ArrayList<BlockPos> result = this.getDecorationLayer(2);
 

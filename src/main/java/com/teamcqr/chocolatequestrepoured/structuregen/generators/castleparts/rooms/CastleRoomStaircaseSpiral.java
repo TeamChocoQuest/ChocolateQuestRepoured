@@ -61,7 +61,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	@Override
 	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
 		this.addEdgeDecoration(world, dungeon);
-		this.addPaintings(world);
+		this.addWallDecoration(world, dungeon);
 		this.addSpawners(world, dungeon, mobFactory);
 	}
 
