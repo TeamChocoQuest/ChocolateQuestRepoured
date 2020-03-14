@@ -51,7 +51,7 @@ public class RenderCQRMandril extends RenderCQREntity<EntityCQRMandril> {
 			@Override
 			public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
 				this.rotate(modelRenderer, false);
-				GlStateManager.translate(0.0D, 0.0D, -0.25D);
+				GlStateManager.translate(0.0D, 0.0D, -0.28125D);
 				this.rotate(modelRenderer, true);
 			}
 
