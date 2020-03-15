@@ -57,6 +57,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
@@ -131,6 +132,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, renderManager -> new RenderSummoningCircle(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, renderManager -> new RenderFlyingSkull(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, renderManager -> new RenderBubble(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
 
 	}
 
