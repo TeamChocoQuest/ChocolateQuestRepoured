@@ -163,7 +163,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected int getCastingTime() {
-		return 80;
+		return 40;
 	}
 
 	@Override
