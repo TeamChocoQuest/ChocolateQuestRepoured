@@ -122,42 +122,44 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	@Override
 	public void onEntityUpdate() {
-		if (ttl < 0) {
-			setDead();
-			return;
-		}
-		// Search parent
-		if (parent == null && parentUUID != null) {
-			if (searchTicksForParent > 0) {
-				if (!world.isRemote) {
-					world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(-10, -10, -10), getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
-
-						@Override
-						public void accept(Entity t) {
-							if (t.getPersistentID().equals(parentUUID)) {
-								parent = (EntityCQRWalkerKing) t;
-							}
-						}
-					});
-					;
-					searchTicksForParent--;
-				}
-			} else {
+		if(!world.isRemote) {
+			if (ttl < 0) {
 				setDead();
 				return;
 			}
-		}
-		if (parent == null || parent.isDead) {
-			setDead();
-			return;
-		}
-		super.onEntityUpdate();
-		this.setHealth(parent.getHealth());
+			// Search parent
+			if (parent == null && parentUUID != null) {
+				if (searchTicksForParent > 0) {
+					if (!world.isRemote) {
+						world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(-10, -10, -10), getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
 
-		if (parent.getAttackTarget() != null || getAttackTarget() != null) {
-			ttl--;
-		} else {
-			ttl -= 10;
+							@Override
+							public void accept(Entity t) {
+								if (t.getPersistentID().equals(parentUUID)) {
+									parent = (EntityCQRWalkerKing) t;
+								}
+							}
+						});
+						;
+						searchTicksForParent--;
+					}
+				} else {
+					setDead();
+					return;
+				}
+			}
+			if (parent == null || parent.isDead) {
+				setDead();
+				return;
+			}
+			super.onEntityUpdate();
+			this.setHealth(parent.getHealth());
+
+			if (parent.getAttackTarget() != null || getAttackTarget() != null) {
+				ttl--;
+			} else {
+				ttl -= 10;
+			}
 		}
 	}
 
