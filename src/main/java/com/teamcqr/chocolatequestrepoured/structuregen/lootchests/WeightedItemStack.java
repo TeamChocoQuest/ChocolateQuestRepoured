@@ -16,7 +16,7 @@ import net.minecraft.world.storage.loot.conditions.RandomChance;
 import net.minecraft.world.storage.loot.functions.EnchantWithLevels;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraft.world.storage.loot.functions.SetCount;
-import net.minecraft.world.storage.loot.functions.SetDamage;
+import net.minecraft.world.storage.loot.functions.SetMetadata;
 
 /**
  * Copyright (c) 29.04.2019
@@ -72,7 +72,7 @@ public class WeightedItemStack {
 			}
 		}
 		if(this.damage != 0 && this.damage > 0) {
-			functions.add(new SetDamage(null, new RandomValueRange(damage)));
+			functions.add(new SetMetadata(null, new RandomValueRange(damage)));
 		}
 
 		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);

@@ -78,7 +78,7 @@ public class StructurePart implements IStructure {
 		this.dungeonChunkZ = compound.getInteger("dungeonChunkZ");
 		this.dungeonMobType = EDungeonMobType.byString(compound.getString("dungeonMob"));
 		this.replaceBanners = compound.getBoolean("replaceBanners");
-		this.dungeonBanner = EBanners.valueOf(compound.getString("dungeonBanner"));
+		this.dungeonBanner = !compound.getString("dungeonBanner").isEmpty() ? EBanners.valueOf(compound.getString("dungeonBanner")) : null;
 		this.hasShield = compound.getBoolean("hasShield");
 	}
 
