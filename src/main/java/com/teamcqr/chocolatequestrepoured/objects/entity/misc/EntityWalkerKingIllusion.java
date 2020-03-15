@@ -4,6 +4,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 import com.google.common.base.Predicates;
+import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
@@ -144,6 +145,16 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 		} else {
 			super.onEntityUpdate();
 		}
+	}
+	
+	@Override
+	public ResourceLocation getResourceLocationOfCape() {
+		return Capes.CAPE_WALKER;
+	}
+	
+	@Override
+	public boolean hasCape() {
+		return true;
 	}
 	
 	@Override
