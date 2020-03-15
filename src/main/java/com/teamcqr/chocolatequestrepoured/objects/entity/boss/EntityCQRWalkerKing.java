@@ -87,16 +87,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void onLivingUpdate() {
-		if(fallDistance > 12 && !world.isRemote) {
+		if(fallDistance > 12) {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
-			if(getAttackTarget() != null) {
+			if(getAttackTarget() != null && !world.isRemote) {
 				Vec3d v = getPositionVector().subtract(getAttackTarget().getPositionVector());
 				v = v.normalize();
 				v = v.subtract(0, v.y, 0);
 				v = v.scale(2);
 				teleportPos = new BlockPos(getAttackTarget().getPositionVector().add(v));
-			} else if(getHomePositionCQR() != null) {
+			} else if(getHomePositionCQR() != null && !world.isRemote) {
 				teleportPos = getHomePositionCQR();
 			}
 			if(teleport) {
