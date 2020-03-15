@@ -337,7 +337,7 @@ public abstract class CastleRoomBase {
 	/*
 	 * Get a list of blocks that make up the ring of potential painting locations
 	 */
-	protected ArrayList<BlockPos> getPaintingEdge(EnumFacing side) {
+	protected ArrayList<BlockPos> getWallDecorationEdge(EnumFacing side) {
 		// First get all blocks that are not occupied by walls
 		ArrayList<BlockPos> result = this.getDecorationLayer(2);
 
@@ -402,11 +402,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected BlockPos getDecorationStartPos() {
-		if (this.defaultFloor) {
-			return this.getNonWallStartPos().up(); // skip the floor
-		} else {
-			return this.getNonWallStartPos();
-		}
+		return this.getNonWallStartPos().up(); // skip the floor
 	}
 
 	protected BlockPos getNonWallStartPos() {

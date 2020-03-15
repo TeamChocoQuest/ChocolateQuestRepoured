@@ -7,7 +7,7 @@ public class RoomDecorTypes {
     public static final IRoomDecor ANVIL = new RoomDecorAnvil();
     public static final IRoomDecor ARMOR_STAND = new RoomDecorArmorStand();
     public static final IRoomDecor BED = new RoomDecorBed();
-    public static final IRoomDecor BREW_STAND = new RoomDecorArmorStand();
+    public static final IRoomDecor BREW_STAND = new RoomDecorBrewingStand();
     public static final IRoomDecor CAULDRON = new RoomDecorCauldron();
     public static final IRoomDecor CHEST = new RoomDecorChest();
     public static final IRoomDecor CRAFTING_TABLE = new RoomDecorCraftingTable();

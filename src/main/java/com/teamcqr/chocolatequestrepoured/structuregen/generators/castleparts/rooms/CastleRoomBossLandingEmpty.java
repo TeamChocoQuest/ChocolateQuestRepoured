@@ -1,12 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class CastleRoomBossLandingEmpty extends CastleRoomBase {
+public class CastleRoomBossLandingEmpty extends CastleRoomDecoratedBase {
 	private EnumFacing doorSide;
 
 	public CastleRoomBossLandingEmpty(BlockPos startPos, int sideLength, int height, EnumFacing doorSide, int floor) {
@@ -19,6 +20,13 @@ public class CastleRoomBossLandingEmpty extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(World world, CastleDungeon dungeon) {
+	}
+
+	@Override
+	public void decorate(World world, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+		this.addEdgeDecoration(world, dungeon);
+		this.addWallDecoration(world, dungeon);
+		this.addSpawners(world, dungeon, mobFactory);
 	}
 
 	@Override

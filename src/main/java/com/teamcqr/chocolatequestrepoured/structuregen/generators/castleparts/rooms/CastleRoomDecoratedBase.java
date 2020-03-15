@@ -20,6 +20,7 @@ import java.util.HashMap;
 
 public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected static final int MAX_DECO_ATTEMPTS = 3;
+    protected static final int LIGHT_LEVEL = 3;
     protected DecorationSelector decoSelector;
     protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
@@ -121,17 +122,24 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         }
     }
 
-    protected void addPaintings(World world) {
+    protected void addWallDecoration(World world, CastleDungeon dungeon) {
+        int torchPercent = LIGHT_LEVEL * 3;
+
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
             if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
-                ArrayList<BlockPos> edge = this.getPaintingEdge(side);
+                ArrayList<BlockPos> edge = this.getWallDecorationEdge(side);
                 for (BlockPos pos : edge) {
                     if (this.usedDecoPositions.contains(pos)) {
                         // This position is already decorated, so keep going
                         continue;
                     }
-
-                    if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
+                    if ((RoomDecorTypes.TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
+                            (DungeonGenUtils.PercentageRandom(torchPercent, this.random))) {
+                        RoomDecorTypes.TORCH.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                    } else if ((RoomDecorTypes.UNLIT_TORCH.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
+                            (DungeonGenUtils.PercentageRandom(5, this.random))) {
+                        RoomDecorTypes.UNLIT_TORCH.build(world, this, dungeon, pos, side, this.usedDecoPositions);
+                    } else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
                             (DungeonGenUtils.PercentageRandom(15, this.random))) {
                         RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.possibleDecoPositions, this.usedDecoPositions);
                     }
