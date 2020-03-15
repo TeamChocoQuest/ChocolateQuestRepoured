@@ -235,7 +235,7 @@ public class CQStructurePart extends Template {
 		try {
 			if (addEntitiesToWorldMethod == null) {
 				try {
-					addEntitiesToWorldMethod = Template.class.getDeclaredMethod("abc", World.class, BlockPos.class, Mirror.class, Rotation.class, StructureBoundingBox.class);
+					addEntitiesToWorldMethod = Template.class.getDeclaredMethod("func_186255_a", World.class, BlockPos.class, Mirror.class, Rotation.class, StructureBoundingBox.class);
 				} catch (NoSuchMethodException e) {
 					addEntitiesToWorldMethod = Template.class.getDeclaredMethod("addEntitiesToWorld", World.class, BlockPos.class, Mirror.class, Rotation.class, StructureBoundingBox.class);
 				}
