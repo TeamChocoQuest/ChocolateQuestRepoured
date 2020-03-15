@@ -40,7 +40,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
 	public EntityCQRNecromancer(World worldIn) {
-		super(worldIn, 1);
+		this(worldIn, 1);
 	}
 
 	public EntityCQRNecromancer(World worldIn, int size) {
