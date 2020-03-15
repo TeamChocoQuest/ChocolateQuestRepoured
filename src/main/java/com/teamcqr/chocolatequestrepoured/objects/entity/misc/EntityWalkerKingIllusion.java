@@ -94,11 +94,11 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 		if(damageCounter >= 3 * (1 + world.getDifficulty().ordinal())) {
 			if(world.isRemote) {
 				for(int i = 0; i < 15; i++) {
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.25, 0.0);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.25, 0.1, 0.25);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.25, 0.1, -0.25);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.25, 0.1, 0.25);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.25, 0.1, -0.25);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.025, 0.0);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, 0.025);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, -0.025);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, 0.025);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, -0.025);
 				}
 				world.playSound(posX, posY, posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
 			}
