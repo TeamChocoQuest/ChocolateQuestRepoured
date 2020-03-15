@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRWalker;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
@@ -27,6 +29,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	private EntityCQRWalkerKing parent;
 	private int ttl = 1200;
 	private int searchTicksForParent = 20;
+	private int damageCounter = 0;
 	private UUID parentUUID = null;
 	
 	public EntityWalkerKingIllusion(World worldIn) {
@@ -88,16 +91,20 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		//return super.attackEntityFrom(source, amount, sentFromPart);
-		
-		if(world.isRemote) {
-			for(int i = 0; i < 15; i++) {
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.005, 0.1, 0.005);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.005, 0.1, -0.005);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.005, 0.1, 0.005);
-				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.005, 0.1, -0.005);
+		if(damageCounter >= 3 * (1 + world.getDifficulty().ordinal())) {
+			if(world.isRemote) {
+				for(int i = 0; i < 15; i++) {
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.25, 0.0);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.25, 0.1, 0.25);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.25, 0.1, -0.25);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.25, 0.1, 0.25);
+					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.25, 0.1, -0.25);
+				}
+				world.playSound(posX, posY, posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
 			}
+			setDead();
 		}
-		setDead();
+		damageCounter++;
 		return true;
 	}
 	
