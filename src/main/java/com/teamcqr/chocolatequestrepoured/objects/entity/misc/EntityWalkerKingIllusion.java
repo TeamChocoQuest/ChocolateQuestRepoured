@@ -93,26 +93,31 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		//return super.attackEntityFrom(source, amount, sentFromPart);
 		if(damageCounter >= 3 * (1 + world.getDifficulty().ordinal())) {
-			if(world.isRemote) {
-				for(int i = 0; i < 15; i++) {
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.025, 0.0);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, 0.025);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, -0.025);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, 0.025);
-					world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, -0.025);
-				}
-				world.playSound(posX, posY, posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
-			}
+			playDeathEffect();
 			setDead();
 		}
 		damageCounter++;
 		return true;
 	}
 	
+	private void playDeathEffect() {
+		if(world.isRemote) {
+			for(int i = 0; i < 15; i++) {
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.025, 0.0);
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, 0.025);
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, -0.025);
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, 0.025);
+				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, -0.025, 0.01, -0.025);
+			}
+			world.playSound(posX, posY, posZ, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.AMBIENT, 2, 0.75F, true);
+		}
+	}
+
 	@Override
 	public void onEntityUpdate() {
 		if(!world.isRemote) {
 			if(ttl < 0) {
+				playDeathEffect();
 				setDead();
 				return;
 			}
@@ -130,18 +135,24 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 					});;
 					searchTicksForParent--;
 				} else {
+					playDeathEffect();
 					setDead();
 					return;
 				}
 			}
 			if(parent == null || parent.isDead) {
+				playDeathEffect();
 				setDead();
 				return;
 			}
 			super.onEntityUpdate();
 			this.setHealth(parent.getHealth());
 			
-			ttl--;
+			if(parent.getAttackTarget() != null || getAttackTarget() != null) {
+				ttl--;
+			} else {
+				ttl -= 10;
+			}
 		} else {
 			super.onEntityUpdate();
 		}
