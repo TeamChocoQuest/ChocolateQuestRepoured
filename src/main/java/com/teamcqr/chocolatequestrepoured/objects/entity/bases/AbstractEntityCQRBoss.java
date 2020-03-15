@@ -146,6 +146,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            	world.createExplosion(this, posX, posY, posZ, 8.0F, true);
 	            }
 	        }
+		} else {
+			this.setDead();
 		}
 	}
 	
