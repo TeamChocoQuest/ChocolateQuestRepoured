@@ -86,9 +86,9 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 		this.tasks.addTask(6, new EntityAIArmorSpell(this));
-		this.tasks.addTask(7, new EntityAIFangAttack(this));
-		this.tasks.addTask(8, new EntityAIShootPoisonProjectiles(this));
-		this.tasks.addTask(9, new EntityAISummonMinionSpell(this));
+		this.tasks.addTask(8, new EntityAIFangAttack(this));
+		this.tasks.addTask(9, new EntityAIShootPoisonProjectiles(this));
+		this.tasks.addTask(7, new EntityAISummonMinionSpell(this));
 		this.tasks.addTask(10, new EntityAIAttackRanged(this));
 		this.tasks.addTask(11, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
