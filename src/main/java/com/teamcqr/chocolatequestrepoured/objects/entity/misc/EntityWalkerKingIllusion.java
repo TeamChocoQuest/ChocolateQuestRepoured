@@ -32,20 +32,20 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	private int searchTicksForParent = 20;
 	private int damageCounter = 0;
 	private UUID parentUUID = null;
-	
+
 	public EntityWalkerKingIllusion(World worldIn) {
 		super(worldIn);
 	}
-	
+
 	public EntityWalkerKingIllusion(int ttl, EntityCQRWalkerKing parent, World world) {
 		this(world);
 		this.parent = parent;
 		this.ttl = ttl;
 		this.parentUUID = parent.getPersistentID();
-		
+
 		cloneParentEquipment(parent);
 	}
-	
+
 	private void cloneParentEquipment(AbstractEntityCQR parent) {
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, parent.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.POTION));
 		this.setItemStackToSlot(EntityEquipmentSlot.CHEST, parent.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
@@ -55,21 +55,20 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, parent.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(parent.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem(), 1));
 	}
-	
+
 	@Override
 	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
 	}
-	
+
 	@Override
 	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
 	}
-	
 
 	@Override
 	protected int getExperiencePoints(EntityPlayer player) {
 		return 0;
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return new ResourceLocation("enpty");
@@ -78,31 +77,36 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		if(parent != null) {
+		if (parent != null) {
 			this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(parent.getMaxHealth());
 			this.setHealth(parent.getHealth());
 		}
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return attackEntityFrom(source, amount, false);
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		//return super.attackEntityFrom(source, amount, sentFromPart);
-		if(damageCounter >= 3 * (1 + world.getDifficulty().ordinal())) {
-			playDeathEffect();
+		// return super.attackEntityFrom(source, amount, sentFromPart);
+		if (!world.isRemote && damageCounter >= 3 * (1 + world.getDifficulty().ordinal())) {
 			setDead();
 		}
 		damageCounter++;
 		return true;
 	}
-	
+
+	@Override
+	public void setDead() {
+		playDeathEffect();
+		super.setDead();
+	}
+
 	private void playDeathEffect() {
-		if(world.isRemote) {
-			for(int i = 0; i < 15; i++) {
+		if (world.isRemote) {
+			for (int i = 0; i < 15; i++) {
 				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.0, 0.025, 0.0);
 				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, 0.025);
 				world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX, posY, posZ, 0.025, 0.01, -0.025);
@@ -115,66 +119,62 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	@Override
 	public void onEntityUpdate() {
-		if(!world.isRemote) {
-			if(ttl < 0) {
-				playDeathEffect();
-				setDead();
-				return;
-			}
-			//Search parent
-			if(parent == null && parentUUID != null) {
-				if(searchTicksForParent > 0) {
-					world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(-10,-10,-10), getPosition().add(10,10,10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
+		if (ttl < 0) {
+			setDead();
+			return;
+		}
+		// Search parent
+		if (parent == null && parentUUID != null) {
+			if (searchTicksForParent > 0) {
+				if (!world.isRemote) {
+					world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(-10, -10, -10), getPosition().add(10, 10, 10)), Predicates.instanceOf(EntityCQRWalkerKing.class)).forEach(new Consumer<Entity>() {
 
 						@Override
 						public void accept(Entity t) {
-							if(t.getPersistentID().equals(parentUUID)) {
+							if (t.getPersistentID().equals(parentUUID)) {
 								parent = (EntityCQRWalkerKing) t;
 							}
 						}
-					});;
+					});
+					;
 					searchTicksForParent--;
-				} else {
-					playDeathEffect();
-					setDead();
-					return;
 				}
-			}
-			if(parent == null || parent.isDead) {
-				playDeathEffect();
+			} else {
 				setDead();
 				return;
 			}
-			super.onEntityUpdate();
-			this.setHealth(parent.getHealth());
-			
-			if(parent.getAttackTarget() != null || getAttackTarget() != null) {
-				ttl--;
-			} else {
-				ttl -= 10;
-			}
+		}
+		if (parent == null || parent.isDead) {
+			setDead();
+			return;
+		}
+		super.onEntityUpdate();
+		this.setHealth(parent.getHealth());
+
+		if (parent.getAttackTarget() != null || getAttackTarget() != null) {
+			ttl--;
 		} else {
-			super.onEntityUpdate();
+			ttl -= 10;
 		}
 	}
-	
+
 	@Override
 	public ResourceLocation getResourceLocationOfCape() {
 		return Capes.CAPE_WALKER;
 	}
-	
+
 	@Override
 	public boolean hasCape() {
 		return true;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("ttl", ttl);
 		compound.setTag("illusionParent", NBTUtil.createUUIDTag(parentUUID));
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
