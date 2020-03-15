@@ -42,7 +42,7 @@ public enum EDungeonMobType {
 			// new EDungeonMobType[] {GOBLIN, ORC, OGRE},
 			new EDungeonMobType[] { SPECTER },
 			new EDungeonMobType[] { MINOTAUR },
-			new EDungeonMobType[] { ENDERMAN }, };
+			/*new EDungeonMobType[] { ENDERMAN }, */};
 
 	private ResourceLocation resLoc;
 	private ResourceLocation bossResLoc;
