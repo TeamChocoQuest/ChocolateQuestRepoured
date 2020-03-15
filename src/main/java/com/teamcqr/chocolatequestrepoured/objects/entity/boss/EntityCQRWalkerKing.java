@@ -6,11 +6,23 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.ai.EntityAIOpenDoor;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
@@ -48,6 +60,28 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.bossInfoServer.setDarkenSky(true);
 		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 		this.bossInfoServer.setPlayEndBossMusic(true);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
+		this.tasks.addTask(5, new EntityAIHealingPotion(this));
+		//Spells
+		this.tasks.addTask(6, new EntityAIWalkerIllusions(this));
+		
+		//normal combat
+		this.tasks.addTask(8, new EntityAIAttackRanged(this));
+		this.tasks.addTask(9, new EntityAIBackstab(this));
+		this.tasks.addTask(10, new EntityAIAttack(this));
+		
+		//Low priority stuff
+		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(21, new EntityAIIdleSit(this));
+
+		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
 	
