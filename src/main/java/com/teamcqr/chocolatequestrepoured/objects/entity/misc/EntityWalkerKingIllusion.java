@@ -102,9 +102,8 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	public void setDead() {
 		if(world.isRemote) {
 			playDeathEffect();
-		} else {
-			super.setDead();
-		}
+		} 
+		super.setDead();
 	}
 
 	private void playDeathEffect() {
