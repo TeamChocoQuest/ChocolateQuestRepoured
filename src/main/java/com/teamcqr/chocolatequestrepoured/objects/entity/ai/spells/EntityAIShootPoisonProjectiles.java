@@ -55,7 +55,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAIUseSpell {
 
 	@Override
 	protected int getCastingInterval() {
-		return 60;
+		return 120;
 	}
 
 	@Override
