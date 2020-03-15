@@ -160,6 +160,8 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 			} else {
 				ttl -= 10;
 			}
+		} else {
+			super.onEntityUpdate();
 		}
 	}
 
