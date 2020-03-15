@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotio
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIArmorSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -88,8 +89,9 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
 		this.tasks.addTask(6, new EntityAIArmorSpell(this));
-		this.tasks.addTask(9, new EntityAIShootPoisonProjectiles(this));
 		this.tasks.addTask(7, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 4, new Vec3d(0,0,0)));
+		this.tasks.addTask(8, new EntityAIFangAttack(this));
+		this.tasks.addTask(9, new EntityAIShootPoisonProjectiles(this));
 		this.tasks.addTask(10, new EntityAIAttackRanged(this));
 		this.tasks.addTask(11, new EntityAIAttack(this));
 		this.tasks.addTask(20, new EntityAIMoveToHome(this));
