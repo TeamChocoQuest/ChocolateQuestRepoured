@@ -33,7 +33,7 @@ public class ModelArmorTurtle extends ModelCustomArmorBase {
 
 		this.bipedHead = new ModelRenderer(this, 30, 46);
 		this.bipedHead.setRotationPoint(0F, 0F, 0F);
-		this.bipedHead.addBox(-4.5F, -8.0F, -4.0F, 9, 9, 9, scale - 0.5F);
+		this.bipedHead.addBox(-4.5F, -8.0F, -4.0F, 9, 8, 8, 0.75F);
 
 		this.bipedBody.addChild(this.shell2);
 		this.bipedBody.addChild(this.shell1);
