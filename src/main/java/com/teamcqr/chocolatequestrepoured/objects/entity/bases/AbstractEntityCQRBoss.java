@@ -127,6 +127,9 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	protected void onDeathUpdate() {
 		if(usesEnderDragonDeath()) {
+			if(isSitting()) {
+				setSitting(false);
+			}
 			//super.onDeathUpdate();
 			++this.deathTicks;
 			if (this.deathTicks >= 180 && this.deathTicks <= MAX_DEATH_TICKS)
