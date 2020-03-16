@@ -58,7 +58,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 					blockToBuild = this.getBlockToBuild(x, y, z);
 					pos = nwCorner.add(x, y, z);
 
-					genArray.add(pos, blockToBuild);
+					genArray.add(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 				}
 			}
 		}

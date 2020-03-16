@@ -139,7 +139,7 @@ public abstract class CastleRoomBase {
 	protected void generateDefaultCeiling(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.add(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlock().getDefaultState());
+				genArray.add(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlock().getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
 			}
 		}
 	}
@@ -149,7 +149,7 @@ public abstract class CastleRoomBase {
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.add(pos.add(x, 0, z), this.getFloorBlock(dungeon));
+				genArray.add(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN);
 			}
 		}
 	}
@@ -159,7 +159,7 @@ public abstract class CastleRoomBase {
         emptySpaces.removeAll(this.usedDecoPositions);
 
         for (BlockPos emptyPos : emptySpaces) {
-            genArray.add(emptyPos, Blocks.AIR.getDefaultState());
+            genArray.add(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
         }
     }
 
@@ -294,7 +294,7 @@ public abstract class CastleRoomBase {
 					for (int x = doorStart; x <= doorEnd; x++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState());
+							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
 							this.usedDecoPositions.add(toAdd);
 						}
 					}
@@ -312,7 +312,7 @@ public abstract class CastleRoomBase {
 					for (int z = doorStart; z <= doorEnd; z++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState());
+							genArray.addOverwrite(toAdd, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
 							this.usedDecoPositions.add(toAdd);
 						}
 					}

@@ -14,7 +14,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -69,7 +68,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                             ++attempts;
                         }
                         if (attempts >= MAX_DECO_ATTEMPTS) {
-                            genArray.add(pos, Blocks.AIR.getDefaultState());
+                            genArray.add(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
                             this.usedDecoPositions.add(pos);
                         }
                     }
@@ -100,7 +99,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     ++attempts;
                 }
                 if (attempts >= MAX_DECO_ATTEMPTS) {
-                    genArray.add(pos, Blocks.AIR.getDefaultState());
+                    genArray.add(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
                     this.usedDecoPositions.add(pos);
                 }
             }

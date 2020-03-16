@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.init.Blocks;
 
 public class RoomDecorCauldron extends RoomDecorBlocksBase {
@@ -9,6 +10,6 @@ public class RoomDecorCauldron extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CAULDRON.getDefaultState()));
+		this.schematic.add(new DecoBlockBase(0, 0, 0, Blocks.CAULDRON.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN));
 	}
 }

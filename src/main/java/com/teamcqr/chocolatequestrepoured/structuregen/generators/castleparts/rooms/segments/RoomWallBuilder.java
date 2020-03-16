@@ -14,7 +14,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class RoomWallBuilder {
 	protected BlockPos wallStart;
@@ -60,7 +59,7 @@ public class RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				genArray.addOverwrite(pos, blockToBuild);
+				genArray.addOverwrite(pos, blockToBuild, BlockStateGenArray.GenerationPhase.POST);
 			}
 		}
 	}

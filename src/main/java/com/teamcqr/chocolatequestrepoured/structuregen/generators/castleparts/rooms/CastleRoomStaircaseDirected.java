@@ -80,7 +80,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 
 	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
-		genArray.add(this.origin.add(x, 0, z), blockToBuild);
+		genArray.add(this.origin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 	}
 
 	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
@@ -95,7 +95,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 		}
 	}
 
@@ -111,7 +111,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 		}
 	}
 
@@ -125,7 +125,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 		}
 	}
 

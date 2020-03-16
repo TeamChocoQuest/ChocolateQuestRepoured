@@ -47,10 +47,9 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			IBlockState stateToPlace = placement.getState(side);
-			genArray.add(pos, stateToPlace);
+			genArray.add(pos, placement.getState(side), placement.getGenPhase());
 
-			if (stateToPlace.getBlock() != Blocks.AIR) {
+			if (placement.getState(side).getBlock() != Blocks.AIR) {
 				decoMap.add(pos);
 			}
 		}
@@ -60,7 +59,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 		ArrayList<DecoBlockBase> result = new ArrayList<>();
 
 		for (DecoBlockBase p : this.schematic) {
-			result.add(new DecoBlockBase(DungeonGenUtils.rotateVec3i(p.offset, side), p.getState(side)));
+			result.add(new DecoBlockBase(DungeonGenUtils.rotateVec3i(p.offset, side), p.getState(side), p.getGenPhase()));
 		}
 
 		return result;
