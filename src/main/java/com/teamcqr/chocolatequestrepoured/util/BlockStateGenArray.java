@@ -1,85 +1,63 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BlockStateGenArray {
-    private IBlockState[][][] blockStateArray;
-    private int sidePadding;
-
-    public BlockStateGenArray(int xLength, int yHeight, int zLength, int sidePadding) {
-        this.sidePadding = sidePadding;
-        this.blockStateArray = new IBlockState[xLength + (sidePadding * 2)][yHeight][zLength + (sidePadding * 2)];
-        for (int x = 0; x < xLength; x++) {
-            for (int y = 0; y < yHeight; y++) {
-                for (int z = 0; z < zLength; z++) {
-                    this.blockStateArray[x][y][z] = null;
-                }
-            }
-        }
+    public enum GenerationPhase {
+        MAIN,
+        POST
     }
 
-    public boolean add(int xIndex, int yIndex, int zIndex, IBlockState blockState) {
-        return addInternal(xIndex, yIndex, zIndex, blockState, false);
+    private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> mainMap = new HashMap<>();
+    private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> postMap = new HashMap<>();
+
+    public BlockStateGenArray() {
     }
 
-    public boolean add(BlockPos pos, IBlockState blockState) {
-        return addInternal(pos.getX(), pos.getY(), pos.getZ(), blockState, false);
+    public Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> getMainMap() {
+        return mainMap;
     }
 
-    public boolean addOverwrite(int xIndex, int yIndex, int zIndex, IBlockState blockState) {
-        return addInternal(xIndex, yIndex, zIndex, blockState, true);
+    public Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> getPostMap()
+    {
+        return postMap;
     }
 
-    public boolean addOverwrite(BlockPos pos, IBlockState blockState) {
-        return addInternal(pos.getX(), pos.getY(), pos.getZ(), blockState, true);
+    public boolean add(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
+        return addInternal(phase, pos, blockState, false);
     }
 
-    private boolean addInternal(int xIndex, int yIndex, int zIndex, IBlockState blockState, boolean overwrite) {
-        boolean wroteToArray = false;
-        xIndex += sidePadding;
-        yIndex += sidePadding;
-        zIndex += sidePadding;
+    public boolean addOverwrite(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
+        return addInternal(phase, pos, blockState, true);
+    }
 
-        try
-        {
-            if ((xIndex < blockStateArray.length) && (yIndex < blockStateArray[0].length) && (zIndex < blockStateArray[0][0].length))
-            {
-                if ((overwrite) || (blockStateArray[xIndex][yIndex][zIndex] == null))
-                {
-                    blockStateArray[xIndex][yIndex][zIndex] = blockState;
-                    wroteToArray = true;
-                }
-            } else
-            {
-                System.out.printf("Tried to add a blockstate to gen array @ (%d, %d, %d) but was out of [%d][%d][%d] bounds\n",
-                        xIndex, yIndex, zIndex, blockStateArray.length, blockStateArray[0].length, blockStateArray[0][0].length);
-            }
-        }
-        catch (IndexOutOfBoundsException ex) {
-            System.out.printf("Tried to add a blockstate to gen array @ (%d, %d, %d) but was out of [%d][%d][%d] bounds\n",
-                    xIndex, yIndex, zIndex, blockStateArray.length, blockStateArray[0].length, blockStateArray[0][0].length);
+    private boolean addInternal(GenerationPhase phase, BlockPos pos, IBlockState blockState, boolean overwrite) {
+        boolean added = false;
+        Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> mapToAdd = getMapFromPhase(phase);
+
+        if (overwrite || !mapToAdd.containsKey(pos)) {
+            ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, new NBTTagCompound());
+            mapToAdd.put(pos, extState);
+            added = true;
         }
 
-        return wroteToArray;
+        return added;
     }
 
-    public IBlockState[][][] finalizeArray() {
-        for (int x = 0; x < blockStateArray.length; x++) {
-            for (int y = 0; y < blockStateArray[0].length; y++) {
-                for (int z = 0; z < blockStateArray[0][0].length; z++) {
-                    if (this.blockStateArray[x][y][z] == null) {
-                        this.blockStateArray[x][y][z] = Blocks.AIR.getDefaultState();
-                    }
-                }
-            }
+    private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> getMapFromPhase(GenerationPhase phase) {
+        switch (phase) {
+            case POST:
+                return postMap;
+            case MAIN:
+            default:
+                return mainMap;
+
         }
-
-        return blockStateArray;
-    }
-
-    public BlockPos getAdjustedStartPosition(BlockPos start) {
-        return start.add(sidePadding, 0, sidePadding);
     }
 }

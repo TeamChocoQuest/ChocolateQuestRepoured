@@ -48,7 +48,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 						blockToBuild = dungeon.getWallBlock().getDefaultState();
 					}
 
-					genArray.add(pos, blockToBuild);
+					genArray.add(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 				}
 			}
 		}

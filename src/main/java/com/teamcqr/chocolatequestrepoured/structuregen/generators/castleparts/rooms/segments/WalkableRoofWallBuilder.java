@@ -7,7 +7,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class WalkableRoofWallBuilder extends RoomWallBuilder {
 	public WalkableRoofWallBuilder(BlockPos roomStart, int height, int length, WallOptions options, EnumFacing side) {
@@ -31,7 +30,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				genArray.add(pos, blockToBuild);
+				genArray.add(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 			}
 		}
 	}

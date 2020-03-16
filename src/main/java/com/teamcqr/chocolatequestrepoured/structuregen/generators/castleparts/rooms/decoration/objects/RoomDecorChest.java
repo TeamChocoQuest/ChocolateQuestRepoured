@@ -2,17 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.HashSet;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -23,7 +19,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 
 	@Override
 	protected void makeSchematic() {
-		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.CHEST.getDefaultState(), BlockChest.FACING, EnumFacing.SOUTH));
+		this.schematic.add(new DecoBlockRotating(0, 0, 0, Blocks.CHEST.getDefaultState(), BlockChest.FACING, EnumFacing.SOUTH, BlockStateGenArray.GenerationPhase.MAIN));
 	}
 
 	@Override

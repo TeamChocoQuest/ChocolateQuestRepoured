@@ -66,6 +66,7 @@ public class CastleRoomSelector {
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
+	private BlockPos buildPosition;
 	private CastleDungeon dungeon;
 	private int floorHeight;
 	private int roomSize;
@@ -78,7 +79,8 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
 
-	public CastleRoomSelector(CastleDungeon dungeon) {
+	public CastleRoomSelector(BlockPos buildPosition, CastleDungeon dungeon) {
+		this.buildPosition = buildPosition;
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
@@ -990,7 +992,7 @@ public class CastleRoomSelector {
 	}
 
 	private BlockPos getRoomStart(int floor, int x, int z) {
-		return new BlockPos(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
+		return buildPosition.add(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
 	}
 
 	private BlockPos getRoomStart(RoomGridCell selection) {
