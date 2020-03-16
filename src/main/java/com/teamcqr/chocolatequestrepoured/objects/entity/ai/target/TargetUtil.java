@@ -40,8 +40,20 @@ public class TargetUtil {
 			public boolean apply(Entity input) {
 				if(input instanceof AbstractEntityCQR) {
 					return faction.isAlly(((AbstractEntityCQR)input).getFaction());
+				} else {
+					return faction.isAlly(input);
 				}
-				return false;
+			}
+		};
+		return predicate;
+	}
+	
+	public static final Predicate<? super Entity> PREDICATE_NON_ALLIES(CQRFaction faction) {
+		Predicate<Entity> predicate = new Predicate<Entity>() {
+
+			@Override
+			public boolean apply(Entity input) {
+				return (!faction.isAlly(input));
 			}
 		};
 		return predicate;
