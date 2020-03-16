@@ -69,7 +69,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                             ++attempts;
                         }
                         if (attempts >= MAX_DECO_ATTEMPTS) {
-                            world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                            genArray.add(pos, Blocks.AIR.getDefaultState());
                             this.usedDecoPositions.add(pos);
                         }
                     }
@@ -100,7 +100,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     ++attempts;
                 }
                 if (attempts >= MAX_DECO_ATTEMPTS) {
-                    world.setBlockState(pos, Blocks.AIR.getDefaultState());
+                    genArray.add(pos, Blocks.AIR.getDefaultState());
                     this.usedDecoPositions.add(pos);
                 }
             }

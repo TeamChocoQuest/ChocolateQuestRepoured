@@ -6,9 +6,11 @@ import net.minecraft.util.math.BlockPos;
 
 public class BlockStateGenArray {
     private IBlockState[][][] blockStateArray;
+    private int sidePadding;
 
-    public BlockStateGenArray(int xLength, int yHeight, int zLength) {
-        this.blockStateArray = new IBlockState[xLength][yHeight][zLength];
+    public BlockStateGenArray(int xLength, int yHeight, int zLength, int sidePadding) {
+        this.sidePadding = sidePadding;
+        this.blockStateArray = new IBlockState[xLength + (sidePadding * 2)][yHeight][zLength + (sidePadding * 2)];
         for (int x = 0; x < xLength; x++) {
             for (int y = 0; y < yHeight; y++) {
                 for (int z = 0; z < zLength; z++) {
@@ -36,12 +38,28 @@ public class BlockStateGenArray {
 
     private boolean addInternal(int xIndex, int yIndex, int zIndex, IBlockState blockState, boolean overwrite) {
         boolean wroteToArray = false;
+        xIndex += sidePadding;
+        yIndex += sidePadding;
+        zIndex += sidePadding;
 
-        if ((xIndex < blockStateArray.length) && (yIndex < blockStateArray[0].length) && (zIndex < blockStateArray[0][0].length)) {
-            if ((overwrite) || (blockStateArray[xIndex][yIndex][zIndex] == null)) {
-                blockStateArray[xIndex][yIndex][zIndex] = blockState;
-                wroteToArray = true;
+        try
+        {
+            if ((xIndex < blockStateArray.length) && (yIndex < blockStateArray[0].length) && (zIndex < blockStateArray[0][0].length))
+            {
+                if ((overwrite) || (blockStateArray[xIndex][yIndex][zIndex] == null))
+                {
+                    blockStateArray[xIndex][yIndex][zIndex] = blockState;
+                    wroteToArray = true;
+                }
+            } else
+            {
+                System.out.printf("Tried to add a blockstate to gen array @ (%d, %d, %d) but was out of [%d][%d][%d] bounds\n",
+                        xIndex, yIndex, zIndex, blockStateArray.length, blockStateArray[0].length, blockStateArray[0][0].length);
             }
+        }
+        catch (IndexOutOfBoundsException ex) {
+            System.out.printf("Tried to add a blockstate to gen array @ (%d, %d, %d) but was out of [%d][%d][%d] bounds\n",
+                    xIndex, yIndex, zIndex, blockStateArray.length, blockStateArray[0].length, blockStateArray[0][0].length);
         }
 
         return wroteToArray;
@@ -59,5 +77,9 @@ public class BlockStateGenArray {
         }
 
         return blockStateArray;
+    }
+
+    public BlockPos getAdjustedStartPosition(BlockPos start) {
+        return start.add(sidePadding, 0, sidePadding);
     }
 }

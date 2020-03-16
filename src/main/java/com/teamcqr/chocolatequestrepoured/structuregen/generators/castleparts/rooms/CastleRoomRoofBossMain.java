@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.ArrayList;
 
+import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
@@ -61,9 +62,13 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				}
 			}
 		}
+	}
 
+	@Override
+	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory)
+	{
 		// Have to add torches last because they won't place unless the wall next to them is already built
-		this.placeTorches(world, nwCorner);
+		this.placeTorches(world, this.origin);
 	}
 
 	@Override

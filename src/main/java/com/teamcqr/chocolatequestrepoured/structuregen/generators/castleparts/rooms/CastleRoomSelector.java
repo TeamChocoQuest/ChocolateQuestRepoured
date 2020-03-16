@@ -66,7 +66,6 @@ public class CastleRoomSelector {
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
-	private BlockStateGenArray genArray;
 	private CastleDungeon dungeon;
 	private int floorHeight;
 	private int roomSize;
@@ -79,8 +78,7 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
 
-	public CastleRoomSelector(BlockStateGenArray genArray, CastleDungeon dungeon) {
-		this.genArray = genArray;
+	public CastleRoomSelector(CastleDungeon dungeon) {
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
 		this.roomSize = dungeon.getRoomSize();
@@ -117,14 +115,14 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
+	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
 		// Roofs come first so rooms overwrite roof blocks
 		this.generateRoofs(genArray, dungeon);
 
-		this.generateAndDecorateRooms(world, startPos, dungeon, genArray, bossUuids);
+		this.generateRooms(world, startPos, dungeon, genArray, bossUuids);
 	}
 
-	private void generateAndDecorateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
+	private void generateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Start with the entire list of populated cells
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(RoomGridCell::isPopulated);
 		ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
@@ -139,7 +137,10 @@ public class CastleRoomSelector {
 		for (RoomGridCell cell : toGenerate) {
 			cell.getRoom().generate(world, genArray, dungeon);
 		}
+	}
 
+	public void addDecoration(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids)
+	{
 		EDungeonMobType mobType = selectCastleMobType(world, startPos, dungeon);
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
 		ResourceLocation bossResLoc = mobType.getBossResourceLocation();

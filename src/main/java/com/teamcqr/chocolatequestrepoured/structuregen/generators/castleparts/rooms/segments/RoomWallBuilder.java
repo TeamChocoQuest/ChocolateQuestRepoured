@@ -60,7 +60,7 @@ public class RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				genArray.add(pos, blockToBuild);
+				genArray.addOverwrite(pos, blockToBuild);
 			}
 		}
 	}

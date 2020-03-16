@@ -45,7 +45,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
-				this.buildFloorBlock(x, z, world, dungeon);
+				this.buildFloorBlock(x, z, genArray, dungeon);
 
 				if (z < 2) {
 					this.buildPlatform(x, z, genArray, dungeon);
@@ -78,9 +78,9 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		return this.doorSide;
 	}
 
-	private void buildFloorBlock(int x, int z, World world, CastleDungeon dungeon) {
+	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
-		world.setBlockState(this.origin.add(x, 0, z), blockToBuild);
+		genArray.add(this.origin.add(x, 0, z), blockToBuild);
 	}
 
 	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
@@ -99,7 +99,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		}
 	}
 
-	private void buildLowerStair(int x, int z, BlockStateGenArray world, CastleDungeon dungeon) {
+	private void buildLowerStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		int stairHeight = this.centerStairLength - (z - PLATFORM_LENGTH + 1);
 		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 		IBlockState blockToBuild;
@@ -111,7 +111,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
-			world.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
+			genArray.add(this.getRotatedPlacement(x, y, z, this.doorSide), blockToBuild);
 		}
 	}
 
