@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -14,7 +15,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 	}
 
 	@Override
-	public void generate(World world, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
@@ -30,7 +31,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				world.setBlockState(pos, blockToBuild);
+				genArray.add(pos, blockToBuild);
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
@@ -26,9 +27,10 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 	}
 
 	@Override
-	public void build(World world, CastleRoomBase room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
-		super.build(world, room, dungeon, start, side, decoMap);
+	public void build(World world, BlockStateGenArray genArray, CastleRoomBase room, CastleDungeon dungeon, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+		super.build(world, genArray, room, dungeon, start, side, decoMap);
 
+		/*
 		int[] chestIDs = room.getChestIDs();
 		if (chestIDs != null) {
 			TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
@@ -48,5 +50,6 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 		} else {
 			System.out.format("Placed a chest but could not find a loot table for Room Type {%s}", room.getRoomType().toString());
 		}
+		*/
 	}
 }

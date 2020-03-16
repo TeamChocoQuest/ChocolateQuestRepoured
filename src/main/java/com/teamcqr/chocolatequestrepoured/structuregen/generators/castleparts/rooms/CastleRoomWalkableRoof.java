@@ -20,7 +20,7 @@ public class CastleRoomWalkableRoof extends CastleRoomBase {
 	@Override
 	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (BlockPos pos : this.getDecorationArea()) {
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
+			genArray.add(pos, Blocks.AIR.getDefaultState());
 		}
 	}
 
