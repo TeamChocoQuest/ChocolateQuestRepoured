@@ -131,7 +131,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, renderManager -> new RenderSummoningCircle(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, renderManager -> new RenderFlyingSkull(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, renderManager -> new RenderBubble(renderManager));
-		//RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
+		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
 
 	}
 
@@ -202,7 +202,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRMage(renderManager, new ModelNecromancer(0F), "entity_cqr_necromancer"));
 		
 		// Walker King
-		//RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
 	}
 
 }
