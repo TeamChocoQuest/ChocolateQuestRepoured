@@ -47,7 +47,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 						}
 					}
 
-					genArray.add(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.getRotatedPlacement(x, y, z, this.stairStartSide), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 				}
 			}
 		}

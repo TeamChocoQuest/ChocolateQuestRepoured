@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
@@ -8,13 +9,21 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorNone;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,8 +77,9 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                             ++attempts;
                         }
                         if (attempts >= MAX_DECO_ATTEMPTS) {
-                            genArray.add(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                            genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
                             this.usedDecoPositions.add(pos);
+                            this.possibleChestLocs.put(pos, side);
                         }
                     }
                 }
@@ -99,7 +109,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     ++attempts;
                 }
                 if (attempts >= MAX_DECO_ATTEMPTS) {
-                    genArray.add(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                    genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
                     this.usedDecoPositions.add(pos);
                 }
             }
@@ -116,8 +126,41 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
             BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));
 
             Entity mobEntity = mobFactory.getGearedEntityByFloor(this.floor, world);
+            NBTTagCompound entityCompound = new NBTTagCompound();
+            mobEntity.writeToNBTOptional(entityCompound);
+            entityCompound.removeTag("UUIDLeast");
+            entityCompound.removeTag("UUIDMost");
+            entityCompound.removeTag("Pos");
+            NBTTagList passengerList = entityCompound.getTagList("Passengers", 10);
+            for (NBTBase passengerTag : passengerList) {
+                ((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
+                ((NBTTagCompound) passengerTag).removeTag("UUIDMost");
+                ((NBTTagCompound) passengerTag).removeTag("Pos");
+            }
 
-            SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
+            Block spawnerBlock = ModBlocks.SPAWNER;
+            IBlockState state = spawnerBlock.getDefaultState();
+            TileEntitySpawner spawner = (TileEntitySpawner)spawnerBlock.createTileEntity(world, state);
+
+            spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
+
+            NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
+            genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST);
+
+            /*
+            NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
+            NBTTagCompound spawn = new NBTTagCompound();
+            spawn.setInteger("Weight", 1);
+            spawn.setTag("Entity", entityCompound);
+            spawnPotentials.appendTag(spawn);
+            spawnerCompound.setTag("SpawnPotentials", spawnPotentials);
+            spawnerCompound.removeTag("SpawnData");
+
+            spawner.readFromNBT(spawnerCompound);
+            spawner.markDirty();
+            */
+
+            //SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
             this.usedDecoPositions.add(pos);
             spawnPositions.remove(pos);
         }

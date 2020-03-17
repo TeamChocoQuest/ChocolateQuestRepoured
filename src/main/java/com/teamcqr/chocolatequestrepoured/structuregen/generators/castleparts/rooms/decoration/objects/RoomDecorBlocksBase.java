@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -47,7 +46,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			genArray.add(pos, placement.getState(side), placement.getGenPhase());
+			genArray.addBlockState(pos, placement.getState(side), placement.getGenPhase());
 
 			if (placement.getState(side).getBlock() != Blocks.AIR) {
 				decoMap.add(pos);

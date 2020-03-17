@@ -106,7 +106,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.add(this.origin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.origin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
 						this.usedDecoPositions.add(this.origin.add(offset));

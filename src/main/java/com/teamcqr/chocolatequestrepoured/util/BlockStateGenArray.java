@@ -29,20 +29,31 @@ public class BlockStateGenArray {
         return postMap;
     }
 
-    public boolean add(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
-        return addInternal(phase, pos, blockState, false);
+    public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
+        ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, new NBTTagCompound());
+        return addInternal(phase, pos, extState, false);
     }
 
-    public boolean addOverwrite(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
-        return addInternal(phase, pos, blockState, true);
+    public boolean forceAddBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
+        ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, new NBTTagCompound());
+        return addInternal(phase, pos, extState, true);
     }
 
-    private boolean addInternal(GenerationPhase phase, BlockPos pos, IBlockState blockState, boolean overwrite) {
+    public boolean addBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase) {
+        ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, nbt);
+        return addInternal(phase, pos, extState, false);
+    }
+
+    public boolean forceAddBlockState(BlockPos pos, IBlockState blockState, NBTTagCompound nbt, GenerationPhase phase) {
+        ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, nbt);
+        return addInternal(phase, pos, extState, true);
+    }
+
+    private boolean addInternal(GenerationPhase phase, BlockPos pos, ExtendedBlockStatePart.ExtendedBlockState extState, boolean overwrite) {
         boolean added = false;
         Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> mapToAdd = getMapFromPhase(phase);
 
         if (overwrite || !mapToAdd.containsKey(pos)) {
-            ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, new NBTTagCompound());
             mapToAdd.put(pos, extState);
             added = true;
         }

@@ -30,7 +30,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 			for (int y = 0; y < this.height; y++) {
 				pos = this.wallStart.offset(iterDirection, i).offset(EnumFacing.UP, y);
 				blockToBuild = this.getBlockToBuild(pos, dungeon);
-				genArray.add(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 			}
 		}
 	}

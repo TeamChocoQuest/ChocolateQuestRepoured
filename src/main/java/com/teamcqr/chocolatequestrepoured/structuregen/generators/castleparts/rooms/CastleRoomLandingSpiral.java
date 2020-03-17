@@ -45,7 +45,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 							blockToBuild = dungeon.getFloorBlock().getDefaultState();
 						}
 					}
-					genArray.add(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 				}
 			}
 		}
