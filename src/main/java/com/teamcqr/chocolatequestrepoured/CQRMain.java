@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.command.CommandExport;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
+import com.teamcqr.chocolatequestrepoured.init.ModDispenseBehaviors;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
@@ -220,6 +221,7 @@ public class CQRMain {
 		DungeonRegistry.getInstance().loadDungeons();
 		CQStructurePart.updateSpecialBlocks();
 		CQStructurePart.updateSpecialEntities();
+		ModDispenseBehaviors.registerDispenseBehaviors();
 	}
 
 	@EventHandler
