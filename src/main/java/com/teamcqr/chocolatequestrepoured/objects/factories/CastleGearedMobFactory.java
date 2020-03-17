@@ -50,7 +50,7 @@ public class CastleGearedMobFactory {
 				mainHand = new ItemStack(ModItems.STAFF_POISON);
 				break;
 			case 1:
-				mainHand = new ItemStack(ModItems.STAFF_THUNDER);
+				mainHand = new ItemStack(ModItems.STAFF_FIRE);
 				break;
 			case 2:
 				mainHand = new ItemStack(ModItems.STAFF_VAMPIRIC);
