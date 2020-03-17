@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -88,13 +89,13 @@ public class ItemBubbleGun extends Item implements IRangedWeapon {
 
 	@Override
 	public SoundEvent getShootSound() {
-		// TODO Auto-generated method stub
-		return null;
+		//TODO: return bubble sound
+		return SoundEvents.ENTITY_BOBBER_THROW;
 	}
 
 	@Override
 	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand) {
-		// TODO Auto-generated method stub
+		shootBubbles(shooter);
 	}
 
 }
