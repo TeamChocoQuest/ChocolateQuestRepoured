@@ -2,9 +2,12 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -43,6 +46,15 @@ public class ItemMobToSpawner extends Item {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
+		if(state.getBlock() == ModBlocks.SPAWNER && !worldIn.isRemote) {
+			TileEntitySpawner spawner = (TileEntitySpawner) worldIn.getTileEntity(pos);
+			spawner.forceTurnBackIntoEntity();
+		}
+		return super.onBlockDestroyed(stack, worldIn, state, pos, entityLiving);
 	}
 
 	private void spawnAdditions(World world, double x, double y, double z) {
