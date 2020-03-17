@@ -19,11 +19,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,43 +124,22 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
             BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));
 
             Entity mobEntity = mobFactory.getGearedEntityByFloor(this.floor, world);
-            NBTTagCompound entityCompound = new NBTTagCompound();
-            mobEntity.writeToNBTOptional(entityCompound);
-            entityCompound.removeTag("UUIDLeast");
-            entityCompound.removeTag("UUIDMost");
-            entityCompound.removeTag("Pos");
-            NBTTagList passengerList = entityCompound.getTagList("Passengers", 10);
-            for (NBTBase passengerTag : passengerList) {
-                ((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
-                ((NBTTagCompound) passengerTag).removeTag("UUIDMost");
-                ((NBTTagCompound) passengerTag).removeTag("Pos");
-            }
+            NBTTagCompound entityCompound = SpawnerFactory.createSpawnerNBTFromEntity(mobEntity);
 
             Block spawnerBlock = ModBlocks.SPAWNER;
             IBlockState state = spawnerBlock.getDefaultState();
             TileEntitySpawner spawner = (TileEntitySpawner)spawnerBlock.createTileEntity(world, state);
 
-            spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
+            if (spawner != null)
+            {
+                spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
 
-            NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
-            genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST);
+                NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
+                genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST);
 
-            /*
-            NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
-            NBTTagCompound spawn = new NBTTagCompound();
-            spawn.setInteger("Weight", 1);
-            spawn.setTag("Entity", entityCompound);
-            spawnPotentials.appendTag(spawn);
-            spawnerCompound.setTag("SpawnPotentials", spawnPotentials);
-            spawnerCompound.removeTag("SpawnData");
-
-            spawner.readFromNBT(spawnerCompound);
-            spawner.markDirty();
-            */
-
-            //SpawnerFactory.placeSpawner(new Entity[] { mobEntity }, false, null, world, pos);
-            this.usedDecoPositions.add(pos);
-            spawnPositions.remove(pos);
+                this.usedDecoPositions.add(pos);
+                spawnPositions.remove(pos);
+            }
         }
     }
 
