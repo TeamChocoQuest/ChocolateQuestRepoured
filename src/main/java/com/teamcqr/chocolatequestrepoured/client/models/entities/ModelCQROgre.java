@@ -73,29 +73,6 @@ public class ModelCQROgre extends ModelCQRBiped {
         this.bipedHead.addChild(this.Jaw1);
     }
 
-    /*@Override
-    public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
-        this.bipedBody.render(f5);
-        this.bipedLeftLeg.render(f5);
-        this.bipedLeftArm.render(f5);
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(this.bipedBodyWear.offsetX, this.bipedBodyWear.offsetY, this.bipedBodyWear.offsetZ);
-        GlStateManager.translate(this.bipedBodyWear.rotationPointX * f5, this.bipedBodyWear.rotationPointY * f5, this.bipedBodyWear.rotationPointZ * f5);
-        GlStateManager.scale(1.0D, 1.0D, 1.2D);
-        GlStateManager.translate(-this.bipedBodyWear.offsetX, -this.bipedBodyWear.offsetY, -this.bipedBodyWear.offsetZ);
-        GlStateManager.translate(-this.bipedBodyWear.rotationPointX * f5, -this.bipedBodyWear.rotationPointY * f5, -this.bipedBodyWear.rotationPointZ * f5);
-        this.bipedBodyWear.render(f5);
-        GlStateManager.popMatrix();
-        this.bipedLeftLegwear.render(f5);
-        this.bipedHeadwear.render(f5);
-        this.bipedRightArmwear.render(f5);
-        this.bipedRightArm.render(f5);
-        this.bipedHead.render(f5);
-        this.bipedLeftArmwear.render(f5);
-        this.bipedRightLegwear.render(f5);
-        this.bipedRightLeg.render(f5);
-    }*/
-
     /**
      * This is a helper function from Tabula to set the rotation of model parts
      */
