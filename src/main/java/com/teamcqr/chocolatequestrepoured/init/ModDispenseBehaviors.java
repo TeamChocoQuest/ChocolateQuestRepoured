@@ -55,8 +55,8 @@ public class ModDispenseBehaviors {
 			bubble.motionZ = v.z;
 			bubble.velocityChanged = true;
 			source.getWorld().spawnEntity(bubble);
-			//TODO: FIgure out how to make the item not disappear
-			return ItemStack.EMPTY;
+			//TODO: FIgure out how to make the stack damaged
+			return stack;
 		}
 	};
 	
