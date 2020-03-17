@@ -314,7 +314,7 @@ public class ModItems {
 					setItemName(new ItemBullet(), "bullet_fire"),
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
-					setItemName(new ItemBubbleGun(), "bubblegun"),
+					setItemName(new ItemBubbleGun(), "bubble_gun"),
 
 					setItemName(new ItemHookshot(), "hookshot"),
 					setItemName(new ItemLongshot(), "longshot"),
