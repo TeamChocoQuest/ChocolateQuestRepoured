@@ -30,10 +30,7 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 				if (!EntitySelectors.IS_ALIVE.apply(input)) {
 					return false;
 				}
-				if (!EntityAICQRNearestAttackTarget.this.isSuitableTarget(input)) {
-					return false;
-				}
-				return true;
+				return EntityAICQRNearestAttackTarget.this.isSuitableTarget(input);
 			}
 		};
 		this.sorter = new TargetUtil.Sorter(entity);

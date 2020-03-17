@@ -66,6 +66,28 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		if (attackTarget != null) {
 			AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - CQRConfig.mobs.alertRadius /2, entity.posY - CQRConfig.mobs.alertRadius /3, entity.posZ - CQRConfig.mobs.alertRadius /2, entity.posX + CQRConfig.mobs.alertRadius /2, entity.posY + CQRConfig.mobs.alertRadius /3, entity.posZ + CQRConfig.mobs.alertRadius /2);
 			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.PREDICATE_ALLIES(entity.getFaction()));
+			
+			if (!possibleEnts.isEmpty()) {
+				Entity e1 = null;
+				int count = -1;
+				double distance = Double.MAX_VALUE;
+				for (Entity e2 : possibleEnts) {
+					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.posX - 4, e2.posY -2, e2.posZ -4, e2.posX +4, e2.posY +2, e2.posZ +4);
+					List<Entity> list = e2.world.getEntitiesInAABBexcluding(e2, aabb1, TargetUtil.PREDICATE_ALLIES(this.entity.getFaction()));
+					double d = this.entity.getDistanceSq(e2); 
+					if (list.size() > count || (list.size() == count && d < distance)) {
+						e1 = e2;
+						count = list.size();
+						distance = d;
+					}
+				}
+				if (count >= 5) {
+					this.entity.getNavigator().tryMoveToEntityLiving(e1, 1.0D);
+					flag = false;
+				}
+			}
+
+			/*
 			if(!possibleEnts.isEmpty() && possibleEnts.size() >= 5) {
 				possibleEnts.sort(new Comparator<Entity>() {
 
@@ -93,6 +115,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 				entity.getNavigator().tryMoveToEntityLiving(possibleEnts.get(0), this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2);
 				flag = false;
 			}
+			*/
 			
 			boolean canMoveBackwards = this.canMoveBackwards();
 			
