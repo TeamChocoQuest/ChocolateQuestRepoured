@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
-import java.util.Comparator;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
@@ -86,37 +85,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 					flag = false;
 				}
 			}
-
-			/*
-			if(!possibleEnts.isEmpty() && possibleEnts.size() >= 5) {
-				possibleEnts.sort(new Comparator<Entity>() {
-
-					@Override
-					public int compare(Entity o1, Entity o2) {
-						AxisAlignedBB aabb1 = new AxisAlignedBB(o1.posX - 4, o1.posY -2, o1.posZ -4, o1.posX +4, o1.posY +2, o1.posZ +4);
-						List<Entity> l1 = o1.world.getEntitiesInAABBexcluding(o1, aabb1, TargetUtil.PREDICATE_ALLIES(((AbstractEntityCQR) o1).getFaction()));
-						AxisAlignedBB aabb2 = new AxisAlignedBB(o2.posX - 4, o2.posY -2, o2.posZ -4, o2.posX +4, o2.posY +2, o2.posZ +4);
-						List<Entity> l2 = o2.world.getEntitiesInAABBexcluding(o2, aabb2, TargetUtil.PREDICATE_ALLIES(((AbstractEntityCQR) o2).getFaction()));
-						
-						if(l1.size() == l2.size()) {
-							return 0;
-						}
-						
-						if(l1.isEmpty() || l2.size() > l1.size()) {
-							return -1;
-						}
-						if(l2.isEmpty() || l1.size() > l2.size()) {
-							return 1;
-						}
-						
-						return 0;
-					}
-				});
-				entity.getNavigator().tryMoveToEntityLiving(possibleEnts.get(0), this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue() * 2);
-				flag = false;
-			}
-			*/
-			
+	
 			boolean canMoveBackwards = this.canMoveBackwards();
 			
 			if(flag) {
