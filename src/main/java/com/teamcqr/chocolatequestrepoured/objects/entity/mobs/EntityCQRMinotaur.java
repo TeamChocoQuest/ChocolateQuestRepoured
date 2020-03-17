@@ -7,8 +7,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
 public class EntityCQRMinotaur extends AbstractEntityCQR {
@@ -64,6 +66,21 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 	@Override
 	public boolean canOpenDoors() {
 		return true;
+	}
+	
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_COW_DEATH;
+	}
+	
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ENTITY_COW_AMBIENT;
+	}
+	
+	@Override
+	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_COW_HURT;
 	}
 
 }
