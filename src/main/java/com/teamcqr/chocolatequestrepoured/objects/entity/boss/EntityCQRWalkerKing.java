@@ -157,6 +157,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if(source == DamageSource.FALL) {
 			return true;
 		}
+		
+		float dmg = amount;
+		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
+			 dmg /= 4;
+		}
+		
 		active = true;
 		activationCooldown = 80;
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
@@ -166,7 +172,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			world.getWorldInfo().setRaining(true);
 			world.getWorldInfo().setThundering(true);
 		}
-		return super.attackEntityFrom(source, amount, sentFromPart);
+		return super.attackEntityFrom(source, dmg, sentFromPart);
 	}
 	
 	@Override
