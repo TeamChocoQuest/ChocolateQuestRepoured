@@ -48,7 +48,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return SoundEvents.ENTITY_PLAYER_DEATH;
+		return SoundEvents.ENTITY_VILLAGER_DEATH;
 	}
 
 	@Override
