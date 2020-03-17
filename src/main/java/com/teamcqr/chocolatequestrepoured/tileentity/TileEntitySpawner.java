@@ -98,6 +98,12 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.turnBackIntoEntity();
 		}
 	}
+	
+	public void forceTurnBackIntoEntity() {
+		if (!this.world.isRemote && this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
+			this.turnBackIntoEntity();
+		}
+	}
 
 	public void setInDungeon(int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
 		this.spawnedInDungeon = true;
