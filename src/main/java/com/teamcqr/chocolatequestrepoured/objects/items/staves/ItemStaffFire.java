@@ -12,7 +12,6 @@ import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -31,6 +30,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,14 +60,17 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.swingArm(handIn);
 		this.shootFromEntity(playerIn);
-		this.changeTorch(worldIn);
+		this.changeTorch(worldIn, playerIn);
 		stack.damageItem(1, playerIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 
-	public void changeTorch(World worldIn) {
-		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
+	public void changeTorch(World worldIn, EntityPlayer player) {
+		Vec3d v = player.getLookVec();
+		v = v.normalize();
+		v = v.scale(10);
+		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
 
 		if (result != null && !worldIn.isRemote) {
 			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
