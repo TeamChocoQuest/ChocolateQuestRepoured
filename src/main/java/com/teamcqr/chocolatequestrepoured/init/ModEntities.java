@@ -163,13 +163,13 @@ public class ModEntities {
 					createEntityEntry(EntityCQRLich.class, "lich", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
-					//createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityBubble.class, "bubbles", 64, 1, true),
-					//createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
 				};
 
 			event.getRegistry().registerAll(entityEntries);
