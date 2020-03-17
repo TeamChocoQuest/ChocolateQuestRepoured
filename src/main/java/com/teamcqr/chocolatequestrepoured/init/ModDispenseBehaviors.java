@@ -45,7 +45,7 @@ public class ModDispenseBehaviors {
 			}
 			IPosition disPos = BlockDispenser.getDispensePosition(source);
 			Vec3d startLoc = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ());
-			Vec3d v = new Vec3d( -0.5D + velocity.x + rng.nextDouble(),  -0.5D + velocity.y + rng.nextDouble(),  -0.5D + velocity.z + rng.nextDouble());
+			Vec3d v = new Vec3d( 0.25D*(-0.5D + velocity.x + rng.nextDouble()),  0.25D*(-0.5D + velocity.y + rng.nextDouble()),  0.25D*(-0.5D + velocity.z + rng.nextDouble()));
 			v = v.normalize();
 			v = v.scale(1.4);
 			
@@ -55,7 +55,8 @@ public class ModDispenseBehaviors {
 			bubble.motionZ = v.z;
 			bubble.velocityChanged = true;
 			source.getWorld().spawnEntity(bubble);
-			//TODO: FIgure out how to make the stack damaged
+			//DONE: FIgure out how to make the stack damaged
+			stack.attemptDamageItem(1, source.getWorld().rand, null);
 			return stack;
 		}
 	};
