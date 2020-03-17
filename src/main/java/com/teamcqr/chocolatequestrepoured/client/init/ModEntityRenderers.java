@@ -16,7 +16,6 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRIllager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMandril;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMinotaur;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROrc;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
@@ -160,7 +159,7 @@ public class ModEntityRenderers {
 		// Ogre
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQROgre.class, renderManager -> new RenderCQROgre(renderManager));
 		// Orc
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class, renderManager -> new RenderCQROrc(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class, renderManager -> new RenderCQREntity<EntityCQROrc>(renderManager, "entity_mob_cqrorc", false));
 		// Boarman
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman"));
 		// Pirate
