@@ -55,18 +55,7 @@ public abstract class SpawnerFactory {
 			if(ent == null) {
 				continue;
 			}
-			NBTTagCompound compound = new NBTTagCompound();
-			ent.writeToNBTOptional(compound);
-			compound.removeTag("UUIDLeast");
-			compound.removeTag("UUIDMost");
-			compound.removeTag("Pos");
-			NBTTagList passengerList = compound.getTagList("Passengers", 10);
-			for (NBTBase passengerTag : passengerList) {
-				((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
-				((NBTTagCompound) passengerTag).removeTag("UUIDMost");
-				((NBTTagCompound) passengerTag).removeTag("Pos");
-			}
-			entCompounds[i] = compound;
+			entCompounds[i] = createSpawnerNBTFromEntity(ent);
 		}
 		placeSpawner(entCompounds, multiUseSpawner, spawnerSettingsOverrides, world, pos);
 	}
@@ -257,6 +246,22 @@ public abstract class SpawnerFactory {
 		entity.readFromNBT(tag);
 
 		return entity;
+	}
+
+	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity) {
+		NBTTagCompound entityCompound = new NBTTagCompound();
+		entity.writeToNBTOptional(entityCompound);
+		entityCompound.removeTag("UUIDLeast");
+		entityCompound.removeTag("UUIDMost");
+		entityCompound.removeTag("Pos");
+		NBTTagList passengerList = entityCompound.getTagList("Passengers", 10);
+		for (NBTBase passengerTag : passengerList) {
+			((NBTTagCompound) passengerTag).removeTag("UUIDLeast");
+			((NBTTagCompound) passengerTag).removeTag("UUIDMost");
+			((NBTTagCompound) passengerTag).removeTag("Pos");
+		}
+
+		return entityCompound;
 	}
 
 	/**
