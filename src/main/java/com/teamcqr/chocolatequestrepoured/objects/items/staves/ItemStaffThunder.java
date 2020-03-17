@@ -9,7 +9,6 @@ import org.lwjgl.input.Keyboard;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -41,7 +40,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
-		if (this.isNotAirBlock(worldIn)) {
+		if (this.isNotAirBlock(worldIn, playerIn)) {
 			playerIn.swingArm(handIn);
 			this.spawnLightningBolt(playerIn, worldIn);
 			stack.damageItem(1, playerIn);
@@ -53,7 +52,9 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	}
 
 	public void spawnLightningBolt(EntityPlayer player, World worldIn) {
-		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
+		Vec3d v = player.getLookVec();
+		v = v.normalize().scale(20);
+		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
 
 		if (result != null) {
 			EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), false);
@@ -61,8 +62,10 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 		}
 	}
 
-	public boolean isNotAirBlock(World worldIn) {
-		RayTraceResult result = Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
+	public boolean isNotAirBlock(World worldIn, EntityPlayer player) {
+		Vec3d v = player.getLookVec();
+		v = v.normalize().scale(20);
+		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
 
 		if (result != null) {
 			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
