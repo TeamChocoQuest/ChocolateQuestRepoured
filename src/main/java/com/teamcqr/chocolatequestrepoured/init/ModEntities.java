@@ -105,13 +105,13 @@ public class ModEntities {
 	public static final EntityEntry LICH = Null();
 	public static final EntityEntry BOAR_MAGE = Null();
 	public static final EntityEntry NECROMANCER = Null();
-	public static final EntityEntry WALKER_KING = Null();
+	//public static final EntityEntry WALKER_KING = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
 	public static final EntityEntry FLYING_SKULL = Null();
 	public static final EntityEntry BUBBLE_ENTITY = Null();
-	public static final EntityEntry ILLUSION_WALKER_KING = Null();
+	//public static final EntityEntry ILLUSION_WALKER_KING = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -163,13 +163,13 @@ public class ModEntities {
 					createEntityEntry(EntityCQRLich.class, "lich", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
-					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
+					//createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityBubble.class, "bubbles", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
+					//createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
 				};
 
 			event.getRegistry().registerAll(entityEntries);
