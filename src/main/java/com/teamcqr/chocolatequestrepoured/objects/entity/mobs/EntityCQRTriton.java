@@ -56,6 +56,11 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEFINED;
 	}
+	
+	@Override
+	protected float getWaterSlowDown() {
+		return 0;
+	}
 
 	@Override
 	public boolean canOpenDoors() {
