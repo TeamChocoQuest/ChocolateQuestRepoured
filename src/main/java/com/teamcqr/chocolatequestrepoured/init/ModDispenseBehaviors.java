@@ -55,10 +55,12 @@ public class ModDispenseBehaviors {
 			bubble.motionZ = v.z;
 			bubble.velocityChanged = true;
 			source.getWorld().spawnEntity(bubble);
-			
+			//TODO: FIgure out how to make the item not disappear
 			return ItemStack.EMPTY;
 		}
 	};
+	
+	
 	
 	public static void registerDispenseBehaviors() {
 		//Bubble Gun
