@@ -118,10 +118,9 @@ public class CastleRoomSelector {
 	}
 
 	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
-		// Roofs come first so rooms overwrite roof blocks
-		this.generateRoofs(genArray, dungeon);
-
 		this.generateRooms(world, startPos, dungeon, genArray, bossUuids);
+
+		this.generateRoofs(genArray, dungeon);
 	}
 
 	private void generateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
