@@ -47,7 +47,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		super(worldIn, size);
 
 		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setCreateFog(false);
 		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 
 		this.setSize(0.6F, 1.8F);
