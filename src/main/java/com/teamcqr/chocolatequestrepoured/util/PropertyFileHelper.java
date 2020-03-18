@@ -54,9 +54,13 @@ public class PropertyFileHelper {
 
 		String[] splitStr = s.split(",");
 		int[] retIntArr = new int[splitStr.length];
-		for (int i = 0; i < splitStr.length; i++) {
-			String tmp = splitStr[i].trim();
-			retIntArr[i] = Integer.parseInt(tmp);
+		if(splitStr.length > 0) {
+			for (int i = 0; i < splitStr.length; i++) {
+				String tmp = splitStr[i].trim();
+				retIntArr[i] = Integer.parseInt(tmp);
+			}
+		} else {
+			return defVal;
 		}
 
 		return retIntArr;
@@ -70,12 +74,16 @@ public class PropertyFileHelper {
 
 		String[] splitSTr = s.split(",");
 		String[] retVal = new String[splitSTr.length];
-		for (int i = 0; i < splitSTr.length; i++) {
-			String tmp = splitSTr[i].trim();
-			retVal[i] = tmp;
-			if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
-				return new String[] { "*" };
+		if(splitSTr.length > 0) {
+			for (int i = 0; i < splitSTr.length; i++) {
+				String tmp = splitSTr[i].trim();
+				retVal[i] = tmp;
+				if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
+					return new String[] { "*" };
+				}
 			}
+		} else {
+			return defVal;
 		}
 
 		return retVal;
