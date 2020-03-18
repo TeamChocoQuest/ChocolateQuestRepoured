@@ -187,7 +187,7 @@ public class DungeonBase {
 	}
 
 	public int getUnderGroundOffset() {
-		return this.underGroundOffset;
+		return Math.abs(this.underGroundOffset);
 	}
 
 	public BlockPos getLockedPos() {
@@ -317,7 +317,7 @@ public class DungeonBase {
 	}
 
 	public int getYOffset() {
-		return Math.abs(this.yOffset);
+		return this.yOffset;
 	}
 
 	// Protection system
