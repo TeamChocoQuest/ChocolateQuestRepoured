@@ -192,7 +192,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		super(worldIn, 1);
 
 		this.bossInfoServer.setColor(Color.GREEN);
-		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setCreateFog(false);
 		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 
 		this.setSize(this.baseWidth, this.baseHeight);

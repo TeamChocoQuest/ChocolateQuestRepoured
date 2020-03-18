@@ -41,7 +41,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public EntityCQRBoarmage(World worldIn, int size) {
 		super(worldIn, size);
 		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(true);
+		this.bossInfoServer.setCreateFog(false);
 		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 
 		this.isImmuneToFire = true;
