@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -30,8 +31,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
@@ -41,6 +44,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -247,10 +251,84 @@ public class CQStructurePart extends Template {
 		}
 	}
 
+	private static Method transformedVec3d = null;
+
+	private Vec3d transformedVec3d(Vec3d vec, Mirror mirror, Rotation rotation) {
+		try {
+			if (transformedVec3d == null) {
+				try {
+					transformedVec3d = Template.class.getDeclaredMethod("func_186269_a", Vec3d.class, Mirror.class, Rotation.class);
+				} catch (NoSuchMethodException e) {
+					transformedVec3d = Template.class.getDeclaredMethod("transformedVec3d", Vec3d.class, Mirror.class, Rotation.class);
+				}
+				transformedVec3d.setAccessible(true);
+			}
+			return (Vec3d) transformedVec3d.invoke(this, vec, mirror, rotation);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			CQRMain.logger.error("Failed to invoke Template.transformedVec3d method", e);
+		}
+		return vec;
+	}
+
+	private static Method transformedBlockPos = null;
+
+	private BlockPos transformedBlockPos(BlockPos pos, Mirror mirror, Rotation rotation) {
+		try {
+			if (transformedBlockPos == null) {
+				try {
+					transformedBlockPos = Template.class.getDeclaredMethod("func_186268_a", BlockPos.class, Mirror.class, Rotation.class);
+				} catch (NoSuchMethodException e) {
+					transformedBlockPos = Template.class.getDeclaredMethod("transformedBlockPos", BlockPos.class, Mirror.class, Rotation.class);
+				}
+				transformedBlockPos.setAccessible(true);
+			}
+			return (BlockPos) transformedBlockPos.invoke(this, pos, mirror, rotation);
+		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
+			CQRMain.logger.error("Failed to invoke Template.transformedBlockPos method", e);
+		}
+		return pos;
+	}
+
+	private void addEntitiesToWorld2(World worldIn, BlockPos pos, Mirror mirrorIn, Rotation rotationIn, @Nullable StructureBoundingBox aabb) {
+		for (Template.EntityInfo template$entityinfo : this.getEntityInfoList()) {
+			BlockPos blockpos = transformedBlockPos(template$entityinfo.blockPos, mirrorIn, rotationIn).add(pos);
+
+			if (aabb == null || aabb.isVecInside(blockpos)) {
+				NBTTagCompound nbttagcompound = template$entityinfo.entityData;
+				Vec3d vec3d = transformedVec3d(template$entityinfo.pos, mirrorIn, rotationIn);
+				Vec3d vec3d1 = vec3d.addVector((double) pos.getX(), (double) pos.getY(), (double) pos.getZ());
+				NBTTagList nbttaglist = new NBTTagList();
+				nbttaglist.appendTag(new NBTTagDouble(vec3d1.x));
+				nbttaglist.appendTag(new NBTTagDouble(vec3d1.y));
+				nbttaglist.appendTag(new NBTTagDouble(vec3d1.z));
+				nbttagcompound.setTag("Pos", nbttaglist);
+				nbttagcompound.setUniqueId("UUID", UUID.randomUUID());
+				Entity entity;
+
+				try {
+					entity = EntityList.createEntityFromNBT(nbttagcompound, worldIn);
+				} catch (Exception var15) {
+					entity = null;
+				}
+
+				if (entity != null) {
+					float f = entity.getMirroredYaw(mirrorIn);
+					f = f + (entity.rotationYaw - entity.getRotatedYaw(rotationIn));
+					if (entity instanceof EntityPainting) {
+						entity.setLocationAndAngles(blockpos.getX(), blockpos.getY(), blockpos.getZ(), f, entity.rotationPitch);
+					} else {
+						entity.setLocationAndAngles(vec3d1.x, vec3d1.y, vec3d1.z, f, entity.rotationPitch);
+					}
+					worldIn.spawnEntity(entity);
+				}
+			}
+		}
+	}
+
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
 		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
-		this.addEntitiesToWorld(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
+		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
 
 		if (replaceBanners && dungeonBanner != null) {
 			for (BlockPos bannerPos : this.banners) {
