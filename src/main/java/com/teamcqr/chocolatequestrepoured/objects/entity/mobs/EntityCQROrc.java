@@ -39,7 +39,7 @@ public class EntityCQROrc extends AbstractEntityCQR {
 
 	@Override
 	public int getTextureCount() {
-		return 1;
+		return 3;
 	}
 
 	@Override
