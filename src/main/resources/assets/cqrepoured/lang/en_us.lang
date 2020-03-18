@@ -206,6 +206,7 @@ item.mob_to_spawner_tool.name=Mob To Spawner Tool
 item.spawner_converter.name=Spawner Converter
 item.badge.name=Badge
 item.backpack.name=Backpack
+item.spiked_glove.name=Spiked Glove
 item.alchemy_bag.name=Alchemy Bag
 item.structure_selector.name=Selection Selector Helper
 item.path_tool.name=Path Tool

@@ -41,6 +41,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpikedGlove;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSuperTool;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
@@ -181,6 +182,7 @@ public class ModItems {
 	public static final Item HELMET_DRAGON = Null(); // #TODO Make model centered on head // Abandon for now
 	public static final Item BOOTS_CLOUD = Null();
 	public static final Item BACKPACK = Null();
+	public static final Item SPIKED_GLOVE = Null();
 
 	// Slime Armor Items
 	public static final Item HELMET_SLIME = Null();
@@ -322,6 +324,7 @@ public class ModItems {
 					setItemName(new ItemHelmetDragon(ModMaterials.ArmorMaterials.ARMOR_DRAGON, -1, EntityEquipmentSlot.HEAD), "helmet_dragon"),
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
 					setItemName(new ItemBackpack(ModMaterials.ArmorMaterials.ARMOR_BACKPACK, -1, EntityEquipmentSlot.CHEST), "backpack"),
+					setItemName(new ItemSpikedGlove(), "spiked_glove"),
 
 					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.HEAD), "helmet_slime"),
 					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.CHEST), "chestplate_slime"),
