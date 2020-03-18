@@ -3,6 +3,8 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.io.File;
 import java.util.Properties;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 
 import net.minecraft.block.Block;
@@ -14,8 +16,8 @@ import net.minecraft.block.Block;
  */
 public class PropertyFileHelper {
 
-	public static int getIntProperty(Properties file, String path, int defVal) {
-		String s = file.getProperty(path);
+	public static int getIntProperty(Properties prop, String key, int defVal) {
+		String s = prop.getProperty(key);
 		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
@@ -30,8 +32,8 @@ public class PropertyFileHelper {
 		return retInt;
 	}
 
-	public static double getDoubleProperty(Properties file, String path, double defVal) {
-		String s = file.getProperty(path);
+	public static double getDoubleProperty(Properties prop, String key, double defVal) {
+		String s = prop.getProperty(key);
 		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
@@ -46,52 +48,55 @@ public class PropertyFileHelper {
 		return retDoubl;
 	}
 
-	public static int[] getIntArrayProperty(Properties file, String path, int[] defVal) {
-		String s = file.getProperty(path);
-		if (s == null || s.isEmpty()) {
+	public static int[] getIntArrayProperty(Properties prop, String key, int[] defVal) {
+		String s = prop.getProperty(key);
+		if (s == null) {
 			return defVal;
 		}
 
 		String[] splitStr = s.split(",");
 		int[] retIntArr = new int[splitStr.length];
-		if(splitStr.length > 0) {
-			for (int i = 0; i < splitStr.length; i++) {
-				String tmp = splitStr[i].trim();
-				retIntArr[i] = Integer.parseInt(tmp);
+		int removed = 0;
+		for (int i = 0; i < splitStr.length; i++) {
+			String tmp = splitStr[i].trim();
+			try {
+				retIntArr[i - removed] = Integer.parseInt(tmp);
+			} catch (NumberFormatException e) {
+				retIntArr = ArrayUtils.remove(retIntArr, i - removed);
+				removed++;
 			}
-		} else {
-			return defVal;
 		}
 
 		return retIntArr;
 	}
 
-	public static String[] getStringArrayProperty(Properties file, String path, String[] defVal) {
-		String s = file.getProperty(path);
-		if (s == null || s.isEmpty()) {
+	public static String[] getStringArrayProperty(Properties prop, String key, String[] defVal) {
+		String s = prop.getProperty(key);
+		if (s == null) {
 			return defVal;
 		}
 
 		String[] splitSTr = s.split(",");
 		String[] retVal = new String[splitSTr.length];
-		if(splitSTr.length > 0) {
-			for (int i = 0; i < splitSTr.length; i++) {
-				String tmp = splitSTr[i].trim();
-				retVal[i] = tmp;
-				if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
-					return new String[] { "*" };
-				}
+		int removed = 0;
+		for (int i = 0; i < splitSTr.length; i++) {
+			String tmp = splitSTr[i].trim();
+			if (tmp.isEmpty()) {
+				retVal = ArrayUtils.remove(retVal, i - removed);
+				removed++;
+			} else if (tmp.equalsIgnoreCase("ALL") || tmp.equalsIgnoreCase("*")) {
+				return new String[] { "*" };
+			} else {
+				retVal[i - removed] = tmp;
 			}
-		} else {
-			return defVal;
 		}
 
 		return retVal;
 
 	}
 
-	public static boolean getBooleanProperty(Properties file, String path, boolean defVal) {
-		String s = file.getProperty(path);
+	public static boolean getBooleanProperty(Properties prop, String key, boolean defVal) {
+		String s = prop.getProperty(key);
 		if (s == null || s.isEmpty()) {
 			return defVal;
 		}
@@ -99,21 +104,22 @@ public class PropertyFileHelper {
 		return s.trim().equalsIgnoreCase("true");
 	}
 
-	public static Block getBlockProperty(Properties file, String path, Block defVal) {
-		Block retBlock = defVal;
-		try {
-			Block tmp = Block.getBlockFromName(file.getProperty(path, "minecraft:stone"));
-			if (tmp != null) {
-				retBlock = tmp;
-			}
-		} catch (Exception ex) {
-			System.out.println("couldnt load floor block! using default value (" + defVal.getUnlocalizedName() + ")...");
+	public static Block getBlockProperty(Properties prop, String key, Block defVal) {
+		String s = prop.getProperty(key);
+		if (s == null || s.isEmpty()) {
+			return defVal;
 		}
+
+		Block retBlock = Block.getBlockFromName(s);
+		if (retBlock == null) {
+			retBlock = defVal;
+		}
+
 		return retBlock;
 	}
 
-	public static File getFileProperty(Properties prop, String path, String defVal) {
-		File fileTmp = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath() + "/" + prop.getProperty(path, defVal));
+	public static File getFileProperty(Properties prop, String key, String defVal) {
+		File fileTmp = new File(CQRMain.CQ_STRUCTURE_FILES_FOLDER.getAbsolutePath(), prop.getProperty(key, defVal));
 
 		if (!fileTmp.exists() || !fileTmp.isDirectory()) {
 			if (fileTmp.exists() && !fileTmp.isDirectory()) {
@@ -121,6 +127,7 @@ public class PropertyFileHelper {
 			}
 			fileTmp.mkdirs();
 		}
+
 		return fileTmp;
 	}
 
