@@ -34,4 +34,10 @@ public class CastleRoomWalkableRoof extends CastleRoomBase {
 		RoomWallBuilder builder = new WalkableRoofWallBuilder(wallStart, this.height, wallLength, this.walls.getOptionsForSide(side), side);
 		builder.generate(genArray, dungeon);
 	}
+
+	@Override
+	protected boolean hasFloor()
+	{
+		return false;
+	}
 }

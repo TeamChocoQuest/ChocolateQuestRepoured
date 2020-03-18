@@ -26,4 +26,17 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		super.generateRoom(world, genArray, dungeon);
 	}
+
+	@Override
+	protected boolean hasFloor()
+	{
+		return false;
+	}
+
+	@Override
+	protected BlockPos getNonWallStartPos() {
+		//Normal rooms start their decoration area at (offsetX, 0, offsety)
+		//But towers always have north/west walls, so adjust 1 square for those
+		return super.getNonWallStartPos().add(1, 0, 1);
+	}
 }

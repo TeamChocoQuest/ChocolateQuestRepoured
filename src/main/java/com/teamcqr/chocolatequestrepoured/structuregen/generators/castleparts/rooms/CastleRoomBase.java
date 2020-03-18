@@ -403,7 +403,15 @@ public abstract class CastleRoomBase {
 	}
 
 	protected BlockPos getDecorationStartPos() {
-		return this.getNonWallStartPos().up(); // skip the floor
+		if (this.hasFloor()) {
+			return this.getNonWallStartPos().up(); // skip the floor
+		} else {
+			return this.getNonWallStartPos();
+		}
+	}
+
+	protected boolean hasFloor() {
+		return true;
 	}
 
 	protected BlockPos getNonWallStartPos() {
