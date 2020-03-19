@@ -23,6 +23,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemStaffHealing extends Item {
+	
+	private static final float HEAL_AMOUNT_ENTITIES = 8F;
 
 	public ItemStaffHealing() {
 		this.setMaxDamage(128);
@@ -32,8 +34,12 @@ public class ItemStaffHealing extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		if (entity instanceof EntityLivingBase && !player.getCooldownTracker().hasCooldown(stack.getItem())) {
-			((EntityLivingBase) entity).heal(2F);
+			((EntityLivingBase) entity).heal(HEAL_AMOUNT_ENTITIES);
 
+			if(entity.isBurning() && !entity.isImmuneToFire()) {
+				entity.setFire(0);
+			}
+			
 			if (entity.world.isRemote) {
 				for (int x = 0; x < 5; x++) {
 					entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 1.0D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F,
