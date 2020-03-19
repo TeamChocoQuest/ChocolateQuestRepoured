@@ -21,7 +21,7 @@ public enum EDungeonMobType {
 	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), new ResourceLocation(Reference.MODID, "lich"), null),
 	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null, EBanners.PIRATE_BANNER),
 	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null, EBanners.ILLAGER_BANNER),
-	WALKER(new ResourceLocation(Reference.MODID, "walker"), null, EBanners.WALKER_ORDO),
+	WALKER(new ResourceLocation(Reference.MODID, "walker"), new ResourceLocation(Reference.MODID, "walker_king"), EBanners.WALKER_ORDO),
 	SPECTER(new ResourceLocation(Reference.MODID, "spectre"), null, null),
 	ENDERMAN(new ResourceLocation(Reference.MODID, "enderman"), null, EBanners.ENDERMEN_BANNER),
 	BOARMAN(new ResourceLocation(Reference.MODID, "boarman"), new ResourceLocation(Reference.MODID, "boar_mage"), EBanners.PIGMAN_BANNER),
