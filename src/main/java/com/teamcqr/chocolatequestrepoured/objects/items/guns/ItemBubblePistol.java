@@ -19,25 +19,37 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
-public class ItemBubbleGun extends Item implements IRangedWeapon {
+public class ItemBubblePistol extends Item implements IRangedWeapon {
 	
 	private final Random rng = new Random();
 
-	public ItemBubbleGun() {
+	public ItemBubblePistol() {
 		super();
-		setMaxDamage(200);
+		setMaxDamage(getMaxUses());
 		setMaxStackSize(1);
+	}
+	
+	public int getMaxUses() {
+		return 200;
+	}
+	
+	public int getCooldown() {
+		return 30;
+	}
+	
+	public double getInaccurary() {
+		return 0.5D;
 	}
 	
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
-		return 100;
+		return 10;
 	}
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		if(entityLiving instanceof EntityPlayer) {
-			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, 30);
+			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, getCooldown());
 		}
 		stack.damageItem(1, entityLiving);
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
@@ -70,7 +82,7 @@ public class ItemBubbleGun extends Item implements IRangedWeapon {
 	}
 	
 	private void shootBubbles(Vec3d velocity, EntityLivingBase shooter) {
-		Vec3d v = new Vec3d( -0.55D + velocity.x + rng.nextDouble(),  -0.55D + velocity.y + rng.nextDouble(),  -0.55D + velocity.z + rng.nextDouble());
+		Vec3d v = new Vec3d( -getInaccurary() + velocity.x + (2* getInaccurary() * rng.nextDouble()), -getInaccurary() + velocity.y + (2* getInaccurary() * rng.nextDouble()), -getInaccurary() + velocity.z + (2* getInaccurary() * rng.nextDouble()));
 		v = v.normalize();
 		v = v.scale(1.4);
 		
