@@ -150,7 +150,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	            }
 	        }
 		} else {
-			this.setDead();
+			super.onDeathUpdate();
 		}
 	}
 	
