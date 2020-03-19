@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningSpiral;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
@@ -72,10 +73,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.tasks.addTask(6, new EntityAIWalkerIllusions(this));
 		
 		this.tasks.addTask(7, new BossAIWalkerLightningCircles(this));
+		this.tasks.addTask(8, new BossAIWalkerLightningSpiral(this));
 		//normal combat
-		this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		this.tasks.addTask(9, new EntityAIBackstab(this));
-		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(9, new EntityAIAttackRanged(this));
+		this.tasks.addTask(10, new EntityAIBackstab(this));
+		this.tasks.addTask(11, new EntityAIAttack(this));
 		
 		//Low priority stuff
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
