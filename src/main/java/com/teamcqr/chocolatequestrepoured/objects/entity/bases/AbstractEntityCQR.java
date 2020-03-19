@@ -492,11 +492,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public boolean attackEntityAsMob(Entity entityIn) {
 		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof EntityLivingBase) {
-				((EntityLivingBase) entityIn).heal(2.0F);
-
 				if (!this.world.isRemote) {
-					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + 0.5D * entityIn.height, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
-					this.world.playSound(null, entityIn.posX, entityIn.posY, entityIn.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 4.0F, 0.6F + this.rand.nextFloat() * 0.2F);
+					((EntityLivingBase) entityIn).heal(ItemStaffHealing.HEAL_AMOUNT_ENTITIES);
+					entityIn.setFire(0);
+					((WorldServer) this.world).spawnParticle(EnumParticleTypes.HEART, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+					this.world.playSound(null, entityIn.posX, entityIn.posY + entityIn.height * 0.5D, entityIn.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + this.rand.nextFloat() * 0.2F);
 				}
 				return true;
 			}
