@@ -14,7 +14,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 	private static final int MAX_COOLDOWN = 220;
 	private static final int ANGLE_INCREMENT = 40;
 	private static final int RADIUS_INCREMENT = 1;
-	private static final int MAX_LIGHTNINGS = 12;
+	private static final int MAX_LIGHTNINGS = 24;
 	
 	private int cooldown = 150;
 	private int cooldown_circle = 5;
@@ -55,7 +55,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 		if(cooldown_circle <= 0) {
 			spawnLightning();
 			lightningCount++;
-			cooldown_circle = 10;
+			cooldown_circle = 5;
 		}
 	}
 
@@ -65,6 +65,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 		EntityLightningBolt lightning = new EntityLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
 		lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
 		entity.world.spawnEntity(lightning);
+		entity.world.addWeatherEffect(lightning);
 		r += RADIUS_INCREMENT;
 		angle += ANGLE_INCREMENT;
 		if(angle >= 360) {
