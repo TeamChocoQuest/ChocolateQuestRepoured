@@ -58,6 +58,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 		if (result != null) {
 			EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), false);
+			worldIn.addWeatherEffect(entity);
 			worldIn.spawnEntity(entity);
 		}
 	}
@@ -97,6 +98,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 			pos = shooter.getPositionVector().add(v);
 		}
 		EntityLightningBolt entity = new EntityLightningBolt(worldIn, pos.x, pos.y, pos.z, false);
+		worldIn.addWeatherEffect(entity);
 		worldIn.spawnEntity(entity);
 	}
 
