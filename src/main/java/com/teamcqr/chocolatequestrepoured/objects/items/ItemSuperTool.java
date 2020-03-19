@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -37,6 +38,12 @@ public class ItemSuperTool extends Item
 		this.attackDamage = new AttributeModifier("SuperToolDamageModifier", 10000D, 0);
 	}
 	
+	@Override
+	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
+		entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
+		return true;
+	}
+
 	@Override
 	public boolean canHarvestBlock(IBlockState blockIn)
     {
