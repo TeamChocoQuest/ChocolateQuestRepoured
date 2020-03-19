@@ -19,7 +19,6 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 	
 	public BossAIWalkerLightningCircles(EntityCQRWalkerKing entity) {
 		super(entity);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -60,6 +59,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 		for(int i = 0; i < (2* circleRad); i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle * i);
 			EntityLightningBolt lightning = new EntityLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
+			lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
 			entity.world.spawnEntity(lightning);
 		}
 	}
