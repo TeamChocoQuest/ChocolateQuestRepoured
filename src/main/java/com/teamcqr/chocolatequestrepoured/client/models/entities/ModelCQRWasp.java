@@ -52,10 +52,10 @@ public class ModelCQRWasp extends ModelBase {
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.bodyMain.render(f5);
         float angle = -22.5F;
-        angle += 45F * new Float((1D + Math.sin((2D * Math.PI) / 4) * entity.ticksExisted));
+        angle += 45F * (new Float((1D + Math.sin(((2D * Math.PI) / 8) * entity.ticksExisted))));
         angle = new Float(Math.toRadians(new Double(angle)));
-        this.wingL.rotateAngleZ = angle;
-        this.wingR.rotateAngleZ = -angle;
+        this.wingL.rotateAngleZ = -angle;
+        this.wingR.rotateAngleZ = angle;
     }
 
     /**

@@ -20,6 +20,11 @@ public class RenderCQRWasp extends RenderLiving<EntityCQRWasp> {
 	public RenderCQRWasp(RenderManager rendermanagerIn, ModelBase modelbaseIn, float shadowsizeIn) {
 		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
 	}
+	
+	@Override
+	protected void renderModel(EntityCQRWasp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRWasp entity) {
