@@ -55,7 +55,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
-import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubbleGun;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubblePistol;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
@@ -176,7 +176,8 @@ public class ModItems {
 	public static final Item BULLET_FIRE = Null();
 	public static final Item CANNON_BALL = Null();
 	public static final Item FLAMETHROWER = Null(); // #TODO TEXTURES
-	public static final Item BUBBLE_GUN = Null();
+	public static final Item BUBBLE_PISTOL = Null();
+	public static final Item BUBBLE_RIFLE = Null();
 
 	// Single Armor Items
 	public static final Item HELMET_DRAGON = Null(); // #TODO Make model centered on head // Abandon for now
@@ -316,7 +317,8 @@ public class ModItems {
 					setItemName(new ItemBullet(), "bullet_fire"),
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
-					setItemName(new ItemBubbleGun(), "bubble_gun"),
+					setItemName(new ItemBubblePistol(), "bubble_pistol"),
+					setItemName(new ItemBubblePistol(), "bubble_rifle"),
 
 					setItemName(new ItemHookshot(), "hookshot"),
 					setItemName(new ItemLongshot(), "longshot"),
