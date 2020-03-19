@@ -60,6 +60,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 			v = VectorUtil.rotateVectorAroundY(v, angle * i);
 			EntityLightningBolt lightning = new EntityLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
 			lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
+			entity.world.addWeatherEffect(lightning);
 			entity.world.spawnEntity(lightning);
 		}
 	}

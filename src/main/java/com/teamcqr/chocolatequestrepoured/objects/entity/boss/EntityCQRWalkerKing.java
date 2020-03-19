@@ -134,6 +134,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				
 				EntityLightningBolt entitybolt = new EntityLightningBolt(world, posX +x, posY +y, posZ +z, false);
 				world.spawnEntity(entitybolt);
+				world.addWeatherEffect(entitybolt);
 			}
 		}
 		super.onLivingUpdate();
