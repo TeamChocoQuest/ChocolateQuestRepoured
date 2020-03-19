@@ -50,6 +50,7 @@ public class ModelCQRWasp extends ModelBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
+    	//TODO: Attack animation
         this.bodyMain.render(f5);
         float angle = -22.5F;
         angle += 45F * (new Float((1D + Math.sin(((2D * Math.PI) / 8) * entity.ticksExisted))));
