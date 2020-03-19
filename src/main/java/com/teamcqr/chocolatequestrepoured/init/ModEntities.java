@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromanc
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
@@ -111,6 +112,7 @@ public class ModEntities {
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
 	public static final EntityEntry FLYING_SKULL = Null();
 	public static final EntityEntry BUBBLE_ENTITY = Null();
+	public static final EntityEntry WASP = Null();
 	//public static final EntityEntry ILLUSION_WALKER_KING = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
@@ -170,6 +172,7 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityBubble.class, "bubbles", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
+					createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393),
 				};
 
 			event.getRegistry().registerAll(entityEntries);
