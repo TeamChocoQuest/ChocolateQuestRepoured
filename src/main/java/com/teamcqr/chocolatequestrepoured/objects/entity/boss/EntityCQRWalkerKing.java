@@ -249,6 +249,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
+		this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 	
