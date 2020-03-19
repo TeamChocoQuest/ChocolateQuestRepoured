@@ -250,17 +250,22 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		}
 		
+		/*
 		if((getAttackTarget() == null || getAttackTarget().isDead) && source.getTrueSource() instanceof EntityLivingBase && source.getTrueSource() != null) {
 			if(!getFaction().isAlly(source.getTrueSource()) && getDistance(source.getTrueSource()) <= 32) {
 				setAttackTarget((EntityLivingBase) source.getTrueSource());
 			}
+		}
+		*/
+		if (source.getTrueSource() instanceof EntityLivingBase) {
+			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
 		}
 		
 		if(!sentFromPart) {
 			amount = 0;
 			world.playSound(posX, posY, posZ, getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 		}
-		if (sentFromPart && (!this.isInShell() || source.isCreativePlayer() || source == DamageSource.IN_WALL)) {
+		if (source.isDamageAbsolute() || (sentFromPart && (!this.isInShell() || source == DamageSource.IN_WALL))) {
 			if(stunned) {
 				amount *= 2F;
 			}
