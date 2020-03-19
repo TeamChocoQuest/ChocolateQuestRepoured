@@ -87,6 +87,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		setEquipmentBasedOnDifficulty(difficulty);
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
 
 	
 	@Override
