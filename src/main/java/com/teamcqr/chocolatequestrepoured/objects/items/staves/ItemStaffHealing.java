@@ -19,12 +19,13 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemStaffHealing extends Item {
-	
-	private static final float HEAL_AMOUNT_ENTITIES = 8F;
+
+	public static final float HEAL_AMOUNT_ENTITIES = 4.0F;
 
 	public ItemStaffHealing() {
 		this.setMaxDamage(128);
@@ -33,26 +34,15 @@ public class ItemStaffHealing extends Item {
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		if (entity instanceof EntityLivingBase && !player.getCooldownTracker().hasCooldown(stack.getItem())) {
+		if (!player.world.isRemote && entity instanceof EntityLivingBase && !player.getCooldownTracker().hasCooldown(stack.getItem())) {
 			((EntityLivingBase) entity).heal(HEAL_AMOUNT_ENTITIES);
-
-			if(entity.isBurning() && !entity.isImmuneToFire()) {
-				entity.setFire(0);
-			}
-			
-			if (entity.world.isRemote) {
-				for (int x = 0; x < 5; x++) {
-					entity.world.spawnParticle(EnumParticleTypes.HEART, entity.posX + itemRand.nextFloat() - 0.5D, entity.posY + 1.0D + itemRand.nextFloat(), entity.posZ + itemRand.nextFloat() - 0.5D, itemRand.nextFloat() - 0.5F,
-							itemRand.nextFloat() - 0.5F, itemRand.nextFloat() - 0.5F);
-				}
-			}
-			entity.world.playSound(player.posX, player.posY, player.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 4.0F, (1.0F + (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F) * 0.7F, false);
+			entity.setFire(0);
+			((WorldServer) player.world).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, 4, 0.25D, 0.25D, 0.25D, 0.0D);
+			player.world.playSound(null, entity.posX, entity.posY + entity.height * 0.5D, entity.posZ, ModSounds.MAGIC, SoundCategory.MASTER, 0.6F, 0.6F + itemRand.nextFloat() * 0.2F);
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(stack.getItem(), 30);
-
-			return true;
 		}
-		return false;
+		return true;
 	}
 
 	@Override
