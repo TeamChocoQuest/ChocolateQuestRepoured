@@ -65,7 +65,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return getBoss() != null && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && !getBoss().isHealing();
+		return getBoss() != null && getBoss().getAnimation() == this.getAnimation() && !getBoss().isStunned() && getBoss().getSpinsBlocked() <= MAX_BLOCKED_SPINS && super.shouldContinueExecuting() && !getBoss().isDead && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead && !getBoss().isHealing();
 	}
 	
 	private void calculateVelocity() {
