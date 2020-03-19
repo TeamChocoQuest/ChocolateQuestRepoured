@@ -79,6 +79,10 @@ public abstract class CastleRoomBase {
 		}
 	}
 
+	public void postProcess(BlockStateGenArray genArray, CastleDungeon dungeon) {
+		;
+	}
+
 	protected abstract void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon);
 
 	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
@@ -445,9 +449,12 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthY() {
-		int result = this.height; // Remove one for the floor tiles
+		int result = this.height;
 
 		if (this.defaultCeiling) {
+			--result;
+		}
+		if (this.hasFloor()) {
 			--result;
 		}
 

@@ -120,7 +120,7 @@ public class CastleRoomSelector {
 	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
 		this.generateRooms(world, startPos, dungeon, genArray, bossUuids);
 
-		this.generateRoofs(genArray, dungeon);
+		this.generateRoofs(world, genArray, dungeon);
 	}
 
 	private void generateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
@@ -128,16 +128,12 @@ public class CastleRoomSelector {
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(RoomGridCell::isPopulated);
 		ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
 
-		// Generate walkable roofs first since they are lowest priority, other rooms may occupy same BlockPos
-		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getRoom() instanceof CastleRoomWalkableRoof)) {
-			toGenerate.remove(cell);
+		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
+		// because they have the lowest block priority (all other parts should overwrite)
+		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
 			cell.getRoom().generate(world, genArray, dungeon);
 		}
 
-		// Generate all other cells
-		for (RoomGridCell cell : toGenerate) {
-			cell.getRoom().generate(world, genArray, dungeon);
-		}
 	}
 
 	public void addDecoration(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids)
@@ -163,9 +159,13 @@ public class CastleRoomSelector {
 		return mobType;
 	}
 
-	private void generateRoofs(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void generateRoofs(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (CastleAddonRoof roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
+		}
+
+		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
+			cell.getRoom().generate(world, genArray, dungeon);
 		}
 	}
 

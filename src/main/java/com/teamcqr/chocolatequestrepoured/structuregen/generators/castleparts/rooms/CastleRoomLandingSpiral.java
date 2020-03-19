@@ -32,7 +32,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
-				for (int y = 0; y < this.height; y++) {
+				for (int y = 0; y < this.getDecorationLengthY(); y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getInteriorBuildStart().add(x, y, z);
 
