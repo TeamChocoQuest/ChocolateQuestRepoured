@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSpectre;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRWasp;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
@@ -54,6 +55,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKin
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
@@ -132,7 +134,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, renderManager -> new RenderFlyingSkull(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, renderManager -> new RenderBubble(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, renderManager -> new RenderCQRWasp(renderManager));
 	}
 
 	protected static void registerEntityRenderers() {
