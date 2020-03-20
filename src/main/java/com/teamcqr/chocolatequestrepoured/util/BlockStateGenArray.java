@@ -1,8 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 import java.util.HashMap;
@@ -16,6 +18,7 @@ public class BlockStateGenArray {
 
     private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> mainMap = new HashMap<>();
     private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> postMap = new HashMap<>();
+    private Map<BlockPos, EntityDataPart.ExtendedEntityData> entityMap = new HashMap<>();
 
     public BlockStateGenArray() {
     }
@@ -27,6 +30,11 @@ public class BlockStateGenArray {
     public Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> getPostMap()
     {
         return postMap;
+    }
+
+    public Map<BlockPos, EntityDataPart.ExtendedEntityData> getEntityMap()
+    {
+        return entityMap;
     }
 
     public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
@@ -49,6 +57,11 @@ public class BlockStateGenArray {
         return addInternal(phase, pos, extState, true);
     }
 
+    public boolean addEntity(BlockPos pos, ResourceLocation resLoc, NBTTagCompound nbt) {
+        EntityDataPart.ExtendedEntityData extEntity = new EntityDataPart.ExtendedEntityData(resLoc, nbt);
+        return addInternal(pos, extEntity);
+    }
+
     private boolean addInternal(GenerationPhase phase, BlockPos pos, ExtendedBlockStatePart.ExtendedBlockState extState, boolean overwrite) {
         boolean added = false;
         Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> mapToAdd = getMapFromPhase(phase);
@@ -59,6 +72,11 @@ public class BlockStateGenArray {
         }
 
         return added;
+    }
+
+    private boolean addInternal(BlockPos pos, EntityDataPart.ExtendedEntityData extData) {
+        entityMap.put(pos, extData);
+        return true;
     }
 
     private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> getMapFromPhase(GenerationPhase phase) {

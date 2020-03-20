@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.paintings;
 
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -25,15 +28,15 @@ public class RoomDecorPainting {
 		return !getArtThatWouldFit(start, side, decoArea, decoMap).isEmpty();
 	}
 
-	public void buildRandom(World world, BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
+	public void buildRandom(World world, BlockPos start, BlockStateGenArray genArray, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
 		ArrayList<EntityPainting.EnumArt> artList = getArtThatWouldFit(start, side, decoArea, decoMap);
 		if (!artList.isEmpty()) {
 			Collections.shuffle(artList);
-			this.build(artList.get(0), world, start, side, decoMap);
+			this.build(artList.get(0), world, start, genArray, side, decoMap);
 		}
 	}
 
-	public void build(EntityPainting.EnumArt art, World world, BlockPos start, EnumFacing side, HashSet<BlockPos> decoMap) {
+	public void build(EntityPainting.EnumArt art, World world, BlockPos start, BlockStateGenArray genArray, EnumFacing side, HashSet<BlockPos> decoMap) {
 		ArrayList<Vec3i> rotated = this.alignFootprint(this.artFootprints.get(art), side);
 
 		for (Vec3i placement : rotated) {
@@ -42,17 +45,19 @@ public class RoomDecorPainting {
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			decoMap.add(pos);
 		}
-		this.createEntityDecoration(art, world, start, side);
+		this.createEntityDecoration(art, world, start, genArray, side);
 	}
 
-	protected void createEntityDecoration(EntityPainting.EnumArt art, World world, BlockPos pos, EnumFacing side) {
+	protected void createEntityDecoration(EntityPainting.EnumArt art, World world, BlockPos pos, BlockStateGenArray genArray, EnumFacing side) {
 		EntityPainting painting = new EntityPainting(world);
 		painting.art = art;
 		painting.facingDirection = side.getOpposite();
 		float rotation = side.getHorizontalAngle();
 		// Need to add 0.5 to each position amount so it spawns in the middle of the tile
 		painting.setPositionAndRotation((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5), rotation, 0f);
-		world.spawnEntity(painting);
+		NBTTagCompound nbt = painting.writeToNBT(new NBTTagCompound());
+		genArray.addEntity(pos, EntityList.getKey(painting), nbt);
+
 	}
 
 	public ArrayList<EntityPainting.EnumArt> getArtThatWouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
