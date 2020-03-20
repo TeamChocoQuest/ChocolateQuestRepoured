@@ -30,6 +30,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.init.Blocks;
@@ -395,12 +396,13 @@ public class CQStructurePart extends Template {
 					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);
 
 					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
-					if (entity instanceof EntityLiving) {
-						((EntityLiving) entity).enablePersistence();
-					}
 					if (entity instanceof AbstractEntityCQRBoss) {
 						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(placementIn);
 						((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
+					}
+					if (entity instanceof EntityLiving) {
+						((EntityLiving) entity).enablePersistence();
+						((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(transformedPos), (IEntityLivingData)null);
 					}
 					worldIn.spawnEntity(entity);
 

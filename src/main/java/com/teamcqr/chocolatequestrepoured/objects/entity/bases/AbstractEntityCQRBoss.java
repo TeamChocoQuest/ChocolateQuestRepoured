@@ -43,7 +43,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			this.assignedRegionID = compound.getString("assignedRegion");
 		}
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
