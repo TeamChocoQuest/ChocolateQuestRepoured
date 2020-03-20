@@ -147,7 +147,7 @@ public class CastleRoomSelector {
 		// Some decoration requires that neighboring rooms have their walls/doors
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
 			cell.getRoom().decorate(world, genArray, dungeon, mobFactory);
-			cell.getRoom().placeBoss(world, dungeon, bossResLoc, bossUuids);
+			cell.getRoom().placeBoss(world, genArray, dungeon, bossResLoc, bossUuids);
 		}
 	}
 
