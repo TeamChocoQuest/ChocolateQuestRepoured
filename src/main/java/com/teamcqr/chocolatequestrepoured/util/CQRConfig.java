@@ -106,6 +106,14 @@ public class CQRConfig {
 		public int alertRadius = 20;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double bossHealthMultiplierPerPlayer = 0.1D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double dropDurabilityModalValue = 0.25D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double dropDurabilityStandardDeviation = 0.05D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double dropDurabilityMinimum = 0.1D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double dropDurabilityMaximum = 0.5D;
 	}
 
 	public static class Wall {

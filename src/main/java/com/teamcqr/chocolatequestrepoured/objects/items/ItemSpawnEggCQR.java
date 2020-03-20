@@ -48,6 +48,7 @@ public class ItemSpawnEggCQR extends Item {
 				CQRMain.logger.error(e);
 			}
 			if (entity != null) {
+				entity.onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
 				entity.setPosition(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
 				this.setEquipment(entity);
 				worldIn.spawnEntity(entity);
