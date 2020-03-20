@@ -15,7 +15,7 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI {
 	public boolean shouldExecute() {
 		if (this.entity.hasHomePositionCQR() && !this.entity.hasLeader()) {
 			BlockPos pos = this.entity.getHomePositionCQR();
-			return this.entity.getDistance((double) pos.getX(), (double) pos.getY(), (double) pos.getZ()) > 8.0D;
+			return this.entity.getDistance((double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D) > 4.0D;
 		}
 		return false;
 	}
