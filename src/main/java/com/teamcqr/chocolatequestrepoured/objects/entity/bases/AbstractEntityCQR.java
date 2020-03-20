@@ -20,8 +20,7 @@ import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSync
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
@@ -108,6 +107,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public boolean prevSitting;
 	protected int spellTicks = 0;
 	protected float sizeScaling = 1.0F;
+	protected int lastTimeSeenAttackTarget;
 
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private CQRFaction factionInstance;
@@ -119,8 +119,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int delayBetweenSpells = 100;
 	protected int spellDelay = 0;
 	protected int magicArmorCooldown = 300;
-	
-	//Pathing AI stuff
+
+	// Pathing AI stuff
 	protected BlockPos[] pathPoints = new BlockPos[] {};
 	protected boolean pathIsLoop = false;
 	protected int currentTargetPoint = 0;
@@ -137,7 +137,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
-	
+
 	// Client only
 	@SideOnly(Side.CLIENT)
 	protected int currentSpeechBubbleID;
@@ -252,9 +252,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
 		}
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		this.tasks.addTask(9, new EntityAIBackstab(this));
+		// this.tasks.addTask(8, new EntityAIAttackRanged(this));
+		// this.tasks.addTask(9, new EntityAIBackstab(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
+		this.tasks.addTask(11, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
 		this.tasks.addTask(16, new EntityAIFollowPath(this));
 		this.tasks.addTask(17, new EntityAITameAndLeashPet(this));
@@ -271,7 +272,33 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
 		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
+		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			this.setDropChance(slot, 0.04F);
+		}
 		return livingdata;
+	}
+
+	@Override
+	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
+		double modalValue = CQRConfig.mobs.dropDurabilityModalValue;
+		double standardDeviation = CQRConfig.mobs.dropDurabilityStandardDeviation;
+		double min = Math.min(CQRConfig.mobs.dropDurabilityMinimum, modalValue);
+		double max = Math.max(CQRConfig.mobs.dropDurabilityMaximum, modalValue);
+
+		for (EntityEquipmentSlot entityequipmentslot : EntityEquipmentSlot.values()) {
+			ItemStack itemstack = this.getItemStackFromSlot(entityequipmentslot);
+			double d0 = (double) this.getDropChance(entityequipmentslot);
+			boolean flag = d0 > 1.0D;
+
+			if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0) {
+				if (!flag && itemstack.isItemStackDamageable()) {
+					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
+					itemstack.setItemDamage((int) ((double) itemstack.getMaxDamage() * (1.0D - durability)));
+				}
+
+				this.entityDropItem(itemstack, 0.0F);
+			}
+		}
 	}
 
 	@Override
@@ -297,19 +324,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		compound.setBoolean("holdingPotion", this.holdingPotion);
 		compound.setDouble("healthScale", this.healthScale);
 		compound.setInteger("spellTicks", this.spellTicks);
-		
-		if(pathPoints.length > 0) {
+
+		if (this.pathPoints.length > 0) {
 			NBTTagCompound pathTag = new NBTTagCompound();
-			pathTag.setInteger("pointcount", pathPoints.length);
+			pathTag.setInteger("pointcount", this.pathPoints.length);
 			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
-			if(pathPoints.tagCount() != this.pathPoints.length) {
+			if (pathPoints.tagCount() != this.pathPoints.length) {
 				pathPoints = new NBTTagList();
 			}
-			for(int i = 0; i < this.pathPoints.length; i++) {
+			for (int i = 0; i < this.pathPoints.length; i++) {
 				pathPoints.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
 			}
 			pathTag.setTag("points", pathPoints);
-			
+
 			compound.setTag("pathingAI", pathTag);
 		}
 	}
@@ -347,13 +374,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.healthScale <= 1.0D) {
 			this.healthScale = 1.0D;
 		}
-		
-		if(compound.hasKey("pathingAI")) {
+
+		if (compound.hasKey("pathingAI")) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
 			int pointcount = compound.getInteger("pointcount");
 			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
 			this.pathPoints = new BlockPos[pointcount];
-			for(int i = 0; i < this.pathPoints.length; i++) {
+			for (int i = 0; i < this.pathPoints.length; i++) {
 				this.pathPoints[i] = NBTUtil.getPosFromTag(pathPoints.getCompoundTagAt(i));
 			}
 		}
@@ -423,6 +450,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		EntityLivingBase attackTarget = this.getAttackTarget();
+		if (attackTarget != null && this.getEntitySenses().canSee(attackTarget) && this.isEntityInFieldOfView(attackTarget)) {
+			this.lastTimeSeenAttackTarget = this.ticksExisted;
+		}
 
 		if (!this.world.isRemote && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
@@ -817,11 +849,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings) {
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
-		
-		//Recalculate path points
-		if(this.pathPoints.length > 0) {
-			for(int i = 0; i < this.pathPoints.length; i++) {
-				pathPoints[i] = Template.transformedBlockPos(placementSettings, pathPoints[i]);
+
+		// Recalculate path points
+		if (this.pathPoints.length > 0) {
+			for (int i = 0; i < this.pathPoints.length; i++) {
+				this.pathPoints[i] = Template.transformedBlockPos(placementSettings, this.pathPoints[i]);
 			}
 		}
 	}
@@ -1027,55 +1059,59 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public void resize(float widthScale, float heightSacle) {
 		this.setSize(this.width * widthScale, this.height * heightSacle);
-		if(this.stepHeight * heightSacle >= 1.0) {
+		if (this.stepHeight * heightSacle >= 1.0) {
 			this.stepHeight *= heightSacle;
 		}
 	}
-	
+
 	public BlockPos[] getGuardPathPoints() {
 		return this.pathPoints;
 	}
-	
+
 	public boolean isGuardPathLoop() {
 		return this.pathIsLoop;
 	}
-	
+
 	public int getCurrentGuardPathTargetPoint() {
-		return currentTargetPoint;
+		return this.currentTargetPoint;
 	}
-	
+
 	public void setCurrentGuardPathTargetPoint(int value) {
 		this.currentTargetPoint = value;
 	}
-	
+
 	public void addPathPoint(BlockPos position) {
-		if(getHomePositionCQR() == null) {
-			setHomePositionCQR(position);
+		if (this.getHomePositionCQR() == null) {
+			this.setHomePositionCQR(position);
 		}
-		BlockPos[] newPosArr = new BlockPos[this.pathPoints.length +1];
-		for(int i = 0; i < this.pathPoints.length; i++) {
+		BlockPos[] newPosArr = new BlockPos[this.pathPoints.length + 1];
+		for (int i = 0; i < this.pathPoints.length; i++) {
 			newPosArr[i] = this.pathPoints[i];
 		}
-		position = position.subtract(getHomePositionCQR());
+		position = position.subtract(this.getHomePositionCQR());
 		newPosArr[this.pathPoints.length] = position;
 		this.pathPoints = newPosArr;
 	}
-	
+
 	public void clearPathPoints() {
 		this.pathPoints = new BlockPos[] {};
 	}
-	
+
 	public void setPath(final BlockPos[] path) {
-		if(path.length <= 0) {
+		if (path.length <= 0) {
 			this.pathPoints = new BlockPos[] {};
 		}
 		this.pathPoints = new BlockPos[path.length];
-		for(int i = 0; i < path.length; i++) {
-			if(getHomePositionCQR() == null) {
-				setHomePositionCQR(path[i]);
+		for (int i = 0; i < path.length; i++) {
+			if (this.getHomePositionCQR() == null) {
+				this.setHomePositionCQR(path[i]);
 			}
-			this.pathPoints[i] = path[i].subtract(getHomePositionCQR());
+			this.pathPoints[i] = path[i].subtract(this.getHomePositionCQR());
 		}
+	}
+
+	public int getLastTimeSeenAttackTarget() {
+		return this.lastTimeSeenAttackTarget;
 	}
 
 }
