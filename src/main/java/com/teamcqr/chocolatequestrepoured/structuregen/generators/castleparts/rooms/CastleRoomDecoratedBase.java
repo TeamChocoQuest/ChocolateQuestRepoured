@@ -124,7 +124,6 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
             BlockPos pos = spawnPositions.get(this.random.nextInt(spawnPositions.size()));
 
             Entity mobEntity = mobFactory.getGearedEntityByFloor(this.floor, world);
-            NBTTagCompound entityCompound = SpawnerFactory.createSpawnerNBTFromEntity(mobEntity);
 
             Block spawnerBlock = ModBlocks.SPAWNER;
             IBlockState state = spawnerBlock.getDefaultState();
@@ -162,7 +161,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                         RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
                     } else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
                             (DungeonGenUtils.PercentageRandom(15, this.random))) {
-                        RoomDecorTypes.PAINTING.buildRandom(world, pos, side, this.possibleDecoPositions, this.usedDecoPositions);
+                        RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
                     }
                 }
             }

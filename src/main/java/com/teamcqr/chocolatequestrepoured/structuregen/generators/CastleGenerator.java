@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
@@ -59,6 +60,7 @@ public class CastleGenerator implements IDungeonGenerator {
 
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getMainMap()));
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getPostMap()));
+		lists.add(EntityDataPart.splitExtendedEntityDataMap(genArray.getEntityMap()));
 
 		//CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, bossUuids);
 		//MinecraftForge.EVENT_BUS.post(event);
