@@ -201,7 +201,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		PathNavigate navigator = new PathNavigateGround(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
-				return 128.0F;
+				return 256.0F;
 			}
 		};
 		((PathNavigateGround) navigator).setEnterDoors(this.canOpenDoors());
