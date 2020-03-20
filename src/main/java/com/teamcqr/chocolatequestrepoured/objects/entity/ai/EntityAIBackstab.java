@@ -32,20 +32,13 @@ public class EntityAIBackstab extends EntityAIAttack {
 	@Override
 	public void updateTask() {
 		super.updateTask();
+
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		if (attackTarget != null) {
-			if (attackTarget instanceof AbstractEntityCQR) {
-				AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
-				if (this.entity.getDistance(target) < 16.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity)) {
-					if (!this.entity.isSneaking()) {
-						this.entity.setSneaking(true);
-					}
-				} else {
-					if (this.entity.isSneaking()) {
-						this.entity.setSneaking(false);
-					}
-				}
-			}
+
+		if (attackTarget instanceof AbstractEntityCQR) {
+			AbstractEntityCQR target = (AbstractEntityCQR) attackTarget;
+			boolean flag = this.entity.getDistance(target) < 20.0D && target.getEntitySenses().canSee(this.entity) && !target.isEntityInFieldOfView(this.entity);
+			this.entity.setSneaking(flag);
 		}
 	}
 

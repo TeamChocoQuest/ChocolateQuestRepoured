@@ -32,14 +32,14 @@ public class TargetUtil {
 			return true;
 		}
 	};
-	
+
 	public static final Predicate<? super Entity> PREDICATE_ALLIES(CQRFaction faction) {
 		Predicate<Entity> predicate = new Predicate<Entity>() {
 
 			@Override
 			public boolean apply(Entity input) {
-				if(input instanceof AbstractEntityCQR) {
-					return faction.isAlly(((AbstractEntityCQR)input).getFaction());
+				if (input instanceof AbstractEntityCQR) {
+					return faction.isAlly(((AbstractEntityCQR) input).getFaction());
 				} else {
 					return faction.isAlly(input);
 				}
@@ -47,7 +47,7 @@ public class TargetUtil {
 		};
 		return predicate;
 	}
-	
+
 	public static final Predicate<? super Entity> PREDICATE_NON_ALLIES(CQRFaction faction) {
 		Predicate<Entity> predicate = new Predicate<Entity>() {
 
@@ -58,7 +58,6 @@ public class TargetUtil {
 		};
 		return predicate;
 	}
-		
 
 	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = new Predicate<EntityLiving>() {
 		@Override
