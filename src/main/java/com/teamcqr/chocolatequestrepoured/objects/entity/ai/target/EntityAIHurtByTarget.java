@@ -18,22 +18,20 @@ import net.minecraft.world.EnumDifficulty;
 
 public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 
-	protected final Predicate<EntityLiving> predicateAlly;
+	protected final Predicate<EntityLiving> predicateAlly = input -> {
+		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
+			return false;
+		}
+		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			return false;
+		}
+		return EntityAIHurtByTarget.this.isSuitableAlly(input);
+	};
 	protected EntityLivingBase attackTarget;
 	protected int prevRevengeTimer;
 
 	public EntityAIHurtByTarget(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(1);
-		this.predicateAlly = input -> {
-			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
-				return false;
-			}
-			return EntityAIHurtByTarget.this.isSuitableAlly(input);
-		};
 	}
 
 	@Override
@@ -89,7 +87,6 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI {
 		}
 		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
 		return path != null && path.getCurrentPathLength() <= 20;
-		// return this.entity.getEntitySenses().canSee(possibleAlly);
 	}
 
 	protected boolean trySetAttackTarget(EntityLiving entityLiving) {

@@ -33,9 +33,19 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 	@Override
 	public void startExecuting() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-		this.updatePath(attackTarget);
-		this.entity.isSwingInProgress = true;
-		this.entity.setActiveHand(EnumHand.MAIN_HAND);
+
+		if (this.entity.getDistance(attackTarget) < 28.0D) {
+			this.entity.setActiveHand(EnumHand.MAIN_HAND);
+			this.entity.isSwingInProgress = true;
+		} else {
+			this.updatePath(attackTarget);
+		}
+	}
+
+	@Override
+	public void resetTask() {
+		super.resetTask();
+		this.entity.isSwingInProgress = false;
 	}
 
 	@Override
@@ -43,22 +53,17 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 
 		if (attackTarget != null) {
-			boolean canSeeAttackTarget = this.entity.getEntitySenses().canSee(attackTarget);
-			if (canSeeAttackTarget) {
-				this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
+			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
+
+			double distance = this.entity.getDistance(attackTarget);
+			if (distance < 28.0D || (!this.entity.hasPath() && distance < 32.0D)) {
 				this.checkAndPerformAttack(this.entity.getAttackTarget());
-			}
-			if (canSeeAttackTarget && this.entity.isEntityInFieldOfView(attackTarget)) {
-				if (this.entity.getDistance(attackTarget) > 28.0D) {
-					this.entity.isSwingInProgress = false;
-					this.updatePath(attackTarget);
-				} else if (this.entity.hasPath()) {
-					this.entity.getNavigator().clearPath();
-				}
-				this.visionTick = 10;
-			} else if (this.visionTick > 0) {
+				this.entity.getNavigator().clearPath();
+				this.entity.setActiveHand(EnumHand.MAIN_HAND);
+				this.entity.isSwingInProgress = true;
+			} else {
 				this.updatePath(attackTarget);
-				this.visionTick--;
+				this.entity.resetActiveHand();
 				this.entity.isSwingInProgress = false;
 			}
 		}
@@ -68,25 +73,22 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 32.0D) {
 			ItemStack stack = this.entity.getHeldItemMainhand();
-			this.entity.isSwingInProgress = false;
 			if (stack.getItem() instanceof ItemBow) {
 				this.attackTick = 60;
-				EntityArrow arrow = null;
 				ItemStack arrowItem = this.entity.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
-				if(arrowItem == null || arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
-					//arrow = new EntityTippedArrow(this.entity.world, this.entity);
+				if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
 					arrowItem = new ItemStack(Items.ARROW, 1);
-				} else {
-					arrowItem.shrink(1);
 				}
-				arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.entity.world, arrowItem, this.entity);
+				EntityArrow arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.entity.world, arrowItem, this.entity);
+				arrowItem.shrink(1);
+
 				double x = attackTarget.posX - this.entity.posX;
 				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
 				double z = attackTarget.posZ - this.entity.posZ;
 				double distance = Math.sqrt(x * x + z * z);
 				arrow.shoot(x, y + distance * 0.06D, z, 3.0F, 0.0F);
 				arrow.motionX += this.entity.motionX;
-				arrow.motionX += this.entity.motionX;
+				arrow.motionZ += this.entity.motionZ;
 				if (!this.entity.onGround) {
 					arrow.motionY += this.entity.motionY;
 				}

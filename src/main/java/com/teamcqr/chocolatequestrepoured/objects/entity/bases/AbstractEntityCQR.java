@@ -20,6 +20,8 @@ import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ItemStackSync
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
@@ -77,6 +79,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -108,6 +111,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected int spellTicks = 0;
 	protected float sizeScaling = 1.0F;
 	protected int lastTimeSeenAttackTarget;
+	protected Vec3d lastPosAttackTarget;
 
 	protected ESpellType activeSpell = ESpellType.NONE;
 	private CQRFaction factionInstance;
@@ -252,8 +256,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
 		}
 		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		// this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		// this.tasks.addTask(9, new EntityAIBackstab(this));
+		this.tasks.addTask(8, new EntityAIAttackRanged(this));
+		this.tasks.addTask(9, new EntityAIBackstab(this));
 		this.tasks.addTask(10, new EntityAIAttack(this));
 		this.tasks.addTask(11, new EntityAIFollowAttackTarget(this));
 		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
@@ -449,12 +453,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-
 		EntityLivingBase attackTarget = this.getAttackTarget();
-		if (attackTarget != null && this.getEntitySenses().canSee(attackTarget) && this.isEntityInFieldOfView(attackTarget)) {
-			this.lastTimeSeenAttackTarget = this.ticksExisted;
+		if (attackTarget != null) {
+			if (this.getEntitySenses().canSee(attackTarget) && this.isEntityInFieldOfView(attackTarget)) {
+				this.lastTimeSeenAttackTarget = this.ticksExisted;
+			}
+			if (this.lastTimeSeenAttackTarget + 10 > this.ticksExisted) {
+				this.lastPosAttackTarget = attackTarget.getPositionVector();
+			}
 		}
+
+		super.onUpdate();
 
 		if (!this.world.isRemote && this.isMagicArmorActive()) {
 			this.updateCooldownForMagicArmor();
@@ -1112,6 +1121,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public int getLastTimeSeenAttackTarget() {
 		return this.lastTimeSeenAttackTarget;
+	}
+
+	public Vec3d getLastPosAttackTarget() {
+		return this.lastPosAttackTarget;
 	}
 
 }

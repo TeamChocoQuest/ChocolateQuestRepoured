@@ -3,59 +3,56 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 
-public class EntityAICQRNearestAttackTarget extends EntityAIBase {
+public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 
-	protected final AbstractEntityCQR entity;
-	protected final Predicate<EntityLivingBase> predicate;
-	protected final TargetUtil.Sorter sorter;
-	protected EntityLivingBase attackTarget;
+	protected final Predicate<EntityLivingBase> predicate = input -> {
+		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
+			return false;
+		}
+		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			return false;
+		}
+		return EntityAICQRNearestAttackTarget.this.isSuitableTarget(input);
+	};
 
 	public EntityAICQRNearestAttackTarget(AbstractEntityCQR entity) {
-		this.entity = entity;
-		this.predicate = new Predicate<EntityLivingBase>() {
-			@Override
-			public boolean apply(EntityLivingBase input) {
-				if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
-					return false;
-				}
-				if (!EntitySelectors.IS_ALIVE.apply(input)) {
-					return false;
-				}
-				return EntityAICQRNearestAttackTarget.this.isSuitableTarget(input);
-			}
-		};
-		this.sorter = new TargetUtil.Sorter(entity);
-		this.setMutexBits(1);
+		super(entity);
 	}
 
 	@Override
 	public boolean shouldExecute() {
 		if (this.entity.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			this.entity.setAttackTarget(null);
 			return false;
 		}
-		if (this.entity.ticksExisted % 4 == 0 && this.entity.getAttackTarget() == null) {
-			AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
-			List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
-			if (!possibleTargets.isEmpty()) {
-				this.attackTarget = TargetUtil.getNearestEntity(this.entity, possibleTargets);
-				return true;
-			}
+		if (this.isStillSuitableTarget(this.entity.getAttackTarget())) {
+			return false;
 		}
+		this.entity.setAttackTarget(null);
+		return true;
+	}
+
+	@Override
+	public boolean shouldContinueExecuting() {
 		return false;
 	}
 
 	@Override
 	public void startExecuting() {
-		this.entity.setAttackTarget(this.attackTarget);
+		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
+		List<EntityLivingBase> possibleTargets = this.entity.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this.predicate);
+		if (!possibleTargets.isEmpty()) {
+			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
+		}
 	}
 
 	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
@@ -87,6 +84,22 @@ public class EntityAICQRNearestAttackTarget extends EntityAIBase {
 			return this.entity.isInSightRange(possibleTarget);
 		}
 		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 12.0D;
+	}
+
+	private boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
+		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
+			return false;
+		}
+		if (this.entity.getDistance(possibleTarget) > 64.0D) {
+			return false;
+		}
+		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+			return false;
+		}
+		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
+			return false;
+		}
+		return EntitySelectors.IS_ALIVE.apply(possibleTarget);
 	}
 
 }
