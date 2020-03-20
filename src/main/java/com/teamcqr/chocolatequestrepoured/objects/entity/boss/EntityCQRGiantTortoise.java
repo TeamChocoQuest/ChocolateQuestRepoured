@@ -261,11 +261,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
 		}
 		
+		if (source.isUnblockable()) {
+			return super.attackEntityFrom(source, amount, sentFromPart);
+		}
 		if(!sentFromPart) {
 			amount = 0;
 			world.playSound(posX, posY, posZ, getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 		}
-		if (source.isDamageAbsolute() || (sentFromPart && (!this.isInShell() || source == DamageSource.IN_WALL))) {
+		if (sentFromPart && (!this.isInShell() || source == DamageSource.IN_WALL)) {
 			if(stunned) {
 				amount *= 2F;
 			}
