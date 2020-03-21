@@ -28,7 +28,7 @@ public class EntityWalkerLightningBolt extends EntityLightningBolt {
     
     public EntityWalkerLightningBolt(World worldIn, double x, double y, double z, boolean effectOnlyIn)
     {
-    	super(worldIn, x, y, z, true);
+    	super(worldIn, x, 255, z, true);
         this.setLocationAndAngles(x, y, z, 0.0F, 0.0F);
         this.lightningState = 2;
         this.boltVertex = this.rand.nextLong();
