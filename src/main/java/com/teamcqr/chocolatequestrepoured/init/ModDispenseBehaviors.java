@@ -65,6 +65,9 @@ public class ModDispenseBehaviors {
 			source.getWorld().spawnEntity(bubble);
 			//DONE: FIgure out how to make the stack damaged
 			stack.attemptDamageItem(1, source.getWorld().rand, null);
+			if(stack.getItemDamage() >= stack.getMaxDamage()) {
+				stack = ItemStack.EMPTY;
+			}
 			return stack;
 		}
 	};
