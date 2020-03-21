@@ -30,9 +30,9 @@ public class DungeonGenerationHandler {
 		this.world = world;
 		int dim = world.provider.getDimension();
 		if (dim == 0) {
-			this.file = new File(world.getSaveHandler().getWorldDirectory(), "data\\cqr_structure_parts.nbt");
+			this.file = new File(world.getSaveHandler().getWorldDirectory(), "data/cqr_structure_parts.nbt");
 		} else {
-			this.file = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "\\data\\cqr_structure_parts.nbt");
+			this.file = new File(world.getSaveHandler().getWorldDirectory(), "DIM" + dim + "/data/cqr_structure_parts.nbt");
 		}
 	}
 
