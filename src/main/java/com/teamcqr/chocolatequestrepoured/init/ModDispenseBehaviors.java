@@ -3,11 +3,13 @@ package com.teamcqr.chocolatequestrepoured.init;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubblePistol;
 
 import net.minecraft.block.BlockDispenser;
 import net.minecraft.dispenser.IBehaviorDispenseItem;
 import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.Vec3d;
@@ -45,7 +47,13 @@ public class ModDispenseBehaviors {
 			}
 			IPosition disPos = BlockDispenser.getDispensePosition(source);
 			Vec3d startLoc = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ());
-			Vec3d v = new Vec3d( 0.25D*(-0.5D + velocity.x + rng.nextDouble()),  0.25D*(-0.5D + velocity.y + rng.nextDouble()),  0.25D*(-0.5D + velocity.z + rng.nextDouble()));
+			Item item = stack.getItem();
+			double acc = 0.5D;
+			if(item instanceof ItemBubblePistol) {
+				ItemBubblePistol pistol = (ItemBubblePistol) item;
+				acc = pistol.getInaccurary();
+			} 
+			Vec3d v = new Vec3d( -acc + velocity.x + (2 * acc * rng.nextDouble()),  -acc + velocity.y + (2 * acc * rng.nextDouble()), -acc + velocity.z + (2 * acc * rng.nextDouble()));
 			v = v.normalize();
 			v = v.scale(1.4);
 			
