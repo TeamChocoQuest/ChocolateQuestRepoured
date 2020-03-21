@@ -126,24 +126,36 @@ public class ProtectionHandler {
         	if(region == null) {
         		continue;
         	}
-            regionsToBeZipped.put("dim_" + dimID + "\\" + region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region));
+            regionsToBeZipped.put("dim_" + dimID + "/" + region.getUUIDString(), ObjectSerializationUtil.writeSerializableToByteArray(region));
         }
-        FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\prot_region_defs.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
+        FileIOUtil.saveToFile(FileIOUtil.getAbsoluteWorldPath() + "data/CQR/prot_region_defs.zip", ArchiveManipulationUtil.zip(regionsToBeZipped));
     }
 
     // ProtectedRegion Deserialization
     @SubscribeEvent
     public void eventHandleWorldLoad(WorldEvent.Load e) {
-        HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "data\\CQR\\prot_region_defs.zip"));
+        HashMap<String, byte[]> protectedRegionsFromDisc = ArchiveManipulationUtil.unzip(FileIOUtil.loadFromFile(FileIOUtil.getAbsoluteWorldPath() + "data/CQR/prot_region_defs.zip"));
         if (protectedRegionsFromDisc != null) {
             for (String regionFileName : protectedRegionsFromDisc.keySet()) {
-
                 // Filter Dimension ID from filename (hacky hotfix to support negative dimension ids)
-                String dimIDAsString = "";
-                int dimIDAsStringCursorPos = 4;
-                while (regionFileName.charAt(dimIDAsStringCursorPos) != '\\') {
+                //String dimIDAsString = "";
+                //int dimIDAsStringCursorPos = 4;
+                /*while (regionFileName.length() > dimIDAsStringCursorPos && regionFileName.charAt(dimIDAsStringCursorPos) != '/') {
                     dimIDAsString += regionFileName.substring(dimIDAsStringCursorPos, dimIDAsStringCursorPos + 1);
                     dimIDAsStringCursorPos++;
+                }*/
+                String[] splitted = regionFileName.split("_");
+                String sub = splitted[splitted.length -1];
+                char[] chars = sub.toCharArray();
+                int index = 0;
+                String dimIDAsString = "";
+                if(chars[0] == '-') {
+                	dimIDAsString += chars[index];
+                	index++;
+                }
+                while(Character.isDigit(chars[index])) {
+                	dimIDAsString += chars[index];
+                	index++;
                 }
 
                 ArrayList<ProtectedRegion> temp = this.activeRegions.get(Integer.parseInt(dimIDAsString));
