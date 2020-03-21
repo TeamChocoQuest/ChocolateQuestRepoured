@@ -171,7 +171,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		float dmg = amount;
 		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			 dmg /= 4;
+			 dmg *= 0.75F;
 		}
 		
 		active = true;
