@@ -2,10 +2,10 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.math.Vec3d;
 
 public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
@@ -59,7 +59,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 		Vec3d v = new Vec3d(circleRad, 0, 0);
 		for(int i = 0; i < (2* circleRad); i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle * i);
-			EntityLightningBolt lightning = new EntityLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
+			EntityWalkerLightningBolt lightning = new EntityWalkerLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
 			lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
 			entity.world.addWeatherEffect(lightning);
 			entity.world.spawnEntity(lightning);
