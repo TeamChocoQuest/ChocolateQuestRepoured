@@ -66,6 +66,7 @@ public class ModDispenseBehaviors {
 	public static void registerDispenseBehaviors() {
 		//Bubble Gun
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
 	}
 
 }
