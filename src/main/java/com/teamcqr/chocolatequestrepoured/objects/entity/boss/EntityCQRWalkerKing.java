@@ -121,7 +121,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				attemptTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
 			}
 		}
-		if(active) {
+		if(active && !world.isRemote) {
 			if(getAttackTarget() == null && !world.isRemote) {
 				activationCooldown--;
 				if(activationCooldown < 0) {
@@ -129,7 +129,13 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 					world.getWorldInfo().setThundering(false);
 					activationCooldown = 80;
 				}
-			} 
+			} else if(!world.isRemote) {
+				world.getWorldInfo().setCleanWeatherTime(0);
+				world.getWorldInfo().setRainTime(400);
+				world.getWorldInfo().setThunderTime(200);
+				world.getWorldInfo().setRaining(true);
+				world.getWorldInfo().setThundering(true);
+			}
 			lightningTick++;
 			if(lightningTick > borderLightning) {
 				// strike lightning
@@ -141,15 +147,17 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				
 				EntityWalkerLightningBolt entitybolt = new EntityWalkerLightningBolt(world, posX +x, posY +y, posZ +z, false);
 				world.spawnEntity(entitybolt);
-				world.addWeatherEffect(entitybolt);
+				//world.addWeatherEffect(entitybolt);
 			}
+		} else if(world.isRemote) {
+			active = false;
 		}
 		super.onLivingUpdate();
 	}
 	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(20F);
+		this.heal(2F);
 	}
 
 	@Override
@@ -175,9 +183,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			 dmg *= 0.75F;
 		}
 		
-		active = true;
-		activationCooldown = 80;
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+			active = true;
+			activationCooldown = 80;
 			world.getWorldInfo().setCleanWeatherTime(0);
 			world.getWorldInfo().setRainTime(400);
 			world.getWorldInfo().setThunderTime(200);
