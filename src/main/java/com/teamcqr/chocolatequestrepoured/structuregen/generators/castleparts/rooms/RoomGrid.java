@@ -527,9 +527,13 @@ public class RoomGrid {
 	}
 
 	private void setPathingForCellSet(HashSet<RoomGridCell> cellsInArea) {
+	    HashSet<RoomGridCell> masterPathList = new HashSet<>();
+
 		// For each cell in this area
 		for (RoomGridCell cell : cellsInArea) {
-			// Check N E S W
+            masterPathList.add(cell); //make sure to include this cell in pathing
+
+			// Check each horizontal (EnumFacing order is S W N E)
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 				// If adjacent cell isn't part of my area and is selected
 				RoomGridCell adjacent = this.getAdjacentCell(cell, direction);
@@ -538,18 +542,17 @@ public class RoomGrid {
 						adjacent.isSelectedForBuilding() && // adjacent cell is selected
 						!cell.getPathableCellsCopy().contains(adjacent)) // I haven't already been pathed to it
 				{
-					// Copy the adjacent cell's pathable list to all cells in my area
-					for (RoomGridCell myPathable : cellsInArea) {
-						myPathable.addPathableCells(adjacent.getPathableCellsCopy());
-					}
-					// Copy my pathable list out to all the adjacent cell's pathable cells
-					HashSet<RoomGridCell> adjacentPathable = adjacent.getPathableCellsCopy();
-					for (RoomGridCell theirPathable : adjacentPathable) {
-						theirPathable.addPathableCells(cell.getPathableCellsCopy());
-					}
+                    //maintain a "superset" of all pathable sets of cells we see around us
+				    masterPathList.addAll(adjacent.getPathableCellsCopy());
 				}
 			}
 		}
+
+        //Reflexively copy out the new master list so all connected sections path to each other
+        // This MUST be done last, since we don't know who is around the new cell area until we check all of them
+        for (RoomGridCell cell : masterPathList) {
+            cell.addPathableCells(masterPathList);
+        }
 	}
 
 	public boolean adjacentCellIsPopulated(RoomGridCell startCell, EnumFacing direction) {
