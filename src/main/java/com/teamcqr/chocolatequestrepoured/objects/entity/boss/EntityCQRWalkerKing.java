@@ -28,6 +28,7 @@ import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -266,7 +267,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
 	}
 	
 	
@@ -275,6 +275,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) {
 			sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true);
+		}
+		if(!EnchantmentHelper.hasVanishingCurse(sword)) {
+			sword.addEnchantment(Enchantments.VANISHING_CURSE, 1);
 		}
 		
 		return sword;
