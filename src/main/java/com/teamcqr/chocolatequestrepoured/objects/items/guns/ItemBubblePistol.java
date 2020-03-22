@@ -59,6 +59,9 @@ public class ItemBubblePistol extends Item implements IRangedWeapon {
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
 		stack.damageItem(1, entityLiving);
+		if(entityLiving instanceof EntityPlayer) {
+			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, getCooldown());
+		}
 	}
 	
 	@Override

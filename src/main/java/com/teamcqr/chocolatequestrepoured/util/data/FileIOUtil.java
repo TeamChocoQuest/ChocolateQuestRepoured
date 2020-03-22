@@ -33,7 +33,7 @@ public class FileIOUtil {
 
 	// Helper method for saving to world file
 	public static String getAbsoluteWorldPath() {
-		return DimensionManager.getCurrentSaveRootDirectory() + "\\";
+		return DimensionManager.getCurrentSaveRootDirectory() + "/";
 	}
 
 	public static void saveToFile(String fileNameIncludingFullPathAndExtension, byte[] toSave) {

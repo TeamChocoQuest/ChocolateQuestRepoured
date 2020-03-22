@@ -56,6 +56,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubblePistol;
+import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubbleRifle;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemCannonBall;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemFlamethrower;
@@ -318,7 +319,7 @@ public class ModItems {
 					setItemName(new ItemCannonBall(), "cannon_ball"),
 					setItemName(new ItemFlamethrower(), "flamethrower"),
 					setItemName(new ItemBubblePistol(), "bubble_pistol"),
-					setItemName(new ItemBubblePistol(), "bubble_rifle"),
+					setItemName(new ItemBubbleRifle(), "bubble_rifle"),
 
 					setItemName(new ItemHookshot(), "hookshot"),
 					setItemName(new ItemLongshot(), "longshot"),

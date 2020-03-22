@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalke
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerLightningBolt;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -27,6 +28,7 @@ import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -120,7 +122,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				attemptTeleport(teleportPos.getX(), teleportPos.getY(), teleportPos.getZ());
 			}
 		}
-		if(active) {
+		if(active && !world.isRemote) {
 			if(getAttackTarget() == null && !world.isRemote) {
 				activationCooldown--;
 				if(activationCooldown < 0) {
@@ -128,7 +130,13 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 					world.getWorldInfo().setThundering(false);
 					activationCooldown = 80;
 				}
-			} 
+			} else if(!world.isRemote) {
+				world.getWorldInfo().setCleanWeatherTime(0);
+				world.getWorldInfo().setRainTime(400);
+				world.getWorldInfo().setThunderTime(200);
+				world.getWorldInfo().setRaining(true);
+				world.getWorldInfo().setThundering(true);
+			}
 			lightningTick++;
 			if(lightningTick > borderLightning) {
 				// strike lightning
@@ -138,17 +146,19 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				int z = -15 + getRNG().nextInt(41);
 				int y = -10 + getRNG().nextInt(21);
 				
-				EntityLightningBolt entitybolt = new EntityLightningBolt(world, posX +x, posY +y, posZ +z, false);
+				EntityWalkerLightningBolt entitybolt = new EntityWalkerLightningBolt(world, posX +x, posY +y, posZ +z, false);
 				world.spawnEntity(entitybolt);
-				world.addWeatherEffect(entitybolt);
+				//world.addWeatherEffect(entitybolt);
 			}
+		} else if(world.isRemote) {
+			active = false;
 		}
 		super.onLivingUpdate();
 	}
 	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(20F);
+		this.heal(2F);
 	}
 
 	@Override
@@ -171,12 +181,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		float dmg = amount;
 		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			 dmg /= 4;
+			 dmg *= 0.75F;
 		}
 		
-		active = true;
-		activationCooldown = 80;
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+			active = true;
+			activationCooldown = 80;
 			world.getWorldInfo().setCleanWeatherTime(0);
 			world.getWorldInfo().setRainTime(400);
 			world.getWorldInfo().setThunderTime(200);
@@ -257,7 +267,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
-		this.setDropChance(EntityEquipmentSlot.MAINHAND, 0F);
 	}
 	
 	
@@ -266,6 +275,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		for(int i = 0; i < 1 + getRNG().nextInt(3 * (world.getDifficulty().ordinal() +1)); i++) {
 			sword = EnchantmentHelper.addRandomEnchantment(getRNG(), sword, 20 + getRNG().nextInt(41), true);
+		}
+		if(!EnchantmentHelper.hasVanishingCurse(sword)) {
+			sword.addEnchantment(Enchantments.VANISHING_CURSE, 1);
 		}
 		
 		return sword;
