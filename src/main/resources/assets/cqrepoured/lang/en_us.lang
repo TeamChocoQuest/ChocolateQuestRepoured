@@ -303,6 +303,8 @@ item.bullet_diamond.name=Diamond Bullets
 item.bullet_fire.name=Fiery Bullets
 item.cannon_ball.name=Cannon Ball
 item.flamethrower.name=Flamethrower
+item.bubble_pistol.name=Bubble Gun
+item.bubble_rifle.name=Advanced Bubble Gun
 
 //Hookshots
 item.hookshot.name=Hookshot
