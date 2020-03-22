@@ -65,7 +65,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 		EntityWalkerLightningBolt lightning = new EntityWalkerLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
 		lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
 		entity.world.spawnEntity(lightning);
-		entity.world.addWeatherEffect(lightning);
+		//entity.world.addWeatherEffect(lightning);
 		r += RADIUS_INCREMENT;
 		angle += ANGLE_INCREMENT;
 		if(angle >= 360) {
