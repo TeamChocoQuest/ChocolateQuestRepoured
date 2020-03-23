@@ -35,6 +35,8 @@ public abstract class CastleRoomBase {
 	protected int floor;
 
 	protected int maxSlotsUsed = 1; // Max number of contiguous room grid slots this can occupy
+	protected boolean isRootRoomInBlock = false;
+	protected ArrayList<CastleRoomBase> roomsInBlock = new ArrayList<>();
 
 	protected boolean isTower = false;
 	protected boolean pathable = true;
@@ -483,6 +485,19 @@ public abstract class CastleRoomBase {
 
 	public boolean isWalkableRoof() {
 		return (this.roomType == EnumRoomType.WALKABLE_ROOF || this.roomType == EnumRoomType.WALKABLE_TOWER_ROOF);
+	}
+
+	public void setRoomsInBlock(ArrayList<CastleRoomBase> rooms) {
+		this.roomsInBlock = rooms;
+		makeRoomBlockAdjustments();
+	}
+
+	protected void makeRoomBlockAdjustments() {
+		;
+	}
+
+	public void setAsRootRoom() {
+		this.isRootRoomInBlock = true;
 	}
 
 	@Override

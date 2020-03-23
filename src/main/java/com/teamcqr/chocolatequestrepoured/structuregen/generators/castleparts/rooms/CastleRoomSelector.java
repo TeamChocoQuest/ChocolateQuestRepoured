@@ -371,11 +371,22 @@ public class CastleRoomSelector {
 			int sizeX = (maxX > 1) ? (1 + this.random.nextInt(maxX - 1)) : 1;
 			int sizeZ = (maxZ > 1) ? (1 + this.random.nextInt(maxZ - 1)) : 1;
 
+			ArrayList<CastleRoomBase> blockRooms = new ArrayList<>();
 			for (int x = 0; x < sizeX; x++) {
 				for (int z = 0; z < sizeZ; z++) {
 					RoomGridCell buildCell = this.grid.getCellAt(rootCell.getFloor(), rootCell.getGridX() + x, rootCell.getGridZ() + z);
-					buildCell.setRoom(RoomFactoryCastle.CreateGenericRoom(type, this.getRoomStart(buildCell), this.roomSize, this.floorHeight, buildCell.getFloor()));
+					CastleRoomBase roomToBuild = RoomFactoryCastle.CreateGenericRoom(type, this.getRoomStart(buildCell), this.roomSize, this.floorHeight, buildCell.getFloor());
+					buildCell.setRoom(roomToBuild);
+					blockRooms.add(roomToBuild);
+
+					if ((x == 0) && (z == 0) && (roomToBuild != null)) {
+						roomToBuild.setAsRootRoom();
+					}
 				}
+			}
+
+			for (CastleRoomBase room : blockRooms) {
+				room.setRoomsInBlock(blockRooms);
 			}
 
 			unTyped = this.grid.getAllCellsWhere(RoomGridCell::needsRoomType);
