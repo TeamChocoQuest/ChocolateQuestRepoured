@@ -124,10 +124,6 @@ public class CastleRoomSelector {
 	}
 
 	private void generateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
-		// Start with the entire list of populated cells
-		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(RoomGridCell::isPopulated);
-		ArrayList<RoomGridCell> toGenerate = new ArrayList<>(populated);
-
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
