@@ -19,7 +19,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
         LONG_HORIZONTAL
     }
 
-    private ShelfPattern pattern = null;
+    private ShelfPattern pattern;
     private BlockPos shelfStart = null;
     private int shelfXLen = 0;
     private int shelfZLen = 0;
@@ -72,8 +72,6 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
             default:
                 break;
         }
-
-
     }
 
     @Override
@@ -111,5 +109,20 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
                 }
             }
         }
+    }
+
+    @Override
+    protected void makeRoomBlockAdjustments() {
+        if (this.isRootRoomInBlock) {
+            for (CastleRoomBase blockRoom : this.roomsInBlock) {
+                if (blockRoom instanceof CastleRoomLibrary) {
+                    ((CastleRoomLibrary)blockRoom).setPattern(this.pattern);
+                }
+            }
+        }
+    }
+
+    public void setPattern(ShelfPattern pattern) {
+        this.pattern = pattern;
     }
 }
