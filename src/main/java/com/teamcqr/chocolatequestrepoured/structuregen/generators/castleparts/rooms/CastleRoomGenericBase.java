@@ -13,16 +13,31 @@ public abstract class CastleRoomGenericBase extends CastleRoomDecoratedBase {
 
 	@Override
 	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
-
+		; //No special generation - decorations only
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-        this.addEdgeDecoration(world, genArray, dungeon);
-        this.addWallDecoration(world, genArray, dungeon);
-        this.addMidDecoration(world, genArray, dungeon);
-        this.addSpawners(world, genArray, dungeon, mobFactory);
-        this.addChests(world, genArray, dungeon);
-        this.fillEmptySpaceWithAir(genArray);
-    }
+	boolean shouldBuildEdgeDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldBuildWallDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldBuildMidDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldAddSpawners() {
+		return true;
+	}
+
+	@Override
+	boolean shouldAddChests() {
+		return true;
+	}
 }
