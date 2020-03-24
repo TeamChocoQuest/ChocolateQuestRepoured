@@ -33,6 +33,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -103,11 +104,14 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
 			if(getAttackTarget() != null && !world.isRemote) {
-				Vec3d v = getPositionVector().subtract(getAttackTarget().getPositionVector());
+				Vec3d v = getAttackTarget().getLookVec();
 				v = v.normalize();
 				v = v.subtract(0, v.y, 0);
-				v = v.scale(2);
-				teleportPos = new BlockPos(getAttackTarget().getPositionVector().add(v));
+				v = v.scale(3);
+				teleportPos = new BlockPos(getAttackTarget().getPositionVector().subtract(v));
+				if(world.isBlockFullCube(teleportPos) || world.isBlockFullCube(teleportPos.offset(EnumFacing.UP)) || world.isAirBlock(teleportPos.offset(EnumFacing.DOWN))) {
+					teleportPos = getAttackTarget().getPosition();
+				}
 			} else if(getHomePositionCQR() != null && !world.isRemote) {
 				teleportPos = getHomePositionCQR();
 			}

@@ -54,23 +54,24 @@ public class ContainerBadge extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+			ItemStack itemstack = itemstack1.copy();
 
 			if (index > 35) {
-				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
-					return ItemStack.EMPTY;
+				if (this.mergeItemStack(itemstack1, 0, 36, false)) {
+					return itemstack;
 				}
-			} else if (!this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
-				return ItemStack.EMPTY;
+			} else {
+				if (this.mergeItemStack(itemstack1, 36, this.inventorySlots.size(), false)) {
+					return itemstack;
+				}
 			}
-
 		}
-		return itemstack;
+
+		return ItemStack.EMPTY;
 	}
 
 	@Override
