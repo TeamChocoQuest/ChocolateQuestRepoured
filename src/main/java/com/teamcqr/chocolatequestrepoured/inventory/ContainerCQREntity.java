@@ -9,12 +9,14 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBullet;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
@@ -42,54 +44,93 @@ public class ContainerCQREntity extends Container {
 
 		this.addSlotToContainer(new SlotItemHandler(inventory, 0, 107, 8) {
 			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
+
+			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.FEET;
+				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.FEET, entity);
+			}
+
+			@Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
+				ItemStack itemstack = this.getStack();
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return "minecraft:items/empty_armor_slot_boots";
+				return ItemArmor.EMPTY_SLOT_NAMES[0];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 1, 89, 8) {
 			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
+
+			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.LEGS;
+				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.LEGS, entity);
+			}
+
+			@Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
+				ItemStack itemstack = this.getStack();
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return "minecraft:items/empty_armor_slot_leggings";
+				return ItemArmor.EMPTY_SLOT_NAMES[1];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 2, 71, 8) {
 			@Override
+			public int getSlotStackLimit() {
+				return 1;
+			}
+
+			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.CHEST;
+				return stack.getItem().isValidArmor(stack, EntityEquipmentSlot.CHEST, entity);
+			}
+
+			@Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
+				ItemStack itemstack = this.getStack();
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return "minecraft:items/empty_armor_slot_chestplate";
+				return ItemArmor.EMPTY_SLOT_NAMES[2];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 3, 53, 8) {
 			@Override
-			public boolean isItemValid(ItemStack stack) {
-				return true;
+			public int getSlotStackLimit() {
+				return 1;
+			}
+
+			@Override
+			public boolean canTakeStack(EntityPlayer playerIn) {
+				ItemStack itemstack = this.getStack();
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
 			@Nullable
 			@SideOnly(Side.CLIENT)
 			public String getSlotTexture() {
-				return "minecraft:items/empty_armor_slot_helmet";
+				return ItemArmor.EMPTY_SLOT_NAMES[3];
 			}
 		});
 		this.addSlotToContainer(new SlotItemHandler(inventory, 4, 71, 26) {
@@ -156,34 +197,35 @@ public class ContainerCQREntity extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
-		ItemStack itemstack = ItemStack.EMPTY;
 		Slot slot = this.inventorySlots.get(index);
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+			ItemStack itemstack = itemstack1.copy();
 
 			// custom slot priority: FEET -> LEGS -> CHEST -> HEAD (helmet) -> POTION -> BADGE -> ARROW -> OFFHAND (shield) -> MAINHAND -> OFFHAND (other) -> HEAD (other)
 			if (index > 35) {
-				if (!this.mergeItemStack(itemstack1, 0, 35, false)) {
-					return ItemStack.EMPTY;
+				if (this.mergeItemStack(itemstack1, 0, 36, false)) {
+					return itemstack;
 				}
-			} else if (this.mergeItemStack(itemstack1, 36, 39, false)) {
-				return itemstack;
-			} else if (EntityLiving.getSlotForItemStack(itemstack1) == EntityEquipmentSlot.HEAD && this.mergeItemStack(itemstack1, 39, 40, false)) {
-				return itemstack;
-			} else if (this.mergeItemStack(itemstack1, 42, 45, false)) {
-				return itemstack;
-			} else if (itemstack1.getItem() instanceof ItemShield && this.mergeItemStack(itemstack1, 41, 42, false)) {
-				return itemstack;
-			} else if (!this.mergeItemStack(itemstack1, 41, 43, false)) {
-				return itemstack;
-			} else if (!this.mergeItemStack(itemstack1, 39, 40, false)) {
-				return ItemStack.EMPTY;
+			} else {
+				if (this.mergeItemStack(itemstack1, 36, 39, false)) {
+					return itemstack;
+				} else if (EntityLiving.getSlotForItemStack(itemstack1) == EntityEquipmentSlot.HEAD && this.mergeItemStack(itemstack1, 39, 40, false)) {
+					return itemstack;
+				} else if (this.mergeItemStack(itemstack1, 42, 45, false)) {
+					return itemstack;
+				} else if (itemstack1.getItem() instanceof ItemShield && this.mergeItemStack(itemstack1, 41, 42, false)) {
+					return itemstack;
+				} else if (this.mergeItemStack(itemstack1, 40, 42, false)) {
+					return itemstack;
+				} else if (this.mergeItemStack(itemstack1, 39, 40, false)) {
+					return itemstack;
+				}
 			}
 
 		}
-		return itemstack;
+		return ItemStack.EMPTY;
 	}
 
 }
