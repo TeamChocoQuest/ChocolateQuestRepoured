@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -11,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-import net.minecraft.world.World;
 
 public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	private EnumFacing doorSide;
@@ -97,7 +95,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {

@@ -52,7 +52,6 @@ public class CastleGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		final int padding = 5;
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
 		this.roomHelper.generate(world, genArray, this.dungeon, origin, bossUuids);

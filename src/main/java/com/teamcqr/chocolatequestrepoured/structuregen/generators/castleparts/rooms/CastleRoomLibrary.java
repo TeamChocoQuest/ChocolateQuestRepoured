@@ -6,11 +6,8 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.Collections;
 
 public class CastleRoomLibrary extends CastleRoomDecoratedBase
 {
@@ -40,7 +37,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+    protected void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
         //allow 1 space from the wall to start
         shelfStart = this.getDecorationStartPos().south().east();
         shelfXLen = this.getDecorationLengthX() - 2;

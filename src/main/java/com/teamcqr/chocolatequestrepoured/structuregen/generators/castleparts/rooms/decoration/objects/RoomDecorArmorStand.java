@@ -5,11 +5,9 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class RoomDecorArmorStand extends RoomDecorEntityBase {
 	public RoomDecorArmorStand() {
@@ -26,6 +24,5 @@ public class RoomDecorArmorStand extends RoomDecorEntityBase {
 		stand.setPositionAndRotation((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5), rotation, 0f);
 		NBTTagCompound nbt = stand.writeToNBT(new NBTTagCompound());
 		genArray.addEntity(pos, EntityList.getKey(stand), nbt);
-		//world.spawnEntity(stand);
 	}
 }

@@ -65,7 +65,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {

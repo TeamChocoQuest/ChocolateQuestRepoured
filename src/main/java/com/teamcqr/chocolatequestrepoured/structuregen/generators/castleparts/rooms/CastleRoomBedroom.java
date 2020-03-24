@@ -13,7 +13,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomBedroom extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
@@ -37,8 +36,8 @@ public class CastleRoomBedroom extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
-		super.generateRoom(world, genArray, dungeon);
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+		super.generateRoom(genArray, dungeon);
 	}
 
 	@Override

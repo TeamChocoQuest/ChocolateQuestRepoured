@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 	public CastleRoomWalkableRoofTower(BlockPos startOffset, int sideLength, int height, CastleRoomTowerSquare tower, int floor) {
@@ -23,8 +22,8 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
-		super.generateRoom(world, genArray, dungeon);
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+		super.generateRoom(genArray, dungeon);
 	}
 
 	@Override

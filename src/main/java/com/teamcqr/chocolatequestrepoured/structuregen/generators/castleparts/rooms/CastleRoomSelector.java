@@ -118,16 +118,17 @@ public class CastleRoomSelector {
 	}
 
 	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
-		this.generateRooms(world, startPos, dungeon, genArray, bossUuids);
+		this.generateRooms(startPos, dungeon, genArray, bossUuids);
+		this.addDecoration(world, startPos, dungeon, genArray, bossUuids);
 
-		this.generateRoofs(world, genArray, dungeon);
+		this.generateRoofs(genArray, dungeon);
 	}
 
-	private void generateRooms(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
+	private void generateRooms(BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.getRoom().generate(world, genArray, dungeon);
+			cell.getRoom().generate(genArray, dungeon);
 		}
 
 	}
@@ -155,13 +156,13 @@ public class CastleRoomSelector {
 		return mobType;
 	}
 
-	private void generateRoofs(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void generateRoofs(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (CastleAddonRoof roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
 		}
 
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.getRoom().generate(world, genArray, dungeon);
+			cell.getRoom().generate(genArray, dungeon);
 		}
 	}
 
