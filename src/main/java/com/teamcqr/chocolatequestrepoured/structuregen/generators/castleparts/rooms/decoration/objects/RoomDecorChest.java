@@ -36,7 +36,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 		int[] chestIDs = room.getChestIDs();
 		if (chestIDs != null) {
 			Block chestBlock = Blocks.CHEST;
-			IBlockState state = chestBlock.getDefaultState();
+			IBlockState state = this.schematic.get(0).getState(side);
 			TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
 			if (chest != null) {
 				int eltID = chestIDs[dungeon.getRandom().nextInt(chestIDs.length)];
@@ -51,7 +51,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 					chest.setLootTable(resLoc, seed);
 				}
 				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
-				genArray.addBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.forceAddBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN);
 				decoMap.add(start);
 			}
 		} else {
