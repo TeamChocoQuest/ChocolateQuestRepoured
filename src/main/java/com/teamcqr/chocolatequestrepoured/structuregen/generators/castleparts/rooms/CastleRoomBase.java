@@ -68,9 +68,9 @@ public abstract class CastleRoomBase {
 		this.possibleDecoPositions = new HashSet<>();
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		this.setupDecoration(genArray);
-		this.generateRoom(world, genArray, dungeon);
+		this.generateRoom(genArray, dungeon);
 		this.generateWalls(genArray, dungeon);
 
 		if (this.defaultFloor) {
@@ -85,7 +85,7 @@ public abstract class CastleRoomBase {
 		;
 	}
 
-	protected abstract void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon);
+	protected abstract void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon);
 
 	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
 		; // Default is no decoration
@@ -165,7 +165,7 @@ public abstract class CastleRoomBase {
         emptySpaces.removeAll(this.usedDecoPositions);
 
         for (BlockPos emptyPos : emptySpaces) {
-            genArray.addBlockState(emptyPos, Blocks.GLASS.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+            genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
         }
     }
 

@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomLandingDirected extends CastleRoomBase {
 	private int openingWidth;
@@ -28,7 +27,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		IBlockState blockToBuild;
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {

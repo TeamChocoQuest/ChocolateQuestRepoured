@@ -8,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomWalkableRoof extends CastleRoomBase {
 	public CastleRoomWalkableRoof(BlockPos startOffset, int sideLength, int height, int floor) {
@@ -18,7 +17,7 @@ public class CastleRoomWalkableRoof extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		;
 	}
 

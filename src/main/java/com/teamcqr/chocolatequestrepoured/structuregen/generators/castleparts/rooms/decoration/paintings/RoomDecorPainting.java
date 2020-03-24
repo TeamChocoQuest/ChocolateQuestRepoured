@@ -41,8 +41,6 @@ public class RoomDecorPainting {
 
 		for (Vec3i placement : rotated) {
 			BlockPos pos = start.add(placement);
-			//Have to set to air now, otherwise placement may fail
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			decoMap.add(pos);
 		}
 		this.createEntityDecoration(art, world, start, genArray, side);

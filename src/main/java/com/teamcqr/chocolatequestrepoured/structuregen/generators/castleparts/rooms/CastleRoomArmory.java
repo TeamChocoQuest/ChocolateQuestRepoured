@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomArmory extends CastleRoomGenericBase {
 	public CastleRoomArmory(BlockPos startOffset, int sideLength, int height, int floor) {
@@ -26,8 +25,8 @@ public class CastleRoomArmory extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
-		super.generateRoom(world, genArray, dungeon);
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+		super.generateRoom(genArray, dungeon);
 	}
 
 	@Override

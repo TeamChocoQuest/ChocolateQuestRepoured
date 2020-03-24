@@ -45,7 +45,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		BlockPos nwCorner = this.origin;
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -66,7 +66,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory)
 	{
 		// Have to add torches last because they won't place unless the wall next to them is already built
-		this.placeTorches(world, this.origin);
+		this.placeTorches(this.origin, genArray);
 	}
 
 	@Override
@@ -82,8 +82,9 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			indicator.setAlwaysRenderNameTag(true);
 			indicator.setSilent(true);
 			indicator.setNoGravity(true);
+			NBTTagCompound indicatorNbt = indicator.writeToNBT(new NBTTagCompound());
 
-			world.spawnEntity(indicator);
+			genArray.addEntity(pos, EntityList.getKey(indicator), indicatorNbt);
 			
 			return;
 		}
@@ -106,16 +107,16 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		}
 	}
 
-	private void placeTorches(World world, BlockPos nwCorner) {
+	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {
 		IBlockState torchBase = Blocks.TORCH.getDefaultState();
-		world.setBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH));
-		world.setBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH));
-		world.setBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH));
-		world.setBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH));
-		world.setBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST));
-		world.setBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST));
-		world.setBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST));
-		world.setBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST));
+		genArray.addBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.MAIN);
 	}
 
 	private BlockPos getBossRoomBuildStartPosition() {

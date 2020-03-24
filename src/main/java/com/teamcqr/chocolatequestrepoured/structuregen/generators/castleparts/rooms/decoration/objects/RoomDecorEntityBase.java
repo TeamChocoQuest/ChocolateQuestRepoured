@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -43,8 +42,6 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 
 		for (Vec3i placement : rotated) {
 			BlockPos pos = start.add(placement);
-			//Have to set to air now, otherwise placement may fail
-			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			decoMap.add(pos);
 		}
 		this.createEntityDecoration(world, start, genArray, side);

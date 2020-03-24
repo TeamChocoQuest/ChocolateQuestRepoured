@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class CastleRoomRoofBossEmpty extends CastleRoomBase {
 	public CastleRoomRoofBossEmpty(BlockPos startOffset, int sideLength, int height, int floor) {
@@ -14,7 +13,7 @@ public class CastleRoomRoofBossEmpty extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 	}
 
 	@Override
