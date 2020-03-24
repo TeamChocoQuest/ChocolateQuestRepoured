@@ -23,10 +23,28 @@ public class CastleRoomBossStairEmpty extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-		this.addEdgeDecoration(world, genArray, dungeon);
-		this.addWallDecoration(world, genArray, dungeon);
-		this.addSpawners(world, genArray, dungeon, mobFactory);
+	boolean shouldBuildEdgeDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldBuildWallDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldBuildMidDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldAddSpawners() {
+		return true;
+	}
+
+	@Override
+	boolean shouldAddChests() {
+		return false;
 	}
 
 	@Override

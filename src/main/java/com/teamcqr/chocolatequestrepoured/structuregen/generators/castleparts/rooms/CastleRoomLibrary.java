@@ -83,6 +83,31 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
         fillEmptySpaceWithAir(genArray);
     }
 
+    @Override
+    boolean shouldBuildEdgeDecoration() {
+        return false;
+    }
+
+    @Override
+    boolean shouldBuildWallDecoration() {
+        return true;
+    }
+
+    @Override
+    boolean shouldBuildMidDecoration() {
+        return false;
+    }
+
+    @Override
+    boolean shouldAddSpawners() {
+        return true;
+    }
+
+    @Override
+    boolean shouldAddChests() {
+        return false;
+    }
+
     private void generateVertical(BlockStateGenArray genArray) {
         for (int x = 0; x < shelfXLen; x++) {
             for (int y = 0; y < shelfHeight; y++) {

@@ -28,7 +28,7 @@ import java.util.HashMap;
 
 public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected static final int MAX_DECO_ATTEMPTS = 3;
-    protected static final int LIGHT_LEVEL = 3;
+    protected static final int LIGHT_LEVEL = 4;
     protected DecorationSelector decoSelector;
     protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
@@ -47,6 +47,35 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
             }
         }
     }
+
+    @Override
+    public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+        this.setupDecoration(genArray);
+
+        if (this.shouldBuildEdgeDecoration()) {
+            this.addEdgeDecoration(world, genArray, dungeon);
+        }
+        if (this.shouldBuildWallDecoration()) {
+            this.addWallDecoration(world, genArray, dungeon);
+        }
+        if (this.shouldBuildMidDecoration()) {
+            this.addMidDecoration(world, genArray, dungeon);
+        }
+        if (this.shouldAddSpawners()) {
+            this.addSpawners(world, genArray, dungeon, mobFactory);
+        }
+        if (this.shouldAddChests()) {
+            this.addChests(world, genArray, dungeon);
+        }
+
+        this.fillEmptySpaceWithAir(genArray);
+    }
+
+    abstract boolean shouldBuildEdgeDecoration();
+    abstract boolean shouldBuildWallDecoration();
+    abstract boolean shouldBuildMidDecoration();
+    abstract boolean shouldAddSpawners();
+    abstract boolean shouldAddChests();
 
     protected void addEdgeDecoration(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         if (this.decoSelector.edgeDecorRegistered()) {
@@ -68,6 +97,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
                                 // If we added air here then this is a candidate spot for a chest
                                 if (decor instanceof RoomDecorNone) {
+                                    this.usedDecoPositions.add(pos);
                                     this.possibleChestLocs.put(pos, side);
                                 }
                                 break;
@@ -87,7 +117,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
     protected void addMidDecoration(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
         if (this.decoSelector.midDecorRegistered()) {
-            ArrayList<BlockPos> area = this.getDecorationLayer(0);
+            ArrayList<BlockPos> area = this.getDecorationMiddle();
             for (BlockPos pos : area) {
                 if (this.usedDecoPositions.contains(pos)) {
                     // This position is already decorated, so keep going
@@ -98,7 +128,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
                 while (attempts < MAX_DECO_ATTEMPTS) {
                     IRoomDecor decor = this.decoSelector.randomMidDecor();
-                    EnumFacing side = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
+                    EnumFacing side = EnumFacing.NORTH; //EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
                     if (decor.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) {
                         decor.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
 

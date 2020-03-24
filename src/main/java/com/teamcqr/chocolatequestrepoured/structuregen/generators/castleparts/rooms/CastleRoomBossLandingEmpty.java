@@ -24,17 +24,34 @@ public class CastleRoomBossLandingEmpty extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
-		this.addEdgeDecoration(world, genArray, dungeon);
-		this.addWallDecoration(world, genArray, dungeon);
-		this.addSpawners(world, genArray, dungeon, mobFactory);
-	}
-
-	@Override
 	public void addInnerWall(EnumFacing side) {
 		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST) && !(side == this.doorSide)) {
 			super.addInnerWall(side);
 		}
 	}
 
+	@Override
+	boolean shouldBuildEdgeDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldBuildWallDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldBuildMidDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldAddSpawners() {
+		return true;
+	}
+
+	@Override
+	boolean shouldAddChests() {
+		return false;
+	}
 }

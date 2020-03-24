@@ -121,6 +121,31 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
+	boolean shouldBuildEdgeDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldBuildWallDecoration() {
+		return true;
+	}
+
+	@Override
+	boolean shouldBuildMidDecoration() {
+		return false;
+	}
+
+	@Override
+	boolean shouldAddSpawners() {
+		return true;
+	}
+
+	@Override
+	boolean shouldAddChests() {
+		return false;
+	}
+
+	@Override
 	public void addInnerWall(EnumFacing side) {
 		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST) && !(side == this.doorSide)) {
 			super.addInnerWall(side);

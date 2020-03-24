@@ -165,7 +165,7 @@ public abstract class CastleRoomBase {
         emptySpaces.removeAll(this.usedDecoPositions);
 
         for (BlockPos emptyPos : emptySpaces) {
-            genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+            genArray.addBlockState(emptyPos, Blocks.GLASS.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
         }
     }
 
@@ -300,7 +300,6 @@ public abstract class CastleRoomBase {
 					for (int x = doorStart; x <= doorEnd; x++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							genArray.forceAddBlockState(toAdd, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
 							this.usedDecoPositions.add(toAdd);
 						}
 					}
@@ -318,7 +317,6 @@ public abstract class CastleRoomBase {
 					for (int z = doorStart; z <= doorEnd; z++) {
 						for (int y = yStart; y < yEnd; y++) {
 							toAdd = new BlockPos(x, y, z);
-							genArray.forceAddBlockState(toAdd, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
 							this.usedDecoPositions.add(toAdd);
 						}
 					}
@@ -337,6 +335,15 @@ public abstract class CastleRoomBase {
 
 		removeAllButEdge(result, side);
 		result.removeIf(p -> this.usedDecoPositions.contains(p)); // Remove block if it is occupied already
+
+		return result;
+	}
+
+	protected ArrayList<BlockPos> getDecorationMiddle() {
+		ArrayList<BlockPos> result = getDecorationLayer(0);
+		for (EnumFacing side : EnumFacing.HORIZONTALS) {
+			result.removeAll(this.getDecorationEdge(side));
+		}
 
 		return result;
 	}
