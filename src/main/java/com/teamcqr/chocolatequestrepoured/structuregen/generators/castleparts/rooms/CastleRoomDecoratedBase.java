@@ -36,16 +36,6 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         this.possibleChestLocs = new HashMap<>();
     }
 
-    protected void addChests(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
-        if (this.getChestIDs() != null && !this.possibleChestLocs.isEmpty()) {
-            if (DungeonGenUtils.PercentageRandom(50, this.random)) {
-                IRoomDecor chest = new RoomDecorChest();
-                BlockPos pos = (BlockPos) this.possibleChestLocs.keySet().toArray()[this.random.nextInt(this.possibleChestLocs.size())];
-                chest.build(world, genArray, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);
-            }
-        }
-    }
-
     @Override
     public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
         this.setupDecoration(genArray);
@@ -192,6 +182,16 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                         RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
                     }
                 }
+            }
+        }
+    }
+
+    protected void addChests(World world, BlockStateGenArray genArray, CastleDungeon dungeon) {
+        if (this.getChestIDs() != null && !this.possibleChestLocs.isEmpty()) {
+            if (DungeonGenUtils.PercentageRandom(50, this.random)) {
+                IRoomDecor chest = new RoomDecorChest();
+                BlockPos pos = (BlockPos) this.possibleChestLocs.keySet().toArray()[this.random.nextInt(this.possibleChestLocs.size())];
+                chest.build(world, genArray, this, dungeon, pos, this.possibleChestLocs.get(pos), this.usedDecoPositions);
             }
         }
     }

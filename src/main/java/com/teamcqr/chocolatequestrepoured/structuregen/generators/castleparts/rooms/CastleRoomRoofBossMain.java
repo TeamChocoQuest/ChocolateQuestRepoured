@@ -4,8 +4,10 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -20,7 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
+import java.util.*;
 
 public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
@@ -67,6 +69,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	{
 		// Have to add torches last because they won't place unless the wall next to them is already built
 		this.placeTorches(this.origin, genArray);
+
+		this.placeChests(world, this.origin, genArray);
 	}
 
 	@Override
@@ -117,6 +121,44 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST);
 		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
 		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
+	}
+
+	private void placeChests(World world, BlockPos nwCorner, BlockStateGenArray genArray) {
+		int numChestsTotal = DungeonGenUtils.randomBetweenGaussian(this.random, 4, 8);
+		int numTreasureChests = DungeonGenUtils.randomBetween(this.random, 2, 4);
+		int treasureChestsPlaced = 0;
+		HashMap<BlockPos, EnumFacing> possibleChestLocs = new HashMap<>();
+		possibleChestLocs.put(nwCorner.add(1, 5, 7), EnumFacing.WEST);
+		possibleChestLocs.put(nwCorner.add(1, 5, 9), EnumFacing.WEST);
+		possibleChestLocs.put(nwCorner.add(15, 5, 7), EnumFacing.EAST);
+		possibleChestLocs.put(nwCorner.add(15, 5, 9), EnumFacing.EAST);
+		possibleChestLocs.put(nwCorner.add(7, 5, 1), EnumFacing.NORTH);
+		possibleChestLocs.put(nwCorner.add(9, 5, 1), EnumFacing.NORTH);
+		possibleChestLocs.put(nwCorner.add(7, 5, 15), EnumFacing.SOUTH);
+		possibleChestLocs.put(nwCorner.add(9, 5, 15), EnumFacing.SOUTH);
+		List<Map.Entry<BlockPos, EnumFacing>> locList = new ArrayList<>(possibleChestLocs.entrySet());
+		Collections.shuffle(locList, this.random);
+
+		for (int i = 0; i < numChestsTotal; i++) {
+			ELootTable lootTable;
+
+			if (treasureChestsPlaced < numTreasureChests) {
+				lootTable = ELootTable.CQ_TREASURE;
+				++treasureChestsPlaced;
+			}
+			else
+			{
+				if (DungeonGenUtils.PercentageRandom(50, random))
+				{
+					lootTable = ELootTable.CQ_MATERIAL;
+				}
+				else
+				{
+					lootTable = ELootTable.CQ_EQUIPMENT;
+				}
+			}
+			genArray.addChestWithLootTable(world, locList.get(i).getKey(), locList.get(i).getValue().getOpposite(), lootTable, BlockStateGenArray.GenerationPhase.POST);
+		}
 	}
 
 	private BlockPos getBossRoomBuildStartPosition() {
