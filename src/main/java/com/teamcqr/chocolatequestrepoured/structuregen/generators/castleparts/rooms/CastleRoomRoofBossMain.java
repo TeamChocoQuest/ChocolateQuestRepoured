@@ -109,14 +109,14 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 
 	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {
 		IBlockState torchBase = Blocks.TORCH.getDefaultState();
-		genArray.addBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.MAIN);
-		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
 	}
 
 	private BlockPos getBossRoomBuildStartPosition() {
@@ -241,7 +241,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		if (x == 1 || x == 15) {
 			if (z == 3 || z == 6 || z == 10 || z == 13) {
 				return chiseledStoneBlock;
-			} else if ((z == 1 || z == 2) && y == 1) {
+			} else if ((z == 1 || z == 2 || z == 14 || z == 15) && y == 1) {
 				return Blocks.LAVA.getDefaultState();
 			} else if (z >= 7 && z <= 9) {
 				if (y == 3 && (z == 7 || z == 9)) {
@@ -256,7 +256,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		} else if (z == 1 || z == 15) {
 			if (x == 3 || x == 6 || x == 10 || x == 13) {
 				return chiseledStoneBlock;
-			} else if (x == 2 && y == 1) {
+			} else if ((x == 2 || x == 14) && y == 1) {
 				return Blocks.LAVA.getDefaultState();
 			} else if (x >= 7 && x <= 9) {
 				if (y == 3 && (x == 7 || x == 9)) {
