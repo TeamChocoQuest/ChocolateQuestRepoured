@@ -27,7 +27,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 	protected abstract void makeSchematic();
 
 	@Override
-	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
+	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap, CastleRoomBase room) {
 		ArrayList<DecoBlockBase> rotated = this.alignSchematic(side);
 
 		for (DecoBlockBase placement : rotated) {

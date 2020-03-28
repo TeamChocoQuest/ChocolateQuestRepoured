@@ -30,6 +30,9 @@ public class CastleRoomBedroom extends CastleRoomGenericBase {
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FIREPLACE, 1);
 		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BED, 2);
 
+		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 20);
+		this.decoSelector.registerMidDecor(RoomDecorTypes.PILLAR, 1);
+
 		List<EnumDyeColor> possibleColors = Arrays.asList(EnumDyeColor.values());
 		Collections.shuffle(possibleColors);
 		this.carpetColor = possibleColors.get(0);
