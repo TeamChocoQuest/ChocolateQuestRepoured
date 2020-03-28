@@ -1,11 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,6 +43,32 @@ public class BlockStateGenArray {
     public Map<BlockPos, EntityDataPart.ExtendedEntityData> getEntityMap()
     {
         return entityMap;
+    }
+
+    public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ELootTable lootTable, GenerationPhase phase) {
+        if (lootTable != null) {
+            Block chestBlock = Blocks.CHEST;
+            IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing);
+            TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
+            if (chest != null) {
+                ResourceLocation resLoc = null;
+                try {
+                    resLoc = lootTable.getResourceLocation();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                if (resLoc != null) {
+                    long seed = WorldDungeonGenerator.getSeed(world, pos.getX() + pos.getY(), pos.getZ() + pos.getY());
+                    chest.setLootTable(resLoc, seed);
+                }
+                NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+                return this.addBlockState(pos, state, nbt, phase);
+            }
+        } else {
+            System.out.format("Tried to place a chest with a null loot table");
+        }
+
+        return false;
     }
 
     public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
