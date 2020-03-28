@@ -1,46 +1,37 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
-
-import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.math.BlockPos;
 
-public class CastleRoomBedroom extends CastleRoomGenericBase {
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroom(BlockPos startOffset, int sideLength, int height, int floor) {
+	public CastleRoomBedroomFancy(BlockPos startOffset, int sideLength, int height, int floor) {
 		super(startOffset, sideLength, height, floor);
-		this.roomType = EnumRoomType.BEDROOM;
+		this.roomType = EnumRoomType.BEDROOM_FANCY;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
 		this.defaultFloor = true;
 
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 5);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 1);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TABLE_1x1, 2);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FIREPLACE, 1);
-		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BED, 2);
-
-		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 20);
-		this.decoSelector.registerMidDecor(RoomDecorTypes.PILLAR, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.NONE, 10);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.SHELF, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.TABLE_1x1, 4);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.JUKEBOX, 1);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.FIREPLACE, 2);
+		this.decoSelector.registerEdgeDecor(RoomDecorTypes.BED, 3);
 
 		List<EnumDyeColor> possibleColors = Arrays.asList(EnumDyeColor.values());
 		Collections.shuffle(possibleColors);
 		this.carpetColor = possibleColors.get(0);
-	}
-
-	@Override
-	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
-		super.generateRoom(genArray, dungeon);
 	}
 
 	@Override

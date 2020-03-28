@@ -8,8 +8,11 @@ public class RoomFactoryCastle {
 			case KITCHEN:
 				return new CastleRoomKitchen(startPos, sideLength, height, floor);
 
-			case BEDROOM:
-				return new CastleRoomBedroom(startPos, sideLength, height, floor);
+			case BEDROOM_BASIC:
+				return new CastleRoomBedroomBasic(startPos, sideLength, height, floor);
+
+			case BEDROOM_FANCY:
+				return new CastleRoomBedroomFancy(startPos, sideLength, height, floor);
 
 			case ARMORY:
 				return new CastleRoomArmory(startPos, sideLength, height, floor);

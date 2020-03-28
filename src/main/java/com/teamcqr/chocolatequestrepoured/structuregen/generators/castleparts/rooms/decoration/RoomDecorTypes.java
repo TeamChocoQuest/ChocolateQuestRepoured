@@ -13,7 +13,9 @@ public class RoomDecorTypes {
     public static final IRoomDecor CRAFTING_TABLE = new RoomDecorCraftingTable();
     public static final IRoomDecor FIREPLACE = new RoomDecorFireplace();
     public static final IRoomDecor FURNACE = new RoomDecorFurnace();
+    public static final IRoomDecor JUKEBOX = new RoomDecorJukebox();
     public static final IRoomDecor NONE = new RoomDecorNone();
+    public static final IRoomDecor PLANKS = new RoomDecorPlanks();
     public static final IRoomDecor SHELF = new RoomDecorShelf();
     public static final IRoomDecor PILLAR = new RoomDecorPillar();
     public static final IRoomDecor TABLE_1x1 = new RoomDecorTableSmall();
