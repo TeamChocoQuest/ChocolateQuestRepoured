@@ -55,7 +55,6 @@ public class CastleGenerator implements IDungeonGenerator {
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
 		this.roomHelper.generate(world, genArray, this.dungeon, origin, bossUuids);
-		this.roomHelper.addDecoration(world, this.origin, this.dungeon, genArray, bossUuids);
 
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getMainMap()));
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getPostMap()));
