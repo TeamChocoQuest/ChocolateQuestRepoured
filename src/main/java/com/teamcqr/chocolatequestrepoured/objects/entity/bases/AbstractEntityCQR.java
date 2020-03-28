@@ -223,7 +223,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (CQRConfig.advanced.enableSpecialFeatures && source != null && source.getImmediateSource() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getImmediateSource());
 			if (resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
-				amount /= 10;
+				amount /= 2;
 				if (this.getRNG().nextDouble() <= 0.05D) {
 					this.attackEntityAsMob(source.getTrueSource());
 				}
@@ -553,7 +553,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// InF compat
 		ResourceLocation resLoc = EntityList.getKey(entityIn);
 		if (resLoc != null && CQRConfig.advanced.enableSpecialFeatures && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
-			f *= 10;
+			f *= 2;
 		}
 		// End of InF compat
 		boolean flag = entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), f);
