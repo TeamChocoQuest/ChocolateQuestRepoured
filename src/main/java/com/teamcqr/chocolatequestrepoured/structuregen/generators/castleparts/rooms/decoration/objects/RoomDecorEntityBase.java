@@ -23,7 +23,7 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 	}
 
 	@Override
-	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap) {
+	public boolean wouldFit(BlockPos start, EnumFacing side, HashSet<BlockPos> decoArea, HashSet<BlockPos> decoMap, CastleRoomBase room) {
 		ArrayList<Vec3i> rotated = this.alignFootprint(this.footprint, side);
 
 		for (Vec3i placement : rotated) {

@@ -457,7 +457,7 @@ public abstract class CastleRoomBase {
 		return result;
 	}
 
-	protected int getDecorationLengthY() {
+	public int getDecorationLengthY() {
 		int result = this.height;
 
 		if (this.defaultCeiling) {
