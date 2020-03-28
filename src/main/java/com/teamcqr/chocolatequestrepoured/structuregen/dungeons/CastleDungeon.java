@@ -66,8 +66,10 @@ public class CastleDungeon extends DungeonBase {
 			this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightArmory", 1);
 			this.roomRandomizer.add(EnumRoomType.ARMORY, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroom", 1);
-			this.roomRandomizer.add(EnumRoomType.BEDROOM, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomBasic", 1);
+			this.roomRandomizer.add(EnumRoomType.BEDROOM_BASIC, weight);
+			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomFancy", 1);
+			this.roomRandomizer.add(EnumRoomType.BEDROOM_FANCY, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightKitchen", 1);
 			this.roomRandomizer.add(EnumRoomType.KITCHEN, weight);
 			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightLibrary", 1);

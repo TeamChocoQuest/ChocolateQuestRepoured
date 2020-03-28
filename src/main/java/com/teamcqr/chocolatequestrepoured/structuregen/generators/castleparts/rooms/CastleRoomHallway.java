@@ -31,6 +31,9 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		this.defaultFloor = true;
 		this.defaultCeiling = true;
 
+		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 25);
+		this.decoSelector.registerMidDecor(RoomDecorTypes.PILLAR, 1);
+
 	}
 
 	@Override
