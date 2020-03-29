@@ -99,6 +99,10 @@ public class EntitySummoningCircle extends EntityLiving {
 	public void onUpdate() {
 		super.onUpdate();
 
+		if(this.hasNoGravity() == false) {
+			this.noClip = false;
+		}
+		
 		// Summon entity
 		if (this.ticksExisted >= this.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon && !this.getEntityWorld().isRemote && this.world != null && this.entityToSpawn != null) {
 			boolean flag = true;

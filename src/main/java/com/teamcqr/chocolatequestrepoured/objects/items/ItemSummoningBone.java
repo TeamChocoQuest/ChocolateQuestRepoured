@@ -36,7 +36,7 @@ public class ItemSummoningBone extends Item {
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if(spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
+		if(!worldIn.isRemote && spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
 			stack.damageItem(1, entityLiving);
 		}
 		if(entityLiving instanceof EntityPlayerMP) {
