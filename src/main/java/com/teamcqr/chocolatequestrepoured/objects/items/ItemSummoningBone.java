@@ -67,6 +67,7 @@ public class ItemSummoningBone extends Item {
 				}
 				EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, null, player);
 				circle.setSummon(resLoc);
+				circle.setNoGravity(false);
 				circle.setPosition(result.hitVec.x, result.hitVec.y +1, result.hitVec.z);
 				worldIn.spawnEntity(circle);
 				return true;

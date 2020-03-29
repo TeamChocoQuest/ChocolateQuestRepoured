@@ -89,6 +89,7 @@ public class EntitySummoningCircle extends EntityLiving {
 		this.summonerLiving = summoner;
 		this.summoner = isummoner;
 		this.noClip = true;
+		this.setNoGravity(true);
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
 		this.setHealth(1F);
 		this.setEntityInvulnerable(true);
@@ -166,11 +167,6 @@ public class EntitySummoningCircle extends EntityLiving {
 
 	@Override
 	public boolean getIsInvulnerable() {
-		return true;
-	}
-
-	@Override
-	public boolean hasNoGravity() {
 		return true;
 	}
 
