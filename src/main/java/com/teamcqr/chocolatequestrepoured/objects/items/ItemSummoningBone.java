@@ -78,5 +78,7 @@ public class ItemSummoningBone extends Item {
 			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, 20);
 		}
 	}
+	
+	//TODO: Tooltip that shows what is going to be summoned
 
 }
