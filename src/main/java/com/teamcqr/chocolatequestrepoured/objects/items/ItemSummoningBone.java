@@ -8,9 +8,13 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -31,15 +35,13 @@ public class ItemSummoningBone extends Item {
 	
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if(super.onItemUseFinish(stack, worldIn, entityLiving) != null) {
-			if(entityLiving instanceof EntityPlayerMP) {
-				if(spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
-					stack.attemptDamageItem(1, entityLiving.getRNG(), (EntityPlayerMP) entityLiving);
-				}
-			}
-			return stack;
-		} 
-		return stack;
+		if(spawnEntity((EntityPlayer) entityLiving, worldIn, stack)) {
+			stack.damageItem(1, entityLiving);
+		}
+		if(entityLiving instanceof EntityPlayerMP) {
+			((EntityPlayerMP) entityLiving).getCooldownTracker().setCooldown(this, 20);
+		}
+		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 	
 	public boolean spawnEntity(EntityPlayer player, World worldIn, ItemStack item) {
@@ -65,10 +67,22 @@ public class ItemSummoningBone extends Item {
 				EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, null, player);
 				circle.setSummon(resLoc);
 				circle.setPosition(result.getBlockPos().getX(), result.getBlockPos().getY() +1, result.getBlockPos().getZ());
+				worldIn.spawnEntity(circle);
 				return true;
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		playerIn.setActiveHand(handIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(handIn));
+	}
+	
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.BOW;
 	}
 	
 	@Override
