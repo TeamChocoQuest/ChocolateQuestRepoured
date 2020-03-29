@@ -2,11 +2,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -30,6 +32,7 @@ public class EntitySummoningCircle extends EntityLiving {
 	protected float timeMultiplierForSummon = 1F;
 	protected ECircleTexture texture = ECircleTexture.METEOR;
 	protected ISummoner summoner = null;
+	protected EntityLivingBase summonerLiving = null;
 	protected Vec3d velForSummon = null;
 	protected final int BORDER_WHEN_TO_SPAWN_IN_TICKS = 60;
 
@@ -58,11 +61,11 @@ public class EntitySummoningCircle extends EntityLiving {
 	}
 
 	public EntitySummoningCircle(World worldIn) {
-		this(worldIn, new ResourceLocation("minecraft", "zombie"), 1F, ECircleTexture.SKELETON, null);
+		this(worldIn, new ResourceLocation("minecraft", "zombie"), 1F, ECircleTexture.ZOMBIE, null);
 	}
 
 	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture textre, ISummoner summoner) {
-		super(worldIn);
+		/*super(worldIn);
 		this.setSize(2.0F, 0.005F);
 		// System.out.println("Mob: " + entityToSpawn);
 		this.entityToSpawn = entityToSpawn;
@@ -72,6 +75,23 @@ public class EntitySummoningCircle extends EntityLiving {
 		this.noClip = true;
 		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
 		this.setHealth(1F);
+		this.setEntityInvulnerable(true);*/
+		this(worldIn, entityToSpawn, timeMultiplier, textre, summoner, null);
+	}
+	
+	public EntitySummoningCircle(World worldIn, ResourceLocation entityToSpawn, float timeMultiplier, ECircleTexture textre, ISummoner isummoner, EntityLivingBase summoner) {
+		super(worldIn);
+		this.setSize(2.0F, 0.005F);
+		// System.out.println("Mob: " + entityToSpawn);
+		this.entityToSpawn = entityToSpawn;
+		this.timeMultiplierForSummon = timeMultiplier;
+		this.texture = textre;
+		this.summonerLiving = summoner;
+		this.summoner = isummoner;
+		this.noClip = true;
+		this.setNoGravity(true);
+		this.dataManager.set(TEXTURE_INDEX, this.texture.getTextureID());
+		this.setHealth(1F);
 		this.setEntityInvulnerable(true);
 	}
 
@@ -79,6 +99,10 @@ public class EntitySummoningCircle extends EntityLiving {
 	public void onUpdate() {
 		super.onUpdate();
 
+		if(this.hasNoGravity() == false) {
+			this.noClip = false;
+		}
+		
 		// Summon entity
 		if (this.ticksExisted >= this.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon && !this.getEntityWorld().isRemote && this.world != null && this.entityToSpawn != null) {
 			boolean flag = true;
@@ -87,6 +111,9 @@ public class EntitySummoningCircle extends EntityLiving {
 				Entity summon = EntityList.createEntityByIDFromName(this.entityToSpawn, this.world);
 				summon.setUniqueId(MathHelper.getRandomUUID());
 				summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
+				if(summonerLiving != null && summon instanceof AbstractEntityCQR) {
+					((AbstractEntityCQR)summon).setLeader(summonerLiving);
+				}
 
 				if (this.velForSummon != null) {
 					//summon.setVelocity(this.velForSummon.x, this.velForSummon.y, this.velForSummon.z);
@@ -144,11 +171,6 @@ public class EntitySummoningCircle extends EntityLiving {
 
 	@Override
 	public boolean getIsInvulnerable() {
-		return true;
-	}
-
-	@Override
-	public boolean hasNoGravity() {
 		return true;
 	}
 

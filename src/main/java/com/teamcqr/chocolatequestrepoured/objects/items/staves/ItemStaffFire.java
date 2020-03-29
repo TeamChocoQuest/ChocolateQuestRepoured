@@ -73,7 +73,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
 
 		if (result != null && !worldIn.isRemote) {
-			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
+			BlockPos pos = new BlockPos(result.hitVec);
 			IBlockState blockStateLookingAt = worldIn.getBlockState(pos);
 
 			if (blockStateLookingAt.getBlock() == ModBlocks.UNLIT_TORCH) {
