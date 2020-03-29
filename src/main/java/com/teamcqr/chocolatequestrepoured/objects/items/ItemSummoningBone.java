@@ -16,6 +16,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -50,7 +51,7 @@ public class ItemSummoningBone extends Item {
 		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
 
 		if (result != null) {
-			if(worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 2))) {
+			if(worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(new BlockPos(result.hitVec).offset(EnumFacing.UP, 2))) {
 				//DONE: Spawn circle
 				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 				//Get entity id
@@ -66,7 +67,7 @@ public class ItemSummoningBone extends Item {
 				}
 				EntitySummoningCircle circle = new EntitySummoningCircle(worldIn, resLoc, 1F, ECircleTexture.METEOR, null, player);
 				circle.setSummon(resLoc);
-				circle.setPosition(result.getBlockPos().getX(), result.getBlockPos().getY() +1, result.getBlockPos().getZ());
+				circle.setPosition(result.hitVec.x, result.hitVec.y +1, result.hitVec.z);
 				worldIn.spawnEntity(circle);
 				return true;
 			}
