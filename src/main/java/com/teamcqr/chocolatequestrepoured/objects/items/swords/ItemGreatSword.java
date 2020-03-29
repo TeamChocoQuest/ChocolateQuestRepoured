@@ -150,20 +150,15 @@ public class ItemGreatSword extends ItemSword {
 
 	@Override
 	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
-		if (!worldIn.isRemote) {
-			if (entityIn instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) entityIn;
+		if (!worldIn.isRemote && entityIn instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entityIn;
 
-				if (player.getHeldItemMainhand() == stack) {
-					if (!player.getHeldItemOffhand().isEmpty()) {
-						if (!player.inventory.addItemStackToInventory(player.getHeldItemOffhand())) {
-							player.entityDropItem(player.getHeldItemOffhand(), 0F);
-						}
+			if (player.getHeldItemMainhand() == stack && !player.getHeldItemOffhand().isEmpty()) {
+				ItemStack stack1 = player.getHeldItemOffhand();
+				player.setHeldItem(EnumHand.OFF_HAND, ItemStack.EMPTY);
 
-						if (!player.capabilities.isCreativeMode) {
-							player.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
-						}
-					}
+				if (!player.inventory.addItemStackToInventory(stack1)) {
+					player.entityDropItem(stack1, 0.0F);
 				}
 			}
 		}
