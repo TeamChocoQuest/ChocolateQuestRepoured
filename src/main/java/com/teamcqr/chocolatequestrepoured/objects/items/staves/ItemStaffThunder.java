@@ -57,7 +57,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
 
 		if (result != null) {
-			EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ(), false);
+			EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, false);
 			worldIn.addWeatherEffect(entity);
 			worldIn.spawnEntity(entity);
 		}

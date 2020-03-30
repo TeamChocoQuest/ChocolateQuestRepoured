@@ -43,6 +43,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnEggCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpawnerConverter;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSpikedGlove;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSummoningBone;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemSuperTool;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemTeleportStone;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorBull;
@@ -257,7 +258,8 @@ public class ModItems {
 	public static final Item SOUL_BOTTLE = Null();
 	public static final Item BADGE = Null();
 	public static final Item ALCHEMY_BAG = Null();
-
+	public static final Item CURSED_BONE = Null();
+	
 	// Dungeon tools
 	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
@@ -390,6 +392,7 @@ public class ModItems {
 					setItemName(new ItemMobToSpawner(), "mob_to_spawner_tool"),
 					setItemName(new ItemBadge(), "badge"),
 					setItemName(new ItemAlchemyBag(), "alchemy_bag"),
+					setItemName(new ItemSummoningBone(), "cursed_bone"),
 
 					setItemName(new ItemStructureSelector(), "structure_selector"),
 					setItemName(new ItemPathTool(), "path_tool"),
