@@ -23,6 +23,9 @@ public class RoomFactoryCastle {
 			case LIBRARY:
 				return new CastleRoomLibrary(startPos, sideLength, height, floor);
 
+			case POOL:
+				return new CastleRoomPool(startPos, sideLength, height, floor);
+
 			default:
 				return null;
 		}

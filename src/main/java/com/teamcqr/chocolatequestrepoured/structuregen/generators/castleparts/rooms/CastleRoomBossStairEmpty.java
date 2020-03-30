@@ -37,7 +37,7 @@ public class CastleRoomBossStairEmpty extends CastleRoomDecoratedBase {
 
 	@Override
 	boolean shouldAddSpawners() {
-		return true;
+		return false;
 	}
 
 	@Override
