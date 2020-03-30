@@ -3,7 +3,8 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,12 +34,12 @@ import net.minecraftforge.common.util.BlockSnapshot;
 public class BlockPlacingHelper {
 
 	public static void setBlockStates(World world, BlockPos pos, Block[][][] blocks, int flags) {
-		Map<BlockPos, IBlockState> map = new HashMap<>();
+		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
 		for (int x = 0; x < blocks.length; x++) {
 			for (int y = 0; y < blocks[x].length; y++) {
 				for (int z = 0; z < blocks[x][y].length; z++) {
 					if (blocks[x][y][z] != null) {
-						map.put(pos.add(x, y, z), blocks[x][y][z].getDefaultState());
+						map.add(new AbstractMap.SimpleEntry(pos.add(x, y, z), blocks[x][y][z].getDefaultState()));
 					}
 				}
 			}
@@ -47,12 +48,12 @@ public class BlockPlacingHelper {
 	}
 
 	public static void setBlockStates(World world, BlockPos pos, IBlockState[][][] blockstates, int flags) {
-		Map<BlockPos, IBlockState> map = new HashMap<>();
+		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
 		for (int x = 0; x < blockstates.length; x++) {
 			for (int y = 0; y < blockstates[x].length; y++) {
 				for (int z = 0; z < blockstates[x][y].length; z++) {
 					if (blockstates[x][y][z] != null) {
-						map.put(pos.add(x, y, z), blockstates[x][y][z]);
+						map.add(new AbstractMap.SimpleEntry(pos.add(x, y, z), blockstates[x][y][z]));
 					}
 				}
 			}
@@ -61,13 +62,13 @@ public class BlockPlacingHelper {
 	}
 
 	public static void setBlockStates(World world, BlockPos pos, ExtendedBlockStatePart.ExtendedBlockState[][][] extendedstates, int flags) {
-		Map<BlockPos, IBlockState> map = new HashMap<>();
+		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
 
 		for (int x = 0; x < extendedstates.length; x++) {
 			for (int y = 0; y < extendedstates[x].length; y++) {
 				for (int z = 0; z < extendedstates[x][y].length; z++) {
 					if (extendedstates[x][y][z] != null) {
-						map.put(pos.add(x, y, z), extendedstates[x][y][z].getState());
+						map.add(new AbstractMap.SimpleEntry(pos.add(x, y, z), extendedstates[x][y][z].getState()));
 					}
 				}
 			}
@@ -97,12 +98,12 @@ public class BlockPlacingHelper {
 	}
 
 	public static void setBlockStates(World world, BlockPos pos, List<Template.BlockInfo> list, PlacementSettings placementSettings, int flags) {
-		Map<BlockPos, IBlockState> map = new HashMap<>();
+		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
 
 		for (Template.BlockInfo blockInfo : list) {
 			BlockPos position = pos.add(Template.transformedBlockPos(placementSettings, blockInfo.pos));
 			IBlockState state = blockInfo.blockState.withMirror(placementSettings.getMirror()).withRotation(placementSettings.getRotation());
-			map.put(position, state);
+			map.add(new AbstractMap.SimpleEntry(position, state));
 		}
 
 		BlockPlacingHelper.setBlockStates(world, map, flags);
@@ -124,7 +125,7 @@ public class BlockPlacingHelper {
 		}
 	}
 
-	public static void setBlockStates(World world, Map<BlockPos, IBlockState> map, int flags) {
+	public static void setBlockStates(World world, List<Map.Entry<BlockPos, IBlockState>> map, int flags) {
 		if (!world.isRemote && world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return;
 		}
@@ -135,7 +136,7 @@ public class BlockPlacingHelper {
 		List<BlockPos> lightUpdates = new LinkedList<>();
 		List<BlockPlacingHelper.BlockUpdate> blockUpdates = new LinkedList<>();
 
-		for (Map.Entry<BlockPos, IBlockState> entry : map.entrySet()) {
+		for (Map.Entry<BlockPos, IBlockState> entry : map) {
 			BlockPos pos = entry.getKey();
 			IBlockState newState = entry.getValue();
 			if (world.isOutsideBuildHeight(pos)) {

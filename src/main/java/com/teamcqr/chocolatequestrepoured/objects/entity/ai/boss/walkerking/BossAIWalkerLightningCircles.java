@@ -24,7 +24,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if(entity != null && !entity.isDead && entity.getAttackTarget() != null) {
+		if(!entity.world.isRemote && entity != null && !entity.isDead && entity.getAttackTarget() != null) {
 			cooldown--;
 			return cooldown <= 0;
 		}
