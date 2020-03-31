@@ -210,6 +210,7 @@ item.spiked_glove.name=Spiked Glove
 item.alchemy_bag.name=Alchemy Bag
 item.structure_selector.name=Selection Selector Helper
 item.path_tool.name=Path Tool
+item.cursed_bone.name=Cursed Bone
 
 //Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -545,6 +546,7 @@ description.staff_poison.name=Whatever this is supposed to do, it doesn't work y
 description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
+description.cursed_bone.name=Mob to be summoned:
 
 // Mobs
 entity.cqr_boarman.name=Boarman
