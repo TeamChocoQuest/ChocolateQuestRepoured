@@ -53,6 +53,9 @@ public class ItemSummoningBone extends Item {
 		if(entityLiving instanceof EntityPlayerMP) {
 			((EntityPlayerMP) entityLiving).getCooldownTracker().setCooldown(this, 20);
 		}
+		if(stack.getItemDamage() >= stack.getMaxDamage()) {
+			return ItemStack.EMPTY;
+		}
 		return super.onItemUseFinish(stack, worldIn, entityLiving);
 	}
 	
@@ -104,6 +107,7 @@ public class ItemSummoningBone extends Item {
 		if(entityLiving instanceof EntityPlayer) {
 			((EntityPlayer) entityLiving).getCooldownTracker().setCooldown(this, 20);
 		}
+		//stack.damageItem(1, entityLiving);
 	}
 	
 	//TODO: Tooltip that shows what is going to be summoned
