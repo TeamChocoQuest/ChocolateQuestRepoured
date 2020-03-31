@@ -81,6 +81,35 @@
                 "condition": "killed_by_player"
             }
         ]
+    	},
+    	{
+    	"rolls": 1,
+    	"name": "lt_cursed_bone",
+    	"entries": [
+    		{
+            	"type": "item",
+                "name": "cqrepoured:cursed_bone",
+                "weight": 1,
+                "functions": [
+                    {
+                        "function": "minecraft:set_nbt",
+                        "tag": "{entity_to_summon:cqrepoured:zombie}"
+                    },
+                    {
+                    	"function": "set_count",
+                    	"count": {
+                    		"min": 0,
+                    		"max": 1
+                    	}
+                    }
+                ]
+    		}
+    	],
+        "conditions": [
+            {
+                "condition": "killed_by_player"
+            }
+        ]
     	}
     ]
 }
