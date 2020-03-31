@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
 
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
@@ -113,6 +114,7 @@ public class EntitySummoningCircle extends EntityLiving {
 				summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
 				if(summonerLiving != null && summon instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR)summon).setLeader(summonerLiving);
+					((AbstractEntityCQR)summon).setFaction(FactionRegistry.instance().getFactionOf(summonerLiving).getName());
 				}
 
 				if (this.velForSummon != null) {
