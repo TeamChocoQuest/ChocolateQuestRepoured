@@ -13,10 +13,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDra
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerLightningBolt;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
@@ -179,7 +179,7 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(EntityBubble.class, "bubbles", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
 					createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393),
-					createEntityEntryWithoutEgg(EntityWalkerLightningBolt.class, "lightning_walker", 512, 1, true)
+					createEntityEntryWithoutEgg(EntityColoredLightningBolt.class, "colored_lightning_bolt", 512, 1, true)
 				};
 
 			event.getRegistry().registerAll(entityEntries);

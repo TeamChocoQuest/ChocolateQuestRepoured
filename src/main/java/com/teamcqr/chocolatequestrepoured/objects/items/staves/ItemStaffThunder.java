@@ -7,13 +7,13 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -59,7 +59,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 			RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 	
 			if (result != null) {
-				EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, false);
+				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, true, false);
 				worldIn.spawnEntity(entity);
 			}
 		}
@@ -92,7 +92,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 			v = v.scale(20D);
 			pos = shooter.getPositionVector().add(v);
 		}
-		EntityLightningBolt entity = new EntityLightningBolt(worldIn, pos.x, pos.y, pos.z, false);
+		EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, pos.x, pos.y, pos.z, true, false);
 		worldIn.spawnEntity(entity);
 	}
 

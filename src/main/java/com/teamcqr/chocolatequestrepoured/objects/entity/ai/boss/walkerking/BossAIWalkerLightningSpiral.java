@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerLightningBolt;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
@@ -62,10 +62,9 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 	private void spawnLightning() {
 		Vec3d v = new Vec3d(r, 0, 0);
 		v = VectorUtil.rotateVectorAroundY(v, angle);
-		EntityWalkerLightningBolt lightning = new EntityWalkerLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, false);
+		EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 		lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
 		entity.world.spawnEntity(lightning);
-		//entity.world.addWeatherEffect(lightning);
 		r += RADIUS_INCREMENT;
 		angle += ANGLE_INCREMENT;
 		if(angle >= 360) {

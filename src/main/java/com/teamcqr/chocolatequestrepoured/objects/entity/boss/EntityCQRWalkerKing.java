@@ -19,7 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalke
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerLightningBolt;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EnumCreatureAttribute;
@@ -150,9 +150,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				int z = -15 + getRNG().nextInt(41);
 				int y = -10 + getRNG().nextInt(21);
 				
-				EntityWalkerLightningBolt entitybolt = new EntityWalkerLightningBolt(world, posX +x, posY +y, posZ +z, false);
+				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(world, posX +x, posY +y, posZ +z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 				world.spawnEntity(entitybolt);
-				//world.addWeatherEffect(entitybolt);
 			}
 		} else if(world.isRemote) {
 			active = false;
