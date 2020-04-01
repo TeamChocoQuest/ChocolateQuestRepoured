@@ -416,6 +416,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 					return true;
 				}
 
+				if (!this.getLookHelper().getIsLooking() && !this.hasPath()) {
+					double x1 = player.posX - this.posX;
+					double z1 = player.posZ - this.posZ;
+					float yaw = (float) Math.toDegrees(Math.atan2(-x1, z1));
+					this.rotationYaw = yaw;
+					this.rotationYawHead = yaw;
+					this.renderYawOffset = yaw;
+				}
 				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
 			}
 			return true;
