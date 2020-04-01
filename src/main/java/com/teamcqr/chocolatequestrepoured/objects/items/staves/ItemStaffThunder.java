@@ -21,7 +21,6 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
@@ -41,10 +40,12 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
 		if (this.isNotAirBlock(worldIn, playerIn)) {
-			playerIn.swingArm(handIn);
-			this.spawnLightningBolt(playerIn, worldIn);
-			stack.damageItem(1, playerIn);
-			playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
+			if (!worldIn.isRemote) {
+				playerIn.swingArm(handIn);
+				this.spawnLightningBolt(playerIn, worldIn);
+				stack.damageItem(1, playerIn);
+				playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20);
+			}
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		}
 
@@ -52,30 +53,24 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	}
 
 	public void spawnLightningBolt(EntityPlayer player, World worldIn) {
-		Vec3d v = player.getLookVec();
-		v = v.normalize().scale(20);
-		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
-
-		if (result != null) {
-			EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, false);
-			worldIn.addWeatherEffect(entity);
-			worldIn.spawnEntity(entity);
+		if (!worldIn.isRemote) {
+			Vec3d start = player.getPositionEyes(1.0F);
+			Vec3d end = start.add(player.getLookVec().scale(20.0D));
+			RayTraceResult result = worldIn.rayTraceBlocks(start, end);
+	
+			if (result != null) {
+				EntityLightningBolt entity = new EntityLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, false);
+				worldIn.spawnEntity(entity);
+			}
 		}
 	}
 
 	public boolean isNotAirBlock(World worldIn, EntityPlayer player) {
-		Vec3d v = player.getLookVec();
-		v = v.normalize().scale(20);
-		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
+		Vec3d start = player.getPositionEyes(1.0F);
+		Vec3d end = start.add(player.getLookVec().scale(20.0D));
+		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
-		if (result != null) {
-			BlockPos pos = new BlockPos(result.getBlockPos().getX(), result.getBlockPos().getY(), result.getBlockPos().getZ());
-
-			if (!worldIn.isAirBlock(pos)) {
-				return true;
-			}
-		}
-		return false;
+		return result != null && !worldIn.isAirBlock(result.getBlockPos());
 	}
 
 	@Override
@@ -98,7 +93,6 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 			pos = shooter.getPositionVector().add(v);
 		}
 		EntityLightningBolt entity = new EntityLightningBolt(worldIn, pos.x, pos.y, pos.z, false);
-		worldIn.addWeatherEffect(entity);
 		worldIn.spawnEntity(entity);
 	}
 

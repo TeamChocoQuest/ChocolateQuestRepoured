@@ -67,10 +67,9 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 	}
 
 	public void changeTorch(World worldIn, EntityPlayer player) {
-		Vec3d v = player.getLookVec();
-		v = v.normalize();
-		v = v.scale(10);
-		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(10D, 1.0F);
+		Vec3d start = player.getPositionEyes(1.0F);
+		Vec3d end = start.add(player.getLookVec().scale(10.0D));
+		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null && !worldIn.isRemote) {
 			BlockPos pos = new BlockPos(result.hitVec);

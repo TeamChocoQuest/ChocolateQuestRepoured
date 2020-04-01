@@ -60,9 +60,9 @@ public class ItemSummoningBone extends Item {
 	}
 	
 	public boolean spawnEntity(EntityPlayer player, World worldIn, ItemStack item) {
-		Vec3d v = player.getLookVec();
-		v = v.normalize().scale(5);
-		RayTraceResult result = worldIn.rayTraceBlocks(player.getPositionVector(), player.getPositionVector().add(v));//Minecraft.getMinecraft().getRenderViewEntity().rayTrace(20D, 1.0F);
+		Vec3d start = player.getPositionEyes(1.0F);
+		Vec3d end = start.add(player.getLookVec().scale(5.0D));
+		RayTraceResult result = worldIn.rayTraceBlocks(start, end);
 
 		if (result != null) {
 			if(worldIn.isAirBlock(result.getBlockPos().offset(EnumFacing.UP, 1)) && worldIn.isAirBlock(new BlockPos(result.hitVec).offset(EnumFacing.UP, 2))) {
