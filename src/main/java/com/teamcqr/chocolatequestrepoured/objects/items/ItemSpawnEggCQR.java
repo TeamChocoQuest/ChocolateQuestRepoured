@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.items;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -43,13 +43,14 @@ public class ItemSpawnEggCQR extends Item {
 			AbstractEntityCQR entity = null;
 			try {
 				entity = this.entityClass.getConstructor(World.class).newInstance(worldIn);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-				CQRMain.logger.error("Failed to spawn entity from preset item!");
-				CQRMain.logger.error(e);
+			} catch (Exception e) {
+				CQRMain.logger.error("Failed to spawn entity from preset item!", e);
 			}
 			if (entity != null) {
 				entity.onInitialSpawn(worldIn.getDifficultyForLocation(pos), null);
-				entity.setPosition(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
+				BlockPos blockpos = pos.offset(facing);
+				double d0 = this.getYOffset(worldIn, blockpos);
+				entity.setPosition((double) blockpos.getX() + 0.5D, (double) blockpos.getY() + d0, (double) blockpos.getZ() + 0.5D);
 				this.setEquipment(entity);
 				worldIn.spawnEntity(entity);
 			}
@@ -58,6 +59,23 @@ public class ItemSpawnEggCQR extends Item {
 			}
 		}
 		return EnumActionResult.SUCCESS;
+	}
+
+	protected double getYOffset(World world, BlockPos blockpos) {
+		AxisAlignedBB aabb = new AxisAlignedBB(blockpos).expand(0.0D, -1.0D, 0.0D);
+		List<AxisAlignedBB> list = world.getCollisionBoxes(null, aabb);
+
+		if (list.isEmpty()) {
+			return 0.0D;
+		} else {
+			double d0 = aabb.minY;
+
+			for (AxisAlignedBB aabb1 : list) {
+				d0 = Math.max(aabb1.maxY, d0);
+			}
+
+			return d0 - (double) blockpos.getY();
+		}
 	}
 
 	@Override
@@ -105,7 +123,7 @@ public class ItemSpawnEggCQR extends Item {
 	}
 
 	public static List<Item> getItemList(Class<? extends AbstractEntityCQR> entityClass, String entityName) {
-		List<Item> itemList = new ArrayList<Item>();
+		List<Item> itemList = new ArrayList<>();
 		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, ItemStack.EMPTY, ItemStack.EMPTY, ArmorMaterial.LEATHER));
 		itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.WOODEN_SWORD), ItemStack.EMPTY, ArmorMaterial.LEATHER));
 		// itemList.add(new ItemSpawnEggCQR(entityClass, entityName, new ItemStack(Items.WOODEN_SWORD), new ItemStack(Items.SHIELD), ArmorMaterial.LEATHER));
