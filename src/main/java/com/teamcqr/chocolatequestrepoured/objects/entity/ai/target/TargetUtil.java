@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBase;
 
 import net.minecraft.entity.Entity;
@@ -20,92 +19,77 @@ import net.minecraft.util.EntitySelectors;
 
 public class TargetUtil {
 
-	public static final Predicate<EntityLivingBase> PREDICATE_ATTACK_TARGET = new Predicate<EntityLivingBase>() {
-		@Override
-		public boolean apply(EntityLivingBase input) {
-			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.CAN_AI_TARGET.apply(input)) {
-				return false;
-			}
-			return true;
+	public static final Predicate<EntityLivingBase> PREDICATE_ATTACK_TARGET = input -> {
+		if (input == null) {
+			return false;
 		}
+		return EntitySelectors.CAN_AI_TARGET.apply(input);
 	};
 
-	public static final Predicate<? super Entity> PREDICATE_ALLIES(CQRFaction faction) {
-		Predicate<Entity> predicate = new Predicate<Entity>() {
+	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = input -> {
+		if (input == null) {
+			return false;
+		}
+		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			return false;
+		}
+		if (input.isBeingRidden()) {
+			return false;
+		}
+		if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
+			return false;
+		}
+		return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse || input instanceof EntityPig;
+	};
 
-			@Override
-			public boolean apply(Entity input) {
-				if (input instanceof AbstractEntityCQR) {
-					return faction.isAlly(((AbstractEntityCQR) input).getFaction());
-				} else {
-					return faction.isAlly(input);
+	public static final Predicate<EntityTameable> PREDICATE_PETS = input -> {
+		if (input == null) {
+			return false;
+		}
+		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			return false;
+		}
+		if (input.getOwnerId() != null) {
+			return false;
+		}
+		return input instanceof EntityOcelot || input instanceof EntityWolf;
+	};
+
+	public static final Predicate<Entity> PREDICATE_LIVING = input -> {
+		if (input == null) {
+			return false;
+		}
+		if (!EntitySelectors.IS_ALIVE.apply(input)) {
+			return false;
+		}
+		return input instanceof EntityLivingBase;
+	};
+
+	public static final Predicate<Entity> createPredicateAlly(CQRFaction faction) {
+		return input -> faction.isAlly(input);
+	}
+
+	public static final Predicate<Entity> createPredicateNonAlly(CQRFaction faction) {
+		return input -> !faction.isAlly(input);
+	}
+
+	public static final <T extends Entity> T getNearestEntity(Entity entity, List<T> list) {
+		if (!list.isEmpty()) {
+			T nearestEntity = list.get(0);
+			double min = entity.getDistanceSq(nearestEntity);
+			int size = list.size();
+			for (int i = 0; i < size; i++) {
+				T otherEntity = list.get(i);
+				double distance = entity.getDistanceSq(otherEntity);
+				if (distance < min) {
+					nearestEntity = otherEntity;
+					min = distance;
 				}
 			}
-		};
-		return predicate;
+			return nearestEntity;
+		}
+		return null;
 	}
-
-	public static final Predicate<? super Entity> PREDICATE_NON_ALLIES(CQRFaction faction) {
-		Predicate<Entity> predicate = new Predicate<Entity>() {
-
-			@Override
-			public boolean apply(Entity input) {
-				return (!faction.isAlly(input));
-			}
-		};
-		return predicate;
-	}
-
-	public static final Predicate<EntityLiving> PREDICATE_MOUNTS = new Predicate<EntityLiving>() {
-		@Override
-		public boolean apply(EntityLiving input) {
-			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
-				return false;
-			}
-			if (input.isBeingRidden()) {
-				return false;
-			}
-			if (input instanceof AbstractHorse && ((AbstractHorse) input).isTame()) {
-				return false;
-			}
-			return input.canBeSteered() || input instanceof EntityCQRMountBase || input instanceof AbstractHorse || input instanceof EntityPig;
-		}
-	};
-
-	public static final Predicate<EntityTameable> PREDICATE_PETS = new Predicate<EntityTameable>() {
-		@Override
-		public boolean apply(EntityTameable input) {
-			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
-				return false;
-			}
-			if (input.getOwnerId() != null) {
-				return false;
-			}
-			return input instanceof EntityOcelot || input instanceof EntityWolf;
-		}
-	};
-
-	public static final Predicate<? super Entity> PREDICATE_LIVING = new Predicate<Entity>() {
-		@Override
-		public boolean apply(Entity input) {
-			if (input == null) {
-				return false;
-			}
-			if (!EntitySelectors.IS_ALIVE.apply(input)) {
-				return false;
-			}
-			return input instanceof EntityLivingBase;
-		}
-	};
 
 	public static class Sorter implements Comparator<Entity> {
 
@@ -129,24 +113,6 @@ public class TargetUtil {
 			}
 		}
 
-	}
-
-	public static <T extends Entity> T getNearestEntity(Entity entity, List<T> list) {
-		if (!list.isEmpty()) {
-			T nearestEntity = list.get(0);
-			double min = entity.getDistanceSq(nearestEntity);
-			int size = list.size();
-			for (int i = 0; i < size; i++) {
-				T otherEntity = list.get(i);
-				double distance = entity.getDistanceSq(otherEntity);
-				if (distance < min) {
-					nearestEntity = otherEntity;
-					min = distance;
-				}
-			}
-			return nearestEntity;
-		}
-		return null;
 	}
 
 }

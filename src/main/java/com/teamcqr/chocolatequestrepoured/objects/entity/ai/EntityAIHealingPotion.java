@@ -64,7 +64,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 		boolean flag = true;
 		if (attackTarget != null) {
 			AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - CQRConfig.mobs.alertRadius /2, entity.posY - CQRConfig.mobs.alertRadius /3, entity.posZ - CQRConfig.mobs.alertRadius /2, entity.posX + CQRConfig.mobs.alertRadius /2, entity.posY + CQRConfig.mobs.alertRadius /3, entity.posZ + CQRConfig.mobs.alertRadius /2);
-			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.PREDICATE_ALLIES(entity.getFaction()));
+			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.createPredicateAlly(entity.getFaction()));
 			
 			if (!possibleEnts.isEmpty()) {
 				Entity e1 = null;
@@ -72,7 +72,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 				double distance = Double.MAX_VALUE;
 				for (Entity e2 : possibleEnts) {
 					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.posX - 4, e2.posY -2, e2.posZ -4, e2.posX +4, e2.posY +2, e2.posZ +4);
-					List<Entity> list = e2.world.getEntitiesInAABBexcluding(e2, aabb1, TargetUtil.PREDICATE_ALLIES(this.entity.getFaction()));
+					List<Entity> list = e2.world.getEntitiesInAABBexcluding(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
 					double d = this.entity.getDistanceSq(e2); 
 					if (list.size() > count || (list.size() == count && d < distance)) {
 						e1 = e2;

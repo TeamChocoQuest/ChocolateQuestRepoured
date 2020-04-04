@@ -26,7 +26,7 @@ public class EntityAIWalkerIllusions extends AbstractEntityAIUseSpell {
 	@Override
 	protected void castSpell() {
 		//entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		entity.world.getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().add(-20,-10,-20), entity.getPosition().add(20,10,20)), TargetUtil.PREDICATE_NON_ALLIES(entity.getFaction())).forEach(new Consumer<Entity>() {
+		entity.world.getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().add(-20,-10,-20), entity.getPosition().add(20,10,20)), TargetUtil.createPredicateNonAlly(entity.getFaction())).forEach(new Consumer<Entity>() {
 
 			@Override
 			public void accept(Entity t) {
