@@ -92,6 +92,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 				horse.setHorseTamed(true);
 				horse.setHorseSaddled(true);
 				// Should that stay? -> Arlo says yes.
+				horse.replaceItemInInventory(400, new ItemStack(Items.SADDLE));
 				horse.replaceItemInInventory(401, new ItemStack(Items.IRON_HORSE_ARMOR));
 			} else if (this.entityToMount instanceof EntityPig) {
 				((EntityPig) this.entityToMount).setSaddled(true);
