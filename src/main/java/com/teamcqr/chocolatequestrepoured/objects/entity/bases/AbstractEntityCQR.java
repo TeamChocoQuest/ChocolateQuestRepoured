@@ -312,11 +312,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.homePosition != null) {
 			compound.setTag("home", NBTUtil.createPosTag(this.homePosition));
 		}
-		
-		if (this.leader != null) {
-			compound.setTag("leader", NBTUtil.createUUIDTag(this.leader.getPersistentID()));
-		}
-		else if (this.leaderUUID != null) {
+
+		if (this.leaderUUID != null) {
 			compound.setTag("leader", NBTUtil.createUUIDTag(this.leaderUUID));
 		}
 		if (this.factionName != null && !this.factionName.equalsIgnoreCase(this.getDefaultFaction().name())) {
@@ -670,10 +667,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		} else {
 			if (this.leader != null) {
-				this.leaderUUID = null;
+				this.leader = null;
 			}
 		}
-		return this.leader;
+		return null;
 	}
 
 	public void setLeader(EntityLivingBase leader) {
