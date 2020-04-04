@@ -56,7 +56,7 @@ public class ContainerCQREntity extends Container {
 			@Override
 			public boolean canTakeStack(EntityPlayer playerIn) {
 				ItemStack itemstack = this.getStack();
-				return !itemstack.isEmpty() /*&& !playerIn.isCreative()*/ && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
@@ -80,7 +80,7 @@ public class ContainerCQREntity extends Container {
 			@Override
 			public boolean canTakeStack(EntityPlayer playerIn) {
 				ItemStack itemstack = this.getStack();
-				return !itemstack.isEmpty() /*&& !playerIn.isCreative()*/ && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
@@ -104,7 +104,7 @@ public class ContainerCQREntity extends Container {
 			@Override
 			public boolean canTakeStack(EntityPlayer playerIn) {
 				ItemStack itemstack = this.getStack();
-				return !itemstack.isEmpty() /*&& !playerIn.isCreative()*/ && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
@@ -123,7 +123,7 @@ public class ContainerCQREntity extends Container {
 			@Override
 			public boolean canTakeStack(EntityPlayer playerIn) {
 				ItemStack itemstack = this.getStack();
-				return !itemstack.isEmpty() /*&& !playerIn.isCreative()*/ && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
+				return !itemstack.isEmpty() && !playerIn.isCreative() && EnchantmentHelper.hasBindingCurse(itemstack) ? false : super.canTakeStack(playerIn);
 			}
 
 			@Override
