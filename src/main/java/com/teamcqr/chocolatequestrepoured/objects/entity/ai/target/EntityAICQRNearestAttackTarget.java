@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EntitySelectors;
@@ -59,26 +59,22 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
-		if (this.entity.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
-			if (!this.entity.getFaction().isAlly(possibleTarget)) {
+		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+			if (!this.entity.getFaction().isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
 				return false;
 			}
-			if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
 			if (!this.entity.isInSightRange(possibleTarget)) {
 				return false;
 			}
-			return possibleTarget.getHealth() < possibleTarget.getMaxHealth();
+			return this.entity.getEntitySenses().canSee(possibleTarget);
 		}
-		if (!this.entity.getFaction().isEnemy(possibleTarget)) {
+		if (!this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
-			return false;
-		}
-		//Dont attack your leader! Even if he isnt in the same faction!
-		if(this.entity.hasLeader() && this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		if (this.entity.isInAttackReach(possibleTarget)) {
@@ -94,20 +90,34 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
 			return false;
 		}
-		if (this.entity.getDistance(possibleTarget) > 64.0D) {
+		if (!EntitySelectors.IS_ALIVE.apply(possibleTarget)) {
 			return false;
 		}
-		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+		if (possibleTarget == this.entity) {
+			return false;
+		}
+		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
+			if (!this.entity.getFaction().isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
+				return false;
+			}
+			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
+				return false;
+			}
+			if (!this.entity.isInSightRange(possibleTarget)) {
+				return false;
+			}
+			return this.entity.getEntitySenses().canSee(possibleTarget);
+		}
+		if (!this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
 			return false;
 		}
-		//Dont attack your leader! Even if he isnt in the same faction!
-		if(this.entity.hasLeader() && this.entity.getLeader() == possibleTarget) {
+		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}
-		return EntitySelectors.IS_ALIVE.apply(possibleTarget);
+		return this.entity.getEntitySenses().canSee(possibleTarget);
 	}
 
 }
