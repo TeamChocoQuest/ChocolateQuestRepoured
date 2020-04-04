@@ -429,7 +429,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			return true;
 		}
 		if(hasLeader() && getLeader() == player && !player.isSneaking()) {
-			player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+			if(!this.world.isRemote) {
+				player.openGui(CQRMain.INSTANCE, Reference.CQR_ENTITY_GUI_ID, this.world, this.getEntityId(), 0, 0);
+			}
 			return true;
 		}
 		return false;
