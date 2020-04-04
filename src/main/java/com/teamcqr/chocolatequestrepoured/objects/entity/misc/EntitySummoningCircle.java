@@ -114,7 +114,11 @@ public class EntitySummoningCircle extends EntityLiving {
 				summon.setPosition(this.posX, this.posY + 0.5D, this.posZ);
 				if(summonerLiving != null && summon instanceof AbstractEntityCQR) {
 					((AbstractEntityCQR)summon).setLeader(summonerLiving);
-					((AbstractEntityCQR)summon).setFaction(FactionRegistry.instance().getFactionOf(summonerLiving).getName());
+					try {
+						((AbstractEntityCQR)summon).setFaction(FactionRegistry.instance().getFactionOf(summonerLiving).getName());
+					} catch(NullPointerException npe) {
+						//IGNORE
+					}
 				}
 
 				if (this.velForSummon != null) {

@@ -77,6 +77,10 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
 			return false;
 		}
+		//Dont attack your leader! Even if he isnt in the same faction!
+		if(this.entity.hasLeader() && this.entity.getLeader() == possibleTarget) {
+			return false;
+		}
 		if (this.entity.isInAttackReach(possibleTarget)) {
 			return true;
 		}
@@ -97,6 +101,10 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 			return false;
 		}
 		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
+			return false;
+		}
+		//Dont attack your leader! Even if he isnt in the same faction!
+		if(this.entity.hasLeader() && this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		return EntitySelectors.IS_ALIVE.apply(possibleTarget);
