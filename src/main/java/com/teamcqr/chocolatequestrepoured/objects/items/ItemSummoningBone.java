@@ -17,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -69,9 +70,10 @@ public class ItemSummoningBone extends Item {
 				//DONE: Spawn circle
 				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 				//Get entity id
-				if(item.hasTagCompound() && item.getTagCompound().hasKey("entity_to_summon")) {
+				if(item.hasTagCompound() && item.getTagCompound().hasKey("tag")) {
 					try {
-						resLoc = new ResourceLocation(item.getTagCompound().getString("entity_to_summon"));
+						NBTTagCompound tag = item.getTagCompound().getCompoundTag("tag");
+						resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
 						if(!EntityList.isRegistered(resLoc)) {
 							resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 						}
@@ -110,15 +112,20 @@ public class ItemSummoningBone extends Item {
 		//stack.damageItem(1, entityLiving);
 	}
 	
-	//TODO: Tooltip that shows what is going to be summoned
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(stack.getTagCompound().getString("entity_to_summon")));
-		} else {
-			tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(Reference.MODID + ":skeleton"));
+		NBTTagCompound tc = stack.getTagCompound();
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("tag")) {
+			try {
+				NBTTagCompound tag = stack.getTagCompound().getCompoundTag("tag");
+				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
+			} catch(Exception ex) {
+				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + "missingNo");
+			}
+			return;
 		}
+		tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(Reference.MODID + ":skeleton"));
 	}
 	private String getEntityName(String registryName) {
 		EntityEntry entityEntry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(registryName));

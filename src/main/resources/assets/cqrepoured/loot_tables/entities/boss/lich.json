@@ -92,7 +92,7 @@
                 "functions": [
                     {
                         "function": "minecraft:set_nbt",
-                        "tag":"{\"entity_to_summon\":\"cqrepoured:cqr_zombie\"}"
+                        "tag":"{\"entity_to_summon\":\"cqrepoured:zombie\"}"
                     },
                     {
                     	"function": "set_count",
