@@ -61,6 +61,7 @@ public class EntityWalkerTornado extends EntityLiving {
 		this.owner = owner;
 	}
 	
+	//Particle code taken from aether legacy's whirlwind
 	@SideOnly(Side.CLIENT)
     public void updateParticles() {
        
