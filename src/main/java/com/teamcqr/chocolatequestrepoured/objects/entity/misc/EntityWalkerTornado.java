@@ -164,6 +164,9 @@ public class EntityWalkerTornado extends EntityLiving {
 	}
 	
 	private boolean isEntityAffected(Entity ent) {
+		if(ent instanceof EntityWalkerTornado) {
+			return false;
+		}
 		if(owner != null) {
 			if(ent == owner) {
 				return false;
