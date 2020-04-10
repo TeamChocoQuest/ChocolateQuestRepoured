@@ -23,6 +23,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	
 	protected ArrayList<EntityParticle> particles = new ArrayList<>();
 	protected final int PARTICLE_COUNT = 2;
+	protected final int MAX_LIVING_TICKS = 100;
 	protected Vec3d velocity = new Vec3d(0,0,0);
 	protected Entity owner = null;
 	
@@ -43,6 +44,9 @@ public class EntityWalkerTornado extends EntityLiving {
 	
 	@Override
 	public void onLivingUpdate() {
+		if(this.ticksExisted >= MAX_LIVING_TICKS) {
+			setDead();
+		}
 		if(world.isRemote) {
 			updateParticles();
 		} else {
