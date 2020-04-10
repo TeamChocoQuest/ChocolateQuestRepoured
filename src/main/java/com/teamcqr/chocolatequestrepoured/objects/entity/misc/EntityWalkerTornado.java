@@ -51,7 +51,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(COLOR, 15);
+		this.dataManager.register(COLOR, 12);
 		this.dataManager.register(OWNER_ID, "");
 	}
 	
