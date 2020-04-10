@@ -31,10 +31,10 @@ public class EntityWalkerTornado extends EntityLiving {
 	protected final int PARTICLE_COUNT = 2;
 	protected final int MAX_LIVING_TICKS = 100;
 	protected Vec3d velocity = new Vec3d(0,0,0);
-	protected UUID ownerID = null;
 	protected Entity owner = null;
 	
 	public static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityWalkerTornado.class, DataSerializers.VARINT);
+	public static final DataParameter<String> OWNER_ID = EntityDataManager.<String>createKey(EntityWalkerTornado.class, DataSerializers.STRING); 
 
 	public EntityWalkerTornado(World worldIn) {
 		super(worldIn);
@@ -52,6 +52,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(COLOR, 15);
+		this.dataManager.register(OWNER_ID, "");
 	}
 	
 	@Override
@@ -67,9 +68,9 @@ public class EntityWalkerTornado extends EntityLiving {
 			this.motionZ = this.velocity.z;
 			this.velocityChanged = true;
 		}
-		if(ownerID != null && owner == null) {
+		if(getOwnerID() != null && owner == null) {
 			for (Entity entity : this.world.loadedEntityList) {
-				if (entity instanceof EntityLivingBase && this.ownerID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+				if (entity instanceof EntityLivingBase && getOwnerID().equals(entity.getPersistentID()) && entity.isEntityAlive()) {
 					this.owner = (EntityLivingBase) entity;
 				}
 			}
@@ -81,7 +82,14 @@ public class EntityWalkerTornado extends EntityLiving {
 	}
 	
 	public void setOwner(UUID ownerID) {
-		this.ownerID = ownerID;
+		this.dataManager.set(OWNER_ID, ownerID.toString());
+	}
+	
+	public UUID getOwnerID() {
+		if(dataManager.get(OWNER_ID) != null && !dataManager.get(OWNER_ID).isEmpty()) {
+			return UUID.fromString(dataManager.get(OWNER_ID));
+		}
+		return null;
 	}
 	
 	//Particle code taken from aether legacy's whirlwind
@@ -189,8 +197,8 @@ public class EntityWalkerTornado extends EntityLiving {
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
-		if(ownerID != null) {
-			compound.setTag("summoner", NBTUtil.createUUIDTag(ownerID));
+		if(getOwnerID() != null) {
+			compound.setTag("summoner", NBTUtil.createUUIDTag(getOwnerID()));
 		}
 		compound.setDouble("vX", velocity.x);
 		compound.setDouble("vY", velocity.y);
@@ -201,7 +209,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
 		if(compound.hasKey("summoner")) {
-			this.ownerID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("summoner"));
+			setOwner(NBTUtil.getUUIDFromTag(compound.getCompoundTag("summoner")));
 		}
 		double x = compound.getDouble("vX");
 		double y = compound.getDouble("vY");
