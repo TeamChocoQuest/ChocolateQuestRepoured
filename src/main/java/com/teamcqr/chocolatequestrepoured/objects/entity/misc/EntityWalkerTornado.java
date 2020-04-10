@@ -79,6 +79,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	
 	public void setVelocity(Vec3d v) {
 		this.velocity = v;
+		this.setNoGravity(false);
 	}
 	
 	public void setOwner(UUID ownerID) {
