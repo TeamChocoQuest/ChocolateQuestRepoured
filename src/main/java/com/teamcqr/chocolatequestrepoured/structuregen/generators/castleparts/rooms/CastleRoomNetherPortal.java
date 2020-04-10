@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFacto
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
-import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -13,8 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class CastleRoomPool extends CastleRoomDecoratedBase
@@ -37,18 +34,31 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
         Predicate<Vec3i> eastRow = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getX() == endZ - 1) && ((vec3i.getZ() >= 1) && (vec3i.getZ() <= endZ - 1))));
         Predicate<Vec3i> water = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getX() > 1) && (vec3i.getX() < endX - 1) && (vec3i.getZ() > 1) && (vec3i.getZ() < endZ - 1)));
 
-        GenerationTemplate poolRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
-        poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-        poolRoomTemplate.addRule(southRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-        poolRoomTemplate.addRule(westRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
-        poolRoomTemplate.addRule(eastRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
-        poolRoomTemplate.addRule(water, Blocks.WATER.getDefaultState());
+        for (int x = 0; x < this.getDecorationLengthX(); x++) {
+            for (int z = 0; z < this.getDecorationLengthZ(); z++) {
+                for (int y = 0; y < this.getDecorationLengthY(); y++) {
+                    IBlockState blockToBuild;
 
-        HashMap<BlockPos, IBlockState> genMap = poolRoomTemplate.GetGenerationMap(getDecorationStartPos(), true);
-        genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN);
-        for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
-            if (entry.getValue().getBlock() != Blocks.AIR) {
-                usedDecoPositions.add(entry.getKey());
+                    Vec3i offset = new Vec3i(x, y, z);
+                    if (northRow.test(offset)) {
+                        blockToBuild = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
+                    } else if (southRow.test(offset)) {
+                        blockToBuild = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH);
+                    } else if (westRow.test(offset)) {
+                        blockToBuild = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+                    } else if (eastRow.test(offset)) {
+                        blockToBuild = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+                    } else if (water.test(offset)) {
+                        blockToBuild = Blocks.WATER.getDefaultState();
+                    } else {
+                        blockToBuild = Blocks.AIR.getDefaultState();
+                    }
+
+                    genArray.addBlockState(this.getDecorationStartPos().add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+                    if (blockToBuild.getBlock() != Blocks.AIR) {
+                        this.usedDecoPositions.add(this.getDecorationStartPos().add(offset));
+                    }
+                }
             }
         }
 
