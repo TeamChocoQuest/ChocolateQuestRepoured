@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityWalkerTornado extends EntityLiving {
 	
-	protected ArrayList<EntityParticle> particles;
+	protected ArrayList<EntityParticle> particles = new ArrayList<>();
 	protected final int PARTICLE_COUNT = 2;
 	protected Vec3d velocity = new Vec3d(0,0,0);
 	protected Entity owner = null;
