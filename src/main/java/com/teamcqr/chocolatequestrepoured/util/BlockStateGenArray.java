@@ -71,6 +71,18 @@ public class BlockStateGenArray {
         return false;
     }
 
+    public void addBlockStateMap(Map<BlockPos, IBlockState> map, GenerationPhase phase) {
+        for (BlockPos pos : map.keySet()) {
+            addBlockState(pos, map.get(pos), phase);
+        }
+    }
+
+    public void forceAddBlockStateMap(Map<BlockPos, IBlockState> map, GenerationPhase phase) {
+        for (BlockPos pos : map.keySet()) {
+            forceAddBlockState(pos, map.get(pos), phase);
+        }
+    }
+
     public boolean addBlockState(BlockPos pos, IBlockState blockState, GenerationPhase phase) {
         ExtendedBlockStatePart.ExtendedBlockState extState = new ExtendedBlockStatePart.ExtendedBlockState(blockState, new NBTTagCompound());
         return addInternal(phase, pos, extState, false);
