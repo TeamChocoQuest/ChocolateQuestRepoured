@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
@@ -16,6 +17,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -36,9 +38,14 @@ public class EntityWalkerTornado extends EntityLiving {
 
 	public EntityWalkerTornado(World worldIn) {
 		super(worldIn);
-		this.setSize(1.5F, 2.5F);
+		this.setSize(0, 0);
 		this.setNoGravity(true);
 		this.noClip = true;
+	}
+	
+	@Override
+	public boolean getIsInvulnerable() {
+		return true;
 	}
 	
 	@Override
@@ -59,12 +66,11 @@ public class EntityWalkerTornado extends EntityLiving {
 			this.motionY = this.velocity.y;
 			this.motionZ = this.velocity.z;
 			this.velocityChanged = true;
-			
-			if(ownerID != null && owner == null) {
-				for (Entity entity : this.world.loadedEntityList) {
-					if (entity instanceof EntityLivingBase && this.ownerID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
-						this.owner = (EntityLivingBase) entity;
-					}
+		}
+		if(ownerID != null && owner == null) {
+			for (Entity entity : this.world.loadedEntityList) {
+				if (entity instanceof EntityLivingBase && this.ownerID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+					this.owner = (EntityLivingBase) entity;
 				}
 			}
 		}
@@ -115,7 +121,18 @@ public class EntityWalkerTornado extends EntityLiving {
                 }
             }
         }
+        
+        handleNearbyEntities();
     }
+
+	private void handleNearbyEntities() {
+		double r = 0.75D;
+		AxisAlignedBB aabb = new AxisAlignedBB(posX -r, posY, posZ -r, posX +r, posY +2*r, posZ +r);
+		final List<Entity> list = (List<Entity>)this.world.getEntitiesWithinAABBExcludingEntity((Entity)this, aabb);
+		for(Entity ent : list) {
+			collideWithEntity(ent);
+		}
+	}
 
 	public void setColor(int value) {
 		this.dataManager.set(COLOR, value);
@@ -123,12 +140,11 @@ public class EntityWalkerTornado extends EntityLiving {
 	
 	@Override
 	protected void collideWithEntity(Entity entityIn) {
-		if(!world.isRemote && isEntityAffected(entityIn)) {
-			//TODO: Fly away :D
+		if(isEntityAffected(entityIn)) {
 			Vec3d vAway = entityIn.getPositionVector().subtract(getPositionVector()).normalize().scale(1.25D);
-			vAway = vAway.addVector(0, vAway.y * 0.5D, 0);
+			vAway = vAway.addVector(0, vAway.y * 0.1D, 0);
 			entityIn.motionX = vAway.x;
-			entityIn.motionY = Math.max(Math.abs(vAway.y), 2.0D);
+			entityIn.motionY = Math.max(Math.abs(vAway.y), 1.0D);
 			entityIn.motionZ = vAway.z;
 			entityIn.velocityChanged = true;
 		}
