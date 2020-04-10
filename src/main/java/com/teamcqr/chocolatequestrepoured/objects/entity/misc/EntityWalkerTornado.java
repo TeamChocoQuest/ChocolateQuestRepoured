@@ -39,8 +39,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	public EntityWalkerTornado(World worldIn) {
 		super(worldIn);
 		this.setSize(0, 0);
-		this.setNoGravity(true);
-		this.noClip = true;
+		this.noClip = false;
 	}
 	
 	@Override
