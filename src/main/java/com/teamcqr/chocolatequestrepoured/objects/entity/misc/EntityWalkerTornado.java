@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
@@ -9,6 +10,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.particle.EntityParticle
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -25,6 +29,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	protected final int PARTICLE_COUNT = 2;
 	protected final int MAX_LIVING_TICKS = 100;
 	protected Vec3d velocity = new Vec3d(0,0,0);
+	protected UUID ownerID = null;
 	protected Entity owner = null;
 	
 	public static final DataParameter<Integer> COLOR = EntityDataManager.<Integer>createKey(EntityWalkerTornado.class, DataSerializers.VARINT);
@@ -54,6 +59,14 @@ public class EntityWalkerTornado extends EntityLiving {
 			this.motionY = this.velocity.y;
 			this.motionZ = this.velocity.z;
 			this.velocityChanged = true;
+			
+			if(ownerID != null && owner == null) {
+				for (Entity entity : this.world.loadedEntityList) {
+					if (entity instanceof EntityLivingBase && this.ownerID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
+						this.owner = (EntityLivingBase) entity;
+					}
+				}
+			}
 		}
 	}
 	
@@ -61,8 +74,8 @@ public class EntityWalkerTornado extends EntityLiving {
 		this.velocity = v;
 	}
 	
-	public void setOwner(Entity owner) {
-		this.owner = owner;
+	public void setOwner(UUID ownerID) {
+		this.ownerID = ownerID;
 	}
 	
 	//Particle code taken from aether legacy's whirlwind
@@ -70,7 +83,7 @@ public class EntityWalkerTornado extends EntityLiving {
     public void updateParticles() {
        
 		final Integer color = this.getColor();
-        for (int k = 0; k < 2; ++k) {
+        for (int k = 0; k < 4; ++k) {
             final double d1 = (float)this.posX + this.rand.nextFloat() * 0.25f;
             final double d2 = (float)this.posY + this.height + 0.125f;
             final double d3 = (float)this.posZ + this.rand.nextFloat() * 0.25f;
@@ -143,13 +156,41 @@ public class EntityWalkerTornado extends EntityLiving {
 	private Integer getColor() {
 		return this.dataManager.get(COLOR);
 	}
-
+	
+	@Override
+	public boolean canBeHitWithPotion() {
+		return false;
+	}
+	
 	@SideOnly(Side.CLIENT)
 	public float getDistanceToParticle(final EntityParticle particle) {
 	    final float f = (float)(this.posX - particle.getX());
 	    final float f2 = (float)(this.posY - particle.getY());
 	    final float f3 = (float)(this.posZ - particle.getZ());
 	    return MathHelper.sqrt(f * f + f2 * f2 + f3 * f3);
+	}
+	
+	@Override
+	public void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		if(ownerID != null) {
+			compound.setTag("summoner", NBTUtil.createUUIDTag(ownerID));
+		}
+		compound.setDouble("vX", velocity.x);
+		compound.setDouble("vY", velocity.y);
+		compound.setDouble("vZ", velocity.z);
+	}
+	
+	@Override
+	public void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		if(compound.hasKey("summoner")) {
+			this.ownerID = NBTUtil.getUUIDFromTag(compound.getCompoundTag("summoner"));
+		}
+		double x = compound.getDouble("vX");
+		double y = compound.getDouble("vY");
+		double z = compound.getDouble("vZ");
+		this.velocity = new Vec3d(x,y,z);
 	}
 
 }
