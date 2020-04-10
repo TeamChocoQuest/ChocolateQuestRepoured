@@ -12,8 +12,8 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI {
 	
 	protected static final int MIN_TORNADOES = 3;
 	protected static final int MAX_TORNADOES = 6;
-	protected static final int MIN_COOLDOWN = 400;
-	protected static final int MAX_COOLDOWN = 800;
+	protected static final int MIN_COOLDOWN = 40;
+	protected static final int MAX_COOLDOWN = 80;
 	
 	protected int cooldown = MIN_COOLDOWN + (MAX_COOLDOWN - MIN_COOLDOWN) /2; 
 
@@ -43,13 +43,15 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI {
 	}
 	
 	private void spawnTornadoes(int count) {
+		//System.out.println("Executing");
 		double angle = 90 / (count -1);
 		Vec3d velocity = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
 		velocity = VectorUtil.rotateVectorAroundY(velocity, -45);
 		for(int i = 0; i < count; i++) {
 			Vec3d v = VectorUtil.rotateVectorAroundY(velocity, angle * i);
 			Vec3d p = entity.getPositionVector().add(v.normalize().scale(0.5));
-			v = v.normalize().scale(0.75);
+			v = v.normalize().scale(0.55);
+			//System.out.println("V=" + v.toString());
 			EntityWalkerTornado tornado = new EntityWalkerTornado(entity.world);
 			tornado.setOwner(entity.getPersistentID());
 			tornado.setPosition(p.x, p.y, p.z);
