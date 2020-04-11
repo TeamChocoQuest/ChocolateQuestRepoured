@@ -12,14 +12,14 @@ import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 @ObjectHolder(Reference.MODID)
 public class ModEnchantments {
 
-	public static final Enchantment LIGHTNING_PROTECTION = null;
+	public static final Enchantment LIGHTNING_PROTECTION = new EnchantmentLightningProtection();
 	
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class RegistrationHandler {
 		
 		@SubscribeEvent
 		public static void onEvent(final RegistryEvent.Register<Enchantment> event) {
-			event.getRegistry().register(new EnchantmentLightningProtection());
+			event.getRegistry().register(LIGHTNING_PROTECTION);
 		}
 	}
 	
