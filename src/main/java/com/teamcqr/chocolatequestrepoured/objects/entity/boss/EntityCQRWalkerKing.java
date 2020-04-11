@@ -163,7 +163,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(2F);
+		this.heal(0.2F);
 	}
 
 	@Override
