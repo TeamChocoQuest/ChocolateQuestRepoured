@@ -20,6 +20,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	public AbstractEntityCQRMageBase(World worldIn, int size) {
 		super(worldIn, size);
+		this.experienceValue = 50;
 	}
 
 	@Override

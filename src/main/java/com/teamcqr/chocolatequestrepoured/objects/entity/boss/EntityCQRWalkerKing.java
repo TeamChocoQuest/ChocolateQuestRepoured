@@ -28,6 +28,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
@@ -66,6 +67,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.bossInfoServer.setDarkenSky(true);
 		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 		this.bossInfoServer.setPlayEndBossMusic(true);
+		
+		this.experienceValue = 200;
 	}
 	
 	@Override
@@ -307,6 +310,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected EnumParticleTypes getDeathAnimParticles() {
 		return EnumParticleTypes.EXPLOSION_HUGE;
+	}
+	
+	@Override
+	protected int getExperiencePoints(EntityPlayer player) {
+		return super.getExperiencePoints(player);
 	}
 	
 }
