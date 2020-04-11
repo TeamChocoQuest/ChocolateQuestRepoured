@@ -21,6 +21,11 @@ public class EnchantmentLightningProtection extends Enchantment {
 		this(Rarity.RARE, EnumEnchantmentType.ARMOR_HEAD, new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD});
 	}
 	
+	@Override
+	public String getName() {
+		return "lightning_protection";
+	}
+	
 	private EnchantmentLightningProtection(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
 		super(rarityIn, typeIn, slots);
 	}
