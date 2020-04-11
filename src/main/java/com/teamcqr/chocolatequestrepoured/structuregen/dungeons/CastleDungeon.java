@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
-import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
@@ -8,15 +7,13 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerato
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import scala.Int;
 
 /**
  * Copyright (c) 25.05.2019
@@ -24,10 +21,10 @@ import scala.Int;
  * GitHub: https://github.com/KalgogSmash
  */
 public class CastleDungeon extends DungeonBase {
+
 	private int maxSize = 10;
 	private int roomSize = 10;
 	private int floorHeight = 8;
-	private Random random;
 	private Block wallBlock = Blocks.STONEBRICK;
 	private Block roofBlock = Blocks.OAK_STAIRS;
 	private Block floorBlock = Blocks.PLANKS;
@@ -41,92 +38,59 @@ public class CastleDungeon extends DungeonBase {
 	private int maxSpawnerRolls = 3;
 	private int spawnerRollChance = 100;
 
-	@Override
-	public IDungeonGenerator getGenerator() {
-		return new CastleGenerator(this);
-	}
+	public CastleDungeon(String name, Properties prop) {
+		super(name, prop);
 
-	public CastleDungeon(File configFile) {
-		super(configFile);
-		Properties prop = this.loadConfig(configFile);
-		if (prop != null) {
-			this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
-			this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
-			this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
+		this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);
+		this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
+		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
-			this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallblock", Blocks.STONEBRICK);
-			this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
-			this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
-			this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
+		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallblock", Blocks.STONEBRICK);
+		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
+		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
+		this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
 
-			this.random = new Random();
+		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
+		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
+		this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightArmory", 1);
+		this.roomRandomizer.add(EnumRoomType.ARMORY, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomBasic", 1);
+		this.roomRandomizer.add(EnumRoomType.BEDROOM_BASIC, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomFancy", 1);
+		this.roomRandomizer.add(EnumRoomType.BEDROOM_FANCY, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightKitchen", 1);
+		this.roomRandomizer.add(EnumRoomType.KITCHEN, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightLibrary", 1);
+		this.roomRandomizer.add(EnumRoomType.LIBRARY, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightPool", 1);
+		this.roomRandomizer.add(EnumRoomType.POOL, weight);
 
-			this.roomRandomizer = new CQRWeightedRandom<>(random);
-			int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
-			this.roomRandomizer.add(EnumRoomType.ALCHEMY_LAB, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightArmory", 1);
-			this.roomRandomizer.add(EnumRoomType.ARMORY, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomBasic", 1);
-			this.roomRandomizer.add(EnumRoomType.BEDROOM_BASIC, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightBedroomFancy", 1);
-			this.roomRandomizer.add(EnumRoomType.BEDROOM_FANCY, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightKitchen", 1);
-			this.roomRandomizer.add(EnumRoomType.KITCHEN, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightLibrary", 1);
-			this.roomRandomizer.add(EnumRoomType.LIBRARY, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roomWeightPool", 1);
-			this.roomRandomizer.add(EnumRoomType.POOL, weight);
+		this.roofTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
+		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
+		this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
 
-			this.roofTypeRandomizer = new CQRWeightedRandom<>(random);
-			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
-			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.TWO_SIDED, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "roofWeightFourSided", 1);
-			this.roofTypeRandomizer.add(RandomCastleConfigOptions.RoofType.FOUR_SIDED, weight);
+		this.windowTypeRandomizer = new CQRWeightedRandom<>(this.random);
+		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
+		this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.BASIC_GLASS, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightCrossGlass", 1);
+		this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.CROSS_GLASS, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightSquareBars", 1);
+		this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.SQUARE_BARS, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "windowWeightOpenSlit", 1);
+		this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.OPEN_SLIT, weight);
 
-			this.windowTypeRandomizer = new CQRWeightedRandom<>(random);
-			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightBasicGlass", 1);
-			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.BASIC_GLASS, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightCrossGlass", 1);
-			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.CROSS_GLASS, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightSquareBars", 1);
-			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.SQUARE_BARS, weight);
-			weight = PropertyFileHelper.getIntProperty(prop, "windowWeightOpenSlit", 1);
-			this.windowTypeRandomizer.add(RandomCastleConfigOptions.WindowType.OPEN_SLIT, weight);
-
-			this.minSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "minSpawnerRolls", 1);
-			this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
-			this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
-
-			this.closeConfigFile();
-		} else {
-			this.registeredSuccessful = false;
-		}
+		this.minSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "minSpawnerRolls", 1);
+		this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
+		this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
 	}
 
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
-
-		this.generator = new CastleGenerator(this);
-
-		// Generating it...
-		int y = this.getHighestAreaY(chunk, x, z);
-		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
-		this.generator.generate(world, chunk, x, y, z);
-	}
-
-	public int getHighestAreaY(Chunk chunk, int nwCornerX, int nwCornerZ) {
-		int highestY = Int.MinValue();
-		for (int x = 0; x < this.maxSize; x++) {
-			for (int z = 0; z < this.maxSize; z++) {
-				int y = DungeonGenUtils.getHighestYAt(chunk, (nwCornerX + x), (nwCornerZ + z), false);
-				if (y > highestY) {
-					highestY = y;
-				}
-			}
-		}
-
-		return highestY;
+	public void generate(World world, int x, int y, int z) {
+		IDungeonGenerator generator = new CastleGenerator(this);
+		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 
 	public Block getWallBlock() {
@@ -162,29 +126,29 @@ public class CastleDungeon extends DungeonBase {
 	}
 
 	public EnumRoomType getRandomRoom() {
-		return roomRandomizer.next();
+		return this.roomRandomizer.next();
 	}
 
 	public RandomCastleConfigOptions.RoofType getRandomRoofType() {
-		return roofTypeRandomizer.next();
+		return this.roofTypeRandomizer.next();
 	}
 
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
-		return windowTypeRandomizer.next();
+		return this.windowTypeRandomizer.next();
 	}
 
 	public int randomizeRoomSpawnerCount() {
 		int numRolls;
 		int result = 0;
-		if (minSpawnerRolls >= maxSpawnerRolls) {
-			numRolls = minSpawnerRolls;
+		if (this.minSpawnerRolls >= this.maxSpawnerRolls) {
+			numRolls = this.minSpawnerRolls;
 		} else {
-			numRolls = DungeonGenUtils.getIntBetweenBorders(minSpawnerRolls, maxSpawnerRolls, random);
+			numRolls = DungeonGenUtils.getIntBetweenBorders(this.minSpawnerRolls, this.maxSpawnerRolls, this.random);
 		}
 
 		for (int i = 0; i < numRolls; i++) {
-			if (spawnerRollChance > 0) {
-				if (DungeonGenUtils.PercentageRandom(spawnerRollChance, random)) {
+			if (this.spawnerRollChance > 0) {
+				if (DungeonGenUtils.PercentageRandom(this.spawnerRollChance, this.random)) {
 					result++;
 				}
 			}
