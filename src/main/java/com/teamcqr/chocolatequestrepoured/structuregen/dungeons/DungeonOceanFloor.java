@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
@@ -22,6 +23,20 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 
 	public DungeonOceanFloor(String name, Properties prop) {
 		super(name, prop);
+	}
+
+	public void generate(World world, int x, int z) {
+		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+		int y = 0;
+		for (int ix = 0; ix < 16; ix++) {
+			for (int iz = 0; iz < 16; iz++) {
+				y += this.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, true);
+			}
+		}
+		y /= 256;
+		y -= this.getUnderGroundOffset();
+		y += this.getYOffset();
+		this.generate(world, x, y, z);
 	}
 
 	@Override
