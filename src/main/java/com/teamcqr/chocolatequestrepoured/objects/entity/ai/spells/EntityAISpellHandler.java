@@ -56,7 +56,6 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 		for (EntityAISpellHandler.SpellEntry spellEntry : this.spells) {
 			IEntityAISpell spell = spellEntry.spell;
 			if (spell.shouldExecute()) {
-				CQRMain.logger.info("Possible spell: {}", spell);
 				if (spell.ignoreWeight()) {
 					this.activeSpell = spell;
 					return true;
@@ -93,7 +92,6 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 
 	@Override
 	public void startExecuting() {
-		CQRMain.logger.info("Casting spell: {}", this.activeSpell);
 		this.activeSpell.startExecuting();
 	}
 
