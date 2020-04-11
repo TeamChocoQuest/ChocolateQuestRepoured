@@ -3,18 +3,27 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIExplosionSpell extends AbstractEntityAIUseSpell {
+public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIExplosionSpell(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAIExplosionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
+	}
+
+	@Override
+	protected void chargeUpSpell() {
+
 	}
 
 	@Override
 	protected void castSpell() {
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		Vec3d centeredPos = new Vec3d(this.entity.getPosition());
 		if (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
 			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
@@ -29,28 +38,28 @@ public class EntityAIExplosionSpell extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 100;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 300;
+	public boolean ignoreWeight() {
+		return false;
 	}
 
 	@Override
-	protected int getCastWarmupTime() {
-		return 120;
+	public float getRed() {
+		return 0.0F;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return null;
+	public float getGreen() {
+		return 0.6F;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.CAST_EXPLOSION;
+	public float getBlue() {
+		return 0.0F;
 	}
 
 }

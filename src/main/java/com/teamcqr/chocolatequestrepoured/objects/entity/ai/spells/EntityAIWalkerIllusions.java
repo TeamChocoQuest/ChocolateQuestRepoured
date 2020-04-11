@@ -17,14 +17,24 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIWalkerIllusions extends AbstractEntityAIUseSpell {
+public class EntityAIWalkerIllusions extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIWalkerIllusions(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAIWalkerIllusions(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
+	}
+
+	@Override
+	protected void chargeUpSpell() {
+		if (this.tick == 0) {
+			this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
+		}
 	}
 
 	@Override
 	protected void castSpell() {
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		//entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
 		entity.world.getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().add(-20,-10,-20), entity.getPosition().add(20,10,20)), TargetUtil.createPredicateNonAlly(entity.getFaction())).forEach(new Consumer<Entity>() {
 
@@ -45,23 +55,28 @@ public class EntityAIWalkerIllusions extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
+	public int getWeight() {
 		return 10;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 400;
+	public boolean ignoreWeight() {
+		return false;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED;
+	public float getRed() {
+		return 0.55F;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.WALKER_ILLUSION;
+	public float getGreen() {
+		return 0.0F;
+	}
+
+	@Override
+	public float getBlue() {
+		return 0.8F;
 	}
 
 }

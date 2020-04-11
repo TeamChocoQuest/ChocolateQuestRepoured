@@ -69,18 +69,8 @@ public class EntityCQRBoarman extends AbstractEntityCQR {
 	}
 
 	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 }

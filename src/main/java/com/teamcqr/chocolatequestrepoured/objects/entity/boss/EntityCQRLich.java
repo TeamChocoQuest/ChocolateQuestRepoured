@@ -43,17 +43,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	protected BlockPos currentPhylacteryPosition = null;
 
 	public EntityCQRLich(World worldIn) {
-		this(worldIn, 1);
-	}
-
-	public EntityCQRLich(World worldIn, int size) {
-		super(worldIn, size);
-
-		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(false);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.setSize(0.6F, 1.8F);
+		super(worldIn);
 	}
 
 	@Override
@@ -86,19 +76,11 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(6, new EntityAIArmorSpell(this));
-		this.tasks.addTask(7, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 4, new Vec3d(0,0,0)));
-		this.tasks.addTask(8, new EntityAIFangAttack(this));
-		this.tasks.addTask(9, new EntityAIShootPoisonProjectiles(this));
-		this.tasks.addTask(10, new EntityAIAttackRanged(this));
-		this.tasks.addTask(11, new EntityAIAttack(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
-
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		super.initEntityAI();
+		this.spellHandler.addSpell(0, new EntityAIArmorSpell(this, 400, 40));
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 400, 40, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 4, new Vec3d(0,0,0)));
+		this.spellHandler.addSpell(2, new EntityAIFangAttack(this, 400, 40));
+		this.spellHandler.addSpell(3, new EntityAIShootPoisonProjectiles(this, 400, 40));
 	}
 
 	@Override
@@ -182,11 +164,6 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public boolean hasPhylactery() {
 		return (this.currentPhylacteryPosition != null &&
 			(this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY)); 
-	}
-	
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 }

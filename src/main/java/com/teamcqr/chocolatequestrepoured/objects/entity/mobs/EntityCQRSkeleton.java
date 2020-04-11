@@ -34,16 +34,6 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	}
 
 	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
@@ -61,11 +51,6 @@ public class EntityCQRSkeleton extends AbstractEntityCQR {
 	@Override
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_SKELETON_DEATH;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 }

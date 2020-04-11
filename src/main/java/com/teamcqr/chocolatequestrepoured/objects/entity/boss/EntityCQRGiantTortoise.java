@@ -44,7 +44,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -189,13 +188,9 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	private int animationProgress = 0;
 
 	public EntityCQRGiantTortoise(World worldIn) {
-		super(worldIn, 1);
+		super(worldIn);
 
 		this.bossInfoServer.setColor(Color.GREEN);
-		this.bossInfoServer.setCreateFog(false);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.setSize(this.baseWidth, this.baseHeight);
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
 			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
@@ -323,16 +318,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.BEASTS;
-	}
-
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return false;
 	}
 
 	@Override

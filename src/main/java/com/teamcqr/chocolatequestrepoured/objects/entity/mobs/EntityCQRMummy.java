@@ -65,23 +65,8 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 }

@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.ESpellType;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
@@ -10,7 +10,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.MathHelper;
 
 public class ModelCQRBiped extends ModelBiped {
@@ -94,8 +93,8 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.isSpellcasting()) {
-				this.renderSpellAnimation(entityIn, ageInTicks);
+			if (cqrEnt.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
+				this.renderSpellAnimation(cqrEnt, (IEntityAISpellAnimatedVanilla) cqrEnt.getActiveSpell(), ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
 				if (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
@@ -123,7 +122,7 @@ public class ModelCQRBiped extends ModelBiped {
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 	}
 
-	protected void renderSpellAnimation(Entity entityIn, float ageInTicks) {
+	protected void renderSpellAnimation(AbstractEntityCQR entity, IEntityAISpellAnimatedVanilla animatedSpell, float ageInTicks) {
 		this.bipedRightArm.rotationPointZ = 0.0F;
 		this.bipedRightArm.rotationPointX = -5.0F;
 		this.bipedLeftArm.rotationPointZ = 0.0F;
@@ -134,25 +133,6 @@ public class ModelCQRBiped extends ModelBiped {
 		this.bipedLeftArm.rotateAngleZ = -2.3561945F;
 		this.bipedRightArm.rotateAngleY = 0.0F;
 		this.bipedLeftArm.rotateAngleY = 0.0F;
-
-		// Particles
-		// dx, dy, dz are the R G B values from 1 to 255
-		double dx = 0.7D;
-		double dy = 0.5D;
-		double dz = 0.2D;
-
-		if (!((AbstractEntityCQR) entityIn).getActiveSpell().equals(ESpellType.NONE)) {
-			ESpellType spell = ((AbstractEntityCQR) entityIn).getActiveSpell();
-			dx = spell.getDX();
-			dy = spell.getDY();
-			dz = spell.getDZ();
-		}
-
-		float f = ((AbstractEntityCQR) entityIn).renderYawOffset * 0.017453292F + MathHelper.cos(ageInTicks * 0.6662F) * 0.25F;
-		float f1 = MathHelper.cos(f);
-		float f2 = MathHelper.sin(f);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX + (double) f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ + (double) f2 * 0.6D, dx, dy, dz);
-		entityIn.world.spawnParticle(EnumParticleTypes.SPELL_MOB, entityIn.posX - (double) f1 * 0.6D, entityIn.posY + 1.8D, entityIn.posZ - (double) f2 * 0.6D, dx, dy, dz);
 	}
 
 	@Override

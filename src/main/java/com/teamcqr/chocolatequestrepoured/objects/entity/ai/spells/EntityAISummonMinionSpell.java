@@ -12,9 +12,9 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -24,26 +24,26 @@ import net.minecraft.util.math.Vec3d;
  * Made by: DerToaster98
  * Comment: Simple AI to summon some minions
  */
-public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
+public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	protected ISummoner summoner = null;
 	protected int MAX_MINIONS = 10;
 	protected int MAX_MINIONS_AT_A_TIME = 3;
-	protected List<Entity> activeCircles = new ArrayList<Entity>();
+	protected List<Entity> activeCircles = new ArrayList<>();
 	protected boolean summonViaCircle = true;
 	protected Vec3d positionOffsetForSummons = new Vec3d(0, 0, 0);
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
 		if (entity instanceof ISummoner) {
 			this.summoner = (ISummoner) entity;
 		}
 	}
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
-		this(entity);
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, ResourceLocation minion, ECircleTexture texture, boolean useCircle, int maxMinions, int maxMinionsPerSpawn, Vec3d offsetV) {
+		this(entity, cooldown, chargeUpTicks);
 		this.summonViaCircle = useCircle;
 		this.minionOverride = minion;
 		this.circleTextureOverride = texture;
@@ -57,10 +57,10 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 		if (this.summoner == null) {
 			return false;
 		}
-		if (super.shouldExecute()) {
-			return this.getAliveMinionCount() < this.MAX_MINIONS;
+		if (!super.shouldExecute()) {
+			return false;
 		}
-		return false;
+		return this.getAliveMinionCount() < this.MAX_MINIONS;
 	}
 
 	protected int getAliveMinionCount() {
@@ -86,7 +86,15 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
+	protected void chargeUpSpell() {
+
+	}
+
+	@Override
 	protected void castSpell() {
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
@@ -162,30 +170,28 @@ public class EntityAISummonMinionSpell extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 40;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 80;
+	public boolean ignoreWeight() {
+		return false;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return null;
+	public float getRed() {
+		return 0.7F;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.SUMMON_MINIONS;
+	public float getGreen() {
+		return 0.7F;
 	}
 
 	@Override
-	public void resetTask() {
-		super.resetTask();
-		this.activeCircles.clear();
-		this.entity.setSpellCasting(false);
+	public float getBlue() {
+		return 0.8F;
 	}
 
 }
