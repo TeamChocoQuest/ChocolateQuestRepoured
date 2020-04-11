@@ -548,6 +548,9 @@ description.staff_thunder.name=Missing #TODO
 description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
 description.cursed_bone.name=Mob to be summoned:
 
+//Enchantments
+enchantment.lightning_protection=Lightning Protection
+
 // Mobs
 entity.cqr_boarman.name=Boarman
 entity.cqr_dummy.name=Dummy
@@ -587,3 +590,4 @@ entity.cqr_walker_king.name=Walker King
 //Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
 entity.cqr_illusion_walker_king.name=Walker King
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
