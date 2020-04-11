@@ -54,18 +54,13 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private int borderLightning = 20;
 	private boolean active = false;
 	private int activationCooldown = 80;
-
-	public EntityCQRWalkerKing(World world) {
-		this(world, 1);
-	}
 	
-	public EntityCQRWalkerKing(World worldIn, int size) {
-		super(worldIn, size);
+	public EntityCQRWalkerKing(World worldIn) {
+		super(worldIn);
 		
 		this.bossInfoServer.setColor(Color.PURPLE);
 		this.bossInfoServer.setCreateFog(true);
 		this.bossInfoServer.setDarkenSky(true);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 		this.bossInfoServer.setPlayEndBossMusic(true);
 		
 		this.experienceValue = 200;
@@ -73,27 +68,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		//Spells
-		this.tasks.addTask(6, new EntityAIWalkerIllusions(this));
-		
-		this.tasks.addTask(7, new BossAIWalkerTornadoAttack(this));
-		this.tasks.addTask(8, new BossAIWalkerLightningCircles(this));
-		this.tasks.addTask(9, new BossAIWalkerLightningSpiral(this));
-		//normal combat
-		this.tasks.addTask(10, new EntityAIAttackRanged(this));
-		this.tasks.addTask(11, new EntityAIBackstab(this));
-		this.tasks.addTask(12, new EntityAIAttack(this));
-		
-		//Low priority stuff
-		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
-
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		super.initEntityAI();
+		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 400, 40));
+		this.tasks.addTask(15, new BossAIWalkerTornadoAttack(this));
+		this.tasks.addTask(16, new BossAIWalkerLightningCircles(this));
+		this.tasks.addTask(17, new BossAIWalkerLightningSpiral(this));
 	}
 	
 	@Override
@@ -102,7 +81,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
-	
 	@Override
 	public void onLivingUpdate() {
 		if(fallDistance > 12) {
@@ -205,11 +183,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-	
-	@Override
 	public boolean hasCape() {
 		return this.deathTicks <= 0;
 	}
@@ -232,21 +205,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.WALKERS;
-	}
-
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 	
 	@Override

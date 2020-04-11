@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spellsTest;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 public interface IEntityAISpell {
 

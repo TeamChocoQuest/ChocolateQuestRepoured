@@ -46,24 +46,4 @@ public class EntityCQRDummy extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_DUMMY.getLootTable();
 	}
 
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return false;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return false;
-	}
-
 }

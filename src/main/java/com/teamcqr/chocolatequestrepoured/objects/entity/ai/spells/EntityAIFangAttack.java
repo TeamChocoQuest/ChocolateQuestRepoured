@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityEvokerFangs;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -16,14 +15,24 @@ import net.minecraft.util.math.MathHelper;
  * Made by: DerToaster98
  * Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
  */
-public class EntityAIFangAttack extends AbstractEntityAIUseSpell {
+public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIFangAttack(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
+	}
+
+	@Override
+	protected void chargeUpSpell() {
+		if (this.tick == 0) {
+			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK, 1.0F, 1.0F);
+		}
 	}
 
 	@Override
 	protected void castSpell() {
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
@@ -48,8 +57,8 @@ public class EntityAIFangAttack extends AbstractEntityAIUseSpell {
 		}
 	}
 
-	private void spawnFangs(double p_190876_1_, double p_190876_3_, double p_190876_5_, double p_190876_7_, float p_190876_9_, int p_190876_10_) {
-		BlockPos blockpos = new BlockPos(p_190876_1_, p_190876_7_, p_190876_3_);
+	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
+		BlockPos blockpos = new BlockPos(x, maxY, z);
 		boolean flag = false;
 		double d0 = 0.0D;
 
@@ -70,40 +79,40 @@ public class EntityAIFangAttack extends AbstractEntityAIUseSpell {
 
 			blockpos = blockpos.down();
 
-			if (blockpos.getY() < MathHelper.floor(p_190876_5_) - 1) {
+			if (blockpos.getY() < MathHelper.floor(minY) - 1) {
 				break;
 			}
 		}
 
 		if (flag) {
-			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, p_190876_1_, (double) blockpos.getY() + d0, p_190876_3_, p_190876_9_, p_190876_10_, this.entity);
+			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
 			this.entity.world.spawnEntity(entityevokerfangs);
 		}
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 40;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 120;
-	}
-
-	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
-	}
-
-	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.SUMMON_FANGS;
-	}
-	
-	@Override
-	public boolean isInterruptible() {
+	public boolean ignoreWeight() {
 		return false;
+	}
+
+	@Override
+	public float getRed() {
+		return 0.4F;
+	}
+
+	@Override
+	public float getGreen() {
+		return 0.3F;
+	}
+
+	@Override
+	public float getBlue() {
+		return 0.35F;
 	}
 
 }

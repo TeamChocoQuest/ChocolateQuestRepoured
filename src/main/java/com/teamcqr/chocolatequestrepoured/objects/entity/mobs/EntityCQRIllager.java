@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
@@ -79,11 +80,6 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 		return 2;
 	}
 
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
 	public boolean isAggressive() {
 		if (!this.world.isRemote) {
 			return this.getAttackTarget() != null;
@@ -94,7 +90,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@SideOnly(Side.CLIENT)
 	public IllagerArmPose getIllagerArmPose() {
 		if (this.isAggressive()) {
-			if (this.isSpellcasting()) {
+			if (this.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
 				return IllagerArmPose.SPELLCASTING;
 			}
 
@@ -110,11 +106,6 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 	@Override

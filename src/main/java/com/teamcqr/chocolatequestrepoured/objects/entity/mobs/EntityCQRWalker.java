@@ -57,11 +57,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	protected ResourceLocation getLootTable() {
 		return ELootTablesNormal.ENTITY_WALKER.getLootTable();
 	}
-
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
@@ -69,21 +64,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 			amount *= 2;
 		}
 		return super.attackEntityFrom(source, amount);
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 
 }

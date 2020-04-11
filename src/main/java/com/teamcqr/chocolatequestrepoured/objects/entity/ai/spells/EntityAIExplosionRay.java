@@ -7,17 +7,26 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
+public class EntityAIExplosionRay extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIExplosionRay(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAIExplosionRay(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
+	}
+
+	@Override
+	protected void chargeUpSpell() {
+		if (this.tick == 0) {
+			this.entity.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 1.0F, 1.0F);
+		}
 	}
 
 	@Override
 	protected void castSpell() {
-		int explosionCount = 1;
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
-		explosionCount = new Double(v.lengthVector()).intValue() / 2;
+		int explosionCount = (int) v.lengthVector() >> 1;
 		v = v.normalize();
 		BlockPos start = this.entity.getPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
@@ -32,28 +41,28 @@ public class EntityAIExplosionRay extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 100;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 160;
+	public boolean ignoreWeight() {
+		return false;
 	}
 
 	@Override
-	protected int getCastWarmupTime() {
-		return 60;
+	public float getRed() {
+		return 0.0F;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return SoundEvents.ENTITY_CREEPER_PRIMED;
+	public float getGreen() {
+		return 0.0F;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.SUMMON_EXPLOSION_RAY;
+	public float getBlue() {
+		return 0.4F;
 	}
 
 }

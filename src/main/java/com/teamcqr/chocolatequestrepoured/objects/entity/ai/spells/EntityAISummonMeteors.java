@@ -8,28 +8,37 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAISummonMeteors extends AbstractEntityAIUseSpell {
+public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MIN_FIREBALLS_PER_CAST = 3;
 	protected static final int MAX_FIREBALLS_PER_CAST = 8;
 
-	public EntityAISummonMeteors(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAISummonMeteors(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, cooldown, chargeUpTicks, 1);
+	}
+
+	@Override
+	protected void chargeUpSpell() {
+		if (this.tick == 0) {
+			this.entity.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 1.0F, 1.0F);
+		}
 	}
 
 	@Override
 	protected void castSpell() {
+		if (this.tick == this.chargeUpTicks) {
+			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+		}
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
 		int ballCount = DungeonGenUtils.getIntBetweenBorders(MIN_FIREBALLS_PER_CAST, MAX_FIREBALLS_PER_CAST, this.entity.getRNG());
 
 		if (ballCount > 0) {
-			double angle = /* 180D */360D / (double) ballCount;
+			double angle = 360D / (double) ballCount;
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getPosition();
@@ -61,28 +70,28 @@ public class EntityAISummonMeteors extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 60;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected int getCastWarmupTime() {
-		return 100;
+	public boolean ignoreWeight() {
+		return false;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 1200;
+	public float getRed() {
+		return 0.8F;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return SoundEvents.ENTITY_WITHER_SPAWN;
+	public float getGreen() {
+		return 0.0F;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.SUMMON_FALLING_FIREBALLS;
+	public float getBlue() {
+		return 0.0F;
 	}
 
 }

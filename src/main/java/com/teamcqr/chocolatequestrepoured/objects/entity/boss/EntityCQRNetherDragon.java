@@ -90,13 +90,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 */
 
 	public EntityCQRNetherDragon(World worldIn) {
-		super(worldIn, 32);
+		super(worldIn);
 		/*
 		 * this.dragonBodyParts = new MultiPartEntityPart[] { this.headPart, this.body1, this.body2, this.body3,
 		 * this.body4, this.body5, this.body6, this.body7, this.body8, this.body9, this.body10, this.body11,
 		 * this.body12, this.body13, this.body14, this.body15, this.body16 };
 		 */
-		this.setSize(1.5F, 1.5F);
 		this.noClip = true;
 		this.setNoGravity(true);
 		this.experienceValue = 100;
@@ -142,11 +141,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
-	}
-
-	@Override
-	public boolean isNonBoss() {
-		return false;
 	}
 
 	@Override
@@ -415,21 +409,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	protected ResourceLocation getLootTable() {
 		return ELootTablesBoss.BOSS_DRAGON_NETHER.getLootTable();
-	}
-
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return false;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
 	}
 	
 	@Override

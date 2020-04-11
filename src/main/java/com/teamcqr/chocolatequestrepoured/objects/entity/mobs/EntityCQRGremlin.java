@@ -31,23 +31,13 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	}
 
 	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
+	public boolean canMountEntity() {
 		return false;
 	}
 
 	@Override
 	public boolean isSitting() {
 		return false;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
 	}
 
 	@Override

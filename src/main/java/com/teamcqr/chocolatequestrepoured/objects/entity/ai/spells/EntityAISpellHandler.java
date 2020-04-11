@@ -1,11 +1,18 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spellsTest;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.WorldServer;
 
 public class EntityAISpellHandler extends AbstractCQREntityAI {
 
@@ -32,7 +39,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 	public void addSpell(int priority, IEntityAISpell spell) {
 		this.spells.add(new SpellEntry(priority, spell));
 		if (this.spells.size() >= 2 && this.spells.get(this.spells.size() - 2).priority > priority) {
-			this.spells.sort(SORTER);
+			this.spells.sort(EntityAISpellHandler.SORTER);
 		}
 	}
 
@@ -49,6 +56,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 		for (EntityAISpellHandler.SpellEntry spellEntry : this.spells) {
 			IEntityAISpell spell = spellEntry.spell;
 			if (spell.shouldExecute()) {
+				CQRMain.logger.info("Possible spell: {}", spell);
 				if (spell.ignoreWeight()) {
 					this.activeSpell = spell;
 					return true;
@@ -85,6 +93,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 
 	@Override
 	public void startExecuting() {
+		CQRMain.logger.info("Casting spell: {}", this.activeSpell);
 		this.activeSpell.startExecuting();
 	}
 
@@ -98,6 +107,25 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 	@Override
 	public void updateTask() {
 		this.activeSpell.updateTask();
+		if (this.activeSpell instanceof IEntityAISpellAnimatedVanilla) {
+			this.spawnAnimatedSpellParticles((IEntityAISpellAnimatedVanilla) this.activeSpell);
+		}
+	}
+
+	private void spawnAnimatedSpellParticles(IEntityAISpellAnimatedVanilla animatedSpell) {
+		double red = animatedSpell.getRed();
+		double green = animatedSpell.getGreen();
+		double blue = animatedSpell.getBlue();
+		float f = this.entity.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.entity.ticksExisted * 0.6662F) * 0.25F;
+		float f1 = MathHelper.cos(f);
+		float f2 = MathHelper.sin(f);
+		this.entity.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX + (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ + (double) f2 * 0.6D, red, green, blue);
+		this.entity.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX - (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ - (double) f2 * 0.6D, red, green, blue);
+	}
+
+	@Nullable
+	public IEntityAISpell getActiveSpell() {
+		return this.activeSpell;
 	}
 
 	private static class SpellEntry {

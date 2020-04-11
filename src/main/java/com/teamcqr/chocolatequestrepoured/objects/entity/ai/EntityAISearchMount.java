@@ -29,7 +29,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if (!this.entity.canRide()) {
+		if (!this.entity.canMountEntity()) {
 			return false;
 		}
 		if (this.entity.isRiding()) {
@@ -50,7 +50,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (!this.entity.canRide()) {
+		if (!this.entity.canMountEntity()) {
 			return false;
 		}
 		if (this.entity.isRiding()) {

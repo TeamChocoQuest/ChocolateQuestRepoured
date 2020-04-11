@@ -27,6 +27,9 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
+		if (!this.entity.canTameEntity()) {
+			return false;
+		}
 		if (!(this.entity.getHeldItemMainhand().getItem() instanceof ItemLead || this.entity.getHeldItemOffhand().getItem() instanceof ItemLead)) {
 			return false;
 		}

@@ -44,19 +44,4 @@ public class EntityCQRPirate extends AbstractEntityCQR {
 		return 3;
 	}
 
-	@Override
-	public boolean canRide() {
-		return false;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
-	}
-
 }
