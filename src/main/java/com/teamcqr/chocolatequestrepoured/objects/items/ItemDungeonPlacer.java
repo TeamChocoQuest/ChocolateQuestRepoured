@@ -25,6 +25,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
@@ -114,13 +115,14 @@ public class ItemDungeonPlacer extends Item {
 				DungeonBase dungeon = DungeonRegistry.getInstance().getDungeon(dungeonName);
 
 				if (dungeon != null) {
-					Vec3d pos = playerIn.getPositionEyes(1.0F);
+					Vec3d vec = playerIn.getPositionEyes(1.0F);
 					Vec3d look = playerIn.getLookVec();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(pos, pos.add(look.scale(128.0D)));
+					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(128.0D)));
 
 					if (result != null) {
-						dungeon.generate(result.getBlockPos(), worldIn);
+						BlockPos pos = result.getBlockPos();
+						dungeon.generate(worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
 						if(!(playerIn.isCreative() || playerIn.isSpectator())) {

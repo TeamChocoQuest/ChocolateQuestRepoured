@@ -301,8 +301,8 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
 		//TODO Add bosses
-		CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world, new ArrayList<String>());
-		MinecraftForge.EVENT_BUS.post(event);
+		// CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world, new ArrayList<String>());
+		// MinecraftForge.EVENT_BUS.post(event);
 
 		// TIME
 		// All: About 20 seconds

@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -25,7 +26,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDun
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -52,7 +52,7 @@ public class DungeonRegistry {
 	private Map<World, Set<String>> worldDungeonSpawnedMap = new HashMap<>();
 
 	public static DungeonRegistry getInstance() {
-		return instance;
+		return DungeonRegistry.instance;
 	}
 
 	public DungeonBase getDungeon(String name) {
@@ -127,121 +127,106 @@ public class DungeonRegistry {
 		CQRMain.logger.info("Loading {} dungeon configuration files...", files.size());
 
 		for (File file : files) {
-			Properties dungeonConfig = new Properties();
-			try (FileInputStream stream = new FileInputStream(file)) {
-				dungeonConfig.load(stream);
-			} catch (IOException e) {
-				CQRMain.logger.error("{}: Failed to load file!", file.getName());
-				continue;
-			}
-			String generatorType = dungeonConfig.getProperty("generator", "TEMPLATE_SURFACE");
+			DungeonBase dungeon = this.createDungeonFromFile(file);
 
-			if (EDungeonGenerator.isValidDungeonGenerator(generatorType)) {
-				DungeonBase dungeon = this.getDungeonByType(generatorType, file);
+			if (dungeon != null) {
+				this.dungeons.add(dungeon);
 
-				if (dungeon != null && dungeon.isRegisteredSuccessful()) {
-					if (!this.isDungeonMissingModDependencies(dungeon)) {
-						if (PropertyFileHelper.getBooleanProperty(dungeonConfig, "spawnAtCertainPosition", false)) {
-							// Position restriction stuff here
-							if (this.handleLockedPos(dungeon, dungeonConfig)) {
-								this.coordinateSpecificDungeons.add(dungeon);
-							}
-						} else if (dungeon.getSpawnChance() > 0) {
-							// Biome map filling
-							String[] biomeNames = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "biomes", new String[] { "PLAINS" });
-							// Biome blacklist
-							String[] biomeNamesBlackList = PropertyFileHelper.getStringArrayProperty(dungeonConfig, "disallowedBiomes", new String[] {});
-							for (String biomeName : biomeNames) {
-								if (biomeName.equalsIgnoreCase("*") || biomeName.equalsIgnoreCase("ALL")) {
-									// Add dungeon to all biomes
-									this.addDungeonToAllBiomes(dungeon);
-									this.addDungeonToAllBiomeTypes(dungeon);
-									break;
-								} else if (this.isBiomeType(biomeName)) {
-									// Add dungeon to all biomes from biome type
-									this.addDungeonToBiomeType(dungeon, this.getBiomeTypeByName(biomeName));
-								} else {
-									// Add dungeon to biome from registry name
-									this.addDungeonToBiome(dungeon, new ResourceLocation(biomeName));
-								}
-							}
-							if (biomeNamesBlackList.length > 0) {
-								for (String nope : biomeNamesBlackList) {
-									if (nope.equalsIgnoreCase("*") || nope.equalsIgnoreCase("ALL")) {
-										// Remove from everything
-										this.removeDungeonFromAllBiomes(dungeon);
-										this.removeDungeonFromAllBiomeTypes(dungeon);
-										break;
-									} else if (this.isBiomeType(nope)) {
-										// Remove from type
-										this.removeDungeonFromBiomeType(dungeon, this.getBiomeTypeByName(nope));
-									} else {
-										// Remove from biome
-										this.removeDungeonFromBiome(dungeon, new ResourceLocation(nope));
-									}
-								}
-							}
-						} else {
-							CQRMain.logger.warn("{}: Dungeon spawnrate is set to or below 0!", file.getName());
-						}
-					} else {
-						CQRMain.logger.warn("{}: Dungeon is missing mod dependencies!", file.getName());
-					}
-
-					this.dungeons.add(dungeon);
-				} else {
-					CQRMain.logger.warn("{}: Couldn't create dungeon for generator type {}!", file.getName(), generatorType);
+				if (this.isDungeonMissingModDependencies(dungeon)) {
+					CQRMain.logger.warn("{}: Dungeon is missing mod dependencies!", file.getName());
+					continue;
 				}
-			} else {
-				CQRMain.logger.warn("{}: Generator type {} is invalid!", file.getName(), generatorType);
+
+				if (dungeon.isPosLocked()) {
+					this.coordinateSpecificDungeons.add(dungeon);
+					continue;
+				}
+
+				if (dungeon.getWeight() <= 0) {
+					CQRMain.logger.warn("{}: Dungeon spawnrate is set to or below 0!", file.getName());
+					continue;
+				}
+
+				for (String s : dungeon.getBiomes()) {
+					if (s.equalsIgnoreCase("*") || s.equalsIgnoreCase("ALL")) {
+						// Add to all biome types and biomes
+						this.addDungeonToAllBiomes(dungeon);
+						this.addDungeonToAllBiomeTypes(dungeon);
+						break;
+					} else if (this.isBiomeType(s)) {
+						// Add to biome type
+						this.addDungeonToBiomeType(dungeon, this.getBiomeTypeByName(s));
+					} else {
+						// Add to biome
+						this.addDungeonToBiome(dungeon, new ResourceLocation(s));
+					}
+				}
+
+				// TODO: Fix biome blacklisting
+				for (String s : dungeon.getBlacklistedBiomes()) {
+					if (s.equalsIgnoreCase("*") || s.equalsIgnoreCase("ALL")) {
+						// Remove from all biome types and biomes
+						this.removeDungeonFromAllBiomes(dungeon);
+						this.removeDungeonFromAllBiomeTypes(dungeon);
+						break;
+					} else if (this.isBiomeType(s)) {
+						// Remove from biome type
+						this.removeDungeonFromBiomeType(dungeon, this.getBiomeTypeByName(s));
+					} else {
+						// Remove from biome
+						this.removeDungeonFromBiome(dungeon, new ResourceLocation(s));
+					}
+				}
 			}
 		}
 	}
 
-	private boolean handleLockedPos(DungeonBase dungeon, Properties dungeonConfig) {
-		String[] coordinates = dungeonConfig.getProperty("spawnAt", "-;-;-").split(";");
-		try {
-			int x = Integer.parseInt(coordinates[0]);
-			int y = Integer.parseInt(coordinates[1]);
-			int z = Integer.parseInt(coordinates[2]);
-			dungeon.setLockPos(new BlockPos(x, y, z), true);
-		} catch (ArrayIndexOutOfBoundsException | NumberFormatException e) {
-			CQRMain.logger.error("{}: Failed to read spawn position!", dungeon.getDungeonName());
-			return false;
-		}
-		return true;
-	}
-
-	private DungeonBase getDungeonByType(String dunType, File dungeonPropertiesFile) {
-		switch (EDungeonGenerator.valueOf(dunType.toUpperCase())) {
-		case CASTLE:
-			return new CastleDungeon(dungeonPropertiesFile);
-		case CAVERNS:
-			return new CavernDungeon(dungeonPropertiesFile);
-		case FLOATING_NETHER_CITY:
-			return new FloatingNetherCity(dungeonPropertiesFile);
-		case NETHER_CITY:
-			return new ClassicNetherCity(dungeonPropertiesFile);
-		case STRONGHOLD:
-			return new StrongholdOpenDungeon(dungeonPropertiesFile);
-		case TEMPLATE_OCEAN_FLOOR:
-			return new DungeonOceanFloor(dungeonPropertiesFile);
-		case TEMPLATE_SURFACE:
-			return new DefaultSurfaceDungeon(dungeonPropertiesFile);
-		case GUARDED_CASTLE:
-			return new GuardedCastleDungeon(dungeonPropertiesFile);
-		case VOLCANO:
-			return new VolcanoDungeon(dungeonPropertiesFile);
-		case CLASSIC_STRONGHOLD:
-			return new StrongholdLinearDungeon(dungeonPropertiesFile);
-		case GREEN_CAVE:
-			// TODO SWAMP CAVE GENERATOR
-			CQRMain.logger.warn("Dungeon Generator GREEN_CAVE is not yet implemented!");
-			break;
-		default:
+	private DungeonBase createDungeonFromFile(File file) {
+		Properties prop = new Properties();
+		try (InputStream inputStream = new FileInputStream(file)) {
+			prop.load(inputStream);
+		} catch (IOException e) {
+			CQRMain.logger.error("Failed to load file" + file.getName(), e);
 			return null;
 		}
-		return null;
+
+		String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
+		String generatorType = prop.getProperty("generator", "").toLowerCase();
+
+		switch (generatorType) {
+		case "caverns":
+			return new CavernDungeon(name, prop);
+		case "abandoned":
+			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
+			return null;
+		case "ruin":
+			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
+			return null;
+		case "nether_city":
+			return new ClassicNetherCity(name, prop);
+		case "floating_nether_city":
+			return new FloatingNetherCity(name, prop);
+		case "template_surface":
+			return new DefaultSurfaceDungeon(name, prop);
+		case "template_ocean_floor":
+			return new DungeonOceanFloor(name, prop);
+		case "stronghold":
+			return new StrongholdOpenDungeon(name, prop);
+		case "classic_stronghold":
+			return new StrongholdLinearDungeon(name, prop);
+		case "green_cave":
+			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
+			return null;
+		case "guarded_castle":
+			return new GuardedCastleDungeon(name, prop);
+		case "castle":
+			return new CastleDungeon(name, prop);
+		case "volcano":
+			return new VolcanoDungeon(name, prop);
+		default:
+			CQRMain.logger.warn("Dungeon Generator {} not found!", generatorType);
+			return null;
+		}
 	}
 
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {

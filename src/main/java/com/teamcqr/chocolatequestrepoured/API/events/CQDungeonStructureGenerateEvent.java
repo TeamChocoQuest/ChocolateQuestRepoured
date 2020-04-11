@@ -26,12 +26,14 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	private BlockPos shieldCorePosition = null;
 	private ArrayList<String> bossUUIDs = new ArrayList<>();
 	private World world;
+	private final UUID uuid;
 
-	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, BlockPos position, BlockPos size, World world, List<String> uuids) {
+	public CQDungeonStructureGenerateEvent(DungeonBase dungeon, UUID uuid, BlockPos position, BlockPos size, World world, List<String> uuids) {
 		this.generatedDungeon = dungeon;
 		this.dunPosition = position;
 		this.dunSize = size;
 		this.world = world;
+		this.uuid = uuid;
 		bossUUIDs.addAll(uuids);
 	}
 	
@@ -52,7 +54,7 @@ public class CQDungeonStructureGenerateEvent extends Event {
 	}
 
 	public UUID getDungeonID() {
-		return this.generatedDungeon.getDungeonID();
+		return this.uuid;
 	}
 
 	@Nullable
