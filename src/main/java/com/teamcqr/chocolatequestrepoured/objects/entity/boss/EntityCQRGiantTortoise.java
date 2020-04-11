@@ -204,7 +204,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.noClip = false;
 		this.setNoGravity(false);
-		this.experienceValue = 150;
+		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
 	}
