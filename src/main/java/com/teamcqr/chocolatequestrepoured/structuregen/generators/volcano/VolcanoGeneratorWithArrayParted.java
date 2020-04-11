@@ -39,39 +39,7 @@ import net.minecraftforge.common.MinecraftForge;
  * GitHub: https://github.com/DerToaster98
  */
 public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
-	
-	public void generate(World world, Chunk chunk, int x, int y, int z) {
-		/*
-		 * int median = 0;
-		 * int cant = 0;
-		 * for(int iX = 0; iX < x; iX++) {
-		 * for(int iZ = 0; iZ < z; iZ++) {
-		 * int height = world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY();
-		 * median += height;
-		 * cant++;
-		 * }
-		 * }
-		 * y = median /cant;
-		 */
-		if (world.isRemote) {
-			return;
-		}
 
-		Structure structure = new Structure(world);
-		List<List<? extends IStructure>> lists = new ArrayList<>();
-
-		this.preProcess(world, chunk, x, y, z, lists);
-		this.postProcess(world, chunk, x, y, z, lists);
-		this.fillChests(world, chunk, x, y, z, lists);
-		this.placeSpawners(world, chunk, x, y, z, lists);
-		this.buildStructure(world, chunk, x, y, z, lists);
-		this.placeCoverBlocks(world, chunk, x, y, z, lists);
-
-		for (List<? extends IStructure> list : lists) {
-			structure.addList(list);
-		}
-		DungeonGenerationHandler.addStructure(world, structure);
-	}
 	//GENERATION TIME TOTAL: ~15-30 seconds
 	/**
 	 * Generate: Given height, given base radius, given top inner radius
@@ -103,7 +71,6 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 	private VolcanoDungeon dungeon;
 
 	private int baseRadius = 1;
-	private int minY = 1;
 	private int maxHeight = 10;
 	private int minRadius = 1;
 	private int entranceDistToWall = 10;
@@ -137,7 +104,6 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		this.baseRadius = new Double(this.minRadius + Math.cbrt(this.maxHeight / this.steepness)).intValue();
 
 		// System.out.println("Calculating minY...");
-		this.minY = this.getMinY(this.centerLoc, this.baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
 		// 1) Calculate MinY
 		// 2) Calculate the base radius
 		// 4) calculate all block positions
@@ -149,7 +115,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		// System.out.println("Creating lists...");
 		List<BlockPos> blockList = new ArrayList<BlockPos>();
 		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
-		int lowYMax = this.minY + (new Double(0.1 * this.maxHeight).intValue());
+		int lowYMax = y + (new Double(0.1 * this.maxHeight).intValue());
 		int rMax = (int) (baseRadius * 4 + dungeon.getMaxHoleSize());
 		final int r = rMax/2;
 		BlockPos referenceLoc = centerLoc.subtract(new Vec3i(r, centerLoc.getY(), r));
@@ -159,7 +125,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		//DONE: Rewrite hole gen code
 		//TODO: Merge all 3 for y(for x(for z))) loops
 		
-		int yMax = ((this.minY + this.maxHeight) < 256 ? this.maxHeight : (255 - this.minY));
+		int yMax = ((y + this.maxHeight) < 256 ? this.maxHeight : (255 - y));
 
 		
 
@@ -179,25 +145,25 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 							// SO now we decide what the wall is gonna be...
 							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
 								// It is lava :D
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getLavaBlock();
+								blocks[iX + r][iY + y][iZ + r] = dungeon.getLavaBlock();
 							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), rdm.nextLong())) {
 								// It is magma
-								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
+								blocks[iX + r][iY + y][iZ + r] = dungeon.getMagmaBlock();
 							} else {
 								// It is stone or ore
 								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1));
-									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1)) {
+									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + y, iZ + z), rdm.nextInt(3) + 1));
+									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + y, iZ + z), rdm.nextInt(3) + 1)) {
 										BlockPos v = bp.subtract(referenceLoc);
 										blocks[v.getX()][bp.getY()][v.getZ()] = this.dungeon.getUpperMainBlock();
 									}
 								} else {
-									blockList.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
-									blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getUpperMainBlock();
+									blockList.add(new BlockPos(iX + x, iY + y, iZ + z));
+									blocks[iX + r][iY + y][iZ + r] = this.dungeon.getUpperMainBlock();
 								}
 							}
 						} else {
-							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR;
+							blocks[iX + r][iY + y][iZ + r] = Blocks.AIR;
 						}
 					}
 				}
@@ -511,19 +477,6 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 				}
 			}
 		}
-	}
-
-	private int getMinY(BlockPos center, int radius, World world) {
-		int minY = 256;
-		for (int iX = -radius; iX <= radius; iX++) {
-			for (int iZ = -radius; iZ <= radius; iZ++) {
-				int yTmp = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(center.add(iX, 0, iZ)), iX, iZ, true);
-				if (yTmp < minY) {
-					minY = yTmp;
-				}
-			}
-		}
-		return minY - 5;
 	}
 
 }
