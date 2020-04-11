@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.enchantments;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -21,13 +22,10 @@ public class EnchantmentLightningProtection extends Enchantment {
 		this(Rarity.RARE, EnumEnchantmentType.ARMOR_HEAD, new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD});
 	}
 	
-	@Override
-	public String getName() {
-		return "lightning_protection";
-	}
-	
 	private EnchantmentLightningProtection(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
 		super(rarityIn, typeIn, slots);
+		setName("lightning_protection");
+		setRegistryName(Reference.MODID, "lightning_protection");
 	}
 	
 

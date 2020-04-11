@@ -8,6 +8,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
+import net.minecraftforge.registries.IForgeRegistry;
 
 @ObjectHolder(Reference.MODID)
 public class ModEnchantments {
@@ -19,7 +20,9 @@ public class ModEnchantments {
 		
 		@SubscribeEvent
 		public static void onEvent(final RegistryEvent.Register<Enchantment> event) {
-			event.getRegistry().register(LIGHTNING_PROTECTION);
+			final IForgeRegistry<Enchantment> registry = event.getRegistry();
+			
+			registry.register(LIGHTNING_PROTECTION);
 		}
 	}
 	
