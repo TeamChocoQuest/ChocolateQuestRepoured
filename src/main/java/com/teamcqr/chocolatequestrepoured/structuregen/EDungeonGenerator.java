@@ -1,5 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.structuregen;
 
+import java.util.Properties;
+
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
@@ -7,39 +21,40 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
  */
 public enum EDungeonGenerator {
 
-	CAVERNS("caverns"),
-	ABANDONED("abandoned"),
-	RUIN("ruin"),
-	NETHER_CITY("nether_city"),
-	FLOATING_NETHER_CITY("floating_nether_city"),
-	TEMPLATE_SURFACE("template_surface"),
-	TEMPLATE_OCEAN_FLOOR("template_ocean_floor"),
-	STRONGHOLD("stronghold"),
-	CLASSIC_STRONGHOLD("classic_stronghold"),
-	GREEN_CAVE("green_cave"),
-	GUARDED_CASTLE("guarded_castle"),
-	CASTLE("castle"),
-	VOLCANO("volcano");
+	CAVERNS(CavernDungeon::new),
+	ABANDONED((name, prop) -> null),
+	RUIN((name, prop) -> null),
+	NETHER_CITY(ClassicNetherCity::new),
+	FLOATING_NETHER_CITY(FloatingNetherCity::new),
+	TEMPLATE_SURFACE(DefaultSurfaceDungeon::new),
+	TEMPLATE_OCEAN_FLOOR(DungeonOceanFloor::new),
+	STRONGHOLD(StrongholdLinearDungeon::new),
+	CLASSIC_STRONGHOLD(StrongholdOpenDungeon::new),
+	GREEN_CAVE((name, prop) -> null),
+	GUARDED_CASTLE(GuardedCastleDungeon::new),
+	CASTLE(CastleDungeon::new),
+	VOLCANO(VolcanoDungeon::new);
 
-	private String name;
+	private IDungeonGenerator generator;
 
-	EDungeonGenerator(String name) {
-		this.name = name;
+	EDungeonGenerator(IDungeonGenerator generator) {
+		this.generator = generator;
 	}
 
-	public String getName() {
-		return this.name;
+	public DungeonBase createDungeon(String name, Properties prop) {
+		return this.generator.createDungeon(name, prop);
 	}
 
-	public static boolean isValidDungeonGenerator(String toTest) {
-
-		for (EDungeonGenerator generator : EDungeonGenerator.values()) {
-			if (toTest.equalsIgnoreCase(generator.getName())) {
-				return true;
-			}
+	public static EDungeonGenerator getDungeonGenerator(String toTest) {
+		try {
+			return EDungeonGenerator.valueOf(toTest.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return null;
 		}
-
-		return false;
 	}
 
+	@FunctionalInterface
+	private static interface IDungeonGenerator {
+		public DungeonBase createDungeon(String name, Properties prop);
+	}
 }

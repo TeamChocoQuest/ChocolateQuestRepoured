@@ -15,17 +15,7 @@ import java.util.Set;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -191,42 +181,10 @@ public class DungeonRegistry {
 		}
 
 		String name = file.getName().substring(0, file.getName().lastIndexOf('.'));
-		String generatorType = prop.getProperty("generator", "").toLowerCase();
+		String generatorType = prop.getProperty("generator", "");
+		EDungeonGenerator dungeonGenerator = EDungeonGenerator.getDungeonGenerator(generatorType);
 
-		switch (generatorType) {
-		case "caverns":
-			return new CavernDungeon(name, prop);
-		case "abandoned":
-			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
-			return null;
-		case "ruin":
-			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
-			return null;
-		case "nether_city":
-			return new ClassicNetherCity(name, prop);
-		case "floating_nether_city":
-			return new FloatingNetherCity(name, prop);
-		case "template_surface":
-			return new DefaultSurfaceDungeon(name, prop);
-		case "template_ocean_floor":
-			return new DungeonOceanFloor(name, prop);
-		case "stronghold":
-			return new StrongholdOpenDungeon(name, prop);
-		case "classic_stronghold":
-			return new StrongholdLinearDungeon(name, prop);
-		case "green_cave":
-			CQRMain.logger.warn("Dungeon Generator {} is not yet implemented!", generatorType);
-			return null;
-		case "guarded_castle":
-			return new GuardedCastleDungeon(name, prop);
-		case "castle":
-			return new CastleDungeon(name, prop);
-		case "volcano":
-			return new VolcanoDungeon(name, prop);
-		default:
-			CQRMain.logger.warn("Dungeon Generator {} not found!", generatorType);
-			return null;
-		}
+		return dungeonGenerator != null ? dungeonGenerator.createDungeon(name, prop) : null;
 	}
 
 	private void addDungeonToAllBiomes(DungeonBase dungeon) {
