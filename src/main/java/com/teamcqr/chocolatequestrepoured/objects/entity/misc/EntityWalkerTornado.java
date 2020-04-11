@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTUtil;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -56,6 +57,7 @@ public class EntityWalkerTornado extends EntityLiving {
 	
 	@Override
 	public void onLivingUpdate() {
+		super.onLivingUpdate();
 		if(this.ticksExisted >= MAX_LIVING_TICKS) {
 			setDead();
 		}
@@ -74,6 +76,16 @@ public class EntityWalkerTornado extends EntityLiving {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		return true;
+	}
+	
+	@Override
+	public boolean attackable() {
+		return false;
 	}
 	
 	public void setVelocity(Vec3d v) {
@@ -167,15 +179,15 @@ public class EntityWalkerTornado extends EntityLiving {
 		if(ent instanceof EntityWalkerTornado) {
 			return false;
 		}
-		if(owner != null) {
-			if(ent == owner) {
-				return false;
+		if(getOwnerID() != null) {
+			if(!ent.getPersistentID().equals(this.getOwnerID())) {
+				CQRFaction faction = FactionRegistry.instance().getFactionOf(owner);
+				if(faction != null) {
+					return !faction.isAlly(ent);
+				}
+				return true;
 			}
-			CQRFaction faction = FactionRegistry.instance().getFactionOf(owner);
-			if(faction != null) {
-				return faction.isAlly(ent);
-			}
-			return true;
+			return false;
 		}
 		return true;
 	}
