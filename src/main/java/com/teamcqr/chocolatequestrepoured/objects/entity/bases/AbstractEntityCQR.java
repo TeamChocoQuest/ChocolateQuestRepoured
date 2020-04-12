@@ -49,7 +49,6 @@ import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
@@ -134,6 +133,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> IS_SPELL_CHARGING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> IS_SPELL_CASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Integer> SPELL_COLOR = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -162,6 +162,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(IS_SPELL_CHARGING, false);
 		this.dataManager.register(IS_SPELL_CASTING, false);
+		this.dataManager.register(SPELL_COLOR, 0);
 	}
 
 	@Override
@@ -494,6 +495,27 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (!this.world.isRemote) {
 			this.dataManager.set(IS_SPELL_CHARGING, this.spellHandler != null && this.spellHandler.isSpellCharging());
 			this.dataManager.set(IS_SPELL_CASTING, this.spellHandler != null && this.spellHandler.isSpellCasting());
+			int spellColor = 0;
+			if (this.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
+				IEntityAISpellAnimatedVanilla spell = (IEntityAISpellAnimatedVanilla) this.getActiveSpell();
+				spellColor = spellColor | 1 << 24;
+				spellColor = spellColor | ((int) (spell.getRed() * 255.0D) & 255) << 16;
+				spellColor = spellColor | ((int) (spell.getGreen() * 255.0D) & 255) << 8;
+				spellColor = spellColor | (int) (spell.getBlue() * 255.0D) & 255;
+			}
+			this.dataManager.set(SPELL_COLOR, spellColor);
+		} else {
+			int spellColor = this.dataManager.get(SPELL_COLOR);
+			if (spellColor >> 24 == 1) {
+				double red = (double) ((spellColor >> 16) & 255) / 255.0D;
+				double green = (double) ((spellColor >> 8) & 255) / 255.0D;
+				double blue = (double) (spellColor & 255) / 255.0D;
+				float f = this.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.ticksExisted * 0.6662F) * 0.25F;
+				float f1 = MathHelper.cos(f);
+				float f2 = MathHelper.sin(f);
+				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + (double) this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
+				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + (double) this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
+			}
 		}
 	}
 

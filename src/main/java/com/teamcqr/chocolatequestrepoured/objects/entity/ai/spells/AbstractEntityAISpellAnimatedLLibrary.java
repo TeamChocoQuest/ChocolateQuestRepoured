@@ -102,9 +102,13 @@ public abstract class AbstractEntityAISpellAnimatedLLibrary<T extends AbstractEn
 		}
 	}
 
-	protected abstract void chargeSpell();
+	protected void chargeSpell() {
 
-	protected abstract void castSpell();
+	}
+
+	protected void castSpell() {
+
+	}
 
 	@Nullable
 	protected SoundEvent getStartChargingSound() {

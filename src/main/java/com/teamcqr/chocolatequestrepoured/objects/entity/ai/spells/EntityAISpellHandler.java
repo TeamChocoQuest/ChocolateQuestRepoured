@@ -9,10 +9,6 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.WorldServer;
-
 public class EntityAISpellHandler extends AbstractCQREntityAI {
 
 	private static final Comparator<EntityAISpellHandler.SpellEntry> SORTER = (spellEntry1, spellEntry2) -> {
@@ -104,20 +100,6 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 	@Override
 	public void updateTask() {
 		this.activeSpell.updateTask();
-		if (this.activeSpell instanceof IEntityAISpellAnimatedVanilla) {
-			this.spawnAnimatedSpellParticles((IEntityAISpellAnimatedVanilla) this.activeSpell);
-		}
-	}
-
-	private void spawnAnimatedSpellParticles(IEntityAISpellAnimatedVanilla animatedSpell) {
-		double red = animatedSpell.getRed();
-		double green = animatedSpell.getGreen();
-		double blue = animatedSpell.getBlue();
-		float f = this.entity.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.entity.ticksExisted * 0.6662F) * 0.25F;
-		float f1 = MathHelper.cos(f);
-		float f2 = MathHelper.sin(f);
-		((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX + (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ + (double) f2 * 0.6D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
-		((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX - (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ - (double) f2 * 0.6D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
 	}
 
 	@Nullable
