@@ -6,7 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
@@ -117,13 +116,21 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 		float f = this.entity.renderYawOffset * 0.017453292F + MathHelper.cos((float) this.entity.ticksExisted * 0.6662F) * 0.25F;
 		float f1 = MathHelper.cos(f);
 		float f2 = MathHelper.sin(f);
-		this.entity.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX + (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ + (double) f2 * 0.6D, red, green, blue);
-		this.entity.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX - (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ - (double) f2 * 0.6D, red, green, blue);
+		((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX + (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ + (double) f2 * 0.6D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
+		((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SPELL_MOB, this.entity.posX - (double) f1 * 0.6D, this.entity.posY + this.entity.height, this.entity.posZ - (double) f2 * 0.6D, 1, 0.0D, 0.0D, 0.0D, 0.0D);
 	}
 
 	@Nullable
 	public IEntityAISpell getActiveSpell() {
 		return this.activeSpell;
+	}
+
+	public boolean isSpellCharging() {
+		return this.activeSpell != null && this.activeSpell.isCharging();
+	}
+
+	public boolean isSpellCasting() {
+		return this.activeSpell != null && this.activeSpell.isCasting();
 	}
 
 	private static class SpellEntry {

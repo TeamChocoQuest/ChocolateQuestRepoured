@@ -15,15 +15,7 @@ public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEn
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		Vec3d centeredPos = new Vec3d(this.entity.getPosition());
 		if (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
 			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
@@ -35,6 +27,16 @@ public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEn
 		v = VectorUtil.rotateVectorAroundY(v, rdmAngle);
 		BlockPos explosionPos = this.entity.getAttackTarget().getPosition().add(v.x, v.y, v.z);
 		this.entity.world.createExplosion(this.entity, explosionPos.getX(), explosionPos.getY(), explosionPos.getZ(), 3.0F, true);
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -21,17 +22,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEnt
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.ENTITY_WITHER_SPAWN, 1.0F, 1.0F);
-		}
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 
@@ -67,6 +58,16 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEnt
 				}
 			}
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.ENTITY_WITHER_SPAWN;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

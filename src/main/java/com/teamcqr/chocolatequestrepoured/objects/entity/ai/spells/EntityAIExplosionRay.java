@@ -14,17 +14,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell implements IEnti
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.ENTITY_CREEPER_PRIMED, 1.0F, 1.0F);
-		}
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		int explosionCount = (int) v.lengthVector() >> 1;
 		v = v.normalize();
@@ -38,6 +28,16 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell implements IEnti
 		for (BlockPos p : positions) {
 			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 0.5F, this.entity.getRNG().nextBoolean(), true);
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.ENTITY_CREEPER_PRIMED;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

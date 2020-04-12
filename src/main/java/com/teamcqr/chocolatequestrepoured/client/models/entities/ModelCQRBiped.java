@@ -93,8 +93,8 @@ public class ModelCQRBiped extends ModelBiped {
 		super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
 		if (entityIn instanceof AbstractEntityCQR) {
 			AbstractEntityCQR cqrEnt = ((AbstractEntityCQR) entityIn);
-			if (cqrEnt.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
-				this.renderSpellAnimation(cqrEnt, (IEntityAISpellAnimatedVanilla) cqrEnt.getActiveSpell(), ageInTicks);
+			if (cqrEnt.isSpellCharging()) {
+				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
 				if (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
@@ -122,7 +122,7 @@ public class ModelCQRBiped extends ModelBiped {
 		copyModelAngles(this.bipedBody, this.bipedBodyWear);
 	}
 
-	protected void renderSpellAnimation(AbstractEntityCQR entity, IEntityAISpellAnimatedVanilla animatedSpell, float ageInTicks) {
+	protected void renderSpellAnimation(AbstractEntityCQR entity, float ageInTicks) {
 		this.bipedRightArm.rotationPointZ = 0.0F;
 		this.bipedRightArm.rotationPointX = -5.0F;
 		this.bipedLeftArm.rotationPointZ = 0.0F;
