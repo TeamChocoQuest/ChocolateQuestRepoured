@@ -90,7 +90,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	@SideOnly(Side.CLIENT)
 	public IllagerArmPose getIllagerArmPose() {
 		if (this.isAggressive()) {
-			if (this.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
+			if (this.isSpellCharging()) {
 				return IllagerArmPose.SPELLCASTING;
 			}
 

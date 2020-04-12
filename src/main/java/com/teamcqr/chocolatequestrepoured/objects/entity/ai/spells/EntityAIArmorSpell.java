@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
@@ -29,15 +30,8 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntity
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
+		super.startCastingSpell();
 		if (this.entity instanceof EntityCQRLich) {
 			BlockPos pos = new BlockPos(this.entity);
 			this.entity.world.setBlockState(pos, ModBlocks.PHYLACTERY.getDefaultState());
@@ -45,6 +39,16 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntity
 		} else {
 			this.entity.setMagicArmorCooldown(300);
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

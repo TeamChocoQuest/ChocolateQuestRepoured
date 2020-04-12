@@ -31,6 +31,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISpellHandler;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
@@ -131,6 +132,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> IS_SPELL_CHARGING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> IS_SPELL_CASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -157,6 +160,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
+		this.dataManager.register(IS_SPELL_CHARGING, false);
+		this.dataManager.register(IS_SPELL_CASTING, false);
 	}
 
 	@Override
@@ -485,6 +490,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		this.prevSneaking = this.isSneaking();
 		this.prevSitting = this.isSitting();
+
+		if (!this.world.isRemote) {
+			this.dataManager.set(IS_SPELL_CHARGING, this.spellHandler != null && this.spellHandler.isSpellCharging());
+			this.dataManager.set(IS_SPELL_CASTING, this.spellHandler != null && this.spellHandler.isSpellCasting());
+		}
 	}
 
 	@Override
@@ -1090,6 +1100,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Nullable
 	public IEntityAISpell getActiveSpell() {
 		return this.spellHandler != null ? this.spellHandler.getActiveSpell() : null;
+	}
+
+	public boolean isSpellCharging() {
+		return this.dataManager.get(IS_SPELL_CHARGING);
+	}
+
+	public boolean isSpellCasting() {
+		return this.dataManager.get(IS_SPELL_CASTING);
 	}
 
 }

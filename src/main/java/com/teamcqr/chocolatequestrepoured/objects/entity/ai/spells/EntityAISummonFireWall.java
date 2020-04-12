@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileF
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
@@ -16,15 +17,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEn
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		v = new Vec3d(v.x, 0, v.z);
 		v = v.normalize();
@@ -54,6 +47,16 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEn
 				this.entity.world.spawnEntity(wallPart);
 			}
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

@@ -18,4 +18,8 @@ public interface IEntityAISpell {
 
 	public void updateTask();
 
+	public boolean isCharging();
+
+	public boolean isCasting();
+
 }

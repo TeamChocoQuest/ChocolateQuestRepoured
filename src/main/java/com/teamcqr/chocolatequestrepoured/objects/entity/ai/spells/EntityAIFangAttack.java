@@ -6,14 +6,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityEvokerFangs;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 
-/*
- * 20.12.2019
- * Made by: DerToaster98
- * Comment: This code is adapted minecraft vanilla code, so it is made by Mojang
+/**
+ * This code is adapted minecraft vanilla code, so it is made by Mojang
  */
 public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
@@ -22,17 +21,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntity
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK, 1.0F, 1.0F);
-		}
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
@@ -88,6 +77,16 @@ public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntity
 			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.entity.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this.entity);
 			this.entity.world.spawnEntity(entityevokerfangs);
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

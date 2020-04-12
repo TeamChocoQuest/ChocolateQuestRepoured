@@ -6,13 +6,9 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
-/*
- * 20.12.2019
- * Author: DerToaster98
- * Comment: A simple AI that launches a bunch of poison balls at the enemy
- */
 public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MAX_PROJECTILES = 10;
@@ -24,17 +20,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell implem
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 1.0F, 1.0F);
-		}
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
@@ -55,6 +41,16 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell implem
 			proj.velocityChanged = true;
 			this.entity.world.spawnEntity(proj);
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

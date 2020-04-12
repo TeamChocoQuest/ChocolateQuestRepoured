@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.init.SoundEvents;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
@@ -18,17 +19,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEnt
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.BLOCK_PORTAL_TRAVEL, 1.0F, 1.0F);
-		}
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
@@ -42,13 +33,23 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEnt
 
 		for (Vec3d v : velocities) {
 			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
-			//proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
+			// proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
 			proj.motionX = v.x * 0.5D;
 			proj.motionY = v.y * 0.5D;
 			proj.motionZ = v.z * 0.5D;
 			proj.velocityChanged = true;
 			this.entity.world.spawnEntity(proj);
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

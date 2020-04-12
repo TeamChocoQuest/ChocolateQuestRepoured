@@ -5,9 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.potion.PotionType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -23,15 +21,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell implements I
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		Vec3d vec = attackTarget.getPositionVector();
 		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));
@@ -46,13 +36,23 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell implements I
 	}
 
 	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
+	}
+
+	@Override
 	public int getWeight() {
 		return 10;
 	}
 
 	@Override
 	public boolean ignoreWeight() {
-		return true;
+		return false;
 	}
 
 	@Override

@@ -24,34 +24,35 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell implements IE
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-		if (this.tick == 0) {
-			this.entity.playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED, 1.0F, 1.0F);
+	protected void startCastingSpell() {
+		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
+		this.entity.world.getEntitiesInAABBexcluding(this.entity, new AxisAlignedBB(this.entity.getPosition().add(-20, -10, -20), this.entity.getPosition().add(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction()))
+				.forEach(new Consumer<Entity>() {
+
+					@Override
+					public void accept(Entity t) {
+						if (t instanceof EntityLivingBase) {
+							((EntityLivingBase) t).addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
+						}
+					}
+				});
+		Vec3d v = new Vec3d(2.5, 0, 0);
+		for (int i = 0; i < 3; i++) {
+			Vec3d pos = this.entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
+			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) this.entity, this.entity.getEntityWorld());
+			illusion.setPosition(pos.x, pos.y, pos.z);
+			this.entity.world.spawnEntity(illusion);
 		}
 	}
 
 	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
-		//entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-		entity.world.getEntitiesInAABBexcluding(entity, new AxisAlignedBB(entity.getPosition().add(-20,-10,-20), entity.getPosition().add(20,10,20)), TargetUtil.createPredicateNonAlly(entity.getFaction())).forEach(new Consumer<Entity>() {
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.ENTITY_ZOMBIE_VILLAGER_CONVERTED;
+	}
 
-			@Override
-			public void accept(Entity t) {
-				if(t instanceof EntityLivingBase) {
-					((EntityLivingBase) t).addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
-				}
-			}
-		});
-		Vec3d v = new Vec3d(2.5, 0, 0);
-		for(int i = 0; i < 3; i++) {
-			Vec3d pos = entity.getPositionVector().add(VectorUtil.rotateVectorAroundY(v, 120 * i));
-			EntityWalkerKingIllusion illusion = new EntityWalkerKingIllusion(1200, (EntityCQRWalkerKing) entity, entity.getEntityWorld());
-			illusion.setPosition(pos.x, pos.y, pos.z);
-			entity.world.spawnEntity(illusion);
-		}
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override

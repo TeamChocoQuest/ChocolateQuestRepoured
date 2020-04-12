@@ -15,15 +15,11 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-/*
- * 20.12.2019
- * Made by: DerToaster98
- * Comment: Simple AI to summon some minions
- */
 public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	protected ISummoner summoner = null;
@@ -54,10 +50,10 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements 
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.summoner == null) {
+		if (!super.shouldExecute()) {
 			return false;
 		}
-		if (!super.shouldExecute()) {
+		if (this.summoner == null) {
 			return false;
 		}
 		return this.getAliveMinionCount() < this.MAX_MINIONS;
@@ -86,15 +82,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements 
 	}
 
 	@Override
-	protected void chargeUpSpell() {
-
-	}
-
-	@Override
-	protected void castSpell() {
-		if (this.tick == this.chargeUpTicks) {
-			this.entity.playSound(SoundEvents.ENTITY_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
-		}
+	protected void startCastingSpell() {
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();
@@ -167,6 +155,16 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements 
 				}
 			}
 		}
+	}
+
+	@Override
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
+	}
+
+	@Override
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override
