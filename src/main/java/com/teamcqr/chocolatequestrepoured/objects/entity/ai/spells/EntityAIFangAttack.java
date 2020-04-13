@@ -17,14 +17,11 @@ import net.minecraft.util.math.MathHelper;
 public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override
 	protected void startCastingSpell() {
-		if(entity.getAttackTarget() == null) {
-			return;
-		}
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;

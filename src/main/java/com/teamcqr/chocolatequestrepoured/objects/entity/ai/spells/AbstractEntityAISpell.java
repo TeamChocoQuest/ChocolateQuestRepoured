@@ -9,16 +9,18 @@ import net.minecraft.util.SoundEvent;
 
 public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implements IEntityAISpell {
 
-	protected final boolean isCombatSpell;
+	protected final boolean needsTargetToStart;
+	protected final boolean needsTargetToContinue;
 	protected final int cooldown;
 	protected final int chargingTicks;
 	protected final int castingTicks;
 	protected int prevTimeCasted;
 	protected int tick;
 
-	public AbstractEntityAISpell(AbstractEntityCQR entity, boolean isCombatSpell, int cooldown, int chargingTicks, int castingTicks) {
+	public AbstractEntityAISpell(AbstractEntityCQR entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
 		super(entity);
-		this.isCombatSpell = isCombatSpell;
+		this.needsTargetToStart = needsTargetToStart;
+		this.needsTargetToContinue = needsTargetToContinue;
 		this.cooldown = cooldown;
 		this.chargingTicks = Math.max(chargingTicks, 0);
 		this.castingTicks = Math.max(castingTicks, 1);
@@ -30,7 +32,7 @@ public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implemen
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
-		if (this.isCombatSpell && this.entity.getAttackTarget() == null) {
+		if (this.needsTargetToStart && this.entity.getAttackTarget() == null) {
 			return false;
 		}
 		return this.entity.ticksExisted > this.prevTimeCasted + this.cooldown;
@@ -41,7 +43,7 @@ public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implemen
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
-		if(isCombatSpell && this.entity.getAttackTarget() == null) {
+		if (this.needsTargetToContinue && this.entity.getAttackTarget() == null) {
 			return false;
 		}
 		return this.tick < this.chargingTicks + this.castingTicks;

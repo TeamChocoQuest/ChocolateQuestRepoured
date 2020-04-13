@@ -13,7 +13,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEn
 	private static final int WALL_LENGTH = 10;
 
 	public EntityAISummonFireWall(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override
