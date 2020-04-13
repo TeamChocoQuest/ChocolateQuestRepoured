@@ -40,7 +40,9 @@ public class ItemSuperTool extends Item
 	
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
-		entity.attackEntityFrom(DamageSource.OUT_OF_WORLD, Float.MAX_VALUE);
+		if (player.isCreative() && !(entity instanceof EntityPlayer)) {
+			entity.attackEntityFrom(DamageSource.LIGHTNING_BOLT, Float.MAX_VALUE);
+		}
 		return true;
 	}
 

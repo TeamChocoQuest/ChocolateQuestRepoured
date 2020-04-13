@@ -16,7 +16,7 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell implem
 	protected static final double SPEED_MULTIPLIER = 0.18;
 
 	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override

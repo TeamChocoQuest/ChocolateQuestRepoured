@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIArmorSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, false, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override

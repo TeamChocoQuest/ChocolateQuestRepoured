@@ -30,7 +30,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISpellHandler;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
@@ -131,9 +130,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> IS_SPELL_CHARGING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Boolean> IS_SPELL_CASTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Integer> SPELL_COLOR = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -160,9 +157,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
-		this.dataManager.register(IS_SPELL_CHARGING, false);
-		this.dataManager.register(IS_SPELL_CASTING, false);
-		this.dataManager.register(SPELL_COLOR, 0);
+		this.dataManager.register(SPELL_INFORMATION, 0);
 	}
 
 	@Override
@@ -455,12 +450,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onUpdate() {
 		EntityLivingBase attackTarget = this.getAttackTarget();
 		if (attackTarget != null) {
-			if (this.getEntitySenses().canSee(attackTarget) && this.isEntityInFieldOfView(attackTarget)) {
+			if (this.isInSightRange(attackTarget) && this.getEntitySenses().canSee(attackTarget)) {
 				this.lastTimeSeenAttackTarget = this.ticksExisted;
 			}
-			if (this.lastTimeSeenAttackTarget + 10 > this.ticksExisted) {
-				this.lastPosAttackTarget = attackTarget.getPositionVector();
-			}
+			this.lastPosAttackTarget = attackTarget.getPositionVector();
 		}
 
 		super.onUpdate();
@@ -493,20 +486,26 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.prevSitting = this.isSitting();
 
 		if (!this.world.isRemote) {
-			this.dataManager.set(IS_SPELL_CHARGING, this.spellHandler != null && this.spellHandler.isSpellCharging());
-			this.dataManager.set(IS_SPELL_CASTING, this.spellHandler != null && this.spellHandler.isSpellCasting());
-			int spellColor = 0;
-			if (this.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
-				IEntityAISpellAnimatedVanilla spell = (IEntityAISpellAnimatedVanilla) this.getActiveSpell();
-				spellColor = spellColor | 1 << 24;
-				spellColor = spellColor | ((int) (spell.getRed() * 255.0D) & 255) << 16;
-				spellColor = spellColor | ((int) (spell.getGreen() * 255.0D) & 255) << 8;
-				spellColor = spellColor | (int) (spell.getBlue() * 255.0D) & 255;
+			int spellInformation = 0;
+			if (this.spellHandler != null) {
+				if (this.spellHandler.isSpellCharging()) {
+					spellInformation = spellInformation | 1 << 26;
+				}
+				if (this.spellHandler.isSpellCasting()) {
+					spellInformation = spellInformation | 1 << 25;
+				}
+				if (this.spellHandler.getActiveSpell() instanceof IEntityAISpellAnimatedVanilla) {
+					IEntityAISpellAnimatedVanilla spell = (IEntityAISpellAnimatedVanilla) this.spellHandler.getActiveSpell();
+					spellInformation = spellInformation | 1 << 24;
+					spellInformation = spellInformation | ((int) (spell.getRed() * 255.0D) & 255) << 16;
+					spellInformation = spellInformation | ((int) (spell.getGreen() * 255.0D) & 255) << 8;
+					spellInformation = spellInformation | (int) (spell.getBlue() * 255.0D) & 255;
+				}
 			}
-			this.dataManager.set(SPELL_COLOR, spellColor);
+			this.dataManager.set(SPELL_INFORMATION, spellInformation);
 		} else {
-			int spellColor = this.dataManager.get(SPELL_COLOR);
-			if (spellColor >> 24 == 1) {
+			if (this.isSpellAnimated()) {
+				int spellColor = this.dataManager.get(SPELL_INFORMATION);
 				double red = (double) ((spellColor >> 16) & 255) / 255.0D;
 				double green = (double) ((spellColor >> 8) & 255) / 255.0D;
 				double blue = (double) (spellColor & 255) / 255.0D;
@@ -1119,17 +1118,16 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return new EntityAISpellHandler(this, 200);
 	}
 
-	@Nullable
-	public IEntityAISpell getActiveSpell() {
-		return this.spellHandler != null ? this.spellHandler.getActiveSpell() : null;
-	}
-
 	public boolean isSpellCharging() {
-		return this.dataManager.get(IS_SPELL_CHARGING);
+		return (this.dataManager.get(SPELL_INFORMATION) >> 26 & 1) == 1;
 	}
 
 	public boolean isSpellCasting() {
-		return this.dataManager.get(IS_SPELL_CASTING);
+		return (this.dataManager.get(SPELL_INFORMATION) >> 25 & 1) == 1;
+	}
+
+	public boolean isSpellAnimated() {
+		return (this.dataManager.get(SPELL_INFORMATION) >> 24 & 1) == 1;
 	}
 
 }
