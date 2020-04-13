@@ -22,6 +22,9 @@ public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntity
 
 	@Override
 	protected void startCastingSpell() {
+		if(entity.getAttackTarget() == null) {
+			return;
+		}
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
