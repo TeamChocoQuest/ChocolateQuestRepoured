@@ -12,8 +12,14 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.Boss
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -143,10 +149,51 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 		
 		handleActivation();
+
+		if(source.getTrueSource() != null && !world.isRemote) {
+			boolean flag = false;
+			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+			if(resLoc != null) {
+				// Start IceAndFire compatibility
+				if (CQRConfig.advanced.enableSpecialFeatures) {
+					flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire");
+					amount = 0;
+					heal(amount /2);
+				}
+				// End IceAndFire compatibility
+				
+				//If we are attacked by a dragon: KILL IT
+				if(resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag) {
+					handleAttackedByDragon(source.getTrueSource());
+				}
+			}
+		}
 		
 		return super.attackEntityFrom(source, amount);
 	}
 	
+	private void handleAttackedByDragon(Entity dragon) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null) {
+			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
+				((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
+				dragon.getControllingPassenger().dismountRidingEntity();
+			}
+		}
+		
+		//KILL IT!!!
+		int lightningCount = 6 + getRNG().nextInt(3);
+		double angle = 360 / lightningCount;
+		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
+		Vec3d v = new Vec3d(3 + 1.5*dragonSize,0,0);
+		for(int i = 0; i < lightningCount; i++) {
+			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
+			int dY = -3 + getRNG().nextInt(7);
+			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+			world.spawnEntity(clb);
+		}
+		dragon.attackEntityFrom(DamageSource.OUT_OF_WORLD, 50F);
+	}
+
 	private void handleActivation() {
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
 			active = true;
