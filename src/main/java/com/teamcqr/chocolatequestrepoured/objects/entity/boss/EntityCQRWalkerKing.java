@@ -204,7 +204,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 			world.spawnEntity(clb);
 		}
-		dragon.attackEntityFrom(DamageSource.OUT_OF_WORLD, 20F);
+		dragon.attackEntityFrom(DamageSource.causeIndirectMagicDamage(dragon, this), 10F);
 	}
 
 	private void handleActivation() {
