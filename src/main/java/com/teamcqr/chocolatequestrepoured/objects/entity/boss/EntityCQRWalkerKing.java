@@ -79,7 +79,9 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public void onLivingUpdate() {
-		dragonAttackCooldown--;
+		if(dragonAttackCooldown > 0) {
+			dragonAttackCooldown--;
+		}
 		if(fallDistance > 12) {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
