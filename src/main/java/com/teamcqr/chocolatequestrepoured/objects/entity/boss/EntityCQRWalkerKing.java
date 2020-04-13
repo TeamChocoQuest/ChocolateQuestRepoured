@@ -173,7 +173,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	private void handleAttackedByDragon(Entity dragon) {
-		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null && getRNG().nextInt(10) >= 7) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null && getRNG().nextInt(10) > 8) {
 			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
 				((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				dragon.getControllingPassenger().dismountRidingEntity();
