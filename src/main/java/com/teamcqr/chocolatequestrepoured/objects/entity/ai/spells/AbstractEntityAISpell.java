@@ -1,13 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.util.SoundEvent;
 
-public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implements IEntityAISpell {
+public abstract class AbstractEntityAISpell /*extends AbstractCQREntityAI*/ implements IEntityAISpell {
 
 	protected final boolean needsTargetToStart;
 	protected final boolean needsTargetToContinue;
@@ -16,9 +17,12 @@ public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implemen
 	protected final int castingTicks;
 	protected int prevTimeCasted;
 	protected int tick;
+	protected final AbstractEntityCQR entity;
+	protected final Random random = new Random();
 
 	public AbstractEntityAISpell(AbstractEntityCQR entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
-		super(entity);
+		//super(entity);
+		this.entity = entity;
 		this.needsTargetToStart = needsTargetToStart;
 		this.needsTargetToContinue = needsTargetToContinue;
 		this.cooldown = cooldown;
