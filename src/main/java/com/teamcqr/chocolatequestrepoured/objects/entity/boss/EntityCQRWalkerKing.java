@@ -6,28 +6,17 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningSpiral;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerTornadoAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.Enchantments;
@@ -41,9 +30,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -144,7 +133,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(0.2F);
+		this.heal(1F);
 	}
 
 	@Override
@@ -153,6 +142,20 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			amount *= 2;
 		}
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	@Override
+	protected void onDeathUpdate() {
+		boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
+		if (this.deathTicks == 200 && !this.world.isRemote)
+        {
+            if (flag)
+            {
+                this.dropExperience(MathHelper.floor((float)1200));
+            }
+        }
+		
+		super.onDeathUpdate();
 	}
 	
 	@Override
@@ -167,7 +170,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		float dmg = amount;
 		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			 dmg *= 0.75F;
+			 dmg *= 0.5F;
 		}
 		
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
@@ -274,5 +277,15 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	protected int getExperiencePoints(EntityPlayer player) {
 		return super.getExperiencePoints(player);
 	}
+	
+	private void dropExperience(int p_184668_1_)
+    {
+        while (p_184668_1_ > 0)
+        {
+            int i = EntityXPOrb.getXPSplit(p_184668_1_);
+            p_184668_1_ -= i;
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
+        }
+    }
 	
 }
