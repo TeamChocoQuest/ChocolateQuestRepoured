@@ -16,17 +16,19 @@ public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEn
 
 	@Override
 	protected void startCastingSpell() {
-		Vec3d centeredPos = new Vec3d(this.entity.getPosition());
-		if (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
-			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-			v = new Vec3d(v.x / 2, v.y / 2, v.z / 2);
-			centeredPos = centeredPos.add(v);
+		if(entity.getAttackTarget() != null) {
+			Vec3d centeredPos = new Vec3d(this.entity.getPosition());
+			if (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
+				Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+				v = new Vec3d(v.x / 2, v.y / 2, v.z / 2);
+				centeredPos = centeredPos.add(v);
+			}
+			int rdmAngle = this.entity.getRNG().nextInt(360);
+			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(centeredPos);
+			v = VectorUtil.rotateVectorAroundY(v, rdmAngle);
+			BlockPos explosionPos = this.entity.getAttackTarget().getPosition().add(v.x, v.y, v.z);
+			this.entity.world.createExplosion(this.entity, explosionPos.getX(), explosionPos.getY(), explosionPos.getZ(), 3.0F, true);
 		}
-		int rdmAngle = this.entity.getRNG().nextInt(360);
-		Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(centeredPos);
-		v = VectorUtil.rotateVectorAroundY(v, rdmAngle);
-		BlockPos explosionPos = this.entity.getAttackTarget().getPosition().add(v.x, v.y, v.z);
-		this.entity.world.createExplosion(this.entity, explosionPos.getX(), explosionPos.getY(), explosionPos.getZ(), 3.0F, true);
 	}
 
 	@Override
