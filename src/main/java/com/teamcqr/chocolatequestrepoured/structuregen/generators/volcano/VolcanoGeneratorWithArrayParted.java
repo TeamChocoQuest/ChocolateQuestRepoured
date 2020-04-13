@@ -6,17 +6,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
+import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
@@ -31,7 +30,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * Copyright (c) 29.04.2019
@@ -73,6 +71,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 	private int baseRadius = 1;
 	private int maxHeight = 10;
 	private int minRadius = 1;
+	private int minY = 1;
 	private int entranceDistToWall = 10;
 	private double steepness = 0.0D;
 	private List<BlockPos> spawnersNChestsOnPath = new ArrayList<>();
@@ -115,7 +114,9 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		// System.out.println("Creating lists...");
 		List<BlockPos> blockList = new ArrayList<BlockPos>();
 		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
-		int lowYMax = y + (new Double(0.1 * this.maxHeight).intValue());
+		//int lowYMax = y + (new Double(0.1 * this.maxHeight).intValue());
+		this.minY = y;//this.getMinY(this.centerLoc, this.baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
+		int lowYMax = this.minY + (new Double(0.1 * this.maxHeight).intValue());
 		int rMax = (int) (baseRadius * 4 + dungeon.getMaxHoleSize());
 		final int r = rMax/2;
 		BlockPos referenceLoc = centerLoc.subtract(new Vec3i(r, centerLoc.getY(), r));
@@ -125,8 +126,14 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		//DONE: Rewrite hole gen code
 		//TODO: Merge all 3 for y(for x(for z))) loops
 		
-		int yMax = ((y + this.maxHeight) < 256 ? this.maxHeight : (255 - y));
+		//int yMax = ((y + this.maxHeight) < 256 ? this.maxHeight : (255 - y));
+		int yMax = ((this.minY + this.maxHeight) < 256 ? this.maxHeight : (255 - this.minY));
 
+		PlateauBuilder pB = new PlateauBuilder();
+		pB.load(dungeon.getLowerMainBlock(), dungeon.getUpperMainBlock());
+		lists.add(
+				pB.createSupportHillList(rdm, world, new BlockPos(x - (r +5), this.minY +1, z - (r  +5)), 2* (r +5), 2* (r +5), EPosType.DEFAULT)
+				);
 		
 
 		// Upper volcano part
@@ -145,25 +152,27 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 							// SO now we decide what the wall is gonna be...
 							if (DungeonGenUtils.PercentageRandom(this.dungeon.getLavaChance(), rdm.nextLong()) && !DungeonGenUtils.isInsideCircle(iX, iZ, innerRadius + 2, this.centerLoc)) {
 								// It is lava :D
-								blocks[iX + r][iY + y][iZ + r] = dungeon.getLavaBlock();
+								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getLavaBlock();
 							} else if (DungeonGenUtils.PercentageRandom(this.dungeon.getMagmaChance(), rdm.nextLong())) {
 								// It is magma
-								blocks[iX + r][iY + y][iZ + r] = dungeon.getMagmaBlock();
+								blocks[iX + r][iY + this.minY][iZ + r] = dungeon.getMagmaBlock();
 							} else {
 								// It is stone or ore
 								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + y, iZ + z), rdm.nextInt(3) + 1));
-									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + y, iZ + z), rdm.nextInt(3) + 1)) {
+									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1));
+									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1)) {
 										BlockPos v = bp.subtract(referenceLoc);
-										blocks[v.getX()][bp.getY()][v.getZ()] = this.dungeon.getUpperMainBlock();
+										if(bp.getY() < 256) {
+											blocks[v.getX()][bp.getY()][v.getZ()] = this.dungeon.getUpperMainBlock();
+										}
 									}
 								} else {
-									blockList.add(new BlockPos(iX + x, iY + y, iZ + z));
-									blocks[iX + r][iY + y][iZ + r] = this.dungeon.getUpperMainBlock();
+									blockList.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
+									blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getUpperMainBlock();
 								}
 							}
 						} else {
-							blocks[iX + r][iY + y][iZ + r] = Blocks.AIR;
+							blocks[iX + r][iY + this.minY][iZ + r] = Blocks.AIR;
 						}
 					}
 				}
@@ -195,7 +204,9 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 									BlockPos v = bp.subtract(referenceLoc);
 									int chanceForSecondary = new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue();
 									Block block = DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock() ;
-									blocks[v.getX()][bp.getY()][v.getZ()] = block;
+									if(bp.getY() < 256) {
+										blocks[v.getX()][bp.getY()][v.getZ()] = block;
+									}
 								}
 							}
 						}
@@ -264,8 +275,8 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 		//Generate parts for generation
 		lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
 		
-		BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
-		BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
+		//BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
+		//BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
 		//TODO Add bosses
 		// CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, lowerCorner, upperCorner, world, new ArrayList<String>());
 		// MinecraftForge.EVENT_BUS.post(event);
