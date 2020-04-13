@@ -118,7 +118,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 			super.onDeathUpdate();
 		}
 	}
-
+	
 	protected SoundEvent getFinalDeathSound() {
 		return this.getDeathSound();
 	}
