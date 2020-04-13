@@ -16,7 +16,7 @@ public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEn
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		Vec3d centeredPos = new Vec3d(this.entity.getPosition());
 		{

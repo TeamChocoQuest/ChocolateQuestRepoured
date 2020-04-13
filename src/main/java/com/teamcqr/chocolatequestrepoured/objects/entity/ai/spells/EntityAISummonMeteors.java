@@ -22,7 +22,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEnt
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 

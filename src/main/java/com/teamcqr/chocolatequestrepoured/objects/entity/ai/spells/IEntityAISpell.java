@@ -2,10 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 public interface IEntityAISpell {
 
-	public int getWeight();
-
-	public boolean ignoreWeight();
-
 	public boolean shouldExecute();
 
 	public boolean shouldContinueExecuting();
@@ -18,8 +14,20 @@ public interface IEntityAISpell {
 
 	public void updateTask();
 
+	public void startChargingSpell();
+
+	public void chargeSpell();
+
+	public void startCastingSpell();
+
+	public void castSpell();
+
 	public boolean isCharging();
 
 	public boolean isCasting();
+
+	public int getWeight();
+
+	public boolean ignoreWeight();
 
 }

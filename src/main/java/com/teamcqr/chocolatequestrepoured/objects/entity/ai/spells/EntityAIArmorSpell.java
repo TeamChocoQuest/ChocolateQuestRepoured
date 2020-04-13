@@ -30,7 +30,7 @@ public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntity
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		super.startCastingSpell();
 		if (this.entity instanceof EntityCQRLich) {
 			BlockPos pos = new BlockPos(this.entity);

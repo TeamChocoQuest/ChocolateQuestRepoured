@@ -14,7 +14,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell implements IEnti
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		int explosionCount = (int) v.lengthVector() >> 1;
 		v = v.normalize();
