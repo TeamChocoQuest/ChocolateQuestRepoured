@@ -141,6 +141,17 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
+		
+		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+			active = true;
+			activationCooldown = 80;
+			world.getWorldInfo().setCleanWeatherTime(0);
+			world.getWorldInfo().setRainTime(400);
+			world.getWorldInfo().setThunderTime(200);
+			world.getWorldInfo().setRaining(true);
+			world.getWorldInfo().setThundering(true);
+		}
+		
 		return super.attackEntityFrom(source, amount);
 	}
 	
