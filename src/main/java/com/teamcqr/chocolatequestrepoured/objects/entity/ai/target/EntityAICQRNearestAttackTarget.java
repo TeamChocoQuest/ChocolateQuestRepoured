@@ -111,9 +111,11 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (!this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
+		/*
 		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
 			return false;
 		}
+		*/
 		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}

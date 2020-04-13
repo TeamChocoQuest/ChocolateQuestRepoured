@@ -450,12 +450,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onUpdate() {
 		EntityLivingBase attackTarget = this.getAttackTarget();
 		if (attackTarget != null) {
-			if (this.getEntitySenses().canSee(attackTarget) && this.isEntityInFieldOfView(attackTarget)) {
+			if (this.isInSightRange(attackTarget) && this.getEntitySenses().canSee(attackTarget)) {
 				this.lastTimeSeenAttackTarget = this.ticksExisted;
 			}
-			if (this.lastTimeSeenAttackTarget + 10 > this.ticksExisted) {
-				this.lastPosAttackTarget = attackTarget.getPositionVector();
-			}
+			this.lastPosAttackTarget = attackTarget.getPositionVector();
 		}
 
 		super.onUpdate();
