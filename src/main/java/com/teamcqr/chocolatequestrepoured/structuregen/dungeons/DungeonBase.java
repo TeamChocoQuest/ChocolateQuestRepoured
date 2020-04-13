@@ -154,6 +154,12 @@ public abstract class DungeonBase {
 
 	public abstract void generate(World world, int x, int y, int z);
 
+	public void generateWithOffsets(World world, int x, int y, int z) {
+		y -= this.getUnderGroundOffset();
+		y += this.getYOffset();
+		this.generate(world, x, y, z);
+	}
+
 	public File getStructureFileFromDirectory(File parentDir) {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(parentDir, new String[] { "nbt" }, true));
 		if (!files.isEmpty()) {

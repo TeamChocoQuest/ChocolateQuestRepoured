@@ -17,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickf
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.ThreadingUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -131,9 +130,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 		PlateauBuilder pB = new PlateauBuilder();
 		pB.load(dungeon.getLowerMainBlock(), dungeon.getUpperMainBlock());
-		lists.add(
-				pB.createSupportHillList(rdm, world, new BlockPos(x - (r +5), this.minY +1, z - (r  +5)), 2* (r +5), 2* (r +5), EPosType.DEFAULT)
-				);
+		lists.add(pB.createSupportHillList(rdm, world, new BlockPos(x - r, this.minY + 1, z - r), 2 * r, 2 * r, EPosType.DEFAULT));
 		
 
 		// Upper volcano part
@@ -386,6 +383,8 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+		// TODO: Adjust to the new system
+		/*
 		if (this.dungeon.isCoverBlockEnabled()) {
 			List<BlockPos> coverBlocks = new ArrayList<>();
 
@@ -397,6 +396,7 @@ public class VolcanoGeneratorWithArrayParted implements IDungeonGenerator {
 
 			ThreadingUtil.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 10000, true);
 		}
+		*/
 		// DONE Pass the list to a simplethread to place the blocks
 	}
 
