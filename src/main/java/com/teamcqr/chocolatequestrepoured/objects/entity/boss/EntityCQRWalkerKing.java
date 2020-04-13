@@ -173,7 +173,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	private void handleAttackedByDragon(Entity dragon) {
-		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null && getRNG().nextInt(10) > 8) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null && (getRNG().nextInt(100) +1) > 98) {
 			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
 				((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				dragon.getControllingPassenger().dismountRidingEntity();
@@ -201,10 +201,10 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		for(int i = 0; i < lightningCount; i++) {
 			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + getRNG().nextInt(7);
-			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
+			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 1F, 0.00F, 0.0F, 0.4F);
 			world.spawnEntity(clb);
 		}
-		dragon.attackEntityFrom(DamageSource.OUT_OF_WORLD, 20F);
+		dragon.attackEntityFrom(DamageSource.MAGIC, 10F);
 	}
 
 	private void handleActivation() {
