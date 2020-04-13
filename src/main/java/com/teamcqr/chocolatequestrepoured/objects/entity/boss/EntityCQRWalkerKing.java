@@ -201,7 +201,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		int lightningCount = 6 + getRNG().nextInt(3);
 		double angle = 360 / lightningCount;
 		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
-		Vec3d v = new Vec3d(3 + (2 * dragonSize),0,0);
+		Vec3d v = new Vec3d(3 + (3 * dragonSize),0,0);
 		for(int i = 0; i < lightningCount; i++) {
 			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + getRNG().nextInt(7);
