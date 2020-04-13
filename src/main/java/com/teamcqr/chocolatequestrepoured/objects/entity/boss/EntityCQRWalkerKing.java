@@ -166,7 +166,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// End IceAndFire compatibility
 				
 				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag) {
+				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
 					dragonAttackCooldown = 20;
 					handleAttackedByDragon(source.getTrueSource());
 				}
