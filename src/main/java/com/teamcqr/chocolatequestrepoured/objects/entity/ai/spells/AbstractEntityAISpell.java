@@ -41,6 +41,9 @@ public abstract class AbstractEntityAISpell extends AbstractCQREntityAI implemen
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
+		if(isCombatSpell && this.entity.getAttackTarget() == null) {
+			return false;
+		}
 		return this.tick < this.chargingTicks + this.castingTicks;
 	}
 
