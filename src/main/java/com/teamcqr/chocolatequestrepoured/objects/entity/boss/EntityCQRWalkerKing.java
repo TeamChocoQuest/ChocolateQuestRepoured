@@ -205,7 +205,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		for(int i = 0; i < lightningCount; i++) {
 			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
 			int dY = -3 + getRNG().nextInt(7);
-			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 1F, 0.00F, 0.0F, 0.4F);
+			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false, 1F, 0.00F, 0.0F, 0.4F);
 			world.spawnEntity(clb);
 		}
 		dragon.attackEntityFrom(DamageSource.MAGIC, 10F);
