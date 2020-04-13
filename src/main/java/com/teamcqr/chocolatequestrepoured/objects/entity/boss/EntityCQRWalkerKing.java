@@ -155,12 +155,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		handleActivation();
 
 		if(source.getTrueSource() != null && !world.isRemote) {
-			boolean flag = false;
 			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
 			if(resLoc != null) {
 				// Start IceAndFire compatibility
-				if (CQRConfig.advanced.enableSpecialFeatures) {
-					flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire");
+				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				if (flag) {
 					amount /= 2;
 				}
 				// End IceAndFire compatibility
