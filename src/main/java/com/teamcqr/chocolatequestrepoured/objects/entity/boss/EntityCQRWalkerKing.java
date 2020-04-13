@@ -23,6 +23,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.Enchantments;
@@ -177,6 +178,19 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
 				((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				dragon.getControllingPassenger().dismountRidingEntity();
+				if(dragon instanceof EntityTameable) {
+					try {
+						((EntityTameable)dragon).setOwnerId(null);
+					} catch(NullPointerException ex) {
+						
+					}
+					try {
+						((EntityTameable)dragon).setTamedBy(null);
+					} catch(NullPointerException ex) {
+						
+					}
+					((EntityTameable)dragon).setTamed(false);
+				}
 			}
 		}
 		
