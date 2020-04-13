@@ -142,6 +142,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			amount *= 2;
 		}
 		
+		handleActivation();
+		
+		return super.attackEntityFrom(source, amount);
+	}
+	
+	private void handleActivation() {
 		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
 			active = true;
 			activationCooldown = 80;
@@ -151,22 +157,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			world.getWorldInfo().setRaining(true);
 			world.getWorldInfo().setThundering(true);
 		}
-		
-		return super.attackEntityFrom(source, amount);
-	}
-	
-	@Override
-	protected void onDeathUpdate() {
-		boolean flag = this.world.getGameRules().getBoolean("doMobLoot");
-		if (this.deathTicks == 200 && !this.world.isRemote)
-        {
-            if (flag)
-            {
-                this.dropExperience(MathHelper.floor((float)1200));
-            }
-        }
-		
-		super.onDeathUpdate();
 	}
 	
 	@Override
@@ -184,15 +174,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			 dmg *= 0.5F;
 		}
 		
-		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
-			active = true;
-			activationCooldown = 80;
-			world.getWorldInfo().setCleanWeatherTime(0);
-			world.getWorldInfo().setRainTime(400);
-			world.getWorldInfo().setThunderTime(200);
-			world.getWorldInfo().setRaining(true);
-			world.getWorldInfo().setThundering(true);
-		}
+		handleActivation();
+		
 		return super.attackEntityFrom(source, dmg, sentFromPart);
 	}
 	
@@ -270,13 +253,33 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
+	protected void onDeathUpdate() {
+		super.onDeathUpdate();
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+        {
+            if (this.deathTicks > 150 && this.deathTicks % 5 == 0)
+            {
+                this.dropExperience(MathHelper.floor((float)50F));
+            }
+        }
+	}
+	
+	@Override
+	protected void onFinalDeath() {
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+        {
+            this.dropExperience(MathHelper.floor((float)1200));
+        }
+	}
+	
+	@Override
 	protected boolean usesEnderDragonDeath() {
 		return true;
 	}
 
 	@Override
 	protected boolean doesExplodeOnDeath() {
-		return true;
+		return false;
 	}
 	
 	@Override
