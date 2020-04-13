@@ -21,7 +21,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell implements I
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		Vec3d vec = attackTarget.getPositionVector();
 		vec = vec.subtract(attackTarget.getLookVec().scale(8.0D));

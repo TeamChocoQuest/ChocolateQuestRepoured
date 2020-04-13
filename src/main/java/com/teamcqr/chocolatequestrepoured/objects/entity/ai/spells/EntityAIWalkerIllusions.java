@@ -24,7 +24,7 @@ public class EntityAIWalkerIllusions extends AbstractEntityAISpell implements IE
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		// entity.getAttackTarget().addPotionEffect(new PotionEffect(Potion.getPotionById(15), 40));
 		this.entity.world.getEntitiesInAABBexcluding(this.entity, new AxisAlignedBB(this.entity.getPosition().add(-20, -10, -20), this.entity.getPosition().add(20, 10, 20)), TargetUtil.createPredicateNonAlly(this.entity.getFaction()))
 				.forEach(new Consumer<Entity>() {

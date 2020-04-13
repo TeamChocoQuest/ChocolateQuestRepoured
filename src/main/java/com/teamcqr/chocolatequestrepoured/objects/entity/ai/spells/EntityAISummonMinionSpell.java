@@ -82,7 +82,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements 
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		Vec3d vector = this.entity.getLookVec().normalize();
 		vector = vector.add(vector).add(vector).add(vector).add(vector);
 		int minionCount = this.MAX_MINIONS - this.getAliveMinionCount();

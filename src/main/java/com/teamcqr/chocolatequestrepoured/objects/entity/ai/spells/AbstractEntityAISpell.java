@@ -8,8 +8,10 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.SoundEvent;
 
-public abstract class AbstractEntityAISpell /*extends AbstractCQREntityAI*/ implements IEntityAISpell {
+public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> implements IEntityAISpell {
 
+	protected final Random random = new Random();
+	protected final T entity;
 	protected final boolean needsTargetToStart;
 	protected final boolean needsTargetToContinue;
 	protected final int cooldown;
@@ -17,11 +19,8 @@ public abstract class AbstractEntityAISpell /*extends AbstractCQREntityAI*/ impl
 	protected final int castingTicks;
 	protected int prevTimeCasted;
 	protected int tick;
-	protected final AbstractEntityCQR entity;
-	protected final Random random = new Random();
 
-	public AbstractEntityAISpell(AbstractEntityCQR entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
-		//super(entity);
+	public AbstractEntityAISpell(T entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
 		this.entity = entity;
 		this.needsTargetToStart = needsTargetToStart;
 		this.needsTargetToContinue = needsTargetToContinue;
@@ -95,23 +94,27 @@ public abstract class AbstractEntityAISpell /*extends AbstractCQREntityAI*/ impl
 		return this.tick != -1 && this.tick < this.chargingTicks + this.castingTicks;
 	}
 
-	protected void startChargingSpell() {
+	@Override
+	public void startChargingSpell() {
 		if (this.getStartChargingSound() != null) {
 			this.entity.playSound(this.getStartChargingSound(), 1.0F, 0.9F + 0.2F * this.random.nextFloat());
 		}
 	}
 
-	protected void startCastingSpell() {
+	@Override
+	public void chargeSpell() {
+
+	}
+
+	@Override
+	public void startCastingSpell() {
 		if (this.getStartCastingSound() != null) {
 			this.entity.playSound(this.getStartCastingSound(), 1.0F, 0.9F + 0.2F * this.random.nextFloat());
 		}
 	}
 
-	protected void chargeSpell() {
-
-	}
-
-	protected void castSpell() {
+	@Override
+	public void castSpell() {
 
 	}
 

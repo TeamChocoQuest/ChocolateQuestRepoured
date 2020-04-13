@@ -17,7 +17,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEn
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		v = new Vec3d(v.x, 0, v.z);
 		v = v.normalize();

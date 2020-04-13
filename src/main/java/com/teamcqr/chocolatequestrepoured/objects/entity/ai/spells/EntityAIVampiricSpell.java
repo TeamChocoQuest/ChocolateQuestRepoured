@@ -19,7 +19,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEnt
 	}
 
 	@Override
-	protected void startCastingSpell() {
+	public void startCastingSpell() {
 		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
