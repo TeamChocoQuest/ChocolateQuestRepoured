@@ -158,8 +158,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// Start IceAndFire compatibility
 				if (CQRConfig.advanced.enableSpecialFeatures) {
 					flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire");
-					heal(amount /2);
-					amount = 0;
+					amount /= 2;
 				}
 				// End IceAndFire compatibility
 				
@@ -174,7 +173,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	private void handleAttackedByDragon(Entity dragon) {
-		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null && getRNG().nextInt(10) >= 7) {
 			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
 				((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
 				dragon.getControllingPassenger().dismountRidingEntity();
@@ -205,7 +204,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 			world.spawnEntity(clb);
 		}
-		dragon.attackEntityFrom(DamageSource.OUT_OF_WORLD, 50F);
+		dragon.attackEntityFrom(DamageSource.OUT_OF_WORLD, 20F);
 	}
 
 	private void handleActivation() {
