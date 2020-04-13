@@ -18,7 +18,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEnt
 	protected static final int MAX_FIREBALLS_PER_CAST = 8;
 
 	public EntityAISummonMeteors(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEnt
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
 			BlockPos centeredPos = this.entity.getPosition();
-			if (this.entity.getAttackTarget() != null && !this.entity.getAttackTarget().isDead) {
+			{
 				Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
 				v = new Vec3d(v.x / 2, v.y / 2, v.z / 2);
 				centeredPos = centeredPos.add(v.x, v.y, v.z);

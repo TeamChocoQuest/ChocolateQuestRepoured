@@ -15,7 +15,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEnt
 	protected static final int MAX_PROJECTILES = 5;
 
 	public EntityAIVampiricSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, cooldown, chargeUpTicks, 1);
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override
