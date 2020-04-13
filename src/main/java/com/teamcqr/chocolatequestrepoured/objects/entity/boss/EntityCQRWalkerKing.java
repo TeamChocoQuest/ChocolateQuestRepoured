@@ -157,8 +157,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// Start IceAndFire compatibility
 				if (CQRConfig.advanced.enableSpecialFeatures) {
 					flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire");
-					amount = 0;
 					heal(amount /2);
+					amount = 0;
 				}
 				// End IceAndFire compatibility
 				
