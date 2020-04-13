@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -10,10 +13,12 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
@@ -36,6 +41,9 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	private Set<BlockPos> bridgeBlocks = new HashSet<>();
 	private Set<BlockPos> lavaBlocks = new HashSet<>();
+
+	private Map<BlockPos, Block> blockMap = new HashMap<>();
+	private List<List<? extends IStructure>> structureList = new LinkedList<>();
 
 	private int minX;
 	private int maxX;
@@ -102,7 +110,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 			 * } else {
 			 */
 			BlockPos cLower = new BlockPos(this.minX, y + 1, this.minZ).add(-this.dungeon.getDistanceBetweenBuildingCenters(), 0, -this.dungeon.getDistanceBetweenBuildingCenters());
-			;
+
 			BlockPos cUpper = new BlockPos(this.maxX, y + this.dungeon.getCaveHeight(), this.maxZ).add(this.dungeon.getDistanceBetweenBuildingCenters() * 0.1, 0, this.dungeon.getDistanceBetweenBuildingCenters() * 0.05);
 
 			PlateauBuilder pB = new PlateauBuilder();
@@ -162,10 +170,12 @@ public class NetherCityGenerator implements IDungeonGenerator {
 		}
 
 		for (BlockPos p : this.lavaBlocks) {
-			world.setBlockState(p, this.dungeon.getFloorBlock().getDefaultState());
+			// world.setBlockState(p, this.dungeon.getFloorBlock().getDefaultState());
+			this.blockMap.put(p, this.dungeon.getFloorBlock());
 		}
 		for (BlockPos p : this.bridgeBlocks) {
-			world.setBlockState(p, this.dungeon.getBridgeBlock().getDefaultState());
+			// world.setBlockState(p, this.dungeon.getBridgeBlock().getDefaultState());
+			this.blockMap.put(p, this.dungeon.getBridgeBlock());
 		}
 	}
 
@@ -202,12 +212,12 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 					@Override
 					public void accept(BlockPos t) {
-						world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
+						// world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
+						NetherCityGenerator.this.blockMap.put(t, NetherCityGenerator.this.dungeon.getBridgeBlock());
 					}
 				});
 
-				for (List<? extends IStructure> list : centralStructure.addBlocksToWorld(world, new BlockPos(x, y + 1, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
-					lists.add(list);
+				this.structureList.addAll(centralStructure.addBlocksToWorld(world, new BlockPos(x, y + 1, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z));
 			}
 		}
 		CQStructure structure = null;
@@ -234,7 +244,8 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 					@Override
 					public void accept(BlockPos t) {
-						world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
+						// world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
+						NetherCityGenerator.this.blockMap.put(t, NetherCityGenerator.this.dungeon.getBridgeBlock());
 					}
 				});
 				/*
@@ -242,14 +253,17 @@ public class NetherCityGenerator implements IDungeonGenerator {
 				 * bosses.add(id.toString());
 				 * }
 				 */
-				for (List<? extends IStructure> list : structure.addBlocksToWorld(world, centerPos.add(0, 1, 0), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
-					lists.add(list);
+				this.structureList.addAll(structure.addBlocksToWorld(world, centerPos.add(0, 1, 0), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z));
 			}
 		}
-		BlockPos posLower = new BlockPos(this.minX - this.dungeon.getDistanceBetweenBuildingCenters(), y, this.minZ - this.dungeon.getDistanceBetweenBuildingCenters());
-		BlockPos posUpper = new BlockPos(this.maxX + this.dungeon.getDistanceBetweenBuildingCenters(), y + this.dungeon.getCaveHeight(), this.maxZ + this.dungeon.getDistanceBetweenBuildingCenters());
 
+		lists.add(ExtendedBlockStatePart.splitBlockMap(this.blockMap));
+		lists.addAll(this.structureList);
 		/*
+		 * BlockPos posLower = new BlockPos(this.minX - this.dungeon.getDistanceBetweenBuildingCenters(), y, this.minZ - this.dungeon.getDistanceBetweenBuildingCenters());
+		 * BlockPos posUpper = new BlockPos(this.maxX + this.dungeon.getDistanceBetweenBuildingCenters(), y + this.dungeon.getCaveHeight(), this.maxZ + this.dungeon.getDistanceBetweenBuildingCenters());
+		 *
+		 * 
 		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
 		 * if (centralStructure != null) {
 		 * event.setShieldCorePosition(centralStructure.getShieldCorePosition());
@@ -265,39 +279,40 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Maybe place some ghast spawners over the city and a nether dragon? -> Complete factory first
-		if (this.dungeon.placeSpawnersAboveBuildings()) {
-			int spawnerY = y + (new Double(this.dungeon.getCaveHeight() * 0.9).intValue());
-
-			// DONE: Place CQ spawners !!!
-			if (this.dungeon.centralBuildingIsSpecial()) {
-				BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
-				try {
-					if (this.dungeon.centralSpawnerIsSingleUse()) {
-						SpawnerFactory.placeSpawner(new Entity[] {
-								EntityList.createEntityByIDFromName(this.dungeon.getCentralSpawnerMob(), world) }, false, null, world, spawnerPosCentral);
-					} else {
-						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, this.dungeon.getCentralSpawnerMob());
-					}
-				} catch (NullPointerException ex) {
-					world.setBlockToAir(spawnerPosCentral);
-				}
-			}
-
-			for (BlockPos p : this.gridPositions) {
-				BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
-
-				try {
-					if (this.dungeon.spawnersAreSingleUse()) {
-						SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getSpawnerMob(), world) }, false, null, world, spawnerPos);
-					} else {
-						SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getSpawnerMob());
-					}
-				} catch (NullPointerException ex) {
-					world.setBlockToAir(spawnerPos);
-				}
-			}
-		}
+		// TODO: Either leave the spawners out or adapt to the new system
+		/*
+		 * if (this.dungeon.placeSpawnersAboveBuildings()) {
+		 * int spawnerY = y + (new Double(this.dungeon.getCaveHeight() * 0.9).intValue());
+		 * 
+		 * // DONE: Place CQ spawners !!!
+		 * if (this.dungeon.centralBuildingIsSpecial()) {
+		 * BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
+		 * try {
+		 * if (this.dungeon.centralSpawnerIsSingleUse()) {
+		 * SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getCentralSpawnerMob(), world) }, false, null, world, spawnerPosCentral);
+		 * } else {
+		 * SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, this.dungeon.getCentralSpawnerMob());
+		 * }
+		 * } catch (NullPointerException ex) {
+		 * world.setBlockToAir(spawnerPosCentral);
+		 * }
+		 * }
+		 * 
+		 * for (BlockPos p : this.gridPositions) {
+		 * BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
+		 * 
+		 * try {
+		 * if (this.dungeon.spawnersAreSingleUse()) {
+		 * SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getSpawnerMob(), world) }, false, null, world, spawnerPos);
+		 * } else {
+		 * SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getSpawnerMob());
+		 * }
+		 * } catch (NullPointerException ex) {
+		 * world.setBlockToAir(spawnerPos);
+		 * }
+		 * }
+		 * }
+		 */
 	}
 
 	@Override
