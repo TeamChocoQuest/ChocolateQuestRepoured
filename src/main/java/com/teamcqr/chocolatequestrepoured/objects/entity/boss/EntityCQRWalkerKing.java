@@ -50,6 +50,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private int borderLightning = 20;
 	private boolean active = false;
 	private int activationCooldown = 80;
+	private int dragonAttackCooldown = 0;
 	
 	public EntityCQRWalkerKing(World worldIn) {
 		super(worldIn);
@@ -79,6 +80,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public void onLivingUpdate() {
+		dragonAttackCooldown--;
 		if(fallDistance > 12) {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
@@ -163,7 +165,8 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				// End IceAndFire compatibility
 				
 				//If we are attacked by a dragon: KILL IT
-				if(resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag) {
+				if(dragonAttackCooldown <= 0 && resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag) {
+					dragonAttackCooldown = 20;
 					handleAttackedByDragon(source.getTrueSource());
 				}
 			}
