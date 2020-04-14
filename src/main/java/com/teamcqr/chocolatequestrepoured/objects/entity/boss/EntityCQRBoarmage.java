@@ -7,27 +7,17 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
