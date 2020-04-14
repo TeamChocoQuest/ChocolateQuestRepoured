@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,10 +11,9 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 
 public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
