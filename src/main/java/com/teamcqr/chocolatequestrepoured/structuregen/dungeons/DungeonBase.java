@@ -35,6 +35,7 @@ public abstract class DungeonBase {
 
 	protected int[] allowedDims;
 	protected int weight;
+	protected int chance;
 	protected String[] biomes;
 	protected String[] blacklistedBiomes;
 	protected boolean unique;
@@ -74,6 +75,7 @@ public abstract class DungeonBase {
 
 		this.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[0]);
 		this.weight = PropertyFileHelper.getIntProperty(prop, "weight", 0);
+		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
 		this.biomes = PropertyFileHelper.getStringArrayProperty(prop, "biomes", new String[0]);
 		this.blacklistedBiomes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomes", new String[0]);
 		this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
@@ -174,6 +176,10 @@ public abstract class DungeonBase {
 
 	public int getWeight() {
 		return this.weight;
+	}
+
+	public int getChance() {
+		return this.chance;
 	}
 
 	public String[] getBiomes() {
