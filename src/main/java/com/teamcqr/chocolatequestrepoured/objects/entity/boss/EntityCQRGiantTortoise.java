@@ -188,13 +188,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		}
 		
-		/*
-		if((getAttackTarget() == null || getAttackTarget().isDead) && source.getTrueSource() instanceof EntityLivingBase && source.getTrueSource() != null) {
-			if(!getFaction().isAlly(source.getTrueSource()) && getDistance(source.getTrueSource()) <= 32) {
-				setAttackTarget((EntityLivingBase) source.getTrueSource());
-			}
-		}
-		*/
 		if (source.getTrueSource() instanceof EntityLivingBase) {
 			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
 		}
@@ -353,9 +346,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			boolean blocked = false;
 			if(entityIn instanceof EntityLivingBase) {
 				if(((EntityLivingBase)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
-					//this.setStunned(true);
-					//this.setSpinning(false);
-					//this.setCanBeStunned(true);
 					if(getRNG().nextBoolean()) {
 						spinsBlocked++;
 					}
