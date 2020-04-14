@@ -6,7 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.WorldServer;
 
-public class BossAIHealingTurtle extends AbstractCQREntityAI {
+public class BossAITortoiseHealing extends AbstractCQREntityAI {
 
 	private boolean healingActive = false;
 
@@ -14,7 +14,7 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	private final int MIN_HEALING_AMOUNT = 50;
 	private int currHealTicks = 0;
 
-	public BossAIHealingTurtle(EntityCQRGiantTortoise entity) {
+	public BossAITortoiseHealing(EntityCQRGiantTortoise entity) {
 		super(entity);
 		setMutexBits(8);
 	}
