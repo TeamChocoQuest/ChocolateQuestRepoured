@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
-public class AITortoiseWalkHome extends EntityAIMoveToHome {
+public class AITortoiseMoveToHome extends EntityAIMoveToHome {
 
-	public AITortoiseWalkHome(EntityCQRGiantTortoise entity) {
+	public AITortoiseMoveToHome(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
 	

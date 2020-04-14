@@ -9,7 +9,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AITortoiseMoveToLeader;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AITortoiseWalkHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AITortoiseMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIStunTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -103,7 +103,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.tasks.addTask(4, new BossAIHealingTurtle(this));
 		this.tasks.addTask(6, new AISpinAttackTurtle(this));
 		this.tasks.addTask(19, new AITortoiseMoveToLeader(this));
-		this.tasks.addTask(20, new AITortoiseWalkHome(this));
+		this.tasks.addTask(20, new AITortoiseMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
