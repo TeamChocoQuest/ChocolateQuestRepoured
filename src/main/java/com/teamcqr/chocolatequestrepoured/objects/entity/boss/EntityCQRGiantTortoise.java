@@ -181,8 +181,15 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
-	final float baseWidth = 2.0F;
-	final float baseHeight = 1.7F;
+	@Override
+	public float getDefaultWidth() {
+		return 2.0F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.7F;
+	}
 
 	@SideOnly(Side.CLIENT)
 	private int animationProgress = 0;
@@ -361,7 +368,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void alignParts() {
 		// Legs
-		Vec3d v = new Vec3d(0, 0, this.baseWidth / 2 + this.baseWidth * 0.1);
+		Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1);
 		v = VectorUtil.rotateVectorAroundY(v, this.rotationYawHead);
 
 		float vy = isInShell() || this.getAnimation() == ANIMATION_STUNNED ? 0.1F : 0.5F; 
