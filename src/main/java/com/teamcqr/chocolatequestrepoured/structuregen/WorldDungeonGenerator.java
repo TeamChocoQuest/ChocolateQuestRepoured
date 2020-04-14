@@ -79,7 +79,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				Set<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ, behindWall);
 
 				if (!possibleDungeons.isEmpty()) {
-					int maxWeight = 0;
+					/*int maxWeight = 0;
 					for (DungeonBase t : possibleDungeons) {
 						maxWeight += t.getWeight();
 					}
@@ -90,6 +90,16 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 							CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
 							dungeon.generate(world, chunkX * 16 + 8, chunkZ * 16 + 8);
 							return;
+						}
+					}*/
+					for (DungeonBase dungeon : possibleDungeons) {
+						if(dungeon.getWeight() <= 0) {
+							continue;
+						}
+						if (DungeonGenUtils.PercentageRandom(dungeon.getWeight(), rand)) {
+							CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
+							dungeon.generate(world, chunkX * 16 + 8, chunkZ * 16 + 8);
+							return;	
 						}
 					}
 				}
