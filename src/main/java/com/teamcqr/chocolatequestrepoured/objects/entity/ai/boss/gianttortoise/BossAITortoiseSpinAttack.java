@@ -8,7 +8,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 
-public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private Vec3d movementVector;
 	
@@ -22,7 +22,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	static final int MIN_DISTANCE_TO_BEGIN_SPIN = 16; 
 
-	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
+	public BossAITortoiseSpinAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
 		//setMutexBits(8);
 	}

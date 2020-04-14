@@ -1,11 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 
-public class AITortoiseMoveToHome extends EntityAIMoveToHome {
+public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 
-	public AITortoiseMoveToHome(EntityCQRGiantTortoise entity) {
+	public BossAITortoiseMoveToLeader(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
 	
