@@ -79,6 +79,11 @@ public class ClassicNetherCity extends DungeonBase {
 	}
 
 	@Override
+	public void generate(World world, int x, int z) {
+		this.generate(world, x, this.posY, z);
+	}
+
+	@Override
 	public void generate(World world, int x, int y, int z) {
 		if (this.structCount != this.buildingFolder.listFiles().length) {
 			for (File f : this.buildingFolder.listFiles()) {

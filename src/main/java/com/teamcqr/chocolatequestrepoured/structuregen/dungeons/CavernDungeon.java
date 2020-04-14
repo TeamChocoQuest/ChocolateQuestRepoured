@@ -93,6 +93,11 @@ public class CavernDungeon extends DungeonBase {
 	}
 
 	@Override
+	public void generate(World world, int x, int z) {
+		this.generate(world, x, DungeonGenUtils.getIntBetweenBorders(this.minY, this.maxY, this.random), z);
+	}
+
+	@Override
 	public void generate(World world, int x, int y, int z) {
 		List<List<? extends IStructure>> lists = new ArrayList<>();
 		List<CavernGenerator> caves = new ArrayList<>();
