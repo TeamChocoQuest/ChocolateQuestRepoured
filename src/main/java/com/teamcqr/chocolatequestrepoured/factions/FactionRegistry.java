@@ -11,6 +11,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -151,6 +153,7 @@ public class FactionRegistry {
 		System.out.println("Default factions loaded and initialized!");
 	}
 
+	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
 		if (entity instanceof EntityTameable) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
