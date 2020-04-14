@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.objects.enchantments;
 
-import java.util.Random;
-
 import com.teamcqr.chocolatequestrepoured.init.ModEnchantments;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -19,45 +17,41 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class EnchantmentLightningProtection extends Enchantment {
 
 	public EnchantmentLightningProtection() {
-		this(Rarity.RARE, EnumEnchantmentType.ARMOR_HEAD, new EntityEquipmentSlot[] {EntityEquipmentSlot.HEAD});
+		this(Rarity.RARE, EnumEnchantmentType.ARMOR_HEAD, new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD });
 	}
-	
+
 	private EnchantmentLightningProtection(Rarity rarityIn, EnumEnchantmentType typeIn, EntityEquipmentSlot[] slots) {
 		super(rarityIn, typeIn, slots);
-		setName("lightning_protection");
-		setRegistryName(Reference.MODID, "lightning_protection");
+		this.setName("lightning_protection");
+		this.setRegistryName(Reference.MODID, "lightning_protection");
 	}
-	
 
 	@Override
 	public int getMaxLevel() {
 		return 8;
 	}
-	
+
 	@Override
 	public boolean isTreasureEnchantment() {
 		return true;
 	}
-	
+
 	@Override
 	public int getMinLevel() {
 		return 1;
 	}
 
-
 	@SubscribeEvent
 	public static void onStruckByLightning(EntityStruckByLightningEvent event) {
-		if(event.getEntity() instanceof EntityLivingBase) {
+		if (event.getEntity() instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) event.getEntity();
 			ItemStack helmet = living.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-			if(helmet != null && helmet.getItem() != null && (EnchantmentHelper.getEnchantments(helmet)).containsKey(ModEnchantments.LIGHTNING_PROTECTION)) {
-				int lvl = (EnchantmentHelper.getEnchantments(helmet)).get(ModEnchantments.LIGHTNING_PROTECTION);
-				Random rdm = living.getRNG();
-				if(lvl >= rdm.nextInt(ModEnchantments.LIGHTNING_PROTECTION.getMaxLevel() +1)) {
-					event.setCanceled(true);
-				}
+
+			int lvl = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.LIGHTNING_PROTECTION, helmet);
+			if (lvl > 0 && lvl > living.getRNG().nextInt(10)) {
+				event.setCanceled(true);
 			}
 		}
 	}
-	
+
 }
