@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
 
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.WorldServer;
@@ -71,23 +70,18 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 		((EntityCQRGiantTortoise) this.entity).setHealing(true);
 		if (this.healingActive) {
 			((EntityCQRGiantTortoise) this.entity).setInShell(true);
-			if (!this.getBoss().getCurrentAnimation().equals(ETortoiseAnimState.HEALING)) {
-				this.getBoss().setCurrentAnimation(ETortoiseAnimState.HEALING);
+			if (this.currHealTicks >= this.getHealingAmount() || (this.entity.getHealth() / this.entity.getMaxHealth() >= 0.8F)) {
+				// Cancel
+				this.healingActive = false;
+				((EntityCQRGiantTortoise) this.entity).setTimesHealed(((EntityCQRGiantTortoise) this.entity).getTimesHealed() +1);
+				this.getBoss().setCanBeStunned(true);
 			} else {
-				if (this.currHealTicks >= this.getHealingAmount() || (this.entity.getHealth() / this.entity.getMaxHealth() >= 0.8F)) {
-					// Cancel
-					this.healingActive = false;
-					((EntityCQRGiantTortoise) this.entity).setTimesHealed(((EntityCQRGiantTortoise) this.entity).getTimesHealed() +1);
-					this.getBoss().setCanBeStunned(true);
-					this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
-				} else {
-					((WorldServer)entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY, entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
-					this.getBoss().heal(1F);
-					this.getBoss().setCanBeStunned(false);
-					this.getBoss().setStunned(false);
-				}
-				this.currHealTicks++;
+				((WorldServer)entity.getEntityWorld()).spawnParticle(EnumParticleTypes.HEART, entity.posX, entity.posY, entity.posZ, 5, 0.5D, 1.0D, 0.5D, 0D);
+				this.getBoss().heal(1F);
+				this.getBoss().setCanBeStunned(false);
+				this.getBoss().setStunned(false);
 			}
+			this.currHealTicks++;
 		}
 	}
 	
@@ -102,7 +96,6 @@ public class BossAIHealingTurtle extends AbstractCQREntityAI {
 	public void resetTask() {
 		super.resetTask();
 		this.getBoss().setCanBeStunned(true);
-		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		this.currHealTicks = 0;
 		((EntityCQRGiantTortoise) this.entity).setHealing(false);
 		this.healingActive = false;

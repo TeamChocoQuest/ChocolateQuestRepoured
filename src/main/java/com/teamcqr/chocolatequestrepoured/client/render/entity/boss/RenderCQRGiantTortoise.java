@@ -24,27 +24,6 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 	@Override
 	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		// DONE: Rotate move around z axis when the mouth is open
-		switch (entity.getCurrentAnimation()) {
-		case HEALING:
-			break;
-		case MOVE_PARTS_IN:
-			break;
-		case MOVE_PARTS_OUT:
-			break;
-		case NONE:
-			break;
-		case SPIN:
-			break;
-		case SPIN_DOWN:
-			break;
-		case SPIN_UP:
-			break;
-		case WALKING:
-			break;
-		default:
-			break;
-
-		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 

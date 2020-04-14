@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -151,7 +150,6 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setSpinning(false);
 		this.getBoss().setReadyToSpin(true);
 		this.getBoss().setCanBeStunned(true);
-		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		cooldown = COOLDOWN;
 		if(!(getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead)) {
 			cooldown /= 3;

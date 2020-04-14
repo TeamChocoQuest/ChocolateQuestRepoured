@@ -50,12 +50,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 
-	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
-	protected ETortoiseAnimState currentAnimation = ETortoiseAnimState.NONE;
 
 	static int EAnimStateGlobalID = 0;
 
@@ -94,27 +92,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		};
 	//End of Animations
 
-	public enum ETortoiseAnimState {
-		SPIN_UP, SPIN_DOWN, SPIN, MOVE_PARTS_IN, MOVE_PARTS_OUT, WALKING, HEALING, NONE;
-
-		private int id;
-
-		private ETortoiseAnimState() {
-			this.id = EAnimStateGlobalID;
-			EAnimStateGlobalID++;
-		}
-
-		public static ETortoiseAnimState valueOf(int i) {
-			if (i >= values().length) {
-				return NONE;
-			}
-			return values()[i];
-		}
-
-		public int getID() {
-			return this.id;
-		}
-	}
 	
 	@Override
 	protected void initEntityAI() {
@@ -215,7 +192,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(ANIM_STATE, ETortoiseAnimState.NONE.getID());
 		this.dataManager.register(IN_SHELL, true);
 		this.dataManager.register(IN_SHELL_BYPASS, false);
 	}
@@ -334,14 +310,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public void setSwingingArms(boolean swingingArms) {
 
-	}
-
-	public ETortoiseAnimState getCurrentAnimation() {
-		if (!this.world.isRemote) {
-			return this.currentAnimation;
-		}
-		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
-		// return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
 
 	@Override
@@ -472,11 +440,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;
-	}
-
-	public void setCurrentAnimation(ETortoiseAnimState newState) {
-		this.currentAnimation = newState;
-		this.dataManager.set(ANIM_STATE, newState.getID());
 	}
 
 	@Override
