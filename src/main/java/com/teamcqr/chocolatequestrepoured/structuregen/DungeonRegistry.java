@@ -56,7 +56,7 @@ public class DungeonRegistry {
 
 	public Set<DungeonBase> getDungeonsForChunk(World world, int chunkX, int chunkZ, boolean behindWall) {
 		Set<DungeonBase> dungeonsForChunk = new HashSet<>();
-		Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 0, chunkZ * 16 + 1));
+		Biome biome = world.getBiomeProvider().getBiome(new BlockPos((chunkX << 4) + 8, 0, (chunkZ << 4) + 8));
 
 		Set<DungeonBase> biomeDungeonSet = this.biomeDungeonMap.get(biome.getRegistryName());
 		if (biomeDungeonSet != null) {
