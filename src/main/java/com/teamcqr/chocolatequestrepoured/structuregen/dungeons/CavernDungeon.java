@@ -1,25 +1,28 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CavernGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -45,7 +48,6 @@ public class CavernDungeon extends DungeonBase {
 	private int maxRoomDistance = 16;
 	private int minRoomDistance = 10;
 	private int chestChancePerRoom = 100;
-	private boolean buildStaris = true;
 
 	private boolean placeSpawners = true;
 	private boolean placeBoss = true;
@@ -55,77 +57,56 @@ public class CavernDungeon extends DungeonBase {
 	private Block floorMaterial = Blocks.STONE;
 	private Block airBlock = Blocks.AIR;
 
-	@Override
-	public IDungeonGenerator getGenerator() {
-		return new CavernGenerator();
-	}
+	public CavernDungeon(String name, Properties prop) {
+		super(name, prop);
 
-	public CavernDungeon(File configFile) {
-		super(configFile);
 		this.enableProtectionSystem = false;
-		Properties prop = this.loadConfig(configFile);
-		if (prop != null) {
-			// super.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
-			// super.name = configFile.getName().replaceAll(".properties", "");
-			// super.allowedDims = PropertyFileHelper.getIntArrayProperty(prop, "allowedDims", new int[]{0});
-			// super.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
 
-			this.minRooms = PropertyFileHelper.getIntProperty(prop, "minRooms", 1);
-			this.maxRooms = PropertyFileHelper.getIntProperty(prop, "maxRooms", 8);
+		this.minRooms = PropertyFileHelper.getIntProperty(prop, "minRooms", 1);
+		this.maxRooms = PropertyFileHelper.getIntProperty(prop, "maxRooms", 8);
 
-			this.minY = PropertyFileHelper.getIntProperty(prop, "minY", 30);
-			this.maxY = PropertyFileHelper.getIntProperty(prop, "maxY", 50);
+		this.minY = PropertyFileHelper.getIntProperty(prop, "minY", 30);
+		this.maxY = PropertyFileHelper.getIntProperty(prop, "maxY", 50);
 
-			this.minCaveSize = PropertyFileHelper.getIntProperty(prop, "minCaveSize", 5);
-			this.maxCaveSize = PropertyFileHelper.getIntProperty(prop, "maxCaveSize", 15);
+		this.minCaveSize = PropertyFileHelper.getIntProperty(prop, "minCaveSize", 5);
+		this.maxCaveSize = PropertyFileHelper.getIntProperty(prop, "maxCaveSize", 15);
 
-			this.minHeight = PropertyFileHelper.getIntProperty(prop, "minCaveHeight", 4);
-			this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxCaveHeight", 12);
+		this.minHeight = PropertyFileHelper.getIntProperty(prop, "minCaveHeight", 4);
+		this.maxHeight = PropertyFileHelper.getIntProperty(prop, "maxCaveHeight", 12);
 
-			this.maxRoomDistance = PropertyFileHelper.getIntProperty(prop, "maxRoomDistance", 20);
-			this.minRoomDistance = PropertyFileHelper.getIntProperty(prop, "minRoomDistance", 12);
+		this.maxRoomDistance = PropertyFileHelper.getIntProperty(prop, "maxRoomDistance", 20);
+		this.minRoomDistance = PropertyFileHelper.getIntProperty(prop, "minRoomDistance", 12);
 
-			this.buildStaris = PropertyFileHelper.getBooleanProperty(prop, "buildStairs", true);
+		this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 50);
 
-			this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 50);
+		this.placeBoss = PropertyFileHelper.getBooleanProperty(prop, "spawnBoss", false);
+		this.placeSpawners = PropertyFileHelper.getBooleanProperty(prop, "placeSpawners", true);
+		this.lootChests = PropertyFileHelper.getBooleanProperty(prop, "lootchests", true);
 
-			this.placeBoss = PropertyFileHelper.getBooleanProperty(prop, "spawnBoss", false);
-			this.placeSpawners = PropertyFileHelper.getBooleanProperty(prop, "placeSpawners", true);
-			this.lootChests = PropertyFileHelper.getBooleanProperty(prop, "lootchests", true);
+		this.mobName = prop.getProperty("mobname", "minecraft:zombie");
+		this.bossMobName = prop.getProperty("bossmobname", "minecraft:pig");
 
-			this.mobName = prop.getProperty("mobname", "minecraft:zombie");
-			this.bossMobName = prop.getProperty("bossmobname", "minecraft:pig");
+		this.underGroundOffset = 0;
 
-			this.underGroundOffset = 0;
+		this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
 
-			this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
-
-			this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
-
-			this.closeConfigFile();
-		} else {
-			this.registeredSuccessful = false;
-		}
+		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
 	}
 
-	// One block below starts y is the floor...
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
+	public void generate(World world, int x, int z) {
+		this.generate(world, x, DungeonGenUtils.getIntBetweenBorders(this.minY, this.maxY, this.random), z);
+	}
 
+	@Override
+	public void generate(World world, int x, int y, int z) {
 		List<List<? extends IStructure>> lists = new ArrayList<>();
-		List<CavernGenerator> caves = new ArrayList<CavernGenerator>();
-		HashMap<CavernGenerator, Integer> xMap = new HashMap<CavernGenerator, Integer>();
-		HashMap<CavernGenerator, Integer> zMap = new HashMap<CavernGenerator, Integer>();
+		List<CavernGenerator> caves = new ArrayList<>();
+		Map<CavernGenerator, Integer> xMap = new HashMap<>();
+		Map<CavernGenerator, Integer> zMap = new HashMap<>();
 
-		int rooms = DungeonGenUtils.getIntBetweenBorders(this.minRooms, this.maxRooms, random);
-		int y = DungeonGenUtils.getIntBetweenBorders(this.minY, this.maxY, random);
-
-		if (this.isPosLocked()) {
-			y = this.getLockedPos().getY();
-		}
-
-		System.out.println("Generating structure " + this.name + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
+		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+		int rooms = DungeonGenUtils.getIntBetweenBorders(this.minRooms, this.maxRooms, this.random);
 		int roomIndex = 1;
 
 		BlockPos centerLoc = new BlockPos(x, y, z);
@@ -141,12 +122,11 @@ public class CavernDungeon extends DungeonBase {
 
 			CavernGenerator cave = new CavernGenerator(this);
 			// Let the cave calculate its air blocks...
-			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, random),
-					DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, random));
+			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random),
+					DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, this.random));
 			cave.preProcess(world, chunk, x + distance.getX(), y, z + distance.getZ(), lists);
 
-			distance = new Vec3i(0, 0, 0);
-			int vLength = DungeonGenUtils.getIntBetweenBorders(this.minRoomDistance, this.maxRoomDistance, random);
+			int vLength = DungeonGenUtils.getIntBetweenBorders(this.minRoomDistance, this.maxRoomDistance, this.random);
 			distance = new Vec3i(vLength, 0, 0);
 			double angle = ((Integer) new Random().nextInt(360)).doubleValue();
 			distance = VectorUtil.rotateVectorAroundY(distance, angle);
@@ -154,7 +134,7 @@ public class CavernDungeon extends DungeonBase {
 			caves.add(cave);
 			xMap.put(cave, x);
 			zMap.put(cave, z);
-			System.out.println("cave #" + roomIndex + "  @ x=" + x + "  z=" + z);
+			// System.out.println("cave #" + roomIndex + " @ x=" + x + " z=" + z);
 			roomIndex++;
 		} while (roomIndex < rooms);
 
@@ -164,15 +144,16 @@ public class CavernDungeon extends DungeonBase {
 			cave.buildStructure(world, chunk, xMap.get(cave), y - 1, zMap.get(cave), lists);
 
 			// connect the tunnels
-			cave.generateTunnel(centerLoc.add(0, 1, 0), cave.getCenter(), world);
+			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+			cave.generateTunnel(centerLoc.add(0, 1, 0), cave.getCenter(), world, stateMap);
+			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 		for (int i = 0; i < caves.size(); i++) {
 			CavernGenerator cave = caves.get(i);
 
 			// Place a loot chest....
 			if (this.lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {
-				world.setBlockState(cave.getCenter().add(0, -4, 0), Blocks.CHEST.getDefaultState());
-				cave.fillChests(world, chunk, cave.getCenter().getX(), cave.getCenter().getY() - 4, cave.getCenter().getZ(), lists);
+				cave.fillChests(world, chunk, cave.getCenter().getX(), y -1, cave.getCenter().getZ(), lists);
 			}
 
 			// Place a spawner...
@@ -180,30 +161,27 @@ public class CavernDungeon extends DungeonBase {
 				cave.placeSpawners(world, chunk, cave.getCenter().getX(), y, cave.getCenter().getZ(), lists);
 			}
 		}
-		Random rdmCI = new Random();
-		int bossCaveIndx = rdmCI.nextInt(caves.size());
+		int bossCaveIndx = this.random.nextInt(caves.size());
 		if (this.placeBoss) {
-
+			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+			
 			BlockPos bossPos = new BlockPos(xMap.get(caves.get(bossCaveIndx)), y + 1, zMap.get(caves.get(bossCaveIndx)));
-			world.setBlockToAir(bossPos.down());
 
 			// BOSS CHEST
-			world.setBlockState(bossPos, Blocks.CHEST.getDefaultState());
-			TileEntityChest bossChest = (TileEntityChest) world.getTileEntity(bossPos.down());
+			IBlockState state = Blocks.CHEST.getDefaultState();
+			TileEntityChest bossChest = (TileEntityChest) Blocks.CHEST.createTileEntity(world, state);
 			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
+			stateMap.put(bossPos.down(), new ExtendedBlockStatePart.ExtendedBlockState(state, bossChest.writeToNBT(new NBTTagCompound())));
 
 			// BOSS SPAWNER
 			// DONE: spawn the boss
-			SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.getBossMob(), world) }, false, null, world, bossPos.up());
+			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
+			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(EntityList.createEntityByIDFromName(this.getBossMob(), world)));
+			stateMap.put(bossPos, new ExtendedBlockStatePart.ExtendedBlockState(state2, tileSpawner.writeToNBT(new NBTTagCompound())));
+			
+			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
-		if (this.buildStaris) {
-			int entryCave = rdmCI.nextInt(caves.size());
-			while (entryCave == bossCaveIndx) {
-				entryCave = rdmCI.nextInt(caves.size());
-			}
-			caves.get(entryCave).buildLadder(world);
-		}
-
 	}
 
 	int getMinCaveHeight() {
@@ -244,10 +222,6 @@ public class CavernDungeon extends DungeonBase {
 		// System.out.println("Path: " + bossString[1]);
 
 		return new ResourceLocation(bossString[0], bossString[1]);
-	}
-
-	public boolean doBuildStaris() {
-		return this.buildStaris;
 	}
 
 }

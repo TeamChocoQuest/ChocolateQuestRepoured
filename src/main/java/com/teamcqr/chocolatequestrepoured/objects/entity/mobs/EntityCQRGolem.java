@@ -70,24 +70,4 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 		return super.attackEntityFrom(source, amount);
 	}
 
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
-	}
-
 }

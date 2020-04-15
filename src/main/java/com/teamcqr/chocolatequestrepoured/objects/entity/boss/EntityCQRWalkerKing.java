@@ -6,27 +6,24 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningSpiral;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerTornadoAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
-import net.minecraft.entity.ai.EntityAIOpenDoor;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.effect.EntityLightningBolt;
+import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
@@ -39,9 +36,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -52,43 +49,26 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private int borderLightning = 20;
 	private boolean active = false;
 	private int activationCooldown = 80;
-
-	public EntityCQRWalkerKing(World world) {
-		this(world, 1);
-	}
+	private int dragonAttackCooldown = 0;
 	
-	public EntityCQRWalkerKing(World worldIn, int size) {
-		super(worldIn, size);
+	public EntityCQRWalkerKing(World worldIn) {
+		super(worldIn);
 		
 		this.bossInfoServer.setColor(Color.PURPLE);
 		this.bossInfoServer.setCreateFog(true);
 		this.bossInfoServer.setDarkenSky(true);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
 		this.bossInfoServer.setPlayEndBossMusic(true);
+		
+		this.experienceValue = 200;
 	}
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(4, new EntityAIOpenDoor(this, true));
-		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		//Spells
-		this.tasks.addTask(6, new EntityAIWalkerIllusions(this));
-		
-		this.tasks.addTask(7, new BossAIWalkerLightningCircles(this));
-		this.tasks.addTask(8, new BossAIWalkerLightningSpiral(this));
-		//normal combat
-		this.tasks.addTask(9, new EntityAIAttackRanged(this));
-		this.tasks.addTask(10, new EntityAIBackstab(this));
-		this.tasks.addTask(11, new EntityAIAttack(this));
-		
-		//Low priority stuff
-		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
-
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		super.initEntityAI();
+		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 400, 40));
+		this.tasks.addTask(15, new BossAIWalkerTornadoAttack(this));
+		this.tasks.addTask(16, new BossAIWalkerLightningCircles(this));
+		this.tasks.addTask(17, new BossAIWalkerLightningSpiral(this));
 	}
 	
 	@Override
@@ -97,9 +77,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
 
-	
 	@Override
 	public void onLivingUpdate() {
+		if(dragonAttackCooldown > 0) {
+			dragonAttackCooldown--;
+		}
 		if(fallDistance > 12) {
 			BlockPos teleportPos = null;
 			boolean teleport = getAttackTarget() != null || getHomePositionCQR() != null;
@@ -161,7 +143,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
-		this.heal(2F);
+		this.heal(1F);
 	}
 
 	@Override
@@ -169,7 +151,75 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
 			amount *= 2;
 		}
+		
+		handleActivation();
+
+		if(source.getTrueSource() != null && !world.isRemote) {
+			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+			if(resLoc != null) {
+				// Start IceAndFire compatibility
+				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				if (flag) {
+					amount /= 2;
+				}
+				// End IceAndFire compatibility
+				
+				//If we are attacked by a dragon: KILL IT
+				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
+					dragonAttackCooldown = 20;
+					handleAttackedByDragon(source.getTrueSource());
+				}
+			}
+		}
+		
 		return super.attackEntityFrom(source, amount);
+	}
+	
+	private void handleAttackedByDragon(Entity dragon) {
+		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /*&& (getRNG().nextInt(100) +1) > 95*/) {
+			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
+				dragon.getControllingPassenger().dismountRidingEntity();
+				//((EntityLiving)dragon).setAttackTarget((EntityLivingBase) dragon.getControllingPassenger());
+				/*if(dragon instanceof EntityTameable) {
+					try {
+						((EntityTameable)dragon).setOwnerId(null);
+					} catch(NullPointerException ex) {
+						
+					}
+					try {
+						((EntityTameable)dragon).setTamedBy(null);
+					} catch(NullPointerException ex) {
+						
+					}
+					((EntityTameable)dragon).setTamed(false);
+				}*/
+			}
+		}
+		
+		//KILL IT!!!
+		int lightningCount = 6 + getRNG().nextInt(3);
+		double angle = 360 / lightningCount;
+		double dragonSize = dragon.width > dragon.height ? dragon.width : dragon.height;
+		Vec3d v = new Vec3d(3 + (3 * dragonSize),0,0);
+		for(int i = 0; i < lightningCount; i++) {
+			Vec3d p = VectorUtil.rotateVectorAroundY(v, i * angle);
+			int dY = -3 + getRNG().nextInt(7);
+			EntityColoredLightningBolt clb = new EntityColoredLightningBolt(world, dragon.posX + p.x, dragon.posY + dY, dragon.posZ + p.z, false, false, 1F, 0.00F, 0.0F, 0.4F);
+			world.spawnEntity(clb);
+		}
+		dragon.attackEntityFrom(DamageSource.MAGIC, 10F);
+	}
+
+	private void handleActivation() {
+		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
+			active = true;
+			activationCooldown = 80;
+			world.getWorldInfo().setCleanWeatherTime(0);
+			world.getWorldInfo().setRainTime(400);
+			world.getWorldInfo().setThunderTime(200);
+			world.getWorldInfo().setRaining(true);
+			world.getWorldInfo().setThundering(true);
+		}
 	}
 	
 	@Override
@@ -184,24 +234,12 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		
 		float dmg = amount;
 		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			 dmg *= 0.75F;
+			 dmg *= 0.5F;
 		}
 		
-		if(!world.isRemote && !world.getWorldInfo().isThundering()) {
-			active = true;
-			activationCooldown = 80;
-			world.getWorldInfo().setCleanWeatherTime(0);
-			world.getWorldInfo().setRainTime(400);
-			world.getWorldInfo().setThunderTime(200);
-			world.getWorldInfo().setRaining(true);
-			world.getWorldInfo().setThundering(true);
-		}
+		handleActivation();
+		
 		return super.attackEntityFrom(source, dmg, sentFromPart);
-	}
-	
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
 	}
 	
 	@Override
@@ -227,21 +265,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.WALKERS;
-	}
-
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 	
 	@Override
@@ -293,18 +316,53 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
+	protected void onDeathUpdate() {
+		super.onDeathUpdate();
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+        {
+            if (this.deathTicks > 150 && this.deathTicks % 5 == 0)
+            {
+                this.dropExperience(MathHelper.floor((float)50F));
+            }
+        }
+	}
+	
+	@Override
+	protected void onFinalDeath() {
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+        {
+            this.dropExperience(MathHelper.floor((float)1200));
+        }
+	}
+	
+	@Override
 	protected boolean usesEnderDragonDeath() {
 		return true;
 	}
 
 	@Override
 	protected boolean doesExplodeOnDeath() {
-		return true;
+		return false;
 	}
 	
 	@Override
 	protected EnumParticleTypes getDeathAnimParticles() {
 		return EnumParticleTypes.EXPLOSION_HUGE;
 	}
+	
+	@Override
+	protected int getExperiencePoints(EntityPlayer player) {
+		return super.getExperiencePoints(player);
+	}
+	
+	private void dropExperience(int p_184668_1_)
+    {
+        while (p_184668_1_ > 0)
+        {
+            int i = EntityXPOrb.getXPSplit(p_184668_1_);
+            p_184668_1_ -= i;
+            this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, i));
+        }
+    }
 	
 }

@@ -4,11 +4,13 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -388,6 +390,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.isCoverBlockEnabled()) {
+			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				int startX = this.toGenerate.get(structure).getX() - structure.getSize().getX() / 3 - CQRConfig.general.supportHillWallSize / 2;
 				int startZ = this.toGenerate.get(structure).getZ() - structure.getSize().getZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
@@ -399,11 +402,12 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 					for (int iZ = startZ; iZ <= endZ; iZ++) {
 						BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
 						if (!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
-							world.setBlockState(pos, this.dungeon.getCoverBlock().getDefaultState());
+							stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null));
 						}
 					}
 				}
 			}
+			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 	}
 }

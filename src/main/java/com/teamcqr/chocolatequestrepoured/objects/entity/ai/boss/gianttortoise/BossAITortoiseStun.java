@@ -6,9 +6,9 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 
-public class BossAIStunTurtle extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 
-	public BossAIStunTurtle(EntityCQRGiantTortoise entity) {
+	public BossAITortoiseStun(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
 	

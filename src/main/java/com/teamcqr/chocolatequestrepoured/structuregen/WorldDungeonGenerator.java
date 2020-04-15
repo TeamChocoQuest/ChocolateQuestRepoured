@@ -39,9 +39,9 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 		Set<DungeonBase> coordinateSpecificDungeons = DungeonGenUtils.getLocSpecDungeonsForChunk(world, chunkX, chunkZ);
 		if (!coordinateSpecificDungeons.isEmpty()) {
 			for (DungeonBase dungeon : coordinateSpecificDungeons) {
-				CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
+				CQRMain.logger.info("Generating dungeon {} at chunkX={}, chunkZ={}", dungeon.getDungeonName(), chunkX, chunkZ);
 				BlockPos pos = dungeon.getLockedPos();
-				dungeon.generate(new BlockPos(pos.getX(), 0, pos.getZ()), world);
+				dungeon.generate(world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return;
 		}
@@ -67,7 +67,7 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 				&& DungeonGenUtils.isFarAwayEnoughFromLocationSpecifics(world, chunkX, chunkZ, dungeonSeparation)) {
 			// Check if there is a village structure nearby
 			int checkDist = 20;
-			if (world.getVillageCollection().getNearestVillage(new BlockPos(chunkX * 16, world.getHeight(chunkX, chunkZ), chunkZ * 16), checkDist) != null) {
+			if (world.getVillageCollection().getNearestVillage(new BlockPos(chunkX << 4, world.getActualHeight() >> 1, chunkZ << 4), checkDist) != null) {
 				CQRMain.logger.warn("Tried to spawn a dungeon in a chunk that was too near at a village, to disable this, lower the check distance in the config");
 				return;
 			}
@@ -75,20 +75,22 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 			Random rand = new Random(getSeed(world, chunkX, chunkZ));
 
 			// Overall dungeon spawn chance
-			if (DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rand) || CQRConfig.general.overallDungeonChance >= 100) {
+			if (DungeonGenUtils.PercentageRandom(CQRConfig.general.overallDungeonChance, rand)) {
 				Set<DungeonBase> possibleDungeons = DungeonRegistry.getInstance().getDungeonsForChunk(world, chunkX, chunkZ, behindWall);
 
 				if (!possibleDungeons.isEmpty()) {
 					int maxWeight = 0;
 					for (DungeonBase t : possibleDungeons) {
-						maxWeight += t.getSpawnChance();
+						maxWeight += t.getWeight();
 					}
 					double d = rand.nextDouble() * maxWeight;
 					for (DungeonBase dungeon : possibleDungeons) {
-						d -= dungeon.getSpawnChance();
+						d -= dungeon.getWeight();
 						if (d <= 0) {
-							CQRMain.logger.info("Generating dungeon " + dungeon.getDungeonName() + " at chunkX=" + chunkX + ", chunkZ=" + chunkZ);
-							dungeon.generate(new BlockPos(chunkX * 16 + 1, 0, chunkZ * 16 + 1), world);
+							if (DungeonGenUtils.PercentageRandom(dungeon.getChance(), rand)) {
+								CQRMain.logger.info("Generating dungeon {} at chunkX={}, chunkZ={}", dungeon.getDungeonName(), chunkX, chunkZ);
+								dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8);
+							}
 							return;
 						}
 					}

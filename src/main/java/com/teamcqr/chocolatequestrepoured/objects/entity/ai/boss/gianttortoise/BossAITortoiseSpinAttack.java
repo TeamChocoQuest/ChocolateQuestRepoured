@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
-import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise.ETortoiseAnimState;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -9,7 +8,7 @@ import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 
-public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	private Vec3d movementVector;
 	
@@ -23,7 +22,7 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 	
 	static final int MIN_DISTANCE_TO_BEGIN_SPIN = 16; 
 
-	public AISpinAttackTurtle(EntityCQRGiantTortoise entity) {
+	public BossAITortoiseSpinAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
 		//setMutexBits(8);
 	}
@@ -151,7 +150,6 @@ public class AISpinAttackTurtle extends AnimationAI<EntityCQRGiantTortoise> {
 		this.getBoss().setSpinning(false);
 		this.getBoss().setReadyToSpin(true);
 		this.getBoss().setCanBeStunned(true);
-		this.getBoss().setCurrentAnimation(ETortoiseAnimState.NONE);
 		cooldown = COOLDOWN;
 		if(!(getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead)) {
 			cooldown /= 3;

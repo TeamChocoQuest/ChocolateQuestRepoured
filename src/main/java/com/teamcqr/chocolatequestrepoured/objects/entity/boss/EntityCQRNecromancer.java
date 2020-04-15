@@ -7,17 +7,10 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIBlindTargetSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIVampiricSpell;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -26,12 +19,9 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 
 public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements ISummoner {
@@ -40,37 +30,17 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	protected List<EntityFlyingSkullMinion> summonedSkulls = new ArrayList<>();
 
 	public EntityCQRNecromancer(World worldIn) {
-		this(worldIn, 1);
-	}
-
-	public EntityCQRNecromancer(World worldIn, int size) {
-		super(worldIn, size);
-
-		this.bossInfoServer.setColor(Color.RED);
-		this.bossInfoServer.setCreateFog(false);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.setSize(0.6F, 1.8F);
+		super(worldIn);
 	}
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-
-		this.tasks.addTask(9, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 2, 2, new Vec3d(0, 0, 0)));
-		this.tasks.addTask(9, new EntityAISummonMinionSpell(this, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
-		this.tasks.addTask(8, new EntityAIBlindTargetSpell(this));
-		this.tasks.addTask(6, new EntityAIFangAttack(this));
-		this.tasks.addTask(10, new EntityAIVampiricSpell(this));
-		
-		this.tasks.addTask(11, new EntityAIAttackRanged(this));
-		this.tasks.addTask(12, new EntityAIAttack(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
-
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		super.initEntityAI();
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 400, 40, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 2, 2, new Vec3d(0, 0, 0)));
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 400, 40, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
+		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 400, 40, 40));
+		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 400, 40));
+		this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 400, 40));
 	}
 
 	@Override
@@ -184,11 +154,6 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
 	}
 	
 }

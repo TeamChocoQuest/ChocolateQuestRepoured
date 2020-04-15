@@ -1,8 +1,10 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spellsTest;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -32,7 +34,7 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 	public void addSpell(int priority, IEntityAISpell spell) {
 		this.spells.add(new SpellEntry(priority, spell));
 		if (this.spells.size() >= 2 && this.spells.get(this.spells.size() - 2).priority > priority) {
-			this.spells.sort(SORTER);
+			this.spells.sort(EntityAISpellHandler.SORTER);
 		}
 	}
 
@@ -98,6 +100,19 @@ public class EntityAISpellHandler extends AbstractCQREntityAI {
 	@Override
 	public void updateTask() {
 		this.activeSpell.updateTask();
+	}
+
+	@Nullable
+	public IEntityAISpell getActiveSpell() {
+		return this.activeSpell;
+	}
+
+	public boolean isSpellCharging() {
+		return this.activeSpell != null && this.activeSpell.isCharging();
+	}
+
+	public boolean isSpellCasting() {
+		return this.activeSpell != null && this.activeSpell.isCasting();
 	}
 
 	private static class SpellEntry {

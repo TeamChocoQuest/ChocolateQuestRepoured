@@ -1,149 +1,104 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
-import java.util.HashSet;
-
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.entity.MoverType;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-public class EntityBubble extends EntityLiving {
+public class EntityBubble extends Entity {
+
+	private static final int FLY_TIME_MAX = 160;
 
 	private int flyTicks = 0;
-	private int riderLessTicks = 0;
-
-	protected static final int FLY_TIME_MAX = 140;
-	public static final float BASE_SIZE = 0.5F;
-	
-	protected static final DataParameter<Float> PASSENGER_HEIGHT = EntityDataManager.<Float>createKey(EntityBubble.class, DataSerializers.FLOAT);
 
 	public EntityBubble(World worldIn) {
 		super(worldIn);
-		setSize(BASE_SIZE, BASE_SIZE);
+		this.isImmuneToFire = true;
+		this.setNoGravity(true);
 	}
 
 	@Override
-	public Iterable<ItemStack> getArmorInventoryList() {
-		return new HashSet<ItemStack>();
-	}
-
-	@Override
-	public ItemStack getItemStackFromSlot(EntityEquipmentSlot slotIn) {
-		return ItemStack.EMPTY;
-	}
-
-	@Override
-	public void setItemStackToSlot(EntityEquipmentSlot slotIn, ItemStack stack) {
+	protected void entityInit() {
 
 	}
 
 	@Override
-	public EnumHandSide getPrimaryHand() {
-		return EnumHandSide.LEFT;
+	public void onUpdate() {
+		super.onUpdate();
+
+		if (!this.world.isRemote) {
+			if (!this.isBeingRidden() || this.isInLava() || (this.collidedVertically && !this.onGround) || this.flyTicks > FLY_TIME_MAX) {
+				if (this.isBeingRidden()) {
+					Entity entity = this.getPassengers().get(0);
+					entity.dismountRidingEntity();
+					entity.setPositionAndUpdate(this.posX, this.posY + 0.5D * (double) (this.height - entity.height), this.posZ);
+				}
+				this.setDead();
+				return;
+			}
+
+			this.flyTicks++;
+		}
+
+		this.move(MoverType.SELF, 0.0D, 0.05D, 0.0D);
 	}
-	
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		flyTicks += 5;
-		return super.attackEntityFrom(source, amount);
+		this.flyTicks += 40;
+		return true;
 	}
-	
+
+	@Override
+	public boolean canBeCollidedWith() {
+		return true;
+	}
+
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+		this.flyTicks = compound.getInteger("flyTicks");
+	}
+
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
+		compound.setInteger("flyTicks", this.flyTicks);
+	}
+
+	@Override
+	public double getMountedYOffset() {
+		if (this.isBeingRidden()) {
+			Entity entity = this.getPassengers().get(0);
+			return 0.5D * (double) (this.height - entity.height) - entity.getYOffset();
+		}
+		return 0.0D;
+	}
+
+	@Override
+	protected void addPassenger(Entity passenger) {
+		super.addPassenger(passenger);
+		float size = Math.max(passenger.width, passenger.height) + 0.1F;
+		this.setSize(size, size);
+	}
+
+	@Override
+	protected boolean canFitPassenger(Entity passenger) {
+		return !this.isBeingRidden();
+	}
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false;
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
+	}
+
 	@Override
 	public boolean shouldDismountInWater(Entity rider) {
 		return false;
-	}
-	
-	@Override
-	public boolean shouldRiderSit() {
-		return true;
-	}
-	
-	@Override
-	public boolean canBePushed() {
-		return true;
-	}
-	
-	@Override
-	public boolean getIsInvulnerable() {
-		return true;
-	}
-
-	@Override
-	public boolean hasNoGravity() {
-		return true;
-	}
-	
-	@Override
-	public void onLivingUpdate() {
-		if(getLowestRidingEntity() == null || getPassengers().isEmpty()) {
-			setDead();
-			return;
-		}
-		super.onLivingUpdate();
-
-		this.motionX = 0;
-		this.motionY = 0;
-		this.motionZ = 0;
-
-		flyTicks++;
-
-		if (isInLava() || !isBeingRidden() || getLowestRidingEntity() == null) {
-			riderLessTicks++;
-			if(riderLessTicks >= 20) {
-				setDead();
-				return;
-			}
-		}
-
-		Material mat = world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + getLowestRidingEntity().height), MathHelper.floor(posZ))).getMaterial();
-
-		if ((mat == Material.AIR) || (mat.isLiquid())) {
-			motionY = 0.05D;
-		}
-		if ((flyTicks >= FLY_TIME_MAX) || ((getLowestRidingEntity().collidedVertically) && (!getPassengers().get(0).onGround))) {
-			setDead();
-			return;
-		}
-	}
-	
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-
-		this.dataManager.register(PASSENGER_HEIGHT, 0F);
-	}
-	
-	@Override
-	protected void addPassenger(Entity passenger) {
-		if(getPassengers().size() > 1) {
-			return;
-		}
-		this.dataManager.set(PASSENGER_HEIGHT, passenger.height);
-		float size = passenger.height > passenger.width ? passenger.height : passenger.width;
-		this.resize(size / BASE_SIZE);
-		super.addPassenger(passenger);
-	}
-	
-	public float getPassengerHeight() {
-		return this.dataManager.get(PASSENGER_HEIGHT);
-	}
-	
-	@Override
-	public double getMountedYOffset() {
-		return 0;//this.height /4D;
-	}
-	
-	public void resize(float scale) {
-		this.setSize(this.width * scale, this.height * scale);
 	}
 
 }

@@ -6,13 +6,13 @@ import net.ilexiconn.llibrary.server.animation.Animation;
 import net.ilexiconn.llibrary.server.animation.AnimationAI;
 import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 
-public class AISwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
+public class BossAITortoiseSwitchStates extends AnimationAI<EntityCQRGiantTortoise> {
 
 	protected EntityCQRGiantTortoise turtle;
 	protected Animation animationIn;
 	protected Animation animationOut;
 	
-	public AISwitchStates(EntityCQRGiantTortoise entity, Animation animIn, Animation animOut) {
+	public BossAITortoiseSwitchStates(EntityCQRGiantTortoise entity, Animation animIn, Animation animOut) {
 		super(entity);
 		setMutexBits(8);
 		this.turtle = entity;

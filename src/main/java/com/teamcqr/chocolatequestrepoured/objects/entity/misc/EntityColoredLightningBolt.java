@@ -44,6 +44,7 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 	 */
 	public EntityColoredLightningBolt(World worldIn, double x, double y, double z, boolean hitEntities, boolean spreadFire, float red, float green, float blue, float alpha) {
 		super(worldIn, x, y, z, true);
+		this.isImmuneToFire = true;
 		this.lightningState = 2;
 		this.boltLivingTime = this.rand.nextInt(3) + 1;
 		this.hitEntities = hitEntities;
@@ -67,6 +68,11 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 				}
 			}
 		}
+	}
+
+	@Override
+	public boolean shouldRenderInPass(int pass) {
+		return pass == 1;
 	}
 
 	@Override

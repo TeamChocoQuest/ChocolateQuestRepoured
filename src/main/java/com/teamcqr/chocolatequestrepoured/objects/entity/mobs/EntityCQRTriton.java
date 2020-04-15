@@ -48,23 +48,13 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	}
 
 	@Override
-	public boolean canRide() {
+	public boolean canMountEntity() {
 		return false;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
 	}
 	
 	@Override
 	protected float getWaterSlowDown() {
-		return 0;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
+		return 0.0F;
 	}
 
 }

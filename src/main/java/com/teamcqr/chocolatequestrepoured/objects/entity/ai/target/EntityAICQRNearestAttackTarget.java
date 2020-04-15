@@ -71,7 +71,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 			}
 			return this.entity.getEntitySenses().canSee(possibleTarget);
 		}
-		if (!this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
+		if ((this.entity.getFaction() != null && possibleTarget != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
@@ -108,12 +108,14 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 			}
 			return this.entity.getEntitySenses().canSee(possibleTarget);
 		}
-		if (!this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
+		if ((this.entity.getFaction() != null && possibleTarget != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
+		/*
 		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
 			return false;
 		}
+		*/
 		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}

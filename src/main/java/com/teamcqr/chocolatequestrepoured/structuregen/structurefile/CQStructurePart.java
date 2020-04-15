@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
@@ -74,8 +75,8 @@ public class CQStructurePart extends Template {
 			List<Template.BlockInfo> list = new ArrayList<>();
 			List<Template.BlockInfo> list1 = new ArrayList<>();
 			List<Template.BlockInfo> list2 = new ArrayList<>();
-			BlockPos blockpos1 = new BlockPos(Math.min(startPos.getX(), blockpos.getX()), Math.min(startPos.getY(), blockpos.getY()), Math.min(startPos.getZ(), blockpos.getZ()));
-			BlockPos blockpos2 = new BlockPos(Math.max(startPos.getX(), blockpos.getX()), Math.max(startPos.getY(), blockpos.getY()), Math.max(startPos.getZ(), blockpos.getZ()));
+			BlockPos blockpos1 = DungeonGenUtils.getMinPos(startPos, blockpos);
+			BlockPos blockpos2 = DungeonGenUtils.getMaxPos(startPos, blockpos);
 			this.setSize(size);
 
 			for (BlockPos.MutableBlockPos blockpos$mutableblockpos : BlockPos.getAllInBoxMutable(blockpos1, blockpos2)) {

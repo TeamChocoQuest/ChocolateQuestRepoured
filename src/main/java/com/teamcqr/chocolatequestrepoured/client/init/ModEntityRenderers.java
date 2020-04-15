@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRWasp;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderWalkerTornado;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
@@ -61,6 +62,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLight
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerTornado;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRBoarman;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDummy;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRDwarf;
@@ -137,6 +139,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, renderManager -> new RenderBubble(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, renderManager -> new RenderCQRWasp(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, renderManager -> new RenderWalkerTornado(renderManager));
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}

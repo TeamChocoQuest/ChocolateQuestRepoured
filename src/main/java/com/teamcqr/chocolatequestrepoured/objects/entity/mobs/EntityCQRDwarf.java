@@ -70,21 +70,6 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	}
 
 	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
-	}
-
-	@Override
 	public float getEyeHeight() {
 		return this.height * 0.85F;
 	}
