@@ -11,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 /**
@@ -30,16 +29,10 @@ public class ClassicNetherCity extends DungeonBase {
 	private double bridgeSizeMultiplier = 1.2D;
 	// private boolean singleAirPocketsForHouses = false;
 	private boolean specialUseForCentralBuilding = false;
-	private boolean centralSpawnerIsSingleUse = true;
-	private boolean spawnersAboveBuildings = true;
-	private boolean spawnersAreSingleUse = true;
 	private boolean makeSpaceForBuildings = true;
 	private Block bridgeBlock = Blocks.NETHER_BRICK;
 	private Block floorBlock = Blocks.LAVA;
 	private Block airBlockForPocket = Blocks.AIR;
-
-	private String spawnerMobName = "minecraft:ghast";
-	private String centralSpawnerMobName = "minecraft:wither_boss";
 
 	protected File buildingFolder;
 	protected File centralBuildingsFolder;
@@ -59,14 +52,8 @@ public class ClassicNetherCity extends DungeonBase {
 		this.heightY = PropertyFileHelper.getIntProperty(prop, "height", 40);
 
 		// singleAirPocketsForHouses = PropertyFileHelper.getBooleanProperty(prop, "singleAirPocketsForHouses", false);
-		this.spawnersAboveBuildings = PropertyFileHelper.getBooleanProperty(prop, "spawnersAboveBuildings", true);
 		this.makeSpaceForBuildings = PropertyFileHelper.getBooleanProperty(prop, "createAirPocket", true);
 		this.specialUseForCentralBuilding = PropertyFileHelper.getBooleanProperty(prop, "centralBuildingIsSpecial", true);
-		this.spawnersAreSingleUse = PropertyFileHelper.getBooleanProperty(prop, "spawnersAreSingleUse", false);
-		this.centralSpawnerIsSingleUse = PropertyFileHelper.getBooleanProperty(prop, "centralSpawnerIsSingleUse", true);
-
-		this.spawnerMobName = prop.getProperty("spawnerMob", "minecraft:ghast");
-		this.centralSpawnerMobName = prop.getProperty("centralSpawnerMob", "minecraft:wither_boss");
 
 		this.bridgeSizeMultiplier = PropertyFileHelper.getDoubleProperty(prop, "bridgelengthmultiplier", 1.2D);
 
@@ -142,20 +129,9 @@ public class ClassicNetherCity extends DungeonBase {
 	 * }
 	 */
 
-	public boolean placeSpawnersAboveBuildings() {
-		return this.spawnersAboveBuildings;
-	}
 
 	public boolean centralBuildingIsSpecial() {
 		return this.specialUseForCentralBuilding;
-	}
-
-	public boolean centralSpawnerIsSingleUse() {
-		return this.centralSpawnerIsSingleUse;
-	}
-
-	public boolean spawnersAreSingleUse() {
-		return this.spawnersAreSingleUse;
 	}
 
 	public boolean makeSpaceForBuildings() {
@@ -178,15 +154,4 @@ public class ClassicNetherCity extends DungeonBase {
 		return this.getStructureFileFromDirectory(this.getCentralBuildingFolder());
 	}
 
-	public ResourceLocation getSpawnerMob() {
-		String[] bossString = this.spawnerMobName.split(":");
-
-		return new ResourceLocation(bossString[0], bossString[1]);
-	}
-
-	public ResourceLocation getCentralSpawnerMob() {
-		String[] bossString = this.centralSpawnerMobName.split(":");
-
-		return new ResourceLocation(bossString[0], bossString[1]);
-	}
 }
