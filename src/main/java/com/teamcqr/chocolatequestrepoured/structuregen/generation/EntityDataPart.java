@@ -9,6 +9,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 import javax.annotation.Nullable;
+
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+
 import java.util.*;
 
 public class EntityDataPart implements IStructure {
@@ -49,7 +52,7 @@ public class EntityDataPart implements IStructure {
     }
 
     @Override
-    public void generate(World world)
+    public void generate(World world, ProtectedRegion protectedRegion)
     {
         //Map<BlockPos, IBlockState> map = new HashMap<>();
         for (int x = 0; x < extendedEntities.length; x++) {

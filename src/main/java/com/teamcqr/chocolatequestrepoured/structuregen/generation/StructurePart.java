@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -42,8 +43,8 @@ public class StructurePart implements IStructure {
 	}
 
 	@Override
-	public void generate(World world) {
-		this.part.addBlocksToWorld(world, this.pos, this.settings, this.dungeonChunkX, this.dungeonChunkZ, this.dungeonMobType, this.replaceBanners, this.dungeonBanner, this.hasShield);
+	public void generate(World world, ProtectedRegion protectedRegion) {
+		this.part.addBlocksToWorld(world, this.pos, this.settings, this.dungeonChunkX, this.dungeonChunkZ, this.dungeonMobType, this.replaceBanners, this.dungeonBanner, this.hasShield, protectedRegion);
 	}
 
 	@Override

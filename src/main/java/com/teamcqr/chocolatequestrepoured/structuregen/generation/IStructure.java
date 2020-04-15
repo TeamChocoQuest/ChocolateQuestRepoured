@@ -1,12 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public interface IStructure {
 
-	public void generate(World world);
+	public void generate(World world, ProtectedRegion protectedRegion);
 
 	public boolean canGenerate(World world);
 

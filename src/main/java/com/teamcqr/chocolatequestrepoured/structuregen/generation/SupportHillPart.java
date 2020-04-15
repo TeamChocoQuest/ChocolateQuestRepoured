@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
@@ -46,7 +47,7 @@ public class SupportHillPart implements IStructure {
 	}
 
 	@Override
-	public void generate(World world) {
+	public void generate(World world, ProtectedRegion protectedRegion) {
 		int offsetX = this.partStartX - this.startPos.getX();
 		int offsetZ = this.partStartZ - this.startPos.getZ();
 		Perlin3D p = new Perlin3D(world.getSeed(), this.wallSize, this.rand);

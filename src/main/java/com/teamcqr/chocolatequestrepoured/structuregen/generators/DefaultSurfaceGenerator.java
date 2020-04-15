@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -139,6 +140,11 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

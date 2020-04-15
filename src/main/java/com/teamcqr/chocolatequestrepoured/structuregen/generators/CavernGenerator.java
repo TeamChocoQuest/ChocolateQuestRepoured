@@ -7,6 +7,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -247,6 +248,11 @@ public class CavernGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// MAKES NO SENSE FOR A CAVE
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

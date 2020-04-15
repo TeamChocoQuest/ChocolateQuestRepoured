@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -22,7 +24,7 @@ public class LightPart implements IStructure {
 	}
 
 	@Override
-	public void generate(World world) {
+	public void generate(World world, ProtectedRegion protectedRegion) {
 		for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(this.startPos, this.endPos)) {
 			BlockPos pos = mutablePos.toImmutable();
 			world.checkLight(pos);
