@@ -1,24 +1,27 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Properties;
 
 import javax.annotation.Nonnull;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
 import net.minecraft.world.EnumDifficulty;
-import net.minecraftforge.common.util.Constants;
 
 public class CQRFaction {
 
@@ -167,35 +170,44 @@ public class CQRFaction {
 			Thread t = new Thread(new Runnable() {
 				@Override
 				public void run() {
-					File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), CQRFaction.this.getName() + ".nbt");
-					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(file);
-					if (root != null) {
-						root.setString("type", "faction");
-						root.setString("name", CQRFaction.this.name);
-						root.setBoolean("staticreputation", CQRFaction.this.isRepuStatic());
-						root.setString("defaultrelation", CQRFaction.this.getDefaultReputation().toString());
-						root.setInteger("repuchangekillally", CQRFaction.this.getRepuAllyKill());
-						root.setInteger("repuchangekillmember", CQRFaction.this.getRepuMemberKill());
-						root.setInteger("repuchangekillenemy", CQRFaction.this.getRepuEnemyKill());
-						NBTTagCompound relationInfo = new NBTTagCompound();
-						if (relationInfo.hasKey("allies")) {
-							relationInfo.removeTag("allies");
+					File file = FileIOUtil.getOrCreateFile(folder.getAbsolutePath(), CQRFaction.this.getName() + ".properties");
+					Properties prop = new Properties();
+					try (InputStream inputStream = new FileInputStream(file)) {
+						prop.load(inputStream);
+					} catch (IOException e) {
+						CQRMain.logger.error("Failed to read file" + file.getName(), e);
+						return;
+					}
+					prop.setProperty(ConfigKeys.FACTION_NAME_KEY, CQRFaction.this.name);
+					prop.setProperty(ConfigKeys.FACTION_STATIC_REPUTATION_KEY, Boolean.toString(CQRFaction.this.isRepuStatic()));
+					prop.setProperty(ConfigKeys.FACTION_REPU_DEFAULT, CQRFaction.this.getDefaultReputation().toString());
+					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, Integer.toString(CQRFaction.this.getRepuAllyKill()));
+					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, Integer.toString(CQRFaction.this.getRepuMemberKill()));
+					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(CQRFaction.this.getRepuEnemyKill()));
+					String allies = "";
+					for (CQRFaction af : CQRFaction.this.allies) {
+						if(!allies.isEmpty()) {
+							allies += ", ";
 						}
-						NBTTagList allyTag = FileIOUtil.getOrCreateTagList(relationInfo, "allies", Constants.NBT.TAG_STRING);
-						for (CQRFaction af : CQRFaction.this.allies) {
-							allyTag.appendTag(new NBTTagString(af.getName()));
+						allies += af.getName();
+					}
+					prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, allies);
+					String enemies = "";
+					for (CQRFaction ef : CQRFaction.this.enemies) {
+						if(!enemies.isEmpty()) {
+							enemies += ", ";
 						}
-						if (relationInfo.hasKey("enemies")) {
-							relationInfo.removeTag("enemies");
-						}
-						NBTTagList enemyTag = FileIOUtil.getOrCreateTagList(relationInfo, "enemies", Constants.NBT.TAG_STRING);
-						for (CQRFaction ef : CQRFaction.this.enemies) {
-							enemyTag.appendTag(new NBTTagString(ef.getName()));
-						}
-						relationInfo.setTag("allies", allyTag);
-						relationInfo.setTag("enemies", enemyTag);
-						root.setTag("relations", relationInfo);
-						FileIOUtil.saveNBTCompoundToFile(root, file);
+						enemies += ef.getName();
+					}
+					prop.setProperty(ConfigKeys.FACTION_ENEMIES_KEY, enemies);
+					
+					//Save file
+					try {
+						OutputStream out = new FileOutputStream(file);
+						prop.store(out, "saved faction data");
+					} catch(IOException ex) {
+						CQRMain.logger.error("Failed to write to file" + file.getName(), ex);
+						return;
 					}
 				}
 			});
