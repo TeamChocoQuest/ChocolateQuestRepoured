@@ -169,5 +169,44 @@ public class FileIOUtil {
 
 		return nbtFileFilter;
 	}
+	
+	private static FilenameFilter propFileFilter;
+	
+	public static FilenameFilter getPropertiesFileFilter() {
+		if (propFileFilter == null) {
+			propFileFilter = new FilenameFilter() {
+
+				String[] fileExtensions = new String[] { "prop", "properties" };
+
+				@Override
+				public boolean accept(File file, String var2) {
+					if (file != null) {
+						if (file.isDirectory()) {
+							return true;
+						}
+
+						String fileName = file.getName();
+						int var3 = fileName.lastIndexOf(46);
+						if (var3 > 0 && var3 < fileName.length() - 1) {
+							String var4 = fileName.substring(var3 + 1).toLowerCase();
+							String[] var5 = this.fileExtensions;
+							int var6 = var5.length;
+
+							for (int var7 = 0; var7 < var6; ++var7) {
+								String var8 = var5[var7];
+								if (var4.equals(var8)) {
+									return true;
+								}
+							}
+						}
+					}
+
+					return false;
+				}
+			};
+		}
+
+		return propFileFilter;
+	}
 
 }
