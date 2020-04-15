@@ -819,13 +819,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		return this.defaultFactionInstance;
 	}
-
+	@Nullable
 	public CQRFaction getFaction() {
-		if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
-			this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
-		}
 		if (this.hasLeader()) {
 			return FactionRegistry.instance().getFactionOf(this.getLeader());
+		}
+		if (this.factionInstance == null && this.factionName != null && !this.factionName.isEmpty()) {
+			this.factionInstance = FactionRegistry.instance().getFactionInstance(this.factionName);
 		}
 		if (this.factionInstance != null) {
 			return this.factionInstance;
