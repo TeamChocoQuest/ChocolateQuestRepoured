@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 import java.util.List;
 
 import com.google.common.base.Predicate;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -96,20 +97,18 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
+		CQRFaction faction = this.entity.getFaction();
 		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
-			if (!this.entity.getFaction().isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
+			if (faction != null && !faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
 				return false;
 			}
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
-			if (!this.entity.isInSightRange(possibleTarget)) {
+		} else {
+			if ((faction != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
 				return false;
 			}
-			return this.entity.getEntitySenses().canSee(possibleTarget);
-		}
-		if ((this.entity.getFaction() != null && possibleTarget != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
-			return false;
 		}
 		/*
 		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
