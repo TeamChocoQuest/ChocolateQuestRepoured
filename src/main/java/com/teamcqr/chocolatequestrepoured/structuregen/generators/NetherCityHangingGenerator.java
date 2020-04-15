@@ -223,7 +223,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 		int maxY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getZ(), true);
 		maxY = maxY >= 255 ? 255 : maxY;
-		int chainCount = (maxY - pos.getY()) / 7;
+		int chainCount = (maxY - pos.getY()) / 4;
 		for (int i = 0; i < chainCount; i++) {
 			// Check the direction of the chain
 			int yOffset = i * deltaYPerChainSegment;
