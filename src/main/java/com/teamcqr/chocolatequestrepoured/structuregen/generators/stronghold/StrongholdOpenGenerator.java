@@ -2,19 +2,24 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -43,6 +48,9 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	private int dunX;
 	private int dunZ;
+	
+	private int entranceSizeX = 0;
+	private int entranceSizeZ = 0;
 
 	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
 		super();
@@ -159,6 +167,8 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 			supportBuilder.createSupportHill(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER);
 		}
+		entranceSizeX = structure.getSize().getX();
+		entranceSizeZ = structure.getSize().getX();
 		structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
 
 		/*
@@ -209,7 +219,25 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// MAKES SENSE ONLY FOR ENTRANCE BUILDING
+		if (this.dungeon.isCoverBlockEnabled()) {
+			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+			
+			int startX = x - entranceSizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
+			int startZ = z - entranceSizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
+
+			int endX = x + entranceSizeX + entranceSizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
+			int endZ = z + entranceSizeZ + entranceSizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
+
+			for (int iX = startX; iX <= endX; iX++) {
+				for (int iZ = startZ; iZ <= endZ; iZ++) {
+					BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
+					if (!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
+						stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null));
+					}
+				}
+			}
+			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
+		}
 	}
 
 	public int getDunX() {
