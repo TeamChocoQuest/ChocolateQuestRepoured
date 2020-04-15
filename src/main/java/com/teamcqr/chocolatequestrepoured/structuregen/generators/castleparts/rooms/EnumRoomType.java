@@ -13,6 +13,7 @@ public enum EnumRoomType {
 
 	LIBRARY(false, false, true, false, new Vec3i(1, 1, 1)),
 	POOL(false, false, true, false, new Vec3i(1, 1, 1)),
+	PORTAL(false, false, true, false, new Vec3i(1, 1, 1)),
 
 	WALKABLE_ROOF(false, false, false, false, new Vec3i(1, 1, 1)),
 	WALKABLE_TOWER_ROOF(false, true, false, false, new Vec3i(1, 1, 1)),

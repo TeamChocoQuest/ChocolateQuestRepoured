@@ -31,11 +31,11 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
     protected void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
-        Predicate<Vec3i> northRow = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getZ() == 1) && ((vec3i.getX() >= 1) && (vec3i.getX() <= endX - 1))));
-        Predicate<Vec3i> southRow = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getZ() == endZ - 1) && ((vec3i.getX() >= 1) && (vec3i.getX() <= endX - 1))));
-        Predicate<Vec3i> westRow = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getX() == 1) && ((vec3i.getZ() >= 1) && (vec3i.getZ() <= endZ - 1))));
-        Predicate<Vec3i> eastRow = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getX() == endZ - 1) && ((vec3i.getZ() >= 1) && (vec3i.getZ() <= endZ - 1))));
-        Predicate<Vec3i> water = (vec3i -> ((vec3i.getY() == 0) && (vec3i.getX() > 1) && (vec3i.getX() < endX - 1) && (vec3i.getZ() > 1) && (vec3i.getZ() < endZ - 1)));
+        Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+        Predicate<Vec3i> southRow = (v -> ((v.getY() == 0) && (v.getZ() == endZ - 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
+        Predicate<Vec3i> westRow = (v -> ((v.getY() == 0) && (v.getX() == 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+        Predicate<Vec3i> eastRow = (v -> ((v.getY() == 0) && (v.getX() == endZ - 1) && ((v.getZ() >= 1) && (v.getZ() <= endZ - 1))));
+        Predicate<Vec3i> water = (v -> ((v.getY() == 0) && (v.getX() > 1) && (v.getX() < endX - 1) && (v.getZ() > 1) && (v.getZ() < endZ - 1)));
 
         GenerationTemplate poolRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
         poolRoomTemplate.addRule(northRow, Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
