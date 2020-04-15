@@ -4,12 +4,13 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISpinAttackTurtle;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.AISwitchStates;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIHealingTurtle;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAIStunTurtle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMoveToLeader;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSpinAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseStun;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSwimming;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseSwitchStates;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -28,7 +29,6 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -44,19 +44,16 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
-import net.minecraft.world.BossInfo.Overlay;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 
-	private static final DataParameter<Integer> ANIM_STATE = EntityDataManager.<Integer>createKey(EntityCQRGiantTortoise.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IN_SHELL = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> IN_SHELL_BYPASS = EntityDataManager.<Boolean>createKey(EntityCQRGiantTortoise.class, DataSerializers.BOOLEAN);
 	
 	protected EntityCQRGiantTortoisePart[] parts = new EntityCQRGiantTortoisePart[5];
-	protected ETortoiseAnimState currentAnimation = ETortoiseAnimState.NONE;
 
 	static int EAnimStateGlobalID = 0;
 
@@ -95,77 +92,17 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		};
 	//End of Animations
 
-	public enum ETortoiseAnimState {
-		SPIN_UP, SPIN_DOWN, SPIN, MOVE_PARTS_IN, MOVE_PARTS_OUT, WALKING, HEALING, NONE;
-
-		private int id;
-
-		private ETortoiseAnimState() {
-			this.id = EAnimStateGlobalID;
-			EAnimStateGlobalID++;
-		}
-
-		public static ETortoiseAnimState valueOf(int i) {
-			if (i >= values().length) {
-				return NONE;
-			}
-			return values()[i];
-		}
-
-		public int getID() {
-			return this.id;
-		}
-	}
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new AISwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
-		this.tasks.addTask(2, new BossAIStunTurtle(this));
-		this.tasks.addTask(4, new BossAIHealingTurtle(this));
-		this.tasks.addTask(6, new AISpinAttackTurtle(this));
-		this.tasks.addTask(15, new EntityAIMoveToLeader(this) {
-			@Override
-			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
-					return true;
-				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-			
-			@Override
-			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
-					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-		});
-		this.tasks.addTask(20, new EntityAIMoveToHome(this) {
-			@Override
-			public boolean shouldExecute() {
-				if(super.shouldExecute() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
-					return true;
-				} else if(super.shouldExecute() && !isHealing && !isStunned() && !isSpinning()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-			
-			@Override
-			public boolean shouldContinueExecuting() {
-				if(super.shouldContinueExecuting() && !((EntityCQRGiantTortoise) entity).isInShell() && !isHealing && !isStunned() && !isSpinning()) {
-					return true;
-				} else if(super.shouldContinueExecuting() && !isHealing && !isStunned() && !isSpinning()){
-					((EntityCQRGiantTortoise) entity).targetNewState(TARGET_MOVE_OUT);
-				}
-				return false;
-			}
-		});
+		//this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(0, new BossAITortoiseSwimming(this));
+		this.tasks.addTask(1, new BossAITortoiseSwitchStates(this, ANIMATION_MOVE_LEGS_IN, ANIMATION_MOVE_LEGS_OUT));
+		this.tasks.addTask(2, new BossAITortoiseStun(this));
+		this.tasks.addTask(4, new BossAITortoiseHealing(this));
+		this.tasks.addTask(6, new BossAITortoiseSpinAttack(this));
+		this.tasks.addTask(19, new BossAITortoiseMoveToLeader(this));
+		this.tasks.addTask(20, new BossAITortoiseMoveToHome(this));
 		this.tasks.addTask(21, new EntityAIIdleSit(this) {
 			@Override
 			public boolean shouldExecute() {
@@ -182,20 +119,23 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
-	final float baseWidth = 2.0F;
-	final float baseHeight = 1.7F;
+	@Override
+	public float getDefaultWidth() {
+		return 2.0F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 1.7F;
+	}
 
 	@SideOnly(Side.CLIENT)
 	private int animationProgress = 0;
 
 	public EntityCQRGiantTortoise(World worldIn) {
-		super(worldIn, 1);
+		super(worldIn);
 
 		this.bossInfoServer.setColor(Color.GREEN);
-		this.bossInfoServer.setCreateFog(false);
-		this.bossInfoServer.setOverlay(Overlay.PROGRESS);
-
-		this.setSize(this.baseWidth, this.baseHeight);
 
 		for (int i = 0; i < this.parts.length - 1; i++) {
 			this.parts[i] = new EntityCQRGiantTortoisePart(this, "tortoise_leg" + i, 0.7F, 1.1F, false);
@@ -204,7 +144,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.noClip = false;
 		this.setNoGravity(false);
-		this.experienceValue = 150;
+		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
 	}
@@ -213,7 +153,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	protected void entityInit() {
 		super.entityInit();
 
-		this.dataManager.register(ANIM_STATE, ETortoiseAnimState.NONE.getID());
 		this.dataManager.register(IN_SHELL, true);
 		this.dataManager.register(IN_SHELL_BYPASS, false);
 	}
@@ -250,13 +189,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 		}
 		
-		/*
-		if((getAttackTarget() == null || getAttackTarget().isDead) && source.getTrueSource() instanceof EntityLivingBase && source.getTrueSource() != null) {
-			if(!getFaction().isAlly(source.getTrueSource()) && getDistance(source.getTrueSource()) <= 32) {
-				setAttackTarget((EntityLivingBase) source.getTrueSource());
-			}
-		}
-		*/
 		if (source.getTrueSource() instanceof EntityLivingBase) {
 			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
 		}
@@ -326,30 +258,12 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return false;
-	}
-
-	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 	}
 
 	@Override
 	public void setSwingingArms(boolean swingingArms) {
 
-	}
-
-	public ETortoiseAnimState getCurrentAnimation() {
-		if (!this.world.isRemote) {
-			return this.currentAnimation;
-		}
-		return ETortoiseAnimState.valueOf(this.dataManager.get(ANIM_STATE));
-		// return ETortoiseAnimState.MOVE_PARTS_OUT;
 	}
 
 	@Override
@@ -376,7 +290,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	private void alignParts() {
 		// Legs
-		Vec3d v = new Vec3d(0, 0, this.baseWidth / 2 + this.baseWidth * 0.1);
+		Vec3d v = new Vec3d(0, 0, this.width / 2 + this.width * 0.1);
 		v = VectorUtil.rotateVectorAroundY(v, this.rotationYawHead);
 
 		float vy = isInShell() || this.getAnimation() == ANIMATION_STUNNED ? 0.1F : 0.5F; 
@@ -433,9 +347,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			boolean blocked = false;
 			if(entityIn instanceof EntityLivingBase) {
 				if(((EntityLivingBase)entityIn).getActiveItemStack().getItem() instanceof ItemShield) {
-					//this.setStunned(true);
-					//this.setSpinning(false);
-					//this.setCanBeStunned(true);
 					if(getRNG().nextBoolean()) {
 						spinsBlocked++;
 					}
@@ -480,11 +391,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	@Override
 	public boolean canBreatheUnderwater() {
 		return true;
-	}
-
-	public void setCurrentAnimation(ETortoiseAnimState newState) {
-		this.currentAnimation = newState;
-		this.dataManager.set(ANIM_STATE, newState.getID());
 	}
 
 	@Override

@@ -1,14 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
-import java.util.Random;
+import java.util.Properties;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.OceanFloorGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.world.World;
@@ -22,38 +21,42 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  */
 public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 
-	public DungeonOceanFloor(File configFile) {
-		super(configFile);
+	public DungeonOceanFloor(String name, Properties prop) {
+		super(name, prop);
 	}
 
-	@Override
-	public IDungeonGenerator getGenerator() {
-		return new OceanFloorGenerator();
-	}
-
-	@Override
-	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		// super.generate(x, z, world, chunk, random);
-
-		File structure = this.pickStructure();
-		CQStructure dungeon = new CQStructure(structure);
-
-		PlacementSettings settings = new PlacementSettings();
-		settings.setMirror(Mirror.NONE);
-		settings.setRotation(Rotation.NONE);
-		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		settings.setIntegrity(1.0F);
-
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, true);
-		// For position locked dungeons, use the positions y
-		if (this.isPosLocked()) {
-			y = this.getLockedPos().getY();
+	public void generate(World world, int x, int z) {
+		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+		int y = 0;
+		for (int ix = 0; ix < 16; ix++) {
+			for (int iz = 0; iz < 16; iz++) {
+				y += this.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, true);
+			}
 		}
+		y /= 256;
+		y -= this.getUnderGroundOffset();
+		y += this.getYOffset();
+		this.generate(world, x, y, z);
+	}
 
-		System.out.println("Placing dungeon: " + this.name);
-		System.out.println("Generating structure " + structure.getName() + " at X: " + x + "  Y: " + y + "  Z: " + z + "  ...");
-		OceanFloorGenerator generator = new OceanFloorGenerator(this, dungeon, settings);
-		generator.generate(world, chunk, x, y, z);
+	@Override
+	public void generate(World world, int x, int y, int z) {
+		File file = this.getStructureFileFromDirectory(this.structureFolderPath);
+
+		if (file != null && file.exists() && file.isFile()) {
+			CQStructure structure = new CQStructure(file);
+			PlacementSettings settings = new PlacementSettings();
+
+			if (this.rotateDungeon()) {
+				settings.setRotation(Rotation.values()[this.random.nextInt(Rotation.values().length)]);
+				settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
+			}
+
+			CQRMain.logger.info("Placing dungeon: {}", this.name);
+			CQRMain.logger.info("Generating structure {} at X: {}  Y: {}  Z: {}  ...", file.getName(), x, y, z);
+			IDungeonGenerator generator = new OceanFloorGenerator(this, structure, settings);
+			generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+		}
 	}
 
 }

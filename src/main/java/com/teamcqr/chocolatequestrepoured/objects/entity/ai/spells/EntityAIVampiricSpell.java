@@ -9,17 +9,17 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
+public class EntityAIVampiricSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MIN_PROJECTILES = 1;
 	protected static final int MAX_PROJECTILES = 5;
 
-	public EntityAIVampiricSpell(AbstractEntityCQR entity) {
-		super(entity);
+	public EntityAIVampiricSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
+		super(entity, true, true, cooldown, chargeUpTicks, 1);
 	}
 
 	@Override
-	protected void castSpell() {
+	public void startCastingSpell() {
 		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
@@ -33,7 +33,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
 
 		for (Vec3d v : velocities) {
 			ProjectileVampiricSpell proj = new ProjectileVampiricSpell(this.entity.world, this.entity);
-			//proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
+			// proj.setVelocity(v.x * 0.5, v.y * 0.5, v.z * 0.5);
 			proj.motionX = v.x * 0.5D;
 			proj.motionY = v.y * 0.5D;
 			proj.motionZ = v.z * 0.5D;
@@ -43,23 +43,38 @@ public class EntityAIVampiricSpell extends AbstractEntityAIUseSpell {
 	}
 
 	@Override
-	protected int getCastingTime() {
-		return 20;
+	protected SoundEvent getStartChargingSound() {
+		return SoundEvents.EVOCATION_ILLAGER_PREPARE_ATTACK;
 	}
 
 	@Override
-	protected int getCastingInterval() {
-		return 160;
+	protected SoundEvent getStartCastingSound() {
+		return SoundEvents.ENTITY_ILLAGER_CAST_SPELL;
 	}
 
 	@Override
-	protected SoundEvent getSpellPrepareSound() {
-		return SoundEvents.BLOCK_PORTAL_TRAVEL;
+	public int getWeight() {
+		return 10;
 	}
 
 	@Override
-	protected ESpellType getSpellType() {
-		return ESpellType.STEAL_HEALTH;
+	public boolean ignoreWeight() {
+		return false;
+	}
+
+	@Override
+	public float getRed() {
+		return 1.0F;
+	}
+
+	@Override
+	public float getGreen() {
+		return 0.0F;
+	}
+
+	@Override
+	public float getBlue() {
+		return 1.0F;
 	}
 
 }

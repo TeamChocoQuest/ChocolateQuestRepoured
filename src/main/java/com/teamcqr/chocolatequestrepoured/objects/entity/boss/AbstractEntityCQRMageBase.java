@@ -11,6 +11,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
@@ -18,18 +19,10 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 	private static final DataParameter<Boolean> IDENTITY_HIDDEN = EntityDataManager.<Boolean>createKey(AbstractEntityCQRMageBase.class, DataSerializers.BOOLEAN);
 
-	public AbstractEntityCQRMageBase(World worldIn, int size) {
-		super(worldIn, size);
-	}
+	public AbstractEntityCQRMageBase(World worldIn) {
+		super(worldIn);
 
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return false;
+		this.bossInfoServer.setColor(Color.RED);
 	}
 
 	@Override
@@ -51,7 +44,7 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	protected void damageEntity(DamageSource damageSrc, float damageAmount) {
 		super.damageEntity(damageSrc, damageAmount);
 
-		if ((this.getHealth() / this.getMaxHealth()) < 0.83) {
+		if ((this.getHealth() / this.getMaxHealth()) < 0.83F) {
 			this.revealIdentity();
 		}
 	}

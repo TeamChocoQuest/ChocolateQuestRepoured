@@ -42,19 +42,4 @@ public class EntityCQROrc extends AbstractEntityCQR {
 		return 3;
 	}
 
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
-	}
-
 }

@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
+import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -56,7 +57,8 @@ public class StructurePart implements IStructure {
 
 		compound.setString("id", "structurePart");
 		compound.setTag("part", this.part.writeToNBT(new NBTTagCompound()));
-		compound.setInteger("rot", this.settings.getRotation().ordinal());
+		compound.setInteger("rotation", this.settings.getRotation().ordinal());
+		compound.setInteger("mirror", this.settings.getMirror().ordinal());
 		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
 		compound.setInteger("dungeonChunkX", this.dungeonChunkX);
 		compound.setInteger("dungeonChunkZ", this.dungeonChunkZ);
@@ -72,7 +74,9 @@ public class StructurePart implements IStructure {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.part = new CQStructurePart();
 		this.part.read(compound.getCompoundTag("part"));
-		this.settings = new PlacementSettings().setRotation(Rotation.values()[compound.getInteger("rot")]);
+		this.settings = new PlacementSettings();
+		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
+		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
 		this.dungeonChunkX = compound.getInteger("dungeonChunkX");
 		this.dungeonChunkZ = compound.getInteger("dungeonChunkZ");

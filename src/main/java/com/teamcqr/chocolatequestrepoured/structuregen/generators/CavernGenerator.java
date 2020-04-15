@@ -1,20 +1,24 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -42,19 +46,15 @@ public class CavernGenerator implements IDungeonGenerator {
 	private int centerZ;
 	private int centerY;
 
-	private BlockPos center;
-
 	private CavernDungeon dungeon;
-	private List<BlockPos> airBlocks = new ArrayList<BlockPos>();
-	private List<BlockPos> floorBlocks = new ArrayList<BlockPos>();
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// DONE: calculate air blocks
 		Perlin3D perlin1 = new Perlin3D(world.getSeed(), 4, new Random());
 		Perlin3D perlin2 = new Perlin3D(world.getSeed(), 32, new Random());
-
-		this.center = new BlockPos(x, y, z);
+		
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 
 		int centerX = this.sizeX / 2;
 		int centerY = this.height / 2;
@@ -89,32 +89,20 @@ public class CavernGenerator implements IDungeonGenerator {
 
 					if (noise < 0.75D) {
 						BlockPos block = new BlockPos(x + iX, y + iY, z + iZ);
-						this.airBlocks.add(block);
+						stateMap.put(block, new ExtendedBlockStatePart.ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
 						if (iY == 0) {
-							this.floorBlocks.add(block.down());
+							stateMap.put(block, new ExtendedBlockStatePart.ExtendedBlockState(dungeon.getFloorBlock().getDefaultState(), null));
 						}
 					}
 				}
 			}
 		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		for (BlockPos bp : this.airBlocks) {
-			// if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getAirBlock())) {
-			if (Block.isEqualTo(this.dungeon.getAirBlock(), Blocks.AIR)) {
-				world.setBlockToAir(bp);
-			} else {
-				world.setBlockState(bp, this.dungeon.getAirBlock().getDefaultState());
-			}
-			// }
-		}
-		for (BlockPos bp : this.floorBlocks) {
-			// if(!Block.isEqualTo(world.getBlockState(bp).getBlock(), this.dungeon.getFloorBlock())) {
-			world.setBlockState(bp, this.dungeon.getFloorBlock().getDefaultState());
-			// }
-		}
+		//Not needed anymore
 	}
 
 	@Override
@@ -125,8 +113,9 @@ public class CavernGenerator implements IDungeonGenerator {
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		BlockPos start = new BlockPos(x, y, z);
-		world.setBlockState(start, Blocks.CHEST.getDefaultState());
-		TileEntityChest chest = (TileEntityChest) world.getTileEntity(start);
+		IBlockState state = Blocks.CHEST.getDefaultState();
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		TileEntityChest chest = (TileEntityChest) Blocks.CHEST.createTileEntity(world, state);
 		int eltID = new Random().nextInt(14) + 4;
 		if (chest != null) {
 			ResourceLocation resLoc = null;
@@ -139,27 +128,36 @@ public class CavernGenerator implements IDungeonGenerator {
 				long seed = WorldDungeonGenerator.getSeed(world, x, z);
 				chest.setLootTable(resLoc, seed);
 			}
+			stateMap.put(start, new ExtendedBlockStatePart.ExtendedBlockState(state, chest.writeToNBT(new NBTTagCompound())));
 		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		BlockPos spawnerPos = new BlockPos(x, y, z);
-
-		SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getMob());
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		
+		IBlockState state = Blocks.MOB_SPAWNER.getDefaultState();
+		TileEntityMobSpawner spawner = (TileEntityMobSpawner)Blocks.MOB_SPAWNER.createTileEntity(world, state);
+		spawner.getSpawnerBaseLogic().setEntityId(dungeon.getMob());
+		spawner.updateContainingBlockInfo();
+		stateMap.put(spawnerPos, new ExtendedBlockStatePart.ExtendedBlockState(state, spawner.writeToNBT(new NBTTagCompound())));
+		
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
-	public void generateTunnel(BlockPos start, BlockPos end, World world) {
-		this.generateTunnel(new Random().nextBoolean(), start, end, world);
+	public void generateTunnel(BlockPos start, BlockPos end, World world, Map<BlockPos, ExtendedBlockState> stateMap) {
+		this.generateTunnel(new Random().nextBoolean(), start, end, world, stateMap);
 	}
 
-	private void generateTunnel(boolean xFirst, BlockPos start, BlockPos target, World world) {
+	private void generateTunnel(boolean xFirst, BlockPos start, BlockPos target, World world, Map<BlockPos, ExtendedBlockState> stateMap) {
 		if (start.getX() == target.getX() && start.getZ() == target.getZ()) {
 			return;
 		} else if (start.getX() == target.getX() && xFirst) {
-			this.generateTunnel(false, start, target, world);
+			this.generateTunnel(false, start, target, world, stateMap);
 		} else if (start.getZ() == target.getZ() && !xFirst) {
-			this.generateTunnel(true, start, target, world);
+			this.generateTunnel(true, start, target, world, stateMap);
 		}
 		/*
 		 * else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) {
@@ -168,7 +166,7 @@ public class CavernGenerator implements IDungeonGenerator {
 		 */
 		else {
 			int v = 0;
-			this.buildTunnelSegment(start, world);
+			this.buildTunnelSegment(start, world, stateMap);
 			if (xFirst) {
 				v = start.getX() < target.getX() ? 1 : -1;
 				if (start.getX() == target.getX()) {
@@ -182,78 +180,64 @@ public class CavernGenerator implements IDungeonGenerator {
 				}
 				start = start.add(0, 0, v);
 			}
-			this.generateTunnel(xFirst, start, target, world);
+			this.generateTunnel(xFirst, start, target, world, stateMap);
 		}
 	}
 
-	private void buildTunnelSegment(BlockPos pos, World world) {
+	private void buildTunnelSegment(BlockPos pos, World world, Map<BlockPos, ExtendedBlockState> stateMap) {
 		Block airBlock = this.dungeon.getAirBlock();
 		Block floorMaterial = this.dungeon.getFloorBlock();
 
-		world.setBlockState(pos, airBlock.getDefaultState());
-		world.setBlockState(pos.down(), airBlock.getDefaultState());
-		world.setBlockState(pos.down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.up(), airBlock.getDefaultState());
+		stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.north(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.north().up(), airBlock.getDefaultState());
+		stateMap.put(pos.north(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.north().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		
+		stateMap.put(pos.north().east(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().east().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().east().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.north().east().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.north().east(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().east().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().east().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.north().east().up(), airBlock.getDefaultState());
+		stateMap.put(pos.north().west(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().west().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.north().west().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.north().west().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.north().west(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().west().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.north().west().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.north().west().up(), airBlock.getDefaultState());
+		stateMap.put(pos.east(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.east().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.east().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.east().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.east(), airBlock.getDefaultState());
-		world.setBlockState(pos.east().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.east().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.east().up(), airBlock.getDefaultState());
+		stateMap.put(pos.south(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.south().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		
+		stateMap.put(pos.south().east(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().east().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().east().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.south().east().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.south(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.south().up(), airBlock.getDefaultState());
+		stateMap.put(pos.south().west(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().west().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.south().west().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.south().west().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 
-		world.setBlockState(pos.south().east(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().east().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().east().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.south().east().up(), airBlock.getDefaultState());
-
-		world.setBlockState(pos.south().west(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().west().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.south().west().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.south().west().up(), airBlock.getDefaultState());
-
-		world.setBlockState(pos.west(), airBlock.getDefaultState());
-		world.setBlockState(pos.west().down(), airBlock.getDefaultState());
-		world.setBlockState(pos.west().down().down(), floorMaterial.getDefaultState());
-		world.setBlockState(pos.west().up(), airBlock.getDefaultState());
+		stateMap.put(pos.west(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.west().down(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
+		stateMap.put(pos.west().down().down(), new ExtendedBlockStatePart.ExtendedBlockState(floorMaterial.getDefaultState(), null));
+		stateMap.put(pos.west().up(), new ExtendedBlockStatePart.ExtendedBlockState(airBlock.getDefaultState(), null));
 	}
 
 	public void setSizeAndHeight(int sX, int sZ, int h) {
 		this.sizeX = sX;
 		this.sizeZ = sZ;
 		this.height = h;
-	}
-
-	public void buildLadder(World world) {
-		System.out.println("Building exit at X: " + this.center.getX() + "  Y: " + this.center.getY() + "  Z: " + this.center.getZ() + "...");
-
-		BlockPos start = this.center.north(this.sizeZ - 2);
-		int y = start.getY();
-		int highestY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(start), start.getX(), start.getZ(), true);
-		while (y <= highestY) {
-			world.setBlockState(start, Blocks.LADDER.getDefaultState());
-
-			start = start.up();
-			y++;
-		}
 	}
 
 	public BlockPos getCenter() {

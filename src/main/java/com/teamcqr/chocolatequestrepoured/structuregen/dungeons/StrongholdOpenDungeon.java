@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
@@ -12,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 /**
  * Copyright (c) 29.04.2019
@@ -42,50 +40,31 @@ public class StrongholdOpenDungeon extends DungeonBase {
 
 	// Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
 
-	public StrongholdOpenDungeon(File configFile) {
-		super(configFile);
-		Properties prop = this.loadConfig(configFile);
-		if (prop != null) {
-			this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");
-			this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
-			this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
-			this.roomFolder = PropertyFileHelper.getFileProperty(prop, "roomFolder", "strongholds/open/rooms");
-			this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "strongholds/open/boss");
+	public StrongholdOpenDungeon(String name, Properties prop) {
+		super(name, prop);
 
-			this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
-			this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 4);
-			this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 4);
-			this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 16);
+		this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");
+		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "strongholds/open/entrance/stairs");
+		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceBuildingFolder", "strongholds/open/entrance/buildings");
+		this.roomFolder = PropertyFileHelper.getFileProperty(prop, "roomFolder", "strongholds/open/rooms");
+		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "strongholds/open/boss");
 
-			this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 17);
-			this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
-			this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
+		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
+		this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 4);
+		this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 4);
+		this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 16);
 
-			this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
+		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 17);
+		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
+		this.roomSizeZ = PropertyFileHelper.getIntProperty(prop, "roomSizeZ", 17);
 
-			this.closeConfigFile();
-		} else {
-			this.registeredSuccessful = false;
-		}
+		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
 	}
 
 	@Override
-	protected void generate(int x, int z, World world, Chunk chunk, Random random) {
-		super.generate(x, z, world, chunk, random);
-
-		int y = DungeonGenUtils.getHighestYAt(chunk, x, z, false);
-		// For position locked dungeons, use the positions y
-		if (this.isPosLocked()) {
-			y = this.getLockedPos().getY();
-		}
-		y += this.getYOffset();
-
-		this.getGenerator().generate(world, chunk, x, y, z);
-	}
-
-	@Override
-	public IDungeonGenerator getGenerator() {
-		return new StrongholdOpenGenerator(this);
+	public void generate(World world, int x, int y, int z) {
+		IDungeonGenerator generator = new StrongholdOpenGenerator(this);
+		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 
 	public File getStairFolder() {

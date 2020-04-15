@@ -30,24 +30,4 @@ public class EntityCQRNPC extends AbstractEntityCQR {
 		return ELootTablesNormal.ENTITY_NPC.getLootTable();
 	}
 
-	@Override
-	public int getTextureCount() {
-		return 1;
-	}
-
-	@Override
-	public boolean canRide() {
-		return true;
-	}
-
-	@Override
-	public EnumCreatureAttribute getCreatureAttribute() {
-		return EnumCreatureAttribute.UNDEFINED;
-	}
-
-	@Override
-	public boolean canOpenDoors() {
-		return true;
-	}
-
 }

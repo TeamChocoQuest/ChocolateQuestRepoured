@@ -1,20 +1,27 @@
 package com.teamcqr.chocolatequestrepoured.factions;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRNPC;
+import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
@@ -61,40 +68,40 @@ public class FactionRegistry {
 
 	private void loadFactionsInConfigFolder() {
 		// DONE: Load factions from files
-		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getNBTFileFilter());
+		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getPropertiesFileFilter());
 		int fileCount = files.length;
 		if (fileCount > 0) {
 			ArrayList<String> fIDs = new ArrayList<>();
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
+			boolean flag = true;
 			for (int i = 0; i < fileCount; i++) {
-				File faction = files[i];
-				NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(faction);
-				if (faction != null && root != null && root.getString("type").equalsIgnoreCase("FACTION")) {
+				File file = files[i];
+				Properties prop = new Properties();
+				try (InputStream inputStream = new FileInputStream(file)) {
+					prop.load(inputStream);
+					flag = true;
+				} catch (IOException e) {
+					CQRMain.logger.error("Failed to load file" + file.getName(), e);
+					flag = false;
+					continue;
+				}
+				if (flag) {
 					List<String> fAlly = new ArrayList<>();
 					List<String> fEnemy = new ArrayList<>();
 					// CQRFaction fTmp =
-					String fName = root.getString("name");
-					int repuChangeAlly = root.getInteger("repuchangekillally");
-					int repuChangeEnemy = root.getInteger("repuchangekillenemy");
-					int repuChangeMember = root.getInteger("repuchangekillmember");
-					EReputationState defRepu = EReputationState.valueOf(root.getString("defaultrelation"));
-					boolean staticRepu = root.getBoolean("staticreputation");
+					String fName = prop.getProperty(ConfigKeys.FACTION_NAME_KEY, "FACTION_NAME");
+					int repuChangeAlly = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, 0);
+					int repuChangeEnemy = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, 0);
+					int repuChangeMember = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, 0);
+					EReputationState defRepu = EReputationState.valueOf(prop.getProperty(ConfigKeys.FACTION_REPU_DEFAULT, EReputationState.NEUTRAL.toString()));
+					boolean staticRepu = PropertyFileHelper.getBooleanProperty(prop, ConfigKeys.FACTION_STATIC_REPUTATION_KEY, false);
 					// Reputation lists
-					NBTTagCompound repuTag = root.getCompoundTag("relations");
-					if (!repuTag.hasNoTags()) {
-						NBTTagList allyTag = FileIOUtil.getOrCreateTagList(repuTag, "allies", Constants.NBT.TAG_STRING);
-						if (!allyTag.hasNoTags()) {
-							for (int j = 0; j < allyTag.tagCount(); j++) {
-								fAlly.add(allyTag.getStringTagAt(j));
-							}
-						}
-						NBTTagList enemyTag = FileIOUtil.getOrCreateTagList(repuTag, "enemies", Constants.NBT.TAG_STRING);
-						if (!enemyTag.hasNoTags()) {
-							for (int j = 0; j < enemyTag.tagCount(); j++) {
-								fEnemy.add(enemyTag.getStringTagAt(j));
-							}
-						}
+					for(String ally : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ALLIES_KEY, new String[] {})) {
+						fAlly.add(ally);
+					}
+					for(String enemy : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ENEMIES_KEY, new String[] {})) {
+						fEnemy.add(enemy);
 					}
 					fIDs.set(i, fName);
 					allyTmp.set(i, fAlly);
@@ -151,6 +158,7 @@ public class FactionRegistry {
 		System.out.println("Default factions loaded and initialized!");
 	}
 
+	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
 		if (entity instanceof EntityTameable) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
