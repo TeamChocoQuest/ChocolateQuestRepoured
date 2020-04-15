@@ -362,8 +362,9 @@ public class CastleRoomSelector {
 
 		while (!unTyped.isEmpty()) {
 			RoomGridCell rootCell = unTyped.get(this.random.nextInt(unTyped.size()));
-			int availableX = this.grid.getContiguousUntypedRoomsX(rootCell.getGridPosition());
-			int availableZ = this.grid.getContiguousUntypedRoomsZ(rootCell.getGridPosition());
+			RoomGrid.Area2D availableCells = grid.getPotentialRoomBuildArea(rootCell.getGridPosition());
+			int availableX = availableCells.sizeX;
+			int availableZ = availableCells.sizeZ;
 
 			EnumRoomType type = this.dungeon.getRandomRoom();
 			int maxX = Math.min(type.getMaxXCells(), availableX);
