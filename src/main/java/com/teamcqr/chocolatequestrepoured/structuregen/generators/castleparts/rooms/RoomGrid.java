@@ -364,6 +364,41 @@ public class RoomGrid {
 		return areas;
 	}
 
+	public Area2D getPotentialRoomBuildArea(RoomGridPosition rootPosition) {
+		int x = 1;
+		int z = 1;
+		boolean incX = true;
+		boolean incZ = true;
+
+		do {
+			if (incX) {
+				++x;
+			}
+			for (int i = 0; i < z; i++) {
+				RoomGridPosition checkPos = rootPosition.move(EnumFacing.EAST, (x - 1)).move(EnumFacing.SOUTH, i);
+				if ((getCellAt(checkPos) == null) || (!getCellAt(checkPos).needsRoomType())) {
+					incX = false;
+					--x;
+					break;
+				}
+			}
+
+			if (incZ) {
+				++z;
+			}
+			for (int i = 0; i < x; i++) {
+				RoomGridPosition checkPos = rootPosition.move(EnumFacing.EAST, i).move(EnumFacing.SOUTH, (z - 1));
+				if ((getCellAt(checkPos) == null) || (!getCellAt(checkPos).needsRoomType())) {
+					incZ = false;
+					--z;
+					break;
+				}
+			}
+		} while (incX || incZ);
+
+		return new Area2D(rootPosition, x, z);
+	}
+
 	@Nullable
 	public Area2D getLargestAreaWhere(ArrayList<RoomGridPosition> floorPositions, Predicate<RoomGridCell> condition) {
 		int largestArea = 0;
@@ -378,7 +413,6 @@ public class RoomGrid {
 				boolean incX = true;
 				boolean incZ = true;
 
-				RoomGridPosition pos = new RoomGridPosition(startPos);
 				do {
 					if (incX) {
 						++x;
