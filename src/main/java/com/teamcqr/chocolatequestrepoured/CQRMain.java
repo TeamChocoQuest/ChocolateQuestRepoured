@@ -27,7 +27,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectionHandler;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -145,7 +145,7 @@ public class CQRMain {
 		EBanners.values();
 
 		// Register event handling for dungeon protection system
-		MinecraftForge.EVENT_BUS.register(ProtectionHandler.getInstance());
+		// MinecraftForge.EVENT_BUS.register(ProtectedRegionManager.getInstance());
 		MinecraftForge.EVENT_BUS.register(ModSerializers.class);
 
 		ModMessages.registerMessages();

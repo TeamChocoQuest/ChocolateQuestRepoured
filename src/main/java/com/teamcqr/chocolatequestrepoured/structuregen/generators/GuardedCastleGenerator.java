@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -410,4 +411,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
+	}
+
 }

@@ -1,250 +1,215 @@
 package com.teamcqr.chocolatequestrepoured.structureprot;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 
-/**
- * Custom type for containing info about a protected region
- * Intended for use by dungeons but can theoretically be anything
- *
- * @author jdawg3636
- *         GitHub: https://github.com/jdawg3636
- *
- * @version 05.01.20
- */
-public class ProtectedRegion implements Serializable {
+public class ProtectedRegion {
 
-    /*
-     * Variables
-     */
+	private final World world;
+	private UUID uuid = MathHelper.getRandomUUID();
+	private BlockPos startPos;
+	private BlockPos endPos;
+	private boolean preventBlockBreaking = false;
+	private boolean preventBlockPlacing = false;
+	private boolean preventExplosions = false;
+	private boolean preventFireSpreading = false;
+	private boolean preventEntitySpawning = false;
+	private boolean isGenerating = true;
+	private final Set<UUID> entityDependencies = new HashSet<>();
+	private final Set<BlockPos> blockDependencies = new HashSet<>();
 
-    // Version (for serialization)
-    private static final long serialVersionUID = 3744789699577710821L;
+	public ProtectedRegion(World world, BlockPos startPos, BlockPos endPos) {
+		this.world = world;
+		this.startPos = DungeonGenUtils.getValidMinPos(startPos, endPos);
+		this.endPos = DungeonGenUtils.getValidMaxPos(startPos, endPos);
+	}
 
-    // Region Data
-    private String UUID;
-    private transient BlockPos NWCorner;
-    private transient BlockPos SECorner;
+	public ProtectedRegion(World world, NBTTagCompound compound) {
+		this.world = world;
+		this.readFromNBT(compound);
+	}
 
-    // Dependencies (Things that will remove ProtectedRegion if all are killed/destroyed)
-    private transient ArrayList<String> entityDependencies; // Stores UUIDs as Strings for ease of serialization
-    private transient ArrayList<BlockPos> blockDependencies;
+	public NBTTagCompound writeToNBT() {
+		NBTTagCompound compound = new NBTTagCompound();
+		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
+		compound.setTag("startPos", NBTUtil.createPosTag(this.startPos));
+		compound.setTag("endPos", NBTUtil.createPosTag(this.endPos));
+		compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
+		compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
+		compound.setBoolean("preventExplosions", this.preventExplosions);
+		compound.setBoolean("preventFireSpreading", this.preventFireSpreading);
+		compound.setBoolean("preventEntitySpawning", this.preventEntitySpawning);
+		compound.setBoolean("isGenerating", this.isGenerating);
+		NBTTagList nbtTagList1 = new NBTTagList();
+		for (UUID entityUuid : this.entityDependencies) {
+			nbtTagList1.appendTag(NBTUtil.createUUIDTag(entityUuid));
+		}
+		compound.setTag("entityDependencies", nbtTagList1);
+		NBTTagList nbtTagList2 = new NBTTagList();
+		for (BlockPos pos : this.blockDependencies) {
+			nbtTagList1.appendTag(NBTUtil.createPosTag(pos));
+		}
+		compound.setTag("blockDependencies", nbtTagList2);
+		return new NBTTagCompound();
+	}
 
-    // Settings
-    public transient HashMap<String, Boolean> settings;
+	public void readFromNBT(NBTTagCompound compound) {
+		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
+		this.startPos = NBTUtil.getPosFromTag(compound.getCompoundTag("startPos"));
+		this.endPos = NBTUtil.getPosFromTag(compound.getCompoundTag("endPos"));
+		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
+		this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
+		this.preventExplosions = compound.getBoolean("preventExplosions");
+		this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
+		this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
+		this.isGenerating = compound.getBoolean("isGenerating");
+		this.entityDependencies.clear();
+		NBTTagList nbtTagList1 = compound.getTagList("entityDependencies", Constants.NBT.TAG_COMPOUND);
+		for (int i = 0; i < nbtTagList1.tagCount(); i++) {
+			this.entityDependencies.add(NBTUtil.getUUIDFromTag(nbtTagList1.getCompoundTagAt(i)));
+		}
+		this.blockDependencies.clear();
+		NBTTagList nbtTagList2 = compound.getTagList("blockDependencies", Constants.NBT.TAG_COMPOUND);
+		for (int i = 0; i < nbtTagList2.tagCount(); i++) {
+			this.blockDependencies.add(NBTUtil.getPosFromTag(nbtTagList2.getCompoundTagAt(i)));
+		}
+	}
 
-    /*
-     * Constructors
-     */
+	public boolean isInsideProtectedRegion(BlockPos pos) {
+		if (pos.getX() < this.startPos.getX()) {
+			return false;
+		}
+		if (pos.getY() < this.startPos.getY()) {
+			return false;
+		}
+		if (pos.getZ() < this.startPos.getZ()) {
+			return false;
+		}
+		if (pos.getX() > this.endPos.getX()) {
+			return false;
+		}
+		if (pos.getY() > this.endPos.getY()) {
+			return false;
+		}
+		return pos.getZ() < this.endPos.getZ();
+	}
 
-    // Verbose
-    public ProtectedRegion(String UUID, BlockPos NWCorner, BlockPos SECorner, ArrayList<String> entityDependenciesAsUUIDStrings, ArrayList<BlockPos> blockDependencies, HashMap<String, Boolean> settingsOverrides) {
-        // Region Data
-        this.UUID = UUID;
-        this.NWCorner = NWCorner;
-        this.SECorner = SECorner;
-        // Dependencies
-        this.entityDependencies = new ArrayList<>();
-        this.blockDependencies = new ArrayList<>();
-        // Settings
-        this.settings = new HashMap<>();
-        // Dependencies
-        if (entityDependenciesAsUUIDStrings != null) {
-            for (String entry : entityDependenciesAsUUIDStrings) {
-                if (entry != null) {
-                    this.entityDependencies.add(entry);
-                }
-            }
-        }
-        if (blockDependencies != null) {
-            for (BlockPos entry : blockDependencies) {
-                if (entry != null) {
-                    this.blockDependencies.add(entry);
-                }
-            }
-        }
-        // Apply Default Settings
-        applyDefaultSettings();
-        // Protection Settings Overrides
-        if (settingsOverrides != null) {
-            for (String setting : settingsOverrides.keySet()) {
-                if (settingsOverrides.get(setting) != null) {
-                    this.settings.put(setting, settingsOverrides.get(setting));
-                }
-            }
-        }
-        // Initial Dependency Check
-        if(this.settings.get("requireDependencies") && this.entityDependencies.size() == 0 && this.blockDependencies.size() == 0) {
-            ProtectionHandler.getInstance().deregister(this);
-        }
-    }
+	public boolean isValid() {
+		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty();
+	}
 
-    /*
-     * Serialization
-     */
+	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosions, boolean preventFireSpreading, boolean preventEntitySpawning) {
+		this.preventBlockBreaking = preventBlockBreaking;
+		this.preventBlockPlacing = preventBlockPlacing;
+		this.preventExplosions = preventExplosions;
+		this.preventFireSpreading = preventFireSpreading;
+		this.preventEntitySpawning = preventEntitySpawning;
+	}
 
-    private void writeObject(ObjectOutputStream stream) throws Exception {
-        // Let default handle what it can
-        try {
-            stream.defaultWriteObject();
-        } catch (Exception ignored) {
-        }
-        // Write NW Corner
-        stream.writeInt(this.NWCorner.getX());
-        stream.writeInt(this.NWCorner.getY());
-        stream.writeInt(this.NWCorner.getZ());
-        // Write SE Corner
-        stream.writeInt(this.SECorner.getX());
-        stream.writeInt(this.SECorner.getY());
-        stream.writeInt(this.SECorner.getZ());
-        // Write Entity Dependencies
-        stream.writeInt(this.entityDependencies.size());
-        for (String UUID : this.entityDependencies) {
-            stream.writeObject(UUID);
-        }
-        // Write Block Dependencies
-        stream.writeInt(this.blockDependencies.size());
-        for (BlockPos position : this.blockDependencies) {
-            stream.writeInt(position.getX());
-            stream.writeInt(position.getY());
-            stream.writeInt(position.getZ());
-        }
-        // Write Settings Values
-        stream.writeInt(this.settings.keySet().size());
-        for (String setting : this.settings.keySet()) {
-            stream.writeObject(setting);
-            stream.writeBoolean(this.settings.get(setting));
-        }
-    }
+	public World getWorld() {
+		return this.world;
+	}
 
-    private void readObject(ObjectInputStream stream) throws Exception {
-        // Let default handle what it can
-        try {
-            stream.defaultReadObject();
-        } catch (Exception ignored) {
-        }
-        // Read NW Corner
-        this.NWCorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
-        // Read SE Corner
-        this.SECorner = new BlockPos(stream.readInt(), stream.readInt(), stream.readInt());
-        // Read Entity Dependencies
-        this.entityDependencies = new ArrayList<>();
-        int entityDependencyCount = stream.readInt();
-        for (int i = 0; i < entityDependencyCount; i++) {
-            this.entityDependencies.add((String) stream.readObject());
-        }
-        // Read Block Dependencies
-        this.blockDependencies = new ArrayList<>();
-        int blockDependencyCount = stream.readInt();
-        for (int i = 0; i < blockDependencyCount; i++) {
-            this.blockDependencies.add(new BlockPos(stream.readInt(), stream.readInt(), stream.readInt()));
-        }
-        // Read Settings Values
-        this.settings = new HashMap<>();
-        this.applyDefaultSettings();
-        int settingCount = stream.readInt();
-        for (int i = 0; i < settingCount; i++) {
-            this.settings.put((String) stream.readObject(), stream.readBoolean());
-        }
-    }
+	public UUID getUuid() {
+		return this.uuid;
+	}
 
-    /*
-     * Private Field Accessors
-     */
+	public BlockPos getStartPos() {
+		return this.startPos;
+	}
 
-    public String getUUIDString() {
-        return this.UUID;
-    }
+	public BlockPos getEndPos() {
+		return this.endPos;
+	}
 
-    public BlockPos getNWCorner() {
-        return this.NWCorner;
-    }
+	public void setPreventBlockBreaking(boolean preventBlockBreaking) {
+		this.preventBlockBreaking = preventBlockBreaking;
+	}
 
-    public BlockPos getSECorner() {
-        return this.SECorner;
-    }
+	public boolean preventBlockBreaking() {
+		return this.preventBlockBreaking;
+	}
 
-    public void addEntityDependency(String entityUUID) {
-        this.entityDependencies.add(entityUUID);
-    }
+	public void setPreventBlockPlacing(boolean preventBlockPlacing) {
+		this.preventBlockPlacing = preventBlockPlacing;
+	}
 
-    public void removeEntityDependency(String entityUUID) {
-        this.entityDependencies.remove(entityUUID);
-        if(entityDependencies.size() == 0 && blockDependencies.size() == 0) ProtectionHandler.getInstance().deregister(this);
-    }
+	public boolean preventBlockPlacing() {
+		return this.preventBlockPlacing;
+	}
 
-    public ArrayList<String> getEntityDependenciesAsUUIDs() {
-        return this.entityDependencies;
-    }
+	public void setPreventExplosions(boolean preventExplosions) {
+		this.preventExplosions = preventExplosions;
+	}
 
-    public void addBlockDependency(BlockPos positionOfBlock) {
-        this.blockDependencies.add(positionOfBlock);
-    }
+	public boolean preventExplosions() {
+		return this.preventExplosions;
+	}
 
-    public void removeBlockDependency(BlockPos toBeRemoved) {
-        this.blockDependencies.remove(toBeRemoved);
-        if(blockDependencies.size() == 0 && entityDependencies.size() == 0) ProtectionHandler.getInstance().deregister(this);
-    }
+	public void setPreventFireSpreading(boolean preventFireSpreading) {
+		this.preventFireSpreading = preventFireSpreading;
+	}
 
-    public ArrayList<BlockPos> getBlockDependencies() {
-        return this.blockDependencies;
-    }
+	public boolean preventFireSpreading() {
+		return this.preventFireSpreading;
+	}
 
-    /*
-     * Util
-     */
+	public void setPreventEntitySpawning(boolean preventEntitySpawning) {
+		this.preventEntitySpawning = preventEntitySpawning;
+	}
 
-    // Protection Settings Defaults
-    public void applyDefaultSettings() {
-        this.settings.put("preventBlockBreak", true);
-        this.settings.put("preventBlockBreakCreative", false);
-        this.settings.put("preventBlockPlace", true);
-        this.settings.put("preventBlockPlaceCreative", false);
-        this.settings.put("preventExplosionTNT", false);
-        this.settings.put("preventExplosionOther", true);
-        this.settings.put("preventFireSpread", true);
-        this.settings.put("preventNaturalMobSpawn", true);
-        this.settings.put("requireDependencies", true);
-    }
+	public boolean preventEntitySpawning() {
+		return this.preventEntitySpawning;
+	}
 
-    // Assumes correct world
-    public boolean checkIfBlockPosInRegion(BlockPos toCheck) {
+	public void addEntityDependency(UUID uuid) {
+		this.entityDependencies.add(uuid);
+	}
 
-        // Check NW (min)
-        if (toCheck.getX() < this.NWCorner.getX()) {
-            return false;
-        }
-        if (toCheck.getY() < this.NWCorner.getY()) {
-            return false;
-        }
-        if (toCheck.getZ() < this.NWCorner.getZ()) {
-            return false;
-        }
+	public void removeEntityDependency(UUID uuid) {
+		this.entityDependencies.remove(uuid);
+		if (!this.isValid()) {
+			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this.uuid);
+		}
+	}
 
-        // Check SE (max)
-        if (toCheck.getX() > this.SECorner.getX()) {
-            return false;
-        }
-        if (toCheck.getY() > this.SECorner.getY()) {
-            return false;
-        }
-        if (toCheck.getZ() > this.SECorner.getZ()) {
-            return false;
-        }
+	public boolean isEntityDependency(UUID uuid) {
+		return this.entityDependencies.contains(uuid);
+	}
 
-        // Default (this means that all disqualifiers failed)
-        return true;
+	public void addBlockDependency(BlockPos pos) {
+		this.blockDependencies.add(pos);
+	}
 
-    }
+	public void removeBlockDependency(BlockPos pos) {
+		this.blockDependencies.remove(pos);
+		if (!this.isValid()) {
+			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this.uuid);
+		}
+	}
 
-    public int getRegionVolume() {
-        // Calculate deltas for x,y,z and multiply results
-        return (this.SECorner.getX() - this.NWCorner.getX()) * (this.SECorner.getY() - this.NWCorner.getY()) * (this.SECorner.getZ() - this.NWCorner.getZ());
-    }
+	public boolean isBlockDependency(BlockPos pos) {
+		return this.blockDependencies.contains(pos);
+	}
+
+	public void setGenerating(boolean isGenerating) {
+		this.isGenerating = isGenerating;
+	}
+
+	public boolean isGenerating() {
+		return this.isGenerating;
+	}
 
 }
