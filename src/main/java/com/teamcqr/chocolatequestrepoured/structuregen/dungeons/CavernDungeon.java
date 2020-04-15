@@ -44,7 +44,6 @@ public class CavernDungeon extends DungeonBase {
 	private int maxRoomDistance = 16;
 	private int minRoomDistance = 10;
 	private int chestChancePerRoom = 100;
-	private boolean buildStaris = true;
 
 	private boolean placeSpawners = true;
 	private boolean placeBoss = true;
@@ -73,8 +72,6 @@ public class CavernDungeon extends DungeonBase {
 
 		this.maxRoomDistance = PropertyFileHelper.getIntProperty(prop, "maxRoomDistance", 20);
 		this.minRoomDistance = PropertyFileHelper.getIntProperty(prop, "minRoomDistance", 12);
-
-		this.buildStaris = PropertyFileHelper.getBooleanProperty(prop, "buildStairs", true);
 
 		this.chestChancePerRoom = PropertyFileHelper.getIntProperty(prop, "chestChancePerRoom", 50);
 
@@ -174,13 +171,6 @@ public class CavernDungeon extends DungeonBase {
 			// DONE: spawn the boss
 			SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.getBossMob(), world) }, false, null, world, bossPos.up());
 		}
-		if (this.buildStaris) {
-			int entryCave = this.random.nextInt(caves.size());
-			while (entryCave == bossCaveIndx) {
-				entryCave = this.random.nextInt(caves.size());
-			}
-			caves.get(entryCave).buildLadder(world);
-		}
 	}
 
 	int getMinCaveHeight() {
@@ -221,10 +211,6 @@ public class CavernDungeon extends DungeonBase {
 		// System.out.println("Path: " + bossString[1]);
 
 		return new ResourceLocation(bossString[0], bossString[1]);
-	}
-
-	public boolean doBuildStaris() {
-		return this.buildStaris;
 	}
 
 }
