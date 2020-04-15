@@ -9,7 +9,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.function.Consumer;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
@@ -19,8 +18,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -279,40 +276,6 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// TODO: Either leave the spawners out or adapt to the new system
-		/*
-		 * if (this.dungeon.placeSpawnersAboveBuildings()) {
-		 * int spawnerY = y + (new Double(this.dungeon.getCaveHeight() * 0.9).intValue());
-		 * 
-		 * // DONE: Place CQ spawners !!!
-		 * if (this.dungeon.centralBuildingIsSpecial()) {
-		 * BlockPos spawnerPosCentral = new BlockPos(x, spawnerY, z);
-		 * try {
-		 * if (this.dungeon.centralSpawnerIsSingleUse()) {
-		 * SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getCentralSpawnerMob(), world) }, false, null, world, spawnerPosCentral);
-		 * } else {
-		 * SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPosCentral, this.dungeon.getCentralSpawnerMob());
-		 * }
-		 * } catch (NullPointerException ex) {
-		 * world.setBlockToAir(spawnerPosCentral);
-		 * }
-		 * }
-		 * 
-		 * for (BlockPos p : this.gridPositions) {
-		 * BlockPos spawnerPos = new BlockPos(p.getX(), spawnerY, p.getZ());
-		 * 
-		 * try {
-		 * if (this.dungeon.spawnersAreSingleUse()) {
-		 * SpawnerFactory.placeSpawner(new Entity[] { EntityList.createEntityByIDFromName(this.dungeon.getSpawnerMob(), world) }, false, null, world, spawnerPos);
-		 * } else {
-		 * SpawnerFactory.createSimpleMultiUseSpawner(world, spawnerPos, this.dungeon.getSpawnerMob());
-		 * }
-		 * } catch (NullPointerException ex) {
-		 * world.setBlockToAir(spawnerPos);
-		 * }
-		 * }
-		 * }
-		 */
 	}
 
 	@Override
