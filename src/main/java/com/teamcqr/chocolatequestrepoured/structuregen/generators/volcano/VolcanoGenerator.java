@@ -383,20 +383,17 @@ public class VolcanoGenerator implements IDungeonGenerator {
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// TODO: Adjust to the new system
-		/*
+		// DONE: Adjust to the new system
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		if (this.dungeon.isCoverBlockEnabled()) {
-			List<BlockPos> coverBlocks = new ArrayList<>();
 
 			for (int iX = new Double(x - (this.baseRadius * 1.25)).intValue(); iX <= new Double(x + (this.baseRadius * 1.25)).intValue(); iX++) {
 				for (int iZ = new Double(z - (this.baseRadius * 1.25)).intValue(); iZ <= new Double(z + (this.baseRadius * 1.25)).intValue(); iZ++) {
-					coverBlocks.add(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)));
+					stateMap.put(world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ).add(0, 1, 0)), new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null));
 				}
 			}
-
-			ThreadingUtil.passListWithBlocksToThreads(coverBlocks, this.dungeon.getCoverBlock(), world, 10000, true);
+			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
-		*/
 		// DONE Pass the list to a simplethread to place the blocks
 	}
 
