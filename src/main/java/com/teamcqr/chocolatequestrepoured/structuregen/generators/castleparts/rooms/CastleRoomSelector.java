@@ -99,7 +99,7 @@ public class CastleRoomSelector {
 	}
 
 	public void randomizeCastle() {
-		this.addMainBuilding();
+		this.createCastleLayout();
 
 		this.addBossRooms();
 		this.addHallways();
@@ -138,7 +138,7 @@ public class CastleRoomSelector {
 		EDungeonMobType mobType = selectCastleMobType(world, startPos, dungeon);
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
 		ResourceLocation bossResLoc = mobType.getBossResourceLocation();
-		CastleGearedMobFactory mobFactory = new CastleGearedMobFactory(usedFloors, mobResLoc, random);
+		CastleGearedMobFactory mobFactory = new CastleGearedMobFactory(getBossFloor(), mobResLoc, random);
 
 		// The rooms MUST be generated before they are decorated
 		// Some decoration requires that neighboring rooms have their walls/doors
@@ -166,7 +166,7 @@ public class CastleRoomSelector {
 		}
 	}
 
-	private void addMainBuilding() {
+	private void createCastleLayout() {
 		this.setFirstLayerBuildable();
 
 		boolean lastFloor = false;
@@ -1009,5 +1009,13 @@ public class CastleRoomSelector {
 	private BlockPos getRoomStart(RoomGridPosition position) {
 		return getRoomStart(position.getFloor(), position.getX(), position.getZ());
 	}
+
+	private int getBossFloor() {
+        if (this.grid.getBossArea() != null) {
+            return this.grid.getBossArea().start.getFloor();
+        } else {
+            return 0;
+        }
+    }
 
 }

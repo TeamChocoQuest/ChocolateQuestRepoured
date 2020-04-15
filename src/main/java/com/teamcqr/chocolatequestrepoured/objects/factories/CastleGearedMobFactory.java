@@ -160,7 +160,7 @@ public class CastleGearedMobFactory {
 	}
 	
 	private boolean enchantGear(int floor) {
-		double chance = (double) floor /  (double)floorCount;
+		double chance = Math.min(((double) floor /  (double)floorCount), 1.00);
 		return random.nextDouble() <= chance;
 	}
 	
@@ -174,7 +174,7 @@ public class CastleGearedMobFactory {
 		}
 
 		//sanity check, just so we don't do out of bounds
-		index = Integer.min(tierCount - 1, index);
+		index = Math.min(tierCount - 1, index);
 		
 		return EGearTier.values()[index];
 	}
