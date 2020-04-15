@@ -176,7 +176,7 @@ public class FileIOUtil {
 		if (propFileFilter == null) {
 			propFileFilter = new FilenameFilter() {
 
-				String[] fileExtensions = new String[] { "prop", "properties" };
+				String[] fileExtensions = new String[] { "prop", "properties", "cfg" };
 
 				@Override
 				public boolean accept(File file, String var2) {
