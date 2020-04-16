@@ -25,13 +25,12 @@ public class StructurePart implements IStructure {
 	private EDungeonMobType dungeonMobType;
 	private boolean replaceBanners;
 	private EBanners dungeonBanner;
-	private boolean hasShield;
 
 	public StructurePart(NBTTagCompound compound) {
 		this.readFromNBT(compound);
 	}
 
-	public StructurePart(CQStructurePart part, PlacementSettings settings, BlockPos pos, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMobType, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
+	public StructurePart(CQStructurePart part, PlacementSettings settings, BlockPos pos, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMobType, boolean replaceBanners, EBanners dungeonBanner) {
 		this.part = part;
 		this.settings = settings;
 		this.pos = pos;
@@ -40,12 +39,11 @@ public class StructurePart implements IStructure {
 		this.dungeonMobType = dungeonMobType;
 		this.replaceBanners = replaceBanners;
 		this.dungeonBanner = dungeonBanner;
-		this.hasShield = hasShield;
 	}
 
 	@Override
 	public void generate(World world, ProtectedRegion protectedRegion) {
-		this.part.addBlocksToWorld(world, this.pos, this.settings, this.dungeonChunkX, this.dungeonChunkZ, this.dungeonMobType, this.replaceBanners, this.dungeonBanner, this.hasShield, protectedRegion);
+		this.part.addBlocksToWorld(world, this.pos, this.settings, this.dungeonChunkX, this.dungeonChunkZ, this.dungeonMobType, this.replaceBanners, this.dungeonBanner, protectedRegion);
 	}
 
 	@Override
@@ -67,7 +65,6 @@ public class StructurePart implements IStructure {
 		compound.setString("dungeonMob", this.dungeonMobType.toString());
 		compound.setBoolean("replaceBanners", this.replaceBanners);
 		compound.setString("dungeonBanner", this.dungeonBanner != null ? this.dungeonBanner.toString() : "");
-		compound.setBoolean("hasShield", this.hasShield);
 
 		return compound;
 	}
@@ -85,7 +82,6 @@ public class StructurePart implements IStructure {
 		this.dungeonMobType = EDungeonMobType.byString(compound.getString("dungeonMob"));
 		this.replaceBanners = compound.getBoolean("replaceBanners");
 		this.dungeonBanner = !compound.getString("dungeonBanner").isEmpty() ? EBanners.valueOf(compound.getString("dungeonBanner")) : null;
-		this.hasShield = compound.getBoolean("hasShield");
 	}
 
 	@Override

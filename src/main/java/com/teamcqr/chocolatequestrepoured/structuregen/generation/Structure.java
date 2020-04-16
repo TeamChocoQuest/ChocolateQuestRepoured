@@ -201,9 +201,9 @@ public class Structure {
 		return this.uuid;
 	}
 
-	public void setupProtectedRegion(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosions, boolean preventFireSpreading, boolean preventEntitySpawning) {
+	public void setupProtectedRegion(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
 		this.protectedRegion = new ProtectedRegion(this.world, new BlockPos(this.startX, this.startY, this.startZ), new BlockPos(this.endX, this.endY, this.endZ));
-		this.protectedRegion.setup(preventBlockBreaking, preventBlockPlacing, preventExplosions, preventFireSpreading, preventEntitySpawning);
+		this.protectedRegion.setup(preventBlockBreaking, preventBlockPlacing, preventExplosionsTNT, preventExplosionsOther, preventFireSpreading, preventEntitySpawning, ignoreNoBossOrNexus);
 		ProtectedRegionManager.getInstance(this.world).addProtectedRegion(this.protectedRegion);
 	}
 

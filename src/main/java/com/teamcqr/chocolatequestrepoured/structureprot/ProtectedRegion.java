@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structureprot;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -23,9 +22,11 @@ public class ProtectedRegion {
 	private BlockPos endPos;
 	private boolean preventBlockBreaking = false;
 	private boolean preventBlockPlacing = false;
-	private boolean preventExplosions = false;
+	private boolean preventExplosionsTNT = false;
+	private boolean preventExplosionsOther = false;
 	private boolean preventFireSpreading = false;
 	private boolean preventEntitySpawning = false;
+	private boolean ignoreNoBossOrNexus = false;
 	private boolean isGenerating = true;
 	private final Set<UUID> entityDependencies = new HashSet<>();
 	private final Set<BlockPos> blockDependencies = new HashSet<>();
@@ -48,9 +49,11 @@ public class ProtectedRegion {
 		compound.setTag("endPos", NBTUtil.createPosTag(this.endPos));
 		compound.setBoolean("preventBlockBreaking", this.preventBlockBreaking);
 		compound.setBoolean("preventBlockPlacing", this.preventBlockPlacing);
-		compound.setBoolean("preventExplosions", this.preventExplosions);
+		compound.setBoolean("preventExplosionsTNT", this.preventExplosionsTNT);
+		compound.setBoolean("preventExplosionsOther", this.preventExplosionsOther);
 		compound.setBoolean("preventFireSpreading", this.preventFireSpreading);
 		compound.setBoolean("preventEntitySpawning", this.preventEntitySpawning);
+		compound.setBoolean("ignoreNoBossOrNexus", this.ignoreNoBossOrNexus);
 		compound.setBoolean("isGenerating", this.isGenerating);
 		NBTTagList nbtTagList1 = new NBTTagList();
 		for (UUID entityUuid : this.entityDependencies) {
@@ -71,9 +74,11 @@ public class ProtectedRegion {
 		this.endPos = NBTUtil.getPosFromTag(compound.getCompoundTag("endPos"));
 		this.preventBlockBreaking = compound.getBoolean("preventBlockBreaking");
 		this.preventBlockPlacing = compound.getBoolean("preventBlockPlacing");
-		this.preventExplosions = compound.getBoolean("preventExplosions");
+		this.preventExplosionsTNT = compound.getBoolean("preventExplosionsTNT");
+		this.preventExplosionsOther = compound.getBoolean("preventExplosionsOther");
 		this.preventFireSpreading = compound.getBoolean("preventFireSpreading");
 		this.preventEntitySpawning = compound.getBoolean("preventEntitySpawning");
+		this.ignoreNoBossOrNexus = compound.getBoolean("ignoreNoBossOrNexus");
 		this.isGenerating = compound.getBoolean("isGenerating");
 		this.entityDependencies.clear();
 		NBTTagList nbtTagList1 = compound.getTagList("entityDependencies", Constants.NBT.TAG_COMPOUND);
@@ -107,15 +112,17 @@ public class ProtectedRegion {
 	}
 
 	public boolean isValid() {
-		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty();
+		return this.isGenerating || !this.entityDependencies.isEmpty() || !this.blockDependencies.isEmpty() || this.ignoreNoBossOrNexus;
 	}
 
-	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosions, boolean preventFireSpreading, boolean preventEntitySpawning) {
+	public void setup(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
 		this.preventBlockBreaking = preventBlockBreaking;
 		this.preventBlockPlacing = preventBlockPlacing;
-		this.preventExplosions = preventExplosions;
+		this.preventExplosionsTNT = preventExplosionsTNT;
+		this.preventExplosionsOther = preventExplosionsOther;
 		this.preventFireSpreading = preventFireSpreading;
 		this.preventEntitySpawning = preventEntitySpawning;
+		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
 	}
 
 	public World getWorld() {
@@ -150,12 +157,20 @@ public class ProtectedRegion {
 		return this.preventBlockPlacing;
 	}
 
-	public void setPreventExplosions(boolean preventExplosions) {
-		this.preventExplosions = preventExplosions;
+	public void setPreventExplosionsTNT(boolean preventExplosionsTNT) {
+		this.preventExplosionsTNT = preventExplosionsTNT;
 	}
 
-	public boolean preventExplosions() {
-		return this.preventExplosions;
+	public boolean preventExplosionsTNT() {
+		return this.preventExplosionsTNT;
+	}
+
+	public void setPreventExplosionsOther(boolean preventExplosionsOther) {
+		this.preventExplosionsOther = preventExplosionsOther;
+	}
+
+	public boolean preventExplosionsOther() {
+		return this.preventExplosionsOther;
 	}
 
 	public void setPreventFireSpreading(boolean preventFireSpreading) {
@@ -172,6 +187,14 @@ public class ProtectedRegion {
 
 	public boolean preventEntitySpawning() {
 		return this.preventEntitySpawning;
+	}
+
+	public void setIgnoreNoBossOrNexus(boolean ignoreNoBossOrNexus) {
+		this.ignoreNoBossOrNexus = ignoreNoBossOrNexus;
+	}
+
+	public boolean ignoreNoBossOrNexus() {
+		return this.ignoreNoBossOrNexus;
 	}
 
 	public void addEntityDependency(UUID uuid) {

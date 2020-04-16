@@ -52,7 +52,7 @@ public interface IDungeonGenerator {
 			structure.addList(list);
 		}
 		structure.addLightParts();
-		structure.setupProtectedRegion(!dungeon.getAllowBlockBreaking(), !dungeon.getAllowBlockPlacing(), !dungeon.getAllowExplosionOther(), !dungeon.getAllowFireSpread(), !dungeon.getAllowMobSpawns());
+		structure.setupProtectedRegion(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
 
 		DungeonGenerationManager.addStructure(world, structure);
 	}

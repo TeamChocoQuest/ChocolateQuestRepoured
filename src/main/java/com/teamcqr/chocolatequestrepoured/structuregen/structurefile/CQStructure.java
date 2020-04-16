@@ -125,13 +125,12 @@ public class CQStructure {
 		}
 		boolean replaceBanners = dungeon.replaceBanners();
 		EBanners dungeonBanner = dungeonMobType.getBanner();
-		boolean hasShield = dungeon.isProtectedFromModifications();
 
 		List<List<StructurePart>> list = new ArrayList<>(this.structures.size());
 		for (List<Entry<BlockPos, CQStructurePart>> list1 : this.structures) {
 			List<StructurePart> list2 = new ArrayList<>(list1.size());
 			for (Entry<BlockPos, CQStructurePart> entry : list1) {
-				list2.add(new StructurePart(entry.getValue(), placementIn, pos.add(Template.transformedBlockPos(placementIn, entry.getKey())), dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner, hasShield));
+				list2.add(new StructurePart(entry.getValue(), placementIn, pos.add(Template.transformedBlockPos(placementIn, entry.getKey())), dungeonChunkX, dungeonChunkZ, dungeonMobType, replaceBanners, dungeonBanner));
 			}
 			list.add(list2);
 		}
