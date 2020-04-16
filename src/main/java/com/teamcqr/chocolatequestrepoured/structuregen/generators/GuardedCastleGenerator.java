@@ -47,7 +47,6 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 	private List<Rotation> rotList = new ArrayList<Rotation>();
 
 	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
-	private BlockPos shieldPos = null;
 
 	public GuardedCastleGenerator(GuardedCastleDungeon dungeon) {
 		this.dungeon = dungeon;
@@ -207,7 +206,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			int index = 1;
 			BlockPos posLower = new BlockPos(x, y, z);
 			BlockPos posUpper = new BlockPos(x, y, z);
-			List<String> bosses = new ArrayList<>();
+			//List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				System.out.println("Building house " + index + "...");
 				BlockPos pos = this.toGenerate.get(structure);
