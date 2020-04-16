@@ -567,4 +567,14 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		spinsBlocked = 0;
 	}
 
+	@Override
+	public boolean canPutOutFire() {
+		return false;
+	}
+
+	@Override
+	public boolean canIgniteTorch() {
+		return false;
+	}
+
 }

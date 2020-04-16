@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -327,7 +328,7 @@ public class CQStructurePart extends Template {
 		}
 	}
 
-	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield) {
+	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield, ProtectedRegion protectedRegion) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
 		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
 		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
@@ -379,6 +380,9 @@ public class CQStructurePart extends Template {
 					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withRotation(placementIn.getRotation()), 2);
 
 					// TODO add nexus to protection system
+					if (protectedRegion != null) {
+						protectedRegion.addBlockDependency(transformedPos);
+					}
 				} else {
 					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
 				}
@@ -408,6 +412,9 @@ public class CQStructurePart extends Template {
 					worldIn.spawnEntity(entity);
 
 					// TODO add boss to protection system
+					if (protectedRegion != null) {
+						protectedRegion.addEntityDependency(entity.getPersistentID());
+					}
 				} else {
 					EntityArmorStand indicator = new EntityArmorStand(worldIn);
 					indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");

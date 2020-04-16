@@ -21,6 +21,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
@@ -29,6 +30,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISearchMount;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITameAndLeashPet;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISpellHandler;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -252,12 +254,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
-		this.tasks.addTask(21, new EntityAITameAndLeashPet(this));
-		this.tasks.addTask(22, new EntityAISearchMount(this));
-		this.tasks.addTask(23, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(24, new EntityAIFollowPath(this));
-		this.tasks.addTask(25, new EntityAIMoveToHome(this));
-		this.tasks.addTask(26, new EntityAIIdleSit(this));
+		this.tasks.addTask(21, new EntityAIFireFighter(this));
+		this.tasks.addTask(22, new EntityAITorchIgniter(this));
+		this.tasks.addTask(23, new EntityAITameAndLeashPet(this));
+		this.tasks.addTask(24, new EntityAISearchMount(this));
+
+		this.tasks.addTask(30, new EntityAIMoveToLeader(this));
+		this.tasks.addTask(31, new EntityAIFollowPath(this));
+		this.tasks.addTask(32, new EntityAIMoveToHome(this));
+		this.tasks.addTask(33, new EntityAIIdleSit(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -625,17 +630,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	@Override
-	public PathNavigate getNavigator() {
-		if (this.isRiding()) {
-			Entity ridden = this.getRidingEntity();
-			if (ridden instanceof EntityLiving) {
-				return ((EntityLiving) ridden).getNavigator();
-			}
-		}
-		return super.getNavigator();
-	}
-
-	@Override
 	public void writeSpawnData(ByteBuf buffer) {
 		buffer.writeFloat(this.getSizeVariation());
 		buffer.writeDouble(this.getHealthScale());
@@ -960,6 +954,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canOpenDoors() {
+		return true;
+	}
+
+	public boolean canPutOutFire() {
+		return true;
+	}
+
+	public boolean canIgniteTorch() {
 		return true;
 	}
 

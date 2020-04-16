@@ -69,4 +69,9 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 		}
 	}
 
+	@Override
+	public boolean canIgniteTorch() {
+		return false;
+	}
+
 }

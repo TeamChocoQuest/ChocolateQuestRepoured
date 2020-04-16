@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
@@ -250,6 +251,11 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 			stateMap.put(lowerBoundL.add(0, i, 0), new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getChainBlock().getDefaultState(), null));
 			stateMap.put(lowerBoundR.add(0, i, 0), new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getChainBlock().getDefaultState(), null));
 		}
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

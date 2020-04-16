@@ -6,6 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -84,4 +85,10 @@ public class CastleGenerator implements IDungeonGenerator {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
+	}
+
 }

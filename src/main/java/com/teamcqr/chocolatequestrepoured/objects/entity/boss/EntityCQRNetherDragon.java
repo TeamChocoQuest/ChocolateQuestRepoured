@@ -414,4 +414,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return false;
 	}
 
+	@Override
+	public boolean canPutOutFire() {
+		return false;
+	}
+
+	@Override
+	public boolean canIgniteTorch() {
+		return false;
+	}
+
 }
