@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
@@ -89,12 +90,12 @@ public class StructurePart implements IStructure {
 
 	@Override
 	public BlockPos getPos() {
-		return this.pos;
+		return DungeonGenUtils.getMinPos(this.pos, this.pos.add(Template.transformedBlockPos(this.settings, this.part.getSize())));
 	}
 
 	@Override
 	public BlockPos getSize() {
-		return Template.transformedBlockPos(this.settings, this.part.getSize());
+		return DungeonGenUtils.getMaxPos(this.pos, this.pos.add(Template.transformedBlockPos(this.settings, this.part.getSize()))).subtract(this.getPos());
 	}
 
 }
