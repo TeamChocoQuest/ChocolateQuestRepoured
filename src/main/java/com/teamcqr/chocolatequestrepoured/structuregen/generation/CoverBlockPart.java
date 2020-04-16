@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,21 +29,6 @@ public class CoverBlockPart implements IStructure {
 		this.size = size;
 		this.partOffset = partOffset;
 		this.partSize = partSize;
-	}
-
-	@Override
-	public void generate(World world) {
-		for (int x = 0; x < this.partSize.getX(); x++) {
-			for (int z = 0; z < this.partSize.getZ(); z++) {
-				int x1 = this.partOffset.getX() + x;
-				int z1 = this.partOffset.getZ() + z;
-
-				int y1 = world.getTopSolidOrLiquidBlock(this.startPos.add(x1, 0, z1)).getY();
-				if (!Block.isEqualTo(world.getBlockState(this.startPos.add(x1, y1, z1).down()).getBlock(), this.coverBlock)) {
-					world.setBlockState(this.startPos.add(x1, y1, z1), this.coverBlock.getDefaultState(), 2);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -83,6 +70,21 @@ public class CoverBlockPart implements IStructure {
 	@Override
 	public BlockPos getSize() {
 		return this.partSize;
+	}
+
+	@Override
+	public void generate(World world, ProtectedRegion protectedRegion) {
+		for (int x = 0; x < this.partSize.getX(); x++) {
+			for (int z = 0; z < this.partSize.getZ(); z++) {
+				int x1 = this.partOffset.getX() + x;
+				int z1 = this.partOffset.getZ() + z;
+
+				int y1 = world.getTopSolidOrLiquidBlock(this.startPos.add(x1, 0, z1)).getY();
+				if (!Block.isEqualTo(world.getBlockState(this.startPos.add(x1, y1, z1).down()).getBlock(), this.coverBlock)) {
+					world.setBlockState(this.startPos.add(x1, y1, z1), this.coverBlock.getDefaultState(), 2);
+				}
+			}
+		}
 	}
 
 }
