@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -29,6 +30,7 @@ public class CastleDungeon extends DungeonBase {
 	private Block roofBlock;
 	private Block floorBlock;
 	private Block stairBlock;
+	private Block slabBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
@@ -45,10 +47,11 @@ public class CastleDungeon extends DungeonBase {
 		this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
-		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallblock", Blocks.STONEBRICK);
-		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.PLANKS);
-		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofblock", Blocks.OAK_STAIRS);
-		this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairblock", Blocks.STONE_BRICK_STAIRS);
+		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
+		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorBlock", Blocks.PLANKS);
+		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofBlock", Blocks.OAK_STAIRS);
+		this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS);
+		this.slabBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", Blocks.STONE_SLAB);
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
@@ -111,6 +114,10 @@ public class CastleDungeon extends DungeonBase {
 		return this.stairBlock;
 	}
 
+	public Block getSlabBlock() {
+		return slabBlock;
+	}
+
 	public int getMaxSize() {
 		return this.maxSize;
 	}
@@ -158,4 +165,5 @@ public class CastleDungeon extends DungeonBase {
 
 		return result;
 	}
+
 }

@@ -125,7 +125,7 @@ public class RoomWallBuilder {
 				if (y >= 1 && y <= 3) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 				} else if (y == 4) {
-					blockToBuild = Blocks.STONE_SLAB.getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
+					blockToBuild = dungeon.getSlabBlock().getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 				}
 			} else if (dist == halfPoint + 1 || dist == halfPoint - 2) {
 				EnumFacing stairFacing;
@@ -136,7 +136,7 @@ public class RoomWallBuilder {
 					stairFacing = (dist == halfPoint - 2) ? this.side.rotateYCCW() : this.side.rotateY();
 				}
 
-				IBlockState stairBase = Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				IBlockState stairBase = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
 
 				if (y == 1) {
 					blockToBuild = stairBase;
