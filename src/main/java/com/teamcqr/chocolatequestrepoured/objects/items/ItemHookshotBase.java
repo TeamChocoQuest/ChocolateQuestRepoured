@@ -8,7 +8,7 @@ import java.util.*;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.util.BlockUtil;
+import com.teamcqr.chocolatequestrepoured.util.CQRBlockUtil;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import net.minecraft.block.Block;
 import org.apache.commons.io.FileUtils;
@@ -80,11 +80,11 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 				case BASE_SOLID:
 					return true;
 				case BASE_WOOD:
-					return BlockUtil.VANILLA_WOOD_SET.contains(block);
+					return CQRBlockUtil.VANILLA_WOOD_SET.contains(block);
 				case BASE_STONE:
-					return BlockUtil.VANILLA_STONE_SET.contains(block);
+					return CQRBlockUtil.VANILLA_STONE_SET.contains(block);
 				case BASE_DIRT:
-					return BlockUtil.VANILLA_DIRT_SET.contains(block);
+					return CQRBlockUtil.VANILLA_DIRT_SET.contains(block);
 				default:
 					return false;
 			}
