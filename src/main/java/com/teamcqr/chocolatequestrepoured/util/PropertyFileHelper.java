@@ -131,4 +131,18 @@ public class PropertyFileHelper {
 		return fileTmp;
 	}
 
+	public static EnumMCWoodType getWoodTypeProperty(Properties prop, String key, EnumMCWoodType defVal) {
+		String s = prop.getProperty(key);
+		if (s == null || s.isEmpty()) {
+			return defVal;
+		}
+
+		EnumMCWoodType retType = EnumMCWoodType.getTypeFromString(s);
+		if (retType == null) {
+			retType = defVal;
+		}
+
+		return retType;
+	}
+
 }

@@ -7,12 +7,9 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerato
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
+import com.teamcqr.chocolatequestrepoured.util.*;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -28,9 +25,11 @@ public class CastleDungeon extends DungeonBase {
 	private int floorHeight;
 	private Block wallBlock;
 	private Block roofBlock;
+	private Block fenceBlock;
 	private Block floorBlock;
 	private Block stairBlock;
 	private Block slabBlock;
+	private Block plankBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
@@ -47,11 +46,14 @@ public class CastleDungeon extends DungeonBase {
 		this.roomSize = PropertyFileHelper.getIntProperty(prop, "roomSize", 10);
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
+		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
 		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
 		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorBlock", Blocks.PLANKS);
-		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofBlock", Blocks.OAK_STAIRS);
+		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofBlock", woodType.getStairBlockState().getBlock());
+		this.fenceBlock = PropertyFileHelper.getBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState().getBlock());
 		this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS);
-		this.slabBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", Blocks.STONE_SLAB);
+		this.slabBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", woodType.getSlabBlockState().getBlock());
+		this.plankBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", woodType.getPlankBlockState().getBlock());
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
@@ -110,12 +112,20 @@ public class CastleDungeon extends DungeonBase {
 		return this.roofBlock;
 	}
 
+	public Block getFenceBlock() {
+		return fenceBlock;
+	}
+
 	public Block getStairBlock() {
 		return this.stairBlock;
 	}
 
 	public Block getSlabBlock() {
 		return slabBlock;
+	}
+
+	public Block getPlankBlock() {
+		return plankBlock;
 	}
 
 	public int getMaxSize() {
@@ -165,5 +175,4 @@ public class CastleDungeon extends DungeonBase {
 
 		return result;
 	}
-
 }
