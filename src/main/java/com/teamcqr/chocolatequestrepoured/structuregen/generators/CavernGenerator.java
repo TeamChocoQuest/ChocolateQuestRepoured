@@ -103,12 +103,12 @@ public class CavernGenerator implements IDungeonGenerator {
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		//Not needed anymore
+		// Not needed
 	}
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		System.out.println("Generated " + this.dungeon.getDungeonName() + " at X: " + x + "  Y: " + y + "  Z: " + z);
+		// Not needed
 	}
 
 	@Override
