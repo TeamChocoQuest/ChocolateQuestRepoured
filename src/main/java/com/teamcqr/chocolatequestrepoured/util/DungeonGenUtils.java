@@ -228,4 +228,12 @@ public class DungeonGenUtils {
 		return new BlockPos(Math.max(pos1.getX(), pos2.getX()), Math.max(pos1.getY(), pos2.getY()), Math.max(pos1.getZ(), pos2.getZ()));
 	}
 
+	public static BlockPos getValidMinPos(BlockPos pos1, BlockPos pos2) {
+		return new BlockPos(Math.max(Math.min(pos1.getX(), pos2.getX()), -30000000), Math.max(Math.min(pos1.getY(), pos2.getY()), 0), Math.max(Math.min(pos1.getZ(), pos2.getZ()), -30000000));
+	}
+
+	public static BlockPos getValidMaxPos(BlockPos pos1, BlockPos pos2) {
+		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30000000), Math.min(Math.max(pos1.getY(), pos2.getY()), 256), Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30000000));
+	}
+
 }

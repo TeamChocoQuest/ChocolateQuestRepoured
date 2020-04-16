@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 
 import net.minecraft.block.Block;
@@ -78,8 +79,8 @@ public class ExtendedBlockStatePart implements IStructure {
 	}
 
 	@Override
-	public void generate(World world) {
-		BlockPlacingHelper.setBlockStates(world, this.pos, this.extendedstates, 3);
+	public void generate(World world, ProtectedRegion protectedRegion) {
+		BlockPlacingHelper.setBlockStates(world, this.pos, this.extendedstates, 2);
 	}
 
 	@Override

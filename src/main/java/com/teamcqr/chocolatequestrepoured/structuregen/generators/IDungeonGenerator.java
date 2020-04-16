@@ -3,7 +3,9 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationHandler;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 
@@ -34,6 +36,8 @@ public interface IDungeonGenerator {
 			return;
 		}
 
+		DungeonBase dungeon = this.getDungeon();
+		CQRMain.logger.info("Start generating dungeon {} at x={}, y={}, z={}.", dungeon, x, y, z);
 		Structure structure = new Structure(world);
 		List<List<? extends IStructure>> lists = new ArrayList<>();
 
@@ -47,7 +51,12 @@ public interface IDungeonGenerator {
 		for (List<? extends IStructure> list : lists) {
 			structure.addList(list);
 		}
-		DungeonGenerationHandler.addStructure(world, structure);
+		structure.addLightParts();
+		structure.setupProtectedRegion(!dungeon.getAllowBlockBreaking(), !dungeon.getAllowBlockPlacing(), !dungeon.getAllowExplosionOther(), !dungeon.getAllowFireSpread(), !dungeon.getAllowMobSpawns());
+
+		DungeonGenerationManager.addStructure(world, structure);
 	}
+
+	DungeonBase getDungeon();
 
 }

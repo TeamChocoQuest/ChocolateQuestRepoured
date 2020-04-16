@@ -1,22 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.CoverBlockPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -94,8 +92,6 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
-			
 			int sizeX = this.structure.getSize().getX();
 			int sizeZ = this.structure.getSize().getZ();
 			switch (this.placeSettings.getRotation()) {
@@ -125,20 +121,29 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 			int startX = x - sizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
 			int startZ = z - sizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
 
-			int endX = x + sizeX + sizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
-			int endZ = z + sizeZ + sizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
-
-			for (int iX = startX; iX <= endX; iX++) {
-				for (int iZ = startZ; iZ <= endZ; iZ++) {
-					BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
-					if (!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
-						stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null));
-					}
+			//int endX = x + sizeX + sizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
+			//int endZ = z + sizeZ + sizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
+			
+			int xIterations = sizeX / 16;
+			int zIterations = sizeZ / 16;
+			
+			List<CoverBlockPart> list = new ArrayList<>(xIterations * zIterations);
+			for (int x1 = 0; x1 <= xIterations; x1++) {
+				for (int z1 = 0; z1 <= zIterations; z1++) {
+					BlockPos partOffset = new BlockPos(x1 * 16, 0, z1 * 16);
+					BlockPos partSize = new BlockPos(x1 == xIterations ? x1 % 16 : 16, 0, z1 == zIterations ? z1 % 16 : 16);
+					CoverBlockPart part = new CoverBlockPart(this.dungeon.getCoverBlock(), new BlockPos(startX, 0, startZ), new BlockPos(sizeX, 0, sizeZ), partOffset, partSize);
+					list.add(part);
 				}
 			}
-			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
+			lists.add(list);
 		}
 
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

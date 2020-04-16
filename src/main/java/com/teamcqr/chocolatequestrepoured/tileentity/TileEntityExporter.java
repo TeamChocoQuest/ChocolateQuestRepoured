@@ -78,6 +78,10 @@ public class TileEntityExporter extends TileEntity {
 		this.setExporterData(compound);
 	}
 
+	public void setValues(BlockPos startPos, BlockPos endPos, String structName, boolean usePartMode, boolean useRelativeMode, boolean useSmartMode) {
+		this.setValues(startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), structName, usePartMode, useRelativeMode, useSmartMode);
+	}
+
 	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode, boolean useRelativeMode, boolean useSmartMode) {
 		this.startX = sX;
 		this.startY = sY;

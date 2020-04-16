@@ -155,7 +155,7 @@ public class FactionRegistry {
 			}
 		}
 
-		System.out.println("Default factions loaded and initialized!");
+		CQRMain.logger.info("Default factions loaded and initialized!");
 	}
 
 	@Nullable
@@ -250,7 +250,7 @@ public class FactionRegistry {
 			int oldScore = factionsOfPlayer.getOrDefault(faction, this.factions.get(faction).getDefaultReputation().getValue());
 			factionsOfPlayer.put(faction, oldScore + score);
 			this.playerFactionRepuMap.put(player.getPersistentID(), factionsOfPlayer);
-			System.out.println("Repu changed!");
+			CQRMain.logger.info("Repu changed!");
 		}
 	}
 
@@ -294,7 +294,7 @@ public class FactionRegistry {
 		String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 		File f = new File(path, event.player.getPersistentID() + ".nbt");
 		if (f.exists()) {
-			System.out.println("Loading player reputation...");
+			CQRMain.logger.info("Loading player reputation...");
 			Thread t = new Thread(new Runnable() {
 
 				@Override
@@ -330,7 +330,7 @@ public class FactionRegistry {
 
 	public void handlePlayerLogout(PlayerLoggedOutEvent event) {
 		if (this.playerFactionRepuMap.containsKey(event.player.getPersistentID())) {
-			System.out.println("Saving player reputation...");
+			CQRMain.logger.info("Saving player reputation...");
 			Thread t = new Thread(new Runnable() {
 
 				@Override
