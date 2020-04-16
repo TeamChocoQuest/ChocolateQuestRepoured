@@ -28,6 +28,10 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
+		if (!this.entity.canIgniteTorch()) {
+			return false;
+		}
+
 		int x = (int) Math.floor(this.entity.posX);
 		int y = (int) Math.floor(this.entity.posY);
 		int z = (int) Math.floor(this.entity.posZ);
