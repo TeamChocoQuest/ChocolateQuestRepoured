@@ -80,7 +80,7 @@ public class ExtendedBlockStatePart implements IStructure {
 
 	@Override
 	public void generate(World world, ProtectedRegion protectedRegion) {
-		BlockPlacingHelper.setBlockStates(world, this.pos, this.extendedstates, 3);
+		BlockPlacingHelper.setBlockStates(world, this.pos, this.extendedstates, 2);
 	}
 
 	@Override
