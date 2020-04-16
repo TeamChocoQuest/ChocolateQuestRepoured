@@ -8,6 +8,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -468,6 +469,11 @@ public class VolcanoGenerator implements IDungeonGenerator {
 				}
 			}
 		}
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

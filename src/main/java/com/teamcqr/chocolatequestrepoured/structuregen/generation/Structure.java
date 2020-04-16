@@ -3,17 +3,23 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class Structure {
 
+	private UUID uuid = MathHelper.getRandomUUID();
 	private final World world;
 	private final List<List<? extends IStructure>> list = new LinkedList<>();
 	private int tick;
@@ -23,6 +29,7 @@ public class Structure {
 	private int endX = Integer.MIN_VALUE;
 	private int endY = Integer.MIN_VALUE;
 	private int endZ = Integer.MIN_VALUE;
+	private ProtectedRegion protectedRegion;
 
 	public Structure(World world, NBTTagCompound compound) {
 		this.world = world;
@@ -82,6 +89,7 @@ public class Structure {
 	public NBTTagCompound writeToNBT() {
 		NBTTagCompound compound = new NBTTagCompound();
 
+		compound.setTag("uuid", NBTUtil.createUUIDTag(this.uuid));
 		NBTTagList nbtTagList1 = new NBTTagList();
 		for (List<? extends IStructure> partList : this.list) {
 			NBTTagList nbtTagList2 = new NBTTagList();
@@ -91,11 +99,13 @@ public class Structure {
 			nbtTagList1.appendTag(nbtTagList2);
 		}
 		compound.setTag("list", nbtTagList1);
+		compound.setTag("protectedRegion", this.protectedRegion != null ? NBTUtil.createUUIDTag(this.protectedRegion.getUuid()) : new NBTTagCompound());
 
 		return compound;
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
+		this.uuid = NBTUtil.getUUIDFromTag(compound.getCompoundTag("uuid"));
 		this.list.clear();
 		NBTTagList nbtTagList1 = compound.getTagList("list", 9);
 		for (int i = 0; i < nbtTagList1.tagCount(); i++) {
@@ -109,6 +119,7 @@ public class Structure {
 			}
 			this.list.add(partList);
 		}
+		this.protectedRegion = ProtectedRegionManager.getInstance(this.world).getProtectedRegion(NBTUtil.getUUIDFromTag(compound.getCompoundTag("protectedRegion")));
 	}
 
 	public void tick(World world) {
@@ -123,7 +134,7 @@ public class Structure {
 					IStructure istructure = partList.get(i);
 
 					if (istructure.canGenerate(world)) {
-						istructure.generate(world);
+						istructure.generate(world, this.protectedRegion);
 						toRemove.add(i);
 						if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInLoaded) {
 							break;
@@ -136,7 +147,7 @@ public class Structure {
 				for (int i = 0; i < partList.size(); i++) {
 					IStructure istructure = partList.get(i);
 
-					istructure.generate(world);
+					istructure.generate(world, this.protectedRegion);
 					toRemove.add(i);
 					if (toRemove.size() == CQRConfig.advanced.dungeonGenerationCountInUnloaded) {
 						break;
@@ -163,7 +174,13 @@ public class Structure {
 	}
 
 	public boolean isGenerated() {
-		return this.list.isEmpty();
+		if (this.list.isEmpty()) {
+			if (this.protectedRegion != null) {
+				this.protectedRegion.setGenerating(false);
+			}
+			return true;
+		}
+		return false;
 	}
 
 	public void addLightParts() {
@@ -178,6 +195,16 @@ public class Structure {
 			}
 		}
 		this.list.add(lightParts);
+	}
+
+	public UUID getUuid() {
+		return this.uuid;
+	}
+
+	public void setupProtectedRegion(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosions, boolean preventFireSpreading, boolean preventEntitySpawning) {
+		this.protectedRegion = new ProtectedRegion(this.world, new BlockPos(this.startX, this.startY, this.startZ), new BlockPos(this.endX, this.endY, this.endZ));
+		this.protectedRegion.setup(preventBlockBreaking, preventBlockPlacing, preventExplosions, preventFireSpreading, preventEntitySpawning);
+		ProtectedRegionManager.getInstance(this.world).addProtectedRegion(this.protectedRegion);
 	}
 
 }

@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.capability.structureselector.Capabilit
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.StructureSelectorPacket;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
@@ -58,7 +59,7 @@ public class ItemStructureSelector extends Item {
 					pos1 = pos1.subtract(pos);
 					pos2 = pos2.subtract(pos);
 				}
-				tileEntity.setValues(pos1.getX(), pos1.getY(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), tileEntity.structureName, tileEntity.partMode, tileEntity.relativeMode, tileEntity.ignoreEntities);
+				tileEntity.setValues(DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.structureName, tileEntity.partMode, tileEntity.relativeMode, tileEntity.ignoreEntities);
 			}
 		} else {
 			if (player.isSneaking()) {

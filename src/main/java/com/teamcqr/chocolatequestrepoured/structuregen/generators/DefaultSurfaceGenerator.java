@@ -140,4 +140,9 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 
 	}
 
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
+	}
+
 }

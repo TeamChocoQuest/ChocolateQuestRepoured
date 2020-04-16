@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
@@ -38,7 +39,7 @@ public class RandomBlobPart implements IStructure {
 	}
 
 	@Override
-	public void generate(World world) {
+	public void generate(World world, ProtectedRegion protectedRegion) {
 		long seed = WorldDungeonGenerator.getSeed(world, this.startPos.getX() >> 4, this.startPos.getZ() >> 4);
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8, this.rand);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32, this.rand);
