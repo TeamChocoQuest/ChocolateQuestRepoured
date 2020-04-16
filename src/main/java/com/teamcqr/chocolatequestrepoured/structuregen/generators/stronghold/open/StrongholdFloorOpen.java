@@ -1,10 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -108,7 +113,7 @@ public class StrongholdFloorOpen {
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
-	public void generateRooms(World world) {
+	public void generateRooms(World world, List<List<? extends IStructure>> lists) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos p = this.roomGrid[x][z];
@@ -132,16 +137,19 @@ public class StrongholdFloorOpen {
 
 				if (p != null && structure != null) {
 					CQStructure struct = new CQStructure(structure);
-					struct.addBlocksToWorld(world, p, this.generator.getPlacementSettings(), EPosType.CENTER_XZ_LAYER, this.generator.getDungeon(), this.generator.getDunX(), this.generator.getDunZ());
+					for (List<? extends IStructure> list : struct.addBlocksToWorld(world, p, this.generator.getPlacementSettings(), EPosType.CENTER_XZ_LAYER, this.generator.getDungeon(), this.generator.getDunX(), this.generator.getDunZ())) {
+						lists.add(list);
+					}
 				}
 			}
 		}
 	}
 
-	public void buildWalls(World world) {
+	public void buildWalls(World world, List<List<? extends IStructure>> lists) {
 		if (this.generator.getDungeon().getWallBlock() == null) {
 			return;
 		}
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		int dimX = this.generator.getDungeon().getRoomSizeX() / 2;
 		int dimZ = this.generator.getDungeon().getRoomSizeZ() / 2;
 		BlockPos p1 = this.roomGrid[this.sideLength - 1][this.sideLength - 1].add(1, 0, 1).add(dimX, -1, dimZ);
@@ -150,38 +158,46 @@ public class StrongholdFloorOpen {
 		BlockPos p4 = this.roomGrid[0][0].add(-1, 0, -1).add(-dimX, -1, -dimZ);
 
 		IBlockState block = this.generator.getDungeon().getWallBlock().getDefaultState();
+		ExtendedBlockStatePart.ExtendedBlockState state = new ExtendedBlockStatePart.ExtendedBlockState(block, null);
 		int addY = 2 + this.generator.getDungeon().getRoomSizeY();
 
 		// 1-2
 		for (BlockPos p12 : BlockPos.getAllInBoxMutable(p1, p2.add(0, addY, 0))) {
-			world.setBlockState(p12, block);
+			//world.setBlockState(p12, block);
+			stateMap.put(p12, state);
 		}
 		// 1-3
 		for (BlockPos p13 : BlockPos.getAllInBoxMutable(p1, p3.add(0, addY, 0))) {
-			world.setBlockState(p13, block);
+			//world.setBlockState(p13, block);
+			stateMap.put(p13, state);
 		}
 		// 4-2
 		for (BlockPos p42 : BlockPos.getAllInBoxMutable(p4, p2.add(0, addY, 0))) {
-			world.setBlockState(p42, block);
+			//world.setBlockState(p42, block);
+			stateMap.put(p42, state);
 		}
 		// 4-3
 		for (BlockPos p43 : BlockPos.getAllInBoxMutable(p4, p3.add(0, addY, 0))) {
-			world.setBlockState(p43, block);
+			//world.setBlockState(p43, block);
+			stateMap.put(p43, state);
 		}
 		// Top
 		for (BlockPos pT : BlockPos.getAllInBoxMutable(p1.add(0, 2 + this.generator.getDungeon().getRoomSizeY(), 0), p4.add(0, addY, 0))) {
 			if (!(pT.getX() >= this.entranceStairCorners.getFirst().getX() && pT.getX() <= this.entranceStairCorners.getSecond().getX() && pT.getZ() >= this.entranceStairCorners.getFirst().getZ()
 					&& pT.getZ() <= this.entranceStairCorners.getSecond().getZ())) {
-				world.setBlockState(pT, block);
+				//world.setBlockState(pT, block);
+				stateMap.put(pT, state);
 			}
 		}
 		// Bottom
 		for (BlockPos pB : BlockPos.getAllInBoxMutable(p1, p4)) {
 			if (this.exitStairIsBossRoom || (pB != null && this.exitStairCorners != null && !(pB.getX() >= this.exitStairCorners.getFirst().getX() && pB.getX() <= this.exitStairCorners.getSecond().getX()
 					&& pB.getZ() >= this.exitStairCorners.getFirst().getZ() && pB.getZ() <= this.exitStairCorners.getSecond().getZ()))) {
-				world.setBlockState(pB, block);
+				//world.setBlockState(pB, block);
+				stateMap.put(pB, state);
 			}
 		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 }
