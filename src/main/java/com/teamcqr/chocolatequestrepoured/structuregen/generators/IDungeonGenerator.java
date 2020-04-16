@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -36,6 +37,7 @@ public interface IDungeonGenerator {
 		}
 
 		DungeonBase dungeon = this.getDungeon();
+		CQRMain.logger.info("Start generating dungeon {} at x={}, y={}, z={}.", dungeon, x, y, z);
 		Structure structure = new Structure(world);
 		List<List<? extends IStructure>> lists = new ArrayList<>();
 
