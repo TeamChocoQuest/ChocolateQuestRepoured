@@ -116,4 +116,9 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		return EnumCreatureAttribute.UNDEAD;
 	}
 
+	@Override
+	public boolean canPutOutFire() {
+		return false;
+	}
+
 }

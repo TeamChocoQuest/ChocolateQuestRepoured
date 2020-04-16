@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -115,6 +116,11 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// Only for entrance
+	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
 	}
 
 }

@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -127,7 +128,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 		// First, build all the support platforms
 		for (int i = 0; i < this.structurePosList.size(); i++) {
 			if (i < this.chosenStructures.size()) {
-				System.out.println("Building support platform " + (i + 1) + "...");
+				// CQRMain.logger.info("Building support platform {}...", i + 1);
 				// DONE: Load structures from file method !!HIGH PRIORITY!!
 				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
 
@@ -181,12 +182,12 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 		}
 		// then build the paths...
 		if (this.structurePosList != null && !this.structurePosList.isEmpty() && this.startPos != null && this.dungeon.buildPaths()) {
-			System.out.println("Building " + this.structurePosList.size() + " roads...");
+			// CQRMain.logger.info("Building {} roads...", this.structurePosList.size());
 			for (BlockPos end : this.structurePosList) {
-				System.out.println("Building road " + (this.structurePosList.indexOf(end) + 1) + " of " + this.structurePosList.size() + "...");
+				// CQRMain.logger.info("Building road {} of {}...", this.structurePosList.indexOf(end) + 1, this.structurePosList.size());
 				this.buildPath(end, cenPos /* this.startPos */);
 			}
-			System.out.println("Roads built!");
+			// CQRMain.logger.info("Roads built!");
 		}
 		// And now, build all the structures...
 	}
@@ -208,7 +209,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			BlockPos posUpper = new BlockPos(x, y, z);
 			//List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
-				System.out.println("Building house " + index + "...");
+				// CQRMain.logger.info("Building house {}...", index);
 				BlockPos pos = this.toGenerate.get(structure);
 				int X = posLower.getX();
 				int Y = posLower.getY();
@@ -409,4 +410,10 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 	}
+
+	@Override
+	public DungeonBase getDungeon() {
+		return this.dungeon;
+	}
+
 }

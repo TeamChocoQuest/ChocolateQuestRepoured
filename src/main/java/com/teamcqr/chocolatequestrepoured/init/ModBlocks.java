@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockBossBlock;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockDungeonBrick;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporter;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
+import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockFireCQR;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockForceFieldNexus;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockNull;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockPhylactery;
@@ -30,6 +31,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -172,8 +174,8 @@ public class ModBlocks {
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class BlockRegistrationHandler {
 
-		public static final List<Block> BLOCKS = new ArrayList<Block>();
-		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
+		public static final List<Block> BLOCKS = new ArrayList<>();
+		public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<>();
 
 		@SubscribeEvent
 		public static void registerBlocks(RegistryEvent.Register<Block> event) {
@@ -285,7 +287,8 @@ public class ModBlocks {
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery") };
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
+					new BlockFireCQR().setRegistryName(Blocks.FIRE.getRegistryName()).setUnlocalizedName(Blocks.FIRE.getUnlocalizedName()) };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
