@@ -31,6 +31,10 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
+		if (!this.entity.canPutOutFire()) {
+			return false;
+		}
+
 		int x = (int) Math.floor(this.entity.posX);
 		int y = (int) Math.floor(this.entity.posY);
 		int z = (int) Math.floor(this.entity.posZ);
