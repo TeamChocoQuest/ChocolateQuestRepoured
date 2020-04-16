@@ -428,28 +428,11 @@ public class VolcanoGenerator implements IDungeonGenerator {
 			if(blockArray[v.getX() +r][p.getY()][v.getZ() +r] == Blocks.AIR || blockArray[v.getX() +r][p.getY()][v.getZ() +r] == null) {
 				continue;
 			}
-			
-			int chance = rdm.nextInt(200) + 1;
-
-			if (chance >= 190) {
-				// DIAMOND
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.DIAMOND_ORE;
-			} else if (chance >= 180) {
-				// EMERALD
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.EMERALD_ORE;
-			} else if (chance >= 90) {
-				// GOLD
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.GOLD_ORE;
-			} else if (chance >= 60) {
-				// REDSTONE
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.REDSTONE_ORE;
-			} else if (chance >= 55) {
-				// IRON
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.IRON_ORE;
-			} else if (chance >= 35) {
-				// COAL
-				blockArray[v.getX() +r][p.getY()][v.getZ() +r] = Blocks.COAL_ORE;
-			}
+			Block ore;
+			int indx = this.dungeon.getOres().length;
+			indx = rdm.nextInt(indx);
+			ore = this.dungeon.getOres()[indx];
+			blockArray[v.getX() +r][p.getY()][v.getZ() +r] = ore;
 		}
 	}
 
