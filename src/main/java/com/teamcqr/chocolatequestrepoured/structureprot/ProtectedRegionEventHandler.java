@@ -1,12 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.structureprot;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityTNTPrimed;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -47,24 +53,22 @@ public class ProtectedRegionEventHandler {
 	public static void onBlockEventBreakEvent(BlockEvent.BreakEvent event) {
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		EntityPlayer player = event.getPlayer();
 
-		if (!world.isRemote && !event.isCanceled()) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-			if (manager != null) {
-				boolean isBlockDependency = false;
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.isBlockDependency(pos)) {
-						protectedRegion.removeBlockDependency(pos);
-						isBlockDependency = true;
-					}
+		if (!world.isRemote && manager != null && !event.isCanceled() && !player.isCreative()) {
+			boolean isBlockDependency = false;
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if (protectedRegion.isBlockDependency(pos)) {
+					protectedRegion.removeBlockDependency(pos);
+					isBlockDependency = true;
 				}
-				if (!isBlockDependency) {
-					for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-						if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
-							event.setCanceled(true);
-							return;
-						}
+			}
+			if (!isBlockDependency) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
+						event.setCanceled(true);
+						return;
 					}
 				}
 			}
@@ -74,39 +78,59 @@ public class ProtectedRegionEventHandler {
 	@SubscribeEvent
 	public static void onBlockEventEntityPlaceEvent(BlockEvent.EntityPlaceEvent event) {
 		World world = event.getWorld();
+		Entity entity = event.getEntity();
 		BlockPos pos = event.getPos();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && !event.isCanceled()) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-			if (manager != null) {
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
-						event.setCanceled(true);
-						return;
-					}
+		if (!world.isRemote && manager != null && !event.isCanceled() && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
+					event.setCanceled(true);
+					return;
 				}
 			}
 		}
 	}
 
 	@SubscribeEvent
-	public static void onExplosionEventStart(ExplosionEvent.Start event) {
+	public static void onExplosionEventDetonate(ExplosionEvent.Detonate event) {
 		World world = event.getWorld();
-		BlockPos pos = new BlockPos(event.getExplosion().getPosition());
+		Explosion explosion = event.getExplosion();
+		boolean isTNT = ProtectedRegionEventHandler.getExploder(explosion) instanceof EntityTNTPrimed;
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && !event.isCanceled()) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		if (!world.isRemote && manager != null && !event.isCanceled()) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if ((isTNT && protectedRegion.preventExplosionsTNT()) || (!isTNT && protectedRegion.preventExplosionsOther())) {
+					List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
 
-			if (manager != null) {
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.preventExplosions() && protectedRegion.isInsideProtectedRegion(pos)) {
-						event.setCanceled(true);
-						return;
+					for (int i = 0; i < affectedBlockPositions.size(); i++) {
+						if (protectedRegion.isInsideProtectedRegion(affectedBlockPositions.get(i))) {
+							affectedBlockPositions.remove(i--);
+						}
 					}
 				}
 			}
 		}
+	}
+
+	private static Field exploderField = null;
+
+	private static Entity getExploder(Explosion explosion) {
+		try {
+			if (exploderField == null) {
+				try {
+					exploderField = Explosion.class.getDeclaredField("test");
+				} catch (NoSuchFieldException e) {
+					exploderField = Explosion.class.getDeclaredField("exploder");
+				}
+				exploderField.setAccessible(true);
+			}
+			return (Entity) exploderField.get(explosion);
+		} catch (IllegalArgumentException | IllegalAccessException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error("Failed to get value of Explosion.exploder field", e);
+		}
+		return null;
 	}
 
 	// Disabled for now
@@ -159,12 +183,12 @@ public class ProtectedRegionEventHandler {
 								if (isLoaded) {
 									for (int y = startPos.getY(); y <= endPos.getY(); y++) {
 										int chunkY = y >> 4;
-									
+
 										if (chunkY != oldChunkY) {
 											oldChunkY = chunkY;
 											extendedBlockStorage = chunk.getBlockStorageArray()[chunkY];
 										}
-										
+
 										if (extendedBlockStorage != Chunk.NULL_BLOCK_STORAGE) {
 											if (extendedBlockStorage.get(x & 15, y & 15, z & 15).getBlock() == Blocks.FIRE) {
 												world.setBlockToAir(new BlockPos(x, y, z));
@@ -179,12 +203,12 @@ public class ProtectedRegionEventHandler {
 							}
 						}
 						/*
-						for (BlockPos.MutableBlockPos mutableBlockPos : BlockPos.getAllInBoxMutable(protectedRegion.getStartPos(), protectedRegion.getEndPos())) {
-							if (world.isBlockLoaded(mutableBlockPos) && world.getBlockState(mutableBlockPos).getBlock() == Blocks.FIRE) {
-								world.setBlockToAir(mutableBlockPos.toImmutable());
-							}
-						}
-						*/
+						 * for (BlockPos.MutableBlockPos mutableBlockPos : BlockPos.getAllInBoxMutable(protectedRegion.getStartPos(), protectedRegion.getEndPos())) {
+						 * if (world.isBlockLoaded(mutableBlockPos) && world.getBlockState(mutableBlockPos).getBlock() == Blocks.FIRE) {
+						 * world.setBlockToAir(mutableBlockPos.toImmutable());
+						 * }
+						 * }
+						 */
 					}
 				}
 			}
@@ -195,16 +219,13 @@ public class ProtectedRegionEventHandler {
 	public static void onWorldEventPotentialSpawns(WorldEvent.PotentialSpawns event) {
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && !event.isCanceled() && !event.getList().isEmpty()) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-			if (manager != null) {
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
-						event.setCanceled(true);
-						return;
-					}
+		if (!world.isRemote && manager != null && !event.isCanceled() && !event.getList().isEmpty()) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
+					event.setCanceled(true);
+					return;
 				}
 			}
 		}
@@ -215,14 +236,11 @@ public class ProtectedRegionEventHandler {
 		Entity entity = event.getEntity();
 		World world = entity.world;
 		UUID uuid = entity.getPersistentID();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && !event.isCanceled()) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-			if (manager != null) {
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					protectedRegion.removeEntityDependency(uuid);
-				}
+		if (!world.isRemote && manager != null && !event.isCanceled()) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				protectedRegion.removeEntityDependency(uuid);
 			}
 		}
 	}

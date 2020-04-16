@@ -61,13 +61,13 @@ public abstract class DungeonBase {
 
 	// Protection system stuff
 	protected boolean enableProtectionSystem = false;
-	protected boolean allowBlockPlacing = false;
-	protected boolean allowBlockBreaking = false;
-	protected boolean allowFireSpread = false;
-	protected boolean allowMobSpawning = false;
-	protected boolean allowExplosionTNT = true;
-	protected boolean allowExplosionOther = false;
-	protected boolean bypassSecurityChecks = false;
+	protected boolean preventBlockPlacing = false;
+	protected boolean preventBlockBreaking = false;
+	protected boolean preventExplosionsTNT = false;
+	protected boolean preventExplosionsOther = false;
+	protected boolean preventFireSpreading = false;
+	protected boolean preventEntitySpawning = false;
+	protected boolean ignoreNoBossOrNexus = false;
 
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
@@ -103,13 +103,13 @@ public abstract class DungeonBase {
 
 		// protection system
 		this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
-		this.allowBlockBreaking = !PropertyFileHelper.getBooleanProperty(prop, "blockMining", false);
-		this.allowBlockPlacing = !PropertyFileHelper.getBooleanProperty(prop, "blockBuilding", false);
-		this.allowFireSpread = !PropertyFileHelper.getBooleanProperty(prop, "blockFireSpread", false);
-		this.allowMobSpawning = !PropertyFileHelper.getBooleanProperty(prop, "blockMobSpawning", false);
-		this.allowExplosionTNT = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionTNT", false);
-		this.allowExplosionOther = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionOther", false);
-		this.bypassSecurityChecks = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
+		this.preventBlockBreaking = PropertyFileHelper.getBooleanProperty(prop, "preventBlockBreaking", false);
+		this.preventBlockPlacing = PropertyFileHelper.getBooleanProperty(prop, "preventBlockPlacing", false);
+		this.preventExplosionsTNT = PropertyFileHelper.getBooleanProperty(prop, "preventExplosionsTNT", false);
+		this.preventExplosionsOther = PropertyFileHelper.getBooleanProperty(prop, "preventExplosionOther", false);
+		this.preventFireSpreading = PropertyFileHelper.getBooleanProperty(prop, "preventFireSpreading", false);
+		this.preventEntitySpawning = PropertyFileHelper.getBooleanProperty(prop, "preventEntitySpawning", false);
+		this.ignoreNoBossOrNexus = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
 	}
 
 	@Override
@@ -281,36 +281,36 @@ public abstract class DungeonBase {
 	}
 
 	// Protection system
-	public boolean isProtectedFromModifications() {
+	public boolean isProtectionSystemEnabled() {
 		return this.enableProtectionSystem;
 	}
 
-	public boolean getAllowBlockPlacing() {
-		return this.allowBlockPlacing;
+	public boolean preventBlockPlacing() {
+		return this.preventBlockPlacing;
 	}
 
-	public boolean getAllowBlockBreaking() {
-		return this.allowBlockBreaking;
+	public boolean preventBlockBreaking() {
+		return this.preventBlockBreaking;
 	}
 
-	public boolean getAllowFireSpread() {
-		return this.allowFireSpread;
+	public boolean preventFireSpreading() {
+		return this.preventFireSpreading;
 	}
 
-	public boolean getAllowMobSpawns() {
-		return this.allowMobSpawning;
+	public boolean preventEntitySpawning() {
+		return this.preventEntitySpawning;
 	}
 
-	public boolean getAllowExplosionTNT() {
-		return this.allowExplosionTNT;
+	public boolean preventExplosionsTNT() {
+		return this.preventExplosionsTNT;
 	}
 
-	public boolean getAllowExplosionOther() {
-		return this.allowExplosionOther;
+	public boolean preventExplosionsOther() {
+		return this.preventExplosionsOther;
 	}
 
-	public boolean getSecurityBypassEnabled() {
-		return this.bypassSecurityChecks;
+	public boolean ignoreNoBossOrNexus() {
+		return this.ignoreNoBossOrNexus;
 	}
 
 }

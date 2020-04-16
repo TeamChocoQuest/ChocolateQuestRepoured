@@ -328,7 +328,7 @@ public class CQStructurePart extends Template {
 		}
 	}
 
-	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield, ProtectedRegion protectedRegion) {
+	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, ProtectedRegion protectedRegion) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
 		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
 		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
@@ -376,13 +376,9 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, nexusPos).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				if (hasShield) {
+				if (protectedRegion != null) {
 					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withRotation(placementIn.getRotation()), 2);
-
-					// TODO add nexus to protection system
-					if (protectedRegion != null) {
-						protectedRegion.addBlockDependency(transformedPos);
-					}
+					protectedRegion.addBlockDependency(transformedPos);
 				} else {
 					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
 				}
@@ -411,7 +407,6 @@ public class CQStructurePart extends Template {
 					}
 					worldIn.spawnEntity(entity);
 
-					// TODO add boss to protection system
 					if (protectedRegion != null) {
 						protectedRegion.addEntityDependency(entity.getPersistentID());
 					}
