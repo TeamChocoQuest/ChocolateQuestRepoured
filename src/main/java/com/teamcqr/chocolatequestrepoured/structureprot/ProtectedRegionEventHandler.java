@@ -120,7 +120,7 @@ public class ProtectedRegionEventHandler {
 		try {
 			if (exploderField == null) {
 				try {
-					exploderField = Explosion.class.getDeclaredField("test");
+					exploderField = Explosion.class.getDeclaredField("field_77283_e");
 				} catch (NoSuchFieldException e) {
 					exploderField = Explosion.class.getDeclaredField("exploder");
 				}
