@@ -9,7 +9,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class BlockUtil {
+public class CQRBlockUtil {
     public static final Block[] VANILLA_STONE = {
             Blocks.STONE,
             Blocks.STONEBRICK,
