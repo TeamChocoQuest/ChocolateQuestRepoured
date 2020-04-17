@@ -31,7 +31,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 			return false;
 		}
 
-		if ((this.entity.ticksExisted & 3) == 0 ) {
+		if ((this.entity.ticksExisted & 3) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			this.nearestFire = this.getNearestFire(this.entity.world, pos.getX(), pos.getY(), pos.getZ(), 16, 4);
 		}
