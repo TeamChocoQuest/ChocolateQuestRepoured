@@ -1,7 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.IWallPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
@@ -42,6 +47,10 @@ public class WorldWallGenerator implements IWorldGenerator {
 		}
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
+			
+			Structure structure = new Structure(world);
+			List<List<? extends IStructure>> lists = new ArrayList<>();
+			
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 1, 100, chunkZ * 16 + 1));
 			if (biome instanceof BiomePlains || biome instanceof BiomeSnow) {
 				// Flag for the gate
@@ -60,11 +69,19 @@ public class WorldWallGenerator implements IWorldGenerator {
 				railingPart = new WallPartRailingWall();
 			}
 			if (wallPart != null) {
-				wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+				wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), lists);
 			}
 			if (railingPart != null) {
-				railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ));
+				railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), lists);
 			}
+			
+			for (List<? extends IStructure> list : lists) {
+				structure.addList(list);
+			}
+			structure.addLightParts();
+			//structure.setupProtectedRegion(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
+
+			DungeonGenerationManager.addStructure(world, structure);
 		}
 
 	}

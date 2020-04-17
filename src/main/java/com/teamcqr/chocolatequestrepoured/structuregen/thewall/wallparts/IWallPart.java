@@ -1,5 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
+import java.util.List;
+
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -12,7 +16,7 @@ public interface IWallPart {
 
 	int getTopY();
 
-	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk);
+	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists);
 
 	default int getLowerY(World world, Chunk chunk) {
 		int[] yValues = new int[256];
