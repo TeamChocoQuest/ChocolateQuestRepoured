@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;

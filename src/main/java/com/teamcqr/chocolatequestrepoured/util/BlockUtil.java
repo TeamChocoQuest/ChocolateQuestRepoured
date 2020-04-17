@@ -1,13 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import net.minecraft.block.Block;
-import net.minecraft.init.Blocks;
-import scala.actors.threadpool.Arrays;
-
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 
 public class BlockUtil {
     public static final Block[] VANILLA_STONE = {

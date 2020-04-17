@@ -17,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.ResourceLocation;

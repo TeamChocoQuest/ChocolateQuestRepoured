@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAIFollowAttackTarget extends AbstractCQREntityAI {
