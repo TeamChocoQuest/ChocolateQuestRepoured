@@ -16,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class SupportHillCylindricalPart implements IStructure {
+	
+	//TODO: FIx radius calculations!!!
 
 	private final Random rand = new Random();
 	private BlockPos startPos;
@@ -67,13 +69,14 @@ public class SupportHillCylindricalPart implements IStructure {
 				
 				double r = (this.partStartX + x - this.centerX) * (this.partStartX + x - this.centerX) +  (this.partStartZ + z - this.centerZ) * (this.partStartZ + z - this.centerZ);
 				r = Math.sqrt(r);
-				if(r > platformRadius) {
+				System.out.println("R: " + r);
+				/*if(r > platformRadius) {
 					continue;
-				}
-				boolean circularRad = r >= (platformRadius - wallSize); 
+				}*/
+				boolean circularRad = r < (platformRadius - wallSize); 
 				
 				for (int y = 0; y <= maxHeight; y++) {
-					if (!circularRad && (offsetX + x > this.wallSize) && (offsetZ + z > this.wallSize) && (offsetX + x < this.sizeX - this.wallSize) && (offsetZ + z < this.sizeZ - this.wallSize)) {
+					if (circularRad && (offsetX + x > this.wallSize) && (offsetZ + z > this.wallSize) && (offsetX + x < this.sizeX - this.wallSize) && (offsetZ + z < this.sizeZ - this.wallSize)) {
 						// This generates the "cube" that goes under the structure
 						world.setBlockState(new BlockPos(this.partStartX + x, posY + y, this.partStartZ + z), this.structureBlock.getDefaultState(), 2);
 					} else {
