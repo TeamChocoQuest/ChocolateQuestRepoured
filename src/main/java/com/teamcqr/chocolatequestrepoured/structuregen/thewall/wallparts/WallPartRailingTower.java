@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -28,7 +29,7 @@ public class WallPartRailingTower implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk) {
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
 		int startX = chunkX * 16;
 		int startZ = chunkZ * 16;
 
