@@ -24,7 +24,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 
 	public EntityAISearchMount(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(1);
+		this.setMutexBits(3);
 	}
 
 	@Override
