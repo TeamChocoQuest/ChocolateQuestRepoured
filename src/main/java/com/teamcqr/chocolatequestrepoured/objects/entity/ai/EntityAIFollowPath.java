@@ -2,54 +2,53 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.BlockPos;
 
 public class EntityAIFollowPath extends AbstractCQREntityAI {
 
 	private boolean isReversingPath = false;
-	
+
 	public EntityAIFollowPath(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(1);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if(this.entity.getGuardPathPoints().length > 0 && this.entity.getHomePositionCQR() != null) {
-			return true;
+		if (this.entity.getGuardPathPoints().length == 0) {
+			return false;
 		}
-		return false;
+		return this.entity.hasHomePositionCQR();
 	}
-	
+
+	@Override
+	public void resetTask() {
+		this.entity.getNavigator().clearPath();
+	}
+
 	@Override
 	public void updateTask() {
-		Vec3d pos = new Vec3d(entity.getGuardPathPoints()[entity.getCurrentGuardPathTargetPoint()]).add(new Vec3d(entity.getHomePositionCQR())).addVector(0.5,0,0.5);
-		float width = entity.width;
-		if(entity.getRidingEntity() != null) {
-			width = entity.getRidingEntity().width;
+		if (!this.entity.hasPath()) {
+			int index = this.getNextPathIndex();
+			this.entity.setCurrentGuardPathTargetPoint(index);
+			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
+			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
 		}
-		if(width <= 0) {
-			width = 1;
-		}
-		width *= width;
-		if(entity.getDistance(pos.x, pos.y, pos.z) <= (width +1) /2) {
-			//Cycle to next position
-			int newIndex = isReversingPath ? entity.getCurrentGuardPathTargetPoint() -1 : entity.getCurrentGuardPathTargetPoint() +1;
-			if(newIndex == entity.getGuardPathPoints().length) {
-				if(entity.isGuardPathLoop()) {
-					newIndex = 0;
-				} else {
-					isReversingPath = true;
-					newIndex--;
-				}
+	}
+
+	private int getNextPathIndex() {
+		BlockPos[] pathPoints = this.entity.getGuardPathPoints();
+		int index = this.entity.getCurrentGuardPathTargetPoint() + (this.isReversingPath ? -1 : 1);
+		if (this.entity.isGuardPathLoop()) {
+			if (index == pathPoints.length) {
+				index = 0;
 			}
-			if(newIndex == 0 && !entity.isGuardPathLoop()) {
-				isReversingPath = false;
-			}
-			entity.setCurrentGuardPathTargetPoint(newIndex);
-			pos = new Vec3d(entity.getGuardPathPoints()[entity.getCurrentGuardPathTargetPoint()]).add(new Vec3d(entity.getHomePositionCQR())).addVector(0.5,0,0.5);
+		} else if (index == pathPoints.length - 1) {
+			this.isReversingPath = true;
+		} else if (index == 0) {
+			this.isReversingPath = false;
 		}
-		this.entity.getNavigator().tryMoveToXYZ(pos.x, pos.y, pos.z, 0.75D);
+		return index;
 	}
 
 }
