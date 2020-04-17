@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFacto
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

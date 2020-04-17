@@ -11,9 +11,9 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;

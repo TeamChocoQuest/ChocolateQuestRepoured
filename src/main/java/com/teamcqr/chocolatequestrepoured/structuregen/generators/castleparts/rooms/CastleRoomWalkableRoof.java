@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.WalkableRoofWallBuilder;
-
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;

@@ -5,9 +5,9 @@ import java.util.HashSet;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;

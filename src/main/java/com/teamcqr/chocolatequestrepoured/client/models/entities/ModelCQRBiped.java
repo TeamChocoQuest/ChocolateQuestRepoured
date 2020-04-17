@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;

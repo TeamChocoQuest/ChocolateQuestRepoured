@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ECQREntityArmPoses;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.AbstractEntityCQRMageBase;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;

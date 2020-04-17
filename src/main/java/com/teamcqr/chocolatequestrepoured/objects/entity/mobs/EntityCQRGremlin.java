@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 

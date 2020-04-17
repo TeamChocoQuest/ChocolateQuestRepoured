@@ -1,9 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
@@ -14,9 +18,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class BlockStateGenArray {
     public enum GenerationPhase {

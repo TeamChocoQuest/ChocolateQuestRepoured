@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.nbt.NBTTagCompound;

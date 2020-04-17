@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 

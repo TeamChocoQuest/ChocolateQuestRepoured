@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects;
 
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.state.IBlockState;

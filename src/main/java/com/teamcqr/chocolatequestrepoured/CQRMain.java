@@ -27,7 +27,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
