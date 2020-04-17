@@ -112,6 +112,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 					}
 
 					if (isLoaded) {
+						IBlockState oldState = null;
 						for (int y3 = y1; y3 <= y2; y3++) {
 							int chunkY = y3 >> 4;
 
@@ -124,7 +125,14 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 								IBlockState state1 = extendedBlockStorage.get(x3 & 15, y3 & 15, z3 & 15);
 
 								if (state1.getBlock() == Blocks.FIRE) {
-									IBlockState state2 = extendedBlockStorage.get(x3 & 15, (y3 - 1) & 15, z3 & 15);
+									IBlockState state2 = oldState;
+									if (state2 == null) {
+										if ((y3 & 15) != 0) {
+											state2 = extendedBlockStorage.get(x3 & 15, (y3 - 1) & 15, z3 & 15);
+										} else {
+											state2 = chunk.getBlockStorageArray()[chunkY - 1].get(x3 & 15, 15, z3 & 15);
+										}
+									}
 
 									if (state2.getBlock().isFireSource(world, new BlockPos(x3, y3 - 1, z3), EnumFacing.UP)) {
 										double distance = this.entity.getDistanceSq(x3 + 0.5D, y3, z3 + 0.5D);
@@ -135,7 +143,10 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 										}
 									}
 								}
+
+								oldState = state1;
 							} else {
+								oldState = Blocks.AIR.getDefaultState();
 								y3 += 15 - (y3 & 15);
 							}
 						}
