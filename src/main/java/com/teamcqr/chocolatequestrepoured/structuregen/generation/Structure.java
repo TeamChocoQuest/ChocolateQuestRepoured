@@ -81,6 +81,8 @@ public class Structure {
 			return new RandomBlobPart(compound);
 		case "lightPart":
 			return new LightPart(compound);
+		case "coverBlockPart":
+			return new CoverBlockPart(compound);
 		default:
 			return null;
 		}
