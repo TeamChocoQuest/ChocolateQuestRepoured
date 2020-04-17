@@ -128,10 +128,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public float getDefaultHeight() {
 		return 1.7F;
 	}
-
-	@SideOnly(Side.CLIENT)
-	private int animationProgress = 0;
-
+	
 	public EntityCQRGiantTortoise(World worldIn) {
 		super(worldIn);
 
