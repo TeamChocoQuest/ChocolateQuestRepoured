@@ -87,8 +87,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI {
 				AbstractHorse horse = (AbstractHorse) this.entityToMount;
 				horse.setOwnerUniqueId(this.entity.getPersistentID());
 
-
-			    this.entity.world.setEntityState(horse, (byte)7);
+				this.entity.world.setEntityState(horse, (byte) 7);
 				horse.setHorseTamed(true);
 				horse.setHorseSaddled(true);
 				// Should that stay? -> Arlo says yes.
