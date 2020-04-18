@@ -137,7 +137,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		}
 		double angle = this.islandCount >= 10 ? 36D : 360D / this.islandCount;
 		retPos = retPos.add(VectorUtil.rotateVectorAroundY(vector, degreeMultiplier * angle));
-
+		retPos = retPos.add(0, this.dungeon.getRandomHeightVariation(), 0);
 		return retPos;
 	}
 
@@ -155,8 +155,6 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 		// r = sqrt(((Longer side of building) / 2)^2 *2) +5
 		radius = new Double(Math.sqrt(Math.pow((double) radius / 2.0D, 2.0D) * 2.0D) + 5).intValue();
-
-		centeredPos = centeredPos.add(0, this.dungeon.getRandomHeightVariation(), 0);
 
 		this.buildPlatform(centeredPos, radius, world, lists);
 
