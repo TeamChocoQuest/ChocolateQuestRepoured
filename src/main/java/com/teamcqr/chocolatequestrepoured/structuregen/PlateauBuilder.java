@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.RandomBlobPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillCylindricalPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -78,27 +77,6 @@ public class PlateauBuilder {
 		return this.generateSupportHillList(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
 	
-	public List<SupportHillCylindricalPart> createSupportHillCylindricalList(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
-		BlockPos pos = startPos;
-		switch (posType) {
-		case CENTER_XZ_LAYER:
-			pos = startPos.subtract(new Vec3i(sizeX / 2, 0, sizeZ / 2));
-			break;
-		case CORNER_NE:
-			pos = startPos.subtract(new Vec3i(sizeX, 0, 0));
-			break;
-		case CORNER_SE:
-			pos = startPos.subtract(new Vec3i(sizeX, 0, sizeZ));
-			break;
-		case CORNER_SW:
-			pos = startPos.subtract(new Vec3i(0, 0, sizeZ));
-			break;
-		default:
-			break;
-		}
-		return this.generateSupportHillCylindricalList(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
-	}
-
 	// Coordinates are the N_W Corner!!
 	/*
 	 * DONE: Write also a method, that digs a cave with two corners
@@ -179,38 +157,6 @@ public class PlateauBuilder {
 		return list;
 	}
 	
-	private List<SupportHillCylindricalPart> generateSupportHillCylindricalList(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
-		sizeX += this.wallSize * 2;
-		sizeZ += this.wallSize * 2;
-
-		startX -= this.wallSize;
-		startZ -= this.wallSize;
-
-		int xIterations = sizeX / 16;
-		int zIterations = sizeZ / 16;
-		
-		int cX = startX + (sizeX /2);
-		int cZ = startZ + (sizeZ /2);
-		
-		int r = sizeX > sizeZ ? sizeX : sizeZ;
-		r /= 2;
-		//System.out.println("R: " + r);
-		//System.out.println("cX: " + cX);
-		//System.out.println("cZ: " + cZ);
-
-		List<SupportHillCylindricalPart> list = new ArrayList<>(xIterations * zIterations);
-		for (int x = 0; x <= xIterations; x++) {
-			for (int z = 0; z <= zIterations; z++) {
-				int partSizeX = x == xIterations ? sizeX % 16 : 16;
-				int partSizeZ = z == zIterations ? sizeZ % 16 : 16;
-				SupportHillCylindricalPart part = new SupportHillCylindricalPart(new BlockPos(startX, startY, startZ), cX, cZ, sizeX, sizeZ, startX + 16 * x, startZ + 16 * z, partSizeX, partSizeZ, r, this.wallSize, this.structureBlock, this.structureTopBlock); 
-						//new SupportHillCylindricalPart(new BlockPos(startX, startY, startZ), sizeX, sizeZ, startX + 16 * x, startZ + 16 * z, partSizeX, partSizeZ, this.wallSize, partSizeZ, r,  this.wallSize, this.structureBlock, this.structureTopBlock);
-				list.add(part);
-			}
-		}
-		return list;
-	}
-
 	// These methods are used to dig out random caves
 	public void createCave(Random random, BlockPos startPos, BlockPos endPos, long seed, World world) {
 		this.makeRandomBlob(random, Blocks.AIR, startPos, endPos, seed, world);
