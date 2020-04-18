@@ -9,7 +9,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -66,7 +66,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	 * 
 	 */
 
-	private VolcanoDungeon dungeon;
+	private DungeonVolcano dungeon;
 
 	private int baseRadius = 1;
 	private int maxHeight = 10;
@@ -79,7 +79,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	private BlockPos entranceStartPos = null;
 	private EStairSection entranceDirection = null;
 
-	public VolcanoGenerator(VolcanoDungeon dungeon) {
+	public VolcanoGenerator(DungeonVolcano dungeon) {
 		this.dungeon = dungeon;
 
 		this.maxHeight = DungeonGenUtils.getIntBetweenBorders(dungeon.getMinHeight(), dungeon.getMaxHeight());

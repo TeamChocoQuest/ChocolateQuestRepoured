@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 import net.minecraft.block.state.IBlockState;
@@ -36,7 +36,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(CastleDungeon dungeon) {
+	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
 		return Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
 	}
 

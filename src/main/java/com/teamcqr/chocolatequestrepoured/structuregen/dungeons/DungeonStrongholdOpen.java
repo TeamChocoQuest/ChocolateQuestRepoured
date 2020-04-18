@@ -17,7 +17,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class StrongholdOpenDungeon extends DungeonBase {
+public class DungeonStrongholdOpen extends DungeonBase {
 
 	private File stairFolder;
 	private File bossRoomFolder;
@@ -40,7 +40,7 @@ public class StrongholdOpenDungeon extends DungeonBase {
 
 	// Generator for 1.7 release strongholds -> not linear, but open strongholds, for old strongholds: see linearDungeon
 
-	public StrongholdOpenDungeon(String name, Properties prop) {
+	public DungeonStrongholdOpen(String name, Properties prop) {
 		super(name, prop);
 
 		this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "strongholds/open/stairs");

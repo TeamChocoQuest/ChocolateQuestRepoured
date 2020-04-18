@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class ClassicNetherCity extends DungeonBase {
+public class DungeonNetherCity extends DungeonBase {
 
 	private int minRowsX = 5;
 	private int maxRowsX = 7;
@@ -41,7 +41,7 @@ public class ClassicNetherCity extends DungeonBase {
 	private int longestSide = -1;
 	private int structCount = 0;
 
-	public ClassicNetherCity(String name, Properties prop) {
+	public DungeonNetherCity(String name, Properties prop) {
 		super(name, prop);
 
 		this.minRowsX = PropertyFileHelper.getIntProperty(prop, "minRowsX", 5);

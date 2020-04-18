@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.SpiralStaircaseBuilder;
 
@@ -20,7 +20,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.origin.getY(), this.stairsBelow.getCenterZ());

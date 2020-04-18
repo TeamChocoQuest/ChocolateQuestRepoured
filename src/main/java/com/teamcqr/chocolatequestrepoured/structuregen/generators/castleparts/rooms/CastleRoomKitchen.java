@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
@@ -26,7 +26,7 @@ public class CastleRoomKitchen extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		super.generateRoom(genArray, dungeon);
 	}
 

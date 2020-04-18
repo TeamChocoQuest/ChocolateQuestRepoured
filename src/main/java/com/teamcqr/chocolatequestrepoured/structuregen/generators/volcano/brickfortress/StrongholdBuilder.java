@@ -9,7 +9,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
@@ -27,13 +27,13 @@ import net.minecraft.world.World;
 public class StrongholdBuilder {
 
 	private BlockPos startPos;
-	private VolcanoDungeon dungeon;
+	private DungeonVolcano dungeon;
 	private int blocksRemainingToWall;
 	private EnumFacing direction;
 	private World world;
 	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(BlockPos start, int distanceToWall, VolcanoDungeon dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilder(BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
 		this.startPos = start;
 		this.dungeon = dungeon;
 		this.blocksRemainingToWall = distanceToWall;

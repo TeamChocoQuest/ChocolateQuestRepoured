@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -220,7 +220,7 @@ public class SpiralStrongholdFloor {
 		return roomGrid;
 	}
 	
-	public List<List<? extends IStructure>> buildRooms(VolcanoDungeon dungeon, int dunX, int dunZ, World world) {
+	public List<List<? extends IStructure>> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world) {
 		List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);

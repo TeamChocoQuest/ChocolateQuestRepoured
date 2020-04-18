@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 /**
@@ -8,5 +8,5 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
  * https://github.com/kalgogsmash
  */
 public interface ICastleAddon {
-	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon);
+	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon);
 }

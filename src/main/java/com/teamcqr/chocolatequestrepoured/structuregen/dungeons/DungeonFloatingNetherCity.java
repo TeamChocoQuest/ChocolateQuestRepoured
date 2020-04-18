@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class FloatingNetherCity extends DungeonBase {
+public class DungeonFloatingNetherCity extends DungeonBase {
 
 	private int minBuildings = 6;
 	private int maxBuildings = 12;
@@ -37,7 +37,7 @@ public class FloatingNetherCity extends DungeonBase {
 	private File structureFolder;
 	private File centralStructureFolder;
 
-	public FloatingNetherCity(String name, Properties prop) {
+	public DungeonFloatingNetherCity(String name, Properties prop) {
 		super(name, prop);
 
 		this.minBuildings = PropertyFileHelper.getIntProperty(prop, "minBuildings", 6);

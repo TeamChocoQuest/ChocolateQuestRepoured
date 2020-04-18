@@ -6,7 +6,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear.StrongholdFloor;
@@ -29,7 +29,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  */
 public class StrongholdLinearGenerator implements IDungeonGenerator {
 
-	private StrongholdLinearDungeon dungeon;
+	private DungeonStrongholdLinear dungeon;
 	private int dunX;
 	private int dunZ;
 
@@ -44,7 +44,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	private StrongholdFloor[] floors;
 	private Random rdm;
 
-	public StrongholdLinearGenerator(StrongholdLinearDungeon dungeon) {
+	public StrongholdLinearGenerator(DungeonStrongholdLinear dungeon) {
 		// Set floor count
 		// Set room per floor count
 		this.dungeon = dungeon;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
@@ -15,13 +15,13 @@ import net.minecraft.world.World;
 public class SpiralStrongholdBuilder {
 
 	private ESkyDirection allowedDirection;
-	private VolcanoDungeon dungeon;
+	private DungeonVolcano dungeon;
 	private SpiralStrongholdFloor[] floors;
 	private int floorCount = 0;
 	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
 	private Random rdm;
 	
-	public SpiralStrongholdBuilder(ESkyDirection expansionDirection, VolcanoDungeon dungeon, Random rdm) {
+	public SpiralStrongholdBuilder(ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
 		this.rdm = rdm;
 		this.allowedDirection = expansionDirection;
 		this.dungeon = dungeon;

@@ -20,7 +20,7 @@ import net.minecraft.world.World;
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
-public class CastleDungeon extends DungeonBase {
+public class DungeonCastle extends DungeonBase {
 
 	private int maxSize;
 	private int roomSize;
@@ -38,7 +38,7 @@ public class CastleDungeon extends DungeonBase {
 	private int maxSpawnerRolls;
 	private int spawnerRollChance;
 
-	public CastleDungeon(String name, Properties prop) {
+	public DungeonCastle(String name, Properties prop) {
 		super(name, prop);
 
 		this.maxSize = PropertyFileHelper.getIntProperty(prop, "maxSize", 60);

@@ -18,11 +18,11 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class DefaultSurfaceDungeon extends DungeonBase {
+public class DungeonSurface extends DungeonBase {
 
 	protected File structureFolderPath;
 
-	public DefaultSurfaceDungeon(String name, Properties prop) {
+	public DungeonSurface(String name, Properties prop) {
 		super(name, prop);
 
 		this.structureFolderPath = PropertyFileHelper.getFileProperty(prop, "structureFolder", "defaultFolder");
