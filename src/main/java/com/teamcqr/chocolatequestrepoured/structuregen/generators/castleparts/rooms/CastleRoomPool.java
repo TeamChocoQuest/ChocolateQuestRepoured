@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +55,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
 
     @Override
     protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-        return dungeon.getWallBlock().getDefaultState();
+        return dungeon.getWallBlockState();
     }
 
     @Override

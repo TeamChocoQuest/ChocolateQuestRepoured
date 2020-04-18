@@ -145,7 +145,7 @@ public abstract class CastleRoomBase {
 	protected void generateDefaultCeiling(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlock().getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getWallBlockState(), BlockStateGenArray.GenerationPhase.MAIN);
 			}
 		}
 	}
@@ -170,7 +170,7 @@ public abstract class CastleRoomBase {
     }
 
 	protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-		return dungeon.getFloorBlock().getDefaultState();
+		return dungeon.getFloorBlockState();
 	}
 
 	public EnumRoomType getRoomType() {

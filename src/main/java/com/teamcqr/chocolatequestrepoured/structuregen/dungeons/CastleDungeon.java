@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.util.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
@@ -23,13 +24,14 @@ public class CastleDungeon extends DungeonBase {
 	private int maxSize;
 	private int roomSize;
 	private int floorHeight;
-	private Block wallBlock;
-	private Block roofBlock;
-	private Block fenceBlock;
-	private Block floorBlock;
-	private Block stairBlock;
-	private Block slabBlock;
-	private Block plankBlock;
+	private IBlockState wallBlock;
+	private IBlockState roofBlock;
+	private IBlockState fenceBlock;
+	private IBlockState floorBlock;
+	private IBlockState stairBlock;
+	private IBlockState slabBlock;
+	private IBlockState plankBlock;
+	private IBlockState doorBlock;
 
 	private CQRWeightedRandom<RandomCastleConfigOptions.RoofType> roofTypeRandomizer;
 	private CQRWeightedRandom<RandomCastleConfigOptions.WindowType> windowTypeRandomizer;
@@ -47,13 +49,14 @@ public class CastleDungeon extends DungeonBase {
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
 		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
-		this.wallBlock = PropertyFileHelper.getBlockProperty(prop, "wallBlock", Blocks.STONEBRICK);
-		this.floorBlock = PropertyFileHelper.getBlockProperty(prop, "floorBlock", Blocks.PLANKS);
-		this.roofBlock = PropertyFileHelper.getBlockProperty(prop, "roofBlock", woodType.getStairBlockState().getBlock());
-		this.fenceBlock = PropertyFileHelper.getBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState().getBlock());
-		this.stairBlock = PropertyFileHelper.getBlockProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS);
-		this.slabBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", woodType.getSlabBlockState().getBlock());
-		this.plankBlock = PropertyFileHelper.getBlockProperty(prop, "slabBlock", woodType.getPlankBlockState().getBlock());
+		this.wallBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "wallBlock", Blocks.STONEBRICK.getDefaultState());
+		this.floorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "floorBlock", woodType.getPlankBlockState());
+		this.roofBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "roofBlock", woodType.getStairBlockState());
+		this.fenceBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState());
+		this.stairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", woodType.getStairBlockState());
+		this.slabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getSlabBlockState());
+		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getPlankBlockState());
+		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
@@ -100,32 +103,36 @@ public class CastleDungeon extends DungeonBase {
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 
-	public Block getWallBlock() {
+	public IBlockState getWallBlockState() {
 		return this.wallBlock;
 	}
 
-	public Block getFloorBlock() {
+	public IBlockState getFloorBlockState() {
 		return this.floorBlock;
 	}
 
-	public Block getRoofBlock() {
+	public IBlockState getRoofBlockState() {
 		return this.roofBlock;
 	}
 
-	public Block getFenceBlock() {
+	public IBlockState getFenceBlockState() {
 		return fenceBlock;
 	}
 
-	public Block getStairBlock() {
+	public IBlockState getStairBlockState() {
 		return this.stairBlock;
 	}
 
-	public Block getSlabBlock() {
+	public IBlockState getSlabBlockState() {
 		return slabBlock;
 	}
 
-	public Block getPlankBlock() {
+	public IBlockState getPlankBlockState() {
 		return plankBlock;
+	}
+
+	public IBlockState getDoorBlockState() {
+		return doorBlock;
 	}
 
 	public int getMaxSize() {

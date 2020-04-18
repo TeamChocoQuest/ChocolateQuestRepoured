@@ -58,7 +58,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getWallBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -72,9 +72,9 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 					if (stairs.isPartOfStairs(pos)) {
 						blockToBuild = stairs.getBlock(pos);
 					} else if (y == 0) {
-						blockToBuild = dungeon.getFloorBlock().getDefaultState();
+						blockToBuild = dungeon.getFloorBlockState();
 					} else if (y == this.height - 1) {
-						blockToBuild = dungeon.getWallBlock().getDefaultState();
+						blockToBuild = dungeon.getWallBlockState();
 					}
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {

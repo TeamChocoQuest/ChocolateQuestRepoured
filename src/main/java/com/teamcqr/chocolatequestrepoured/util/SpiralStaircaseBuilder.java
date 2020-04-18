@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -17,14 +16,14 @@ public class SpiralStaircaseBuilder {
 
 	private BlockPos start;
 	private EnumFacing firstSide;
-	private Block platformBlock;
-	private Block stairBlock;
+	private IBlockState platformBlockState;
+	private IBlockState stairBlockState;
 
-	public SpiralStaircaseBuilder(BlockPos pillarStart, EnumFacing firstStairSide, Block platformBlock, Block stairBlock) {
+	public SpiralStaircaseBuilder(BlockPos pillarStart, EnumFacing firstStairSide, IBlockState platformBlockState, IBlockState stairBlockState) {
 		this.start = pillarStart;
 		this.firstSide = firstStairSide;
-		this.platformBlock = platformBlock;
-		this.stairBlock = stairBlock;
+		this.platformBlockState = platformBlockState;
+		this.stairBlockState = stairBlockState;
 	}
 
 	// returns true if a position is within this staircase, meaning that it is within
@@ -41,7 +40,7 @@ public class SpiralStaircaseBuilder {
 		int posZ = position.getZ();
 
 		if (position.getX() == this.start.getX() && position.getZ() == this.start.getZ()) {
-			return this.platformBlock.getDefaultState();
+			return this.platformBlockState;
 		}
 
 		// The side of the stairs rotates each level from the bottom
@@ -51,33 +50,33 @@ public class SpiralStaircaseBuilder {
 		switch (stairSide) {
 		case NORTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.stairBlock.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.platformBlock.getDefaultState();
+				return this.platformBlockState;
 			}
 			break;
 
 		case SOUTH:
 			if (posX == startX && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.stairBlock.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
 			} else if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && this.inBoundsWithZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.platformBlock.getDefaultState();
+				return this.platformBlockState;
 			}
 			break;
 
 		case WEST:
 			if (this.inBoundsNoZero(posX, startX, -STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlock.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, -STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, -STAIR_WIDTH)) {
-				return this.platformBlock.getDefaultState();
+				return this.platformBlockState;
 			}
 			break;
 
 		case EAST:
 			if (this.inBoundsNoZero(posX, startX, STAIR_WIDTH) && posZ == startZ) {
-				return this.stairBlock.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				return this.stairBlockState.withProperty(BlockStairs.FACING, stairFacing);
 			} else if (this.inBoundsWithZero(posX, startX, STAIR_WIDTH) && this.inBoundsNoZero(posZ, startZ, STAIR_WIDTH)) {
-				return this.platformBlock.getDefaultState();
+				return this.platformBlockState;
 			}
 			break;
 		default:
