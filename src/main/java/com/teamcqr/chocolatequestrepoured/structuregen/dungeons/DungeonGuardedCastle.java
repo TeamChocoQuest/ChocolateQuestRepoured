@@ -17,7 +17,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class GuardedCastleDungeon extends DungeonBase {
+public class DungeonGuardedCastle extends DungeonBase {
 
 	private File structureFolder;
 	private File centerStructureFolder;
@@ -32,7 +32,7 @@ public class GuardedCastleDungeon extends DungeonBase {
 	private boolean placeInCircle = false;
 	private Block pathBlock = Blocks.GRASS_PATH;
 
-	public GuardedCastleDungeon(String name, Properties prop) {
+	public DungeonGuardedCastle(String name, Properties prop) {
 		super(name, prop);
 
 		this.structureFolder = PropertyFileHelper.getFileProperty(prop, "structurefolder", "village_buildings");

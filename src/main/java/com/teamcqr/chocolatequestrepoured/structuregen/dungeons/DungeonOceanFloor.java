@@ -18,7 +18,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class DungeonOceanFloor extends DefaultSurfaceDungeon {
+public class DungeonOceanFloor extends DungeonSurface {
 
 	public DungeonOceanFloor(String name, Properties prop) {
 		super(name, prop);

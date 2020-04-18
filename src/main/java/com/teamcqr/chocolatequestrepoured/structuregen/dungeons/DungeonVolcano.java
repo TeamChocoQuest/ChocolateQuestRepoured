@@ -22,7 +22,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VolcanoDungeon extends DungeonBase {
+public class DungeonVolcano extends DungeonBase {
 
 	// For smoke: https://github.com/Tropicraft/Tropicraft/blob/1.12.2/src/main/java/net/tropicraft/core/common/block/tileentity/TileEntityVolcano.java
 	private boolean buildStairwell = true;
@@ -75,7 +75,7 @@ public class VolcanoDungeon extends DungeonBase {
 	private File stairWFolder;
 	private File bossFolder;
 
-	public VolcanoDungeon(String name, Properties prop) {
+	public DungeonVolcano(String name, Properties prop) {
 		super(name, prop);
 
 		this.buildStairwell = PropertyFileHelper.getBooleanProperty(prop, "buildPath", true);

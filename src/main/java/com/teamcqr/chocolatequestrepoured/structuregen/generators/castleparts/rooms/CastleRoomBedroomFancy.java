@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 
 import net.minecraft.block.BlockColored;
@@ -36,7 +36,7 @@ public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
 	}
 
 	@Override
-	protected IBlockState getFloorBlock(CastleDungeon dungeon) {
+	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
 		return Blocks.WOOL.getDefaultState().withProperty(BlockColored.COLOR, this.carpetColor);
 	}
 }

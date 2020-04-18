@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -80,7 +80,7 @@ public class StrongholdFloor {
 		}
 	}
 
-	public void generateRooms(BlockPos upperFloorExitPos, boolean firstStairIsEntranceStair, boolean isLastFloor, PlacementSettings settings, World world, StrongholdLinearDungeon dungeon) {
+	public void generateRooms(BlockPos upperFloorExitPos, boolean firstStairIsEntranceStair, boolean isLastFloor, PlacementSettings settings, World world, DungeonStrongholdLinear dungeon) {
 		// Entrance stair
 		StrongholdRoom entranceRoom = this.roomGrid[this.firstRoomIndexes.getFirst()][this.firstRoomIndexes.getSecond()];
 		CQStructure stair = null;
@@ -121,7 +121,7 @@ public class StrongholdFloor {
 		}
 	}
 
-	public BlockPos getLastRoomPastePos(BlockPos upperFloorExitPos, StrongholdLinearDungeon dungeon) {
+	public BlockPos getLastRoomPastePos(BlockPos upperFloorExitPos, DungeonStrongholdLinear dungeon) {
 		Vec3i v = new Vec3i(this.lastRoomIndexes.getFirst() - this.firstRoomIndexes.getFirst(), 0, this.lastRoomIndexes.getSecond() - this.firstRoomIndexes.getSecond());
 		BlockPos pos = new BlockPos(upperFloorExitPos.getX() + (dungeon.getRoomSizeX() * v.getX()), this.floorY, upperFloorExitPos.getZ() + (dungeon.getRoomSizeZ() * v.getZ()));
 		return pos;

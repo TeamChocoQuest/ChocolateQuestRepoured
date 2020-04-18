@@ -2,17 +2,17 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.util.Properties;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.GuardedCastleDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonFloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 
 /**
  * Copyright (c) 29.04.2019
@@ -21,19 +21,19 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.VolcanoDungeon;
  */
 public enum EDungeonGenerator {
 
-	CAVERNS(CavernDungeon::new),
+	CAVERNS(DungeonCavern::new),
 	ABANDONED((name, prop) -> null),
 	RUIN((name, prop) -> null),
-	NETHER_CITY(ClassicNetherCity::new),
-	FLOATING_NETHER_CITY(FloatingNetherCity::new),
-	TEMPLATE_SURFACE(DefaultSurfaceDungeon::new),
+	NETHER_CITY(DungeonNetherCity::new),
+	FLOATING_NETHER_CITY(DungeonFloatingNetherCity::new),
+	TEMPLATE_SURFACE(DungeonSurface::new),
 	TEMPLATE_OCEAN_FLOOR(DungeonOceanFloor::new),
-	STRONGHOLD(StrongholdLinearDungeon::new),
-	CLASSIC_STRONGHOLD(StrongholdOpenDungeon::new),
+	STRONGHOLD(DungeonStrongholdLinear::new),
+	CLASSIC_STRONGHOLD(DungeonStrongholdOpen::new),
 	GREEN_CAVE((name, prop) -> null),
-	GUARDED_CASTLE(GuardedCastleDungeon::new),
-	CASTLE(CastleDungeon::new),
-	VOLCANO(VolcanoDungeon::new);
+	GUARDED_CASTLE(DungeonGuardedCastle::new),
+	CASTLE(DungeonCastle::new),
+	VOLCANO(DungeonVolcano::new);
 
 	private IDungeonGenerator generator;
 

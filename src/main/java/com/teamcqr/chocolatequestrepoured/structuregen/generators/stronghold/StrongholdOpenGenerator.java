@@ -9,7 +9,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdOpenDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -37,7 +37,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  */
 public class StrongholdOpenGenerator implements IDungeonGenerator {
 
-	private StrongholdOpenDungeon dungeon;
+	private DungeonStrongholdOpen dungeon;
 
 	private List<String> blacklistedRooms = new ArrayList<String>();
 	private Tuple<Integer, Integer> structureBounds;
@@ -52,7 +52,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	private int entranceSizeX = 0;
 	private int entranceSizeZ = 0;
 
-	public StrongholdOpenGenerator(StrongholdOpenDungeon dungeon) {
+	public StrongholdOpenGenerator(DungeonStrongholdOpen dungeon) {
 		super();
 		this.dungeon = dungeon;
 		this.structureBounds = new Tuple<Integer, Integer>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
@@ -76,7 +76,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		}
 	}
 
-	public StrongholdOpenDungeon getDungeon() {
+	public DungeonStrongholdOpen getDungeon() {
 		return this.dungeon;
 	}
 

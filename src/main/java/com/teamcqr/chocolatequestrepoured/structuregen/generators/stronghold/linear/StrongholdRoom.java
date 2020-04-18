@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.StrongholdLinearDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -136,7 +136,7 @@ public class StrongholdRoom {
 		}
 	}
 
-	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings) {
+	public void generateRoom(DungeonStrongholdLinear dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings) {
 		CQStructure structure = null;
 		switch (this.layout) {
 		case CURVE:
@@ -162,7 +162,7 @@ public class StrongholdRoom {
 		}
 	}
 
-	public void generateRoom(StrongholdLinearDungeon dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings, CQStructure structure, boolean ignoreRotating) {
+	public void generateRoom(DungeonStrongholdLinear dungeon, BlockPos centeredOnXZPos, World world, PlacementSettings settings, CQStructure structure, boolean ignoreRotating) {
 		settings.setRotation(this.roomtype.getRotation());
 		BlockPos pastePos = this.roomtype.getTransformedPastePos(centeredOnXZPos, structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER);
 		structure.addBlocksToWorld(world, pastePos, settings, EPosType.DEFAULT, dungeon, this.floor.getGenerator().getDunZ(), this.floor.getGenerator().getDunX());

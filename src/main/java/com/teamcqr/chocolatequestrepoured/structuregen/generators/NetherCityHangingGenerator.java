@@ -9,7 +9,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.FloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonFloatingNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -31,14 +31,14 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 	//TODO: Air bubble around the whole thing
 	
-	private FloatingNetherCity dungeon;
+	private DungeonFloatingNetherCity dungeon;
 	private int islandCount = 1;
 	private int islandDistance = 1;
 	private HashMap<BlockPos, File> structureMap = new HashMap<BlockPos, File>();
 
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public NetherCityHangingGenerator(FloatingNetherCity generator) {
+	public NetherCityHangingGenerator(DungeonFloatingNetherCity generator) {
 		this.dungeon = generator;
 		this.islandCount = this.dungeon.getBuildingCount(new Random());
 		this.islandDistance = this.dungeon.getIslandDistance();

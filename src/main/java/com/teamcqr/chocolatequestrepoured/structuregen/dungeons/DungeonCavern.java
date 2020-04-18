@@ -35,7 +35,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class CavernDungeon extends DungeonBase {
+public class DungeonCavern extends DungeonBase {
 
 	private int minRooms = 1;
 	private int maxRooms = 10;
@@ -57,7 +57,7 @@ public class CavernDungeon extends DungeonBase {
 	private Block floorMaterial = Blocks.STONE;
 	private Block airBlock = Blocks.AIR;
 
-	public CavernDungeon(String name, Properties prop) {
+	public DungeonCavern(String name, Properties prop) {
 		super(name, prop);
 
 		this.enableProtectionSystem = false;

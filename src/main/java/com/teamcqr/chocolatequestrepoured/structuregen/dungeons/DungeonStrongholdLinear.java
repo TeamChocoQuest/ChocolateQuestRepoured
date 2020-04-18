@@ -14,7 +14,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class StrongholdLinearDungeon extends DungeonBase {
+public class DungeonStrongholdLinear extends DungeonBase {
 
 	private File stairFolder;
 	private File entranceStairFolder;
@@ -43,7 +43,7 @@ public class StrongholdLinearDungeon extends DungeonBase {
 	// Important: All rooms need to have the same x and z size, the height must be the same for all, except the stair rooms: They must have the double height
 	// Also all stair rooms must have exits and entries to ALL sides (N, E, S, W)
 
-	public StrongholdLinearDungeon(String name, Properties prop) {
+	public DungeonStrongholdLinear(String name, Properties prop) {
 		super(name, prop);
 
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
