@@ -69,11 +69,13 @@ public class SupportHillCylindricalPart implements IStructure {
 				
 				double r = (this.partStartX + x - this.centerX) * (this.partStartX + x - this.centerX) +  (this.partStartZ + z - this.centerZ) * (this.partStartZ + z - this.centerZ);
 				r = Math.sqrt(r);
-				System.out.println("R: " + r);
-				/*if(r > platformRadius) {
+				//System.out.println("R: " + r);
+				//System.out.println("X: " + (this.partStartX + x - this.centerX) + "    Z: " + (this.partStartZ + z - this.centerZ));
+				//System.out.println("Center X: " + centerX + "    Center Z: " + centerZ);
+				if(r > platformRadius) {
 					continue;
-				}*/
-				boolean circularRad = r < (platformRadius - wallSize); 
+				}
+				boolean circularRad = r < (platformRadius - ( 1.5 * wallSize)); 
 				
 				for (int y = 0; y <= maxHeight; y++) {
 					if (circularRad && (offsetX + x > this.wallSize) && (offsetZ + z > this.wallSize) && (offsetX + x < this.sizeX - this.wallSize) && (offsetZ + z < this.sizeZ - this.wallSize)) {
