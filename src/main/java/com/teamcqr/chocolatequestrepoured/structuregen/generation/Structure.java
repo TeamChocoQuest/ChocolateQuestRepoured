@@ -83,8 +83,6 @@ public class Structure {
 			return new LightPart(compound);
 		case "coverBlockPart":
 			return new CoverBlockPart(compound);
-		case "supportHillCylindricalPart":
-			return new SupportHillCylindricalPart(compound);
 		default:
 			return null;
 		}
