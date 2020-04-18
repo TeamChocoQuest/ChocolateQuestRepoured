@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -93,7 +93,7 @@ public class DungeonDataManager {
 	}
 
 	private Set<BlockPos> getLocationsOfDungeon(String dungeon) {
-		return dungeonData.getOrDefault(dungeon, Collections.emptySet());
+		return dungeonData.getOrDefault(dungeon, new HashSet<>());
 	}
 
 	public DungeonDataManager(World world) {
@@ -108,7 +108,7 @@ public class DungeonDataManager {
 	}
 	
 	public void insertDungeonEntry(String dungeon, BlockPos location) {
-		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon, Collections.emptySet());
+		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon, new HashSet<>());
 		if(spawnedLocs.add(location)) {
 			dungeonData.put(dungeon, spawnedLocs);
 			if(!modifiedSinceLastSave) {
@@ -163,7 +163,7 @@ public class DungeonDataManager {
 						public void accept(NBTBase t1) {
 							if(t1 instanceof NBTTagCompound) {
 								NBTTagCompound tag1 = (NBTTagCompound) t1;
-								dungeonData.getOrDefault(s, Collections.emptySet()).add(NBTUtil.getPosFromTag(tag1));
+								dungeonData.getOrDefault(s, new HashSet<>()).add(NBTUtil.getPosFromTag(tag1));
 							}
 						}
 					});
@@ -176,7 +176,7 @@ public class DungeonDataManager {
 		if(dungeonData.isEmpty()) {
 			return false;
 		}
-		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon.getDungeonName(), Collections.emptySet());
+		Set<BlockPos> spawnedLocs = dungeonData.getOrDefault(dungeon.getDungeonName(), new HashSet<>());
 		if(spawnedLocs.isEmpty()) {
 			return false;
 		}
