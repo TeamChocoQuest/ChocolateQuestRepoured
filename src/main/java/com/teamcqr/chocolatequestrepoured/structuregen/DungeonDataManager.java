@@ -35,6 +35,7 @@ public class DungeonDataManager {
 	public static void handleWorldLoad(World world) {
 		if(isWorldValid(world)) {
 			createInstance(world);
+			getInstance(world).readData();
 		}
 	}
 	
