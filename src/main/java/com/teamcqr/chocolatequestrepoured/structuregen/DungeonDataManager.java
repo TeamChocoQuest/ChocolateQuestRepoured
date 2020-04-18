@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.util.data;
+package com.teamcqr.chocolatequestrepoured.structuregen;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,9 +23,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
-public class CQRDataFileManager {
+public class DungeonDataManager {
 	
-	private static final Map<World, CQRDataFileManager> INSTANCES = new HashMap<>();
+	private static final Map<World, DungeonDataManager> INSTANCES = new HashMap<>();
 	
 	private boolean modifiedSinceLastSave = false;
 	private Map<String, Set<BlockPos>> dungeonData = new HashMap<>();
@@ -56,7 +57,7 @@ public class CQRDataFileManager {
 	}
 	
 	@Nullable
-	public static CQRDataFileManager getInstance(World world) {
+	public static DungeonDataManager getInstance(World world) {
 		if(isWorldValid(world)) {
 			return INSTANCES.get(world);
 		}
@@ -69,7 +70,7 @@ public class CQRDataFileManager {
 	
 	private static void createInstance(World world) {
 		if(isWorldValid(world) && !INSTANCES.containsKey(world)) {
-			INSTANCES.put(world, new CQRDataFileManager(world));
+			INSTANCES.put(world, new DungeonDataManager(world));
 		}
 	}
 	
@@ -95,7 +96,7 @@ public class CQRDataFileManager {
 		return dungeonData.getOrDefault(dungeon, Collections.emptySet());
 	}
 
-	public CQRDataFileManager(World world) {
+	public DungeonDataManager(World world) {
 		int dim = world.provider.getDimension();
 		String path = world.getSaveHandler().getWorldDirectory().getAbsolutePath();
 		if (dim == 0) {

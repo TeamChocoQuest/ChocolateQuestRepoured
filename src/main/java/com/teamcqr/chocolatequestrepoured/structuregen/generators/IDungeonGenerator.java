@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
-import com.teamcqr.chocolatequestrepoured.util.data.CQRDataFileManager;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -56,7 +56,7 @@ public interface IDungeonGenerator {
 		structure.addLightParts();
 		structure.setupProtectedRegion(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
 
-		CQRDataFileManager.addDungeonEntry(world, getDungeon(), new BlockPos(x,y,z));
+		DungeonDataManager.addDungeonEntry(world, getDungeon(), new BlockPos(x,y,z));
 		
 		DungeonGenerationManager.addStructure(world, structure);
 	}
