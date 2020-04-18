@@ -143,7 +143,7 @@ public class FileIOUtil {
 				public boolean accept(File file, String var2) {
 					if (file != null) {
 						if (file.isDirectory()) {
-							return true;
+							return false;
 						}
 
 						String fileName = file.getName();
@@ -182,7 +182,7 @@ public class FileIOUtil {
 				public boolean accept(File file, String var2) {
 					if (file != null) {
 						if (file.isDirectory()) {
-							return true;
+							return false;
 						}
 
 						String fileName = file.getName();
