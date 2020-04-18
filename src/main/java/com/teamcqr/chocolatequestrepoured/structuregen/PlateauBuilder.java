@@ -9,10 +9,12 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPar
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 
@@ -169,7 +171,7 @@ public class PlateauBuilder {
 	public void makeRandomBlob(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, long seed, World world) {
 		this.makeRandomBlob(random, fillBlock, startPos, endPos, 4, seed, world);
 	}
-
+	
 	public void makeRandomBlob(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world) {
 		Perlin3D perlinNoise1 = new Perlin3D(seed, 8, random);
 		Perlin3D perlinNoise2 = new Perlin3D(seed, 32, random);
@@ -225,6 +227,20 @@ public class PlateauBuilder {
 					list.add(new RandomBlobPart(fillBlock, startPos, size, partOffset, partSize, wallSize));
 				}
 			}
+		}
+		return list;
+	}
+	
+	public List<RandomBlobPart> makeRoundRandomBlobList(Random random, Block fillBlock, BlockPos centerPos, double radius, int height, int wallSize, long seed) {
+		double partCount = new Double(radius / 10D);
+		double angle = 360D / (partCount * partCount);
+		List<RandomBlobPart> list = new ArrayList<>(((Double)partCount).intValue());
+		Vec3d v = new Vec3d(radius, 0, 0);
+		for(int i = 1; i <= ((Double)partCount).intValue(); i++) {
+			v = VectorUtil.rotateVectorAroundY(v, angle);
+			BlockPos pStart = centerPos.add(-v.x, 0, -v.z);
+			BlockPos pEnd = centerPos.add(v.x, height, v.z);
+			list.addAll(makeRandomBlobList(random, fillBlock, pStart, pEnd, wallSize, seed));
 		}
 		return list;
 	}
