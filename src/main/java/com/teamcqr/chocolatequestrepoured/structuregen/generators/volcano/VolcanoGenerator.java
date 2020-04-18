@@ -131,7 +131,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 
 		PlateauBuilder pB = new PlateauBuilder();
 		pB.load(dungeon.getLowerMainBlock(), dungeon.getUpperMainBlock());
-		lists.add(pB.createSupportHillCylindricalList(rdm, world, new BlockPos(x - r, this.minY + 1, z - r), 2 * r, 2 * r, EPosType.DEFAULT));
+		lists.add(pB.createSupportHillList(rdm, world, new BlockPos(x - r, this.minY + 1, z - r), 2 * r, 2 * r, EPosType.DEFAULT));
 		
 
 		// Upper volcano part
