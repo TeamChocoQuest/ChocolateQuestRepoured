@@ -3,23 +3,27 @@ package com.teamcqr.chocolatequestrepoured.objects.items;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.Properties;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.util.BlockUtil;
-import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
-import net.minecraft.block.Block;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.input.Keyboard;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBullet;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
+import com.teamcqr.chocolatequestrepoured.util.BlockUtil;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
+import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
