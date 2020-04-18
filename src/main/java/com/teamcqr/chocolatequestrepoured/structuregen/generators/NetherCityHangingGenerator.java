@@ -72,7 +72,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 					int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
 					radius *= 3;
 					PlateauBuilder pb = new PlateauBuilder();
-					lists.add(pb.makeRandomBlobList(new Random(), Blocks.AIR, nextIslandPos.add(-radius, dungeon.getYFactorHeight(), -radius), nextIslandPos.add(radius, dungeon.getYFactorHeight() *2, radius), 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
+					lists.add(pb.makeRoundRandomBlobList(new Random(), Blocks.AIR, nextIslandPos.add(0, -dungeon.getYFactorHeight(), 0), radius, structure.getSize().getY() + dungeon.getYFactorHeight() *3, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
 				}
 			}
 		}
@@ -85,11 +85,10 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Builds the chains
 		BlockPos center = new BlockPos(x, y, z);
 		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure());
-		center = new BlockPos(center.getX() /*- censtruct.getSize().getX()*/, y, center.getZ() /*- censtruct.getSize().getZ()*/);
 		
 		int radius = censtruct.getSize().getX() > censtruct.getSize().getZ() ? censtruct.getSize().getX() : censtruct.getSize().getZ();
 		PlateauBuilder pb = new PlateauBuilder();
-		lists.add(pb.makeRoundRandomBlobList(new Random(), Blocks.AIR, center.add(0, -dungeon.getYFactorHeight(), 0), radius * 2.5, dungeon.getYFactorHeight() *2, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
+		lists.add(pb.makeRoundRandomBlobList(new Random(), Blocks.AIR, center.add(0, -dungeon.getYFactorHeight(), 0), radius * 3, censtruct.getSize().getY() + dungeon.getYFactorHeight() *3, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
 
 		this.buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center), lists);
 
@@ -97,9 +96,8 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 			CQStructure structure = new CQStructure(this.structureMap.get(bp));
 			/*BlockPos pastePos = bp.subtract(structure.getSize());
 			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());*/
-			BlockPos pastePos = new BlockPos(bp.getX(), y, bp.getZ());
 
-			this.buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp), lists);
+			this.buildBuilding(structure, bp, world, world.getChunkFromBlockCoords(bp), lists);
 		}
 	}
 
