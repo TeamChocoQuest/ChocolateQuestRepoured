@@ -152,8 +152,6 @@ public class CQRMain {
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
-		Reference.BLOCK_PLACING_THREADS_INSTANCE.resetThreads(CQRConfig.advanced.threadCount);
-
 		boolean installCQ = false;
 
 		CQ_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "CQR");
