@@ -134,14 +134,11 @@ public class DungeonDataManager {
 				if(!data.getValue().isEmpty()) {
 					NBTTagList locs = FileIOUtil.getOrCreateTagList(root, "dun-" + data.getKey(), Constants.NBT.TAG_COMPOUND);
 					for(BlockPos loc : data.getValue()) {
-						//locs.appendTag(new NBTTagString(loc.toString()));
 						locs.appendTag(NBTUtil.createPosTag(loc));
 					}
-					root.setTag(data.getKey(), locs);
 					dungeonNames.appendTag(new NBTTagString(data.getKey()));
 				}
 			}
-			root.setTag("dungeons", dungeonNames);
 			FileIOUtil.saveNBTCompoundToFile(root, file);
 			modifiedSinceLastSave = false;
 		}
