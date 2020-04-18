@@ -189,11 +189,14 @@ public class PlateauBuilder {
 		int xIterations = sizeX / 16;
 		int zIterations = sizeZ / 16;
 		
-		int cX = startX - sizeX;
-		int cZ = startZ - sizeZ;
+		int cX = startX + (sizeX /2);
+		int cZ = startZ + (sizeZ /2);
 		
 		int r = sizeX > sizeZ ? sizeX : sizeZ;
 		r /= 2;
+		//System.out.println("R: " + r);
+		//System.out.println("cX: " + cX);
+		//System.out.println("cZ: " + cZ);
 
 		List<SupportHillCylindricalPart> list = new ArrayList<>(xIterations * zIterations);
 		for (int x = 0; x <= xIterations; x++) {
