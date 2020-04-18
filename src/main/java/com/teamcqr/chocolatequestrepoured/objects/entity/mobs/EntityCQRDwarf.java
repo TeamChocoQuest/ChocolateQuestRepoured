@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;

@@ -16,6 +16,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
@@ -63,17 +64,20 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 
 		boolean flag = true;
 		if (attackTarget != null) {
-			AxisAlignedBB aabb = new AxisAlignedBB(entity.posX - CQRConfig.mobs.alertRadius /2, entity.posY - CQRConfig.mobs.alertRadius /3, entity.posZ - CQRConfig.mobs.alertRadius /2, entity.posX + CQRConfig.mobs.alertRadius /2, entity.posY + CQRConfig.mobs.alertRadius /3, entity.posZ + CQRConfig.mobs.alertRadius /2);
-			List<Entity> possibleEnts = entity.world.getEntitiesInAABBexcluding(entity, aabb, TargetUtil.createPredicateAlly(entity.getFaction()));
-			
+			int alertRadius = CQRConfig.mobs.alertRadius;
+			Vec3d vec1 = this.entity.getPositionVector().addVector(alertRadius, alertRadius * 0.5D, alertRadius);
+			Vec3d vec2 = this.entity.getPositionVector().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
+			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
+			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
+
 			if (!possibleEnts.isEmpty()) {
 				Entity e1 = null;
 				int count = -1;
 				double distance = Double.MAX_VALUE;
 				for (Entity e2 : possibleEnts) {
-					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.posX - 4, e2.posY -2, e2.posZ -4, e2.posX +4, e2.posY +2, e2.posZ +4);
+					AxisAlignedBB aabb1 = new AxisAlignedBB(e2.posX - 4, e2.posY - 2, e2.posZ - 4, e2.posX + 4, e2.posY + 2, e2.posZ + 4);
 					List<Entity> list = e2.world.getEntitiesInAABBexcluding(e2, aabb1, TargetUtil.createPredicateAlly(this.entity.getFaction()));
-					double d = this.entity.getDistanceSq(e2); 
+					double d = this.entity.getDistanceSq(e2);
 					if (list.size() > count || (list.size() == count && d < distance)) {
 						e1 = e2;
 						count = list.size();
@@ -85,11 +89,11 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI {
 					flag = false;
 				}
 			}
-	
+
 			boolean canMoveBackwards = this.canMoveBackwards();
-			
-			if(flag) {
-				//No larger group in range
+
+			if (flag) {
+				// No larger group in range
 				this.updateRotation(attackTarget, 2.5F, 2.5F);
 
 				if (canMoveBackwards) {

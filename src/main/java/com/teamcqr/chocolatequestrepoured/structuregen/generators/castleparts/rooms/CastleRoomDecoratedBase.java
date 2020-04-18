@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
@@ -12,6 +15,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -20,9 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected static final int MAX_DECO_ATTEMPTS = 3;

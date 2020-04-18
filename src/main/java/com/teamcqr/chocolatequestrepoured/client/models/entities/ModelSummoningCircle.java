@@ -1,12 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumParticleTypes;
 
 /**
  * SummoningCircle - DerToaster

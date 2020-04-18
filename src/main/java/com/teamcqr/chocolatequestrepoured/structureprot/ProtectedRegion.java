@@ -108,7 +108,10 @@ public class ProtectedRegion {
 		if (pos.getY() > this.endPos.getY()) {
 			return false;
 		}
-		return pos.getZ() < this.endPos.getZ();
+		if (pos.getZ() > this.endPos.getZ()) {
+			return false;
+		}
+		return true;
 	}
 
 	public boolean isValid() {

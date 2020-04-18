@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.util.Reference;

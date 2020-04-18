@@ -1,5 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
@@ -7,12 +16,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
-
-import java.util.*;
 
 public class EntityDataPart implements IStructure {
     public static class ExtendedEntityData {

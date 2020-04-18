@@ -3,9 +3,9 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;

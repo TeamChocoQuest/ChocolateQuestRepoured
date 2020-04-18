@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
+import java.io.IOException;
+
 import com.teamcqr.chocolatequestrepoured.util.Reference;
+
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
@@ -8,8 +11,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.DataSerializerEntry;
-
-import java.io.IOException;
 
 /**
  * Copyright (c) 15 Feb 2019

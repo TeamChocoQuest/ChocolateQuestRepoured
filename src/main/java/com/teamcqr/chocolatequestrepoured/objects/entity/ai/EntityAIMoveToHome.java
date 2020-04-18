@@ -8,14 +8,14 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI {
 
 	public EntityAIMoveToHome(AbstractEntityCQR entity) {
 		super(entity);
-		this.setMutexBits(1);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.hasHomePositionCQR() && !this.entity.hasLeader()) {
+		if (this.entity.hasHomePositionCQR()) {
 			BlockPos pos = this.entity.getHomePositionCQR();
-			return this.entity.getDistance((double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D) > 4.0D;
+			return this.entity.getDistanceSqToCenter(pos) > 16.0D;
 		}
 		return false;
 	}
@@ -28,7 +28,7 @@ public class EntityAIMoveToHome extends AbstractCQREntityAI {
 	@Override
 	public void startExecuting() {
 		BlockPos pos = this.entity.getHomePositionCQR();
-		this.entity.getNavigator().setPath(this.entity.getNavigator().getPathToPos(pos), 1.0D);
+		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 1.0D);
 	}
 
 	@Override
