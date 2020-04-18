@@ -9,21 +9,23 @@ import net.minecraft.init.Blocks;
 import javax.annotation.Nullable;
 
 public enum EnumMCWoodType {
-    OAK(BlockPlanks.EnumType.OAK, Blocks.OAK_STAIRS, Blocks.OAK_FENCE),
-    BIRCH(BlockPlanks.EnumType.BIRCH, Blocks.BIRCH_STAIRS, Blocks.BIRCH_FENCE),
-    SPRUCE(BlockPlanks.EnumType.SPRUCE, Blocks.SPRUCE_STAIRS, Blocks.SPRUCE_FENCE),
-    JUNGLE(BlockPlanks.EnumType.JUNGLE, Blocks.JUNGLE_STAIRS, Blocks.JUNGLE_FENCE),
-    ACACIA(BlockPlanks.EnumType.ACACIA, Blocks.ACACIA_STAIRS, Blocks.ACACIA_FENCE),
-    DARK_OAK(BlockPlanks.EnumType.DARK_OAK, Blocks.DARK_OAK_STAIRS, Blocks.DARK_OAK_FENCE);
+    OAK(BlockPlanks.EnumType.OAK, Blocks.OAK_STAIRS, Blocks.OAK_FENCE, Blocks.OAK_DOOR),
+    BIRCH(BlockPlanks.EnumType.BIRCH, Blocks.BIRCH_STAIRS, Blocks.BIRCH_FENCE, Blocks.BIRCH_DOOR),
+    SPRUCE(BlockPlanks.EnumType.SPRUCE, Blocks.SPRUCE_STAIRS, Blocks.SPRUCE_FENCE, Blocks.SPRUCE_DOOR),
+    JUNGLE(BlockPlanks.EnumType.JUNGLE, Blocks.JUNGLE_STAIRS, Blocks.JUNGLE_FENCE, Blocks.JUNGLE_DOOR),
+    ACACIA(BlockPlanks.EnumType.ACACIA, Blocks.ACACIA_STAIRS, Blocks.ACACIA_FENCE, Blocks.ACACIA_DOOR),
+    DARK_OAK(BlockPlanks.EnumType.DARK_OAK, Blocks.DARK_OAK_STAIRS, Blocks.DARK_OAK_FENCE, Blocks.DARK_OAK_DOOR);
 
     private final BlockPlanks.EnumType plankVariant;
     private final Block stairBlock;
     private final Block fenceBlock;
+    private final Block doorBlock;
 
-    EnumMCWoodType(BlockPlanks.EnumType slab, Block stair, Block fence) {
+    EnumMCWoodType(BlockPlanks.EnumType slab, Block stair, Block fence, Block door) {
         this.plankVariant = slab;
         this.stairBlock = stair;
         this.fenceBlock = fence;
+        this.doorBlock = door;
     }
 
     public IBlockState getSlabBlockState() {
@@ -40,6 +42,10 @@ public enum EnumMCWoodType {
 
     public IBlockState getFenceBlockState() {
         return fenceBlock.getDefaultState();
+    }
+
+    public IBlockState getDoorBlockState() {
+        return doorBlock.getDefaultState();
     }
 
     @Nullable

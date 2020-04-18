@@ -21,7 +21,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import java.util.*;
 
@@ -174,7 +173,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			if (this.floorDesignBlock(x, z)) {
 				blockToBuild = Blocks.CONCRETE.getDefaultState();
 			} else {
-				blockToBuild = dungeon.getWallBlock().getDefaultState();
+				blockToBuild = dungeon.getWallBlockState();
 			}
 		} else if (x == 0 || z == 0 || x == 16 || z == 16) {
 			blockToBuild = this.getOuterEdgeBlock(x, y, z);
@@ -223,61 +222,61 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private IBlockState getOuterEdgeBlock(int x, int y, int z) {
 		if (x == 0 || x == 16) {
 			if (z == 0 || z == 3 || z == 6 || z == 10 || z == 13 || z == 16) {
-				return dungeon.getWallBlock().getDefaultState();
+				return dungeon.getWallBlockState();
 			} else if (z >= 7 && z <= 9) {
 				if (y >= 1 && y <= 3) {
 					return Blocks.AIR.getDefaultState();
 				} else if (y == 4) {
 					if (z == 7 || z == 9) {
 						EnumFacing doorFrameFacing = (z == 7) ? EnumFacing.NORTH : EnumFacing.SOUTH;
-						return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, doorFrameFacing);
+						return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, doorFrameFacing);
 					} else {
 						return Blocks.AIR.getDefaultState();
 					}
 				}
 			} else {
 				if (y == 6) {
-					return dungeon.getWallBlock().getDefaultState();
+					return dungeon.getWallBlockState();
 				} else if (y == 2 || y == 3 || y == 4) {
 					return Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED);
 				} else if (y == 1) {
 					EnumFacing windowBotFacing = (x == 0) ? EnumFacing.WEST : EnumFacing.EAST;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, windowBotFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, windowBotFacing);
 				} else if (y == 5) {
 					EnumFacing windowTopFacing = (x == 0) ? EnumFacing.EAST : EnumFacing.WEST;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, windowTopFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, windowTopFacing);
 				}
 			}
 		} else if (z == 0 || z == 16) {
 			if (x == 3 || x == 6 || x == 10 || x == 13) {
-				return dungeon.getWallBlock().getDefaultState();
+				return dungeon.getWallBlockState();
 			} else if (x >= 7 && x <= 9) {
 				if (y >= 1 && y <= 3) {
 					return Blocks.AIR.getDefaultState();
 				} else if (y == 4) {
 					if (x == 7 || x == 9) {
 						EnumFacing doorFrameFacing = (x == 7) ? EnumFacing.WEST : EnumFacing.EAST;
-						return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, doorFrameFacing);
+						return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, doorFrameFacing);
 					} else {
 						return Blocks.AIR.getDefaultState();
 					}
 				}
 			} else {
 				if (y == 6) {
-					return dungeon.getWallBlock().getDefaultState();
+					return dungeon.getWallBlockState();
 				} else if (y == 2 || y == 3 || y == 4) {
 					return Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED);
 				} else if (y == 1) {
 					EnumFacing windowBotFacing = (z == 0) ? EnumFacing.NORTH : EnumFacing.SOUTH;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, windowBotFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, windowBotFacing);
 				} else if (y == 5) {
 					EnumFacing windowTopFacing = (z == 0) ? EnumFacing.SOUTH : EnumFacing.NORTH;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, windowTopFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.TOP).withProperty(BlockStairs.FACING, windowTopFacing);
 				}
 			}
 		}
 
-		return dungeon.getWallBlock().getDefaultState();
+		return dungeon.getWallBlockState();
 	}
 
 	private IBlockState getInnerRing1Block(int x, int y, int z) {
@@ -290,12 +289,12 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				return Blocks.LAVA.getDefaultState();
 			} else if (z >= 7 && z <= 9) {
 				if (y == 3 && (z == 7 || z == 9)) {
-					return dungeon.getSlabBlock().getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
+					return dungeon.getSlabBlockState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 				} else if (y == 4) {
 					return chiseledStoneBlock;
 				} else if (y == 5 && z == 8) {
 					EnumFacing frameTopStairFacing = (x == 1) ? EnumFacing.WEST : EnumFacing.EAST;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);
 				}
 			}
 		} else if (z == 1 || z == 15) {
@@ -305,12 +304,12 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				return Blocks.LAVA.getDefaultState();
 			} else if (x >= 7 && x <= 9) {
 				if (y == 3 && (x == 7 || x == 9)) {
-					return dungeon.getSlabBlock().getDefaultState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
+					return dungeon.getSlabBlockState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 				} else if (y == 4) {
 					return chiseledStoneBlock;
 				} else if (y == 5 && x == 8) {
 					EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.NORTH : EnumFacing.SOUTH;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);
 				}
 			}
 		}
@@ -326,7 +325,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				if (y == 1 || y == 6) {
 					EnumFacing stairFacing = (z == 3) ? EnumFacing.NORTH : EnumFacing.SOUTH;
 					BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing).withProperty(BlockStairs.HALF, stairHalf);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing).withProperty(BlockStairs.HALF, stairHalf);
 				} else if (y >= 2 && y <= 5) {
 					return Blocks.IRON_BARS.getDefaultState();
 				}
@@ -338,7 +337,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				if (y == 1 || y == 6) {
 					EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.EAST;
 					BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
-					return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing).withProperty(BlockStairs.HALF, stairHalf);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing).withProperty(BlockStairs.HALF, stairHalf);
 				} else if (y >= 2 && y <= 5) {
 					return Blocks.IRON_BARS.getDefaultState();
 				}
@@ -355,7 +354,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			} else if (y == 1 || y == 6) {
 				BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
 				EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.NORTH;
-				return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, stairHalf).withProperty(BlockStairs.FACING, stairFacing);
+				return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, stairHalf).withProperty(BlockStairs.FACING, stairFacing);
 			}
 		} else if ((x == 3 || x == 13) && z == 13) {
 			if (y >= 2 & y <= 5) {
@@ -363,7 +362,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			} else if (y == 1 || y == 6) {
 				BlockStairs.EnumHalf stairHalf = (y == 1) ? BlockStairs.EnumHalf.TOP : BlockStairs.EnumHalf.BOTTOM;
 				EnumFacing stairFacing = (x == 3) ? EnumFacing.WEST : EnumFacing.SOUTH;
-				return dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.HALF, stairHalf).withProperty(BlockStairs.FACING, stairFacing);
+				return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, stairHalf).withProperty(BlockStairs.FACING, stairFacing);
 			}
 		}
 

@@ -26,6 +26,6 @@ public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 
 	@Override
 	protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-		return dungeon.getWallBlock().getDefaultState();
+		return dungeon.getWallBlockState();
 	}
 }

@@ -78,7 +78,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	}
 
 	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
-		IBlockState blockToBuild = dungeon.getFloorBlock().getDefaultState();
+		IBlockState blockToBuild = dungeon.getFloorBlockState();
 		genArray.addBlockState(this.origin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 	}
 
@@ -88,9 +88,9 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		IBlockState blockToBuild;
 		for (int y = 1; y < this.height; y++) {
 			if (y < stairHeight) {
-				blockToBuild = dungeon.getWallBlock().getDefaultState();
+				blockToBuild = dungeon.getWallBlockState();
 			} else if (y == stairHeight) {
-				blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
@@ -104,9 +104,9 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		IBlockState blockToBuild;
 		for (int y = 1; y < this.height; y++) {
 			if (y < stairHeight) {
-				blockToBuild = dungeon.getWallBlock().getDefaultState();
+				blockToBuild = dungeon.getWallBlockState();
 			} else if (y == stairHeight) {
-				blockToBuild = dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+				blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
@@ -120,7 +120,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 
 		for (int y = 1; y < this.height; y++) {
 			if (y < platformHeight) {
-				blockToBuild = dungeon.getFloorBlock().getDefaultState();
+				blockToBuild = dungeon.getFloorBlockState();
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}

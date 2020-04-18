@@ -3,18 +3,14 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
-import net.minecraft.block.BlockObsidian;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import scala.reflect.internal.Types;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -64,11 +60,11 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
 
         GenerationTemplate portalRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
-        portalRoomTemplate.addRule(northEdge, dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-        portalRoomTemplate.addRule(southEdge, dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-        portalRoomTemplate.addRule(westEdge, dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
-        portalRoomTemplate.addRule(eastEdge, dungeon.getStairBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
-        portalRoomTemplate.addRule(platform, dungeon.getWallBlock().getDefaultState());
+        portalRoomTemplate.addRule(northEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
+        portalRoomTemplate.addRule(southEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
+        portalRoomTemplate.addRule(westEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
+        portalRoomTemplate.addRule(eastEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
+        portalRoomTemplate.addRule(platform, dungeon.getWallBlockState());
         portalRoomTemplate.addRule(portal, Blocks.OBSIDIAN.getDefaultState());
         portalRoomTemplate.addRule(portalMid, Blocks.PORTAL.getDefaultState());
 
@@ -85,7 +81,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
     @Override
     protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-        return dungeon.getWallBlock().getDefaultState();
+        return dungeon.getWallBlockState();
     }
 
     @Override

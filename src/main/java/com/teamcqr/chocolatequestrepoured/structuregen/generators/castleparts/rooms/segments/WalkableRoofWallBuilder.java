@@ -40,7 +40,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 		if (this.options.hasDoor() && this.inDoorFrame(pos)) {
 			return Blocks.AIR.getDefaultState();
 		} else if (this.shouldBuildCrenellatedRoof(pos)) {
-			return dungeon.getWallBlock().getDefaultState();
+			return dungeon.getWallBlockState();
 		} else {
 			return Blocks.AIR.getDefaultState();
 		}

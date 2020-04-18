@@ -46,7 +46,7 @@ public class CastleAddonRoof implements ICastleAddon {
 		int x = this.startPos.getX();
 		int y = this.startPos.getY();
 		int z = this.startPos.getZ();
-		IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
+		IBlockState blockState = dungeon.getRoofBlockState();
 		boolean xIsLongSide;
 
 		if (sizeX > sizeZ) {
@@ -61,7 +61,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 		do {
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getWallBlock().getDefaultState();
+			IBlockState state = dungeon.getWallBlockState();
 			if (underLenX > 0 && underLenZ > 0)
 			{
 				for (int i = 0; i < underLenX; i++) {
@@ -98,10 +98,10 @@ public class CastleAddonRoof implements ICastleAddon {
 				roofLenZ = sizeZ + 2;
 
 				for (int i = 0; i < roofLenZ; i++) {
-					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+					blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
 					genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN);
 
-					blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+					blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
 					genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN);
 				}
 
@@ -126,7 +126,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 		do {
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getWallBlock().getDefaultState();
+			IBlockState state = dungeon.getWallBlockState();
 			if (underLenX > 0 && underLenZ > 0)
 			{
 				for (int i = 0; i < underLenX; i++)
@@ -148,7 +148,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 			// add the north row
 			for (int i = 0; i < roofLenX; i++) {
-				IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
+				IBlockState blockState = dungeon.getRoofBlockState();
 				blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.SOUTH);
 
 				// Apply properties to corner pieces
@@ -162,7 +162,7 @@ public class CastleAddonRoof implements ICastleAddon {
 			}
 			// add the south row
 			for (int i = 0; i < roofLenX; i++) {
-				IBlockState blockState = dungeon.getRoofBlock().getDefaultState();
+				IBlockState blockState = dungeon.getRoofBlockState();
 				blockState = blockState.withProperty(BlockStairs.FACING, EnumFacing.NORTH);
 
 				// Apply properties to corner pieces
@@ -176,10 +176,10 @@ public class CastleAddonRoof implements ICastleAddon {
 			}
 
 			for (int i = 0; i < roofLenZ; i++) {
-				IBlockState blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
+				IBlockState blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST);
 				genArray.addBlockState(new BlockPos(roofX, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN);
 
-				blockState = dungeon.getRoofBlock().getDefaultState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
+				blockState = dungeon.getRoofBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST);
 
 				genArray.addBlockState(new BlockPos(roofX + roofLenX - 1, y, roofZ + i), blockState, BlockStateGenArray.GenerationPhase.MAIN);
 			}

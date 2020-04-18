@@ -26,7 +26,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.origin.getY(), this.stairsBelow.getCenterZ());
 		EnumFacing firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
 
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlock(), dungeon.getStairBlock());
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getWallBlockState(), dungeon.getStairBlockState());
 
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
@@ -40,7 +40,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 							blockToBuild = stairs.getBlock(pos);
 							this.usedDecoPositions.add(pos);
 						} else {
-							blockToBuild = dungeon.getFloorBlock().getDefaultState();
+							blockToBuild = dungeon.getFloorBlockState();
 						}
 					}
 					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);

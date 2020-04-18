@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.io.File;
 import java.util.Properties;
 
+import net.minecraft.block.state.IBlockState;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -116,6 +117,21 @@ public class PropertyFileHelper {
 		}
 
 		return retBlock;
+	}
+
+	public static IBlockState getDefaultStateBlockProperty(Properties prop, String key, IBlockState defVal) {
+		String s = prop.getProperty(key);
+		if (s == null || s.isEmpty()) {
+			return defVal;
+		}
+
+		Block retBlock = Block.getBlockFromName(s);
+		if (retBlock == null) {
+			return defVal;
+		}
+		else {
+			return retBlock.getDefaultState();
+		}
 	}
 
 	public static File getFileProperty(Properties prop, String key, String defVal) {
