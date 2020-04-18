@@ -15,7 +15,6 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.util.data.CQRDataFileManager;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -293,7 +292,7 @@ public class DungeonRegistry {
 		if (!dungeon.dependsOnOtherStructures()) {
 			return false;
 		}
-		Set<String> spawnedTypes = CQRDataFileManager.getSpawnedDungeonNames(world);
+		Set<String> spawnedTypes = DungeonDataManager.getSpawnedDungeonNames(world);
 		if(spawnedTypes.isEmpty()) {
 			return true;
 		}
@@ -301,7 +300,7 @@ public class DungeonRegistry {
 			if(!spawnedTypes.contains(s)) {
 				return true;
 			}
-			Set<BlockPos> spawnedLocs = CQRDataFileManager.getLocationsOfDungeon(world, s);
+			Set<BlockPos> spawnedLocs = DungeonDataManager.getLocationsOfDungeon(world, s);
 			if(spawnedLocs.isEmpty()) {
 				return true;
 			}
@@ -310,7 +309,7 @@ public class DungeonRegistry {
 	}
 	
 	public boolean canDungeonSpawnAgain(World world, DungeonBase dungeon) {
-		return !(dungeon.getSpawnLimit() < 0) || !CQRDataFileManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
+		return !(dungeon.getSpawnLimit() < 0) || !DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
 	}
 
 }
