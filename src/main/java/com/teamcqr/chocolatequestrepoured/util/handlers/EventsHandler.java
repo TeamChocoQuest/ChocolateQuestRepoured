@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.API.events.CQDungeonStructureGenerateEvent;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -143,23 +142,12 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e) {
-		if (!e.getWorld().isRemote) {
-			CQRDataFileManager.getInstance().handleWorldLoad(e.getWorld());
-		}
+		CQRDataFileManager.handleWorldLoad(e.getWorld());
 	}
 
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
-		if (!e.getWorld().isRemote) {
-			CQRDataFileManager.getInstance().handleWorldSaving(e.getWorld());
-		}
-	}
-
-	@SubscribeEvent
-	public static void onDungeonGenerate(CQDungeonStructureGenerateEvent e) {
-		if (!e.getWorld().isRemote) {
-			CQRDataFileManager.getInstance().handleDungeonGeneration(e.getWorld(), e.getDungeon(), e.getPos());
-		}
+		CQRDataFileManager.handleWorldSave(e.getWorld());
 	}
 
 	@SubscribeEvent
@@ -171,8 +159,7 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
-			CQRDataFileManager.getInstance().handleWorldUnload(e.getWorld());
-
+			CQRDataFileManager.handleWorldUnload(e.getWorld());
 			// Stop export threads
 			if (!CQStructure.RUNNING_EXPORT_THREADS.isEmpty()) {
 				for (Thread t : CQStructure.RUNNING_EXPORT_THREADS) {

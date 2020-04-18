@@ -36,9 +36,9 @@ public abstract class DungeonBase {
 	protected int[] allowedDims;
 	protected int weight;
 	protected int chance;
+	protected int spawnLimit; 
 	protected String[] biomes;
 	protected String[] blacklistedBiomes;
-	protected boolean unique;
 	protected boolean rotateDungeon;
 	protected boolean spawnBehindWall;
 	protected String[] modDependencies;
@@ -78,7 +78,7 @@ public abstract class DungeonBase {
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
 		this.biomes = PropertyFileHelper.getStringArrayProperty(prop, "biomes", new String[0]);
 		this.blacklistedBiomes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomes", new String[0]);
-		this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", -1);
 		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[0]);
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[0]);
 		this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
@@ -203,8 +203,8 @@ public abstract class DungeonBase {
 		return false;
 	}
 
-	public boolean isUnique() {
-		return this.unique;
+	public int getSpawnLimit() {
+		return this.spawnLimit;
 	}
 
 	public Block getSupportTopBlock() {
