@@ -29,7 +29,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class NetherCityHangingGenerator implements IDungeonGenerator {
 
-	//TODO: Air bubble around the whole thing
+	//DONE: Air bubble around the whole thing
 	
 	private DungeonFloatingNetherCity dungeon;
 	private int islandCount = 1;
@@ -60,23 +60,23 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		rdm = new Random();
 
 		// DONE: Carve out cave -> Need to specify the height in the dungeon
-		int distMax = new Double((this.islandDistance * 1.5D) * (this.islandCount / 10D + 2D)).intValue();
-		BlockPos lower = new BlockPos(x - distMax, y - this.dungeon.getYFactorHeight(), z - distMax);
-		BlockPos upper = new BlockPos(x + distMax, y + (this.dungeon.getYFactorHeight() * 1.5D), z + distMax);
-		if (this.dungeon.digAirCave()) {
-			PlateauBuilder pb = new PlateauBuilder();
-			// pb.createCave(rdm, lower, upper, WorldDungeonGenerator.getSeed(world, x - y, z + y), world);
-			lists.add(pb.makeRandomBlobList(rdm, Blocks.AIR, lower, upper, 4, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
-		}
-
 		for (int i = 0; i < this.islandCount; i++) {
 			nextIslandPos = this.getNextIslandPos(center, i);
 
 			File sf = this.dungeon.pickStructure();
 			if (sf != null) {
 				this.structureMap.put(nextIslandPos, sf);
+				
+				if (this.dungeon.digAirCave()) {
+					CQStructure structure = new CQStructure(sf);
+					int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
+					radius *= 3;
+					PlateauBuilder pb = new PlateauBuilder();
+					lists.add(pb.makeRandomBlobList(new Random(), Blocks.AIR, nextIslandPos.add(-radius, dungeon.getYFactorHeight(), -radius), nextIslandPos.add(radius, dungeon.getYFactorHeight() *2, radius), 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
+				}
 			}
 		}
+		
 	}
 
 	@Override
@@ -85,13 +85,19 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		// Builds the chains
 		BlockPos center = new BlockPos(x, y, z);
 		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure());
-		center = new BlockPos(center.getX() - censtruct.getSize().getX(), y, center.getZ() - censtruct.getSize().getZ());
+		center = new BlockPos(center.getX() /*- censtruct.getSize().getX()*/, y, center.getZ() /*- censtruct.getSize().getZ()*/);
+		
+		int radius = censtruct.getSize().getX() > censtruct.getSize().getZ() ? censtruct.getSize().getX() : censtruct.getSize().getZ();
+		PlateauBuilder pb = new PlateauBuilder();
+		lists.add(pb.makeRoundRandomBlobList(new Random(), Blocks.AIR, center.add(0, -dungeon.getYFactorHeight(), 0), radius * 2.5, dungeon.getYFactorHeight() *2, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
+
 		this.buildBuilding(censtruct, center, world, world.getChunkFromBlockCoords(center), lists);
 
 		for (BlockPos bp : this.structureMap.keySet()) {
 			CQStructure structure = new CQStructure(this.structureMap.get(bp));
-			BlockPos pastePos = bp.subtract(structure.getSize());
-			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());
+			/*BlockPos pastePos = bp.subtract(structure.getSize());
+			pastePos = new BlockPos(pastePos.getX(), y, pastePos.getZ());*/
+			BlockPos pastePos = new BlockPos(bp.getX(), y, bp.getZ());
 
 			this.buildBuilding(structure, pastePos, world, world.getChunkFromBlockCoords(bp), lists);
 		}
@@ -146,16 +152,15 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 	 * # # # # # # # # 3 4
 	 * 
 	 */
-	private void buildBuilding(CQStructure structure, BlockPos pos, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
+	private void buildBuilding(CQStructure structure, BlockPos centeredPos, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
 		int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
 
 		// r = sqrt(((Longer side of building) / 2)^2 *2) +5
 		radius = new Double(Math.sqrt(Math.pow((double) radius / 2.0D, 2.0D) * 2.0D) + 5).intValue();
 
-		BlockPos center = pos.add(-radius, 0, -radius);
-		center = center.add(0, this.dungeon.getRandomHeightVariation(), 0);
+		centeredPos = centeredPos.add(0, this.dungeon.getRandomHeightVariation(), 0);
 
-		this.buildPlatform(center, radius, world, lists);
+		this.buildPlatform(centeredPos, radius, world, lists);
 
 		// DONE: Dig out cave
 		// DONE: Not single caverns but one large cavern for everything ?
@@ -166,9 +171,9 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
 
-		center = center.add(0, 1, 0);
+		centeredPos = centeredPos.add(0, 1, 0);
 
-		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, center, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
+		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, centeredPos, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z))
 			lists.add(list);
 
 		/*
@@ -224,7 +229,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 		int maxY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getZ(), true);
 		maxY = maxY >= 255 ? 255 : maxY;
-		int chainCount = (maxY - pos.getY()) / 4;
+		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {
 			// Check the direction of the chain
 			int yOffset = i * deltaYPerChainSegment;
