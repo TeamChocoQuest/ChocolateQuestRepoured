@@ -61,26 +61,40 @@ public class StrongholdFloor {
 				} else {
 					//Handle stair
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getStair(currentDirection));
+					currentDirection = getRoomExitDirection(getStair(currentDirection));
 				}
 				continue;
 			}
-			if(isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) {
+			if(isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()) || (reversed && getRoomAt(getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection)) != null)) {
 				curveCount--;
 				if(curveCount == 0) {
 					curveCount = 3;
-					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
-					roomCount--;
-					roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
-					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
+					if(reversed && getRoomAt(getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection)) != null) {
+						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
+						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
+						currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+					} else {
+						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
+						roomCount--;
+						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
+						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
+						currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+					}
 				} else {
 					//DONE Curve
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
+					currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
 					continue;
 				}
 			}
 			//DONE: Hallway
 			setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
 		}
+	}
+	
+	private EStrongholdRoomType getRoomAt(Tuple<Integer, Integer> gridPos) {
+		Tuple<Integer, Integer> arrPos = gridPosToArrayIndices(gridPos);
+		return roomPattern[arrPos.getFirst()][arrPos.getSecond()];
 	}
 	
 	private EStrongholdRoomType getHallway(ESkyDirection dir) {
