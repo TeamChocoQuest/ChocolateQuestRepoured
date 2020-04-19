@@ -76,21 +76,21 @@ public class CQStructure {
 
 						CQStructurePart structurePart = new CQStructurePart();
 						structurePart.takeBlocksFromWorld(worldIn, partStartPos, new BlockPos(x1, y1, z1), false, ignoreEntities);
-						list.add(new AbstractMap.SimpleEntry(partStartPos.subtract(startPos1), structurePart));
+						list.add(new AbstractMap.SimpleEntry<>(partStartPos.subtract(startPos1), structurePart));
 					}
 				}
 			}
 		} else {
 			CQStructurePart structure = new CQStructurePart();
 			structure.takeBlocksFromWorld(worldIn, startPos1, this.size, false, ignoreEntities);
-			list.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
+			list.add(new AbstractMap.SimpleEntry<>(BlockPos.ORIGIN, structure));
 		}
 		this.structures.add(list);
 
 		List<Map.Entry<BlockPos, CQStructurePart>> list1 = new ArrayList<>();
 		CQStructurePart structure = new CQStructurePart();
 		structure.takeBlocksFromWorld(worldIn, startPos1, this.size, true, ignoreEntities);
-		list1.add(new AbstractMap.SimpleEntry(BlockPos.ORIGIN, structure));
+		list1.add(new AbstractMap.SimpleEntry<>(BlockPos.ORIGIN, structure));
 		this.structures.add(list1);
 	}
 
@@ -225,7 +225,7 @@ public class CQStructure {
 				CQStructurePart structurePart = new CQStructurePart();
 
 				structurePart.read(partCompound);
-				list.add(new AbstractMap.SimpleEntry(offset, structurePart));
+				list.add(new AbstractMap.SimpleEntry<>(offset, structurePart));
 			}
 			this.structures.add(list);
 		} else {
