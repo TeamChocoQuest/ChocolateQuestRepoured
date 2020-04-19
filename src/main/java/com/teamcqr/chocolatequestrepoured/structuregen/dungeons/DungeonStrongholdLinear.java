@@ -2,11 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -44,9 +46,10 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	private int minFloors = 2;
 	private int maxFloors = 3;
-	private int minRoomsPerFloor = 6;
-	private int maxRoomsPerFloor = 10;
 
+	private int minFloorSize = 3;
+	private int maxFloorSize = 5;
+	
 	private int roomSizeX = 15;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
@@ -63,8 +66,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
 		this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 3);
-		this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minFloorSize", 3);
-		this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
+		this.minFloorSize = PropertyFileHelper.getIntProperty(prop, "minFloorSize", 3);
+		this.maxFloorSize = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
 		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
 		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
@@ -102,16 +105,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		return this.minFloors;
 	}
 
-	public int getMinRoomsPerFloor() {
-		return this.minRoomsPerFloor;
-	}
-
 	public int getMaxFloors() {
 		return this.maxFloors;
-	}
-
-	public int getMaxRoomsPerFloor() {
-		return this.maxRoomsPerFloor;
 	}
 
 	public int getRoomSizeX() {
@@ -228,6 +223,17 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			return this.getStructureFileFromDirectory(folder);
 		}
 		return null;
+	}
+	
+	public int getFloorSize(Random random) {
+		int size = DungeonGenUtils.getIntBetweenBorders(minFloorSize, maxFloorSize);
+		if (size < 3) {
+			size = 3;
+		}
+		if( size % 2 == 0) {
+			size += 1;
+		}
+		return size;
 	}
 
 }
