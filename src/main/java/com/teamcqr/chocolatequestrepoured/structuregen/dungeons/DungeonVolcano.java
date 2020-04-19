@@ -6,8 +6,8 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.brickfortress.ESpiralStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
@@ -178,7 +178,7 @@ public class DungeonVolcano extends DungeonBase {
 		return this.innerRadius;
 	}
 
-	public File getRoomNBTFileForType(ESpiralStrongholdRoomType type) {
+	public File getRoomNBTFileForType(EStrongholdRoomType type) {
 		File dir = null;
 		switch (type) {
 		case BOSS:

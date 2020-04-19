@@ -41,8 +41,8 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		return this.dunZ;
 	}
 
-	private StrongholdFloor[] floors;
 	private Random rdm;
+	private StrongholdFloor[] floors;
 
 	public StrongholdLinearGenerator(DungeonStrongholdLinear dungeon) {
 		// Set floor count
@@ -53,19 +53,23 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// calculates the positions for rooms, stairs, bossroom, entrance, entrance stairs
-		long floorCount = WorldDungeonGenerator.getSeed(world, chunk.x, chunk.z);
+		long seed = WorldDungeonGenerator.getSeed(world, chunk.x, chunk.z);
 		this.rdm = new Random();
-		this.rdm.setSeed(floorCount);
+		this.rdm.setSeed(seed);
 		int count = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinFloors(), this.dungeon.getMaxFloors(), this.rdm);
+		int floorSize = this.dungeon.getFloorSize(this.rdm);
 		this.floors = new StrongholdFloor[count];
 		this.dunX = x;
 		this.dunZ = z;
 
+		int sX = 0;
+		int sZ = 0;
 		for (int i = 0; i < this.floors.length; i++) {
-			int roomCount = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinRoomsPerFloor(), this.dungeon.getMaxRoomsPerFloor(), this.rdm);
-			StrongholdFloor floor = new StrongholdFloor(roomCount, this);
-			floor.generateRoomPattern();
+			StrongholdFloor floor = new StrongholdFloor(floorSize, this, i == (this.floors.length -1));
+			floor.generateRoomPattern(sX, sZ);
 			this.floors[i] = floor;
+			sX = floor.getLastRoomGridPos().getFirst();
+			sZ = floor.getLastRoomGridPos().getSecond();
 		}
 	}
 
@@ -82,13 +86,6 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
 
-		for (int i = 0; i < this.floors.length; i++) {
-			System.out.println("Init pos for floor #" + i + " :" + initPos.toString());
-			StrongholdFloor floor = this.floors[i];
-			floor.generateRooms(initPos, i == 0, i == (this.floors.length - 1), settings, world, this.dungeon);
-			initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
-		}
-
 		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding());
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
@@ -97,6 +94,19 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		}
 		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
 			lists.add(list);
+		}
+		structure = new CQStructure(this.dungeon.getEntranceStairRoom());
+		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+			lists.add(list);
+		}
+		
+		int yFloor = y;
+		yFloor -= structure.getSize().getY();
+		for (int i = 0; i < this.floors.length; i++) {
+			System.out.println("Init pos for floor #" + i + " :" + initPos.toString());
+			StrongholdFloor floor = this.floors[i];
+			floor.generateRooms(x, z, yFloor, lists);
+			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
 	}
 
