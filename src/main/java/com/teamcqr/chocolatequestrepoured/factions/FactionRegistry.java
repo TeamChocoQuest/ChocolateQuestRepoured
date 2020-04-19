@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.FileUtils;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -68,15 +70,15 @@ public class FactionRegistry {
 
 	private void loadFactionsInConfigFolder() {
 		// DONE: Load factions from files
-		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getPropertiesFileFilter());
-		int fileCount = files.length;
+		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_FACTION_FOLDER, new String[] {"cfg", "prop", "properties"}, true));
+		int fileCount = files.size();
 		if (fileCount > 0) {
 			ArrayList<String> fIDs = new ArrayList<>();
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
 			boolean flag = true;
 			for (int i = 0; i < fileCount; i++) {
-				File file = files[i];
+				File file = files.get(i);
 				Properties prop = new Properties();
 				try (InputStream inputStream = new FileInputStream(file)) {
 					prop.load(inputStream);
