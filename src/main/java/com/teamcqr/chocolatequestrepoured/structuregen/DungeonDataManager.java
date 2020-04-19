@@ -154,17 +154,18 @@ public class DungeonDataManager {
 			public void accept(NBTBase t) {
 				if(t instanceof NBTTagString) {
 					NBTTagString tag = (NBTTagString) t;
-					String s = tag.getString().substring(4);
-					
-					NBTTagList data = FileIOUtil.getOrCreateTagList(root, s, Constants.NBT.TAG_COMPOUND);
+					String s = tag.getString();
+					Set<BlockPos> poss = dungeonData.getOrDefault(s, new HashSet<>());
+					NBTTagList data = FileIOUtil.getOrCreateTagList(root, "dun-" + s, Constants.NBT.TAG_COMPOUND);
 					data.forEach(new Consumer<NBTBase>() {
 						public void accept(NBTBase t1) {
 							if(t1 instanceof NBTTagCompound) {
 								NBTTagCompound tag1 = (NBTTagCompound) t1;
-								dungeonData.getOrDefault(s, new HashSet<>()).add(NBTUtil.getPosFromTag(tag1));
+								poss.add(NBTUtil.getPosFromTag(tag1));
 							}
 						}
 					});
+					dungeonData.put(s, poss);
 				}
 			}
 		});
