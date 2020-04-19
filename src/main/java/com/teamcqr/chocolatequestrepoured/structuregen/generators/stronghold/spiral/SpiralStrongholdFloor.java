@@ -97,10 +97,10 @@ public class SpiralStrongholdFloor {
 			if(x == 0) {
 				//Left side
 				if(!rev) {
-					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_SN;
+					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
-					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
+					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_SN;
 					z -= 1;
 				}
 				continue;
@@ -108,10 +108,10 @@ public class SpiralStrongholdFloor {
 			if(x == (sideLength -1)) {
 				//Right side
 				if(rev) {
-					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_SN;
+					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
 					z += 1;
 				} else {
-					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_NS;
+					roomGrid[x][z] = EStrongholdRoomType.HALLWAY_SN;
 					z -= 1;
 				}
 				continue;
