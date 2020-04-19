@@ -231,6 +231,14 @@ public class PlateauBuilder {
 		return list;
 	}
 	
+	public List<RandomBlobPart> makeRandomBlobList(Random random, Block fillBlock, BlockPos centerPos, double radius, int height, int wallSize, long seed) {
+		Vec3d v = new Vec3d(radius, 0, 0);
+		v = VectorUtil.rotateVectorAroundY(v, 45);
+		BlockPos pStart = centerPos.add(-v.x, 0, -v.z);
+		BlockPos pEnd = centerPos.add(v.x, height, v.z);
+		return makeRandomBlobList(random, fillBlock, pStart, pEnd, wallSize, seed);
+	}
+	
 	public List<RandomBlobPart> makeRoundRandomBlobList(Random random, Block fillBlock, BlockPos centerPos, double radius, int height, int wallSize, long seed) {
 		double partCount = new Double(radius / 10D);
 		double angle = 360D / (partCount * partCount);
