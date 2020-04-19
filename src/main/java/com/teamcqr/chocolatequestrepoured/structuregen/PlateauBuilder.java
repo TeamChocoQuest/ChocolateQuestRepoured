@@ -232,7 +232,7 @@ public class PlateauBuilder {
 	}
 	
 	public List<RandomBlobPart> makeRandomBlobList(Random random, Block fillBlock, BlockPos centerPos, double radius, int height, int wallSize, long seed) {
-				BlockPos pStart = centerPos.add(-radius, 0, -radius);
+		BlockPos pStart = centerPos.add(-radius, 0, -radius);
 		BlockPos pEnd = centerPos.add(radius, height, radius);
 		return makeRandomBlobList(random, fillBlock, pStart, pEnd, wallSize, seed);
 	}
