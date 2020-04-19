@@ -3,8 +3,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 import java.util.Properties;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
+import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.world.World;
@@ -16,18 +19,28 @@ import net.minecraft.world.World;
  */
 public class DungeonStrongholdLinear extends DungeonBase {
 
-	private File stairFolder;
 	private File entranceStairFolder;
 	private File entranceBuildingFolder;
 	private File bossRoomFolder;
 
 	// IMPORTANT: the structure paste location MUST BE in its middle !!!
 	// --> calculate position B E F O R E pasting -> pre-process method
-	private File roomCurveFolder;
-	private File roomRoomFolder;
-	private File roomCrossingFolder;
-	private File roomtCrossingFolder;
-	private File roomHallwayFolder;
+	private File curveENFolder;
+	private File curveNEFolder;
+	private File curveSEFolder;
+	private File curveESFolder;
+	private File curveWSFolder;
+	private File curveSWFolder;
+	private File curveNWFolder;
+	private File curveWNFolder;
+	private File hallSNFolder;
+	private File hallNSFolder;
+	private File hallWEFolder;
+	private File hallEWFolder;
+	private File stairNFolder;
+	private File stairEFolder;
+	private File stairSFolder;
+	private File stairWFolder;
 
 	private int minFloors = 2;
 	private int maxFloors = 3;
@@ -45,22 +58,34 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	public DungeonStrongholdLinear(String name, Properties prop) {
 		super(name, prop);
+		
+		this.rotateDungeon = false;
 
 		this.minFloors = PropertyFileHelper.getIntProperty(prop, "minFloors", 2);
 		this.maxFloors = PropertyFileHelper.getIntProperty(prop, "maxFloors", 3);
-		this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minRoomsPerFloor", 6);
-		this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxRoomsPerFloor", 10);
+		this.minRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "minFloorSize", 3);
+		this.maxRoomsPerFloor = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
-		this.stairFolder = PropertyFileHelper.getFileProperty(prop, "stairFolder", "stronghold/linear/stairs/");
 		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
 		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
-
-		this.roomRoomFolder = PropertyFileHelper.getFileProperty(prop, "deadEndFolder", "stronghold/linear/rooms/deadEnds");
-		this.roomHallwayFolder = PropertyFileHelper.getFileProperty(prop, "hallwayStraightFolder", "stronghold/linear/rooms/hallways/");
-		this.roomCurveFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCurveFolder", "stronghold/linear/rooms/curves/");
-		this.roomtCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayTCrossingFolder", "stronghold/linear/rooms/crossings/threesided/");
-		this.roomCrossingFolder = PropertyFileHelper.getFileProperty(prop, "hallwayCrossingFolder", "stronghold/linear/rooms/crossings/foursided/");
+		
+		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
+		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");
+		this.curveNEFolder = PropertyFileHelper.getFileProperty(prop, "curveNEFolder", "stronghold/rooms/curves/NE");
+		this.curveNWFolder = PropertyFileHelper.getFileProperty(prop, "curveNWFolder", "stronghold/rooms/curves/NW");
+		this.curveSEFolder = PropertyFileHelper.getFileProperty(prop, "curveSEFolder", "stronghold/rooms/curves/SE");
+		this.curveSWFolder = PropertyFileHelper.getFileProperty(prop, "curveSWFolder", "stronghold/rooms/curves/SW");
+		this.curveWNFolder = PropertyFileHelper.getFileProperty(prop, "curveWNFolder", "stronghold/rooms/curves/WN");
+		this.curveWSFolder = PropertyFileHelper.getFileProperty(prop, "curveWSFolder", "stronghold/rooms/curves/WS");
+		this.hallEWFolder = PropertyFileHelper.getFileProperty(prop, "hallwayEWFolder", "stronghold/rooms/hallway/EW");
+		this.hallNSFolder = PropertyFileHelper.getFileProperty(prop, "hallwayNSFolder", "stronghold/rooms/hallway/NS");
+		this.hallSNFolder = PropertyFileHelper.getFileProperty(prop, "hallwaySNFolder", "stronghold/rooms/hallway/SN");
+		this.hallWEFolder = PropertyFileHelper.getFileProperty(prop, "hallwayWEFolder", "stronghold/rooms/hallway/WE");
+		this.stairEFolder = PropertyFileHelper.getFileProperty(prop, "stairEFolder", "stronghold/stairs/E");
+		this.stairNFolder = PropertyFileHelper.getFileProperty(prop, "stairNFolder", "stronghold/stairs/N");
+		this.stairSFolder = PropertyFileHelper.getFileProperty(prop, "stairSFolder", "stronghold/stairs/S");
+		this.stairWFolder = PropertyFileHelper.getFileProperty(prop, "stairWFolder", "stronghold/stairs/W");
 
 		this.roomSizeX = PropertyFileHelper.getIntProperty(prop, "roomSizeX", 15);
 		this.roomSizeY = PropertyFileHelper.getIntProperty(prop, "roomSizeY", 10);
@@ -77,96 +102,16 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		return this.minFloors;
 	}
 
-	public void setMinFloors(int floors) {
-		this.minFloors = floors;
-	}
-
 	public int getMinRoomsPerFloor() {
 		return this.minRoomsPerFloor;
-	}
-
-	public void setMinRoomsPerFloor(int minRoomsPerFloor) {
-		this.minRoomsPerFloor = minRoomsPerFloor;
 	}
 
 	public int getMaxFloors() {
 		return this.maxFloors;
 	}
 
-	public void setMaxFloors(int floorss) {
-		this.maxFloors = floorss;
-	}
-
 	public int getMaxRoomsPerFloor() {
 		return this.maxRoomsPerFloor;
-	}
-
-	public void setMaxRoomsPerFloor(int maxRoomsPerFloor) {
-		this.maxRoomsPerFloor = maxRoomsPerFloor;
-	}
-
-	public File getStairFolder() {
-		return this.stairFolder;
-	}
-
-	public void setStairFolder(File stairFolder) {
-		this.stairFolder = stairFolder;
-	}
-
-	public File getEntranceStairFolder() {
-		return this.entranceStairFolder;
-	}
-
-	public void setEntranceStairFolder(File entranceStairFolder) {
-		this.entranceStairFolder = entranceStairFolder;
-	}
-
-	public File getEntranceBuildingFolder() {
-		return this.entranceBuildingFolder;
-	}
-
-	public void setEntranceBuildingFolder(File entranceBuildingFolder) {
-		this.entranceBuildingFolder = entranceBuildingFolder;
-	}
-
-	public File getBossRoomFolder() {
-		return this.bossRoomFolder;
-	}
-
-	public void setBossRoomFolder(File bossRoomFolder) {
-		this.bossRoomFolder = bossRoomFolder;
-	}
-
-	public File getCurveRoom() {
-		return this.getStructureFileFromDirectory(this.roomCurveFolder);
-	}
-
-	public File getTCrossingRoom() {
-		return this.getStructureFileFromDirectory(this.roomtCrossingFolder);
-	}
-
-	public File getCrossingRoom() {
-		return this.getStructureFileFromDirectory(this.roomCrossingFolder);
-	}
-
-	public File getHallwayRoom() {
-		return this.getStructureFileFromDirectory(this.roomHallwayFolder);
-	}
-
-	public File getDeadEndRoom() {
-		return this.getStructureFileFromDirectory(this.roomRoomFolder);
-	}
-
-	public File getEntranceStairRoom() {
-		return this.getStructureFileFromDirectory(this.entranceStairFolder);
-	}
-
-	public File getStairRoom() {
-		return this.getStructureFileFromDirectory(this.stairFolder);
-	}
-
-	public File getBossRoom() {
-		return this.getStructureFileFromDirectory(this.bossRoomFolder);
 	}
 
 	public int getRoomSizeX() {
@@ -183,6 +128,106 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	public File getEntranceBuilding() {
 		return this.getStructureFileFromDirectory(this.entranceBuildingFolder);
+	}
+	
+	public File getEntranceStairRoom() {
+		return this.getStructureFileFromDirectory(this.entranceStairFolder);
+	}
+
+	public File getBossRoom() {
+		return this.getStructureFileFromDirectory(this.bossRoomFolder);
+	}
+	
+	@Nullable
+	public File getStairRoom(ESkyDirection direction) {
+		return getRoom(direction, direction);
+	}
+	
+	@Nullable
+	public File getRoom(ESkyDirection entranceD, ESkyDirection exitD) {
+		File folder = null;
+		if(entranceD == exitD) {
+			switch(entranceD) {
+			case EAST:
+				folder = stairEFolder;
+				break;
+			case NORTH:
+				folder = stairNFolder;
+				break;
+			case SOUTH:
+				folder = stairSFolder;
+				break;
+			case WEST:
+				folder = stairWFolder;
+				break;
+			}
+		} else {
+			switch(entranceD) {
+			case EAST:
+				switch(exitD) {
+				case NORTH:
+					folder = curveENFolder;
+					break;
+				case SOUTH:
+					folder = curveESFolder;
+					break;
+				case WEST:
+					folder = hallEWFolder;
+					break;
+				default: break;
+				}
+				break;
+			case NORTH:
+				switch(exitD) {
+				case EAST:
+					folder = curveNEFolder;
+					break;
+				case SOUTH:
+					folder = hallNSFolder;
+					break;
+				case WEST:
+					folder = curveNWFolder;
+					break;
+				default: break;
+				}
+				break;
+			case SOUTH:
+				switch(exitD) {
+				case EAST:
+					folder = curveSEFolder;
+					break;
+				case NORTH:
+					folder = hallSNFolder;
+					break;
+				case WEST:
+					folder = curveSWFolder;
+					break;
+				default: break;
+				}
+				break;
+			case WEST:
+				switch(exitD) {
+				case EAST:
+					folder = hallWEFolder;
+					break;
+				case NORTH:
+					folder = curveWNFolder;
+					break;
+				case SOUTH:
+					folder = curveWSFolder;
+					break;
+				default: break;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		
+		if(folder != null) {
+			return this.getStructureFileFromDirectory(folder);
+		}
+		return null;
 	}
 
 }
