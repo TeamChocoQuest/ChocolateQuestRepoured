@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.lin
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -64,10 +65,12 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 
 		int sX = 0;
 		int sZ = 0;
+		ESkyDirection exitDir = ESkyDirection.values()[rdm.nextInt(ESkyDirection.values().length)];
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = new StrongholdFloor(floorSize, this, i == (this.floors.length -1));
-			floor.generateRoomPattern(sX, sZ);
+			floor.generateRoomPattern(sX, sZ, exitDir);
 			this.floors[i] = floor;
+			exitDir = floor.getExitDirection();
 			sX = floor.getLastRoomGridPos().getFirst();
 			sZ = floor.getLastRoomGridPos().getSecond();
 		}
@@ -76,7 +79,6 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// places the structures
-		BlockPos initPos = new BlockPos(x, y, z);
 		// CQStructure entranceStair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
 
@@ -96,16 +98,16 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 			lists.add(list);
 		}
 		structure = new CQStructure(this.dungeon.getEntranceStairRoom());
-		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+		int yFloor = y;
+		yFloor -= structure.getSize().getY();
+		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, yFloor, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
 			lists.add(list);
 		}
 		
-		int yFloor = y;
-		yFloor -= structure.getSize().getY();
 		for (int i = 0; i < this.floors.length; i++) {
-			System.out.println("Init pos for floor #" + i + " :" + initPos.toString());
 			StrongholdFloor floor = this.floors[i];
-			floor.generateRooms(x, z, yFloor, lists);
+			floor.generateRooms(x, z, yFloor, settings, lists);
+			yFloor -= dungeon.getRoomSizeY() * 2;
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
 	}
