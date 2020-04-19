@@ -49,8 +49,8 @@ public class StrongholdFloor {
 		
 		int roomCount = this.sideLength * this.sideLength;
 		roomCount -= 2;
-		int curveCount = 3;
 		boolean reversed = !curve;
+		int curveCount = reversed ? 4 : 3;
 		while(roomCount > 0) {
 			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
 			roomCount--;
