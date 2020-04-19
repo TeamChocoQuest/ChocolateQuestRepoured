@@ -289,20 +289,19 @@ public class DungeonRegistry {
 	}
 
 	public boolean isDungeonMissingDungeonDependencies(World world, DungeonBase dungeon) {
-		if (!dungeon.dependsOnOtherStructures()) {
-			return false;
-		}
-		Set<String> spawnedTypes = DungeonDataManager.getSpawnedDungeonNames(world);
-		if(spawnedTypes.isEmpty()) {
-			return true;
-		}
-		for (String s : dungeon.getDungeonDependencies()) {
-			if(!spawnedTypes.contains(s)) {
+		if (dungeon.dependsOnOtherStructures()) {
+			Set<String> spawnedTypes = DungeonDataManager.getSpawnedDungeonNames(world);
+			if(spawnedTypes.isEmpty()) {
 				return true;
 			}
-			Set<BlockPos> spawnedLocs = DungeonDataManager.getLocationsOfDungeon(world, s);
-			if(spawnedLocs.isEmpty()) {
-				return true;
+			for (String s : dungeon.getDungeonDependencies()) {
+				if(!spawnedTypes.contains(s)) {
+					return true;
+				}
+				Set<BlockPos> spawnedLocs = DungeonDataManager.getLocationsOfDungeon(world, s);
+				if(spawnedLocs.isEmpty()) {
+					return true;
+				}
 			}
 		}
 		return false;
