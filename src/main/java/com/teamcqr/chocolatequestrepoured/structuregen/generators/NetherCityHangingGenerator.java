@@ -70,7 +70,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 				if (this.dungeon.digAirCave()) {
 					CQStructure structure = new CQStructure(sf);
 					int radius = structure.getSize().getX() > structure.getSize().getZ() ? structure.getSize().getX() : structure.getSize().getZ();
-					radius *= 3;
+					radius *= 2;
 					PlateauBuilder pb = new PlateauBuilder();
 					lists.add(pb.makeRandomBlobList(new Random(), Blocks.AIR, nextIslandPos.add(0, -dungeon.getYFactorHeight(), 0), radius, structure.getSize().getY() + dungeon.getYFactorHeight() *2, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
 				}
@@ -87,6 +87,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 		CQStructure censtruct = new CQStructure(this.dungeon.pickCentralStructure());
 		
 		int radius = censtruct.getSize().getX() > censtruct.getSize().getZ() ? censtruct.getSize().getX() : censtruct.getSize().getZ();
+		radius *= 2;
 		PlateauBuilder pb = new PlateauBuilder();
 		lists.add(pb.makeRandomBlobList(new Random(), Blocks.AIR, center.add(0, -dungeon.getYFactorHeight(), 0), radius * 3, censtruct.getSize().getY() + dungeon.getYFactorHeight() *2, 8, WorldDungeonGenerator.getSeed(world, x - y, z + y)));
 
