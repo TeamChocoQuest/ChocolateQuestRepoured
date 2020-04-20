@@ -72,7 +72,7 @@ public class StrongholdFloor {
 			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), this.currentDirection);
 			//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 			roomCount--;
-			if(roomCount == 0) {
+			if(roomCount == 0 && (!reversed || (roomCoord.getFirst() == 0 && roomCoord.getSecond() == 0))) {
 				//DONE: Handle stair or boss room
 				if(lastFloor) {
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), EStrongholdRoomType.BOSS);
@@ -94,10 +94,16 @@ public class StrongholdFloor {
 						roomCoord = prevCoords;
 						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
 						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
-						roomCount--;
+						
+						//As we needed to "fuck go back", we need to increment the room counter again so taht we dont forget one room
+						roomCount++;
+						
 						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
-						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
-						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+						if(!(roomCoord.getFirst() == 0 && roomCoord.getSecond() == 0)) {
+							setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
+							roomCount--;
+							this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+						}
 					} else {
 						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
 						roomCount--;
