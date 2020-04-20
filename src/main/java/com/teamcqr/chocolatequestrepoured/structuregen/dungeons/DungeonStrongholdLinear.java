@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -234,6 +235,69 @@ public class DungeonStrongholdLinear extends DungeonBase {
 			size += 1;
 		}
 		return size;
+	}
+	
+	public File getRoom(EStrongholdRoomType type) {
+		File folder = null;
+		switch(type) {
+		case BOSS:
+			folder = bossRoomFolder;
+			break;
+		case CURVE_EN:
+			folder = curveENFolder;
+			break;
+		case CURVE_ES:
+			folder = curveESFolder;
+			break;
+		case CURVE_NE:
+			folder = curveNEFolder;
+			break;
+		case CURVE_NW:
+			folder = curveNWFolder;
+			break;
+		case CURVE_SE:
+			folder = curveSEFolder;
+			break;
+		case CURVE_SW:
+			folder = curveSWFolder;
+			break;
+		case CURVE_WN:
+			folder = curveWNFolder;
+			break;
+		case CURVE_WS:
+			folder = curveWSFolder;
+			break;
+		case HALLWAY_EW:
+			folder = hallEWFolder;
+			break;
+		case HALLWAY_NS:
+			folder = hallNSFolder;
+			break;
+		case HALLWAY_SN:
+			folder = hallSNFolder;
+			break;
+		case HALLWAY_WE:
+			folder = hallWEFolder;
+			break;
+		case STAIR_EE:
+			folder = stairEFolder;
+			break;
+		case STAIR_NN:
+			folder = stairNFolder;
+			break;
+		case STAIR_SS:
+			folder = stairSFolder;
+			break;
+		case STAIR_WW:
+			folder = stairWFolder;
+			break;
+		default:
+			return null;
+		}
+		if(folder != null) {
+			return this.getStructureFileFromDirectory(folder);
+		}
+		return null;
 	}
 
 }
