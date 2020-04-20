@@ -14,10 +14,14 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 
 /**
  * Copyright (c) 29.04.2019<br>
@@ -234,6 +238,26 @@ public class DungeonGenUtils {
 
 	public static BlockPos getValidMaxPos(BlockPos pos1, BlockPos pos2) {
 		return new BlockPos(Math.min(Math.max(pos1.getX(), pos2.getX()), 30000000), Math.min(Math.max(pos1.getY(), pos2.getY()), 256), Math.min(Math.max(pos1.getZ(), pos2.getZ()), 30000000));
+	}
+
+	public static BlockPos getTransformedStartPos(BlockPos startPos, BlockPos size, PlacementSettings settings) {
+		if (settings.getMirror() == Mirror.NONE && settings.getRotation() == Rotation.NONE) {
+			return startPos;
+		}
+		BlockPos pos = Template.transformedBlockPos(settings, size);
+		int x = startPos.getX();
+		int y = startPos.getY();
+		int z = startPos.getZ();
+		boolean flag = false;
+		if (pos.getX() < 0) {
+			x -= pos.getX() + 1;
+			flag = true;
+		}
+		if (pos.getZ() < 0) {
+			z -= pos.getZ() + 1;
+			flag = true;
+		}
+		return flag ? new BlockPos(x, y, z) : startPos;
 	}
 
 }
