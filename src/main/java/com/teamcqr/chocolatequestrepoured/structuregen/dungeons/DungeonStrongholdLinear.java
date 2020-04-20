@@ -72,7 +72,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
 		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
-		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossroomFolder", "stronghold/linear/bossrooms/");
+		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
 		
 		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
 		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");

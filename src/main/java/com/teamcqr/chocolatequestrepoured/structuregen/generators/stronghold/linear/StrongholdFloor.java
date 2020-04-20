@@ -49,15 +49,19 @@ public class StrongholdFloor {
 			break;
 		} 
 		Tuple<Integer, Integer> roomCoord = getNextRoomCoordinates(gridPosX, gridPosZ, prevFloorExitDir);
+		//System.out.println("X: " + gridPosX + "    Z: " + gridPosZ + "        Room: 0");
+		//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: 1");
 		setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), room);
-		currentDirection = getRoomExitDirection(room);
+		this.currentDirection = getRoomExitDirection(room);
 		
 		int roomCount = this.sideLength * this.sideLength;
 		roomCount -= 2;
 		boolean reversed = !curve;
-		int curveCount = reversed ? 4 : 3;
+		int curveCount = reversed ? 4 : 4;
+		System.out.println("Beginning gen...");
 		while(roomCount > 0) {
-			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
+			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), this.currentDirection);
+			//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 			roomCount--;
 			if(roomCount == 0) {
 				//DONE: Handle stair or boss room
@@ -66,29 +70,31 @@ public class StrongholdFloor {
 				} else {
 					//Handle stair
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getStair(currentDirection));
-					currentDirection = getRoomExitDirection(getStair(currentDirection));
+					this.currentDirection = getRoomExitDirection(getStair(currentDirection));
 				}
-				continue;
+				break;
 			}
 			if(isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()) || (reversed && getRoomAt(getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection)) != null)) {
 				curveCount--;
 				if(curveCount == 0) {
-					curveCount = 3;
+					curveCount = 4;
 					if(reversed && getRoomAt(getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection)) != null) {
 						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
 						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
-						currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
 					} else {
 						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
 						roomCount--;
 						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
+						//System.out.println("Setting extra room...");
 						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
-						currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
 					}
+					//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 				} else {
 					//DONE Curve
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
-					currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+					this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
 					continue;
 				}
 			}
@@ -210,6 +216,7 @@ public class StrongholdFloor {
 
 	private void setRoomType(int gpX, int gpZ, EStrongholdRoomType type) {
 		Tuple<Integer, Integer> coords = gridPosToArrayIndices(new Tuple<>(gpX, gpZ));
+		System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
 		this.roomPattern[coords.getFirst()][coords.getSecond()] = type;
 	}
 	
@@ -218,18 +225,22 @@ public class StrongholdFloor {
 		case CURVE_EN:
 		case CURVE_WN:
 		case HALLWAY_SN:
+		case STAIR_NN:
 			return ESkyDirection.NORTH;
 		case CURVE_ES:
 		case CURVE_WS:
 		case HALLWAY_NS:
+		case STAIR_SS:
 			return ESkyDirection.SOUTH;
 		case CURVE_NE:
 		case CURVE_SE:
 		case HALLWAY_WE:
+		case STAIR_EE:
 			return ESkyDirection.EAST;
 		case CURVE_NW:
 		case CURVE_SW:
 		case HALLWAY_EW:
+		case STAIR_WW:
 			return ESkyDirection.WEST;
 		default: 
 			return null;

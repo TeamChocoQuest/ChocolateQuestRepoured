@@ -66,6 +66,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		int sZ = 0;
 		ESkyDirection exitDir = ESkyDirection.values()[rdm.nextInt(ESkyDirection.values().length)];
 		for (int i = 0; i < this.floors.length; i++) {
+			System.out.println("Calculating floor" + (i+1));
 			StrongholdFloor floor = new StrongholdFloor(floorSize, this, i == (this.floors.length -1));
 			floor.generateRoomPattern(sX, sZ, exitDir);
 			this.floors[i] = floor;
