@@ -22,7 +22,6 @@ public class StrongholdFloor {
 	private EStrongholdRoomType[][] roomPattern;
 	private ESkyDirection currentDirection;
 	private boolean lastFloor;
-	private int gpFirstX, gpFirstZ;
 	
 	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
 		this.generator = generator;
@@ -33,8 +32,6 @@ public class StrongholdFloor {
 	
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
 		setRoomType(gridPosX, gridPosZ, EStrongholdRoomType.NONE);
-		this.gpFirstX = gridPosX;
-		this.gpFirstZ = gridPosZ;
 		EStrongholdRoomType room = EStrongholdRoomType.NONE;
 		boolean curve = gridPosX == 0 && gridPosZ == 0;
 		switch (prevFloorExitDir) {
