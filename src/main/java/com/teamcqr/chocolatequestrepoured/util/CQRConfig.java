@@ -80,7 +80,7 @@ public class CQRConfig {
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
-		@Config.RangeDouble(min = 0.0D, max = 100.0D)
+		@Config.RangeDouble(min = 0, max = 100)
 		public int spawnerActivationDistance = 48;
 		@Config.RangeInt(min = 0, max = 32)
 		public int supportHillWallSize = 8;
