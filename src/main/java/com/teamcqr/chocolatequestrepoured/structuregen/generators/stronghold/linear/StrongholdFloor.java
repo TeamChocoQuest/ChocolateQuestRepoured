@@ -22,6 +22,7 @@ public class StrongholdFloor {
 	private EStrongholdRoomType[][] roomPattern;
 	private ESkyDirection currentDirection;
 	private boolean lastFloor;
+	private int gpFirstX, gpFirstZ;
 	
 	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
 		this.generator = generator;
@@ -32,20 +33,23 @@ public class StrongholdFloor {
 	
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
 		setRoomType(gridPosX, gridPosZ, EStrongholdRoomType.NONE);
+		this.gpFirstX = gridPosX;
+		this.gpFirstZ = gridPosZ;
 		EStrongholdRoomType room = EStrongholdRoomType.NONE;
 		boolean curve = gridPosX == 0 && gridPosZ == 0;
 		switch (prevFloorExitDir) {
+		//When you enter the curve: you face the OPPOSITE of FIRST_LETTER, when you leave you face SECOND_LETTER
 		case EAST:
-			room = curve ? EStrongholdRoomType.CURVE_EN : EStrongholdRoomType.HALLWAY_EW;
+			room = curve ? EStrongholdRoomType.CURVE_WN : EStrongholdRoomType.HALLWAY_EW;
 			break;
 		case NORTH:
-			room = curve ? EStrongholdRoomType.CURVE_NW : EStrongholdRoomType.HALLWAY_NS;
+			room = curve ? EStrongholdRoomType.CURVE_SW : EStrongholdRoomType.HALLWAY_NS;
 			break;
 		case SOUTH:
-			room = curve ? EStrongholdRoomType.CURVE_SE : EStrongholdRoomType.HALLWAY_SN;
+			room = curve ? EStrongholdRoomType.CURVE_NE : EStrongholdRoomType.HALLWAY_SN;
 			break;
 		case WEST:
-			room = curve ? EStrongholdRoomType.CURVE_WS : EStrongholdRoomType.HALLWAY_WE;
+			room = curve ? EStrongholdRoomType.CURVE_ES : EStrongholdRoomType.HALLWAY_WE;
 			break;
 		} 
 		Tuple<Integer, Integer> roomCoord = getNextRoomCoordinates(gridPosX, gridPosZ, prevFloorExitDir);
