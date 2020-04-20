@@ -1,8 +1,11 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
+import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModEntities;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
@@ -10,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.util.*;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -25,6 +29,7 @@ public class CastleDungeon extends DungeonBase {
 	private int roomSize;
 	private int floorHeight;
 	private IBlockState wallBlock;
+	private IBlockState fancyWallBlock;
 	private IBlockState roofBlock;
 	private IBlockState fenceBlock;
 	private IBlockState floorBlock;
@@ -50,6 +55,7 @@ public class CastleDungeon extends DungeonBase {
 
 		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
 		this.wallBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "wallBlock", Blocks.STONEBRICK.getDefaultState());
+		this.fancyWallBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fancyWallBlock", Blocks.STONEBRICK.getDefaultState());
 		this.floorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "floorBlock", woodType.getPlankBlockState());
 		this.roofBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "roofBlock", woodType.getStairBlockState());
 		this.fenceBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState());
@@ -57,6 +63,7 @@ public class CastleDungeon extends DungeonBase {
 		this.slabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getSlabBlockState());
 		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
+		Collection<IProperty<? >> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
