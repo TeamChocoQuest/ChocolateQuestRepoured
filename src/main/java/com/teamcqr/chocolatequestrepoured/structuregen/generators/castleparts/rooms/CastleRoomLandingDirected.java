@@ -39,7 +39,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 						} else if (x < this.openingWidth || ((x >= this.openingSeparation + this.openingWidth) && (x < this.openingSeparation + this.openingWidth * 2))) {
 							if (z == this.stairZ) {
 								EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, DungeonGenUtils.getCWRotationsBetween(EnumFacing.SOUTH, this.stairStartSide));
-								blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+								blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 							}
 						} else {
 							blockToBuild = dungeon.getFloorBlockState();

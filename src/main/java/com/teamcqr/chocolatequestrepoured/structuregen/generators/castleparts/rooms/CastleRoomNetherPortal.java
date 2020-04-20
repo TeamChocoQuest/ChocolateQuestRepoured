@@ -60,11 +60,11 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
 
         GenerationTemplate portalRoomTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
-        portalRoomTemplate.addRule(northEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
-        portalRoomTemplate.addRule(southEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
-        portalRoomTemplate.addRule(westEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
-        portalRoomTemplate.addRule(eastEdge, dungeon.getStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
-        portalRoomTemplate.addRule(platform, dungeon.getWallBlockState());
+        portalRoomTemplate.addRule(northEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.SOUTH));
+        portalRoomTemplate.addRule(southEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.NORTH));
+        portalRoomTemplate.addRule(westEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.EAST));
+        portalRoomTemplate.addRule(eastEdge, dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, EnumFacing.WEST));
+        portalRoomTemplate.addRule(platform, dungeon.getMainBlockState());
         portalRoomTemplate.addRule(portal, Blocks.OBSIDIAN.getDefaultState());
         portalRoomTemplate.addRule(portalMid, Blocks.PORTAL.getDefaultState());
 
@@ -81,7 +81,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
     @Override
     protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-        return dungeon.getWallBlockState();
+        return dungeon.getMainBlockState();
     }
 
     @Override

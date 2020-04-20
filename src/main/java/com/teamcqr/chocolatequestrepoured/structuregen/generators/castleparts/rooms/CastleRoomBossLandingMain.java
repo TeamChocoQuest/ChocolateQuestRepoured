@@ -89,7 +89,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 
 		if (z == -1) {
 			if (x < this.connectingWallLength || x > this.endX - this.connectingWallLength || y == this.height - 1) {
-				blockToBuild = dungeon.getWallBlockState();
+				blockToBuild = dungeon.getMainBlockState();
 			} else if (y == 0) {
 				return Blocks.QUARTZ_BLOCK.getDefaultState();
 			}
@@ -99,7 +99,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 					blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
 				} else if (z == this.stairsDownZIdx) {
 					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
-					blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+					blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 				} else {
 					return Blocks.AIR.getDefaultState();
 				}
@@ -107,7 +107,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 				blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
 			}
 		} else if (y == this.height - 1) {
-			blockToBuild = dungeon.getWallBlockState();
+			blockToBuild = dungeon.getMainBlockState();
 		}
 
 		return blockToBuild;

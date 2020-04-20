@@ -26,7 +26,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	@Override
 	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
 		this.recalcPillarStart();
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getWallBlockState(), dungeon.getStairBlockState());
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -43,7 +43,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 						blockToBuild = stairs.getBlock(pos);
 						this.usedDecoPositions.add(pos);
 					} else if (y == this.height - 1) {
-						blockToBuild = dungeon.getWallBlockState();
+						blockToBuild = dungeon.getMainBlockState();
 					}
 
 					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);

@@ -55,7 +55,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
 
     @Override
     protected IBlockState getFloorBlock(CastleDungeon dungeon) {
-        return dungeon.getWallBlockState();
+        return dungeon.getMainBlockState();
     }
 
     @Override

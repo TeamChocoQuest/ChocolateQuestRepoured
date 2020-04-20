@@ -61,7 +61,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 		do {
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getWallBlockState();
+			IBlockState state = dungeon.getMainBlockState();
 			if (underLenX > 0 && underLenZ > 0)
 			{
 				for (int i = 0; i < underLenX; i++) {
@@ -126,7 +126,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 		do {
 			// Add the foundation under the roof
-			IBlockState state = dungeon.getWallBlockState();
+			IBlockState state = dungeon.getMainBlockState();
 			if (underLenX > 0 && underLenZ > 0)
 			{
 				for (int i = 0; i < underLenX; i++)
