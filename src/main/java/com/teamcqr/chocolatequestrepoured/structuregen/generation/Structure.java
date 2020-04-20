@@ -48,17 +48,20 @@ public class Structure {
 				BlockPos endPos = startPos.add(istructure.getSize());
 				if (startPos.getX() < startX) {
 					startX = startPos.getX();
-				} else if (endPos.getX() > endX) {
-					endX = endPos.getX();
 				}
 				if (startPos.getY() < startY) {
 					startY = startPos.getY();
-				} else if (endPos.getY() > endY) {
-					endY = endPos.getY();
 				}
 				if (startPos.getZ() < startZ) {
 					startZ = startPos.getZ();
-				} else if (endPos.getZ() > endZ) {
+				}
+				if (endPos.getY() > endY) {
+					endY = endPos.getY();
+				}
+				if (endPos.getX() > endX) {
+					endX = endPos.getX();
+				}
+				if (endPos.getZ() > endZ) {
 					endZ = endPos.getZ();
 				}
 			}
@@ -189,10 +192,14 @@ public class Structure {
 		List<LightPart> lightParts = new ArrayList<>();
 		int partSize = 24;
 		for (int y = this.startY; y <= this.endY; y += partSize) {
+			int partSizeY = y + partSize > this.endY ? this.endY - y + 1 : partSize;
 			for (int x = this.startX; x <= this.endX; x += partSize) {
+				int partSizeX = x + partSize > this.endX ? this.endX - x + 1 : partSize;
 				for (int z = this.startZ; z <= this.endZ; z += partSize) {
-					BlockPos pos = new BlockPos(x, y, z);
-					lightParts.add(new LightPart(pos, pos.add(partSize - 1, partSize - 1, partSize - 1)));
+					int partSizeZ = z + partSize > this.endZ ? this.endZ - z + 1 : partSize;
+					BlockPos startPos = new BlockPos(x, y, z);
+					BlockPos endPos = startPos.add(partSizeX - 1, partSizeY - 1, partSizeZ - 1);
+					lightParts.add(new LightPart(startPos, endPos));
 				}
 			}
 		}
