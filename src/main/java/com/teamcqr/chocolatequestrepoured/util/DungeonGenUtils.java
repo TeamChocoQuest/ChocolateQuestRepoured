@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.EnumFacing;
@@ -258,6 +259,15 @@ public class DungeonGenUtils {
 			flag = true;
 		}
 		return flag ? new BlockPos(x, y, z) : startPos;
+	}
+
+	public static int getYForPos(World world, int x, int z, boolean ignoreWater) {
+		int y = 255;
+		Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
+		while (y > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
+			material = world.getBlockState(new BlockPos(x, --y, z)).getMaterial();
+		}
+		return y;
 	}
 
 }

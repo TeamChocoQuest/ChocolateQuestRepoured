@@ -32,12 +32,12 @@ public class WallPartRailingTower implements IWallPart {
 
 	@Override
 	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
-		int startX = chunkX * 16;
+		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 
 		int[] xValues = new int[] { 0, 1, 6, 7 };
 		int[] zValues = new int[] { 2, 3, 12, 13 };
-		
+
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		ExtendedBlockStatePart.ExtendedBlockState stateBlock = new ExtendedBlockState(Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true), null);
 		ExtendedBlockStatePart.ExtendedBlockState stateAir = new ExtendedBlockState(Blocks.AIR.getDefaultState(), null);
@@ -78,7 +78,7 @@ public class WallPartRailingTower implements IWallPart {
 				}
 			}
 		}
-		
+
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
