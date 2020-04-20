@@ -115,6 +115,7 @@ public class StrongholdFloor {
 					//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 				} else {
 					//DONE Curve
+					//TODO: Add something to prevent going around curves if we already were here
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
 					this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
 				}
