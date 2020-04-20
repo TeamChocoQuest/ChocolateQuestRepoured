@@ -49,15 +49,17 @@ public class BlockSpawner extends BlockContainer {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		TileEntitySpawner tile = (TileEntitySpawner) world.getTileEntity(pos);
-		IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.NORTH);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (tileEntity instanceof TileEntitySpawner) {
+			IItemHandler itemHandler = ((TileEntitySpawner) tileEntity).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 
-		for (int i = 0; i < itemHandler.getSlots(); i++) {
-			ItemStack stack = itemHandler.getStackInSlot(i);
+			for (int i = 0; i < itemHandler.getSlots(); i++) {
+				ItemStack stack = itemHandler.getStackInSlot(i);
 
-			if (!stack.isEmpty()) {
-				EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
-				world.spawnEntity(item);
+				if (!stack.isEmpty()) {
+					EntityItem item = new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack);
+					world.spawnEntity(item);
+				}
 			}
 		}
 		super.breakBlock(world, pos, state);
