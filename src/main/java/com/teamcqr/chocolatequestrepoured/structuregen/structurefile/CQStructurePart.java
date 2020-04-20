@@ -330,7 +330,7 @@ public class CQStructurePart extends Template {
 
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, ProtectedRegion protectedRegion) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
-		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
+		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 6);
 		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
 
 		if (replaceBanners && dungeonBanner != null) {
