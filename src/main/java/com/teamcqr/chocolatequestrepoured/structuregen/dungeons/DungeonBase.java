@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
@@ -136,22 +137,13 @@ public abstract class DungeonBase {
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {
-				y += this.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
+				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
 			}
 		}
 		y /= 256;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
 		this.generate(world, x, y, z);
-	}
-
-	protected int getYForPos(World world, int x, int z, boolean ignoreWater) {
-		int y = 255;
-		Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
-		while (y > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
-			material = world.getBlockState(new BlockPos(x, --y, z)).getMaterial();
-		}
-		return y;
 	}
 
 	public abstract void generate(World world, int x, int y, int z);
