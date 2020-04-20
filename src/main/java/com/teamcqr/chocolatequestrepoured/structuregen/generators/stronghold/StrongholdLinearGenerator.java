@@ -107,7 +107,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
 			floor.generateRooms(x, z, yFloor, settings, lists, world);
-			yFloor -= dungeon.getRoomSizeY() * 2;
+			yFloor -= dungeon.getRoomSizeY();
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
 	}

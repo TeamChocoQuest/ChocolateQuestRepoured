@@ -139,15 +139,16 @@ public class StrongholdFloor {
 	}
 	
 	private EStrongholdRoomType getCurve(ESkyDirection dir, boolean reversed) {
+		//When you enter the curve: you face the OPPOSITE of FIRST_LETTER, when you leave you face SECOND_LETTER
 		switch(dir) {
 		case EAST:
-			return reversed ? EStrongholdRoomType.CURVE_ES : EStrongholdRoomType.CURVE_EN;
+			return reversed ? EStrongholdRoomType.CURVE_WS : EStrongholdRoomType.CURVE_WN;
 		case NORTH:
-			return reversed ? EStrongholdRoomType.CURVE_NE : EStrongholdRoomType.CURVE_NW;
+			return reversed ? EStrongholdRoomType.CURVE_SE : EStrongholdRoomType.CURVE_SW;
 		case SOUTH:
-			return reversed ? EStrongholdRoomType.CURVE_SW : EStrongholdRoomType.CURVE_SE;
+			return reversed ? EStrongholdRoomType.CURVE_NW : EStrongholdRoomType.CURVE_NE;
 		case WEST:
-			return reversed ? EStrongholdRoomType.CURVE_WN : EStrongholdRoomType.CURVE_WS;
+			return reversed ? EStrongholdRoomType.CURVE_EN : EStrongholdRoomType.CURVE_ES;
 		default:
 			return null;
 		}
@@ -161,7 +162,11 @@ public class StrongholdFloor {
 					Tuple<Integer,Integer> gridPos = arrayIndiciesToGridPos(new Tuple<>(iX, iZ));
 					int x = centerX + (gridPos.getFirst() * generator.getDungeon().getRoomSizeX());
 					int z = centerZ + (gridPos.getSecond() * generator.getDungeon().getRoomSizeZ());
-					BlockPos pos = new BlockPos(x,y,z);
+					int y1 = y;
+					if(room.toString().startsWith("STAIR_")) {
+						y1 -= generator.getDungeon().getRoomSizeY();
+					}
+					BlockPos pos = new BlockPos(x,y1,z);
 					File struct = generator.getDungeon().getRoom(room);
 					if(struct != null) {
 						CQStructure structure = new CQStructure(struct);
