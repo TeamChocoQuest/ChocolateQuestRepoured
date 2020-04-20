@@ -1,13 +1,18 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear;
 
+import java.io.File;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdFloor {
@@ -142,8 +147,25 @@ public class StrongholdFloor {
 		}
 	}
 	
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, List<List<? extends IStructure>> lists) {
-		
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, List<List<? extends IStructure>> lists, World world) {
+		for(int iX = 0; iX < sideLength; iX++) {
+			for(int iZ = 0; iZ < sideLength; iZ++) {
+				EStrongholdRoomType room = roomPattern[iX][iZ];
+				if(room != null && room!=EStrongholdRoomType.NONE) {
+					Tuple<Integer,Integer> gridPos = arrayIndiciesToGridPos(new Tuple<>(iX, iZ));
+					int x = centerX + (gridPos.getFirst() * generator.getDungeon().getRoomSizeX());
+					int z = centerZ + (gridPos.getSecond() * generator.getDungeon().getRoomSizeZ());
+					BlockPos pos = new BlockPos(x,y,z);
+					File struct = generator.getDungeon().getRoom(room);
+					if(struct != null) {
+						CQStructure structure = new CQStructure(struct);
+						for (List<? extends IStructure> list : structure.addBlocksToWorld(world, pos, settings, EPosType.CENTER_XZ_LAYER, generator.getDungeon(), centerX, centerZ)) {
+							lists.add(list);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	private Tuple<Integer, Integer> getNextRoomCoordinates(int oldX, int oldZ, ESkyDirection direction) {

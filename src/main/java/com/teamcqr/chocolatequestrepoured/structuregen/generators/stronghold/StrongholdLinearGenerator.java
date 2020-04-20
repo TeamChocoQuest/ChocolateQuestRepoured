@@ -5,7 +5,6 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
@@ -106,7 +105,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
-			floor.generateRooms(x, z, yFloor, settings, lists);
+			floor.generateRooms(x, z, yFloor, settings, lists, world);
 			yFloor -= dungeon.getRoomSizeY() * 2;
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}
@@ -133,7 +132,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	}
 
 	@Override
-	public DungeonBase getDungeon() {
+	public DungeonStrongholdLinear getDungeon() {
 		return this.dungeon;
 	}
 
