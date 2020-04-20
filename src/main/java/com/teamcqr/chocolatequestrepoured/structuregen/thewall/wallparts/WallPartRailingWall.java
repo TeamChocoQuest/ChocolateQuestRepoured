@@ -47,7 +47,7 @@ public class WallPartRailingWall implements IWallPart {
 
 	@Override
 	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
-		int startX = chunkX * 16;
+		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
@@ -136,7 +136,7 @@ public class WallPartRailingWall implements IWallPart {
 			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
-			
+
 			stateMap.put(spawnerPos, new ExtendedBlockStatePart.ExtendedBlockState(state2, tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}

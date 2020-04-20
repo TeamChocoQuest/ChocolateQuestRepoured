@@ -3,8 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
@@ -18,21 +18,14 @@ public interface IWallPart {
 
 	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists);
 
-	default int getLowerY(World world, Chunk chunk) {
-		int[] yValues = new int[256];
-		int index = 0;
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				int y = world.getTopSolidOrLiquidBlock(new BlockPos((chunk.x * 16) + x, 0, (chunk.z * 16) + z)).getY();
-				yValues[index] = y;
-				index++;
-			}
-		}
-		int lowestY = yValues[0];
-		for (int i = 1; i < yValues.length; i++) {
-			int y = yValues[i];
-			if (y < lowestY) {
-				lowestY = y;
+	default int getLowerY(World world, int x1, int z1) {
+		int lowestY = this.getTopY() - 16;
+		for (int x2 = 0; x2 < 16; x2++) {
+			for (int z2 = 0; z2 < 16; z2++) {
+				int y = DungeonGenUtils.getYForPos(world, x1 + x2, z1 + z2, true);
+				if (y < lowestY) {
+					lowestY = y;
+				}
 			}
 		}
 		if (lowestY <= 10) {

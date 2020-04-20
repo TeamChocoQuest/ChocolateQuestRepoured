@@ -32,20 +32,19 @@ public class WallPartTower implements IWallPart {
 
 	@Override
 	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
-
-		int startX = chunkX * 16;
+		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		ExtendedBlockStatePart.ExtendedBlockState stateAndesite = new ExtendedBlockState(Blocks.STONE.getDefaultState().withProperty(BlockStone.VARIANT, BlockStone.EnumType.ANDESITE_SMOOTH), null);
 		ExtendedBlockStatePart.ExtendedBlockState stateObsidian = new ExtendedBlockState(Blocks.OBSIDIAN.getDefaultState(), null);
 		ExtendedBlockStatePart.ExtendedBlockState stateBrick = new ExtendedBlockState(Blocks.STONEBRICK.getDefaultState(), null);
-		if(!CQRConfig.wall.obsidianCore) {
+		if (!CQRConfig.wall.obsidianCore) {
 			stateObsidian = stateBrick;
 		}
 
-
-		for (int y = this.getLowerY(world, chunk); y <= this.getTopY(); y++) {
+		int lowerY = this.getLowerY(world, startX, startZ);
+		for (int y = lowerY; y <= this.getTopY(); y++) {
 			for (int x = 0; x < 16; x++) {
 				for (int z = 0; z < 16; z++) {
 					// Wall Rest, not the tower
