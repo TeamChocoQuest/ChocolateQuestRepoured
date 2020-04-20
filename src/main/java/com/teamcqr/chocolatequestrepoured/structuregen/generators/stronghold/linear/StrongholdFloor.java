@@ -22,6 +22,7 @@ public class StrongholdFloor {
 	private EStrongholdRoomType[][] roomPattern;
 	private ESkyDirection currentDirection;
 	private boolean lastFloor;
+	private int lastX, lastZ;
 	
 	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
 		this.generator = generator;
@@ -195,11 +196,7 @@ public class StrongholdFloor {
 	}
 	
 	public Tuple<Integer, Integer> getLastRoomGridPos() {
-		return new Tuple<>(0,0);
-	}
-	
-	public Tuple<Integer, Integer> getFirstRoomGridPos() {
-		return new Tuple<>(0,0);
+		return new Tuple<>(lastX,lastZ);
 	}
 	
 	private Tuple<Integer, Integer> gridPosToArrayIndices(Tuple<Integer, Integer> gridPosIn) {
@@ -221,6 +218,8 @@ public class StrongholdFloor {
 	}
 
 	private void setRoomType(int gpX, int gpZ, EStrongholdRoomType type) {
+		lastX = gpX;
+		lastZ = gpZ;
 		Tuple<Integer, Integer> coords = gridPosToArrayIndices(new Tuple<>(gpX, gpZ));
 		System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
 		this.roomPattern[coords.getFirst()][coords.getSecond()] = type;
