@@ -173,7 +173,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			if (this.floorDesignBlock(x, z)) {
 				blockToBuild = Blocks.CONCRETE.getDefaultState();
 			} else {
-				blockToBuild = dungeon.getWallBlockState();
+				blockToBuild = dungeon.getMainBlockState();
 			}
 		} else if (x == 0 || z == 0 || x == 16 || z == 16) {
 			blockToBuild = this.getOuterEdgeBlock(x, y, z);
@@ -222,7 +222,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private IBlockState getOuterEdgeBlock(int x, int y, int z) {
 		if (x == 0 || x == 16) {
 			if (z == 0 || z == 3 || z == 6 || z == 10 || z == 13 || z == 16) {
-				return dungeon.getWallBlockState();
+				return dungeon.getMainBlockState();
 			} else if (z >= 7 && z <= 9) {
 				if (y >= 1 && y <= 3) {
 					return Blocks.AIR.getDefaultState();
@@ -236,7 +236,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				}
 			} else {
 				if (y == 6) {
-					return dungeon.getWallBlockState();
+					return dungeon.getMainBlockState();
 				} else if (y == 2 || y == 3 || y == 4) {
 					return Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED);
 				} else if (y == 1) {
@@ -249,7 +249,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			}
 		} else if (z == 0 || z == 16) {
 			if (x == 3 || x == 6 || x == 10 || x == 13) {
-				return dungeon.getWallBlockState();
+				return dungeon.getMainBlockState();
 			} else if (x >= 7 && x <= 9) {
 				if (y >= 1 && y <= 3) {
 					return Blocks.AIR.getDefaultState();
@@ -263,7 +263,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 				}
 			} else {
 				if (y == 6) {
-					return dungeon.getWallBlockState();
+					return dungeon.getMainBlockState();
 				} else if (y == 2 || y == 3 || y == 4) {
 					return Blocks.STAINED_GLASS_PANE.getDefaultState().withProperty(BlockColored.COLOR, EnumDyeColor.RED);
 				} else if (y == 1) {
@@ -276,22 +276,22 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			}
 		}
 
-		return dungeon.getWallBlockState();
+		return dungeon.getMainBlockState();
 	}
 
 	private IBlockState getInnerRing1Block(int x, int y, int z) {
-		final IBlockState chiseledStoneBlock = Blocks.STONEBRICK.getDefaultState().withProperty(BlockStoneBrick.VARIANT, BlockStoneBrick.EnumType.CHISELED);
+		final IBlockState detailBlock = dungeon.getFancyBlockState();
 
 		if (x == 1 || x == 15) {
 			if (z == 3 || z == 6 || z == 10 || z == 13) {
-				return chiseledStoneBlock;
+				return detailBlock;
 			} else if ((z == 1 || z == 2 || z == 14 || z == 15) && y == 1) {
 				return Blocks.LAVA.getDefaultState();
 			} else if (z >= 7 && z <= 9) {
 				if (y == 3 && (z == 7 || z == 9)) {
 					return dungeon.getSlabBlockState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 				} else if (y == 4) {
-					return chiseledStoneBlock;
+					return detailBlock;
 				} else if (y == 5 && z == 8) {
 					EnumFacing frameTopStairFacing = (x == 1) ? EnumFacing.WEST : EnumFacing.EAST;
 					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);
@@ -299,14 +299,14 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			}
 		} else if (z == 1 || z == 15) {
 			if (x == 3 || x == 6 || x == 10 || x == 13) {
-				return chiseledStoneBlock;
+				return detailBlock;
 			} else if ((x == 2 || x == 14) && y == 1) {
 				return Blocks.LAVA.getDefaultState();
 			} else if (x >= 7 && x <= 9) {
 				if (y == 3 && (x == 7 || x == 9)) {
 					return dungeon.getSlabBlockState().withProperty(BlockSlab.HALF, BlockSlab.EnumBlockHalf.TOP);
 				} else if (y == 4) {
-					return chiseledStoneBlock;
+					return detailBlock;
 				} else if (y == 5 && x == 8) {
 					EnumFacing frameTopStairFacing = (z == 1) ? EnumFacing.NORTH : EnumFacing.SOUTH;
 					return dungeon.getStairBlockState().withProperty(BlockStairs.HALF, BlockStairs.EnumHalf.BOTTOM).withProperty(BlockStairs.FACING, frameTopStairFacing);

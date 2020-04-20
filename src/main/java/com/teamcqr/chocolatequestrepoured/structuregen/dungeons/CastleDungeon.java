@@ -4,22 +4,19 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.init.ModEntities;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.CastleGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
 import com.teamcqr.chocolatequestrepoured.util.*;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
 /**
- * Copyright (c) 25.05.2019
+ * Copyright (c) 20.04.2020
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
@@ -28,13 +25,15 @@ public class CastleDungeon extends DungeonBase {
 	private int maxSize;
 	private int roomSize;
 	private int floorHeight;
-	private IBlockState wallBlock;
-	private IBlockState fancyWallBlock;
+	private IBlockState mainBlock;
+	private IBlockState fancyBlock;
+	private IBlockState slabBlock;
+	private IBlockState stairBlock;
 	private IBlockState roofBlock;
 	private IBlockState fenceBlock;
 	private IBlockState floorBlock;
-	private IBlockState stairBlock;
-	private IBlockState slabBlock;
+	private IBlockState woodStairBlock;
+	private IBlockState woodSlabBlock;
 	private IBlockState plankBlock;
 	private IBlockState doorBlock;
 
@@ -54,13 +53,15 @@ public class CastleDungeon extends DungeonBase {
 		this.floorHeight = PropertyFileHelper.getIntProperty(prop, "floorHeight", 8);
 
 		EnumMCWoodType woodType = PropertyFileHelper.getWoodTypeProperty(prop, "woodType", EnumMCWoodType.OAK);
-		this.wallBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "wallBlock", Blocks.STONEBRICK.getDefaultState());
-		this.fancyWallBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fancyWallBlock", Blocks.STONEBRICK.getDefaultState());
+		this.mainBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "mainBlock", Blocks.STONEBRICK.getDefaultState());
+		this.stairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", Blocks.STONE_BRICK_STAIRS.getDefaultState());
+		this.slabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", Blocks.STONE_SLAB.getDefaultState());
+		this.fancyBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fancyBlock", Blocks.STONEBRICK.getDefaultState());
 		this.floorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "floorBlock", woodType.getPlankBlockState());
 		this.roofBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "roofBlock", woodType.getStairBlockState());
 		this.fenceBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState());
-		this.stairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", woodType.getStairBlockState());
-		this.slabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getSlabBlockState());
+		this.woodStairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", woodType.getStairBlockState());
+		this.woodSlabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getSlabBlockState());
 		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
 		Collection<IProperty<? >> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
@@ -110,8 +111,20 @@ public class CastleDungeon extends DungeonBase {
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 
-	public IBlockState getWallBlockState() {
-		return this.wallBlock;
+	public IBlockState getMainBlockState() {
+		return this.mainBlock;
+	}
+
+	public IBlockState getFancyBlockState() {
+		return fancyBlock;
+	}
+
+	public IBlockState getSlabBlockState() {
+		return slabBlock;
+	}
+
+	public IBlockState getStairBlockState() {
+		return stairBlock;
 	}
 
 	public IBlockState getFloorBlockState() {
@@ -126,12 +139,12 @@ public class CastleDungeon extends DungeonBase {
 		return fenceBlock;
 	}
 
-	public IBlockState getStairBlockState() {
-		return this.stairBlock;
+	public IBlockState getWoodStairBlockState() {
+		return this.woodStairBlock;
 	}
 
-	public IBlockState getSlabBlockState() {
-		return slabBlock;
+	public IBlockState getWoodSlabBlockState() {
+		return woodSlabBlock;
 	}
 
 	public IBlockState getPlankBlockState() {
