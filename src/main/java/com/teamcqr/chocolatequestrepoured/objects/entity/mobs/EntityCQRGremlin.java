@@ -45,6 +45,16 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 	}
 
 	@Override
+	public boolean canIgniteTorch() {
+		return false;
+	}
+
+	@Override
+	public boolean canTameEntity() {
+		return false;
+	}
+
+	@Override
 	public float getEyeHeight() {
 		return this.height * 0.7F;
 	}

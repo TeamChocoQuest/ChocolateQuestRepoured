@@ -28,13 +28,6 @@ public class EntityCQREnderman extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(14, new EntityAIFireFighter(this));
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-	}
-
-	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if (super.attackEntityFrom(source, amount)) {
 			if (source instanceof EntityDamageSourceIndirect) {

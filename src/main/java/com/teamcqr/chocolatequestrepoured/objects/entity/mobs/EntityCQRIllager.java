@@ -40,12 +40,6 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-	}
-
-	@Override
 	public void onEntityUpdate() {
 		if (!this.world.isRemote) {
 			if (this.getAttackTarget() != null && !this.dataManager.get(IS_AGGRESSIVE)) {

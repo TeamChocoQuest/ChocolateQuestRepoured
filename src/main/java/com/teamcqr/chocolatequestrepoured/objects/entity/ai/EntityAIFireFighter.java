@@ -10,6 +10,9 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.WorldType;
@@ -18,10 +21,13 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class EntityAIFireFighter extends AbstractCQREntityAI {
 
+	private static final int SEARCH_RADIUS_HORIZONTAL = 16;
+	private static final int SEARCH_RADIUS_VERTICAL = 2;
+	private static final double REACH_DISTANCE_SQ = 3.0D * 3.0D;
 	private BlockPos nearestFire = null;
 
-	public EntityAIFireFighter(AbstractEntityCQR ent) {
-		super(ent);
+	public EntityAIFireFighter(AbstractEntityCQR entity) {
+		super(entity);
 		this.setMutexBits(3);
 	}
 
@@ -33,7 +39,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 		if ((this.entity.ticksExisted & 3) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
-			this.nearestFire = this.getNearestFire(this.entity.world, pos.getX(), pos.getY(), pos.getZ(), 16, 4);
+			this.nearestFire = this.getNearestFire(this.entity.world, pos.getX(), pos.getY(), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL);
 		}
 
 		return this.nearestFire != null;
@@ -44,7 +50,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 		if (this.nearestFire == null) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestFire) != Blocks.FIRE) {
+		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestFire).getBlock() != Blocks.FIRE) {
 			return false;
 		}
 		return this.entity.hasPath();
@@ -52,7 +58,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	@Override
 	public void startExecuting() {
-		if (this.entity.getDistanceSqToCenter(this.nearestFire) > 4.0D) {
+		if (this.entity.getDistanceSqToCenter(this.nearestFire) > REACH_DISTANCE_SQ) {
 			this.entity.getNavigator().tryMoveToXYZ(this.nearestFire.getX(), this.nearestFire.getY(), this.nearestFire.getZ(), 1.0D);
 		}
 	}
@@ -65,7 +71,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	@Override
 	public void updateTask() {
-		if (this.entity.getDistanceSqToCenter(this.nearestFire) <= 4.0D) {
+		if (this.entity.getDistanceSqToCenter(this.nearestFire) <= REACH_DISTANCE_SQ) {
 			if (this.entity.world.getBlockState(this.nearestFire).getBlock() == Blocks.FIRE) {
 				this.entity.world.setBlockToAir(this.nearestFire);
 				((WorldServer) this.entity.world).spawnParticle(EnumParticleTypes.SMOKE_NORMAL, this.nearestFire.getX() + 0.5D, this.nearestFire.getY() + 0.5D, this.nearestFire.getZ() + 0.5D, 4, 0.25D, 0.25D, 0.25D, 0.0D);
@@ -128,7 +134,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 				}
 
 				if (isLoaded) {
-					IBlockState oldState = null;
+					IBlockState oldState = chunk.getBlockState(x3, y1 - 1, z3);
 					for (int y3 = y1; y3 <= y2; y3++) {
 						int chunkY = y3 >> 4;
 
@@ -140,27 +146,19 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 						if (extendedBlockStorage != Chunk.NULL_BLOCK_STORAGE) {
 							IBlockState state1 = extendedBlockStorage.get(x3 & 15, y3 & 15, z3 & 15);
 
-							if (state1.getBlock() == Blocks.FIRE) {
-								if (oldState == null) {
-									if ((y3 & 15) != 0) {
-										oldState = extendedBlockStorage.get(x3 & 15, (y3 - 1) & 15, z3 & 15);
-									} else {
-										ExtendedBlockStorage extendedBlockStorage2 = chunk.getBlockStorageArray()[chunkY - 1];
-										if (extendedBlockStorage2 != Chunk.NULL_BLOCK_STORAGE) {
-											oldState = chunk.getBlockStorageArray()[chunkY - 1].get(x3 & 15, 15, z3 & 15);
-										} else {
-											oldState = Blocks.AIR.getDefaultState();
-										}
-									}
+							if (state1.getBlock() == Blocks.FIRE && oldState.getBlock().isFireSource(world, pos2.setPos(x3, y3 - 1, z3), EnumFacing.UP)) {
+								Vec3d vec3d1 = this.entity.getPositionEyes(1.0F);
+								Vec3d vec3d2 = new Vec3d(x3 + 0.5D, y3 + 0.5D, z3 + 0.5D);
+								RayTraceResult rayTraceResult = this.entity.world.rayTraceBlocks(vec3d1, vec3d2, false, false, false);
+								if (rayTraceResult != null && (MathHelper.floor(rayTraceResult.hitVec.x) != x3 || MathHelper.floor(rayTraceResult.hitVec.y) != y3 || MathHelper.floor(rayTraceResult.hitVec.z) != z3)) {
+									continue;
 								}
 
-								if (oldState.getBlock().isFireSource(world, pos2.setPos(x3, y3 - 1, z3), EnumFacing.UP)) {
-									double distance = this.entity.getDistanceSqToCenter(pos2.setPos(x3, y3, z3));
+								double distance = this.entity.getDistanceSqToCenter(pos2.setPos(x3, y3, z3));
 
-									if (distance < min) {
-										pos1 = pos1 != null ? pos1.setPos(x3, y3, z3) : new BlockPos.MutableBlockPos(x3, y3, z3);
-										min = distance;
-									}
+								if (distance < min) {
+									pos1 = pos1 != null ? pos1.setPos(x3, y3, z3) : new BlockPos.MutableBlockPos(x3, y3, z3);
+									min = distance;
 								}
 							}
 

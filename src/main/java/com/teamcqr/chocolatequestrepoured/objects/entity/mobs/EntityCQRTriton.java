@@ -16,12 +16,6 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.TRITON.getValue();
 	}
