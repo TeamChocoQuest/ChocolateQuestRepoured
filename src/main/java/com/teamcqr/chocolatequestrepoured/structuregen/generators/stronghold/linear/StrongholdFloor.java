@@ -27,7 +27,7 @@ public class StrongholdFloor {
 	
 	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
 		this.generator = generator;
-		this.sideLength = 3;
+		this.sideLength = size;
 		this.lastFloor = isLastFloor;
 		this.roomPattern = new EStrongholdRoomType[size][size];
 	}
