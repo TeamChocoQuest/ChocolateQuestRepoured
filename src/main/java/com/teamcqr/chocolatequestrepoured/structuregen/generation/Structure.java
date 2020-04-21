@@ -10,12 +10,18 @@ import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
+import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class Structure {
 
@@ -46,23 +52,23 @@ public class Structure {
 			for (IStructure istructure : list) {
 				BlockPos startPos = istructure.getPos();
 				BlockPos endPos = startPos.add(istructure.getSize());
-				if (startPos.getX() < startX) {
-					startX = startPos.getX();
+				if (startPos.getX() < this.startX) {
+					this.startX = startPos.getX();
 				}
-				if (startPos.getY() < startY) {
-					startY = startPos.getY();
+				if (startPos.getY() < this.startY) {
+					this.startY = startPos.getY();
 				}
-				if (startPos.getZ() < startZ) {
-					startZ = startPos.getZ();
+				if (startPos.getZ() < this.startZ) {
+					this.startZ = startPos.getZ();
 				}
-				if (endPos.getY() > endY) {
-					endY = endPos.getY();
+				if (endPos.getY() > this.endY) {
+					this.endY = endPos.getY();
 				}
-				if (endPos.getX() > endX) {
-					endX = endPos.getX();
+				if (endPos.getX() > this.endX) {
+					this.endX = endPos.getX();
 				}
-				if (endPos.getZ() > endZ) {
-					endZ = endPos.getZ();
+				if (endPos.getZ() > this.endZ) {
+					this.endZ = endPos.getZ();
 				}
 			}
 		} else {
@@ -183,6 +189,7 @@ public class Structure {
 			if (this.protectedRegion != null) {
 				this.protectedRegion.setGenerating(false);
 			}
+			this.updateLiquids();
 			return true;
 		}
 		return false;
@@ -214,6 +221,67 @@ public class Structure {
 		this.protectedRegion = new ProtectedRegion(this.world, new BlockPos(this.startX, this.startY, this.startZ), new BlockPos(this.endX, this.endY, this.endZ));
 		this.protectedRegion.setup(preventBlockBreaking, preventBlockPlacing, preventExplosionsTNT, preventExplosionsOther, preventFireSpreading, preventEntitySpawning, ignoreNoBossOrNexus);
 		ProtectedRegionManager.getInstance(this.world).addProtectedRegion(this.protectedRegion);
+	}
+
+	private void updateLiquids() {
+		if (this.world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+			return;
+		}
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int oldChunkX = this.startX >> 4;
+		int oldChunkY = this.startY >> 4;
+		int oldChunkZ = this.startZ >> 4;
+		Chunk chunk = this.world.getChunkFromChunkCoords(oldChunkX, oldChunkZ);
+		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[oldChunkY];
+		for (int x = this.startX; x <= this.endX; x++) {
+			int chunkX = x >> 4;
+
+			if (chunkX != oldChunkX) {
+				oldChunkX = chunkX;
+				oldChunkY = this.startY >> 4;
+				oldChunkZ = this.startZ >> 4;
+				chunk = this.world.getChunkFromChunkCoords(chunkX, this.startZ >> 4);
+				extendedBlockStorage = chunk.getBlockStorageArray()[this.startY >> 4];
+			}
+
+			for (int z = this.startZ; z <= this.endZ; z++) {
+				int chunkZ = z >> 4;
+
+				if (chunkZ != oldChunkZ) {
+					oldChunkX = chunkX;
+					oldChunkY = this.startY >> 4;
+					oldChunkZ = chunkZ;
+					chunk = this.world.getChunkFromChunkCoords(chunkX, chunkZ);
+					extendedBlockStorage = chunk.getBlockStorageArray()[this.startY >> 4];
+				}
+
+				BlockPos.MutableBlockPos oldPos = new BlockPos.MutableBlockPos(x, this.startY == 0 ? 1 : this.startY - 1, z);
+				IBlockState oldState = chunk.getBlockState(oldPos);
+				for (int y = this.startY; y <= this.endY; y++) {
+					int chunkY = y >> 4;
+
+					if (chunkY != oldChunkY) {
+						oldChunkY = chunkY;
+						extendedBlockStorage = chunk.getBlockStorageArray()[chunkY];
+					}
+
+					if (extendedBlockStorage != Chunk.NULL_BLOCK_STORAGE) {
+						IBlockState state = extendedBlockStorage.get(x & 15, y & 15, z & 15);
+
+						if (state.getBlock() instanceof BlockLiquid) {
+							state.neighborChanged(this.world, pos.setPos(x, y, z), oldState.getBlock(), oldPos);
+						}
+
+						oldState = state;
+						oldPos.setPos(x, y, z);
+					} else {
+						y += 15 - (y & 15);
+						oldState = Blocks.AIR.getDefaultState();
+						oldPos.setPos(x, y, z);
+					}
+				}
+			}
+		}
 	}
 
 }
