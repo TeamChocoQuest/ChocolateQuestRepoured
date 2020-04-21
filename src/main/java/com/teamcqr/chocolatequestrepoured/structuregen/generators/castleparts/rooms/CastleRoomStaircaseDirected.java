@@ -90,7 +90,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			if (y < stairHeight) {
 				blockToBuild = dungeon.getMainBlockState();
 			} else if (y == stairHeight) {
-				blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+				blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}
@@ -106,7 +106,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 			if (y < stairHeight) {
 				blockToBuild = dungeon.getMainBlockState();
 			} else if (y == stairHeight) {
-				blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+				blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 			} else {
 				blockToBuild = Blocks.AIR.getDefaultState();
 			}

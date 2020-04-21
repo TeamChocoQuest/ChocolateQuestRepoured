@@ -60,9 +60,9 @@ public class CastleDungeon extends DungeonBase {
 		this.floorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "floorBlock", woodType.getPlankBlockState());
 		this.roofBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "roofBlock", woodType.getStairBlockState());
 		this.fenceBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "fenceBlock", woodType.getFenceBlockState());
-		this.woodStairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "stairBlock", woodType.getStairBlockState());
-		this.woodSlabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getSlabBlockState());
-		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "slabBlock", woodType.getPlankBlockState());
+		this.woodStairBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "woodStairBlock", woodType.getStairBlockState());
+		this.woodSlabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "woodSlabBlock", woodType.getSlabBlockState());
+		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "plankBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
 		Collection<IProperty<? >> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
 
