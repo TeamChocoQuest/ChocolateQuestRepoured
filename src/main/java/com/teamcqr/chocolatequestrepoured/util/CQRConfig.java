@@ -86,7 +86,7 @@ public class CQRConfig {
 		public int supportHillWallSize = 8;
 		@Config.Comment("Chance in percent to generate a dungeon.")
 		@Config.RangeInt(min = 0, max = 100)
-		public int overallDungeonChance = 75;
+		public int overallDungeonChance = 100;
 		public boolean moreDungeonsBehindWall = true;
 		@Config.RangeInt(min = 1, max = 10)
 		public int densityBehindWallFactor = 2;
