@@ -37,7 +37,7 @@ public class LightPart implements IStructure {
 			world.checkLight(mutablePos);
 			Chunk chunk = world.getChunkFromBlockCoords(mutablePos);
 			IBlockState state = chunk.getBlockState(mutablePos);
-			world.markAndNotifyBlock(mutablePos, chunk, state, state, 22);
+			world.markAndNotifyBlock(mutablePos, chunk, state, state, 18);
 		}
 	}
 

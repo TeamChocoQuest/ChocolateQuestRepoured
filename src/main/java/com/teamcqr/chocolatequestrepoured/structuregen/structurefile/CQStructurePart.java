@@ -330,7 +330,7 @@ public class CQStructurePart extends Template {
 
 	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, ProtectedRegion protectedRegion) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
-		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 6);
+		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 2);
 		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
 
 		if (replaceBanners && dungeonBanner != null) {
@@ -362,7 +362,7 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 6);
+				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
@@ -377,10 +377,10 @@ public class CQStructurePart extends Template {
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
 				if (protectedRegion != null) {
-					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()), 6);
+					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()), 2);
 					protectedRegion.addBlockDependency(transformedPos);
 				} else {
-					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 6);
+					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
 				}
 			} else {
 				CQRMain.logger.warn("Failed to place force field nexus at {}", transformedPos);
@@ -391,7 +391,7 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, bossPos).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 6);
+				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
 
 				if (dungeonMob.getBossResourceLocation() != null) {
 					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);

@@ -35,7 +35,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 			return false;
 		}
 
-		if ((this.entity.ticksExisted & 3) == 0) {
+		if (this.entity.ticksExisted % 4 == 0) {
 			BlockPos pos = new BlockPos(this.entity);
 			this.nearestTorch = this.getNearestUnlitTorch(this.entity.world, pos.getX(), pos.getY() + ((int) this.entity.height >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL);
 		}
