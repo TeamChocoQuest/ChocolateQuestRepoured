@@ -138,7 +138,12 @@ public class DungeonRegistry {
 				}
 
 				if (dungeon.getWeight() <= 0) {
-					CQRMain.logger.warn("{}: Dungeon spawnrate is set to or below 0!", file.getName());
+					CQRMain.logger.warn("{}: Dungeon weight is set to or below 0!", file.getName());
+					continue;
+				}
+
+				if (dungeon.getChance() <= 0) {
+					CQRMain.logger.warn("{}: Dungeon chance is set to or below 0!", file.getName());
 					continue;
 				}
 
