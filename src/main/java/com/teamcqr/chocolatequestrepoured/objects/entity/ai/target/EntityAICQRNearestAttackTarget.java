@@ -60,8 +60,9 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		if (possibleTarget == this.entity) {
 			return false;
 		}
+		CQRFaction faction = this.entity.getFaction();
 		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
-			if (!this.entity.getFaction().isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
+			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
@@ -72,7 +73,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 			}
 			return this.entity.getEntitySenses().canSee(possibleTarget);
 		}
-		if ((this.entity.getFaction() != null && possibleTarget != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
+		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
 		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
@@ -99,22 +100,20 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
 		}
 		CQRFaction faction = this.entity.getFaction();
 		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
-			if (faction != null && !faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget) {
+			if (faction == null || (!faction.isAlly(possibleTarget) && this.entity.getLeader() != possibleTarget)) {
 				return false;
 			}
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
-		} else {
-			if ((faction != null && !this.entity.getFaction().isEnemy(possibleTarget)) || this.entity.getLeader() == possibleTarget) {
+			if (!this.entity.isInSightRange(possibleTarget)) {
 				return false;
 			}
+			return this.entity.getEntitySenses().canSee(possibleTarget);
 		}
-		/*
-		if (this.entity.getLastTimeSeenAttackTarget() + 10 < this.entity.ticksExisted) {
+		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
-		*/
 		if (!this.entity.isInSightRange(possibleTarget)) {
 			return false;
 		}
