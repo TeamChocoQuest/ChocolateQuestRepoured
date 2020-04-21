@@ -21,13 +21,6 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(14, new EntityAIFireFighter(this));
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-	}
-
-	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.WALKER.getValue();
 	}

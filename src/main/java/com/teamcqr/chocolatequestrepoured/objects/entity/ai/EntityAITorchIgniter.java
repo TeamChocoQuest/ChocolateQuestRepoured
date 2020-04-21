@@ -9,6 +9,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
@@ -16,10 +19,13 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
+	private static final int SEARCH_RADIUS_HORIZONTAL = 16;
+	private static final int SEARCH_RADIUS_VERTICAL = 2;
+	private static final double REACH_DISTANCE_SQ = 3.0D * 3.0D;
 	private BlockPos nearestTorch = null;
 
-	public EntityAITorchIgniter(AbstractEntityCQR ent) {
-		super(ent);
+	public EntityAITorchIgniter(AbstractEntityCQR entity) {
+		super(entity);
 		this.setMutexBits(3);
 	}
 
@@ -31,7 +37,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 		if ((this.entity.ticksExisted & 3) == 0) {
 			BlockPos pos = new BlockPos(this.entity);
-			this.nearestTorch = this.getNearestUnlitTorch(this.entity.world, pos.getX(), pos.getY(), pos.getZ(), 16, 4);
+			this.nearestTorch = this.getNearestUnlitTorch(this.entity.world, pos.getX(), pos.getY() + ((int) this.entity.height >> 1), pos.getZ(), SEARCH_RADIUS_HORIZONTAL, SEARCH_RADIUS_VERTICAL);
 		}
 
 		return this.nearestTorch != null;
@@ -42,7 +48,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 		if (this.nearestTorch == null) {
 			return false;
 		}
-		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestTorch) != ModBlocks.UNLIT_TORCH) {
+		if (this.entity.ticksExisted % 10 == 0 && this.entity.world.getBlockState(this.nearestTorch).getBlock() != ModBlocks.UNLIT_TORCH) {
 			return false;
 		}
 		return this.entity.hasPath();
@@ -50,7 +56,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 	@Override
 	public void startExecuting() {
-		if (this.entity.getDistanceSqToCenter(this.nearestTorch) > 4.0D) {
+		if (this.entity.getDistanceSqToCenter(this.nearestTorch) > REACH_DISTANCE_SQ) {
 			this.entity.getNavigator().tryMoveToXYZ(this.nearestTorch.getX(), this.nearestTorch.getY(), this.nearestTorch.getZ(), 1.0D);
 		}
 	}
@@ -63,7 +69,7 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 
 	@Override
 	public void updateTask() {
-		if (this.entity.getDistanceSqToCenter(this.nearestTorch) <= 4.0D) {
+		if (this.entity.getDistanceSqToCenter(this.nearestTorch) <= REACH_DISTANCE_SQ) {
 			IBlockState state = this.entity.world.getBlockState(this.nearestTorch);
 			if (state.getBlock() == ModBlocks.UNLIT_TORCH) {
 				BlockUnlitTorch.lightUp(this.entity.world, this.nearestTorch, state.getValue(BlockTorch.FACING));
@@ -137,6 +143,12 @@ public class EntityAITorchIgniter extends AbstractCQREntityAI {
 							IBlockState state1 = extendedBlockStorage.get(x3 & 15, y3 & 15, z3 & 15);
 
 							if (state1.getBlock() == ModBlocks.UNLIT_TORCH) {
+								Vec3d vec3d1 = this.entity.getPositionEyes(1.0F);
+								Vec3d vec3d2 = new Vec3d(x3 + 0.5D, y3 + 0.5D, z3 + 0.5D);
+								RayTraceResult rayTraceResult = this.entity.world.rayTraceBlocks(vec3d1, vec3d2, false, false, false);
+								if (rayTraceResult != null && (MathHelper.floor(rayTraceResult.hitVec.x) != x3 || MathHelper.floor(rayTraceResult.hitVec.y) != y3 || MathHelper.floor(rayTraceResult.hitVec.z) != z3)) {
+									continue;
+								}
 								double distance = this.entity.getDistanceSqToCenter(pos2.setPos(x3, y3, z3));
 
 								if (distance < min) {
