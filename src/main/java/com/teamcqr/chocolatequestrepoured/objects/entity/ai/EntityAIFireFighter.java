@@ -77,7 +77,7 @@ public class EntityAIFireFighter extends AbstractCQREntityAI {
 
 	@Nullable
 	private BlockPos getNearestFire(World world, int x, int y, int z, int horizontalRadius, int vertialRadius) {
-		if (world.getWorldType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
+		if (world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return null;
 		}
 		int x1 = Math.max(x - horizontalRadius, -30000000);
