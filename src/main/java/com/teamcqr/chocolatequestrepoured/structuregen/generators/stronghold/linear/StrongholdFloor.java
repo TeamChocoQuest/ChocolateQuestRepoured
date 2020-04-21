@@ -200,12 +200,10 @@ public class StrongholdFloor {
 
 	private void setRoomType(int gpX, int gpZ, EStrongholdRoomType type) {
 		Tuple<Integer, Integer> coords = gridPosToArrayIndices(new Tuple<>(gpX, gpZ));
-		//if(roomPattern[coords.getFirst()][coords.getSecond()] == null) {
-			lastX = gpX;
-			lastZ = gpZ;
-			System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
-			this.roomPattern[coords.getFirst()][coords.getSecond()] = type;
-		//}
+		lastX = gpX;
+		lastZ = gpZ;
+		System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
+		this.roomPattern[coords.getFirst()][coords.getSecond()] = type;
 	}
 	
 	private ESkyDirection getRoomExitDirection(EStrongholdRoomType room) {
