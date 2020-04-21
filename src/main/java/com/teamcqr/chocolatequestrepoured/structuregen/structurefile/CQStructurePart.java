@@ -341,7 +341,7 @@ public class CQStructurePart extends Template {
 				if (tileEntity instanceof TileEntityBanner) {
 					((TileEntityBanner) tileEntity).setItemValues(dungeonBanner.getBanner(), true);
 				} else {
-					CQRMain.logger.warn("Failed to place banner at " + transformedPos);
+					CQRMain.logger.warn("Failed to place banner at {}", transformedPos);
 				}
 			}
 		}
@@ -352,9 +352,9 @@ public class CQStructurePart extends Template {
 
 			if (tileEntity instanceof TileEntitySpawner) {
 				((TileEntitySpawner) tileEntity).setInDungeon(dungeonChunkX, dungeonChunkZ, dungeonMob);
-				((TileEntitySpawner) tileEntity).rot = placementIn.getRotation();
+				((TileEntitySpawner) tileEntity).setMirrorAndRotation(placementIn.getMirror(), placementIn.getRotation());
 			} else {
-				CQRMain.logger.warn("Failed to place spawner at " + transformedPos);
+				CQRMain.logger.warn("Failed to place spawner at {}", transformedPos);
 			}
 		}
 
@@ -362,13 +362,13 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
+				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 6);
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
 				tileEntityChest.setLootTable(lootChestInfo.getLootTable().getResourceLocation(), seed);
 			} else {
-				CQRMain.logger.warn("Failed to place loot chest at " + transformedPos);
+				CQRMain.logger.warn("Failed to place loot chest at {}", transformedPos);
 			}
 		}
 
@@ -377,13 +377,13 @@ public class CQStructurePart extends Template {
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
 				if (protectedRegion != null) {
-					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withRotation(placementIn.getRotation()), 2);
+					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()), 6);
 					protectedRegion.addBlockDependency(transformedPos);
 				} else {
-					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
+					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 6);
 				}
 			} else {
-				CQRMain.logger.warn("Failed to place force field nexus at " + transformedPos);
+				CQRMain.logger.warn("Failed to place force field nexus at {}", transformedPos);
 			}
 		}
 
@@ -391,7 +391,7 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, bossPos).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
+				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 6);
 
 				if (dungeonMob.getBossResourceLocation() != null) {
 					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);
@@ -403,7 +403,7 @@ public class CQStructurePart extends Template {
 					}
 					if (entity instanceof EntityLiving) {
 						((EntityLiving) entity).enablePersistence();
-						((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(transformedPos), (IEntityLivingData)null);
+						((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(transformedPos), (IEntityLivingData) null);
 					}
 					worldIn.spawnEntity(entity);
 
@@ -423,7 +423,7 @@ public class CQStructurePart extends Template {
 					worldIn.spawnEntity(indicator);
 				}
 			} else {
-				CQRMain.logger.warn("Failed to place boss at " + transformedPos);
+				CQRMain.logger.warn("Failed to place boss at {}", transformedPos);
 			}
 		}
 	}
