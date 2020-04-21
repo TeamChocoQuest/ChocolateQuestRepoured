@@ -27,52 +27,40 @@ public class StrongholdFloor {
 	
 	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
 		this.generator = generator;
-		this.sideLength = size;
+		this.sideLength = 3;
 		this.lastFloor = isLastFloor;
 		this.roomPattern = new EStrongholdRoomType[size][size];
 	}
 	
 	public void generateRoomPattern(int gridPosX, int gridPosZ, ESkyDirection prevFloorExitDir) {
 		setRoomType(gridPosX, gridPosZ, EStrongholdRoomType.NONE);
-		EStrongholdRoomType room = EStrongholdRoomType.NONE;
 		boolean curve = gridPosX == 0 && gridPosZ == 0;
-		switch (prevFloorExitDir) {
-		//When you enter the curve: you face the OPPOSITE of FIRST_LETTER, when you leave you face SECOND_LETTER
-		case EAST:
-			room = curve ? EStrongholdRoomType.CURVE_WN : EStrongholdRoomType.HALLWAY_WE;
-			break;
-		case NORTH:
-			room = curve ? EStrongholdRoomType.CURVE_SW : EStrongholdRoomType.HALLWAY_SN;
-			break;
-		case SOUTH:
-			room = curve ? EStrongholdRoomType.CURVE_NE : EStrongholdRoomType.HALLWAY_NS;
-			break;
-		case WEST:
-			room = curve ? EStrongholdRoomType.CURVE_ES : EStrongholdRoomType.HALLWAY_EW;
-			break;
-		} 
-		this.currentDirection = prevFloorExitDir;
-		/*if(!curve) {
-			this.currentDirection = this.currentDirection.getOpposite();
-		}*/
-		Tuple<Integer, Integer> roomCoord = getNextRoomCoordinates(gridPosX, gridPosZ, this.currentDirection);
+		Tuple<Integer, Integer> roomCoord = new Tuple<>(gridPosX, gridPosZ);
 		//System.out.println("X: " + gridPosX + "    Z: " + gridPosZ + "        Room: 0");
 		//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: 1");
-		setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), room);
-		this.currentDirection = getRoomExitDirection(room);
+		
+		boolean reversed = !curve;
+		int sideLengthTemp = reversed ? this.sideLength : 1;
+		int slCounter = reversed ? (sideLengthTemp * 4) -4 -1 : 1;
+		if(reversed && sideLengthTemp <= 3) {
+			slCounter--;
+		}
+		
+		this.currentDirection = prevFloorExitDir;
 		
 		int roomCount = this.sideLength * this.sideLength;
-		roomCount -= 2;
-		boolean reversed = !curve;
-		int curveCount = 4;
-		Tuple<Integer, Integer> prevCoords = new Tuple<>(roomCoord.getFirst(), roomCoord.getSecond());
+		System.out.println("Room Count: " + (roomCount));
+		roomCount --;
+		
 		System.out.println("Beginning gen...");
 		while(roomCount > 0) {
-			prevCoords = new Tuple<>(roomCoord.getFirst(), roomCoord.getSecond());
 			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), this.currentDirection);
 			//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 			roomCount--;
-			if(roomCount == 0 && (!reversed || (roomCoord.getFirst() == 0 && roomCoord.getSecond() == 0))) {
+			slCounter--;
+			System.out.println("sl: " + slCounter);
+			
+			if(roomCount == 0) {
 				//DONE: Handle stair or boss room
 				if(lastFloor) {
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), EStrongholdRoomType.BOSS);
@@ -83,52 +71,23 @@ public class StrongholdFloor {
 				}
 				break;
 			}
-			//TODO: Move decission about curve to own method
-			//DONE: Rewrite curve, hallway and stair calculation so DIRECTION is used consistently
-			if(isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) {
-				curveCount--;
-				if(curveCount == 0) {
-					curveCount = 4;
-					if(reversed && getRoomAt(roomCoord) != null) {
-						//We are going "backwards" (left turns, not right turns) and the next curve room is also set, so it is NOT a curve room
-						roomCoord = prevCoords;
-						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
-						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
-						
-						//As we needed to "fuck go back", we need to increment the room counter again so taht we dont forget one room
-						roomCount++;
-						
-						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
-						if(!(roomCoord.getFirst() == 0 && roomCoord.getSecond() == 0)) {
-							setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
-							roomCount--;
-							this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
-						}
-					} else {
-						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
-						roomCount--;
-						roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), currentDirection);
-						//System.out.println("Setting extra room...");
-						setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
-						this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
+			if(slCounter <= 0 || (!reversed && slCounter > 1 && isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond())) || ( reversed && slCounter > 1 && slCounter < ((sideLengthTemp * 4) -4 -2) && isCurveRoom(roomCoord.getFirst(), roomCoord.getSecond()))) {
+				if(slCounter <= 0) {
+					sideLengthTemp += reversed ? -2 : 2;
+					slCounter = (sideLengthTemp * 4) -4;
+					System.out.println("sidelength: " + sideLengthTemp);
+					if(reversed) {
+						slCounter--;
 					}
-					//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
-				} else {
-					//DONE Curve
-					//TODO: Add something to prevent going around curves if we already were here
+				}
+				
 					setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getCurve(this.currentDirection, reversed));
 					this.currentDirection = getRoomExitDirection(getCurve(this.currentDirection, reversed));
-				}
-				continue;
+			} else {
+				setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
 			}
-			//DONE: Hallway
-			setRoomType(roomCoord.getFirst(), roomCoord.getSecond(), getHallway(this.currentDirection));
+			
 		}
-	}
-	
-	private EStrongholdRoomType getRoomAt(Tuple<Integer, Integer> gridPos) {
-		Tuple<Integer, Integer> arrPos = gridPosToArrayIndices(gridPos);
-		return roomPattern[arrPos.getFirst()][arrPos.getSecond()];
 	}
 	
 	private EStrongholdRoomType getHallway(ESkyDirection dir) {
