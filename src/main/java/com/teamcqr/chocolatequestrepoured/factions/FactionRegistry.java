@@ -87,6 +87,10 @@ public class FactionRegistry {
 			}
 			if(flag) {
 				for(String key : prop.stringPropertyNames()) {
+					if(key.startsWith("#")) {
+						continue;
+					}
+					key = key.replace('.', ':');
 					ResourceLocation resLoc = new ResourceLocation(key);
 					if(EntityList.isRegistered(resLoc)) {
 						String faction = prop.getProperty(key);
