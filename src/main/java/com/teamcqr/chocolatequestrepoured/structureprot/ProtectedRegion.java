@@ -1,9 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structureprot;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,7 +69,7 @@ public class ProtectedRegion {
 			nbtTagList1.appendTag(NBTUtil.createPosTag(pos));
 		}
 		compound.setTag("blockDependencies", nbtTagList2);
-		return new NBTTagCompound();
+		return compound;
 	}
 
 	public void readFromNBT(NBTTagCompound compound) {
@@ -206,8 +210,16 @@ public class ProtectedRegion {
 
 	public void removeEntityDependency(UUID uuid) {
 		this.entityDependencies.remove(uuid);
+
+		if (this.world != null && !this.world.isRemote) {
+			// TODO Only send changes to clients
+			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+			List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+			CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
+		}
+
 		if (!this.isValid()) {
-			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this.uuid);
+			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
 		}
 	}
 
@@ -221,8 +233,16 @@ public class ProtectedRegion {
 
 	public void removeBlockDependency(BlockPos pos) {
 		this.blockDependencies.remove(pos);
+
+		if (this.world != null && !this.world.isRemote) {
+			// TODO Only send changes to clients
+			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+			List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+			CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
+		}
+
 		if (!this.isValid()) {
-			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this.uuid);
+			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
 		}
 	}
 
