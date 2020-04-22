@@ -110,7 +110,7 @@ public class ProtectedRegionEventHandler {
 			}
 
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				System.out.println(protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos));
+				//System.out.println(protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos));
 				if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
 					event.setCanceled(true);
 					return;
