@@ -162,9 +162,11 @@ public class FactionRegistry {
 
 	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
-		if (entity instanceof EntityTameable) {
+		if (entity.getControllingPassenger() != null) {
+			return this.getFactionOf(entity.getControllingPassenger();
+		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
-		}
+		} 
 		if (entity instanceof EntityArmorStand) {
 			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
