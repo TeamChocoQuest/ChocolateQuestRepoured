@@ -90,11 +90,11 @@ public class FactionRegistry {
 					if(key.startsWith("#")) {
 						continue;
 					}
-					key = key.replace('.', ':');
-					ResourceLocation resLoc = new ResourceLocation(key);
+					String rlkey = key.replace('.', ':');
+					ResourceLocation resLoc = new ResourceLocation(rlkey);
 					if(EntityList.isRegistered(resLoc)) {
-						String faction = prop.getProperty(key);
-						if(factions.containsKey(faction)) {
+						String faction = prop.getProperty(key, null);
+						if(faction != null && factions.containsKey(faction)) {
 							entityFactionMap.put(resLoc, factions.get(faction));
 						}
 					}
