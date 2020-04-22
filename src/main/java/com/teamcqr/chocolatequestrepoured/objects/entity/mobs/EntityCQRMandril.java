@@ -17,7 +17,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAILeapAtTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.util.ResourceLocation;
@@ -31,22 +30,8 @@ public class EntityCQRMandril extends AbstractEntityCQR {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(5, new EntityAIHealingPotion(this));
-		this.tasks.addTask(8, new EntityAIAttackRanged(this));
-		this.tasks.addTask(9, new EntityAIBackstab(this));
-		this.tasks.addTask(10, new EntityAILeapAtTarget(this, 0.6F));
-		this.tasks.addTask(11, new EntityAIAttack(this));
-		this.tasks.addTask(14, new EntityAIFireFighter(this));
-		this.tasks.addTask(15, new EntityAIMoveToLeader(this));
-		this.tasks.addTask(16, new EntityAISearchMount(this));
-		this.tasks.addTask(17, new EntityAITameAndLeashPet(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(21, new EntityAIIdleSit(this));
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
-
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
-		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
+		super.initEntityAI();
+		this.tasks.addTask(9, new EntityAILeapAtTarget(this, 0.6F));
 	}
 
 	@Override

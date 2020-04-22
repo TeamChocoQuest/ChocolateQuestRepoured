@@ -52,7 +52,8 @@ public class CommandExport extends CommandBase {
 			if (!file.exists() || (args.length >= 1 && args[0].equals("true"))) {
 				exporter.saveStructure(sender.getEntityWorld(), exporter.getMinPos(), exporter.getMaxPos(), (EntityPlayer) sender);
 			} else {
-				sender.sendMessage(new TextComponentString("Couldn't export structure " + exporter.structureName + " because a file with that name already exists and file overriding is disabled."));
+				String msg = "Couldn't export structure " + exporter.structureName + " because a file with that name already exists and file overriding is disabled.";
+				sender.sendMessage(new TextComponentString(msg));
 			}
 		}
 	}

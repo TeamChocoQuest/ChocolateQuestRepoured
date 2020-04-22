@@ -1,17 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import net.minecraft.util.EnumFacing;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
-
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
-import net.minecraft.util.EnumFacing;
 
 public class RoomGrid {
 	public static class Area2D {

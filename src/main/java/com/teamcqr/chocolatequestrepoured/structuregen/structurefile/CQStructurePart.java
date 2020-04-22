@@ -328,9 +328,9 @@ public class CQStructurePart extends Template {
 		}
 	}
 
-	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, boolean hasShield, ProtectedRegion protectedRegion) {
+	public void addBlocksToWorld(World worldIn, BlockPos pos, PlacementSettings placementIn, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType dungeonMob, boolean replaceBanners, EBanners dungeonBanner, ProtectedRegion protectedRegion) {
 		// this.addBlocksToWorld(worldIn, pos, placementIn);
-		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 3);
+		BlockPlacingHelper.setBlockStates(worldIn, pos, this.getBlockInfoList(), placementIn, 2);
 		this.addEntitiesToWorld2(worldIn, pos, placementIn.getMirror(), placementIn.getRotation(), placementIn.getBoundingBox());
 
 		if (replaceBanners && dungeonBanner != null) {
@@ -341,7 +341,7 @@ public class CQStructurePart extends Template {
 				if (tileEntity instanceof TileEntityBanner) {
 					((TileEntityBanner) tileEntity).setItemValues(dungeonBanner.getBanner(), true);
 				} else {
-					CQRMain.logger.warn("Failed to place banner at " + transformedPos);
+					CQRMain.logger.warn("Failed to place banner at {}", transformedPos);
 				}
 			}
 		}
@@ -352,9 +352,9 @@ public class CQStructurePart extends Template {
 
 			if (tileEntity instanceof TileEntitySpawner) {
 				((TileEntitySpawner) tileEntity).setInDungeon(dungeonChunkX, dungeonChunkZ, dungeonMob);
-				((TileEntitySpawner) tileEntity).rot = placementIn.getRotation();
+				((TileEntitySpawner) tileEntity).setMirrorAndRotation(placementIn.getMirror(), placementIn.getRotation());
 			} else {
-				CQRMain.logger.warn("Failed to place spawner at " + transformedPos);
+				CQRMain.logger.warn("Failed to place spawner at {}", transformedPos);
 			}
 		}
 
@@ -362,13 +362,13 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
+				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
 				tileEntityChest.setLootTable(lootChestInfo.getLootTable().getResourceLocation(), seed);
 			} else {
-				CQRMain.logger.warn("Failed to place loot chest at " + transformedPos);
+				CQRMain.logger.warn("Failed to place loot chest at {}", transformedPos);
 			}
 		}
 
@@ -376,18 +376,14 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, nexusPos).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				if (hasShield) {
-					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withRotation(placementIn.getRotation()), 2);
-
-					// TODO add nexus to protection system
-					if (protectedRegion != null) {
-						protectedRegion.addBlockDependency(transformedPos);
-					}
+				if (protectedRegion != null) {
+					worldIn.setBlockState(transformedPos, ModBlocks.FORCE_FIELD_NEXUS.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()), 2);
+					protectedRegion.addBlockDependency(transformedPos);
 				} else {
-					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
+					worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
 				}
 			} else {
-				CQRMain.logger.warn("Failed to place force field nexus at " + transformedPos);
+				CQRMain.logger.warn("Failed to place force field nexus at {}", transformedPos);
 			}
 		}
 
@@ -395,7 +391,7 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, bossPos).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState().withRotation(placementIn.getRotation()), 2);
+				worldIn.setBlockState(transformedPos, Blocks.AIR.getDefaultState(), 2);
 
 				if (dungeonMob.getBossResourceLocation() != null) {
 					Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), worldIn);
@@ -407,11 +403,10 @@ public class CQStructurePart extends Template {
 					}
 					if (entity instanceof EntityLiving) {
 						((EntityLiving) entity).enablePersistence();
-						((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(transformedPos), (IEntityLivingData)null);
+						((EntityLiving) entity).onInitialSpawn(worldIn.getDifficultyForLocation(transformedPos), (IEntityLivingData) null);
 					}
 					worldIn.spawnEntity(entity);
 
-					// TODO add boss to protection system
 					if (protectedRegion != null) {
 						protectedRegion.addEntityDependency(entity.getPersistentID());
 					}
@@ -428,7 +423,7 @@ public class CQStructurePart extends Template {
 					worldIn.spawnEntity(indicator);
 				}
 			} else {
-				CQRMain.logger.warn("Failed to place boss at " + transformedPos);
+				CQRMain.logger.warn("Failed to place boss at {}", transformedPos);
 			}
 		}
 	}

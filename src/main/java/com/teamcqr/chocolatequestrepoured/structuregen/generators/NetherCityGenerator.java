@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.ClassicNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -30,7 +30,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class NetherCityGenerator implements IDungeonGenerator {
 
-	private ClassicNetherCity dungeon;
+	private DungeonNetherCity dungeon;
 
 	// TODO: Dont make this a Set, sets are slow as they need to calculate the hash keys every time you add something to them...
 	private Set<BlockPos> gridPositions = new HashSet<>();
@@ -50,7 +50,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	// private static int tunnelHeight = 3;
 
-	public NetherCityGenerator(ClassicNetherCity dungeon) {
+	public NetherCityGenerator(DungeonNetherCity dungeon) {
 		this.dungeon = dungeon;
 	}
 

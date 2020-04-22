@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CavernDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
@@ -35,7 +35,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	public CavernGenerator() {
 	};
 
-	public CavernGenerator(CavernDungeon dungeon) {
+	public CavernGenerator(DungeonCavern dungeon) {
 		this.dungeon = dungeon;
 	}
 
@@ -47,7 +47,7 @@ public class CavernGenerator implements IDungeonGenerator {
 	private int centerZ;
 	private int centerY;
 
-	private CavernDungeon dungeon;
+	private DungeonCavern dungeon;
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {

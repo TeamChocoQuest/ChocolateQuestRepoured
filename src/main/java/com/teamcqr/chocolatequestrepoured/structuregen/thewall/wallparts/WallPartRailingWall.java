@@ -1,16 +1,22 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockStoneSlab;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -40,60 +46,42 @@ public class WallPartRailingWall implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk) {
-		int startX = chunkX * 16;
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
+		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
 
-		List<BlockPos> railingBlocks = new ArrayList<BlockPos>();
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		ExtendedBlockStatePart.ExtendedBlockState stateBlock = new ExtendedBlockState(Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true), null);
 
 		// Spawner
 		BlockPos spawnerPos = new BlockPos(startX + 4, this.getTopY() + 12 + 1 - 7, startZ + 7);
-		this.placeSpawner(spawnerPos, world);
+		this.placeSpawner(spawnerPos, world, stateMap);
 
 		for (int y = 0; y <= 7; y++) {
 			for (int z : zValues) {
 				for (int x = 0; x < 8; x++) {
 					if (this.isBiggerPart(x)) {
 						if (y < 3 && z == (z > 3 ? 12 : 3)) {
-							railingBlocks.add(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z));
-							railingBlocks.add(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z));
+							stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
+							stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
 						} else if (y >= 3) {
-							railingBlocks.add(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z));
-							railingBlocks.add(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z));
+							stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
+							stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
 						}
 					} else if (y >= 4 && z == (z > 3 ? 12 : 3) && y <= 6) {
-						railingBlocks.add(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z));
-						railingBlocks.add(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z));
+						stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
+						stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
 					}
 				}
 			}
 		}
 
-		if (!railingBlocks.isEmpty()) {
-			/*
-			 * for(BlockPos pos : railingBlocks) {
-			 * world.setBlockState(pos, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE));
-			 * }
-			 */
-			final List<BlockPos> posL = new ArrayList<BlockPos>(railingBlocks);
-			railingBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-
-				@Override
-				public void run() {
-
-					for (BlockPos p : posL) {
-						world.setBlockState(p, Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true), 2);
-					}
-
-				}
-			});
-		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
-	private void placeSpawner(BlockPos spawnerPos, World world) {
+	private void placeSpawner(BlockPos spawnerPos, World world, Map<BlockPos, ExtendedBlockState> stateMap) {
 		Entity spawnerEnt = EntityList.createEntityByIDFromName(new ResourceLocation(CQRConfig.wall.mob), world);
 		if (spawnerEnt instanceof EntityLiving) {
 			switch (((EntityLiving) spawnerEnt).getRNG().nextInt(5)) {
@@ -145,7 +133,11 @@ public class WallPartRailingWall implements IWallPart {
 			((ItemArmorDyable) ModItems.BOOTS_IRON_DYABLE).setColor(boots, 000000);
 			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
 
-			SpawnerFactory.placeSpawner(new Entity[] { spawnerEnt }, false, null, world, spawnerPos);
+			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
+			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
+			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
+
+			stateMap.put(spawnerPos, new ExtendedBlockStatePart.ExtendedBlockState(state2, tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}
 

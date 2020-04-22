@@ -45,8 +45,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob, IAnimatedEntity {
 
@@ -128,10 +126,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	public float getDefaultHeight() {
 		return 1.7F;
 	}
-
-	@SideOnly(Side.CLIENT)
-	private int animationProgress = 0;
-
+	
 	public EntityCQRGiantTortoise(World worldIn) {
 		super(worldIn);
 

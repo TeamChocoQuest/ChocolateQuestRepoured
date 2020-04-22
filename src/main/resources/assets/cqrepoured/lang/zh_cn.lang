@@ -193,6 +193,9 @@ gui.drops.name=掉落物
 gui.backpack.name=背包
 gui.alchemy_bag.name=炼金药袋
 description.gui_exporter.name=用于导出地牢的创造模式专用方块。 选择要导出的区域， 然后保存它。
+description.gui_exporter_part_mode.name=将结构拆分为16x16x16个立方体，通常用于更快的导出和生成。建议保持检查。
+description.gui_exporter_relative_mode.name=使用相对于导出方块的坐标 无论是否选中，选择器助手都会小心处理。
+description.gui_exporter_ignore_entities.name=忽略未在 cqrepoured.cfg -> advanced -> specialEntities 路径下列出的所有实体。建议保持检查。
 
 //Other
 item.super_tool.name=超级工具 (创造模式限定)
@@ -203,8 +206,11 @@ item.mob_to_spawner_tool.name=生物生成器
 item.spawner_converter.name=刷怪笼转换器
 item.badge.name=徽章
 item.backpack.name=背包
+item.spiked_glove.name=尖刺拳套
 item.alchemy_bag.name=炼金药袋
-item.structure_selector.name=选择选择器助手
+item.structure_selector.name=选择器助手
+item.path_tool.name=路径工具
+item.cursed_bone.name=诅咒之骨
 
 //Dragon Items
 item.helmet_dragon.name=龙之头盔
@@ -235,7 +241,7 @@ item.cqr_shield_r09.name=鱿鱼盾
 
 //Walker set
 item.sword_walker.name=漫步者之剑
-item.shield_walker.name=深渊王之盾
+item.shield_walker_king.name=深渊王之盾
 
 //Shields
 item.shield_bull.name=冰牛盾
@@ -298,6 +304,8 @@ item.bullet_diamond.name=钻石子弹
 item.bullet_fire.name=烈焰子弹
 item.cannon_ball.name=火炮炮弹
 item.flamethrower.name=火焰喷射器
+item.bubble_pistol.name=泡泡枪
+item.bubble_rifle.name=改进型泡泡枪
 
 //Hookshots
 item.hookshot.name=抓钩
@@ -537,7 +545,11 @@ description.staff_wind.name=不管这是做什么的，现在还不起作用。 
 description.staff_poison.name=不管这是做什么的，现在还不起作用。 #TODO
 description.staff.name=丢失 #TODO
 description.staff_thunder.name=丢失 #TODO
-description.spear_diamond.name=制作精良的制式武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
+description.spear_diamond.name=制作精良的武器，攻击距离可比普通的剑更长。右击效果：蓄力延长穿刺距离。
+description.cursed_bone.name=召唤的暴徒:
+
+//Enchantments
+enchantment.lightning_protection=雷击保护
 
 // Mobs
 entity.cqr_boarman.name=野猪人
@@ -573,6 +585,9 @@ entity.cqr_giant_tortoise.name=巨龟
 entity.cqr_lich.name=巫妖
 entity.cqr_necromancer.name=亡灵巫师
 entity.cqr_boar_mage.name=野猪法师
+entity.cqr_walker_king.name=深渊王
 
 //Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>五角星召唤物
+entity.cqr_illusion_walker_king.name=深渊王
+entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>深渊旋风

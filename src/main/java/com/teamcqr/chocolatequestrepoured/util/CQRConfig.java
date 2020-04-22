@@ -1,7 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -60,6 +62,21 @@ public class CQRConfig {
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
 
+		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
+		public String[] protectionSystemBreakableBlockWhitelist = {
+				"mob_spawner",
+				"torch",
+				"fire",
+				"cobweb",
+				"cqrepoured:unlit_torch",
+				"cqrepoured:force_field_nexus" };
+	
+		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
+		public String[] protectionSystemPlaceableBlockWhitelist = {
+				"torch",
+				"fire",
+				"cqrepoured:unlit_torch" };
+
 		public boolean enableSpecialFeatures = true;
 	}
 
@@ -80,13 +97,13 @@ public class CQRConfig {
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
-		@Config.RangeDouble(min = 0.0D, max = 100.0D)
-		public double spawnerActivationDistance = 25.0D;
+		@Config.RangeInt(min = 0, max = 100)
+		public int spawnerActivationDistance = 48;
 		@Config.RangeInt(min = 0, max = 32)
 		public int supportHillWallSize = 8;
 		@Config.Comment("Chance in percent to generate a dungeon.")
 		@Config.RangeInt(min = 0, max = 100)
-		public int overallDungeonChance = 75;
+		public int overallDungeonChance = 100;
 		public boolean moreDungeonsBehindWall = true;
 		@Config.RangeInt(min = 1, max = 10)
 		public int densityBehindWallFactor = 2;
@@ -137,6 +154,8 @@ public class CQRConfig {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
 				CQStructurePart.updateSpecialBlocks();
 				CQStructurePart.updateSpecialEntities();
+				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
+				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 			}
 		}
 

@@ -6,7 +6,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -14,12 +13,6 @@ public class EntityCQRTriton extends AbstractEntityCQR {
 
 	public EntityCQRTriton(World worldIn) {
 		super(worldIn);
-	}
-
-	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
 	@Override

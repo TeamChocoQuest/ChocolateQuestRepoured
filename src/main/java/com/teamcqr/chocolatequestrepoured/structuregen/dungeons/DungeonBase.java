@@ -10,10 +10,10 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -36,9 +36,9 @@ public abstract class DungeonBase {
 	protected int[] allowedDims;
 	protected int weight;
 	protected int chance;
+	protected int spawnLimit; 
 	protected String[] biomes;
 	protected String[] blacklistedBiomes;
-	protected boolean unique;
 	protected boolean rotateDungeon;
 	protected boolean spawnBehindWall;
 	protected String[] modDependencies;
@@ -61,13 +61,13 @@ public abstract class DungeonBase {
 
 	// Protection system stuff
 	protected boolean enableProtectionSystem = false;
-	protected boolean allowBlockPlacing = false;
-	protected boolean allowBlockBreaking = false;
-	protected boolean allowFireSpread = false;
-	protected boolean allowMobSpawning = false;
-	protected boolean allowExplosionTNT = true;
-	protected boolean allowExplosionOther = false;
-	protected boolean bypassSecurityChecks = false;
+	protected boolean preventBlockPlacing = false;
+	protected boolean preventBlockBreaking = false;
+	protected boolean preventExplosionsTNT = false;
+	protected boolean preventExplosionsOther = false;
+	protected boolean preventFireSpreading = false;
+	protected boolean preventEntitySpawning = false;
+	protected boolean ignoreNoBossOrNexus = false;
 
 	public DungeonBase(String name, Properties prop) {
 		this.name = name;
@@ -78,7 +78,7 @@ public abstract class DungeonBase {
 		this.chance = PropertyFileHelper.getIntProperty(prop, "chance", 0);
 		this.biomes = PropertyFileHelper.getStringArrayProperty(prop, "biomes", new String[0]);
 		this.blacklistedBiomes = PropertyFileHelper.getStringArrayProperty(prop, "disallowedBiomes", new String[0]);
-		this.unique = PropertyFileHelper.getBooleanProperty(prop, "unique", false);
+		this.spawnLimit = PropertyFileHelper.getIntProperty(prop, "spawnLimit", -1);
 		this.modDependencies = PropertyFileHelper.getStringArrayProperty(prop, "dependencies", new String[0]);
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[0]);
 		this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
@@ -103,13 +103,13 @@ public abstract class DungeonBase {
 
 		// protection system
 		this.enableProtectionSystem = PropertyFileHelper.getBooleanProperty(prop, "enableProtectionSystem", false);
-		this.allowBlockBreaking = !PropertyFileHelper.getBooleanProperty(prop, "blockMining", false);
-		this.allowBlockPlacing = !PropertyFileHelper.getBooleanProperty(prop, "blockBuilding", false);
-		this.allowFireSpread = !PropertyFileHelper.getBooleanProperty(prop, "blockFireSpread", false);
-		this.allowMobSpawning = !PropertyFileHelper.getBooleanProperty(prop, "blockMobSpawning", false);
-		this.allowExplosionTNT = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionTNT", false);
-		this.allowExplosionOther = !PropertyFileHelper.getBooleanProperty(prop, "blockExplosionOther", false);
-		this.bypassSecurityChecks = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
+		this.preventBlockBreaking = PropertyFileHelper.getBooleanProperty(prop, "preventBlockBreaking", false);
+		this.preventBlockPlacing = PropertyFileHelper.getBooleanProperty(prop, "preventBlockPlacing", false);
+		this.preventExplosionsTNT = PropertyFileHelper.getBooleanProperty(prop, "preventExplosionsTNT", false);
+		this.preventExplosionsOther = PropertyFileHelper.getBooleanProperty(prop, "preventExplosionOther", false);
+		this.preventFireSpreading = PropertyFileHelper.getBooleanProperty(prop, "preventFireSpreading", false);
+		this.preventEntitySpawning = PropertyFileHelper.getBooleanProperty(prop, "preventEntitySpawning", false);
+		this.ignoreNoBossOrNexus = PropertyFileHelper.getBooleanProperty(prop, "ignoreNoBossOrNexus", false);
 	}
 
 	@Override
@@ -136,22 +136,13 @@ public abstract class DungeonBase {
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {
-				y += this.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
+				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
 			}
 		}
 		y /= 256;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
 		this.generate(world, x, y, z);
-	}
-
-	protected int getYForPos(World world, int x, int z, boolean ignoreWater) {
-		int y = 255;
-		Material material = world.getBlockState(new BlockPos(x, y, z)).getMaterial();
-		while (y > 0 && (material == Material.AIR || material == Material.WOOD || material == Material.LEAVES || material == Material.PLANTS || (ignoreWater && material == Material.WATER))) {
-			material = world.getBlockState(new BlockPos(x, --y, z)).getMaterial();
-		}
-		return y;
 	}
 
 	public abstract void generate(World world, int x, int y, int z);
@@ -203,8 +194,8 @@ public abstract class DungeonBase {
 		return false;
 	}
 
-	public boolean isUnique() {
-		return this.unique;
+	public int getSpawnLimit() {
+		return this.spawnLimit;
 	}
 
 	public Block getSupportTopBlock() {
@@ -281,36 +272,36 @@ public abstract class DungeonBase {
 	}
 
 	// Protection system
-	public boolean isProtectedFromModifications() {
+	public boolean isProtectionSystemEnabled() {
 		return this.enableProtectionSystem;
 	}
 
-	public boolean getAllowBlockPlacing() {
-		return this.allowBlockPlacing;
+	public boolean preventBlockPlacing() {
+		return this.preventBlockPlacing;
 	}
 
-	public boolean getAllowBlockBreaking() {
-		return this.allowBlockBreaking;
+	public boolean preventBlockBreaking() {
+		return this.preventBlockBreaking;
 	}
 
-	public boolean getAllowFireSpread() {
-		return this.allowFireSpread;
+	public boolean preventFireSpreading() {
+		return this.preventFireSpreading;
 	}
 
-	public boolean getAllowMobSpawns() {
-		return this.allowMobSpawning;
+	public boolean preventEntitySpawning() {
+		return this.preventEntitySpawning;
 	}
 
-	public boolean getAllowExplosionTNT() {
-		return this.allowExplosionTNT;
+	public boolean preventExplosionsTNT() {
+		return this.preventExplosionsTNT;
 	}
 
-	public boolean getAllowExplosionOther() {
-		return this.allowExplosionOther;
+	public boolean preventExplosionsOther() {
+		return this.preventExplosionsOther;
 	}
 
-	public boolean getSecurityBypassEnabled() {
-		return this.bypassSecurityChecks;
+	public boolean ignoreNoBossOrNexus() {
+		return this.ignoreNoBossOrNexus;
 	}
 
 }

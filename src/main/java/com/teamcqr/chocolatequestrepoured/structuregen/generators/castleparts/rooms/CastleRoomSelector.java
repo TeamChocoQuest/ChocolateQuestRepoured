@@ -1,31 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
+import java.util.*;
 
 /**
  * Copyright (c) 20.12.2019
@@ -67,7 +56,7 @@ public class CastleRoomSelector {
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
 	private BlockPos buildPosition;
-	private CastleDungeon dungeon;
+	private DungeonCastle dungeon;
 	private int floorHeight;
 	private int roomSize;
 	private int minRoomsForBoss;
@@ -79,7 +68,7 @@ public class CastleRoomSelector {
 	private List<SupportArea> supportAreas;
 	private List<CastleAddonRoof> castleRoofs;
 
-	public CastleRoomSelector(BlockPos buildPosition, CastleDungeon dungeon) {
+	public CastleRoomSelector(BlockPos buildPosition, DungeonCastle dungeon) {
 		this.buildPosition = buildPosition;
 		this.dungeon = dungeon;
 		this.floorHeight = dungeon.getFloorHeight();
@@ -117,14 +106,14 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
 		this.addDecoration(world, startPos, dungeon, genArray, bossUuids);
 
 		this.generateRoofs(genArray, dungeon);
 	}
 
-	private void generateRooms(BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
+	private void generateRooms(BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids) {
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
@@ -133,7 +122,7 @@ public class CastleRoomSelector {
 
 	}
 
-	private void addDecoration(World world, BlockPos startPos, CastleDungeon dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids)
+	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids)
 	{
 		EDungeonMobType mobType = selectCastleMobType(world, startPos, dungeon);
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
@@ -148,7 +137,7 @@ public class CastleRoomSelector {
 		}
 	}
 
-	private EDungeonMobType selectCastleMobType(World world, BlockPos startPos, CastleDungeon dungeon) {
+	private EDungeonMobType selectCastleMobType(World world, BlockPos startPos, DungeonCastle dungeon) {
 		EDungeonMobType mobType = dungeon.getDungeonMob();
 		if (mobType == EDungeonMobType.DEFAULT) {
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, startPos.getX(), startPos.getZ());
@@ -156,7 +145,7 @@ public class CastleRoomSelector {
 		return mobType;
 	}
 
-	private void generateRoofs(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void generateRoofs(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		for (CastleAddonRoof roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
 		}

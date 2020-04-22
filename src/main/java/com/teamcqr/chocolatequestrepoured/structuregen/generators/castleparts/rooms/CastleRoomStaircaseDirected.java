@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
@@ -41,7 +40,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
 				this.buildFloorBlock(x, z, genArray, dungeon);
@@ -77,12 +76,12 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		return this.doorSide;
 	}
 
-	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getFloorBlockState();
 		genArray.addBlockState(this.origin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 	}
 
-	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		int stairHeight = this.centerStairLength + (z - PLATFORM_LENGTH);
 		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.SOUTH, this.numRotations);
 		IBlockState blockToBuild;
@@ -98,7 +97,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		}
 	}
 
-	private void buildLowerStair(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void buildLowerStair(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		int stairHeight = this.centerStairLength - (z - PLATFORM_LENGTH + 1);
 		EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
 		IBlockState blockToBuild;
@@ -114,7 +113,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 		}
 	}
 
-	private void buildPlatform(int x, int z, BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void buildPlatform(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild;
 		int platformHeight = this.centerStairLength; // the stair length is also the platform height
 

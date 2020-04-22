@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -25,11 +25,11 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class CastleGenerator implements IDungeonGenerator {
 	private BlockPos origin;
-	private CastleDungeon dungeon;
+	private DungeonCastle dungeon;
 	private Random random;
 	private CastleRoomSelector roomHelper;
 
-	public CastleGenerator(CastleDungeon dungeon) {
+	public CastleGenerator(DungeonCastle dungeon) {
 		this.dungeon = dungeon;
 		this.random = this.dungeon.getRandom();
 	}

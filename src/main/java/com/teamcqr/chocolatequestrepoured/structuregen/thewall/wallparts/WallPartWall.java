@@ -1,10 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -27,72 +30,37 @@ public class WallPartWall implements IWallPart {
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk) {
-
-		int startX = chunkX * 16;
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
+		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
 
-		// All the calculated block positions are stored within these lists
-		List<BlockPos> outerBlocks = new ArrayList<BlockPos>();
-		List<BlockPos> innerBlocks = new ArrayList<BlockPos>();
+		// All the calculated block positions are stored within this map
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		ExtendedBlockStatePart.ExtendedBlockState stateObsidian = new ExtendedBlockState(Blocks.OBSIDIAN.getDefaultState(), null);
+		ExtendedBlockStatePart.ExtendedBlockState stateBrick = new ExtendedBlockState(Blocks.STONEBRICK.getDefaultState(), null);
+		if (!CQRConfig.wall.obsidianCore) {
+			stateObsidian = stateBrick;
+		}
 
 		// Calculates all the block positions
-		for (int y = this.getLowerY(world, chunk); y <= this.getTopY(); y++) {
+		int lowerY = this.getLowerY(world, startX, startZ);
+		for (int y = lowerY; y <= this.getTopY(); y++) {
 			for (int z = 4; z < 12; z++) {
 				for (int x = 0; x < 16; x++) {
 					BlockPos pos = new BlockPos(startX + x, y, startZ + z);
 					if (y == this.getTopY()) {
-						outerBlocks.add(pos);
+						stateMap.put(pos, stateBrick);
 					} else if ((z >= 6 && z <= 9)) {
-						innerBlocks.add(pos);
+						stateMap.put(pos, stateObsidian);
 					} else {
-						outerBlocks.add(pos);
+						stateMap.put(pos, stateBrick);
 					}
 				}
 			}
 		}
 
 		// Places the blocks at the calculated positions
-		if (!outerBlocks.isEmpty() && !innerBlocks.isEmpty()) {
-			// Inner Obsidian core
-			/*
-			 * for(BlockPos pos : innerBlocks) {
-			 * world.setBlockState(pos, Reference.CONFIG_HELPER.wallHasObsiCore() ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState());
-			 * }
-			 */
-			final List<BlockPos> posL = new ArrayList<BlockPos>(innerBlocks);
-			innerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-
-				@Override
-				public void run() {
-
-					for (BlockPos p : posL) {
-						world.setBlockState(p, CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : Blocks.STONEBRICK.getDefaultState(), 2);
-					}
-
-				}
-			});
-			// Outer Stoneblock cover
-			/*
-			 * for(BlockPos pos : outerBlocks) {
-			 * world.setBlockState(pos, Blocks.STONEBRICK.getDefaultState());
-			 * }
-			 */
-			final List<BlockPos> posL2 = new ArrayList<BlockPos>(outerBlocks);
-			outerBlocks.clear();
-			Reference.BLOCK_PLACING_THREADS_INSTANCE.addTask(new Runnable() {
-
-				@Override
-				public void run() {
-
-					for (BlockPos p : posL2) {
-						world.setBlockState(p, Blocks.STONEBRICK.getDefaultState(), 2);
-					}
-
-				}
-			});
-		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 
 	}
 

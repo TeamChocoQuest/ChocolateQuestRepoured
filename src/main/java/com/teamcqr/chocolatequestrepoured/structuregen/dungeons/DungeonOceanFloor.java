@@ -6,6 +6,7 @@ import java.util.Properties;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.OceanFloorGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
@@ -18,7 +19,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class DungeonOceanFloor extends DefaultSurfaceDungeon {
+public class DungeonOceanFloor extends DungeonSurface {
 
 	public DungeonOceanFloor(String name, Properties prop) {
 		super(name, prop);
@@ -29,7 +30,7 @@ public class DungeonOceanFloor extends DefaultSurfaceDungeon {
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {
-				y += this.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, true);
+				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, true);
 			}
 		}
 		y /= 256;

@@ -153,7 +153,7 @@ public class ExtendedBlockStatePart implements IStructure {
 	 * @param map BlockPos keys are coordinates in the world
 	 */
 	public static List<ExtendedBlockStatePart> splitBlockMap(Map<BlockPos, Block> map) {
-		return ExtendedBlockStatePart.splitBlockList(new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitBlockList(new ArrayList<>(map.entrySet()));
 	}
 
 	/**
@@ -161,14 +161,14 @@ public class ExtendedBlockStatePart implements IStructure {
 	 * @param map BlockPos keys are the relative coordinates to the start position
 	 */
 	public static List<ExtendedBlockStatePart> splitBlockMap(BlockPos pos, Map<BlockPos, Block> map) {
-		return ExtendedBlockStatePart.splitBlockList(pos, new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitBlockList(pos, new ArrayList<>(map.entrySet()));
 	}
 
 	/**
 	 * @param map BlockPos keys are coordinates in the world
 	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateMap(Map<BlockPos, IBlockState> map) {
-		return ExtendedBlockStatePart.splitBlockStateList(new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitBlockStateList(new ArrayList<>(map.entrySet()));
 	}
 
 	/**
@@ -176,14 +176,14 @@ public class ExtendedBlockStatePart implements IStructure {
 	 * @param map BlockPos keys are the relative coordinates to the start position
 	 */
 	public static List<ExtendedBlockStatePart> splitBlockStateMap(BlockPos pos, Map<BlockPos, IBlockState> map) {
-		return ExtendedBlockStatePart.splitBlockStateList(pos, new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitBlockStateList(pos, new ArrayList<>(map.entrySet()));
 	}
 
 	/**
 	 * @param map BlockPos keys are coordinates in the world
 	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(Map<BlockPos, ExtendedBlockState> map) {
-		return ExtendedBlockStatePart.splitExtendedBlockStateList(new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitExtendedBlockStateList(new ArrayList<>(map.entrySet()));
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class ExtendedBlockStatePart implements IStructure {
 	 * @param map BlockPos keys are the relative coordinates to the start position
 	 */
 	public static List<ExtendedBlockStatePart> splitExtendedBlockStateMap(BlockPos pos, Map<BlockPos, ExtendedBlockState> map) {
-		return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, new ArrayList(map.entrySet()));
+		return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, new ArrayList<>(map.entrySet()));
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
 			for (Map.Entry<BlockPos, Block> entry : entryList) {
-				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
+				list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
 			}
 			return ExtendedBlockStatePart.splitExtendedBlockStateList(list);
 		}
@@ -217,7 +217,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
 			for (Map.Entry<BlockPos, Block> entry : entryList) {
-				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
+				list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ExtendedBlockState(entry.getValue().getDefaultState(), null)));
 			}
 			return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, list);
 		}
@@ -232,7 +232,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
 			for (Map.Entry<BlockPos, IBlockState> entry : entryList) {
-				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
+				list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
 			}
 			return ExtendedBlockStatePart.splitExtendedBlockStateList(list);
 		}
@@ -248,7 +248,7 @@ public class ExtendedBlockStatePart implements IStructure {
 		if (!entryList.isEmpty()) {
 			List<Map.Entry<BlockPos, ExtendedBlockState>> list = new ArrayList<>(entryList.size());
 			for (Map.Entry<BlockPos, IBlockState> entry : entryList) {
-				list.add(new AbstractMap.SimpleEntry(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
+				list.add(new AbstractMap.SimpleEntry<>(entry.getKey(), new ExtendedBlockState(entry.getValue(), null)));
 			}
 			return ExtendedBlockStatePart.splitExtendedBlockStateList(pos, list);
 		}
