@@ -54,7 +54,7 @@ public class FactionRegistry {
 
 	private static FactionRegistry instance;
 
-	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
+	private Map<String, CQRFaction> factions = new HashMap<>();
 	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
 	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
@@ -108,7 +108,7 @@ public class FactionRegistry {
 		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_FACTION_FOLDER, new String[] {"cfg", "prop", "properties"}, true));
 		int fileCount = files.size();
 		if (fileCount > 0) {
-			ArrayList<String> fIDs = new ArrayList<>();
+			ArrayList<String> fIDs = new ArrayList<>(fileCount +1);
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
 			boolean flag = true;
@@ -140,9 +140,9 @@ public class FactionRegistry {
 					for(String enemy : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ENEMIES_KEY, new String[] {})) {
 						fEnemy.add(enemy);
 					}
-					fIDs.set(i, fName);
-					allyTmp.set(i, fAlly);
-					enemyTmp.set(i, fEnemy);
+					fIDs.add(fName);
+					allyTmp.add(fAlly);
+					enemyTmp.add(fEnemy);
 
 					Optional<Integer> optionMember = Optional.of(repuChangeMember);
 					Optional<Integer> optionAlly = Optional.of(repuChangeAlly);
