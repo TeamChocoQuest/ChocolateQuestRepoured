@@ -168,7 +168,8 @@ public class FactionRegistry {
 	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
 		if (entity.getControllingPassenger() != null) {
-			return this.getFactionOf(entity.getControllingPassenger();
+			return this.getFactionOf(entity.getControllingPassenger());
+		}
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		} 
@@ -312,7 +313,7 @@ public class FactionRegistry {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if (!repuDataList.hasNoTags()) {
-						while(FactionRegistry.this.uuidsBeingLoaded.containsKey(uuid)) {
+						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
 							//Wait until the uuid isnt active	
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
@@ -354,7 +355,7 @@ public class FactionRegistry {
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
 					if (f != null) {
-						while(FactionRegistry.this.uuidsBeingLoaded.containsKey(uuid)) {
+						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
 							//Wait until the uuid isnt active	
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
