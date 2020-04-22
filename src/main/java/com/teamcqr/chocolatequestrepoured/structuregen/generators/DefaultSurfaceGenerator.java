@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.CoverBlockPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -27,9 +27,9 @@ public class DefaultSurfaceGenerator implements IDungeonGenerator {
 
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
-	private DefaultSurfaceDungeon dungeon;
+	private DungeonSurface dungeon;
 
-	public DefaultSurfaceGenerator(DefaultSurfaceDungeon dun, CQStructure struct, PlacementSettings settings) {
+	public DefaultSurfaceGenerator(DungeonSurface dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
 		this.structure = struct;
 		this.placeSettings = settings;

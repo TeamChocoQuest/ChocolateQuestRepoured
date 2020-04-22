@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAITorchIgniter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -23,13 +22,6 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	@Override
 	public float getBaseHealth() {
 		return EBaseHealths.GOLEM.getValue();
-	}
-
-	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
-		this.tasks.addTask(14, new EntityAIFireFighter(this));
-		this.tasks.addTask(22, new EntityAITorchIgniter(this));
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -14,7 +13,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 	}
 
 	@Override
-	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
@@ -36,7 +35,7 @@ public class WalkableRoofWallBuilder extends RoomWallBuilder {
 	}
 
 	@Override
-	protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon) {
+	protected IBlockState getBlockToBuild(BlockPos pos, DungeonCastle dungeon) {
 		if (this.options.hasDoor() && this.inDoorFrame(pos)) {
 			return Blocks.AIR.getDefaultState();
 		} else if (this.shouldBuildCrenellatedRoof(pos)) {

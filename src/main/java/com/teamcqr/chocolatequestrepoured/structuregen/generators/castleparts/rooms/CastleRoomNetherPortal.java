@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
 import net.minecraft.block.BlockStairs;
@@ -35,7 +35,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
         int halfX = endX / 2;
@@ -80,12 +80,12 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected IBlockState getFloorBlock(CastleDungeon dungeon) {
+    protected IBlockState getFloorBlock(DungeonCastle dungeon) {
         return dungeon.getMainBlockState();
     }
 
     @Override
-    public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory)
+    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory)
     {
         setupDecoration(genArray);
         addWallDecoration(world, genArray, dungeon);

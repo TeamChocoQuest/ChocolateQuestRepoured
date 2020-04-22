@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import net.minecraft.util.EnumFacing;
+
 import java.util.HashSet;
 import java.util.List;
-
-import net.minecraft.util.EnumFacing;
 
 public class RoomGridCell {
 	private enum CellState {

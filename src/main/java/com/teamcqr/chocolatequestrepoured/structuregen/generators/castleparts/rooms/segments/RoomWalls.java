@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
+import net.minecraft.util.EnumFacing;
+
 import java.util.EnumMap;
 import java.util.Random;
-
-import net.minecraft.util.EnumFacing;
 
 public class RoomWalls {
 	// The wall settings for this room

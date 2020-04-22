@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 
 public class LightPart implements IStructure {
@@ -25,12 +26,18 @@ public class LightPart implements IStructure {
 
 	@Override
 	public void generate(World world, ProtectedRegion protectedRegion) {
+		if (world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+			for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(this.startPos, this.endPos)) {
+				world.checkLight(mutablePos);
+			}
+			return;
+		}
+
 		for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(this.startPos, this.endPos)) {
-			BlockPos pos = mutablePos.toImmutable();
-			world.checkLight(pos);
-			Chunk chunk = world.getChunkFromBlockCoords(pos);
-			IBlockState state = chunk.getBlockState(pos);
-			world.markAndNotifyBlock(pos, chunk, state, state, 7);
+			world.checkLight(mutablePos);
+			Chunk chunk = world.getChunkFromBlockCoords(mutablePos);
+			IBlockState state = chunk.getBlockState(mutablePos);
+			world.markAndNotifyBlock(mutablePos, chunk, state, state, 18);
 		}
 	}
 

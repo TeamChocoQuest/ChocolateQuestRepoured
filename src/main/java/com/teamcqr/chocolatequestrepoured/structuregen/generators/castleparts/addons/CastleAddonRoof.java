@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockStairs;
@@ -22,7 +21,7 @@ public class CastleAddonRoof implements ICastleAddon {
 	}
 
 	@Override
-	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		RandomCastleConfigOptions.RoofType type = dungeon.getRandomRoofType();
 		switch (type) {
 			case TWO_SIDED: {
@@ -36,7 +35,7 @@ public class CastleAddonRoof implements ICastleAddon {
 		}
 	}
 
-	private void generateTwoSided(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void generateTwoSided(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		int roofX;
 		int roofZ;
 		int roofLenX;
@@ -113,7 +112,7 @@ public class CastleAddonRoof implements ICastleAddon {
 		} while (underLenX >= 0 && underLenZ >= 0);
 	}
 
-	private void generateFourSided(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	private void generateFourSided(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		int roofX;
 		int roofZ;
 		int roofLenX;

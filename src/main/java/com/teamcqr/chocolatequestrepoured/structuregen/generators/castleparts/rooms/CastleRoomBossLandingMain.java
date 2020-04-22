@@ -1,10 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -65,7 +64,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
@@ -84,7 +83,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 		}
 	}
 
-	private IBlockState getBlockToBuild(CastleDungeon dungeon, int x, int y, int z) {
+	private IBlockState getBlockToBuild(DungeonCastle dungeon, int x, int y, int z) {
 		IBlockState blockToBuild = Blocks.AIR.getDefaultState();
 
 		if (z == -1) {
@@ -114,7 +113,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory) {
 		this.addEdgeDecoration(world, genArray, dungeon);
 		this.addWallDecoration(world, genArray, dungeon);
 		this.addSpawners(world, genArray, dungeon, mobFactory);

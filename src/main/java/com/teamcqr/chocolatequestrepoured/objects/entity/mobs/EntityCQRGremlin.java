@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -42,6 +41,16 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	@Override
 	public boolean canOpenDoors() {
+		return false;
+	}
+
+	@Override
+	public boolean canIgniteTorch() {
+		return false;
+	}
+
+	@Override
+	public boolean canTameEntity() {
 		return false;
 	}
 

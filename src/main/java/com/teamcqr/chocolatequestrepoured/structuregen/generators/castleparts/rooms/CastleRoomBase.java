@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
@@ -68,7 +68,7 @@ public abstract class CastleRoomBase {
 		this.possibleDecoPositions = new HashSet<>();
 	}
 
-	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.setupDecoration(genArray);
 		this.generateRoom(genArray, dungeon);
 		this.generateWalls(genArray, dungeon);
@@ -81,21 +81,21 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	public void postProcess(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void postProcess(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		;
 	}
 
-	protected abstract void generateRoom(BlockStateGenArray genArray, CastleDungeon dungeon);
+	protected abstract void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon);
 
-	public void decorate(World world, BlockStateGenArray genArray, CastleDungeon dungeon, CastleGearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory) {
 		; // Default is no decoration
 	}
 
-	public void placeBoss(World world, BlockStateGenArray genArray, CastleDungeon dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
+	public void placeBoss(World world, BlockStateGenArray genArray, DungeonCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
 		; // Default is no boss
 	}
 
-	protected void generateWalls(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	protected void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			if (this.walls.hasWallOnSide(side)) {
 				int wallLength = (side.getAxis() == EnumFacing.Axis.X) ? this.buildLengthZ : this.buildLengthX;
@@ -113,7 +113,7 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	protected void createAndGenerateWallBuilder(BlockStateGenArray genArray, CastleDungeon dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
+	protected void createAndGenerateWallBuilder(BlockStateGenArray genArray, DungeonCastle dungeon, EnumFacing side, int wallLength, BlockPos wallStart) {
 		RoomWallBuilder builder = new RoomWallBuilder(wallStart, this.height, wallLength, this.walls.getOptionsForSide(side), side);
 		builder.generate(genArray, dungeon);
 	}
@@ -142,7 +142,7 @@ public abstract class CastleRoomBase {
 		return this.roomType.isPathable();
 	}
 
-	protected void generateDefaultCeiling(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
 				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN);
@@ -150,7 +150,7 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	protected void generateDefaultFloor(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	protected void generateDefaultFloor(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos = this.getNonWallStartPos();
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
@@ -169,7 +169,7 @@ public abstract class CastleRoomBase {
         }
     }
 
-	protected IBlockState getFloorBlock(CastleDungeon dungeon) {
+	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
 		return dungeon.getFloorBlockState();
 	}
 

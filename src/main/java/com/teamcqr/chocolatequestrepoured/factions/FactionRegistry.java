@@ -17,6 +17,8 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.io.FileUtils;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.factions.EReputationState.EReputationStateRough;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -25,6 +27,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.AbstractIllager;
@@ -41,6 +44,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -50,9 +54,10 @@ public class FactionRegistry {
 
 	private static FactionRegistry instance;
 
-	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
-	private List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
+	private Map<String, CQRFaction> factions = new HashMap<>();
+	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
+	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
 
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
@@ -62,21 +67,53 @@ public class FactionRegistry {
 	}
 
 	public void loadFactions() {
-		this.loadDefaultFactions();
 		this.loadFactionsInConfigFolder();
+		this.loadDefaultFactions();
+		
+		this.loadEntityFactionRelations();
+	}
+
+	private void loadEntityFactionRelations() {
+		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "entityFactionRelation.properties");
+		if(file.exists()) {
+			Properties prop = new Properties();
+			boolean flag = true;
+			try (InputStream inputStream = new FileInputStream(file)) {
+				prop.load(inputStream);
+				flag = true;
+			} catch (IOException e) {
+				CQRMain.logger.error("Failed to load file" + file.getName(), e);
+				flag = false;
+			}
+			if(flag) {
+				for(String key : prop.stringPropertyNames()) {
+					if(key.startsWith("#")) {
+						continue;
+					}
+					String rlkey = key.replace('.', ':');
+					ResourceLocation resLoc = new ResourceLocation(rlkey);
+					if(EntityList.isRegistered(resLoc)) {
+						String faction = prop.getProperty(key, null);
+						if(faction != null && factions.containsKey(faction)) {
+							entityFactionMap.put(resLoc, factions.get(faction));
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void loadFactionsInConfigFolder() {
 		// DONE: Load factions from files
-		File[] files = CQRMain.CQ_FACTION_FOLDER.listFiles(FileIOUtil.getPropertiesFileFilter());
-		int fileCount = files.length;
+		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_FACTION_FOLDER, new String[] {"cfg", "prop", "properties"}, true));
+		int fileCount = files.size();
 		if (fileCount > 0) {
-			ArrayList<String> fIDs = new ArrayList<>();
+			ArrayList<String> fIDs = new ArrayList<>(fileCount +1);
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
 			boolean flag = true;
 			for (int i = 0; i < fileCount; i++) {
-				File file = files[i];
+				File file = files.get(i);
 				Properties prop = new Properties();
 				try (InputStream inputStream = new FileInputStream(file)) {
 					prop.load(inputStream);
@@ -91,9 +128,9 @@ public class FactionRegistry {
 					List<String> fEnemy = new ArrayList<>();
 					// CQRFaction fTmp =
 					String fName = prop.getProperty(ConfigKeys.FACTION_NAME_KEY, "FACTION_NAME");
-					int repuChangeAlly = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, 0);
-					int repuChangeEnemy = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, 0);
-					int repuChangeMember = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, 0);
+					int repuChangeAlly = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ALLY, 2);
+					int repuChangeEnemy = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, 1);
+					int repuChangeMember = PropertyFileHelper.getIntProperty(prop, ConfigKeys.FACTION_REPU_CHANGE_KILL_MEMBER, 5);
 					EReputationState defRepu = EReputationState.valueOf(prop.getProperty(ConfigKeys.FACTION_REPU_DEFAULT, EReputationState.NEUTRAL.toString()));
 					boolean staticRepu = PropertyFileHelper.getBooleanProperty(prop, ConfigKeys.FACTION_STATIC_REPUTATION_KEY, false);
 					// Reputation lists
@@ -103,9 +140,9 @@ public class FactionRegistry {
 					for(String enemy : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ENEMIES_KEY, new String[] {})) {
 						fEnemy.add(enemy);
 					}
-					fIDs.set(i, fName);
-					allyTmp.set(i, fAlly);
-					enemyTmp.set(i, fEnemy);
+					fIDs.add(fName);
+					allyTmp.add(fAlly);
+					enemyTmp.add(fEnemy);
 
 					Optional<Integer> optionMember = Optional.of(repuChangeMember);
 					Optional<Integer> optionAlly = Optional.of(repuChangeAlly);
@@ -131,8 +168,13 @@ public class FactionRegistry {
 	private void loadDefaultFactions() {
 		String[][] allies = new String[EDefaultFaction.values().length][];
 		String[][] enemies = new String[EDefaultFaction.values().length][];
+		List<Integer> indices = new ArrayList<>();
 		for (int i = 0; i < EDefaultFaction.values().length; i++) {
 			EDefaultFaction edf = EDefaultFaction.values()[i];
+			if (this.factions.containsKey(edf.name())) {
+				continue;
+			}
+			indices.add(i);
 			allies[i] = edf.getAllies();
 			enemies[i] = edf.getEnemies();
 
@@ -144,7 +186,7 @@ public class FactionRegistry {
 			this.factions.put(edf.name(), fac);
 		}
 
-		for (int i = 0; i < EDefaultFaction.values().length; i++) {
+		for (int i : indices) {
 			String name = EDefaultFaction.values()[i].name();
 			CQRFaction fac = this.factions.get(name);
 			for (int j = 0; j < allies[i].length; j++) {
@@ -160,19 +202,29 @@ public class FactionRegistry {
 
 	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
-		if (entity instanceof EntityTameable) {
-			return this.getFactionOf(((EntityTameable) entity).getOwner());
+		if (entity.getControllingPassenger() != null) {
+			return this.getFactionOf(entity.getControllingPassenger());
 		}
+		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
+			return this.getFactionOf(((EntityTameable) entity).getOwner());
+		} 
+		
+		if (entity instanceof AbstractEntityCQR) {
+			return ((AbstractEntityCQR) entity).getFaction();
+		}
+		
+		//Faction overriding
+		if(entityFactionMap.containsKey(EntityList.getKey(entity))) {
+			return entityFactionMap.get(EntityList.getKey(entity));
+		}
+		//Overriding end
+		
 		if (entity instanceof EntityArmorStand) {
 			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
 
 		if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
 			return this.factions.get(EDefaultFaction.VILLAGERS.name());
-		}
-
-		if (entity instanceof AbstractEntityCQR) {
-			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
 		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
@@ -299,10 +351,14 @@ public class FactionRegistry {
 
 				@Override
 				public void run() {
+					final UUID uuid = event.player.getPersistentID();
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if (!repuDataList.hasNoTags()) {
-						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
+						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+							//Wait until the uuid isnt active	
+						}
+						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 							repuDataList.forEach(new Consumer<NBTBase>() {
@@ -318,7 +374,7 @@ public class FactionRegistry {
 								}
 							});
 						} finally {
-							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
 				}
@@ -337,10 +393,14 @@ public class FactionRegistry {
 				public void run() {
 					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 					Map<String, Integer> entryMapping = new HashMap<>();
+					final UUID uuid = event.player.getPersistentID();
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-					File f = FileIOUtil.getOrCreateFile(path, event.player.getPersistentID() + ".nbt");
+					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
 					if (f != null) {
-						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
+						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+							//Wait until the uuid isnt active	
+						}
+						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 							NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
@@ -364,7 +424,7 @@ public class FactionRegistry {
 
 							FileIOUtil.saveNBTCompoundToFile(root, f);
 						} finally {
-							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
 				}

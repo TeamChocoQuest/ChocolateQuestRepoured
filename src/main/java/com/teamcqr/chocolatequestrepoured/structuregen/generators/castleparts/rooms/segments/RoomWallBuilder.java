@@ -1,9 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
-import java.util.Random;
-
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.CastleDungeon;
-
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockDoor;
@@ -13,6 +10,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 /**
  * Copyright (c) 20.04.2020
@@ -46,7 +45,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	public void generate(BlockStateGenArray genArray, CastleDungeon dungeon) {
+	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
@@ -68,7 +67,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	protected IBlockState getBlockToBuild(BlockPos pos, CastleDungeon dungeon) {
+	protected IBlockState getBlockToBuild(BlockPos pos, DungeonCastle dungeon) {
 		if (this.options.hasWindow()) {
 			return this.getWindowBlock(pos, dungeon);
 		} else if (this.options.hasDoor()) {
@@ -78,7 +77,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	protected IBlockState getDoorBlock(BlockPos pos, CastleDungeon dungeon) {
+	protected IBlockState getDoorBlock(BlockPos pos, DungeonCastle dungeon) {
 		switch (this.options.getDoor().getType()) {
 		case AIR:
 			return this.getBlockDoorAir(pos, dungeon);
@@ -100,7 +99,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	private IBlockState getBlockDoorAir(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockDoorAir(BlockPos pos, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
@@ -116,7 +115,7 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorStairBorder(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockDoorStairBorder(BlockPos pos, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.wallStart.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -155,7 +154,7 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorFenceBorder(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockDoorFenceBorder(BlockPos pos, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.wallStart.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -178,7 +177,7 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockDoorStandard(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockDoorStandard(BlockPos pos, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 		final int y = pos.getY() - this.wallStart.getY();
 		final int dist = this.getLengthPoint(pos);
@@ -211,7 +210,7 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
-	private IBlockState getBlockGrandEntry(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockGrandEntry(BlockPos pos, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getMainBlockState();
 
 		final int y = pos.getY() - this.wallStart.getY();
@@ -256,7 +255,7 @@ public class RoomWallBuilder {
 		return blockToBuild;
 	}
 
-	protected IBlockState getWindowBlock(BlockPos pos, CastleDungeon dungeon) {
+	protected IBlockState getWindowBlock(BlockPos pos, DungeonCastle dungeon) {
 		switch (this.windowType) {
 			case BASIC_GLASS:
 				return getBlockWindowBasicGlass(pos, dungeon);
@@ -270,7 +269,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	private IBlockState getBlockWindowBasicGlass(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockWindowBasicGlass(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
 
@@ -281,7 +280,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	private IBlockState getBlockWindowCrossGlass(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockWindowCrossGlass(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = this.length / 2;
@@ -295,7 +294,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	private IBlockState getBlockWindowSquareBars(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockWindowSquareBars(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = length / 2;
@@ -308,7 +307,7 @@ public class RoomWallBuilder {
 		}
 	}
 
-	private IBlockState getBlockWindowOpenSlit(BlockPos pos, CastleDungeon dungeon) {
+	private IBlockState getBlockWindowOpenSlit(BlockPos pos, DungeonCastle dungeon) {
 		int y = pos.getY() - this.wallStart.getY();
 		int dist = this.getLengthPoint(pos);
 		int halfDist = length / 2;

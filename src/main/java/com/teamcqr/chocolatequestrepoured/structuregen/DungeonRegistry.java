@@ -5,7 +5,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -39,7 +38,13 @@ public class DungeonRegistry {
 	private Map<BiomeDictionary.Type, Set<DungeonBase>> biomeTypeDungeonMap = new HashMap<>();
 	private Set<DungeonBase> coordinateSpecificDungeons = new HashSet<>();
 
-	private Map<World, Set<String>> worldDungeonSpawnedMap = new HashMap<>();
+	
+	//TODO: Initialize this on world load
+	/* 
+	 * First key: Dimension
+	 * Second key: Dungeon name
+	 * Third value: where this dungeon did spawn
+	 */
 
 	public static DungeonRegistry getInstance() {
 		return DungeonRegistry.instance;
@@ -133,7 +138,12 @@ public class DungeonRegistry {
 				}
 
 				if (dungeon.getWeight() <= 0) {
-					CQRMain.logger.warn("{}: Dungeon spawnrate is set to or below 0!", file.getName());
+					CQRMain.logger.warn("{}: Dungeon weight is set to or below 0!", file.getName());
+					continue;
+				}
+
+				if (dungeon.getChance() <= 0) {
+					CQRMain.logger.warn("{}: Dungeon chance is set to or below 0!", file.getName());
 					continue;
 				}
 
@@ -260,18 +270,6 @@ public class DungeonRegistry {
 		return this.getBiomeTypeByName(biomeName) != null;
 	}
 
-	public void insertDungeonEntries(World world, String... dungeonNames) {
-		Set<String> set = new HashSet<>();
-		Collections.addAll(set, dungeonNames);
-		this.insertDungeonEntries(world, set);
-	}
-
-	public void insertDungeonEntries(World world, Set<String> dungeonNames) {
-		Set<String> spawnedDungeons = this.worldDungeonSpawnedMap.getOrDefault(world, new HashSet<String>());
-		spawnedDungeons.addAll(dungeonNames);
-		this.worldDungeonSpawnedMap.put(world, spawnedDungeons);
-	}
-
 	private boolean isDungeonMissingModDependencies(DungeonBase dungeon) {
 		for (String modid : dungeon.getDependencies()) {
 			if (!Loader.isModLoaded(modid)) {
@@ -296,27 +294,26 @@ public class DungeonRegistry {
 	}
 
 	public boolean isDungeonMissingDungeonDependencies(World world, DungeonBase dungeon) {
-		if (!dungeon.dependsOnOtherStructures()) {
-			return false;
-		}
-		Set<String> spawned = this.worldDungeonSpawnedMap.getOrDefault(world, Collections.emptySet());
-		if (spawned.isEmpty()) {
-			return true;
-		}
-		for (String s : dungeon.getDungeonDependencies()) {
-			if (!spawned.contains(s)) {
+		if (dungeon.dependsOnOtherStructures()) {
+			Set<String> spawnedTypes = DungeonDataManager.getSpawnedDungeonNames(world);
+			if(spawnedTypes.isEmpty()) {
 				return true;
+			}
+			for (String s : dungeon.getDungeonDependencies()) {
+				if(!spawnedTypes.contains(s)) {
+					return true;
+				}
+				Set<BlockPos> spawnedLocs = DungeonDataManager.getLocationsOfDungeon(world, s);
+				if(spawnedLocs.isEmpty()) {
+					return true;
+				}
 			}
 		}
 		return false;
 	}
-
+	
 	public boolean canDungeonSpawnAgain(World world, DungeonBase dungeon) {
-		return !dungeon.isUnique() || !this.hasUniqueDungeonAlreadyBeenSpawned(world, dungeon.getDungeonName());
-	}
-
-	public boolean hasUniqueDungeonAlreadyBeenSpawned(World world, String dungeonName) {
-		return this.worldDungeonSpawnedMap.getOrDefault(world, Collections.emptySet()).contains(dungeonName);
+		return (dungeon.getSpawnLimit() < 0) || !DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
 	}
 
 }

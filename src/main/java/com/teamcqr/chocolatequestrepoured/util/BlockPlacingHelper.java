@@ -44,7 +44,7 @@ public class BlockPlacingHelper {
 				}
 			}
 		}
-		BlockPlacingHelper.setBlockStates(world, map, flags);
+		BlockPlacingHelper.setBlockStates(world, map, flags, false);
 	}
 
 	public static void setBlockStates(World world, BlockPos pos, IBlockState[][][] blockstates, int flags) {
@@ -58,7 +58,7 @@ public class BlockPlacingHelper {
 				}
 			}
 		}
-		BlockPlacingHelper.setBlockStates(world, map, flags);
+		BlockPlacingHelper.setBlockStates(world, map, flags, false);
 	}
 
 	public static void setBlockStates(World world, BlockPos pos, ExtendedBlockStatePart.ExtendedBlockState[][][] extendedstates, int flags) {
@@ -74,7 +74,7 @@ public class BlockPlacingHelper {
 			}
 		}
 
-		BlockPlacingHelper.setBlockStates(world, map, flags);
+		BlockPlacingHelper.setBlockStates(world, map, flags, false);
 
 		for (int x = 0; x < extendedstates.length; x++) {
 			for (int y = 0; y < extendedstates[x].length; y++) {
@@ -106,7 +106,7 @@ public class BlockPlacingHelper {
 			map.add(new AbstractMap.SimpleEntry(position, state));
 		}
 
-		BlockPlacingHelper.setBlockStates(world, map, flags);
+		BlockPlacingHelper.setBlockStates(world, map, flags, false);
 
 		for (Template.BlockInfo blockInfo : list) {
 			if (blockInfo.tileentityData != null) {
@@ -125,14 +125,14 @@ public class BlockPlacingHelper {
 		}
 	}
 
-	public static void setBlockStates(World world, List<Map.Entry<BlockPos, IBlockState>> map, int flags) {
+	public static void setBlockStates(World world, List<Map.Entry<BlockPos, IBlockState>> map, int flags, boolean updateLight) {
 		if (!world.isRemote && world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return;
 		}
 
 		Set<Chunk> generateSkylightMap = new HashSet<>();
 		Set<BlockPos> relightBlock = new HashSet<>();
-		Set<BlockPos> propagateSkylightOcclusion = new HashSet<>();
+		List<BlockPos> propagateSkylightOcclusion = new LinkedList<>();
 		List<BlockPos> lightUpdates = new LinkedList<>();
 		List<BlockPlacingHelper.BlockUpdate> blockUpdates = new LinkedList<>();
 
@@ -148,14 +148,14 @@ public class BlockPlacingHelper {
 			int oldLight = oldState.getLightValue(world, pos);
 			int oldOpacity = oldState.getLightOpacity(world, pos);
 
-			IBlockState iblockstate = setBlockState(world, chunk, pos, newState, generateSkylightMap, relightBlock, propagateSkylightOcclusion);
+			IBlockState iblockstate = setBlockState(world, chunk, pos, newState, updateLight, generateSkylightMap, relightBlock, propagateSkylightOcclusion);
 
 			if (iblockstate != null) {
-				if (newState.getLightOpacity(world, pos) != oldOpacity || newState.getLightValue(world, pos) != oldLight) {
+				if (updateLight && (newState.getLightOpacity(world, pos) != oldOpacity || newState.getLightValue(world, pos) != oldLight)) {
 					lightUpdates.add(pos);
 				}
 
-				if (world.captureBlockSnapshots && !world.isRemote) {
+				if (!world.isRemote && world.captureBlockSnapshots) {
 					world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos, oldState, flags));
 				} else {
 					blockUpdates.add(new BlockUpdate(world, pos, chunk, iblockstate, newState, flags));
@@ -163,25 +163,25 @@ public class BlockPlacingHelper {
 			}
 		}
 
-		/*
-		for (Chunk chunk : generateSkylightMap) {
-			chunk.generateSkylightMap();
-		}
+		if (updateLight) {
+			for (Chunk chunk : generateSkylightMap) {
+				chunk.generateSkylightMap();
+			}
 
-		for (BlockPos pos : relightBlock) {
-			relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
-		}
+			for (BlockPos pos : relightBlock) {
+				relightBlock(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getY(), pos.getZ() & 15);
+			}
 
-		for (BlockPos pos : propagateSkylightOcclusion) {
-			propagateSkylightOcclusion(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getZ() & 15);
-		}
+			for (BlockPos pos : propagateSkylightOcclusion) {
+				propagateSkylightOcclusion(world.getChunkFromBlockCoords(pos), pos.getX() & 15, pos.getZ() & 15);
+			}
 
-		world.profiler.startSection("checkLight");
-		for (BlockPos pos : lightUpdates) {
-			world.checkLight(pos);
+			world.profiler.startSection("checkLight");
+			for (BlockPos pos : lightUpdates) {
+				world.checkLight(pos);
+			}
+			world.profiler.endSection();
 		}
-		world.profiler.endSection();
-		*/
 
 		for (BlockPlacingHelper.BlockUpdate blockUpdate : blockUpdates) {
 			blockUpdate.markAndNotifyBlock();
@@ -189,7 +189,7 @@ public class BlockPlacingHelper {
 	}
 
 	@Nullable
-	public static IBlockState setBlockState(World world, Chunk chunk, BlockPos pos, IBlockState state, Set<Chunk> generateSkylightMap, Set<BlockPos> relightBlock, Set<BlockPos> propagateSkylightOcclusion) {
+	public static IBlockState setBlockState(World world, Chunk chunk, BlockPos pos, IBlockState state, boolean updateLight, Set<Chunk> generateSkylightMap, Set<BlockPos> relightBlock, List<BlockPos> propagateSkylightOcclusion) {
 		int i = pos.getX() & 15;
 		int j = pos.getY();
 		int k = pos.getZ() & 15;
@@ -208,7 +208,7 @@ public class BlockPlacingHelper {
 		} else {
 			Block block = state.getBlock();
 			Block block1 = iblockstate.getBlock();
-			int k1 = iblockstate.getLightOpacity(world, pos); // Relocate old light value lookup here, so that it is called before TE is removed.
+			int k1 = iblockstate.getLightOpacity(world, pos);
 			ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[j >> 4];
 			boolean flag = false;
 
@@ -225,7 +225,6 @@ public class BlockPlacingHelper {
 			extendedblockstorage.set(i, j & 15, k, state);
 
 			if (!world.isRemote) {
-				// Only fire block breaks when the block changes.
 				if (block1 != block) {
 					block1.breakBlock(world, pos, iblockstate);
 				}
@@ -243,25 +242,26 @@ public class BlockPlacingHelper {
 			if (extendedblockstorage.get(i, j & 15, k).getBlock() != block) {
 				return null;
 			} else {
-				if (flag) {
-					generateSkylightMap.add(chunk);
-				} else {
-					int j1 = state.getLightOpacity(world, pos);
+				if (updateLight) {
+					if (flag) {
+						generateSkylightMap.add(chunk);
+					} else {
+						int j1 = state.getLightOpacity(world, pos);
 
-					if (j1 > 0) {
-						if (j >= i1) {
-							relightBlock.add(pos.up());
+						if (j1 > 0) {
+							if (j >= i1) {
+								relightBlock.add(pos.up());
+							}
+						} else if (j == i1 - 1) {
+							relightBlock.add(pos);
 						}
-					} else if (j == i1 - 1) {
-						relightBlock.add(pos);
-					}
 
-					if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
-						propagateSkylightOcclusion.add(pos);
+						if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
+							propagateSkylightOcclusion.add(pos);
+						}
 					}
 				}
 
-				// If capturing blocks, only run block physics for TE's. Non-TE's are handled in ForgeHooks.onPlaceItemIntoWorld
 				if (!world.isRemote && block1 != block && (!world.captureBlockSnapshots || block.hasTileEntity(state))) {
 					block.onBlockAdded(world, pos, state);
 				}

@@ -12,6 +12,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 @EventBusSubscriber(modid = Reference.MODID)
 public class DungeonGenerationEventHandler {
 
+	@SubscribeEvent
+	public static void onWorldCreatedEvent(WorldEvent.CreateSpawnPosition event) {
+		DungeonGenerationManager.handleWorldLoad(event.getWorld());
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onWorldLoadEvent(WorldEvent.Load event) {
 		DungeonGenerationManager.handleWorldLoad(event.getWorld());

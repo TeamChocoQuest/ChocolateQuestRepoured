@@ -287,8 +287,7 @@ public class ModBlocks {
 
 					setBlockName(new BlockForceFieldNexus(Material.IRON), "force_field_nexus"),
 
-					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery"),
-					new BlockFireCQR().setRegistryName(Blocks.FIRE.getRegistryName()).setUnlocalizedName(Blocks.FIRE.getUnlocalizedName()) };
+					setBlockName(new BlockPhylactery(Material.GLASS), "phylactery") };
 
 			IForgeRegistry<Block> registry = event.getRegistry();
 
@@ -296,6 +295,8 @@ public class ModBlocks {
 				registry.register(block);
 				BLOCKS.add(block);
 			}
+
+			registry.register(new BlockFireCQR().setRegistryName(Blocks.FIRE.getRegistryName()).setUnlocalizedName(Blocks.FIRE.getUnlocalizedName()));
 
 			registerTileEntities();
 		}

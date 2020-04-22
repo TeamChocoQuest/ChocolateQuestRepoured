@@ -3,10 +3,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.util.List;
 import java.util.Random;
 
-import org.omg.CosNaming.IstringHelper;
-
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DefaultSurfaceDungeon;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
@@ -27,7 +25,7 @@ public class OceanFloorGenerator implements IDungeonGenerator {
 
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
-	private DefaultSurfaceDungeon dungeon;
+	private DungeonSurface dungeon;
 
 	public OceanFloorGenerator() {
 	}
