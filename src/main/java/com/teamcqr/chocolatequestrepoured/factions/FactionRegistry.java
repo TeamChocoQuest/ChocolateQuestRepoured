@@ -64,8 +64,8 @@ public class FactionRegistry {
 	}
 
 	public void loadFactions() {
-		this.loadDefaultFactions();
 		this.loadFactionsInConfigFolder();
+		this.loadDefaultFactions();
 	}
 
 	private void loadFactionsInConfigFolder() {
@@ -133,8 +133,13 @@ public class FactionRegistry {
 	private void loadDefaultFactions() {
 		String[][] allies = new String[EDefaultFaction.values().length][];
 		String[][] enemies = new String[EDefaultFaction.values().length][];
+		List<Integer> indices = new ArrayList<>();
 		for (int i = 0; i < EDefaultFaction.values().length; i++) {
 			EDefaultFaction edf = EDefaultFaction.values()[i];
+			if (this.factions.containsKey(edf.name())) {
+				continue;
+			}
+			indices.add(i);
 			allies[i] = edf.getAllies();
 			enemies[i] = edf.getEnemies();
 
@@ -146,7 +151,7 @@ public class FactionRegistry {
 			this.factions.put(edf.name(), fac);
 		}
 
-		for (int i = 0; i < EDefaultFaction.values().length; i++) {
+		for (int i : indices) {
 			String name = EDefaultFaction.values()[i].name();
 			CQRFaction fac = this.factions.get(name);
 			for (int j = 0; j < allies[i].length; j++) {
