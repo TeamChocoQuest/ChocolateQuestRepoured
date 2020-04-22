@@ -1,7 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
+import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -59,6 +61,21 @@ public class CQRConfig {
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
+
+		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
+		public String[] protectionSystemBreakableBlockWhitelist = {
+				"mob_spawner",
+				"torch",
+				"fire",
+				"cobweb",
+				"cqrepoured:unlit_torch",
+				"cqrepoured:force_field_nexus" };
+	
+		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
+		public String[] protectionSystemPlaceableBlockWhitelist = {
+				"torch",
+				"fire",
+				"cqrepoured:unlit_torch" };
 
 		public boolean enableSpecialFeatures = true;
 	}
@@ -137,6 +154,8 @@ public class CQRConfig {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
 				CQStructurePart.updateSpecialBlocks();
 				CQStructurePart.updateSpecialEntities();
+				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
+				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 			}
 		}
 
