@@ -144,6 +144,11 @@ public class EventsHandler {
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
 	}
+	
+	@SubscribeEvent
+	public static void onWorldCreateSpawnpoint(WorldEvent.CreateSpawnPosition e) {
+		DungeonDataManager.handleWorldLoad(e.getWorld());
+	}
 
 	@SubscribeEvent
 	public static void onWorldSave(WorldEvent.Save e) {
