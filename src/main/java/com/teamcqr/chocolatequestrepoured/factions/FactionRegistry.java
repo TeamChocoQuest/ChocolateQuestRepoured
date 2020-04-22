@@ -209,6 +209,10 @@ public class FactionRegistry {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		} 
 		
+		if (entity instanceof AbstractEntityCQR) {
+			return ((AbstractEntityCQR) entity).getFaction();
+		}
+		
 		//Faction overriding
 		if(entityFactionMap.containsKey(EntityList.getKey(entity))) {
 			return entityFactionMap.get(EntityList.getKey(entity));
@@ -221,10 +225,6 @@ public class FactionRegistry {
 
 		if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
 			return this.factions.get(EDefaultFaction.VILLAGERS.name());
-		}
-
-		if (entity instanceof AbstractEntityCQR) {
-			return ((AbstractEntityCQR) entity).getFaction();
 		}
 
 		if (entity instanceof AbstractIllager || entity instanceof EntityVex) {
