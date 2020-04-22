@@ -33,7 +33,7 @@ public class DungeonDataManager {
 	private File file;
 
 	public static void handleWorldLoad(World world) {
-		if(isWorldValid(world)) {
+		if(isWorldValid(world) && !INSTANCES.containsKey(world)) {
 			createInstance(world);
 			getInstance(world).readData();
 		}
