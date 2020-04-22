@@ -1,37 +1,74 @@
 package com.teamcqr.chocolatequestrepoured.structureprot;
 
 import java.lang.reflect.Field;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 @EventBusSubscriber(modid = Reference.MODID)
 public class ProtectedRegionEventHandler {
 
+	/*
+	 * Possible other events to use (do not delete):
+	 * PlayerInteractEvent.LeftClickBlock
+	 * PlayerInteractEvent.RightClickBlock
+	 * PlayerEvent.BreakSpeed
+	 */
+
+	public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
+	public static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
+
 	private ProtectedRegionEventHandler() {
 
+	}
+
+	@SubscribeEvent
+	public static void onPlayerLoggedInEvent(PlayerEvent.PlayerLoggedInEvent event) {
+		ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(protectedRegions), (EntityPlayerMP) event.player);
+	}
+
+	@SubscribeEvent
+	public static void onPlayerChangedDimensionEvent(PlayerEvent.PlayerChangedDimensionEvent event) {
+		ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(event.player.world);
+		List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+		CQRMain.NETWORK.sendTo(new SPacketSyncProtectedRegions(protectedRegions), (EntityPlayerMP) event.player);
+	}
+
+	@SubscribeEvent
+	public static void onWorldCreatedEvent(WorldEvent.CreateSpawnPosition event) {
+		ProtectedRegionManager.handleWorldLoad(event.getWorld());
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGH)
@@ -50,39 +87,55 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onBlockEventBreakEvent(BlockEvent.BreakEvent event) {
-		World world = event.getWorld();
-		BlockPos pos = event.getPos();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-		EntityPlayer player = event.getPlayer();
+	public static void onPlayerLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
+		if (event.isCanceled()) {
+			return;
+		}
 
-		if (!world.isRemote && manager != null && !event.isCanceled() && !player.isCreative()) {
-			boolean isBlockDependency = false;
+		World world = event.getWorld();
+		EntityPlayer player = event.getEntityPlayer();
+		BlockPos pos = event.getPos();
+		IBlockState state = world.getBlockState(pos);
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+		if (player.isCreative() || BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
+			return;
+		}
+
+		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				if (protectedRegion.isBlockDependency(pos)) {
-					protectedRegion.removeBlockDependency(pos);
-					isBlockDependency = true;
+					return;
 				}
 			}
-			if (!isBlockDependency) {
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
-						event.setCanceled(true);
-						return;
-					}
+
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				System.out.println(protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos));
+				if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
+					event.setCanceled(true);
+					return;
 				}
 			}
 		}
 	}
 
 	@SubscribeEvent
-	public static void onBlockEventEntityPlaceEvent(BlockEvent.EntityPlaceEvent event) {
+	public static void onPlayerRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
+		if (event.isCanceled()) {
+			return;
+		}
+
 		World world = event.getWorld();
-		Entity entity = event.getEntity();
+		EntityPlayer player = event.getEntityPlayer();
 		BlockPos pos = event.getPos();
+		ItemStack stack = event.getItemStack();
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && manager != null && !event.isCanceled() && (!(entity instanceof EntityPlayer) || !((EntityPlayer) entity).isCreative())) {
+		if (player.isCreative() || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock) || PLACEABLE_BLOCK_WHITELIST.contains(((ItemBlock) stack.getItem()).getBlock())) {
+			return;
+		}
+
+		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
 					event.setCanceled(true);
@@ -94,12 +147,16 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onExplosionEventDetonate(ExplosionEvent.Detonate event) {
+		if (event.isCanceled()) {
+			return;
+		}
+
 		World world = event.getWorld();
 		Explosion explosion = event.getExplosion();
 		boolean isTNT = ProtectedRegionEventHandler.getExploder(explosion) instanceof EntityTNTPrimed;
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && manager != null && !event.isCanceled()) {
+		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				if ((isTNT && protectedRegion.preventExplosionsTNT()) || (!isTNT && protectedRegion.preventExplosionsOther())) {
 					List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
@@ -133,95 +190,17 @@ public class ProtectedRegionEventHandler {
 		return null;
 	}
 
-	// Disabled for now
-	// @SubscribeEvent
-	public static void onTickEventWorldTickEvent(TickEvent.WorldTickEvent event) {
-		World world = event.world;
-
-		if (!world.isRemote) {
-			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-			if (manager != null) {
-				ChunkProviderServer chunkProvider = (ChunkProviderServer) world.getChunkProvider();
-				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-					if (protectedRegion.preventFireSpreading() && world.getWorldType() != WorldType.DEBUG_ALL_BLOCK_STATES) {
-						BlockPos startPos = protectedRegion.getStartPos();
-						BlockPos endPos = protectedRegion.getEndPos();
-						int endX = endPos.getX();
-						int endY = endPos.getY();
-						int endZ = endPos.getZ();
-						int oldChunkX = startPos.getX() >> 4;
-						int oldChunkY = startPos.getY() >> 4;
-						int oldChunkZ = startPos.getZ() >> 4;
-						boolean isLoaded = world.isBlockLoaded(startPos);
-						// boolean isLoaded = chunkProvider.chunkExists(oldChunkX, oldChunkZ);
-						Chunk chunk = null;
-						ExtendedBlockStorage extendedBlockStorage = Chunk.NULL_BLOCK_STORAGE;
-						if (isLoaded) {
-							chunk = world.getChunkFromChunkCoords(oldChunkX, oldChunkZ);
-							// chunk = chunkProvider.getLoadedChunk(oldChunkX, oldChunkZ);
-							extendedBlockStorage = chunk.getBlockStorageArray()[oldChunkY >> 4];
-						}
-						for (int x = startPos.getX(); x <= endPos.getX(); x++) {
-							int chunkX = x >> 4;
-
-							for (int z = startPos.getZ(); z <= endPos.getZ(); z++) {
-								int chunkZ = z >> 4;
-
-								if (chunkX != oldChunkX || chunkZ != oldChunkZ) {
-									oldChunkX = chunkX;
-									oldChunkZ = chunkZ;
-									isLoaded = world.isBlockLoaded(new BlockPos(x, 0, z));
-									// isLoaded = chunkProvider.chunkExists(chunkX, chunkZ);
-									if (isLoaded) {
-										chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
-										// chunk = chunkProvider.getLoadedChunk(chunkX, chunkZ);
-										extendedBlockStorage = chunk.getBlockStorageArray()[startPos.getY() >> 4];
-									}
-								}
-
-								if (isLoaded) {
-									for (int y = startPos.getY(); y <= endPos.getY(); y++) {
-										int chunkY = y >> 4;
-
-										if (chunkY != oldChunkY) {
-											oldChunkY = chunkY;
-											extendedBlockStorage = chunk.getBlockStorageArray()[chunkY];
-										}
-
-										if (extendedBlockStorage != Chunk.NULL_BLOCK_STORAGE) {
-											if (extendedBlockStorage.get(x & 15, y & 15, z & 15).getBlock() == Blocks.FIRE) {
-												world.setBlockToAir(new BlockPos(x, y, z));
-											}
-										} else {
-											y += 15 - (y & 15);
-										}
-									}
-								} else {
-									z += 15 - (z & 15);
-								}
-							}
-						}
-						/*
-						 * for (BlockPos.MutableBlockPos mutableBlockPos : BlockPos.getAllInBoxMutable(protectedRegion.getStartPos(), protectedRegion.getEndPos())) {
-						 * if (world.isBlockLoaded(mutableBlockPos) && world.getBlockState(mutableBlockPos).getBlock() == Blocks.FIRE) {
-						 * world.setBlockToAir(mutableBlockPos.toImmutable());
-						 * }
-						 * }
-						 */
-					}
-				}
-			}
-		}
-	}
-
 	@SubscribeEvent
 	public static void onWorldEventPotentialSpawns(WorldEvent.PotentialSpawns event) {
+		if (event.isCanceled() || event.getList().isEmpty()) {
+			return;
+		}
+
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && manager != null && !event.isCanceled() && !event.getList().isEmpty()) {
+		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
 					event.setCanceled(true);
@@ -232,15 +211,54 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onEntityDeath(LivingDeathEvent event) {
+	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
+		if (event.isCanceled()) {
+			return;
+		}
+
+		World world = event.getWorld();
+		BlockPos pos = event.getPos();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+		if (manager != null) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if (protectedRegion.isBlockDependency(pos)) {
+					protectedRegion.removeBlockDependency(pos);
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLivingDeathEvent(LivingDeathEvent event) {
 		Entity entity = event.getEntity();
 		World world = entity.world;
 		UUID uuid = entity.getPersistentID();
 		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (!world.isRemote && manager != null && !event.isCanceled()) {
+		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				protectedRegion.removeEntityDependency(uuid);
+			}
+		}
+	}
+
+	public static void updateBreakableBlockWhitelist() {
+		ProtectedRegionEventHandler.BREAKABLE_BLOCK_WHITELIST.clear();
+		for (String s : CQRConfig.advanced.protectionSystemBreakableBlockWhitelist) {
+			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
+			if (b != null) {
+				ProtectedRegionEventHandler.BREAKABLE_BLOCK_WHITELIST.add(b);
+			}
+		}
+	}
+
+	public static void updatePlaceableBlockWhitelist() {
+		ProtectedRegionEventHandler.PLACEABLE_BLOCK_WHITELIST.clear();
+		for (String s : CQRConfig.advanced.protectionSystemPlaceableBlockWhitelist) {
+			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
+			if (b != null) {
+				ProtectedRegionEventHandler.PLACEABLE_BLOCK_WHITELIST.add(b);
 			}
 		}
 	}

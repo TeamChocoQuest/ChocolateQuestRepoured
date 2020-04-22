@@ -12,8 +12,8 @@ public interface IProxy {
 
 	public void postInit();
 
-	public EntityPlayer getPlayer(MessageContext context);
+	public EntityPlayer getPlayer(MessageContext ctx);
 
-	public World getWorld(MessageContext context);
+	public World getWorld(MessageContext ctx);
 
 }
