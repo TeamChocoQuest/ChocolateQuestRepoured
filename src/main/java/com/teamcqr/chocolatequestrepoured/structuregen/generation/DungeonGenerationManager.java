@@ -39,17 +39,17 @@ public class DungeonGenerationManager {
 		}
 	}
 
-	public static void handleWorldSave(World world) {
-		if (world != null && !world.isRemote) {
-			DungeonGenerationManager.getInstance(world).saveData();
-		}
-	}
-
 	public static void handleWorldLoad(World world) {
-		if (world != null && !world.isRemote) {
+		if (world != null && !world.isRemote && DungeonGenerationManager.getInstance(world) == null) {
 			DungeonGenerationManager.createInstance(world);
 			DungeonGenerationManager.getInstance(world).loadData();
 			CQRMain.logger.info("Loaded {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonPartList.size());
+		}
+	}
+
+	public static void handleWorldSave(World world) {
+		if (world != null && !world.isRemote) {
+			DungeonGenerationManager.getInstance(world).saveData();
 		}
 	}
 
@@ -88,8 +88,7 @@ public class DungeonGenerationManager {
 
 	public static void addStructure(World world, Structure structure) {
 		if (world != null && !world.isRemote) {
-			DungeonGenerationManager instance = DungeonGenerationManager.getInstance(world);
-			instance.dungeonPartList.add(structure);
+			DungeonGenerationManager.getInstance(world).dungeonPartList.add(structure);
 		}
 	}
 
