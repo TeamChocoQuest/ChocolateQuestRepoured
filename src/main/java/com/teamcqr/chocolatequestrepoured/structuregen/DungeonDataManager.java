@@ -172,6 +172,9 @@ public class DungeonDataManager {
 	}
 
 	public boolean isDungeonSpawnLimitMet(DungeonBase dungeon) {
+		if (dungeon.getSpawnLimit() < 0) {
+			return false;
+		}
 		if(dungeonData.isEmpty()) {
 			return false;
 		}
