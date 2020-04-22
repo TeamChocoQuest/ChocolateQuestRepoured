@@ -308,10 +308,14 @@ public class FactionRegistry {
 
 				@Override
 				public void run() {
+					final UUID uuid = event.player.getPersistentID();
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if (!repuDataList.hasNoTags()) {
-						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
+						while(FactionRegistry.this.uuidsBeingLoaded.containsKey(uuid)) {
+							//Wait until the uuid isnt active	
+						}
+						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 							repuDataList.forEach(new Consumer<NBTBase>() {
@@ -327,7 +331,7 @@ public class FactionRegistry {
 								}
 							});
 						} finally {
-							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
 				}
@@ -346,10 +350,14 @@ public class FactionRegistry {
 				public void run() {
 					Map<String, Integer> mapping = FactionRegistry.this.playerFactionRepuMap.get(event.player.getPersistentID());
 					Map<String, Integer> entryMapping = new HashMap<>();
+					final UUID uuid = event.player.getPersistentID();
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
-					File f = FileIOUtil.getOrCreateFile(path, event.player.getPersistentID() + ".nbt");
+					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
 					if (f != null) {
-						FactionRegistry.this.uuidsBeingLoaded.add(event.player.getPersistentID());
+						while(FactionRegistry.this.uuidsBeingLoaded.containsKey(uuid)) {
+							//Wait until the uuid isnt active	
+						}
+						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
 							NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 							NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
@@ -373,7 +381,7 @@ public class FactionRegistry {
 
 							FileIOUtil.saveNBTCompoundToFile(root, f);
 						} finally {
-							FactionRegistry.this.uuidsBeingLoaded.remove(event.player.getPersistentID());
+							FactionRegistry.this.uuidsBeingLoaded.remove(uuid);
 						}
 					}
 				}
