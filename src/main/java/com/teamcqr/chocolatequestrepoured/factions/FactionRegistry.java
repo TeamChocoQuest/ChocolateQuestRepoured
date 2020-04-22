@@ -53,7 +53,7 @@ public class FactionRegistry {
 	private static FactionRegistry instance;
 
 	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
-	private List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
+	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
 
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
