@@ -27,6 +27,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.AbstractIllager;
@@ -43,6 +44,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
@@ -55,6 +57,7 @@ public class FactionRegistry {
 	private Map<String, CQRFaction> factions = new ConcurrentHashMap<>();
 	private volatile List<UUID> uuidsBeingLoaded = Collections.synchronizedList(new ArrayList<UUID>());
 	private Map<UUID, Map<String, Integer>> playerFactionRepuMap = new ConcurrentHashMap<>();
+	private Map<ResourceLocation, CQRFaction> entityFactionMap = new ConcurrentHashMap<>();
 
 	public static final int LOWEST_REPU = EReputationState.ARCH_ENEMY.getValue();
 	public static final int HIGHEST_REPU = EReputationState.MEMBER.getValue();
@@ -66,6 +69,34 @@ public class FactionRegistry {
 	public void loadFactions() {
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
+		
+		this.loadEntityFactionRelations();
+	}
+
+	private void loadEntityFactionRelations() {
+		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "entityFactionRelation.properties");
+		if(file.exists()) {
+			Properties prop = new Properties();
+			boolean flag = true;
+			try (InputStream inputStream = new FileInputStream(file)) {
+				prop.load(inputStream);
+				flag = true;
+			} catch (IOException e) {
+				CQRMain.logger.error("Failed to load file" + file.getName(), e);
+				flag = false;
+			}
+			if(flag) {
+				for(String key : prop.stringPropertyNames()) {
+					ResourceLocation resLoc = new ResourceLocation(key);
+					if(EntityList.isRegistered(resLoc)) {
+						String faction = prop.getProperty(key);
+						if(factions.containsKey(faction)) {
+							entityFactionMap.put(resLoc, factions.get(faction));
+						}
+					}
+				}
+			}
+		}
 	}
 
 	private void loadFactionsInConfigFolder() {
@@ -173,6 +204,13 @@ public class FactionRegistry {
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		} 
+		
+		//Faction overriding
+		if(entityFactionMap.containsKey(EntityList.getKey(entity))) {
+			return entityFactionMap.get(EntityList.getKey(entity));
+		}
+		//Overriding end
+		
 		if (entity instanceof EntityArmorStand) {
 			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
