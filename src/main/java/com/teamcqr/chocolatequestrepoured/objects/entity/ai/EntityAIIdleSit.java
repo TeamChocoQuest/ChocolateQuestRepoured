@@ -112,6 +112,9 @@ public class EntityAIIdleSit extends AbstractCQREntityAI {
 		if (possibleAlly == this.entity) {
 			return false;
 		}
+		if(this.entity.getFaction() == null) {
+			return false;
+		}
 		return this.entity.getFaction().isAlly(possibleAlly);
 	}
 
