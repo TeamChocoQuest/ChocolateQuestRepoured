@@ -133,12 +133,12 @@ public class SupportHillPart implements IStructure {
 
 	@Override
 	public BlockPos getPos() {
-		return new BlockPos(this.partStartX, startPos.getY(), this.partStartZ);
+		return new BlockPos(this.partStartX, this.startPos.getY(), this.partStartZ);
 	}
 
 	@Override
 	public BlockPos getSize() {
-		return new BlockPos(this.partSizeX, startPos.getY(), this.partSizeZ);
+		return new BlockPos(this.partSizeX, 0, this.partSizeZ);
 	}
 
 }
