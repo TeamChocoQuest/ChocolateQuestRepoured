@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.li
 import java.io.File;
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
@@ -136,7 +137,7 @@ public class StrongholdFloor {
 		}
 	}
 	
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, List<List<? extends IStructure>> lists, World world) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, List<List<? extends IStructure>> lists, World world, EDungeonMobType mobType) {
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				EStrongholdRoomType room = roomPattern[iX][iZ];
@@ -152,6 +153,7 @@ public class StrongholdFloor {
 					File struct = generator.getDungeon().getRoom(room);
 					if(struct != null) {
 						CQStructure structure = new CQStructure(struct);
+						structure.setDungeonMob(mobType);
 						for (List<? extends IStructure> list : structure.addBlocksToWorld(world, pos, settings, EPosType.CENTER_XZ_LAYER, generator.getDungeon(), centerX, centerZ)) {
 							lists.add(list);
 						}

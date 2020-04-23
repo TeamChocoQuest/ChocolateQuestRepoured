@@ -311,7 +311,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (this.dungeon.doBuildDungeon()) {
 			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
-			entranceBuilder.generate();
+			entranceBuilder.generate(x,z);
 			lists.addAll(entranceBuilder.getStrongholdParts());
 		}
 

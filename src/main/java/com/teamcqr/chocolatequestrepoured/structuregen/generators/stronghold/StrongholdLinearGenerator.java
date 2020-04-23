@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdLinear;
@@ -106,7 +107,11 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 		
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
-			floor.generateRooms(x, z, yFloor, settings, lists, world);
+			EDungeonMobType mobType = dungeon.getDungeonMob();
+			if (mobType == EDungeonMobType.DEFAULT) {
+				mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x *16, z *16);
+			}
+			floor.generateRooms(x, z, yFloor, settings, lists, world, mobType);
 			yFloor -= dungeon.getRoomSizeY();
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
 		}

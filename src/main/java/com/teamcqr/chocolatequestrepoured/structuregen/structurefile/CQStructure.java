@@ -43,6 +43,7 @@ public class CQStructure {
 	private String author = "DerToaster98";
 	private BlockPos size = new BlockPos(0, 0, 0);
 	private final List<List<Map.Entry<BlockPos, CQStructurePart>>> structures = new ArrayList<>();
+	private EDungeonMobType dungeonMobType = null;
 
 	public CQStructure(String name) {
 		this.file = new File(CQRMain.CQ_EXPORT_FILES_FOLDER, name + ".nbt");
@@ -51,6 +52,10 @@ public class CQStructure {
 	public CQStructure(File file) {
 		this.file = file;
 		this.readFromFile();
+	}
+	
+	public void setDungeonMob(EDungeonMobType type) {
+		this.dungeonMobType = type;
 	}
 
 	public void takeBlocksFromWorld(World worldIn, BlockPos startPos, BlockPos endPos, boolean usePartMode, boolean ignoreEntities) {
@@ -119,9 +124,11 @@ public class CQStructure {
 			break;
 		}
 
-		EDungeonMobType dungeonMobType = dungeon.getDungeonMob();
-		if (dungeonMobType == EDungeonMobType.DEFAULT) {
-			dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(worldIn, dungeonChunkX *16, dungeonChunkZ *16);
+		if(dungeonMobType == null) {
+			dungeonMobType = dungeon.getDungeonMob();
+			if (dungeonMobType == EDungeonMobType.DEFAULT) {
+				dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(worldIn, dungeonChunkX *16, dungeonChunkZ *16);
+			}
 		}
 		boolean replaceBanners = dungeon.replaceBanners();
 		EBanners dungeonBanner = dungeonMobType.getBanner();
