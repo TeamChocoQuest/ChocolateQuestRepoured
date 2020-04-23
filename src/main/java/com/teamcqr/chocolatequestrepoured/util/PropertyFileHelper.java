@@ -116,6 +116,27 @@ public class PropertyFileHelper {
 
 		return retBlock;
 	}
+	
+	public static Block[] getBlockArrayProperty(Properties prop, String key, Block[] defVal) {
+		String s = prop.getProperty(key);
+		if(s == null || s.isEmpty()) {
+			return defVal;
+		}
+		String[] splitSTr = s.split(",");
+		Block[] retVal = new Block[splitSTr.length];
+		int removed = 0;
+		for (int i = 0; i < splitSTr.length; i++) {
+			String tmp = splitSTr[i].trim();
+			if (tmp.isEmpty()) {
+				retVal = ArrayUtils.remove(retVal, i - removed);
+				removed++;
+			} else if(Block.getBlockFromName(tmp) != null){
+				retVal[i - removed] = Block.getBlockFromName(tmp);
+			}
+		}
+
+		return retVal;
+	}
 
 	public static IBlockState getDefaultStateBlockProperty(Properties prop, String key, IBlockState defVal) {
 		String s = prop.getProperty(key);
