@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
@@ -98,12 +99,16 @@ public class SpiralStrongholdBuilder {
 		}
 	}
 	
-	public void buildFloors(BlockPos strongholdEntrancePos, World world) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ) {
 		//BlockPos currentPos = strongholdEntrancePos;
 		List<List<? extends IStructure>> floors = new ArrayList<>();
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, dungeonChunkX *16, dungeonChunkZ *16);
+		}
 		for(int i = 0; i < floorCount; i++) {
 			SpiralStrongholdFloor floor = this.floors[i];
-			floors.addAll(floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world));
+			floors.addAll(floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world, mobType));
 		}
 		strongholdParts.addAll(floors);
 	}

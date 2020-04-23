@@ -8,6 +8,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
@@ -113,7 +114,7 @@ public class StrongholdFloorOpen {
 		this.entranceStairBlockPosition = new Tuple<>(exitPos.getX(), exitPos.getZ());
 	}
 
-	public void generateRooms(World world, List<List<? extends IStructure>> lists) {
+	public void generateRooms(World world, List<List<? extends IStructure>> lists, EDungeonMobType mobType) {
 		for (int x = 0; x < this.sideLength; x++) {
 			for (int z = 0; z < this.sideLength; z++) {
 				BlockPos p = this.roomGrid[x][z];
@@ -137,6 +138,7 @@ public class StrongholdFloorOpen {
 
 				if (p != null && structure != null) {
 					CQStructure struct = new CQStructure(structure);
+					struct.setDungeonMob(mobType);
 					for (List<? extends IStructure> list : struct.addBlocksToWorld(world, p, this.generator.getPlacementSettings(), EPosType.CENTER_XZ_LAYER, this.generator.getDungeon(), this.generator.getDunX(), this.generator.getDunZ())) {
 						lists.add(list);
 					}

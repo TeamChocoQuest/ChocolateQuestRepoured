@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
@@ -51,7 +52,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	
 	private int entranceSizeX = 0;
 	private int entranceSizeZ = 0;
-
+	
 	public StrongholdOpenGenerator(DungeonStrongholdOpen dungeon) {
 		super();
 		this.dungeon = dungeon;
@@ -188,8 +189,12 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 		// build staircase to bossroom at next position, then build boss room
 
 		// Structure gen information: stored in map with location and structure file
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x *16, z *16);
+		}
 		for (StrongholdFloorOpen floor : this.floors) {
-			floor.generateRooms(world, lists);
+			floor.generateRooms(world, lists, mobType);
 		}
 	}
 

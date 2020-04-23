@@ -41,7 +41,7 @@ public class StrongholdBuilder {
 		this.world = world;
 	}
 
-	public void generate() {
+	public void generate(int cX, int cZ) {
 
 		Vec3i expansionVector = new Vec3i(0, 0, 0);
 		switch (this.direction) {
@@ -70,13 +70,13 @@ public class StrongholdBuilder {
 			pos = pos.add(expansionVector);
 		}
 		this.strongholdParts.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
-		buildStronghold(pos.add(0,-1,0), world);
+		buildStronghold(pos.add(0,-1,0), world, cX, cZ);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2) {
+	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
-		stronghold.buildFloors(pos.add(0,-1,0), world);
+		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
 	}
 
