@@ -99,24 +99,14 @@ public class DungeonVolcano extends DungeonBase {
 		this.magmaBlock = PropertyFileHelper.getBlockProperty(prop, "magmaBlock", Blocks.MAGMA);
 		this.rampBlock = PropertyFileHelper.getBlockProperty(prop, "rampBlock", Blocks.NETHERRACK);
 		this.pillarBlock = PropertyFileHelper.getBlockProperty(prop, "pillarBlock", ModBlocks.GRANITE_LARGE);
-		String[] oresTmp = PropertyFileHelper.getStringArrayProperty(prop, "oreBlocks", new String[] {"minecraft:coal_ore", "minecraft:iron_ore", "minecraft:gold_ore", "minecraft:emerald_ore", "minecraft:redstone_ore", "minecraft:diamond_ore" });
-		Block[] oreBlocksTmp = new Block[oresTmp.length];
-		int indx = 0;
-		for(String ore : oresTmp) {
-			if(ore == null || ore.isEmpty()) {
-				continue;
-			}
-			Block retBlock = Block.getBlockFromName(ore);
-			if (retBlock != null) {
-				oreBlocksTmp[indx] = retBlock;
-				indx++;
-			}
-		}
-		this.oreBlocks = new Block[indx];
-		for(int i = 0; i < this.oreBlocks.length; i++) {
-			this.oreBlocks[i] = oreBlocksTmp[i];
-		}
-		
+		this.oreBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "oreBlocks", new Block[] {
+				Blocks.COAL_ORE,
+				Blocks.IRON_ORE,
+				Blocks.GOLD_BLOCK,
+				Blocks.EMERALD_ORE,
+				Blocks.REDSTONE_ORE,
+				Blocks.DIAMOND_ORE
+		});
 
 		// Stronghold
 		this.minStrongholdFloors = PropertyFileHelper.getIntProperty(prop, "minStrongholdFloors", 3);
