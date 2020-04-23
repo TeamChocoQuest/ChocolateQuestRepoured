@@ -40,7 +40,7 @@ public interface IDungeonGenerator {
 
 		DungeonBase dungeon = this.getDungeon();
 		CQRMain.logger.info("Start generating dungeon {} at x={}, y={}, z={}.", dungeon, x, y, z);
-		Structure structure = new Structure(world);
+		Structure structure = new Structure(world, new BlockPos(x, y, z));
 		List<List<? extends IStructure>> lists = new ArrayList<>();
 
 		this.preProcess(world, chunk, x, y, z, lists);

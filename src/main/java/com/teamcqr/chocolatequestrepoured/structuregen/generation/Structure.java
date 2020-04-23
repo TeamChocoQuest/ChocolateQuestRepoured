@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -29,12 +30,9 @@ public class Structure {
 	private final World world;
 	private final List<List<? extends IStructure>> list = new LinkedList<>();
 	private int tick;
-	private int startX = Integer.MAX_VALUE;
-	private int startY = Integer.MAX_VALUE;
-	private int startZ = Integer.MAX_VALUE;
-	private int endX = Integer.MIN_VALUE;
-	private int endY = Integer.MIN_VALUE;
-	private int endZ = Integer.MIN_VALUE;
+	private BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+	private BlockPos.MutableBlockPos minPos = new BlockPos.MutableBlockPos();
+	private BlockPos.MutableBlockPos maxPos = new BlockPos.MutableBlockPos();
 	private ProtectedRegion protectedRegion;
 
 	public Structure(World world, NBTTagCompound compound) {
@@ -42,34 +40,21 @@ public class Structure {
 		this.readFromNBT(compound);
 	}
 
-	public Structure(World world) {
+	public Structure(World world, BlockPos pos) {
 		this.world = world;
+		this.pos.setPos(pos);
+		this.minPos.setPos(pos);
+		this.maxPos.setPos(pos);
 	}
 
 	public void addList(List<? extends IStructure> list) {
 		if (list != null && !list.isEmpty()) {
 			this.list.add(list);
 			for (IStructure istructure : list) {
-				BlockPos startPos = istructure.getPos();
-				BlockPos endPos = startPos.add(istructure.getSize());
-				if (startPos.getX() < this.startX) {
-					this.startX = startPos.getX();
-				}
-				if (startPos.getY() < this.startY) {
-					this.startY = startPos.getY();
-				}
-				if (startPos.getZ() < this.startZ) {
-					this.startZ = startPos.getZ();
-				}
-				if (endPos.getY() > this.endY) {
-					this.endY = endPos.getY();
-				}
-				if (endPos.getX() > this.endX) {
-					this.endX = endPos.getX();
-				}
-				if (endPos.getZ() > this.endZ) {
-					this.endZ = endPos.getZ();
-				}
+				BlockPos partMinPos = istructure.getPos();
+				BlockPos partMaxPos = partMinPos.add(istructure.getSize());
+				this.minPos.setPos(DungeonGenUtils.getValidMinPos(this.minPos, partMinPos));
+				this.maxPos.setPos(DungeonGenUtils.getValidMaxPos(this.maxPos, partMaxPos));
 			}
 		} else {
 			CQRMain.logger.warn("Tried to add null or an empty list to structure.");
@@ -111,6 +96,9 @@ public class Structure {
 		}
 		compound.setTag("list", nbtTagList1);
 		compound.setTag("protectedRegion", this.protectedRegion != null ? NBTUtil.createUUIDTag(this.protectedRegion.getUuid()) : new NBTTagCompound());
+		compound.setTag("pos", NBTUtil.createPosTag(this.pos));
+		compound.setTag("minPos", NBTUtil.createPosTag(this.minPos));
+		compound.setTag("maxPos", NBTUtil.createPosTag(this.maxPos));
 
 		return compound;
 	}
@@ -131,6 +119,9 @@ public class Structure {
 			this.list.add(partList);
 		}
 		this.protectedRegion = ProtectedRegionManager.getInstance(this.world).getProtectedRegion(NBTUtil.getUUIDFromTag(compound.getCompoundTag("protectedRegion")));
+		this.pos = new BlockPos.MutableBlockPos(NBTUtil.getPosFromTag(compound.getCompoundTag("pos")));
+		this.minPos = new BlockPos.MutableBlockPos(NBTUtil.getPosFromTag(compound.getCompoundTag("minPos")));
+		this.maxPos = new BlockPos.MutableBlockPos(NBTUtil.getPosFromTag(compound.getCompoundTag("maxPos")));
 	}
 
 	public void tick(World world) {
@@ -174,9 +165,9 @@ public class Structure {
 				this.list.remove(0);
 
 				if (this.list.size() == 1) {
-					for (int x = this.startX; x < this.endX + 16; x += 16) {
-						for (int z = this.startZ; z < this.endZ + 16; z += 16) {
-							world.getChunkFromChunkCoords(x >> 4, z >> 4).generateSkylightMap();
+					for (int x = this.minPos.getX() >> 4; x <= this.maxPos.getX() >> 4; x++) {
+						for (int z = this.minPos.getZ() >> 4; z <= this.maxPos.getZ() >> 4; z++) {
+							world.getChunkFromChunkCoords(x, z).generateSkylightMap();
 						}
 					}
 				}
@@ -198,12 +189,18 @@ public class Structure {
 	public void addLightParts() {
 		List<LightPart> lightParts = new ArrayList<>();
 		int partSize = 24;
-		for (int y = this.startY; y <= this.endY; y += partSize) {
-			int partSizeY = y + partSize > this.endY ? this.endY - y + 1 : partSize;
-			for (int x = this.startX; x <= this.endX; x += partSize) {
-				int partSizeX = x + partSize > this.endX ? this.endX - x + 1 : partSize;
-				for (int z = this.startZ; z <= this.endZ; z += partSize) {
-					int partSizeZ = z + partSize > this.endZ ? this.endZ - z + 1 : partSize;
+		int startX = this.minPos.getX();
+		int startY = this.minPos.getY();
+		int startZ = this.minPos.getZ();
+		int endX = this.maxPos.getX();
+		int endY = this.maxPos.getY();
+		int endZ = this.maxPos.getZ();
+		for (int y = startY; y <= endY; y += partSize) {
+			int partSizeY = y + partSize > endY ? endY - y + 1 : partSize;
+			for (int x = startX; x <= endX; x += partSize) {
+				int partSizeX = x + partSize > endX ? endX - x + 1 : partSize;
+				for (int z = startZ; z <= endZ; z += partSize) {
+					int partSizeZ = z + partSize > endZ ? endZ - z + 1 : partSize;
 					BlockPos startPos = new BlockPos(x, y, z);
 					BlockPos endPos = startPos.add(partSizeX - 1, partSizeY - 1, partSizeZ - 1);
 					lightParts.add(new LightPart(startPos, endPos));
@@ -218,7 +215,7 @@ public class Structure {
 	}
 
 	public void setupProtectedRegion(boolean preventBlockBreaking, boolean preventBlockPlacing, boolean preventExplosionsTNT, boolean preventExplosionsOther, boolean preventFireSpreading, boolean preventEntitySpawning, boolean ignoreNoBossOrNexus) {
-		this.protectedRegion = new ProtectedRegion(this.world, new BlockPos(this.startX, this.startY, this.startZ), new BlockPos(this.endX, this.endY, this.endZ));
+		this.protectedRegion = new ProtectedRegion(this.world, this.minPos.toImmutable(), this.maxPos.toImmutable());
 		this.protectedRegion.setup(preventBlockBreaking, preventBlockPlacing, preventExplosionsTNT, preventExplosionsOther, preventFireSpreading, preventEntitySpawning, ignoreNoBossOrNexus);
 		ProtectedRegionManager.getInstance(this.world).addProtectedRegion(this.protectedRegion);
 	}
@@ -227,37 +224,43 @@ public class Structure {
 		if (this.world.getWorldType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
 			return;
 		}
+		int startX = this.minPos.getX();
+		int startY = this.minPos.getY();
+		int startZ = this.minPos.getZ();
+		int endX = this.maxPos.getX();
+		int endY = this.maxPos.getY();
+		int endZ = this.maxPos.getZ();
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int oldChunkX = this.startX >> 4;
-		int oldChunkY = this.startY >> 4;
-		int oldChunkZ = this.startZ >> 4;
+		int oldChunkX = startX >> 4;
+		int oldChunkY = startY >> 4;
+		int oldChunkZ = startZ >> 4;
 		Chunk chunk = this.world.getChunkFromChunkCoords(oldChunkX, oldChunkZ);
 		ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[oldChunkY];
-		for (int x = this.startX; x <= this.endX; x++) {
+		for (int x = startX; x <= endX; x++) {
 			int chunkX = x >> 4;
 
 			if (chunkX != oldChunkX) {
 				oldChunkX = chunkX;
-				oldChunkY = this.startY >> 4;
-				oldChunkZ = this.startZ >> 4;
-				chunk = this.world.getChunkFromChunkCoords(chunkX, this.startZ >> 4);
-				extendedBlockStorage = chunk.getBlockStorageArray()[this.startY >> 4];
+				oldChunkY = startY >> 4;
+				oldChunkZ = startZ >> 4;
+				chunk = this.world.getChunkFromChunkCoords(chunkX, startZ >> 4);
+				extendedBlockStorage = chunk.getBlockStorageArray()[startY >> 4];
 			}
 
-			for (int z = this.startZ; z <= this.endZ; z++) {
+			for (int z = startZ; z <= endZ; z++) {
 				int chunkZ = z >> 4;
 
 				if (chunkZ != oldChunkZ) {
 					oldChunkX = chunkX;
-					oldChunkY = this.startY >> 4;
+					oldChunkY = startY >> 4;
 					oldChunkZ = chunkZ;
 					chunk = this.world.getChunkFromChunkCoords(chunkX, chunkZ);
-					extendedBlockStorage = chunk.getBlockStorageArray()[this.startY >> 4];
+					extendedBlockStorage = chunk.getBlockStorageArray()[startY >> 4];
 				}
 
-				BlockPos.MutableBlockPos oldPos = new BlockPos.MutableBlockPos(x, this.startY == 0 ? 1 : this.startY - 1, z);
+				BlockPos.MutableBlockPos oldPos = new BlockPos.MutableBlockPos(x, startY == 0 ? 1 : startY - 1, z);
 				IBlockState oldState = chunk.getBlockState(oldPos);
-				for (int y = this.startY; y <= this.endY; y++) {
+				for (int y = startY; y <= endY; y++) {
 					int chunkY = y >> 4;
 
 					if (chunkY != oldChunkY) {
