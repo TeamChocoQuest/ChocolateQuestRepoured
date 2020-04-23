@@ -214,7 +214,7 @@ public class FactionRegistry {
 		}
 		
 		//Faction overriding
-		if(entityFactionMap.containsKey(EntityList.getKey(entity))) {
+		if(EntityList.getKey(entity) != null && entityFactionMap.containsKey(EntityList.getKey(entity))) {
 			return entityFactionMap.get(EntityList.getKey(entity));
 		}
 		//Overriding end
@@ -272,7 +272,7 @@ public class FactionRegistry {
 		if (faction.isRepuStatic()) {
 			return faction.getDefaultReputation().getValue();
 		}
-		if (this.playerFactionRepuMap.containsKey(playerID)) {
+		if (playerID != null && this.playerFactionRepuMap.containsKey(playerID)) {
 			if (this.playerFactionRepuMap.get(playerID).containsKey(faction.getName())) {
 				return this.playerFactionRepuMap.get(playerID).get(faction.getName());
 			}
