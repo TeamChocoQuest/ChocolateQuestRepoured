@@ -67,7 +67,7 @@ public class ItemTeleportStone extends Item {
 					worldIn.playSound(player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1.0F, 1.0F, false);
 
 					if (!player.capabilities.isCreativeMode) {
-						stack.setItemDamage(stack.getItemDamage() + 1);
+						stack.damageItem(1, entityLiving);
 					}
 				}
 			}
