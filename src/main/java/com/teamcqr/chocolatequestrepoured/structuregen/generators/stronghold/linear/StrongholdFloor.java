@@ -6,7 +6,7 @@ import java.util.List;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdLinearGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -18,7 +18,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdFloor {
 
-	private StrongholdLinearGenerator generator;
+	private GeneratorStronghold generator;
 	private int sideLength;
 	private EStrongholdRoomType[][] roomPattern;
 	//Where do we face currently? its the direction we face after exiting the last part we were in
@@ -26,7 +26,7 @@ public class StrongholdFloor {
 	private boolean lastFloor;
 	private int lastX, lastZ;
 	
-	public StrongholdFloor(int size, StrongholdLinearGenerator generator, boolean isLastFloor) {
+	public StrongholdFloor(int size, GeneratorStronghold generator, boolean isLastFloor) {
 		this.generator = generator;
 		this.sideLength = size;
 		this.lastFloor = isLastFloor;

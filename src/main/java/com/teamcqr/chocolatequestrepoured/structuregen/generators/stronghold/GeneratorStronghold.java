@@ -28,7 +28,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class StrongholdLinearGenerator implements IDungeonGenerator {
+public class GeneratorStronghold implements IDungeonGenerator {
 
 	private DungeonStrongholdLinear dungeon;
 	private int dunX;
@@ -45,7 +45,7 @@ public class StrongholdLinearGenerator implements IDungeonGenerator {
 	private Random rdm;
 	private StrongholdFloor[] floors;
 
-	public StrongholdLinearGenerator(DungeonStrongholdLinear dungeon) {
+	public GeneratorStronghold(DungeonStrongholdLinear dungeon) {
 		// Set floor count
 		// Set room per floor count
 		this.dungeon = dungeon;

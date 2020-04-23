@@ -11,7 +11,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.CavernGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -101,9 +101,9 @@ public class DungeonCavern extends DungeonBase {
 	@Override
 	public void generate(World world, int x, int y, int z) {
 		List<List<? extends IStructure>> lists = new ArrayList<>();
-		List<CavernGenerator> caves = new ArrayList<>();
-		Map<CavernGenerator, Integer> xMap = new HashMap<>();
-		Map<CavernGenerator, Integer> zMap = new HashMap<>();
+		List<GeneratorCavern> caves = new ArrayList<>();
+		Map<GeneratorCavern, Integer> xMap = new HashMap<>();
+		Map<GeneratorCavern, Integer> zMap = new HashMap<>();
 
 		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
 		int rooms = DungeonGenUtils.getIntBetweenBorders(this.minRooms, this.maxRooms, this.random);
@@ -120,7 +120,7 @@ public class DungeonCavern extends DungeonBase {
 			x += distance.getX();
 			z += distance.getZ();
 
-			CavernGenerator cave = new CavernGenerator(this);
+			GeneratorCavern cave = new GeneratorCavern(this);
 			// Let the cave calculate its air blocks...
 			cave.setSizeAndHeight(DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random), DungeonGenUtils.getIntBetweenBorders(this.minCaveSize, this.maxCaveSize, this.random),
 					DungeonGenUtils.getIntBetweenBorders(this.minHeight, this.maxHeight, this.random));
@@ -139,7 +139,7 @@ public class DungeonCavern extends DungeonBase {
 		} while (roomIndex < rooms);
 
 		for (int i = 0; i < caves.size(); i++) {
-			CavernGenerator cave = caves.get(i);
+			GeneratorCavern cave = caves.get(i);
 			// Dig out the cave...
 			cave.buildStructure(world, chunk, xMap.get(cave), y - 1, zMap.get(cave), lists);
 
@@ -149,7 +149,7 @@ public class DungeonCavern extends DungeonBase {
 			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
 		for (int i = 0; i < caves.size(); i++) {
-			CavernGenerator cave = caves.get(i);
+			GeneratorCavern cave = caves.get(i);
 
 			// Place a loot chest....
 			if (this.lootChests && DungeonGenUtils.PercentageRandom(this.chestChancePerRoom, world.getSeed())) {

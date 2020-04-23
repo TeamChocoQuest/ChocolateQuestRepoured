@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 
@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 
 public class StrongholdFloorOpen {
 
-	private StrongholdOpenGenerator generator;
+	private GeneratorStrongholdOpen generator;
 	private BlockPos[][] roomGrid;
 	private Tuple<Integer, Integer> entranceStairBlockPosition;
 	private Tuple<Integer, Integer> entranceStairIndex;
@@ -37,11 +37,11 @@ public class StrongholdFloorOpen {
 	private boolean exitStairIsBossRoom = false;
 	private boolean isFirstFloor = false;
 
-	public StrongholdFloorOpen(StrongholdOpenGenerator generator, int roomCount) {
+	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount) {
 		this(generator, roomCount, new Random().nextInt(roomCount), new Random().nextInt(roomCount));
 	}
 	
-	public StrongholdFloorOpen(StrongholdOpenGenerator generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ) {
+	public StrongholdFloorOpen(GeneratorStrongholdOpen generator, int roomCount, int entranceStairIndexX, int entranceStairIndexZ) {
 		this.generator = generator;
 		this.sideLength = roomCount;
 		this.roomGrid = new BlockPos[roomCount][roomCount];

@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 import java.util.Properties;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.GuardedCastleGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
@@ -53,12 +53,12 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new GuardedCastleGenerator(this);
+		IDungeonGenerator generator = new GeneratorGuardedStructure(this);
 
 		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, this.random);
-		((GuardedCastleGenerator) generator).setCenterStructure(this.getStructureFileFromDirectory(this.centerStructureFolder));
+		((GeneratorGuardedStructure) generator).setCenterStructure(this.getStructureFileFromDirectory(this.centerStructureFolder));
 		for (int i = 0; i < buildings; i++) {
-			((GuardedCastleGenerator) generator).addStructure(this.getStructureFileFromDirectory(this.structureFolder));
+			((GeneratorGuardedStructure) generator).addStructure(this.getStructureFileFromDirectory(this.structureFolder));
 		}
 
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);

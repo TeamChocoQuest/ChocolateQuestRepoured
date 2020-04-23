@@ -36,7 +36,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class StrongholdOpenGenerator implements IDungeonGenerator {
+public class GeneratorStrongholdOpen implements IDungeonGenerator {
 
 	private DungeonStrongholdOpen dungeon;
 
@@ -53,7 +53,7 @@ public class StrongholdOpenGenerator implements IDungeonGenerator {
 	private int entranceSizeX = 0;
 	private int entranceSizeZ = 0;
 	
-	public StrongholdOpenGenerator(DungeonStrongholdOpen dungeon) {
+	public GeneratorStrongholdOpen(DungeonStrongholdOpen dungeon) {
 		super();
 		this.dungeon = dungeon;
 		this.structureBounds = new Tuple<Integer, Integer>(dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());

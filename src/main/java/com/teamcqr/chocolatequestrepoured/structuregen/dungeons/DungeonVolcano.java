@@ -7,7 +7,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.VolcanoGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
@@ -140,7 +140,7 @@ public class DungeonVolcano extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new VolcanoGenerator(this);
+		IDungeonGenerator generator = new GeneratorVolcano(this);
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 

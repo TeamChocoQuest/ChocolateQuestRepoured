@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.StrongholdOpenGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -63,7 +63,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new StrongholdOpenGenerator(this);
+		IDungeonGenerator generator = new GeneratorStrongholdOpen(this);
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 

@@ -36,7 +36,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class VolcanoGenerator implements IDungeonGenerator {
+public class GeneratorVolcano implements IDungeonGenerator {
 
 	//GENERATION TIME TOTAL: ~15-30 seconds
 	/**
@@ -79,7 +79,7 @@ public class VolcanoGenerator implements IDungeonGenerator {
 	private BlockPos entranceStartPos = null;
 	private EStairSection entranceDirection = null;
 
-	public VolcanoGenerator(DungeonVolcano dungeon) {
+	public GeneratorVolcano(DungeonVolcano dungeon) {
 		this.dungeon = dungeon;
 
 		this.maxHeight = DungeonGenUtils.getIntBetweenBorders(dungeon.getMinHeight(), dungeon.getMaxHeight());

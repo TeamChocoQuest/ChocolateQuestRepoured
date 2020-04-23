@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class NetherCityHangingGenerator implements IDungeonGenerator {
+public class GeneratorHangingCity implements IDungeonGenerator {
 
 	//DONE: Air bubble around the whole thing
 	
@@ -38,7 +38,7 @@ public class NetherCityHangingGenerator implements IDungeonGenerator {
 
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public NetherCityHangingGenerator(DungeonFloatingNetherCity generator) {
+	public GeneratorHangingCity(DungeonFloatingNetherCity generator) {
 		this.dungeon = generator;
 		this.islandCount = this.dungeon.getBuildingCount(new Random());
 		this.islandDistance = this.dungeon.getIslandDistance();
