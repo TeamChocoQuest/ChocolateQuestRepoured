@@ -23,13 +23,13 @@ import net.minecraft.world.gen.structure.template.Template;
 /**
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
-public class DefaultSurfaceGenerator implements IDungeonGenerator {
+public class GeneratorSurface implements IDungeonGenerator {
 
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DungeonSurface dungeon;
 
-	public DefaultSurfaceGenerator(DungeonSurface dun, CQStructure struct, PlacementSettings settings) {
+	public GeneratorSurface(DungeonSurface dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
 		this.structure = struct;
 		this.placeSettings = settings;

@@ -34,7 +34,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class GuardedCastleGenerator implements IDungeonGenerator {
+public class GeneratorGuardedStructure implements IDungeonGenerator {
 
 	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 
@@ -49,7 +49,7 @@ public class GuardedCastleGenerator implements IDungeonGenerator {
 
 	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
 
-	public GuardedCastleGenerator(DungeonGuardedCastle dungeon) {
+	public GeneratorGuardedStructure(DungeonGuardedCastle dungeon) {
 		this.dungeon = dungeon;
 	}
 

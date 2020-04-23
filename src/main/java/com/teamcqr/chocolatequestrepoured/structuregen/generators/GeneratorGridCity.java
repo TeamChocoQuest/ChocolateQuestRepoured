@@ -28,7 +28,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class NetherCityGenerator implements IDungeonGenerator {
+public class GeneratorGridCity implements IDungeonGenerator {
 
 	private DungeonNetherCity dungeon;
 
@@ -50,7 +50,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 
 	// private static int tunnelHeight = 3;
 
-	public NetherCityGenerator(DungeonNetherCity dungeon) {
+	public GeneratorGridCity(DungeonNetherCity dungeon) {
 		this.dungeon = dungeon;
 	}
 
@@ -211,7 +211,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					@Override
 					public void accept(BlockPos t) {
 						// world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
-						NetherCityGenerator.this.blockMap.put(t, NetherCityGenerator.this.dungeon.getBridgeBlock());
+						GeneratorGridCity.this.blockMap.put(t, GeneratorGridCity.this.dungeon.getBridgeBlock());
 					}
 				});
 
@@ -243,7 +243,7 @@ public class NetherCityGenerator implements IDungeonGenerator {
 					@Override
 					public void accept(BlockPos t) {
 						// world.setBlockState(t, NetherCityGenerator.this.dungeon.getBridgeBlock().getDefaultState());
-						NetherCityGenerator.this.blockMap.put(t, NetherCityGenerator.this.dungeon.getBridgeBlock());
+						GeneratorGridCity.this.blockMap.put(t, GeneratorGridCity.this.dungeon.getBridgeBlock());
 					}
 				});
 				/*

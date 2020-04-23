@@ -21,16 +21,16 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class OceanFloorGenerator implements IDungeonGenerator {
+public class GeneratorOceanFloor implements IDungeonGenerator {
 
 	private CQStructure structure;
 	private PlacementSettings placeSettings;
 	private DungeonSurface dungeon;
 
-	public OceanFloorGenerator() {
+	public GeneratorOceanFloor() {
 	}
 
-	public OceanFloorGenerator(DungeonOceanFloor dun, CQStructure struct, PlacementSettings settings) {
+	public GeneratorOceanFloor(DungeonOceanFloor dun, CQStructure struct, PlacementSettings settings) {
 		this.dungeon = dun;
 		this.structure = struct;
 		this.placeSettings = settings;

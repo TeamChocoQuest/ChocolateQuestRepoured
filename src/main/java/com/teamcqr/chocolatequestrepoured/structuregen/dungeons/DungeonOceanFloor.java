@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.OceanFloorGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorOceanFloor;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -52,7 +52,7 @@ public class DungeonOceanFloor extends DungeonSurface {
 				settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
 			}
 
-			IDungeonGenerator generator = new OceanFloorGenerator(this, structure, settings);
+			IDungeonGenerator generator = new GeneratorOceanFloor(this, structure, settings);
 			generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 		}
 	}

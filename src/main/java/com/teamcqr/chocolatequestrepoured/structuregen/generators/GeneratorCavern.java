@@ -30,12 +30,12 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class CavernGenerator implements IDungeonGenerator {
+public class GeneratorCavern implements IDungeonGenerator {
 
-	public CavernGenerator() {
+	public GeneratorCavern() {
 	};
 
-	public CavernGenerator(DungeonCavern dungeon) {
+	public GeneratorCavern(DungeonCavern dungeon) {
 		this.dungeon = dungeon;
 	}
 

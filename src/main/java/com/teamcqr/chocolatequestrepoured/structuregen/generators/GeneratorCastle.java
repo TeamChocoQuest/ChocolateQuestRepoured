@@ -23,13 +23,13 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
-public class CastleGenerator implements IDungeonGenerator {
+public class GeneratorCastle implements IDungeonGenerator {
 	private BlockPos origin;
 	private DungeonCastle dungeon;
 	private Random random;
 	private CastleRoomSelector roomHelper;
 
-	public CastleGenerator(DungeonCastle dungeon) {
+	public GeneratorCastle(DungeonCastle dungeon) {
 		this.dungeon = dungeon;
 		this.random = this.dungeon.getRandom();
 	}
