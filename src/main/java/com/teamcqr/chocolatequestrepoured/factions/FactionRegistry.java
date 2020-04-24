@@ -202,6 +202,9 @@ public class FactionRegistry {
 
 	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
+		if(entity == null) {
+			return null;
+		}
 		if (entity.getControllingPassenger() != null) {
 			return this.getFactionOf(entity.getControllingPassenger());
 		}
