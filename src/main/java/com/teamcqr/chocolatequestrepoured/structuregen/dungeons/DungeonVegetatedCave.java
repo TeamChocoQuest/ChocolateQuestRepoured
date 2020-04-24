@@ -10,9 +10,11 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 
-public class DungeonSwampCave extends DungeonBase {
+public class DungeonVegetatedCave extends DungeonBase {
 	
 	private Block vineBlock;
+	private Block airBlock;
+	private Block pumpkinBlock;
 	private Block[] flowerBlocks;
 	private Block[] mushrooms;
 	private Block[] floorBlocks;
@@ -23,9 +25,11 @@ public class DungeonSwampCave extends DungeonBase {
 	private int size;
 	private int height;
 	
-	public DungeonSwampCave(String name, Properties prop) {
+	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
 		this.vineBlock = PropertyFileHelper.getBlockProperty(prop, "vineBlock", Blocks.VINE);
+		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airBlock", Blocks.AIR);
+		this.pumpkinBlock = PropertyFileHelper.getBlockProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN);
 		this.flowerBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "flowerBlocks", new Block[] {
 			Blocks.RED_FLOWER,
 			Blocks.YELLOW_FLOWER
@@ -49,8 +53,8 @@ public class DungeonSwampCave extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		// TODO Auto-generated method stub
-
+		//GeneratorVegetatedCave generator = new GeneratorVegetatedCave(this);
+		//generator.generate(world, world.getChunkFromBlockCoords(new BlockPos(x,y,z)), x, y, z);
 	}
 	
 	public File getRandomCentralBuilding() {
@@ -92,5 +96,13 @@ public class DungeonSwampCave extends DungeonBase {
 	public boolean placeVines() {
 		return placeVines;
 	}
+
+	public Block getAirBlock() {
+		return airBlock;
+	}
+
+	public Block getPumpkinBlock() {
+		return pumpkinBlock;
+	}	
 
 }
