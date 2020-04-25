@@ -102,7 +102,7 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
                 // TODO adjust to hookshot
                 if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
                     NBTTagCompound stackTag = stack.getTagCompound();
-                    if (stackTag.getBoolean("isShooting")) {
+                    if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
                         return 1.0f;
                     }
                 }

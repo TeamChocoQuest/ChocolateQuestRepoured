@@ -6,7 +6,7 @@
             "predicate": {
                 "hook_out": 1
             },
-            "model": "cqrepoured:item/hooks/hookshot_shot"
+            "model": "cqrepoured:item/hooks/hookshot_normal_empty"
         }
     ]
 }
