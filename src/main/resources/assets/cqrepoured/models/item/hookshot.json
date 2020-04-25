@@ -4,7 +4,7 @@
 	"overrides": [
         {
             "predicate": {
-                "hook_shot": 1
+                "hook_out": 1
             },
             "model": "cqrepoured:item/hooks/hookshot_shot"
         }

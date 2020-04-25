@@ -11,6 +11,8 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRBlockUtil;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import net.minecraft.block.Block;
+import net.minecraft.nbt.NBTTagByteArray;
+import net.minecraft.nbt.NBTTagCompound;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.lwjgl.input.Keyboard;
@@ -93,12 +95,19 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
         this.loadPropertiesFromFile(hookshotName);
 
-        this.addPropertyOverride(new ResourceLocation("hook_shot"), new IItemPropertyGetter() {
+        this.addPropertyOverride(new ResourceLocation("hook_out"), new IItemPropertyGetter() {
             @Override
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
                 // TODO adjust to hookshot
-                return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
+                if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
+                    NBTTagCompound stackTag = stack.getTagCompound();
+                    if (stackTag.getBoolean("isShooting")) {
+                        return 1.0f;
+                    }
+                }
+
+                return 0.0f;
             }
         });
     }
