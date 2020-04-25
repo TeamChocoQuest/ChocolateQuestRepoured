@@ -99,7 +99,6 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
             @Override
             @SideOnly(Side.CLIENT)
             public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                // TODO adjust to hookshot
                 if (entityIn != null && stack.getItem() instanceof ItemHookshotBase) {
                     NBTTagCompound stackTag = stack.getTagCompound();
                     if ((stackTag != null) && (stackTag.getBoolean("isShooting"))) {
