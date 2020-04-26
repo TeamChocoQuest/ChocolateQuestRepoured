@@ -26,12 +26,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.feature.WorldGenBigMushroom;
+import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	private DungeonVegetatedCave dungeon;
-	
+
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
 	private List<BlockPos> floorBlocks;
@@ -44,7 +46,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	@Override
 	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		if(this.dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
+		if (this.dungeon.getDungeonMob() == EDungeonMobType.DEFAULT) {
 			dungeon.getDungeonMob();
 			this.mobtype = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
 		} else {
@@ -52,26 +54,26 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
-		//getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
-		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
-		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(),y,z - dungeon.getCentralCaveSize()), blocks));
-		Vec3d center = new Vec3d(x,y + (dungeon.getCentralCaveSize() /2),z);
+		getFloorBlocksOfBlob(blocks, new BlockPos(x, y, z), random);
+		storeBlockArrayInMap(blocks, new BlockPos(x, y, z));
+		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
+		Vec3d center = new Vec3d(x, y + (dungeon.getCentralCaveSize() / 2), z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize(), 0, 0);
 		double angle = 360D / dungeon.getCaveCount();
-		for(int i = 0; i < dungeon.getCaveCount(); i++) {
+		for (int i = 0; i < dungeon.getCaveCount(); i++) {
 			Vec3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
 			Vec3d startPos = center.add(v);
-			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() -1), dungeon.getCaveSegmentCount(), random, lists);
+			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() - 1), dungeon.getCaveSegmentCount(), random, lists);
 		}
-		
+
 	}
 
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		if(dungeon.placeBuilding()) {
-			BlockPos pastePos = new BlockPos(x , y, z);
+		if (dungeon.placeBuilding()) {
+			BlockPos pastePos = new BlockPos(x, y, z);
 			File file = dungeon.getRandomCentralBuilding();
-			if(file != null) {
+			if (file != null) {
 				CQStructure structure = new CQStructure(file);
 				structure.setDungeonMob(this.mobtype);
 				PlacementSettings settings = new PlacementSettings();
@@ -89,17 +91,17 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		//TODO: Place giant shrooms
+		// TODO: Place giant shrooms
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		//TODO: Place and fill chests
+		// TODO: Place and fill chests
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		//TODO: Place spawners
+		// TODO: Place spawners
 	}
 
 	@Override
@@ -111,34 +113,34 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	public DungeonBase getDungeon() {
 		return dungeon;
 	}
-	
+
 	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
-		//System.out.println("size: " + startSize);
+		// System.out.println("size: " + startSize);
 		double angle = 90D;
 		angle /= initLength;
-		angle /= (startSize -2) /2;
+		angle /= (startSize - 2) / 2;
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
-		for(int i = 0; i < initLength; i++) {
-			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, random);
-			//getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
+		for (int i = 0; i < initLength; i++) {
+			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
+			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
-			lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x,startPos.y,startPos.z), blob));
+			lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x, startPos.y, startPos.z), blob));
 			startPos = startPos.add(expansionDir);
 		}
 		startSize -= 2;
-		if(startSize > 3) {
+		if (startSize > 3) {
 			createTunnel(startPos, initAngle + angle * initLength - 90, startSize, (int) (initLength * 1.5), random, lists);
 			createTunnel(startPos, initAngle + angle * initLength, startSize, (int) (initLength * 1.5), random, lists);
 		}
 	}
-	
+
 	private void storeBlockArrayInMap(Block[][][] blob, BlockPos blobCenter) {
 		int radius = blob.length / 2;
-		for(int iX = 0; iX < blob.length; iX++) {
-			for(int iZ = 0; iZ < blob[0][0].length; iZ++) {
-				for(int iY = 1; iY < blob[0].length; iY++) {
-					if(blob[iX][iY][iZ] != null) {
+		for (int iX = 0; iX < blob.length; iX++) {
+			for (int iZ = 0; iZ < blob[0][0].length; iZ++) {
+				for (int iY = 1; iY < blob[0].length; iY++) {
+					if (blob[iX][iY][iZ] != null) {
 						IBlockState state = blob[iX][iY][iZ].getDefaultState();
 						BlockPos bp = new BlockPos(iX - radius, iY - radius, iZ - radius);
 						this.blocks.put(bp, state);
@@ -147,14 +149,14 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			}
 		}
 	}
-	
+
 	private List<BlockPos> getFloorBlocksOfBlob(Block[][][] blob, BlockPos blobCenter, Random random) {
 		List<BlockPos> floorBlocks = new ArrayList<>();
 		int radius = blob.length / 2;
-		for(int iX = 0; iX < blob.length; iX++) {
-			for(int iZ = 0; iZ < blob[0][0].length; iZ++) {
-				for(int iY = 1; iY < blob[0].length; iY++) {
-					if(blob[iX][iY][iZ] != null && blob[iX][iY -1][iZ] == null) {
+		for (int iX = 0; iX < blob.length; iX++) {
+			for (int iZ = 0; iZ < blob[0][0].length; iZ++) {
+				for (int iY = 1; iY < blob[0].length; iY++) {
+					if (blob[iX][iY][iZ] != null && blob[iX][iY - 1][iZ] == null) {
 						blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
 						floorBlocks.add(new BlockPos(iX - radius, iY - radius, iZ - radius));
 					}
@@ -163,27 +165,44 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		return floorBlocks;
 	}
-	
+
+	@SuppressWarnings("unused")
 	private Block[][][] getRandomBlob(Block block, int radius, Random random) {
 		return getRandomBlob(block, radius, radius, random);
 	}
-	
+
+	//TODO: Rewrite to generate 3d array, using worldgenerators doesnt work with our system
+	private boolean getGiantMushroom(Random random, BlockPos pos, World world) {
+		WorldGenerator worldgenerator = null;
+
+		if (random.nextBoolean()) {
+			worldgenerator = new WorldGenBigMushroom(Blocks.BROWN_MUSHROOM_BLOCK);
+		} else {
+			worldgenerator = new WorldGenBigMushroom(Blocks.RED_MUSHROOM_BLOCK);
+		}
+
+		if (worldgenerator != null && worldgenerator.generate(world, random, pos)) {
+			return true;
+		}
+		return false;
+	}
+
 	private Block[][][] getRandomBlob(Block block, int radius, int radiusY, Random random) {
 		Block[][][] blocks = new Block[radius * 4][radiusY * 4][radius * 4];
 		int subSphereCount = radius * 3;
 		double sphereSurface = 4 * Math.PI * (radius * radius);
 		double counter = sphereSurface / subSphereCount;
 		double cI = 0;
-		for(int iX = -radius; iX <= radius; iX++) {
-			for(int iY = -radiusY; iY <= radiusY; iY++) {
-				for(int iZ = -radius; iZ <= radius; iZ++) {
+		for (int iX = -radius; iX <= radius; iX++) {
+			for (int iY = -radiusY; iY <= radiusY; iY++) {
+				for (int iZ = -radius; iZ <= radius; iZ++) {
 					double distance = iX * iX + iZ * iZ + iY * iY;
 					distance = Math.sqrt(distance);
-					if(distance < radius) {
+					if (distance < radius) {
 						blocks[iX + (radius * 2)][iY + (radiusY * 2)][iZ + (radius * 2)] = block;
-					} else if(distance <= radius +1) {
+					} else if (distance <= radius + 1) {
 						cI++;
-						if(cI < counter) {
+						if (cI < counter) {
 							continue;
 						}
 						cI = 0;
@@ -193,18 +212,18 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 						int r2Y = (int) (radiusY * 0.75);
 						int rSub = DungeonGenUtils.getIntBetweenBorders(r1, r2, random);
 						int rSubY = DungeonGenUtils.getIntBetweenBorders(r1Y, r2Y, random);
-						for(int jX = iX - rSub; jX <= iX + rSub; jX++) {
-							for(int jY = iY - rSubY; jY <= iY + rSubY; jY++) {
-								for(int jZ = iZ - rSub; jZ <= iZ + rSub; jZ++) {
-									double distanceSub = (jX -iX) * (jX -iX) + (jY -iY) * (jY -iY) + (jZ -iZ) * (jZ -iZ);
+						for (int jX = iX - rSub; jX <= iX + rSub; jX++) {
+							for (int jY = iY - rSubY; jY <= iY + rSubY; jY++) {
+								for (int jZ = iZ - rSub; jZ <= iZ + rSub; jZ++) {
+									double distanceSub = (jX - iX) * (jX - iX) + (jY - iY) * (jY - iY) + (jZ - iZ) * (jZ - iZ);
 									distanceSub = Math.sqrt(distanceSub);
-									if(distanceSub < rSub) {
+									if (distanceSub < rSub) {
 										try {
-											if(blocks[jX + (radius * 2)][jY + (radiusY * 2)][jZ + (radius * 2)] != block) {
+											if (blocks[jX + (radius * 2)][jY + (radiusY * 2)][jZ + (radius * 2)] != block) {
 												blocks[jX + (radius * 2)][jY + (radiusY * 2)][jZ + (radius * 2)] = block;
 											}
-										} catch(ArrayIndexOutOfBoundsException ex) {
-											//Ignore
+										} catch (ArrayIndexOutOfBoundsException ex) {
+											// Ignore
 										}
 									}
 								}
