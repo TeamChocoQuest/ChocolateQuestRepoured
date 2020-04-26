@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.render.entity;
 import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
+import com.teamcqr.chocolatequestrepoured.client.render.EntityRenderManager;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
@@ -41,7 +42,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
 		this(rendermanagerIn, textureName, 1.0D, 1.0D, true);
 	}
-	
+
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, boolean hasExtraLayer) {
 		this(rendermanagerIn, textureName, 1.0D, 1.0D, hasExtraLayer);
 	}
@@ -49,7 +50,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
 		this(rendermanagerIn, textureName, widthScale, heightScale, true);
 	}
-	
+
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale, boolean hasExtraLayer) {
 		this(rendermanagerIn, new ModelCQRBiped(0.0F, hasExtraLayer), 0.5F, textureName, widthScale, heightScale);
 	}
@@ -89,6 +90,10 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	public void doRender(T entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if (!EntityRenderManager.shouldEntityBeRendered(entity)) {
+			return;
+		}
+
 		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
 			ModelBiped model = (ModelBiped) this.mainModel;
