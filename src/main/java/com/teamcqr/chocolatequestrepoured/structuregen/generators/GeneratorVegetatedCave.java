@@ -114,7 +114,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	}
 	
 	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
-		System.out.println("size: " + startSize);
+		//System.out.println("size: " + startSize);
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize -2) /2;
