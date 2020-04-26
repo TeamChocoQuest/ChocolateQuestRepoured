@@ -2,11 +2,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
@@ -15,12 +15,15 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -32,6 +35,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
 	private List<BlockPos> floorBlocks;
+	private HashMap<BlockPos, IBlockState> blocks;
 	private BlockPos center;
 	private EDungeonMobType mobtype;
 
@@ -48,12 +52,19 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			this.mobtype = dungeon.getDungeonMob();
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
-		PlateauBuilder pb = new PlateauBuilder();
-		//Block[][][] blockPattern = new Block[dungeon.getSize()][dungeon.getHeight()][dungeon.getSize()];
-		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), 8, random);
+		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);
 		getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
-		lists.add(ExtendedBlockStatePart.split(new BlockPos(x,y,z), blocks, 32));
-		//This shape isnt any better, too random, it needs to be rounder :/
+		//lists.add(ExtendedBlockStatePart.split(new BlockPos(x,y,z), blocks, 32));
+		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
+		Vec3d center = new Vec3d(x,y,z);
+		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize(), 0, 0);
+		double angle = 360D / dungeon.getCaveCount();
+		for(int i = 0; i < dungeon.getCaveCount(); i++) {
+			Vec3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
+			Vec3d startPos = center.add(v);
+			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() -1), dungeon.getCaveSegmentCount(), random);
+		}
+		lists.add(ExtendedBlockStatePart.splitBlockStateMap(new BlockPos(x,y,z), this.blocks));
 	}
 
 	@Override
@@ -100,6 +111,37 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	@Override
 	public DungeonBase getDungeon() {
 		return dungeon;
+	}
+	
+	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random) {
+		double angle = 67.5D;
+		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
+		for(int i = 0; i < initLength; i++) {
+			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, random);
+			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
+			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
+			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
+			startPos = startPos.add(expansionDir);
+		}
+		startSize -= 2;
+		if(startSize > 2) {
+			//TODO
+		}
+	}
+	
+	private void storeBlockArrayInMap(Block[][][] blob, BlockPos blobCenter) {
+		int radius = blob.length / 2;
+		for(int iX = 0; iX < blob.length; iX++) {
+			for(int iZ = 0; iZ < blob[0][0].length; iZ++) {
+				for(int iY = 1; iY < blob[0].length; iY++) {
+					if(blob[iX][iY][iZ] != null) {
+						IBlockState state = blob[iX][iY][iZ].getDefaultState();
+						BlockPos bp = new BlockPos(iX - radius, iY - radius, iZ - radius);
+						this.blocks.put(bp, state);
+					}
+				}
+			}
+		}
 	}
 	
 	private List<BlockPos> getFloorBlocksOfBlob(Block[][][] blob, BlockPos blobCenter, Random random) {
