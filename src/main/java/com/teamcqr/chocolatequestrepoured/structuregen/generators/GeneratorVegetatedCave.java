@@ -119,7 +119,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		angle /= (startSize -2) /2;
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for(int i = 0; i < initLength; i++) {
-			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, (int) (startSize * 0.75), random);
+			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, random);
 			//getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
