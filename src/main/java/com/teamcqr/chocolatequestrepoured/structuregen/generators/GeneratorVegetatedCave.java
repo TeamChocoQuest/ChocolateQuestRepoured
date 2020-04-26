@@ -257,12 +257,6 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 					blocks.put(floorPos, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
 					return true;
 				}
-				/*for(BlockPos p : blocks.keySet()) {
-					if(p.equals(lower)) {
-						blocks.put(floorPos, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
-						return true;
-					}
-				}*/
 				return false;
 			}
 		});
