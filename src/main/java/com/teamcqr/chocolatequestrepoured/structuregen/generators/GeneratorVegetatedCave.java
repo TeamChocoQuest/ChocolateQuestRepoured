@@ -88,6 +88,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		if (this.dungeon.placeVegetation()) {
 			createVegetation(random);
 		}
+		//Vines
+		if(this.dungeon.placeVines()) {
+			
+		}
 
 		// Build
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(this.blocks));
@@ -227,7 +231,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				for (int iY = blob[0].length -1; iY >= 1; iY--) {
 					if (blob[iX][iY-1][iZ] != null && blob[iX][iY][iZ] == null) {
 						//blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
-						ceilingBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius, iZ - radius)));
+						ceilingBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius -1, iZ - radius)));
+						break;
 					}
 				}
 			}
