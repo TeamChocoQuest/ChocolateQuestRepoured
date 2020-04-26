@@ -52,7 +52,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			this.mobtype = dungeon.getDungeonMob();
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
-		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);
+		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
 		//getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
 		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
 		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(),y,z - dungeon.getCentralCaveSize()), blocks));
