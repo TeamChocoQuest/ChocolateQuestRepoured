@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
@@ -42,6 +42,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
+	private Set<BlockPos> giantMushrooms = new HashSet<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
 	private EDungeonMobType mobtype;
@@ -73,6 +74,12 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		//Filter floorblocks
 		filterFloorBlocks();
+		
+		//Flowers, Mushrooms and Weed
+		if(this.dungeon.placeVegetation()) {
+			createVegetation(random);
+		}
+		
 		//Build
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(this.blocks));
 	}
@@ -125,7 +132,6 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	}
 
 	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
-		// System.out.println("size: " + startSize);
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
@@ -135,7 +141,6 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			this.floorBlocks.addAll(getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
-			//lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x, startPos.y, startPos.z), blob));
 			startPos = startPos.add(expansionDir);
 		}
 		startSize -= 2;
@@ -260,6 +265,35 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				return false;
 			}
 		});
+	}
+	
+	private void createVegetation(Random random) {
+		for(BlockPos floorPos : this.floorBlocks) {
+			int number = random.nextInt(200);
+			IBlockState state = null;
+			if(number >= 190) {
+				//Giant mushroom
+				giantMushrooms.add(floorPos.up());
+			}
+			else if(number <= 150) {
+				if(number >= 90) {
+					//Grass
+					state = dungeon.getGrassBlock(random).getDefaultState();
+				} else {
+					//Flower or mushroom
+					if(random.nextBoolean()) {
+						//Flower
+						state = dungeon.getFlowerBlock(random).getDefaultState();
+					} else {
+						//Mushroom
+						state = dungeon.getMushroomBlock(random).getDefaultState();
+					}
+				}
+			}
+			if(state != null) {
+				blocks.put(floorPos.up(), new ExtendedBlockState(state, null));
+			}
+		}
 	}
 
 }
