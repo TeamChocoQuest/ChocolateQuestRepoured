@@ -409,10 +409,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				boolean firstFlag = true;
 				ExtendedBlockState airState = new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null);
 				ExtendedBlockState upState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.UP,  true), null) : null;
-				ExtendedBlockState nState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true), null) : null;
-				ExtendedBlockState eState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true), null) : null;
-				ExtendedBlockState sState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.SOUTH, true), null) : null;
-				ExtendedBlockState wState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true), null) : null;
+				ExtendedBlockState sState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true), null) : null;
+				ExtendedBlockState wState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true), null) : null;
+				ExtendedBlockState nState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.SOUTH, true), null) : null;
+				ExtendedBlockState eState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true), null) : null;
 				while(vineLength >= 0) {
 					if(this.dungeon.isVineShapeCross()) {
 						if(firstFlag) {
