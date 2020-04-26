@@ -70,11 +70,12 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		// lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
 		Vec3d center = new Vec3d(x, y - (dungeon.getCentralCaveSize() / 2), z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize() * 1.75, 0, 0);
-		double angle = 360D / dungeon.getCaveCount();
-		for (int i = 0; i < dungeon.getCaveCount(); i++) {
+		int tunnelCount = dungeon.getTunnelCount(random);
+		double angle = 360D / tunnelCount;
+		for (int i = 0; i < tunnelCount; i++) {
 			Vec3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
 			Vec3d startPos = center.add(v);
-			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() - 1), dungeon.getCaveSegmentCount(), random, lists);
+			createTunnel(startPos, angle * i, dungeon.getTunnelStartSize(), dungeon.getCaveSegmentCount(), random, lists);
 		}
 		// Filter floorblocks
 		filterFloorBlocks();
@@ -191,7 +192,14 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		return dungeon;
 	}
 
-	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
+	/*private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
+		double angle = 90D;
+		angle /= initLength;
+		angle /= (startSize - 2) / 2;
+		createTunnel(startPos, initAngle, angle, startSize, initLength, random, lists);
+	}*/
+	
+	private void createTunnel(Vec3d startPos, double initAngle,/* double angle,*/ int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
@@ -203,10 +211,11 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
 			startPos = startPos.add(expansionDir);
 		}
+		int szTmp = startSize;
 		startSize -= 2;
 		if (startSize > 3) {
-			createTunnel(startPos, initAngle + angle * initLength - 90, startSize, (int) (initLength * 1.5), random, lists);
-			createTunnel(startPos, initAngle + angle * initLength, startSize, (int) (initLength * 1.5), random, lists);
+			createTunnel(startPos, initAngle + angle * initLength - 90, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random, lists);
+			createTunnel(startPos, initAngle + angle * initLength, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random, lists);
 		}
 	}
 
