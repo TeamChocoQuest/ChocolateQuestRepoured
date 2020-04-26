@@ -269,14 +269,14 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	
 	private void createVegetation(Random random) {
 		for(BlockPos floorPos : this.floorBlocks) {
-			int number = random.nextInt(200);
+			int number = random.nextInt(300);
 			IBlockState state = null;
-			if(number >= 190) {
+			if(number >= 285) {
 				//Giant mushroom
 				giantMushrooms.add(floorPos.up());
 			}
 			else if(number <= 150) {
-				if(number >= 90) {
+				if(number <= 100) {
 					//Grass
 					state = dungeon.getGrassBlock(random).getDefaultState();
 				} else {
