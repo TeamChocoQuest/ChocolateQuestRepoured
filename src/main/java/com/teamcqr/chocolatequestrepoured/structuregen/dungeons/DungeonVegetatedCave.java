@@ -4,10 +4,12 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class DungeonVegetatedCave extends DungeonBase {
@@ -18,12 +20,14 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private Block[] flowerBlocks;
 	private Block[] mushrooms;
 	private Block[] floorBlocks;
+	private int centralCaveSize = 20;
+	private int caveCount = 3;
+	private int caveSegmentCount = 8;
+	private int posY = 30;
 	private boolean placeVines;
 	private boolean placeVegetation;
 	private boolean placeBuilding;
 	private File buildingFolder;
-	private int size;
-	private int height;
 	
 	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
@@ -40,33 +44,25 @@ public class DungeonVegetatedCave extends DungeonBase {
 		});
 		this.floorBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "floorBlocks", new Block[] {
 			Blocks.GRASS,
-			Blocks.GRASS,
-			Blocks.MOSSY_COBBLESTONE,
 		});
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
 		this.placeBuilding = PropertyFileHelper.getBooleanProperty(prop, "placeBuilding", true);
-		this.size = PropertyFileHelper.getIntProperty(prop, "size", 72);
-		this.height = PropertyFileHelper.getIntProperty(prop, "height", 40);
 		this.buildingFolder = PropertyFileHelper.getFileProperty(prop, "buildingFolder", "caves/swamp");
+		this.centralCaveSize = PropertyFileHelper.getIntProperty(prop, "centralCaveSize", 20);
+		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 30);
+		this.caveCount = PropertyFileHelper.getIntProperty(prop, "caveCount", 3);
+		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
 	}
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		//GeneratorVegetatedCave generator = new GeneratorVegetatedCave(this);
-		//generator.generate(world, world.getChunkFromBlockCoords(new BlockPos(x,y,z)), x, y, z);
+		GeneratorVegetatedCave generator = new GeneratorVegetatedCave(this);
+		generator.generate(world, world.getChunkFromBlockCoords(new BlockPos(x,y,z)), x, posY, z);
 	}
 	
 	public File getRandomCentralBuilding() {
 		return getStructureFileFromDirectory(buildingFolder);
-	}
-	
-	public int getSize() {
-		return size;
-	}
-	
-	public int getHeight() {
-		return height;
 	}
 	
 	public Block getVineBlock() {
@@ -103,6 +99,18 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public Block getPumpkinBlock() {
 		return pumpkinBlock;
-	}	
+	}
+	
+	public int getCentralCaveSize() {
+		return this.centralCaveSize;
+	}
+	
+	public int getCaveCount() {
+		return this.caveCount;
+	}
+	
+	public int getCaveSegmentCount() {
+		return this.caveSegmentCount;
+	}
 
 }
