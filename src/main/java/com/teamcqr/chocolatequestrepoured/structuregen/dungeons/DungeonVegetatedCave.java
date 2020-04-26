@@ -5,6 +5,7 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
@@ -22,7 +23,9 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private Block[] grassBlocks;
 	private Block[] floorBlocks;
 	private int centralCaveSize = 20;
-	private int caveCount = 3;
+	private int tunnelCountMin = 3;
+	private int tunnelCountMax = 5;
+	private int tunnelStartSize = 8;
 	private int caveSegmentCount = 8;
 	private int posY = 30;
 	private int[] chestIDs;
@@ -56,8 +59,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.buildingFolder = PropertyFileHelper.getFileProperty(prop, "buildingFolder", "caves/swamp");
 		this.centralCaveSize = PropertyFileHelper.getIntProperty(prop, "centralCaveSize", 15);
 		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 30);
-		this.caveCount = PropertyFileHelper.getIntProperty(prop, "caveCount", 3);
+		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
+		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
+		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
 	}
 
@@ -115,8 +120,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 		return this.centralCaveSize;
 	}
 	
-	public int getCaveCount() {
-		return this.caveCount;
+	public int getTunnelCount(Random random) {
+		return DungeonGenUtils.getIntBetweenBorders(tunnelCountMin, tunnelCountMax, random);
 	}
 	
 	public int getCaveSegmentCount() {
@@ -125,6 +130,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public int getChestID(Random random) {
 		return this.chestIDs[random.nextInt(this.chestIDs.length)];
+	}
+
+	public int getTunnelStartSize() {
+		return this.tunnelStartSize;
 	}
 
 }
