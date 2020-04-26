@@ -91,7 +91,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		//Vines
 		if(this.dungeon.placeVines()) {
-			
+			createVines(random);
 		}
 
 		// Build
@@ -357,12 +357,16 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			IBlockState state = null;
 			if (number >= 295) {
 				// Giant mushroom
+				boolean flag = true;
 				for (BlockPos shroom : giantMushrooms) {
-					if (shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 8) {
-						continue;
+					if (shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 5) {
+						flag = false;
+						break;
 					}
 				}
-				giantMushrooms.add(floorPos.up());
+				if(flag) {
+					giantMushrooms.add(floorPos.up());
+				}
 			} else if (number >= 290) {
 				// Lantern
 				state = dungeon.getPumpkinBlock().getDefaultState();
@@ -387,6 +391,14 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		//System.out.println("Floor blocks: " + floorBlocks.size());
 		//System.out.println("Giant mushrooms: " + giantMushrooms.size());
+	}
+	
+	private void createVines(Random random) {
+		for(BlockPos vineStart : this.ceilingBlocks) {
+			if(random.nextInt(300) >= 280) {
+				
+			}
+		}
 	}
 
 	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, ExtendedBlockState> stateMap) {
