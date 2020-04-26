@@ -347,8 +347,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				blocks.put(floorPos.up(), new ExtendedBlockState(state, null));
 			}
 		}
-		System.out.println("Floor blocks: " + floorBlocks.size());
-		System.out.println("Giant mushrooms: " + giantMushrooms.size());
+		//System.out.println("Floor blocks: " + floorBlocks.size());
+		//System.out.println("Giant mushrooms: " + giantMushrooms.size());
 	}
 
 	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, ExtendedBlockState> stateMap) {
