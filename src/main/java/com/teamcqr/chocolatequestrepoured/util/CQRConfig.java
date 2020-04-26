@@ -78,6 +78,13 @@ public class CQRConfig {
 				"cqrepoured:unlit_torch" };
 
 		public boolean enableSpecialFeatures = true;
+
+		@Config.Comment("Only render the nearest 'limitEntityRenderingCount' amount of CQR entities. Bosses will be rendered normally.")
+		public boolean limitEntityRendering = false;
+		@Config.RangeInt(min = 8, max = 128)
+		public int limitEntityRenderingCount = 64;
+		@Config.Comment("Skip rendering of entities that are visible/not behind blocks. Bosses will be rendered normally. This probably will cause issues where a mob should be render but it won't.")
+		public boolean skipHiddenEntityRendering = false;
 	}
 
 	public static class General {
