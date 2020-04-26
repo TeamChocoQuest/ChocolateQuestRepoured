@@ -48,8 +48,9 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> chests = new ArrayList<>();
 	private Set<BlockPos> ceilingBlocks = new HashSet<>();
 	private Set<BlockPos> giantMushrooms = new HashSet<>();
+	private Map<BlockPos, Integer> heightMap = new ConcurrentHashMap<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
-	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
+	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<>();
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
@@ -231,7 +232,15 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				for (int iY = blob[0].length -1; iY >= 1; iY--) {
 					if (blob[iX][iY-1][iZ] != null && blob[iX][iY][iZ] == null) {
 						//blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
-						ceilingBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius -1, iZ - radius)));
+						BlockPos p = blobCenter.add(new BlockPos(iX - radius, iY - radius -1, iZ - radius));
+						ceilingBlocks.add(p);
+						int height = 0;
+						int yTmp = iY -1;
+						while(blob[iX][yTmp][iZ] != null && yTmp >= 0) {
+							yTmp--;
+							height++;
+						}
+						this.heightMap.put(p, new Integer(height));
 						break;
 					}
 				}
@@ -264,6 +273,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 					if (blob[iX][iY][iZ] != null && blob[iX][iY - 1][iZ] == null) {
 						blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
 						floorBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius, iZ - radius)));
+						break;
 					}
 				}
 			}
