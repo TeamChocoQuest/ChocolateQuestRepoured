@@ -3,9 +3,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -38,8 +42,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
-	private List<BlockPos> floorBlocks;
-	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new HashMap<>();
+	private Set<BlockPos> floorBlocks = new HashSet<>();
+	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
@@ -56,10 +60,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
-		getFloorBlocksOfBlob(blocks, new BlockPos(x, y, z), random);
+		this.floorBlocks.addAll(getFloorBlocksOfBlob(blocks, new BlockPos(x, y, z), random));
 		storeBlockArrayInMap(blocks, new BlockPos(x, y, z));
 		//lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
-		Vec3d center = new Vec3d(x, y + (dungeon.getCentralCaveSize() / 5), z);
+		Vec3d center = new Vec3d(x, y - (dungeon.getCentralCaveSize() / 2), z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize() *1.75, 0, 0);
 		double angle = 360D / dungeon.getCaveCount();
 		for (int i = 0; i < dungeon.getCaveCount(); i++) {
@@ -68,7 +72,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() - 1), dungeon.getCaveSegmentCount(), random, lists);
 		}
 		//Filter floorblocks
-		
+		filterFloorBlocks();
 		//Build
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(this.blocks));
 	}
@@ -128,7 +132,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
-			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
+			this.floorBlocks.addAll(getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
 			//lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x, startPos.y, startPos.z), blob));
@@ -164,7 +168,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				for (int iY = 1; iY < blob[0].length; iY++) {
 					if (blob[iX][iY][iZ] != null && blob[iX][iY - 1][iZ] == null) {
 						blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
-						floorBlocks.add(new BlockPos(iX - radius, iY - radius, iZ - radius));
+						floorBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius, iZ - radius)));
 					}
 				}
 			}
@@ -241,6 +245,27 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			}
 		}
 		return blocks;
+	}
+	
+	private void filterFloorBlocks() {
+		this.floorBlocks.removeIf(new Predicate<BlockPos>() {
+
+			@Override
+			public boolean test(BlockPos floorPos) {
+				BlockPos lower = floorPos.down();
+				if(blocks.containsKey(lower)) {
+					blocks.put(floorPos, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
+					return true;
+				}
+				/*for(BlockPos p : blocks.keySet()) {
+					if(p.equals(lower)) {
+						blocks.put(floorPos, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
+						return true;
+					}
+				}*/
+				return false;
+			}
+		});
 	}
 
 }
