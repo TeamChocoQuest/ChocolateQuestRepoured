@@ -35,7 +35,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
 	private List<BlockPos> floorBlocks;
-	private HashMap<BlockPos, IBlockState> blocks;
+	private HashMap<BlockPos, IBlockState> blocks = new HashMap<>();
 	private BlockPos center;
 	private EDungeonMobType mobtype;
 
@@ -54,17 +54,17 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);
 		getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
-		//lists.add(ExtendedBlockStatePart.split(new BlockPos(x,y,z), blocks, 32));
 		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
+		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(),y,z - dungeon.getCentralCaveSize()), blocks));
 		Vec3d center = new Vec3d(x,y,z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize(), 0, 0);
 		double angle = 360D / dungeon.getCaveCount();
 		for(int i = 0; i < dungeon.getCaveCount(); i++) {
 			Vec3d v = VectorUtil.rotateVectorAroundY(rad, angle * i);
 			Vec3d startPos = center.add(v);
-			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() -1), dungeon.getCaveSegmentCount(), random);
+			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() -1), dungeon.getCaveSegmentCount(), random, lists);
 		}
-		lists.add(ExtendedBlockStatePart.splitBlockStateMap(new BlockPos(x,y,z), this.blocks));
+		
 	}
 
 	@Override
@@ -113,14 +113,17 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		return dungeon;
 	}
 	
-	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random) {
-		double angle = 67.5D;
+	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
+		double angle = 90D;
+		angle /= initLength;
+		angle /= (startSize -2) /2;
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for(int i = 0; i < initLength; i++) {
 			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, random);
 			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
+			lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x,startPos.y,startPos.z), blob));
 			startPos = startPos.add(expansionDir);
 		}
 		startSize -= 2;
