@@ -53,7 +53,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);
-		getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
+		//getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
 		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
 		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(),y,z - dungeon.getCentralCaveSize()), blocks));
 		Vec3d center = new Vec3d(x,y + (dungeon.getCentralCaveSize() /2),z);
@@ -114,21 +114,23 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	}
 	
 	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
+		System.out.println("size: " + startSize);
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize -2) /2;
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for(int i = 0; i < initLength; i++) {
-			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, random);
-			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
+			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, (int) (startSize * 0.75), random);
+			//getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
 			lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x,startPos.y,startPos.z), blob));
 			startPos = startPos.add(expansionDir);
 		}
 		startSize -= 2;
-		if(startSize > 2) {
-			//TODO
+		if(startSize > 3) {
+			createTunnel(startPos, initAngle + angle * initLength - 90, startSize, (int) (initLength * 1.5), random, lists);
+			createTunnel(startPos, initAngle + angle * initLength, startSize, (int) (initLength * 1.5), random, lists);
 		}
 	}
 	
@@ -164,18 +166,22 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	}
 	
 	private Block[][][] getRandomBlob(Block block, int radius, Random random) {
-		Block[][][] blocks = new Block[radius * 4][radius * 4][radius * 4];
+		return getRandomBlob(block, radius, radius, random);
+	}
+	
+	private Block[][][] getRandomBlob(Block block, int radius, int radiusY, Random random) {
+		Block[][][] blocks = new Block[radius * 4][radiusY * 4][radius * 4];
 		int subSphereCount = radius * 3;
 		double sphereSurface = 4 * Math.PI * (radius * radius);
 		double counter = sphereSurface / subSphereCount;
 		double cI = 0;
 		for(int iX = -radius; iX <= radius; iX++) {
-			for(int iY = -radius; iY <= radius; iY++) {
+			for(int iY = -radiusY; iY <= radiusY; iY++) {
 				for(int iZ = -radius; iZ <= radius; iZ++) {
 					double distance = iX * iX + iZ * iZ + iY * iY;
 					distance = Math.sqrt(distance);
 					if(distance < radius) {
-						blocks[iX + (radius * 2)][iY + (radius * 2)][iZ + (radius * 2)] = block;
+						blocks[iX + (radius * 2)][iY + (radiusY * 2)][iZ + (radius * 2)] = block;
 					} else if(distance <= radius +1) {
 						cI++;
 						if(cI < counter) {
@@ -183,18 +189,20 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 						}
 						cI = 0;
 						int r1 = radius / 2;
+						int r1Y = radiusY / 2;
 						int r2 = (int) (radius * 0.75);
+						int r2Y = (int) (radiusY * 0.75);
 						int rSub = DungeonGenUtils.getIntBetweenBorders(r1, r2, random);
+						int rSubY = DungeonGenUtils.getIntBetweenBorders(r1Y, r2Y, random);
 						for(int jX = iX - rSub; jX <= iX + rSub; jX++) {
-							for(int jY = iY - rSub; jY <= iY + rSub; jY++) {
+							for(int jY = iY - rSubY; jY <= iY + rSubY; jY++) {
 								for(int jZ = iZ - rSub; jZ <= iZ + rSub; jZ++) {
 									double distanceSub = (jX -iX) * (jX -iX) + (jY -iY) * (jY -iY) + (jZ -iZ) * (jZ -iZ);
 									distanceSub = Math.sqrt(distanceSub);
 									if(distanceSub < rSub) {
 										try {
-											//blocks[jX + (radius * 2)][jY + (radius * 2)][jZ + (radius * 2)] = block;
-											if(blocks[jX + (radius * 2)][jY + (radius * 2)][jZ + (radius * 2)] != block) {
-												blocks[jX + (radius * 2)][jY + (radius * 2)][jZ + (radius * 2)] = block;
+											if(blocks[jX + (radius * 2)][jY + (radiusY * 2)][jZ + (radius * 2)] != block) {
+												blocks[jX + (radius * 2)][jY + (radiusY * 2)][jZ + (radius * 2)] = block;
 											}
 										} catch(ArrayIndexOutOfBoundsException ex) {
 											//Ignore
