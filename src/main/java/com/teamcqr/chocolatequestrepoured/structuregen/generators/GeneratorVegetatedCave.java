@@ -345,6 +345,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				}
 				giantMushrooms.add(floorPos.up());
 			}
+			else if(number >= 290) {
+				//Lantern
+				state = dungeon.getPumpkinBlock().getDefaultState();
+			}
 			else if(number <= 150) {
 				if(number <= 100) {
 					//Grass
