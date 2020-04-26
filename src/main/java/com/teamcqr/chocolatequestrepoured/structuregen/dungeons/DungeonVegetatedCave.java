@@ -49,7 +49,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
 		this.placeBuilding = PropertyFileHelper.getBooleanProperty(prop, "placeBuilding", true);
 		this.buildingFolder = PropertyFileHelper.getFileProperty(prop, "buildingFolder", "caves/swamp");
-		this.centralCaveSize = PropertyFileHelper.getIntProperty(prop, "centralCaveSize", 20);
+		this.centralCaveSize = PropertyFileHelper.getIntProperty(prop, "centralCaveSize", 15);
 		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 30);
 		this.caveCount = PropertyFileHelper.getIntProperty(prop, "caveCount", 3);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
