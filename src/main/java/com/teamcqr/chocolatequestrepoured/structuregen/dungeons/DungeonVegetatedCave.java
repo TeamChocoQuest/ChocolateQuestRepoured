@@ -25,6 +25,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int caveCount = 3;
 	private int caveSegmentCount = 8;
 	private int posY = 30;
+	private int[] chestIDs;
 	private boolean placeVines;
 	private boolean placeVegetation;
 	private boolean placeBuilding;
@@ -57,6 +58,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.posY = PropertyFileHelper.getIntProperty(prop, "posY", 30);
 		this.caveCount = PropertyFileHelper.getIntProperty(prop, "caveCount", 3);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
+		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
 	}
 
 	@Override
@@ -119,6 +121,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public int getCaveSegmentCount() {
 		return this.caveSegmentCount;
+	}
+	
+	public int getChestID(Random random) {
+		return this.chestIDs[random.nextInt(this.chestIDs.length)];
 	}
 
 }
