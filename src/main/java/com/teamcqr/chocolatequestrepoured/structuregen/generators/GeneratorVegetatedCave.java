@@ -56,7 +56,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		getFloorBlocksOfBlob(blocks, new BlockPos(x,y,z), random);
 		storeBlockArrayInMap(blocks, new BlockPos(x,y,z));
 		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(),y,z - dungeon.getCentralCaveSize()), blocks));
-		Vec3d center = new Vec3d(x,y,z);
+		Vec3d center = new Vec3d(x,y + (dungeon.getCentralCaveSize() /2),z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize(), 0, 0);
 		double angle = 360D / dungeon.getCaveCount();
 		for(int i = 0; i < dungeon.getCaveCount(); i++) {
