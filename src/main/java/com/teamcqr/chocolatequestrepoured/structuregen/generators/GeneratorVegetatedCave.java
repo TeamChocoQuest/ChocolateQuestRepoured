@@ -181,7 +181,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			spawner.updateContainingBlockInfo();
 			
 			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
-			stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+			stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
 		}
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
@@ -339,7 +339,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			if(number >= 295) {
 				//Giant mushroom
 				for(BlockPos shroom : giantMushrooms) {
-					if(shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 5) {
+					if(shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 8) {
 						continue;
 					}
 				}
