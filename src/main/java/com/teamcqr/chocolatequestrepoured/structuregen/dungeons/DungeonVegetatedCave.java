@@ -19,6 +19,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private Block pumpkinBlock;
 	private Block[] flowerBlocks;
 	private Block[] mushrooms;
+	private Block[] grassBlocks;
 	private Block[] floorBlocks;
 	private int centralCaveSize = 20;
 	private int caveCount = 3;
@@ -44,6 +45,9 @@ public class DungeonVegetatedCave extends DungeonBase {
 		});
 		this.floorBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "floorBlocks", new Block[] {
 			Blocks.GRASS,
+		});
+		this.grassBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "grassBlocks", new Block[] {
+			Blocks.TALLGRASS,
 		});
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
@@ -79,6 +83,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public Block getFloorBlock(Random rdm) {
 		return floorBlocks[rdm.nextInt(floorBlocks.length)];
+	}
+	
+	public Block getGrassBlock(Random rdm) {
+		return grassBlocks[rdm.nextInt(grassBlocks.length)];
 	}
 	
 	public boolean placeVegetation() {
