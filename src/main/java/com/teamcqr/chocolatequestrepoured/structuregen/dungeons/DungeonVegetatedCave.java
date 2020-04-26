@@ -47,7 +47,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 			Blocks.GRASS,
 		});
 		this.grassBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "grassBlocks", new Block[] {
-			Blocks.TALLGRASS,
+			Blocks.AIR,
 		});
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
