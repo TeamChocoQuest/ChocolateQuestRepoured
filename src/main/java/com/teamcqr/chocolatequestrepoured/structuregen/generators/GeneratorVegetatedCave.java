@@ -46,6 +46,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	private List<BlockPos> spawners = new ArrayList<>();
 	private List<BlockPos> chests = new ArrayList<>();
+	private Set<BlockPos> ceilingBlocks = new HashSet<>();
 	private Set<BlockPos> giantMushrooms = new HashSet<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
@@ -65,6 +66,9 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
+		if(dungeon.placeVines()) {
+			this.ceilingBlocks.addAll(getCeilingBlocksOfBlob(blocks, new BlockPos(x,y,z), random));
+		}
 		this.floorBlocks.addAll(getFloorBlocksOfBlob(blocks, new BlockPos(x, y, z), random));
 		storeBlockArrayInMap(blocks, new BlockPos(x, y, z));
 		// lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
@@ -199,6 +203,9 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		Vec3d expansionDir = VectorUtil.rotateVectorAroundY(new Vec3d(startSize, 0, 0), initAngle);
 		for (int i = 0; i < initLength; i++) {
 			Block[][][] blob = getRandomBlob(dungeon.getAirBlock(), startSize, (int) (startSize * 0.8), random);
+			if(dungeon.placeVines()) {
+				this.ceilingBlocks.addAll(getCeilingBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
+			}
 			this.floorBlocks.addAll(getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random));
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
@@ -210,6 +217,22 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			createTunnel(startPos, initAngle + angle * initLength - 90, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random, lists);
 			createTunnel(startPos, initAngle + angle * initLength, new Integer(startSize), (int) (initLength * (szTmp / startSize)), random, lists);
 		}
+	}
+
+	private List<BlockPos> getCeilingBlocksOfBlob(Block[][][] blob, BlockPos blobCenter, Random random) {
+		List<BlockPos> ceilingBlocks = new ArrayList<>();
+		int radius = blob.length / 2;
+		for (int iX = 0; iX < blob.length; iX++) {
+			for (int iZ = 0; iZ < blob[0][0].length; iZ++) {
+				for (int iY = blob[0].length -1; iY >= 1; iY--) {
+					if (blob[iX][iY-1][iZ] != null && blob[iX][iY][iZ] == null) {
+						//blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
+						ceilingBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius, iZ - radius)));
+					}
+				}
+			}
+		}
+		return ceilingBlocks;
 	}
 
 	private void storeBlockArrayInMap(Block[][][] blob, BlockPos blobCenter) {
