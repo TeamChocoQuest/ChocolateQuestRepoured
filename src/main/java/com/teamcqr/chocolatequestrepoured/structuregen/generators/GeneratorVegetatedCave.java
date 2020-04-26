@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
+import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -26,7 +27,11 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.Mirror;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -40,8 +45,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	private DungeonVegetatedCave dungeon;
 
-	private List<BlockPos> spawners;
-	private List<BlockPos> chests;
+	private List<BlockPos> spawners = new ArrayList<>();
+	private List<BlockPos> chests = new ArrayList<>();
 	private Set<BlockPos> giantMushrooms = new HashSet<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
@@ -109,16 +114,76 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	@Override
 	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		// TODO: Place giant shrooms
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
+		for(BlockPos p : this.giantMushrooms) {
+			//Place shroom
+			if(random.nextBoolean()) {
+				//Red shroom
+				
+			} else {
+				//Brown shroom
+				
+			}
+			
+			if(random.nextInt(3) == 0) {
+				//Spawner
+				BlockPos spawner = new BlockPos(p.getX() + (random.nextBoolean() ? -1 : 1), p.getY() +1, p.getZ() + (random.nextBoolean() ? -1 : 1));
+				this.spawners.add(spawner);
+				if(random.nextInt(3) >= 1) {
+					//Chest
+					this.chests.add(spawner.down());
+				}
+			}
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// TODO: Place and fill chests
+		// DONE: Place and fill chests
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
+		for(BlockPos pos : this.chests) {
+			Block block = Blocks.CHEST;
+			IBlockState state = block.getDefaultState();
+			TileEntityChest chest = (TileEntityChest)block.createTileEntity(world, state);
+			
+			int eltID = dungeon.getChestID(random);
+			if (chest != null) {
+				ResourceLocation resLoc = null;
+				try {
+					resLoc = ELootTable.values()[eltID].getResourceLocation();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+				if (resLoc != null) {
+					long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
+					chest.setLootTable(resLoc, seed);
+				}
+			}
+			
+			NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
+			stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
 	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// TODO: Place spawners
+		// DONE: Place spawners
+		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
+		for(BlockPos pos : this.spawners) {
+			Block block = Blocks.MOB_SPAWNER;
+			IBlockState state = block.getDefaultState();
+			TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state);
+			spawner.getSpawnerBaseLogic().setEntityId(mobtype.getEntityResourceLocation());
+			spawner.updateContainingBlockInfo();
+			
+			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());
+			stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state, nbt));
+		}
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
 	@Override
@@ -271,7 +336,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		for(BlockPos floorPos : this.floorBlocks) {
 			int number = random.nextInt(300);
 			IBlockState state = null;
-			if(number >= 285) {
+			if(number >= 295) {
 				//Giant mushroom
 				giantMushrooms.add(floorPos.up());
 			}
@@ -294,6 +359,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				blocks.put(floorPos.up(), new ExtendedBlockState(state, null));
 			}
 		}
+		System.out.println("Floor blocks: " + floorBlocks.size());
+		System.out.println("Giant mushrooms: " + giantMushrooms.size());
 	}
 
 }
