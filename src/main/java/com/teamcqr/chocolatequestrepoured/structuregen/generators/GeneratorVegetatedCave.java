@@ -192,14 +192,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		return dungeon;
 	}
 
-	/*private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
-		double angle = 90D;
-		angle /= initLength;
-		angle /= (startSize - 2) / 2;
-		createTunnel(startPos, initAngle, angle, startSize, initLength, random, lists);
-	}*/
-	
-	private void createTunnel(Vec3d startPos, double initAngle,/* double angle,*/ int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
+	private void createTunnel(Vec3d startPos, double initAngle, int startSize, int initLength, Random random, List<List<? extends IStructure>> lists) {
 		double angle = 90D;
 		angle /= initLength;
 		angle /= (startSize - 2) / 2;
