@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 public class DungeonVegetatedCave extends DungeonBase {
 	
 	private Block vineBlock;
+	private Block vineLatchBlock;
 	private Block airBlock;
 	private Block pumpkinBlock;
 	private Block[] flowerBlocks;
@@ -62,6 +63,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
 		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
+		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
 	}
@@ -114,6 +116,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public Block getPumpkinBlock() {
 		return pumpkinBlock;
+	}
+	
+	public Block getVineLatchBlock() {
+		return vineLatchBlock;
 	}
 	
 	public int getCentralCaveSize() {
