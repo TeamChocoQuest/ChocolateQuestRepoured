@@ -350,6 +350,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	}
 
 	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, ExtendedBlockState> stateMap) {
+		//Taken from WorldGenBigMushroom
 		Block block = rand.nextBoolean() ? Blocks.BROWN_MUSHROOM_BLOCK : Blocks.RED_MUSHROOM_BLOCK;
 		int i = 6;
 
