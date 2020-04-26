@@ -36,7 +36,6 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> chests;
 	private List<BlockPos> floorBlocks;
 	private HashMap<BlockPos, IBlockState> blocks = new HashMap<>();
-	private BlockPos center;
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
