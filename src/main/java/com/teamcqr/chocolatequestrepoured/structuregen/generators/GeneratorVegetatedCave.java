@@ -26,6 +26,7 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -396,7 +397,57 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private void createVines(Random random) {
 		for(BlockPos vineStart : this.ceilingBlocks) {
 			if(random.nextInt(300) >= 280) {
-				
+				int vineLength = this.heightMap.get(vineStart);
+				vineLength /= 3;
+				if(this.dungeon.isVineShapeCross()) {
+					this.blocks.put(vineStart, new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+				}
+				BlockPos vN = vineStart.north();
+				BlockPos vE = vineStart.east();
+				BlockPos vS = vineStart.south();
+				BlockPos vW = vineStart.west();
+				boolean firstFlag = true;
+				ExtendedBlockState airState = new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null);
+				ExtendedBlockState upState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.UP,  true), null) : null;
+				ExtendedBlockState nState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true), null) : null;
+				ExtendedBlockState eState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true), null) : null;
+				ExtendedBlockState sState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.SOUTH, true), null) : null;
+				ExtendedBlockState wState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true), null) : null;
+				while(vineLength >= 0) {
+					if(this.dungeon.isVineShapeCross()) {
+						if(firstFlag) {
+							this.blocks.put(vN, upState);
+							this.blocks.put(vE, upState);
+							this.blocks.put(vS, upState);
+							this.blocks.put(vW, upState);
+							firstFlag = false;
+						} else {
+							this.blocks.put(vN, nState);
+							this.blocks.put(vE, eState);
+							this.blocks.put(vS, sState);
+							this.blocks.put(vW, wState);
+						}
+						vN = vN.down();
+						vE = vE.down();
+						vS = vS.down();
+						vW = vW.down();
+						if(this.blocks.getOrDefault(vN, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vE, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vS, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vW, airState).getState().getBlock() != this.dungeon.getAirBlock()
+							) 
+						{
+							break;
+						}
+					} else {
+						this.blocks.put(vineStart, new ExtendedBlockState(this.dungeon.getVineBlock().getDefaultState(), null));
+						if(this.blocks.getOrDefault(vineStart, airState).getState().getBlock() != this.dungeon.getAirBlock()) {
+							break;
+						}
+						vineStart = vineStart.down();
+					}
+					vineLength--;
+				}
 			}
 		}
 	}
