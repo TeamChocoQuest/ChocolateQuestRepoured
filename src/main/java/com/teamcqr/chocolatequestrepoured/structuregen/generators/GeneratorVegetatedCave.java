@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
@@ -11,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
@@ -37,7 +39,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> spawners;
 	private List<BlockPos> chests;
 	private List<BlockPos> floorBlocks;
-	private HashMap<BlockPos, IBlockState> blocks = new HashMap<>();
+	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new HashMap<>();
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
@@ -56,8 +58,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
 		getFloorBlocksOfBlob(blocks, new BlockPos(x, y, z), random);
 		storeBlockArrayInMap(blocks, new BlockPos(x, y, z));
-		lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
-		Vec3d center = new Vec3d(x, y + (dungeon.getCentralCaveSize() / 2), z);
+		//lists.add(ExtendedBlockStatePart.split(new BlockPos(x - dungeon.getCentralCaveSize(), y, z - dungeon.getCentralCaveSize()), blocks));
+		Vec3d center = new Vec3d(x, y + (dungeon.getCentralCaveSize() / 5), z);
 		Vec3d rad = new Vec3d(dungeon.getCentralCaveSize() *1.75, 0, 0);
 		double angle = 360D / dungeon.getCaveCount();
 		for (int i = 0; i < dungeon.getCaveCount(); i++) {
@@ -65,7 +67,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			Vec3d startPos = center.add(v);
 			createTunnel(startPos, angle * i, dungeon.getCentralCaveSize() / (dungeon.getCaveCount() - 1), dungeon.getCaveSegmentCount(), random, lists);
 		}
-
+		//Filter floorblocks
+		
+		//Build
+		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(this.blocks));
 	}
 
 	@Override
@@ -76,6 +81,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			if (file != null) {
 				CQStructure structure = new CQStructure(file);
 				structure.setDungeonMob(this.mobtype);
+				//TODO: Support platform
 				PlacementSettings settings = new PlacementSettings();
 				settings.setMirror(Mirror.NONE);
 				settings.setRotation(Rotation.NONE);
@@ -125,7 +131,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			getFloorBlocksOfBlob(blob, new BlockPos(startPos.x, startPos.y, startPos.z), random);
 			storeBlockArrayInMap(blob, new BlockPos(startPos.x, startPos.y, startPos.z));
 			expansionDir = VectorUtil.rotateVectorAroundY(expansionDir, angle);
-			lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x, startPos.y, startPos.z), blob));
+			//lists.add(ExtendedBlockStatePart.split(new BlockPos(startPos.x, startPos.y, startPos.z), blob));
 			startPos = startPos.add(expansionDir);
 		}
 		startSize -= 2;
@@ -143,7 +149,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 					if (blob[iX][iY][iZ] != null) {
 						IBlockState state = blob[iX][iY][iZ].getDefaultState();
 						BlockPos bp = new BlockPos(iX - radius, iY - radius, iZ - radius);
-						this.blocks.put(bp, state);
+						this.blocks.put(blobCenter.add(bp), new ExtendedBlockState(state, null));
 					}
 				}
 			}
