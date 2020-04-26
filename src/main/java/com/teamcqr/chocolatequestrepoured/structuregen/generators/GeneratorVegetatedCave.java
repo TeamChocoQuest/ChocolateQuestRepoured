@@ -338,6 +338,11 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			IBlockState state = null;
 			if(number >= 295) {
 				//Giant mushroom
+				for(BlockPos shroom : giantMushrooms) {
+					if(shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 5) {
+						continue;
+					}
+				}
 				giantMushrooms.add(floorPos.up());
 			}
 			else if(number <= 150) {
