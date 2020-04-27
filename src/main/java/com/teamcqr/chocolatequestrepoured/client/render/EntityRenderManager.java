@@ -132,7 +132,8 @@ public class EntityRenderManager {
 			BlockPos pos1 = result1.getBlockPos();
 			BlockPos pos2 = result2.getBlockPos();
 			int maxDiff = CQRConfig.advanced.skipHiddenEntityRenderingDiff;
-			return Math.abs(pos1.getX() - pos2.getX()) <= maxDiff && Math.abs(pos1.getY() - pos2.getY()) <= maxDiff && Math.abs(pos1.getZ() - pos2.getZ()) <= maxDiff;
+			return pos1.distanceSq(pos2) <= maxDiff * maxDiff;
+			// return Math.abs(pos1.getX() - pos2.getX()) <= maxDiff && Math.abs(pos1.getY() - pos2.getY()) <= maxDiff && Math.abs(pos1.getZ() - pos2.getZ()) <= maxDiff;
 		}
 		return true;
 	}

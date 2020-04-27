@@ -82,13 +82,13 @@ public class CQRConfig {
 		@Config.Comment("Only render the nearest 'limitEntityRenderingCount' amount of CQR entities. Bosses will be rendered normally.")
 		public boolean limitEntityRendering = false;
 		@Config.Comment("The maximum amount of entities that get rendered.")
-		@Config.RangeInt(min = 8, max = 128)
+		@Config.RangeInt(min = 8, max = 256)
 		public int limitEntityRenderingCount = 64;
 		@Config.Comment("Skip rendering of entities that are visible/not behind blocks. Bosses will be rendered normally. This probably will cause issues where a mob should be render but it won't.")
-		public boolean skipHiddenEntityRendering = false;
+		public boolean skipHiddenEntityRendering = true;
 		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the block positions that were hit and only renders the entity when the difference on each axis is lower than this setting.")
-		@Config.RangeInt(min = 0, max = 128)
-		public int skipHiddenEntityRenderingDiff = 8;
+		@Config.RangeInt(min = 0, max = 256)
+		public int skipHiddenEntityRenderingDiff = 16;
 	}
 
 	public static class General {
