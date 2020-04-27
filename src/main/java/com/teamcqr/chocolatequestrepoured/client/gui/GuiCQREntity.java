@@ -54,6 +54,15 @@ public class GuiCQREntity extends GuiContainer {
 		this.buttonList.add(this.sliderDropChanceFeet);
 		this.buttonList.add(this.sliderDropChanceMainhand);
 		this.buttonList.add(this.sliderDropChanceOffhand);
+		if (!this.mc.player.isCreative()) {
+			this.sliderHealthScaling.enabled = false;
+			this.sliderDropChanceHelm.enabled = false;
+			this.sliderDropChanceChest.enabled = false;
+			this.sliderDropChanceLegs.enabled = false;
+			this.sliderDropChanceFeet.enabled = false;
+			this.sliderDropChanceMainhand.enabled = false;
+			this.sliderDropChanceOffhand.enabled = false;
+		}
 		this.buttonList.add(this.sliderSizeScaling);
 	}
 
