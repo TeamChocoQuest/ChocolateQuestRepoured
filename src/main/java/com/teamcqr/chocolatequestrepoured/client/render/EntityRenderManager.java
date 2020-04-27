@@ -52,7 +52,7 @@ public class EntityRenderManager {
 		try {
 			if (renderInfos == null) {
 				try {
-					renderInfos = RenderGlobal.class.getDeclaredField("TODO");
+					renderInfos = RenderGlobal.class.getDeclaredField("field_72755_R");
 				} catch (NoSuchFieldException e) {
 					renderInfos = RenderGlobal.class.getDeclaredField("renderInfos");
 				}
@@ -61,7 +61,7 @@ public class EntityRenderManager {
 			if (renderChunk == null) {
 				Class clazz = Class.forName("net.minecraft.client.renderer.RenderGlobal$ContainerLocalRenderInformation");
 				try {
-					renderChunk = clazz.getDeclaredField("TODO");
+					renderChunk = clazz.getDeclaredField("field_178036_a");
 				} catch (NoSuchFieldException e) {
 					renderChunk = clazz.getDeclaredField("renderChunk");
 				}
@@ -129,7 +129,10 @@ public class EntityRenderManager {
 			if (result2 == null) {
 				return true;
 			}
-			return result1.getBlockPos().equals(result2.getBlockPos());
+			BlockPos pos1 = result1.getBlockPos();
+			BlockPos pos2 = result2.getBlockPos();
+			int maxDiff = CQRConfig.advanced.skipHiddenEntityRenderingDiff;
+			return Math.abs(pos1.getX() - pos2.getX()) <= maxDiff && Math.abs(pos1.getY() - pos2.getY()) <= maxDiff && Math.abs(pos1.getZ() - pos2.getZ()) <= maxDiff;
 		}
 		return true;
 	}
