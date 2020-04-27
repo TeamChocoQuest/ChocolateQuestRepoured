@@ -26,6 +26,7 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHugeMushroom;
+import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -48,8 +49,9 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private List<BlockPos> chests = new ArrayList<>();
 	private Set<BlockPos> ceilingBlocks = new HashSet<>();
 	private Set<BlockPos> giantMushrooms = new HashSet<>();
+	private Map<BlockPos, Integer> heightMap = new ConcurrentHashMap<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
-	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<BlockPos, ExtendedBlockStatePart.ExtendedBlockState>();
+	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<>();
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
@@ -83,6 +85,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		// Filter floorblocks
 		filterFloorBlocks();
+		//Filter ceiling blocks
+		if(dungeon.placeVines()) {
+			filterCeilingBlocks();
+		}
 
 		// Flowers, Mushrooms and Weed
 		if (this.dungeon.placeVegetation()) {
@@ -90,7 +96,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		//Vines
 		if(this.dungeon.placeVines()) {
-			
+			createVines(random);
 		}
 
 		// Build
@@ -231,7 +237,15 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				for (int iY = blob[0].length -1; iY >= 1; iY--) {
 					if (blob[iX][iY-1][iZ] != null && blob[iX][iY][iZ] == null) {
 						//blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
-						ceilingBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius -1, iZ - radius)));
+						BlockPos p = blobCenter.add(new BlockPos(iX - radius, iY - radius -1, iZ - radius));
+						ceilingBlocks.add(p);
+						int height = 0;
+						int yTmp = iY -1;
+						while(blob[iX][yTmp][iZ] != null && yTmp >= 0) {
+							yTmp--;
+							height++;
+						}
+						this.heightMap.put(p, new Integer(height));
 						break;
 					}
 				}
@@ -264,6 +278,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 					if (blob[iX][iY][iZ] != null && blob[iX][iY - 1][iZ] == null) {
 						blob[iX][iY][iZ] = dungeon.getFloorBlock(random);
 						floorBlocks.add(blobCenter.add(new BlockPos(iX - radius, iY - radius, iZ - radius)));
+						break;
 					}
 				}
 			}
@@ -340,6 +355,23 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			}
 		});
 	}
+	
+	private void filterCeilingBlocks() {
+		this.ceilingBlocks.removeIf(new Predicate<BlockPos>() {
+
+			@Override
+			public boolean test(BlockPos arg0) {
+				BlockPos upper = arg0.up();
+				if(blocks.containsKey(upper)) {
+					blocks.put(arg0, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
+					heightMap.remove(arg0);
+					return true;
+				}
+				return false;
+			}
+			
+		});
+	}
 
 	private void createVegetation(Random random) {
 		for (BlockPos floorPos : this.floorBlocks) {
@@ -347,12 +379,16 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 			IBlockState state = null;
 			if (number >= 295) {
 				// Giant mushroom
+				boolean flag = true;
 				for (BlockPos shroom : giantMushrooms) {
-					if (shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 8) {
-						continue;
+					if (shroom.getDistance(floorPos.getX(), floorPos.getY(), floorPos.getZ()) < 5) {
+						flag = false;
+						break;
 					}
 				}
-				giantMushrooms.add(floorPos.up());
+				if(flag) {
+					giantMushrooms.add(floorPos.up());
+				}
 			} else if (number >= 290) {
 				// Lantern
 				state = dungeon.getPumpkinBlock().getDefaultState();
@@ -377,6 +413,68 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		//System.out.println("Floor blocks: " + floorBlocks.size());
 		//System.out.println("Giant mushrooms: " + giantMushrooms.size());
+	}
+	
+	private void createVines(Random random) {
+		for(BlockPos vineStart : this.ceilingBlocks) {
+			if(random.nextInt(300) >= 280) {
+				int vineLength = this.heightMap.get(vineStart);
+				vineLength /= 3;
+				BlockPos vN = vineStart.north();
+				BlockPos vE = vineStart.east();
+				BlockPos vS = vineStart.south();
+				BlockPos vW = vineStart.west();
+				if(this.dungeon.isVineShapeCross()) {
+					this.blocks.put(vineStart, new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+					this.blocks.put(vN.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+					this.blocks.put(vE.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+					this.blocks.put(vS.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+					this.blocks.put(vW.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
+				}
+				boolean firstFlag = true;
+				ExtendedBlockState airState = new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null);
+				ExtendedBlockState upState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.UP,  true), null) : null;
+				ExtendedBlockState sState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true), null) : null;
+				ExtendedBlockState wState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true), null) : null;
+				ExtendedBlockState nState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.SOUTH, true), null) : null;
+				ExtendedBlockState eState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true), null) : null;
+				while(vineLength >= 0) {
+					if(this.dungeon.isVineShapeCross()) {
+						if(firstFlag) {
+							this.blocks.put(vN, upState);
+							this.blocks.put(vE, upState);
+							this.blocks.put(vS, upState);
+							this.blocks.put(vW, upState);
+							firstFlag = false;
+						} else {
+							this.blocks.put(vN, nState);
+							this.blocks.put(vE, eState);
+							this.blocks.put(vS, sState);
+							this.blocks.put(vW, wState);
+						}
+						vN = vN.down();
+						vE = vE.down();
+						vS = vS.down();
+						vW = vW.down();
+						if(this.blocks.getOrDefault(vN, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vE, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vS, airState).getState().getBlock() != this.dungeon.getAirBlock() ||
+								this.blocks.getOrDefault(vW, airState).getState().getBlock() != this.dungeon.getAirBlock()
+							) 
+						{
+							break;
+						}
+					} else {
+						this.blocks.put(vineStart, new ExtendedBlockState(this.dungeon.getVineBlock().getDefaultState(), null));
+						if(this.blocks.getOrDefault(vineStart, airState).getState().getBlock() != this.dungeon.getAirBlock()) {
+							break;
+						}
+						vineStart = vineStart.down();
+					}
+					vineLength--;
+				}
+			}
+		}
 	}
 
 	private void generateGiantMushroom(BlockPos position, Random rand, Map<BlockPos, ExtendedBlockState> stateMap) {
