@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandler;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
 import com.teamcqr.chocolatequestrepoured.client.init.ESpeechBubble;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
@@ -518,6 +519,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				float f2 = MathHelper.sin(f);
 				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX + (double) f1 * (double) this.width, this.posY + (double) this.height, this.posZ + (double) f2 * (double) this.width, red, green, blue);
 				this.world.spawnParticle(EnumParticleTypes.SPELL_MOB, this.posX - (double) f1 * (double) this.width, this.posY + (double) this.height, this.posZ - (double) f2 * (double) this.width, red, green, blue);
+			}
+			if (this.isChatting() && this.ticksExisted % LayerCQRSpeechbubble.CHANGE_BUBBLE_INTERVAL == 0) {
+				this.chooseNewRandomSpeechBubble();
 			}
 		}
 	}

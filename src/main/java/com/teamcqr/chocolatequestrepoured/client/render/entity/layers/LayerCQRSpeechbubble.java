@@ -13,11 +13,10 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 
-	private static final int CHANGE_BUBBLE_INTERVAL = 50;
+	public static final int CHANGE_BUBBLE_INTERVAL = 80;
 
 	public LayerCQRSpeechbubble(RenderCQREntity<?> livingEntityRendererIn) {
 		super(livingEntityRendererIn);
-		// System.out.println("NEW INSTANCE");
 	}
 
 	@Override
@@ -28,18 +27,10 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(netHeadYaw, 0.0F, 1.0F, 0.0F);
-			//TODO : This does not really line up with scaling mob size
-			GlStateManager.translate(-0.5, - 1.5F * entity.height, 0);
+			// DONE : This does not really line up with scaling mob size
+			GlStateManager.translate(-0.5D, (-1.15D * (double) entity.height) / entity.getSizeVariation(), 0.0D);
 
-			// System.out.println("Entity age: " + ageInTicks);
-			if (Math.floor(ageInTicks) % CHANGE_BUBBLE_INTERVAL == 0) {
-				// currentBubble = ESpeechBubble.getRandom(entity.getRNG());
-				entity.chooseNewRandomSpeechBubble();
-				// System.out.println("Bubble: " + currentBubble.name());
-			}
-
-			// minecraft.renderEngine.bindTexture(currentBubble.getResourceLocation());
-			minecraft.renderEngine.bindTexture(entity.getCurrentSpeechBubble().getResourceLocation());
+			minecraft.getTextureManager().bindTexture(entity.getCurrentSpeechBubble().getResourceLocation());
 
 			BufferBuilder buffer = tessellator.getBuffer();
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
