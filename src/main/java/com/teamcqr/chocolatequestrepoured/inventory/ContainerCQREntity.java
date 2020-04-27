@@ -165,7 +165,7 @@ public class ContainerCQREntity extends Container {
 		this.addSlotToContainer(new SlotItemHandler(extraInventory, 1, 107, 26) {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
-				return stack.getItem() instanceof ItemBadge;
+				return playerInv.player.isCreative() && stack.getItem() instanceof ItemBadge;
 			}
 
 			@Override
