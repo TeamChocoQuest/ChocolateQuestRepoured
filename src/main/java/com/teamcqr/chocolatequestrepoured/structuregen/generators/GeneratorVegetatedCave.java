@@ -52,6 +52,8 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	private Map<BlockPos, Integer> heightMap = new ConcurrentHashMap<>();
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> blocks = new ConcurrentHashMap<>();
+	private Block[][][] centralCaveBlocks;
+	private CQStructure core = null;
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(DungeonVegetatedCave dungeon) {
@@ -68,6 +70,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), (int) (dungeon.getCentralCaveSize() * 0.75), random);
+		this.centralCaveBlocks = blocks;
 		if(dungeon.placeVines()) {
 			this.ceilingBlocks.addAll(getCeilingBlocksOfBlob(blocks, new BlockPos(x,y,z), random));
 		}
@@ -106,23 +109,50 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		if (dungeon.placeBuilding()) {
-			BlockPos pastePos = new BlockPos(x, y, z);
 			File file = dungeon.getRandomCentralBuilding();
 			if (file != null) {
 				CQStructure structure = new CQStructure(file);
 				structure.setDungeonMob(this.mobtype);
-				// TODO: Support platform
-				PlacementSettings settings = new PlacementSettings();
-				settings.setMirror(Mirror.NONE);
-				settings.setRotation(Rotation.NONE);
-				settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-				settings.setIntegrity(1.0F);
-				for (List<? extends IStructure> list : structure.addBlocksToWorld(world, pastePos, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
-					lists.add(list);
-				}
+				this.core = structure;
 			}
 		}
 		// DONE: Paste the building
+	}
+	
+	private int getLowestY(Block[][][] blocks, int rX, int rZ, int origY) {
+		int y = 255;
+		
+		int cX = blocks.length /2;
+		int radX = rX < cX ? rX : cX;
+		if(cX + radX >= blocks.length) {
+			radX = blocks.length - cX;
+		}
+		int cZ = blocks[0][0].length /2;
+		int radZ = rZ < cZ ? rZ : cZ;
+		if(cZ + radZ >= blocks.length) {
+			radZ = blocks.length - cZ;
+		}
+		
+		for(int iX = cX - radX; iX <= cX + radX; iX++) {
+			for(int iZ = cZ - radZ; iZ <= cZ + radZ; iZ++) {
+				if(iX < 0 || iX >= blocks.length || iZ < 0 || iZ >= blocks[0][0].length) {
+					continue;
+				}
+				for(int iY = 0; iY < blocks[iX].length; iY++) {
+					if(blocks[iX][iY][iZ] != null) {
+						if(y > iY) {
+							y = iY;
+						}
+						break;
+					}
+				}
+			}
+		}
+		
+		int radius = blocks.length / 2;
+		y -= radius;
+		y += origY;
+		return y;
 	}
 
 	@Override
@@ -198,7 +228,20 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 
 	@Override
 	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// UNUSED
+		//Well we need to place teh building now to avoid that it gets overrun by mushrooms
+		if(this.core != null) {
+			int pY = getLowestY(centralCaveBlocks, this.core.getSize().getX() /2, this.core.getSize().getZ() /2, y);
+			BlockPos pastePos = new BlockPos(x, pY, z);
+			// DONE: Support platform -> not needed
+			PlacementSettings settings = new PlacementSettings();
+			settings.setMirror(Mirror.NONE);
+			settings.setRotation(Rotation.NONE);
+			settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
+			settings.setIntegrity(1.0F);
+			for (List<? extends IStructure> list : this.core.addBlocksToWorld(world, pastePos, settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+				lists.add(list);
+			}
+		}
 	}
 
 	@Override
