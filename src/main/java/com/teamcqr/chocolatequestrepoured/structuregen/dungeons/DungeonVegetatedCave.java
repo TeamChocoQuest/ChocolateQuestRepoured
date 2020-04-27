@@ -9,6 +9,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockVine;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,6 +17,7 @@ import net.minecraft.world.World;
 public class DungeonVegetatedCave extends DungeonBase {
 	
 	private Block vineBlock;
+	private Block vineLatchBlock;
 	private Block airBlock;
 	private Block pumpkinBlock;
 	private Block[] flowerBlocks;
@@ -30,6 +32,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int posY = 30;
 	private int[] chestIDs;
 	private boolean placeVines;
+	private boolean crossVine;
 	private boolean placeVegetation;
 	private boolean placeBuilding;
 	private File buildingFolder;
@@ -37,6 +40,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
 		this.vineBlock = PropertyFileHelper.getBlockProperty(prop, "vineBlock", Blocks.VINE);
+		//DONE: Add a non-cross-shape vine thing
+		this.crossVine = (this.vineBlock instanceof BlockVine);
 		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airBlock", Blocks.AIR);
 		this.pumpkinBlock = PropertyFileHelper.getBlockProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN);
 		this.flowerBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "flowerBlocks", new Block[] {
@@ -62,6 +67,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.tunnelCountMin = PropertyFileHelper.getIntProperty(prop, "tunnelCountMin", 3);
 		this.tunnelCountMax = PropertyFileHelper.getIntProperty(prop, "tunnelCountMax", 5);
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
+		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
 	}
@@ -104,6 +110,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 		return placeBuilding;
 	}
 	
+	public boolean isVineShapeCross() {
+		return this.crossVine;
+	}
+	
 	public boolean placeVines() {
 		return placeVines;
 	}
@@ -114,6 +124,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 
 	public Block getPumpkinBlock() {
 		return pumpkinBlock;
+	}
+	
+	public Block getVineLatchBlock() {
+		return vineLatchBlock;
 	}
 	
 	public int getCentralCaveSize() {
