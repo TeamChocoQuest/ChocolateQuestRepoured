@@ -50,10 +50,10 @@ public class StrongholdFloor {
 		this.currentDirection = prevFloorExitDir;
 		
 		int roomCount = this.sideLength * this.sideLength;
-		System.out.println("Room Count: " + (roomCount));
+		//System.out.println("Room Count: " + (roomCount));
 		roomCount --;
 		
-		System.out.println("Beginning gen...");
+		//System.out.println("Beginning gen...");
 		while(roomCount > 0) {
 			roomCoord = getNextRoomCoordinates(roomCoord.getFirst(), roomCoord.getSecond(), this.currentDirection);
 			//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
@@ -76,7 +76,7 @@ public class StrongholdFloor {
 				if(slCounter <= 0) {
 					sideLengthTemp += reversed ? -2 : 2;
 					slCounter = (sideLengthTemp * 4) -4;
-					System.out.println("sidelength: " + sideLengthTemp);
+					//System.out.println("sidelength: " + sideLengthTemp);
 					if(reversed) {
 						slCounter--;
 					}
