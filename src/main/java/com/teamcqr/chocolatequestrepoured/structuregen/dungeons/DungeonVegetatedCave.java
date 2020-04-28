@@ -37,6 +37,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private boolean crossVine;
 	private boolean placeVegetation;
 	private boolean placeBuilding;
+	private boolean skipCeilingFiltering = false;
 	private File buildingFolder;
 	
 	public DungeonVegetatedCave(String name, Properties prop) {
@@ -74,6 +75,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
+		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 
 	@Override
@@ -120,6 +122,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public boolean placeVines() {
 		return placeVines;
+	}
+	
+	public boolean skipCeilingFiltering() {
+		return this.skipCeilingFiltering;
 	}
 
 	public Block getAirBlock() {
