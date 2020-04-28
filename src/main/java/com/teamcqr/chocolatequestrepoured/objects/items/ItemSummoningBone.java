@@ -115,7 +115,6 @@ public class ItemSummoningBone extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		NBTTagCompound tc = stack.getTagCompound();
 		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
 			try {
 				NBTTagCompound tag = stack.getTagCompound();//.getCompoundTag("tag");
