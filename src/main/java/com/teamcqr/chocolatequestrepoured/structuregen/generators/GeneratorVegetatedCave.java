@@ -89,7 +89,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		filterFloorBlocks();
 		//Filter ceiling blocks
 		if(dungeon.placeVines()) {
-			filterCeilingBlocks();
+			filterCeilingBlocks(world);
 		}
 
 		// Flowers, Mushrooms and Weed
@@ -328,7 +328,6 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		return floorBlocks;
 	}
 
-	@SuppressWarnings("unused")
 	private Block[][][] getRandomBlob(Block block, int radius, Random random) {
 		return getRandomBlob(block, radius, radius, random);
 	}
@@ -398,7 +397,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		});
 	}
 	
-	private void filterCeilingBlocks() {
+	private void filterCeilingBlocks(World world) {
 		this.ceilingBlocks.removeIf(new Predicate<BlockPos>() {
 
 			@Override
@@ -408,6 +407,9 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 					blocks.put(arg0, new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null));
 					heightMap.remove(arg0);
 					return true;
+				}
+				if(!dungeon.skipCeilingFiltering()) {
+					return world.getHeight(arg0.getX(), arg0.getZ()) <= arg0.getY() || world.getHeight(arg0).getY() <= arg0.getY() || world.canBlockSeeSky(arg0);
 				}
 				return false;
 			}
@@ -468,12 +470,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				BlockPos vW = vineStart.west();
 				if(this.dungeon.isVineShapeCross()) {
 					this.blocks.put(vineStart, new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
-					this.blocks.put(vN.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
-					this.blocks.put(vE.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
-					this.blocks.put(vS.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
-					this.blocks.put(vW.up(), new ExtendedBlockState(this.dungeon.getVineLatchBlock().getDefaultState(), null));
 				}
-				boolean firstFlag = true;
 				ExtendedBlockState airState = new ExtendedBlockState(dungeon.getAirBlock().getDefaultState(), null);
 				ExtendedBlockState sState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true), null) : null;
 				ExtendedBlockState wState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true), null) : null;
@@ -481,18 +478,10 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 				ExtendedBlockState eState = dungeon.isVineShapeCross() ? new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true), null) : null;
 				while(vineLength >= 0) {
 					if(this.dungeon.isVineShapeCross()) {
-						if(firstFlag) {
-							this.blocks.put(vS, new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.NORTH, true).withProperty(BlockVine.UP, true), null));
-							this.blocks.put(vE, new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.WEST, true).withProperty(BlockVine.UP, true), null));
-							this.blocks.put(vN, new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.SOUTH, true).withProperty(BlockVine.UP, true), null));
-							this.blocks.put(vW, new ExtendedBlockState(dungeon.getVineBlock().getDefaultState().withProperty(BlockVine.EAST, true).withProperty(BlockVine.UP, true), null));
-							firstFlag = false;
-						} else {
-							this.blocks.put(vN, nState);
-							this.blocks.put(vE, eState);
-							this.blocks.put(vS, sState);
-							this.blocks.put(vW, wState);
-						}
+						this.blocks.put(vN, nState);
+						this.blocks.put(vE, eState);
+						this.blocks.put(vS, sState);
+						this.blocks.put(vW, wState);
 						vN = vN.down();
 						vE = vE.down();
 						vS = vS.down();
