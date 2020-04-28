@@ -460,7 +460,7 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 	
 	private void createVines(Random random) {
 		for(BlockPos vineStart : this.ceilingBlocks) {
-			if(random.nextInt(300) >= 280) {
+			if(random.nextInt(300) >= (300 - dungeon.getVineChance())) {
 				int vineLength = this.heightMap.get(vineStart);
 				vineLength = new Double(vineLength / this.dungeon.getVineLengthModifier()).intValue();
 				BlockPos vN = vineStart.north();
