@@ -5,14 +5,17 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.world.World;
 
-public abstract class AbstractCQREntityAI extends EntityAIBase {
+public abstract class AbstractCQREntityAI<T extends AbstractEntityCQR> extends EntityAIBase {
 
-	protected final AbstractEntityCQR entity;
 	protected final Random random = new Random();
+	protected final T entity;
+	protected final World world;
 
-	public AbstractCQREntityAI(AbstractEntityCQR entity) {
+	public AbstractCQREntityAI(T entity) {
 		this.entity = entity;
+		this.world = entity.world;
 	}
 
 }

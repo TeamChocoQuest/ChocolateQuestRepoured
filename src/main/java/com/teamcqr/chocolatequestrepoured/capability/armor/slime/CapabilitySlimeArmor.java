@@ -25,7 +25,7 @@ public class CapabilitySlimeArmor extends CapabilitySpecialArmor {
 
 		if (!this.onCooldown()) {
 			if (!entity.world.isRemote) {
-				EntitySlimePart slime = new EntitySlimePart(entity.world, entity, 1.0F);
+				EntitySlimePart slime = new EntitySlimePart(entity.world, entity);
 				slime.posX = entity.posX + 4.0D * entity.world.rand.nextDouble() - 2.0D;
 				slime.posY = entity.posY + 0.5D * entity.world.rand.nextDouble();
 				slime.posZ = entity.posZ + 4.0D * entity.world.rand.nextDouble() - 2.0D;
