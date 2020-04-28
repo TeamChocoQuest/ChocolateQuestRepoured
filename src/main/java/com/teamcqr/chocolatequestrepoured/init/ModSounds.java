@@ -25,7 +25,9 @@ public class ModSounds {
 	public static final SoundEvent NETHER_DRAGON_HURT = Null();
 	@ObjectHolder("entity.nether_dragon.death")
 	public static final SoundEvent NETHER_DRAGON_DEATH = Null();
-
+	@ObjectHolder("entity.bubble.bubble")
+	public static final SoundEvent BUBBLE_BUBBLE= Null();
+	
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class SoundRegistrationHandler {
 
@@ -36,7 +38,9 @@ public class ModSounds {
 					createSoundEvent("item.magic"),
 					createSoundEvent("entity.player.classic_hurt"),
 					createSoundEvent("entity.nether_dragon.hurt"),
-					createSoundEvent("entity.nether_dragon.death") };
+					createSoundEvent("entity.nether_dragon.death"),
+					createSoundEvent("entity.bubble.bubble")
+				};
 
 			IForgeRegistry<SoundEvent> registry = event.getRegistry();
 
