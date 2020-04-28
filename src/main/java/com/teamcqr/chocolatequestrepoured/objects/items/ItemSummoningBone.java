@@ -70,9 +70,9 @@ public class ItemSummoningBone extends Item {
 				//DONE: Spawn circle
 				ResourceLocation resLoc = new ResourceLocation(Reference.MODID, "skeleton");
 				//Get entity id
-				if(item.hasTagCompound() && item.getTagCompound().hasKey("tag")) {
+				if(item.hasTagCompound() && item.getTagCompound().hasKey("entity_to_summon")) {
 					try {
-						NBTTagCompound tag = item.getTagCompound().getCompoundTag("tag");
+						NBTTagCompound tag = item.getTagCompound();//.getCompoundTag("tag");
 						resLoc = new ResourceLocation(tag.getString("entity_to_summon"));
 						if(!EntityList.isRegistered(resLoc)) {
 							resLoc = new ResourceLocation(Reference.MODID, "skeleton");
@@ -116,9 +116,9 @@ public class ItemSummoningBone extends Item {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		NBTTagCompound tc = stack.getTagCompound();
-		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("tag")) {
+		if(stack.hasTagCompound() && stack.getTagCompound().hasKey("entity_to_summon")) {
 			try {
-				NBTTagCompound tag = stack.getTagCompound().getCompoundTag("tag");
+				NBTTagCompound tag = stack.getTagCompound();//.getCompoundTag("tag");
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + " " + this.getEntityName(tag.getString("entity_to_summon")));
 			} catch(Exception ex) {
 				tooltip.add(TextFormatting.BLUE + I18n.format("description.cursed_bone.name") + "missingNo");
