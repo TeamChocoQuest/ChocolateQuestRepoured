@@ -59,7 +59,7 @@ public class StrongholdFloor {
 			//System.out.println("X: " + roomCoord.getFirst() + "    Z: " + roomCoord.getSecond() + "        Room: " + ((this.sideLength * this.sideLength) - roomCount));
 			roomCount--;
 			slCounter--;
-			System.out.println("sl: " + slCounter);
+			//System.out.println("sl: " + slCounter);
 			
 			if(roomCount == 0) {
 				//DONE: Handle stair or boss room
@@ -204,7 +204,7 @@ public class StrongholdFloor {
 		Tuple<Integer, Integer> coords = gridPosToArrayIndices(new Tuple<>(gpX, gpZ));
 		lastX = gpX;
 		lastZ = gpZ;
-		System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
+		//System.out.println("X: " + gpX + "    Z: " + gpZ + "        Room: " + type.toString());
 		this.roomPattern[coords.getFirst()][coords.getSecond()] = type;
 	}
 	
