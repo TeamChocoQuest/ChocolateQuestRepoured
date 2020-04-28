@@ -132,8 +132,9 @@ public class CQRConfig {
 		public int factionUpdateRadius = 100;
 		@Config.RangeInt(min = 0, max = 128)
 		public int alertRadius = 20;
-		@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double bossHealthMultiplierPerPlayer = 0.1D;
+		@Config.Comment("For every player after the first bosses will receive x percent less damage. bossDamageReduction = (1.0 - x) ^ (playerCount - 1)")
+		@Config.RangeDouble(min = 0.0D, max = 0.5D)
+		public double bossDamageReductionPerPlayer = 0.25D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityModalValue = 0.25D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)

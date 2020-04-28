@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.bases;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -24,10 +27,14 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		if (this.bossInfoServer.getPlayers().size() > 1) {
-			for (int i = 0; i < this.bossInfoServer.getPlayers().size() - 1; i++) {
-				amount *= 0.95F;
+		int nearbyPlayerCount = 0;
+		for (EntityPlayer player : this.world.playerEntities) {
+			if (this.getDistanceSq(player) < 100.0D * 100.0D) {
+				nearbyPlayerCount++;
 			}
+		}
+		for (int i = 0; i < nearbyPlayerCount - 1; i++) {
+			amount *= 1.0F - CQRConfig.mobs.bossDamageReductionPerPlayer;
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
