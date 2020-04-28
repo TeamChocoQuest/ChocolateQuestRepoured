@@ -30,6 +30,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int tunnelStartSize = 8;
 	private int caveSegmentCount = 8;
 	private int posY = 30;
+	private int vineChance = 20;
 	private int[] chestIDs;
 	private double vineLengthModifier = 2;
 	private boolean placeVines;
@@ -60,6 +61,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 			Blocks.AIR,
 		});
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
+		this.vineChance = PropertyFileHelper.getIntProperty(prop, "vineChance", 20);
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
 		this.placeBuilding = PropertyFileHelper.getBooleanProperty(prop, "placeBuilding", true);
@@ -154,6 +156,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public double getVineLengthModifier() {
 		return this.vineLengthModifier;
+	}
+
+	public int getVineChance() {
+		return this.vineChance;
 	}
 
 }
