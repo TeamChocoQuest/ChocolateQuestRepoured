@@ -31,7 +31,6 @@ public class WeightedItemStack {
 	private int weight;
 	private boolean enchant = false;
 	private boolean treasure;
-	@SuppressWarnings("unused")
 	private int damage;
 	private int minLvl;
 	private int maxLvl;
