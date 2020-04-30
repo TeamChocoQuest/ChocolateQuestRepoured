@@ -22,10 +22,15 @@ import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.RandomValueRange;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
@@ -127,9 +132,23 @@ public class LootTableLoader {
 
 				List<WeightedItemStack> items = getItemList(properties);
 
-				for (int i = 0; i < items.size(); i++) {
+				/*for (int i = 0; i < items.size(); i++) {
 					items.get(i).addToTable(lootTable, i);
+				}*/
+				
+				LootEntry[] entries = new LootEntry[items.size()];
+				for(int i = 0; i < items.size(); i++) {
+					entries[i] = items.get(i).getAsLootEntry(i);
 				}
+				
+				lootTable.addPool(
+						new LootPool(entries, new LootCondition[] {}, new RandomValueRange(
+									Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest),
+									Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())
+								), 
+								new RandomValueRange(0),
+								name.getResourceDomain() + "_pool")
+						);
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
 			} finally {
