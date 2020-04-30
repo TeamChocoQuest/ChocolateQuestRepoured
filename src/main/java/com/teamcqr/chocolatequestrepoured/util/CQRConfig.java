@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.util;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -103,8 +102,12 @@ public class CQRConfig {
 		public int dungeonSpawnDistance = 25;
 		@Config.Comment("Enable/Disable dungeon generation in super flat worlds.")
 		public boolean dungeonsInFlat = false;
-		@Config.RangeInt(min = 1, max = 10)
-		public int maxLootTablePoolRolls = 1;
+		@Config.Comment("Setting this to true allows you to set min and max items per chest")
+		public boolean singleLootPoolPerLootTable = true;
+		@Config.RangeInt(min = 0, max = 27)
+		public int minItemsPerLootChest = 6;
+		@Config.RangeInt(min = 1, max = 27)
+		public int maxItemsPerLootChest = 12;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
@@ -132,8 +135,9 @@ public class CQRConfig {
 		public int factionUpdateRadius = 100;
 		@Config.RangeInt(min = 0, max = 128)
 		public int alertRadius = 20;
-		@Config.RangeDouble(min = 0.0D, max = 1.0D)
-		public double bossHealthMultiplierPerPlayer = 0.1D;
+		@Config.Comment("For every player after the first bosses will receive x percent less damage. bossDamageReduction = (1.0 - x) ^ (playerCount - 1)")
+		@Config.RangeDouble(min = 0.0D, max = 0.5D)
+		public double bossDamageReductionPerPlayer = 0.25D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityModalValue = 0.25D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)

@@ -12,6 +12,7 @@ import net.minecraft.dispenser.IPosition;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 
 public class ModDispenseBehaviors {
@@ -63,6 +64,9 @@ public class ModDispenseBehaviors {
 			bubble.motionZ = v.z;
 			bubble.velocityChanged = true;
 			source.getWorld().spawnEntity(bubble);
+			
+			source.getWorld().playSound(disPos.getX(), disPos.getY(), disPos.getZ(), ModSounds.BUBBLE_BUBBLE, SoundCategory.BLOCKS, 1, 0.75F + (0.5F* rng.nextFloat()), false);
+			
 			//DONE: FIgure out how to make the stack damaged
 			stack.attemptDamageItem(1, source.getWorld().rand, null);
 			if(stack.getItemDamage() >= stack.getMaxDamage()) {
