@@ -34,9 +34,7 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraftforge.common.ForgeHooks;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class LootTableLoader {
 
@@ -118,7 +116,8 @@ public class LootTableLoader {
 				if (lootTable != null) {
 					lootTable.freeze();
 				}
-			} catch (IOException | JsonSyntaxException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InstantiationException | InvocationTargetException e) {
+			} catch (IOException | JsonSyntaxException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InstantiationException
+					| InvocationTargetException e) {
 				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
 			} finally {
 				IOUtils.closeQuietly(inputStream);
@@ -132,23 +131,19 @@ public class LootTableLoader {
 
 				List<WeightedItemStack> items = getItemList(properties);
 
-				for (int i = 0; i < items.size(); i++) {
-					lootTable.addPool(items.get(i).getAsSingleLootPool(i));
+				if (CQRConfig.general.singleLootPoolPerLootTable) {
+					LootEntry[] entries = new LootEntry[items.size()];
+					for (int i = 0; i < items.size(); i++) {
+						entries[i] = items.get(i).getAsLootEntry(i);
+					}
+
+					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(
+							CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getResourceDomain() + "_pool"));
+				} else {
+					for (int i = 0; i < items.size(); i++) {
+						lootTable.addPool(items.get(i).getAsSingleLootPool(i));
+					}
 				}
-				
-				/*LootEntry[] entries = new LootEntry[items.size()];
-				for(int i = 0; i < items.size(); i++) {
-					entries[i] = items.get(i).getAsLootEntry(i);
-				}
-				
-				lootTable.addPool(
-						new LootPool(entries, new LootCondition[] {}, new RandomValueRange(
-									Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest),
-									Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())
-								), 
-								new RandomValueRange(0),
-								name.getResourceDomain() + "_pool")
-						);*/
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
 			} finally {
@@ -157,6 +152,7 @@ public class LootTableLoader {
 		}
 
 		return lootTable;
+
 	}
 
 	private static ThreadLocal<Deque> getLootContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
@@ -165,8 +161,7 @@ public class LootTableLoader {
 		return (ThreadLocal<Deque>) f.get(null);
 	}
 
-	private static Object createLootTableContext(ResourceLocation name)
-			throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	private static Object createLootTableContext(ResourceLocation name) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
 		c.setAccessible(true);
 		return c.newInstance(name, true);

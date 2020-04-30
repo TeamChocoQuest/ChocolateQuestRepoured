@@ -102,12 +102,12 @@ public class CQRConfig {
 		public int dungeonSpawnDistance = 25;
 		@Config.Comment("Enable/Disable dungeon generation in super flat worlds.")
 		public boolean dungeonsInFlat = false;
-		@Config.RangeInt(min = 1, max = 10)
-		public int maxLootTablePoolRolls = 1;
+		@Config.Comment("Setting this to true allows you to set min and max items per chest")
+		public boolean singleLootPoolPerLootTable = true;
 		@Config.RangeInt(min = 0, max = 27)
-		public int minItemsPerLootChest = 0;
+		public int minItemsPerLootChest = 6;
 		@Config.RangeInt(min = 1, max = 27)
-		public int maxItemsPerLootChest = 18;
+		public int maxItemsPerLootChest = 12;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;

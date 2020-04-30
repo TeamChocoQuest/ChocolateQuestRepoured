@@ -2,11 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.lootchests;
 
 import java.util.ArrayList;
 
-import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-
 import net.minecraft.item.Item;
 import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryEmpty;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.RandomValueRange;
@@ -54,8 +51,8 @@ public class WeightedItemStack {
 		LootCondition condition = new RandomChance(new Float(this.weight) / 100F);
 		LootCondition[] conditionA = new LootCondition[] { condition };
 
-		LootCondition condition2 = new RandomChance(1F - (new Float(this.weight) / 100F));
-		LootCondition[] conditionB = new LootCondition[] { condition2 };
+		//LootCondition condition2 = new RandomChance(1F - (new Float(this.weight) / 100F));
+		//LootCondition[] conditionB = new LootCondition[] { condition2 };
 
 		LootCondition condition3 = new RandomChance(1F);
 		LootCondition[] conditionC = new LootCondition[] { condition3 };
