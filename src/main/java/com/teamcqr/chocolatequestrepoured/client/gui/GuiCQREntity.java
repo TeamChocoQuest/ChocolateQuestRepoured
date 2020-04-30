@@ -62,6 +62,7 @@ public class GuiCQREntity extends GuiContainer {
 			this.sliderDropChanceFeet.enabled = false;
 			this.sliderDropChanceMainhand.enabled = false;
 			this.sliderDropChanceOffhand.enabled = false;
+			this.sliderSizeScaling.enabled = false;
 		}
 		this.buttonList.add(this.sliderSizeScaling);
 	}
