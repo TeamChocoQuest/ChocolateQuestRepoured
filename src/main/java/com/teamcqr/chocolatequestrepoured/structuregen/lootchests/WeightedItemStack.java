@@ -73,12 +73,12 @@ public class WeightedItemStack {
 			functions.add(new SetMetadata(null, new RandomValueRange(damage)));
 		}
 
-		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);
-		LootEntry entryEmpty = new LootEntryEmpty(100 - this.weight, 0, conditionB, "entry_empty");
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionC, "entry_" + indx + this.itemName);
+		//LootEntry entryEmpty = new LootEntryEmpty(100 - this.weight, 0, conditionB, "entry_empty");
 
-		LootEntry[] entryA = new LootEntry[] { entry, entryEmpty };
+		LootEntry[] entryA = new LootEntry[] { entry/*, entryEmpty */};
 
-		LootPool pool = new LootPool(entryA, conditionC, new RandomValueRange(1), new RandomValueRange(CQRConfig.general.maxLootTablePoolRolls), "item_" + indx);
+		LootPool pool = new LootPool(entryA, conditionA, new RandomValueRange(1), new RandomValueRange(0), "item_" + indx);
 		return pool;
 	}
 	
