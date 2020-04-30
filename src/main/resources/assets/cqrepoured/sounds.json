@@ -25,5 +25,17 @@
 	{
 		"category": "neutral",
 		"sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_death"}]
+	},
+	"entity.bubble.bubble":
+	{
+		"category": "neutral",
+		"sounds":
+		[
+			{"name": "cqrepoured:entity/bubble/bubble_0"},
+			{"name": "cqrepoured:entity/bubble/bubble_1"},
+			{"name": "cqrepoured:entity/bubble/bubble_2"},
+			{"name": "cqrepoured:entity/bubble/bubble_3"},
+			{"name": "cqrepoured:entity/bubble/bubble_4"}
+		]
 	}
 }   

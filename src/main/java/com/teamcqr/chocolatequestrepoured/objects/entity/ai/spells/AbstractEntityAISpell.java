@@ -7,11 +7,13 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.World;
 
 public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> implements IEntityAISpell {
 
 	protected final Random random = new Random();
 	protected final T entity;
+	protected final World world;
 	protected final boolean needsTargetToStart;
 	protected final boolean needsTargetToContinue;
 	protected final int cooldown;
@@ -22,6 +24,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 
 	public AbstractEntityAISpell(T entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
 		this.entity = entity;
+		this.world = entity.world;
 		this.needsTargetToStart = needsTargetToStart;
 		this.needsTargetToContinue = needsTargetToContinue;
 		this.cooldown = cooldown;

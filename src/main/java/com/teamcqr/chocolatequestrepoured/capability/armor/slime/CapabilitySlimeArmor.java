@@ -25,16 +25,14 @@ public class CapabilitySlimeArmor extends CapabilitySpecialArmor {
 
 		if (!this.onCooldown()) {
 			if (!entity.world.isRemote) {
-				EntitySlimePart slime = new EntitySlimePart(entity.world, entity, 1.0F);
-				slime.posX = entity.posX + 4.0D * entity.world.rand.nextDouble() - 2.0D;
-				slime.posY = entity.posY + 0.5D * entity.world.rand.nextDouble();
-				slime.posZ = entity.posZ + 4.0D * entity.world.rand.nextDouble() - 2.0D;
-				slime.motionX = entity.world.rand.nextDouble() - 0.5D;
-				slime.motionY = 0.5D * entity.world.rand.nextDouble();
-				slime.motionZ = entity.world.rand.nextDouble() - 0.5D;
+				EntitySlimePart slime = new EntitySlimePart(entity.world, entity);
+				double x = entity.posX - 5.0D + 2.5D * slime.getRNG().nextDouble();
+				double y = entity.posY;
+				double z = entity.posZ - 5.0D + 2.5D * slime.getRNG().nextDouble();
+				slime.setPosition(x, y, z);
 				entity.world.spawnEntity(slime);
 			}
-			this.setCooldown(100);
+			this.setCooldown(120);
 		}
 	}
 

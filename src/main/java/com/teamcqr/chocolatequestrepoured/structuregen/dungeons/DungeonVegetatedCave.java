@@ -30,12 +30,14 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int tunnelStartSize = 8;
 	private int caveSegmentCount = 8;
 	private int posY = 30;
+	private int vineChance = 20;
 	private int[] chestIDs;
 	private double vineLengthModifier = 2;
 	private boolean placeVines;
 	private boolean crossVine;
 	private boolean placeVegetation;
 	private boolean placeBuilding;
+	private boolean skipCeilingFiltering = false;
 	private File buildingFolder;
 	
 	public DungeonVegetatedCave(String name, Properties prop) {
@@ -60,6 +62,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 			Blocks.AIR,
 		});
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
+		this.vineChance = PropertyFileHelper.getIntProperty(prop, "vineChance", 20);
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
 		this.placeVegetation = PropertyFileHelper.getBooleanProperty(prop, "placeVegetation", true);
 		this.placeBuilding = PropertyFileHelper.getBooleanProperty(prop, "placeBuilding", true);
@@ -72,6 +75,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
 		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
+		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 
 	@Override
@@ -119,6 +123,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	public boolean placeVines() {
 		return placeVines;
 	}
+	
+	public boolean skipCeilingFiltering() {
+		return this.skipCeilingFiltering;
+	}
 
 	public Block getAirBlock() {
 		return airBlock;
@@ -154,6 +162,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 	
 	public double getVineLengthModifier() {
 		return this.vineLengthModifier;
+	}
+
+	public int getVineChance() {
+		return this.vineChance;
 	}
 
 }
