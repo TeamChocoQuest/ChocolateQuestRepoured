@@ -132,11 +132,11 @@ public class LootTableLoader {
 
 				List<WeightedItemStack> items = getItemList(properties);
 
-				/*for (int i = 0; i < items.size(); i++) {
-					items.get(i).addToTable(lootTable, i);
-				}*/
+				for (int i = 0; i < items.size(); i++) {
+					lootTable.addPool(items.get(i).getAsSingleLootPool(i));
+				}
 				
-				LootEntry[] entries = new LootEntry[items.size()];
+				/*LootEntry[] entries = new LootEntry[items.size()];
 				for(int i = 0; i < items.size(); i++) {
 					entries[i] = items.get(i).getAsLootEntry(i);
 				}
@@ -148,7 +148,7 @@ public class LootTableLoader {
 								), 
 								new RandomValueRange(0),
 								name.getResourceDomain() + "_pool")
-						);
+						);*/
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
 			} finally {
