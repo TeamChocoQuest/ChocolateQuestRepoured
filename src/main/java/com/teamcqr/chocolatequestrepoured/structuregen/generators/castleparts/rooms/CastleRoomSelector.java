@@ -818,23 +818,26 @@ public class CastleRoomSelector {
 			double neighborG = currentNode.getG() + 1;
 			// add each neighbor node to closed list if it connectable and not closed already
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
-				RoomGridCell neighborCell = this.grid.getAdjacentCell(currentNode.getCell(), direction);
-				if (neighborCell != null && neighborCell.isSelectedForBuilding() && neighborCell.reachableFromSide(direction.getOpposite()) && !invalidCells.contains(neighborCell)) {
-					PathNode neighborNode = new PathNode(currentNode, direction.getOpposite(), neighborCell, neighborG, neighborCell.distanceTo(endCell));
+				//Make sure this cell/room can actually go this direction first
+				if (currentNode.getCell().getRoom().reachableFromSide(direction)) {
+					RoomGridCell neighborCell = this.grid.getAdjacentCell(currentNode.getCell(), direction);
+					if (neighborCell != null && neighborCell.isSelectedForBuilding() && neighborCell.reachableFromSide(direction.getOpposite()) && !invalidCells.contains(neighborCell)) {
+						PathNode neighborNode = new PathNode(currentNode, direction.getOpposite(), neighborCell, neighborG, neighborCell.distanceTo(endCell));
 
-					// should really do this with .contains() but I don't feel like doing the overrides
-					boolean cellAlreadyClosed = this.nodeListContainsCell(closed, neighborCell);
+						// should really do this with .contains() but I don't feel like doing the overrides
+						boolean cellAlreadyClosed = this.nodeListContainsCell(closed, neighborCell);
 
-					if (!cellAlreadyClosed) {
-						boolean cellAlreadyOpen = this.nodeListContainsCell(open, neighborCell);
-						if (cellAlreadyOpen) {
-							PathNode openNode = this.getNodeThatContainsCell(open, neighborCell);
-							if (openNode.getG() > neighborG) {
-								openNode.updateParent(currentNode);
-								openNode.updateG(neighborG);
+						if (!cellAlreadyClosed) {
+							boolean cellAlreadyOpen = this.nodeListContainsCell(open, neighborCell);
+							if (cellAlreadyOpen) {
+								PathNode openNode = this.getNodeThatContainsCell(open, neighborCell);
+								if (openNode.getG() > neighborG) {
+									openNode.updateParent(currentNode);
+									openNode.updateG(neighborG);
+								}
+							} else {
+								open.add(neighborNode);
 							}
-						} else {
-							open.add(neighborNode);
 						}
 					}
 				}
