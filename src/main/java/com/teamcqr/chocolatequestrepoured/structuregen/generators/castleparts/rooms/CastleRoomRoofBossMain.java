@@ -49,7 +49,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		BlockPos nwCorner = this.origin;
+		BlockPos nwCorner = this.getBossRoomBuildStartPosition();
 		BlockPos pos;
 		IBlockState blockToBuild;
 		this.dungeon = dungeon;
@@ -70,9 +70,9 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory)
 	{
 		// Have to add torches last because they won't place unless the wall next to them is already built
-		this.placeTorches(this.origin, genArray);
+		this.placeTorches(this.getBossRoomBuildStartPosition(), genArray);
 
-		this.placeChests(world, this.origin, genArray);
+		this.placeChests(world, this.getBossRoomBuildStartPosition(), genArray);
 	}
 
 	@Override

@@ -10,10 +10,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomLandingDirected extends CastleRoomBase {
-	private int openingWidth;
-	private int openingSeparation;
-	private int stairZ;
-	private EnumFacing stairStartSide;
+	protected int openingWidth;
+	protected int openingSeparation;
+	protected int stairZ;
+	protected EnumFacing stairStartSide;
 
 	public CastleRoomLandingDirected(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
 		super(startOffset, sideLength, height, floor);
@@ -30,7 +30,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 		IBlockState blockToBuild;
 		for (int x = 0; x < this.buildLengthX - 1; x++) {
 			for (int z = 0; z < this.buildLengthZ - 1; z++) {
-				for (int y = 0; y < this.height; y++) {
+				for (int y = 0; y < this.height - 1; y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					if (y == 0) {
 						if (z > this.stairZ) {
