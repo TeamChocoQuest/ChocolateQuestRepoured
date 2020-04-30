@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.util;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
-import net.minecraft.init.Blocks;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -105,6 +104,10 @@ public class CQRConfig {
 		public boolean dungeonsInFlat = false;
 		@Config.RangeInt(min = 1, max = 10)
 		public int maxLootTablePoolRolls = 1;
+		@Config.RangeInt(min = 0, max = 27)
+		public int minItemsPerLootChest = 0;
+		@Config.RangeInt(min = 1, max = 27)
+		public int maxItemsPerLootChest = 18;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;

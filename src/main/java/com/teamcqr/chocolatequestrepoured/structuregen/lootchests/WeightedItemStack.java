@@ -9,7 +9,6 @@ import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryEmpty;
 import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.RandomChance;
@@ -51,7 +50,7 @@ public class WeightedItemStack {
 		return this.weight;
 	}
 
-	public void addToTable(LootTable table, int indx) {
+	public LootPool getAsSingleLootPool(int indx) {
 		LootCondition condition = new RandomChance(new Float(this.weight) / 100F);
 		LootCondition[] conditionA = new LootCondition[] { condition };
 
@@ -80,8 +79,27 @@ public class WeightedItemStack {
 		LootEntry[] entryA = new LootEntry[] { entry, entryEmpty };
 
 		LootPool pool = new LootPool(entryA, conditionC, new RandomValueRange(1), new RandomValueRange(CQRConfig.general.maxLootTablePoolRolls), "item_" + indx);
+		return pool;
+	}
+	
+	public LootEntry getAsLootEntry(int indx) {
+		LootCondition condition = new RandomChance(new Float(this.weight) / 100F);
+		LootCondition[] conditionA = new LootCondition[] { condition };
+		ArrayList<LootFunction> functions = new ArrayList<>();
+		functions.add(new SetCount(null, new RandomValueRange(this.minCount, this.maxCount)));
+		if (this.enchant) {
+			if (this.treasure) {
+				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), true));
+			} else {
+				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl, this.maxLvl), false));
+			}
+		}
+		if(this.damage != 0 && this.damage > 0) {
+			functions.add(new SetMetadata(null, new RandomValueRange(damage)));
+		}
 
-		table.addPool(pool);
+		LootEntry entry = new LootEntryItem(Item.getByNameOrId(this.itemName), this.weight, 0, functions.toArray(new LootFunction[0]), conditionA, "entry_" + indx + this.itemName);
+		return entry;
 	}
 
 	public WeightedItemStack setChance(int chance) {
