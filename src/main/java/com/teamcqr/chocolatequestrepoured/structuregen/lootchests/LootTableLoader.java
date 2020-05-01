@@ -67,6 +67,7 @@ public class LootTableLoader {
 			int min_lvl = 1;
 			int max_lvl = 10;
 			boolean treasure = false;
+			int enchChance = 0;
 
 			item = ((String) tokenizer.nextElement()).trim();
 			damage = Integer.parseInt(((String) tokenizer.nextElement()).trim());
@@ -80,10 +81,13 @@ public class LootTableLoader {
 				max_lvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
 				if (tokenCount >= 9) {
 					treasure = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
+					if(tokenCount >= 10) {
+						enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
+					}
 				}
 			}
 
-			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure);
+			WeightedItemStack itemstack = new WeightedItemStack(item, damage, min_count, max_count, chance, enchant, min_lvl, max_lvl, treasure, enchChance);
 			return itemstack;
 		} else {
 			CQRMain.logger.error("Config string is invalid! Not enough arguments!");
