@@ -1,0 +1,31 @@
+{
+	"parent": "cqrepoured:cqr/challenger",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.kill_walker_king.title"
+		},
+		"icon": {
+			"item": "cqrepoured:sword_walker"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.kill_walker_king.description"
+		},
+		"frame": "goal",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"boss": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_king"
+				}
+			}
+		}
+	},
+	"requirements": [
+		["boss"]
+	]
+}

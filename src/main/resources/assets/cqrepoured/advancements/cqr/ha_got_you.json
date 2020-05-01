@@ -1,0 +1,267 @@
+{
+	"parent": "cqrepoured:cqr/root",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.ha_got_you.title"
+		},
+		"icon": {
+			"item": "minecraft:bone"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.ha_got_you.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": true,
+		"hidden": true
+	},
+	"criteria": {
+		"dwarf": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:dwarf"
+				}
+			}
+		},
+		"enderman": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:enderman"
+				}
+			}
+		},
+		"gremlin": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:gremlin"
+				}
+			}
+		},
+		"golem": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:golem"
+				}
+			}
+		},
+		"illager": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:illager"
+				}
+			}
+		},
+		"minotaur": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:minotaur"
+				}
+			}
+		},
+		"mandril": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:mandril"
+				}
+			}
+		},
+		"mummy": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:mummy"
+				}
+			}
+		},
+		"ogre": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:ogre"
+				}
+			}
+		},
+		"orc": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:orc"
+				}
+			}
+		},
+		"boarman": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:boarman"
+				}
+			}
+		},
+		"pirate": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:pirate"
+				}
+			}
+		},
+		"skeleton": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:skeleton"
+				}
+			}
+		},
+		"spectre": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:spectre"
+				}
+			}
+		},
+		"triton": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:triton"
+				}
+			}
+		},
+		"walker": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker"
+				}
+			}
+		},
+		"zombie": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:zombie"
+				}
+			}
+		},
+		"flying_skull": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:flying_skull"
+				}
+			}
+		},
+		"illusion_walker_king": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:illusion_walker_king"
+				}
+			}
+		},
+		"wasp": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:wasp"
+				}
+			}
+		},
+		"walker_tornado": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_tornado"
+				}
+			}
+		},
+		"omg_its_godzilla": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:nether_dragon"
+				}
+			}
+		},
+		"tortoise": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:giant_tortoise"
+				}
+			}
+		},
+		"lich": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:lich"
+				}
+			}
+		},
+		"boar_mage": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:boar_mage"
+				}
+			}
+		},
+		"necromancer": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:necromancer"
+				}
+			}
+		},
+		"walker_boi": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_king"
+				}
+			}
+		}
+	},
+	"requirements": [
+		[
+			"dwarf",
+			"enderman",
+			"gremlin",
+			"golem",
+			"illager",
+			"minotaur",
+			"mandril",
+			"mummy",
+			"ogre",
+			"orc",
+			"boarman",
+			"pirate",
+			"skeleton",
+			"spectre",
+			"triton",
+			"walker",
+			"zombie",
+			"flying_skull",
+			"illusion_walker_king",
+			"wasp",
+			"walker_tornado",
+			"omg_its_godzilla",
+			"tortoise",
+			"lich",
+			"boar_mage",
+			"necromancer",
+			"walker_boi"	
+		]
+	]
+}
