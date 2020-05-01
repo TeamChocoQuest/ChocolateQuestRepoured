@@ -175,7 +175,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				}
 
 				if (this.spawnedInDungeon && entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(new PlacementSettings().setMirror(this.mirror).setRotation(this.rot));
+					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(new PlacementSettings().setMirror(this.mirror).setRotation(this.rot), this.mobOverride);
 				}
 			}
 
