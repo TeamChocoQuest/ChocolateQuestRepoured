@@ -123,6 +123,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
 
+	protected int lastTimeHitByAxeWhileBlocking = 0;
 	protected boolean wasRecentlyHitByAxe = false;
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
@@ -220,17 +221,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		if(CQRConfig.mobs.blockCancelledByAxe && source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityLivingBase) {
-			if(source.isUnblockable() || holdsAxe((EntityLivingBase)source.getImmediateSource())) {
-				ItemStack offhand = this.getHeldItemOffhand();
-				if ((offhand.getItem().isShield(offhand, this) || this.isActiveItemStackBlocking()) && getRNG().nextInt(10) < 4) {
-					this.resetActiveHand();
-					offhand.attemptDamageItem(new Double(amount * 1.5).intValue(), getRNG(), null);
-					this.wasRecentlyHitByAxe = true;
-				}
-			}
+		if (CQRConfig.mobs.blockCancelledByAxe && amount > 0.0F && this.canBlockDamageSource(source) && source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
-		
+
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
 				this.handleArmorBreaking();
@@ -242,11 +236,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return false;
 	}
 
-	private boolean holdsAxe(EntityLivingBase ent) {
-		return (
-				(ent.getHeldItemMainhand() != null && ent.getHeldItemMainhand().getItem() != null && ent.getHeldItemMainhand().getItem() instanceof ItemAxe)
-				|| (ent.getHeldItemOffhand() != null && ent.getHeldItemOffhand().getItem() != null && ent.getHeldItemOffhand().getItem() instanceof ItemAxe)
-				);
+	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
+		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking()) {
+			Vec3d vec3d = damageSourceIn.getDamageLocation();
+
+			if (vec3d != null) {
+				Vec3d vec3d1 = this.getLook(1.0F);
+				Vec3d vec3d2 = vec3d.subtractReverse(new Vec3d(this.posX, this.posY, this.posZ)).normalize();
+				vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
+
+				if (vec3d2.dotProduct(vec3d1) < 0.0D) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	@Override
@@ -841,6 +846,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		return this.defaultFactionInstance;
 	}
+
 	@Nullable
 	public CQRFaction getFaction() {
 		if (this.hasLeader()) {
@@ -906,12 +912,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.pathPoints[i] = Template.transformedBlockPos(placementSettings, this.pathPoints[i]);
 			}
 		}
-		
-		//Replace shield
-		for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+
+		// Replace shield
+		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			ItemStack stack = this.getItemStackFromSlot(slot);
 			Item item = stack.getItem();
-			if(item instanceof ItemShieldDummy) {
+			if (item instanceof ItemShieldDummy) {
 				this.setItemStackToSlot(slot, mobType.getShieldItem().copy());
 			}
 		}
@@ -1168,12 +1174,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public boolean isSpellAnimated() {
 		return (this.dataManager.get(SPELL_INFORMATION) >> 24 & 1) == 1;
 	}
-	
-	public boolean wasRecentlyHitByAxe() {
-		return this.wasRecentlyHitByAxe;
+
+	public void setLastTimeHitByAxeWhileBlocking(int tick) {
+		this.lastTimeHitByAxeWhileBlocking = tick;
 	}
-	public void resetHitByAxe() {
-		this.wasRecentlyHitByAxe = false;
+
+	public int getLastTimeHitByAxeWhileBlocking() {
+		return this.lastTimeHitByAxeWhileBlocking;
 	}
 
 }
