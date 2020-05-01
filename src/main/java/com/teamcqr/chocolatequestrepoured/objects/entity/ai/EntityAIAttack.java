@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
-public class EntityAIAttack extends AbstractCQREntityAI {
+public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected int attackTick;
 	protected int shieldTick;
@@ -27,6 +27,10 @@ public class EntityAIAttack extends AbstractCQREntityAI {
 	public boolean shouldContinueExecuting() {
 		this.shieldTick = Math.max(this.shieldTick - 1, 0);
 		this.attackTick = Math.max(this.attackTick - 1, 0);
+		if(this.entity.wasRecentlyHitByAxe()) {
+			this.shieldTick = 10;
+			this.entity.resetHitByAxe();
+		}
 		return this.entity.getAttackTarget() != null;
 	}
 
