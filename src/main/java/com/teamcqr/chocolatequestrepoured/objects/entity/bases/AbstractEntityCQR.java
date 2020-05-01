@@ -60,6 +60,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -118,6 +119,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private String factionName;
 	private CQRFaction defaultFactionInstance;
 
+	protected boolean wasRecentlyHitByAxe = false;
 	protected boolean armorActive = false;
 	protected int magicArmorCooldown = 300;
 
@@ -214,15 +216,33 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
+		if(CQRConfig.mobs.blockCancelledByAxe && source.getImmediateSource() != null && source.getImmediateSource() instanceof EntityLivingBase) {
+			if(source.isUnblockable() || holdsAxe((EntityLivingBase)source.getImmediateSource())) {
+				ItemStack offhand = this.getHeldItemOffhand();
+				if ((offhand.getItem().isShield(offhand, this) || this.isActiveItemStackBlocking()) && getRNG().nextInt(10) < 4) {
+					this.resetActiveHand();
+					offhand.attemptDamageItem(new Double(amount * 1.5).intValue(), getRNG(), null);
+					this.wasRecentlyHitByAxe = true;
+				}
+			}
+		}
+		
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
 				this.handleArmorBreaking();
 			}
-
+			
 			return true;
 		}
 
 		return false;
+	}
+
+	private boolean holdsAxe(EntityLivingBase ent) {
+		return (
+				(ent.getHeldItemMainhand() != null && ent.getHeldItemMainhand().getItem() != null && ent.getHeldItemMainhand().getItem() instanceof ItemAxe)
+				|| (ent.getHeldItemOffhand() != null && ent.getHeldItemOffhand().getItem() != null && ent.getHeldItemOffhand().getItem() instanceof ItemAxe)
+				);
 	}
 
 	@Override
@@ -1133,6 +1153,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean isSpellAnimated() {
 		return (this.dataManager.get(SPELL_INFORMATION) >> 24 & 1) == 1;
+	}
+	
+	public boolean wasRecentlyHitByAxe() {
+		return this.wasRecentlyHitByAxe;
+	}
+	public void resetHitByAxe() {
+		this.wasRecentlyHitByAxe = false;
 	}
 
 }
