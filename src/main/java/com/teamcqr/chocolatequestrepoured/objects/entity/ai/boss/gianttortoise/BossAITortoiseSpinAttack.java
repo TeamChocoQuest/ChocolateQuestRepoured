@@ -21,7 +21,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 	private final int AFTER_IDLE_TIME = 5;
 	private final int BUBBLE_SHOOT_DURATION = 20;
 	
-	static final int MIN_DISTANCE_TO_BEGIN_SPIN = 16; 
+	static final int MAX_DISTANCE_TO_BEGIN_SPIN = 16; 
 
 	public BossAITortoiseSpinAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -41,7 +41,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 	public boolean shouldExecute() {
 		cooldown--;
 		if(!getBoss().isStunned() && getBoss().getAttackTarget() != null && !getBoss().getAttackTarget().isDead) {
-			if(getBoss().getDistance(getBoss().getAttackTarget()) > MIN_DISTANCE_TO_BEGIN_SPIN) {
+			if(getBoss().getDistance(getBoss().getAttackTarget()) > MAX_DISTANCE_TO_BEGIN_SPIN) {
 				return false;
 			}
 		} else {
