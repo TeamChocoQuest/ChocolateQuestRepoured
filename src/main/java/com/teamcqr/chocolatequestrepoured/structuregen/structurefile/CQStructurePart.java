@@ -398,7 +398,7 @@ public class CQStructurePart extends Template {
 
 					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 					if (entity instanceof AbstractEntityCQRBoss) {
-						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(placementIn);
+						((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(placementIn, dungeonMob);
 						((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
 					}
 					if (entity instanceof EntityLiving) {

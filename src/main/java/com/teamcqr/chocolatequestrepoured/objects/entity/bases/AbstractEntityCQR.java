@@ -40,7 +40,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtB
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -60,6 +62,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemShield;
@@ -893,7 +896,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings) {
+	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, EDungeonMobType mobType) {
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
 
@@ -901,6 +904,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.pathPoints.length > 0) {
 			for (int i = 0; i < this.pathPoints.length; i++) {
 				this.pathPoints[i] = Template.transformedBlockPos(placementSettings, this.pathPoints[i]);
+			}
+		}
+		
+		//Replace shield
+		for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			ItemStack stack = this.getItemStackFromSlot(slot);
+			Item item = stack.getItem();
+			if(item instanceof ItemShieldDummy) {
+				this.setItemStackToSlot(slot, mobType.getShieldItem().copy());
 			}
 		}
 	}

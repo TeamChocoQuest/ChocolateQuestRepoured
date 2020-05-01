@@ -211,6 +211,7 @@ item.alchemy_bag.name=Alchemy Bag
 item.structure_selector.name=Selection Selector Helper
 item.path_tool.name=Path Tool
 item.cursed_bone.name=Cursed Bone
+item.dummy_shield.name=Dummy Shield
 
 #Dragon Items
 item.helmet_dragon.name=Dragon Helmet
@@ -547,6 +548,7 @@ description.staff.name=Missing #TODO
 description.staff_thunder.name=Missing #TODO
 description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
 description.cursed_bone.name=Mob to be summoned:
+description.dummy_shield.name=A rough approximation of what a shield is supposed to look like. Will not protect you from attacks. An exported dummy that is holding this will instead be holding the usual shield for its mob type when its dungeon generates.
 
 #Enchantments
 enchantment.lightning_protection=Lightning Protection
