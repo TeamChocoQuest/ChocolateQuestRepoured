@@ -110,11 +110,12 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 		else if(getBoss().getAnimationTick() > BUBBLE_SHOOT_DURATION && getAnimation().getDuration() - getBoss().getAnimationTick() > AFTER_IDLE_TIME) {
 			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20 || previousBlocks != getBoss().getSpinsBlocked()) {
 				calculateVelocity();
-				float damage = 4F;
+				float damage = 1F;
 				if(previousBlocks != getBoss().getSpinsBlocked()) {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
 				}
+				damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());
 				if(getBoss().collidedHorizontally) {
 					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
 				}
