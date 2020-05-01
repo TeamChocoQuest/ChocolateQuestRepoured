@@ -993,7 +993,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean isInAttackReach(EntityLivingBase target) {
-		return target != null && this.getDistance(target) <= this.getAttackReach(target);
+		Vec3d vec1 = new Vec3d(this.posX, MathHelper.clamp(target.posY, this.posY, this.posY + this.height), this.posZ);
+		Vec3d vec2 = new Vec3d(target.posX, MathHelper.clamp(this.posY, target.posY, target.posY + target.height), target.posZ);
+		double d = this.getAttackReach(target);
+		return vec1.squareDistanceTo(vec2) <= d * d;
 	}
 
 	public boolean canOpenDoors() {
