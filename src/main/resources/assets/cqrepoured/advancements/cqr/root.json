@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "cqrepoured:dungeon_placer_d2"
+        },
+        "title": {
+            "translate": "advancements.cqrepoured.root.title"
+        },
+        "description": {
+            "translate": "advancements.cqrepoured.root.description"
+        },
+        "background": "minecraft:textures/blocks/stonebrick.png",
+        "show_toast": true,
+        "announce_to_chat": false,
+        "hidden" : false
+    },
+    "criteria": {
+        "tick": {
+            "trigger": "minecraft:tick"
+        }
+    }
+}

@@ -1,0 +1,78 @@
+{
+	"parent": "cqrepoured:cqr/root",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.not_so_friendly.title"
+		},
+		"icon": {
+			"item": "cqrepoured:shield_walker"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.not_so_friendly.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"killed_walker": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker"
+				}
+			}
+		},
+		"kill_walker": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker"
+				}
+			}
+		},
+		"killed_walker_king": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_king"
+				}
+			}
+		},
+		"kill_walker_king": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_king"
+				}
+			}
+		},
+		"killed_walker_king_illusion": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:illusion_walker_king"
+				}
+			}
+		},
+		"kill_walker_king_illusion": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:illusion_walker_king"
+				}
+			}
+		}
+	},
+	"requirements": [
+		[
+			"killed_walker",
+			"killed_walker_king",
+			"killed_walker_king_illusion",
+			"kill_walker",
+			"kill_walker_king",
+			"kill_walker_king_illusion"
+		]
+	]
+}

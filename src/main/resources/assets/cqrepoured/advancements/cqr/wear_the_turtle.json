@@ -1,0 +1,66 @@
+{
+	"parent": "cqrepoured:cqr/bosses/kill_giant_tortoise",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.wear_the_turtle.title"
+		},
+		"icon": {
+			"item": "cqrepoured:chestplate_turtle"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.wear_the_turtle.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"turtle_helmet": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:helmet_turtle"
+					}
+				]
+			}
+		},
+		"turtle_chest": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:chestplate_turtle"
+					}
+				]
+			}
+		},
+		"turtle_legs": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:leggings_turtle"
+					}
+				]
+			}
+		},
+		"turtle_boots": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:boots_turtle"
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		["turtle_helmet"],
+		["turtle_chest"],
+		["turtle_legs"],
+		["turtle_boots"]
+	]
+}

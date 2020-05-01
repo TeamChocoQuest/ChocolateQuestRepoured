@@ -1,0 +1,69 @@
+{
+	"parent": "cqrepoured:cqr/root",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.challenger.title"
+		},
+		"icon": {
+			"item": "cqrepoured:dagger_iron"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.challenger.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"nether_dragon": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:nether_dragon"
+				}
+			}
+		},
+		"giant_tortoise": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:giant_tortoise"
+				}
+			}
+		},
+		"lich": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:lich"
+				}
+			}
+		},
+		"necromancer": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:necromancer"
+				}
+			}
+		},
+		"walker_king": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:walker_king"
+				}
+			}
+		}
+	},
+	"requirements": [
+		[
+			"nether_dragon",
+			"giant_tortoise",
+			"lich",
+			"necromancer",
+			"walker_king"
+		]
+	]
+}
