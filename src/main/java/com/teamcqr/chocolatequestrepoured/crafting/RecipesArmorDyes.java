@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.crafting;
 import java.util.List;
 
 import com.google.common.collect.Lists;
-import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemArmor;
@@ -27,13 +27,7 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 			ItemStack itemstack1 = inv.getStackInSlot(i);
 
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.getItem() instanceof ItemArmor) {
-					ItemArmor itemarmor = (ItemArmor) itemstack1.getItem();
-
-					if (itemarmor.getArmorMaterial() != ModMaterials.ArmorMaterials.DIAMOND_DYABLE || itemarmor.getArmorMaterial() != ModMaterials.ArmorMaterials.IRON_DYABLE || !itemstack.isEmpty()) {
-						return false;
-					}
-
+				if (itemstack1.getItem() instanceof ItemArmorDyable) {
 					itemstack = itemstack1;
 				} else {
 					if (!net.minecraftforge.oredict.DyeUtils.isDye(itemstack1)) {
@@ -63,12 +57,8 @@ public class RecipesArmorDyes extends Impl<IRecipe> implements IRecipe {
 			ItemStack itemstack1 = inv.getStackInSlot(k);
 
 			if (!itemstack1.isEmpty()) {
-				if (itemstack1.getItem() instanceof ItemArmor) {
+				if (itemstack1.getItem() instanceof ItemArmorDyable) {
 					itemarmor = (ItemArmor) itemstack1.getItem();
-
-					if (itemarmor.getArmorMaterial() != ModMaterials.ArmorMaterials.DIAMOND_DYABLE || itemarmor.getArmorMaterial() != ModMaterials.ArmorMaterials.IRON_DYABLE || !itemstack.isEmpty()) {
-						return ItemStack.EMPTY;
-					}
 
 					itemstack = itemstack1.copy();
 					itemstack.setCount(1);
