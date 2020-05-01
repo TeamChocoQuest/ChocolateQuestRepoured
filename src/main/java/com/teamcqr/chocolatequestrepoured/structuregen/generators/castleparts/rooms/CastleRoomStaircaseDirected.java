@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.block.BlockStairs;
@@ -8,6 +9,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	private static final int PLATFORM_LENGTH = 2;
@@ -135,5 +138,11 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	@Override
 	public boolean reachableFromSide(EnumFacing side) {
 		return (side == this.doorSide);
+	}
+
+	//Only centered doors look good, as the stairs are centered in the room
+	@Override
+	public DoorPlacement addDoorOnSideRandom(Random random, EnumFacing side) {
+		return super.addDoorOnSideCentered(side);
 	}
 }
