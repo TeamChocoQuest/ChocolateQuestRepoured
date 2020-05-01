@@ -26,8 +26,9 @@ public class WeightedItemStack {
 	private int damage;
 	private int minLvl;
 	private int maxLvl;
+	private int enchantChance;
 
-	public WeightedItemStack(String itemName, int damage, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure) {
+	public WeightedItemStack(String itemName, int damage, int minItems, int maxItems, int weight, boolean enchant, int minEnchantLevel, int maxEnchantLevel, boolean isTreasure, int enchantChance) {
 		this.itemName = itemName;
 		this.damage = damage;
 		this.minCount = minItems;
@@ -37,6 +38,7 @@ public class WeightedItemStack {
 		this.minLvl = minEnchantLevel;
 		this.maxLvl = maxEnchantLevel;
 		this.treasure = isTreasure;
+		this.enchantChance = enchantChance;
 	}
 
 	public int getWeight() {
@@ -56,10 +58,14 @@ public class WeightedItemStack {
 		ArrayList<LootFunction> functions = new ArrayList<>();
 		functions.add(new SetCount(null, new RandomValueRange(this.minCount, this.maxCount)));
 		if (this.enchant) {
+			LootCondition[] enchConds = null;
+			if(this.enchantChance > 0) {
+				enchConds = new LootCondition[] {new RandomChance(new Float(this.enchantChance) /100F)};
+			}
 			if (this.treasure) {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), true));
+				functions.add(new EnchantWithLevels(enchConds, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), true));
 			} else {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl, this.maxLvl), false));
+				functions.add(new EnchantWithLevels(enchConds, new RandomValueRange(this.minLvl, this.maxLvl), false));
 			}
 		}
 		if(this.damage != 0 && this.damage > 0) {
@@ -82,10 +88,14 @@ public class WeightedItemStack {
 		ArrayList<LootFunction> functions = new ArrayList<>();
 		functions.add(new SetCount(null, new RandomValueRange(this.minCount, this.maxCount)));
 		if (this.enchant) {
+			LootCondition[] enchConds = null;
+			if(this.enchantChance > 0) {
+				enchConds = new LootCondition[] {new RandomChance(new Float(this.enchantChance) /100F)};
+			}
 			if (this.treasure) {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), true));
+				functions.add(new EnchantWithLevels(enchConds, new RandomValueRange(this.minLvl * 2, this.maxLvl * 2), this.treasure));
 			} else {
-				functions.add(new EnchantWithLevels(null, new RandomValueRange(this.minLvl, this.maxLvl), false));
+				functions.add(new EnchantWithLevels(enchConds, new RandomValueRange(this.minLvl, this.maxLvl), false));
 			}
 		}
 		if(this.damage != 0 && this.damage > 0) {
