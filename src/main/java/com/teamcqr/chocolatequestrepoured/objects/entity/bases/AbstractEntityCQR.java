@@ -237,7 +237,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking()) {
+		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking() && damageSourceIn != null) {
 			Vec3d vec3d = damageSourceIn.getDamageLocation();
 
 			if (vec3d != null) {
