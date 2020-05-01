@@ -103,7 +103,7 @@ public class EntityAIAttackRanged extends EntityAIAttack {
 		}
 	}
 
-	private boolean isRangedWeapon(Item item) {
+	protected boolean isRangedWeapon(Item item) {
 		return item instanceof ItemBow || item instanceof IRangedWeapon;
 	}
 
