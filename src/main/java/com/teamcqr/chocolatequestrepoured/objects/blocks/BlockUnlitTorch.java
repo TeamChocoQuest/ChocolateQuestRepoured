@@ -51,7 +51,7 @@ public class BlockUnlitTorch extends BlockTorch {
 	public static void lightUp(World world, BlockPos pos, EnumFacing facing) {
 		if (!world.isRemote) {
 			world.setBlockState(pos, Blocks.TORCH.getDefaultState().withProperty(FACING, facing), 3);
-			world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 3.0F, 1.0F + world.rand.nextFloat());
+			world.playSound(null, pos, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, 1.0F + world.rand.nextFloat());
 			((WorldServer) world).spawnParticle(EnumParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.75, pos.getZ() + 0.5, 15, 0.25D, 0.25D, 0.25D, 0.00125);
 		}
 	}
