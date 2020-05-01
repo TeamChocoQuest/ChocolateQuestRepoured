@@ -1,15 +1,15 @@
-The English US language file for Chocolate Quest Repoured Mod!
-This translation was created by basically every dev and polished out by ArloTheEpic
+#The English US language file for Chocolate Quest Repoured Mod!
+#This translation was created by basically every dev and polished out by ArloTheEpic
 
 
-//CreativeTabs
+#CreativeTabs
 itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocks
 itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Items
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Dungeon Placers
 itemGroup.ChocolateQuestRepouredBannerTab=Banners
 itemGroup.ChocolateQuestRepouredExporterChests=Exporter Chests
 
-//Banners
+#Banners
 item.banner.cqrepoured_cq_blank.white=CQR-banner marker
 item.banner.cqrepoured_cq_blank.orange=CQR-banner marker
 item.banner.cqrepoured_cq_blank.magenta=CQR-banner marker
@@ -183,7 +183,7 @@ item.banner.cqrepoured_walker_skull.red=Red walker face
 item.banner.cqrepoured_walker_skull.black=Black walker face
 
 
-//Gui
+#Gui
 gui.repu.name=Reputation
 gui.repu.faction=Faction
 gui.repu.reputation=Your reputation
@@ -197,7 +197,7 @@ description.gui_exporter_part_mode.name=Splits the structure into 16x16x16 cubes
 description.gui_exporter_relative_mode.name=Uses coordinates relative to the exporter block. The Selection Helper item takes care wether this is checked or not.
 description.gui_exporter_ignore_entities.name=Ignores all entities which are not listed in cqrepoured.cfg -> advanced -> specialEntities. Recommended to keep checked.
 
-//Other
+#Other
 item.super_tool.name=Super Tool (Creative Only)
 item.potion_healing.name=Healing Potion
 item.teleport_stone.name=Teleport Stone
@@ -212,23 +212,23 @@ item.structure_selector.name=Selection Selector Helper
 item.path_tool.name=Path Tool
 item.cursed_bone.name=Cursed Bone
 
-//Dragon Items
+#Dragon Items
 item.helmet_dragon.name=Dragon Helmet
 
-//Daggers
+#Daggers
 item.dagger_iron.name=Iron Dagger
 item.dagger_diamond.name=Diamond Dagger
 item.dagger_monking.name=Monking Dagger
 item.dagger_ninja.name=Ninja Dagger
 
-//Swords
+#Swords
 item.sword_turtle.name=Turtle Sword
 item.sword_spider.name=Spider Sword
 item.battle_axe_bull.name=Bull Battle Axe
 item.sword_moonlight.name=Moonlight
 item.sword_sunshine.name=Sunshine
 
-//Shields
+#Shields
 item.cqr_shield_r01.name=Pigman Shield
 item.cqr_shield_r02.name=Pirate Shield
 item.cqr_shield_r03.name=Specter Shield
@@ -239,11 +239,11 @@ item.cqr_shield_r07.name=Rusted Shield
 item.cqr_shield_r08.name=Turtles Shield
 item.cqr_shield_r09.name=Triton Shield
 
-//Walker set
+#Walker set
 item.sword_walker.name=Walker Sword
 item.shield_walker_king.name=Walker King Shield
 
-//Shields
+#Shields
 item.shield_bull.name=Ice Bull Shield
 item.shield_carl.name=Carl
 item.shield_dragonslayer.name=Dragon Shield
@@ -270,17 +270,17 @@ item.shield_walker.name=Walker Shield
 item.shield_walker_normal.name=Walker Shield
 item.shield_zombie.name=Zombie Shield
 
-//Great Swords
+#Great Swords
 item.great_sword_monking.name=Monking Great Sword
 item.great_sword_bull.name=Bull Greatsword
 item.great_sword_diamond.name=Diamond Greatsword
 item.great_sword_iron.name=Iron Greatsword
 
-//Spears
+#Spears
 item.spear_diamond.name=Diamond Spear
 item.spear_iron.name=Iron Spear
 
-//Staves
+#Staves
 item.staff.name=Staff
 item.staff_fire.name=Fire Staff
 item.staff_vampiric.name=Vampiric Staff
@@ -291,7 +291,7 @@ item.staff_gun.name=Gun Staff
 item.staff_healing.name=Healing Staff
 item.staff_thunder.name=Thunder Staff
 
-//Guns
+#Guns
 item.revolver.name=Revolver
 item.captain_revolver.name=Captain Revolver
 item.musket.name=Musket
@@ -307,24 +307,24 @@ item.flamethrower.name=Flamethrower
 item.bubble_pistol.name=Bubble Gun
 item.bubble_rifle.name=Advanced Bubble Gun
 
-//Hookshots
+#Hookshots
 item.hookshot.name=Hookshot
 item.longshot.name=Longshot
 
-//Cloud Items
+#Cloud Items
 item.boots_cloud.name=Cloud Boots
 item.feather_golden.name=Golden Feather
 
-//Monking Items
+#Monking Items
 item.bone_monking.name=Monking Bone
 
-//Inquisition Armor
+#Inquisition Armor
 item.helmet_inquisition.name=Inquisition Helmet
 item.chestplate_inquisition.name=Inquisition Chestplate
 item.leggings_inquisition.name=Inquisition Leggings
 item.boots_inquisition.name=Inquisition Boots
 
-//Bull Armor
+#Bull Armor
 item.helmet_bull.name=Bull Helmet
 item.chestplate_bull.name=Bull Chestplate
 item.leggings_bull.name=Bull Leggings
@@ -332,21 +332,21 @@ item.boots_bull.name=Bull Boots
 item.leather_bull.name=Bull Leather
 item.horn_bull.name=Bull Horn
 
-//Turtle Armor
+#Turtle Armor
 item.helmet_turtle.name=Turtle Helmet
 item.chestplate_turtle.name=Turtle Chestplate
 item.leggings_turtle.name=Turtle Leggings
 item.boots_turtle.name=Turtle Boots
 item.scale_turtle.name=Turtle Scale
 
-//Slime Armor
+#Slime Armor
 item.helmet_slime.name=Slime Helmet
 item.chestplate_slime.name=Slime Chestplate
 item.leggings_slime.name=Slime Leggings
 item.boots_slime.name=Slime Boots
 item.ball_slime.name=Regenerating Slime Ball
 
-//Spider Armor
+#Spider Armor
 item.helmet_spider.name=Spider Helmet
 item.chestplate_spider.name=Spider Chestplate
 item.leggings_spider.name=Spider Leggings
@@ -354,31 +354,31 @@ item.boots_spider.name=Spider Boots
 item.leather_spider.name=Spider Leather
 item.giant_spider_poison.name=Giant Spider Poison
 
-//Heavy Diamond Armor
+#Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Heavy Diamond Helmet
 item.chestplate_heavy_diamond.name=Heavy Diamond Chestplate
 item.leggings_heavy_diamond.name=Heavy Diamond Leggings
 item.boots_heavy_diamond.name=Heavy Diamond Boots
 
-//Heavy Iron Armor
+#Heavy Iron Armor
 item.helmet_heavy_iron.name=Heavy Iron Helmet
 item.chestplate_heavy_iron.name=Heavy Iron Chestplate
 item.leggings_heavy_iron.name=Heavy Iron Leggings
 item.boots_heavy_iron.name=Heavy Iron Boots
 
-//Dyable Iron Armor
+#Dyable Iron Armor
 item.helmet_iron_dyable.name=Dyable Iron Helmet
 item.chestplate_iron_dyable.name=Dyable Iron Chestplate
 item.leggings_iron_dyable.name=Dyable Iron Leggings
 item.boots_iron_dyable.name=Dyable Iron Boots
 
-//Dyable Diamond Armor
+#Dyable Diamond Armor
 item.helmet_diamond_dyable.name=Dyable Diamond Helmet
 item.chestplate_diamond_dyable.name=Dyable Diamond Chestplate
 item.leggings_diamond_dyable.name=Dyable Diamond Leggings
 item.boots_diamond_dyable.name=Dyable Diamond Boots
 
-//Blocks
+#Blocks
 tile.exporter.name=Exporter Block
 tile.spawner.name=Spawner
 tile.null_block.name=Null Block
@@ -392,7 +392,7 @@ tile.table_dark.name=Dark Oak Table
 tile.boss_block.name=Boss Block
 tile.force_field_nexus.name=Force Field Nexus (NYI)
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Carved Andesite
 tile.andesite_pillar.name=Andesite Pillar
 tile.andesite_cube.name=Andesite Cube
@@ -401,7 +401,7 @@ tile.andesite_square.name=Andesite Square
 tile.andesite_small.name=Small Andesite Bricks
 tile.andesite_large.name=Large Andesite Bricks
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Carved Diorite
 tile.diorite_pillar.name=Diorite Pillar
 tile.diorite_cube.name=Diorite Cube
@@ -410,7 +410,7 @@ tile.diorite_square.name=Diorite Square
 tile.diorite_small.name=Small Diorite Bricks
 tile.diorite_large.name=Large Diorite Bricks
 
-//Diorite blocks
+#Diorite blocks
 tile.granite_carved.name=Carved Granite
 tile.granite_pillar.name=Granite Pillar
 tile.granite_cube.name=Granite Cube
@@ -419,7 +419,7 @@ tile.granite_square.name=Granite Square
 tile.granite_small.name=Small Granite Bricks
 tile.granite_large.name=Large Granite Bricks
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Carved Prismarine
 tile.prismarine_pillar.name=Prismarine Pillar
 tile.prismarine_cube.name=Prismarine Cube
@@ -427,7 +427,7 @@ tile.prismarine_square.name=Prismarine Square
 tile.prismarine_small.name=Small Prismarine Bricks
 tile.prismarine_large.name=Large Prismarine Bricks
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Carved Endstone
 tile.endstone_pillar.name=Endstone Pillar
 tile.endstone_cube.name=Endstone Cube
@@ -435,14 +435,14 @@ tile.endstone_scale.name=Endstone Scale
 tile.endstone_square.name=Endstone Square
 tile.endstone_small.name=Small Endstone Bricks
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Carved Purpur
 tile.purpur_cube.name=Purpur Cube
 tile.purpur_scale.name=Purpur Scale
 tile.purpur_small.name=Small Purpur Bricks
 tile.purpur_large.name=Large Purpur Bricks
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Carved Red Netherbrick
 tile.red_netherbrick_pillar.name=Red Netherbrick Pillar
 tile.red_netherbrick_cube.name=Red Netherbrick Cube
@@ -450,14 +450,14 @@ tile.red_netherbrick_scale.name=Red Netherbrick Scale
 tile.red_netherbrick_square.name=Red Netherbrick Square
 tile.red_netherbrick_large.name=Large Red Netherbricks
 
-//Stone blocks
+#Stone blocks
 tile.stone_pillar.name=Stone Pillar
 tile.stone_cube.name=Stone Cube
 tile.stone_scale.name=Stone Scale
 tile.stone_square.name=Stone Square
 tile.stone_small.name=Small Stone Bricks
 
-//Exporter chests
+#Exporter chests
 tile.exporter_chest_valuable.name=Exporter Chest Treasure
 tile.exporter_chest_food.name=Exporter Chest Food
 tile.exporter_chest_equipment.name=Exporter Chest Equipment
@@ -491,10 +491,10 @@ tile.exporter_chest_custom_12.name=Exporter Chest - Custom 12
 tile.exporter_chest_custom_13.name=Exporter Chest - Custom 13
 tile.exporter_chest_custom_14.name=Exporter Chest - Custom 14
 
-//technical
+#technical
 tile.phylactery.name=Lich Phylactery
 
-//Descriptions
+#Descriptions
 description.spider_armor.name=Wear the spider to become the spider. A full set allows you to climb walls and jump much higher.
 description.spider_sword.name=Flowing forth from the fangs that made this simple sword a hero's blade, Shelob's poison can't be stayed once your foe is stuck with this blade.
 description.bull_armor.name=Wear the bull to become the bull. A full set allows you to charge forward at great speed, and destroy anything in your path.
@@ -502,7 +502,7 @@ description.great_sword.name=Hold right click to strike a large area.
 description.turtle_armor.name=The turtle's power, should you fashion a full set from its shell, will allow you to regain health much faster. The shell prevents most damage from the rear, as well.
 description.slime_armor.name=With a full set of the regenerating goo touching your skin, you can feel your maximum health overflowing, and whenever you are damaged, a small slime may appear which can restore your health, if you can reach it.
 description.cloud_boots.name=Those who tread to the angels song the prophets say can do no wrong. A single leap becomes a bound, a brisk walk breaks the speed of sound, no fall can stop the chosen few, and with these boots, that includes you. 
-//description.dragon_helmet.name=You can feel the power of the dragon coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!
+#description.dragon_helmet.name=You can feel the power of the dragon coursing through your veins. Attacks that once were a threat to you seem meaningless now, yet your own strikes are twice as strong!
 description.dagger.name=Right click while moving to leap forward
 description.ninja_dagger.name=Right click while moving to leap forward. They say the wielder of this dagger could, at will, vanish without a trace. You can probably mimic this behavior with a sneaking right-click, but while you'll vanish from sight, you won't go far. 
 description.bull_battle_axe.name=Grux right-click ground. Make earthquake. Travel forward. Smash enemies real good. Grux like.
@@ -525,17 +525,17 @@ description.staff_gun.name=It's a gun on a stick. Man, those dwarves are geniuse
 description.staff_healing.name=A left-click restores the health that you need, I don't actually remember what this does, but I had to make descriptions for all of these out of greed.
 description.contains.name=Contains:
 description.empty.name=Empty
-description.soul_bottle.name=Left-click a mob to store it, right-click to summon that mob. Can be turned into a spawner for that mob as well.
+description.soul_bottle.name=Left-click a mob to store it, right-click to summon that mob. Can be put in a single use spawner so that spawner spawns the stored mob.
 description.flamethrower.name=Undertech Prototype Fyrebird mk7 22mm nozzle flame expulsion unit. A right-mouse press should expel fire directly forwards. Internal Gel Cartridges should be able to extract slime from anywhere in the inventory. Current model requires regular reload, as no regenerating source of slime has been discovered. 
 description.badge.name=Creative only item. Right-click with it to open a GUI, items placed in this GUI can be accessed later by left-clicking any mob with this badge again, and will be dropped when the attached mob is killed.
 description.backpack.name=Right-click to open.
 description.alchemy_bag.name=Right-click to open. Only stores potions.
-//description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
+#description.woodshot.name=Right-click to shoot hook. Once the hook hits a wooden block, you will be pulled to it.
 description.hookshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
 description.longshot.name=Right-click to shoot hook. Once the hook hits a block, you will be pulled to it.
-//description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-//description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
-//description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
+#description.manualhook.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
+#description.spidershot.name=Right-click to shoot web. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
+#description.hooksword.name=Right-click to shoot hook. Once the hook hits a block, you can hold right-click to move closer to it, and sneak while doing so to move away from it.
 description.moonlight.name=The inscription on the blade reads "My power can only be awakened in the light of the moon"
 description.sunshine.name=The inscription on the blade reads "My power can only be awakened in the light of the sun"
 description.attack_damage_at_night.name=Attack Damage during the Night
@@ -548,10 +548,10 @@ description.staff_thunder.name=Missing #TODO
 description.spear_diamond.name=A well-made weapon with longer reach than swords. Right-click to charge an extended thrust.
 description.cursed_bone.name=Mob to be summoned:
 
-//Enchantments
+#Enchantments
 enchantment.lightning_protection=Lightning Protection
 
-// Mobs
+#Mobs
 entity.cqr_boarman.name=Boarman
 entity.cqr_dummy.name=Dummy
 entity.cqr_dwarf.name=Dwarf
@@ -573,13 +573,13 @@ entity.cqr_triton.name=Triton
 entity.cqr_walker.name=Abyss Walker
 entity.cqr_zombie.name=Zombie
 
-//Mounts
+#Mounts
 entity.cqr_giant_endermite.name=Giant Endermite
 entity.cqr_giant_silverfish.name=Giant Silverfish
 entity.cqr_giant_silverfish1.name=Giant Lava Silverfish
 entity.cqr_giant_silverfish2.name=Giant Swamp Silverfish
 
-// Bosses
+#Bosses
 entity.cqr_nether_dragon.name=Nether Dragon
 entity.cqr_giant_tortoise.name=Giant Tortoise
 entity.cqr_lich.name=Lich
@@ -587,7 +587,7 @@ entity.cqr_necromancer.name=Necromancer
 entity.cqr_boar_mage.name=Boarmage
 entity.cqr_walker_king.name=Walker King
 
-//Misc Entities
+#Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
 entity.cqr_illusion_walker_king.name=Walker King
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
