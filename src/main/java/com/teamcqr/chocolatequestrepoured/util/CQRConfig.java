@@ -105,9 +105,9 @@ public class CQRConfig {
 		@Config.Comment("Setting this to true allows you to set min and max items per chest")
 		public boolean singleLootPoolPerLootTable = true;
 		@Config.RangeInt(min = 0, max = 27)
-		public int minItemsPerLootChest = 6;
+		public int minItemsPerLootChest = 2;
 		@Config.RangeInt(min = 1, max = 27)
-		public int maxItemsPerLootChest = 12;
+		public int maxItemsPerLootChest = 8;
 		public boolean mobsFromCQSpawnerDontDespawn = true;
 		@Config.Comment("Copies the default config files from the jar to the config folder (existing files will get replaced).")
 		public boolean reinstallDefaultConfigs = false;
