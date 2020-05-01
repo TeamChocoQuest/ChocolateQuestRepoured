@@ -67,11 +67,11 @@ public class RoomGrid {
 			return (Math.min(this.sizeX, this.sizeZ) >= smaller) && (Math.max(this.sizeX, this.sizeZ) >= larger);
 		}
 
-		public int cellsFromStartX(RoomGridPosition gridPos) {
+		public int countXCellsToPosition(RoomGridPosition gridPos) {
 			return gridPos.getX() - this.start.getX();
 		}
 
-		public int cellsFromStartZ(RoomGridPosition gridPos) {
+		public int countZCellsToPosition(RoomGridPosition gridPos) {
 			return gridPos.getZ() - this.start.getZ();
 		}
 
