@@ -221,7 +221,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 		}
 
-		if (CQRConfig.mobs.blockCancelledByAxe && amount > 0.0F && this.canBlockDamageSource(source) && source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
+		if (CQRConfig.mobs.blockCancelledByAxe && !this.world.isRemote && amount > 0.0F && this.canBlockDamageSource(source) && source.getImmediateSource() instanceof EntityLivingBase && !(source.getImmediateSource() instanceof EntityPlayer) && ((EntityLivingBase) source.getImmediateSource()).getHeldItemMainhand().getItem() instanceof ItemAxe) {
 			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
 
@@ -237,7 +237,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking() && damageSourceIn != null) {
+		if (!damageSourceIn.isUnblockable() && this.isActiveItemStackBlocking()) {
 			Vec3d vec3d = damageSourceIn.getDamageLocation();
 
 			if (vec3d != null) {
