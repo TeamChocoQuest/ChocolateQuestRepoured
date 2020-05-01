@@ -6,10 +6,12 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -17,10 +19,12 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -32,6 +36,7 @@ import net.minecraftforge.event.LootTableLoadEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -144,7 +149,7 @@ public class EventsHandler {
 	public static void onWorldLoad(WorldEvent.Load e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldCreateSpawnpoint(WorldEvent.CreateSpawnPosition e) {
 		DungeonDataManager.handleWorldLoad(e.getWorld());
@@ -193,6 +198,22 @@ public class EventsHandler {
 			return;
 		}
 		FactionRegistry.instance().handlePlayerLogout(event);
+	}
+
+	@SubscribeEvent
+	public static void onAttackEntityEvent(AttackEntityEvent event) {
+		if (CQRConfig.mobs.blockCancelledByAxe) {
+			EntityPlayer player = event.getEntityPlayer();
+			World world = player.world;
+
+			if (!world.isRemote && event.getTarget() instanceof AbstractEntityCQR) {
+				AbstractEntityCQR targetCQR = (AbstractEntityCQR) event.getTarget();
+
+				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) == 1.0F) {
+					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
+				}
+			}
+		}
 	}
 
 }
