@@ -27,10 +27,6 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	public boolean shouldContinueExecuting() {
 		this.shieldTick = Math.max(this.shieldTick - 1, 0);
 		this.attackTick = Math.max(this.attackTick - 1, 0);
-		if(this.entity.wasRecentlyHitByAxe()) {
-			this.shieldTick = 10;
-			this.entity.resetHitByAxe();
-		}
 		return this.entity.getAttackTarget() != null;
 	}
 
@@ -63,7 +59,11 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 
 	protected void checkAndPerformBlock() {
-		if (this.shieldTick <= 0 && !this.entity.isActiveItemStackBlocking()) {
+		if (this.entity.getLastTimeHitByAxeWhileBlocking() + 60 > this.entity.ticksExisted) {
+			if (this.entity.isActiveItemStackBlocking()) {
+				this.entity.resetActiveHand();
+			}
+		} else if (this.shieldTick <= 0 && !this.entity.isActiveItemStackBlocking()) {
 			ItemStack offhand = this.entity.getHeldItemOffhand();
 			if (offhand.getItem().isShield(offhand, this.entity)) {
 				this.entity.setActiveHand(EnumHand.OFF_HAND);
