@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -64,7 +65,12 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		this.model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
-
+	
+	@Override
+	public boolean shouldRender(EntityCQRNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
+		return super.shouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
+	}
+	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
 		return TEXTURES_NORMAL;

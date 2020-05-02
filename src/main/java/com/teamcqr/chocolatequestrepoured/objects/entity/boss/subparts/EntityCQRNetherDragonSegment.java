@@ -88,4 +88,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		return this.dragon.processInitialInteract(player, hand);
 	}
 
+	public void explode() {
+		if(!world.isRemote) {
+			this.world.createExplosion(this, posX, posY, posZ, 3, false);
+		}
+		setDead();
+	}
+
 }

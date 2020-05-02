@@ -34,6 +34,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -104,6 +105,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1);
 		}
+		moveParts();
+	}
+	
+	@Override
+	protected boolean usesEnderDragonDeath() {
+		return false;
 	}
 
 	@Override
@@ -247,7 +254,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) {
+		if ((this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
 			return false;
 		}
 
@@ -308,7 +315,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.world.updateEntityWithOptionalForce(segment, true);
 		}
 
-		this.moveParts();
+		//if(!this.isDead) {
+			this.moveParts();
+		//}
 	}
 
 	@Override
@@ -332,7 +341,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		for (EntityCQRNetherDragonSegment dragonPart : this.dragonBodyParts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
-			this.world.removeEntityDangerously(dragonPart);
+			if(dragonPart != null) {
+				this.world.removeEntityDangerously(dragonPart);
+			}
 		}
 	}
 
@@ -422,6 +433,38 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public boolean canIgniteTorch() {
 		return false;
+	}
+	
+	@Override
+	protected void onDeathUpdate() {
+		if (this.isSitting()) {
+			this.setSitting(false);
+		}
+		++this.deathTicks;
+		this.motionX = 0;
+		this.motionY = 0;
+		this.motionZ = 0;
+		this.setNoGravity(true);
+		if(this.deathTicks % 2 == 0) {
+			EntityCQRNetherDragonSegment segment = null;
+			for(int i = this.dragonBodyParts.length -1; i >= 0; i--) {
+				if(this.dragonBodyParts[i] != null && !this.dragonBodyParts[i].isDead) {
+					segment = this.dragonBodyParts[i];
+					break;
+				}
+			}
+			if(segment != null) {
+				segment.explode();
+			} else {
+				//All segments are dead -> head is still there
+				if(!world.isRemote) {
+					this.world.createExplosion(this, posX, posY, posZ, 6, true);
+				}
+				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+				this.setDead();
+				onFinalDeath();
+			}
+		}
 	}
 
 }
