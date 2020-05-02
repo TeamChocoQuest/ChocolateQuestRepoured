@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
+import java.awt.Color;
+
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 
 import net.minecraft.client.Minecraft;
@@ -7,6 +9,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.util.Constants;
 
 public class ItemArmorDyable extends ItemArmor {
@@ -46,35 +49,21 @@ public class ItemArmorDyable extends ItemArmor {
 
 				if (nbttagcompound1 != null && nbttagcompound1.hasKey("color", Constants.NBT.TAG_INT)) {
 					int color = nbttagcompound1.getInteger("color");
-					if ((color >> 24 & 15) > 0) {
+					if ((color >> 24 & 1) == 1) {
 						Minecraft mc = Minecraft.getMinecraft();
 						if (mc.world != null) {
-							float j = 1530.0F / (color >> 24 & 15);
-							float k = j / 6.0F;
-							float time = mc.world.getTotalWorldTime() % j;
-							int r = 0;
-							int g = 0;
-							int b = 0;
-							int i = Math.round(time % k * 255.0F / k);
-							if (time < k) {
-								r = 255;
-								g = i;
-							} else if (time < k * 2) {
-								g = 255;
-								r = 255 - i;
-							} else if (time < k * 3) {
-								g = 255;
-								b = i;
-							} else if (time < k * 4) {
-								b = 255;
-								g = 255 - i;
-							} else if (time < k * 5) {
-								b = 255;
-								r = i;
-							} else {
-								r = 255;
-								b = 255 - i;
-							}
+							float j = 1530.0F / (color >> 16 & 255);
+							float s = (color >> 8 & 255) / 255.0F;
+							float b = (color & 255) / 255.0F;
+							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b);
+						}
+					} else if ((color >> 25 & 15) > 0) {
+						Minecraft mc = Minecraft.getMinecraft();
+						if (mc.world != null) {
+							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) / 15.0F * (color >> 25 & 15));
+							int r = Math.round((color >> 16 & 255) * f);
+							int g = Math.round((color >> 8 & 255) * f);
+							int b = Math.round((color & 255) * f);
 							return r << 16 | g << 8 | b;
 						}
 					}
