@@ -49,22 +49,19 @@ public class ItemArmorDyable extends ItemArmor {
 
 				if (nbttagcompound1 != null && nbttagcompound1.hasKey("color", Constants.NBT.TAG_INT)) {
 					int color = nbttagcompound1.getInteger("color");
-					if ((color >> 24 & 1) == 1) {
-						Minecraft mc = Minecraft.getMinecraft();
-						if (mc.world != null) {
+					Minecraft mc = Minecraft.getMinecraft();
+					if (mc.world != null) {
+						if ((color >> 28 & 1) == 1) {
 							float j = 1530.0F / (color >> 16 & 255);
 							float s = (color >> 8 & 255) / 255.0F;
 							float b = (color & 255) / 255.0F;
-							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b);
-						}
-					} else if ((color >> 25 & 15) > 0) {
-						Minecraft mc = Minecraft.getMinecraft();
-						if (mc.world != null) {
+							return Color.HSBtoRGB((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) % j / j, s, b) & 0x00FFFFFF | (color & 0xFF000000);
+						} else if ((color >> 24 & 15) > 0) {
 							float f = 0.5F + 0.5F * MathHelper.sin((mc.world.getTotalWorldTime() + mc.getRenderPartialTicks()) / 15.0F * (color >> 25 & 15));
 							int r = Math.round((color >> 16 & 255) * f);
 							int g = Math.round((color >> 8 & 255) * f);
 							int b = Math.round((color & 255) * f);
-							return r << 16 | g << 8 | b;
+							return r << 16 | g << 8 | b | (color & 0xFF000000);
 						}
 					}
 					return color;
@@ -122,6 +119,14 @@ public class ItemArmorDyable extends ItemArmor {
 		} else {
 			super.setColor(stack, color);
 		}
+	}
+
+	public int getPersistentColor(ItemStack stack) {
+		if (!stack.hasTagCompound()) {
+			return 0;
+		}
+
+		return stack.getTagCompound().getCompoundTag("display").getInteger("color");
 	}
 
 }
