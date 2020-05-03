@@ -34,6 +34,7 @@ public class DungeonSurface extends DungeonBase {
 
 		if (file != null && file.exists() && file.isFile()) {
 			CQStructure structure = new CQStructure(file);
+			structure.setDungeonMob(this.dungeonMob);
 			PlacementSettings settings = new PlacementSettings();
 
 			if (this.rotateDungeon()) {
