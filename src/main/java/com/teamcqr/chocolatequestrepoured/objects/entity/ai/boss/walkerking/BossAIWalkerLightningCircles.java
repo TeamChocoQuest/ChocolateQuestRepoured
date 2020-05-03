@@ -12,7 +12,7 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 
 	private static final int MIN_COOLDOWN = 100;
 	private static final int MAX_COOLDOWN = 200;
-	private static final int MAX_CIRCLE_RADIUS = 24;
+	private static final int MAX_CIRCLE_RADIUS = 218;
 	
 	private int cooldown = 150;
 	private int cooldown_circle = 5;
