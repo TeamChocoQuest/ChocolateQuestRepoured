@@ -104,7 +104,7 @@ public class SpiralStrongholdBuilder {
 		List<List<? extends IStructure>> floors = new ArrayList<>();
 		EDungeonMobType mobType = dungeon.getDungeonMob();
 		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, dungeonChunkX *16, dungeonChunkZ *16);
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, dungeonChunkX, dungeonChunkZ);
 		}
 		for(int i = 0; i < floorCount; i++) {
 			SpiralStrongholdFloor floor = this.floors[i];
