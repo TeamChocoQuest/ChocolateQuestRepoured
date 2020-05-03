@@ -6,6 +6,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -15,28 +18,31 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	// TODO: Add the tail peek
 
 	private final EntityCQRNetherDragon dragon;
-	private final int partID;
-
-	private boolean tailPeek = false;
-	private int tailPart = -1;
-
+	private int partIndex = 0;
+	
+	private static final DataParameter<Integer> PART_INDEX = EntityDataManager.<Integer>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.VARINT);
+	
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID) {
 		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
 
 		this.setSize(1.25F, 1.25F);
 
 		this.dragon = dragon;
-		this.partID = partID;
-
-		if (partID > EntityCQRNetherDragon.SEGMENT_COUNT - 3) {
-			this.tailPeek = true;
-
-			this.tailPart = EntityCQRNetherDragon.SEGMENT_COUNT - this.partID + 1;
-			// System.out.println("part id: " + this.tailPart);
-		}
+		this.partIndex = EntityCQRNetherDragon.SEGMENT_COUNT - partID;
+		this.dataManager.set(PART_INDEX, this.partIndex);
 
 		// String partName, float width, float height
 		this.setInvisible(false);
+	}
+	
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(PART_INDEX, this.partIndex);
+	}
+	
+	public int getPartIndex() {
+		return this.dataManager.get(PART_INDEX);
 	}
 
 	@Override
@@ -71,15 +77,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	public void setRotation(float yaw, float pitch) {
 		super.setRotation(yaw, pitch);
 	}
-
-	public boolean isTailPeek() {
-		return this.tailPeek;
-	}
-
-	public int getTailPartIndex() {
-		return this.tailPart;
-	}
-
+	
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
 		if (this.dragon.isDead) {
