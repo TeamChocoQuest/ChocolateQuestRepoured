@@ -3,6 +3,8 @@ package com.teamcqr.chocolatequestrepoured.util.handlers;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableBreathing;
+import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableRainbow;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -163,6 +165,8 @@ public class EventsHandler {
 	@SubscribeEvent
 	public static void onRecipeRegister(RegistryEvent.Register<IRecipe> event) {
 		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(Reference.MODID, "armor_coloring"));
+		event.getRegistry().register(new RecipeArmorDyableRainbow());
+		event.getRegistry().register(new RecipeArmorDyableBreathing());
 	}
 
 	@SuppressWarnings("deprecation")
