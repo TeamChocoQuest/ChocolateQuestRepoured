@@ -55,6 +55,14 @@
 					"type": "cqrepoured:walker_king"
 				}
 			}
+		},
+		"boar_mage": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:boar_mage"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -62,6 +70,7 @@
 		["giant_tortoise"],
 		["lich"],
 		["necromancer"],
-		["walker_king"]
+		["walker_king"],
+		["boar_mage"]
 	]
 }
