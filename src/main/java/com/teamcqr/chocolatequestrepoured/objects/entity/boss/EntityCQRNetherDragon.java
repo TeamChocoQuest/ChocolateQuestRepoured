@@ -67,7 +67,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs
 	 */
 
-	public static final int SEGMENT_COUNT = 32;
+	public static int SEGMENT_COUNT = 16;
 
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
@@ -107,6 +107,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1);
 		}
 		moveParts();
+	}
+	
+	@Override
+	public float getDefaultWidth() {
+		return 2.0F;
+	}
+
+	@Override
+	public float getDefaultHeight() {
+		return 2.0F;
 	}
 	
 	@Override
