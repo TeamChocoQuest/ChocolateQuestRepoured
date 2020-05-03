@@ -15,8 +15,6 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 
-	// TODO: Add the tail peek
-
 	private final EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	
@@ -48,7 +46,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		return this.dragon.attackEntityFromPart(this, source, amount);
-		// return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
