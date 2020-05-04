@@ -4,11 +4,14 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNethe
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
@@ -34,12 +37,24 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
-		ModelBase model = this.modelSkeletal;
-		if (entity.getPartIndex() <= 1) {
-			if (entity.getPartIndex() <= 0) {
-				model = this.modelTailTip;
-			} else {
-				model = this.modelTail;
+		ModelBase model = null;
+		if(entity.isSkeletal()) {
+			model = this.modelSkeletal;
+			
+			//Flames
+			WorldClient world = Minecraft.getMinecraft().world;
+			double dx = x + (-0.25 + (0.5*world.rand.nextDouble()));
+			double dy = y + (-0.25 + (0.5*world.rand.nextDouble()));
+			double dz = z + (-0.25 + (0.5*world.rand.nextDouble()));
+			world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+		} else {
+			model = this.modelNormal;
+			if (entity.getPartIndex() <= 1) {
+				if (entity.getPartIndex() <= 0) {
+					model = this.modelTailTip;
+				} else {
+					model = this.modelTail;
+				}
 			}
 		}
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
@@ -56,6 +71,9 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
+		if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
+			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
+		}
 		model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
@@ -67,7 +85,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
-		return TEXTURES_SKELETAL;
+		return entity.isSkeletal() ? TEXTURES_SKELETAL : TEXTURES_NORMAL;
 	}
 
 }
