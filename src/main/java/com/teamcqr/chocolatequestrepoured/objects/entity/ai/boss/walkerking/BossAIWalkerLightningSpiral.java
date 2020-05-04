@@ -10,11 +10,11 @@ import net.minecraft.util.math.Vec3d;
 
 public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 	
-	private static final int MIN_COOLDOWN = 80;
-	private static final int MAX_COOLDOWN = 220;
+	private static final int MIN_COOLDOWN = 120;
+	private static final int MAX_COOLDOWN = 260;
 	private static final int ANGLE_INCREMENT = 40;
 	private static final int RADIUS_INCREMENT = 1;
-	private static final int MAX_LIGHTNINGS = 24;
+	private static final int MAX_LIGHTNINGS = 18;
 	
 	private int cooldown = 150;
 	private int cooldown_circle = 5;
@@ -28,7 +28,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 
 	@Override
 	public boolean shouldExecute() {
-		if(entity != null && !entity.isDead && entity.getAttackTarget() != null && lightningCount < MAX_LIGHTNINGS) {
+		if(!entity.world.isRemote && entity != null && !entity.isDead && entity.getAttackTarget() != null && lightningCount < MAX_LIGHTNINGS) {
 			cooldown--;
 			return cooldown <= 0;
 		}

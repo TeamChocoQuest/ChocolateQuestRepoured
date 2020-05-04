@@ -191,7 +191,7 @@ public class GeneratorStrongholdOpen implements IDungeonGenerator {
 		// Structure gen information: stored in map with location and structure file
 		EDungeonMobType mobType = dungeon.getDungeonMob();
 		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x *16, z *16);
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
 		}
 		for (StrongholdFloorOpen floor : this.floors) {
 			floor.generateRooms(world, lists, mobType);
