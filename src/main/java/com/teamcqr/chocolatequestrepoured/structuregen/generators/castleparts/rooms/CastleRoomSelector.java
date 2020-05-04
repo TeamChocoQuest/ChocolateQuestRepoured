@@ -819,9 +819,9 @@ public class CastleRoomSelector {
 			// add each neighbor node to closed list if it connectable and not closed already
 			for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 				//Make sure this cell/room can actually go this direction first
-				if (currentNode.getCell().getRoom().reachableFromSide(direction)) {
+				if (currentNode.getCell().reachableFromSide(direction)) {
 					RoomGridCell neighborCell = this.grid.getAdjacentCell(currentNode.getCell(), direction);
-					if (neighborCell != null && neighborCell.isSelectedForBuilding() && neighborCell.reachableFromSide(direction.getOpposite()) && !invalidCells.contains(neighborCell)) {
+					if (neighborCell != null && neighborCell.isPopulated() && neighborCell.reachableFromSide(direction.getOpposite()) && !invalidCells.contains(neighborCell)) {
 						PathNode neighborNode = new PathNode(currentNode, direction.getOpposite(), neighborCell, neighborG, neighborCell.distanceTo(endCell));
 
 						// should really do this with .contains() but I don't feel like doing the overrides
