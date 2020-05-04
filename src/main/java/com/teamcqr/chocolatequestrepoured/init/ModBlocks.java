@@ -29,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityTable;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -297,6 +298,7 @@ public class ModBlocks {
 			}
 
 			registry.register(new BlockFireCQR().setRegistryName(Blocks.FIRE.getRegistryName()).setUnlocalizedName(Blocks.FIRE.getUnlocalizedName()));
+			BlockFire.init();
 
 			registerTileEntities();
 		}
