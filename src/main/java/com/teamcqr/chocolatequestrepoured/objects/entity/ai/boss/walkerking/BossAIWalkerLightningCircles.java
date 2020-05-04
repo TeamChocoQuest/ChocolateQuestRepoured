@@ -55,9 +55,10 @@ public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
 	}
 	
 	private void spawnLightnings() {
-		int angle = 360 / (2* circleRad);
+		int count = 2* circleRad;
+		int angle = 360 / count;
 		Vec3d v = new Vec3d(circleRad, 0, 0);
-		for(int i = 0; i < (2* circleRad); i++) {
+		for(int i = 0; i < count; i++) {
 			v = VectorUtil.rotateVectorAroundY(v, angle * i);
 			EntityColoredLightningBolt lightning = new EntityColoredLightningBolt(entity.world, entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 			lightning.setPosition(entity.posX + v.x, entity.posY + v.y, entity.posZ + v.z);
