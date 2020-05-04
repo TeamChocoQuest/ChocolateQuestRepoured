@@ -13,17 +13,18 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
 
-	// TODO: Add the tail peek
-
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon_skeletal.png")); 
 
 	private final ModelBase modelNormal;
+	private final ModelBase modelSkeletal;
 	private final ModelBase modelTail;
 	private final ModelBase modelTailTip;
 
 	public RenderCQRNetherDragonSegment(RenderManager manager) {
 		super(manager);
 		this.modelNormal = new ModelNetherDragonBodyParts.ModelNetherDragonBodyPart();
+		this.modelSkeletal = new ModelNetherDragonBodyParts.ModelNetherDragonBodyPartSkeletal();
 		this.modelTail = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailStart();
 		this.modelTailTip = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailTip();
 	}
@@ -33,7 +34,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
-		ModelBase model = this.modelNormal;
+		ModelBase model = this.modelSkeletal;
 		if (entity.getPartIndex() <= 1) {
 			if (entity.getPartIndex() <= 0) {
 				model = this.modelTailTip;
@@ -66,7 +67,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
-		return TEXTURES_NORMAL;
+		return TEXTURES_SKELETAL;
 	}
 
 }
