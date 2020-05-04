@@ -109,7 +109,7 @@ public class GeneratorStronghold implements IDungeonGenerator {
 			StrongholdFloor floor = this.floors[i];
 			EDungeonMobType mobType = dungeon.getDungeonMob();
 			if (mobType == EDungeonMobType.DEFAULT) {
-				mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x *16, z *16);
+				mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
 			}
 			floor.generateRooms(x, z, yFloor, settings, lists, world, mobType);
 			yFloor -= dungeon.getRoomSizeY();
