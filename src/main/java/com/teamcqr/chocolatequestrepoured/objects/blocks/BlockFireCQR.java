@@ -63,7 +63,7 @@ public class BlockFireCQR extends BlockFire {
 					j = -50;
 				}
 
-				if (this.isPosProtected(worldIn, pos)) {
+				if (!this.isPosProtected(worldIn, pos)) {
 					this.tryCatchFire(worldIn, pos.east(), 300 + j, rand, i, EnumFacing.WEST);
 					this.tryCatchFire(worldIn, pos.west(), 300 + j, rand, i, EnumFacing.EAST);
 					this.tryCatchFire(worldIn, pos.down(), 250 + j, rand, i, EnumFacing.UP);
@@ -111,7 +111,7 @@ public class BlockFireCQR extends BlockFire {
 	}
 
 	private void tryCatchFire(World worldIn, BlockPos pos, int chance, Random random, int age, EnumFacing face) {
-		if (!this.isPosProtected(worldIn, pos)) {
+		if (this.isPosProtected(worldIn, pos)) {
 			return;
 		}
 		int i = worldIn.getBlockState(pos).getBlock().getFlammability(worldIn, pos, face);
@@ -166,11 +166,11 @@ public class BlockFireCQR extends BlockFire {
 		if (manager != null) {
 			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
 				if (protectedRegion.preventFireSpreading() && protectedRegion.isInsideProtectedRegion(pos)) {
-					return false;
+					return true;
 				}
 			}
 		}
-		return true;
+		return false;
 	}
 
 }
