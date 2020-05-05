@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
+import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
@@ -72,7 +72,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     }
 
     @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory)
+    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
     {
         setupDecoration(genArray);
         addWallDecoration(world, genArray, dungeon);
