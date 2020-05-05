@@ -210,6 +210,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
+		Blocks.FIRE.init();
 	}
 
 	@EventHandler
