@@ -32,7 +32,7 @@
 		[
 			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_ambient_0"}
 		]
-	}
+	},
 	"entity.nether_dragon.death":
 	{
 		"category": "neutral",
