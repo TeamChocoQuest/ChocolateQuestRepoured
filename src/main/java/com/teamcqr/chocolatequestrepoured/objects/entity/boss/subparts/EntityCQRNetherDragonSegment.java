@@ -17,7 +17,7 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 
-	private final EntityCQRNetherDragon dragon;
+	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
 	private boolean dead = false;
@@ -51,7 +51,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	}
 	
 	public boolean isSkeletal() {
-		return this.dataManager.get(IS_SKELETAL) || this.dragon.getSkeleProgress() >= this.realID;
+		return this.dataManager.get(IS_SKELETAL) || this.dragon == null || this.dragon.getSkeleProgress() >= this.realID;
 	}
 	
 	private void setIsSkeletal(Boolean val) {
@@ -60,7 +60,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.isExplosion() || source.isFireDamage()) {
+		if(source.isExplosion() || source.isFireDamage() || this.dragon == null) {
 			return false;
 		}
 		
@@ -77,6 +77,14 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		super.onUpdate();
 
 		++this.ticksExisted;
+		
+		if(this.dragon == null || (dead && !isDead)) {
+			deathTicks++;
+			if(deathTicks > 10 || this.dragon == null) {
+				explode();
+				this.world.removeEntityDangerously(this);
+			}
+		}
 	}
 
 	@Override
@@ -96,7 +104,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
-		if (this.dragon.isDead) {
+		if (this.dragon == null || this.dragon.isDead) {
 			return false;
 		}
 		return this.dragon.processInitialInteract(player, hand);
@@ -108,22 +116,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		}
 		setSize(0, 0);
 		setInvisible(true);
-	}
-	
-	@Override
-	public void onEntityUpdate() {
-		super.onEntityUpdate();
-		if(dead && !isDead) {
-			deathTicks++;
-			if(deathTicks <= 80) {
-				this.motionY = -0.0001;
-			}
-			if(this.collidedVertically || deathTicks > 80) {
-				explode();
-				setDead();
-				this.world.removeEntityDangerously(this);
-			}
-		}
 	}
 	
 	public void switchToSkeletalState() {
@@ -140,6 +132,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	}
 
 	public void die() {
+		this.dragon = null;
 		this.noClip = false;
 		this.dead = true;
 	}
