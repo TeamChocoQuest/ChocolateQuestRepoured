@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockTNT;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
@@ -15,6 +16,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlockFireCQR extends BlockFire {
+
+	public BlockFireCQR() {
+		this.setRegistryName("fire");
+		this.setHardness(0.0F);
+		this.setLightLevel(1.0F);
+		this.setSoundType(SoundType.CLOTH);
+		this.setUnlocalizedName("fire");
+		this.disableStats();
+	}
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {

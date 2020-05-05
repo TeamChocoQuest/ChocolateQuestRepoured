@@ -31,7 +31,6 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ResourceLocation;
@@ -296,7 +295,7 @@ public class ModBlocks {
 				BLOCKS.add(block);
 			}
 
-			registry.register(new BlockFireCQR().setRegistryName(Blocks.FIRE.getRegistryName()).setUnlocalizedName(Blocks.FIRE.getUnlocalizedName()));
+			registry.register(new BlockFireCQR());
 
 			registerTileEntities();
 		}
