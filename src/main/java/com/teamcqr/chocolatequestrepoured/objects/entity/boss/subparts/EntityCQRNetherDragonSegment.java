@@ -71,7 +71,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	public boolean canBeCollidedWith() {
 		return true;
 	}
-
+	
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -82,7 +82,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 			deathTicks++;
 			if(deathTicks > 10 || this.dragon == null) {
 				explode();
-				this.world.removeEntityDangerously(this);
+				//this.world.removeEntityDangerously(this);
 			}
 		}
 	}
