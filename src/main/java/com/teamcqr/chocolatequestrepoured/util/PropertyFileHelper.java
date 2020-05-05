@@ -3,6 +3,8 @@ package com.teamcqr.chocolatequestrepoured.util;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
+
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
@@ -91,7 +93,19 @@ public class PropertyFileHelper {
 		}
 
 		return retVal;
+	}
 
+	public static ResourceLocation[] getResourceLocationArrayProperty(Properties prop, String key, ResourceLocation[] defVal) {
+		if (!prop.containsKey(key)) {
+			return defVal;
+		}
+
+		String[] stringArray = getStringArrayProperty(prop, key, new String[0]);
+		ResourceLocation[] resourceLocationArray = new ResourceLocation[stringArray.length];
+		for (int i = 0; i < stringArray.length; i++) {
+			resourceLocationArray[i] = new ResourceLocation(stringArray[i]);
+		}
+		return resourceLocationArray;
 	}
 
 	public static boolean getBooleanProperty(Properties prop, String key, boolean defVal) {

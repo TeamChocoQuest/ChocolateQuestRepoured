@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.GeneratorVolcano;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
@@ -16,6 +17,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 /**
  * Copyright (c) 29.04.2019
@@ -35,7 +37,7 @@ public class DungeonVolcano extends DungeonBase {
 	private int maxHeight = 130;
 	private int innerRadius = 6;
 	private int chestChance = 600;
-	private int[] chestIDs = { 4, 10, 2 };
+	private ResourceLocation[] chestIDs;
 	private double steepness = 0.075D;
 	private double lavaChance = 0.005D;
 	private double magmaChance = 0.1;
@@ -92,7 +94,11 @@ public class DungeonVolcano extends DungeonBase {
 		this.ores = PropertyFileHelper.getBooleanProperty(prop, "ores", true);
 		this.oreConcentration = Math.min(Math.max(1, Math.abs(PropertyFileHelper.getIntProperty(prop, "orechance", 5))), 100);
 		this.rampMobName = prop.getProperty("rampMob", "minecraft:zombie");
-		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
+				LootTableList.CHESTS_ABANDONED_MINESHAFT,
+				LootTableList.CHESTS_NETHER_BRIDGE,
+				CQRLootTableList.CHESTS_FOOD
+		});
 		this.stoneBlock = PropertyFileHelper.getBlockProperty(prop, "topBlock", Blocks.STONE);
 		this.lowerStoneBlock = PropertyFileHelper.getBlockProperty(prop, "lowerBlock", Blocks.COBBLESTONE);
 		this.lavaBlock = PropertyFileHelper.getBlockProperty(prop, "lavaBlock", Blocks.LAVA);
@@ -283,7 +289,7 @@ public class DungeonVolcano extends DungeonBase {
 		return this.chestChance;
 	}
 
-	public int[] getChestIDs() {
+	public ResourceLocation[] getChestIDs() {
 		return this.chestIDs;
 	}
 
@@ -306,7 +312,7 @@ public class DungeonVolcano extends DungeonBase {
 	public Block getRampBlock() {
 		return this.rampBlock;
 	}
-	
+
 	public Block[] getOres() {
 		return this.oreBlocks;
 	}

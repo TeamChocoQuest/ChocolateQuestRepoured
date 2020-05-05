@@ -7,13 +7,13 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIArmorSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIShootPoisonProjectiles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -93,7 +93,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesBoss.BOSS_LICH.getLootTable();
+		return CQRLootTableList.ENTITIES_LICH;
 	}
 
 	@Override

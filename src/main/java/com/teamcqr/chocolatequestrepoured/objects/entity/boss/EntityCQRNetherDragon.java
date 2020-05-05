@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIChargeAtTarget;
@@ -12,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -543,7 +543,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesBoss.BOSS_DRAGON_NETHER.getLootTable();
+		return CQRLootTableList.ENTITIES_DRAGON_NETHER;
 	}
 	
 	@Override
