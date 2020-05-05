@@ -470,8 +470,8 @@ public abstract class CastleRoomBase {
 		return result;
 	}
 
-	public int[] getChestIDs() {
-		return null;
+	public ResourceLocation[] getChestIDs() {
+		return new ResourceLocation[0];
 	}
 
 	public int getOffsetX() {

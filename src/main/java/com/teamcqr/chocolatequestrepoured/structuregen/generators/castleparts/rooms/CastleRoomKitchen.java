@@ -2,8 +2,10 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomKitchen extends CastleRoomGenericBase {
@@ -30,7 +32,7 @@ public class CastleRoomKitchen extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public int[] getChestIDs() {
-		return new int[] { ELootTable.CQ_FOOD.ordinal() };
+	public ResourceLocation[] getChestIDs() {
+		return new ResourceLocation[] { CQRLootTableList.CHESTS_FOOD };
 	}
 }

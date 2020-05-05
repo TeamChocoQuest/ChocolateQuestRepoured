@@ -6,7 +6,6 @@ import java.util.Map;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -46,7 +45,7 @@ public class BlockStateGenArray {
         return entityMap;
     }
 
-    public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ELootTable lootTable, GenerationPhase phase) {
+    public boolean addChestWithLootTable(World world, BlockPos pos, EnumFacing facing, ResourceLocation lootTable, GenerationPhase phase) {
         if (lootTable != null) {
             Block chestBlock = Blocks.CHEST;
             IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, facing);
@@ -54,7 +53,7 @@ public class BlockStateGenArray {
             if (chest != null) {
                 ResourceLocation resLoc = null;
                 try {
-                    resLoc = lootTable.getResourceLocation();
+                    resLoc = lootTable;
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }

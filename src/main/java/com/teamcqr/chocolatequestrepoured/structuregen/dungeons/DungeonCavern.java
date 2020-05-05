@@ -12,8 +12,8 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCavern;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -29,6 +29,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.storage.loot.LootTableList;
 
 /**
  * Copyright (c) 29.04.2019
@@ -56,6 +57,7 @@ public class DungeonCavern extends DungeonBase {
 	private String bossMobName = "minecraft:wither";
 	private Block floorMaterial = Blocks.STONE;
 	private Block airBlock = Blocks.AIR;
+	private ResourceLocation[] chestIDs;
 
 	public DungeonCavern(String name, Properties prop) {
 		super(name, prop);
@@ -91,6 +93,11 @@ public class DungeonCavern extends DungeonBase {
 		this.floorMaterial = PropertyFileHelper.getBlockProperty(prop, "floorblock", Blocks.STONE);
 
 		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airblock", Blocks.AIR);
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
+				LootTableList.CHESTS_ABANDONED_MINESHAFT,
+				LootTableList.CHESTS_NETHER_BRIDGE,
+				CQRLootTableList.CHESTS_FOOD
+		});
 	}
 
 	@Override
@@ -170,7 +177,7 @@ public class DungeonCavern extends DungeonBase {
 			// BOSS CHEST
 			IBlockState state = Blocks.CHEST.getDefaultState();
 			TileEntityChest bossChest = (TileEntityChest) Blocks.CHEST.createTileEntity(world, state);
-			bossChest.setLootTable(ELootTable.CQ_VANILLA_END_CITY.getResourceLocation(), world.getSeed());
+			bossChest.setLootTable(LootTableList.CHESTS_END_CITY_TREASURE, world.getSeed());
 			stateMap.put(bossPos.down(), new ExtendedBlockStatePart.ExtendedBlockState(state, bossChest.writeToNBT(new NBTTagCompound())));
 
 			// BOSS SPAWNER
@@ -222,6 +229,10 @@ public class DungeonCavern extends DungeonBase {
 		// System.out.println("Path: " + bossString[1]);
 
 		return new ResourceLocation(bossString[0], bossString[1]);
+	}
+
+	public ResourceLocation[] getChestIDs() {
+		return this.chestIDs;
 	}
 
 }

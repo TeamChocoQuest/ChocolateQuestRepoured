@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.mounts;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBase;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -33,7 +33,7 @@ public class EntityPollo extends EntityCQRMountBase {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesNormal.ENTITY_POLLO.getLootTable();
+		return CQRLootTableList.ENTITIES_POLLO;
 	}
 
 }

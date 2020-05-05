@@ -18,7 +18,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -27,9 +26,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -350,7 +347,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 
 	@Override
 	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		final int[] chestIDs = this.dungeon.getChestIDs();
+		final ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random rdm = new Random();
 		for(BlockPos pos : this.spawnersNChestsOnPath) {
@@ -359,14 +356,8 @@ public class GeneratorVolcano implements IDungeonGenerator {
 				IBlockState state = block.getDefaultState();
 				TileEntityChest chest = (TileEntityChest)block.createTileEntity(world, state);
 				
-				int eltID = chestIDs[rdm.nextInt(chestIDs.length)];
 				if (chest != null) {
-					ResourceLocation resLoc = null;
-					try {
-						resLoc = ELootTable.values()[eltID].getResourceLocation();
-					} catch (Exception ex) {
-						ex.printStackTrace();
-					}
+					ResourceLocation resLoc = chestIDs[rdm.nextInt(chestIDs.length)];
 					if (resLoc != null) {
 						long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
 						chest.setLootTable(resLoc, seed);

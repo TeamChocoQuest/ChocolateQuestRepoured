@@ -2,8 +2,8 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -29,7 +29,7 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesNormal.ENTITY_MINOTAUR.getLootTable();
+		return CQRLootTableList.ENTITIES_MINOTAUR;
 	}
 
 	@Override

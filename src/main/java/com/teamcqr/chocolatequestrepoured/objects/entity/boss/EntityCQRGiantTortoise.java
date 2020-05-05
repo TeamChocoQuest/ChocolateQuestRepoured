@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIIdleSit;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseHealing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.gianttortoise.BossAITortoiseMoveToHome;
@@ -15,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.ilexiconn.llibrary.server.animation.Animation;
@@ -239,7 +239,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return ELootTablesBoss.BOSS_TURTLE.getLootTable();
+		return CQRLootTableList.ENTITIES_TURTLE;
 	}
 
 	@Override

@@ -5,14 +5,17 @@ import java.util.Properties;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class DungeonVegetatedCave extends DungeonBase {
 	
@@ -31,7 +34,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private int caveSegmentCount = 8;
 	private int posY = 30;
 	private int vineChance = 20;
-	private int[] chestIDs;
+	private ResourceLocation[] chestIDs;
 	private double vineLengthModifier = 2;
 	private boolean placeVines;
 	private boolean crossVine;
@@ -74,7 +77,11 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
 		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
-		this.chestIDs = PropertyFileHelper.getIntArrayProperty(prop, "chestIDs", new int[] { 4, 10, 2 });
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
+				LootTableList.CHESTS_ABANDONED_MINESHAFT,
+				LootTableList.CHESTS_NETHER_BRIDGE,
+				CQRLootTableList.CHESTS_FOOD
+		});
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 
@@ -152,10 +159,10 @@ public class DungeonVegetatedCave extends DungeonBase {
 		return this.caveSegmentCount;
 	}
 	
-	public int getChestID(Random random) {
-		return this.chestIDs[random.nextInt(this.chestIDs.length)];
+	public ResourceLocation[] getChestIDs() {
+		return this.chestIDs;
 	}
-
+	
 	public int getTunnelStartSize() {
 		return this.tunnelStartSize;
 	}
