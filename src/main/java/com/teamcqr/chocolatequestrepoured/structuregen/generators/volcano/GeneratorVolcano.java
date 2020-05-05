@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -19,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spi
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -29,7 +31,6 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -384,12 +385,13 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random rng = new Random();
 		int floor = this.spawnersNChestsOnPath.size();
-		CastleGearedMobFactory mobFactory = new CastleGearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rng);
+		GearedMobFactory mobFactory = new GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rng);
 		for(BlockPos pos : this.spawnersNChestsOnPath) {
-			Block block = Blocks.MOB_SPAWNER;
+			Block block = ModBlocks.SPAWNER;//Blocks.MOB_SPAWNER;
 			IBlockState state = block.getDefaultState();
-			TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state);
-			spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
+			//TileEntityMobSpawner spawner = (TileEntityMobSpawner)block.createTileEntity(world, state);
+			TileEntitySpawner spawner = (TileEntitySpawner)block.createTileEntity(world, state);
+			/*spawner.getSpawnerBaseLogic().setEntityId(dungeon.getRampMob());
 			
 			//Spawner settings
 			NBTTagCompound settingsCompound = spawner.writeToNBT(new NBTTagCompound());
@@ -417,10 +419,16 @@ public class GeneratorVolcano implements IDungeonGenerator {
 			spawnPotential.setTag("Entity", ent);
 			spawnPotentials.appendTag(spawnPotential);
 			settingsCompound.setTag("SpawnPotentials", spawnPotentials);;
-			settingsCompound.removeTag("SpawnData");
+			settingsCompound.removeTag("SpawnData");*/
 			//End of spawner settings
-			
-			stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state, settingsCompound));
+			int ec = 2 + rng.nextInt(3);
+			for(int i = 0; i < ec; i++) {
+				Entity ent = mobFactory.getGearedEntityByFloor(floor, world);
+				//NBTTagCompound entity = SpawnerFactory.createSpawnerNBTFromEntity(ent);
+				spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent));
+			}
+			NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
+			stateMap.put(pos.add(0, 1, 0), new ExtendedBlockStatePart.ExtendedBlockState(state, data));
 			floor--;
 		}
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
