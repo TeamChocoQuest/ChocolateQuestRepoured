@@ -20,11 +20,10 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	private final EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
-	private float hp = 50;
-	private static final float MAX_HP = 50;
+	private boolean dead = false;
+	private long deathTicks = 0;
 	
 	private static final DataParameter<Integer> PART_INDEX = EntityDataManager.<Integer>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.VARINT);
-	private static final DataParameter<Float> HEALTH = EntityDataManager.<Float>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.FLOAT);
 	private static final DataParameter<Boolean> IS_SKELETAL = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
 	
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID) {
@@ -45,7 +44,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		super.entityInit();
 		this.dataManager.register(PART_INDEX, this.partIndex);
 		this.dataManager.register(IS_SKELETAL, false);
-		this.dataManager.register(HEALTH, 1 - (hp / MAX_HP));
 	}
 	
 	public int getPartIndex() {
@@ -60,28 +58,12 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.dataManager.set(IS_SKELETAL, val);
 	}
 	
-	public float getHealthPercentage() {
-		return this.dataManager.get(HEALTH);
-	}
-	
-	private void recalcHP() {
-		this.dataManager.set(HEALTH, 1 - (hp / MAX_HP));
-	}
-
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(source.isExplosion() || source.isFireDamage()) {
 			return false;
 		}
 		
-		if(this.isSkeletal()) {
-			//amount *= 0.75 + (0.25 * rng.nextFloat());
-			this.hp -= amount;
-			recalcHP();
-			if(hp <= 0) {
-				this.dragon.attackEntityFromPart(this, source, amount);
-			}
-		}
 		return this.dragon.attackEntityFromPart(this, source, amount);
 	}
 
@@ -127,7 +109,23 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		setSize(0, 0);
 		setInvisible(true);
 	}
-
+	
+	@Override
+	public void onEntityUpdate() {
+		super.onEntityUpdate();
+		if(dead && !isDead) {
+			deathTicks++;
+			if(deathTicks <= 80) {
+				this.motionY = -0.0001;
+			}
+			if(this.collidedVertically || deathTicks > 80) {
+				explode();
+				setDead();
+				this.world.removeEntityDangerously(this);
+			}
+		}
+	}
+	
 	public void switchToSkeletalState() {
 		setIsSkeletal(true);
 		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.1, 0.1, 0.1, 25);
@@ -139,6 +137,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, -0.1, 0.1, 25);
 		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, -0.1, -0.1, 25);
 		playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 1F, 1.25F);
+	}
+
+	public void die() {
+		this.noClip = false;
+		this.dead = true;
 	}
 
 }

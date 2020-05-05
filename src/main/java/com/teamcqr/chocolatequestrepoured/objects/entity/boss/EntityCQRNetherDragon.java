@@ -76,6 +76,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 */
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
+	private float damageTmpPhaseTwo = 40;
 
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
@@ -150,20 +151,31 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-		// if (dragonPart != this.headPart) {
-		damage = damage / 4.0F + Math.min(damage, 1.0F);
-		// }
+		if(this.phase == 0) {
+			damage = damage / 4.0F + Math.min(damage, 1.0F);
+		}
 		if(this.phase == 1) {
 			return false;
 		}
 		
 		if(this.phase == 2) {
-			damage = this.getMaxHealth() / this.getSegmentCount();
+			damageTmpPhaseTwo -= damage;
+			/*damage = this.getMaxHealth() / this.getSegmentCount();
 			this.setHealth(getHealth() - damage);
 			((EntityCQRNetherDragonSegment) dragonPart).explode();
 			removePart(dragonPart);
 			if(damage >= this.getHealth()) {
 				super.attackEntityFrom(source, damage +1);
+			}*/
+			if(damageTmpPhaseTwo <= 0) {
+				damageTmpPhaseTwo = 40;
+				//DONE: Remove last segment
+				removeLastSegment();
+				damage = this.getMaxHealth() / this.getSegmentCount();
+				this.setHealth(getHealth() - damage);
+				if(damage >= this.getHealth()) {
+					super.attackEntityFrom(source, damage +1);
+				}
 			}
 			return true;
 		}
@@ -174,6 +186,21 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return super.attackEntityFrom(source, damage);
 	}
 	
+	private void removeLastSegment() {
+		int indx = Math.max(0, this.dragonBodyParts.length -1);
+		EntityCQRNetherDragonSegment segment = this.dragonBodyParts[indx];
+		if(indx > 0) {
+			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[this.dragonBodyParts.length -1];
+			for(int i = 0; i < partsTmp.length; i++) {
+				partsTmp[i] = this.dragonBodyParts[i];
+			}
+			this.dragonBodyParts = partsTmp;
+		} else {
+			this.dragonBodyParts = new EntityCQRNetherDragonSegment[0];
+		}
+		segment.die();
+	}
+
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		/*
@@ -200,29 +227,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 
 		return super.attackEntityFrom(source, amount);
-	}
-	
-	public void removePart(MultiPartEntityPart part) {
-		int index = 0;
-		for(index = 0; index < this.dragonBodyParts.length; index++) {
-			if(part == this.dragonBodyParts[index]) {
-				break;
-			}
-		}
-		for(int i = index; i < this.dragonBodyParts.length -1; i++) {
-			this.dragonBodyParts[i] = this.dragonBodyParts[i +1];
-			if(i+1 < this.dragonBodyParts.length) {
-				this.dragonBodyParts[i +1] = null;
-			}
-		}
-		/*for(int i = this.dragonBodyParts.length -1; i >= 0; i++) {
-			if(this.dragonBodyParts[i].isDead || this.dragonBodyParts[i] == null) {
-				this.dragonBodyParts[i] = null;
-			}
-		}*/
-		/*if(part != null) {
-			this.world.removeEntityDangerously(part);
-		}*/
 	}
 	
 	@Override
