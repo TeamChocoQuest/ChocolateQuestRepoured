@@ -41,12 +41,14 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		if(entity.isSkeletal()) {
 			model = this.modelSkeletal;
 			
-			//Flames
-			WorldClient world = Minecraft.getMinecraft().world;
-			double dx = x + (-0.25 + (0.5*world.rand.nextDouble()));
-			double dy = y + (-0.25 + (0.5*world.rand.nextDouble()));
-			double dz = z + (-0.25 + (0.5*world.rand.nextDouble()));
-			world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+			if(entity.ticksExisted % 5 == 0) {
+				//Flames
+				WorldClient world = Minecraft.getMinecraft().world;
+				double dx = entity.posX + (-0.25 + (0.5*world.rand.nextDouble()));
+				double dy = 0.5 + entity.posY + (-0.25 + (0.5*world.rand.nextDouble()));
+				double dz = entity.posZ + (-0.25 + (0.5*world.rand.nextDouble()));
+				world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+			}
 		} else {
 			model = this.modelNormal;
 			if (entity.getPartIndex() <= 1) {
@@ -71,9 +73,9 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
-		if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
+		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
 			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
-		}
+		}*/
 		model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		GlStateManager.popMatrix();
 	}
