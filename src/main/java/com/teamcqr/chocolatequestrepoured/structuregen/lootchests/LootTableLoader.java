@@ -96,14 +96,12 @@ public class LootTableLoader {
 	}
 
 	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
-		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.valueOf(name).getFileName() + ".json");
-		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, ELootTable.valueOf(name).getFileName() + ".prop");
-		InputStream inputStream = null;
+		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".json");
+		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".prop");
 
 		if (jsonFile.exists()) {
 			// Load json loot table
-			try {
-				inputStream = new FileInputStream(jsonFile);
+			try (InputStream inputStream = new FileInputStream(jsonFile)) {
 				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
 
 				ThreadLocal<Deque> lootContext = getLootContext();
@@ -123,13 +121,10 @@ public class LootTableLoader {
 			} catch (IOException | JsonSyntaxException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InstantiationException
 					| InvocationTargetException e) {
 				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
-			} finally {
-				IOUtils.closeQuietly(inputStream);
 			}
 		} else if (propFile.exists()) {
 			// Load prop file and fill loot table
-			try {
-				inputStream = new FileInputStream(propFile);
+			try (InputStream inputStream = new FileInputStream(propFile)) {
 				Properties properties = new Properties();
 				properties.load(inputStream);
 
@@ -150,8 +145,6 @@ public class LootTableLoader {
 				}
 			} catch (IOException e) {
 				CQRMain.logger.error("Failed to read prop loot table " + propFile.getName(), e);
-			} finally {
-				IOUtils.closeQuietly(inputStream);
 			}
 		}
 
