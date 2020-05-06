@@ -19,7 +19,19 @@
 	"entity.nether_dragon.hurt":
 	{
 		"category": "neutral",
-		"sounds": [{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt"}]
+		"sounds": 
+		[
+			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_0"},
+			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_hurt_1"}
+		]
+	},
+	"entity.nether_dragon.ambient":
+	{
+		"category": "neutral",
+		"sounds":
+		[
+			{"name": "cqrepoured:entity/nether_dragon/nether_dragon_ambient_0"}
+		]
 	},
 	"entity.nether_dragon.death":
 	{

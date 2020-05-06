@@ -19,12 +19,9 @@ import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesBoss;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ELootTablesNormal;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
@@ -138,10 +135,7 @@ public class CQRMain {
 		}
 
 		// Instantiating enums
-		ELootTable.values();
 		EBannerPatternsCQ.values();
-		ELootTablesNormal.values();
-		ELootTablesBoss.values();
 		EBanners.values();
 
 		// Register event handling for dungeon protection system
@@ -210,6 +204,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
+		Blocks.FIRE.init();
 	}
 
 	@EventHandler

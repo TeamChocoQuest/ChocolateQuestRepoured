@@ -6,12 +6,11 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 
 import net.minecraft.block.Block;
@@ -117,14 +116,9 @@ public class GeneratorCavern implements IDungeonGenerator {
 		IBlockState state = Blocks.CHEST.getDefaultState();
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		TileEntityChest chest = (TileEntityChest) Blocks.CHEST.createTileEntity(world, state);
-		int eltID = new Random().nextInt(14) + 4;
+		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		if (chest != null) {
-			ResourceLocation resLoc = null;
-			try {
-				resLoc = ELootTable.values()[eltID].getResourceLocation();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
+			ResourceLocation resLoc = chestIDs[new Random().nextInt(chestIDs.length)];
 			if (resLoc != null) {
 				long seed = WorldDungeonGenerator.getSeed(world, x, z);
 				chest.setLootTable(resLoc, seed);

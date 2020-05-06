@@ -14,13 +14,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class CastleGearedMobFactory {
+public class GearedMobFactory {
 
 	private int floorCount = 1;
 	private ResourceLocation entityID;
 	private Random random;
 	
-	public CastleGearedMobFactory(int floorCount, ResourceLocation entityID, Random rng) {
+	public GearedMobFactory(int floorCount, ResourceLocation entityID, Random rng) {
 		this.floorCount = floorCount;
 		this.entityID = entityID;
 		this.random = rng;

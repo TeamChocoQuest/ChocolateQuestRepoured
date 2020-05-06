@@ -15,15 +15,7 @@ public class VectorUtil {
 	}
 
 	public static Vec3d rotateVectorAroundY(Vec3d vector, double degrees) {
-		double rad = Math.toRadians(degrees);
-
-		double currentX = vector.x;
-		double currentZ = vector.z;
-
-		double cosine = Math.cos(rad);
-		double sine = Math.sin(rad);
-
-		return new Vec3d((cosine * currentX - sine * currentZ), vector.y, (sine * currentX + cosine * currentZ));
+		return vector.rotateYaw((float) Math.toRadians(degrees));
 	}
 
 	public static Vec3i rotateVector(EAxis axis, Vec3i vector, Double degrees) {

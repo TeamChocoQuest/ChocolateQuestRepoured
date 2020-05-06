@@ -4,26 +4,30 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNethe
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
 
-	// TODO: Add the tail peek
-
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon_skeletal.png")); 
 
 	private final ModelBase modelNormal;
+	private final ModelBase modelSkeletal;
 	private final ModelBase modelTail;
 	private final ModelBase modelTailTip;
 
 	public RenderCQRNetherDragonSegment(RenderManager manager) {
 		super(manager);
 		this.modelNormal = new ModelNetherDragonBodyParts.ModelNetherDragonBodyPart();
+		this.modelSkeletal = new ModelNetherDragonBodyParts.ModelNetherDragonBodyPartSkeletal();
 		this.modelTail = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailStart();
 		this.modelTailTip = new ModelNetherDragonBodyParts.ModelNetherDragonBodyTailTip();
 	}
@@ -33,12 +37,26 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
-		ModelBase model = this.modelNormal;
-		if (entity.getPartIndex() <= 1) {
-			if (entity.getPartIndex() <= 0) {
-				model = this.modelTailTip;
-			} else {
-				model = this.modelTail;
+		ModelBase model = null;
+		if(entity.isSkeletal()) {
+			model = this.modelSkeletal;
+			
+			if(entity.ticksExisted % 5 == 0) {
+				//Flames
+				WorldClient world = Minecraft.getMinecraft().world;
+				double dx = entity.posX + (-0.25 + (0.5*world.rand.nextDouble()));
+				double dy = 0.5 + entity.posY + (-0.25 + (0.5*world.rand.nextDouble()));
+				double dz = entity.posZ + (-0.25 + (0.5*world.rand.nextDouble()));
+				world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
+			}
+		} else {
+			model = this.modelNormal;
+			if (entity.getPartIndex() <= 1) {
+				if (entity.getPartIndex() <= 0) {
+					model = this.modelTailTip;
+				} else {
+					model = this.modelTail;
+				}
 			}
 		}
 		GlStateManager.scale(-1.0F, -1.0F, 1.0F);
@@ -55,7 +73,12 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
-		model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
+			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
+		}*/
+		if(!entity.isInvisible()) {
+			model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		}
 		GlStateManager.popMatrix();
 	}
 	
@@ -66,7 +89,7 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 	
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
-		return TEXTURES_NORMAL;
+		return entity.isSkeletal() ? TEXTURES_SKELETAL : TEXTURES_NORMAL;
 	}
 
 }

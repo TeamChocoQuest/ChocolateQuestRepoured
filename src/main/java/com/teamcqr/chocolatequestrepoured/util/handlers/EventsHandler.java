@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -50,11 +49,11 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
-		if (ELootTable.valueOf(event.getName()) != null) {
+		if (event.getName().getResourceDomain().equals(Reference.MODID)) {
 			try {
 				event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 			} catch (Exception e) {
-				CQRMain.logger.error("Unable to fill loot table " + event.getName());
+				CQRMain.logger.error("Unable to fill loot table {}", event.getName());
 			}
 		}
 	}

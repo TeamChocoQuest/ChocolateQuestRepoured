@@ -1,14 +1,25 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
-import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
+import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
-import net.minecraft.block.*;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockColored;
+import net.minecraft.block.BlockSlab;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -21,8 +32,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-
-import java.util.*;
 
 public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private Vec3i bossBuildOffset = new Vec3i(0, 0, 0);
@@ -67,7 +76,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory)
+	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
 	{
 		// Have to add torches last because they won't place unless the wall next to them is already built
 		this.placeTorches(this.getBossRoomBuildStartPosition(), genArray);
@@ -142,21 +151,21 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 		Collections.shuffle(locList, this.random);
 
 		for (int i = 0; i < numChestsTotal; i++) {
-			ELootTable lootTable;
+			ResourceLocation lootTable;
 
 			if (treasureChestsPlaced < numTreasureChests) {
-				lootTable = ELootTable.CQ_TREASURE;
+				lootTable = CQRLootTableList.CHESTS_TREASURE;
 				++treasureChestsPlaced;
 			}
 			else
 			{
 				if (DungeonGenUtils.PercentageRandom(50, random))
 				{
-					lootTable = ELootTable.CQ_MATERIAL;
+					lootTable = CQRLootTableList.CHESTS_MATERIAL;
 				}
 				else
 				{
-					lootTable = ELootTable.CQ_EQUIPMENT;
+					lootTable = CQRLootTableList.CHESTS_EQUIPMENT;
 				}
 			}
 			genArray.addChestWithLootTable(world, locList.get(i).getKey(), locList.get(i).getValue().getOpposite(), lootTable, BlockStateGenArray.GenerationPhase.POST);
