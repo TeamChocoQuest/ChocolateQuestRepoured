@@ -610,7 +610,10 @@ public class RoomGrid {
 	public boolean cellIsValidForRoof(RoomGridCell cell) {
 		RoomGridCell below = this.getAdjacentCell(cell, EnumFacing.DOWN);
 
-		return (below != null && !cell.isSelectedForBuilding() && below.isPopulated() && !below.getRoom().getRoomType().isBossRoom());
+		return (below != null &&
+				!cell.isSelectedForBuilding() &&
+				below.isPopulated() &&
+				!(below.getFloor() == bossArea.start.getFloor())); //Don't want to build roofs over the boss floor rooms
 	}
 
 	public boolean cellIsOuterEdge(RoomGridCell cell, EnumFacing direction) {
