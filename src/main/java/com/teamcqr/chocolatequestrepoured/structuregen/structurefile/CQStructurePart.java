@@ -366,7 +366,7 @@ public class CQStructurePart extends Template {
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
-				tileEntityChest.setLootTable(lootChestInfo.getLootTable().getResourceLocation(), seed);
+				tileEntityChest.setLootTable(lootChestInfo.getLootTable(), seed);
 			} else {
 				CQRMain.logger.warn("Failed to place loot chest at {}", transformedPos);
 			}
