@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNethe
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -26,7 +27,14 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
 	@Override
 	public void doRender(EntityCQRNetherDragon entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if(entity.isDead) {
+			GlStateManager.pushMatrix();
+			GlStateManager.color(new Float(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)),0,0);
+		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		if(entity.isDead) {
+			GlStateManager.popMatrix();
+		}
 		// DONE: Rotate move around z axis when the mouth is open
 
 		if (this.animState < 11 && entity.isMouthOpen() && !this.mouthIsOpen) {

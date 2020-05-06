@@ -7,6 +7,7 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -20,13 +21,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	private EntityCQRNetherDragon dragon;
 	private int partIndex = 0;
 	private int realID = 0;
-	private boolean dead = false;
-	private long deathTicks = 0;
 	
 	private static final DataParameter<Integer> PART_INDEX = EntityDataManager.<Integer>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_SKELETAL = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
 	
-	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID) {
+	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
 		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
 
 		this.setSize(1.25F, 1.25F);
@@ -34,6 +33,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.partIndex = dragon.getSegmentCount() - partID;
 		this.realID = partID;
 		this.dataManager.set(PART_INDEX, this.partIndex);
+		this.setIsSkeletal(skeletal);
 
 		// String partName, float width, float height
 		this.setInvisible(false);
@@ -78,13 +78,6 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 
 		++this.ticksExisted;
 		
-		if(this.dragon == null || (dead && !isDead)) {
-			deathTicks++;
-			if(deathTicks > 10 || this.dragon == null) {
-				explode();
-				//this.world.removeEntityDangerously(this);
-			}
-		}
 	}
 
 	@Override
@@ -112,10 +105,8 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 
 	public void explode() {
 		if(!world.isRemote) {
-			this.world.createExplosion(this, posX, posY, posZ, 3, false);
+			this.world.createExplosion(this, posX, posY, posZ, 1, false);
 		}
-		setSize(0, 0);
-		setInvisible(true);
 	}
 	
 	public void switchToSkeletalState() {
@@ -132,9 +123,23 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	}
 
 	public void die() {
-		this.dragon = null;
-		this.noClip = false;
-		this.dead = true;
+		explode();
+	}
+	
+	@Override
+	protected void writeEntityToNBT(NBTTagCompound compound) {
+		super.writeEntityToNBT(compound);
+		compound.setBoolean("skeletal", this.isSkeletal());
+		compound.setInteger("realID", realID);
+		compound.setInteger("partIndex", this.partIndex);
+	}
+	
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound compound) {
+		super.readEntityFromNBT(compound);
+		setIsSkeletal(compound.getBoolean("skeletal"));
+		this.realID = compound.getInteger("realID");
+		this.partIndex = compound.getInteger("partIndex");
 	}
 
 }
