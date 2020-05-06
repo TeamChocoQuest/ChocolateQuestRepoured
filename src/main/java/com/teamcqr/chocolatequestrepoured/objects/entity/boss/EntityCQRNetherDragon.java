@@ -165,7 +165,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			if(damageTmpPhaseTwo <= 0) {
 				damageTmpPhaseTwo = 40;
 				//DONE: Remove last segment
-				damage = this.getMaxHealth() / (this.getSegmentCount() -4);
+				damage = this.getMaxHealth() / (this.getSegmentCount() -2);
 				this.setHealth(getHealth() - damage);
 				if(damage >= this.getHealth()) {
 					super.attackEntityFrom(source, damage +1);
@@ -439,9 +439,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	private void updateSegmentCount() {
-		double divisor = this.getMaxHealth() / (this.getSegmentCount() -4);
+		double divisor = this.getMaxHealth() / (this.getSegmentCount() -2);
 		int actualSegmentCount = (int) Math.floor(getHealth() / divisor); 
-		if(actualSegmentCount < (this.dragonBodyParts.length -1 -4)) {
+		if(actualSegmentCount < (this.dragonBodyParts.length -1 -2)) {
 			removeLastSegment();
 		}
 	}
