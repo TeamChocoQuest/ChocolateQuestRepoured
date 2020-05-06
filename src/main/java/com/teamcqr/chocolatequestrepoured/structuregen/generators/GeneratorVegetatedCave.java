@@ -18,7 +18,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetated
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.ELootTable;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -183,19 +182,14 @@ public class GeneratorVegetatedCave implements IDungeonGenerator {
 		// DONE: Place and fill chests
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, x / 16, z / 16));
+		ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		for (BlockPos pos : this.chests) {
 			Block block = Blocks.CHEST;
 			IBlockState state = block.getDefaultState();
 			TileEntityChest chest = (TileEntityChest) block.createTileEntity(world, state);
 
-			int eltID = dungeon.getChestID(random);
 			if (chest != null) {
-				ResourceLocation resLoc = null;
-				try {
-					resLoc = ELootTable.values()[eltID].getResourceLocation();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				ResourceLocation resLoc = chestIDs[random.nextInt(chestIDs.length)];
 				if (resLoc != null) {
 					long seed = WorldDungeonGenerator.getSeed(world, x + pos.getX() + pos.getY(), z + pos.getZ() + pos.getY());
 					chest.setLootTable(resLoc, seed);

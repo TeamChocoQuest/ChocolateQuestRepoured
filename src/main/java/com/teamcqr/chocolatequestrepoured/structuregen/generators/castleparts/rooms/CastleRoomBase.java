@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import com.teamcqr.chocolatequestrepoured.objects.factories.CastleGearedMobFactory;
+import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
@@ -87,7 +87,7 @@ public abstract class CastleRoomBase {
 
 	protected abstract void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon);
 
-	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, CastleGearedMobFactory mobFactory) {
+	public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
 		; // Default is no decoration
 	}
 
@@ -470,8 +470,8 @@ public abstract class CastleRoomBase {
 		return result;
 	}
 
-	public int[] getChestIDs() {
-		return null;
+	public ResourceLocation[] getChestIDs() {
+		return new ResourceLocation[0];
 	}
 
 	public int getOffsetX() {
