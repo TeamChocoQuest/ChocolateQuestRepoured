@@ -33,7 +33,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 		//super.build(world, genArray, room, dungeon, start, side, decoMap);
 
 		ResourceLocation[] chestIDs = room.getChestIDs();
-		if (chestIDs != null) {
+		if (chestIDs != null && chestIDs.length > 0) {
 			Block chestBlock = Blocks.CHEST;
 			IBlockState state = this.schematic.get(0).getState(side);
 			TileEntityChest chest = (TileEntityChest) chestBlock.createTileEntity(world, state);
