@@ -76,7 +76,9 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
 			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
 		}*/
-		model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		if(!entity.isInvisible()) {
+			model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
+		}
 		GlStateManager.popMatrix();
 	}
 	
