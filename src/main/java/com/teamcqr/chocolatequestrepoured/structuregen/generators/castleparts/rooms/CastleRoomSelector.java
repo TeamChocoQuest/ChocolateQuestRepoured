@@ -483,12 +483,12 @@ public class CastleRoomSelector {
 				} else if (snapToSide == EnumFacing.SOUTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
 					int x = distFromEdge / 2;
-					int z = distFromEdge - 1;
+					int z = distFromEdge;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
 				} else { //east
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
 					int z = distFromEdge / 2;
-					int x = distFromEdge - 1;
+					int x = distFromEdge;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
 				}
 			}

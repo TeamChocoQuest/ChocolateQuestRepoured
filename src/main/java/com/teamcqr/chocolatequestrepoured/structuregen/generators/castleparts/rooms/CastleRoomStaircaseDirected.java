@@ -44,8 +44,13 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (int x = 0; x < this.buildLengthX - 1; x++) {
-			for (int z = 0; z < this.buildLengthZ - 1; z++) {
+		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially
+		//generating a room facing south and then rotating it
+		int lenX = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthX : this.buildLengthZ;
+		int lenZ = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthZ : this.buildLengthX;
+
+		for (int x = 0; x < lenX - 1; x++) {
+			for (int z = 0; z < lenZ - 1; z++) {
 				this.buildFloorBlock(x, z, genArray, dungeon);
 
 				if (z < 2) {

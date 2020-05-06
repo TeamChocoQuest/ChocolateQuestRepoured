@@ -667,7 +667,10 @@ public class RoomGrid {
 	public boolean canAttachTower(RoomGridCell cell, EnumFacing side) {
 		RoomGridCell adjacent = this.getAdjacentCell(cell, side);
 
-		return (!cell.getRoom().isTower() && !cell.getRoom().hasDoorOnSide(side) && adjacent != null && !(adjacent.isPopulated() && !cell.getRoom().isStairsOrLanding()));
+		return (!cell.getRoom().isTower() &&
+				!cell.getRoom().hasDoorOnSide(side) &&
+				adjacent != null && !(adjacent.isPopulated() &&
+				!cell.getRoom().isStairsOrLanding()));
 	}
 
 	public double distanceBetweenCells2D(RoomGridCell c1, RoomGridCell c2) {

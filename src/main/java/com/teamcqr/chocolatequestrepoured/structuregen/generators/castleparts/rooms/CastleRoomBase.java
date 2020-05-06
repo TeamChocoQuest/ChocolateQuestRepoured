@@ -241,7 +241,7 @@ public abstract class CastleRoomBase {
 	}
 
 	public void addInnerWall(EnumFacing side) {
-		if (!this.walls.hasWallOnSide(side)) {
+		if (!this.walls.hasWallOnSide(side) && this.canBuildInnerWallOnSide(side)) {
 			this.walls.addInner(side);
 		}
 	}

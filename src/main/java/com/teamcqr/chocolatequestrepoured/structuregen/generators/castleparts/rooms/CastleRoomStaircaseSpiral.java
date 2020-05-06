@@ -92,15 +92,6 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		return this.pillarStart.getZ();
 	}
 
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		super.addInnerWall(side);
-	}
-
-	@Override
-	public void addOuterWall(EnumFacing side) {
-		super.addOuterWall(side);
-	}
 
 	private void recalcPillarStart() {
 		int centerX = (this.buildLengthX - 1) / 2;

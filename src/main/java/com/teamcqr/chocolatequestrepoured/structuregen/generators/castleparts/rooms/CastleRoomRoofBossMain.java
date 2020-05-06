@@ -77,7 +77,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 
 	@Override
 	public void placeBoss(World world, BlockStateGenArray genArray, DungeonCastle dungeon, ResourceLocation bossResourceLocation, ArrayList<String> bossUuids) {
-		BlockPos pos =  this.origin.add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
+		BlockPos pos =  this.getBossRoomBuildStartPosition().add(BOSS_ROOM_STATIC_SIZE / 2, 1, BOSS_ROOM_STATIC_SIZE / 2);
 		if(bossResourceLocation == null) {
 			
 			EntityArmorStand indicator = new EntityArmorStand(world);
