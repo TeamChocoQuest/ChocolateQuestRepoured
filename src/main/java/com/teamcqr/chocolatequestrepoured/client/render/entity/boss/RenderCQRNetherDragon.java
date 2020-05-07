@@ -27,12 +27,12 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
 	@Override
 	public void doRender(EntityCQRNetherDragon entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		if(entity.isDead) {
+		if(entity.deathTicks > 0 ) {
 			GlStateManager.pushMatrix();
-			GlStateManager.color(new Float(0.3F * (Math.sin(0.125 * entity.ticksExisted) + 1)),0,0);
+			GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
 		}
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-		if(entity.isDead) {
+		if(entity.deathTicks > 0 ) {
 			GlStateManager.popMatrix();
 		}
 		// DONE: Rotate move around z axis when the mouth is open

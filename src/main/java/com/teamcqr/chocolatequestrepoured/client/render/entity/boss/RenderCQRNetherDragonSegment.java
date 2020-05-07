@@ -73,6 +73,12 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
+		
+		if(entity.getParent() != null) {
+			if(entity.getParent().deathTicks > 0) {
+				GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
+			}
+		}
 		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
 			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
 		}*/

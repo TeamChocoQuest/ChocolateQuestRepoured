@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 
 import net.minecraft.block.Block;
@@ -101,6 +103,11 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 			return false;
 		}
 		return this.dragon.processInitialInteract(player, hand);
+	}
+	
+	@Nullable
+	public EntityCQRNetherDragon getParent() {
+		return this.dragon;
 	}
 
 	public void explode() {

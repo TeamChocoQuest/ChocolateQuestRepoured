@@ -21,7 +21,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -567,36 +566,30 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	protected void onDeathUpdate() {
-		//TODO: Do this properly
-		if(!this.world.isRemote) {
-			if (this.isSitting()) {
-				this.setSitting(false);
+		++this.deathTicks;
+		this.noClip = false;
+		this.setNoGravity(false);
+		this.motionX = 0;
+		this.motionZ = 0;
+		if(this.posY <= 0 || this.onGround || this.deathPhaseEnd) {
+			this.setSitting(true);
+			this.motionY = 0;
+			if(this.collidedVertically && !this.deathPhaseEnd) {
+				this.deathPhaseEnd = true;
+				this.deathTicks = 0;
 			}
-			++this.deathTicks;
-			this.noClip = false;
-			this.setNoGravity(false);
-			this.motionX = 0;
-			this.motionZ = 0;
-			this.setNoGravity(true);
-			if(this.posY <= 0 || this.onGround || this.deathPhaseEnd) {
-				this.motionY = 0;
-				if(this.collidedVertically && !this.deathPhaseEnd) {
-					this.deathPhaseEnd = true;
-					this.deathTicks = 0;
+			//All segments are dead -> head is still there
+			if(this.deathTicks >= 40 || this.posY <= 0) {
+				if(!world.isRemote) {
+					this.world.createExplosion(this, posX, posY, posZ, 3, true);
+					dropExperience(100, posX, posY, posZ);
 				}
-				//All segments are dead -> head is still there
-				if(this.deathTicks >= 80 || this.posY <= 0) {
-					if(!world.isRemote) {
-						this.world.createExplosion(this, posX, posY, posZ, 6, true);
-						dropExperience(100, posX, posY, posZ);
-					}
-					this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-					this.setDead();
-					onFinalDeath();
-				}
-			} else {
-				this.move(MoverType.SELF, 0, -0.1, 0);
+				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+				this.setDead();
+				onFinalDeath();
 			}
+		} else if (this.isSitting()) {
+			this.setSitting(false);
 		}
 	}
 	
