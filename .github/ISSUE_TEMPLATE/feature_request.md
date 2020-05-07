@@ -6,23 +6,23 @@ labels: 'Type: Enhancememt'
 assignees: ''
 ---
 
-#**General Info**
+# **General Info**
  - This is a..
    - [ ] Change request
    - [ ] Feature request
  - [ ] This has already been asked before and the answer was 'No'
  - [ ] This has already been implemented by another mod (which is compatible)
 
-#**Description**
-##Basic description
+# **Description**
+## Basic description
 *Describe your idea in a few short sentences
 
-##Why should it be in the mod?
+## Why should it be in the mod?
 *Explain why your idea is cool and fits with the mod
 
-##Detailed description
+## Detailed description
 *Explain in detail how your idea works
 
-#**Others**
+# **Others**
 *If you have something like a small code that implements your idea just post it here, this also includes things like models or textures for example
 
