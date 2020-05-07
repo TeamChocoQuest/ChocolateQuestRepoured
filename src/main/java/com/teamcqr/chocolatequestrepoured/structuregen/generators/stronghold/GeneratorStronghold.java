@@ -93,7 +93,7 @@ public class GeneratorStronghold implements IDungeonGenerator {
 		settings.setIntegrity(1.0F);
 
 		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding());
-		structure.setDungeonMOb(mobType);
+		structure.setDungeonMob(mobType);
 		
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
@@ -104,7 +104,7 @@ public class GeneratorStronghold implements IDungeonGenerator {
 			lists.add(list);
 		}
 		structure = new CQStructure(this.dungeon.getEntranceStairRoom());
-		structure.setDungeonMOb(mobType);
+		structure.setDungeonMob(mobType);
 		
 		int yFloor = y;
 		yFloor -= structure.getSize().getY();
