@@ -87,6 +87,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SKELE_COUNT = EntityDataManager.<Integer>createKey(EntityCQRNetherDragon.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> PHASE_INCREASED = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 
 	private boolean isReadyToAttack = true;
 
@@ -142,12 +143,21 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		this.dataManager.register(MOUTH_OPEN, false);
 		this.dataManager.register(SKELE_COUNT, -1);
+		this.dataManager.register(PHASE_INCREASED, false);
 	}
 	
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
 		if(this.phase == 0) {
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
+			if(damage >= this.getHealth()) {
+				this.phase++;
+				this.dataManager.set(PHASE_INCREASED, true);
+				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+				this.setHealth(this.getMaxHealth() -1);
+				damage = 0;
+				return false;
+			}
 		}
 		if(this.phase == 1) {
 			return false;
@@ -155,29 +165,23 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		if(this.phase == 2) {
 			damageTmpPhaseTwo -= damage;
-			/*damage = this.getMaxHealth() / this.getSegmentCount();
-			this.setHealth(getHealth() - damage);
-			((EntityCQRNetherDragonSegment) dragonPart).explode();
-			removePart(dragonPart);
-			if(damage >= this.getHealth()) {
-				super.attackEntityFrom(source, damage +1);
-			}*/
 			if(damageTmpPhaseTwo <= 0) {
 				damageTmpPhaseTwo = 40;
 				//DONE: Remove last segment
 				damage = this.getMaxHealth() / (this.getSegmentCount() -2);
 				this.setHealth(getHealth() - damage);
 				if(damage >= this.getHealth()) {
-					super.attackEntityFrom(source, damage +1);
+					super.attackEntityFrom(source, damage +1, true);
 				}
 			}
-			return true;
+			updateSegmentCount();
+			return super.attackEntityFrom(source, 0, true);
 		}
 		if(this.phase == 0) {
-			return attackEntityFrom(source, damage);
+			return attackEntityFrom(source, damage, true);
 		}
 
-		return super.attackEntityFrom(source, damage);
+		return super.attackEntityFrom(source, damage, true);
 	}
 	
 	private void removeLastSegment() {
@@ -198,12 +202,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		/*
-		 * if (source instanceof EntityDamageSource && ((EntityDamageSource) source).getIsThornsDamage()) {
-		 * //return this.attackEntityFromPart(this.headPart, source, amount);
-		 * return true;
-		 * }
-		 */
 		if (source.isFireDamage() || source.isExplosion()) {
 			return false;
 		}
@@ -211,18 +209,19 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		//Phase change
 		if(this.phase == 0 && amount >= this.getHealth()) {
 			this.phase++;
+			this.dataManager.set(PHASE_INCREASED, true);
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			//DONE: Init phase 2!!
 			this.setHealth(this.getMaxHealth() -1);
 			amount = 0;
 			return false;
-		} else if (phase != 0) {
+		} else if (phase != 0 && amount > 0) {
 			//Play blaze sound
 			playSound(SoundEvents.ENTITY_BLAZE_HURT, 2F, 1.5F);
 			return false;
 		}
 
-		return super.attackEntityFrom(source, amount);
+		return super.attackEntityFrom(source, amount, false);
 	}
 	
 	@Override
@@ -428,10 +427,18 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			if(this.dragonBodyParts[this.dragonBodyParts.length -1].isSkeletal()) {
 				this.dataManager.set(SKELE_COUNT, this.dragonBodyParts.length +1);
 				this.phase++;
+				this.dataManager.set(PHASE_INCREASED, true);
 			}
 		}
+		
+		if(world.isRemote && this.dataManager.get(PHASE_INCREASED)) {
+			this.dataManager.set(PHASE_INCREASED, false);
+			this.phase++;
+		}
 
-		updateSegmentCount();
+		if(this.phase > 1) {
+			updateSegmentCount();
+		}
 		
 		super.onUpdate();
 		
