@@ -11,7 +11,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNe
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
@@ -78,6 +80,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
 	private float damageTmpPhaseTwo = 40;
+	private int fireballTimer = 240;
 	boolean deathPhaseEnd = false;
 
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
@@ -90,10 +93,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static final DataParameter<Boolean> PHASE_INCREASED = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 
 	private boolean isReadyToAttack = true;
-
-	private ENetherDragonAttacks currentAttack = null;
-
-	private int attackTimer = 0;
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -337,13 +336,38 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		// DONE: Destroy the blocks
+		
 		this.destroyBlocksInAABB(this.getEntityBoundingBox());
-		/*
-		 * for(EntityCQRNetherDragonSegment part : this.dragonBodyParts) {
-		 * destroyBlocksInAABB(part.getEntityBoundingBox());
-		 * }
-		 */
+		
+		this.fireballTimer--;
+		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
+			this.fireballTimer = 240;
+			int indx = getRNG().nextInt(this.dragonBodyParts.length);
+			while(this.dragonBodyParts[indx] == null) {
+				indx = getRNG().nextInt(this.dragonBodyParts.length);
+			}
+			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
+			Vec3d v = pre.getPositionVector().subtract(this.dragonBodyParts[indx].getPositionVector());
+			v = v.add(new Vec3d(0, 0.125 - (0.25 * getRNG().nextDouble()), 0));
+			
+			if(getRNG().nextBoolean()) {
+				v = VectorUtil.rotateVectorAroundY(v, 45);
+				int angle = getRNG().nextInt(61);
+				v = VectorUtil.rotateVectorAroundY(v, angle);
+			} else {
+				v = VectorUtil.rotateVectorAroundY(v, -45);
+				int angle = -getRNG().nextInt(61);
+				v = VectorUtil.rotateVectorAroundY(v, angle);
+			}
+			v = v.normalize();
+			ProjectileHotFireball proj = new ProjectileHotFireball(world, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
+			v = v.scale(0.5);
+			proj.motionX = v.x;
+			proj.motionY = v.y;
+			proj.motionZ = v.z;
+			proj.velocityChanged = true;
+			world.spawnEntity(proj);
+		}
 
 		// TODO: Attack stuff -> in updateAI
 
@@ -558,9 +582,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public void startAttack(ENetherDragonAttacks attackType) {
 		if (this.isReadyToAttack) {
-			this.currentAttack = attackType;
 			this.setMouthOpen(true);
-			this.attackTimer = 0;
 		}
 	}
 
