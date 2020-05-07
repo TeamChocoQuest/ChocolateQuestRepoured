@@ -433,6 +433,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		if(world.isRemote && this.dataManager.get(PHASE_INCREASED)) {
 			this.dataManager.set(PHASE_INCREASED, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			this.phase++;
 		}
 
@@ -590,7 +591,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.setNoGravity(false);
 		this.motionX = 0;
 		this.motionZ = 0;
-		boolean deathP2 = this.posY <= 0 || this.onGround || this.deathPhaseEnd;
+		boolean deathP2 = this.posY <= 0 || ((this.onGround || this.deathPhaseEnd) && this.deathTicks >= 80);
 		if((this.deathTicks <= 30 && !deathP2) && this.deathTicks % 15 == 0 && this.deathTicks > 0) {
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getHurtSound(DamageSource.GENERIC), SoundCategory.MASTER, 1, 1, false);
 		}
@@ -602,7 +603,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				this.deathTicks = 0;
 			}
 			//All segments are dead -> head is still there
-			if(this.deathTicks >= 40 || this.posY <= 0) {
+			if(this.deathTicks >= 60 || this.posY <= 0) {
 				if(!world.isRemote) {
 					this.world.createExplosion(this, posX, posY, posZ, 3, true);
 					dropExperience(100, posX, posY, posZ);
