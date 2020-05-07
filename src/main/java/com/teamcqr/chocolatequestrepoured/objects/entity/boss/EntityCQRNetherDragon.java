@@ -210,6 +210,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		//Phase change
 		if(this.phase == 0 && amount >= this.getHealth()) {
 			this.phase++;
+			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			//DONE: Init phase 2!!
 			this.setHealth(this.getMaxHealth() -1);
 			amount = 0;
@@ -570,7 +571,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.setNoGravity(false);
 		this.motionX = 0;
 		this.motionZ = 0;
-		if(this.posY <= 0 || this.onGround || this.deathPhaseEnd) {
+		boolean deathP2 = this.posY <= 0 || this.onGround || this.deathPhaseEnd;
+		if((this.deathTicks <= 30 && !deathP2) && this.deathTicks % 15 == 0 && this.deathTicks > 0) {
+			this.world.playSound(this.posX, this.posY, this.posZ, this.getHurtSound(DamageSource.GENERIC), SoundCategory.MASTER, 1, 1, false);
+		}
+		if(deathP2) {
 			this.setSitting(true);
 			this.motionY = 0;
 			if(this.collidedVertically && !this.deathPhaseEnd) {
