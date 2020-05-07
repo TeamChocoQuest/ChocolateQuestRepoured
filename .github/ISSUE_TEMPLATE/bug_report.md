@@ -6,6 +6,23 @@ labels: 'Type: Bug'
 assignees: ''
 
 ---
+**Common sense Info**
+ - I play...
+   - [ ] With a large modpack
+   - [ ] Only with CQR and it's dependencies
+ - The issue occurs in...
+   - [ ] Singleplayer
+   - [ ] Multiplayer
+ - [ ] I have searched for this or a similar issue before reporting and it was either (1) not previously reported, or (2) previously fixed  and I'm having the same problem.
+ - [ ] I am using the latest version of the mod (all versions can be found on github under releases)
+ - [ ] I reproduced the bug without any other mod's except forge, cqr and it's dependencies
+ - [ ] The game crashes because of this bug
+ 
+ 
+ **Versions**
+Chocolate Quest Repoured:
+Forge:
+Minecraft:
 
 **Describe the bug**
 A clear and concise description of what the bug is.
@@ -25,11 +42,6 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
-
-**Versions**
-Chocolate Quest Repoured:
-Forge:
-Minecraft:
 
 **Other**
 Crash report:
