@@ -1,12 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemShield;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
-public class ProjectileHotFireball extends ProjectileBase {
+public class ProjectileHotFireball extends EntityThrowable {
 	
 
 	public ProjectileHotFireball(World worldIn) {
@@ -25,8 +26,22 @@ public class ProjectileHotFireball extends ProjectileBase {
 	}
 	
 	@Override
+	public boolean hasNoGravity() {
+		return true;
+	}
+	
+	@Override
+	public void onUpdate() {
+		if (this.ticksExisted > 800) {
+			this.world.createExplosion(this.thrower, posX, posY, posZ, 1.5F, true);
+			this.setDead();
+		}
+
+		super.onUpdate();
+	}
+	
+	@Override
 	protected void onImpact(RayTraceResult result) {
-		super.onImpact(result);
 		if(result.typeOfHit == Type.ENTITY) {
 			if(result.entityHit == this.thrower) {
 				return;
