@@ -399,8 +399,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				this.phaseChangeTimer = 2;
 				for(int i = 0; i < this.dragonBodyParts.length; i++) {
 					if(!this.dragonBodyParts[i].isSkeletal()) {
-						/*world.removeEntityDangerously(*/this.dragonBodyParts[i].switchToSkeletalState();
-						//this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i, true);
+						this.dragonBodyParts[i].switchToSkeletalState();
 						if(!world.isRemote) {
 							if(i == 0) {
 								this.dataManager.set(SKELE_COUNT, 1);
