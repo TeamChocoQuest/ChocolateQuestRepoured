@@ -82,7 +82,10 @@ public class GeneratorStronghold implements IDungeonGenerator {
 		// places the structures
 		// CQStructure entranceStair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
-
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
+		}
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);
 		settings.setRotation(Rotation.NONE);
@@ -90,6 +93,8 @@ public class GeneratorStronghold implements IDungeonGenerator {
 		settings.setIntegrity(1.0F);
 
 		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding());
+		structure.setDungeonMOb(mobType);
+		
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -99,6 +104,8 @@ public class GeneratorStronghold implements IDungeonGenerator {
 			lists.add(list);
 		}
 		structure = new CQStructure(this.dungeon.getEntranceStairRoom());
+		structure.setDungeonMOb(mobType);
+		
 		int yFloor = y;
 		yFloor -= structure.getSize().getY();
 		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, yFloor, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
@@ -107,10 +114,7 @@ public class GeneratorStronghold implements IDungeonGenerator {
 		
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
-			EDungeonMobType mobType = dungeon.getDungeonMob();
-			if (mobType == EDungeonMobType.DEFAULT) {
-				mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
-			}
+			
 			floor.generateRooms(x, z, yFloor, settings, lists, world, mobType);
 			yFloor -= dungeon.getRoomSizeY();
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);
