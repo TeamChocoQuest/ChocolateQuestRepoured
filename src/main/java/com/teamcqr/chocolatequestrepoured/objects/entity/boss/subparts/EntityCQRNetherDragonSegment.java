@@ -8,14 +8,12 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 
 public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
@@ -118,15 +116,9 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	
 	public void switchToSkeletalState() {
 		setIsSkeletal(true);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.1, 0.1, 0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.1, 0.1, -0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, 0.1, 0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, 0.1, -0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.1, -0.1, 0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, 0.1, -0.1, -0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, -0.1, 0.1, 25);
-		this.world.spawnParticle(EnumParticleTypes.FLAME, posX, posY, posZ, -0.1, -0.1, -0.1, 25);
-		playSound(SoundEvents.ENTITY_ZOMBIE_VILLAGER_CURE, 1F, 1.25F);
+		if(!world.isRemote) {
+			this.world.createExplosion(this, posX, posY, posZ, 0, false);
+		}
 	}
 
 	public void die() {
