@@ -35,7 +35,7 @@ public class RenderProjectileLargeFireball extends Render<ProjectileLargeFirebal
         this.bindEntityTexture(entity);
         GlStateManager.rotate(entity.ticksExisted * 7, 1.0F, 1.0F, 1.0F);
         GlStateManager.translate(-0.5F, 0F, 0.5F);
-        blockrendererdispatcher.renderBlockBrightness(Blocks.LAVA.getDefaultState(), 8);
+        blockrendererdispatcher.renderBlockBrightness(Blocks.MAGMA.getDefaultState(), 8);
         GlStateManager.translate(-1.0F, 0.0F, 1.0F);
         GL11.glPopMatrix();
     }
