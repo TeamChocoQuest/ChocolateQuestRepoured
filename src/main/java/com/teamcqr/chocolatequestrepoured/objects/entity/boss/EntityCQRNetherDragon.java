@@ -25,6 +25,7 @@ import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -268,6 +269,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			// Spit fire
 			this.setMouthOpen(true);
 		}
+	}
+	
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		if(super.attackEntityAsMob(entityIn)) {
+			if(this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
+				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 60 + entityIn.world.getDifficulty().ordinal() * 20));
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override
