@@ -18,7 +18,7 @@ public class BossAIFlyRandomly extends AbstractCQREntityAI<EntityCQRNetherDragon
 	public boolean shouldExecute() {
 		EntityMoveHelper entitymovehelper = this.entity.getMoveHelper();
 
-		if (entity.getAttackTarget() != null || entity.getLastAttackedEntityTime() <= 400) {
+		if (entity.getAttackTarget() != null /*|| entity.getLastAttackedEntityTime() <= 400*/) {
 			return false;
 		}
 		if (!entitymovehelper.isUpdating()) {
