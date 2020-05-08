@@ -6,7 +6,9 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIChargeAtTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyRandomly;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAISpiralUpOrDown;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.MoveHelperNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -23,7 +25,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -117,6 +121,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
 			worldIn.spawnEntity(this.dragonBodyParts[i]);
 		}
+		this.moveHelper = new MoveHelperNetherDragon(this);
 		moveParts();
 	}
 	
@@ -224,12 +229,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIAttackRanged(this, 1.1, 30, 60, 40));
-		this.tasks.addTask(6, new BossAIChargeAtTarget(this));
+		//this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIAttackRanged(this, 1.1, 30, 60, 40));
+		//this.tasks.addTask(6, new BossAIChargeAtTarget(this));
 		//this.tasks.addTask(7, new BossAIFlyToLocation(this));
-		this.tasks.addTask(8, new BossAISpiralUpOrDown(this));
-		this.tasks.addTask(10, new EntityAIAttack(this));
-		this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		//this.tasks.addTask(8, new BossAISpiralUpOrDown(this));
+		//this.tasks.addTask(10, new EntityAIAttack(this));
+		//this.tasks.addTask(20, new EntityAIMoveToHome(this));
+		this.tasks.addTask(30, new BossAIFlyRandomly(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -692,5 +698,86 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 		return this.getHomePositionCQR();
 	}
+	
+	//Methods from entity flying
+	@Override
+	public void fall(float distance, float damageMultiplier)
+    {
+    }
+	
+	@Override
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
+    {
+    }
+	
+	@Override
+    public void travel(float strafe, float vertical, float forward)
+    {
+        if (this.isInWater())
+        {
+            this.moveRelative(strafe, vertical, forward, 0.02F);
+            this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.800000011920929D;
+            this.motionY *= 0.800000011920929D;
+            this.motionZ *= 0.800000011920929D;
+        }
+        else if (this.isInLava())
+        {
+            this.moveRelative(strafe, vertical, forward, 0.02F);
+            this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+            this.motionX *= 0.5D;
+            this.motionY *= 0.5D;
+            this.motionZ *= 0.5D;
+        }
+        else
+        {
+            float f = 0.91F;
 
+            if (this.onGround)
+            {
+                BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+                IBlockState underState = this.world.getBlockState(underPos);
+                f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
+            }
+
+            float f1 = 0.16277136F / (f * f * f);
+            this.moveRelative(strafe, vertical, forward, this.onGround ? 0.1F * f1 : 0.02F);
+            f = 0.91F;
+
+            if (this.onGround)
+            {
+                BlockPos underPos = new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ));
+                IBlockState underState = this.world.getBlockState(underPos);
+                f = underState.getBlock().getSlipperiness(underState, this.world, underPos, this) * 0.91F;
+            }
+
+            this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+            this.motionX *= (double)f;
+            this.motionY *= (double)f;
+            this.motionZ *= (double)f;
+        }
+
+        this.prevLimbSwingAmount = this.limbSwingAmount;
+        double d1 = this.posX - this.prevPosX;
+        double d0 = this.posZ - this.prevPosZ;
+        float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
+
+        if (f2 > 1.0F)
+        {
+            f2 = 1.0F;
+        }
+
+        this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
+        this.limbSwing += this.limbSwingAmount;
+    }
+
+    /**
+     * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or
+     * for AI reasons)
+     */
+    public boolean isOnLadder()
+    {
+        return false;
+    }
+    
 }
