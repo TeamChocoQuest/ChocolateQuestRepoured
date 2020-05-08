@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHeadSkeletal;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -12,21 +13,26 @@ import net.minecraft.util.ResourceLocation;
 public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 
 	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
-	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/skeletal_nether_dragon.png"));
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon_skeletal_head.png"));
 
-	private ModelNetherDragonHead model = new ModelNetherDragonHead();
-	private int animState = 0;
-	private boolean mouthIsOpen = false;
+	private final static ModelNetherDragonHead modelNormal = new ModelNetherDragonHead();
+	private final static ModelNetherDragonHeadSkeletal modelSkeletal = new ModelNetherDragonHeadSkeletal();
 
-	public RenderCQRNetherDragon(RenderManager manager, ModelNetherDragonHead model) {
+	public RenderCQRNetherDragon(RenderManager manager) {
 		// super(manager, new ModelNetherDragon(), 0.5F);
-		super(manager, model, 0.5F);
-
-		this.model = model;
+		super(manager, modelNormal, 0.5F);
 	}
 
 	@Override
 	public void doRender(EntityCQRNetherDragon entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		
+		//Determine model
+		if(entity.getSkeleProgress() >= 0) {
+			this.mainModel = modelSkeletal;
+		} else {
+			this.mainModel = modelNormal;
+		}
+		
 		if(entity.deathTicks > 0 ) {
 			GlStateManager.pushMatrix();
 			GlStateManager.color(new Float(0.5F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
@@ -35,38 +41,11 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 		if(entity.deathTicks > 0 ) {
 			GlStateManager.popMatrix();
 		}
-		// DONE: Rotate move around z axis when the mouth is open
-
-		if (this.animState < 11 && entity.isMouthOpen() && !this.mouthIsOpen) {
-			float angle = (this.animState) * 3.375F;
-			this.model.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(angle));
-
-			this.animState++;
-			if (this.animState == 11) {
-				this.mouthIsOpen = true;
-				this.animState = 0;
-			}
-		}
-
-		else if (this.animState < 11 && !entity.isMouthOpen() && this.mouthIsOpen) {
-			// this.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(33.75D));
-			float angle = (10 - this.animState) * 3.375F;
-			this.model.Mouth_Bottom.rotateAngleZ = new Float(Math.toRadians(angle));
-
-			this.animState++;
-			if (this.animState == 11) {
-				this.mouthIsOpen = false;
-				this.animState = 0;
-			}
-		} else {
-
-		}
-
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragon entity) {
-		return TEXTURES_NORMAL;
+		return entity.getSkeleProgress() < 0 ? TEXTURES_NORMAL : TEXTURES_SKELETAL;
 	}
 
 }
