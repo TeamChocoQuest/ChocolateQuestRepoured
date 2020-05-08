@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -203,6 +205,20 @@ public class ModelNetherDragonHeadSkeletal extends ModelBase {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) { 
         this.HeadNonSkeletal.render(f5);
+    }
+    
+    @Override
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {
+    	super.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor, entityIn);
+    	EntityCQRNetherDragon dragon = (EntityCQRNetherDragon)entityIn;
+    	if(dragon.isMouthOpen()) {
+    		float angle = new Float(Math.toRadians(13));
+    		setRotateAngle(this.Mouth_Bottom, 0, 0, angle);
+    		setRotateAngle(this.Mouth_Top, 0, 0, -(angle /2));
+    	} else {
+    		setRotateAngle(this.Mouth_Bottom, 0, 0, 0);
+    		setRotateAngle(this.Mouth_Top, 0, 0, 0);
+    	}
     }
 
     /**

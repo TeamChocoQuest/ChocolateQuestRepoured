@@ -81,6 +81,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int phaseChangeTimer = 0;
 	private float damageTmpPhaseTwo = 40;
 	private int fireballTimer = 240;
+	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
@@ -103,8 +104,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	public EntityCQRNetherDragon(World worldIn) {
 		super(worldIn);
-		this.noClip = true;
-		this.setNoGravity(true);
 		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
@@ -274,6 +273,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if(super.attackEntityAsMob(entityIn)) {
 			if(this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
 				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 60 + entityIn.world.getDifficulty().ordinal() * 20));
+			}
+			if(!this.world.isRemote) {
+				this.mouthTimer = 5;
 			}
 			return true;
 		}
@@ -459,6 +461,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dataManager.set(PHASE_INCREASED, false);
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			this.phase++;
+		}
+		
+		if(!world.isRemote && mouthTimer > 0) {
+			mouthTimer--;
+			this.dataManager.set(MOUTH_OPEN, mouthTimer > 0);
 		}
 
 		if(this.phase > 1) {
@@ -677,6 +684,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 			world.removeEntityDangerously(segment);
 		}
+	}
+	
+	protected BlockPos getCirclingCenter() {
+		if(this.getHomePositionCQR() == null) {
+			this.setHomePositionCQR(getPosition());
+		}
+		return this.getHomePositionCQR();
 	}
 
 }
