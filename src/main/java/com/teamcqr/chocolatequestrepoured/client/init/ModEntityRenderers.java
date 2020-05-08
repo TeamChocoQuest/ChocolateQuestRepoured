@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.client.init;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNecromancer;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNetherDragonHead;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMage;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelWalkerKing;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderBubble;
@@ -41,6 +40,8 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileFirewallPart;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileHookShotHook;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileHotFireball;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileLargeFireball;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
@@ -88,6 +89,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileC
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileEarthQuake;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileLargeFireball;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
@@ -132,6 +135,8 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, renderManager -> new RenderProjectileFirewallPart(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, renderManager -> new RenderProjectileHookShotHook(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, renderManager -> new RenderProjectileBubble(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileLargeFireball.class, renderManager -> new RenderProjectileLargeFireball(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, renderManager -> new RenderProjectileHotFireball(renderManager));
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, renderManager -> new RenderSummoningCircle(renderManager));
@@ -194,7 +199,7 @@ public class ModEntityRenderers {
 
 	protected static void registerBossRenderers() {
 		// Nether Dragon
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, renderManager -> new RenderCQRNetherDragon(renderManager, new ModelNetherDragonHead()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, renderManager -> new RenderCQRNetherDragon(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, renderManager -> new RenderCQRNetherDragonSegment(renderManager));
 
 		// Giant Tortoise

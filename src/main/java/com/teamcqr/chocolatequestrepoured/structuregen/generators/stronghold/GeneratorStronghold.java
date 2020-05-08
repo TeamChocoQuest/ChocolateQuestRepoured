@@ -82,35 +82,71 @@ public class GeneratorStronghold implements IDungeonGenerator {
 		// places the structures
 		// CQStructure entranceStair = new CQStructure(dungeon.getEntranceStairRoom(), dungeon, dunX, dunZ, dungeon.isProtectedFromModifications());
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
-
+		
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
+		}
 		PlacementSettings settings = new PlacementSettings();
 		settings.setMirror(Mirror.NONE);
 		settings.setRotation(Rotation.NONE);
 		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
 		settings.setIntegrity(1.0F);
+		
+		CQStructure structureStair = new CQStructure(this.dungeon.getEntranceStairRoom());
+		structureStair.setDungeonMob(mobType);
 
-		CQStructure structure = new CQStructure(this.dungeon.getEntranceBuilding());
+		CQStructure structureEntrance = new CQStructure(this.dungeon.getEntranceBuilding());
+		structureEntrance.setDungeonMob(mobType);
+		
+		int segCount = 0;
+		CQStructure stairSeg = null;
+		if(this.dungeon.useStairSegments()) {
+			int ySurface = new Integer(y);
+			
+			int yTmp = 3;
+			yTmp += (this.floors.length -1) * this.dungeon.getRoomSizeY();
+			yTmp += structureStair.getSize().getY();
+			
+			if(yTmp < ySurface) {
+				y = yTmp;
+				stairSeg = new CQStructure(this.dungeon.getEntranceStairSegment());
+				stairSeg.setDungeonMob(mobType);
+				while(y < ySurface) {
+					segCount++;
+					y += stairSeg.getSize().getY();
+				}
+			}
+		}
+
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			lists.add(supportBuilder.createSupportHillList(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structure.getSize().getX(), structure.getSize().getZ(), EPosType.CENTER_XZ_LAYER));
+			lists.add(supportBuilder.createSupportHillList(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), structureEntrance.getSize().getX(), structureEntrance.getSize().getZ(), EPosType.CENTER_XZ_LAYER));
 		}
-		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+		for (List<? extends IStructure> list : structureEntrance.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
 			lists.add(list);
 		}
-		structure = new CQStructure(this.dungeon.getEntranceStairRoom());
+		
+		if(segCount > 0 ) {
+			while(segCount > 0) {
+				segCount--;
+				y -= stairSeg.getSize().getY();
+				for (List<? extends IStructure> list : stairSeg.addBlocksToWorld(world, new BlockPos(x, y, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+					lists.add(list);
+				}
+			}
+		}
+		
 		int yFloor = y;
-		yFloor -= structure.getSize().getY();
-		for (List<? extends IStructure> list : structure.addBlocksToWorld(world, new BlockPos(x, yFloor, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
+		yFloor -= structureStair.getSize().getY();
+		for (List<? extends IStructure> list : structureStair.addBlocksToWorld(world, new BlockPos(x, yFloor, z), settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z)) {
 			lists.add(list);
 		}
 		
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
-			EDungeonMobType mobType = dungeon.getDungeonMob();
-			if (mobType == EDungeonMobType.DEFAULT) {
-				mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
-			}
+			
 			floor.generateRooms(x, z, yFloor, settings, lists, world, mobType);
 			yFloor -= dungeon.getRoomSizeY();
 			//initPos = floor.getLastRoomPastePos(initPos, this.dungeon).add(0, this.dungeon.getRoomSizeY(), 0);

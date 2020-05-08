@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 public class DungeonStrongholdLinear extends DungeonBase {
 
 	private File entranceStairFolder;
+	private File entranceStairSegmentFolder;
 	private File entranceBuildingFolder;
 	private File bossRoomFolder;
 
@@ -54,6 +55,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	private int roomSizeX = 15;
 	private int roomSizeY = 10;
 	private int roomSizeZ = 15;
+	
+	private boolean useStairSegments = true;
 
 	// Generator for the old strongholds which were basic linear dungeons
 
@@ -71,8 +74,11 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		this.maxFloorSize = PropertyFileHelper.getIntProperty(prop, "maxFloorSize", 5);
 
 		this.entranceStairFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairFolder", "stronghold/linear/entranceStairs/");
+		this.entranceStairSegmentFolder = PropertyFileHelper.getFileProperty(prop, "entranceStairSegmentFolder", "stronghold/linear/entranceStairSegments");
 		this.entranceBuildingFolder = PropertyFileHelper.getFileProperty(prop, "entranceFolder", "stronghold/linear/entrances/");
 		this.bossRoomFolder = PropertyFileHelper.getFileProperty(prop, "bossRoomFolder", "stronghold/linear/bossrooms/");
+		
+		this.useStairSegments = PropertyFileHelper.getBooleanProperty(prop, "useStairSegments", true);
 		
 		this.curveENFolder = PropertyFileHelper.getFileProperty(prop, "curveENFolder", "stronghold/rooms/curves/EN");
 		this.curveESFolder = PropertyFileHelper.getFileProperty(prop, "curveESFolder", "stronghold/rooms/curves/ES");
@@ -130,8 +136,16 @@ public class DungeonStrongholdLinear extends DungeonBase {
 		return this.getStructureFileFromDirectory(this.entranceStairFolder);
 	}
 
+	public File getEntranceStairSegment() {
+		return this.getStructureFileFromDirectory(this.entranceStairSegmentFolder);
+	}
+	
 	public File getBossRoom() {
 		return this.getStructureFileFromDirectory(this.bossRoomFolder);
+	}
+	
+	public boolean useStairSegments() {
+		return this.useStairSegments;
 	}
 	
 	@Nullable
