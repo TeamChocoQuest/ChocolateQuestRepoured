@@ -2,6 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import net.minecraft.util.EnumFacing;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -36,21 +38,21 @@ public class RoomGridCell {
 	private boolean partOfMainStruct = false;
 	private CastleRoomBase room;
 	private boolean narrow;
-	private HashSet<RoomGridCell> linkedCells; // cells that are connected to this room (no walls between)
+	private HashSet<RoomGridCell> connectedCells; // all cells near this one that have the same type
 	private HashSet<RoomGridCell> pathableCells; // cells on the same floor that are potentially reachable
 	private boolean isBossArea = false;
 
 	public RoomGridCell(int floor, int x, int z, CastleRoomBase room) {
 		this.room = room;
 		this.gridPosition = new RoomGridPosition(floor, x, z);
-		this.linkedCells = new HashSet<>();
+		this.connectedCells = new HashSet<>();
 		this.pathableCells = new HashSet<>();
 	}
 
 	public void setAllLinkedReachable(List<RoomGridCell> unreachableCells, List<RoomGridCell> reachableCells) {
 		this.reachable = true;
 
-		for (RoomGridCell linkedCell : this.getLinkedCellsCopy()) {
+		for (RoomGridCell linkedCell : this.getConnectedCellsCopy()) {
 			linkedCell.setReachable();
 			unreachableCells.remove(linkedCell);
 
@@ -173,20 +175,24 @@ public class RoomGridCell {
 		return this.isBossArea;
 	}
 
-	public void linkToCell(RoomGridCell cell) {
-		this.linkedCells.add(cell);
+	public void connectToCell(RoomGridCell cell) {
+		this.connectedCells.add(cell);
 	}
 
-	public void setLinkedCells(HashSet<RoomGridCell> cells) {
-		this.linkedCells = new HashSet<>(cells);
+	public void connectToCells(Collection<RoomGridCell> cell) {
+		this.connectedCells.addAll(cell);
 	}
 
-	public HashSet<RoomGridCell> getLinkedCellsCopy() {
-		return new HashSet<>(this.linkedCells); // return a copy
+	public void setConnectedCells(HashSet<RoomGridCell> cells) {
+		this.connectedCells = new HashSet<>(cells);
 	}
 
-	public boolean isLinkedToCell(RoomGridCell cell) {
-		return this.linkedCells.contains(cell);
+	public HashSet<RoomGridCell> getConnectedCellsCopy() {
+		return new HashSet<>(this.connectedCells); // return a copy
+	}
+
+	public boolean isConnectedToCell(RoomGridCell cell) {
+		return this.connectedCells.contains(cell);
 	}
 
 	public void addPathableCells(HashSet<RoomGridCell> cells) {
@@ -208,6 +214,14 @@ public class RoomGridCell {
 	public void setLandingForAllPathableCells() {
 		for (RoomGridCell cell : this.pathableCells) {
 			cell.setHasLanding();
+		}
+	}
+
+	public void copyRoomPropertiesToConnectedCells() {
+		ArrayList<CastleRoomBase> connectedRooms = new ArrayList<>();
+		connectedCells.stream().filter(RoomGridCell::isPopulated).forEach(c -> connectedRooms.add(c.getRoom()));
+		for (CastleRoomBase connectedRoom : connectedRooms) {
+			connectedRoom.copyPropertiesOf(this.room);
 		}
 	}
 
