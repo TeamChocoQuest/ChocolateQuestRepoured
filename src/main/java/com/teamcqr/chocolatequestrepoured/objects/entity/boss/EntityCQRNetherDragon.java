@@ -618,6 +618,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	protected void onDeathUpdate() {
+		//TODO: Make this better...
 		++this.deathTicks;
 		this.noClip = false;
 		this.setNoGravity(false);
