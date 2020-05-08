@@ -52,6 +52,7 @@ public class CastleRoomSelector {
 	private static final int PADDING_FLOORS = 2;
 	private static final int MIN_TOWER_FLOORS = 3;
 	private static final int MIN_TOWER_SIZE = 7; // needs to have room for spiral stairs
+	private static final int MIN_BRIDGE_LENGTH = 2;
 
 	private static final int MIN_BOSS_ROOM_SIZE = 15;
 
@@ -102,6 +103,8 @@ public class CastleRoomSelector {
 
 		this.placeOuterDoors();
 		this.placeTowers();
+		this.placeBridges();
+
 		this.pathBetweenRooms();
 
 	}
@@ -343,6 +346,31 @@ public class CastleRoomSelector {
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
 			cell.setRoom(new CastleRoomWalkableRoofTower(this.getRoomStart(cell), this.roomSize, this.floorHeight, tower, cell.getFloor()));
+		}
+	}
+
+	private void placeBridges() {
+		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0);
+		for (RoomGridCell cell : populated) {
+			ArrayList<EnumFacing> bridgeDirections = grid.getPotentialBridgeDirections(cell);
+			if (!bridgeDirections.isEmpty())
+			{
+				EnumFacing bestDirection = null;
+				int longestBridge = MIN_BRIDGE_LENGTH - 1; //subtract one since we are checking for greater than this
+
+				for (EnumFacing direction : bridgeDirections) {
+					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, direction);
+					if (bridgeCells.size() > longestBridge) {
+						longestBridge = bridgeCells.size();
+						bestDirection = direction;
+					}
+				}
+
+				if (bestDirection != null) {
+					//Build the bridge on bridgecells
+					System.out.println("Would build a bridge at " + cell.toString() + " of length " + longestBridge);
+				}
+			}
 		}
 	}
 

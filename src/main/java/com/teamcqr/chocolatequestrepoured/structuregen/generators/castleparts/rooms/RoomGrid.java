@@ -630,6 +630,42 @@ public class RoomGrid {
 		return true;
 	}
 
+	public ArrayList<EnumFacing> getPotentialBridgeDirections(RoomGridCell cell) {
+		ArrayList<EnumFacing> result = new ArrayList<>();
+
+		if (cell.isPopulated()) {
+			for (EnumFacing side : EnumFacing.HORIZONTALS) {
+				if (cellIsValidForBridge(getAdjacentCell(cell, side))) {
+					result.add(side);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	public ArrayList<RoomGridCell> getBridgeCells(RoomGridCell cell, EnumFacing direction) {
+		ArrayList<RoomGridCell> result = new ArrayList<>();
+
+		RoomGridCell next = getAdjacentCell(cell, direction);
+		while (cellIsValidForBridge(next)) {
+			result.add(next);
+			next = getAdjacentCell(next, direction);
+		}
+
+		return result;
+	}
+
+	private boolean cellIsValidForBridge(@Nullable RoomGridCell cell) {
+		if (cell != null && cell.isBuildableExactly()) {
+			RoomGridCell below = getAdjacentCell(cell, EnumFacing.DOWN);
+			//Cell below it has to satisfy the same
+			return (below != null && cell.isBuildableExactly());
+		}
+
+		return false;
+	}
+
 	public ArrayList<RoomGridCell> getAdjacentSelectedCellsInRow(RoomGridPosition position) {
 		ArrayList<RoomGridCell> result = new ArrayList<>();
 
