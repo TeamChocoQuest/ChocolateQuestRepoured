@@ -3,8 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyRandomly;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.MoveHelperNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
@@ -231,8 +230,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		//this.tasks.addTask(8, new BossAISpiralUpOrDown(this));
 		//this.tasks.addTask(10, new EntityAIAttack(this));
 		//this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(19, new EntityAIFollowPath(this));
-		this.tasks.addTask(20, new BossAIFlyRandomly(this));
+		this.tasks.addTask(18, new BossAICircleAroundLocation(this));
+		//this.tasks.addTask(20, new BossAIFlyRandomly(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -618,35 +617,39 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	protected void onDeathUpdate() {
-		//TODO: Make this better...
 		++this.deathTicks;
-		this.noClip = false;
-		this.setNoGravity(false);
-		this.motionX = 0;
-		this.motionZ = 0;
-		boolean deathP2 = this.posY <= 0 || ((this.onGround || this.deathPhaseEnd) && this.deathTicks >= 80);
-		if((this.deathTicks <= 30 && !deathP2) && this.deathTicks % 15 == 0 && this.deathTicks > 0) {
-			this.world.playSound(this.posX, this.posY, this.posZ, this.getHurtSound(DamageSource.GENERIC), SoundCategory.MASTER, 1, 1, false);
-		}
-		if(deathP2) {
-			this.setSitting(true);
-			this.motionY = 0;
-			if(this.collidedVertically && !this.deathPhaseEnd) {
-				this.deathPhaseEnd = true;
-				this.deathTicks = 0;
+		double distC = this.getDistanceSq(getCirclingCenter());
+		
+		distC = Math.sqrt(distC);
+		if(this.deathTicks % 10 == 0) {
+			for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+				float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+				float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+				float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+				this.world.spawnParticle(this.getDeathAnimParticles(), segment.posX + (double) f, segment.posY + 2.0D + (double) f1, segment.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 			}
-			//All segments are dead -> head is still there
-			if(this.deathTicks >= 60 || this.posY <= 0) {
-				if(!world.isRemote) {
-					this.world.createExplosion(this, posX, posY, posZ, 3, true);
-					dropExperience(100, posX, posY, posZ);
-				}
+			float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+			float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+			float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+			this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+		}
+		if(distC > 3) {
+			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
+			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
+			this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
+		} else if (this.deathTicks < 600){
+			this.noClip = false;
+			if(this.onGround || this.posY <= getCirclingCenter().getY() || this.deathTicks >= 600) {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				this.setDead();
 				onFinalDeath();
+			} else {
+				this.setMoveVertical(-1);
 			}
-		} else if (this.isSitting()) {
-			this.setSitting(false);
+		} else if(this.deathTicks >= 600) {
+			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+			this.setDead();
+			onFinalDeath();
 		}
 	}
 	
@@ -686,11 +689,32 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	protected void onFinalDeath() {
 		super.onFinalDeath();
 		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+	        {
+	            this.dropExperience(MathHelper.floor((float)120), segment.posX, segment.posY, segment.posZ);
+	        }
+			float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+			float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+			float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+			this.world.spawnParticle(this.getDeathAnimParticles(), segment.posX + (double) f, segment.posY + 2.0D + (double) f1, segment.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 			world.removeEntityDangerously(segment);
 		}
+		float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
+		float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
+		float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
+		this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+        {
+            this.dropExperience(MathHelper.floor((float)800), posX, posY, posZ);
+        }
 	}
 	
-	protected BlockPos getCirclingCenter() {
+	@Override
+	protected EnumParticleTypes getDeathAnimParticles() {
+		return EnumParticleTypes.LAVA;
+	}
+	
+	public BlockPos getCirclingCenter() {
 		if(this.getHomePositionCQR() == null) {
 			this.setHomePositionCQR(getPosition());
 		}
