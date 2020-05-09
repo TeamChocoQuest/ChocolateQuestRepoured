@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.MoveHelperNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -110,7 +109,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		// Init the body parts
 		initBody();
 		
-		this.moveHelper = new MoveHelperNetherDragon(this);
+		//this.moveHelper = new MoveHelperNetherDragon(this);
 		moveParts();
 	}
 	
