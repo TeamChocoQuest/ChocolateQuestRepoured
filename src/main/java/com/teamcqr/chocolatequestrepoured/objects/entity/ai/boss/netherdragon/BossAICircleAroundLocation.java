@@ -1,21 +1,87 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon;
 
-import net.minecraft.entity.ai.EntityAIBase;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
-public class BossAICircleAroundLocation extends EntityAIBase {
+import net.minecraft.util.math.Vec3d;
 
-	/**
-	 * This AI controls the attack scheme and movement behavior of the netherdragon
-	 */
-
-	public BossAICircleAroundLocation() {
-		// TODO Auto-generated constructor stub
+public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNetherDragon> {
+	
+	private Vec3d targetPosition = null;
+	private Vec3d nextPosition = null;
+	Vec3d vAngle = null;
+	Vec3d direction = null;
+	Vec3d center = null;
+	double dY = 6;
+	protected static final double ANGLE_INCREMENT = 36;
+	protected static final double CIRCLING_RADIUS = 32;
+	protected static final double MIN_DISTANCE_TO_TARGET = 3;
+	
+	public BossAICircleAroundLocation(EntityCQRNetherDragon entity) {
+		super(entity);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		// TODO Auto-generated method stub
+		if(this.entity.getCirclingCenter() != null) {
+			return true;
+		}
 		return false;
 	}
+	
+	@Override
+	public boolean shouldContinueExecuting() {
+		return super.shouldContinueExecuting() && shouldExecute();
+	}
 
+	private void calculateTargetPositions(Vec3d vInit) {
+		this.vAngle = vInit;
+		if(this.center == null) {
+			this.center = new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ());
+		}
+		calculateTargetPositions();
+	}
+	
+	private void calculateTargetPositions() {
+		if(this.nextPosition == null) {
+			this.targetPosition = center.add(vAngle);
+		} else {
+			this.targetPosition = this.nextPosition;
+		}
+		vAngle = VectorUtil.rotateVectorAroundY(vAngle, ANGLE_INCREMENT);
+		this.nextPosition = center.add(vAngle);
+		this.nextPosition = this.nextPosition.add(new Vec3d(0,dY,0));
+		this.dY *= -1;
+		this.direction = this.nextPosition.subtract(targetPosition);
+		this.direction = this.direction.normalize();
+	}
+	
+	@Override
+	public void updateTask() {
+		super.updateTask();
+		double dist = this.entity.getDistance(targetPosition.x, targetPosition.y, targetPosition.z);
+		if(dist <= MIN_DISTANCE_TO_TARGET) {
+			calculateTargetPositions();
+		}
+		this.entity.getLookHelper().setLookPosition(targetPosition.x, targetPosition.y, targetPosition.z, 90, 90);
+		this.entity.getMoveHelper().setMoveTo(targetPosition.x, targetPosition.y, targetPosition.z, 0.5);
+	}
+	
+	@Override
+	public void resetTask() {
+		this.vAngle = null;
+		this.nextPosition = null;
+		this.targetPosition = null;
+	}
+	
+	@Override
+	public void startExecuting() {
+		super.startExecuting();
+		if(this.targetPosition == null) {
+			Vec3d v = new Vec3d(CIRCLING_RADIUS, 0, 0);
+			calculateTargetPositions(v); 
+		}
+	}
+	
 }
