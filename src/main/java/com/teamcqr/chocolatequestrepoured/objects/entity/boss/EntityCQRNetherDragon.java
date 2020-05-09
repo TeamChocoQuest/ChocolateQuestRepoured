@@ -637,7 +637,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.setDead();
 			onFinalDeath();
 		}
-		else if(distC > 12) {
+		else if(distC > 3) {
 			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
 			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
 			//this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
