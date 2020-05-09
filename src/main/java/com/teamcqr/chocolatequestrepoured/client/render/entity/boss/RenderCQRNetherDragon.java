@@ -43,7 +43,7 @@ public class RenderCQRNetherDragon extends RenderLiving<EntityCQRNetherDragon> {
 			float f2 = (entity.getRNG().nextFloat() - 0.5F) * 8.0F;
 			Minecraft.getMinecraft().world.spawnParticle(entity.getDeathAnimParticles(), entity.posX + (double) f, entity.posY + 2.0D + (double) f1, entity.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 		}
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		super.doRender(entity, x, y, z, entity.rotationYawHead, partialTicks);
 		/*if(entity.deathTicks > 0 ) {
 			GlStateManager.popMatrix();
 		}*/

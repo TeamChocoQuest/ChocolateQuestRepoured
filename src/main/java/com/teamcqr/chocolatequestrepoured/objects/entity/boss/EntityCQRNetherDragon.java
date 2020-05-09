@@ -293,7 +293,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public void setSwingingArms(boolean swingingArms) {
 		// Unused?
 	}
-
+	
 	// This code is not entirely made by me, it is oriented from this:
 	// https://github.com/TeamTwilight/twilightforest/blob/1.12.x/src/main/java/twilightforest/entity/boss/EntityTFNaga.java
 	protected void moveParts() {
@@ -637,7 +637,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.setDead();
 			onFinalDeath();
 		}
-		else if(distC > 3) {
+		else if(distC > 12) {
 			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
 			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
 			//this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
