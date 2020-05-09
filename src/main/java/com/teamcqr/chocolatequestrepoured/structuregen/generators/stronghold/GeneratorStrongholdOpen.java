@@ -158,11 +158,16 @@ public class GeneratorStrongholdOpen implements IDungeonGenerator {
 	@Override
 	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
 		File building = this.dungeon.getEntranceBuilding();
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
+		}
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
 			return;
 		}
 		CQStructure structure = new CQStructure(building);
+		structure.setDungeonMob(mobType);
 		if (this.dungeon.doBuildSupportPlatform()) {
 			PlateauBuilder supportBuilder = new PlateauBuilder();
 			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
@@ -189,10 +194,6 @@ public class GeneratorStrongholdOpen implements IDungeonGenerator {
 		// build staircase to bossroom at next position, then build boss room
 
 		// Structure gen information: stored in map with location and structure file
-		EDungeonMobType mobType = dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, x, z);
-		}
 		for (StrongholdFloorOpen floor : this.floors) {
 			floor.generateRooms(world, lists, mobType);
 		}
