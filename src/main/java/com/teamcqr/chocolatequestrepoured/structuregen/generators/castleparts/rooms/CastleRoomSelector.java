@@ -542,24 +542,28 @@ public class CastleRoomSelector {
 	}
 
 	private void linkCellToAdjacentCells(RoomGridCell cell) {
-		cell.linkToCell(cell); // link the cell to itself first
+		cell.connectToCell(cell); //connect the cell to itself first
 
 		for (EnumFacing direction : EnumFacing.HORIZONTALS) {
 			RoomGridCell adjacent = this.grid.getAdjacentCell(cell, direction);
 			if (adjacent != null && adjacent.isPopulated() && cell.getRoom().getRoomType() == adjacent.getRoom().getRoomType()) {
-				// if we are already on the adjacent cell's list then it likely means
-				// that cell was linked to us already and nothing else needs to be done
-				if (!adjacent.isLinkedToCell(cell)) {
-					// link all of this cell's linked cells (including me) to the adjacent cell
-					for (RoomGridCell linkedCell : cell.getLinkedCellsCopy()) {
-						linkedCell.linkToCell(adjacent);
-					}
-
-					// copy current cell's links to neighbor
-					adjacent.setLinkedCells(cell.getLinkedCellsCopy());
+				//if we are already on the adjacent cell's list then it likely means
+				//that cell was connected to us already and nothing else needs to be done
+				if (!adjacent.isConnectedToCell(cell)) {
+					//add all connected cells from the adjacent cell to this cell
+					cell.connectToCell(adjacent);
+					cell.connectToCells(adjacent.getConnectedCellsCopy());
 				}
 			}
 		}
+
+		//now this cell's connected list is the "true" one, so copy it out
+		for (RoomGridCell connectedCell : cell.getConnectedCellsCopy())
+		{
+			connectedCell.connectToCells(cell.getConnectedCellsCopy());
+		}
+
+		cell.copyRoomPropertiesToConnectedCells();
 	}
 
 	private void placeOuterDoors() {
@@ -903,7 +907,7 @@ public class CastleRoomSelector {
 		if (outerSouth) {
 			cell.getRoom().addOuterWall(EnumFacing.SOUTH);
 		} else {
-			if (!cell.isLinkedToCell(this.grid.getAdjacentCell(cell, EnumFacing.SOUTH))) {
+			if (!cell.isConnectedToCell(this.grid.getAdjacentCell(cell, EnumFacing.SOUTH))) {
 				cell.getRoom().addInnerWall(EnumFacing.SOUTH);
 
 				RoomGridCell adjacentCell = this.grid.getAdjacentCell(cell, EnumFacing.SOUTH);
@@ -918,7 +922,7 @@ public class CastleRoomSelector {
 		if (outerEast) {
 			cell.getRoom().addOuterWall(EnumFacing.EAST);
 		} else {
-			if (!cell.isLinkedToCell(this.grid.getAdjacentCell(cell, EnumFacing.EAST))) {
+			if (!cell.isConnectedToCell(this.grid.getAdjacentCell(cell, EnumFacing.EAST))) {
 				cell.getRoom().addInnerWall(EnumFacing.EAST);
 
 				RoomGridCell adjacentCell = this.grid.getAdjacentCell(cell, EnumFacing.EAST);
