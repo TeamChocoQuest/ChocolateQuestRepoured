@@ -74,14 +74,21 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
 		
-		if(entity.getParent() != null) {
-			if(entity.getParent().deathTicks > 0) {
+		/*if(entity.getParent() != null) {
+			if(entity.getParent().deathTicks > 600) {
 				GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
 			}
-		}
+		}*/
 		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
 			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
 		}*/
+		if(entity.getParent() != null && entity.getParent().deathTicks > 0 && entity.getParent().deathTicks % 5 == 0) {
+			float f = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
+			float f1 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 4.0F;
+			float f2 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
+			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + (double) f, entity.posY + 2.0D + (double) f1, entity.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+		}
+		
 		if(!entity.isInvisible()) {
 			model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		}

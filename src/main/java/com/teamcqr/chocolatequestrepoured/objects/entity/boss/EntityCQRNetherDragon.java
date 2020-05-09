@@ -85,7 +85,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
-	private EntityCQRNetherDragonSegment[] dragonBodyParts; 
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[0]; 
 
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
@@ -106,18 +106,23 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
-
+		
 		// Init the body parts
+		initBody();
+		
+		this.moveHelper = new MoveHelperNetherDragon(this);
+		moveParts();
+	}
+	
+	private void initBody() {
 		if(this.segmentCount < 0) {
 			this.segmentCount = 18;
 		}
 		this.dragonBodyParts = new EntityCQRNetherDragonSegment[this.segmentCount];
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
-			worldIn.spawnEntity(this.dragonBodyParts[i]);
+			world.spawnEntity(this.dragonBodyParts[i]);
 		}
-		this.moveHelper = new MoveHelperNetherDragon(this);
-		moveParts();
 	}
 	
 	@Override
@@ -340,6 +345,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+		
+		/*if(this.firstUpdate) {
+			initBody();
+		}*/
 		
 		this.destroyBlocksInAABB(this.getEntityBoundingBox());
 		
@@ -618,38 +627,34 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	protected void onDeathUpdate() {
 		++this.deathTicks;
+		this.deathTime = deathTicks * (20 / 600);
+		super.onDeathUpdate();
 		double distC = this.getDistanceSq(getCirclingCenter());
 		
 		distC = Math.sqrt(distC);
-		if(this.deathTicks % 10 == 0) {
-			for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
-				float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
-				float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-				float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-				this.world.spawnParticle(this.getDeathAnimParticles(), segment.posX + (double) f, segment.posY + 2.0D + (double) f1, segment.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
-			}
-			float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-			float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
-		}
-		if(distC > 3) {
-			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
-			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
-			this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
-		} else if (this.deathTicks < 600){
-			this.noClip = false;
-			if(this.onGround || this.posY <= getCirclingCenter().getY() || this.deathTicks >= 600) {
-				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-				this.setDead();
-				onFinalDeath();
-			} else {
-				this.setMoveVertical(-1);
-			}
-		} else if(this.deathTicks >= 600) {
+		if(this.deathTicks >= 600) {
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			this.setDead();
 			onFinalDeath();
+		}
+		else if(distC > 12) {
+			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
+			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
+			//this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
+			Vec3d v = center.subtract(getPositionVector()).normalize().scale(0.4);
+			this.motionX = v.x;
+			this.motionY = v.y;
+			this.motionZ = v.z;
+			this.velocityChanged = true;
+		} else {
+			this.noClip = false;
+			if(this.onGround || this.posY <= getCirclingCenter().getY() || this.deathTicks >= 600) {
+				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
+				onFinalDeath();
+				this.setDead();
+			} else {
+				this.setMoveVertical(-1);
+			}
 		}
 	}
 	
@@ -687,30 +692,23 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected void onFinalDeath() {
-		super.onFinalDeath();
 		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
 	        {
 	            this.dropExperience(MathHelper.floor((float)120), segment.posX, segment.posY, segment.posZ);
 	        }
-			float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-			float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-			this.world.spawnParticle(this.getDeathAnimParticles(), segment.posX + (double) f, segment.posY + 2.0D + (double) f1, segment.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
+			world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
 			world.removeEntityDangerously(segment);
 		}
-		float f = (this.rand.nextFloat() - 0.5F) * 8.0F;
-		float f1 = (this.rand.nextFloat() - 0.5F) * 4.0F;
-		float f2 = (this.rand.nextFloat() - 0.5F) * 8.0F;
-		this.world.spawnParticle(this.getDeathAnimParticles(), this.posX + (double) f, this.posY + 2.0D + (double) f1, this.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
         {
             this.dropExperience(MathHelper.floor((float)800), posX, posY, posZ);
         }
+		world.createExplosion(this, this.posX, this.posY, this.posZ, 1, false);
 	}
 	
 	@Override
-	protected EnumParticleTypes getDeathAnimParticles() {
+	public EnumParticleTypes getDeathAnimParticles() {
 		return EnumParticleTypes.LAVA;
 	}
 	
