@@ -511,4 +511,6 @@ public abstract class CastleRoomBase {
 	public String toString() {
 		return this.roomType.toString();
 	}
+
+	public void copyPropertiesOf(CastleRoomBase room) { ; };
 }
