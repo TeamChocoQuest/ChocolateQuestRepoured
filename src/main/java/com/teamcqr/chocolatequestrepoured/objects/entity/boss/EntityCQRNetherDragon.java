@@ -365,7 +365,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			initBody();
 		}*/
 		
-		this.destroyBlocksInAABB(this.getEntityBoundingBox());
+		this.destroyBlocksInAABB(this.getEntityBoundingBox().offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
+		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+			if(segment != null) {
+				destroyBlocksInAABB(segment.getEntityBoundingBox());
+			}
+		}
 		
 		this.fireballTimer--;
 		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
