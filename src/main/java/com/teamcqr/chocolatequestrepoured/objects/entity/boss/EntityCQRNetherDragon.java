@@ -22,6 +22,8 @@ import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -109,7 +111,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		// Init the body parts
 		initBody();
 		
-		//this.moveHelper = new MoveHelperNetherDragon(this);
+		this.moveHelper = new EntityFlyHelper(this);//new MoveHelperNetherDragon(this);
 		moveParts();
 	}
 	
@@ -122,6 +124,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
 			world.spawnEntity(this.dragonBodyParts[i]);
 		}
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.FLYING_SPEED);
+		this.getEntityAttribute(SharedMonsterAttributes.FLYING_SPEED).setBaseValue(0.75D);
 	}
 	
 	@Override
