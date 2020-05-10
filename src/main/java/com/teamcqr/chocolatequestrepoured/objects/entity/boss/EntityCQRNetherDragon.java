@@ -37,6 +37,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -46,6 +47,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.items.CapabilityItemHandler;
 
 public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 
@@ -365,7 +367,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			initBody();
 		}*/
 		
-		this.destroyBlocksInAABB(this.getEntityBoundingBox().offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
+		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(1.25).offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
 		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 			if(segment != null) {
 				destroyBlocksInAABB(segment.getEntityBoundingBox());
@@ -435,7 +437,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						}
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-							if (block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS
+							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world,iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+							if (!container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS
 									&& block != Blocks.END_GATEWAY) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
