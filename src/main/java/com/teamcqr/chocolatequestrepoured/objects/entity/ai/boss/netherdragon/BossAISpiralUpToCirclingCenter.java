@@ -50,6 +50,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 			v = VectorUtil.rotateVectorAroundY(v, angleIncrement);
 			center = center.addVector(0, v.y, 0);
 			this.targetPos = center.add(v);
+			System.out.println("Center: " + center.toString());
 		}
 		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, 1.5);
 	}

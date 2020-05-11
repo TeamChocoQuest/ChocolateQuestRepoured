@@ -282,10 +282,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-		// TODO: Shoot fireball OR spit fire if close enough
-		double distance = this.getDistance(target);
-
-		if (distance > 25) {
+		if (getRNG().nextDouble() < 0.4) {
 			// Shoot fireball
 			this.mouthTimer = 10;
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this);
