@@ -11,15 +11,17 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	
 	private Vec3d targetPosition = null;
 	private Vec3d nextPosition = null;
-	Vec3d vAngle = null;
-	Vec3d direction = null;
-	Vec3d center = null;
-	double dY = 3;
+	private Vec3d vAngle = null;
+	private Vec3d direction = null;
+	private Vec3d center = null;
+	static double DELTA_Y = 3;
+	static final double CIRCLING_HEIGHT = 20;
 	protected static final double ANGLE_INCREMENT = 36;
 	protected static final double MIN_DISTANCE_TO_TARGET = 5;
 	
 	public BossAICircleAroundLocation(EntityCQRNetherDragon entity) {
 		super(entity);
+		setMutexBits(1|2|4);
 	}
 
 	@Override
@@ -51,8 +53,8 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 		}
 		vAngle = VectorUtil.rotateVectorAroundY(vAngle, ANGLE_INCREMENT);
 		this.nextPosition = center.add(vAngle);
-		this.nextPosition = this.nextPosition.add(new Vec3d(0,dY,0));
-		this.dY *= -1;
+		this.nextPosition = this.nextPosition.add(new Vec3d(0,DELTA_Y + CIRCLING_HEIGHT,0));
+		DELTA_Y *= -1;
 		this.direction = this.nextPosition.subtract(targetPosition);
 		this.direction = this.direction.normalize();
 	}
