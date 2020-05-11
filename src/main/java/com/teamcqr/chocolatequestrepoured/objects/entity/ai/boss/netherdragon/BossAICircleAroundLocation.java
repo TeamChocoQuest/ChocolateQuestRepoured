@@ -27,13 +27,13 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 	Vec3d center = null;
 	double dY = 3;
 	private LAYER currentLayer = LAYER.MIDDLE;
-	protected static final double LAYER_DIV_Y = 12;
+	protected static final double LAYER_DIV_Y = 6;
 	protected static final double ANGLE_INCREMENT = 36;
 	protected static final double CIRCLING_RADIUS_LOWER = 16;
 	protected static final double CIRCLING_RADIUS_MIDDLE = 32;
 	protected static final double CIRCLING_RADIUS_UPPER = 24;
 	protected static final double MIN_DISTANCE_TO_TARGET = 5;
-	private int changeLayerTimer = new Double(360 / ANGLE_INCREMENT).intValue();
+	private int changeLayerTimer = new Double(180 / ANGLE_INCREMENT).intValue();
 	
 	public BossAICircleAroundLocation(EntityCQRNetherDragon entity) {
 		super(entity);
@@ -79,9 +79,10 @@ public class BossAICircleAroundLocation extends AbstractCQREntityAI<EntityCQRNet
 					rad = CIRCLING_RADIUS_UPPER;
 					break;
 				}
+				System.out.println("R=" + rad);
 				vAngle = vAngle.addVector(0,-vAngle.y,0);
 				vAngle = vAngle.scale(rad);
-				vAngle = new Vec3d(vAngle.x, center.y + next.getLayerIndex() * LAYER_DIV_Y, vAngle.z);
+				vAngle = new Vec3d(vAngle.x, next.getLayerIndex() * LAYER_DIV_Y, vAngle.z);
 			}
 		}
 		if(this.nextPosition == null) {
