@@ -91,6 +91,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	//AI stuff
 	private Vec3d targetLocation = null;
+	private boolean flyingUp = false;
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -111,6 +112,14 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		this.moveHelper = new MoveHelperDirectFlight(this);
 		moveParts();
+	}
+	
+	public void setFlyingUp(boolean value) {
+		this.flyingUp = value;
+	}
+	
+	public boolean isFlyingUp() {
+		return this.flyingUp;
 	}
 	
 	private void initBody() {
