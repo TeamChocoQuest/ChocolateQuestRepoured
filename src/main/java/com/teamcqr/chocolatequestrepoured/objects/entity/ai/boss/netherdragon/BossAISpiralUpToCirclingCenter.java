@@ -31,7 +31,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 	public boolean shouldContinueExecuting() {
 		Vec3d center = new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ());
 		double yCirclingCenter = center.y + BossAICircleAroundLocation.CIRCLING_HEIGHT + (1.5* BossAICircleAroundLocation.DELTA_Y);
-		return super.shouldContinueExecuting() && this.entity.posY < yCirclingCenter;
+		return this.entity.posY < yCirclingCenter;
 	}
 	
 	@Override
