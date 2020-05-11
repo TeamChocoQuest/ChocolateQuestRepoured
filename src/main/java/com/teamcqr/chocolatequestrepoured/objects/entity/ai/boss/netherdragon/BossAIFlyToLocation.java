@@ -48,6 +48,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 	public void resetTask() {
 		super.resetTask();
 		this.cooldown = 0;
+		this.entity.setTargetLocation(null);
 	}
 
 
