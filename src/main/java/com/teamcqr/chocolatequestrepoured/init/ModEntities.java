@@ -44,7 +44,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileE
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileFireWallPart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHookShotHook;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
-import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileLargeFireball;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
@@ -143,7 +142,6 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(ProjectileFireWallPart.class, "projectile_firewall_part", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHookShotHook.class, "projectile_hookshot_hook", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileBubble.class, "projectile_bubble", 64, 1, true),
-					createEntityEntryWithoutEgg(ProjectileLargeFireball.class, "projectile_large_fireball", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
