@@ -688,7 +688,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		compound.setInteger("skeleCount", this.getSkeleProgress());
 		
 		//AI stuff
-		compound.setTag("targetLocation", VectorUtil.createVectorNBTTag(targetLocation));
+		if(targetLocation != null) {
+			compound.setTag("targetLocation", VectorUtil.createVectorNBTTag(targetLocation));
+		}
 	}
 	
 	@Override
@@ -699,7 +701,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.phase = compound.getInteger("phase");
 		
 		//AI stuff
-		this.targetLocation = VectorUtil.getVectorFromTag(compound.getCompoundTag("targetLocation"));
+		if(compound.hasKey("targetLocation")) {
+			this.targetLocation = VectorUtil.getVectorFromTag(compound.getCompoundTag("targetLocation"));
+		}
 	}
 
 	@Override
