@@ -288,6 +288,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this);
 			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
 			velocity = velocity.scale(2);
+			proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.motionX = velocity.x;
 			proj.motionY = velocity.y;
 			proj.motionZ = velocity.z;
