@@ -6,7 +6,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
-	private int attackCooldown = 50;
+	private int attackCooldown = 20;
 	private int aiCooldown = 100;
 
 	public BossAIFlyToTarget(EntityCQRNetherDragon entity) {
