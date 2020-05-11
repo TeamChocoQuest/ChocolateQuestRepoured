@@ -307,7 +307,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public boolean attackEntityAsMob(Entity entityIn) {
 		if(super.attackEntityAsMob(entityIn)) {
 			if(this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
-				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 60 + entityIn.world.getDifficulty().ordinal() * 20));
+				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
 			}
 			if(!this.world.isRemote) {
 				this.mouthTimer = 5;
