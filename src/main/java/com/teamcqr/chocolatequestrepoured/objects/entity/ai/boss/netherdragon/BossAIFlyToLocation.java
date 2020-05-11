@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec3d;
 
 public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDragon> {
 	
-	protected static final double MIN_DISTANCE_TO_REACH = 3;
+	protected static final double MIN_DISTANCE_TO_REACH = 2;
 	
 	protected int cooldown = 0;
 
