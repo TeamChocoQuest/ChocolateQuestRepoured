@@ -10,13 +10,14 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 
 	private static final double MIN_DISTANCE_TO_HOME = 8;
 	private static final double MIN_DISTANCE_TO_NODE = 3;
-	private Vec3d v = new Vec3d(5,0.5,0);
+	private Vec3d v = new Vec3d(5,1,0);
 	private Vec3d center = new Vec3d(0,0,0);
 	private Vec3d targetPos = center;
 	private double angleIncrement = 45;
 	
 	public BossAISpiralUpToCirclingCenter(EntityCQRNetherDragon entity) {
 		super(entity);
+		setMutexBits(1 | 2 | 4);
 	}
 
 	@Override
