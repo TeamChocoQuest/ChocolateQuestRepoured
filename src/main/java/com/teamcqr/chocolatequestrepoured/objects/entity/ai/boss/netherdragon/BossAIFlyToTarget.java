@@ -48,7 +48,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	@Override
 	protected Vec3d getTargetLocation() {
-		return entity.getAttackTarget().getPositionVector();
+		return (entity.getAttackTarget() != null && !entity.getAttackTarget().isDead) ? entity.getAttackTarget().getPositionVector() : null;
 	}
 
 }
