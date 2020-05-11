@@ -10,7 +10,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 
 	private static final double MIN_DISTANCE_TO_HOME = 8;
 	private static final double MIN_DISTANCE_TO_NODE = 3;
-	private Vec3d v = new Vec3d(5,1,0);
+	private Vec3d v = new Vec3d(5,2,0);
 	private Vec3d center = new Vec3d(0,0,0);
 	private Vec3d targetPos = center;
 	private double angleIncrement = 45;
@@ -50,7 +50,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 			v = VectorUtil.rotateVectorAroundY(v, angleIncrement);
 			center = center.addVector(0, v.y, 0);
 			this.targetPos = center.add(v);
-			System.out.println("Center: " + center.toString());
+			//System.out.println("Center: " + center.toString());
 		}
 		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, 1.5);
 	}
