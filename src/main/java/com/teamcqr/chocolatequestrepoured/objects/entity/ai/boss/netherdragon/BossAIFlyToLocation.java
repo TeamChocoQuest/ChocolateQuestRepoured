@@ -18,7 +18,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 
 	@Override
 	public boolean shouldExecute() {
-		return getTargetLocation() != null;
+		return getTargetLocation() != null && !this.entity.isFlyingUp();
 	}
 	
 	@Override

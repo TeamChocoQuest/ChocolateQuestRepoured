@@ -21,7 +21,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	@Override
 	public boolean shouldExecute() {
 		aiCooldown--;
-		return super.shouldExecute() && entity.getAttackTarget() != null && !entity.getAttackTarget().isDead && aiCooldown <= 0;
+		return super.shouldExecute() && entity.getAttackTarget() != null && !entity.getAttackTarget().isDead && aiCooldown <= 0 && !this.entity.isFlyingUp();
 	}
 	
 	@Override
