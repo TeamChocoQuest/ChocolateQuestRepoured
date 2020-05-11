@@ -15,7 +15,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	@Override
 	protected double getMovementSpeed() {
-		return 3;
+		return 4;
 	}
 	
 	@Override
@@ -50,5 +50,5 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	protected Vec3d getTargetLocation() {
 		return (entity.getAttackTarget() != null && !entity.getAttackTarget().isDead) ? entity.getAttackTarget().getPositionVector() : null;
 	}
-
+	
 }
