@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.MoveHelperDirectFlight;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateDirectLine;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -108,6 +108,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public EntityCQRNetherDragon(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 100;
+		this.noClip = true;
 
 		this.ignoreFrustumCheck = true;
 		
@@ -503,9 +504,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dataManager.set(MOUTH_OPEN, mouthTimer > 0);
 		}
 		
-		/*if(world.isRemote && firstUpdate && this.dragonBodyParts.length > this.getSegmentCount()) {
+		if(world.isRemote && firstUpdate && this.dragonBodyParts.length > this.getSegmentCount()) {
 			updateSegmentCount();
-		}*/
+		}
 
 		if(this.phase > 1) {
 			updateSegmentCount();
@@ -594,7 +595,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		return new PathNavigateNetherDragon(this, worldIn) {
+		return new PathNavigateDirectLine(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
 				return 128.0F;
