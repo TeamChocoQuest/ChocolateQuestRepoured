@@ -287,9 +287,18 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 		if (distance > 25) {
 			// Shoot fireball
+			this.mouthTimer = 10;
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this);
+			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
+			velocity = velocity.scale(2);
+			proj.motionX = velocity.x;
+			proj.motionY = velocity.y;
+			proj.motionZ = velocity.z;
+			proj.velocityChanged = true;
+			world.spawnEntity(proj);
 		} else {
 			// Spit fire
-			this.setMouthOpen(true);
+			this.mouthTimer = 60;
 		}
 	}
 	
