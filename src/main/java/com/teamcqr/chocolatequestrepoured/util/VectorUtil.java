@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 
@@ -50,5 +51,18 @@ public class VectorUtil {
 	public static Vec3i vectorAdd(Vec3i start, int x, int y, int z) {
 		return new Vec3i(start.getX() + x, start.getY() + y, start.getZ() + z);
 	}
+
+	public static NBTTagCompound createVectorNBTTag(Vec3d vector) {
+		NBTTagCompound nbttagcompound = new NBTTagCompound();
+        nbttagcompound.setDouble("X", vector.x);
+        nbttagcompound.setDouble("Y", vector.y);
+        nbttagcompound.setDouble("Z", vector.z);
+        return nbttagcompound;
+	}
+	
+	public static Vec3d getPosFromTag(NBTTagCompound tag)
+    {
+        return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
+    }
 
 }
