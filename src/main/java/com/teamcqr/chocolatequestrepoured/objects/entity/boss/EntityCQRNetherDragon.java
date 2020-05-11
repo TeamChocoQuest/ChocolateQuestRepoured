@@ -4,6 +4,7 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.MoveHelperDirectFlight;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateNetherDragon;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
@@ -24,7 +25,6 @@ import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityFlyHelper;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -73,7 +73,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs
 	 */
 
-	public int segmentCount = -1;
+	public final int INITIAL_SEGMENT_COUNT = 18;
+	public int segmentCount = INITIAL_SEGMENT_COUNT;
 	/*
 	 * 0: Normal mode
 	 * 1: Transition to phase 2
@@ -113,7 +114,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		// Init the body parts
 		initBody();
 		
-		this.moveHelper = new EntityFlyHelper(this);//new MoveHelperNetherDragon(this);
+		this.moveHelper = new MoveHelperDirectFlight(this);
 		moveParts();
 	}
 	
@@ -501,6 +502,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			mouthTimer--;
 			this.dataManager.set(MOUTH_OPEN, mouthTimer > 0);
 		}
+		
+		/*if(world.isRemote && firstUpdate && this.dragonBodyParts.length > this.getSegmentCount()) {
+			updateSegmentCount();
+		}*/
 
 		if(this.phase > 1) {
 			updateSegmentCount();
@@ -523,11 +528,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	private void updateSegmentCount() {
-		double divisor = this.getMaxHealth() / (this.getSegmentCount() -2);
+		double divisor = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -2);
 		int actualSegmentCount = (int) Math.floor(getHealth() / divisor); 
 		if(actualSegmentCount < (this.dragonBodyParts.length -1 -2)) {
 			removeLastSegment();
 		}
+		this.segmentCount = this.dragonBodyParts.length;
 	}
 
 	public int getSkeleProgress() {

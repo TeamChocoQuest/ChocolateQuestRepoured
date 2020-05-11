@@ -1,7 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator;
 
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.pathfinding.FlyingNodeProcessor;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.math.BlockPos;
@@ -17,7 +16,7 @@ public class PathNavigateNetherDragon extends PathNavigate {
 
 	@Override
 	protected PathFinder getPathFinder() {
-		this.nodeProcessor = new FlyingNodeProcessor();
+		this.nodeProcessor = new DirectLineNodeProcessor();
         this.nodeProcessor.setCanEnterDoors(true);
         this.nodeProcessor.setCanSwim(true);
         return new PathFinder(this.nodeProcessor);

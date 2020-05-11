@@ -30,7 +30,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 
 		this.setSize(1.25F, 1.25F);
 		this.dragon = dragon;
-		this.partIndex = dragon.getSegmentCount() - partID;
+		this.partIndex = dragon.INITIAL_SEGMENT_COUNT - partID;
 		this.realID = partID;
 		this.dataManager.set(PART_INDEX, this.partIndex);
 		this.setIsSkeletal(skeletal);
