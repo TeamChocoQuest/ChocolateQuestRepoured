@@ -60,7 +60,7 @@ public class VectorUtil {
         return nbttagcompound;
 	}
 	
-	public static Vec3d getPosFromTag(NBTTagCompound tag)
+	public static Vec3d getVectorFromTag(NBTTagCompound tag)
     {
         return new Vec3d(tag.getDouble("X"), tag.getDouble("Y"), tag.getDouble("Z"));
     }
