@@ -1,9 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import javax.annotation.Nullable;
+
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyToLocation;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAIFlyToTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAISpiralUpToCirclingCenter;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.MoveHelperDirectFlight;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateDirectLine;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
@@ -51,17 +56,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 
-	public enum EDragonMovementState {
-		CHARGING,
-		FLYING,
-		// When it is flying up or down, it will spiral up or down
-		FLYING_UPWARDS,
-		FLYING_DOWNWARDS
-	}
-
-	public enum ENetherDragonAttacks {
-		SPIT_FIRE, FIREBALL, LIGHTNINGS, BITE
-	}
 
 	/**
 	 * AI:
@@ -87,7 +81,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
-	private EDragonMovementState movementState = EDragonMovementState.FLYING;
 
 	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[0]; 
 
@@ -96,7 +89,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static final DataParameter<Integer> SKELE_COUNT = EntityDataManager.<Integer>createKey(EntityCQRNetherDragon.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> PHASE_INCREASED = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 
-	private boolean isReadyToAttack = true;
+	//AI stuff
+	private Vec3d targetLocation = null;
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -248,14 +242,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	@Override
 	protected void initEntityAI() {
-		//this.tasks.addTask(5, new net.minecraft.entity.ai.EntityAIAttackRanged(this, 1.1, 30, 60, 40));
-		//this.tasks.addTask(6, new BossAIChargeAtTarget(this));
-		//this.tasks.addTask(7, new BossAIFlyToLocation(this));
-		//this.tasks.addTask(8, new BossAISpiralUpOrDown(this));
-		//this.tasks.addTask(10, new EntityAIAttack(this));
-		//this.tasks.addTask(20, new EntityAIMoveToHome(this));
-		this.tasks.addTask(18, new BossAICircleAroundLocation(this));
-		//this.tasks.addTask(20, new BossAIFlyRandomly(this));
+		this.tasks.addTask(5, new BossAIFlyToTarget(this));
+		this.tasks.addTask(8, new BossAIFlyToLocation(this));
+		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
+		this.tasks.addTask(12, new BossAICircleAroundLocation(this));
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
@@ -585,14 +575,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.bossInfoServer.removePlayer(player);
 	}
 
-	public EDragonMovementState getCurrentMovementState() {
-		return this.movementState;
-	}
-
-	public void updateMovementState(EDragonMovementState charging) {
-		this.movementState = charging;
-	}
-
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
 		return new PathNavigateDirectLine(this, worldIn) {
@@ -626,12 +608,6 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public void readSpawnData(ByteBuf additionalData) {
 		super.readSpawnData(additionalData);
 		this.dataManager.set(MOUTH_OPEN, additionalData.readBoolean());
-	}
-
-	public void startAttack(ENetherDragonAttacks attackType) {
-		if (this.isReadyToAttack) {
-			this.setMouthOpen(true);
-		}
 	}
 
 	@Override
@@ -710,6 +686,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		compound.setInteger("segmentCount", this.segmentCount);
 		compound.setInteger("phase", this.phase);
 		compound.setInteger("skeleCount", this.getSkeleProgress());
+		
+		//AI stuff
+		compound.setTag("targetLocation", VectorUtil.createVectorNBTTag(targetLocation));
 	}
 	
 	@Override
@@ -718,6 +697,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.segmentCount = compound.getInteger("segmentCount");
 		this.dataManager.set(SKELE_COUNT, compound.getInteger("skeleCount"));
 		this.phase = compound.getInteger("phase");
+		
+		//AI stuff
+		this.targetLocation = VectorUtil.getVectorFromTag(compound.getCompoundTag("targetLocation"));
 	}
 
 	@Override
@@ -829,5 +811,15 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
     {
         return false;
     }
+    
+    //AI stuff
+    @Nullable
+    public Vec3d getTargetLocation() {
+    	return this.targetLocation;
+    }
+
+	public void setTargetLocation(Vec3d newTarget) {
+		this.targetLocation = newTarget;
+	}
     
 }
