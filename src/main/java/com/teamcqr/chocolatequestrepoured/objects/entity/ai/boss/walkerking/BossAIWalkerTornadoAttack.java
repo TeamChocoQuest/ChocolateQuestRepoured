@@ -1,23 +1,23 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerTornado;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.util.math.Vec3d;
 
-public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI {
+public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI<EntityCQRWalkerKing> {
 	
 	protected static final int MIN_TORNADOES = 3;
 	protected static final int MAX_TORNADOES = 6;
-	protected static final int MIN_COOLDOWN = 60;
-	protected static final int MAX_COOLDOWN = 120;
+	protected static final int MIN_COOLDOWN = 120;
+	protected static final int MAX_COOLDOWN = 240;
 	
 	protected int cooldown = MIN_COOLDOWN + (MAX_COOLDOWN - MIN_COOLDOWN) /2; 
 
-	public BossAIWalkerTornadoAttack(AbstractEntityCQR entity) {
+	public BossAIWalkerTornadoAttack(EntityCQRWalkerKing entity) {
 		super(entity);
 	}
 
