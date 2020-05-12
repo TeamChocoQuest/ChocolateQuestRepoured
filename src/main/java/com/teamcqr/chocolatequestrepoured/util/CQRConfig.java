@@ -124,6 +124,8 @@ public class CQRConfig {
 	}
 
 	public static class Mobs {
+		public static Bosses bosses = new Bosses();
+		
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
@@ -148,6 +150,11 @@ public class CQRConfig {
 		public double dropDurabilityMinimum = 0.1D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityMaximum = 0.5D;
+		
+		
+		public static class Bosses {
+			public boolean harderWalkerKing = true;
+		}
 	}
 
 	public static class Wall {
