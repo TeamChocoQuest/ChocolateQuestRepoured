@@ -130,9 +130,9 @@ public class EntityWalkerTornado extends Entity {
 		if (this.isEntityAffected(entityIn)) {
 			Vec3d vAway = entityIn.getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25D);
 			vAway = vAway.addVector(0, vAway.y * 0.1D, 0);
-			entityIn.motionX = vAway.x;
+			entityIn.motionX = vAway.x * 0.75;
 			entityIn.motionY = Math.max(Math.abs(vAway.y), 1.0D);
-			entityIn.motionZ = vAway.z;
+			entityIn.motionZ = vAway.z * 0.75;
 			entityIn.velocityChanged = true;
 		}
 	}
