@@ -65,7 +65,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 400, 40));
+		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 200, 40));
 		this.tasks.addTask(15, new BossAIWalkerTornadoAttack(this));
 		this.tasks.addTask(16, new BossAIWalkerLightningCircles(this));
 		this.tasks.addTask(17, new BossAIWalkerLightningSpiral(this));
