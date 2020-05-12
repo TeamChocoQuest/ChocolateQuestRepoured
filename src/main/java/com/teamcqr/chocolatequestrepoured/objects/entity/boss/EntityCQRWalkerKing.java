@@ -153,63 +153,6 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source == DamageSource.WITHER) {
-			this.heal(amount /2);
-			return true;
-		}
-		if(source == DamageSource.FALL) {
-			return true;
-		}
-		
-		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			amount *= 0.5F;
-		}
-		
-		if(source.getImmediateSource() != null ) {
-			if(source.getImmediateSource() instanceof EntitySpectralArrow) {
-				amount *= 2;
-				super.attackEntityFrom(source, amount);
-				return true;
-			}
-			if(source.getImmediateSource() instanceof EntityThrowable && !world.isRemote) {
-				//STAB HIM IN THE BACK!!
-				backStabAttacker(source);
-				return false;
-			}
-		}
-		
-		handleActivation();
-
-		if(source.getTrueSource() != null && !world.isRemote) {
-			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
-			if(resLoc != null) {
-				// Start IceAndFire compatibility
-				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
-				if (flag) {
-					amount /= 2;
-				}
-				// End IceAndFire compatibility
-				
-				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
-					dragonAttackCooldown = 80;
-					handleAttackedByDragon(source.getTrueSource());
-				}
-			}
-		}
-		
-		if(Mobs.bosses.harderWalkerKing) {
-			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
-				//Revenge Attack
-				if(getRNG().nextDouble() < 0.7) {
-					attackEntityAsMob(source.getTrueSource());
-					teleportBehindEntity(source.getTrueSource());
-				} else {
-					counterAttack(source.getTrueSource());
-				}
-			}
-		}
-		
 		return super.attackEntityFrom(source, amount);
 	}
 	
@@ -284,7 +227,63 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
-		return attackEntityFrom(source, amount);
+		if(source == DamageSource.WITHER) {
+			this.heal(amount /2);
+			return true;
+		}
+		if(source == DamageSource.FALL) {
+			return true;
+		}
+		
+		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
+			amount *= 0.5F;
+		}
+		
+		if(source.getImmediateSource() != null ) {
+			if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+				amount *= 2;
+				super.attackEntityFrom(source, amount, sentFromPart);
+				return true;
+			}
+			if(source.getImmediateSource() instanceof EntityThrowable && !world.isRemote) {
+				//STAB HIM IN THE BACK!!
+				backStabAttacker(source);
+				return false;
+			}
+		}
+		
+		handleActivation();
+
+		if(source.getTrueSource() != null && !world.isRemote) {
+			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+			if(resLoc != null) {
+				// Start IceAndFire compatibility
+				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				if (flag) {
+					amount /= 2;
+				}
+				// End IceAndFire compatibility
+				
+				//If we are attacked by a dragon: KILL IT
+				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
+					dragonAttackCooldown = 80;
+					handleAttackedByDragon(source.getTrueSource());
+				}
+			}
+		}
+		
+		if(Mobs.bosses.harderWalkerKing) {
+			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
+				//Revenge Attack
+				if(getRNG().nextDouble() < 0.7) {
+					attackEntityAsMob(source.getTrueSource());
+					teleportBehindEntity(source.getTrueSource());
+				} else {
+					counterAttack(source.getTrueSource());
+				}
+			}
+		}
+		return super.attackEntityFrom(source, amount, sentFromPart);
 	}
 	
 	@Override
