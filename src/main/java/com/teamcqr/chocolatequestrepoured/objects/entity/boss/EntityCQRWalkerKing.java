@@ -165,7 +165,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	private boolean teleportBehindEntity(Entity entity) {
-		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
+		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(4 + (entity.width * 0.5)));
 		if(getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
 			for(int ix = -1; ix <= 1; ix++) {
 				for(int iz = -1; iz <= 1; iz++) {
