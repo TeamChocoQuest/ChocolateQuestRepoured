@@ -10,13 +10,13 @@ import net.minecraft.util.math.Vec3d;
 
 public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
 	
-	private static final int MIN_COOLDOWN = 120;
-	private static final int MAX_COOLDOWN = 260;
+	private static final int MIN_COOLDOWN = 80;
+	private static final int MAX_COOLDOWN = 200;
 	private static final int ANGLE_INCREMENT = 40;
 	private static final int RADIUS_INCREMENT = 1;
 	private static final int MAX_LIGHTNINGS = 18;
 	
-	private int cooldown = 150;
+	private int cooldown = 100;
 	private int cooldown_circle = 5;
 	private int r = 2;
 	private int lightningCount = 0;
