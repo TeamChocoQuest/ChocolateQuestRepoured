@@ -272,7 +272,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 		
-		if(Mobs.bosses.harderWalkerKing) {
+		if(Mobs.bosses.harderWalkerKing && !world.isRemote) {
 			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
 				//Revenge Attack
 				if(getRNG().nextDouble() < 0.7) {
