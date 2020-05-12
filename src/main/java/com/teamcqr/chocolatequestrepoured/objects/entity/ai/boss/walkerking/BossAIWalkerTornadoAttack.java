@@ -12,8 +12,8 @@ public class BossAIWalkerTornadoAttack extends AbstractCQREntityAI {
 	
 	protected static final int MIN_TORNADOES = 3;
 	protected static final int MAX_TORNADOES = 6;
-	protected static final int MIN_COOLDOWN = 100;
-	protected static final int MAX_COOLDOWN = 200;
+	protected static final int MIN_COOLDOWN = 60;
+	protected static final int MAX_COOLDOWN = 120;
 	
 	protected int cooldown = MIN_COOLDOWN + (MAX_COOLDOWN - MIN_COOLDOWN) /2; 
 
