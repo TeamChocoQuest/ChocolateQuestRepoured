@@ -278,9 +278,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				if(getRNG().nextDouble() < 0.7) {
 					attackEntityAsMob(source.getTrueSource());
 					teleportBehindEntity(source.getTrueSource());
-				} else {
-					counterAttack(source.getTrueSource());
-				}
+				} 
 			}
 		}
 		return super.attackEntityFrom(source, amount, sentFromPart);
