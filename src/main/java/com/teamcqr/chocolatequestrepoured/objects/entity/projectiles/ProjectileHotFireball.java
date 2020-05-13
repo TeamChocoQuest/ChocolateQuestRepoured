@@ -15,8 +15,9 @@ public class ProjectileHotFireball extends EntityThrowable {
 		setSize(0.5F, 0.5F);
 	}
 
-	public ProjectileHotFireball(World worldIn, double x, double y, double z) {
+	public ProjectileHotFireball(World worldIn, EntityLivingBase shooter, double x, double y, double z) {
 		super(worldIn, x, y, z);
+		this.thrower = shooter;
 		setSize(0.5F, 0.5F);
 	}
 
