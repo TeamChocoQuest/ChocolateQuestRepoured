@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemShield;
 import net.minecraft.util.math.RayTraceResult;
@@ -43,8 +44,15 @@ public class ProjectileHotFireball extends EntityThrowable {
 	
 	@Override
 	protected void onImpact(RayTraceResult result) {
+		if(world.isRemote) {
+			return;
+		}
 		if(result.typeOfHit == Type.ENTITY) {
 			if(result.entityHit == this.thrower) {
+				return;
+			}
+			
+			if(result.entityHit instanceof MultiPartEntityPart && ((MultiPartEntityPart)result.entityHit).parent == this.thrower) {
 				return;
 			}
 			
