@@ -297,7 +297,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.mouthTimer = 10;
 			
 			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
-			velocity = velocity.scale(0.75);
+			velocity = velocity.normalize().scale(0.25);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, posX + velocity.x, posY + velocity.y, posZ + velocity.z);
 			//proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.motionX = velocity.x;
@@ -438,17 +438,18 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width /2) - 0.25).subtract(0, 0.2, 0)));
 		flameStartPos = flameStartPos.addVector(0,this.height /2, 0);
 		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
-		double ANGLE_MAX = 45;
-		double MAX_LENGTH = 8;
-		double angle = ANGLE_MAX / 8;
+		double ANGLE_MAX = 22.5;
+		double MAX_LENGTH = 12;
+		double angle = ANGLE_MAX / MAX_LENGTH;
 		double dY = -0.05;
 		v = VectorUtil.rotateVectorAroundY(v, -(ANGLE_MAX/2));
 		if(world.isRemote) { 
-			for(int i = 0; i <= 8; i++) {
+			for(int i = 0; i <= MAX_LENGTH; i++) {
 				for(int iY = 0; iY <= 10; iY++) {
 					Vec3d vOrig = v;
-					v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(0.75);
+					v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
 					
+					world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
 					world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
 					
 					v = vOrig;
@@ -456,20 +457,27 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 				v = VectorUtil.rotateVectorAroundY(v, angle);
 			}
 		} else {
-			double angleTan = Math.tan(ANGLE_MAX / 2D);
-			int count = 10;
+			v = new Vec3d(motionX, 0, motionZ).scale(0.75);
+			double angleTan = Math.tan(Math.toRadians(ANGLE_MAX / 2D));
+			MAX_LENGTH *= 1.25;
+			int count = 9;
 			double currentLength = MAX_LENGTH / count;
 			double lengthIncr = currentLength;
 			for(int i = 0; i < count; i++) {
 				double r = angleTan * currentLength;
-				
-				Vec3d v2 = new Vec3d(motionX, -0.15 + (5 * -0.05), motionZ).scale(currentLength - r);
+				//System.out.println("R=" + r);
+				Vec3d v2 = new Vec3d(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
 				Vec3d pCenter = flameStartPos.add(v2);
 				AxisAlignedBB aabb = new AxisAlignedBB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).shrink(0.25);
 				for(Entity ent : this.world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.createPredicateNonAlly(getFaction()))) {
 					ent.setFire(8);
 					ent.attackEntityFrom(DamageSource.ON_FIRE, 5);
 				}
+
+				//DEBUG TO SEE THE "ZONE"
+				/*for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX,  (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){
+					world.setBlockState(p, Blocks.GLASS.getDefaultState());
+				}*/
 				
 				currentLength += lengthIncr;
 			}
