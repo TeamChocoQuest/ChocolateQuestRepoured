@@ -69,6 +69,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 */
 
 	public final int INITIAL_SEGMENT_COUNT = 18;
+	public final int SEGMENT_COUNT_ON_DEATH = 4;
 	public int segmentCount = INITIAL_SEGMENT_COUNT;
 	/*
 	 * 0: Normal mode
@@ -198,7 +199,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			if(damageTmpPhaseTwo <= 0) {
 				damageTmpPhaseTwo = 40;
 				//DONE: Remove last segment
-				damage = this.getMaxHealth() / (this.getSegmentCount() -2);
+				damage = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -SEGMENT_COUNT_ON_DEATH);
 				this.setHealth(getHealth() - damage);
 				if(damage >= this.getHealth()) {
 					super.attackEntityFrom(source, damage +1, true);
@@ -608,9 +609,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 	
 	private void updateSegmentCount() {
-		double divisor = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -2);
-		int actualSegmentCount = (int) Math.floor(getHealth() / divisor); 
-		if(actualSegmentCount < (this.dragonBodyParts.length -1 -2)) {
+		double divisor = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -SEGMENT_COUNT_ON_DEATH);
+		int actualSegmentCount = (int) Math.floor(getHealth() / divisor) +SEGMENT_COUNT_ON_DEATH; 
+		if(actualSegmentCount < (this.dragonBodyParts.length -1)) {
 			removeLastSegment();
 		}
 		this.segmentCount = this.dragonBodyParts.length;
@@ -722,35 +723,22 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	protected void onDeathUpdate() {
 		++this.deathTicks;
-		this.deathTime = deathTicks * (20 / 600);
-		super.onDeathUpdate();
-		double distC = this.getDistanceSq(getCirclingCenter());
 		
-		distC = Math.sqrt(distC);
-		if(this.deathTicks >= 600) {
-			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-			this.setDead();
-			onFinalDeath();
-		}
-		else if(distC > 12) {
-			Vec3d center = new Vec3d(getCirclingCenter().getX(), getCirclingCenter().getY(), getCirclingCenter().getZ());
-			this.getLookHelper().setLookPosition(center.x, center.y, center.z, 90, 90);
-			//this.getMoveHelper().setMoveTo(center.x, center.y, center.z, 0.75);
-			Vec3d v = center.subtract(getPositionVector()).normalize().scale(0.4);
-			this.motionX = v.x;
-			this.motionY = v.y;
-			this.motionZ = v.z;
-			this.velocityChanged = true;
-		} else {
-			this.noClip = false;
-			if(this.onGround || this.posY <= getCirclingCenter().getY() || this.deathTicks >= 600) {
+		if(deathTicks % 5 == 0) {
+			if(this.dragonBodyParts.length > 0) {
+				EntityCQRNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length -1];
+				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
+		        {
+		            this.dropExperience(MathHelper.floor((float)120), segment.posX, segment.posY, segment.posZ);
+		        }
+				world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
+				removeLastSegment();
+			} else {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				onFinalDeath();
-				this.setDead();
-			} else {
-				this.setMoveVertical(-1);
+				setDead();
 			}
-		}
+		} 
 	}
 	
 	private void dropExperience(int p_184668_1_, double x, double y, double z)
