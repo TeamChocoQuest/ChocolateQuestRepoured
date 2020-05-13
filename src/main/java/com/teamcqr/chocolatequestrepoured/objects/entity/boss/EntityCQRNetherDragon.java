@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.MoveHelper
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateDirectLine;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
@@ -50,7 +51,6 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -437,30 +437,41 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width /2) - 0.25).subtract(0, 0.2, 0)));
 		flameStartPos = flameStartPos.addVector(0,this.height /2, 0);
 		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
-		double angle = 45 / 8;
+		double ANGLE_MAX = 45;
+		double MAX_LENGTH = 8;
+		double angle = ANGLE_MAX / 8;
 		double dY = -0.05;
-		v = VectorUtil.rotateVectorAroundY(v, -22.5);
-		for(int i = 0; i <= 8; i++) {
-			for(int iY = 0; iY < 10; iY++) {
-				Vec3d vOrig = v;
-				v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(0.75);
-				if(world.isRemote) {
+		v = VectorUtil.rotateVectorAroundY(v, -(ANGLE_MAX/2));
+		if(world.isRemote) { 
+			for(int i = 0; i <= 8; i++) {
+				for(int iY = 0; iY <= 10; iY++) {
+					Vec3d vOrig = v;
+					v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(0.75);
+					
 					world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
-				} 
-				else {
-					RayTraceResult rtr = world.rayTraceBlocks(flameStartPos, flameStartPos.add(v.scale(0.1)));
-					//System.out.println("rtr is null: " + (rtr == null));
-					//rtr seems to always be null, but why?!
-					if(rtr != null && rtr.entityHit != null && !(rtr.entityHit == this || (rtr.entityHit instanceof EntityCQRNetherDragonSegment && ((EntityCQRNetherDragonSegment)rtr.entityHit).getParent() == this))) {
-						if(rtr.hitVec.distanceTo(flameStartPos) <= 8) {
-							rtr.entityHit.setFire(8);
-							rtr.entityHit.attackEntityFrom(DamageSource.ON_FIRE, 5);
-						}
-					}
+					
+					v = vOrig;
 				}
-				v = vOrig;
+				v = VectorUtil.rotateVectorAroundY(v, angle);
 			}
-			v = VectorUtil.rotateVectorAroundY(v, angle);
+		} else {
+			double angleTan = Math.tan(ANGLE_MAX / 2D);
+			int count = 10;
+			double currentLength = MAX_LENGTH / count;
+			double lengthIncr = currentLength;
+			for(int i = 0; i < count; i++) {
+				double r = angleTan * currentLength;
+				
+				Vec3d v2 = new Vec3d(motionX, -0.15 + (5 * -0.05), motionZ).scale(currentLength - r);
+				Vec3d pCenter = flameStartPos.add(v2);
+				AxisAlignedBB aabb = new AxisAlignedBB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).shrink(0.25);
+				for(Entity ent : this.world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.createPredicateNonAlly(getFaction()))) {
+					ent.setFire(8);
+					ent.attackEntityFrom(DamageSource.ON_FIRE, 5);
+				}
+				
+				currentLength += lengthIncr;
+			}
 		}
 	}
 
