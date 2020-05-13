@@ -295,10 +295,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if (getRNG().nextDouble() < 0.4) {
 			// Shoot fireball
 			this.mouthTimer = 10;
-			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this);
+			
 			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
-			velocity = velocity.scale(2);
-			proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
+			velocity = velocity.scale(0.75);
+			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, posX + velocity.x, posY + velocity.y, posZ + velocity.z);
+			//proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.motionX = velocity.x;
 			proj.motionY = velocity.y;
 			proj.motionZ = velocity.z;
@@ -420,7 +421,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			v = VectorUtil.rotateVectorAroundY(v, angle);
 		}
 		v = v.normalize();
-		ProjectileHotFireball proj = new ProjectileHotFireball(world, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
+		ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
 		v = v.scale(0.5);
 		proj.motionX = v.x;
 		proj.motionY = v.y;
