@@ -68,6 +68,7 @@ public class CQRConfig {
 				"fire",
 				"cobweb",
 				"cqrepoured:unlit_torch",
+				"cqrepoured:phylactery",
 				"cqrepoured:force_field_nexus" };
 	
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
