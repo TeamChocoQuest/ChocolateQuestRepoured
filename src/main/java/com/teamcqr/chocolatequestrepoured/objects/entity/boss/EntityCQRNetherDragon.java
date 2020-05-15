@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
@@ -18,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
@@ -494,7 +496,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
+		if (!CQRConfig.Mobs.bosses.netherDragonDestroysBlocks || this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
 			return false;
 		}
 
@@ -522,8 +524,19 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world,iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (!container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK && block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.IRON_BARS
-									&& block != Blocks.END_GATEWAY) {
+							if (!container && block.isCollidable() && 
+									block != Blocks.BEDROCK && 
+									block != Blocks.STRUCTURE_BLOCK &&
+									block != Blocks.COMMAND_BLOCK && 
+									block != Blocks.REPEATING_COMMAND_BLOCK && 
+									block != Blocks.CHAIN_COMMAND_BLOCK && 
+									block != Blocks.END_GATEWAY &&
+									block != Blocks.END_PORTAL &&
+									block != Blocks.PORTAL &&
+									block != ModBlocks.PHYLACTERY &&
+									block != ModBlocks.FORCE_FIELD_NEXUS &&
+									block != ModBlocks.EXPORTER
+									) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;
