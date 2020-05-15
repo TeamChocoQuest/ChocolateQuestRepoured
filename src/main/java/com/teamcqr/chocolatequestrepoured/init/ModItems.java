@@ -56,6 +56,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorSpider;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorTurtle;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBackpack;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemBootsCloud;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemHelmetDragon;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubblePistol;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubbleRifle;
@@ -187,6 +188,7 @@ public class ModItems {
 	public static final Item BOOTS_CLOUD = Null();
 	public static final Item BACKPACK = Null();
 	public static final Item SPIKED_GLOVE = Null();
+	public static final Item KING_CROWN = Null();
 
 	// Slime Armor Items
 	public static final Item HELMET_SLIME = Null();
@@ -332,6 +334,7 @@ public class ModItems {
 					setItemName(new ItemBootsCloud(ModMaterials.ArmorMaterials.ARMOR_CLOUD, -1, EntityEquipmentSlot.FEET), "boots_cloud"),
 					setItemName(new ItemBackpack(ModMaterials.ArmorMaterials.ARMOR_BACKPACK, -1, EntityEquipmentSlot.CHEST), "backpack"),
 					setItemName(new ItemSpikedGlove(), "spiked_glove"),
+					setItemName(new ItemCrown(ModMaterials.ArmorMaterials.ARMOR_CROWN, -1), "king_crown"),
 
 					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.HEAD), "helmet_slime"),
 					setItemName(new ItemArmorSlime(ModMaterials.ArmorMaterials.ARMOR_SLIME, -1, EntityEquipmentSlot.CHEST), "chestplate_slime"),
