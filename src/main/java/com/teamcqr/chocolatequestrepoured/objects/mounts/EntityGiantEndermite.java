@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.mounts;
 
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.EntityCQRMountBase;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -33,7 +33,7 @@ public class EntityGiantEndermite extends EntityCQRMountBase {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_GIANT_ENDERMITE;
+		return ModLoottables.ENTITIES_GIANT_ENDERMITE;
 	}
 
 }

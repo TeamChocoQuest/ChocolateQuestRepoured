@@ -7,13 +7,13 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCavern;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -96,7 +96,7 @@ public class DungeonCavern extends DungeonBase {
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
 				LootTableList.CHESTS_ABANDONED_MINESHAFT,
 				LootTableList.CHESTS_NETHER_BRIDGE,
-				CQRLootTableList.CHESTS_FOOD
+				ModLoottables.CHESTS_FOOD
 		});
 	}
 

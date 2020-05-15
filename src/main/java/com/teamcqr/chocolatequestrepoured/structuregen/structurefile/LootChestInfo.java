@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -63,13 +63,13 @@ public class LootChestInfo {
 	private ResourceLocation getOldLootTable(NBTTagCompound compound) {
 		switch (compound.getInteger("loottable")) {
 		case 0:
-			return CQRLootTableList.CHESTS_TREASURE;
+			return ModLoottables.CHESTS_TREASURE;
 		case 1:
-			return CQRLootTableList.CHESTS_EQUIPMENT;
+			return ModLoottables.CHESTS_EQUIPMENT;
 		case 2:
-			return CQRLootTableList.CHESTS_FOOD;
+			return ModLoottables.CHESTS_FOOD;
 		case 3:
-			return CQRLootTableList.CHESTS_MATERIAL;
+			return ModLoottables.CHESTS_MATERIAL;
 		case 4:
 			return LootTableList.CHESTS_ABANDONED_MINESHAFT;
 		case 5:
