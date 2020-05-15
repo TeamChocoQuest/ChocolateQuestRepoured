@@ -19,7 +19,4 @@ public class ItemCrown extends ItemArmor {
 		return ModArmorModels.crown;
 	}
 
-	
-	
-
 }
