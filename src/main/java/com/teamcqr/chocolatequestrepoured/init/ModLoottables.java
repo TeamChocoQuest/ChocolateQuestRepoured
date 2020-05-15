@@ -34,7 +34,6 @@ public class ModLoottables {
 
 	public static final ResourceLocation ENTITIES_DRAGON = createEntityLootTable("bosses/dragon_normal");
 	public static final ResourceLocation ENTITIES_DRAGON_NETHER = createEntityLootTable("bosses/dragon_nether");
-	public static final ResourceLocation ENTITIES_DRAGON_NETHER_SKELETAL = createEntityLootTable("bosses/dragon_nether_skeletal");
 	public static final ResourceLocation ENTITIES_DRAGON_LAND = createEntityLootTable("bosses/dragon_land");
 	public static final ResourceLocation ENTITIES_NECROMANCER = createEntityLootTable("bosses/necromancer");
 	public static final ResourceLocation ENTITIES_LICH = createEntityLootTable("bosses/lich");
