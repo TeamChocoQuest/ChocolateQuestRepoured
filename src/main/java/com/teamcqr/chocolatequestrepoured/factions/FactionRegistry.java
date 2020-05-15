@@ -28,6 +28,7 @@ import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.monster.AbstractIllager;
@@ -204,6 +205,9 @@ public class FactionRegistry {
 	public CQRFaction getFactionOf(Entity entity) {
 		if(entity == null) {
 			return null;
+		}
+		if (entity instanceof MultiPartEntityPart) {
+			return this.getFactionOf((Entity) ((MultiPartEntityPart)entity).parent);
 		}
 		if (entity.getControllingPassenger() != null) {
 			return this.getFactionOf(entity.getControllingPassenger());
