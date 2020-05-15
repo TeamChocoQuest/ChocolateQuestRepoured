@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorSpider;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTransparent;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelArmorTurtle;
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelBackpack;
+import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelCrown;
 
 public class ModArmorModels {
 
@@ -33,5 +34,7 @@ public class ModArmorModels {
 
 	public static ModelArmorSpider spiderArmor = new ModelArmorSpider(1.0F);
 	public static ModelArmorSpider spiderArmorLegs = new ModelArmorSpider(0.5F);
+
+	public static ModelCrown crown = new ModelCrown(1.0F);
 
 }
