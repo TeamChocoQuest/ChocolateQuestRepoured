@@ -21,10 +21,16 @@ public class BoundingBoxHelper {
 					return true;
 				}
 			}
+			for (Vec3d vertice : bb1.getVertices()) {
+				if (bb2.isVecInside(vertice)) {
+					return true;
+				}
+			}
 			if (checkIfEdgeHitsPlane(bb1, bb2)) {
 				return true;
 			}
-			return checkIfEdgeHitsPlane(bb2, bb1);
+			// return checkIfEdgeHitsPlane(bb2, bb1);
+			return false;
 		});
 	}
 
@@ -36,18 +42,22 @@ public class BoundingBoxHelper {
 			for (Square plane : bb2.getPlanes()) {
 				Vec3d planeNormal = plane.vec2.subtract(plane.vec1).crossProduct(plane.vec3.subtract(plane.vec1));
 				if (planeNormal.dotProduct(lineDirectionNormalized) == 0.0D) {
-					break;
+					continue;
 				}
 
 				Vec3d vec = lineDirectionNormalized.scale((planeNormal.dotProduct(plane.vec1) - planeNormal.dotProduct(edge.vec1)) / planeNormal.dotProduct(lineDirectionNormalized));
 				if (vec.x < 0 != lineDirection.x < 0 || vec.y < 0 != lineDirection.y < 0 || vec.z < 0 != lineDirection.z < 0 || vec.lengthSquared() > lineDirection.lengthSquared()) {
-					break;
+					continue;
 				}
 
 				Vec3d intersectionPoint = edge.vec1.add(vec);
-				int i1 = (int) (10000 * (getAreaOfTriangle(intersectionPoint, plane.vec1, plane.vec2) + getAreaOfTriangle(intersectionPoint, plane.vec2, plane.vec3) + getAreaOfTriangle(intersectionPoint, plane.vec3, plane.vec4) + getAreaOfTriangle(intersectionPoint, plane.vec4, plane.vec1)));
-				int i2 = (int) (10000 * (getAreaOfTriangle(plane.vec1, plane.vec2, plane.vec3) + getAreaOfTriangle(plane.vec2, plane.vec3, plane.vec4)));
-				if (i1 <= i2) {
+				int i1 = (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec1, plane.vec2))
+						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec2, plane.vec4))
+						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec4, plane.vec3))
+						+ (int) (1000 * getAreaOfTriangle(intersectionPoint, plane.vec3, plane.vec1));
+				int i2 = (int) (1000 * getAreaOfTriangle(plane.vec1, plane.vec2, plane.vec3))
+						+ (int) (1000 * getAreaOfTriangle(plane.vec2, plane.vec3, plane.vec4));
+				if (i1 <= i2 + 100) {
 					return true;
 				}
 			}

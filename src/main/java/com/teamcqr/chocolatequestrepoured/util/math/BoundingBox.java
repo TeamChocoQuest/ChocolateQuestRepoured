@@ -18,6 +18,12 @@ public class BoundingBox {
 
 	public BoundingBox(Vec3d[] vertices, int[][] edges, int[][] planes) {
 		this.vertices = vertices;
+		this.minX = vertices[0].x;
+		this.minY =	vertices[0].y;
+		this.minZ = vertices[0].z;
+		this.maxX = vertices[0].x;
+		this.maxY = vertices[0].y;
+		this.maxZ = vertices[0].z;
 		for (Vec3d vec : vertices) {
 			this.minX = Math.min(this.minX, vec.x);
 			this.minY = Math.min(this.minY, vec.y);
