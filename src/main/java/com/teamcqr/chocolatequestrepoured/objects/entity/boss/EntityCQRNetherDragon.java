@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
@@ -20,7 +21,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import io.netty.buffer.ByteBuf;
@@ -722,7 +722,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_DRAGON_NETHER;
+		return ModLoottables.ENTITIES_DRAGON_NETHER;
 	}
 	
 	@Override
