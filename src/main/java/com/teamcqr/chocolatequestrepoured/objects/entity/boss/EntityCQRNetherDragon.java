@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.MoveHelper
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.navigator.PathNavigateDirectLine;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAINetherDragonNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -264,7 +265,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.tasks.addTask(10, new BossAISpiralUpToCirclingCenter(this));
 		this.tasks.addTask(12, new BossAICircleAroundLocation(this));
 
-		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
+		this.targetTasks.addTask(0, new EntityAINetherDragonNearestAttackTarget(this));
+		this.targetTasks.addTask(2, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
 
@@ -402,6 +404,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 
 	}
+	
+	@Override
+	public double getAttackReach(EntityLivingBase target) {
+		return super.getAttackReach(target) * INITIAL_SEGMENT_COUNT;
+	}
 
 	private void handleSpitFireBall() {
 		int indx = getRNG().nextInt(this.dragonBodyParts.length);
@@ -423,7 +430,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 		v = v.normalize();
 		ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
-		v = v.scale(0.5);
+		v = v.scale(0.75);
 		proj.motionX = v.x;
 		proj.motionY = v.y;
 		proj.motionZ = v.z;
