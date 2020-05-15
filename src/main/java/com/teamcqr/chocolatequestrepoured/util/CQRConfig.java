@@ -155,6 +155,7 @@ public class CQRConfig {
 		
 		public static class Bosses {
 			public boolean harderWalkerKing = true;
+			public boolean netherDragonDestroysBlocks = true;
 		}
 	}
 
