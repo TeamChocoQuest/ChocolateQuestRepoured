@@ -1,11 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.armor;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrown;
 import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -13,6 +17,7 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 
 public class ItemCrown extends ItemArmor {
@@ -55,6 +60,14 @@ public class ItemCrown extends ItemArmor {
 		if(crown.hasCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null)) {
 			crown.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null).attachItem(toAttach);
 		}
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		CapabilityDynamicCrown capability = stack.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null);
+		if(capability.getAttachedItem() != null) {
+			tooltip.add("Attached helmet: " + new ItemStack(capability.getAttachedItem(), 1).getDisplayName());
+		} 
 	}
 	
 	//TODO: Tooltip that shows the attachment

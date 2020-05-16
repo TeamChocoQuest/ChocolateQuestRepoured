@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.crafting;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 
+import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -32,13 +33,22 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 					return false;
 				}
 				helmetFound = true;
+				if(attachmentFound) {
+					return true;
+				}
 				continue;
 			}
-			if(item instanceof ItemArmor && ((ItemArmor)item).getEquipmentSlot(itemStack) != null && ((ItemArmor)item).getEquipmentSlot(itemStack) == EntityEquipmentSlot.HEAD) {
+			//TODO: doesn't enter this block
+			if(item instanceof ItemArmor && 
+					((ItemArmor)item).armorType != null && 
+					((ItemArmor)item).armorType == EntityEquipmentSlot.HEAD) {
 				if(attachmentFound) {
 					return false;
 				}
 				attachmentFound = true;
+				if(helmetFound) {
+					return true;
+				}
 			}
 		}
 		return helmetFound && attachmentFound;
@@ -62,19 +72,20 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 				}
 				continue;
 			}
-			if(item instanceof ItemArmor && ((ItemArmor)item).getEquipmentSlot() == EntityEquipmentSlot.HEAD) {
+			if(item instanceof ItemArmor && ((ItemArmor)item).armorType == EntityEquipmentSlot.HEAD) {
 				attachment = item;
 				if(crown != null) {
 					break;
 				}
 				continue;
 			}
-			if(item != null && !(item instanceof ItemArmor)) {
+			if(item != null && !(item instanceof ItemArmor) && item != Items.AIR ) {
 				return ItemStack.EMPTY;
 			}
 		}
-		((ItemCrown)ModItems.KING_CROWN).attachItem(crown, attachment);
-		return crown.copy();
+		ItemStack copy = crown.copy();
+		((ItemCrown)ModItems.KING_CROWN).attachItem(copy, attachment);
+		return copy;
 	}
 
 	@Override
