@@ -1,8 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.crafting;
 
-import java.util.List;
-
-import com.google.common.collect.Lists;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 
@@ -19,10 +16,10 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
-		List<ItemStack> list = Lists.<ItemStack>newArrayList();
 		boolean helmetFound = false;
 		boolean attachmentFound = false;
-		for(ItemStack itemStack : list) {
+		for (int i = 0; i < inv.getSizeInventory(); ++i) {
+			ItemStack itemStack = inv.getStackInSlot(i);
 			if(itemStack == null || itemStack == ItemStack.EMPTY) {
 				continue;
 			}
@@ -52,8 +49,8 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 		ItemStack crown = null;
 		Item attachment = null;
 		
-		List<ItemStack> list = Lists.<ItemStack>newArrayList();
-		for(ItemStack itemStack : list) {
+		for (int i = 0; i < inv.getSizeInventory(); ++i) {
+			ItemStack itemStack = inv.getStackInSlot(i);
 			if(itemStack == null || itemStack == ItemStack.EMPTY) {
 				continue;
 			}
