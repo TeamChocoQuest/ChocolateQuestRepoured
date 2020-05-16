@@ -1,12 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.client.models.armor;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 
 /**
  * ModelCrown - DerToaster
@@ -63,6 +66,12 @@ public class ModelCrown extends ModelCustomArmorBase {
     
     @Override
     public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+    	if(entityIn instanceof EntityLivingBase) {
+    		ItemStack helmet = ((EntityLivingBase) entityIn).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+    		if(helmet != null && !helmet.isEmpty() && helmet.getItem() instanceof ItemCrown) {
+    			
+    		}
+    	}
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(1.2, 1.2, 1.2);
     	super.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
