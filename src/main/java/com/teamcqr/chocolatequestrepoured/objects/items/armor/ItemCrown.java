@@ -56,5 +56,8 @@ public class ItemCrown extends ItemArmor {
 			crown.getCapability(CapabilityDynamicCrownProvider.DYNAMIC_CROWN, null).attachItem(toAttach);
 		}
 	}
+	
+	//TODO: Tooltip that shows the attachment
+	//TODO: Stats are affected by attachment
 
 }
