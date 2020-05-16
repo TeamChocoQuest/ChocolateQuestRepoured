@@ -37,7 +37,7 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 				helmetFound = true;
 				continue;
 			}
-			if(item instanceof ItemArmor && ((ItemArmor)item).getEquipmentSlot() == EntityEquipmentSlot.HEAD) {
+			if(item instanceof ItemArmor && ((ItemArmor)item).getEquipmentSlot(itemStack) != null && ((ItemArmor)item).getEquipmentSlot(itemStack) == EntityEquipmentSlot.HEAD) {
 				if(attachmentFound) {
 					return false;
 				}
@@ -72,12 +72,12 @@ public class RecipeDynamicCrown extends Impl<IRecipe> implements IRecipe{
 				}
 				continue;
 			}
-			if(item != null) {
+			if(item != null && !(item instanceof ItemArmor)) {
 				return ItemStack.EMPTY;
 			}
 		}
 		((ItemCrown)ModItems.KING_CROWN).attachItem(crown, attachment);
-		return crown;
+		return crown.copy();
 	}
 
 	@Override
