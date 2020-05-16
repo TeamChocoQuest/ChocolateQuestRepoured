@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.models.armor;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemCrown;
 
 import net.minecraft.client.model.ModelBiped;
@@ -9,6 +10,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 
 /**
@@ -69,7 +72,16 @@ public class ModelCrown extends ModelCustomArmorBase {
     	if(entityIn instanceof EntityLivingBase) {
     		ItemStack helmet = ((EntityLivingBase) entityIn).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
     		if(helmet != null && !helmet.isEmpty() && helmet.getItem() instanceof ItemCrown) {
-    			
+    			ItemCrown crown = (ItemCrown) ModItems.KING_CROWN;
+    			if(crown.getAttachedItem(helmet) != null) {
+    				Item attachedHelmet = crown.getAttachedItem(helmet);
+    				if(attachedHelmet instanceof ItemArmor) {
+    					ModelBiped attachedModel = attachedHelmet.getArmorModel((EntityLivingBase) entityIn, new ItemStack(attachedHelmet, 1), EntityEquipmentSlot.HEAD, null);
+    					if(attachedModel != null) {
+    						attachedModel.render(entityIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+    					}
+    				}
+    			}
     		}
     	}
     	GlStateManager.pushMatrix();
@@ -80,6 +92,21 @@ public class ModelCrown extends ModelCustomArmorBase {
     
     @Override
     public void render(Entity entityIn, float scale, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
+    	if(entityIn instanceof EntityLivingBase) {
+    		ItemStack helmet = ((EntityLivingBase) entityIn).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+    		if(helmet != null && !helmet.isEmpty() && helmet.getItem() instanceof ItemCrown) {
+    			ItemCrown crown = (ItemCrown) ModItems.KING_CROWN;
+    			if(crown.getAttachedItem(helmet) != null) {
+    				Item attachedHelmet = crown.getAttachedItem(helmet);
+    				if(attachedHelmet instanceof ItemArmor) {
+    					ModelBiped attachedModel = attachedHelmet.getArmorModel((EntityLivingBase) entityIn, new ItemStack(attachedHelmet, 1), EntityEquipmentSlot.HEAD, null);
+    					if(attachedModel != null && attachedModel instanceof ModelCustomArmorBase) {
+    						((ModelCustomArmorBase)attachedModel).render(entityIn, scale, layer, model, slot);
+    					}
+    				}
+    			}
+    		}
+    	}
     	GlStateManager.pushMatrix();
     	GlStateManager.scale(1.2, 1.2, 1.2);
     	super.render(entityIn, scale, layer, model, slot);
