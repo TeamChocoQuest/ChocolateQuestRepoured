@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
+import com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor.CapabilityDynamicCrownProvider;
 import com.teamcqr.chocolatequestrepoured.capability.armor.slime.CapabilitySlimeArmorProvider;
 import com.teamcqr.chocolatequestrepoured.capability.armor.turtle.CapabilityTurtleArmorProvider;
 import com.teamcqr.chocolatequestrepoured.capability.extraitemhandler.CapabilityExtraItemHandlerProvider;
@@ -14,6 +15,7 @@ public class ModCapabilities {
 		CapabilityExtraItemHandlerProvider.register();
 		CapabilityStructureSelectorProvider.register();
 		CapabilityPathToolProvider.register();
+		CapabilityDynamicCrownProvider.register();
 	}
 
 }
