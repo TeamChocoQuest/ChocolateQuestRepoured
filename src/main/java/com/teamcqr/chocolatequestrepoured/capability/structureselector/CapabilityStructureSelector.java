@@ -1,11 +1,21 @@
 package com.teamcqr.chocolatequestrepoured.capability.structureselector;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 
 public class CapabilityStructureSelector {
 
+	private final ItemStack stack;
 	private BlockPos pos1;
 	private BlockPos pos2;
+
+	public CapabilityStructureSelector() {
+		this(ItemStack.EMPTY);
+	}
+
+	public CapabilityStructureSelector(ItemStack stack) {
+		this.stack = stack;
+	}
 
 	public void setPos1(BlockPos pos) {
 		this.pos1 = pos;
@@ -33,6 +43,10 @@ public class CapabilityStructureSelector {
 
 	public boolean hasPos1AndPos2() {
 		return this.hasPos1() && this.hasPos2();
+	}
+
+	public ItemStack getStack() {
+		return this.stack;
 	}
 
 }

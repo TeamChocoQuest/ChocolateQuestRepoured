@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.capability.itemhandler.CapabilityItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.resources.I18n;
@@ -52,7 +52,7 @@ public class ItemAlchemyBag extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityItemHandlerProvider.createProvider(5);
+		return CapabilityItemHandlerItemProvider.createProvider(stack, 5);
 	}
 
 }
