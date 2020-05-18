@@ -17,6 +17,7 @@ public class CQRConfig {
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
 	public static Wall wall = new Wall();
+	public static Bosses bosses = new Bosses();
 
 	public static class Advanced {
 		@Config.RangeInt(min = 0, max = 10)
@@ -126,7 +127,6 @@ public class CQRConfig {
 	}
 
 	public static class Mobs {
-		public static Bosses bosses = new Bosses();
 		
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
@@ -153,12 +153,12 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityMaximum = 0.5D;
 		
-		
-		public static class Bosses {
-			public boolean harderWalkerKing = true;
-			public boolean netherDragonDestroysBlocks = true;
-			public String[] netherDragonBreakableBlocks = {"stone", "netherrack", "grass", "dirt", "quartz_ore", "gravel", "soul_sand", "sand", "leaves", "tall_grass", "double_plant", "coal_ore", "iron_ore", "gold_ore"};
-		}
+	}
+	
+	public static class Bosses {
+		public boolean harderWalkerKing = true;
+		public boolean netherDragonDestroysBlocks = true;
+		public String[] netherDragonBreakableBlocks = {"stone", "netherrack", "grass", "dirt", "quartz_ore", "gravel", "soul_sand", "sand", "leaves", "tall_grass", "double_plant", "coal_ore", "iron_ore", "gold_ore"};
 	}
 
 	public static class Wall {

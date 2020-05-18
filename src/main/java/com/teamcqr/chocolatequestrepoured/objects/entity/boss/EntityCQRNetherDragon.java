@@ -126,7 +126,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	
 	public static void reloadBreakableBlocks() {
 		breakableBlocks.clear();
-		for(String s : CQRConfig.Mobs.bosses.netherDragonBreakableBlocks) {
+		for(String s : CQRConfig.bosses.netherDragonBreakableBlocks) {
 			ResourceLocation rs = new ResourceLocation(s);
 			breakableBlocks.add(rs);
 		}
@@ -508,7 +508,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	// Copied from ender dragon
 	private boolean destroyBlocksInAABB(AxisAlignedBB aabb) {
-		if (!CQRConfig.Mobs.bosses.netherDragonDestroysBlocks || this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
+		if (!CQRConfig.bosses.netherDragonDestroysBlocks || this.isDead || (this.getWorld().getGameRules().hasRule("mobGriefing") && !this.getWorld().getGameRules().getBoolean("mobGriefing")) || this.world.isRemote) {
 			return false;
 		}
 
