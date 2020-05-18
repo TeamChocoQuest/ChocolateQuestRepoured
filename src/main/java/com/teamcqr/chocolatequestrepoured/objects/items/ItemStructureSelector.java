@@ -83,7 +83,7 @@ public class ItemStructureSelector extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityStructureSelectorProvider.createProvider();
+		return CapabilityStructureSelectorProvider.createProvider(stack);
 	}
 
 	@Override

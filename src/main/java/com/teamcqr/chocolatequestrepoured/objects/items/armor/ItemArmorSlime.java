@@ -7,7 +7,12 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilityCooldownHandlerHelper;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
+import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
@@ -21,6 +26,9 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -63,6 +71,28 @@ public class ItemArmorSlime extends ItemArmor {
 	@Nullable
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped _default) {
 		return armorSlot == EntityEquipmentSlot.LEGS ? ModArmorModels.slimeArmorLegs : ModArmorModels.slimeArmor;
+	}
+
+	@EventBusSubscriber(modid = Reference.MODID)
+	public static class EventHandler {
+
+		@SubscribeEvent
+		public static void onLivingHurtEvent(LivingHurtEvent event) {
+			EntityLivingBase entity = event.getEntityLiving();
+
+			if (ItemUtil.hasFullSet(entity, ItemArmorSlime.class) && !CapabilityCooldownHandlerHelper.onCooldown(entity, ModItems.CHESTPLATE_SLIME)) {
+				if (!entity.world.isRemote) {
+					EntitySlimePart slime = new EntitySlimePart(entity.world, entity);
+					double x = entity.posX - 5.0D + 2.5D * slime.getRNG().nextDouble();
+					double y = entity.posY;
+					double z = entity.posZ - 5.0D + 2.5D * slime.getRNG().nextDouble();
+					slime.setPosition(x, y, z);
+					entity.world.spawnEntity(slime);
+				}
+				CapabilityCooldownHandlerHelper.setCooldown(entity, ModItems.CHESTPLATE_SLIME, 160);
+			}
+		}
+
 	}
 
 }

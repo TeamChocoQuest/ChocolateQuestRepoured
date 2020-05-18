@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -29,7 +29,7 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_GOLEM;
+		return ModLoottables.ENTITIES_GOLEM;
 	}
 
 	@Override

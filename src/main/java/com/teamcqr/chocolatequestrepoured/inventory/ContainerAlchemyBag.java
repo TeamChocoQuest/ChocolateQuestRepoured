@@ -45,7 +45,7 @@ public class ContainerAlchemyBag extends Container {
 			this.addSlotToContainer(new SlotItemHandler(inventory, l, 44 + l * 18, 20) {
 				@Override
 				public boolean isItemValid(ItemStack stack) {
-					return stack.getItem() == Items.SPLASH_POTION;
+					return stack.getItem() == Items.SPLASH_POTION || stack.getItem() == Items.LINGERING_POTION;
 				}
 			});
 		}

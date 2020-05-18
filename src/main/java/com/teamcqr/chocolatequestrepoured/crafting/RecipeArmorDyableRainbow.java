@@ -21,7 +21,7 @@ import net.minecraftforge.registries.IForgeRegistryEntry;
 public class RecipeArmorDyableRainbow extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	protected final NonNullList<Ingredient> input = NonNullList.create();
-	protected boolean isSimple = false;
+	protected boolean isSimple = true;
 
 	public RecipeArmorDyableRainbow() {
 		this.setRegistryName(Reference.MODID, "rainbow");

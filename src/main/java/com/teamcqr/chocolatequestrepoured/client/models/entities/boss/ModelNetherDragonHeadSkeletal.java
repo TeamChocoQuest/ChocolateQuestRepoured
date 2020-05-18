@@ -213,8 +213,8 @@ public class ModelNetherDragonHeadSkeletal extends ModelBase {
     	EntityCQRNetherDragon dragon = (EntityCQRNetherDragon)entityIn;
     	if(dragon.isMouthOpen()) {
     		float angle = new Float(Math.toRadians(13));
-    		setRotateAngle(this.Mouth_Bottom, 0, 0, angle);
-    		setRotateAngle(this.Mouth_Top, 0, 0, -(angle /2));
+    		setRotateAngle(this.Mouth_Bottom, 0, 0, angle * 2);
+    		setRotateAngle(this.Mouth_Top, 0, 0, -angle);
     	} else {
     		setRotateAngle(this.Mouth_Bottom, 0, 0, 0);
     		setRotateAngle(this.Mouth_Top, 0, 0, 0);

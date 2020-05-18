@@ -1,28 +1,28 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.util.math.Vec3d;
 
-public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI {
+public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWalkerKing> {
 	
 	private static final int MIN_COOLDOWN = 120;
-	private static final int MAX_COOLDOWN = 260;
+	private static final int MAX_COOLDOWN = 240;
 	private static final int ANGLE_INCREMENT = 40;
 	private static final int RADIUS_INCREMENT = 1;
 	private static final int MAX_LIGHTNINGS = 18;
 	
-	private int cooldown = 150;
+	private int cooldown = 100;
 	private int cooldown_circle = 5;
 	private int r = 2;
 	private int lightningCount = 0;
 	private int angle = 0;
 	
-	public BossAIWalkerLightningSpiral(AbstractEntityCQR entity) {
+	public BossAIWalkerLightningSpiral(EntityCQRWalkerKing entity) {
 		super(entity);
 	}
 

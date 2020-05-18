@@ -4,8 +4,8 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorVegetatedCave;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -80,7 +80,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
 				LootTableList.CHESTS_ABANDONED_MINESHAFT,
 				LootTableList.CHESTS_NETHER_BRIDGE,
-				CQRLootTableList.CHESTS_FOOD
+				ModLoottables.CHESTS_FOOD
 		});
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}

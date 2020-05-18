@@ -1,8 +1,10 @@
-package com.teamcqr.chocolatequestrepoured.util;
+package com.teamcqr.chocolatequestrepoured.init;
+
+import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
 
-public class CQRLootTableList {
+public class ModLoottables {
 
 	public static final ResourceLocation ENTITIES_BOARMAN = createEntityLootTable("boarman");
 	public static final ResourceLocation ENTITIES_DWARF = createEntityLootTable("dwarf");
@@ -32,7 +34,6 @@ public class CQRLootTableList {
 
 	public static final ResourceLocation ENTITIES_DRAGON = createEntityLootTable("bosses/dragon_normal");
 	public static final ResourceLocation ENTITIES_DRAGON_NETHER = createEntityLootTable("bosses/dragon_nether");
-	public static final ResourceLocation ENTITIES_DRAGON_NETHER_SKELETAL = createEntityLootTable("bosses/dragon_nether_skeletal");
 	public static final ResourceLocation ENTITIES_DRAGON_LAND = createEntityLootTable("bosses/dragon_land");
 	public static final ResourceLocation ENTITIES_NECROMANCER = createEntityLootTable("bosses/necromancer");
 	public static final ResourceLocation ENTITIES_LICH = createEntityLootTable("bosses/lich");

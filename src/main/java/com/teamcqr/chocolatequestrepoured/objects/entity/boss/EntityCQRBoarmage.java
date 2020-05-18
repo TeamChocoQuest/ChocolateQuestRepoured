@@ -5,13 +5,13 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -78,7 +78,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_BOARMAGE;
+		return ModLoottables.ENTITIES_BOARMAGE;
 	}
 
 	@Override

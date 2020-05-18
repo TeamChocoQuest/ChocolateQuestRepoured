@@ -35,13 +35,11 @@ public class ProjectileBubble extends ProjectileBase {
 	}
 	
 	protected void onImpact(RayTraceResult result) {
-		if (!this.world.isRemote) {
-			if (result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
-				applyEntityCollision(result.entityHit);
-			}
-
-			super.onImpact(result);
+		if (!this.world.isRemote && result.typeOfHit == RayTraceResult.Type.ENTITY && result.entityHit != null && result.entityHit != this.shooter && !(result.entityHit instanceof MultiPartEntityPart)) {
+			applyEntityCollision(result.entityHit);
 		}
+
+		super.onImpact(result);
 	}
 	
 	@Override
@@ -77,6 +75,7 @@ public class ProjectileBubble extends ProjectileBase {
 	
 	@Override
 	protected void onUpdateInAir() {
+		super.onUpdateInAir();
 		if (this.world.isRemote) {
 			if (this.ticksExisted % 5 == 0) {
 				this.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, this.posX, this.posY + 0.1D, this.posZ, 0.0D, 0.0D, 0.0D);

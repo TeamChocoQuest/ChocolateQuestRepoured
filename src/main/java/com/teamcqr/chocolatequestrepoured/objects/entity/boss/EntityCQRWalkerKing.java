@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
@@ -11,10 +12,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.Boss
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -24,17 +26,21 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntityEvokerFangs;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
+import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -65,7 +71,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 400, 40));
+		this.spellHandler.addSpell(0, new EntityAIWalkerIllusions(this, 600, 40));
 		this.tasks.addTask(15, new BossAIWalkerTornadoAttack(this));
 		this.tasks.addTask(16, new BossAIWalkerLightningCircles(this));
 		this.tasks.addTask(17, new BossAIWalkerLightningSpiral(this));
@@ -76,7 +82,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		setEquipmentBasedOnDifficulty(difficulty);
 		return super.onInitialSpawn(difficulty, livingdata);
 	}
-
+	
 	@Override
 	public void onLivingUpdate() {
 		if(dragonAttackCooldown > 0) {
@@ -148,33 +154,31 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) {
-			amount *= 2;
-		}
-		
-		handleActivation();
-
-		if(source.getTrueSource() != null && !world.isRemote) {
-			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
-			if(resLoc != null) {
-				// Start IceAndFire compatibility
-				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
-				if (flag) {
-					amount /= 2;
-				}
-				// End IceAndFire compatibility
-				
-				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
-					dragonAttackCooldown = 80;
-					handleAttackedByDragon(source.getTrueSource());
-				}
-			}
-		}
-		
 		return super.attackEntityFrom(source, amount);
 	}
 	
+	private void backStabAttacker(DamageSource source) {
+		if(source.getTrueSource() != null) {
+			if(teleportBehindEntity(source.getTrueSource())) {
+				attackEntityAsMob(source.getTrueSource());
+			}
+		}
+	}
+	
+	private boolean teleportBehindEntity(Entity entity) {
+		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(4 + (entity.width * 0.5)));
+		if(getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
+			for(int ix = -1; ix <= 1; ix++) {
+				for(int iz = -1; iz <= 1; iz++) {
+					((WorldServer)world).spawnParticle(EnumParticleTypes.SMOKE_LARGE, posX + ix, posY +2, posZ +iz, 10, 0, 0, 0, 0.25, 0, 0, 0);
+				}
+			}
+			world.playSound(posX, posY, posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.AMBIENT, 1, 1, true);
+			return attemptTeleport(p.x, p.y, p.z);
+		}
+		return false;
+	}
+
 	private void handleAttackedByDragon(Entity dragon) {
 		if (CQRConfig.advanced.enableSpecialFeatures && dragon.getControllingPassenger() != null /*&& (getRNG().nextInt(100) +1) > 95*/) {
 			if(dragon instanceof EntityLiving && dragon.getControllingPassenger() instanceof EntityLivingBase) {
@@ -232,14 +236,122 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			return true;
 		}
 		
-		float dmg = amount;
 		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
-			 dmg *= 0.5F;
+			amount *= 0.5F;
+		}
+		
+		if(source.getImmediateSource() != null ) {
+			if(source.getImmediateSource() instanceof EntitySpectralArrow) {
+				amount *= 2;
+				super.attackEntityFrom(source, amount, sentFromPart);
+				return true;
+			}
+			if(source.getImmediateSource() instanceof EntityThrowable && !world.isRemote) {
+				//STAB HIM IN THE BACK!!
+				backStabAttacker(source);
+				return false;
+			}
 		}
 		
 		handleActivation();
+
+		if(source.getTrueSource() != null && !world.isRemote) {
+			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
+			if(resLoc != null) {
+				// Start IceAndFire compatibility
+				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				if (flag) {
+					amount /= 2;
+				}
+				// End IceAndFire compatibility
+				
+				//If we are attacked by a dragon: KILL IT
+				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
+					dragonAttackCooldown = 80;
+					handleAttackedByDragon(source.getTrueSource());
+				}
+			}
+		}
 		
-		return super.attackEntityFrom(source, dmg, sentFromPart);
+		if(CQRConfig.bosses.harderWalkerKing && !world.isRemote) {
+			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
+				//Revenge Attack
+				if(getRNG().nextDouble() < 0.7) {
+					attackEntityAsMob(source.getTrueSource());
+					teleportBehindEntity(source.getTrueSource());
+				} 
+			}
+		}
+		return super.attackEntityFrom(source, amount, sentFromPart);
+	}
+	
+	@Override
+	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
+		if(!CQRConfig.bosses.harderWalkerKing) {
+			return super.canBlockDamageSource(damageSourceIn);
+		}
+		if (super.canBlockDamageSource(damageSourceIn)) {
+			if(getRNG().nextDouble() < 0.3) {
+				return true;
+			}
+			if(getRNG().nextDouble() < 0.1) {
+				//Attack back
+				counterAttack();
+			}
+		}
+		return false;
+	}
+
+	private void counterAttack() {
+		counterAttack(this.getAttackTarget());
+	}
+	
+	private void counterAttack(Entity entitylivingbase) {
+		double d0 = Math.min(entitylivingbase.posY, this.posY);
+		double d1 = Math.max(entitylivingbase.posY, this.posY) + 1.0D;
+		float f = (float) MathHelper.atan2(entitylivingbase.posZ - this.posZ, entitylivingbase.posX - this.posX);
+		for (int i = 0; i < 5; ++i) {
+			float f1 = f + (float) i * (float) Math.PI * 0.4F;
+			this.spawnFangs(this.posX + (double) MathHelper.cos(f1) * 1.5D, this.posZ + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+		}
+
+		for (int k = 0; k < 8; ++k) {
+			float f2 = f + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
+			this.spawnFangs(this.posX + (double) MathHelper.cos(f2) * 2.5D, this.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
+		}
+	}
+	
+	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
+		BlockPos blockpos = new BlockPos(x, maxY, z);
+		boolean flag = false;
+		double d0 = 0.0D;
+
+		while (true) {
+			if (!this.world.isBlockNormalCube(blockpos, true) && this.world.isBlockNormalCube(blockpos.down(), true)) {
+				if (!this.world.isAirBlock(blockpos)) {
+					IBlockState iblockstate = this.world.getBlockState(blockpos);
+					AxisAlignedBB axisalignedbb = iblockstate.getCollisionBoundingBox(this.world, blockpos);
+
+					if (axisalignedbb != null) {
+						d0 = axisalignedbb.maxY;
+					}
+				}
+
+				flag = true;
+				break;
+			}
+
+			blockpos = blockpos.down();
+
+			if (blockpos.getY() < MathHelper.floor(minY) - 1) {
+				break;
+			}
+		}
+
+		if (flag) {
+			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this);
+			this.world.spawnEntity(entityevokerfangs);
+		}
 	}
 	
 	@Override
@@ -254,7 +366,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_WALKER_KING;
+		return ModLoottables.ENTITIES_WALKER_KING;
 	}
 
 	@Override
@@ -293,6 +405,31 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
+		
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.KING_CROWN, 1));
+		
+		//Give him some armor...
+		if(CQRConfig.bosses.armorForTheWalkerKing) {
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+
+			if (!nbttagcompound.hasKey("display", 10)) {
+				nbttagcompound.setTag("display", nbttagcompound1);
+			}
+
+			nbttagcompound1.setInteger("color", 9437439);
+			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+			
+			ItemStack legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
+			
+			ItemStack boobs = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.FEET, boobs);
+		}
 	}
 	
 	
