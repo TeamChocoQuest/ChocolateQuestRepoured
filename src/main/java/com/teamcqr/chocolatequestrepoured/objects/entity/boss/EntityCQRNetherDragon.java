@@ -101,7 +101,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private Vec3d targetLocation = null;
 	private boolean flyingUp = false;
 	
-	private static ArrayList<Block> breakableBlocks = new ArrayList<>();
+	private static ArrayList<ResourceLocation> breakableBlocks = new ArrayList<>();
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -128,10 +128,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		breakableBlocks.clear();
 		for(String s : CQRConfig.Mobs.bosses.netherDragonBreakableBlocks) {
 			ResourceLocation rs = new ResourceLocation(s);
-			if(!Block.REGISTRY.containsKey(rs)) {
-				continue;
-			}
-			breakableBlocks.add(Block.REGISTRY.getObject(rs));
+			breakableBlocks.add(rs);
 		}
 	}
 	
@@ -539,7 +536,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world,iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (breakableBlocks.contains(block) && !container && block.isCollidable() && 
+							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && 
 									block != Blocks.BEDROCK && 
 									block != Blocks.STRUCTURE_BLOCK &&
 									block != Blocks.COMMAND_BLOCK && 
