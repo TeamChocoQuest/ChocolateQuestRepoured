@@ -1,10 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import java.util.ArrayList;
+
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.netherdragon.BossAICircleAroundLocation;
@@ -98,6 +100,8 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	//AI stuff
 	private Vec3d targetLocation = null;
 	private boolean flyingUp = false;
+	
+	private static ArrayList<Block> breakableBlocks = new ArrayList<>();
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
@@ -118,6 +122,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		this.moveHelper = new MoveHelperDirectFlight(this);
 		moveParts();
+	}
+	
+	public static void reloadBreakableBlocks() {
+		breakableBlocks.clear();
+		for(String s : CQRConfig.Mobs.bosses.netherDragonBreakableBlocks) {
+			ResourceLocation rs = new ResourceLocation(s);
+			if(!Block.REGISTRY.containsKey(rs)) {
+				continue;
+			}
+			breakableBlocks.add(Block.REGISTRY.getObject(rs));
+		}
 	}
 	
 	public void setFlyingUp(boolean value) {
@@ -524,7 +539,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
 							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world,iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (!container && block.isCollidable() && 
+							if (breakableBlocks.contains(block) && !container && block.isCollidable() && 
 									block != Blocks.BEDROCK && 
 									block != Blocks.STRUCTURE_BLOCK &&
 									block != Blocks.COMMAND_BLOCK && 

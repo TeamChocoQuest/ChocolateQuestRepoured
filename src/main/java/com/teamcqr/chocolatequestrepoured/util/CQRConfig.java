@@ -156,6 +156,7 @@ public class CQRConfig {
 		public static class Bosses {
 			public boolean harderWalkerKing = true;
 			public boolean netherDragonDestroysBlocks = true;
+			public String[] netherDragonBreakableBlocks = {"stone", "netherrack", "grass", "dirt", "quartz_ore", "gravel", "soul_sand", "sand", "leaves", "tallgrass", "double_plant", "coal_ore", "iron_ore", "gold_ore"};
 		}
 	}
 
