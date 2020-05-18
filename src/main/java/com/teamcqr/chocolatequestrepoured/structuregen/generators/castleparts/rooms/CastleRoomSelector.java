@@ -103,7 +103,7 @@ public class CastleRoomSelector {
 
 		this.placeOuterDoors();
 		this.placeTowers();
-		this.placeBridges();
+		//this.placeBridges();
 
 		this.pathBetweenRooms();
 
@@ -366,10 +366,17 @@ public class CastleRoomSelector {
 					}
 				}
 
+				/*
 				if (bestDirection != null) {
-					//Build the bridge on bridgecells
-					System.out.println("Would build a bridge at " + cell.toString() + " of length " + longestBridge);
-				}
+					for (RoomGridCell bridgeCell : grid.getBridgeCells(cell, bestDirection))
+					{
+						if (!bridgeCell.isPopulated())
+						{
+							CastleRoomBridgeTop bridgeRoom = new CastleRoomBridgeTop(getRoomStart(bridgeCell), this.roomSize, this.floorHeight, bestDirection, bridgeCell.getFloor());
+							bridgeCell.setRoom(bridgeRoom);
+						}
+					}
+				} */
 			}
 		}
 	}
