@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
@@ -183,6 +184,7 @@ public class CQRConfig {
 				CQStructurePart.updateSpecialEntities();
 				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
+				EntityCQRNetherDragon.reloadBreakableBlocks();
 			}
 		}
 
