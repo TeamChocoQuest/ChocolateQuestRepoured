@@ -33,6 +33,8 @@ public class ItemTeleportStone extends Item {
 
 	public ItemTeleportStone() {
 		this.setMaxDamage(100);
+		
+		setMaxStackSize(1);
 	}
 
 	@Override
