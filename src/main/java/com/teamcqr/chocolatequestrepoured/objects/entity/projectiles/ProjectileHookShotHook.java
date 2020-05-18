@@ -397,7 +397,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			Optional<UUID> shooterUUID = dataManager.get(SHOOTER_UUID);
 			// If this client's player is the shooting player
-			if (shooterUUID.isPresent() && player.getUniqueID() == shooterUUID.get()) {
+			if (shooterUUID.isPresent() && player.getUniqueID().equals(shooterUUID.get())) {
 				// Calculate the vector between this player and the hook
 				Vec3d playerPos = player.getPositionVector();
 				Vec3d latchPos = getDestinationPosition();
@@ -432,7 +432,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			Optional<UUID> pulledUUID = dataManager.get(PULLING_UUID);
 			// If this client's player is the shooting player
-			if (pulledUUID.isPresent() && player.getUniqueID() == pulledUUID.get()) {
+			if (pulledUUID.isPresent() && player.getUniqueID().equals(pulledUUID.get())) {
 				// Calculate the vector between this player and the hook
 				Vec3d playerPos = player.getPositionVector();
 				Vec3d destPos = getDestinationPosition();
