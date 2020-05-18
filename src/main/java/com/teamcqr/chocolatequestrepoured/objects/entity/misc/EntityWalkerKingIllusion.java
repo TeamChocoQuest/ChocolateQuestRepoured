@@ -91,7 +91,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
 		// return super.attackEntityFrom(source, amount, sentFromPart);
-		if (!world.isRemote && damageCounter >= 3 * (world.getDifficulty().ordinal() <= 0 ? 1 : world.getDifficulty().ordinal())) {
+		if (!world.isRemote && damageCounter >= 2 * (world.getDifficulty().ordinal() <= 0 ? 1 : world.getDifficulty().ordinal())) {
 			setDead();
 		}
 		damageCounter++;

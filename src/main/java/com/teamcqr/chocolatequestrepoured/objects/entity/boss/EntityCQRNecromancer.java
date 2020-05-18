@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIBlindTargetSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
@@ -13,7 +14,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIVampi
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
@@ -112,7 +112,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 
 	@Override
 	protected ResourceLocation getLootTable() {
-		return CQRLootTableList.ENTITIES_NECROMANCER;
+		return ModLoottables.ENTITIES_NECROMANCER;
 	}
 
 	@Override

@@ -33,6 +33,8 @@ public class ItemTeleportStone extends Item {
 
 	public ItemTeleportStone() {
 		this.setMaxDamage(100);
+		
+		setMaxStackSize(1);
 	}
 
 	@Override
@@ -131,7 +133,13 @@ public class ItemTeleportStone extends Item {
 			stone.setDouble(this.Z, player.posZ);
 		}
 	}
-
+	
+	@Override
+	public boolean hasEffect(ItemStack stack) {
+		return getPoint(stack) != null;
+	}
+	
+	@Nullable
 	private BlockPos getPoint(ItemStack stack) {
 		if (stack.hasTagCompound()) {
 			if (stack.getTagCompound().hasKey(this.X) && stack.getTagCompound().hasKey(this.Y) && stack.getTagCompound().hasKey(this.Z)) {

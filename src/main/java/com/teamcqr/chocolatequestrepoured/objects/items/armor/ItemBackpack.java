@@ -7,7 +7,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.capability.itemhandler.CapabilityItemHandlerProvider;
+import com.teamcqr.chocolatequestrepoured.capability.itemhandler.item.CapabilityItemHandlerItemProvider;
 import com.teamcqr.chocolatequestrepoured.client.init.ModArmorModels;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -56,7 +56,7 @@ public class ItemBackpack extends ItemArmor {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		return CapabilityItemHandlerProvider.createProvider(36);
+		return CapabilityItemHandlerItemProvider.createProvider(stack, 36);
 	}
 
 	@Override

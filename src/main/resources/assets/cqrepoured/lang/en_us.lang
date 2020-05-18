@@ -319,6 +319,9 @@ item.feather_golden.name=Golden Feather
 #Monking Items
 item.bone_monking.name=Monking Bone
 
+#King Armor
+item.king_crown.name=King Crown
+
 #Inquisition Armor
 item.helmet_inquisition.name=Inquisition Helmet
 item.chestplate_inquisition.name=Inquisition Chestplate

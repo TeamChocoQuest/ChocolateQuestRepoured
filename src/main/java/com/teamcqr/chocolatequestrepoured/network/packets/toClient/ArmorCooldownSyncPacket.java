@@ -1,55 +1,48 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.toClient;
 
-import java.util.List;
-
-import com.teamcqr.chocolatequestrepoured.capability.armor.CapabilitySpecialArmor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class ArmorCooldownSyncPacket implements IMessage {
 
-	private int[] cooldowns = new int[0];
+	private Map<Item, Integer> itemCooldownMap = new HashMap<>();
 
 	public ArmorCooldownSyncPacket() {
 
 	}
 
-	public ArmorCooldownSyncPacket(int[] cooldowns) {
-		this.cooldowns = cooldowns;
-	}
-
-	public ArmorCooldownSyncPacket(EntityPlayer player, List<Capability<? extends CapabilitySpecialArmor>> capabilities) {
-		this.cooldowns = new int[capabilities.size()];
-		CapabilitySpecialArmor icapability;
-		for (int i = 0; i < capabilities.size(); i++) {
-			icapability = player.getCapability(capabilities.get(i), null);
-			this.cooldowns[i] = icapability.getCooldown();
-		}
+	public ArmorCooldownSyncPacket(Map<Item, Integer> itemCooldownMap) {
+		this.itemCooldownMap = itemCooldownMap;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
 		int size = buf.readInt();
-		this.cooldowns = new int[size];
 		for (int i = 0; i < size; i++) {
-			this.cooldowns[i] = buf.readInt();
+			Item item = ByteBufUtils.readRegistryEntry(buf, ForgeRegistries.ITEMS);
+			int cooldown = buf.readInt();
+			this.itemCooldownMap.put(item, cooldown);
 		}
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		int size = this.cooldowns.length;
-		buf.writeInt(size);
-		for (int i = 0; i < size; i++) {
-			buf.writeInt(this.cooldowns[i]);
+		buf.writeInt(this.itemCooldownMap.size());
+		for (Entry<Item, Integer> entry : this.itemCooldownMap.entrySet()) {
+			ByteBufUtils.writeRegistryEntry(buf, entry.getKey());
+			buf.writeInt(entry.getValue());
 		}
 	}
 
-	public int[] getCooldowns() {
-		return this.cooldowns;
+	public Map<Item, Integer> getItemCooldownMap() {
+		return this.itemCooldownMap;
 	}
 
 }

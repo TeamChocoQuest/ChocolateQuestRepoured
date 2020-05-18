@@ -5,6 +5,7 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableBreathing;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableRainbow;
+import com.teamcqr.chocolatequestrepoured.crafting.RecipeDynamicCrown;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -166,6 +167,7 @@ public class EventsHandler {
 		event.getRegistry().register(new RecipesArmorDyes().setRegistryName(Reference.MODID, "armor_coloring"));
 		event.getRegistry().register(new RecipeArmorDyableRainbow());
 		event.getRegistry().register(new RecipeArmorDyableBreathing());
+		event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
 	}
 
 	@SuppressWarnings("deprecation")

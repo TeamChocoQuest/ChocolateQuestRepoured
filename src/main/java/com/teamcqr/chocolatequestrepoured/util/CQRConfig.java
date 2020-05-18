@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
@@ -16,6 +17,7 @@ public class CQRConfig {
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
 	public static Wall wall = new Wall();
+	public static Bosses bosses = new Bosses();
 
 	public static class Advanced {
 		@Config.RangeInt(min = 0, max = 10)
@@ -68,6 +70,7 @@ public class CQRConfig {
 				"fire",
 				"cobweb",
 				"cqrepoured:unlit_torch",
+				"cqrepoured:phylactery",
 				"cqrepoured:force_field_nexus" };
 	
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
@@ -124,6 +127,7 @@ public class CQRConfig {
 	}
 
 	public static class Mobs {
+		
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
@@ -148,6 +152,30 @@ public class CQRConfig {
 		public double dropDurabilityMinimum = 0.1D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityMaximum = 0.5D;
+		
+	}
+	
+	public static class Bosses {
+		public boolean harderWalkerKing = true;
+		public boolean armorForTheWalkerKing = false; 
+		
+		public boolean netherDragonDestroysBlocks = true;
+		public String[] netherDragonBreakableBlocks = {
+				"minecraft:stone", 
+				"minecraft:netherrack", 
+				"minecraft:grass", 
+				"minecraft:dirt", 
+				"minecraft:quartz_ore", 
+				"minecraft:gravel", 
+				"minecraft:soul_sand", 
+				"minecraft:sand", 
+				"minecraft:leaves", 
+				"minecraft:tall_grass", 
+				"minecraft:double_plant", 
+				"minecraft:coal_ore", 
+				"minecraft:iron_ore", 
+				"minecraft:gold_ore"
+			};
 	}
 
 	public static class Wall {
@@ -173,6 +201,7 @@ public class CQRConfig {
 				CQStructurePart.updateSpecialEntities();
 				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
+				EntityCQRNetherDragon.reloadBreakableBlocks();
 			}
 		}
 

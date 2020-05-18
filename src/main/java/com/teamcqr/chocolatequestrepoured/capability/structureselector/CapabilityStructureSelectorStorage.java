@@ -1,6 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.capability.structureselector;
 
+import com.teamcqr.chocolatequestrepoured.capability.CapabilityHandler;
+
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
@@ -12,6 +16,7 @@ public class CapabilityStructureSelectorStorage implements IStorage<CapabilitySt
 
 	@Override
 	public NBTBase writeNBT(Capability<CapabilityStructureSelector> capability, CapabilityStructureSelector instance, EnumFacing side) {
+		ItemStack stack = instance.getStack();
 		NBTTagCompound compound = new NBTTagCompound();
 
 		BlockPos pos1 = instance.getPos1();
@@ -23,12 +28,15 @@ public class CapabilityStructureSelectorStorage implements IStorage<CapabilitySt
 			compound.setTag("pos2", NBTUtil.createPosTag(pos2));
 		}
 
-		return compound;
+		CapabilityHandler.writeToItemStackNBT(stack, CapabilityStructureSelectorProvider.REGISTRY_NAME.toString(), compound);
+
+		return new NBTTagByte((byte) 0);
 	}
 
 	@Override
 	public void readNBT(Capability<CapabilityStructureSelector> capability, CapabilityStructureSelector instance, EnumFacing side, NBTBase nbt) {
-		NBTTagCompound compound = (NBTTagCompound) nbt;
+		ItemStack stack = instance.getStack();
+		NBTTagCompound compound = CapabilityHandler.readFromItemStackNBT(stack, CapabilityStructureSelectorProvider.REGISTRY_NAME.toString());
 
 		if (compound.hasKey("pos1")) {
 			instance.setPos1(NBTUtil.getPosFromTag(compound.getCompoundTag("pos1")));

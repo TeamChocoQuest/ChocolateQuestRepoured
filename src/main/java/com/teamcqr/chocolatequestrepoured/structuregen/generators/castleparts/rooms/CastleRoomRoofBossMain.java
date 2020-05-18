@@ -6,13 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
-import com.teamcqr.chocolatequestrepoured.util.CQRLootTableList;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
@@ -154,18 +154,18 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			ResourceLocation lootTable;
 
 			if (treasureChestsPlaced < numTreasureChests) {
-				lootTable = CQRLootTableList.CHESTS_TREASURE;
+				lootTable = ModLoottables.CHESTS_TREASURE;
 				++treasureChestsPlaced;
 			}
 			else
 			{
 				if (DungeonGenUtils.PercentageRandom(50, random))
 				{
-					lootTable = CQRLootTableList.CHESTS_MATERIAL;
+					lootTable = ModLoottables.CHESTS_MATERIAL;
 				}
 				else
 				{
-					lootTable = CQRLootTableList.CHESTS_EQUIPMENT;
+					lootTable = ModLoottables.CHESTS_EQUIPMENT;
 				}
 			}
 			genArray.addChestWithLootTable(world, locList.get(i).getKey(), locList.get(i).getValue().getOpposite(), lootTable, BlockStateGenArray.GenerationPhase.POST);

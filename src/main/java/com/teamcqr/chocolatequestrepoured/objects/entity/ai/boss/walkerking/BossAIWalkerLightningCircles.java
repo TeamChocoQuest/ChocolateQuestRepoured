@@ -8,10 +8,10 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.util.math.Vec3d;
 
-public class BossAIWalkerLightningCircles extends AbstractCQREntityAI {
+public class BossAIWalkerLightningCircles extends AbstractCQREntityAI<EntityCQRWalkerKing> {
 
-	private static final int MIN_COOLDOWN = 100;
-	private static final int MAX_COOLDOWN = 200;
+	private static final int MIN_COOLDOWN = 200;
+	private static final int MAX_COOLDOWN = 300;
 	private static final int MAX_CIRCLE_RADIUS = 18;
 	
 	private int cooldown = 150;
