@@ -424,11 +424,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			
 			ItemStack legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) ModItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
-			setItemStackToSlot(EntityEquipmentSlot.LEGS, chest);
+			setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
 			
 			ItemStack boobs = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
 			((ItemArmorDyable) ModItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
-			setItemStackToSlot(EntityEquipmentSlot.FEET, chest);
+			setItemStackToSlot(EntityEquipmentSlot.FEET, boobs);
 		}
 	}
 	
