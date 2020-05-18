@@ -100,7 +100,7 @@ public class EntityWalkerTornado extends Entity {
 				final double d9 = particle3.getZ();
 				final double d10 = this.getDistanceToParticle(particle3);
 				final double d11 = d8 - this.posY;
-				particle3.setMotionY(0.11500000208616257 + Math.abs(this.motionY));
+				particle3.setMotionY(0.11500000208616257 + this.motionY);
 				double d12 = Math.atan2(this.posX - d7, this.posZ - d9) / 0.01745329424738884;
 				d12 += 160.0;
 				particle3.setMotionX(-Math.cos(0.01745329424738884 * d12) * (d10 * 2.5 - d11) * 0.10000000149011612);
