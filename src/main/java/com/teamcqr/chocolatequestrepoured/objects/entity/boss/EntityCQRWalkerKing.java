@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.Boss
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
@@ -32,6 +33,7 @@ import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
@@ -403,6 +405,31 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, getSword());
 		this.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_WALKER_KING, 1));
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 3));
+		
+		this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.KING_CROWN, 1));
+		
+		//Give him some armor...
+		if(CQRConfig.bosses.armorForTheWalkerKing) {
+			NBTTagCompound nbttagcompound = new NBTTagCompound();
+			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
+
+			if (!nbttagcompound.hasKey("display", 10)) {
+				nbttagcompound.setTag("display", nbttagcompound1);
+			}
+
+			nbttagcompound1.setInteger("color", 9437439);
+			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.CHESTPLATE_DIAMOND_DYABLE).setColor(chest, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+			
+			ItemStack legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.LEGGINGS_DIAMOND_DYABLE).setColor(legs, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.LEGS, chest);
+			
+			ItemStack boobs = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE, 1, 0, nbttagcompound);
+			((ItemArmorDyable) ModItems.BOOTS_DIAMOND_DYABLE).setColor(boobs, 9437439);
+			setItemStackToSlot(EntityEquipmentSlot.FEET, chest);
+		}
 	}
 	
 	
