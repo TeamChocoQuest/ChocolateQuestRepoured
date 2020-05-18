@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalke
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig.Bosses;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig.Mobs;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
@@ -272,7 +273,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			}
 		}
 		
-		if(Mobs.bosses.harderWalkerKing && !world.isRemote) {
+		if(CQRConfig.bosses.harderWalkerKing && !world.isRemote) {
 			if(getRNG().nextDouble() < 0.2 && source.getTrueSource() != null) {
 				//Revenge Attack
 				if(getRNG().nextDouble() < 0.7) {
@@ -286,7 +287,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	
 	@Override
 	public boolean canBlockDamageSource(DamageSource damageSourceIn) {
-		if(!Mobs.bosses.harderWalkerKing) {
+		if(!CQRConfig.bosses.harderWalkerKing) {
 			return super.canBlockDamageSource(damageSourceIn);
 		}
 		if (super.canBlockDamageSource(damageSourceIn)) {
