@@ -19,6 +19,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBannerPatternsCQ;
 import com.teamcqr.chocolatequestrepoured.objects.banners.EBanners;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -217,6 +218,7 @@ public class CQRMain {
 		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 		ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 		ModDispenseBehaviors.registerDispenseBehaviors();
+		EntityCQRNetherDragon.reloadBreakableBlocks();
 	}
 
 	@EventHandler
