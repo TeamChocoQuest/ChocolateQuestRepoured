@@ -1,12 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.capability.armor.kingarmor;
 
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityProviderCQR;
+import com.teamcqr.chocolatequestrepoured.capability.SerializableCapabilityProvider;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class CapabilityDynamicCrownProvider extends CapabilityProviderCQR<CapabilityDynamicCrown> {
+public class CapabilityDynamicCrownProvider extends SerializableCapabilityProvider<CapabilityDynamicCrown> {
 
 	@CapabilityInject(CapabilityDynamicCrown.class)
 	public static final Capability<CapabilityDynamicCrown> DYNAMIC_CROWN = null;

@@ -17,6 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -70,7 +71,7 @@ public class ItemSuperTool extends Item {
 		if (playerIn.isSneaking()) {
 			int mode = this.getMode(stack) + 1;
 
-			if (mode <= 0 || mode >= 3) {
+			if (mode < 0 || mode > 2) {
 				mode = 0;
 			}
 
@@ -123,15 +124,15 @@ public class ItemSuperTool extends Item {
 	private void performAction(World worldIn, BlockPos pos, ItemStack stack) {
 		int mode = this.getMode(stack);
 
-		if (mode == 1) {
+		if (mode == 0) {
 			worldIn.setBlockState(pos, this.getBlock(stack).getDefaultState());
-		} else if (mode == 2) {
+		} else if (mode == 1) {
 			Block block = worldIn.getBlockState(pos).getBlock();
 
 			if (block != Blocks.AIR) {
 				worldIn.setBlockState(pos, this.getBlock(stack).getDefaultState());
 			}
-		} else if (mode == 3) {
+		} else if (mode == 2) {
 			Block block = worldIn.getBlockState(pos).getBlock();
 
 			if (block != Blocks.AIR) {
@@ -144,7 +145,7 @@ public class ItemSuperTool extends Item {
 		}
 	}
 
-	private int getMode(ItemStack stack) {
+	public int getMode(ItemStack stack) {
 		NBTTagCompound stackTag = stack.getTagCompound();
 
 		if (stackTag == null) {
@@ -152,7 +153,14 @@ public class ItemSuperTool extends Item {
 			stack.setTagCompound(stackTag);
 		}
 
-		return stackTag.getInteger(MODE_TAG);
+		int mode = stackTag.getInteger(MODE_TAG);
+
+		if (mode < 0 || mode > 2) {
+			mode = 0;
+			this.setMode(stack, mode);
+		}
+
+		return mode;
 	}
 
 	public Block getBlock(ItemStack stack) {
@@ -174,6 +182,10 @@ public class ItemSuperTool extends Item {
 		if (stackTag == null) {
 			stackTag = new NBTTagCompound();
 			stack.setTagCompound(stackTag);
+		}
+
+		if (mode < 0 || mode > 2) {
+			mode = 0;
 		}
 
 		stackTag.setInteger(MODE_TAG, mode);
