@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
 import net.minecraftforge.common.config.Config;
@@ -91,15 +91,6 @@ public class CQRConfig {
 		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the block positions that were hit and only renders the entity when the difference on each axis is lower than this setting.")
 		@Config.RangeInt(min = 0, max = 256)
 		public int skipHiddenEntityRenderingDiff = 16;
-
-		@Config.Comment("Enable/Disable loading and caching of structure files during startup.")
-		public boolean cacheStructureFiles = true;
-		@Config.Comment("The maximum amount of megabytes which will be cached.")
-		@Config.RangeInt(min = 1, max = 2048)
-		public int cachedStructureFilesMaxSize = 128;
-		@Config.Comment("The maximum amount of files which will be cached.")
-		@Config.RangeInt(min = 1, max = 1024)
-		public int cachedStructureFilesMaxAmount = 64;
 	}
 
 	public static class General {
@@ -206,8 +197,8 @@ public class CQRConfig {
 		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(Reference.MODID)) {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
-				CQStructure.updateSpecialBlocks();
-				CQStructure.updateSpecialEntities();
+				CQStructurePart.updateSpecialBlocks();
+				CQStructurePart.updateSpecialEntities();
 				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();

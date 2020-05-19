@@ -141,7 +141,7 @@ public class ItemPathTool extends Item {
 		NBTTagList nbtTagList;
 		if (!compound.hasKey("pathPoints", Constants.NBT.TAG_LIST)) {
 			nbtTagList = new NBTTagList();
-			compound.setTag("pathPoints", nbtTagList);
+			compound.setTag("pathPoints", new NBTTagList());
 		} else {
 			nbtTagList = compound.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
 		}

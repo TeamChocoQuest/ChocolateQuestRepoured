@@ -23,7 +23,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDra
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -132,7 +132,7 @@ public class CQRMain {
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
 		if (CQRConfig.wall.enabled) {
-			// GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
+			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 		}
 
 		// Instantiating enums
@@ -213,8 +213,8 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
-		CQStructure.updateSpecialBlocks();
-		CQStructure.updateSpecialEntities();
+		CQStructurePart.updateSpecialBlocks();
+		CQStructurePart.updateSpecialEntities();
 		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 		ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 		ModDispenseBehaviors.registerDispenseBehaviors();
