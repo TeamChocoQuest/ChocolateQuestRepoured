@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.capability.armor;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityProviderCQR;
+import com.teamcqr.chocolatequestrepoured.capability.SerializableCapabilityProvider;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.ArmorCooldownSyncPacket;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 @EventBusSubscriber(modid = Reference.MODID)
-public class CapabilityCooldownHandlerProvider extends CapabilityProviderCQR<CapabilityCooldownHandler> {
+public class CapabilityCooldownHandlerProvider extends SerializableCapabilityProvider<CapabilityCooldownHandler> {
 
 	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(Reference.MODID, "item_cooldown_handler");
 

@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemStructureSelector;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -18,8 +19,9 @@ public class StructureSelectorPacketHandler implements IMessageHandler<Structure
 		FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> {
 			EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 			ItemStack stack = player.getHeldItem(message.getHand());
+
 			if (stack.getItem() instanceof ItemStructureSelector) {
-				ItemStructureSelector.setFirstPos(stack, player.getPosition(), player);
+				((ItemStructureSelector) stack.getItem()).setFirstPos(stack, new BlockPos(player));
 			}
 		});
 		return null;
