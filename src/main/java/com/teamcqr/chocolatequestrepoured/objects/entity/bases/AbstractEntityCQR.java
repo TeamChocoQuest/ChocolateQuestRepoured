@@ -44,6 +44,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -355,16 +356,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (this.pathPoints.length > 0) {
 			NBTTagCompound pathTag = new NBTTagCompound();
-			pathTag.setInteger("pointcount", this.pathPoints.length);
-			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
-			if (pathPoints.tagCount() != this.pathPoints.length) {
-				pathPoints = new NBTTagList();
-			}
+			pathTag.setBoolean("isLoop", this.pathIsLoop);
+			pathTag.setInteger("currentPathPoint", this.currentTargetPoint);
+			NBTTagList nbtTagList = new NBTTagList();
 			for (int i = 0; i < this.pathPoints.length; i++) {
-				pathPoints.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
+				nbtTagList.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
 			}
-			pathTag.setTag("points", pathPoints);
-
+			pathTag.setTag("pathPoints", nbtTagList);
 			compound.setTag("pathingAI", pathTag);
 		}
 	}
@@ -395,13 +393,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.healthScale = 1.0D;
 		}
 
-		if (compound.hasKey("pathingAI")) {
+		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
-			int pointcount = compound.getInteger("pointcount");
-			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
-			this.pathPoints = new BlockPos[pointcount];
-			for (int i = 0; i < this.pathPoints.length; i++) {
-				this.pathPoints[i] = NBTUtil.getPosFromTag(pathPoints.getCompoundTagAt(i));
+			this.pathIsLoop = pathTag.getBoolean("isLoop");
+			this.currentTargetPoint = pathTag.getInteger("currentPathPoint");
+			NBTTagList nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
+			this.pathPoints = new BlockPos[nbtTagList.tagCount()];
+			for (int i = 0; i < nbtTagList.tagCount(); i++) {
+				this.pathPoints[i] = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
 			}
 		}
 	}
