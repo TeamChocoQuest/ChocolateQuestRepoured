@@ -80,7 +80,7 @@ public class ItemStructureSelector extends Item {
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 
-		if (playerIn.isSneaking()) {
+		if (!playerIn.world.isRemote && playerIn.isSneaking()) {
 			BlockPos pos1 = new BlockPos(playerIn);
 			this.setSecondPos(stack, pos1);
 			playerIn.sendMessage(new TextComponentString("Second position set to " + pos1));
@@ -161,16 +161,18 @@ public class ItemStructureSelector extends Item {
 			ItemStack stack = player.getHeldItem(event.getHand());
 
 			if (stack.getItem() instanceof ItemStructureSelector) {
-				ItemStructureSelector structureSelector = (ItemStructureSelector) stack.getItem();
+				if (!player.world.isRemote) {
+					ItemStructureSelector structureSelector = (ItemStructureSelector) stack.getItem();
 
-				if (player.isSneaking()) {
-					BlockPos pos = new BlockPos(player);
-					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new TextComponentString("First position set to " + pos));
-				} else {
-					BlockPos pos = event.getPos();
-					structureSelector.setFirstPos(stack, pos);
-					player.sendMessage(new TextComponentString("First position set to " + pos));
+					if (player.isSneaking()) {
+						BlockPos pos = new BlockPos(player);
+						structureSelector.setFirstPos(stack, pos);
+						player.sendMessage(new TextComponentString("First position set to " + pos));
+					} else {
+						BlockPos pos = event.getPos();
+						structureSelector.setFirstPos(stack, pos);
+						player.sendMessage(new TextComponentString("First position set to " + pos));
+					}
 				}
 
 				event.setCanceled(true);
