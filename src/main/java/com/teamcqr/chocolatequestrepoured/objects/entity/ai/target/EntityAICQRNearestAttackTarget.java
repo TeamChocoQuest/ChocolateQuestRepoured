@@ -13,7 +13,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
 
-public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI {
+public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected final Predicate<EntityLivingBase> predicate = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {
