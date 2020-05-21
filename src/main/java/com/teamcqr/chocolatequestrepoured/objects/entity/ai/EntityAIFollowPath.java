@@ -33,6 +33,7 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			this.entity.setCurrentGuardPathTargetPoint(index);
 			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
 			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
+			this.entity.getLookHelper().setLookPosition(pos.getX(), pos.getY() + entity.getEyeHeight(), pos.getZ(), 30, 30);
 		}
 	}
 
