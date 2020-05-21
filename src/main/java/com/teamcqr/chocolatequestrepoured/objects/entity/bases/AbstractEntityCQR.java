@@ -44,7 +44,6 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -396,7 +395,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
 			this.pathIsLoop = pathTag.getBoolean("isLoop");
-			this.currentTargetPoint = pathTag.getInteger("currentPathPoint");
+			this.currentTargetPoint = pathTag.getInteger("currentPathPoint") -1;
 			NBTTagList nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
 			this.pathPoints = new BlockPos[nbtTagList.tagCount()];
 			for (int i = 0; i < nbtTagList.tagCount(); i++) {
