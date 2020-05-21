@@ -20,7 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAISummonMinionSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	protected ISummoner summoner = null;
 	protected int MAX_MINIONS = 10;

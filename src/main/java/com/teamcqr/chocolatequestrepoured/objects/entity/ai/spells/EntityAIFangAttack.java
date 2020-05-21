@@ -14,7 +14,7 @@ import net.minecraft.util.math.MathHelper;
 /**
  * This code is adapted minecraft vanilla code, so it is made by Mojang
  */
-public class EntityAIFangAttack extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
 		super(entity, true, true, cooldown, chargeUpTicks, 1);

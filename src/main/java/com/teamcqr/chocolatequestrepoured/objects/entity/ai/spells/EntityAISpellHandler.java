@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
-public class EntityAISpellHandler extends AbstractCQREntityAI {
+public class EntityAISpellHandler extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private static final Comparator<EntityAISpellHandler.SpellEntry> SORTER = (spellEntry1, spellEntry2) -> {
 		if (spellEntry1.priority < spellEntry2.priority) {

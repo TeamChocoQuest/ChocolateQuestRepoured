@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.pathfinding.PathPoint;
 
-public class EntityAIMoveToLeader extends AbstractCQREntityAI {
+public class EntityAIMoveToLeader extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIMoveToLeader(AbstractEntityCQR entity) {
 		super(entity);

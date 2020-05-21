@@ -16,7 +16,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 
-public class EntityAIHurtByTarget extends AbstractCQREntityAI {
+public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected final Predicate<EntityLiving> predicateAlly = input -> {
 		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(input)) {

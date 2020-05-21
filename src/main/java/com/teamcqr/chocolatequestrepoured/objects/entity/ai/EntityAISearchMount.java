@@ -13,7 +13,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAISearchMount extends AbstractCQREntityAI {
+public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected static final double MOUNT_SEARCH_RADIUS = 16;
 	protected static final double DISTANCE_TO_MOUNT = 2.0D;
