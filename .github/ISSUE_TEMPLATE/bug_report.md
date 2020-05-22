@@ -45,8 +45,9 @@ If applicable, add screenshots to help explain your problem.
 
 **Other**
 Please note: log files and crash reports should be uploaded as a FILE and not as a copy paste of the text of it here. Upload the file to a site like pastebin or similar and link it here!!
-Crash report:
-Log file:
-Singleplayer/Multiplayer:
-Other mods (that are necessary to produce the bug):
-Other mods (that are also installed):
+ - Link to Crash report file:
+ - Link to Log file:
+ - Other mods (that are necessary to produce the bug):
+ - Other mods (that are also installed):
+ - CQR config folder (link, only if you changed the configs):
+ - Other mod's configs (link):
