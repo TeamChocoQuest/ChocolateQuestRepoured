@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.EPosType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
@@ -11,7 +12,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +23,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
-public class GeneratorCastle implements IDungeonGenerator {
+public class GeneratorCastle implements AbstractDungeonGenerator {
 	private BlockPos origin;
 	private DungeonCastle dungeon;
 	private Random random;

@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.RandomBlobPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -38,6 +38,7 @@ public class PlateauBuilder {
 	}
 
 	public void createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+		this.wallSize = 4;
 		BlockPos pos = startPos;
 		switch (posType) {
 		case CENTER_XZ_LAYER:
@@ -104,13 +105,14 @@ public class PlateauBuilder {
 
 		for (int x = 0; x < sizeX; ++x) {
 			for (int z = 0; z < sizeZ; ++z) {
-				int maxHeight = startY - TOP_LAYER_HEIGHT - world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i,
-																																			// z + k, true);
-				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);
+				int maxHeight = startY - TOP_LAYER_HEIGHT - world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true)
+				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true)
 				for (int y = 0; y <= maxHeight; ++y) {
 					// This generates the "cube" that goes under the structure
 					if ((x > this.wallSize) && (z > this.wallSize) && (x < sizeX - this.wallSize) && (z < sizeZ - this.wallSize)) {
-						world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+						//world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
 					}
 					// This generates the fancy "curved" walls around the cube
 					else {
@@ -121,17 +123,25 @@ public class PlateauBuilder {
 
 						noiseVar += Math.max(0.0F, (this.wallSize - z) / 8.0F);
 						noiseVar += Math.max(0.0F, (this.wallSize - (sizeZ - z)) / 8.0F);
-						double value = (p.getNoiseAt(x + startX, y, z + startZ) + p2.getNoiseAt(x + startX, y, z + startZ) + noiseVar) / 3.0D + y / (maxHeight == 0 ? 1 : maxHeight) * 0.25D;
+						double value = (/*p.getNoiseAt(x + startX, y, z + startZ) + p2.getNoiseAt(x + startX, y, z + startZ) + */noiseVar) / 3.0D + y / (maxHeight == 0 ? 1 : maxHeight) * 0.25D;
+
+						if (true) {
+							CQRMain.logger.info("2 {}, {}, {}, {}, {}", new BlockPos(x, y, z), noiseVar, value);
+							break;
+						}
 						if (value < 0.5D) {
-							world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+							//world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+						} else {
+							break;
 						}
 					}
 				}
 				// This places the top layer blocks
-				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);//
-																											// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
+				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true)
+				// Old: world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY()
 				if (maxHeight <= startY) {
-					world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState(), 2);
+					//world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState(), 2);
 				}
 			}
 		}

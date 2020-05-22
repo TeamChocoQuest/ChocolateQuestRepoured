@@ -9,16 +9,17 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.EPosType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.PosInfoBlock;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -33,13 +34,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
  * Copyright (c) 29.04.2019
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class GeneratorVolcano implements IDungeonGenerator {
+public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	//GENERATION TIME TOTAL: ~15-30 seconds
 	/**
@@ -69,8 +71,6 @@ public class GeneratorVolcano implements IDungeonGenerator {
 	 * 
 	 */
 
-	private DungeonVolcano dungeon;
-
 	private int baseRadius = 1;
 	private int maxHeight = 10;
 	private int minRadius = 1;
@@ -82,8 +82,8 @@ public class GeneratorVolcano implements IDungeonGenerator {
 	private BlockPos entranceStartPos = null;
 	private EStairSection entranceDirection = null;
 
-	public GeneratorVolcano(DungeonVolcano dungeon) {
-		this.dungeon = dungeon;
+	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
+		super(world, pos, dungeon);
 
 		this.maxHeight = DungeonGenUtils.getIntBetweenBorders(dungeon.getMinHeight(), dungeon.getMaxHeight());
 		this.minRadius = dungeon.getInnerRadius();
@@ -96,10 +96,10 @@ public class GeneratorVolcano implements IDungeonGenerator {
 	// DONE: add noise in crater like in new version that is too slow
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void preProcess() {
 		// X Y Z mark the C E N T E R / Middle of the crater!!!!
-		this.centerLoc = new BlockPos(x, y, z);
 
+		this.centerLoc = this.pos;
 		Random rdm = new Random();
 
 		this.maxHeight += new Double(this.maxHeight * 0.1).intValue();
@@ -118,7 +118,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		List<BlockPos> blockList = new ArrayList<BlockPos>();
 		List<BlockPos> pillarCenters = new ArrayList<BlockPos>();
 		//int lowYMax = y + (new Double(0.1 * this.maxHeight).intValue());
-		this.minY = y;//this.getMinY(this.centerLoc, this.baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
+		this.minY = this.pos.getY();//this.getMinY(this.centerLoc, this.baseRadius, world) /*- (new Double(0.1 * maxHeight).intValue())*/;
 		int lowYMax = this.minY + (new Double(0.1 * this.maxHeight).intValue());
 		int rMax = (int) (baseRadius * 4 + dungeon.getMaxHoleSize());
 		final int r = rMax/2;
@@ -134,7 +134,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 
 		PlateauBuilder pB = new PlateauBuilder();
 		pB.load(dungeon.getLowerMainBlock(), dungeon.getUpperMainBlock());
-		lists.add(pB.createSupportHillList(rdm, world, new BlockPos(x - r, this.minY + 1, z - r), 2 * r, 2 * r, EPosType.DEFAULT));
+		// lists.add(pB.createSupportHillList(rdm, world, new BlockPos(this.pos.getX() - r, this.minY + 1, this.pos.getZ() - r), 2 * r, 2 * r, EPosType.DEFAULT));
 		
 
 		// Upper volcano part
@@ -160,8 +160,8 @@ public class GeneratorVolcano implements IDungeonGenerator {
 							} else {
 								// It is stone or ore
 								if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1));
-									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + this.minY, iZ + z), rdm.nextInt(3) + 1)) {
+									blockList.addAll(this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + this.minY, iZ + this.pos.getZ()), rdm.nextInt(3) + 1));
+									for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + this.minY, iZ + this.pos.getZ()), rdm.nextInt(3) + 1)) {
 										BlockPos v = bp.subtract(referenceLoc);
 										if(bp.getY() < 256) {
 											try {
@@ -172,7 +172,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 										}
 									}
 								} else {
-									blockList.add(new BlockPos(iX + x, iY + this.minY, iZ + z));
+									blockList.add(new BlockPos(iX + this.pos.getX(), iY + this.minY, iZ + this.pos.getZ()));
 									blocks[iX + r][iY + this.minY][iZ + r] = this.dungeon.getUpperMainBlock();
 								}
 							}
@@ -205,7 +205,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 						} else {
 							// We are in the outer wall -> random spheres to make it more cave
 							if (DungeonGenUtils.getIntBetweenBorders(0, 101) > 95) {
-								for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + x, iY + 6, iZ + z), rdm.nextInt(3) + 2)) {
+								for(BlockPos bp : this.getSphereBlocks(new BlockPos(iX + this.pos.getX(), iY + 6, iZ + this.pos.getZ()), rdm.nextInt(3) + 2)) {
 									BlockPos v = bp.subtract(referenceLoc);
 									int chanceForSecondary = new Double((this.dungeon.getMagmaChance() * 100.0D) * 2.0D).intValue();
 									Block block = DungeonGenUtils.getIntBetweenBorders(0, 101) >= (100 - chanceForSecondary) ? this.dungeon.getMagmaBlock() : this.dungeon.getLowerMainBlock() ;
@@ -250,7 +250,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 						if (DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius + 1, this.centerLoc) && !DungeonGenUtils.isInsideCircle(iX, iZ, stairRadius / 2, this.centerLoc)) {
 							// Check that it is outside of the middle circle
 							if (this.dungeon.doBuildStairs() && StairCaseHelper.isLocationFine(currStairSection, iX, iZ, stairRadius)) {
-								BlockPos pos = new BlockPos(iX + x, yStairCase, iZ + z);
+								BlockPos pos = new BlockPos(iX + this.pos.getX(), yStairCase, iZ + this.pos.getZ());
 								blocks[iX + r][yStairCase][iZ + r] = dungeon.getRampBlock();
 								// Spawners and chets, spawn only in a certain radius and only with 1% chance
 								if (DungeonGenUtils.isInsideCircle(iX, iZ, (stairRadius / 2) + (stairRadius / 4) + (stairRadius / 6), this.centerLoc)) {
@@ -282,7 +282,18 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		}
 		
 		//Generate parts for generation
-		lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
+		// lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
+		List<AbstractBlockInfo> list = new ArrayList<>();
+		for (int i = 0; i < blocks.length; i++) {
+			for (int j = 0; j < blocks[i].length; j++) {
+				for (int k = 0; k < blocks[i][j].length; k++) {
+					if (blocks[i][j][k] != null) {
+						list.add(new PosInfoBlock(new BlockPos(i, j, k), blocks[i][j][k].getDefaultState(), null));
+					}
+				}
+			}
+		}
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, referenceLoc, list, new PlacementSettings(), dungeon.getDungeonMob()));
 		
 		//BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		//BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
@@ -319,11 +330,11 @@ public class GeneratorVolcano implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void buildStructure() {
 		if (this.dungeon.doBuildDungeon()) {
-			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
-			entranceBuilder.generate(x,z);
-			lists.addAll(entranceBuilder.getStrongholdParts());
+			// final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
+			// entranceBuilder.generate(x,z);
+			// lists.addAll(entranceBuilder.getStrongholdParts());
 		}
 
 		// Generates the stronghold
@@ -341,12 +352,12 @@ public class GeneratorVolcano implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void postProcess() {
 
 	}
 
-	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	/*
+	public void fillChests() {
 		final ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random rdm = new Random();
@@ -371,8 +382,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
-	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void placeSpawners() {
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		Random rng = new Random();
 		int floor = this.spawnersNChestsOnPath.size();
@@ -410,7 +420,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 			spawnPotential.setTag("Entity", ent);
 			spawnPotentials.appendTag(spawnPotential);
 			settingsCompound.setTag("SpawnPotentials", spawnPotentials);;
-			settingsCompound.removeTag("SpawnData");*/
+			settingsCompound.removeTag("SpawnData");*//*
 			//End of spawner settings
 			int ec = 2 + rng.nextInt(3);
 			for(int i = 0; i < ec; i++) {
@@ -425,8 +435,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 	}
 
-	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void placeCoverBlocks() {
 		// DONE: Adjust to the new system
 		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 		if (this.dungeon.isCoverBlockEnabled()) {
@@ -440,6 +449,7 @@ public class GeneratorVolcano implements IDungeonGenerator {
 		}
 		// DONE Pass the list to a simplethread to place the blocks
 	}
+	*/
 
 	private List<BlockPos> getSphereBlocks(BlockPos center, int radius) {
 		List<BlockPos> posList = new ArrayList<>();
@@ -512,11 +522,6 @@ public class GeneratorVolcano implements IDungeonGenerator {
 				}
 			}
 		}
-	}
-
-	@Override
-	public DungeonBase getDungeon() {
-		return this.dungeon;
 	}
 
 }

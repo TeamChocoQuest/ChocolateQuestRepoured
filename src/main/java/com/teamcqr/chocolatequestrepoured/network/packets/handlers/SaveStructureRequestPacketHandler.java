@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.network.packets.handlers;
 
+import java.io.File;
+
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.SaveStructureRequestPacket;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -19,9 +21,8 @@ public class SaveStructureRequestPacketHandler implements IMessageHandler<SaveSt
 			if (ctx.side.isServer()) {
 				EntityPlayer player = CQRMain.proxy.getPlayer(ctx);
 				World world = CQRMain.proxy.getWorld(ctx);
-				CQStructure structure = new CQStructure(message.getName());
-				structure.takeBlocksFromWorld(world, message.getStartPos(), message.getEndPos(), message.usePartMode(), message.ignoreEntities());
-				structure.writeToFile(player);
+				CQStructure structure = CQStructure.createFromWorld(world, message.getStartPos(), message.getEndPos(), message.ignoreEntities(), player.getName());
+				new Thread(() -> structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, message.getName() + ".nbt"))).start();
 			}
 		});
 		return null;

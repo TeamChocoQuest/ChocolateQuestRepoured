@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 import java.util.Properties;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGridCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -87,7 +87,7 @@ public class DungeonNetherCity extends DungeonBase {
 			this.structCount = this.buildingFolder.listFiles().length;
 		}
 
-		IDungeonGenerator generator = new GeneratorGridCity(this);
+		AbstractDungeonGenerator generator = new GeneratorGridCity(this);
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 

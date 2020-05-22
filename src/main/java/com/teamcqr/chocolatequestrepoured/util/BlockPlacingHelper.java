@@ -15,6 +15,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.PosInfoBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -362,6 +363,138 @@ public class BlockPlacingHelper {
 			this.world.markAndNotifyBlock(this.pos, this.chunk, this.iblockstate, this.newState, this.flags);
 		}
 
+	}
+
+	public static boolean setBlockState2(World world, BlockPos pos, IBlockState newState, int flags, boolean updateLight) {
+		if (world.isOutsideBuildHeight(pos)) {
+			return false;
+		}
+
+		if (!world.isRemote && world.getWorldInfo().getTerrainType() == WorldType.DEBUG_ALL_BLOCK_STATES) {
+			return false;
+		}
+
+		Chunk chunk = world.getChunkFromBlockCoords(pos);
+		IBlockState oldState = chunk.getBlockState(pos);
+		int oldLight = oldState.getLightValue(world, pos);
+		int oldOpacity = oldState.getLightOpacity(world, pos);
+
+		IBlockState iblockstate = setBlockState2(world, chunk, pos, newState, updateLight);
+
+		if (iblockstate == null) {
+			return false;
+		}
+
+		if (updateLight && (newState.getLightOpacity(world, pos) != oldOpacity || newState.getLightValue(world, pos) != oldLight)) {
+			world.profiler.startSection("checkLight");
+			world.checkLight(pos);
+			world.profiler.endSection();
+		}
+
+		if (!world.isRemote && world.captureBlockSnapshots) {
+			world.capturedBlockSnapshots.add(new BlockSnapshot(world, pos.toImmutable(), oldState, flags));
+		} else {
+			world.markAndNotifyBlock(pos, chunk, iblockstate, newState, flags);
+		}
+
+		return true;
+	}
+
+	@Nullable
+	public static IBlockState setBlockState2(World world, Chunk chunk, BlockPos pos, IBlockState state, boolean updateLight) {
+		int i = pos.getX() & 15;
+		int j = pos.getY();
+		int k = pos.getZ() & 15;
+		int l = k << 4 | i;
+
+		int[] precipitationHeightMap = getPrecipitationHeightMap(chunk);
+		if (j >= precipitationHeightMap[l] - 1) {
+			precipitationHeightMap[l] = -999;
+		}
+
+		int i1 = chunk.getHeightMap()[l];
+		IBlockState iblockstate = chunk.getBlockState(pos);
+
+		if (iblockstate == state) {
+			return null;
+		} else {
+			Block block = state.getBlock();
+			Block block1 = iblockstate.getBlock();
+			int k1 = iblockstate.getLightOpacity(world, pos);
+			ExtendedBlockStorage extendedblockstorage = chunk.getBlockStorageArray()[j >> 4];
+			boolean flag = false;
+
+			if (extendedblockstorage == Chunk.NULL_BLOCK_STORAGE) {
+				if (block == Blocks.AIR) {
+					return null;
+				}
+
+				extendedblockstorage = new ExtendedBlockStorage(j >> 4 << 4, world.provider.hasSkyLight());
+				chunk.getBlockStorageArray()[j >> 4] = extendedblockstorage;
+				flag = j >= i1;
+			}
+
+			extendedblockstorage.set(i, j & 15, k, state);
+
+			if (!world.isRemote) {
+				if (block1 != block) {
+					block1.breakBlock(world, pos, iblockstate);
+				}
+				TileEntity te = chunk.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+				if (te != null && te.shouldRefresh(world, pos, iblockstate, state)) {
+					world.removeTileEntity(pos);
+				}
+			} else if (block1.hasTileEntity(iblockstate)) {
+				TileEntity te = chunk.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+				if (te != null && te.shouldRefresh(world, pos, iblockstate, state)) {
+					world.removeTileEntity(pos);
+				}
+			}
+
+			if (extendedblockstorage.get(i, j & 15, k).getBlock() != block) {
+				return null;
+			} else {
+				if (updateLight) {
+					if (flag) {
+						chunk.generateSkylightMap();
+					} else {
+						int j1 = state.getLightOpacity(world, pos);
+
+						if (j1 > 0) {
+							if (j >= i1) {
+								relightBlock(chunk, i, j + 1, k);
+							}
+						} else if (j == i1 - 1) {
+							relightBlock(chunk, i, j, k);
+						}
+
+						if (j1 != k1 && (j1 < k1 || chunk.getLightFor(EnumSkyBlock.SKY, pos) > 0 || chunk.getLightFor(EnumSkyBlock.BLOCK, pos) > 0)) {
+							propagateSkylightOcclusion(chunk, i, k);
+						}
+					}
+				}
+
+				if (!world.isRemote && block1 != block && (!world.captureBlockSnapshots || block.hasTileEntity(state))) {
+					block.onBlockAdded(world, pos, state);
+				}
+
+				if (block.hasTileEntity(state)) {
+					TileEntity tileentity1 = chunk.getTileEntity(pos, Chunk.EnumCreateEntityType.CHECK);
+
+					if (tileentity1 == null) {
+						tileentity1 = block.createTileEntity(world, state);
+						world.setTileEntity(pos, tileentity1);
+					}
+
+					if (tileentity1 != null) {
+						tileentity1.updateContainingBlockInfo();
+					}
+				}
+
+				chunk.markDirty();
+				return iblockstate;
+			}
+		}
 	}
 
 }
