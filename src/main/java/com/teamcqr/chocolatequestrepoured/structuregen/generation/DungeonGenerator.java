@@ -179,9 +179,11 @@ public class DungeonGenerator {
 		}
 	}
 
+	protected long t;
 	public void startGeneration() {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.state = EnumDungeonGeneratorState.GENERATION;
+			t = System.currentTimeMillis();
 		}
 	}
 
