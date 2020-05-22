@@ -77,7 +77,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 
 	@Override
 	public void generateNext() {
-		while (this.x1 <= this.maxPos.getX()) {
+		if (this.x1 <= this.maxPos.getX()) {
 			int posY = this.world.getTopSolidOrLiquidBlock(new BlockPos(this.x1, 0, this.z1)).getY();
 			int y1 = posY;
 
@@ -93,7 +93,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 					noiseVar += Math.max((this.wallSize - (this.z1 - this.minPos.getZ())) / 8.0F, 0.0F);
 					noiseVar += Math.max((this.wallSize - ((this.maxPos.getZ() + 1) - this.z1)) / 8.0F, 0.0F);
 
-					double value = (this.perlin1.getNoiseAt(this.x1, y1, this.z1) + this.perlin2.getNoiseAt(this.x1, y1, this.z1) + noiseVar) / 3.0D + (y1 - posY) / ((this.maxPos.getY() - 1) - posY) * 0.25D;
+					double value = (this.perlin1.getNoiseAt(this.x1, y1, this.z1) + this.perlin2.getNoiseAt(this.x1, y1, this.z1) + noiseVar) / 3.0D + (double) (y1 - posY) / ((this.maxPos.getY() - 1) - posY) * 0.25D;
 
 					if (value < 0.5D) {
 						this.world.setBlockState(new BlockPos(this.x1, y1, this.z1), this.supportHillBlock.getDefaultState(), 18);
