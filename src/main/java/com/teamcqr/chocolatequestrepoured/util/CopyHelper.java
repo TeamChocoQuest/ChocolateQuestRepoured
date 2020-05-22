@@ -27,8 +27,9 @@ public class CopyHelper {
 		URL url = CQRMain.class.getResource("");
 		if (url.getProtocol().equals("jar")) {
 			JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
-			FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader());
-			path = fileSystem.getPath(source);
+			try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader())) {
+				path = fileSystem.getPath(source);
+			}
 		} else {
 			path = new File(CQRMain.class.getResource(source).toURI()).toPath();
 		}
