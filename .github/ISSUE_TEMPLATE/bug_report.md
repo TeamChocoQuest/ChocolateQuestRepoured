@@ -44,6 +44,7 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Other**
+Please note: log files and crash reports should be uploaded as a FILE and not as a copy paste of the text of it here. Upload the file to a site like pastebin or similar and link it here!!
 Crash report:
 Log file:
 Singleplayer/Multiplayer:
