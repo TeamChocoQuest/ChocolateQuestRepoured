@@ -6,7 +6,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -104,7 +104,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new GeneratorStronghold(this);
+		AbstractDungeonGenerator generator = new GeneratorStronghold(this);
 		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
 	}
 

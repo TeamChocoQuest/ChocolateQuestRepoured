@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.Properties;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -53,7 +53,7 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	@Override
 	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new GeneratorGuardedStructure(this);
+		AbstractDungeonGenerator generator = new GeneratorGuardedStructure(this);
 
 		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, this.random);
 		((GeneratorGuardedStructure) generator).setCenterStructure(this.getStructureFileFromDirectory(this.centerStructureFolder));

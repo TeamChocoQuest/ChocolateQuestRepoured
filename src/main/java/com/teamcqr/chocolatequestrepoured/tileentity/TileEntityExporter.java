@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.tileentity;
 
+import java.io.File;
+
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -139,9 +141,8 @@ public class TileEntityExporter extends TileEntity {
 		}
 		if (!world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
-			CQStructure structure = new CQStructure(this.structureName);
-			structure.takeBlocksFromWorld(world, startPos, endPos, this.partMode, this.ignoreEntities);
-			structure.writeToFile(author);
+			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, ignoreEntities, author.getName());
+			structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
 			CQRMain.logger.info("Done!");
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");

@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.IWallPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
@@ -48,7 +48,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
 
-			Structure structure = new Structure(world, new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
+			DungeonGenerator structure = new DungeonGenerator(world, new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 			List<List<? extends IStructure>> lists = new ArrayList<>();
 
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));

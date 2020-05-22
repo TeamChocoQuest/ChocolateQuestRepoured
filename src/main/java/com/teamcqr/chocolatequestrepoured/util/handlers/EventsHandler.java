@@ -12,7 +12,6 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -173,20 +172,6 @@ public class EventsHandler {
 	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
-		if (!e.getWorld().isRemote) {
-			DungeonDataManager.handleWorldUnload(e.getWorld());
-			// Stop export threads
-			if (!CQStructure.RUNNING_EXPORT_THREADS.isEmpty()) {
-				for (Thread t : CQStructure.RUNNING_EXPORT_THREADS) {
-					try {
-						t.stop();
-					} catch (Exception ex) {
-
-					}
-				}
-				CQStructure.RUNNING_EXPORT_THREADS.clear();
-			}
-		}
 	}
 
 	@SubscribeEvent

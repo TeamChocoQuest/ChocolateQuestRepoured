@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
@@ -13,11 +14,17 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagDouble;
+import net.minecraft.nbt.NBTTagInt;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -268,6 +275,76 @@ public class DungeonGenUtils {
 			material = world.getBlockState(new BlockPos(x, --y, z)).getMaterial();
 		}
 		return y;
+	}
+
+	public static Vec3d transformedVec3d(Vec3d vec, PlacementSettings settings) {
+		return transformedVec3d(vec, settings.getMirror(), settings.getRotation());
+	}
+
+	public static Vec3d transformedVec3d(Vec3d vec, Mirror mirror, Rotation rotation) {
+		double i = vec.x;
+		double j = vec.y;
+		double k = vec.z;
+		boolean flag = true;
+
+		switch (mirror) {
+		case LEFT_RIGHT:
+			k = -k;
+			break;
+		case FRONT_BACK:
+			i = -i;
+			break;
+		default:
+			flag = false;
+		}
+
+		switch (rotation) {
+		case COUNTERCLOCKWISE_90:
+			return new Vec3d(k, j, -i);
+		case CLOCKWISE_90:
+			return new Vec3d(-k, j, i);
+		case CLOCKWISE_180:
+			return new Vec3d(-i, j, -k);
+		default:
+			return flag ? new Vec3d(i, j, k) : vec;
+		}
+	}
+
+	public static NBTTagList writePosToList(BlockPos pos) {
+		NBTTagList nbtTagList = new NBTTagList();
+		nbtTagList.appendTag(new NBTTagInt(pos.getX()));
+		nbtTagList.appendTag(new NBTTagInt(pos.getY()));
+		nbtTagList.appendTag(new NBTTagInt(pos.getZ()));
+		return nbtTagList;
+	}
+
+	public static BlockPos readPosFromList(NBTTagList nbtTagList) {
+		return new BlockPos(nbtTagList.getIntAt(0), nbtTagList.getIntAt(1), nbtTagList.getIntAt(2));
+	}
+
+	public static NBTTagList writeVecToList(Vec3d vec) {
+		NBTTagList nbtTagList = new NBTTagList();
+		nbtTagList.appendTag(new NBTTagDouble(vec.x));
+		nbtTagList.appendTag(new NBTTagDouble(vec.y));
+		nbtTagList.appendTag(new NBTTagDouble(vec.z));
+		return nbtTagList;
+	}
+
+	public static Vec3d readVecFromList(NBTTagList nbtTagList) {
+		return new Vec3d(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
+	}
+
+	public static NBTTagList writeUUIDToList(UUID uuid) {
+		NBTTagList nbtTagList = new NBTTagList();
+		nbtTagList.appendTag(new NBTTagLong(uuid.getMostSignificantBits()));
+		nbtTagList.appendTag(new NBTTagLong(uuid.getLeastSignificantBits()));
+		return nbtTagList;
+	}
+
+	public static UUID readUUIDFromList(NBTTagList nbtTagList) {
+		NBTBase nbtM = nbtTagList.get(0);
+		NBTBase nbtL = nbtTagList.get(1);
+		return new UUID(nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtM).getLong() : 0, nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtL).getLong() : 0);
 	}
 
 }

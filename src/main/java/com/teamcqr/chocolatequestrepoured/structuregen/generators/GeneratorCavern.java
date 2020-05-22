@@ -29,7 +29,7 @@ import net.minecraft.world.chunk.Chunk;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class GeneratorCavern implements IDungeonGenerator {
+public class GeneratorCavern implements AbstractDungeonGenerator {
 
 	public GeneratorCavern() {
 	};
