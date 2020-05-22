@@ -148,12 +148,8 @@ public class CQStructure {
 		// Save normal blocks
 		NBTTagList nbtTagList1 = new NBTTagList();
 		NBTTagIntArray emptyNbtTagIntArray = new NBTTagIntArray(new int[0]);
-		for (int x = 0; x < this.size.getX(); x++) {
-			for (int y = 0; y < this.size.getY(); y++) {
-				for (int z = 0; z < this.size.getZ(); z++) {
-					nbtTagList1.appendTag(emptyNbtTagIntArray);
-				}
-			}
+		for (int i = 0; i < this.size.getX() * this.size.getY() * this.size.getZ(); i++) {
+			nbtTagList1.appendTag(emptyNbtTagIntArray);
 		}
 		for (AbstractBlockInfo blockInfo : this.blockInfoList) {
 			int index = blockInfo.getPos().getX() + blockInfo.getPos().getY() * this.size.getX() + blockInfo.getPos().getZ() * this.size.getX() * this.size.getY();
@@ -231,6 +227,38 @@ public class CQStructure {
 				z++;
 			}
 		}
+		this.blockInfoList.sort((blockInfo1, blockInfo2) -> {
+			boolean isNormalBlock1 = blockInfo1.getClass() == PosInfoBlock.class;
+			boolean isNormalBlock2 = blockInfo2.getClass() == PosInfoBlock.class;
+			if (isNormalBlock1 && isNormalBlock2) {
+				boolean hasTileEntity1 = ((PosInfoBlock) blockInfo1).tileentityData != null;
+				boolean hasTileEntity2 = ((PosInfoBlock) blockInfo2).tileentityData != null;
+				boolean hasSpecialShape1 = !((PosInfoBlock) blockInfo1).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo1).blockstate.isFullCube();
+				boolean hasSpecialShape2 = !((PosInfoBlock) blockInfo2).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo2).blockstate.isFullCube();
+				if (!hasTileEntity1 && !hasSpecialShape1 && !hasTileEntity2 && !hasSpecialShape2) {
+					return 0;
+				}
+				if (!hasTileEntity1 && !hasSpecialShape1 && (hasTileEntity2 || hasSpecialShape2)) {
+					return -1;
+				}
+				if ((hasTileEntity1 || hasSpecialShape1) && !hasTileEntity2 && !hasSpecialShape2) {
+					return 1;
+				}
+				if (hasTileEntity1 && !hasTileEntity2) {
+					return -1;
+				}
+				if (!hasTileEntity1 && hasTileEntity2) {
+					return 1;
+				}
+			}
+			if (isNormalBlock1 && !isNormalBlock2) {
+				return -1;
+			}
+			if (!isNormalBlock1 && isNormalBlock2) {
+				return 1;
+			}
+			return 0;
+		});
 
 		// Load special blocks
 		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {

@@ -35,7 +35,7 @@ public class GeneratorSurface extends AbstractDungeonGenerator {
 	protected void preProcess() {
 		if (this.dungeon.doBuildSupportPlatform()) {
 			BlockPos startPos = this.pos.up(this.dungeon.getUnderGroundOffset()).down();
-			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getX() - 1)));
+			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1)));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), Blocks.STONE, Blocks.GRASS, 8));
