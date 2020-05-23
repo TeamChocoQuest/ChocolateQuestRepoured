@@ -92,6 +92,9 @@ public class CQRConfig {
 		@Config.Comment("The maximum amount of files which will be cached.")
 		@Config.RangeInt(min = 1, max = 1024)
 		public int cachedStructureFilesMaxAmount = 64;
+
+		@Config.RangeInt(min = 1, max = 100)
+		public int generationSpeed = 20;
 	}
 
 	public static class General {

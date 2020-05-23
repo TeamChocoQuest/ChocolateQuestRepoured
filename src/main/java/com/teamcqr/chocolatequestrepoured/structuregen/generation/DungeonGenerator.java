@@ -8,6 +8,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -99,7 +100,7 @@ public class DungeonGenerator {
 
 	public void tick() {
 		if (this.state == EnumDungeonGeneratorState.GENERATION) {
-			this.tickTime += 20000000;
+			this.tickTime += CQRConfig.advanced.generationSpeed * 1000000;
 
 			while (this.tickTime > 0 && !this.isGenerated()) {
 				long t = System.nanoTime();
