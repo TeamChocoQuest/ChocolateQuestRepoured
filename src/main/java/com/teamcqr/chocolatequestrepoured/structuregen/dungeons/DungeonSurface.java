@@ -39,8 +39,8 @@ public class DungeonSurface extends DungeonBase {
 			PlacementSettings settings = new PlacementSettings();
 
 			if (this.rotateDungeon()) {
-				//settings.setRotation(Rotation.values()[this.random.nextInt(Rotation.values().length)]);
-				//settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
+				settings.setRotation(Rotation.values()[this.random.nextInt(Rotation.values().length)]);
+				settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
 			}
 
 			AbstractDungeonGenerator generator = new GeneratorSurface(world, new BlockPos(x, y, z), this, structure, settings);
