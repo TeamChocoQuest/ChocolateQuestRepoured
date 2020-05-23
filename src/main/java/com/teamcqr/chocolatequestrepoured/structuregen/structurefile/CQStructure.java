@@ -306,7 +306,14 @@ public class CQStructure {
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
 				if (SPECIAL_BLOCKS.contains(block)) {
-					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, null));
+					NBTTagCompound compound = null;
+					if (tileEntity != null) {
+						compound = tileEntity.writeToNBT(new NBTTagCompound());
+						compound.removeTag("x");
+						compound.removeTag("y");
+						compound.removeTag("z");
+					}
+					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, compound));
 				} else if (block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) {
 					NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
 					compound.removeTag("x");
