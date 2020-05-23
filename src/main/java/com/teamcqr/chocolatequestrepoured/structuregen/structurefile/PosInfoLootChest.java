@@ -58,7 +58,7 @@ public class PosInfoLootChest extends AbstractBlockInfo {
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
 		if (tileEntity instanceof TileEntityChest) {
-			long seed = WorldDungeonGenerator.getSeed(world, dungeonPos.getX() >> 4, dungeonPos.getZ() >> 4);
+			long seed = WorldDungeonGenerator.getSeed(world, transformedPos.getX(), transformedPos.getZ());
 			((TileEntityChest) tileEntity).setLootTable(this.lootTable, seed);
 		} else {
 			CQRMain.logger.warn("Failed to place loot chest at {}", transformedPos);
