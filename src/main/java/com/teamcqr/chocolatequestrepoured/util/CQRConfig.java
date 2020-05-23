@@ -40,28 +40,20 @@ public class CQRConfig {
 
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = {
-				"torch",
-				"ladder",
-				"wall_sign",
 				"bed",
-				"skull",
-				"wall_banner",
-				"lever",
-				"redstone_torch",
-				"wooden_button",
-				"stone_button",
-				"tripwire_hook",
 				"wooden_door",
 				"spruce_door",
 				"birch_door",
 				"jungle_door",
 				"acacia_door",
 				"dark_oak_door",
-				"iron_door",
-				"cqrepoured:unlit_torch" };
+				"iron_door" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
+		public String[] specialEntities = {
+				"minecraft:painting",
+				"minecraft:item_frame",
+				"minecraft:armor_stand" };
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableBlockWhitelist = {
