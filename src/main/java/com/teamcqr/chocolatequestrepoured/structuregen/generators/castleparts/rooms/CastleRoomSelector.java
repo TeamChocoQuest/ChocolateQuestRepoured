@@ -103,7 +103,7 @@ public class CastleRoomSelector {
 
 		this.placeOuterDoors();
 		this.placeTowers();
-		//this.placeBridges();
+		this.placeBridges();
 
 		this.pathBetweenRooms();
 
@@ -349,7 +349,6 @@ public class CastleRoomSelector {
 		}
 	}
 
-	/*
 	private void placeBridges() {
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0);
 		for (RoomGridCell cell : populated) {
@@ -379,7 +378,7 @@ public class CastleRoomSelector {
 				}
 			}
 		}
-	} */
+	}
 
 	private void randomizeRooms() {
 		ArrayList<RoomGridCell> unTyped = this.grid.getAllCellsWhere(RoomGridCell::needsRoomType);
