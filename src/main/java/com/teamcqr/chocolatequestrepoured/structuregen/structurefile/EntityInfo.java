@@ -23,8 +23,9 @@ public class EntityInfo implements IGeneratable {
 	public EntityInfo(BlockPos structurePos, Entity entity) {
 		this.entityData = new NBTTagCompound();
 		entity.writeToNBTOptional(this.entityData);
-		this.entityData.removeTag("UUID");
-		NBTTagList nbtTagList = this.entityData.getTagList("pos", Constants.NBT.TAG_DOUBLE);
+		this.entityData.removeTag("UUIDMost");
+		this.entityData.removeTag("UUIDLeast");
+		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 		nbtTagList.set(0, new NBTTagDouble(entity.posX - structurePos.getX()));
 		nbtTagList.set(1, new NBTTagDouble(entity.posY - structurePos.getY()));
 		nbtTagList.set(2, new NBTTagDouble(entity.posZ - structurePos.getZ()));
@@ -52,9 +53,9 @@ public class EntityInfo implements IGeneratable {
 			float transformedYaw = entity.rotationYaw + entity.getMirroredYaw(settings.getMirror()) - entity.getRotatedYaw(settings.getRotation());
 			Vec3d vec;
 			if (entity instanceof EntityHanging) {
-				vec = DungeonGenUtils.readVecFromList(this.entityData.getTagList("pos", Constants.NBT.TAG_DOUBLE));
-			} else {
 				vec = new Vec3d(this.entityData.getInteger("TileX"), this.entityData.getInteger("TileY"), this.entityData.getInteger("TileZ"));
+			} else {
+				vec = DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE));
 			}
 			Vec3d transformedVec = DungeonGenUtils.transformedVec3d(vec, settings).addVector(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
 			entity.setPositionAndRotation(transformedVec.x, transformedVec.y, transformedVec.z, transformedYaw, entity.rotationPitch);
