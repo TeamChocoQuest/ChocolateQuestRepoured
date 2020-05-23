@@ -19,6 +19,7 @@ import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartBlock extends AbstractDungeonPart {
@@ -32,7 +33,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		super(world, dungeonGenerator, partPos);
 		for (AbstractBlockInfo blockInfo : blocks) {
 			if (blockInfo != null) {
-				this.updateMinAndMaxPos(partPos.add(blockInfo.getPos()));
+				this.updateMinAndMaxPos(partPos.add(Template.transformedBlockPos(settings, blockInfo.getPos())));
 				this.blockInfoList.add(blockInfo);
 			}
 		}
