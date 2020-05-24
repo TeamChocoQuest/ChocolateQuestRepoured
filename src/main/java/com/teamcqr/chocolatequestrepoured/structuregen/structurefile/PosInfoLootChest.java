@@ -54,7 +54,7 @@ public class PosInfoLootChest extends AbstractBlockInfo {
 	@Override
 	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDungeonMobType dungeonMob, ProtectedRegion protectedRegion) {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
-		IBlockState iblockstate = Blocks.CHEST.getDefaultState().withMirror(settings.getMirror()).withRotation(settings.getRotation());
+		IBlockState iblockstate = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, this.facing).withMirror(settings.getMirror()).withRotation(settings.getRotation());
 		BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates);
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
