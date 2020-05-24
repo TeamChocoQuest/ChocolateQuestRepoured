@@ -289,10 +289,10 @@ public class DungeonGenUtils {
 
 		switch (mirror) {
 		case LEFT_RIGHT:
-			k = -k;
+			k = 1.0D - k;
 			break;
 		case FRONT_BACK:
-			i = -i;
+			i = 1.0D - i;
 			break;
 		default:
 			flag = false;
@@ -300,11 +300,11 @@ public class DungeonGenUtils {
 
 		switch (rotation) {
 		case COUNTERCLOCKWISE_90:
-			return new Vec3d(k, j, -i);
+			return new Vec3d(k, j, 1.0D - i);
 		case CLOCKWISE_90:
-			return new Vec3d(-k, j, i);
+			return new Vec3d(1.0D - k, j, i);
 		case CLOCKWISE_180:
-			return new Vec3d(-i, j, -k);
+			return new Vec3d(1.0D - i, j, 1.0D - k);
 		default:
 			return flag ? new Vec3d(i, j, k) : vec;
 		}
