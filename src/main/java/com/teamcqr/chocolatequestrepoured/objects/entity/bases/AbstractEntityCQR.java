@@ -143,7 +143,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	//Shoulder entity stuff
 	protected static final DataParameter<NBTTagCompound> LEFT_SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(EntityPlayer.class, DataSerializers.COMPOUND_TAG);
-    protected static final DataParameter<NBTTagCompound> RIGHT_SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(EntityPlayer.class, DataSerializers.COMPOUND_TAG);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -174,7 +173,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		
 		//Shoulder entity stuff
 		this.dataManager.register(LEFT_SHOULDER_ENTITY, new NBTTagCompound());
-        this.dataManager.register(RIGHT_SHOULDER_ENTITY, new NBTTagCompound());
 	}
 
 	@Override
@@ -382,10 +380,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
             compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
         }
 
-        if (!this.getRightShoulderEntity().hasNoTags())
-        {
-            compound.setTag("ShoulderEntityRight", this.getRightShoulderEntity());
-        }
 	}
 
 	@Override
@@ -431,10 +425,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
             this.setLeftShoulderEntity(compound.getCompoundTag("ShoulderEntityLeft"));
         }
 
-        if (compound.hasKey("ShoulderEntityRight", 10))
-        {
-            this.setRightShoulderEntity(compound.getCompoundTag("ShoulderEntityRight"));
-        }
 	}
 
 	@Override
@@ -1236,11 +1226,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
                 this.setLeftShoulderEntity(p_192027_1_);
                 return true;
             }
-            else if (this.getRightShoulderEntity().hasNoTags())
-            {
-                this.setRightShoulderEntity(p_192027_1_);
-                return true;
-            }
             else
             {
                 return false;
@@ -1256,8 +1241,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
     {
         this.spawnShoulderEntity(this.getLeftShoulderEntity());
         this.setLeftShoulderEntity(new NBTTagCompound());
-        this.spawnShoulderEntity(this.getRightShoulderEntity());
-        this.setRightShoulderEntity(new NBTTagCompound());
     }
 
     private void spawnShoulderEntity(@Nullable NBTTagCompound p_192026_1_)
@@ -1286,14 +1269,4 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
         this.dataManager.set(LEFT_SHOULDER_ENTITY, tag);
     }
 
-    public NBTTagCompound getRightShoulderEntity()
-    {
-        return (NBTTagCompound)this.dataManager.get(RIGHT_SHOULDER_ENTITY);
-    }
-
-    protected void setRightShoulderEntity(NBTTagCompound tag)
-    {
-        this.dataManager.set(RIGHT_SHOULDER_ENTITY, tag);
-    }
-    
 }
