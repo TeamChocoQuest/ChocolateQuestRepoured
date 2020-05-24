@@ -62,23 +62,23 @@ public class CQStructure {
 	public static void cacheFiles() {
 		CACHED_STRUCTURES.clear();
 
-		if (CQRConfig.advanced.cacheStructureFiles) {
+		if (!CQRConfig.advanced.cacheStructureFiles) {
 			return;
 		}
 
 		List<File> fileList = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_STRUCTURE_FILES_FOLDER, new String[] { "nbt" }, true));
 		fileList.sort((file1, file2) -> {
-			if (file1.length() < file2.length()) {
+			if (file1.length() > file2.length()) {
 				return -1;
 			}
-			if (file1.length() > file2.length()) {
+			if (file1.length() < file2.length()) {
 				return 1;
 			}
 			return 0;
 		});
 
 		long fileSizeSum = 0;
-		for (int i = 0; i < CQRConfig.advanced.cachedStructureFilesMaxAmount; i++) {
+		for (int i = 0; i < fileList.size() && i < CQRConfig.advanced.cachedStructureFilesMaxAmount; i++) {
 			File file = fileList.get(i);
 			fileSizeSum += file.length();
 			CACHED_STRUCTURES.put(file, createFromFile(file));
