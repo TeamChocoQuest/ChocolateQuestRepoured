@@ -15,6 +15,9 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	protected final T dungeon;
 	protected final DungeonGenerator dungeonGenerator;
 
+	
+	//Why remove all paramters from the functions?!?!? Those were supposed to be all the same! It is even needed like that for some generators
+	
 	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon) {
 		this.world = world;
 		this.pos = pos;

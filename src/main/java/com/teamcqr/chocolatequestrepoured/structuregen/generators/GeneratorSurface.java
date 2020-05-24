@@ -21,6 +21,7 @@ public class GeneratorSurface extends AbstractDungeonGenerator {
 	private PlacementSettings settings;
 
 	public GeneratorSurface(World world, BlockPos pos, DungeonBase dungeon, CQStructure structure, PlacementSettings settings) {
+		//Why do you use a centralized Position? And what does "centralized" actually mean here (should be explained in corresponding method)?
 		super(world, getCentralizedPosForStructure(pos, structure, settings), dungeon);
 		this.structure = structure;
 		this.settings = settings;
