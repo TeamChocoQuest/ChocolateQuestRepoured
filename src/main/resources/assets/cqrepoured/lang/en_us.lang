@@ -591,11 +591,13 @@ entity.cqr_lich.name=Lich
 entity.cqr_necromancer.name=Necromancer
 entity.cqr_boar_mage.name=Boarmage
 entity.cqr_walker_king.name=Walker King
+entity.cqr_pirate_captain.name=Der Piratenkapitän
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
 entity.cqr_illusion_walker_king.name=Walker King
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
+entity.cqr_pirate_parrot.name=Traitor Parrot
 
 #Advancements
 advancements.cqrepoured.root.title=Chocolate Quest Repoured

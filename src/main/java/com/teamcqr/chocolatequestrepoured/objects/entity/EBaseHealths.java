@@ -32,7 +32,8 @@ public enum EBaseHealths {
 	LICH(200.0F),
 	NECROMANCER(150.0F),
 	BOAR_MAGE(250.0F), 
-	WALKER_KING(300.0F),
+	WALKER_KING(300.0F), 
+	PIRATE_CAPTAIN(200),
 	;
 
 	private float baseHealth;
