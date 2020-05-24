@@ -21,6 +21,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRWasp;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderPirateParrot;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderWalkerTornado;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
@@ -28,6 +29,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGia
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfish;
@@ -53,6 +55,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
@@ -142,6 +146,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, renderManager -> new RenderCQRWasp(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, renderManager -> new RenderWalkerTornado(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, renderManager -> new RenderPirateParrot(renderManager));
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
@@ -214,6 +219,9 @@ public class ModEntityRenderers {
 		
 		// Walker King
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
+		
+		// Pirate Captain
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateCaptain.class, renderManager -> new RenderCQRPirateCaptain(renderManager, "boss/pirate_captain"));
 	}
 
 }
