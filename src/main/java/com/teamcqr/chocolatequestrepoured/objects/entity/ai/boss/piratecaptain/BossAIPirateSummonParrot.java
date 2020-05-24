@@ -29,8 +29,8 @@ public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPir
 			v = new Vec3d(0,1,0);
 		}
 		EntityCQRPirateParrot parrot = new EntityCQRPirateParrot(world);
-		parrot.setOwnerId(entity.getPersistentID());
 		parrot.setTamed(true);
+		parrot.setOwnerId(entity.getPersistentID());
 		Vec3d pos = entity.getPositionVector().add(v);
 		parrot.setPosition(pos.x, pos.y, pos.z);
 		this.entity.world.spawnEntity(parrot);
