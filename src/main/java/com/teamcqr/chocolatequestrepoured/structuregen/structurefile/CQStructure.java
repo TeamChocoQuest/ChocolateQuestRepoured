@@ -55,6 +55,7 @@ public class CQStructure {
 	private BlockPos size = BlockPos.ORIGIN;
 	private String author = "";
 
+	// Overall: Move stuff in different sub methods AND add comments throughout the method explaining why you do something or place a longer comment directly at the beginning of the function that summarizes the functionality and how it works
 	private CQStructure() {
 
 	}
@@ -192,6 +193,7 @@ public class CQStructure {
 	}
 
 	private void readFromNBT(NBTTagCompound compound) {
+		// Ever heard about encapsulation and splitting code into methods? This block is too long!
 		String cqrFileVersion = compound.getString("cqr_file_version");
 		if (!cqrFileVersion.equals(CQStructure.CQR_FILE_VERSION)) {
 			CQRMain.logger.warn("Warning! Trying to create structre from file which was exported with an older/newer version of CQR! Expected {} but got {}.", CQR_FILE_VERSION, cqrFileVersion);
@@ -294,6 +296,7 @@ public class CQStructure {
 	}
 
 	private void takeBlocksFromWorld(World world, BlockPos pos1, BlockPos pos2) {
+		// Encapsulation, maybe move the actual saving into own sub methods?
 		this.blockInfoList.clear();
 		this.specialBlockInfoList.clear();
 
