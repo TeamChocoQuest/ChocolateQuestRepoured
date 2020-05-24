@@ -5,6 +5,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.UUID;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
@@ -103,7 +104,7 @@ public class DungeonGenerator {
 			this.tickTime += CQRConfig.advanced.generationSpeed * 1000000;
 			int i = 0;
 
-			while (this.tickTime > 0 && i < 10000 && !this.isGenerated()) {
+			while (this.tickTime > 0 && i < CQRConfig.advanced.generationLimit && !this.isGenerated()) {
 				long t = System.nanoTime();
 
 				if (!this.parts.isEmpty()) {
@@ -111,6 +112,9 @@ public class DungeonGenerator {
 					part.generateNext();
 					if (part.isGenerated()) {
 						this.parts.removeFirst();
+					}
+					if (this.parts.isEmpty()) {
+						CQRMain.logger.info("Generated blocks: {}", System.currentTimeMillis() - this.t);
 					}
 				} else if (!this.dungeonPartLight.isGenerated()) {
 					this.dungeonPartLight.generateNext();

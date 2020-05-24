@@ -213,6 +213,7 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
+		CQStructure.cacheFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();
 		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
