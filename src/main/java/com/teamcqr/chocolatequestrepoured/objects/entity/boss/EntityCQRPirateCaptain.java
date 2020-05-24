@@ -69,4 +69,8 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		return spawnedParrot;
 	}
 
+	public void setSpawnedParrot(boolean b) {
+		this.spawnedParrot = b;
+	}
+
 }
