@@ -101,8 +101,9 @@ public class DungeonGenerator {
 	public void tick() {
 		if (this.state == EnumDungeonGeneratorState.GENERATION) {
 			this.tickTime += CQRConfig.advanced.generationSpeed * 1000000;
+			int i = 0;
 
-			while (this.tickTime > 0 && !this.isGenerated()) {
+			while (this.tickTime > 0 && i < 10000 && !this.isGenerated()) {
 				long t = System.nanoTime();
 
 				if (!this.parts.isEmpty()) {
@@ -118,6 +119,7 @@ public class DungeonGenerator {
 					}
 				}
 
+				i++;
 				this.tickTime -= System.nanoTime() - t;
 			}
 		}
