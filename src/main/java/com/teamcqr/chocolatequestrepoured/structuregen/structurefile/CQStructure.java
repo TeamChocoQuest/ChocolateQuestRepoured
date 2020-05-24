@@ -8,11 +8,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import org.apache.commons.io.FileUtils;
 
@@ -45,6 +48,38 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class CQStructure {
 
+	private static final Comparator<AbstractBlockInfo> BLOCK_INFO_COMPARATOR = (blockInfo1, blockInfo2) -> {
+		boolean isNormalBlock1 = blockInfo1.getClass() == PosInfoBlock.class;
+		boolean isNormalBlock2 = blockInfo2.getClass() == PosInfoBlock.class;
+		if (isNormalBlock1 && isNormalBlock2) {
+			boolean hasTileEntity1 = ((PosInfoBlock) blockInfo1).tileentityData != null;
+			boolean hasTileEntity2 = ((PosInfoBlock) blockInfo2).tileentityData != null;
+			boolean hasSpecialShape1 = !((PosInfoBlock) blockInfo1).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo1).blockstate.isFullCube();
+			boolean hasSpecialShape2 = !((PosInfoBlock) blockInfo2).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo2).blockstate.isFullCube();
+			if (!hasTileEntity1 && !hasSpecialShape1 && !hasTileEntity2 && !hasSpecialShape2) {
+				return 0;
+			}
+			if (!hasTileEntity1 && !hasSpecialShape1 && (hasTileEntity2 || hasSpecialShape2)) {
+				return -1;
+			}
+			if ((hasTileEntity1 || hasSpecialShape1) && !hasTileEntity2 && !hasSpecialShape2) {
+				return 1;
+			}
+			if (hasTileEntity1 && !hasTileEntity2) {
+				return -1;
+			}
+			if (!hasTileEntity1 && hasTileEntity2) {
+				return 1;
+			}
+		}
+		if (isNormalBlock1 && !isNormalBlock2) {
+			return -1;
+		}
+		if (!isNormalBlock1 && isNormalBlock2) {
+			return 1;
+		}
+		return 0;
+	};
 	private static final Map<File, CQStructure> CACHED_STRUCTURES = new HashMap<>();
 	private static final String CQR_FILE_VERSION = "1.1.0";
 	private static final Set<Block> SPECIAL_BLOCKS = new HashSet<>();
@@ -234,38 +269,7 @@ public class CQStructure {
 			}
 		}
 		long t = System.currentTimeMillis();
-		this.blockInfoList.sort((blockInfo1, blockInfo2) -> {
-			boolean isNormalBlock1 = blockInfo1.getClass() == PosInfoBlock.class;
-			boolean isNormalBlock2 = blockInfo2.getClass() == PosInfoBlock.class;
-			if (isNormalBlock1 && isNormalBlock2) {
-				boolean hasTileEntity1 = ((PosInfoBlock) blockInfo1).tileentityData != null;
-				boolean hasTileEntity2 = ((PosInfoBlock) blockInfo2).tileentityData != null;
-				boolean hasSpecialShape1 = !((PosInfoBlock) blockInfo1).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo1).blockstate.isFullCube();
-				boolean hasSpecialShape2 = !((PosInfoBlock) blockInfo2).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo2).blockstate.isFullCube();
-				if (!hasTileEntity1 && !hasSpecialShape1 && !hasTileEntity2 && !hasSpecialShape2) {
-					return 0;
-				}
-				if (!hasTileEntity1 && !hasSpecialShape1 && (hasTileEntity2 || hasSpecialShape2)) {
-					return -1;
-				}
-				if ((hasTileEntity1 || hasSpecialShape1) && !hasTileEntity2 && !hasSpecialShape2) {
-					return 1;
-				}
-				if (hasTileEntity1 && !hasTileEntity2) {
-					return -1;
-				}
-				if (!hasTileEntity1 && hasTileEntity2) {
-					return 1;
-				}
-			}
-			if (isNormalBlock1 && !isNormalBlock2) {
-				return -1;
-			}
-			if (!isNormalBlock1 && isNormalBlock2) {
-				return 1;
-			}
-			return 0;
-		});
+		this.blockInfoList.sort(BLOCK_INFO_COMPARATOR);
 		CQRMain.logger.info("Sorted block info list: {}", System.currentTimeMillis() - t);
 
 		// Load special blocks
@@ -309,43 +313,33 @@ public class CQStructure {
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
 				if (SPECIAL_BLOCKS.contains(block)) {
-					NBTTagCompound compound = null;
-					if (tileEntity != null) {
-						compound = tileEntity.writeToNBT(new NBTTagCompound());
-						compound.removeTag("x");
-						compound.removeTag("y");
-						compound.removeTag("z");
-					}
-					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, compound));
+					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) {
-					NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
-					compound.removeTag("x");
-					compound.removeTag("y");
-					compound.removeTag("z");
-					this.blockInfoList.add(new PosInfoBanner(pos, state, compound));
+					this.blockInfoList.add(new PosInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block == ModBlocks.SPAWNER) {
-					NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
-					compound.removeTag("x");
-					compound.removeTag("y");
-					compound.removeTag("z");
-					this.blockInfoList.add(new PosInfoSpawner(pos, state, compound));
+					this.blockInfoList.add(new PosInfoSpawner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block instanceof BlockExporterChest) {
 					this.blockInfoList.add(new PosInfoLootChest(pos, ((BlockExporterChest) block).lootTable, state.getValue(BlockChest.FACING)));
 				} else if (block == ModBlocks.FORCE_FIELD_NEXUS) {
 					this.blockInfoList.add(new PosInfoForceFieldNexus(pos));
 				} else if (block == ModBlocks.BOSS_BLOCK) {
 					this.blockInfoList.add(new PosInfoBoss(pos));
-				} else if (tileEntity != null) {
-					NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
-					compound.removeTag("x");
-					compound.removeTag("y");
-					compound.removeTag("z");
-					this.blockInfoList.add(new PosInfoBlock(pos, state, compound));
 				} else {
-					this.blockInfoList.add(new PosInfoBlock(pos, state, null));
+					this.blockInfoList.add(new PosInfoBlock(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				}
 			}
 		}
+	}
+
+	private NBTTagCompound writeTileEntityToNBT(@Nullable TileEntity tileEntity) {
+		if (tileEntity == null) {
+			return null;
+		}
+		NBTTagCompound compound = tileEntity.writeToNBT(new NBTTagCompound());
+		compound.removeTag("x");
+		compound.removeTag("y");
+		compound.removeTag("z");
+		return compound;
 	}
 
 	private void takeEntitiesFromWorld(World world, BlockPos pos1, BlockPos pos2, boolean ignoreBasicEntities) {
