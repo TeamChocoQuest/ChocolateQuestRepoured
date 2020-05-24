@@ -33,9 +33,9 @@ public class EntityCQRPirateParrot extends EntityParrot {
         this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityCQRPirateCaptain.class, 8.0F));
         //this.tasks.addTask(2, this.aiSit);
         this.tasks.addTask(2, new EntityAIFollowOwnerFlying(this, 1.0D, 5.0F, 1.0F));
-        this.tasks.addTask(2, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
+        this.tasks.addTask(5, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
         this.tasks.addTask(3, new BossAIPirateParrotLandOnCaptainsShoulder(this));
-        this.tasks.addTask(3, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
+        this.tasks.addTask(4, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
     }
 	
 	@Override
