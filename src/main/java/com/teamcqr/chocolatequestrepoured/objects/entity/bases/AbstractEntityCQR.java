@@ -142,7 +142,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	//Shoulder entity stuff
-	protected static final DataParameter<NBTTagCompound> LEFT_SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(EntityPlayer.class, DataSerializers.COMPOUND_TAG);
+	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -172,7 +172,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		
 		//Shoulder entity stuff
-		this.dataManager.register(LEFT_SHOULDER_ENTITY, new NBTTagCompound());
+		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
 	}
 
 	@Override
@@ -1261,12 +1261,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
     
     public NBTTagCompound getLeftShoulderEntity()
     {
-        return (NBTTagCompound)this.dataManager.get(LEFT_SHOULDER_ENTITY);
+        return (NBTTagCompound)this.dataManager.get(SHOULDER_ENTITY);
     }
 
     protected void setLeftShoulderEntity(NBTTagCompound tag)
     {
-        this.dataManager.set(LEFT_SHOULDER_ENTITY, tag);
+        this.dataManager.set(SHOULDER_ENTITY, tag);
     }
 
 }
