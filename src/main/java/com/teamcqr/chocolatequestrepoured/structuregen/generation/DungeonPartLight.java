@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.BlockLiquid;
@@ -32,6 +33,10 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		this.x2 = this.minPos.getX();
 		this.y2 = this.minPos.getY();
 		this.z2 = this.minPos.getZ();
+		if (CQRConfig.advanced.instantLightUpdates) {
+			this.chunkX = Integer.MAX_VALUE;
+			this.x1 = Integer.MAX_VALUE;
+		}
 	}
 
 	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator, NBTTagCompound compound) {

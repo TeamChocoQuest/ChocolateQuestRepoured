@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +45,7 @@ public class PosInfoBlock extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 		IBlockState iblockstate = this.blockstate.withMirror(settings.getMirror()).withRotation(settings.getRotation());
 
-		if (BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, false) && this.tileentityData != null) {
+		if (BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates) && this.tileentityData != null) {
 			TileEntity tileentity = world.getTileEntity(transformedPos);
 
 			if (tileentity != null) {

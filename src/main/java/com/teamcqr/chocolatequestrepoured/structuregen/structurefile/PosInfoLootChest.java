@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.block.BlockChest;
@@ -54,7 +55,7 @@ public class PosInfoLootChest extends AbstractBlockInfo {
 	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDungeonMobType dungeonMob, ProtectedRegion protectedRegion) {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 		IBlockState iblockstate = Blocks.CHEST.getDefaultState().withMirror(settings.getMirror()).withRotation(settings.getRotation());
-		BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, false);
+		BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates);
 		TileEntity tileEntity = world.getTileEntity(transformedPos);
 
 		if (tileEntity instanceof TileEntityChest) {

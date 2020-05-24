@@ -95,6 +95,7 @@ public class CQRConfig {
 
 		@Config.RangeInt(min = 1, max = 100)
 		public int generationSpeed = 20;
+		public boolean instantLightUpdates = false;
 	}
 
 	public static class General {
