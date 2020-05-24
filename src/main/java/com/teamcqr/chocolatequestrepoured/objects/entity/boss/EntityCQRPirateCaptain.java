@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSummonParrot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
 import net.minecraft.entity.IEntityLivingData;
@@ -36,6 +37,13 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.PIRATE;
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+		
+		this.spellHandler.addSpell(0, new BossAIPirateSummonParrot(this, 0, 20, 20));
 	}
 	
 	@Override

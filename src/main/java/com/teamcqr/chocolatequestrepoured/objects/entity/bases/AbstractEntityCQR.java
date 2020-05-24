@@ -58,6 +58,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -140,6 +141,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	//Shoulder entity stuff
+	protected static final DataParameter<NBTTagCompound> LEFT_SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(EntityPlayer.class, DataSerializers.COMPOUND_TAG);
+    protected static final DataParameter<NBTTagCompound> RIGHT_SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(EntityPlayer.class, DataSerializers.COMPOUND_TAG);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -167,6 +171,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
+		
+		//Shoulder entity stuff
+		this.dataManager.register(LEFT_SHOULDER_ENTITY, new NBTTagCompound());
+        this.dataManager.register(RIGHT_SHOULDER_ENTITY, new NBTTagCompound());
 	}
 
 	@Override
@@ -210,6 +218,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		// End IceAndFire compatibility
 
+		//Shoulder entity stuff
+		spawnShoulderEntities();
+		
 		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			amount *= 0.7F;
 		} else {
@@ -364,6 +375,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			pathTag.setTag("pathPoints", nbtTagList);
 			compound.setTag("pathingAI", pathTag);
 		}
+		
+		//Shoulder entity stuff
+		if (!this.getLeftShoulderEntity().hasNoTags())
+        {
+            compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
+        }
+
+        if (!this.getRightShoulderEntity().hasNoTags())
+        {
+            compound.setTag("ShoulderEntityRight", this.getRightShoulderEntity());
+        }
 	}
 
 	@Override
@@ -402,6 +424,17 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.pathPoints[i] = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
 			}
 		}
+		
+		//Shoulder entity stuff
+		if (compound.hasKey("ShoulderEntityLeft", 10))
+        {
+            this.setLeftShoulderEntity(compound.getCompoundTag("ShoulderEntityLeft"));
+        }
+
+        if (compound.hasKey("ShoulderEntityRight", 10))
+        {
+            this.setRightShoulderEntity(compound.getCompoundTag("ShoulderEntityRight"));
+        }
 	}
 
 	@Override
@@ -592,6 +625,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		//Shoulder entity stuff
+		spawnShoulderEntities();
+		
 		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof EntityLivingBase) {
 				if (!this.world.isRemote) {
@@ -651,7 +687,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 			this.applyEnchantments(this, entityIn);
 		}
-
+		
 		return flag;
 	}
 
@@ -1183,5 +1219,81 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public int getLastTimeHitByAxeWhileBlocking() {
 		return this.lastTimeHitByAxeWhileBlocking;
 	}
+	
+	
+	
+	
+	
+	
+	//Shoulder entity stuff
 
+	public boolean addShoulderEntity(NBTTagCompound p_192027_1_)
+    {
+        if (!this.isRiding() && this.onGround && !this.isInWater())
+        {
+            if (this.getLeftShoulderEntity().hasNoTags())
+            {
+                this.setLeftShoulderEntity(p_192027_1_);
+                return true;
+            }
+            else if (this.getRightShoulderEntity().hasNoTags())
+            {
+                this.setRightShoulderEntity(p_192027_1_);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    protected void spawnShoulderEntities()
+    {
+        this.spawnShoulderEntity(this.getLeftShoulderEntity());
+        this.setLeftShoulderEntity(new NBTTagCompound());
+        this.spawnShoulderEntity(this.getRightShoulderEntity());
+        this.setRightShoulderEntity(new NBTTagCompound());
+    }
+
+    private void spawnShoulderEntity(@Nullable NBTTagCompound p_192026_1_)
+    {
+        if (!this.world.isRemote && !p_192026_1_.hasNoTags())
+        {
+            Entity entity = EntityList.createEntityFromNBT(p_192026_1_, this.world);
+
+            if (entity instanceof EntityTameable)
+            {
+                ((EntityTameable)entity).setOwnerId(this.entityUniqueID);
+            }
+
+            entity.setPosition(this.posX, this.posY + 0.699999988079071D, this.posZ);
+            this.world.spawnEntity(entity);
+        }
+    }
+    
+    public NBTTagCompound getLeftShoulderEntity()
+    {
+        return (NBTTagCompound)this.dataManager.get(LEFT_SHOULDER_ENTITY);
+    }
+
+    protected void setLeftShoulderEntity(NBTTagCompound tag)
+    {
+        this.dataManager.set(LEFT_SHOULDER_ENTITY, tag);
+    }
+
+    public NBTTagCompound getRightShoulderEntity()
+    {
+        return (NBTTagCompound)this.dataManager.get(RIGHT_SHOULDER_ENTITY);
+    }
+
+    protected void setRightShoulderEntity(NBTTagCompound tag)
+    {
+        this.dataManager.set(RIGHT_SHOULDER_ENTITY, tag);
+    }
+    
 }
