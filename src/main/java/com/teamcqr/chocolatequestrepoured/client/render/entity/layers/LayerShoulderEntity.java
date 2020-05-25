@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -68,7 +67,7 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
             {
                 p_192864_4_ = new RenderPirateParrot(this.entityRenderer.getRenderManager());
                 p_192864_5_ = new ModelParrot();
-                p_192864_6_ = RenderPirateParrot.PARROT_TEXTURES[p_192864_3_.getInteger("Variant")];
+                p_192864_6_ = RenderPirateParrot.TEXTURE;
             }
         }
 
@@ -78,7 +77,7 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
         float f1 = p_192864_15_ ? 0.4F : -0.4F;
         GlStateManager.translate(f1, f, 0.0F);
 
-        if (p_192864_7_ == EntityParrot.class)
+        if (p_192864_7_ == EntityCQRPirateParrot.class)
         {
             p_192864_11_ = 0.0F;
         }
