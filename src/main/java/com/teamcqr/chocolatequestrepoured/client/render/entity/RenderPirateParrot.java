@@ -9,7 +9,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderPirateParrot extends RenderParrot {
 
-	protected static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/pirate_parrot.png");
+	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/pirate_parrot.png");
 	
 	public RenderPirateParrot(RenderManager renderManager) {
 		super(renderManager);
