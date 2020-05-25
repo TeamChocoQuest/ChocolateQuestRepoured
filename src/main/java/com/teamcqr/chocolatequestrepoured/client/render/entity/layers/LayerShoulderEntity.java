@@ -5,13 +5,14 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderPirateParrot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateParrot;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelParrot;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
-import net.minecraft.client.renderer.entity.RenderParrot;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityParrot;
@@ -63,11 +64,11 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
             p_192864_2_ = p_192864_3_.getUniqueId("UUID");
             p_192864_7_ = EntityList.getClassFromName(p_192864_3_.getString("id"));
 
-            if (p_192864_7_ == EntityParrot.class)
+            if (p_192864_7_ == EntityCQRPirateParrot.class)
             {
-                p_192864_4_ = new RenderParrot(this.entityRenderer.getRenderManager());
+                p_192864_4_ = new RenderPirateParrot(this.entityRenderer.getRenderManager());
                 p_192864_5_ = new ModelParrot();
-                p_192864_6_ = RenderParrot.PARROT_TEXTURES[p_192864_3_.getInteger("Variant")];
+                p_192864_6_ = RenderPirateParrot.PARROT_TEXTURES[p_192864_3_.getInteger("Variant")];
             }
         }
 
