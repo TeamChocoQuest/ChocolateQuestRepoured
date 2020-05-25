@@ -21,6 +21,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 	private int y1;
 	private int z1;
 	private int x2;
+	private int y2;
 	private int z2;
 
 	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator, BlockPos minPos, BlockPos maxPos) {
@@ -32,6 +33,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		this.y1 = this.minPos.getY();
 		this.z1 = this.minPos.getZ();
 		this.x2 = this.minPos.getX();
+		this.y2 = this.minPos.getY();
 		this.z2 = this.minPos.getZ();
 		if (CQRConfig.advanced.instantLightUpdates) {
 			this.chunkX = Integer.MAX_VALUE;
@@ -52,6 +54,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		compound.setInteger("y1", this.y1);
 		compound.setInteger("z1", this.z1);
 		compound.setInteger("x2", this.x2);
+		compound.setInteger("y2", this.y2);
 		compound.setInteger("z2", this.z2);
 		return compound;
 	}
@@ -65,6 +68,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		this.y1 = compound.getInteger("y1");
 		this.z1 = compound.getInteger("z1");
 		this.x2 = compound.getInteger("x2");
+		this.y2 = compound.getInteger("y2");
 		this.z2 = compound.getInteger("z2");
 	}
 
@@ -100,41 +104,18 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				}
 			}
 		} else if (this.x2 <= this.maxPos.getX()) {
-			BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(this.x2, this.minPos.getY(), this.z2);
-			int oldChunkY = minPos.getY() >> 4;
-			Chunk chunk = this.world.getChunkFromChunkCoords(this.x2 >> 4, this.z2 >> 4);
-			ExtendedBlockStorage extendedBlockStorage = chunk.getBlockStorageArray()[oldChunkY];
-			BlockPos.MutableBlockPos oldPos = new BlockPos.MutableBlockPos(this.x2, this.minPos.getY() == 0 ? 1 : this.minPos.getY() - 1, this.z2);
-			IBlockState oldState = chunk.getBlockState(oldPos);
-
-			for (int y2 = this.minPos.getY(); y2 <= this.maxPos.getY(); y2++) {
-				int chunkY = y2 >> 4;
-
-				if (chunkY != oldChunkY) {
-					extendedBlockStorage = chunk.getBlockStorageArray()[chunkY];
-					oldChunkY = chunkY;
-				}
-
-				if (extendedBlockStorage != Chunk.NULL_BLOCK_STORAGE) {
-					IBlockState state = extendedBlockStorage.get(this.x2 & 15, y2 & 15, this.z2 & 15);
-
-					if (state.getBlock() instanceof BlockLiquid) {
-						state.neighborChanged(this.world, pos.setPos(this.x2, y2, this.z2), oldState.getBlock(), oldPos);
-					}
-
-					oldState = state;
-					oldPos.setPos(this.x2, y2, this.z2);
-				} else {
-					y2 += 15 - (y2 & 15);
-					oldState = Blocks.AIR.getDefaultState();
-					oldPos.setY(y2);
-				}
-			}
+			BlockPos pos = new BlockPos(this.x2, this.y2, this.z2);
+			IBlockState state = this.world.getBlockState(pos);
+			this.world.notifyNeighborsRespectDebug(pos, state.getBlock(), false);
 
 			this.z2++;
 			if (this.z2 > this.maxPos.getZ()) {
 				this.z2 = this.minPos.getZ();
-				this.x2++;
+				this.y2++;
+				if (this.y2 > this.maxPos.getY()) {
+					this.y2 = this.minPos.getY();
+					this.x2++;
+				}
 			}
 		}
 	}
