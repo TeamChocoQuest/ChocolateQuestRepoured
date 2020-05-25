@@ -21,6 +21,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -39,6 +40,7 @@ import net.minecraft.nbt.NBTTagIntArray;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityBanner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -314,7 +316,7 @@ public class CQStructure {
 
 				if (SPECIAL_BLOCKS.contains(block)) {
 					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, this.writeTileEntityToNBT(tileEntity)));
-				} else if (block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) {
+				} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
 					this.blockInfoList.add(new PosInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block == ModBlocks.SPAWNER) {
 					this.blockInfoList.add(new PosInfoSpawner(pos, state, this.writeTileEntityToNBT(tileEntity)));
