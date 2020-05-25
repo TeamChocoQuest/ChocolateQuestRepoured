@@ -362,7 +362,7 @@ public class CQStructurePart extends Template {
 			BlockPos transformedPos = transformedBlockPos(placementIn, lootChestInfo.getPosition()).add(pos);
 
 			if (!worldIn.isOutsideBuildHeight(transformedPos)) {
-				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()).withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()), 2);
+				worldIn.setBlockState(transformedPos, Blocks.CHEST.getDefaultState().withProperty(BlockHorizontal.FACING, lootChestInfo.getFacing()).withMirror(placementIn.getMirror()).withRotation(placementIn.getRotation()), 2);
 				TileEntityChest tileEntityChest = (TileEntityChest) worldIn.getTileEntity(transformedPos);
 
 				long seed = WorldDungeonGenerator.getSeed(worldIn, transformedPos.getX(), transformedPos.getZ());
