@@ -47,7 +47,10 @@ public class CQRConfig {
 				"jungle_door",
 				"acacia_door",
 				"dark_oak_door",
-				"iron_door" };
+				"iron_door",
+				"piston",
+				"sticky_piston",
+				"piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = {
