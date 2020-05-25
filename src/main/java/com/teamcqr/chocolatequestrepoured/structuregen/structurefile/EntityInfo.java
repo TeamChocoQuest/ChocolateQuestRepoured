@@ -10,7 +10,10 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -50,7 +53,7 @@ public class EntityInfo implements IGeneratable {
 			entity = null;
 		}
 		if (entity != null) {
-			float transformedYaw = entity.rotationYaw + entity.getMirroredYaw(settings.getMirror()) - entity.getRotatedYaw(settings.getRotation());
+			float transformedYaw = this.getTransformedYaw(entity.rotationYaw, settings.getMirror(), settings.getRotation());
 			Vec3d vec;
 			if (entity instanceof EntityHanging) {
 				vec = new Vec3d(this.entityData.getInteger("TileX"), this.entityData.getInteger("TileY"), this.entityData.getInteger("TileZ"));
@@ -58,7 +61,9 @@ public class EntityInfo implements IGeneratable {
 				vec = DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE));
 			}
 			Vec3d transformedVec = DungeonGenUtils.transformedVec3d(vec, settings).addVector(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
-			entity.setPositionAndRotation(transformedVec.x, transformedVec.y, transformedVec.z, transformedYaw, entity.rotationPitch);
+			entity.setLocationAndAngles(transformedVec.x, transformedVec.y, transformedVec.z, transformedYaw, entity.rotationPitch);
+			entity.setRenderYawOffset(transformedYaw);
+			entity.setRotationYawHead(transformedYaw);
 			world.spawnEntity(entity);
 		}
 	}
@@ -70,6 +75,34 @@ public class EntityInfo implements IGeneratable {
 	public BlockPos getPos() {
 		NBTTagList nbtTagList = this.entityData.getTagList("pos", Constants.NBT.TAG_DOUBLE);
 		return new BlockPos(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
+	}
+
+	private float getTransformedYaw(float rotationYaw, Mirror mirror, Rotation rotation) {
+		float f = MathHelper.wrapDegrees(rotationYaw);
+		switch (mirror) {
+		case LEFT_RIGHT:
+			f = 180.0F - f;
+			break;
+		case FRONT_BACK:
+			f = -f;
+			break;
+		default:
+			break;
+		}
+		switch (rotation) {
+		case CLOCKWISE_90:
+			f += 90.0F;
+			break;
+		case CLOCKWISE_180:
+			f += 180.0F;
+			break;
+		case COUNTERCLOCKWISE_90:
+			f -= 90.0F;
+			break;
+		default:
+			break;
+		}
+		return f;
 	}
 
 }
