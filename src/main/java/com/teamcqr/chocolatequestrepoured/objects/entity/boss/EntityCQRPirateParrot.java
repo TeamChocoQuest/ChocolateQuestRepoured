@@ -1,9 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
+import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotLandOnCaptainsShoulder;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.mobs.EntityCQRPirate;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFollow;
 import net.minecraft.entity.ai.EntityAIFollowOwnerFlying;
@@ -15,6 +23,7 @@ import net.minecraft.entity.passive.EntityParrot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 
 public class EntityCQRPirateParrot extends EntityParrot {
@@ -28,7 +37,6 @@ public class EntityCQRPirateParrot extends EntityParrot {
         this.aiSit = new EntityAISit(this);
         //this.tasks.addTask(0, new EntityAIPanic(this, 1.25D));
         this.tasks.addTask(0, new EntityAISwimming(this));
-        this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
         this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityCQRPirate.class, 8.0F));
         this.tasks.addTask(1, new EntityAIWatchClosest(this, EntityCQRPirateCaptain.class, 8.0F));
         //this.tasks.addTask(2, this.aiSit);
@@ -44,6 +52,41 @@ public class EntityCQRPirateParrot extends EntityParrot {
 		world.createExplosion(this, posX, posY, posZ, 2, true);
 	}
 	
+	@Override
+	public void setSitting(boolean sitting) {
+	}
+	
+	@Override
+	public boolean isSitting() {
+		return false;
+	}
+	
+	@Nullable
+	@Override
+    public EntityLivingBase getOwner()
+    {
+        try
+        {
+            UUID uuid = this.getOwnerId();
+            return uuid == null ? null : getOwnerInRange(uuid);
+        }
+        catch (IllegalArgumentException var2)
+        {
+            return null;
+        }
+    }	
+	
+	private EntityLivingBase getOwnerInRange(UUID uuid) {
+		List<Entity> ents = world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(posX -20, posY -20, posZ -20, posX +20, posY +20, posZ +20), new Predicate<Entity>() {
+
+			@Override
+			public boolean apply(Entity input) {
+				return input instanceof EntityLivingBase && input.getPersistentID().equals(uuid);
+			}
+		});
+		return ents.isEmpty() ? null : (EntityLivingBase)ents.get(0); 
+	}
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -66,6 +109,13 @@ public class EntityCQRPirateParrot extends EntityParrot {
             return false;
         }
     }
+	
+	@Override
+	public boolean canSitOnShoulder() {
+		return true;
+	}
+	
+	
 	
 	@Override
 	public boolean setEntityOnShoulder(EntityPlayer p_191994_1_) {
