@@ -96,14 +96,14 @@ public class ModelCQRBiped extends ModelBiped {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					}
 				}
-				if (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {
