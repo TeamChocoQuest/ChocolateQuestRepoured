@@ -136,6 +136,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> HAS_TARGET = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
@@ -165,6 +166,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		super.entityInit();
 
 		this.dataManager.register(IS_SITTING, false);
+		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
@@ -586,6 +588,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
 		super.onLivingUpdate();
+		
+		if(!world.isRemote) {
+			this.dataManager.set(HAS_TARGET, getAttackTarget() != null);
+		}
 	}
 
 	@Override
@@ -1210,6 +1216,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.lastTimeHitByAxeWhileBlocking;
 	}
 	
+	@SideOnly(Side.CLIENT)
+	public boolean hasAttackTarget() {
+		return this.dataManager.get(HAS_TARGET);
+	}
 	
 	
 	

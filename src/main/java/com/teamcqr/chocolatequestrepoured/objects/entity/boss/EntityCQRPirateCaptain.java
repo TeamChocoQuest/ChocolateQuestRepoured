@@ -47,6 +47,11 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
+	public void setSitting(boolean sitting) {
+		super.setSitting(false);
+	}
+	
+	@Override
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		super.setEquipmentBasedOnDifficulty(difficulty);
 		setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.CAPTAIN_REVOLVER, 1));
@@ -54,7 +59,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		setItemStackToExtraSlot(EntityEquipmentExtraSlot.ARROW, new ItemStack(ModItems.BULLET_FIRE, 64));
 		setItemStackToExtraSlot(EntityEquipmentExtraSlot.POTION, new ItemStack(ModItems.POTION_HEALING, 2));
 	}
-	
+
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
 		setEquipmentBasedOnDifficulty(difficulty);
