@@ -236,7 +236,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			return true;
 		}
 		
-		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow)) {
+		if(!(source.getImmediateSource() != null && source.getImmediateSource() instanceof EntitySpectralArrow) && CQRConfig.bosses.harderWalkerKing) {
 			amount *= 0.5F;
 		}
 		
