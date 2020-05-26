@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.item.EntityPainting;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
@@ -17,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
 import net.minecraftforge.common.util.Constants;
 
 public class EntityInfo implements IGeneratable {
@@ -53,17 +55,21 @@ public class EntityInfo implements IGeneratable {
 			entity = null;
 		}
 		if (entity != null) {
-			float transformedYaw = this.getTransformedYaw(entity.rotationYaw, settings.getMirror(), settings.getRotation());
-			Vec3d vec;
 			if (entity instanceof EntityHanging) {
-				vec = new Vec3d(this.entityData.getInteger("TileX"), this.entityData.getInteger("TileY"), this.entityData.getInteger("TileZ"));
+				BlockPos pos = new BlockPos(this.entityData.getInteger("TileX"), this.entityData.getInteger("TileY"), this.entityData.getInteger("TileZ"));
+				if (entity instanceof EntityPainting && settings.getMirror() != Mirror.NONE) {
+					pos = pos.offset(((EntityPainting) entity).facingDirection.rotateYCCW(), (((EntityPainting) entity).art.sizeX >> 4) - 1);
+				}
+				pos = Template.transformedBlockPos(settings, pos).add(dungeonPartPos);
+				float transformedYaw = entity.rotationYaw + entity.getMirroredYaw(settings.getMirror()) - entity.getRotatedYaw(settings.getRotation());
+				entity.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), transformedYaw, entity.rotationPitch);
 			} else {
-				vec = DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE));
+				Vec3d vec = DungeonGenUtils.transformedVec3d(DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE)), settings).addVector(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
+				float transformedYaw = this.getTransformedYaw(entity.rotationYaw, settings.getMirror(), settings.getRotation());
+				entity.setLocationAndAngles(vec.x, vec.y, vec.z, transformedYaw, entity.rotationPitch);
+				entity.setRenderYawOffset(transformedYaw);
+				entity.setRotationYawHead(transformedYaw);
 			}
-			Vec3d transformedVec = DungeonGenUtils.transformedVec3d(vec, settings).addVector(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
-			entity.setLocationAndAngles(transformedVec.x, transformedVec.y, transformedVec.z, transformedYaw, entity.rotationPitch);
-			entity.setRenderYawOffset(transformedYaw);
-			entity.setRotationYawHead(transformedYaw);
 			world.spawnEntity(entity);
 		}
 	}
