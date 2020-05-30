@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity;
 
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRPirateParrotHeldItem;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -13,6 +14,8 @@ public class RenderPirateParrot extends RenderParrot {
 	
 	public RenderPirateParrot(RenderManager renderManager) {
 		super(renderManager);
+		
+		this.addLayer(new LayerCQRPirateParrotHeldItem(this));
 	}
 	
 	@Override
