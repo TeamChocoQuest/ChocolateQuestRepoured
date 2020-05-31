@@ -19,7 +19,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeo
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.PosInfoBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -288,7 +288,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			for (int j = 0; j < blocks[i].length; j++) {
 				for (int k = 0; k < blocks[i][j].length; k++) {
 					if (blocks[i][j][k] != null) {
-						list.add(new PosInfoBlock(new BlockPos(i, j, k), blocks[i][j][k].getDefaultState(), null));
+						list.add(new BlockInfo(new BlockPos(i, j, k), blocks[i][j][k].getDefaultState(), null));
 					}
 				}
 			}

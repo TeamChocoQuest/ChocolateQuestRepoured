@@ -14,8 +14,6 @@ import java.util.Set;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.PosInfoBlock;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

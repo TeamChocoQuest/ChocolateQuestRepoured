@@ -17,15 +17,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
-public class PosInfoBanner extends PosInfoBlock {
+public class BlockInfoBanner extends BlockInfo {
 
 	public static final int ID = 1;
 
-	public PosInfoBanner(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
+	public BlockInfoBanner(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
 		super(pos, blockstate, tileentityData);
 	}
 
-	public PosInfoBanner(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+	public BlockInfoBanner(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		super(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
 	}
 
