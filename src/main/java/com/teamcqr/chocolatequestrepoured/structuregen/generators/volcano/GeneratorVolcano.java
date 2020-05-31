@@ -363,7 +363,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		List<AbstractBlockInfo> lootChests = new ArrayList<>();
 		for(BlockPos pos : this.spawnersNChestsOnPath) {
 			if(rdm.nextBoolean()) {
-				lootChests.add(new BlockInfoLootChest(pos, chestIDs[rdm.nextInt(chestIDs.length)], EnumFacing.NORTH));
+				lootChests.add(new BlockInfoLootChest(pos.subtract(this.pos), chestIDs[rdm.nextInt(chestIDs.length)], EnumFacing.NORTH));
 			}
 		}
 		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, lootChests, new PlacementSettings(), EDungeonMobType.DEFAULT));
@@ -381,7 +381,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent));
 			}
 			NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
-			mobSpawners.add(new BlockInfo(pos.add(0, 1, 0), state, data));
+			mobSpawners.add(new BlockInfo(pos.subtract(this.pos).add(0, 1, 0), state, data));
 			floor--;
 		}
 	}
