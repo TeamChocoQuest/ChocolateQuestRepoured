@@ -1,12 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockStatePalette;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTBase;
@@ -24,10 +26,13 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartBlock extends AbstractDungeonPart {
 
-	public static final String ID = "dungeon_part_block";
 	protected final Deque<AbstractBlockInfo> blockInfoList = new LinkedList<>();
 	protected PlacementSettings settings;
 	protected EDungeonMobType dungeonMobType;
+
+	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator) {
+		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDungeonMobType.DEFAULT);
+	}
 
 	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, EDungeonMobType dungeonMobType) {
 		super(world, dungeonGenerator, partPos);
@@ -39,10 +44,6 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-	}
-
-	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator, NBTTagCompound compound) {
-		super(world, dungeonGenerator, compound);
 	}
 
 	@Override
@@ -133,7 +134,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 
 	@Override
 	public String getId() {
-		return DungeonPartBlock.ID;
+		return DUNGEON_PART_BLOCK_ID;
 	}
 
 	@Override

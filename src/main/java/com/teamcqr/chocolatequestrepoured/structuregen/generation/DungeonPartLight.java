@@ -13,12 +13,15 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartLight extends AbstractDungeonPart {
 
-	public static final String ID = "dungeon_part_light";
 	private int chunkX;
 	private int chunkZ;
 	private BlockPos.MutableBlockPos mutablePos1;
 	private BlockPos.MutableBlockPos mutablePos2;
 	private BlockPos.MutableBlockPos mutablePos3;
+
+	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator) {
+		this(world, dungeonGenerator, BlockPos.ORIGIN, BlockPos.ORIGIN);
+	}
 
 	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator, BlockPos minPos, BlockPos maxPos) {
 		super(world, dungeonGenerator, DungeonGenUtils.getValidMinPos(minPos, maxPos));
@@ -36,10 +39,6 @@ public class DungeonPartLight extends AbstractDungeonPart {
 			this.mutablePos2 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 			this.mutablePos3 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		}
-	}
-
-	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator, NBTTagCompound compound) {
-		super(world, dungeonGenerator, compound);
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 
 	@Override
 	public String getId() {
-		return DungeonPartLight.ID;
+		return DUNGEON_PART_LIGHT_ID;
 	}
 
 	@Override

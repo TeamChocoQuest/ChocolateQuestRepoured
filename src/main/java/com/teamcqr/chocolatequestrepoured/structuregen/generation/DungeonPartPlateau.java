@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 public class DungeonPartPlateau extends AbstractDungeonPart {
 
-	public static final String ID = "dungeon_part_plateau";
 	private Block supportHillBlock;
 	private Block supportHillTopBlock;
 	private int wallSize;
@@ -22,6 +21,10 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 	private int z1;
 	private Perlin3D perlin1;
 	private Perlin3D perlin2;
+
+	public DungeonPartPlateau(World world, DungeonGenerator dungeonGenerator) {
+		this(world, dungeonGenerator, 0, 0, 0, 0, 0, Blocks.STONE, Blocks.GRASS, 0);
+	}
 
 	public DungeonPartPlateau(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endY, int endZ, Block supportHillBlock, Block supportHillTopBlock, int wallSize) {
 		super(world, dungeonGenerator, new BlockPos(Math.min(startX, endX) - wallSize, endY, Math.min(startZ, endZ) - wallSize));
@@ -34,10 +37,6 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 		Random rand = new Random();
 		this.perlin1 = new Perlin3D(this.world.getSeed(), this.wallSize, rand);
 		this.perlin2 = new Perlin3D(this.world.getSeed(), this.wallSize * 4, rand);
-	}
-
-	public DungeonPartPlateau(World world, DungeonGenerator dungeonGenerator, NBTTagCompound compound) {
-		super(world, dungeonGenerator, compound);
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class DungeonPartPlateau extends AbstractDungeonPart {
 
 	@Override
 	public String getId() {
-		return DungeonPartPlateau.ID;
+		return DUNGEON_PART_PLATEAU_ID;
 	}
 
 	@Override
