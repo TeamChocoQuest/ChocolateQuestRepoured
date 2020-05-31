@@ -53,22 +53,22 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		compound.setInteger("rotation", this.settings.getRotation().ordinal());
 		compound.setInteger("mob", this.dungeonMobType.ordinal());
 
-		BlockPos size = this.maxPos.subtract(this.minPos).add(1, 1, 1);
+		BlockPos offset = this.getMinPos(this.blockInfoList);
+		BlockPos size = this.getMaxPos(this.blockInfoList).subtract(offset).add(1, 1, 1);
+		compound.setTag("offset", DungeonGenUtils.writePosToList(offset));
+		compound.setTag("size", DungeonGenUtils.writePosToList(size));
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 		NBTTagList compoundTagList = new NBTTagList();
 
 		// Save normal blocks
 		NBTTagList nbtTagList1 = new NBTTagList();
 		NBTTagIntArray emptyNbtTagIntArray = new NBTTagIntArray(new int[0]);
-		for (int x = 0; x < size.getX(); x++) {
-			for (int y = 0; y < size.getY(); y++) {
-				for (int z = 0; z < size.getZ(); z++) {
-					nbtTagList1.appendTag(emptyNbtTagIntArray);
-				}
-			}
+		for (int i = 0; i < size.getX() * size.getY() * size.getZ(); i++) {
+			nbtTagList1.appendTag(emptyNbtTagIntArray);
 		}
 		for (AbstractBlockInfo blockInfo : this.blockInfoList) {
-			int index = blockInfo.getPos().getX() + blockInfo.getPos().getY() * size.getX() + blockInfo.getPos().getZ() * size.getX() * size.getY();
+			BlockPos pos = blockInfo.getPos().subtract(offset);
+			int index = pos.getX() + pos.getY() * size.getX() + pos.getZ() * size.getX() * size.getY();
 			nbtTagList1.set(index, blockInfo.writeToNBT(blockStatePalette, compoundTagList));
 		}
 		compound.setTag("blockInfoList", nbtTagList1);
@@ -89,13 +89,15 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
+
 		this.blockInfoList.clear();
 		this.settings = new PlacementSettings();
 		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
 		this.dungeonMobType = EDungeonMobType.values()[compound.getInteger("mob")];
 
-		BlockPos size = this.maxPos.subtract(this.minPos).add(1, 1, 1);
+		BlockPos offset = DungeonGenUtils.readPosFromList(compound.getTagList("offset", Constants.NBT.TAG_INT));
+		BlockPos size = DungeonGenUtils.readPosFromList(compound.getTagList("size", Constants.NBT.TAG_INT));
 		BlockStatePalette blockStatePalette = new BlockStatePalette();
 
 		// Load compound tags
@@ -112,7 +114,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		int y = 0;
 		int z = 0;
 		for (NBTBase nbt : compound.getTagList("blockInfoList", Constants.NBT.TAG_INT_ARRAY)) {
-			AbstractBlockInfo blockInfo = AbstractBlockInfo.create(new BlockPos(x, y, z), (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
+			AbstractBlockInfo blockInfo = AbstractBlockInfo.create(offset.add(x, y, z), (NBTTagIntArray) nbt, blockStatePalette, compoundTagList);
 			if (blockInfo != null) {
 				this.blockInfoList.add(blockInfo);
 			}
@@ -145,6 +147,50 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 	@Override
 	public boolean isGenerated() {
 		return this.blockInfoList.isEmpty();
+	}
+
+	private BlockPos getMinPos(Collection<AbstractBlockInfo> collection) {
+		if (collection.isEmpty()) {
+			return BlockPos.ORIGIN;
+		}
+		int minX = Integer.MAX_VALUE;
+		int minY = Integer.MAX_VALUE;
+		int minZ = Integer.MAX_VALUE;
+		for (AbstractBlockInfo blockInfo : collection) {
+			BlockPos pos = blockInfo.getPos();
+			if (pos.getX() < minX) {
+				minX = pos.getX();
+			}
+			if (pos.getY() < minY) {
+				minY = pos.getY();
+			}
+			if (pos.getZ() < minZ) {
+				minZ = pos.getZ();
+			}
+		}
+		return new BlockPos(minX, minY, minZ);
+	}
+
+	private BlockPos getMaxPos(Collection<AbstractBlockInfo> collection) {
+		if (collection.isEmpty()) {
+			return BlockPos.ORIGIN;
+		}
+		int maxX = Integer.MIN_VALUE;
+		int maxY = Integer.MIN_VALUE;
+		int maxZ = Integer.MIN_VALUE;
+		for (AbstractBlockInfo blockInfo : collection) {
+			BlockPos pos = blockInfo.getPos();
+			if (pos.getX() > maxX) {
+				maxX = pos.getX();
+			}
+			if (pos.getY() > maxY) {
+				maxY = pos.getY();
+			}
+			if (pos.getZ() > maxZ) {
+				maxZ = pos.getZ();
+			}
+		}
+		return new BlockPos(maxX, maxY, maxZ);
 	}
 
 }
