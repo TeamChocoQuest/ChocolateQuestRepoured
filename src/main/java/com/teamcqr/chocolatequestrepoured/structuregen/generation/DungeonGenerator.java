@@ -190,6 +190,16 @@ public class DungeonGenerator {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.state = EnumDungeonGeneratorState.GENERATION;
 			t = System.currentTimeMillis();
+			for (AbstractDungeonPart p : this.parts) {
+				if (p instanceof DungeonPartBlock) {
+					CQRMain.logger.info("Block {}", ((DungeonPartBlock) p).blockInfoList.size());
+				}
+				if (p instanceof DungeonPartEntity) {
+					CQRMain.logger.info("Entity {}", ((DungeonPartEntity) p).entityInfoList.size());
+				}
+			}
+			BlockPos si = this.maxPos.subtract(this.minPos).add(1, 1, 1);
+			CQRMain.logger.info("Light {}", si.getX() * si.getY() * si.getZ());
 		}
 	}
 
