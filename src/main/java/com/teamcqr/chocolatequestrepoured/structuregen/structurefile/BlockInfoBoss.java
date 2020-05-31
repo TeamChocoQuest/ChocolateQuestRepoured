@@ -19,15 +19,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
-public class PosInfoBoss extends AbstractBlockInfo {
+public class BlockInfoBoss extends AbstractBlockInfo {
 
 	public static final int ID = 2;
 
-	public PosInfoBoss(BlockPos pos) {
+	public BlockInfoBoss(BlockPos pos) {
 		super(pos);
 	}
 
-	public PosInfoBoss(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
+	public BlockInfoBoss(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
 		super(pos);
 		this.readFromNBT(nbtTagIntArray, null, null);
 	}

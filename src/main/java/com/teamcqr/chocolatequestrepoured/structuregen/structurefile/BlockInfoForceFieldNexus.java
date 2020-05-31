@@ -14,15 +14,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
-public class PosInfoForceFieldNexus extends AbstractBlockInfo {
+public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 
 	public static final int ID = 3;
 
-	public PosInfoForceFieldNexus(BlockPos pos) {
+	public BlockInfoForceFieldNexus(BlockPos pos) {
 		super(pos);
 	}
 
-	public PosInfoForceFieldNexus(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
+	public BlockInfoForceFieldNexus(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
 		super(pos);
 		this.readFromNBT(nbtTagIntArray, null, null);
 	}

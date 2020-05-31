@@ -51,13 +51,13 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class CQStructure {
 
 	private static final Comparator<AbstractBlockInfo> BLOCK_INFO_COMPARATOR = (blockInfo1, blockInfo2) -> {
-		boolean isNormalBlock1 = blockInfo1.getClass() == PosInfoBlock.class;
-		boolean isNormalBlock2 = blockInfo2.getClass() == PosInfoBlock.class;
+		boolean isNormalBlock1 = blockInfo1.getClass() == BlockInfo.class;
+		boolean isNormalBlock2 = blockInfo2.getClass() == BlockInfo.class;
 		if (isNormalBlock1 && isNormalBlock2) {
-			boolean hasTileEntity1 = ((PosInfoBlock) blockInfo1).tileentityData != null;
-			boolean hasTileEntity2 = ((PosInfoBlock) blockInfo2).tileentityData != null;
-			boolean hasSpecialShape1 = !((PosInfoBlock) blockInfo1).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo1).blockstate.isFullCube();
-			boolean hasSpecialShape2 = !((PosInfoBlock) blockInfo2).blockstate.isFullBlock() && !((PosInfoBlock) blockInfo2).blockstate.isFullCube();
+			boolean hasTileEntity1 = ((BlockInfo) blockInfo1).tileentityData != null;
+			boolean hasTileEntity2 = ((BlockInfo) blockInfo2).tileentityData != null;
+			boolean hasSpecialShape1 = !((BlockInfo) blockInfo1).blockstate.isFullBlock() && !((BlockInfo) blockInfo1).blockstate.isFullCube();
+			boolean hasSpecialShape2 = !((BlockInfo) blockInfo2).blockstate.isFullBlock() && !((BlockInfo) blockInfo2).blockstate.isFullCube();
 			if (!hasTileEntity1 && !hasSpecialShape1 && !hasTileEntity2 && !hasSpecialShape2) {
 				return 0;
 			}
@@ -315,19 +315,19 @@ public class CQStructure {
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
 				if (SPECIAL_BLOCKS.contains(block)) {
-					this.specialBlockInfoList.add(new PosInfoBlock(pos, state, this.writeTileEntityToNBT(tileEntity)));
+					this.specialBlockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
-					this.blockInfoList.add(new PosInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
+					this.blockInfoList.add(new BlockInfoBanner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block == ModBlocks.SPAWNER) {
-					this.blockInfoList.add(new PosInfoSpawner(pos, state, this.writeTileEntityToNBT(tileEntity)));
+					this.blockInfoList.add(new BlockInfoSpawner(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if (block instanceof BlockExporterChest) {
-					this.blockInfoList.add(new PosInfoLootChest(pos, ((BlockExporterChest) block).lootTable, state.getValue(BlockChest.FACING)));
+					this.blockInfoList.add(new BlockInfoLootChest(pos, ((BlockExporterChest) block).lootTable, state.getValue(BlockChest.FACING)));
 				} else if (block == ModBlocks.FORCE_FIELD_NEXUS) {
-					this.blockInfoList.add(new PosInfoForceFieldNexus(pos));
+					this.blockInfoList.add(new BlockInfoForceFieldNexus(pos));
 				} else if (block == ModBlocks.BOSS_BLOCK) {
-					this.blockInfoList.add(new PosInfoBoss(pos));
+					this.blockInfoList.add(new BlockInfoBoss(pos));
 				} else {
-					this.blockInfoList.add(new PosInfoBlock(pos, state, this.writeTileEntityToNBT(tileEntity)));
+					this.blockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				}
 			}
 		}

@@ -35,18 +35,18 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 			return null;
 		}
 		switch (nbtTagIntArray.getIntArray()[0]) {
-		case PosInfoBlock.ID:
-			return new PosInfoBlock(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
-		case PosInfoBanner.ID:
-			return new PosInfoBanner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
-		case PosInfoBoss.ID:
-			return new PosInfoBoss(pos, nbtTagIntArray);
-		case PosInfoForceFieldNexus.ID:
-			return new PosInfoForceFieldNexus(pos, nbtTagIntArray);
-		case PosInfoLootChest.ID:
-			return new PosInfoLootChest(pos, nbtTagIntArray);
-		case PosInfoSpawner.ID:
-			return new PosInfoSpawner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+		case BlockInfo.ID:
+			return new BlockInfo(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+		case BlockInfoBanner.ID:
+			return new BlockInfoBanner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
+		case BlockInfoBoss.ID:
+			return new BlockInfoBoss(pos, nbtTagIntArray);
+		case BlockInfoForceFieldNexus.ID:
+			return new BlockInfoForceFieldNexus(pos, nbtTagIntArray);
+		case BlockInfoLootChest.ID:
+			return new BlockInfoLootChest(pos, nbtTagIntArray);
+		case BlockInfoSpawner.ID:
+			return new BlockInfoSpawner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
 		default:
 			return null;
 		}

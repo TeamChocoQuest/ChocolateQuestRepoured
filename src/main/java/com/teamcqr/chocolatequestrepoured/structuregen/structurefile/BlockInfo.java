@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import javax.annotation.Nullable;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
@@ -18,13 +17,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
-public class PosInfoBlock extends AbstractBlockInfo {
+public class BlockInfo extends AbstractBlockInfo {
 
 	public static final int ID = 0;
 	protected IBlockState blockstate;
 	protected NBTTagCompound tileentityData;
 
-	public PosInfoBlock(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
+	public BlockInfo(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
 		super(pos);
 		this.blockstate = blockstate;
 		this.tileentityData = tileentityData;
@@ -35,7 +34,7 @@ public class PosInfoBlock extends AbstractBlockInfo {
 		}
 	}
 
-	public PosInfoBlock(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
+	public BlockInfo(BlockPos pos, NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		super(pos);
 		this.readFromNBT(nbtTagIntArray, blockStatePalette, compoundTagList);
 	}

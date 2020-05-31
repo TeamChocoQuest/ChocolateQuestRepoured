@@ -25,14 +25,14 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 import net.minecraft.world.storage.loot.LootTableList;
 
-public class PosInfoLootChest extends AbstractBlockInfo {
+public class BlockInfoLootChest extends AbstractBlockInfo {
 
 	public static final int ID = 4;
 
 	protected ResourceLocation lootTable = LootTableList.EMPTY;
 	protected EnumFacing facing = EnumFacing.NORTH;
 
-	public PosInfoLootChest(BlockPos pos, IBlockState state) {
+	public BlockInfoLootChest(BlockPos pos, IBlockState state) {
 		super(pos);
 		if (state.getBlock() instanceof BlockExporterChest) {
 			this.lootTable = ((BlockExporterChest) state.getBlock()).lootTable;
@@ -40,13 +40,13 @@ public class PosInfoLootChest extends AbstractBlockInfo {
 		}
 	}
 
-	public PosInfoLootChest(BlockPos pos, ResourceLocation lootTable, EnumFacing facing) {
+	public BlockInfoLootChest(BlockPos pos, ResourceLocation lootTable, EnumFacing facing) {
 		super(pos);
 		this.lootTable = lootTable;
 		this.facing = facing;
 	}
 
-	public PosInfoLootChest(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
+	public BlockInfoLootChest(BlockPos pos, NBTTagIntArray nbtTagIntArray) {
 		super(pos);
 		this.readFromNBT(nbtTagIntArray, null, null);
 	}
