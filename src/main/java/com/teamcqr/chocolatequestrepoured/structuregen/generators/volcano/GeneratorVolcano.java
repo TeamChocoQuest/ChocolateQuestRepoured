@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.EPosType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
@@ -20,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spi
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoLootChest;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -29,6 +32,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
@@ -353,7 +357,33 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 	@Override
 	public void postProcess() {
+		Random rdm = new Random();
 
+		final ResourceLocation[] chestIDs = this.dungeon.getChestIDs();
+		List<AbstractBlockInfo> lootChests = new ArrayList<>();
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			if(rdm.nextBoolean()) {
+				lootChests.add(new BlockInfoLootChest(pos, chestIDs[rdm.nextInt(chestIDs.length)], EnumFacing.NORTH));
+			}
+		}
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, lootChests, new PlacementSettings(), EDungeonMobType.DEFAULT));
+		
+		List<AbstractBlockInfo> mobSpawners = new ArrayList<>();
+		int floor = this.spawnersNChestsOnPath.size();
+		GearedMobFactory mobFactory = new GearedMobFactory(this.spawnersNChestsOnPath.size(), dungeon.getRampMob(), rdm);
+		for(BlockPos pos : this.spawnersNChestsOnPath) {
+			Block block = ModBlocks.SPAWNER;
+			IBlockState state = block.getDefaultState();
+			TileEntitySpawner spawner = (TileEntitySpawner)block.createTileEntity(world, state);
+			int ec = 2 + rdm.nextInt(3);
+			for(int i = 0; i < ec; i++) {
+				Entity ent = mobFactory.getGearedEntityByFloor(floor, world);
+				spawner.inventory.setStackInSlot(i, SpawnerFactory.getSoulBottleItemStackForEntity(ent));
+			}
+			NBTTagCompound data = spawner.writeToNBT(new NBTTagCompound());
+			mobSpawners.add(new BlockInfo(pos.add(0, 1, 0), state, data));
+			floor--;
+		}
 	}
 
 	/*
