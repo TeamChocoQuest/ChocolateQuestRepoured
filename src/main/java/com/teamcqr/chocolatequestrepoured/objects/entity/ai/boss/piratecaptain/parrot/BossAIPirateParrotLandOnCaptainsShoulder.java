@@ -3,12 +3,14 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateParrot;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
 
 	private final EntityCQRPirateParrot entity;
-    private AbstractEntityCQR owner;
+    private EntityLivingBase owner;
     private boolean isSittingOnShoulder;
 
     public BossAIPirateParrotLandOnCaptainsShoulder(EntityCQRPirateParrot parrot)
@@ -21,7 +23,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
      */
     public boolean shouldExecute()
     {
-    	AbstractEntityCQR entitylivingbase = (AbstractEntityCQR) this.entity.getOwner();
+    	EntityLivingBase entitylivingbase = (EntityLivingBase) this.entity.getOwner();
         boolean flag = entitylivingbase != null &&  !entitylivingbase.isInWater();
         return !this.entity.isSitting() && flag && this.entity.canSitOnShoulder();
     }
@@ -40,7 +42,7 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
      */
     public void startExecuting()
     {
-        this.owner = (AbstractEntityCQR) this.entity.getOwner();
+        this.owner = (EntityLivingBase) this.entity.getOwner();
         this.isSittingOnShoulder = false;
     }
 
@@ -53,7 +55,11 @@ public class BossAIPirateParrotLandOnCaptainsShoulder extends EntityAIBase {
         {
             if (this.entity.getEntityBoundingBox().intersects(this.owner.getEntityBoundingBox()))
             {
-                this.isSittingOnShoulder = this.entity.setCQREntityOnShoulder(this.owner);
+                if(this.owner instanceof AbstractEntityCQR) {
+                	this.isSittingOnShoulder = this.entity.setCQREntityOnShoulder((AbstractEntityCQR) this.owner);
+                } else if(this.owner instanceof EntityPlayer) {
+                	this.isSittingOnShoulder = this.entity.setEntityOnShoulder((EntityPlayer) this.owner);
+                }
             }
         }
     }

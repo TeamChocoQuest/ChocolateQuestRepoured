@@ -127,7 +127,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	
 	@Override
 	public boolean setEntityOnShoulder(EntityPlayer p_191994_1_) {
-		return false;
+		return super.setEntityOnShoulder(p_191994_1_);
 	}
 
 }
