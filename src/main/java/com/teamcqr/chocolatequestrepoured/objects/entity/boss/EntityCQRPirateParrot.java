@@ -12,7 +12,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFollow;
 import net.minecraft.entity.ai.EntityAIFollowOwnerFlying;
@@ -53,12 +52,6 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		world.createExplosion(this, posX, posY, posZ, 2, true);
-	}
-	
-	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
-		setEquipmentBasedOnDifficulty(difficulty);
-		return super.onInitialSpawn(difficulty, livingdata);
 	}
 	
 	@Override

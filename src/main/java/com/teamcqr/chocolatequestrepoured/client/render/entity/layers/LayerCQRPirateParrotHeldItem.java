@@ -26,8 +26,12 @@ public class LayerCQRPirateParrotHeldItem extends LayerHeldItem {
 			if (!armRenderer.cubeList.isEmpty()) {
 				ModelBox armBox = armRenderer.cubeList.get(0);
 				float x = 0.125F - 0.03125F * (armBox.posX2 - armBox.posX1);
-				float y = 0.0625F * (armBox.posY2 - armBox.posY1 - 6.0F);
-				GlStateManager.translate(x, y, 0.0F);
+				float z = 0.125F;
+				float sizeY = Math.abs(Math.max(armBox.posY1, armBox.posY2) - Math.min(armBox.posY1, armBox.posY2));
+				float y = 0.0625F * (armBox.posY2 - armBox.posY1 + (sizeY * 4)); //6F is the height of the body
+				
+				GlStateManager.translate(x, y, z +0.295);
+				GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 			}
 		}
 	}
