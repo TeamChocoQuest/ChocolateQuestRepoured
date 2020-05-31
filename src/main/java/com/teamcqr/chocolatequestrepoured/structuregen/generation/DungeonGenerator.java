@@ -87,7 +87,8 @@ public class DungeonGenerator {
 		this.pos = NBTUtil.getPosFromTag(compound.getCompoundTag("pos"));
 		this.minPos = NBTUtil.getPosFromTag(compound.getCompoundTag("minPos"));
 		this.maxPos = NBTUtil.getPosFromTag(compound.getCompoundTag("maxPos"));
-		this.dungeonPartLight = new DungeonPartLight(this.world, this, compound.getCompoundTag("partLight"));
+		this.dungeonPartLight = new DungeonPartLight(this.world, this);
+		this.dungeonPartLight.readFromNBT(compound.getCompoundTag("partLight"));
 		if (compound.hasKey("protectedRegion", Constants.NBT.TAG_COMPOUND)) {
 			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
 			if (protectedRegionManager != null) {

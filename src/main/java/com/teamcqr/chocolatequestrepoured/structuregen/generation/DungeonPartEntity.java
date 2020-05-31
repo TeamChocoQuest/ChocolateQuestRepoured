@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 
@@ -19,10 +20,13 @@ import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartEntity extends AbstractDungeonPart {
 
-	public static final String ID = "dungeon_part_entity";
 	protected final Deque<EntityInfo> entityInfoList = new LinkedList<>();
 	protected PlacementSettings settings;
 	protected EDungeonMobType dungeonMobType;
+
+	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator) {
+		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDungeonMobType.DEFAULT);
+	}
 
 	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<EntityInfo> entities, PlacementSettings settings, EDungeonMobType dungeonMobType) {
 		super(world, dungeonGenerator, partPos);
@@ -34,10 +38,6 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-	}
-
-	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator, NBTTagCompound compound) {
-		super(world, dungeonGenerator, compound);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 
 	@Override
 	public String getId() {
-		return DungeonPartEntity.ID;
+		return DUNGEON_PART_ENTITY_ID;
 	}
 
 	@Override
