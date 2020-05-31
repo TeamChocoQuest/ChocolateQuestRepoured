@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -76,9 +77,8 @@ public class DungeonGenerator {
 	public void readFromNBT(NBTTagCompound compound) {
 		this.parts.clear();
 
-		NBTTagList nbtTagList = compound.getTagList("parts", Constants.NBT.TAG_COMPOUND);
-		for (int i = 0; i < nbtTagList.tagCount(); i++) {
-			AbstractDungeonPart part = AbstractDungeonPart.createDungeonPart(this.world, this, nbtTagList.getCompoundTagAt(i));
+		for (NBTBase nbt : compound.getTagList("parts", Constants.NBT.TAG_COMPOUND)) {
+			AbstractDungeonPart part = AbstractDungeonPart.createDungeonPart(this.world, this, (NBTTagCompound) nbt);
 			if (part != null) {
 				this.parts.add(part);
 			}
@@ -101,7 +101,7 @@ public class DungeonGenerator {
 
 	public void tick() {
 		if (this.state == EnumDungeonGeneratorState.GENERATION) {
-			this.tickTime += CQRConfig.advanced.generationSpeed * 1000000;
+			this.tickTime = Math.min(this.tickTime + CQRConfig.advanced.generationSpeed * 1000000, CQRConfig.advanced.generationSpeed * 1000000);
 			int i = 0;
 
 			while (this.tickTime > 0 && i < CQRConfig.advanced.generationLimit && !this.isGenerated()) {
@@ -118,9 +118,8 @@ public class DungeonGenerator {
 					}
 				} else if (!this.dungeonPartLight.isGenerated()) {
 					this.dungeonPartLight.generateNext();
-					if (this.dungeonPartLight.isGenerated()) {
-						this.state = EnumDungeonGeneratorState.POST_GENERATION;
-					}
+				} else {
+					this.state = EnumDungeonGeneratorState.POST_GENERATION;
 				}
 
 				i++;
@@ -186,7 +185,7 @@ public class DungeonGenerator {
 		}
 	}
 
-	protected long t;
+	protected long t = System.currentTimeMillis();
 	public void startGeneration() {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.state = EnumDungeonGeneratorState.GENERATION;
