@@ -1,43 +1,40 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 
 public class DungeonPartLight extends AbstractDungeonPart {
 
 	public static final String ID = "dungeon_part_light";
 	private int chunkX;
 	private int chunkZ;
-	private int x1;
-	private int y1;
-	private int z1;
-	private int x2;
-	private int y2;
-	private int z2;
+	private BlockPos.MutableBlockPos mutablePos1;
+	private BlockPos.MutableBlockPos mutablePos2;
+	private BlockPos.MutableBlockPos mutablePos3;
 
 	public DungeonPartLight(World world, DungeonGenerator dungeonGenerator, BlockPos minPos, BlockPos maxPos) {
 		super(world, dungeonGenerator, DungeonGenUtils.getValidMinPos(minPos, maxPos));
 		this.maxPos = DungeonGenUtils.getValidMaxPos(minPos, maxPos);
-		this.chunkX = this.minPos.getX() >> 4;
-		this.chunkZ = this.minPos.getZ() >> 4;
-		this.x1 = this.minPos.getX();
-		this.y1 = this.minPos.getY();
-		this.z1 = this.minPos.getZ();
-		this.x2 = this.minPos.getX();
-		this.y2 = this.minPos.getY();
-		this.z2 = this.minPos.getZ();
-		if (CQRConfig.advanced.instantLightUpdates) {
+		if (!CQRConfig.advanced.instantLightUpdates) {
+			this.chunkX = this.minPos.getX() >> 4;
+			this.chunkZ = this.minPos.getZ() >> 4;
+			this.mutablePos1 = new BlockPos.MutableBlockPos(this.minPos);
+			this.mutablePos2 = new BlockPos.MutableBlockPos(this.minPos);
+			this.mutablePos3 = new BlockPos.MutableBlockPos(this.minPos);
+		} else {
 			this.chunkX = Integer.MAX_VALUE;
-			this.x1 = Integer.MAX_VALUE;
+			this.chunkZ = Integer.MAX_VALUE;
+			this.mutablePos1 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+			this.mutablePos2 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
+			this.mutablePos3 = new BlockPos.MutableBlockPos(Integer.MAX_VALUE, Integer.MAX_VALUE, Integer.MAX_VALUE);
 		}
 	}
 
@@ -50,12 +47,9 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		NBTTagCompound compound = super.writeToNBT();
 		compound.setInteger("chunkX", this.chunkX);
 		compound.setInteger("chunkZ", this.chunkZ);
-		compound.setInteger("x1", this.x1);
-		compound.setInteger("y1", this.y1);
-		compound.setInteger("z1", this.z1);
-		compound.setInteger("x2", this.x2);
-		compound.setInteger("y2", this.y2);
-		compound.setInteger("z2", this.z2);
+		compound.setTag("pos1", DungeonGenUtils.writePosToList(this.mutablePos1));
+		compound.setTag("pos2", DungeonGenUtils.writePosToList(this.mutablePos2));
+		compound.setTag("pos3", DungeonGenUtils.writePosToList(this.mutablePos3));
 		return compound;
 	}
 
@@ -64,12 +58,9 @@ public class DungeonPartLight extends AbstractDungeonPart {
 		super.readFromNBT(compound);
 		this.chunkX = compound.getInteger("chunkX");
 		this.chunkZ = compound.getInteger("chunkZ");
-		this.x1 = compound.getInteger("x1");
-		this.y1 = compound.getInteger("y1");
-		this.z1 = compound.getInteger("z1");
-		this.x2 = compound.getInteger("x2");
-		this.y2 = compound.getInteger("y2");
-		this.z2 = compound.getInteger("z2");
+		this.mutablePos1 = new BlockPos.MutableBlockPos(DungeonGenUtils.readPosFromList(compound.getTagList("pos1", Constants.NBT.TAG_INT)));
+		this.mutablePos2 = new BlockPos.MutableBlockPos(DungeonGenUtils.readPosFromList(compound.getTagList("pos2", Constants.NBT.TAG_INT)));
+		this.mutablePos3 = new BlockPos.MutableBlockPos(DungeonGenUtils.readPosFromList(compound.getTagList("pos3", Constants.NBT.TAG_INT)));
 	}
 
 	@Override
@@ -86,35 +77,48 @@ public class DungeonPartLight extends AbstractDungeonPart {
 			if (this.chunkZ > this.maxPos.getZ() >> 4) {
 				this.chunkZ = this.minPos.getZ() >> 4;
 				this.chunkX++;
-			}
-		} else if (this.x1 <= this.maxPos.getX()) {
-			BlockPos pos = new BlockPos(this.x1, this.y1, this.z1);
-			this.world.checkLight(pos);
-			Chunk chunk = this.world.getChunkFromBlockCoords(pos);
-			IBlockState state = chunk.getBlockState(pos);
-			this.world.markAndNotifyBlock(pos, chunk, state, state, 18);
-
-			this.z1++;
-			if (this.z1 > this.maxPos.getZ()) {
-				this.z1 = this.minPos.getZ();
-				this.y1++;
-				if (this.y1 > this.maxPos.getY()) {
-					this.y1 = this.minPos.getY();
-					this.x1++;
+				if (this.chunkX > this.maxPos.getX() >> 4) {
+					CQRMain.logger.info("1 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
 				}
 			}
-		} else if (this.x2 <= this.maxPos.getX()) {
-			BlockPos pos = new BlockPos(this.x2, this.y2, this.z2);
-			IBlockState state = this.world.getBlockState(pos);
-			this.world.notifyNeighborsRespectDebug(pos, state.getBlock(), false);
+		} else if (this.mutablePos1.getX() <= this.maxPos.getX()) {
+			this.world.checkLight(this.mutablePos1);
 
-			this.z2++;
-			if (this.z2 > this.maxPos.getZ()) {
-				this.z2 = this.minPos.getZ();
-				this.y2++;
-				if (this.y2 > this.maxPos.getY()) {
-					this.y2 = this.minPos.getY();
-					this.x2++;
+			if (this.mutablePos1.getZ() < this.maxPos.getZ()) {
+				this.mutablePos1.setPos(this.mutablePos1.getX(), this.mutablePos1.getY(), this.mutablePos1.getZ() + 1);
+			} else if (this.mutablePos1.getY() < this.maxPos.getY()) {
+				this.mutablePos1.setPos(this.mutablePos1.getX(), this.mutablePos1.getY() + 1, this.minPos.getZ());
+			} else {
+				this.mutablePos1.setPos(this.mutablePos1.getX() + 1, this.minPos.getY(), this.minPos.getZ());
+				if (this.mutablePos1.getX() > this.maxPos.getX()) {
+					CQRMain.logger.info("2 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
+				}
+			}
+		} else if (this.mutablePos2.getX() <= this.maxPos.getX()) {
+			((WorldServer) this.world).getPlayerChunkMap().markBlockForUpdate(this.mutablePos2);
+
+			if (this.mutablePos2.getZ() < this.maxPos.getZ()) {
+				this.mutablePos2.setPos(this.mutablePos2.getX(), this.mutablePos2.getY(), this.mutablePos2.getZ() + 1);
+			} else if (this.mutablePos2.getY() < this.maxPos.getY()) {
+				this.mutablePos2.setPos(this.mutablePos2.getX(), this.mutablePos2.getY() + 1, this.minPos.getZ());
+			} else {
+				this.mutablePos2.setPos(this.mutablePos2.getX() + 1, this.minPos.getY(), this.minPos.getZ());
+				if (this.mutablePos2.getX() > this.maxPos.getX()) {
+					CQRMain.logger.info("3 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
+				}
+			}
+		} else if (this.mutablePos3.getX() <= this.maxPos.getX()) {
+			IBlockState state = this.world.getBlockState(this.mutablePos3);
+			this.world.notifyNeighborsRespectDebug(this.mutablePos3, state.getBlock(), false);
+
+			if (this.mutablePos3.getZ() < this.maxPos.getZ()) {
+				this.mutablePos3.setPos(this.mutablePos3.getX(), this.mutablePos3.getY(), this.mutablePos3.getZ() + 1);
+			} else if (this.mutablePos3.getY() < this.maxPos.getY()) {
+				this.mutablePos3.setPos(this.mutablePos3.getX(), this.mutablePos3.getY() + 1, this.minPos.getZ());
+			} else {
+				this.mutablePos3.setPos(this.mutablePos3.getX() + 1, this.minPos.getY(), this.minPos.getZ());
+				if (this.mutablePos3.getX() > this.maxPos.getX()) {
+					CQRMain.logger.info("4 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
 				}
 			}
 		}
@@ -122,7 +126,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 
 	@Override
 	public boolean isGenerated() {
-		return this.x2 > this.maxPos.getX();
+		return this.mutablePos3.getX() > this.maxPos.getX();
 	}
 
 }
