@@ -118,7 +118,7 @@ public class ItemDungeonPlacer extends Item {
 					Vec3d vec = playerIn.getPositionEyes(1.0F);
 					Vec3d look = playerIn.getLookVec();
 
-					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(128.0D)));
+					RayTraceResult result = worldIn.rayTraceBlocks(vec, vec.add(look.scale(256.0D)));
 
 					if (result != null) {
 						BlockPos pos = result.getBlockPos();
