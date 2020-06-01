@@ -1,12 +1,17 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain;
 
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
+
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 
 public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPirateCaptain> {
 
 	private int cooldown = 0;
 	private int invisibleTime = 0;
+	private ItemStack previousItem = null;
 	
 	public BossAIPirateTurnInvisible(EntityCQRPirateCaptain entity) {
 		super(entity);
@@ -25,6 +30,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	public void startExecuting() {
 		invisibleTime = 200;
 		entity.setInvisibleTicks(1);
+		this.previousItem = entity.getHeldItemMainhand();
 	}
 	
 	@Override
@@ -41,11 +47,13 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 			reInt = true;
 			invi = false;
 			entity.setInvisibleTicks(entity.getInvisibleTicks() -1);
+			entity.setHeldItem(EnumHand.MAIN_HAND, previousItem);
 		}
 		else if(invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
 			disInt = true;
 			invi = false;
 			entity.setInvisibleTicks(entity.getInvisibleTicks() +1);
+			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
 		}
 		
 		invisibleTime--;
