@@ -8,7 +8,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 
-public class EntityAIArmorSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIArmorSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
 		super(entity, true, false, cooldown, chargeUpTicks, 1);

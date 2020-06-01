@@ -11,7 +11,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIBlindTargetSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	private final int duration;
 

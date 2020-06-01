@@ -9,7 +9,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MAX_PROJECTILES = 10;
 	protected static final int MIN_PROJECTILES = 4;

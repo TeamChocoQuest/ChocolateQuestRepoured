@@ -8,7 +8,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAISummonFireWall extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	private static final int WALL_LENGTH = 10;
 

@@ -58,6 +58,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -135,11 +136,14 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	// Sync with client
 	protected static final DataParameter<Boolean> IS_SITTING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
+	protected static final DataParameter<Boolean> HAS_TARGET = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<String> ARM_POSE = EntityDataManager.<String>createKey(AbstractEntityCQR.class, DataSerializers.STRING);
 	protected static final DataParameter<Boolean> TALKING = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	//Shoulder entity stuff
+	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
 	public int deathTicks = 0;
 	public static float MAX_DEATH_TICKS = 200.0F;
@@ -162,11 +166,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		super.entityInit();
 
 		this.dataManager.register(IS_SITTING, false);
+		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
+		
+		//Shoulder entity stuff
+		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
 	}
 
 	@Override
@@ -210,6 +218,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 		// End IceAndFire compatibility
 
+		//Shoulder entity stuff
+		spawnShoulderEntities();
+		
 		if (this.world.getWorldInfo().isHardcoreModeEnabled()) {
 			amount *= 0.7F;
 		} else {
@@ -355,18 +366,22 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		if (this.pathPoints.length > 0) {
 			NBTTagCompound pathTag = new NBTTagCompound();
-			pathTag.setInteger("pointcount", this.pathPoints.length);
-			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
-			if (pathPoints.tagCount() != this.pathPoints.length) {
-				pathPoints = new NBTTagList();
-			}
+			pathTag.setBoolean("isLoop", this.pathIsLoop);
+			pathTag.setInteger("currentPathPoint", this.currentTargetPoint);
+			NBTTagList nbtTagList = new NBTTagList();
 			for (int i = 0; i < this.pathPoints.length; i++) {
-				pathPoints.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
+				nbtTagList.appendTag(NBTUtil.createPosTag(this.pathPoints[i]));
 			}
-			pathTag.setTag("points", pathPoints);
-
+			pathTag.setTag("pathPoints", nbtTagList);
 			compound.setTag("pathingAI", pathTag);
 		}
+		
+		//Shoulder entity stuff
+		if (!this.getLeftShoulderEntity().hasNoTags())
+        {
+            compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
+        }
+
 	}
 
 	@Override
@@ -395,15 +410,23 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.healthScale = 1.0D;
 		}
 
-		if (compound.hasKey("pathingAI")) {
+		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
-			int pointcount = compound.getInteger("pointcount");
-			NBTTagList pathPoints = pathTag.getTagList("points", Constants.NBT.TAG_COMPOUND);
-			this.pathPoints = new BlockPos[pointcount];
-			for (int i = 0; i < this.pathPoints.length; i++) {
-				this.pathPoints[i] = NBTUtil.getPosFromTag(pathPoints.getCompoundTagAt(i));
+			this.pathIsLoop = pathTag.getBoolean("isLoop");
+			this.currentTargetPoint = pathTag.getInteger("currentPathPoint") -1;
+			NBTTagList nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
+			this.pathPoints = new BlockPos[nbtTagList.tagCount()];
+			for (int i = 0; i < nbtTagList.tagCount(); i++) {
+				this.pathPoints[i] = NBTUtil.getPosFromTag(nbtTagList.getCompoundTagAt(i));
 			}
 		}
+		
+		//Shoulder entity stuff
+		if (compound.hasKey("ShoulderEntityLeft", 10))
+        {
+            this.setLeftShoulderEntity(compound.getCompoundTag("ShoulderEntityLeft"));
+        }
+
 	}
 
 	@Override
@@ -565,6 +588,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
 		super.onLivingUpdate();
+		
+		if(!world.isRemote) {
+			this.dataManager.set(HAS_TARGET, getAttackTarget() != null);
+		}
 	}
 
 	@Override
@@ -594,6 +621,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
+		//Shoulder entity stuff
+		spawnShoulderEntities();
+		
 		if (this.getHeldItemMainhand().getItem() instanceof ItemStaffHealing) {
 			if (entityIn instanceof EntityLivingBase) {
 				if (!this.world.isRemote) {
@@ -653,7 +683,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 			this.applyEnchantments(this, entityIn);
 		}
-
+		
 		return flag;
 	}
 
@@ -1185,5 +1215,68 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public int getLastTimeHitByAxeWhileBlocking() {
 		return this.lastTimeHitByAxeWhileBlocking;
 	}
+	
+	@SideOnly(Side.CLIENT)
+	public boolean hasAttackTarget() {
+		return this.dataManager.get(HAS_TARGET);
+	}
+	
+	
+	
+	
+	
+	//Shoulder entity stuff
+
+	public boolean addShoulderEntity(NBTTagCompound p_192027_1_)
+    {
+        if (!this.isRiding() && this.onGround && !this.isInWater())
+        {
+            if (this.getLeftShoulderEntity().hasNoTags())
+            {
+                this.setLeftShoulderEntity(p_192027_1_);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    protected void spawnShoulderEntities()
+    {
+        this.spawnShoulderEntity(this.getLeftShoulderEntity());
+        this.setLeftShoulderEntity(new NBTTagCompound());
+    }
+
+    private void spawnShoulderEntity(@Nullable NBTTagCompound p_192026_1_)
+    {
+        if (!this.world.isRemote && !p_192026_1_.hasNoTags())
+        {
+            Entity entity = EntityList.createEntityFromNBT(p_192026_1_, this.world);
+
+            if (entity instanceof EntityTameable)
+            {
+                ((EntityTameable)entity).setOwnerId(this.entityUniqueID);
+            }
+
+            entity.setPosition(this.posX, this.posY + 0.699999988079071D, this.posZ);
+            this.world.spawnEntity(entity);
+        }
+    }
+    
+    public NBTTagCompound getLeftShoulderEntity()
+    {
+        return (NBTTagCompound)this.dataManager.get(SHOULDER_ENTITY);
+    }
+
+    protected void setLeftShoulderEntity(NBTTagCompound tag)
+    {
+        this.dataManager.set(SHOULDER_ENTITY, tag);
+    }
 
 }

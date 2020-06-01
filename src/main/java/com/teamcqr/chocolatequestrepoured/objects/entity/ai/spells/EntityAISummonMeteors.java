@@ -12,7 +12,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAISummonMeteors extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MIN_FIREBALLS_PER_CAST = 3;
 	protected static final int MAX_FIREBALLS_PER_CAST = 8;

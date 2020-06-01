@@ -17,7 +17,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
-public class EntityAITorchIgniter extends AbstractCQREntityAI {
+public class EntityAITorchIgniter extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private static final int SEARCH_RADIUS_HORIZONTAL = 16;
 	private static final int SEARCH_RADIUS_VERTICAL = 2;

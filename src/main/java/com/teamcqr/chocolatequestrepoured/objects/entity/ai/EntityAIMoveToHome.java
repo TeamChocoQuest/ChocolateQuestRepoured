@@ -4,7 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.math.BlockPos;
 
-public class EntityAIMoveToHome extends AbstractCQREntityAI {
+public class EntityAIMoveToHome extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIMoveToHome(AbstractEntityCQR entity) {
 		super(entity);

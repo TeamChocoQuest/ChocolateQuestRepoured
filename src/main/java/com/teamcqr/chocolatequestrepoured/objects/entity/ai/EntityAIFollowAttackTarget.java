@@ -4,7 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIFollowAttackTarget extends AbstractCQREntityAI {
+public class EntityAIFollowAttackTarget extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	public EntityAIFollowAttackTarget(AbstractEntityCQR entity) {
 		super(entity);
