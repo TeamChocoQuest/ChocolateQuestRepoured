@@ -19,7 +19,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 
 	@Override
 	public boolean shouldExecute() {
-		if(entity != null && entity.getHealth() / entity.getMaxHealth() <= 0.5 && entity.hasAttackTarget() && !entity.isDead) {
+		if(entity != null && entity.getHealth() / entity.getMaxHealth() <= 0.5 && entity.getAttackTarget() != null && !entity.isDead) {
 			cooldown --;
 			return cooldown <= 0;
 		}
