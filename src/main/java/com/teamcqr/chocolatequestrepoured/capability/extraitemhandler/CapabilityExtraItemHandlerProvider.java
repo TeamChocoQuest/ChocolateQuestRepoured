@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.capability.extraitemhandler;
 
-import com.teamcqr.chocolatequestrepoured.capability.CapabilityProviderCQR;
+import com.teamcqr.chocolatequestrepoured.capability.SerializableCapabilityProvider;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
@@ -8,7 +8,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 
-public class CapabilityExtraItemHandlerProvider extends CapabilityProviderCQR<CapabilityExtraItemHandler> {
+public class CapabilityExtraItemHandlerProvider extends SerializableCapabilityProvider<CapabilityExtraItemHandler> {
 
 	public static final ResourceLocation REGISTRY_NAME = new ResourceLocation(Reference.MODID, "extra_item_slot");
 

@@ -17,7 +17,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIWalkerIllusions extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIWalkerIllusions extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIWalkerIllusions(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
 		super(entity, true, false, cooldown, chargeUpTicks, 1);

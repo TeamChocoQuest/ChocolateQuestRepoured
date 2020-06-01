@@ -9,7 +9,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIExplosionSpell extends AbstractEntityAISpell implements IEntityAISpellAnimatedVanilla {
+public class EntityAIExplosionSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIExplosionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
 		super(entity, true, true, cooldown, chargeUpTicks, 1);

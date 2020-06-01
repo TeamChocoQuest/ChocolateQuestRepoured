@@ -23,7 +23,7 @@ public enum EDungeonMobType {
 	DWARF(new ResourceLocation(Reference.MODID, "dwarf"), null, null, ModItems.SHIELD_CARL),
 	SKELETON(new ResourceLocation(Reference.MODID, "skeleton"), new ResourceLocation(Reference.MODID, "necromancer"), EBanners.SKELETON_BANNER, ModItems.SHIELD_SKELETON_FRIENDS),
 	ZOMBIE(new ResourceLocation(Reference.MODID, "zombie"), new ResourceLocation(Reference.MODID, "lich"), null, ModItems.SHIELD_ZOMBIE),
-	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), null, EBanners.PIRATE_BANNER, ModItems.SHIELD_PIRATE2),
+	PIRATE(new ResourceLocation(Reference.MODID, "pirate"), new ResourceLocation(Reference.MODID, "pirate_captain"), EBanners.PIRATE_BANNER, ModItems.SHIELD_PIRATE2),
 	ILLAGER(new ResourceLocation(Reference.MODID, "illager"), null, EBanners.ILLAGER_BANNER),
 	WALKER(new ResourceLocation(Reference.MODID, "walker"), new ResourceLocation(Reference.MODID, "walker_king"), EBanners.WALKER_ORDO, ModItems.SHIELD_WALKER),
 	SPECTER(new ResourceLocation(Reference.MODID, "spectre"), null, null, ModItems.SHIELD_SPECTER),

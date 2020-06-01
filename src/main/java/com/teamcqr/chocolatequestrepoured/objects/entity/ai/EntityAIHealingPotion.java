@@ -18,7 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIHealingPotion extends AbstractCQREntityAI {
+public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected int ticksNotHealing;
 	protected boolean isHealing;

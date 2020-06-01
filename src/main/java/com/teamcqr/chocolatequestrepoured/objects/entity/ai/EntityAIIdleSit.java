@@ -10,7 +10,7 @@ import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAIIdleSit extends AbstractCQREntityAI {
+public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected static final int COOLDOWN_BORDER = 50;
 	protected static final int COOLDOWN_FOR_PARTNER_CYCLE_BORDER = 100;

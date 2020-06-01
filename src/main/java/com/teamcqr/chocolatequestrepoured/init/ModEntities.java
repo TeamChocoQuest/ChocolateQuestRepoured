@@ -10,6 +10,8 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateParrot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
@@ -116,6 +118,7 @@ public class ModEntities {
 	public static final EntityEntry BOAR_MAGE = Null();
 	public static final EntityEntry NECROMANCER = Null();
 	public static final EntityEntry WALKER_KING = Null();
+	public static final EntityEntry PIRATE_CAPTAIN = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -125,6 +128,7 @@ public class ModEntities {
 	public static final EntityEntry COLORED_LIGHTNING_BOLT = Null();
 	public static final EntityEntry ILLUSION_WALKER_KING = Null();
 	public static final EntityEntry WALKER_TORNADO = Null();
+	public static final EntityEntry PIRATE_PARROT = Null();
 
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class EntityRegistrationHandler {
@@ -178,6 +182,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRBoarmage.class, "boar_mage", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
@@ -187,6 +192,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntryWithoutEgg(EntityColoredLightningBolt.class, "colored_lightning_bolt", 512, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerTornado.class, "walker_tornado", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityCQRPirateParrot.class, "pirate_parrot", 64, 1, true),
 				};
 
 			event.getRegistry().registerAll(entityEntries);

@@ -4,7 +4,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 
 import net.minecraft.util.math.BlockPos;
 
-public class EntityAIFollowPath extends AbstractCQREntityAI {
+public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private boolean isReversingPath = false;
 
@@ -28,11 +28,12 @@ public class EntityAIFollowPath extends AbstractCQREntityAI {
 
 	@Override
 	public void updateTask() {
-		if (!this.entity.hasPath()) {
+		if (!this.entity.hasPath() && entity.hasHomePositionCQR() && entity.getGuardPathPoints() != null) {
 			int index = this.getNextPathIndex();
 			this.entity.setCurrentGuardPathTargetPoint(index);
 			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
 			this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
+			this.entity.getLookHelper().setLookPosition(pos.getX(), pos.getY() + entity.getEyeHeight(), pos.getZ(), 30, 30);
 		}
 	}
 
@@ -43,10 +44,16 @@ public class EntityAIFollowPath extends AbstractCQREntityAI {
 			if (index == pathPoints.length) {
 				index = 0;
 			}
-		} else if (index == pathPoints.length - 1) {
+		} else if (index >= pathPoints.length - 1) {
 			this.isReversingPath = true;
-		} else if (index == 0) {
+		} else if (index <= 0) {
 			this.isReversingPath = false;
+		}
+		if(index >= pathPoints.length) {
+			index -= 2;
+		}
+		if(index < 0) {
+			index += 2;
 		}
 		return index;
 	}

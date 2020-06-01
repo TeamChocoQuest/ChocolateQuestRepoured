@@ -10,7 +10,7 @@ import net.minecraft.item.ItemLead;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 
-public class EntityAITameAndLeashPet extends AbstractCQREntityAI {
+public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	// TODO: Save pet information on entity!!!
 
