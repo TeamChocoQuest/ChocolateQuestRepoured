@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.ro
 import com.teamcqr.chocolatequestrepoured.util.*;
 
 import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
@@ -44,6 +45,8 @@ public class DungeonCastle extends DungeonBase {
 	private int minSpawnerRolls;
 	private int maxSpawnerRolls;
 	private int spawnerRollChance;
+
+	private int paintingChance;
 
 	public DungeonCastle(String name, Properties prop) {
 		super(name, prop);
@@ -103,6 +106,8 @@ public class DungeonCastle extends DungeonBase {
 		this.minSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "minSpawnerRolls", 1);
 		this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
 		this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
+
+		this.paintingChance = PropertyFileHelper.getIntProperty(prop, "paintingChance", 0);
 	}
 
 	@Override
@@ -181,6 +186,10 @@ public class DungeonCastle extends DungeonBase {
 
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
 		return this.windowTypeRandomizer.next();
+	}
+
+	public int getPaintingChance() {
+		return paintingChance;
 	}
 
 	public int randomizeRoomSpawnerCount() {
