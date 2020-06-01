@@ -22,8 +22,8 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 	@Override
 	protected void renderModel(EntityCQRPirateCaptain entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		//System.out.println("is turning invisible client: " + entity.isTurningInvisible());
-		if(entity.isTurningInvisible()) {
-			float f = (float)entity.turnInvisibleTime / EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
+		if((entity.isDisintegrating() || entity.isReintegrating()) /*&& entity.turnInvisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME*/) {
+			float f = (float)entity.getInvisibleTicks() / EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
 			f = Math.max(f, 0);
 			f = Math.min(f, 1);
             GlStateManager.depthFunc(515);
@@ -34,14 +34,14 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
             GlStateManager.alphaFunc(516, 0.1F);
             GlStateManager.depthFunc(514);
             
-            entity.turnInvisibleTime += entity.getIsInvisible() ? -1 : 1;
+            //entity.turnInvisibleTime += entity.isDisintegrating() ? 1 : -1;
             //System.out.println("invi timer: " + entity.turnInvisibleTime);
-            if(f >= 1 && !entity.getIsInvisible()) {
+           /* if(f >= 1 && !entity.getIsInvisible()) {
             	entity.setIsInvisible(true);
             }
             else if(entity.turnInvisibleTime <= 1 && entity.getIsInvisible()) {
             	entity.setIsInvisible(false);
-            }
+            }*/
             
 		}
 		this.bindTexture(getEntityTexture(entity));
