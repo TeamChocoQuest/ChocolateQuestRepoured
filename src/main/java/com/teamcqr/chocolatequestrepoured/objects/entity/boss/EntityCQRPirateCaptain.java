@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
+import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSummonParrot;
@@ -49,6 +50,16 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	public void setSitting(boolean sitting) {
 		super.setSitting(false);
+	}
+	
+	@Override
+	public boolean hasCape() {
+		return true;
+	}
+	
+	@Override
+	public ResourceLocation getResourceLocationOfCape() {
+		return Capes.CAPE_PIRATE;
 	}
 	
 	@Override
