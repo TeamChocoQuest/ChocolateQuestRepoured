@@ -31,7 +31,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return timer < 160;
+		return timer < 120 && entity.getAttackTarget() != null;
 	}
 	
 	@Override
@@ -42,7 +42,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
 		}
 		
-		if(timer == 140) {
+		if(timer == 100) {
 			Vec3d v = entity.getAttackTarget().getLookVec().normalize().scale(2);
 			Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v).addVector(0,0.5,0);
 			entity.attemptTeleport(p.x, p.y, p.z);
