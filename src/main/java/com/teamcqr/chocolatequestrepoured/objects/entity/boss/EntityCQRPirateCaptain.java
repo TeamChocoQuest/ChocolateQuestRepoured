@@ -28,7 +28,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> INVISIBILITY_TICKS = EntityDataManager.<Integer>createKey(EntityCQRPirateCaptain.class, DataSerializers.VARINT);
 	
-	public static int TURN_INVISIBLE_ANIMATION_TIME = 60;
+	public static int TURN_INVISIBLE_ANIMATION_TIME = 30;
 
 	private boolean spawnedParrot = false;
 	
