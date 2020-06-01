@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModDispenseBehaviors;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
@@ -145,6 +146,7 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
+		ModLoottables.registerLootTables();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
