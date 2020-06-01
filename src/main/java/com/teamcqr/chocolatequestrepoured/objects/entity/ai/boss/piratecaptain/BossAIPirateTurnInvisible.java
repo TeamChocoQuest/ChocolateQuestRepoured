@@ -61,7 +61,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 			disInt = false;
 			reInt = false;
 			invi = false;
-			this.cooldown = 150;
+			this.cooldown = 100;
 		}
 		entity.setInvisible(invi);
 		entity.setIsReintegrating(reInt);
