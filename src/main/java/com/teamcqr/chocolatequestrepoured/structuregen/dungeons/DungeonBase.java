@@ -10,6 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -131,6 +132,8 @@ public abstract class DungeonBase {
 		return true;
 	}
 
+	public abstract AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z);
+
 	public void generate(World world, int x, int z) {
 		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
 		int y = 0;
@@ -145,7 +148,9 @@ public abstract class DungeonBase {
 		this.generate(world, x, y, z);
 	}
 
-	public abstract void generate(World world, int x, int y, int z);
+	public void generate(World world, int x, int y, int z) {
+		this.createDungeonGenerator(world, x, y, z).generate();
+	}
 
 	public void generateWithOffsets(World world, int x, int y, int z) {
 		y -= this.getUnderGroundOffset();
