@@ -100,6 +100,11 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	}
 
 	@Override
+	public boolean canBuildDoorOnSide(EnumFacing side) {
+		return side == this.connectedSide;
+	}
+
+	@Override
 	public boolean isTower() {
 		return true;
 	}

@@ -37,21 +37,23 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 
 	@Override
 	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		int endX = getDecorationLengthX() - 1;
-		int endZ = getDecorationLengthZ() - 1;
+		final int startX = 1;
+		final int startZ = 1;
+		final int endX = getDecorationLengthX() - 3;
+		final int endZ = getDecorationLengthZ() - 3;
 		Predicate<Vec3i> bottom;
 		Predicate<Vec3i> edges;
 
 		GenerationTemplate bridgeTopTemplate = new GenerationTemplate(getDecorationLengthX(), getDecorationLengthY(), getDecorationLengthZ());
 		if (alignment == Alignment.HORIZONTAL)
 		{
-			bottom = (v -> v.getY() == 0);
-			edges = (v -> v.getY() == 1 && ((v.getZ() == 0) || (v.getZ() == endZ)));
+			bottom = (v -> (v.getY() == 0) && (v.getZ() >= startZ) && (v.getZ() <= endZ));
+			edges = (v -> v.getY() == 1 && ((v.getZ() == startZ) || (v.getZ() == endZ)));
 		}
 		else
 		{
-			bottom = (v -> v.getY() == 0);
-			edges = (v -> v.getY() == 1 && ((v.getX() == 0) || (v.getX() == endZ)));
+			bottom = (v -> (v.getY() == 0) && (v.getX() >= startX) && (v.getX() <= endX));
+			edges = (v -> v.getY() == 1 && ((v.getX() == startZ) || (v.getX() == endX)));
 		}
 
 		bridgeTopTemplate.addRule(bottom, dungeon.getMainBlockState());
