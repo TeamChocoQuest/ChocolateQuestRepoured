@@ -14,7 +14,7 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 
 	@Override
 	public boolean shouldExecute() {
-		if( entity.getHealth() / entity.getMaxHealth() <= 0.5) {
+		if(entity != null && entity.getHealth() / entity.getMaxHealth() <= 0.5 && entity.hasAttackTarget() && !entity.isDead) {
 			cooldown --;
 			return cooldown <= 0;
 		}
@@ -23,13 +23,8 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	
 	@Override
 	public void startExecuting() {
-		if(entity.getIsInvisible()) {
-			entity.setIsInvisible(true);
-			entity.setInvisible(false);
-		}
-		entity.setIsTurningInvisible(true);
-		
-		invisibleTime = 100;
+		invisibleTime = 200;
+		entity.setInvisibleTicks(1);
 	}
 	
 	@Override
@@ -39,12 +34,30 @@ public class BossAIPirateTurnInvisible extends AbstractCQREntityAI<EntityCQRPira
 	
 	@Override
 	public void updateTask() {
+		boolean disInt = false;
+		boolean reInt = false;
+		boolean invi = true;
+		if(invisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+			reInt = true;
+			invi = false;
+			entity.setInvisibleTicks(entity.getInvisibleTicks() -1);
+		}
+		else if(invisibleTime >= 200 - EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME) {
+			disInt = true;
+			invi = false;
+			entity.setInvisibleTicks(entity.getInvisibleTicks() +1);
+		}
+		
 		invisibleTime--;
 		if(invisibleTime == 0) {
-			entity.setIsTurningInvisible(false);
-			
-			this.cooldown = 50;
+			disInt = false;
+			reInt = false;
+			invi = false;
+			this.cooldown = 150;
 		}
+		entity.setInvisible(invi);
+		entity.setIsReintegrating(reInt);
+		entity.setIsDisintegrating(disInt);
 	}
 
 }

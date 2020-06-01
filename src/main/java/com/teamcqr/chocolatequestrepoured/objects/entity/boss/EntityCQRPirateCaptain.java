@@ -23,8 +23,9 @@ import net.minecraft.world.World;
 
 public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	
-	private static final DataParameter<Boolean> IS_INVISIBLE = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
-	private static final DataParameter<Boolean> TURNING_INVISIBLE = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_DISINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_REINTEGRATING = EntityDataManager.<Boolean>createKey(EntityCQRPirateCaptain.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> INVISIBILITY_TICKS = EntityDataManager.<Integer>createKey(EntityCQRPirateCaptain.class, DataSerializers.VARINT);
 	
 	public static int TURN_INVISIBLE_ANIMATION_TIME = 60;
 
@@ -78,8 +79,9 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataManager.register(IS_INVISIBLE, false);
-		this.dataManager.register(TURNING_INVISIBLE, false);
+		this.dataManager.register(IS_DISINTEGRATING, false);
+		this.dataManager.register(IS_REINTEGRATING, false);
+		this.dataManager.register(INVISIBILITY_TICKS, 1);
 	}
 	
 	@Override
@@ -117,20 +119,27 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		this.spawnedParrot = b;
 	}
 	
-	public void setIsInvisible(boolean value) {
-		this.dataManager.set(IS_INVISIBLE, value);
+	public void setIsDisintegrating(boolean value) {
+		this.dataManager.set(IS_DISINTEGRATING, value);
 	}
 	
-	public void setIsTurningInvisible(boolean value) {
-		this.dataManager.set(TURNING_INVISIBLE, value);
+	public void setIsReintegrating(boolean value) {
+		this.dataManager.set(IS_REINTEGRATING, value);
 	}
 	
-	public boolean getIsInvisible() {
-		return this.dataManager.get(IS_INVISIBLE);
+	public boolean isDisintegrating() {
+		return this.dataManager.get(IS_DISINTEGRATING);
 	}
 	
-	public boolean isTurningInvisible() {
-		return this.dataManager.get(TURNING_INVISIBLE);
+	public boolean isReintegrating() {
+		return this.dataManager.get(IS_REINTEGRATING);
 	}
 
+	public int getInvisibleTicks() {
+		return this.dataManager.get(INVISIBILITY_TICKS);
+	}
+	
+	public void setInvisibleTicks(int value) {
+		this.dataManager.set(INVISIBILITY_TICKS, value);
+	}
 }
