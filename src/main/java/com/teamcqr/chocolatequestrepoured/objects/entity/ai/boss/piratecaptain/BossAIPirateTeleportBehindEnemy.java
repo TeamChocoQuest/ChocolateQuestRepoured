@@ -24,7 +24,9 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	@Override
 	public boolean shouldExecute() {
 		cooldown--;
-		return cooldown <= 0 && entity.getAttackTarget() != null && entity.getDistance(entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE; 
+		return cooldown <= 0 && entity.getAttackTarget() != null && entity.getDistance(entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE 
+				&& !(entity.isInvisible() || entity.isReintegrating() || entity.isDisintegrating()
+				); 
 	}
 	
 	@Override
