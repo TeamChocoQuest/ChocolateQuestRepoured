@@ -18,14 +18,15 @@ public class DungeonPartCover extends AbstractDungeonPart {
 	private int z1;
 
 	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, 0, 0, 0, 0);
+		this(world, dungeonGenerator, 0, 0, 0, 0, Blocks.AIR);
 	}
 
-	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endZ) {
+	public DungeonPartCover(World world, DungeonGenerator dungeonGenerator, int startX, int startZ, int endX, int endZ, Block coverBlock) {
 		super(world, dungeonGenerator, new BlockPos(Math.min(startX, endX), dungeonGenerator.getPos().getY(), Math.min(startZ, endZ)));
 		this.maxPos = new BlockPos(Math.max(startX, endX), dungeonGenerator.getPos().getY(), Math.max(startZ, endZ));
 		this.x1 = this.minPos.getX();
 		this.z1 = this.minPos.getZ();
+		this.coverBlock = coverBlock;
 	}
 
 	@Override

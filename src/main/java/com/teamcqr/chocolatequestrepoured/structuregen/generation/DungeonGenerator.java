@@ -158,7 +158,7 @@ public class DungeonGenerator {
 	}
 
 	public void add(AbstractDungeonPart part) {
-		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION && part != null) {
+		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION && part != null && !part.isGenerated()) {
 			this.parts.add(part);
 			this.minPos = DungeonGenUtils.getValidMinPos(part.getMinPos(), this.minPos);
 			this.maxPos = DungeonGenUtils.getValidMaxPos(part.getMaxPos(), this.maxPos);
