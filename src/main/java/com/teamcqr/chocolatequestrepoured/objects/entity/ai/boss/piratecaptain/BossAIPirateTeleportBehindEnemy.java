@@ -43,7 +43,7 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 		}
 		
 		if(timer == 40) {
-			Vec3d v = entity.getAttackTarget().getLookVec().normalize().scale(3);
+			Vec3d v = entity.getAttackTarget().getLookVec().normalize().scale(2);
 			Vec3d p = entity.getPositionVector().subtract(v).addVector(0,0.5,0);
 			entity.attemptTeleport(p.x, p.y, p.z);
 			entity.getLookHelper().setLookPositionWithEntity(entity.getAttackTarget(), 30, 30);
