@@ -146,7 +146,7 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if(player != getOwner()) {
+		if(isTamed() && player != getOwner()) {
 			return true;
 		}
 		return super.processInteract(player, hand);
