@@ -28,6 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -141,6 +142,14 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	@Override
 	public boolean setEntityOnShoulder(EntityPlayer p_191994_1_) {
 		return super.setEntityOnShoulder(p_191994_1_);
+	}
+	
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		if(player != getOwner()) {
+			return true;
+		}
+		return super.processInteract(player, hand);
 	}
 
 }
