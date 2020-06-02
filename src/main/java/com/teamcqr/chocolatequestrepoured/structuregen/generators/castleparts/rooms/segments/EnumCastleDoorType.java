@@ -3,7 +3,12 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import java.util.Random;
 
 public enum EnumCastleDoorType {
-	RANDOM(0, 0), STANDARD(4, 4), AIR(4, 4), FENCE_BORDER(4, 4), STAIR_BORDER(4, 5), GRAND_ENTRY(7, 6);
+	RANDOM(0, 0),
+	STANDARD(4, 4),
+	AIR(4, 4),
+	FENCE_BORDER(4, 4),
+	STAIR_BORDER(4, 5),
+	GRAND_ENTRY(7, 6);
 
 	private final int width;
 	private final int height;

@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import net.minecraft.util.math.Vec3i;
 
 public enum EnumRoomType {
-	NONE(false, false, true, false, new Vec3i(999, 999, 999)),
+	NONE(false, false, false, false, new Vec3i(999, 999, 999)),
 
 	KITCHEN(false, false, true, false, new Vec3i(3, 1, 3)),
 	BEDROOM_BASIC(false, false, true, false, new Vec3i(3, 1, 3)),
@@ -24,6 +24,8 @@ public enum EnumRoomType {
 	LANDING_BOSS(true, false, false, false, new Vec3i(1, 1, 1)),
 
 	HALLWAY(false, false, true, false, new Vec3i(999, 999, 999)),
+	BRIDGE_TOP(false, false, false, false, new Vec3i(999, 999, 999)),
+
 	STAIRCASE_DIRECTED(true, false, true, false, new Vec3i(1, 1, 1)),
 	STAIRCASE_SPIRAL(true, false, true, false, new Vec3i(1, 1, 1)),
 	LANDING_DIRECTED(true, false, false, false, new Vec3i(1, 1, 1)),

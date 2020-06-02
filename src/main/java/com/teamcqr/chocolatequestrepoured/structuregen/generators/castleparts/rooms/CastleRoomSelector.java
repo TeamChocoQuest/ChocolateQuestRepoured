@@ -349,7 +349,6 @@ public class CastleRoomSelector {
 		}
 	}
 
-	/*
 	private void placeBridges() {
 		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0);
 		for (RoomGridCell cell : populated) {
@@ -368,7 +367,11 @@ public class CastleRoomSelector {
 				}
 
 				if (bestDirection != null) {
-					for (RoomGridCell bridgeCell : grid.getBridgeCells(cell, bestDirection))
+					cell.getRoom().addDoorOnSideCentered(bestDirection);
+
+					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, bestDirection);
+
+					for (RoomGridCell bridgeCell : bridgeCells)
 					{
 						if (!bridgeCell.isPopulated())
 						{
@@ -376,10 +379,15 @@ public class CastleRoomSelector {
 							bridgeCell.setRoom(bridgeRoom);
 						}
 					}
+
+					RoomGridCell endCell = grid.getAdjacentCell(bridgeCells.get(bridgeCells.size() - 1), bestDirection);
+					if (endCell != null && endCell.isPopulated()) {
+						endCell.getRoom().addDoorOnSideCentered(bestDirection.getOpposite());
+					}
 				}
 			}
 		}
-	} */
+	}
 
 	private void randomizeRooms() {
 		ArrayList<RoomGridCell> unTyped = this.grid.getAllCellsWhere(RoomGridCell::needsRoomType);

@@ -88,9 +88,8 @@ public class RoomGridCell {
         return (this.state.isAtLeast(CellState.BUILDABLE));
     }
 
-    public boolean isBuildableExactly() {
-        //check for exactly buildable, meaning this cell is in the structure but never got a room
-        return (this.state == CellState.BUILDABLE);
+    public boolean isNotSelected() {
+        return (this.state.isLessThan(CellState.SELECTED));
     }
 
     public void selectForBuilding() {

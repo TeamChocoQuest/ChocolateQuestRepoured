@@ -178,7 +178,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                             (DungeonGenUtils.PercentageRandom(5, this.random))) {
                         RoomDecorTypes.UNLIT_TORCH.build(world, genArray, this, dungeon, pos, side, this.usedDecoPositions);
                     } else if ((RoomDecorTypes.PAINTING.wouldFit(pos, side, this.possibleDecoPositions, this.usedDecoPositions)) &&
-                            (DungeonGenUtils.PercentageRandom(15, this.random))) {
+                            (DungeonGenUtils.PercentageRandom(dungeon.getPaintingChance(), this.random))) {
                         RoomDecorTypes.PAINTING.buildRandom(world, pos, genArray, side, this.possibleDecoPositions, this.usedDecoPositions);
                     }
                 }
