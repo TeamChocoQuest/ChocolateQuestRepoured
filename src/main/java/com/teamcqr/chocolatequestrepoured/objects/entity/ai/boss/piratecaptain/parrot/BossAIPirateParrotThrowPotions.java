@@ -13,6 +13,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionType;
 import net.minecraft.potion.PotionUtils;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 
 public class BossAIPirateParrotThrowPotions extends EntityAIBase {
@@ -88,6 +89,8 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		potion.shoot(d1, d2 + (double)(f * 0.2F), d3, 0.75F, 8.0F);
 		thrower.world.playSound((EntityPlayer)null, thrower.posX, thrower.posY, thrower.posZ, SoundEvents.ENTITY_WITCH_THROW, thrower.getSoundCategory(), 1.0F, 0.8F + thrower.getRNG().nextFloat() * 0.4F);
 		thrower.world.spawnEntity(potion);
+		
+		entity.setHeldItem(EnumHand.MAIN_HAND, ItemStack.EMPTY);
 	}
 
 	@Override
