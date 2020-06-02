@@ -8,9 +8,11 @@ import javax.annotation.Nullable;
 import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotLandOnCaptainsShoulder;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.parrot.BossAIPirateParrotThrowPotions;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIPetNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFollow;
@@ -46,6 +48,8 @@ public class EntityCQRPirateParrot extends EntityParrot {
         this.tasks.addTask(5, new EntityAIWanderAvoidWaterFlying(this, 1.0D));
         this.tasks.addTask(2, new BossAIPirateParrotLandOnCaptainsShoulder(this));
         this.tasks.addTask(4, new EntityAIFollow(this, 1.0D, 3.0F, 7.0F));
+        
+        this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<EntityLiving>(this, EntityLiving.class, 100, true, false));
     }
 	
 	@Override
