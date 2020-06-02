@@ -176,6 +176,8 @@ public class CQRConfig {
 				"minecraft:iron_ore", 
 				"minecraft:gold_ore"
 			};
+		
+		public double pirateCaptainFleeCheckRadius = 32;
 	}
 
 	public static class Wall {

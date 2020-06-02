@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTeleportBehindEnemy;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateFleeSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateSummonParrot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -57,7 +58,8 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		
-		this.spellHandler.addSpell(0, new BossAIPirateSummonParrot(this, 0, 20, 20));
+		this.spellHandler.addSpell(1, new BossAIPirateSummonParrot(this, 0, 20, 20));
+		this.spellHandler.addSpell(0, new BossAIPirateFleeSpell(this, true, true, 60, 30, 30));
 		
 		this.tasks.addTask(2, new BossAIPirateTurnInvisible(this));
 		this.tasks.addTask(1, new BossAIPirateTeleportBehindEnemy(this));
