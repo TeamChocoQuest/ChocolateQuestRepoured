@@ -653,14 +653,26 @@ public class RoomGrid {
 			next = getAdjacentCell(next, direction);
 		}
 
+		if (next == null) {
+			//If we hit a null that means we hit the edge of the castle grid
+			result.clear(); //Clear the bridge cell array - can't build a bridge here
+		} else if (!next.isPopulated()) {
+			//Have to end on a populated room, otherwise it's a bridge to nowhere
+			result.clear();
+		}
+		else if (next.isPopulated() && !next.reachableFromSide(direction.getOpposite())) {
+			//If we hit another room, make sure that room can exit to the bridge
+			result.clear();
+		}
+
 		return result;
 	}
 
 	private boolean cellIsValidForBridge(@Nullable RoomGridCell cell) {
-		if (cell != null && cell.isBuildableExactly()) {
+		if (cell != null && cell.isNotSelected()) {
 			RoomGridCell below = getAdjacentCell(cell, EnumFacing.DOWN);
 			//Cell below it has to satisfy the same
-			return (below != null && cell.isBuildableExactly());
+			return (below != null && below.isNotSelected());
 		}
 
 		return false;

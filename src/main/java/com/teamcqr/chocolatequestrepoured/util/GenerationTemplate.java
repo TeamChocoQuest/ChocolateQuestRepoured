@@ -1,15 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+
+import javax.annotation.Nullable;
 
 public class GenerationTemplate {
 
@@ -37,11 +36,17 @@ public class GenerationTemplate {
     private int lengthY;
     private int lengthZ;
 
+    private boolean fillUnusedBlockWithAir = true;
+
     public GenerationTemplate(int lengthX, int lengthY, int lengthZ) {
         this.generationRules = new ArrayList<>();
         this.lengthX = lengthX;
         this.lengthY = lengthY;
         this.lengthZ = lengthZ;
+    }
+
+    public void setFillUnusedBlockWithAir(boolean shouldFill) {
+        this.fillUnusedBlockWithAir = shouldFill;
     }
 
     public GenerationTemplate(Vec3i dimensions) {
@@ -53,6 +58,25 @@ public class GenerationTemplate {
 
     public void addRule(Predicate<Vec3i> condition, IBlockState blockToBuild) {
         generationRules.add(new GenerationRule(condition, blockToBuild));
+    }
+
+    public void AddToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase)
+    {
+        AddToGenArray(origin, genArray, phase, null);
+    }
+
+    public void AddToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase, @Nullable  HashSet<BlockPos> positionsFilled)
+    {
+        HashMap<BlockPos, IBlockState> genMap = this.GetGenerationMap(origin, fillUnusedBlockWithAir);
+        genArray.addBlockStateMap(genMap, phase);
+        if (positionsFilled != null)
+        {
+            for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
+                if (entry.getValue().getBlock() != Blocks.AIR) {
+                    positionsFilled.add(entry.getKey());
+                }
+            }
+        }
     }
 
     public HashMap<BlockPos, IBlockState> GetGenerationMap(BlockPos origin, boolean fillUnusedWithAir) {
