@@ -26,6 +26,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.DifficultyInstance;
@@ -51,6 +52,14 @@ public class EntityCQRPirateParrot extends EntityParrot {
         
         this.targetTasks.addTask(0, new EntityAIPetNearestAttackTarget<EntityLiving>(this, EntityLiving.class, 100, true, false));
     }
+	
+	@Override
+	public void addPotionEffect(PotionEffect effect) {
+		if(effect.getPotion().isBadEffect()) {
+			return;
+		}
+		super.addPotionEffect(effect);
+	}
 	
 	@Override
 	public void onDeath(DamageSource cause) {
