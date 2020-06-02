@@ -34,7 +34,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 
 	@Override
 	public boolean shouldExecute() {
-		if (super.shouldExecute() && entity.getHealingPotions() <= 1 && entity.getHealth() / entity.getMaxHealth() <= 0.1) {
+		if (super.shouldExecute() && entity.getHealingPotions() <= 1 && entity.getHealth() / entity.getMaxHealth() <= 0.2) {
 			return hasNearbyAllies();
 		}
 		return false;
