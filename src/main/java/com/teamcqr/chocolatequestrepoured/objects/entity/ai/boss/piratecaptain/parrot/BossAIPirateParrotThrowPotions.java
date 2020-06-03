@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateParrot;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityPotion;
@@ -56,6 +57,14 @@ public class BossAIPirateParrotThrowPotions extends EntityAIBase {
 		case 2:
 			type = PotionTypes.STRONG_POISON;
 			break;
+		}
+		if(entity.getAttackTarget().getCreatureAttribute() == EnumCreatureAttribute.UNDEAD) {
+			if(type == PotionTypes.STRONG_HARMING) {
+				type = PotionTypes.STRONG_HEALING;
+			}
+			if(type == PotionTypes.HEALING) {
+				type = PotionTypes.HEALING;
+			}
 		}
 		ItemStack potion = PotionUtils.addPotionToItemStack(new ItemStack(Items.SPLASH_POTION), type);
 		this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, potion);
