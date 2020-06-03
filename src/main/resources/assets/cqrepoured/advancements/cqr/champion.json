@@ -63,6 +63,14 @@
 					"type": "cqrepoured:boar_mage"
 				}
 			}
+		},
+		"pirate_captain": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:pirate_captain"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -71,6 +79,7 @@
 		["lich"],
 		["necromancer"],
 		["walker_king"],
-		["boar_mage"]
+		["boar_mage"],
+		["pirate_captain"]
 	]
 }

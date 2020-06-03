@@ -231,6 +231,14 @@
 					"type": "cqrepoured:walker_king"
 				}
 			}
+		},
+		"pirate_captain": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:pirate_captain"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -261,7 +269,8 @@
 			"lich",
 			"boar_mage",
 			"necromancer",
-			"walker_boi"	
+			"walker_boi",
+			"pirate_captain"	
 		]
 	]
 }
