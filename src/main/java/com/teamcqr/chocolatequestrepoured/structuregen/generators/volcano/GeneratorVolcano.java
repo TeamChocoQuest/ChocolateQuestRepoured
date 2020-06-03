@@ -89,8 +89,8 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 	private BlockPos entranceStartPos = null;
 	private EStairSection entranceDirection = null;
 
-	public GeneratorVolcano(World world, DungeonVolcano dungeon, BlockPos pos) {
-		super(world, dungeon, pos);
+	public GeneratorVolcano(World world, BlockPos pos, DungeonVolcano dungeon) {
+		super(world, pos, dungeon);
 
 		this.maxHeight = DungeonGenUtils.getIntBetweenBorders(dungeon.getMinHeight(), dungeon.getMaxHeight());
 		this.minRadius = dungeon.getInnerRadius();

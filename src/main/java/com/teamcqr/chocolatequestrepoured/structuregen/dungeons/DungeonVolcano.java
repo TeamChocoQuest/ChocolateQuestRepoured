@@ -147,7 +147,7 @@ public class DungeonVolcano extends DungeonBase {
 
 	@Override
 	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
-		return new GeneratorVolcano(world, this, new BlockPos(x, y, z));
+		return new GeneratorVolcano(world, new BlockPos(x, y, z), this);
 	}
 
 	public int getMinHeight() {

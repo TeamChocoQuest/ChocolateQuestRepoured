@@ -23,9 +23,10 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 
 	private CQStructure structure;
 	private PlacementSettings settings;
+	private BlockPos structurePos;
 
-	public GeneratorSurface(World world, DungeonSurface dungeon, BlockPos pos) {
-		super(world, dungeon, pos);
+	public GeneratorSurface(World world, BlockPos pos, DungeonSurface dungeon) {
+		super(world, pos, dungeon);
 	}
 
 	/**
@@ -51,35 +52,33 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 		}
 
 		// Why do you use a centralized Position? And what does "centralized" actually mean here (should be explained in corresponding method)?
-		this.pos = getCentralizedPosForStructure(this.pos, this.structure, this.settings);
-	}
+		this.structurePos = getCentralizedPosForStructure(this.pos, this.structure, this.settings);
 
-	@Override
-	protected void buildStructure() {
 		if (this.dungeon.doBuildSupportPlatform()) {
-			BlockPos startPos = this.pos.up(this.dungeon.getUnderGroundOffset()).down();
+			BlockPos startPos = this.structurePos.up(this.dungeon.getUnderGroundOffset()).down();
 			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1)));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), CQRConfig.general.supportHillWallSize));
 		}
+	}
 
+	@Override
+	protected void buildStructure() {
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, this.structure.getBlockInfoList(), this.settings, this.dungeon.getDungeonMob()));
 		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.pos, this.structure.getEntityInfoList(), this.settings, this.dungeon.getDungeonMob()));
 		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, this.pos, this.structure.getSpecialBlockInfoList(), this.settings, this.dungeon.getDungeonMob()));
+	}
 
+	@Override
+	protected void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			BlockPos startPos = this.pos;
+			BlockPos startPos = this.structurePos;
 			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1)));
 			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
 			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
 			this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
 		}
-	}
-
-	@Override
-	protected void postProcess() {
-		// Not needed here
 	}
 
 }
