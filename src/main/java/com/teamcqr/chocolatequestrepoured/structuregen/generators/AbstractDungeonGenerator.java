@@ -13,18 +13,19 @@ import net.minecraft.world.World;
 
 public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 
-	protected final World world;
-	protected final T dungeon;
 	protected final Random random = new Random();
-	protected BlockPos pos;
-	protected DungeonGenerator dungeonGenerator;
+	protected final World world;
+	protected final BlockPos pos;
+	protected final T dungeon;
+	protected final DungeonGenerator dungeonGenerator;
 
 	// Why remove all parameters from the functions?!?!? Those were supposed to be all the same! It is even needed like that for some generators
 
-	public AbstractDungeonGenerator(World world, T dungeon, BlockPos pos) {
+	public AbstractDungeonGenerator(World world, BlockPos pos, T dungeon) {
 		this.world = world;
-		this.dungeon = dungeon;
 		this.pos = pos;
+		this.dungeon = dungeon;
+		this.dungeonGenerator = new DungeonGenerator(world, pos, dungeon.getDungeonName());
 	}
 
 	public void generate() {
@@ -36,43 +37,25 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 
 		try {
 			this.preProcess();
-		} catch (Exception e) {
-			CQRMain.logger.error("Failed to pre-process dungeon " + this.dungeon + " at " + this.pos, e);
-			return;
-		}
-
-		this.dungeonGenerator = new DungeonGenerator(this.world, this.pos, this.dungeon.getDungeonName());
-
-		try {
 			this.buildStructure();
-		} catch (Exception e) {
-			CQRMain.logger.error("Failed to process dungeon " + this.dungeon + " at " + this.pos, e);
-			return;
-		}
-
-		DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon);
-
-		try {
 			this.postProcess();
+			DungeonGenerationManager.addStructure(this.world, this.dungeonGenerator, this.dungeon);
 		} catch (Exception e) {
-			CQRMain.logger.error("Failed to post-process dungeon " + this.dungeon + " at " + this.pos, e);
+			CQRMain.logger.error("Failed to prepare dungeon " + this.dungeon + " for generation at " + this.pos, e);
 		}
 	}
 
 	/**
-	 * The field {@link AbstractDungeonGenerator#dungeonGenerator} hasn't been initialized and thus the dungeon position can be changed.
 	 * Now all pre-processing should be done (for example loading a file).
 	 */
 	protected abstract void preProcess();
 
 	/**
-	 * The field {@link AbstractDungeonGenerator#dungeonGenerator} has been initialized.
 	 * Now all {@link AbstractDungeonPart} objects should be added to the {@link AbstractDungeonGenerator#dungeonGenerator}.
 	 */
 	protected abstract void buildStructure();
 
 	/**
-	 * The {@link AbstractDungeonGenerator#dungeonGenerator} has been committed to the {@link DungeonGenerationManager}.
 	 * Now all post-processing should be done (Note that the dungeon hasn't been generated yet).
 	 */
 	protected abstract void postProcess();
