@@ -57,10 +57,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	
 	@Override
 	public void addPotionEffect(PotionEffect effect) {
-		if(effect.getPotion().isBadEffect()) {
-			return;
-		}
-		super.addPotionEffect(effect);
+		return;
 	}
 	
 	@Override
