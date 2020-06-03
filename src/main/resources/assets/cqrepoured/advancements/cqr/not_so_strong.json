@@ -55,6 +55,14 @@
 					"type": "cqrepoured:walker_king"
 				}
 			}
+		},
+		"pirate_captain": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:pirate_captain"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -63,7 +71,8 @@
 			"giant_tortoise",
 			"lich",
 			"necromancer",
-			"walker_king"
+			"walker_king",
+			"pirate_captain"
 		]
 	]
 }
