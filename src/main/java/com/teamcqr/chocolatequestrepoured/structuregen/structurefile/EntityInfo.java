@@ -79,7 +79,7 @@ public class EntityInfo implements IGeneratable {
 	}
 
 	public BlockPos getPos() {
-		NBTTagList nbtTagList = this.entityData.getTagList("pos", Constants.NBT.TAG_DOUBLE);
+		NBTTagList nbtTagList = this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE);
 		return new BlockPos(nbtTagList.getDoubleAt(0), nbtTagList.getDoubleAt(1), nbtTagList.getDoubleAt(2));
 	}
 
