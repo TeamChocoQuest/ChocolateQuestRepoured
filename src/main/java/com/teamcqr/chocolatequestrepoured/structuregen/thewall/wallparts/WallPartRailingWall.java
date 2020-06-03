@@ -1,17 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoSpawner;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
@@ -19,7 +21,7 @@ import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -27,8 +29,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
@@ -36,116 +40,137 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class WallPartRailingWall implements IWallPart {
 
-	public WallPartRailingWall() {
-		// Does not really need a constructor too....
-	}
-
 	@Override
 	public int getTopY() {
 		return CQRConfig.wall.topY - 12;
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, DungeonGenerator dungeonGenerator) {
 		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
+		int startY = this.getTopY();
+
+		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		IBlockState stateBlock = Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true);
 
 		int[] zValues = new int[] { 2, 3, 12, 13 };
-
-		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
-		ExtendedBlockStatePart.ExtendedBlockState stateBlock = new ExtendedBlockState(Blocks.DOUBLE_STONE_SLAB.getDefaultState().withProperty(BlockStoneSlab.VARIANT, BlockStoneSlab.EnumType.STONE).withProperty(BlockStoneSlab.SEAMLESS, true), null);
-
-		// Spawner
-		BlockPos spawnerPos = new BlockPos(startX + 4, this.getTopY() + 12 + 1 - 7, startZ + 7);
-		this.placeSpawner(spawnerPos, world, stateMap);
-
-		for (int y = 0; y <= 7; y++) {
+		for (int y = 0; y < 8; y++) {
 			for (int z : zValues) {
 				for (int x = 0; x < 8; x++) {
-					if (this.isBiggerPart(x)) {
-						if (y < 3 && z == (z > 3 ? 12 : 3)) {
-							stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
-							stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
-						} else if (y >= 3) {
-							stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
-							stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
-						}
-					} else if (y >= 4 && z == (z > 3 ? 12 : 3) && y <= 6) {
-						stateMap.put(new BlockPos(startX + x * 2, this.getTopY() + y, startZ + z), stateBlock);
-						stateMap.put(new BlockPos(startX + x * 2 + 1, this.getTopY() + y, startZ + z), stateBlock);
+					if ((z == 3 || z == 12) && y >= 3 && (this.isBiggerPart(x) || (y >= 4 && y <= 6))) {
+						blockInfoList.add(new BlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
+						blockInfoList.add(new BlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
 					}
 				}
 			}
 		}
 
-		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
+		// Spawner
+		this.placeSpawner(new BlockPos(4, 6, 7), world, blockInfoList);
+
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT));
 	}
 
-	private void placeSpawner(BlockPos spawnerPos, World world, Map<BlockPos, ExtendedBlockState> stateMap) {
+	private boolean isBiggerPart(int xAsChunkRelativeCoord) {
+		return (xAsChunkRelativeCoord & 1) == 0;
+	}
+
+	private void placeSpawner(BlockPos spawnerPos, World world, List<AbstractBlockInfo> blockInfoList) {
 		Entity spawnerEnt = EntityList.createEntityByIDFromName(new ResourceLocation(CQRConfig.wall.mob), world);
-		if (spawnerEnt instanceof EntityLiving) {
-			switch (((EntityLiving) spawnerEnt).getRNG().nextInt(5)) {
-			case 0:
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-				break;
-			case 1:
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-				break;
-			case 2:
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-				break;
-			case 3:
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
-				break;
-			case 4:
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-				spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
-				break;
-			}
+
+		if (spawnerEnt instanceof EntityLivingBase) {
+			EnumDifficulty difficulty = world.getDifficulty();
+			this.equipWeaponBasedOnDifficulty((EntityLivingBase) spawnerEnt, difficulty);
+			this.equipArmorBasedOnDifficulty((EntityLivingBase) spawnerEnt, difficulty);
+
 			if (spawnerEnt instanceof AbstractEntityCQR) {
-				((AbstractEntityCQR) spawnerEnt).setHealingPotions(3);
+				if (difficulty == EnumDifficulty.HARD) {
+					((AbstractEntityCQR) spawnerEnt).setHealingPotions(3);
+				} else if (difficulty == EnumDifficulty.NORMAL) {
+					((AbstractEntityCQR) spawnerEnt).setHealingPotions(2);
+				} else {
+					((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
+				}
 			}
-			NBTTagCompound nbttagcompound = new NBTTagCompound();
-			NBTTagCompound nbttagcompound1 = nbttagcompound.getCompoundTag("display");
-
-			if (!nbttagcompound.hasKey("display", 10)) {
-				nbttagcompound.setTag("display", nbttagcompound1);
-			}
-
-			nbttagcompound1.setInteger("color", 000000);
-
-			ItemStack helmet = new ItemStack(ModItems.HELMET_IRON_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.HELMET_IRON_DYABLE).setColor(helmet, 000000);
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.HEAD, helmet);
-
-			ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.CHESTPLATE_IRON_DYABLE).setColor(chest, 000000);
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
-
-			ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.LEGGINGS_IRON_DYABLE).setColor(legs, 000000);
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
-
-			ItemStack boots = new ItemStack(ModItems.BOOTS_IRON_DYABLE, 1, 0, nbttagcompound);
-			((ItemArmorDyable) ModItems.BOOTS_IRON_DYABLE).setColor(boots, 000000);
-			spawnerEnt.setItemStackToSlot(EntityEquipmentSlot.FEET, boots);
 
 			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
 			TileEntitySpawner tileSpawner = (TileEntitySpawner) ModBlocks.SPAWNER.createTileEntity(world, state2);
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(spawnerEnt));
 
-			stateMap.put(spawnerPos, new ExtendedBlockStatePart.ExtendedBlockState(state2, tileSpawner.writeToNBT(new NBTTagCompound())));
+			blockInfoList.add(new BlockInfoSpawner(spawnerPos, state2, tileSpawner.writeToNBT(new NBTTagCompound())));
 		}
 	}
 
-	private boolean isBiggerPart(int xAsChunkRelativeCoord) {
-		if (xAsChunkRelativeCoord % 2 == 0 || xAsChunkRelativeCoord == 0) {
-			return true;
+	private void equipWeaponBasedOnDifficulty(EntityLivingBase entity, EnumDifficulty difficulty) {
+		switch (entity.getRNG().nextInt(5)) {
+		case 0:
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			break;
+		case 1:
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_AXE, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			break;
+		case 2:
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
+			break;
+		case 3:
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(ModItems.SHIELD_SPECTER, 1));
+			break;
+		case 4:
+			entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			entity.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(Items.DIAMOND_SWORD, 1));
+			break;
 		}
-		return false;
+	}
+
+	private void equipArmorBasedOnDifficulty(EntityLivingBase entity, EnumDifficulty difficulty) {
+		ItemStack helm = new ItemStack(ModItems.HELMET_IRON_DYABLE);
+		ItemStack chest = new ItemStack(ModItems.CHESTPLATE_IRON_DYABLE);
+		ItemStack legs = new ItemStack(ModItems.LEGGINGS_IRON_DYABLE);
+		ItemStack feet = new ItemStack(ModItems.BOOTS_IRON_DYABLE);
+
+		if (difficulty == EnumDifficulty.HARD) {
+			if (entity.getRNG().nextDouble() < 0.35D) {
+				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+			}
+		} else if (difficulty == EnumDifficulty.NORMAL) {
+			if (entity.getRNG().nextDouble() < 0.25D) {
+				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+			}
+		} else {
+			if (entity.getRNG().nextDouble() < 0.2D) {
+				helm = new ItemStack(ModItems.HELMET_DIAMOND_DYABLE);
+				chest = new ItemStack(ModItems.CHESTPLATE_DIAMOND_DYABLE);
+				legs = new ItemStack(ModItems.LEGGINGS_DIAMOND_DYABLE);
+				feet = new ItemStack(ModItems.BOOTS_DIAMOND_DYABLE);
+			}
+		}
+
+		if (entity.getRNG().nextDouble() < 0.005D) {
+			((ItemArmorDyable) helm.getItem()).setColor(helm, 0x1008FFFF);
+			((ItemArmorDyable) helm.getItem()).setColor(chest, 0x1008FFFF);
+			((ItemArmorDyable) helm.getItem()).setColor(legs, 0x1008FFFF);
+			((ItemArmorDyable) helm.getItem()).setColor(feet, 0x1008FFFF);
+		} else {
+			((ItemArmorDyable) helm.getItem()).setColor(helm, 0);
+			((ItemArmorDyable) helm.getItem()).setColor(chest, 0);
+			((ItemArmorDyable) helm.getItem()).setColor(legs, 0);
+			((ItemArmorDyable) helm.getItem()).setColor(feet, 0);
+		}
+
+		entity.setItemStackToSlot(EntityEquipmentSlot.HEAD, helm);
+		entity.setItemStackToSlot(EntityEquipmentSlot.CHEST, chest);
+		entity.setItemStackToSlot(EntityEquipmentSlot.LEGS, legs);
+		entity.setItemStackToSlot(EntityEquipmentSlot.FEET, feet);
 	}
 
 }

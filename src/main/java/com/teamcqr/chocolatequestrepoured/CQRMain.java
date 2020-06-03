@@ -132,9 +132,7 @@ public class CQRMain {
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if (CQRConfig.wall.enabled) {
-			// GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
-		}
+		GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 
 		// Instantiating enums
 		EBannerPatternsCQ.values();
