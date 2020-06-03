@@ -44,7 +44,12 @@ public class WallPartRailingTower implements IWallPart {
 		for (int y = 0; y < 8; y++) {
 			for (int z : zValues) {
 				for (int x : xValues) {
-					if ((z == 3 || z == 12) && y >= 3 && (this.isBiggerPart(x) || (y >= 4 && y <= 6))) {
+					if (this.isBiggerPart(x)) {
+						if (y >= 3 || z == 3 || z == 12) {
+							blockInfoList.add(new BlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
+							blockInfoList.add(new BlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
+						}
+					} else if (y >= 4 && y <= 6 && (z == 3 || z == 12)) {
 						blockInfoList.add(new BlockInfo(new BlockPos(x * 2, y, z), stateBlock, null));
 						blockInfoList.add(new BlockInfo(new BlockPos(x * 2 + 1, y, z), stateBlock, null));
 					}
