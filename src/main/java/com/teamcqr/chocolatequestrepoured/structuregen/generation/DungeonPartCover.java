@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
-import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -58,16 +56,22 @@ public class DungeonPartCover extends AbstractDungeonPart {
 	public void generateNext() {
 		if (this.x1 <= this.maxPos.getX()) {
 			BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(this.x1, 255, this.z1);
-			while (mutablePos.getY() > 0) {
-				IBlockState state = this.world.getBlockState(mutablePos);
-				if (state.getBlock() == Blocks.AIR) {
-					mutablePos.setY(mutablePos.getY() - 1);
-				} else {
-					if (mutablePos.getY() < 255 && state.getBlock() != this.coverBlock) {
-						mutablePos.setY(mutablePos.getY() + 1);
-						BlockPlacingHelper.setBlockState2(this.world, mutablePos, this.coverBlock.getDefaultState(), 18, false);
+
+			if (this.world.getBlockState(mutablePos).getBlock() == Blocks.AIR) {
+				mutablePos.setY(mutablePos.getY() - 1);
+
+				while (mutablePos.getY() > 0) {
+					IBlockState state = this.world.getBlockState(mutablePos);
+
+					if (state.getBlock() == Blocks.AIR) {
+						mutablePos.setY(mutablePos.getY() - 1);
+					} else {
+						if (state.getBlock() != this.coverBlock) {
+							mutablePos.setY(mutablePos.getY() + 1);
+							this.world.setBlockState(mutablePos, this.coverBlock.getDefaultState(), 18);
+						}
+						break;
 					}
-					break;
 				}
 			}
 
