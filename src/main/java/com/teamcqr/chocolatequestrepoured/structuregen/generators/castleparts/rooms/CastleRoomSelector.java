@@ -1047,7 +1047,8 @@ public class CastleRoomSelector {
 	}
 
 	private BlockPos getRoomStart(int floor, int x, int z) {
-		return buildPosition.add(x * this.roomSize, floor * this.floorHeight, z * this.roomSize);
+		final int wallWidth = 1;
+		return buildPosition.add(x * (this.roomSize + 1), floor * this.floorHeight, z * (this.roomSize + 1));
 	}
 
 	private BlockPos getRoomStart(RoomGridCell selection) {

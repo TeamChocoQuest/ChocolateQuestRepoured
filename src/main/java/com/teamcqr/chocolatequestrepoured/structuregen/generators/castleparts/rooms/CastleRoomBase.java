@@ -71,7 +71,7 @@ public abstract class CastleRoomBase {
 	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.setupDecoration(genArray);
 		this.generateRoom(genArray, dungeon);
-		this.generateWalls(genArray, dungeon);
+		//this.generateWalls(genArray, dungeon);
 
 		if (this.defaultFloor) {
 			this.generateDefaultFloor(genArray, dungeon);

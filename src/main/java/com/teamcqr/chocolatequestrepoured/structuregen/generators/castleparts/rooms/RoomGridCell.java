@@ -1,11 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import net.minecraft.util.EnumFacing;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class RoomGridCell {
     private enum CellState {
@@ -40,12 +38,22 @@ public class RoomGridCell {
     private HashSet<RoomGridCell> connectedCells; // all cells near this one that have the same type
     private HashSet<RoomGridCell> pathableCells; // cells on the same floor that are potentially reachable
     private boolean isBossArea = false;
+    private HashMap<EnumFacing, RoomGridCell> adjacentCells = new HashMap<>();
+    private HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 
     public RoomGridCell(int floor, int x, int z, CastleRoomBase room) {
         this.room = room;
         this.gridPosition = new RoomGridPosition(floor, x, z);
         this.connectedCells = new HashSet<>();
         this.pathableCells = new HashSet<>();
+    }
+
+    public void RegisterAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {
+        adjacentCells.put(directionOfCell, cell);
+    }
+
+    public void registerAdjacentWall(CastleMainStructWall wall, EnumFacing directionOfWall) {
+        walls.put(directionOfWall, wall);
     }
 
     public void setAllLinkedReachable(List<RoomGridCell> unreachableCells, List<RoomGridCell> reachableCells) {
