@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
@@ -52,6 +53,14 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.PIRATE;
+	}
+	
+	@Override
+	public void addPotionEffect(PotionEffect effect) {
+		if(effect.getPotion().isBadEffect()) {
+			return;
+		}
+		super.addPotionEffect(effect);
 	}
 	
 	@Override
