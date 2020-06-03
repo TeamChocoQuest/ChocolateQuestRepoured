@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.B
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.piratecaptain.BossAIPirateTurnInvisible;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -58,6 +59,12 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	@Override
 	public void addPotionEffect(PotionEffect effect) {
 		return;
+	}
+	
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		spawnShoulderEntities();
+		return super.attackEntityAsMob(entityIn);
 	}
 	
 	@Override
