@@ -37,7 +37,7 @@ public abstract class DungeonBase {
 	protected int[] allowedDims;
 	protected int weight;
 	protected int chance;
-	protected int spawnLimit; 
+	protected int spawnLimit;
 	protected String[] biomes;
 	protected String[] blacklistedBiomes;
 	protected boolean rotateDungeon;
@@ -142,7 +142,7 @@ public abstract class DungeonBase {
 				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
 			}
 		}
-		y /= 256;
+		y >>= 8;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
 		this.generate(world, x, y, z);
