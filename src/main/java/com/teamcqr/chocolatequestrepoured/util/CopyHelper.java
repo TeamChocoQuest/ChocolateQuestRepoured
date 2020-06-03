@@ -29,22 +29,26 @@ public class CopyHelper {
 			JarURLConnection jarURLConnection = (JarURLConnection) url.openConnection();
 			try (FileSystem fileSystem = FileSystems.newFileSystem(Paths.get(jarURLConnection.getJarFileURL().toURI()), CQRMain.class.getClassLoader())) {
 				path = fileSystem.getPath(source);
+				copyFiles(path, target);
 			}
 		} else {
 			path = new File(CQRMain.class.getResource(source).toURI()).toPath();
+			copyFiles(path, target);
 		}
+	}
 
-		Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
+	private static void copyFiles(Path source, Path target) throws IOException {
+		Files.walkFileTree(source, new SimpleFileVisitor<Path>() {
 
 			@Override
 			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-				Files.createDirectories(target.resolve(path.relativize(dir).toString()));
+				Files.createDirectories(target.resolve(source.relativize(dir).toString()));
 				return FileVisitResult.CONTINUE;
 			}
 
 			@Override
 			public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-				Files.copy(file, target.resolve(path.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
+				Files.copy(file, target.resolve(source.relativize(file).toString()), StandardCopyOption.REPLACE_EXISTING);
 				return FileVisitResult.CONTINUE;
 			}
 
