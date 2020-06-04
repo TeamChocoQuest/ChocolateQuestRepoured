@@ -1,0 +1,44 @@
+{
+	"parent": "cqrepoured:cqr/bosses/kill_pirate_captain",
+	"display": {
+		"title": {
+			"translate": "advancements.cqrepoured.new_captain.title"
+		},
+		"icon": {
+			"item": "cqrepoured:captain_revolver"
+		},
+		"description": {
+			"translate": "advancements.cqrepoured.new_captain.description"
+		},
+		"frame": "task",
+		"show_toast": true,
+		"announce_to_chat": false,
+		"hidden": true
+	},
+	"criteria": {
+		"ninja_dagger": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:dagger_ninja"
+					}
+				]
+			}
+		},
+		"captain_revolver": {
+			"trigger": "minecraft:inventory_changed",
+			"conditions": {
+				"items": [
+					{
+						"item": "cqrepoured:captain_revolver"
+					}
+				]
+			}
+		}
+	},
+	"requirements": [
+		["ninja_dagger"],
+		["captain_revolver"]
+	]
+}

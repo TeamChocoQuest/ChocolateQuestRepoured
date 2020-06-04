@@ -206,6 +206,11 @@ public class FactionRegistry {
 		if(entity == null) {
 			return null;
 		}
+		
+		if(entity instanceof EntityPlayer) {
+			return this.factions.get(EDefaultFaction.PLAYERS.name());
+		}
+		
 		if (entity instanceof MultiPartEntityPart) {
 			return this.getFactionOf((Entity) ((MultiPartEntityPart)entity).parent);
 		}

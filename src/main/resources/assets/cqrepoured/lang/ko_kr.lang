@@ -1,4 +1,5 @@
-이것은 초콜릿 퀘스트 리포지드의 한국어 파일 입니다. 이 번역은 oplayero가 했습니다.
+#이것은 CQR모드의 한국어 파일(Ko.kr) 입니다.
+#이 번역은 기본적으로 모든 개발자에 의해 작성되었으며 oplayero에 의해 한국어화 되었습니다.
 
 
 #CreativeTabs
@@ -8,9 +9,6 @@ itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR 던전 생성기
 itemGroup.ChocolateQuestRepouredBannerTab=CQR 배너
 itemGroup.ChocolateQuestRepouredExporterChests=CQR 상자
 itemGroup.CQRSpawnEggs=CQR 스폰알
-itemGroup.CQR SpawnEggs=CQR 스폰알
-itemGroup.CQR Spawn Eggs=CQR 스폰알
-
 #Banners
 item.banner.cqrepoured_cq_blank.white=CQR-배너 마커
 item.banner.cqrepoured_cq_blank.orange=CQR-배너 마커
@@ -384,7 +382,6 @@ item.chestplate_diamond_dyable.name=염색 가능한 다이아몬드 흉갑
 item.leggings_diamond_dyable.name=염색 가능한 다이아몬드 각반
 item.boots_diamond_dyable.name=염색 가능한 다이아몬드 부츠
 
-
 #Blocks
 tile.exporter.name=불러오기 블럭
 tile.spawner.name=스포너
@@ -399,7 +396,6 @@ tile.table_dark.name=짙은참나무 테이블
 tile.boss_block.name=보스 블럭
 tile.force_field_nexus.name=포스 필드 넥서스(NYI)
 
-
 #Andesite blocks
 tile.andesite_carved.name=조각 된 안산암
 tile.andesite_pillar.name=안산암 기둥
@@ -408,7 +404,6 @@ tile.andesite_scale.name=안산암 스케일
 tile.andesite_square.name=안산암 정사각형
 tile.andesite_small.name=작은 안산암 벽돌
 tile.andesite_large.name=큰 안산암 벽돌
-
 
 #Diorite blocks
 tile.diorite_carved.name=조각 된 섬록암
@@ -513,7 +508,7 @@ description.slime_armor.name=슬라임 갑올을 세트로 입으면 최대체�
 description.cloud_boots.name=이 신발을 신으면 한번의 점프로도 매우 높게 올라갈 수 있고 속도는 음속을 뛰어 넘는다.
 #description.dragon_helmet.name=넌 용의 힘을 느끼게 된다. 공격은 2배 강해지며 체력이 높아진다.
 description.dagger.name=앞으로 이동중 우클릭을 누르면 앞으로 점프하고 뒤로 이동중 우클릭을 누르면 뒤로 점프한다.
-description.ninja_dagger.name=이동중 우클릭을 누르면 앞으로 점프하고 뒤로 이동중 우클릭을 누르면 뒤로 점프한다. 웅크리기+우클릭으로 모습을 숨길 수 있다. 하지만 그리 오래 가지는 않을것 이다.
+description.ninja_dagger.name=이동중 우클릭을 누르면 앞으로 점프하고 뒤로 이동중 우클릭을 누르면 뒤로 점프한다. 웅크리기+우클릭으로 앞으로 살짝 텔레포트하고 모습을 숨길 수 있다. 하지만 그리 오래 가지는 않는다.
 description.bull_battle_axe.name=땅에 대고 우클릭을 하면 지진을 이르킬수 있다.
 description.walker_set.name=전설에 따르면 워커킹에게 화살을 쏜 사람 등 뒤에서 칼을 든 워커킹을 나타났다고 한다. 그의 검과 방패를 모두 모으면 같은 능력을 가질 수 있을까?
 description.gun.name=우클릭으로 발사한다.발사 하려면 총알이 필요하다. 
@@ -551,7 +546,7 @@ description.attack_damage_at_night.name=공격 데미지가 밤에 더 쌔진다
 description.attack_damage_at_day.name=공격 데미지가 아침에 더 쌔진다.
 description.staff_vampiric.name=이 지팡이는 손에 쥐고있을 때 암흑 에너지를 방출합니다. 우클릭으로 발사체가 발사합니다. 피해는 약하지만, 제대로 맞혔을때 체력을 회복 할 수 있습니다.
 description.staff_wind.name=추후 추가 예정
-description.staff_poison.name=우클릭으로 독을 발사하고 맞으면 독에 걸린다. #TODO
+description.staff_poison.name=우클릭으로 독을 발사하고 맞으면 독에 걸린다.
 description.staff.name=능력이 없다.
 description.staff_thunder.name=우클릭 한 자리에 번개를 떨어 뜨린다.
 description.spear_diamond.name=칼보다 먼 거리를 가진 무기. 데미지를 충전하려면 우클릭을 누르시오.
@@ -597,12 +592,14 @@ entity.cqr_giant_tortoise.name=자이언트 터틀
 entity.cqr_lich.name=리치
 entity.cqr_necromancer.name=네크로맨서
 entity.cqr_boar_mage.name=보어메이지
-entity.cqr_walker_king.name=워커킹
+entity.cqr_walker_king.name=어비스 워커킹
+entity.cqr_pirate_captain.name=해적 선장
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>소환진
 entity.cqr_illusion_walker_king.name=워커킹
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>워커 토네이도
+entity.cqr_pirate_parrot.name=배신자 앵무새
 
 #Advancements
 advancements.cqrepoured.root.title=초콜릿 퀘스트 리포지드
@@ -631,3 +628,5 @@ advancements.cqrepoured.kill_nether_dragon.title=고질라가 아니였다.
 advancements.cqrepoured.kill_nether_dragon.description=네더드래곤을 처치하라
 advancements.cqrepoured.kill_giant_tortoise.title=넌 정말 나를 미치게 만들어...
 advancements.cqrepoured.kill_giant_tortoise.description=자이언트 터틀을 처치하라
+advancements.cqrepoured.new_captain.title=이제 누가 선장이지?
+advancements.cqrepoured.new_captain.description=해적 선장의 무기를 획득하라.

@@ -49,7 +49,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (!revengeTarget.isEntityAlive()) {
 			return false;
 		}
-		if (this.entity.getFaction().isAlly(revengeTarget)) {
+		if (this.entity.getFaction() != null && this.entity.getFaction().isAlly(revengeTarget)) {
 			return false;
 		}
 		if (!this.entity.isInSightRange(revengeTarget)) {
@@ -82,7 +82,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		if (possibleAlly == this.entity) {
 			return false;
 		}
-		if (!this.entity.getFaction().isAlly(possibleAlly)) {
+		if (this.entity.getFaction() != null && !this.entity.getFaction().isAlly(possibleAlly)) {
 			return false;
 		}
 		Path path = possibleAlly.getNavigator().getPathToEntityLiving(this.entity);
