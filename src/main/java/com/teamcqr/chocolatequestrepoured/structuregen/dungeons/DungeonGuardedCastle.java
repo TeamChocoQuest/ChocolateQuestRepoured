@@ -3,13 +3,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 import java.io.File;
 import java.util.Properties;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorGuardedStructure;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -52,16 +52,8 @@ public class DungeonGuardedCastle extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		AbstractDungeonGenerator generator = new GeneratorGuardedStructure(this);
-
-		int buildings = DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuilding, this.random);
-		((GeneratorGuardedStructure) generator).setCenterStructure(this.getStructureFileFromDirectory(this.centerStructureFolder));
-		for (int i = 0; i < buildings; i++) {
-			((GeneratorGuardedStructure) generator).addStructure(this.getStructureFileFromDirectory(this.structureFolder));
-		}
-
-		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+		return new GeneratorGuardedStructure(world, new BlockPos(x, y, z), this);
 	}
 
 	public int getMinDistance() {
@@ -82,6 +74,22 @@ public class DungeonGuardedCastle extends DungeonBase {
 
 	public Block getPathMaterial() {
 		return this.pathBlock;
+	}
+
+	public int getMinBuildings() {
+		return minBuildings;
+	}
+
+	public int getMaxBuilding() {
+		return maxBuilding;
+	}
+
+	public File getStructureFolder() {
+		return structureFolder;
+	}
+
+	public File getCenterStructureFolder() {
+		return centerStructureFolder;
 	}
 
 }
