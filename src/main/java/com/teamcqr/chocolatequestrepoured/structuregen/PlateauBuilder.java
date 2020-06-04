@@ -62,6 +62,7 @@ public class PlateauBuilder {
 		this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
 
+	/*
 	public List<SupportHillPart> createSupportHillList(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
 		BlockPos pos = startPos;
 		switch (posType) {
@@ -82,6 +83,7 @@ public class PlateauBuilder {
 		}
 		return this.generateSupportHillList(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
+	*/
 	
 	// Coordinates are the N_W Corner!!
 	/*
@@ -150,6 +152,7 @@ public class PlateauBuilder {
 		}
 	}
 
+	/*
 	private List<SupportHillPart> generateSupportHillList(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		sizeX += this.wallSize * 2;
 		sizeZ += this.wallSize * 2;
@@ -171,6 +174,7 @@ public class PlateauBuilder {
 		}
 		return list;
 	}
+	*/
 	
 	// These methods are used to dig out random caves
 	public void createCave(Random random, BlockPos startPos, BlockPos endPos, long seed, World world) {
@@ -267,6 +271,7 @@ public class PlateauBuilder {
 		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT);
 	}
 
+	/*
 	public List<RandomBlobPart> makeRandomBlobList(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
 		BlockPos size = new BlockPos((endPos.getX() - startPos.getX()) * 1.25D, (endPos.getY() - startPos.getY()) * 1.25D, (endPos.getZ() - startPos.getZ()) * 1.25D);
 
@@ -306,5 +311,6 @@ public class PlateauBuilder {
 		}
 		return list;
 	}
+	*/
 
 }

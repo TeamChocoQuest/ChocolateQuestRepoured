@@ -60,6 +60,7 @@ public class BlockPlacingHelper {
 		BlockPlacingHelper.setBlockStates(world, map, flags, false);
 	}
 
+	/*
 	public static void setBlockStates(World world, BlockPos pos, ExtendedBlockStatePart.ExtendedBlockState[][][] extendedstates, int flags) {
 		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
 
@@ -95,6 +96,7 @@ public class BlockPlacingHelper {
 			}
 		}
 	}
+	*/
 
 	public static void setBlockStates(World world, BlockPos pos, List<Template.BlockInfo> list, PlacementSettings placementSettings, int flags) {
 		List<Map.Entry<BlockPos, IBlockState>> map = new ArrayList<>();
