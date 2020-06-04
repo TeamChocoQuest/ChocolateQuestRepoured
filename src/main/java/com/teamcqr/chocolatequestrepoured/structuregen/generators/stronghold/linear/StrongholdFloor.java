@@ -1,11 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear;
 
 import java.io.File;
-import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.structuregen.EPosType;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -137,7 +138,7 @@ public class StrongholdFloor {
 		}
 	}
 	
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, List<List<? extends IStructure>> lists, World world, EDungeonMobType mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, EDungeonMobType mobType) {
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				EStrongholdRoomType room = roomPattern[iX][iZ];
@@ -152,11 +153,10 @@ public class StrongholdFloor {
 					BlockPos pos = new BlockPos(x,y1,z);
 					File struct = generator.getDungeon().getRoom(room);
 					if(struct != null) {
-						CQStructure structure = new CQStructure(struct);
-						structure.setDungeonMob(mobType);
-						for (List<? extends IStructure> list : structure.addBlocksToWorld(world, pos, settings, EPosType.CENTER_XZ_LAYER, generator.getDungeon(), centerX, centerZ)) {
-							lists.add(list);
-						}
+						CQStructure structure = this.generator.loadStructureFromFile(struct);
+						dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, structure.getBlockInfoList(), settings, mobType));
+						dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, pos, structure.getEntityInfoList(), settings, mobType));
+						dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, pos, structure.getSpecialBlockInfoList(), settings, mobType));
 					}
 				}
 			}
