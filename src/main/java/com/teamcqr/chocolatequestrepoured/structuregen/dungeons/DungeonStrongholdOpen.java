@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -62,9 +63,8 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		AbstractDungeonGenerator generator = new GeneratorStrongholdOpen(this);
-		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this);
 	}
 
 	public File getStairFolder() {
