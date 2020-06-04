@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import java.util.HashSet;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
@@ -48,7 +49,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 				decoMap.add(start);
 			}
 		} else {
-			System.out.format("Placed a chest but could not find a loot table for Room Type {%s}", room.getRoomType().toString());
+			CQRMain.logger.warn("Placed a chest but could not find a loot table for Room Type {}", room.getRoomType());
 		}
 	}
 }

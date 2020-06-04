@@ -4,15 +4,19 @@ import java.util.Collection;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
-import com.teamcqr.chocolatequestrepoured.util.*;
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.EnumMCWoodType;
+import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -64,7 +68,7 @@ public class DungeonCastle extends DungeonBase {
 		this.woodSlabBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "woodSlabBlock", woodType.getSlabBlockState());
 		this.plankBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "plankBlock", woodType.getPlankBlockState());
 		this.doorBlock = PropertyFileHelper.getDefaultStateBlockProperty(prop, "doorBlock", woodType.getDoorBlockState());
-		Collection<IProperty<? >> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
+		Collection<IProperty<?>> x = Blocks.SANDSTONE.getDefaultState().getPropertyKeys();
 
 		this.roomRandomizer = new CQRWeightedRandom<>(this.random);
 		int weight = PropertyFileHelper.getIntProperty(prop, "roomWeightAlchemyLab", 1);
@@ -106,9 +110,8 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		AbstractDungeonGenerator generator = new GeneratorCastle(this);
-		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+		return new GeneratorCastle(world, new BlockPos(x, y, z), this);
 	}
 
 	public IBlockState getMainBlockState() {
