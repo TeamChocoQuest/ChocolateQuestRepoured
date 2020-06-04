@@ -48,7 +48,6 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 	// private static int tunnelHeight = 3;
 
 	private CQStructure[][] structures;
-	private Map<File, CQStructure> cachedStructures = new HashMap<>();
 
 	public GeneratorGridCity(World world, BlockPos pos, DungeonNetherCity dungeon) {
 		super(world, pos, dungeon);
@@ -70,13 +69,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 				} else {
 					file = this.dungeon.getRandomBuilding();
 				}
-				CQStructure structure;
-				if (this.cachedStructures.containsKey(file)) {
-					structure = this.cachedStructures.get(file);
-				} else {
-					structure = CQStructure.createFromFile(file);
-					this.cachedStructures.put(file, structure);
-				}
+				CQStructure structure = this.loadStructureFromFile(file);
 				this.structures[iX + rowsX][iZ + rowsZ] = structure;
 
 				if (structure != null) {

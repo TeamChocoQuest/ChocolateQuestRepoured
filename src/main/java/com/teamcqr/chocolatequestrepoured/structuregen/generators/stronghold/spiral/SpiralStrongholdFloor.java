@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
@@ -23,6 +24,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class SpiralStrongholdFloor {
 
+	private AbstractDungeonGenerator generator;
 	private DungeonGenerator dungeonGenerator;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
@@ -34,7 +36,8 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 	
-	public SpiralStrongholdFloor(DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.entranceCoordinates = entrancePos;
 		this.entranceIndex = new Tuple<>(entranceX, entranceZ);
@@ -241,7 +244,7 @@ public class SpiralStrongholdFloor {
 						if(dungeon != null && world != null) {
 							File file = dungeon.getRoomNBTFileForType(type);
 							if(file != null) {
-								CQStructure room = CQStructure.createFromFile(file);
+								CQStructure room = this.generator.loadStructureFromFile(file);
 								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getBlockInfoList(), settings, mobType));
 								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getSpecialBlockInfoList(), settings, mobType));
 								strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getEntityInfoList(), settings, mobType));
