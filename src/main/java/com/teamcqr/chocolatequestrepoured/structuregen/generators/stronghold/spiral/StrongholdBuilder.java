@@ -45,7 +45,7 @@ public class StrongholdBuilder {
 		this.world = world;
 	}
 
-	public void generate(int cX, int cZ) {
+	public void generate(int cX, int cZ, EDungeonMobType mobType) {
 
 		Vec3i expansionVector = new Vec3i(0, 0, 0);
 		switch (this.direction) {
@@ -73,11 +73,11 @@ public class StrongholdBuilder {
 			this.buildSegment(pos.subtract(this.startPos), blockInfoList);
 			pos = pos.add(expansionVector);
 		}
-		this.strongholdParts.add(new DungeonPartBlock(world, dungeonGenerator, this.startPos, blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT));
-		buildStronghold(pos.add(0,-1,0), world, cX, cZ);
+		this.strongholdParts.add(new DungeonPartBlock(world, dungeonGenerator, this.startPos, blockInfoList, new PlacementSettings(), mobType));
+		buildStronghold(pos.add(0,-1,0), world, cX, cZ, mobType);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ) {
+	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, EDungeonMobType mobType) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
 		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ);
