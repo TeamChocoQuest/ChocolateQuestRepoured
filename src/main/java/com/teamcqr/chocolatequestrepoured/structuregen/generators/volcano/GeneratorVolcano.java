@@ -344,7 +344,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// All: About 20 seconds
 
 		if (this.dungeon.doBuildDungeon()) {
-			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.dungeonGenerator, this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
+			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this, this.dungeonGenerator, this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
 			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
 			this.dungeonGenerator.addAll(entranceBuilder.getStrongholdParts());
 		}
