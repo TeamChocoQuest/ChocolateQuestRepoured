@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -103,9 +104,8 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		AbstractDungeonGenerator generator = new GeneratorStronghold(this);
-		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+		return new GeneratorStronghold(world, new BlockPos(x, y, z), this);
 	}
 
 	public int getMinFloors() {
