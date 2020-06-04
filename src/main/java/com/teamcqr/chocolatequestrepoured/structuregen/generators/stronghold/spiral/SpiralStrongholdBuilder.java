@@ -102,13 +102,9 @@ public class SpiralStrongholdBuilder {
 		}
 	}
 	
-	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ, EDungeonMobType mobType) {
 		//BlockPos currentPos = strongholdEntrancePos;
 		List<AbstractDungeonPart> floors = new ArrayList<>();
-		EDungeonMobType mobType = dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, dungeonChunkX, dungeonChunkZ);
-		}
 		for(int i = 0; i < floorCount; i++) {
 			SpiralStrongholdFloor floor = this.floors[i];
 			floors.addAll(floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world, mobType));

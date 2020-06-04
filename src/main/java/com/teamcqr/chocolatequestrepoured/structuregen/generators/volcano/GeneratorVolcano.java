@@ -314,6 +314,11 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 		}
 
+		EDungeonMobType mobType = dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
+		}
+
 		// Generate parts for generation
 		// lists.add(ExtendedBlockStatePart.split(referenceLoc, blocks, 32));
 		List<AbstractBlockInfo> list = new ArrayList<>();
@@ -326,7 +331,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				}
 			}
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, referenceLoc, list, new PlacementSettings(), dungeon.getDungeonMob()));
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, referenceLoc, list, new PlacementSettings(), mobType));
 
 		// BlockPos lowerCorner = new BlockPos(x - (this.baseRadius * 2), 0, z - (this.baseRadius * 2));
 		// BlockPos upperCorner = new BlockPos(2 * (this.baseRadius * 2), yMax + y, 2 * (this.baseRadius * 2));
@@ -340,7 +345,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		if (this.dungeon.doBuildDungeon()) {
 			final StrongholdBuilder entranceBuilder = new StrongholdBuilder(this.dungeonGenerator, this.entranceStartPos, this.entranceDistToWall, this.dungeon, this.entranceDirection.getAsSkyDirection(), world);
-			entranceBuilder.generate(this.pos.getX(), this.pos.getZ());
+			entranceBuilder.generate(this.pos.getX(), this.pos.getZ(), mobType);
 			this.dungeonGenerator.addAll(entranceBuilder.getStrongholdParts());
 		}
 
@@ -364,7 +369,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 				lootChests.add(new BlockInfoLootChest(pos.subtract(this.pos), chestIDs[this.random.nextInt(chestIDs.length)], EnumFacing.NORTH));
 			}
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, lootChests, new PlacementSettings(), EDungeonMobType.DEFAULT));
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, lootChests, new PlacementSettings(), mobType));
 
 		List<AbstractBlockInfo> mobSpawners = new ArrayList<>();
 		int floor = this.spawnersNChestsOnPath.size();
@@ -382,7 +387,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			mobSpawners.add(new BlockInfo(pos.subtract(this.pos).add(0, 1, 0), state, data));
 			floor--;
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, mobSpawners, new PlacementSettings(), EDungeonMobType.DEFAULT));
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, mobSpawners, new PlacementSettings(), mobType));
 	}
 
 	@Override

@@ -199,6 +199,10 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 
 	@Override
 	public void postProcess() {
+		EDungeonMobType mobType = this.dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		}
 		Map<BlockPos, CQStructure> structureMap = new HashMap<>();
 		for (int iX = 0; iX < this.gridPositions.length && iX < this.structures.length; iX++) {
 			for (int iZ = 0; iZ < this.gridPositions[iX].length && iZ < this.structures[iX].length; iZ++) {
@@ -219,12 +223,12 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		for (Map.Entry<BlockPos, Block> entry : this.blockMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue().getDefaultState(), null));
 		}
-		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT));
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getBlockInfoList(), new PlacementSettings(), EDungeonMobType.DEFAULT));
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getSpecialBlockInfoList(), new PlacementSettings(), EDungeonMobType.DEFAULT));
-			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getEntityInfoList(), new PlacementSettings(), EDungeonMobType.DEFAULT));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getBlockInfoList(), new PlacementSettings(), mobType));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getSpecialBlockInfoList(), new PlacementSettings(), mobType));
+			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getEntityInfoList(), new PlacementSettings(), mobType));
 		}
 	}
 

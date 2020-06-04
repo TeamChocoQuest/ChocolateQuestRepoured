@@ -51,7 +51,7 @@ public class WallPartWall implements IWallPart {
 			}
 
 			// Places the blocks at the calculated positions
-			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT));
+			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.SPECTER));
 		}
 	}
 

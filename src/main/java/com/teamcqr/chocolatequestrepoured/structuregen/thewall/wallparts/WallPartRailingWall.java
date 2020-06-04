@@ -74,7 +74,7 @@ public class WallPartRailingWall implements IWallPart {
 		// Spawner
 		this.placeSpawner(new BlockPos(4, 6, 7), world, blockInfoList);
 
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT));
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.SPECTER));
 	}
 
 	private boolean isBiggerPart(int xAsChunkRelativeCoord) {
