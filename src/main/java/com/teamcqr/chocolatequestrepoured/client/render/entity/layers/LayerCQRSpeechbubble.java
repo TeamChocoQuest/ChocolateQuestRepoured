@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -21,7 +22,7 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 
 	@Override
 	public void doRenderLayer(AbstractEntityCQR entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		if (entity.isChatting()) {
+		if (CQRConfig.general.enableSpeechBubbles && entity.isChatting()) {
 			Tessellator tessellator = Tessellator.getInstance();
 			Minecraft minecraft = Minecraft.getMinecraft();
 
