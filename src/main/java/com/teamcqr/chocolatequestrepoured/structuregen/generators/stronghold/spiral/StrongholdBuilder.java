@@ -12,6 +12,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
@@ -28,6 +29,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdBuilder {
 
+	private AbstractDungeonGenerator generator;
 	private DungeonGenerator dungeonGenerator;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
@@ -36,7 +38,8 @@ public class StrongholdBuilder {
 	private World world;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilder(AbstractDungeonGenerator generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
+		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.startPos = start;
 		this.dungeon = dungeon;
@@ -78,7 +81,7 @@ public class StrongholdBuilder {
 	}
 
 	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, EDungeonMobType mobType) {
-		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
+		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
 		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ, mobType);
 		this.strongholdParts.addAll(stronghold.getStrongholdParts());
