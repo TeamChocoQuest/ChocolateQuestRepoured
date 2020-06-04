@@ -44,7 +44,7 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 		if (file == null) {
 			throw new NullPointerException("No structure file found in folder " + this.dungeon.getStructureFolderPath());
 		}
-		this.structure = CQStructure.createFromFile(file);
+		this.structure = this.loadStructureFromFile(file);
 		this.settings = new PlacementSettings();
 
 		if (this.dungeon.rotateDungeon()) {

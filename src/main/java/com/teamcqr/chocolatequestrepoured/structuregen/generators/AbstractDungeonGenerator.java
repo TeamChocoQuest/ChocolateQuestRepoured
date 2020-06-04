@@ -1,5 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -7,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,6 +22,8 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	protected final BlockPos pos;
 	protected final T dungeon;
 	protected final DungeonGenerator dungeonGenerator;
+
+	private final Map<File, CQStructure> cachedStructures = new HashMap<>();
 
 	// Why remove all parameters from the functions?!?!? Those were supposed to be all the same! It is even needed like that for some generators
 
@@ -60,4 +66,12 @@ public abstract class AbstractDungeonGenerator<T extends DungeonBase> {
 	 */
 	protected abstract void postProcess();
 
+	public CQStructure loadStructureFromFile(File file) {
+		if (this.cachedStructures.containsKey(file)) {
+			return this.cachedStructures.get(file);
+		}
+		CQStructure structure = CQStructure.createFromFile(file);
+		this.cachedStructures.put(file, structure);
+		return structure;
+	}
 }
