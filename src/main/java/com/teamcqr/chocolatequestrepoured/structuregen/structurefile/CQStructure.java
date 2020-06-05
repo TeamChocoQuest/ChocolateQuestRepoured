@@ -23,6 +23,9 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -33,6 +36,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,6 +45,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityBanner;
+import net.minecraft.tileentity.TileEntityMobSpawner;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -314,6 +319,8 @@ public class CQStructure {
 				BlockPos pos = mutablePos.subtract(pos1);
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
+				fixSpawners(tileEntity);
+
 				if (SPECIAL_BLOCKS.contains(block)) {
 					this.specialBlockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
 				} else if ((block == Blocks.STANDING_BANNER || block == Blocks.WALL_BANNER) && tileEntity instanceof TileEntityBanner && BannerHelper.isCQBanner((TileEntityBanner) tileEntity)) {
@@ -348,6 +355,8 @@ public class CQStructure {
 		this.entityInfoList.clear();
 
 		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos1, pos2.add(1, 1, 1)), input -> !(input instanceof EntityPlayer))) {
+			fixEntity(entity);
+
 			if (!ignoreBasicEntities || SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
 				this.entityInfoList.add(new EntityInfo(pos1, entity));
 			}
@@ -388,6 +397,69 @@ public class CQStructure {
 		CQStructure.SPECIAL_ENTITIES.clear();
 		for (String s : CQRConfig.advanced.specialEntities) {
 			CQStructure.SPECIAL_ENTITIES.add(new ResourceLocation(s));
+		}
+	}
+
+	/**
+	 * TODO Remove this method before releasing an update!<br>
+	 * <br>
+	 * Removes unnecessary data from the entity NBTTagCompounds and sets the healing potion count to 1.
+	 */
+	private static void fixSpawners(TileEntity tileEntity) {
+		if (tileEntity instanceof TileEntitySpawner) {
+			TileEntitySpawner tileEntitySpawner = (TileEntitySpawner) tileEntity;
+			for (int i = 0; i < tileEntitySpawner.inventory.getSlots(); i++) {
+				ItemStack stack = tileEntitySpawner.inventory.getStackInSlot(i);
+
+				if (stack.getItem() instanceof ItemSoulBottle) {
+					NBTTagCompound compound = stack.getTagCompound();
+
+					if (compound.hasKey("EntityIn", Constants.NBT.TAG_COMPOUND)) {
+						fixEntityData(compound.getCompoundTag("EntityIn"));
+					}
+				}
+			}
+			tileEntity.markDirty();
+		} else if (tileEntity instanceof TileEntityMobSpawner) {
+			TileEntityMobSpawner tileEntityMobSpawner = (TileEntityMobSpawner) tileEntity;
+			NBTTagCompound compound = tileEntityMobSpawner.writeToNBT(new NBTTagCompound());
+			fixEntityData(compound.getCompoundTag("SpawnData"));
+			for (NBTBase nbt : compound.getTagList("SpawnPotentials", Constants.NBT.TAG_COMPOUND)) {
+				fixEntityData(((NBTTagCompound) nbt).getCompoundTag("Entity"));
+			}
+			tileEntityMobSpawner.readFromNBT(compound);
+			tileEntity.markDirty();
+		}
+	}
+
+	/**
+	 * TODO Remove this method before releasing an update!<br>
+	 * <br>
+	 * Removes unnecessary data from the entity NBTTagCompounds and sets the healing potion count to 1.
+	 */
+	private static void fixEntityData(NBTTagCompound compound) {
+		compound.removeTag("UUIDMost");
+		compound.removeTag("UUIDLeast");
+		compound.removeTag("Pos");
+		for (NBTBase nbt : compound.getCompoundTag("ForgeCaps").getTagList("cqrepoured:extra_item_slot", Constants.NBT.TAG_COMPOUND)) {
+			NBTTagCompound compound1 = (NBTTagCompound) nbt;
+			if (compound1.getString("id").equals("cqrepoured:potion_healing")) {
+				compound1.setByte("Count", (byte) 1);
+			}
+		}
+		for (NBTBase nbt : compound.getTagList("Passengers", Constants.NBT.TAG_COMPOUND)) {
+			fixEntityData((NBTTagCompound) nbt);
+		}
+	}
+
+	/**
+	 * TODO Remove this method before releasing an update!<br>
+	 * <br>
+	 * Sets the healing potion count to 1.
+	 */
+	private static void fixEntity(Entity entity) {
+		if (entity instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR) entity).setHealingPotions(1);
 		}
 	}
 
