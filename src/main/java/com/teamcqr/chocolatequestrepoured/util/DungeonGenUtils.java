@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.objects.banners.BannerHelper;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockExporterChest;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -345,6 +346,14 @@ public class DungeonGenUtils {
 		NBTBase nbtM = nbtTagList.get(0);
 		NBTBase nbtL = nbtTagList.get(1);
 		return new UUID(nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtM).getLong() : 0, nbtM instanceof NBTTagLong ? ((NBTTagLong) nbtL).getLong() : 0);
+	}
+
+	/**
+	 * Returns the passed position with the half of the transformed structure sizeX and sizeZ subtracted.
+	 */
+	public static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
+		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
+		return pos.add(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
 	}
 
 }

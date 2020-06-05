@@ -17,6 +17,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -219,9 +220,11 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, this.pos, blockInfoList, new PlacementSettings(), mobType));
 
 		for (Map.Entry<BlockPos, CQStructure> entry : structureMap.entrySet()) {
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getBlockInfoList(), new PlacementSettings(), mobType));
-			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getSpecialBlockInfoList(), new PlacementSettings(), mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, entry.getKey(), entry.getValue().getEntityInfoList(), new PlacementSettings(), mobType));
+			PlacementSettings settings = new PlacementSettings();
+			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(entry.getKey(), entry.getValue(), settings);
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, entry.getValue().getBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, entry.getValue().getSpecialBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, entry.getValue().getEntityInfoList(), settings, mobType));
 		}
 	}
 

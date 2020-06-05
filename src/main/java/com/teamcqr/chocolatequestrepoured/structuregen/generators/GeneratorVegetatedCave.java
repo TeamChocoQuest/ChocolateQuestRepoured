@@ -221,11 +221,12 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			if (file != null) {
 				CQStructure structure = this.loadStructureFromFile(file);
 				int pY = getLowestY(centralCaveBlocks, structure.getSize().getX() /2, structure.getSize().getZ() /2, this.pos.getY());
-				BlockPos pastePos = new BlockPos(this.pos.getX(), pY, this.pos.getZ());
 				// DONE: Support platform -> not needed
-				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pastePos, structure.getBlockInfoList(), new PlacementSettings(), mobtype));
-				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pastePos, structure.getSpecialBlockInfoList(), new PlacementSettings(), mobtype));
-				this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, pastePos, structure.getEntityInfoList(), new PlacementSettings(), mobtype));
+				PlacementSettings settings = new PlacementSettings();
+				BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), pY, this.pos.getZ()), structure, settings);
+				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), settings, mobtype));
+				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobtype));
+				this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), settings, mobtype));
 			}
 		}
 	}
