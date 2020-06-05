@@ -45,7 +45,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 				entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 				if (entity instanceof AbstractEntityCQRBoss) {
 					((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(settings, dungeonMob);
-					((AbstractEntityCQRBoss) entity).setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
+					((AbstractEntityCQRBoss) entity).setHealingPotions(3);
 				}
 				if (entity instanceof EntityLiving) {
 					((EntityLiving) entity).enablePersistence();
