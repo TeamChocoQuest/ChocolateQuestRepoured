@@ -18,6 +18,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 public class TileEntityExporter extends TileEntity {
@@ -143,11 +144,13 @@ public class TileEntityExporter extends TileEntity {
 			CQRMain.logger.info("Server is saving structure...");
 			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, ignoreEntities, author.getName());
 			structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
-			CQRMain.logger.info("Done!");
+			new Thread(() -> {
+				structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
+				author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName));
+			}).start();
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");
 			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, true, this.partMode, this.ignoreEntities));
-			CQRMain.logger.info("Packet sent!");
 		}
 	}
 
