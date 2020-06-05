@@ -301,7 +301,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
+		this.setHealingPotions(this.isNonBoss() ? 1 : 3);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
 		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			this.setDropChance(slot, 0.04F);

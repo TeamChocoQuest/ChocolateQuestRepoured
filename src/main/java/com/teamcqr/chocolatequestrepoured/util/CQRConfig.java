@@ -141,8 +141,6 @@ public class CQRConfig {
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
-		@Config.RangeInt(min = 0, max = 16)
-		public int defaultHealingPotionCount = 1;
 		@Config.RangeInt(min = 1, max = 100000)
 		public int distanceDivisor = 1000;
 		@Config.RangeInt(min = 1, max = 100000)
