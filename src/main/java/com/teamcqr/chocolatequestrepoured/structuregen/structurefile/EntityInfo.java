@@ -58,7 +58,7 @@ public class EntityInfo implements IGeneratable {
 			if (entity instanceof EntityHanging) {
 				BlockPos pos = new BlockPos(this.entityData.getInteger("TileX"), this.entityData.getInteger("TileY"), this.entityData.getInteger("TileZ"));
 				if (entity instanceof EntityPainting && settings.getMirror() != Mirror.NONE) {
-					pos = pos.offset(((EntityPainting) entity).facingDirection.rotateYCCW(), (((EntityPainting) entity).art.sizeX >> 4) - 1);
+					pos = pos.offset(((EntityPainting) entity).facingDirection.rotateYCCW(), ((((EntityPainting) entity).art.sizeX >> 4) + 1) & 1);
 				}
 				pos = Template.transformedBlockPos(settings, pos).add(dungeonPartPos);
 				float transformedYaw = entity.rotationYaw + entity.getMirroredYaw(settings.getMirror()) - entity.getRotatedYaw(settings.getRotation());
