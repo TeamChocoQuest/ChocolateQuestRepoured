@@ -31,6 +31,7 @@ import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockCommandBlock;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -314,6 +315,10 @@ public class CQStructure {
 		for (BlockPos.MutableBlockPos mutablePos : BlockPos.getAllInBoxMutable(pos1, pos2)) {
 			IBlockState state = world.getBlockState(mutablePos);
 			Block block = state.getBlock();
+
+			if (block == Blocks.BARRIER || block instanceof BlockCommandBlock || block == Blocks.STRUCTURE_BLOCK || block == ModBlocks.EXPORTER) {
+				CQRMain.logger.warn("Exporting unexpected block: {} from {}", block, mutablePos);
+			}
 
 			if (block != Blocks.STRUCTURE_VOID && block != ModBlocks.NULL_BLOCK) {
 				BlockPos pos = mutablePos.subtract(pos1);
