@@ -20,6 +20,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.data.FileIOUtil;
 
 import net.minecraft.block.Block;
@@ -173,10 +174,11 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 		entranceSizeX = structure.getSize().getX();
 		entranceSizeZ = structure.getSize().getX();
-		//structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.settings, EPosType.CENTER_XZ_LAYER, this.dungeon, chunk.x, chunk.z);
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.pos, structure.getBlockInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.pos, structure.getEntityInfoList(), this.settings, mobType));
-		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, this.pos, structure.getSpecialBlockInfoList(), this.settings, mobType));
+
+		BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(this.pos, structure, this.settings);
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, structure.getBlockInfoList(), this.settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, structure.getEntityInfoList(), this.settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p, structure.getSpecialBlockInfoList(), this.settings, mobType));
 		/*
 		 * CQStructure stairs = new CQStructure(dungeon.getStairRoom(), dungeon, chunk.x, chunk.z, dungeon.isProtectedFromModifications());
 		 * BlockPos pastePosForStair = new BlockPos(x, y - stairs.getSizeY(), z);

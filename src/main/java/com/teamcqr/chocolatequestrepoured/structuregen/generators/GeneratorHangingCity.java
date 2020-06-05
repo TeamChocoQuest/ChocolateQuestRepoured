@@ -127,9 +127,11 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonFloati
 
 		this.buildPlatform(centeredPos, radius, mobType);
 		if (structure != null) {
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, centeredPos.up(), structure.getBlockInfoList(), new PlacementSettings(), mobType));
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, centeredPos.up(), structure.getSpecialBlockInfoList(), new PlacementSettings(), mobType));
-			this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, centeredPos.up(), structure.getEntityInfoList(), new PlacementSettings(), mobType));
+			PlacementSettings settings = new PlacementSettings();
+			BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(centeredPos.up(), structure, settings);
+			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
+			this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
 		}
 	}
 

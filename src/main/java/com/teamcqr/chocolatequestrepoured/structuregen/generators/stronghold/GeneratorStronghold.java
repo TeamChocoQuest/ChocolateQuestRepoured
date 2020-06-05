@@ -79,13 +79,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
 		}
 		PlacementSettings settings = new PlacementSettings();
-		settings.setMirror(Mirror.NONE);
-		settings.setRotation(Rotation.NONE);
-		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		settings.setIntegrity(1.0F);
-
 		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom());
-
 		CQStructure structureEntrance = this.loadStructureFromFile(this.dungeon.getEntranceBuilding());
 
 		int segCount = 0;
@@ -111,19 +105,19 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + structureEntrance.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + structureEntrance.getSize().getZ(),
 					this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
-		BlockPos p1 = new BlockPos(this.pos.getX(), y, this.pos.getZ());
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p1, structureEntrance.getBlockInfoList(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p1, structureEntrance.getEntityInfoList(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p1, structureEntrance.getSpecialBlockInfoList(), new PlacementSettings(), mobType));
+		BlockPos p1 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), structureEntrance, settings);
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p1, structureEntrance.getBlockInfoList(), settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p1, structureEntrance.getEntityInfoList(), settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p1, structureEntrance.getSpecialBlockInfoList(), settings, mobType));
 
 		if (segCount > 0) {
 			while (segCount > 0) {
 				segCount--;
 				y -= stairSeg.getSize().getY();
-				BlockPos p = new BlockPos(this.pos.getX(), y, this.pos.getZ());
-				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p, stairSeg.getBlockInfoList(), new PlacementSettings(), mobType));
-				this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p, stairSeg.getEntityInfoList(), new PlacementSettings(), mobType));
-				this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p, stairSeg.getSpecialBlockInfoList(), new PlacementSettings(), mobType));
+				BlockPos p2 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), stairSeg, settings);
+				this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p2, stairSeg.getBlockInfoList(), settings, mobType));
+				this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p2, stairSeg.getEntityInfoList(), settings, mobType));
+				this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p2, stairSeg.getSpecialBlockInfoList(), settings, mobType));
 			}
 		}
 

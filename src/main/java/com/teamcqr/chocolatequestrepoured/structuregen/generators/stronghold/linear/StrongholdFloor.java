@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
@@ -154,9 +155,10 @@ public class StrongholdFloor {
 					File struct = generator.getDungeon().getRoom(room);
 					if(struct != null) {
 						CQStructure structure = this.generator.loadStructureFromFile(struct);
-						dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, structure.getBlockInfoList(), settings, mobType));
-						dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, pos, structure.getEntityInfoList(), settings, mobType));
-						dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, pos, structure.getSpecialBlockInfoList(), settings, mobType));
+						BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(pos, structure, settings);
+						dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, p, structure.getBlockInfoList(), settings, mobType));
+						dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, p, structure.getEntityInfoList(), settings, mobType));
+						dungeonGenerator.add(new DungeonPartBlockSpecial(world, dungeonGenerator, p, structure.getSpecialBlockInfoList(), settings, mobType));
 					}
 				}
 			}

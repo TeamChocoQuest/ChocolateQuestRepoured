@@ -30,14 +30,6 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 		super(world, pos, dungeon);
 	}
 
-	/**
-	 * Returns the passed position with the half of the transformed structure sizeX and sizeZ subtracted.
-	 */
-	private static BlockPos getCentralizedPosForStructure(BlockPos pos, CQStructure structure, PlacementSettings settings) {
-		BlockPos transformedSize = Template.transformedBlockPos(settings, structure.getSize());
-		return pos.add(-(transformedSize.getX() >> 1), 0, -(transformedSize.getZ() >> 1));
-	}
-
 	@Override
 	protected void preProcess() {
 		File file = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolderPath());
@@ -53,7 +45,7 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 		}
 
 		// Why do you use a centralized Position? And what does "centralized" actually mean here (should be explained in corresponding method)?
-		this.structurePos = getCentralizedPosForStructure(this.pos, this.structure, this.settings);
+		this.structurePos = DungeonGenUtils.getCentralizedPosForStructure(this.pos, this.structure, this.settings);
 
 		if (this.dungeon.doBuildSupportPlatform()) {
 			BlockPos startPos = this.structurePos.up(this.dungeon.getUnderGroundOffset()).down();

@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.Mirror;
@@ -232,10 +233,6 @@ public class SpiralStrongholdFloor {
 	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, EDungeonMobType mobType) {
 		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
-		settings.setMirror(Mirror.NONE);
-		settings.setRotation(Rotation.NONE);
-		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		settings.setIntegrity(1.0F);
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
@@ -245,9 +242,10 @@ public class SpiralStrongholdFloor {
 							File file = dungeon.getRoomNBTFileForType(type);
 							if(file != null) {
 								CQStructure room = this.generator.loadStructureFromFile(file);
-								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getBlockInfoList(), settings, mobType));
-								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getSpecialBlockInfoList(), settings, mobType));
-								strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, coordinateGrid[iX][iZ], room.getEntityInfoList(), settings, mobType));
+								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(coordinateGrid[iX][iZ], room, settings);
+								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
+								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getSpecialBlockInfoList(), settings, mobType));
+								strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, p, room.getEntityInfoList(), settings, mobType));
 							}
 						}
 					}
