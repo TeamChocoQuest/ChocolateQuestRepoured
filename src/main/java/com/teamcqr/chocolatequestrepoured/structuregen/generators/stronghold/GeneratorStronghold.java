@@ -108,7 +108,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ(), this.pos.getX() + structureEntrance.getSize().getX(), this.pos.getZ() + structureEntrance.getSize().getZ(),
+			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + structureEntrance.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + structureEntrance.getSize().getZ(),
 					this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 		BlockPos p1 = new BlockPos(this.pos.getX(), y, this.pos.getZ());
