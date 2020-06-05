@@ -15,9 +15,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.ESt
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -154,16 +151,16 @@ public class SpiralStrongholdFloor {
 	
 	private EStrongholdRoomType getExitRoomType(int iX, int iZ, boolean rev) {
 		if(iX == 0 && iZ == 0) {
-			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_EE;
+			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_EE;
 		}
 		if(iX == 0 && iZ == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_SS;
+			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_NN;
 		}
 		if(iX == (sideLength -1) && iZ == 0) {
-			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_NN;
+			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_SS;
 		}
 		if(iX == (sideLength -1) && iZ == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_WW;
+			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_WW;
 		}
 		
 		//Stairs not in corners
@@ -174,10 +171,10 @@ public class SpiralStrongholdFloor {
 			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_WW;
 		}
 		if(iX == 0) {
-			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_SS;
+			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_NN;
 		}
 		if(iX == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_NN;
+			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_SS;
 		}
 		return EStrongholdRoomType.NONE;
 	}
