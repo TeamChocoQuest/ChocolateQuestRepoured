@@ -30,7 +30,6 @@ public class TileEntityExporter extends TileEntity {
 	public int endY = 0;
 	public int endZ = 0;
 	public String structureName = "NoName";
-	public boolean partMode = true;
 	public boolean relativeMode = false;
 	public boolean ignoreEntities = true;
 
@@ -47,7 +46,6 @@ public class TileEntityExporter extends TileEntity {
 		compound.setInteger("EndY", this.endY);
 		compound.setInteger("EndZ", this.endZ);
 		compound.setString("StructureName", this.structureName);
-		compound.setBoolean("PartMode", this.partMode);
 		compound.setBoolean("RelativeMode", this.relativeMode);
 		compound.setBoolean("IgnoreEntities", this.ignoreEntities);
 		return compound;
@@ -61,7 +59,6 @@ public class TileEntityExporter extends TileEntity {
 		this.endY = compound.getInteger("EndY");
 		this.endZ = compound.getInteger("EndZ");
 		this.structureName = compound.getString("StructureName");
-		this.partMode = compound.getBoolean("PartMode");
 		this.relativeMode = compound.getBoolean("RelativeMode");
 		this.ignoreEntities = compound.getBoolean("IgnoreEntities");
 
@@ -81,11 +78,11 @@ public class TileEntityExporter extends TileEntity {
 		this.setExporterData(compound);
 	}
 
-	public void setValues(BlockPos startPos, BlockPos endPos, String structName, boolean usePartMode, boolean useRelativeMode, boolean useSmartMode) {
-		this.setValues(startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), structName, usePartMode, useRelativeMode, useSmartMode);
+	public void setValues(BlockPos startPos, BlockPos endPos, String structName, boolean useRelativeMode, boolean useSmartMode) {
+		this.setValues(startPos.getX(), startPos.getY(), startPos.getZ(), endPos.getX(), endPos.getY(), endPos.getZ(), structName, useRelativeMode, useSmartMode);
 	}
 
-	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean usePartMode, boolean useRelativeMode, boolean useSmartMode) {
+	public void setValues(int sX, int sY, int sZ, int eX, int eY, int eZ, String structName, boolean useRelativeMode, boolean useSmartMode) {
 		this.startX = sX;
 		this.startY = sY;
 		this.startZ = sZ;
@@ -93,7 +90,6 @@ public class TileEntityExporter extends TileEntity {
 		this.endY = eY;
 		this.endZ = eZ;
 		this.structureName = structName;
-		this.partMode = usePartMode;
 		this.relativeMode = useRelativeMode;
 		this.ignoreEntities = useSmartMode;
 
@@ -150,7 +146,7 @@ public class TileEntityExporter extends TileEntity {
 			}).start();
 		} else {
 			CQRMain.logger.info("Sending structure save request packet...");
-			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, true, this.partMode, this.ignoreEntities));
+			CQRMain.NETWORK.sendToServer(new SaveStructureRequestPacket(startPos, endPos, author.getName(), this.structureName, this.ignoreEntities));
 		}
 	}
 
