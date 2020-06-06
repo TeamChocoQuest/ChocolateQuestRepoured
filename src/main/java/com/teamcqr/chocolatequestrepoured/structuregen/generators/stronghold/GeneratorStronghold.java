@@ -123,10 +123,10 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 
 		int yFloor = y;
 		yFloor -= structureStair.getSize().getY();
-		BlockPos p2 = new BlockPos(this.pos.getX(), y, this.pos.getZ());
-		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p2, structureStair.getBlockInfoList(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p2, structureStair.getEntityInfoList(), new PlacementSettings(), mobType));
-		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p2, structureStair.getSpecialBlockInfoList(), new PlacementSettings(), mobType));
+		BlockPos p3 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), yFloor, this.pos.getZ()), structureStair, settings);
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, p3, structureStair.getBlockInfoList(), settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, p3, structureStair.getEntityInfoList(), settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, p3, structureStair.getSpecialBlockInfoList(), settings, mobType));
 
 		for (int i = 0; i < this.floors.length; i++) {
 			StrongholdFloor floor = this.floors[i];
