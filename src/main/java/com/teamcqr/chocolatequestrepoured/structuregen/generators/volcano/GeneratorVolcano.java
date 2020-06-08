@@ -11,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
@@ -159,8 +160,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 
 		PlateauBuilder pB = new PlateauBuilder();
 		pB.load(dungeon.getLowerMainBlock(), dungeon.getUpperMainBlock());
-		// lists.add(pB.createSupportHillList(rdm, world, new BlockPos(this.pos.getX() - r, this.minY + 1, this.pos.getZ() - r), 2 * r, 2 * r,
-		// EPosType.DEFAULT));
+		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + 2 * r, this.minY + 1, this.pos.getZ() + 2 * r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 		// Upper volcano part
 		for (int iY = 0; iY < yMax; iY++) {
