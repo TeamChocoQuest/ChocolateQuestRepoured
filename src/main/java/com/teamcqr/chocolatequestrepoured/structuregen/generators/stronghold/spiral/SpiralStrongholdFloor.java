@@ -22,7 +22,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class SpiralStrongholdFloor {
 
-	private AbstractDungeonGenerator generator;
+	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
@@ -34,7 +34,7 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 	
-	public SpiralStrongholdFloor(AbstractDungeonGenerator generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.entranceCoordinates = entrancePos;

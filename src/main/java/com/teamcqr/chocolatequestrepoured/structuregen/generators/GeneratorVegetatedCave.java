@@ -35,7 +35,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
-import net.minecraftforge.common.property.ExtendedBlockState;
 
 public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVegetatedCave> {
 
@@ -47,7 +46,6 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, IBlockState> blocks = new ConcurrentHashMap<>();
 	private Block[][][] centralCaveBlocks;
-	private CQStructure core = null;
 	private EDungeonMobType mobtype;
 
 	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon) {

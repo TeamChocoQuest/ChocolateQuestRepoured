@@ -29,7 +29,7 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class StrongholdBuilder {
 
-	private AbstractDungeonGenerator generator;
+	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
 	private BlockPos startPos;
 	private DungeonVolcano dungeon;
@@ -38,7 +38,7 @@ public class StrongholdBuilder {
 	private World world;
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 
-	public StrongholdBuilder(AbstractDungeonGenerator generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
+	public StrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, BlockPos start, int distanceToWall, DungeonVolcano dungeon, EnumFacing expansionDirection, World world) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.startPos = start;
