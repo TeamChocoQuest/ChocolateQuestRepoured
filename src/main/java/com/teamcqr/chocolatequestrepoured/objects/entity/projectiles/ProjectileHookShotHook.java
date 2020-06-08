@@ -76,7 +76,6 @@ public class ProjectileHookShotHook extends ProjectileBase {
 
 	private Vec3d lastCheckedPosition = null; //last recorded position of the shooter - used to detect blocked path
 	private int lastMovementCheckTick = 0; //tick count of last time shooter/entity position was recorded
-	private int lastPositionSaveTick = 0;
 	private ItemHookshotBase hookshot = null;
 	private ItemStack shooterItemStack = null;
 
