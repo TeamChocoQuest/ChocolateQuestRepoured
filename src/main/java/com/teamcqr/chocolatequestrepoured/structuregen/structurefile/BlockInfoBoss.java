@@ -37,7 +37,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {
-			BlockPlacingHelper.setBlockState2(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates);
+			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates);
 
 			if (dungeonMob.getBossResourceLocation() != null) {
 				Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), world);

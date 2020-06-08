@@ -20,24 +20,6 @@ public class CQRConfig {
 	public static Bosses bosses = new Bosses();
 
 	public static class Advanced {
-		@Config.RangeInt(min = 0, max = 10)
-		public int threadCount = 4;
-		@Config.RangeInt(min = 1, max = 10)
-		public int tickRateForTasks = 5;
-
-		@Config.Comment("Every x ticks not yet generated dungeon parts in loaded chunks will be generated.")
-		@Config.RangeInt(min = 1, max = 200)
-		public int dungeonGenerationFrequencyInLoaded = 1;
-		@Config.Comment("Every x ticks not yet generated dungeon parts in unloaded chunks will be generated. Will only happen when no dungeon parts were generated in loaded chunks.")
-		@Config.RangeInt(min = 1, max = 200)
-		public int dungeonGenerationFrequencyInUnloaded = 1;
-		@Config.Comment("Generate up to x not yet generated dungeon parts in loaded chunks.")
-		@Config.RangeInt(min = 1, max = 10)
-		public int dungeonGenerationCountInLoaded = 1;
-		@Config.Comment("Generate up to x not yet generated dungeon parts in unloaded chunks. Will only happen when no dungeon parts were generated in loaded chunks.")
-		@Config.RangeInt(min = 1, max = 10)
-		public int dungeonGenerationCountInUnloaded = 1;
-
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = {
 				"bed",

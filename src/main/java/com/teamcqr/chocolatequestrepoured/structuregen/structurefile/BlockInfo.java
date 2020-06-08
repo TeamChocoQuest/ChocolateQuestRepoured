@@ -44,7 +44,7 @@ public class BlockInfo extends AbstractBlockInfo {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 		IBlockState iblockstate = this.blockstate.withMirror(settings.getMirror()).withRotation(settings.getRotation());
 
-		if (BlockPlacingHelper.setBlockState2(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates) && this.tileentityData != null) {
+		if (BlockPlacingHelper.setBlockState(world, transformedPos, iblockstate, 18, CQRConfig.advanced.instantLightUpdates) && this.tileentityData != null) {
 			TileEntity tileentity = world.getTileEntity(transformedPos);
 
 			if (tileentity != null) {
