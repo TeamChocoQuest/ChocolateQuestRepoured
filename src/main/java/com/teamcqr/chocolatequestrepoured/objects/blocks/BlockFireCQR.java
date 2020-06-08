@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 public class BlockFireCQR extends BlockFire {
 
 	public BlockFireCQR() {
-		this.setRegistryName("fire");
+		this.setRegistryName("minecraft:fire");
 		this.setHardness(0.0F);
 		this.setLightLevel(1.0F);
 		this.setSoundType(SoundType.CLOTH);
