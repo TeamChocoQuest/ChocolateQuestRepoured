@@ -67,7 +67,7 @@ public class DungeonNetherCity extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonNetherCity> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorGridCity(world, new BlockPos(x, y, z), this);
 	}
 

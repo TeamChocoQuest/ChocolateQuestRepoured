@@ -104,7 +104,7 @@ public class DungeonStrongholdLinear extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonStrongholdLinear> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorStronghold(world, new BlockPos(x, y, z), this);
 	}
 

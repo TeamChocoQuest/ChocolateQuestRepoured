@@ -132,7 +132,7 @@ public abstract class DungeonBase {
 		return true;
 	}
 
-	public abstract AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z);
+	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
 
 	public void generate(World world, int x, int z) {
 		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);

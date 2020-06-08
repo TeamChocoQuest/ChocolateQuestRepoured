@@ -52,7 +52,7 @@ public class DungeonGuardedCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonGuardedCastle> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorGuardedStructure(world, new BlockPos(x, y, z), this);
 	}
 

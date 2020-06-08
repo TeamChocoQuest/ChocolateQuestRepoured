@@ -26,7 +26,7 @@ public class DungeonSurface extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonSurface> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorSurface(world, new BlockPos(x, y, z), this);
 	}
 

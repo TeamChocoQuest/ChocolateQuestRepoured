@@ -63,7 +63,7 @@ public class DungeonStrongholdOpen extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonStrongholdOpen> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorStrongholdOpen(world, new BlockPos(x, y, z), this);
 	}
 
