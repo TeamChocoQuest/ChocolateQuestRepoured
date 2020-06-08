@@ -4,13 +4,14 @@ import java.io.File;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.IDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorHangingCity;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -64,9 +65,8 @@ public class DungeonFloatingNetherCity extends DungeonBase {
 	}
 
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		IDungeonGenerator generator = new GeneratorHangingCity(this);
-		generator.generate(world, world.getChunkFromChunkCoords(x >> 4, z >> 4), x, y, z);
+	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this);
 	}
 
 	// Generator: Radius of the island circle is the longer side (x or z) -1 of the structure to spawn!!
@@ -143,12 +143,12 @@ public class DungeonFloatingNetherCity extends DungeonBase {
 	 * }
 	 */
 
-	public int getBuildingCount(Random random) {
-		return DungeonGenUtils.getIntBetweenBorders(this.minBuildings, this.maxBuildings, random);
+	public int getMinBuildings() {
+		return minBuildings;
 	}
 
-	public int getIslandDistance() {
-		return DungeonGenUtils.getIntBetweenBorders(this.minIslandDistance, this.maxIslandDistance, new Random());
+	public int getMaxBuildings() {
+		return maxBuildings;
 	}
 
 	public Block getChainBlock() {

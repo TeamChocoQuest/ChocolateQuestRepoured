@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.RandomBlobPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.SupportHillPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -17,6 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class PlateauBuilder {
 
@@ -38,6 +41,7 @@ public class PlateauBuilder {
 	}
 
 	public void createSupportHill(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
+		this.wallSize = 4;
 		BlockPos pos = startPos;
 		switch (posType) {
 		case CENTER_XZ_LAYER:
@@ -58,6 +62,7 @@ public class PlateauBuilder {
 		this.generateSupportHill(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
 
+	/*
 	public List<SupportHillPart> createSupportHillList(Random random, World world, BlockPos startPos, int sizeX, int sizeZ, EPosType posType) {
 		BlockPos pos = startPos;
 		switch (posType) {
@@ -78,6 +83,7 @@ public class PlateauBuilder {
 		}
 		return this.generateSupportHillList(random, world, pos.getX(), pos.getY(), pos.getZ(), sizeX, sizeZ);
 	}
+	*/
 	
 	// Coordinates are the N_W Corner!!
 	/*
@@ -104,13 +110,14 @@ public class PlateauBuilder {
 
 		for (int x = 0; x < sizeX; ++x) {
 			for (int z = 0; z < sizeZ; ++z) {
-				int maxHeight = startY - TOP_LAYER_HEIGHT - world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i,
-																																			// z + k, true);
-				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);
+				int maxHeight = startY - TOP_LAYER_HEIGHT - world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)), x + i, z + k, true)
+				int posY = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true)
 				for (int y = 0; y <= maxHeight; ++y) {
 					// This generates the "cube" that goes under the structure
 					if ((x > this.wallSize) && (z > this.wallSize) && (x < sizeX - this.wallSize) && (z < sizeZ - this.wallSize)) {
-						world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+						//world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
 					}
 					// This generates the fancy "curved" walls around the cube
 					else {
@@ -121,22 +128,31 @@ public class PlateauBuilder {
 
 						noiseVar += Math.max(0.0F, (this.wallSize - z) / 8.0F);
 						noiseVar += Math.max(0.0F, (this.wallSize - (sizeZ - z)) / 8.0F);
-						double value = (p.getNoiseAt(x + startX, y, z + startZ) + p2.getNoiseAt(x + startX, y, z + startZ) + noiseVar) / 3.0D + y / (maxHeight == 0 ? 1 : maxHeight) * 0.25D;
+						double value = (/*p.getNoiseAt(x + startX, y, z + startZ) + p2.getNoiseAt(x + startX, y, z + startZ) + */noiseVar) / 3.0D + y / (maxHeight == 0 ? 1 : maxHeight) * 0.25D;
+
+						if (true) {
+							CQRMain.logger.info("2 {}, {}, {}, {}, {}", new BlockPos(x, y, z), noiseVar, value);
+							break;
+						}
 						if (value < 0.5D) {
-							world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+							//world.setBlockState(new BlockPos(startX + x, posY + y, startZ + z), this.structureBlock.getDefaultState(), 2);
+						} else {
+							break;
 						}
 					}
 				}
 				// This places the top layer blocks
-				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();// DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true);//
-																											// world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY();
+				maxHeight = world.getTopSolidOrLiquidBlock(new BlockPos(x + startX, 0, z + startZ)).getY();
+				// Old: DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(new BlockPos(x + i, 0, z + k)),x + i, z + k, true)
+				// Old: world.getTopSolidOrLiquidBlock(new BlockPos(x + i, 0, z + k)).getY()
 				if (maxHeight <= startY) {
-					world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState(), 2);
+					//world.setBlockState(new BlockPos(startX + x, maxHeight - 1, startZ + z), this.structureTopBlock.getDefaultState(), 2);
 				}
 			}
 		}
 	}
 
+	/*
 	private List<SupportHillPart> generateSupportHillList(Random random, World world, int startX, int startY, int startZ, int sizeX, int sizeZ) {
 		sizeX += this.wallSize * 2;
 		sizeZ += this.wallSize * 2;
@@ -158,6 +174,7 @@ public class PlateauBuilder {
 		}
 		return list;
 	}
+	*/
 	
 	// These methods are used to dig out random caves
 	public void createCave(Random random, BlockPos startPos, BlockPos endPos, long seed, World world) {
@@ -210,7 +227,51 @@ public class PlateauBuilder {
 			}
 		}
 	}
+	
+	public static DungeonPartBlock makeRandomBlob2(Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed, World world, DungeonGenerator dungeonGenerator) {
+		List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+		Perlin3D perlinNoise1 = new Perlin3D(seed, 8, new Random());
+		Perlin3D perlinNoise2 = new Perlin3D(seed, 32, new Random());
 
+		int sizeX = endPos.getX() - startPos.getX();
+		int sizeZ = endPos.getZ() - startPos.getZ();
+		int sizeY = endPos.getY() - startPos.getY();
+
+		sizeX *= 1.25;
+		sizeZ *= 1.25;
+		sizeY *= 1.35;
+
+		for (int iX = 0; iX < sizeX; ++iX) {
+			for (int iY = 0; iY < sizeY; ++iY) {
+				for (int iZ = 0; iZ < sizeZ; ++iZ) {
+
+					float noise = Math.max(0.0F, 2.0F - (float) (sizeY - iY) / 4.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iX / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeX - iX) / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) iZ / 2.0F);
+					noise += Math.max(0.0F, (float) wallSize - (float) (sizeZ - iZ) / 2.0F);
+
+					if (noise >= 0.5F) {
+						double perlin1 = perlinNoise1.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
+
+						if (perlin1 * (double) noise >= 0.5D) {
+							double perlin2 = perlinNoise2.getNoiseAt(startPos.getX() + iX, startPos.getY() + iY, startPos.getZ() + iZ);
+
+							if (perlin1 * perlin2 * (double) noise >= 0.5D) {
+								continue;
+							}
+						}
+					}
+
+					blockInfoList.add(new BlockInfo(new BlockPos(iX, iY, iZ), fillBlock.getDefaultState(), null));
+				}
+			}
+		}
+
+		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), EDungeonMobType.DEFAULT);
+	}
+
+	/*
 	public List<RandomBlobPart> makeRandomBlobList(Random random, Block fillBlock, BlockPos startPos, BlockPos endPos, int wallSize, long seed) {
 		BlockPos size = new BlockPos((endPos.getX() - startPos.getX()) * 1.25D, (endPos.getY() - startPos.getY()) * 1.25D, (endPos.getZ() - startPos.getZ()) * 1.25D);
 
@@ -250,5 +311,6 @@ public class PlateauBuilder {
 		}
 		return list;
 	}
+	*/
 
 }

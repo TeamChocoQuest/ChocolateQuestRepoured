@@ -22,7 +22,6 @@ public class RoomDecorArmorStand extends RoomDecorEntityBase {
 		EntityArmorStand stand = new EntityArmorStand(world);
 		float rotation = side.getHorizontalAngle();
 		stand.setPositionAndRotation((pos.getX() + 0.5), (pos.getY() + 0.5), (pos.getZ() + 0.5), rotation, 0f);
-		NBTTagCompound nbt = stand.writeToNBT(new NBTTagCompound());
-		genArray.addEntity(pos, EntityList.getKey(stand), nbt);
+		genArray.addEntity(BlockPos.ORIGIN, stand);
 	}
 }

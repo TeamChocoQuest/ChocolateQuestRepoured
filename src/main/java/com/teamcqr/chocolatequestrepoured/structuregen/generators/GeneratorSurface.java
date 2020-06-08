@@ -1,149 +1,81 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.CoverBlockPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
 
-/**
- * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
- */
-public class GeneratorSurface implements IDungeonGenerator {
+public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 
 	private CQStructure structure;
-	private PlacementSettings placeSettings;
-	private DungeonSurface dungeon;
+	private PlacementSettings settings;
+	private BlockPos structurePos;
 
-	public GeneratorSurface(DungeonSurface dun, CQStructure struct, PlacementSettings settings) {
-		this.dungeon = dun;
-		this.structure = struct;
-		this.placeSettings = settings;
+	public GeneratorSurface(World world, BlockPos pos, DungeonSurface dungeon) {
+		super(world, pos, dungeon);
 	}
 
 	@Override
-	public void generate(World world, Chunk chunk, int x, int y, int z) {
-		BlockPos pos1 = this.structure.getSize();
-		BlockPos pos2 = Template.transformedBlockPos(this.placeSettings, new BlockPos(pos1.getX() >> 1, 0, pos1.getZ() >> 1));
-		x -= pos2.getX();
-		z -= pos2.getZ();
-		IDungeonGenerator.super.generate(world, chunk, x, y, z);
-	}
+	protected void preProcess() {
+		File file = this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolderPath());
+		if (file == null) {
+			throw new NullPointerException("No structure file found in folder " + this.dungeon.getStructureFolderPath());
+		}
+		this.structure = this.loadStructureFromFile(file);
+		this.settings = new PlacementSettings();
 
-	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Builds the support hill
+		if (this.dungeon.rotateDungeon()) {
+			this.settings.setRotation(Rotation.values()[this.random.nextInt(Rotation.values().length)]);
+			this.settings.setMirror(Mirror.values()[this.random.nextInt(Mirror.values().length)]);
+		}
+
+		// Why do you use a centralized Position? And what does "centralized" actually mean here (should be explained in corresponding method)?
+		this.structurePos = DungeonGenUtils.getCentralizedPosForStructure(this.pos, this.structure, this.settings);
+
 		if (this.dungeon.doBuildSupportPlatform()) {
-			BlockPos pos1 = new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z);
-			BlockPos pos2 = pos1.add(Template.transformedBlockPos(this.placeSettings, this.structure.getSize()));
-			BlockPos start = DungeonGenUtils.getMinPos(pos1, pos2);
-			BlockPos end = DungeonGenUtils.getMaxPos(pos1, pos2);
-
-			PlateauBuilder supportBuilder = new PlateauBuilder();
-			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			lists.add(supportBuilder.createSupportHillList(new Random(), world, start, end.getX() - start.getX(), end.getZ() - start.getZ(), EPosType.DEFAULT));
+			BlockPos startPos = this.structurePos.up(this.dungeon.getUnderGroundOffset()).down();
+			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1)));
+			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
+			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
+			this.dungeonGenerator.add(new DungeonPartPlateau(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getY(), pos2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), CQRConfig.general.supportHillWallSize));
 		}
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Simply puts the structure at x,y,z
-		for (List<? extends IStructure> list : this.structure.addBlocksToWorld(world, new BlockPos(x, y, z), this.placeSettings, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z)) {
-			lists.add(list);
+	protected void buildStructure() {
+		EDungeonMobType mobType = this.dungeon.getDungeonMob();
+		if (mobType == EDungeonMobType.DEFAULT) {
+			mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 		}
-
-		/*
-		 * List<String> bosses = new ArrayList<>(); for(UUID id : structure.getBossIDs()) { bosses.add(id.toString()); }
-		 * 
-		 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), this.structure.getSize(), world, bosses); event.setShieldCorePosition(this.structure.getShieldCorePosition());
-		 * MinecraftForge.EVENT_BUS.post(event);
-		 */
+		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.structurePos, this.structure.getBlockInfoList(), this.settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.structurePos, this.structure.getEntityInfoList(), this.settings, mobType));
+		this.dungeonGenerator.add(new DungeonPartBlockSpecial(this.world, this.dungeonGenerator, this.structurePos, this.structure.getSpecialBlockInfoList(), this.settings, mobType));
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Does nothing here
-	}
-
-	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Also does nothing
-	}
-
-	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Also does nothing
-	}
-
-	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	protected void postProcess() {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			int sizeX = this.structure.getSize().getX();
-			int sizeZ = this.structure.getSize().getZ();
-			switch (this.placeSettings.getRotation()) {
-			case CLOCKWISE_90:
-				x -= sizeZ; {
-				int i = sizeX;
-				int j = sizeZ;
-				sizeX = j;
-				sizeZ = i;
-			}
-				break;
-			case CLOCKWISE_180:
-				x -= sizeX;
-				z -= sizeZ;
-				break;
-			case COUNTERCLOCKWISE_90:
-				z -= sizeX; {
-				int i = sizeX;
-				int j = sizeZ;
-				sizeX = j;
-				sizeZ = i;
-			}
-				break;
-			default:
-				break;
-			}
-			int startX = x - sizeX / 3 - CQRConfig.general.supportHillWallSize / 2;
-			int startZ = z - sizeZ / 3 - CQRConfig.general.supportHillWallSize / 2;
-
-			//int endX = x + sizeX + sizeX / 3 + CQRConfig.general.supportHillWallSize / 2;
-			//int endZ = z + sizeZ + sizeZ / 3 + CQRConfig.general.supportHillWallSize / 2;
-			
-			int xIterations = sizeX / 16;
-			int zIterations = sizeZ / 16;
-			
-			List<CoverBlockPart> list = new ArrayList<>(xIterations * zIterations);
-			for (int x1 = 0; x1 <= xIterations; x1++) {
-				for (int z1 = 0; z1 <= zIterations; z1++) {
-					BlockPos partOffset = new BlockPos(x1 * 16, 0, z1 * 16);
-					BlockPos partSize = new BlockPos(x1 == xIterations ? x1 % 16 : 16, 0, z1 == zIterations ? z1 % 16 : 16);
-					CoverBlockPart part = new CoverBlockPart(this.dungeon.getCoverBlock(), new BlockPos(startX, 0, startZ), new BlockPos(sizeX, 0, sizeZ), partOffset, partSize);
-					list.add(part);
-				}
-			}
-			lists.add(list);
+			BlockPos startPos = this.structurePos;
+			BlockPos endPos = startPos.add(Template.transformedBlockPos(this.settings, new BlockPos(this.structure.getSize().getX() - 1, 0, this.structure.getSize().getZ() - 1)));
+			BlockPos pos1 = DungeonGenUtils.getValidMinPos(startPos, endPos);
+			BlockPos pos2 = DungeonGenUtils.getValidMaxPos(startPos, endPos);
+			this.dungeonGenerator.add(new DungeonPartCover(this.world, this.dungeonGenerator, pos1.getX(), pos1.getZ(), pos2.getX(), pos2.getZ(), this.dungeon.getCoverBlock()));
 		}
-
-	}
-
-	@Override
-	public DungeonBase getDungeon() {
-		return this.dungeon;
 	}
 
 }

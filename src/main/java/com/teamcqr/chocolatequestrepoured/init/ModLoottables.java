@@ -1,10 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.init;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.storage.loot.LootTableList;
 
 public class ModLoottables {
+
+	private static final Set<ResourceLocation> LOOT_TABLES = new HashSet<>();
 
 	public static final ResourceLocation ENTITIES_BOARMAN = createEntityLootTable("boarman");
 	public static final ResourceLocation ENTITIES_DWARF = createEntityLootTable("dwarf");
@@ -77,11 +83,23 @@ public class ModLoottables {
 	public static final ResourceLocation CHESTS_CUSTOM_14 = createChestLootTable("custom_14");
 
 	public static ResourceLocation createChestLootTable(String name) {
-		return new ResourceLocation(Reference.MODID, "chests/" + name);
+		return createLootTable("chests/" + name);
 	}
 
 	public static ResourceLocation createEntityLootTable(String name) {
-		return new ResourceLocation(Reference.MODID, "entities/" + name);
+		return createLootTable("entities/" + name);
+	}
+
+	public static ResourceLocation createLootTable(String name) {
+		ResourceLocation lootTable = new ResourceLocation(Reference.MODID, name);
+		LOOT_TABLES.add(lootTable);
+		return lootTable;
+	}
+
+	public static void registerLootTables() {
+		for (ResourceLocation lootTable : LOOT_TABLES) {
+			LootTableList.register(lootTable);
+		}
 	}
 
 }

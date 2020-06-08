@@ -1,7 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 
 import net.minecraftforge.common.config.Config;
@@ -40,17 +40,7 @@ public class CQRConfig {
 
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = {
-				"torch",
-				"ladder",
-				"wall_sign",
 				"bed",
-				"skull",
-				"wall_banner",
-				"lever",
-				"redstone_torch",
-				"wooden_button",
-				"stone_button",
-				"tripwire_hook",
 				"wooden_door",
 				"spruce_door",
 				"birch_door",
@@ -58,10 +48,15 @@ public class CQRConfig {
 				"acacia_door",
 				"dark_oak_door",
 				"iron_door",
-				"cqrepoured:unlit_torch" };
+				"piston",
+				"sticky_piston",
+				"piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
-		public String[] specialEntities = { "minecraft:painting", "minecraft:item_frame", "minecraft:armor_stand" };
+		public String[] specialEntities = {
+				"minecraft:painting",
+				"minecraft:item_frame",
+				"minecraft:armor_stand" };
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableBlockWhitelist = {
@@ -91,6 +86,21 @@ public class CQRConfig {
 		@Config.Comment("It raytraces from the eyes of the player to the eyes of the mob and the other way around. Then it compares the block positions that were hit and only renders the entity when the difference on each axis is lower than this setting.")
 		@Config.RangeInt(min = 0, max = 256)
 		public int skipHiddenEntityRenderingDiff = 16;
+
+		@Config.Comment("Enable/Disable loading and caching of structure files during startup.")
+		public boolean cacheStructureFiles = true;
+		@Config.Comment("The maximum amount of megabytes which will be cached.")
+		@Config.RangeInt(min = 1, max = 2048)
+		public int cachedStructureFilesMaxSize = 128;
+		@Config.Comment("The maximum amount of files which will be cached.")
+		@Config.RangeInt(min = 1, max = 1024)
+		public int cachedStructureFilesMaxAmount = 64;
+
+		@Config.RangeInt(min = 1, max = 100)
+		public int generationSpeed = 16;
+		@Config.RangeInt(min = 100, max = 100000)
+		public int generationLimit = 8000;
+		public boolean instantLightUpdates = false;
 	}
 
 	public static class General {
@@ -132,8 +142,6 @@ public class CQRConfig {
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
-		@Config.RangeInt(min = 0, max = 16)
-		public int defaultHealingPotionCount = 1;
 		@Config.RangeInt(min = 1, max = 100000)
 		public int distanceDivisor = 1000;
 		@Config.RangeInt(min = 1, max = 100000)
@@ -200,8 +208,8 @@ public class CQRConfig {
 		public static void onConfigChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event) {
 			if (event.getModID().equals(Reference.MODID)) {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
-				CQStructurePart.updateSpecialBlocks();
-				CQStructurePart.updateSpecialEntities();
+				CQStructure.updateSpecialBlocks();
+				CQStructure.updateSpecialEntities();
 				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();
