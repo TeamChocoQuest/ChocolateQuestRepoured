@@ -9,7 +9,6 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
@@ -114,15 +113,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 		}
 		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		PlateauBuilder platformCenter = new PlateauBuilder();
-		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
-
 		this.toGenerate.put(centerDun, this.pos);
-		// this.shieldPos = centerDun.getShieldCorePosition();
 
-		PlateauBuilder platform = new PlateauBuilder();
-		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		// First, build all the support platforms
 		for (int i = 0; i < this.structurePosList.size(); i++) {
 			if (i < this.chosenStructures.size()) {

@@ -8,7 +8,6 @@ import java.util.Map;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonStrongholdOpen;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
@@ -168,8 +167,6 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 		}
 		CQStructure structure = this.loadStructureFromFile(building);
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauBuilder supportBuilder = new PlateauBuilder();
-			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() + 4 + structure.getSize().getX() / 2, this.pos.getZ() + 4 + structure.getSize().getZ() / 2, this.pos.getX() - 4 - structure.getSize().getX() / 2, this.pos.getY(), this.pos.getZ() - 4 - structure.getSize().getZ() / 2, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 		entranceSizeX = structure.getSize().getX();

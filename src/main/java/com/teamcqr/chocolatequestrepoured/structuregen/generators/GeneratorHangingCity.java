@@ -59,7 +59,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 				int radius = structure != null ? 2 * Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 				BlockPos startPos = nextIslandPos.add(-radius, -this.dungeon.getYFactorHeight(), -radius);
 				BlockPos endPos = nextIslandPos.add(radius, this.dungeon.getYFactorHeight(), radius);
-				this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
+				this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
 			}
 		}
 
@@ -69,7 +69,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 			int radius = structure != null ? 2 * Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 			BlockPos startPos = this.pos.add(-radius, -this.dungeon.getYFactorHeight(), -radius);
 			BlockPos endPos = this.pos.add(radius, this.dungeon.getYFactorHeight(), radius);
-			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
+			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, startPos, endPos, 8, WorldDungeonGenerator.getSeed(world, this.pos.getX() >> 4, this.pos.getZ() >> 4), world, dungeonGenerator));
 		}
 	}
 

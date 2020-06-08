@@ -130,7 +130,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).add(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).add(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
 
-			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob2(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ), this.world, this.dungeonGenerator));
+			this.dungeonGenerator.add(PlateauBuilder.makeRandomBlob(Blocks.AIR, cLower, cUpper, 4, WorldDungeonGenerator.getSeed(this.world, this.minX, this.maxZ), this.world, this.dungeonGenerator));
 
 		}
 
