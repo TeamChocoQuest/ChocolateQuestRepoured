@@ -18,7 +18,7 @@ import net.minecraft.world.World;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class DungeonFloatingNetherCity extends DungeonBase {
+public class DungeonHangingCity extends DungeonBase {
 
 	private int minBuildings = 6;
 	private int maxBuildings = 12;
@@ -37,7 +37,7 @@ public class DungeonFloatingNetherCity extends DungeonBase {
 	private File structureFolder;
 	private File centralStructureFolder;
 
-	public DungeonFloatingNetherCity(String name, Properties prop) {
+	public DungeonHangingCity(String name, Properties prop) {
 		super(name, prop);
 
 		this.minBuildings = PropertyFileHelper.getIntProperty(prop, "minBuildings", 6);
@@ -64,7 +64,7 @@ public class DungeonFloatingNetherCity extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator<DungeonFloatingNetherCity> createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonHangingCity> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this);
 	}
 

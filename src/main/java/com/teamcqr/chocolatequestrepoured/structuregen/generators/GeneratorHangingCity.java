@@ -9,7 +9,7 @@ import java.util.Map;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonFloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
@@ -25,7 +25,7 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
-public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonFloatingNetherCity> {
+public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangingCity> {
 
 	// DONE: Air bubble around the whole thing
 
@@ -35,7 +35,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonFloati
 
 	// This needs to calculate async (island blocks, chain blocks, air blocks)
 
-	public GeneratorHangingCity(World world, BlockPos pos, DungeonFloatingNetherCity dungeon) {
+	public GeneratorHangingCity(World world, BlockPos pos, DungeonHangingCity dungeon) {
 		super(world, pos.up(8), dungeon);
 	}
 
