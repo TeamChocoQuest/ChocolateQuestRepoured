@@ -33,7 +33,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.storage.loot.LootTableList;
 
@@ -103,7 +102,7 @@ public class DungeonCavern extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonCavern> createDungeonGenerator(World world, int x, int y, int z) {
 		return null;
 	}
 
@@ -118,7 +117,6 @@ public class DungeonCavern extends DungeonBase {
 		Map<GeneratorCavern, Integer> xMap = new HashMap<>();
 		Map<GeneratorCavern, Integer> zMap = new HashMap<>();
 
-		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
 		int rooms = DungeonGenUtils.getIntBetweenBorders(this.minRooms, this.maxRooms, this.random);
 		int roomIndex = 1;
 

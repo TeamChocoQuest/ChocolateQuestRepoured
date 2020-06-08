@@ -14,7 +14,6 @@ import com.teamcqr.chocolatequestrepoured.util.EnumMCWoodType;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -115,7 +114,7 @@ public class DungeonCastle extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonCastle> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorCastle(world, new BlockPos(x, y, z), this);
 	}
 

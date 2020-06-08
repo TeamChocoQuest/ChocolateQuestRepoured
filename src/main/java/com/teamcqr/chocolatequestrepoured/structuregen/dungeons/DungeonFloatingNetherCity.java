@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.dungeons;
 
 import java.io.File;
 import java.util.Properties;
-import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorHangingCity;
@@ -65,7 +64,7 @@ public class DungeonFloatingNetherCity extends DungeonBase {
 	}
 
 	@Override
-	public AbstractDungeonGenerator createDungeonGenerator(World world, int x, int y, int z) {
+	public AbstractDungeonGenerator<DungeonFloatingNetherCity> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorHangingCity(world, new BlockPos(x, y, z), this);
 	}
 
