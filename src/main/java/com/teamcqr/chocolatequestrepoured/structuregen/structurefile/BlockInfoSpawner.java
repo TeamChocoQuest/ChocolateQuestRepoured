@@ -19,8 +19,6 @@ import net.minecraft.world.gen.structure.template.Template;
 
 public class BlockInfoSpawner extends BlockInfo {
 
-	public static final int ID = 5;
-
 	public BlockInfoSpawner(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
 		super(pos, blockstate, tileentityData);
 	}
@@ -44,7 +42,7 @@ public class BlockInfoSpawner extends BlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return SPAWNER_INFO_ID;
 	}
 
 }

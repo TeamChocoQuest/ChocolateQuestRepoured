@@ -19,7 +19,6 @@ import net.minecraft.world.gen.structure.template.Template;
 
 public class BlockInfo extends AbstractBlockInfo {
 
-	public static final int ID = 0;
 	protected IBlockState blockstate;
 	protected NBTTagCompound tileentityData;
 
@@ -60,7 +59,7 @@ public class BlockInfo extends AbstractBlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return BLOCK_INFO_ID;
 	}
 
 	@Override
