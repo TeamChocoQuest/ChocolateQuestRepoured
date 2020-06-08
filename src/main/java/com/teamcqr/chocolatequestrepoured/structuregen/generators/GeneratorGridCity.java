@@ -92,15 +92,15 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		for (int iX = -rowsX; iX <= rowsX; iX++) {
 			for (int iZ = -rowsZ; iZ <= rowsZ; iZ++) {
 
-				boolean noAddFlag = false;
+				/*boolean noAddFlag = false;
 				if (this.dungeon.centralBuildingIsSpecial() && iX == 0 && iZ == 0) {
 					noAddFlag = true;
-				}
+				}*/
 
 				BlockPos p = this.pos.add((iX * this.distanceBetweenBuildings), 0, (iZ * this.distanceBetweenBuildings));
-				if (!noAddFlag) {
+				//if (!noAddFlag) {
 					this.gridPositions[iX + rowsX][iZ + rowsZ] = p;
-				}
+				//}
 				// Bridge starter positions, in total there will be rowsX +rowsZ -1 bridges
 				if (iX == 0) {
 					this.bridgeBuilderStartPositionsZ.add(p);
