@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModDispenseBehaviors;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
@@ -23,7 +24,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDra
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -131,9 +132,7 @@ public class CQRMain {
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if (CQRConfig.wall.enabled) {
-			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
-		}
+		GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 
 		// Instantiating enums
 		EBannerPatternsCQ.values();
@@ -145,6 +144,7 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
+		ModLoottables.registerLootTables();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -213,8 +213,9 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
-		CQStructurePart.updateSpecialBlocks();
-		CQStructurePart.updateSpecialEntities();
+		CQStructure.cacheFiles();
+		CQStructure.updateSpecialBlocks();
+		CQStructure.updateSpecialEntities();
 		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 		ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 		ModDispenseBehaviors.registerDispenseBehaviors();

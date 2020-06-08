@@ -1,8 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
-import java.util.List;
-
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
 import net.minecraft.world.World;
@@ -16,9 +14,9 @@ public interface IWallPart {
 
 	int getTopY();
 
-	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists);
+	void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, DungeonGenerator dungeonGenerator);
 
-	default int getLowerY(World world, int x1, int z1) {
+	default int getBottomY(World world, int x1, int z1) {
 		int lowestY = this.getTopY() - 16;
 		for (int x2 = 0; x2 < 16; x2++) {
 			for (int z2 = 0; z2 < 16; z2++) {
@@ -28,12 +26,7 @@ public interface IWallPart {
 				}
 			}
 		}
-		if (lowestY <= 10) {
-			lowestY = 3;
-		} else {
-			lowestY -= 6;
-		}
-		return lowestY;
+		return Math.max(lowestY - 6, 1);
 	}
 
 }

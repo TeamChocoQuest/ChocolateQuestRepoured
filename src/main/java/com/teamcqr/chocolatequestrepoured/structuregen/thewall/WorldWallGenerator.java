@@ -1,12 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerationManager;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.Structure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.IWallPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingTower;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts.WallPartRailingWall;
@@ -35,10 +32,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
-		if (world.isRemote) {
-			return;
-		}
-		if (world.provider.getDimension() != 0) {
+		if (!CQRConfig.wall.enabled || world.isRemote || world.provider.getDimension() != 0) {
 			return;
 		}
 		// Check if it is the wall region
@@ -48,8 +42,7 @@ public class WorldWallGenerator implements IWorldGenerator {
 		// Z is the z value where the wall is -> generates the wall
 		if (chunkZ < 0 && Math.abs(chunkZ) == Math.abs(CQRConfig.wall.distance)) {
 
-			Structure structure = new Structure(world, new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
-			List<List<? extends IStructure>> lists = new ArrayList<>();
+			DungeonGenerator dungeonGenerator = new DungeonGenerator(world, new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8), "Wall in the North");
 
 			Biome biome = world.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + 8, 0, chunkZ * 16 + 8));
 			if (biome instanceof BiomePlains || biome instanceof BiomeSnow) {
@@ -68,20 +61,11 @@ public class WorldWallGenerator implements IWorldGenerator {
 				wallPart = new WallPartWall();
 				railingPart = new WallPartRailingWall();
 			}
-			if (wallPart != null) {
-				wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), lists);
-			}
-			if (railingPart != null) {
-				railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), lists);
-			}
 
-			for (List<? extends IStructure> list : lists) {
-				structure.addList(list);
-			}
-			structure.addLightParts();
-			// structure.setupProtectedRegion(dungeon.preventBlockBreaking(), dungeon.preventBlockPlacing(), dungeon.preventExplosionsTNT(), dungeon.preventExplosionsOther(), dungeon.preventFireSpreading(), dungeon.preventEntitySpawning(), dungeon.ignoreNoBossOrNexus());
+			wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), dungeonGenerator);
+			railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), dungeonGenerator);
 
-			DungeonGenerationManager.addStructure(world, structure);
+			DungeonGenerationManager.addStructure(world, dungeonGenerator, null);
 		}
 
 	}
