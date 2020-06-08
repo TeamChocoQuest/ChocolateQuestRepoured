@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -76,9 +75,6 @@ public class DungeonPartLight extends AbstractDungeonPart {
 			if (this.chunkZ > this.maxPos.getZ() >> 4) {
 				this.chunkZ = this.minPos.getZ() >> 4;
 				this.chunkX++;
-				if (this.chunkX > this.maxPos.getX() >> 4) {
-					CQRMain.logger.info("1 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
-				}
 			}
 		} else if (this.mutablePos1.getX() <= this.maxPos.getX()) {
 			this.world.checkLight(this.mutablePos1);
@@ -89,9 +85,6 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				this.mutablePos1.setPos(this.mutablePos1.getX(), this.mutablePos1.getY() + 1, this.minPos.getZ());
 			} else {
 				this.mutablePos1.setPos(this.mutablePos1.getX() + 1, this.minPos.getY(), this.minPos.getZ());
-				if (this.mutablePos1.getX() > this.maxPos.getX()) {
-					CQRMain.logger.info("2 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
-				}
 			}
 		} else if (this.mutablePos2.getX() <= this.maxPos.getX()) {
 			((WorldServer) this.world).getPlayerChunkMap().markBlockForUpdate(this.mutablePos2);
@@ -102,9 +95,6 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				this.mutablePos2.setPos(this.mutablePos2.getX(), this.mutablePos2.getY() + 1, this.minPos.getZ());
 			} else {
 				this.mutablePos2.setPos(this.mutablePos2.getX() + 1, this.minPos.getY(), this.minPos.getZ());
-				if (this.mutablePos2.getX() > this.maxPos.getX()) {
-					CQRMain.logger.info("3 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
-				}
 			}
 		} else if (this.mutablePos3.getX() <= this.maxPos.getX()) {
 			IBlockState state = this.world.getBlockState(this.mutablePos3);
@@ -116,9 +106,6 @@ public class DungeonPartLight extends AbstractDungeonPart {
 				this.mutablePos3.setPos(this.mutablePos3.getX(), this.mutablePos3.getY() + 1, this.minPos.getZ());
 			} else {
 				this.mutablePos3.setPos(this.mutablePos3.getX() + 1, this.minPos.getY(), this.minPos.getZ());
-				if (this.mutablePos3.getX() > this.maxPos.getX()) {
-					CQRMain.logger.info("4 Light: {}", System.currentTimeMillis() - this.dungeonGenerator.t);
-				}
 			}
 		}
 	}

@@ -5,7 +5,6 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.UUID;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
@@ -114,9 +113,6 @@ public class DungeonGenerator {
 					if (part.isGenerated()) {
 						this.parts.removeFirst();
 					}
-					if (this.parts.isEmpty()) {
-						CQRMain.logger.info("Generated blocks: {}", System.currentTimeMillis() - this.t);
-					}
 				} else if (!this.dungeonPartLight.isGenerated()) {
 					this.dungeonPartLight.generateNext();
 				} else {
@@ -186,21 +182,9 @@ public class DungeonGenerator {
 		}
 	}
 
-	protected long t = System.currentTimeMillis();
 	public void startGeneration() {
 		if (this.state == EnumDungeonGeneratorState.PRE_GENERATION) {
 			this.state = EnumDungeonGeneratorState.GENERATION;
-			t = System.currentTimeMillis();
-			for (AbstractDungeonPart p : this.parts) {
-				if (p instanceof DungeonPartBlock) {
-					CQRMain.logger.info("Block {}", ((DungeonPartBlock) p).blockInfoList.size());
-				}
-				if (p instanceof DungeonPartEntity) {
-					CQRMain.logger.info("Entity {}", ((DungeonPartEntity) p).entityInfoList.size());
-				}
-			}
-			BlockPos si = this.maxPos.subtract(this.minPos).add(1, 1, 1);
-			CQRMain.logger.info("Light {}", si.getX() * si.getY() * si.getZ());
 		}
 	}
 

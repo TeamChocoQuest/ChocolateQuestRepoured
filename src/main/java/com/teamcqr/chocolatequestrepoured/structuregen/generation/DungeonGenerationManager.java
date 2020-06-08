@@ -161,7 +161,7 @@ public class DungeonGenerationManager {
 
 			if (dungeonGenerator.isGenerated()) {
 				this.dungeonGeneratorList.remove(i--);
-				CQRMain.logger.info("Generated dungeon {} at {}: {}", dungeonGenerator.getDungeonName(), dungeonGenerator.getPos(), System.currentTimeMillis() - dungeonGenerator.t);
+				CQRMain.logger.info("Generated dungeon {} at {}", dungeonGenerator.getDungeonName(), dungeonGenerator.getPos());
 			}
 		}
 	}

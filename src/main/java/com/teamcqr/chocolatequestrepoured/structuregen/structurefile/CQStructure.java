@@ -161,7 +161,6 @@ public class CQStructure {
 		} catch (IOException e) {
 			CQRMain.logger.error("Failed to write structure to file " + file.getName(), e);
 		}
-		CQRMain.logger.info("Writed to file: {}", System.currentTimeMillis() - t);
 	}
 
 	private void readFromFile(File file) {
@@ -180,7 +179,6 @@ public class CQStructure {
 		if (compound != null) {
 			this.readFromNBT(compound);
 		}
-		CQRMain.logger.info("Read from file: {}", System.currentTimeMillis() - t);
 	}
 
 	private NBTTagCompound writeToNBT() {
@@ -278,7 +276,6 @@ public class CQStructure {
 		}
 		long t = System.currentTimeMillis();
 		this.blockInfoList.sort(BLOCK_INFO_COMPARATOR);
-		CQRMain.logger.info("Sorted block info list: {}", System.currentTimeMillis() - t);
 
 		// Load special blocks
 		for (NBTBase nbt : compound.getTagList("specialBlockInfoList", Constants.NBT.TAG_COMPOUND)) {
