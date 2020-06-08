@@ -88,7 +88,6 @@ public class WorldDungeonGenerator implements IWorldGenerator {
 						d -= dungeon.getWeight();
 						if (d <= 0) {
 							if (DungeonGenUtils.PercentageRandom(dungeon.getChance(), rand)) {
-								CQRMain.logger.info("Generating dungeon {} at chunkX={}, chunkZ={}", dungeon.getDungeonName(), chunkX, chunkZ);
 								dungeon.generate(world, (chunkX << 4) + 8, (chunkZ << 4) + 8);
 							}
 							return;

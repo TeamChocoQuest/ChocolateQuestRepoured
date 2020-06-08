@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockStatePalette;
@@ -46,6 +47,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		this.dungeonMobType = dungeonMobType;
 		if (this.dungeonMobType == EDungeonMobType.DEFAULT) {
 			this.dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+			CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos);
 		}
 	}
 

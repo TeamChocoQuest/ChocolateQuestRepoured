@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EntityInfo;
 
@@ -38,6 +39,10 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
+		if (this.dungeonMobType == EDungeonMobType.DEFAULT) {
+			this.dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+			CQRMain.logger.warn("Created dungeon part entity with mob type default at {}", partPos);
+		}
 	}
 
 	@Override
