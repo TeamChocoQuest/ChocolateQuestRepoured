@@ -15,9 +15,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
@@ -102,7 +99,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		}
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX() + structureEntrance.getSize().getX(), this.pos.getY() + this.dungeon.getUnderGroundOffset(), this.pos.getZ() + structureEntrance.getSize().getZ(),
+			this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() + 4 + structureEntrance.getSize().getX() / 2, this.pos.getZ() + 4 + structureEntrance.getSize().getZ() / 2, this.pos.getX() - 4 - structureEntrance.getSize().getX() / 2, /*this.pos.getY()*/y + this.dungeon.getUnderGroundOffset() -1, this.pos.getZ() - 4 - structureEntrance.getSize().getZ() / 2,
 					this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 		}
 		BlockPos p1 = DungeonGenUtils.getCentralizedPosForStructure(new BlockPos(this.pos.getX(), y, this.pos.getZ()), structureEntrance, settings);
