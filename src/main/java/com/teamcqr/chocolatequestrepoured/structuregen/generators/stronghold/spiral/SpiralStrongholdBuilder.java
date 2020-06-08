@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 
 public class SpiralStrongholdBuilder {
 
-	private AbstractDungeonGenerator generator;
+	private AbstractDungeonGenerator<DungeonVolcano> generator;
 	private DungeonGenerator dungeonGenerator;
 	private ESkyDirection allowedDirection;
 	private DungeonVolcano dungeon;
@@ -27,7 +27,7 @@ public class SpiralStrongholdBuilder {
 	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 	private Random rdm;
 	
-	public SpiralStrongholdBuilder(AbstractDungeonGenerator generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
+	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
 		this.generator = generator;
 		this.dungeonGenerator = dungeonGenerator;
 		this.rdm = rdm;
