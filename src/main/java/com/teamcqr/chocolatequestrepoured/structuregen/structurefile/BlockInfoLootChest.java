@@ -27,8 +27,6 @@ import net.minecraft.world.storage.loot.LootTableList;
 
 public class BlockInfoLootChest extends AbstractBlockInfo {
 
-	public static final int ID = 4;
-
 	protected ResourceLocation lootTable = LootTableList.EMPTY;
 	protected EnumFacing facing = EnumFacing.NORTH;
 
@@ -68,7 +66,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return CHEST_INFO_ID;
 	}
 
 	@Override

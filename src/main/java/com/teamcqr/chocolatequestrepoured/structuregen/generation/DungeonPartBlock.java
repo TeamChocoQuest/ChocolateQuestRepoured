@@ -44,6 +44,9 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
+		if (this.dungeonMobType == EDungeonMobType.DEFAULT) {
+			this.dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+		}
 	}
 
 	@Override

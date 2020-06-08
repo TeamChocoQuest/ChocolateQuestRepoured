@@ -21,8 +21,6 @@ import net.minecraft.world.gen.structure.template.Template;
 
 public class BlockInfoBoss extends AbstractBlockInfo {
 
-	public static final int ID = 2;
-
 	public BlockInfoBoss(BlockPos pos) {
 		super(pos);
 	}
@@ -75,7 +73,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return BOSS_INFO_ID;
 	}
 
 }

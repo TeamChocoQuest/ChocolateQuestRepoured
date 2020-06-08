@@ -19,8 +19,6 @@ import net.minecraft.world.gen.structure.template.Template;
 
 public class BlockInfoBanner extends BlockInfo {
 
-	public static final int ID = 1;
-
 	public BlockInfoBanner(BlockPos pos, IBlockState blockstate, @Nullable NBTTagCompound tileentityData) {
 		super(pos, blockstate, tileentityData);
 	}
@@ -46,7 +44,7 @@ public class BlockInfoBanner extends BlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return BANNER_INFO_ID;
 	}
 
 }

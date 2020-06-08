@@ -79,9 +79,9 @@ public class CQRConfig {
 		public int cachedStructureFilesMaxAmount = 64;
 
 		@Config.RangeInt(min = 1, max = 100)
-		public int generationSpeed = 16;
+		public int generationSpeed = 20;
 		@Config.RangeInt(min = 100, max = 100000)
-		public int generationLimit = 8000;
+		public int generationLimit = 20000;
 		public boolean instantLightUpdates = false;
 	}
 

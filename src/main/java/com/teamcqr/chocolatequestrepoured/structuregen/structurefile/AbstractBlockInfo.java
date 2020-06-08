@@ -8,6 +8,13 @@ import net.minecraft.util.math.BlockPos;
 
 public abstract class AbstractBlockInfo implements IGeneratable {
 
+	public static final int BLOCK_INFO_ID = 0;
+	public static final int BANNER_INFO_ID = 1;
+	public static final int BOSS_INFO_ID = 2;
+	public static final int NEXUS_INFO_ID = 3;
+	public static final int CHEST_INFO_ID = 4;
+	public static final int SPAWNER_INFO_ID = 5;
+
 	protected BlockPos pos;
 
 	public AbstractBlockInfo(BlockPos pos) {
@@ -35,17 +42,17 @@ public abstract class AbstractBlockInfo implements IGeneratable {
 			return null;
 		}
 		switch (nbtTagIntArray.getIntArray()[0]) {
-		case BlockInfo.ID:
+		case BLOCK_INFO_ID:
 			return new BlockInfo(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
-		case BlockInfoBanner.ID:
+		case BANNER_INFO_ID:
 			return new BlockInfoBanner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
-		case BlockInfoBoss.ID:
+		case BOSS_INFO_ID:
 			return new BlockInfoBoss(pos, nbtTagIntArray);
-		case BlockInfoForceFieldNexus.ID:
+		case NEXUS_INFO_ID:
 			return new BlockInfoForceFieldNexus(pos, nbtTagIntArray);
-		case BlockInfoLootChest.ID:
+		case CHEST_INFO_ID:
 			return new BlockInfoLootChest(pos, nbtTagIntArray);
-		case BlockInfoSpawner.ID:
+		case SPAWNER_INFO_ID:
 			return new BlockInfoSpawner(pos, nbtTagIntArray, blockStatePalette, compoundTagList);
 		default:
 			return null;

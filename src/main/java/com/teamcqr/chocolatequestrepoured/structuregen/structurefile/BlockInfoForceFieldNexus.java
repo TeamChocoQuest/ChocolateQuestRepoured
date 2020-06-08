@@ -16,8 +16,6 @@ import net.minecraft.world.gen.structure.template.Template;
 
 public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 
-	public static final int ID = 3;
-
 	public BlockInfoForceFieldNexus(BlockPos pos) {
 		super(pos);
 	}
@@ -44,7 +42,7 @@ public class BlockInfoForceFieldNexus extends AbstractBlockInfo {
 
 	@Override
 	public int getId() {
-		return ID;
+		return NEXUS_INFO_ID;
 	}
 
 }
