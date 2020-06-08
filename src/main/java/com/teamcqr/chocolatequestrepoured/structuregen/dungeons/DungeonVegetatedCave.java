@@ -92,8 +92,8 @@ public class DungeonVegetatedCave extends DungeonBase {
 	}
 	
 	@Override
-	public void generate(World world, int x, int y, int z) {
-		super.generate(world, x, posY, z);
+	public void generate(World world, int x, int z) {
+		this.generate(world, x, this.posY, z);
 	}
 	
 	public File getRandomCentralBuilding() {
