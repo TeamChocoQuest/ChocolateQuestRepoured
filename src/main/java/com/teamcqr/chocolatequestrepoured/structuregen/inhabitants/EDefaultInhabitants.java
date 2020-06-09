@@ -25,20 +25,10 @@ enum EDefaultInhabitants {
 	MINOTAUR(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "minotaur")}, null, null, ModItems.SHIELD_PIGMAN),
 	ORC(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "orc")}, null, null, ModItems.SHIELD_WARPED),
 	GOLEM(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "golem")}, null, null),
-	GOBLIN(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "goblin")}, null, null, ModItems.SHIELD_GOBLIN),
 	MUMMY(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "mummy")}, null, null, ModItems.SHIELD_MUMMY),
 	OGRE(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "ogre")}, null, null, ModItems.SHIELD_TOMB),
 	GREMLIN(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "gremlin")}, null, EBanners.GREMLIN_BANNER, ModItems.SHIELD_RUSTED),
 	TRITON(new ResourceLocation[] {new ResourceLocation(Reference.MODID, "triton")}, null, null);
-
-	private static final EDefaultInhabitants[][] MOB_WHEEL = new EDefaultInhabitants[][] {
-			new EDefaultInhabitants[] { SKELETON },
-			new EDefaultInhabitants[] { ZOMBIE, MUMMY },
-			new EDefaultInhabitants[] { ILLAGER },
-			// new EDungeonMobType[] {GOBLIN, ORC, OGRE},
-			new EDefaultInhabitants[] { SPECTER },
-			new EDefaultInhabitants[] { MINOTAUR },
-			/*new EDungeonMobType[] { ENDERMAN }, */};
 
 	private ResourceLocation[] resLoc;
 	private ResourceLocation[] bossResLoc;

@@ -33,10 +33,16 @@ public class DungeonInhabitant {
 		this.name = prop.getProperty(ConfigKeys.KEY_NAME, "missingNo");
 		this.entityIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_ENTITY_ID_LIST, entityIDs);
 		this.bossIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, ConfigKeys.KEY_BOSS_ID_LIST, bossIDs);
-		this.assignedBanner = EBanners.valueOf(prop.getProperty(ConfigKeys.KEY_BANNER, EBanners.ENDERMEN_BANNER.name()));
-		this.factionOverride = prop.getProperty(ConfigKeys.KEY_FACTION_OVERRIDE, null);
+		String tmp = prop.getProperty(ConfigKeys.KEY_BANNER, "UNUSED");
+		if(!tmp.equalsIgnoreCase("UNUSED")) {
+			this.assignedBanner = EBanners.valueOf(tmp);
+		}
+		tmp = prop.getProperty(ConfigKeys.KEY_FACTION_OVERRIDE, "UNUSED");
+		if(!tmp.equalsIgnoreCase("UNUSED")) {
+			this.factionOverride = tmp;
+		}
 		String stTmp = prop.getProperty(ConfigKeys.KEY_SHIELD_ITEM, null);
-		if(stTmp != null && !stTmp.isEmpty()) {
+		if(stTmp != null && !stTmp.isEmpty() && !stTmp.equalsIgnoreCase("UNUSED")) {
 			ResourceLocation itemResLoc = new ResourceLocation(stTmp);
 			this.shieldReplacement = Item.REGISTRY.getObject(itemResLoc);
 		}
@@ -59,7 +65,7 @@ public class DungeonInhabitant {
 	}
 	
 	public ResourceLocation getBossID() {
-		return bossIDs.length <= 0 ? EMPTY_RES_LOC : bossIDs[random.nextInt(bossIDs.length)];
+		return bossIDs.length <= 0 ? null : bossIDs[random.nextInt(bossIDs.length)];
 	}
 	
 	@Nullable
@@ -73,7 +79,7 @@ public class DungeonInhabitant {
 	
 	@Nullable
 	public String getFactionOverride() {
-		if(this.factionOverride.isEmpty()) {
+		if(this.factionOverride == null || this.factionOverride.isEmpty()) {
 			return null;
 		}
 		return this.factionOverride;
