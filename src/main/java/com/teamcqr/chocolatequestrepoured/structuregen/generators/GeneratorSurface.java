@@ -59,7 +59,7 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 	@Override
 	protected void buildStructure() {
 		String mobType = this.dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.structurePos, this.structure.getBlockInfoList(), this.settings, mobType));

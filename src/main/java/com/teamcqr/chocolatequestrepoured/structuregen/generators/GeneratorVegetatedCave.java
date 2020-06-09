@@ -56,7 +56,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	@Override
 	public void preProcess() {
 		this.mobtype = this.dungeon.getDungeonMob();
-		if (this.mobtype == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (this.mobtype.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			this.mobtype = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, this.pos.getX() / 16, this.pos.getZ() / 16));

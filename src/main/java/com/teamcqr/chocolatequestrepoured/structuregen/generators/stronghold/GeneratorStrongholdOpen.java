@@ -158,7 +158,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding();
 		String mobType = dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
