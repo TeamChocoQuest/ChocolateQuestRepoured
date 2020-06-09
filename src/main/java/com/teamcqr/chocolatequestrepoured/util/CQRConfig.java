@@ -22,38 +22,44 @@ public class CQRConfig {
 	public static class Advanced {
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
 		public String[] specialBlocks = {
-				"bed",
-				"wooden_door",
-				"spruce_door",
-				"birch_door",
-				"jungle_door",
-				"acacia_door",
-				"dark_oak_door",
-				"iron_door",
-				"piston",
-				"sticky_piston",
-				"piston_head" };
+				"minecraft:bed",
+				"minecraft:wooden_door",
+				"minecraft:spruce_door",
+				"minecraft:birch_door",
+				"minecraft:jungle_door",
+				"minecraft:acacia_door",
+				"minecraft:dark_oak_door",
+				"minecraft:iron_door",
+				"minecraft:piston",
+				"minecraft:sticky_piston",
+				"minecraft:piston_head" };
 
 		@Config.Comment("Entities which will be exported despite the ignore entities checkbox being checked.")
 		public String[] specialEntities = {
 				"minecraft:painting",
 				"minecraft:item_frame",
-				"minecraft:armor_stand" };
+				"minecraft:armor_stand",
+				"minecraft:minecart",
+				"minecraft:chest_minecart",
+				"minecraft:furnace_minecart",
+				"minecraft:tnt_minecart",
+				"minecraft:hopper_minecart",
+				"minecraft:boat" };
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
 		public String[] protectionSystemBreakableBlockWhitelist = {
-				"mob_spawner",
-				"torch",
-				"fire",
-				"cobweb",
+				"minecraft:mob_spawner",
+				"minecraft:torch",
+				"minecraft:fire",
+				"minecraft:cobweb",
 				"cqrepoured:unlit_torch",
 				"cqrepoured:phylactery",
 				"cqrepoured:force_field_nexus" };
 	
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
 		public String[] protectionSystemPlaceableBlockWhitelist = {
-				"torch",
-				"fire",
+				"minecraft:torch",
+				"minecraft:fire",
 				"cqrepoured:unlit_torch" };
 
 		public boolean enableSpecialFeatures = true;
