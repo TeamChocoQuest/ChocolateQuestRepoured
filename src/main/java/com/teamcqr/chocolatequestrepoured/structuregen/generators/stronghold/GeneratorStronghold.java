@@ -72,7 +72,7 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 
 		int y = this.pos.getY();
 		String mobType = dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		PlacementSettings settings = new PlacementSettings();

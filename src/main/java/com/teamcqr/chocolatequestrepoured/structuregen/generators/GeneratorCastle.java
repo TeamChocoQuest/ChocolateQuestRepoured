@@ -48,7 +48,7 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
 		String mobType = dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
