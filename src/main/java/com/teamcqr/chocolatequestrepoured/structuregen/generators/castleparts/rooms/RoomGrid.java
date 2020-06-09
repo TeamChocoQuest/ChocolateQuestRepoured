@@ -1,13 +1,13 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -272,7 +272,7 @@ public class RoomGrid {
 	private List<RoomGridCell> cellList;
 	private Area2D bossArea = null;
 
-	public RoomGrid(int floors, int roomsX, int roomsZ, Random random) {
+	public RoomGrid(int floors, int roomsX, int roomsZ, int roomWidth, int floorHeight, Random random) {
 		this.floors = floors;
 		this.roomsX = roomsX;
 		this.roomsZ = roomsZ;
@@ -284,8 +284,46 @@ public class RoomGrid {
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ; z++) {
-					this.cellArray[floor][x][z] = new RoomGridCell(floor, x, z, null);
-					this.cellList.add(this.cellArray[floor][x][z]);
+					RoomGridCell cell = new RoomGridCell(floor, x, z, roomWidth, floorHeight);
+					this.cellArray[floor][x][z] = cell;
+					this.cellList.add(cell);
+				}
+			}
+		}
+	}
+
+	private void initializeCellLinks(int roomWidth, int floorHeight)
+	{
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX; x++) {
+				for (int z = 0; z < roomsZ; z++) {
+					RoomGridCell cell = getCellAt(floor, x, z);
+
+					for (EnumFacing direction : EnumFacing.VALUES)
+					{
+						RoomGridCell adjacent = getAdjacentCell(cell, direction);
+						if (adjacent != null)
+						{
+							cell.registerAdjacentCell(adjacent, direction);
+							adjacent.registerAdjacentCell(adjacent, direction);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void initializeWalls(int roomWidth, int floorHeight)
+	{
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX + 1; x++) {
+				for (int z = 0; z < roomsZ; z++) {
+					int xOffset = x * (roomWidth + 1);
+					int yOffset = floor * floorHeight;
+					int zOffset = 1 + (z * (roomWidth + 1));
+					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL);
+					
 				}
 			}
 		}

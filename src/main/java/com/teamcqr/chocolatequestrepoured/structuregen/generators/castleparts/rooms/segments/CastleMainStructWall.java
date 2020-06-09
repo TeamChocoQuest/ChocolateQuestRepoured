@@ -9,8 +9,8 @@ import java.util.Optional;
 
 public class CastleMainStructWall {
      public enum WallOrientation {
-        HORIZONTAL_WALL,
-        VERTICAL_WALL
+         HORIZONTAL,
+         VERTICAL
     }
 
     private BlockPos origin;

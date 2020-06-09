@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.*;
 
@@ -30,30 +31,64 @@ public class RoomGridCell {
     }
 
     private RoomGridPosition gridPosition;
+    private BlockPos originOffset; //offset of northmost/westmost/lowest z block
     private CellState state = CellState.UNUSED;
     private boolean reachable = false;
     private boolean floorHasLanding = false;
     private boolean partOfMainStruct = false;
-    private CastleRoomBase room;
+    private CastleRoomBase room = null;
     private HashSet<RoomGridCell> connectedCells; // all cells near this one that have the same type
     private HashSet<RoomGridCell> pathableCells; // cells on the same floor that are potentially reachable
     private boolean isBossArea = false;
     private HashMap<EnumFacing, RoomGridCell> adjacentCells = new HashMap<>();
     private HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 
-    public RoomGridCell(int floor, int x, int z, CastleRoomBase room) {
-        this.room = room;
+    public RoomGridCell(int floor, int x, int z, int roomWidth, int floorHeight) {
         this.gridPosition = new RoomGridPosition(floor, x, z);
         this.connectedCells = new HashSet<>();
         this.pathableCells = new HashSet<>();
+
+        int xOffset = 1 + (x * (roomWidth + 1));
+        int zOffset = 1 + (z * (roomWidth + 1));
+        int yOffset = 1 + (floor * floorHeight);
+        this.originOffset = new BlockPos(xOffset, yOffset, zOffset);
     }
 
-    public void RegisterAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {
+    public BlockPos getOriginOffset()
+    {
+        return originOffset;
+    }
+
+    public void registerAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {
         adjacentCells.put(directionOfCell, cell);
+    }
+
+    public Optional<RoomGridCell> getAdjacentCell(EnumFacing direction)
+    {
+        if (adjacentCells.containsKey(direction))
+        {
+            return Optional.of(adjacentCells.get(direction));
+        }
+        else
+        {
+            return Optional.empty();
+        }
     }
 
     public void registerAdjacentWall(CastleMainStructWall wall, EnumFacing directionOfWall) {
         walls.put(directionOfWall, wall);
+    }
+
+    public Optional<CastleMainStructWall> getAdjacentWall(EnumFacing direction)
+    {
+        if (walls.containsKey(direction))
+        {
+            return Optional.of(walls.get(direction));
+        }
+        else
+        {
+            return Optional.empty();
+        }
     }
 
     public void setAllLinkedReachable(List<RoomGridCell> unreachableCells, List<RoomGridCell> reachableCells) {
