@@ -1,4 +1,4 @@
-package com.teamcqr.chocolatequestrepoured.structuregen;
+package com.teamcqr.chocolatequestrepoured.structuregen.inhabitants;
 
 import java.util.Random;
 
@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public enum EDungeonMobType {
+public enum EDefaultInhabitants {
 
 	DEFAULT(null, null, null),
 	// DONT_REPLACE(null),
@@ -39,13 +39,13 @@ public enum EDungeonMobType {
 	TRITON(new ResourceLocation(Reference.MODID, "triton"), null, null);
 
 	private static final Random RAND = new Random();
-	private static final EDungeonMobType[][] MOB_WHEEL = new EDungeonMobType[][] {
-			new EDungeonMobType[] { SKELETON },
-			new EDungeonMobType[] { ZOMBIE, MUMMY },
-			new EDungeonMobType[] { ILLAGER },
+	private static final EDefaultInhabitants[][] MOB_WHEEL = new EDefaultInhabitants[][] {
+			new EDefaultInhabitants[] { SKELETON },
+			new EDefaultInhabitants[] { ZOMBIE, MUMMY },
+			new EDefaultInhabitants[] { ILLAGER },
 			// new EDungeonMobType[] {GOBLIN, ORC, OGRE},
-			new EDungeonMobType[] { SPECTER },
-			new EDungeonMobType[] { MINOTAUR },
+			new EDefaultInhabitants[] { SPECTER },
+			new EDefaultInhabitants[] { MINOTAUR },
 			/*new EDungeonMobType[] { ENDERMAN }, */};
 
 	private ResourceLocation resLoc;
@@ -53,14 +53,14 @@ public enum EDungeonMobType {
 	private Item shieldItem;
 	private EBanners banner;
 
-	private EDungeonMobType(ResourceLocation resLoc, ResourceLocation bossResLoc, EBanners banner, Item shieldItem) {
+	private EDefaultInhabitants(ResourceLocation resLoc, ResourceLocation bossResLoc, EBanners banner, Item shieldItem) {
 		this.resLoc = resLoc;
 		this.banner = banner;
 		this.shieldItem = shieldItem;
 		this.bossResLoc = bossResLoc;
 	}
 	
-	private EDungeonMobType(ResourceLocation resLoc, ResourceLocation bossResLoc, EBanners banner) {
+	private EDefaultInhabitants(ResourceLocation resLoc, ResourceLocation bossResLoc, EBanners banner) {
 		this.resLoc = resLoc;
 		this.banner = banner;
 		this.shieldItem = Items.SHIELD;
@@ -95,7 +95,7 @@ public enum EDungeonMobType {
 	 * Minotaur<br>
 	 * Endermen<br>
 	 */
-	public static EDungeonMobType getMobTypeDependingOnDistance(World world, int x, int z) {
+	public static EDefaultInhabitants getMobTypeDependingOnDistance(World world, int x, int z) {
 		BlockPos spawnPoint = world.getSpawnPoint();
 		int x1 = x - spawnPoint.getX();
 		int z1 = z - spawnPoint.getZ();
@@ -110,8 +110,8 @@ public enum EDungeonMobType {
 	}
 
 	@Nullable
-	public static EDungeonMobType byString(String name) {
-		for (EDungeonMobType e : EDungeonMobType.values()) {
+	public static EDefaultInhabitants byString(String name) {
+		for (EDefaultInhabitants e : EDefaultInhabitants.values()) {
 			if (e.name().equalsIgnoreCase(name)) {
 				return e;
 			}

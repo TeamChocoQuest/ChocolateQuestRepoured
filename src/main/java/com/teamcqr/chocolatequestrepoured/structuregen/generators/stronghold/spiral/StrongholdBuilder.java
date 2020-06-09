@@ -6,7 +6,6 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.blocks.BlockUnlitTorch;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
@@ -14,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerat
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -48,7 +48,7 @@ public class StrongholdBuilder {
 		this.world = world;
 	}
 
-	public void generate(int cX, int cZ, EDungeonMobType mobType) {
+	public void generate(int cX, int cZ, EDefaultInhabitants mobType) {
 
 		Vec3i expansionVector = new Vec3i(0, 0, 0);
 		switch (this.direction) {
@@ -80,7 +80,7 @@ public class StrongholdBuilder {
 		buildStronghold(pos.add(0,-1,0), world, cX, cZ, mobType);
 	}
 
-	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, EDungeonMobType mobType) {
+	private void buildStronghold(BlockPos pos, World world2, int cX, int cZ, EDefaultInhabitants mobType) {
 		SpiralStrongholdBuilder stronghold = new SpiralStrongholdBuilder(this.generator, this.dungeonGenerator, ESkyDirection.fromFacing(this.direction), this.dungeon, new Random(WorldDungeonGenerator.getSeed(this.world, pos.getX() /16, pos.getZ() /16)));
 		stronghold.calculateFloors(pos);
 		stronghold.buildFloors(pos.add(0,-1,0), world, cX, cZ, mobType);

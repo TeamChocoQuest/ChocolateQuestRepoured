@@ -8,9 +8,9 @@ import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoSpawner;
@@ -74,7 +74,7 @@ public class WallPartRailingWall implements IWallPart {
 		// Spawner
 		this.placeSpawner(new BlockPos(4, 6, 7), world, blockInfoList);
 
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDungeonMobType.SPECTER));
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDefaultInhabitants.SPECTER));
 	}
 
 	private boolean isBiggerPart(int xAsChunkRelativeCoord) {

@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -31,7 +31,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDungeonMobType dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDefaultInhabitants dungeonMob, ProtectedRegion protectedRegion) {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {

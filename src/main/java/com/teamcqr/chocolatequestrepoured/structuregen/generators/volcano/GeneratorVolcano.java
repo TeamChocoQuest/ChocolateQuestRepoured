@@ -7,13 +7,13 @@ import java.util.Random;
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.spiral.StrongholdBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.volcano.StairCaseHelper.EStairSection;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfoLootChest;
@@ -303,9 +303,9 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 			}
 		}
 
-		EDungeonMobType mobType = dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
+		EDefaultInhabitants mobType = dungeon.getDungeonMob();
+		if (mobType == EDefaultInhabitants.DEFAULT) {
+			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
 		}
 
 		// Generate parts for generation

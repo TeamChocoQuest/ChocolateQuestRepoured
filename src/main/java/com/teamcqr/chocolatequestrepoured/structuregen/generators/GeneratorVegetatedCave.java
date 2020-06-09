@@ -11,11 +11,11 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -46,7 +46,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, IBlockState> blocks = new ConcurrentHashMap<>();
 	private Block[][][] centralCaveBlocks;
-	private EDungeonMobType mobtype;
+	private EDefaultInhabitants mobtype;
 
 	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon) {
 		super(world, pos, dungeon);
@@ -55,8 +55,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	@Override
 	public void preProcess() {
 		this.mobtype = this.dungeon.getDungeonMob();
-		if (this.mobtype == EDungeonMobType.DEFAULT) {
-			this.mobtype = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		if (this.mobtype == EDefaultInhabitants.DEFAULT) {
+			this.mobtype = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);

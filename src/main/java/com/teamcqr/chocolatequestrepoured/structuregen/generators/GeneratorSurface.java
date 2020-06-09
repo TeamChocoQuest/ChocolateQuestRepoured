@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonSurface;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -58,9 +58,9 @@ public class GeneratorSurface extends AbstractDungeonGenerator<DungeonSurface> {
 
 	@Override
 	protected void buildStructure() {
-		EDungeonMobType mobType = this.dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		EDefaultInhabitants mobType = this.dungeon.getDungeonMob();
+		if (mobType == EDefaultInhabitants.DEFAULT) {
+			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 		}
 		this.dungeonGenerator.add(new DungeonPartBlock(this.world, this.dungeonGenerator, this.structurePos, this.structure.getBlockInfoList(), this.settings, mobType));
 		this.dungeonGenerator.add(new DungeonPartEntity(this.world, this.dungeonGenerator, this.structurePos, this.structure.getEntityInfoList(), this.settings, mobType));

@@ -1,6 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -47,7 +47,7 @@ public class EntityInfo implements IGeneratable {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDungeonMobType dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDefaultInhabitants dungeonMob, ProtectedRegion protectedRegion) {
 		Entity entity;
 		try {
 			entity = EntityList.createEntityFromNBT(this.entityData, world);
