@@ -6,7 +6,8 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EntityInfo;
 
 import net.minecraft.nbt.NBTBase;
@@ -23,13 +24,13 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 
 	protected final Deque<EntityInfo> entityInfoList = new LinkedList<>();
 	protected PlacementSettings settings;
-	protected EDefaultInhabitants dungeonMobType;
+	protected String dungeonMobType;
 
 	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDefaultInhabitants.DEFAULT);
+		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 	}
 
-	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<EntityInfo> entities, PlacementSettings settings, EDefaultInhabitants dungeonMobType) {
+	public DungeonPartEntity(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<EntityInfo> entities, PlacementSettings settings, String dungeonMobType) {
 		super(world, dungeonGenerator, partPos);
 		for (EntityInfo entityInfo : entities) {
 			if (entityInfo != null) {
@@ -39,8 +40,12 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-		if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) {
-			this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
+			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ());
+			//this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+			if(inha != null) {
+				this.dungeonMobType = inha.getName();
+			}
 			CQRMain.logger.warn("Created dungeon part entity with mob type default at {}", partPos);
 		}
 	}
@@ -51,7 +56,8 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 
 		compound.setInteger("mirror", this.settings.getMirror().ordinal());
 		compound.setInteger("rotation", this.settings.getRotation().ordinal());
-		compound.setInteger("mob", this.dungeonMobType.ordinal());
+		//compound.setInteger("mob", this.dungeonMobType.ordinal());
+		compound.setString("mob", this.dungeonMobType);
 
 		// Save entities
 		NBTTagList nbtTagList = new NBTTagList();
@@ -70,7 +76,8 @@ public class DungeonPartEntity extends AbstractDungeonPart {
 		this.settings = new PlacementSettings();
 		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
-		this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
+		//this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
+		this.dungeonMobType = compound.getString("mob");
 
 		// Load entities
 		for (NBTBase nbt : compound.getTagList("entityInfoList", Constants.NBT.TAG_COMPOUND)) {

@@ -18,7 +18,8 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -121,9 +122,10 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, EDefaultInhabitants mobType) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobType) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
-		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, mobType);
+		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobType);
+		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, inha);
 
 		this.generateRoofs(genArray, dungeon);
 	}
@@ -137,10 +139,10 @@ public class CastleRoomSelector {
 
 	}
 
-	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, EDefaultInhabitants mobType)
+	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, DungeonInhabitant mobType)
 	{
-		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
-		ResourceLocation bossResLoc = mobType.getBossResourceLocation();
+		ResourceLocation mobResLoc = mobType.getEntityID();
+		ResourceLocation bossResLoc = mobType.getBossID();
 		GearedMobFactory mobFactory = new GearedMobFactory(getBossFloor(), mobResLoc, random);
 
 		// The rooms MUST be generated before they are decorated

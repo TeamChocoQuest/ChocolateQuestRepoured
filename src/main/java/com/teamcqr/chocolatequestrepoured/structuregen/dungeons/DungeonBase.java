@@ -10,7 +10,7 @@ import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -45,7 +45,7 @@ public abstract class DungeonBase {
 	protected String[] modDependencies;
 	protected String[] dungeonDependencies;
 
-	protected EDefaultInhabitants dungeonMob;
+	protected String dungeonMob;
 	protected boolean replaceBanners;
 	protected int underGroundOffset;
 	protected int yOffset;
@@ -84,7 +84,7 @@ public abstract class DungeonBase {
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[0]);
 		this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 
-		this.dungeonMob = EDefaultInhabitants.byString(prop.getProperty("dummyReplacement", EDefaultInhabitants.DEFAULT.name().toUpperCase()).toUpperCase());
+		this.dungeonMob = prop.getProperty("dummyReplacement", DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
@@ -256,7 +256,7 @@ public abstract class DungeonBase {
 		return this.rotateDungeon;
 	}
 
-	public EDefaultInhabitants getDungeonMob() {
+	public String getDungeonMob() {
 		return this.dungeonMob;
 	}
 

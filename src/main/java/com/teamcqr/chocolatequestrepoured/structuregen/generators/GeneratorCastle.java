@@ -8,7 +8,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.util.math.BlockPos;
@@ -47,9 +47,9 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 	public void buildStructure() {
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
-		EDefaultInhabitants mobType = dungeon.getDungeonMob();
-		if (mobType == EDefaultInhabitants.DEFAULT) {
-			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
+		String mobType = dungeon.getDungeonMob();
+		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 

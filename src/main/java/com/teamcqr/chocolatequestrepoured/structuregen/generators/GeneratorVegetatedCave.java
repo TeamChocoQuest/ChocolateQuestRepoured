@@ -15,7 +15,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetatedCave;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -46,7 +47,7 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	private Set<BlockPos> floorBlocks = new HashSet<>();
 	private Map<BlockPos, IBlockState> blocks = new ConcurrentHashMap<>();
 	private Block[][][] centralCaveBlocks;
-	private EDefaultInhabitants mobtype;
+	private String mobtype;
 
 	public GeneratorVegetatedCave(World world, BlockPos pos, DungeonVegetatedCave dungeon) {
 		super(world, pos, dungeon);
@@ -55,8 +56,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 	@Override
 	public void preProcess() {
 		this.mobtype = this.dungeon.getDungeonMob();
-		if (this.mobtype == EDefaultInhabitants.DEFAULT) {
-			this.mobtype = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		if (this.mobtype == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			this.mobtype = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		Random random = new Random(WorldDungeonGenerator.getSeed(world, this.pos.getX() / 16, this.pos.getZ() / 16));
 		Block[][][] blocks = getRandomBlob(dungeon.getAirBlock(), dungeon.getCentralCaveSize(), random);
@@ -203,7 +204,8 @@ public class GeneratorVegetatedCave extends AbstractDungeonGenerator<DungeonVege
 			Block block = Blocks.MOB_SPAWNER;
 			IBlockState state = block.getDefaultState();
 			TileEntityMobSpawner spawner = (TileEntityMobSpawner) block.createTileEntity(world, state);
-			spawner.getSpawnerBaseLogic().setEntityId(mobtype.getEntityResourceLocation());
+			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobtype);
+			spawner.getSpawnerBaseLogic().setEntityId(inha.getEntityID());
 			spawner.updateContainingBlockInfo();
 
 			NBTTagCompound nbt = spawner.writeToNBT(new NBTTagCompound());

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -68,7 +67,7 @@ public class WallPartRailingTower implements IWallPart {
 			}
 		}
 
-		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), EDefaultInhabitants.SPECTER));
+		dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), "SPECTER"));
 	}
 
 	private boolean isBiggerPart(int xAsChunkRelativeCoord) {

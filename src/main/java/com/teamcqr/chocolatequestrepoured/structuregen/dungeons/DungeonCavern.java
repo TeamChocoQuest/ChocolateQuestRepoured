@@ -15,7 +15,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerat
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.GeneratorCavern;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
@@ -162,7 +161,7 @@ public class DungeonCavern extends DungeonBase {
 			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 				blockInfoList.add(new BlockInfo(entry.getKey().subtract(cave.getCenter()), entry.getValue(), null));
 			}
-			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, cave.getCenter(), blockInfoList, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, cave.getCenter(), blockInfoList, new PlacementSettings(), "ZOMBIE"));
 		}
 		for (int i = 0; i < caves.size(); i++) {
 			GeneratorCavern cave = caves.get(i);
@@ -196,7 +195,7 @@ public class DungeonCavern extends DungeonBase {
 			tileSpawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(EntityList.createEntityByIDFromName(this.getBossMob(), world)));
 			blockInfoList.add(new BlockInfo(BlockPos.ORIGIN, state, tileSpawner.writeToNBT(new NBTTagCompound())));
 
-			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, bossPos, blockInfoList, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, bossPos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
 		}
 		DungeonGenerationManager.addStructure(world, dungeonGenerator, this);
 	}

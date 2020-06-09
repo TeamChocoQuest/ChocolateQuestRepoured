@@ -13,7 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -187,9 +187,9 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	@Override
 	public void postProcess() {
 		if (this.toGenerate != null && !this.toGenerate.isEmpty()) {
-			EDefaultInhabitants mobType = this.dungeon.getDungeonMob();
-			if (mobType == EDefaultInhabitants.DEFAULT) {
-				mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+			String mobType = this.dungeon.getDungeonMob();
+			if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+				mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 			}
 
 			PlacementSettings plcmnt = new PlacementSettings();

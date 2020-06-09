@@ -10,7 +10,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.linear.StrongholdFloor;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -71,9 +71,9 @@ public class GeneratorStronghold extends AbstractDungeonGenerator<DungeonStrongh
 		// initPos = initPos.subtract(new Vec3i(0,entranceStair.getSizeY(),0));
 
 		int y = this.pos.getY();
-		EDefaultInhabitants mobType = dungeon.getDungeonMob();
-		if (mobType == EDefaultInhabitants.DEFAULT) {
-			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
+		String mobType = dungeon.getDungeonMob();
+		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		PlacementSettings settings = new PlacementSettings();
 		CQStructure structureStair = this.loadStructureFromFile(this.dungeon.getEntranceStairRoom());

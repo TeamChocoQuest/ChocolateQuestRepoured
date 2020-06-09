@@ -6,7 +6,7 @@ import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
@@ -59,7 +59,7 @@ public class PlateauBuilder {
 			}
 		}
 
-		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), EDefaultInhabitants.DEFAULT);
+		return new DungeonPartBlock(world, dungeonGenerator, startPos, blockInfoList, new PlacementSettings(), DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 	}
 
 }

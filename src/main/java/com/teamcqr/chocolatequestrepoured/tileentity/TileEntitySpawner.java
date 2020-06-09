@@ -5,7 +5,8 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -35,7 +36,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	public ItemStackHandler inventory = new ItemStackHandler(9);
 	private boolean spawnedInDungeon = false;
-	private EDefaultInhabitants mobOverride = null;
+	private String mobOverride = null;
 	private int dungeonChunkX = 0;
 	private int dungeonChunkZ = 0;
 	private Mirror mirror = Mirror.NONE;
@@ -61,7 +62,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
 		}
 		if (compound.hasKey("overrideMob")) {
-			this.mobOverride = EDefaultInhabitants.byString(compound.getString("overrideMob"));
+			this.mobOverride = compound.getString("overrideMob");
 		}
 		if (compound.hasKey("dungeonChunkX") && compound.hasKey("dungeonChunkZ")) {
 			this.dungeonChunkX = compound.getInteger("dungeonChunkX");
@@ -79,7 +80,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			compound.setBoolean("isDungeonSpawner", true);
 		}
 		if (this.mobOverride != null) {
-			compound.setString("overrideMob", this.mobOverride.name());
+			compound.setString("overrideMob", this.mobOverride);
 		}
 		if (this.dungeonChunkX != 0 && this.dungeonChunkZ != 0) {
 			compound.setInteger("dungeonChunkX", this.dungeonChunkX);
@@ -109,7 +110,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 	}
 
-	public void setInDungeon(int dunChunkX, int dunChunkZ, EDefaultInhabitants mobOverride) {
+	public void setInDungeon(int dunChunkX, int dunChunkZ, String mobOverride) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = mobOverride;
 		this.dungeonChunkX = dunChunkX;
@@ -152,11 +153,15 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 
 		if (this.mobOverride != null && nbt.getString("id").equals(Reference.MODID + ":dummy")) {
-			if (this.mobOverride == EDefaultInhabitants.DEFAULT) {
-				EDefaultInhabitants mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
-				nbt.setString("id", mobType.getEntityResourceLocation().toString());
+			if (this.mobOverride == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+				DungeonInhabitant mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+				nbt.setString("id", mobType.getEntityID().toString());
 			} else {
-				nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());
+				//nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());
+				DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(this.mobOverride);
+				if(inha != null) {
+					nbt.setString("id", inha.getEntityID().toString());
+				}
 			}
 		}
 
@@ -175,7 +180,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 				}
 
 				if (this.spawnedInDungeon && entity instanceof AbstractEntityCQR) {
-					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(new PlacementSettings().setMirror(this.mirror).setRotation(this.rot), this.mobOverride);
+					((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(new PlacementSettings().setMirror(this.mirror).setRotation(this.rot), DungeonInhabitantManager.getInhabitantByName(this.mobOverride));
 				}
 			}
 

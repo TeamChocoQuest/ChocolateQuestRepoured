@@ -13,7 +13,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -193,9 +193,9 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 
 	@Override
 	public void postProcess() {
-		EDefaultInhabitants mobType = this.dungeon.getDungeonMob();
-		if (mobType == EDefaultInhabitants.DEFAULT) {
-			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		String mobType = this.dungeon.getDungeonMob();
+		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		Map<BlockPos, CQStructure> structureMap = new HashMap<>();
 		for (int iX = 0; iX < this.gridPositions.length && iX < this.structures.length; iX++) {

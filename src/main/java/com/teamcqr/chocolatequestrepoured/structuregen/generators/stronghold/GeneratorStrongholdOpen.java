@@ -14,7 +14,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEnt
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.open.StrongholdFloorOpen;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -157,9 +157,9 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 	@Override
 	public void buildStructure() {
 		File building = this.dungeon.getEntranceBuilding();
-		EDefaultInhabitants mobType = dungeon.getDungeonMob();
-		if (mobType == EDefaultInhabitants.DEFAULT) {
-			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, this.pos.getX(), this.pos.getZ());
+		String mobType = dungeon.getDungeonMob();
+		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		if (building == null || this.dungeon.getEntranceBuildingFolder().listFiles(FileIOUtil.getNBTFileFilter()).length <= 0) {
 			CQRMain.logger.error("No entrance buildings for Open Stronghold dungeon: " + this.getDungeon().getDungeonName());
@@ -232,7 +232,7 @@ public class GeneratorStrongholdOpen extends AbstractDungeonGenerator<DungeonStr
 			for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 				blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 			}
-			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, blockInfoList, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+			this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
 		}
 	}
 
