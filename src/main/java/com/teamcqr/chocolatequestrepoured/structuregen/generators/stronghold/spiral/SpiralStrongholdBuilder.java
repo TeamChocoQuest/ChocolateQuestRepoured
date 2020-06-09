@@ -9,7 +9,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
 import net.minecraft.util.Tuple;
@@ -105,7 +104,7 @@ public class SpiralStrongholdBuilder {
 		}
 	}
 	
-	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ, EDefaultInhabitants mobType) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ, String mobType) {
 		//BlockPos currentPos = strongholdEntrancePos;
 		List<AbstractDungeonPart> floors = new ArrayList<>();
 		for(int i = 0; i < floorCount; i++) {

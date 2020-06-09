@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.Perlin3D;
@@ -101,7 +100,7 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 		for (Map.Entry<BlockPos, IBlockState> entry : stateMap.entrySet()) {
 			blockInfoList.add(new BlockInfo(entry.getKey().subtract(this.pos), entry.getValue(), null));
 		}
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, pos, blockInfoList, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, pos, blockInfoList, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	@Override
@@ -128,7 +127,7 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 			}
 			list.add(new BlockInfo(BlockPos.ORIGIN, state, chest.writeToNBT(new NBTTagCompound())));
 		}
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, start, list, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, start, list, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	public void placeSpawners() {
@@ -141,7 +140,7 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 		spawner.updateContainingBlockInfo();
 		list.add(new BlockInfo(BlockPos.ORIGIN, state, spawner.writeToNBT(new NBTTagCompound())));
 
-		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, spawnerPos, list, new PlacementSettings(), EDefaultInhabitants.ZOMBIE));
+		this.customGenerator.add(new DungeonPartBlock(world, customGenerator, spawnerPos, list, new PlacementSettings(), "ZOMBIE"));
 	}
 
 	public void generateTunnel(BlockPos start, BlockPos end, World world, Map<BlockPos, IBlockState> stateMap) {

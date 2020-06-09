@@ -2,7 +2,8 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.util.BlockPlacingHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -31,18 +32,20 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDefaultInhabitants dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, String dungeonMob, ProtectedRegion protectedRegion) {
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 
 		if (!world.isOutsideBuildHeight(transformedPos)) {
 			BlockPlacingHelper.setBlockState(world, transformedPos, Blocks.AIR.getDefaultState(), 18, CQRConfig.advanced.instantLightUpdates);
 
-			if (dungeonMob.getBossResourceLocation() != null) {
-				Entity entity = EntityList.createEntityByIDFromName(dungeonMob.getBossResourceLocation(), world);
+			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(dungeonMob);
+			
+			if (inha != null && inha.getBossID() != null) {
+				Entity entity = EntityList.createEntityByIDFromName(inha.getBossID(), world);
 
 				entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 				if (entity instanceof AbstractEntityCQRBoss) {
-					((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(settings, dungeonMob);
+					((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
 					((AbstractEntityCQRBoss) entity).setHealingPotions(3);
 				}
 				if (entity instanceof EntityLiving) {

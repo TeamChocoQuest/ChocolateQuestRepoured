@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 import java.util.Collection;
 import java.util.Collections;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 
 import net.minecraft.util.math.BlockPos;
@@ -13,10 +13,10 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 public class DungeonPartBlockSpecial extends DungeonPartBlock {
 
 	public DungeonPartBlockSpecial(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDefaultInhabitants.DEFAULT);
+		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 	}
 
-	public DungeonPartBlockSpecial(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, EDefaultInhabitants dungeonMobType) {
+	public DungeonPartBlockSpecial(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, String dungeonMobType) {
 		super(world, dungeonGenerator, partPos, blocks, settings, dungeonMobType);
 	}
 
