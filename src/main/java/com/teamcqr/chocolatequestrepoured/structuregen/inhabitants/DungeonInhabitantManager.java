@@ -91,7 +91,8 @@ public class DungeonInhabitantManager {
 					String[] entries = key.split(",");
 					List<String> tmpList = new ArrayList<>();
 					for(String s : entries) {
-						if(inhabitantMapping.containsKey("s") && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
+						s = s.trim();
+						if(inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
 							tmpList.add(s);
 						}
 					}
