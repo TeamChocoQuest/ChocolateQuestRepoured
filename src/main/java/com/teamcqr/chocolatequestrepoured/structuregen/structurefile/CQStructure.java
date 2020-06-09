@@ -321,7 +321,8 @@ public class CQStructure {
 				BlockPos pos = mutablePos.subtract(pos1);
 				TileEntity tileEntity = world.getTileEntity(mutablePos);
 
-				fixSpawners(tileEntity);
+				// Removed for public release
+				// fixSpawners(tileEntity);
 
 				if (SPECIAL_BLOCKS.contains(block)) {
 					this.specialBlockInfoList.add(new BlockInfo(pos, state, this.writeTileEntityToNBT(tileEntity)));
@@ -357,7 +358,8 @@ public class CQStructure {
 		this.entityInfoList.clear();
 
 		for (Entity entity : world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos1, pos2.add(1, 1, 1)), input -> !(input instanceof EntityPlayer))) {
-			fixEntity(entity);
+			// Removed for public release
+			// fixEntity(entity);
 
 			if (!ignoreBasicEntities || SPECIAL_ENTITIES.contains(EntityList.getKey(entity))) {
 				this.entityInfoList.add(new EntityInfo(pos1, entity));
