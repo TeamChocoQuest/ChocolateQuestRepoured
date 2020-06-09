@@ -950,6 +950,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			if (item instanceof ItemShieldDummy && mobType != null) {
 				this.setItemStackToSlot(slot, new ItemStack(mobType.getShieldReplacement(), 1));
 			}
+			if(mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
+				setFaction(mobType.getFactionOverride());
+			}
 		}
 	}
 
