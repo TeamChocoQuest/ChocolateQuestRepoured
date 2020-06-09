@@ -153,7 +153,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 
 		if (this.mobOverride != null && nbt.getString("id").equals(Reference.MODID + ":dummy")) {
-			if (this.mobOverride == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			if (this.mobOverride.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 				DungeonInhabitant mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 				nbt.setString("id", mobType.getEntityID().toString());
 			} else {

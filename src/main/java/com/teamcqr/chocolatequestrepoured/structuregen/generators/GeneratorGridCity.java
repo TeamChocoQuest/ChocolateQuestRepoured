@@ -194,7 +194,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 	@Override
 	public void postProcess() {
 		String mobType = this.dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 		Map<BlockPos, CQStructure> structureMap = new HashMap<>();

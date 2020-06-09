@@ -76,7 +76,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	@Override
 	public void buildStructure() {
 		String mobType = this.dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 
