@@ -32,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
+import net.minecraft.block.BlockFire;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -69,6 +70,7 @@ public class CQRMain {
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	public static File CQ_FACTION_FOLDER = null;
+	public static File CQ_INHABITANT_FOLDER = null;
 	public static File CQ_ITEM_FOLDER = null;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
@@ -156,6 +158,7 @@ public class CQRMain {
 		CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures");
 		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output");
 		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
+		CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants");
 		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
 
 		if (!CQ_CONFIG_FOLDER.exists()) {
@@ -184,6 +187,10 @@ public class CQRMain {
 			CQ_FACTION_FOLDER.mkdir();
 			installCQ = true;
 		}
+		if (!CQ_INHABITANT_FOLDER.exists()) {
+			CQ_INHABITANT_FOLDER.mkdir();
+			installCQ = true;
+		}
 		if (!CQ_ITEM_FOLDER.exists()) {
 			CQ_ITEM_FOLDER.mkdir();
 			installCQ = true;
@@ -205,7 +212,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
-		Blocks.FIRE.init();
+		BlockFire.init();
 	}
 
 	@EventHandler
