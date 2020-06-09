@@ -97,9 +97,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			indicator.setAlwaysRenderNameTag(true);
 			indicator.setSilent(true);
 			indicator.setNoGravity(true);
-			NBTTagCompound indicatorNbt = indicator.writeToNBT(new NBTTagCompound());
-
-			genArray.addEntity(pos, EntityList.getKey(indicator), indicatorNbt);
+			
+			genArray.addEntity(BlockPos.ORIGIN, indicator);
 			
 			return;
 		}

@@ -1,94 +1,66 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.EntityDataPart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
  * Copyright (c) 25.05.2019
  * Developed by KalgogSmash
  * GitHub: https://github.com/KalgogSmash
  */
-public class GeneratorCastle implements IDungeonGenerator {
-	private BlockPos origin;
-	private DungeonCastle dungeon;
-	private Random random;
+public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
+
 	private CastleRoomSelector roomHelper;
 
-	public GeneratorCastle(DungeonCastle dungeon) {
-		this.dungeon = dungeon;
-		this.random = this.dungeon.getRandom();
+	public GeneratorCastle(World world, BlockPos pos, DungeonCastle dungeon) {
+		super(world, pos, dungeon);
 	}
 
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		origin = new BlockPos(x, y, z);
-		this.roomHelper = new CastleRoomSelector(origin, this.dungeon);
+	public void preProcess() {
+		this.roomHelper = new CastleRoomSelector(this.pos, this.dungeon);
 		this.roomHelper.randomizeCastle();
 
 		if (this.dungeon.doBuildSupportPlatform()) {
-			PlateauBuilder supportBuilder = new PlateauBuilder();
-			supportBuilder.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-			List<CastleRoomSelector.SupportArea> supportAreas = this.roomHelper.getSupportAreas();
-
-			for (CastleRoomSelector.SupportArea area : supportAreas) {
-				lists.add(supportBuilder.createSupportHillList(this.random, world, area.getNwCorner(), area.getBlocksX(), area.getBlocksZ(), EPosType.CORNER_NW));
+			for (CastleRoomSelector.SupportArea area : this.roomHelper.getSupportAreas()) {
+				CQRMain.logger.info("{} {} {}", area.getNwCorner(), area.getBlocksX(), area.getBlocksZ());
+				BlockPos p1 = this.pos.add(area.getNwCorner());
+				BlockPos p2 = p1.add(area.getBlocksX(), 0, area.getBlocksZ());
+				this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, p1.getX(), p1.getZ(), p2.getX(), p2.getY(), p2.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 			}
 		}
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void buildStructure() {
 		BlockStateGenArray genArray = new BlockStateGenArray();
 		ArrayList<String> bossUuids = new ArrayList<>();
-		this.roomHelper.generate(world, genArray, this.dungeon, origin, bossUuids);
+		String mobType = dungeon.getDungeonMob();
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
+			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
+		}
+		this.roomHelper.generate(this.world, genArray, this.dungeon, this.pos, bossUuids, mobType);
 
-		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getMainMap()));
-		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(genArray.getPostMap()));
-		lists.add(EntityDataPart.splitExtendedEntityDataMap(genArray.getEntityMap()));
-
-		//CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, new BlockPos(x, y, z), new BlockPos(x + this.totalX, y + this.totalY, z + this.totalZ), world, bossUuids);
-		//MinecraftForge.EVENT_BUS.post(event);
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, genArray.getMainMap().values(), new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, pos, genArray.getPostMap().values(), new PlacementSettings(), mobType));
+		this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, pos, genArray.getEntityMap().values(), new PlacementSettings(), mobType));
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void postProcess() {
 		// Does nothing here
-	}
-
-	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Also does nothing
-	}
-
-	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// Also does nothing
-	}
-
-	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public DungeonBase getDungeon() {
-		return this.dungeon;
 	}
 
 }

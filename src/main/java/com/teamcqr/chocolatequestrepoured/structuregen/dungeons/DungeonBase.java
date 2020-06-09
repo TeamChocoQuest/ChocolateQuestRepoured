@@ -9,7 +9,8 @@ import java.util.Random;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.PropertyFileHelper;
 
@@ -36,7 +37,7 @@ public abstract class DungeonBase {
 	protected int[] allowedDims;
 	protected int weight;
 	protected int chance;
-	protected int spawnLimit; 
+	protected int spawnLimit;
 	protected String[] biomes;
 	protected String[] blacklistedBiomes;
 	protected boolean rotateDungeon;
@@ -44,7 +45,7 @@ public abstract class DungeonBase {
 	protected String[] modDependencies;
 	protected String[] dungeonDependencies;
 
-	protected EDungeonMobType dungeonMob;
+	protected String dungeonMob;
 	protected boolean replaceBanners;
 	protected int underGroundOffset;
 	protected int yOffset;
@@ -83,7 +84,7 @@ public abstract class DungeonBase {
 		this.dungeonDependencies = PropertyFileHelper.getStringArrayProperty(prop, "requiredDungeonsForThisToSpawn", new String[0]);
 		this.spawnBehindWall = PropertyFileHelper.getBooleanProperty(prop, "spawnOnlyBehindWall", false);
 
-		this.dungeonMob = EDungeonMobType.byString(prop.getProperty("dummyReplacement", EDungeonMobType.DEFAULT.name().toUpperCase()).toUpperCase());
+		this.dungeonMob = prop.getProperty("dummyReplacement", DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT);
 		this.replaceBanners = PropertyFileHelper.getBooleanProperty(prop, "replaceBanners", false);
 		this.underGroundOffset = PropertyFileHelper.getIntProperty(prop, "undergroundoffset", 0);
 		this.yOffset = PropertyFileHelper.getIntProperty(prop, "yoffset", 0);
@@ -131,6 +132,8 @@ public abstract class DungeonBase {
 		return true;
 	}
 
+	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
+
 	public void generate(World world, int x, int z) {
 		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
 		int y = 0;
@@ -139,13 +142,15 @@ public abstract class DungeonBase {
 				y += DungeonGenUtils.getYForPos(world, chunk.x * 16 + ix, chunk.z * 16 + iz, false);
 			}
 		}
-		y /= 256;
+		y >>= 8;
 		y -= this.getUnderGroundOffset();
 		y += this.getYOffset();
 		this.generate(world, x, y, z);
 	}
 
-	public abstract void generate(World world, int x, int y, int z);
+	public void generate(World world, int x, int y, int z) {
+		this.createDungeonGenerator(world, x, y, z).generate();
+	}
 
 	public void generateWithOffsets(World world, int x, int y, int z) {
 		y -= this.getUnderGroundOffset();
@@ -251,7 +256,7 @@ public abstract class DungeonBase {
 		return this.rotateDungeon;
 	}
 
-	public EDungeonMobType getDungeonMob() {
+	public String getDungeonMob() {
 		return this.dungeonMob;
 	}
 

@@ -15,8 +15,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.commons.io.IOUtils;
-
 import com.google.common.collect.Queues;
 import com.google.common.io.Files;
 import com.google.gson.Gson;
@@ -95,6 +93,7 @@ public class LootTableLoader {
 		}
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
 		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".json");
 		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".prop");
@@ -152,6 +151,7 @@ public class LootTableLoader {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private static ThreadLocal<Deque> getLootContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
 		Field f = ForgeHooks.class.getDeclaredField("lootContext");
 		f.setAccessible(true);
@@ -159,6 +159,7 @@ public class LootTableLoader {
 	}
 
 	private static Object createLootTableContext(ResourceLocation name) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+		@SuppressWarnings("rawtypes")
 		Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
 		c.setAccessible(true);
 		return c.newInstance(name, true);

@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
 
@@ -16,14 +17,18 @@ import net.minecraft.world.World;
 
 public class SpiralStrongholdBuilder {
 
+	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private DungeonGenerator dungeonGenerator;
 	private ESkyDirection allowedDirection;
 	private DungeonVolcano dungeon;
 	private SpiralStrongholdFloor[] floors;
 	private int floorCount = 0;
-	private List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
+	private List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 	private Random rdm;
 	
-	public SpiralStrongholdBuilder(ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
+	public SpiralStrongholdBuilder(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, ESkyDirection expansionDirection, DungeonVolcano dungeon, Random rdm) {
+		this.generator = generator;
+		this.dungeonGenerator = dungeonGenerator;
 		this.rdm = rdm;
 		this.allowedDirection = expansionDirection;
 		this.dungeon = dungeon;
@@ -80,7 +85,7 @@ public class SpiralStrongholdBuilder {
 				floorRoomCount = roomCount;
 				roomCount = 0;
 			}
-			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount);
+			SpiralStrongholdFloor floor = new SpiralStrongholdFloor(this.generator, this.dungeonGenerator, posTuple, entranceX, entranceZ, roomCount <= 0 || i == (floors.length -1), dungeon.getFloorSideLength(), floorRoomCount);
 			floor.calculateRoomGrid(entranceType, (i +1) % 2 == 0);
 			floor.calculateCoordinates(y, dungeon.getRoomSizeX(), dungeon.getRoomSizeZ());
 			posTuple = floor.getExitCoordinates();
@@ -99,13 +104,9 @@ public class SpiralStrongholdBuilder {
 		}
 	}
 	
-	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ) {
+	public void buildFloors(BlockPos strongholdEntrancePos, World world, int dungeonChunkX, int dungeonChunkZ, String mobType) {
 		//BlockPos currentPos = strongholdEntrancePos;
-		List<List<? extends IStructure>> floors = new ArrayList<>();
-		EDungeonMobType mobType = dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(world, dungeonChunkX, dungeonChunkZ);
-		}
+		List<AbstractDungeonPart> floors = new ArrayList<>();
 		for(int i = 0; i < floorCount; i++) {
 			SpiralStrongholdFloor floor = this.floors[i];
 			floors.addAll(floor.buildRooms(dungeon, strongholdEntrancePos.getX() /16, strongholdEntrancePos.getZ() /16, world, mobType));
@@ -113,7 +114,7 @@ public class SpiralStrongholdBuilder {
 		strongholdParts.addAll(floors);
 	}
 
-	public List<List<? extends IStructure>> getStrongholdParts() {
+	public List<AbstractDungeonPart> getStrongholdParts() {
 		return strongholdParts;
 	}
 

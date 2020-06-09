@@ -42,7 +42,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -312,7 +312,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	@Nullable
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
-		this.setHealingPotions(CQRConfig.mobs.defaultHealingPotionCount);
+		this.setHealingPotions(this.isNonBoss() ? 1 : 3);
 		this.setItemStackToExtraSlot(EntityEquipmentExtraSlot.BADGE, new ItemStack(ModItems.BADGE));
 		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			this.setDropChance(slot, 0.04F);
@@ -932,7 +932,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, EDungeonMobType mobType) {
+	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, DungeonInhabitant mobType) {
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
 
@@ -947,8 +947,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		for (EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
 			ItemStack stack = this.getItemStackFromSlot(slot);
 			Item item = stack.getItem();
-			if (item instanceof ItemShieldDummy) {
-				this.setItemStackToSlot(slot, mobType.getShieldItem().copy());
+			if (item instanceof ItemShieldDummy && mobType != null) {
+				this.setItemStackToSlot(slot, new ItemStack(mobType.getShieldReplacement(), 1));
+			}
+			if(mobType != null && mobType.getFactionOverride() != null && !mobType.getFactionOverride().isEmpty() && FactionRegistry.instance().getFactionInstance(mobType.getFactionOverride()) != null) {
+				setFaction(mobType.getFactionOverride());
 			}
 		}
 	}

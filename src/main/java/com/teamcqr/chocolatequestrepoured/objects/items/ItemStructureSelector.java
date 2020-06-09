@@ -60,7 +60,7 @@ public class ItemStructureSelector extends Item {
 					pos2 = pos2.subtract(pos);
 				}
 
-				tileEntity.setValues(DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.structureName, tileEntity.partMode, tileEntity.relativeMode, tileEntity.ignoreEntities);
+				tileEntity.setValues(DungeonGenUtils.getMinPos(pos1, pos2), DungeonGenUtils.getMaxPos(pos1, pos2), tileEntity.structureName, tileEntity.relativeMode, tileEntity.ignoreEntities);
 			}
 		} else if (!world.isRemote) {
 			if (player.isSneaking()) {

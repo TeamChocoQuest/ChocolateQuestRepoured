@@ -4,16 +4,16 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -21,6 +21,8 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 public class SpiralStrongholdFloor {
 
+	private AbstractDungeonGenerator<DungeonVolcano> generator;
+	private DungeonGenerator dungeonGenerator;
 	private Tuple<Integer, Integer> entranceCoordinates;
 	private Tuple<Integer, Integer> entranceIndex;
 	private Tuple<Integer, Integer> exitCoordinates;
@@ -31,7 +33,9 @@ public class SpiralStrongholdFloor {
 	private EStrongholdRoomType[][] roomGrid;
 	private BlockPos[][] coordinateGrid;
 	
-	public SpiralStrongholdFloor(Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+	public SpiralStrongholdFloor(AbstractDungeonGenerator<DungeonVolcano> generator, DungeonGenerator dungeonGenerator, Tuple<Integer, Integer> entrancePos, int entranceX, int entranceZ, boolean isLastFloor, int sideLength, int roomCount) {
+		this.generator = generator;
+		this.dungeonGenerator = dungeonGenerator;
 		this.entranceCoordinates = entrancePos;
 		this.entranceIndex = new Tuple<>(entranceX, entranceZ);
 		this.isLastFloor = isLastFloor;
@@ -146,16 +150,16 @@ public class SpiralStrongholdFloor {
 	
 	private EStrongholdRoomType getExitRoomType(int iX, int iZ, boolean rev) {
 		if(iX == 0 && iZ == 0) {
-			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_EE;
+			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_EE;
 		}
 		if(iX == 0 && iZ == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_SS;
+			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_NN;
 		}
 		if(iX == (sideLength -1) && iZ == 0) {
-			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_NN;
+			return rev ? EStrongholdRoomType.STAIR_WW : EStrongholdRoomType.STAIR_SS;
 		}
 		if(iX == (sideLength -1) && iZ == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_WW;
+			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_WW;
 		}
 		
 		//Stairs not in corners
@@ -166,10 +170,10 @@ public class SpiralStrongholdFloor {
 			return rev ? EStrongholdRoomType.STAIR_EE : EStrongholdRoomType.STAIR_WW;
 		}
 		if(iX == 0) {
-			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_SS;
+			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_NN;
 		}
 		if(iX == (sideLength -1)) {
-			return rev ? EStrongholdRoomType.STAIR_SS : EStrongholdRoomType.STAIR_NN;
+			return rev ? EStrongholdRoomType.STAIR_NN : EStrongholdRoomType.STAIR_SS;
 		}
 		return EStrongholdRoomType.NONE;
 	}
@@ -222,13 +226,9 @@ public class SpiralStrongholdFloor {
 		return roomGrid;
 	}
 	
-	public List<List<? extends IStructure>> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, EDungeonMobType mobType) {
-		List<List<? extends IStructure>> strongholdParts = new ArrayList<>();
+	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, String mobType) {
+		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
-		settings.setMirror(Mirror.NONE);
-		settings.setRotation(Rotation.NONE);
-		settings.setReplacedBlock(Blocks.STRUCTURE_VOID);
-		settings.setIntegrity(1.0F);
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				if((iX == 0 || iX == (sideLength -1)) || (iZ == 0 || iZ == (sideLength -1))) {
@@ -237,11 +237,11 @@ public class SpiralStrongholdFloor {
 						if(dungeon != null && world != null) {
 							File file = dungeon.getRoomNBTFileForType(type);
 							if(file != null) {
-								CQStructure room = new CQStructure(file);
-								room.setDungeonMob(mobType);
-								for (List<? extends IStructure> list : room.addBlocksToWorld(world, coordinateGrid[iX][iZ], settings, EPosType.CENTER_XZ_LAYER, dungeon, dunX, dunZ)) {
-									strongholdParts.add(list);
-								}
+								CQStructure room = this.generator.loadStructureFromFile(file);
+								BlockPos p = DungeonGenUtils.getCentralizedPosForStructure(coordinateGrid[iX][iZ], room, settings);
+								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getBlockInfoList(), settings, mobType));
+								strongholdParts.add(new DungeonPartBlock(world, this.dungeonGenerator, p, room.getSpecialBlockInfoList(), settings, mobType));
+								strongholdParts.add(new DungeonPartEntity(world, this.dungeonGenerator, p, room.getEntityInfoList(), settings, mobType));
 							}
 						}
 					}

@@ -8,13 +8,13 @@ import java.util.Map;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartCover;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.EPosType;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -34,34 +34,33 @@ import net.minecraft.world.gen.structure.template.PlacementSettings;
  * Developed by DerToaster98
  * GitHub: https://github.com/DerToaster98
  */
-public class GeneratorGuardedStructure implements IDungeonGenerator {
+public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonGuardedCastle> {
 
 	// DONE? remake the part where the dungeons are chosen and the support hills are being built, it does not work how it should atm...
 
-	private DungeonGuardedCastle dungeon;
-
-	private List<File> chosenStructures = new ArrayList<File>();
+	private List<File> chosenStructures = new ArrayList<>();
 	private File centerStructure;
 
 	private BlockPos startPos;
-	private List<BlockPos> structurePosList = new ArrayList<BlockPos>();
-	private List<Rotation> rotList = new ArrayList<Rotation>();
+	private List<BlockPos> structurePosList = new ArrayList<>();
+	private List<Rotation> rotList = new ArrayList<>();
 
-	private HashMap<CQStructure, BlockPos> toGenerate = new HashMap<CQStructure, BlockPos>();
+	private Map<CQStructure, BlockPos> toGenerate = new HashMap<>();
 
-	public GeneratorGuardedStructure(DungeonGuardedCastle dungeon) {
-		this.dungeon = dungeon;
+	public GeneratorGuardedStructure(World world, BlockPos pos, DungeonGuardedCastle dungeon) {
+		super(world, pos, dungeon);
 	}
 
-	private World worldIn;
-
 	@Override
-	public void preProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void preProcess() {
+		int buildings = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinBuildings(), this.dungeon.getMaxBuilding(), this.random);
+		this.centerStructure = this.dungeon.getStructureFileFromDirectory(this.dungeon.getCenterStructureFolder());
+		for (int i = 0; i < buildings; i++) {
+			this.chosenStructures.add(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFileFromDirectory(this.dungeon.getStructureFolder())));
+		}
+
 		// DONE: Calculate positions of structures, then build the support platforms, then calculate
-		// !! IN BUILD STEP !! PATH BUILDING: First: Chose wether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
-		BlockPos start = new BlockPos(x, y, z);
-		this.startPos = new BlockPos(start);
-		this.worldIn = world;
+		// !! IN BUILD STEP !! PATH BUILDING: First: Chose whether to build x or z first. then build x/z until the destination x/z is reached. then switch to the remaining component and wander to the destination
 		int vX = DungeonGenUtils.getIntBetweenBorders(this.dungeon.getMinDistance(), this.dungeon.getMaxDistance());
 		for (int i = 0; i < this.chosenStructures.size(); i++) {
 			if (!this.dungeon.placeInCircle() && i > 0) {
@@ -77,7 +76,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 			}
 			v = VectorUtil.rotateVectorAroundY(v, degrees);
 			// System.out.println("Vector: " + v.toString());
-			BlockPos newPos = start.add(v);
+			BlockPos newPos = this.pos.add(v);
 			while (this.positionConflicts(newPos) && i > 0 && !this.dungeon.placeInCircle()) {
 				degrees = ((Integer) new Random().nextInt(360)).doubleValue();
 				if (this.dungeon.placeInCircle()) {
@@ -86,7 +85,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 				}
 				v = VectorUtil.rotateVectorAroundY(v, degrees);
 
-				newPos = start.add(v);
+				newPos = this.pos.add(v);
 			}
 			int yNew = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(newPos), newPos.getX(), newPos.getZ(), true);
 
@@ -107,32 +106,25 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	@Override
-	public void buildStructure(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void buildStructure() {
 		if (this.centerStructure == null) {
-			CQRMain.logger.error("No center building for guarded castle: " + this.dungeon.getDungeonName());
+			CQRMain.logger.error("No center building for guarded castle: {}", this.dungeon.getDungeonName());
 			return;
 		}
-		CQStructure centerDun = new CQStructure(this.centerStructure);
+		CQStructure centerDun = this.loadStructureFromFile(this.centerStructure);
 
-		PlateauBuilder platformCenter = new PlateauBuilder();
-		platformCenter.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
-		lists.add(platformCenter.createSupportHillList(new Random(), world, new BlockPos(x, y + this.dungeon.getUnderGroundOffset(), z), centerDun.getSize().getX(), centerDun.getSize().getZ(), EPosType.DEFAULT));
+		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX(), this.pos.getZ(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.toGenerate.put(centerDun, this.pos);
 
-		BlockPos cenPos = new BlockPos(x /*- (centerDun.getSizeX() /2)*/, y, z /*- (centerDun.getSizeZ() /2)*/);
-
-		this.toGenerate.put(centerDun, cenPos);
-		// this.shieldPos = centerDun.getShieldCorePosition();
-
-		PlateauBuilder platform = new PlateauBuilder();
-		platform.load(this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock());
 		// First, build all the support platforms
 		for (int i = 0; i < this.structurePosList.size(); i++) {
 			if (i < this.chosenStructures.size()) {
 				// CQRMain.logger.info("Building support platform {}...", i + 1);
 				// DONE: Load structures from file method !!HIGH PRIORITY!!
-				CQStructure dungeonToSpawn = new CQStructure(this.chosenStructures.get(i));
+				File file = this.chosenStructures.get(i);
+				CQStructure structure = this.loadStructureFromFile(file);
 
-				if (dungeonToSpawn != null) {
+				if (structure != null) {
 					// Build the support platform...
 					BlockPos pos = this.structurePosList.get(i);
 
@@ -140,8 +132,8 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 					int zT = pos.getZ();
 
 					Rotation rot = this.dungeon.rotateDungeon() ? Rotation.values()[new Random().nextInt(4)] : Rotation.NONE;
-					int sizeX = dungeonToSpawn.getSize().getX();
-					int sizeZ = dungeonToSpawn.getSize().getZ();
+					int sizeX = structure.getSize().getX();
+					int sizeZ = structure.getSize().getZ();
 					this.rotList.set(i, rot);
 					if (this.dungeon.rotateDungeon()) {
 						switch (rot) {
@@ -165,7 +157,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 						this.structurePosList.set(i, pos);
 					}
 
-					lists.add(platform.createSupportHillList(new Random(), world, new BlockPos(pos.getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ()), dungeonToSpawn.getSize().getX(), dungeonToSpawn.getSize().getZ(), EPosType.DEFAULT));
+					this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, pos.getX(), pos.getZ(), pos.getX() + structure.getSize().getX(), pos.getY() + this.dungeon.getUnderGroundOffset(), pos.getZ() + structure.getSize().getZ(), this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 					// Build the structure...
 					/*
@@ -176,7 +168,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 					 * pos = new BlockPos(X, Y, Z);
 					 */
 
-					this.toGenerate.put(dungeonToSpawn, pos);
+					this.toGenerate.put(structure, pos);
 				}
 			}
 		}
@@ -185,7 +177,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 			// CQRMain.logger.info("Building {} roads...", this.structurePosList.size());
 			for (BlockPos end : this.structurePosList) {
 				// CQRMain.logger.info("Building road {} of {}...", this.structurePosList.indexOf(end) + 1, this.structurePosList.size());
-				this.buildPath(end, cenPos /* this.startPos */);
+				this.buildPath(end, this.pos /* this.startPos */);
 			}
 			// CQRMain.logger.info("Roads built!");
 		}
@@ -193,8 +185,12 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	@Override
-	public void postProcess(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void postProcess() {
 		if (this.toGenerate != null && !this.toGenerate.isEmpty()) {
+			String mobType = this.dungeon.getDungeonMob();
+			if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
+				mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
+			}
 
 			PlacementSettings plcmnt = new PlacementSettings();
 			plcmnt.setMirror(Mirror.NONE);
@@ -205,8 +201,8 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 			plcmnt.setIntegrity(1.0f);
 
 			int index = 1;
-			BlockPos posLower = new BlockPos(x, y, z);
-			BlockPos posUpper = new BlockPos(x, y, z);
+			BlockPos posLower = this.pos;
+			BlockPos posUpper = this.pos;
 			//List<String> bosses = new ArrayList<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				// CQRMain.logger.info("Building house {}...", index);
@@ -241,45 +237,15 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 
 				plcmnt.setRotation(this.rotList.get(index - 1));
 
-				for (List<? extends IStructure> list : structure.addBlocksToWorld(world, pos, plcmnt, EPosType.DEFAULT, this.dungeon, chunk.x, chunk.z))
-					lists.add(list);
-
-				/*
-				 * for (UUID id : structure.getBossIDs()) {
-				 * bosses.add(id.toString());
-				 * }
-				 */
+				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, posLower, structure.getBlockInfoList(), plcmnt, mobType));
+				this.dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, posLower, structure.getSpecialBlockInfoList(), plcmnt, mobType));
+				this.dungeonGenerator.add(new DungeonPartEntity(world, dungeonGenerator, posLower, structure.getEntityInfoList(), plcmnt, mobType));
 
 				index++;
 			}
 
-			/*
-			 * CQDungeonStructureGenerateEvent event = new CQDungeonStructureGenerateEvent(this.dungeon, posLower, posUpper.subtract(posLower), world, bosses);
-			 * event.setShieldCorePosition(shieldPos);
-			 * MinecraftForge.EVENT_BUS.post(event);
-			 */
+			this.placeCoverBlocks();
 		}
-	}
-
-	@Override
-	public void fillChests(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-
-	}
-
-	@Override
-	public void placeSpawners(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
-
-	}
-
-	// Functionality: Things and methods for generating the paths / streets...
-	public void addStructure(File f) {
-		// if(!chosenStructures.contains(f)) {
-		this.chosenStructures.add(f);
-		// }
-	}
-
-	public void setCenterStructure(File f) {
-		this.centerStructure = f;
 	}
 
 	private void buildPath(BlockPos start, BlockPos end) {
@@ -294,7 +260,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	private void buildPathX(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
+		Chunk currChunk = this.world.getChunkFromBlockCoords(start);
 		int vX = end.getX() < start.getX() ? -1 : 1;
 		if (end.getX() == start.getX()) {
 			vX = 0;
@@ -306,7 +272,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 			y = DungeonGenUtils.getHighestYAt(currChunk, currX, z, true);
 			this.buildPathSegmentX(new BlockPos(currX, y, z));
 			currX += vX;
-			currChunk = this.worldIn.getChunkFromBlockCoords(new BlockPos(currX, y, z));
+			currChunk = this.world.getChunkFromBlockCoords(new BlockPos(currX, y, z));
 		} while (currX != end.getX());
 		/*
 		 * if(start.getZ() != end.getZ()) {
@@ -317,7 +283,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	private void buildPathZ(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.worldIn.getChunkFromBlockCoords(start);
+		Chunk currChunk = this.world.getChunkFromBlockCoords(start);
 		int vZ = end.getZ() < start.getZ() ? -1 : 1;
 		if (end.getZ() == start.getZ()) {
 			vZ = 0;
@@ -329,7 +295,7 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 			y = DungeonGenUtils.getHighestYAt(currChunk, x, currZ, true);
 			this.buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
-			currChunk = this.worldIn.getChunkFromBlockCoords(new BlockPos(x, y, currZ));
+			currChunk = this.world.getChunkFromBlockCoords(new BlockPos(x, y, currZ));
 		} while (currZ != end.getZ());
 		/*
 		 * if(start.getX() != end.getX()) {
@@ -340,9 +306,9 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	private void buildPathSegmentX(BlockPos pos) {
-		this.worldIn.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
-		this.worldIn.setBlockState(pos.north(), this.dungeon.getPathMaterial().getDefaultState());
-		this.worldIn.setBlockState(pos.south(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos.north(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos.south(), this.dungeon.getPathMaterial().getDefaultState());
 
 		this.supportBlock(pos);
 		this.supportBlock(pos.north());
@@ -350,9 +316,9 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	}
 
 	private void buildPathSegmentZ(BlockPos pos) {
-		this.worldIn.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
-		this.worldIn.setBlockState(pos.west(), this.dungeon.getPathMaterial().getDefaultState());
-		this.worldIn.setBlockState(pos.east(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos, this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos.west(), this.dungeon.getPathMaterial().getDefaultState());
+		this.world.setBlockState(pos.east(), this.dungeon.getPathMaterial().getDefaultState());
 
 		this.supportBlock(pos);
 		this.supportBlock(pos.west());
@@ -362,13 +328,13 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 	private void supportBlock(BlockPos pos) {
 		int i = 0;
 		BlockPos tmpPos = pos.up();
-		while (!Block.isEqualTo(this.worldIn.getBlockState(tmpPos).getBlock(), Blocks.AIR) && i <= 3) {
-			this.worldIn.setBlockToAir(tmpPos);
+		while (!Block.isEqualTo(this.world.getBlockState(tmpPos).getBlock(), Blocks.AIR) && i <= 3) {
+			this.world.setBlockToAir(tmpPos);
 			tmpPos = tmpPos.up();
 		}
 		tmpPos = pos.down();
-		while (Block.isEqualTo(this.worldIn.getBlockState(tmpPos).getBlock(), Blocks.AIR)) {
-			this.worldIn.setBlockState(tmpPos, this.dungeon.getPathMaterial().getDefaultState());
+		while (Block.isEqualTo(this.world.getBlockState(tmpPos).getBlock(), Blocks.AIR)) {
+			this.world.setBlockState(tmpPos, this.dungeon.getPathMaterial().getDefaultState());
 			tmpPos = tmpPos.down();
 		}
 	}
@@ -387,10 +353,8 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 		}
 	}
 
-	@Override
-	public void placeCoverBlocks(World world, Chunk chunk, int x, int y, int z, List<List<? extends IStructure>> lists) {
+	public void placeCoverBlocks() {
 		if (this.dungeon.isCoverBlockEnabled()) {
-			Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
 			for (CQStructure structure : this.toGenerate.keySet()) {
 				int startX = this.toGenerate.get(structure).getX() - structure.getSize().getX() / 3 - CQRConfig.general.supportHillWallSize / 2;
 				int startZ = this.toGenerate.get(structure).getZ() - structure.getSize().getZ() / 3 - CQRConfig.general.supportHillWallSize / 2;
@@ -398,22 +362,9 @@ public class GeneratorGuardedStructure implements IDungeonGenerator {
 				int endX = this.toGenerate.get(structure).getX() + structure.getSize().getX() + structure.getSize().getX() / 3 + CQRConfig.general.supportHillWallSize / 2;
 				int endZ = this.toGenerate.get(structure).getZ() + structure.getSize().getZ() + structure.getSize().getZ() / 3 + CQRConfig.general.supportHillWallSize / 2;
 
-				for (int iX = startX; iX <= endX; iX++) {
-					for (int iZ = startZ; iZ <= endZ; iZ++) {
-						BlockPos pos = new BlockPos(iX, world.getTopSolidOrLiquidBlock(new BlockPos(iX, 0, iZ)).getY(), iZ);
-						if (!Block.isEqualTo(world.getBlockState(pos.subtract(new Vec3i(0, 1, 0))).getBlock(), this.dungeon.getCoverBlock())) {
-							stateMap.put(pos, new ExtendedBlockStatePart.ExtendedBlockState(this.dungeon.getCoverBlock().getDefaultState(), null));
-						}
-					}
-				}
+				this.dungeonGenerator.add(new DungeonPartCover(world, dungeonGenerator, startX, startZ, endX, endZ, this.dungeon.getCoverBlock()));
 			}
-			lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
 		}
-	}
-
-	@Override
-	public DungeonBase getDungeon() {
-		return this.dungeon;
 	}
 
 }

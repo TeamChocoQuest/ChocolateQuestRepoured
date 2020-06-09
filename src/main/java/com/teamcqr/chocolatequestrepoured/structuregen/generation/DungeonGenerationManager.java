@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generation;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +17,9 @@ import javax.annotation.Nullable;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,7 +29,7 @@ public class DungeonGenerationManager {
 
 	private static final Map<World, DungeonGenerationManager> instances = new HashMap<>();
 
-	private final List<Structure> dungeonPartList = new ArrayList<>();
+	private final List<DungeonGenerator> dungeonGeneratorList = new ArrayList<>();
 	private final World world;
 	private final File folder;
 
@@ -43,7 +47,7 @@ public class DungeonGenerationManager {
 		if (world != null && !world.isRemote && DungeonGenerationManager.getInstance(world) == null) {
 			DungeonGenerationManager.createInstance(world);
 			DungeonGenerationManager.getInstance(world).loadData();
-			CQRMain.logger.info("Loaded {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonPartList.size());
+			CQRMain.logger.info("Loaded {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonGeneratorList.size());
 		}
 	}
 
@@ -55,7 +59,7 @@ public class DungeonGenerationManager {
 
 	public static void handleWorldUnload(World world) {
 		if (world != null && !world.isRemote) {
-			CQRMain.logger.info("Saved {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonPartList.size());
+			CQRMain.logger.info("Saved {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonGeneratorList.size());
 			DungeonGenerationManager.deleteInstance(world);
 		}
 	}
@@ -86,9 +90,18 @@ public class DungeonGenerationManager {
 		}
 	}
 
-	public static void addStructure(World world, Structure structure) {
+	public static void addStructure(World world, DungeonGenerator structure, @Nullable DungeonBase dungeon) {
 		if (world != null && !world.isRemote) {
-			DungeonGenerationManager.getInstance(world).dungeonPartList.add(structure);
+			if (dungeon != null) {
+				structure.setupProtectedRegion(dungeon);
+			}
+			structure.setupLight();
+			structure.startGeneration();
+			if (dungeon != null) {
+				DungeonDataManager.addDungeonEntry(world, dungeon, structure.getPos());
+			}
+			ProtectedRegionManager.getInstance(world).addProtectedRegion(structure.getProtectedRegion());
+			DungeonGenerationManager.getInstance(world).dungeonGeneratorList.add(structure);
 		}
 	}
 
@@ -106,7 +119,7 @@ public class DungeonGenerationManager {
 	private void createStructureFromFile(File file) {
 		try (InputStream inputStream = new FileInputStream(file)) {
 			NBTTagCompound compound = CompressedStreamTools.readCompressed(inputStream);
-			this.dungeonPartList.add(new Structure(this.world, compound));
+			this.dungeonGeneratorList.add(new DungeonGenerator(this.world, compound));
 		} catch (IOException e) {
 			CQRMain.logger.info("Failed to load structure from file: " + file.getName(), e);
 		}
@@ -120,20 +133,20 @@ public class DungeonGenerationManager {
 			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				file.delete();
 			}
-			for (Structure structure : this.dungeonPartList) {
+			for (DungeonGenerator structure : this.dungeonGeneratorList) {
 				this.createFileFromStructure(this.folder, structure);
 			}
 		}
 	}
 
-	private void createFileFromStructure(File folder, Structure structure) {
-		File file = new File(folder, structure.getUuid().toString() + ".nbt");
+	private void createFileFromStructure(File folder, DungeonGenerator dungeonGenerator) {
+		File file = new File(folder, dungeonGenerator.getUuid().toString() + ".nbt");
 		try {
-			if (!file.exists()) {
-				file.createNewFile();
+			if (!file.exists() && !file.createNewFile()) {
+				throw new FileNotFoundException();
 			}
 			try (OutputStream outputStream = new FileOutputStream(file)) {
-				CompressedStreamTools.writeCompressed(structure.writeToNBT(), outputStream);
+				CompressedStreamTools.writeCompressed(dungeonGenerator.writeToNBT(), outputStream);
 			}
 		} catch (IOException e) {
 			CQRMain.logger.info("Failed to save structure to file: " + file.getName(), e);
@@ -141,20 +154,14 @@ public class DungeonGenerationManager {
 	}
 
 	private void tick() {
-		if (!this.dungeonPartList.isEmpty()) {
-			List<Integer> toRemove = new ArrayList<>();
+		for (int i = 0; i < this.dungeonGeneratorList.size(); i++) {
+			DungeonGenerator dungeonGenerator = this.dungeonGeneratorList.get(i);
 
-			for (int i = 0; i < this.dungeonPartList.size(); i++) {
-				Structure structure = this.dungeonPartList.get(i);
-				structure.tick(this.world);
-				if (structure.isGenerated()) {
-					toRemove.add(i);
-					CQRMain.logger.info("Generated dungeon!");
-				}
-			}
+			dungeonGenerator.tick();
 
-			for (int i = 0; i < toRemove.size(); i++) {
-				this.dungeonPartList.remove((int) toRemove.get(i) - i);
+			if (dungeonGenerator.isGenerated()) {
+				this.dungeonGeneratorList.remove(i--);
+				CQRMain.logger.info("Generated dungeon {} at {}", dungeonGenerator.getDungeonName(), dungeonGenerator.getPos());
 			}
 		}
 	}

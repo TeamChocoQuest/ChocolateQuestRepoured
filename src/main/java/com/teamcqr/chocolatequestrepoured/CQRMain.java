@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModCapabilities;
 import com.teamcqr.chocolatequestrepoured.init.ModDispenseBehaviors;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.init.ModMaterials;
 import com.teamcqr.chocolatequestrepoured.init.ModMessages;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
@@ -23,7 +24,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDra
 import com.teamcqr.chocolatequestrepoured.proxy.IProxy;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
-import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructurePart;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -31,6 +32,7 @@ import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 import com.teamcqr.chocolatequestrepoured.util.handlers.GuiHandler;
 
+import net.minecraft.block.BlockFire;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -68,6 +70,7 @@ public class CQRMain {
 	public static File CQ_EXPORT_FILES_FOLDER = null;
 	public static File CQ_CHEST_FOLDER = null;
 	public static File CQ_FACTION_FOLDER = null;
+	public static File CQ_INHABITANT_FOLDER = null;
 	public static File CQ_ITEM_FOLDER = null;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
@@ -131,9 +134,7 @@ public class CQRMain {
 		// remove this line, moving it somewhere else is fine, but it must be called in
 		// pre initialization (!)
 		GameRegistry.registerWorldGenerator(new WorldDungeonGenerator(), 100);
-		if (CQRConfig.wall.enabled) {
-			GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
-		}
+		GameRegistry.registerWorldGenerator(new WorldWallGenerator(), 101);
 
 		// Instantiating enums
 		EBannerPatternsCQ.values();
@@ -145,6 +146,7 @@ public class CQRMain {
 
 		ModMessages.registerMessages();
 		ModCapabilities.registerCapabilities();
+		ModLoottables.registerLootTables();
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
@@ -156,6 +158,7 @@ public class CQRMain {
 		CQ_STRUCTURE_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "structures");
 		CQ_EXPORT_FILES_FOLDER = new File(CQ_CONFIG_FOLDER, "exporter_output");
 		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
+		CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants");
 		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
 
 		if (!CQ_CONFIG_FOLDER.exists()) {
@@ -184,6 +187,10 @@ public class CQRMain {
 			CQ_FACTION_FOLDER.mkdir();
 			installCQ = true;
 		}
+		if (!CQ_INHABITANT_FOLDER.exists()) {
+			CQ_INHABITANT_FOLDER.mkdir();
+			installCQ = true;
+		}
 		if (!CQ_ITEM_FOLDER.exists()) {
 			CQ_ITEM_FOLDER.mkdir();
 			installCQ = true;
@@ -205,7 +212,7 @@ public class CQRMain {
 		NetworkRegistry.INSTANCE.registerGuiHandler(CQRMain.INSTANCE, new GuiHandler());
 		ModMaterials.setRepairItemsForMaterials();
 		// SmeltingHandler.init();
-		Blocks.FIRE.init();
+		BlockFire.init();
 	}
 
 	@EventHandler
@@ -213,8 +220,9 @@ public class CQRMain {
 		proxy.postInit();
 
 		DungeonRegistry.getInstance().loadDungeons();
-		CQStructurePart.updateSpecialBlocks();
-		CQStructurePart.updateSpecialEntities();
+		CQStructure.cacheFiles();
+		CQStructure.updateSpecialBlocks();
+		CQStructure.updateSpecialEntities();
 		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
 		ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
 		ModDispenseBehaviors.registerDispenseBehaviors();

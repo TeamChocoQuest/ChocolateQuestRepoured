@@ -1,18 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.thewall.wallparts;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.ExtendedBlockStatePart.ExtendedBlockState;
-import com.teamcqr.chocolatequestrepoured.structuregen.generation.IStructure;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
+import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
+import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
  * Copyright (c) 23.05.2019 Developed by DerToaster98 GitHub:
@@ -20,48 +22,36 @@ import net.minecraft.world.chunk.Chunk;
  */
 public class WallPartWall implements IWallPart {
 
-	public WallPartWall() {
-		// I dont think this needs a constructor
-	}
-
 	@Override
 	public int getTopY() {
 		return CQRConfig.wall.topY - 7;
 	}
 
 	@Override
-	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, List<List<? extends IStructure>> lists) {
+	public void generateWall(int chunkX, int chunkZ, World world, Chunk chunk, DungeonGenerator dungeonGenerator) {
 		int startX = chunkX * 16 + 8;
 		int startZ = chunkZ * 16;
+		int startY = this.getBottomY(world, startX, startZ);
 
-		// All the calculated block positions are stored within this map
-		Map<BlockPos, ExtendedBlockStatePart.ExtendedBlockState> stateMap = new HashMap<>();
-		ExtendedBlockStatePart.ExtendedBlockState stateObsidian = new ExtendedBlockState(Blocks.OBSIDIAN.getDefaultState(), null);
-		ExtendedBlockStatePart.ExtendedBlockState stateBrick = new ExtendedBlockState(Blocks.STONEBRICK.getDefaultState(), null);
-		if (!CQRConfig.wall.obsidianCore) {
-			stateObsidian = stateBrick;
-		}
+		if (this.getTopY() > startY) {
+			// All the calculated block positions are stored within this map
+			List<AbstractBlockInfo> blockInfoList = new ArrayList<>();
+			IBlockState stateBrick = Blocks.STONEBRICK.getDefaultState();
+			IBlockState stateObsidian = CQRConfig.wall.obsidianCore ? Blocks.OBSIDIAN.getDefaultState() : stateBrick;
 
-		// Calculates all the block positions
-		int lowerY = this.getLowerY(world, startX, startZ);
-		for (int y = lowerY; y <= this.getTopY(); y++) {
-			for (int z = 4; z < 12; z++) {
-				for (int x = 0; x < 16; x++) {
-					BlockPos pos = new BlockPos(startX + x, y, startZ + z);
-					if (y == this.getTopY()) {
-						stateMap.put(pos, stateBrick);
-					} else if ((z >= 6 && z <= 9)) {
-						stateMap.put(pos, stateObsidian);
-					} else {
-						stateMap.put(pos, stateBrick);
-					}
+			int height = this.getTopY() - startY;
+			// Calculates all the block positions
+			for (BlockPos pos : BlockPos.getAllInBox(0, 0, 4, 15, height, 11)) {
+				if (pos.getY() < height && pos.getZ() >= 6 && pos.getZ() <= 9) {
+					blockInfoList.add(new BlockInfo(pos, stateObsidian, null));
+				} else {
+					blockInfoList.add(new BlockInfo(pos, stateBrick, null));
 				}
 			}
+
+			// Places the blocks at the calculated positions
+			dungeonGenerator.add(new DungeonPartBlock(world, dungeonGenerator, new BlockPos(startX, startY, startZ), blockInfoList, new PlacementSettings(), "SPECTER"));
 		}
-
-		// Places the blocks at the calculated positions
-		lists.add(ExtendedBlockStatePart.splitExtendedBlockStateMap(stateMap));
-
 	}
 
 }

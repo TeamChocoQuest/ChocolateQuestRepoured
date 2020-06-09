@@ -5,7 +5,7 @@ import java.util.Properties;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCavern;
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonFloatingNetherCity;
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonGuardedCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonNetherCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonOceanFloor;
@@ -26,7 +26,7 @@ public enum EDungeonGenerator {
 	ABANDONED((name, prop) -> null),
 	RUIN((name, prop) -> null),
 	NETHER_CITY(DungeonNetherCity::new),
-	FLOATING_NETHER_CITY(DungeonFloatingNetherCity::new),
+	FLOATING_NETHER_CITY(DungeonHangingCity::new),
 	TEMPLATE_SURFACE(DungeonSurface::new),
 	TEMPLATE_OCEAN_FLOOR(DungeonOceanFloor::new),
 	STRONGHOLD(DungeonStrongholdOpen::new),
