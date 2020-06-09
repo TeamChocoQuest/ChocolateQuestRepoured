@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.PlateauBuilder;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonHangingCity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
@@ -75,9 +75,9 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	@Override
 	public void buildStructure() {
-		EDungeonMobType mobType = this.dungeon.getDungeonMob();
-		if (mobType == EDungeonMobType.DEFAULT) {
-			mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+		EDefaultInhabitants mobType = this.dungeon.getDungeonMob();
+		if (mobType == EDefaultInhabitants.DEFAULT) {
+			mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 		}
 
 		// Builds the platforms
@@ -121,7 +121,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 	 * # # # # # # # # 3 4
 	 * 
 	 */
-	private void buildBuilding(BlockPos centeredPos, CQStructure structure, EDungeonMobType mobType) {
+	private void buildBuilding(BlockPos centeredPos, CQStructure structure, EDefaultInhabitants mobType) {
 		int longestSide = structure != null ? Math.max(structure.getSize().getX(), structure.getSize().getZ()) : 16;
 		int radius = (int) (0.7071D * (double) longestSide) + 5;
 
@@ -135,7 +135,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		}
 	}
 
-	private void buildPlatform(BlockPos center, int radius, EDungeonMobType mobType) {
+	private void buildPlatform(BlockPos center, int radius, EDefaultInhabitants mobType) {
 		Map<BlockPos, IBlockState> stateMap = new HashMap<>();
 		int decrementor = 0;
 		int rad = (int) (1.5D * radius);

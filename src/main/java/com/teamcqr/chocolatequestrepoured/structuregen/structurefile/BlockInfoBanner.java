@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 
 import net.minecraft.block.state.IBlockState;
@@ -28,7 +28,7 @@ public class BlockInfoBanner extends BlockInfo {
 	}
 
 	@Override
-	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDungeonMobType dungeonMob, ProtectedRegion protectedRegion) {
+	public void generate(World world, BlockPos dungeonPos, BlockPos dungeonPartPos, PlacementSettings settings, EDefaultInhabitants dungeonMob, ProtectedRegion protectedRegion) {
 		super.generate(world, dungeonPos, dungeonPartPos, settings, dungeonMob, protectedRegion);
 		BlockPos transformedPos = dungeonPartPos.add(Template.transformedBlockPos(settings, this.pos));
 		TileEntity tileEntity = world.getTileEntity(transformedPos);

@@ -42,7 +42,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -932,7 +932,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 	}
 
-	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, EDungeonMobType mobType) {
+	public void onSpawnFromCQRSpawnerInDungeon(PlacementSettings placementSettings, EDefaultInhabitants mobType) {
 		this.setHomePositionCQR(this.getPosition());
 		this.setBaseHealth(this.getPosition(), this.getBaseHealth());
 

@@ -15,10 +15,10 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -121,7 +121,7 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, EDungeonMobType mobType) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, EDefaultInhabitants mobType) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
 		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, mobType);
 
@@ -137,7 +137,7 @@ public class CastleRoomSelector {
 
 	}
 
-	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, EDungeonMobType mobType)
+	private void addDecoration(World world, BlockPos startPos, DungeonCastle dungeon, BlockStateGenArray genArray, ArrayList<String> bossUuids, EDefaultInhabitants mobType)
 	{
 		ResourceLocation mobResLoc = mobType.getEntityResourceLocation();
 		ResourceLocation bossResLoc = mobType.getBossResourceLocation();

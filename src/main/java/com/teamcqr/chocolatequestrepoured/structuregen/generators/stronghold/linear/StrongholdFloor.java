@@ -2,13 +2,13 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.li
 
 import java.io.File;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlockSpecial;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.GeneratorStronghold;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.ESkyDirection;
@@ -139,7 +139,7 @@ public class StrongholdFloor {
 		}
 	}
 	
-	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, EDungeonMobType mobType) {
+	public void generateRooms(int centerX, int centerZ, int y, PlacementSettings settings, DungeonGenerator dungeonGenerator, World world, EDefaultInhabitants mobType) {
 		for(int iX = 0; iX < sideLength; iX++) {
 			for(int iZ = 0; iZ < sideLength; iZ++) {
 				EStrongholdRoomType room = roomPattern[iX][iZ];

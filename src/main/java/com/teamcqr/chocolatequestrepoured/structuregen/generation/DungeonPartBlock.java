@@ -6,7 +6,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.AbstractBlockInfo;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.BlockStatePalette;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
@@ -29,13 +29,13 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 
 	protected final Deque<AbstractBlockInfo> blockInfoList = new LinkedList<>();
 	protected PlacementSettings settings;
-	protected EDungeonMobType dungeonMobType;
+	protected EDefaultInhabitants dungeonMobType;
 
 	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator) {
-		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDungeonMobType.DEFAULT);
+		this(world, dungeonGenerator, BlockPos.ORIGIN, Collections.emptyList(), new PlacementSettings(), EDefaultInhabitants.DEFAULT);
 	}
 
-	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, EDungeonMobType dungeonMobType) {
+	public DungeonPartBlock(World world, DungeonGenerator dungeonGenerator, BlockPos partPos, Collection<AbstractBlockInfo> blocks, PlacementSettings settings, EDefaultInhabitants dungeonMobType) {
 		super(world, dungeonGenerator, partPos);
 		for (AbstractBlockInfo blockInfo : blocks) {
 			if (blockInfo != null) {
@@ -45,8 +45,8 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-		if (this.dungeonMobType == EDungeonMobType.DEFAULT) {
-			this.dungeonMobType = EDungeonMobType.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+		if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) {
+			this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
 			CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos);
 		}
 	}
@@ -100,7 +100,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		this.settings = new PlacementSettings();
 		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
-		this.dungeonMobType = EDungeonMobType.values()[compound.getInteger("mob")];
+		this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
 
 		BlockPos offset = DungeonGenUtils.readPosFromList(compound.getTagList("offset", Constants.NBT.TAG_INT));
 		BlockPos size = DungeonGenUtils.readPosFromList(compound.getTagList("size", Constants.NBT.TAG_INT));

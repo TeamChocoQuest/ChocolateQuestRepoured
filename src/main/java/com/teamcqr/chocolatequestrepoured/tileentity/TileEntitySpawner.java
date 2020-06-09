@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
@@ -35,7 +35,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 
 	public ItemStackHandler inventory = new ItemStackHandler(9);
 	private boolean spawnedInDungeon = false;
-	private EDungeonMobType mobOverride = null;
+	private EDefaultInhabitants mobOverride = null;
 	private int dungeonChunkX = 0;
 	private int dungeonChunkZ = 0;
 	private Mirror mirror = Mirror.NONE;
@@ -61,7 +61,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.spawnedInDungeon = compound.getBoolean("isDungeonSpawner");
 		}
 		if (compound.hasKey("overrideMob")) {
-			this.mobOverride = EDungeonMobType.byString(compound.getString("overrideMob"));
+			this.mobOverride = EDefaultInhabitants.byString(compound.getString("overrideMob"));
 		}
 		if (compound.hasKey("dungeonChunkX") && compound.hasKey("dungeonChunkZ")) {
 			this.dungeonChunkX = compound.getInteger("dungeonChunkX");
@@ -109,7 +109,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 	}
 
-	public void setInDungeon(int dunChunkX, int dunChunkZ, EDungeonMobType mobOverride) {
+	public void setInDungeon(int dunChunkX, int dunChunkZ, EDefaultInhabitants mobOverride) {
 		this.spawnedInDungeon = true;
 		this.mobOverride = mobOverride;
 		this.dungeonChunkX = dunChunkX;
@@ -152,8 +152,8 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 		}
 
 		if (this.mobOverride != null && nbt.getString("id").equals(Reference.MODID + ":dummy")) {
-			if (this.mobOverride == EDungeonMobType.DEFAULT) {
-				EDungeonMobType mobType = EDungeonMobType.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
+			if (this.mobOverride == EDefaultInhabitants.DEFAULT) {
+				EDefaultInhabitants mobType = EDefaultInhabitants.getMobTypeDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ());
 				nbt.setString("id", mobType.getEntityResourceLocation().toString());
 			} else {
 				nbt.setString("id", this.mobOverride.getEntityResourceLocation().toString());

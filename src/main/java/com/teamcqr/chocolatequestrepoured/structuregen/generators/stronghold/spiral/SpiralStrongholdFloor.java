@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.EDungeonMobType;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.AbstractDungeonPart;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonGenerator;
@@ -12,6 +11,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlo
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.AbstractDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.stronghold.EStrongholdRoomType;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.EDefaultInhabitants;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
@@ -227,7 +227,7 @@ public class SpiralStrongholdFloor {
 		return roomGrid;
 	}
 	
-	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, EDungeonMobType mobType) {
+	public List<AbstractDungeonPart> buildRooms(DungeonVolcano dungeon, int dunX, int dunZ, World world, EDefaultInhabitants mobType) {
 		List<AbstractDungeonPart> strongholdParts = new ArrayList<>();
 		PlacementSettings settings = new PlacementSettings();
 		for(int iX = 0; iX < sideLength; iX++) {
