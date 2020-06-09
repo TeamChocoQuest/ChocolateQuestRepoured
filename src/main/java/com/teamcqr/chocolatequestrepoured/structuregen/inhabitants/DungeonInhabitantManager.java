@@ -129,6 +129,9 @@ public class DungeonInhabitantManager {
 	}
 	
 	private DungeonInhabitant getInhabitantByDistance(World world, int blockX, int blockZ) {
+		if(this.distantMapping.isEmpty()) {
+			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[random.nextInt(inhabitantMapping.values().size())];
+		}
 		BlockPos spawnPoint = world.getSpawnPoint();
 		int x1 = blockX - spawnPoint.getX();
 		int z1 = blockZ - spawnPoint.getZ();
@@ -148,7 +151,7 @@ public class DungeonInhabitantManager {
 			List<String> tmpList = distantMapping.get(random.nextInt(distantMapping.size()));
 			return getInhabitant(tmpList.get(random.nextInt(tmpList.size())));
 		}
-		return inhabitantMapping.get(name);
+		return inhabitantMapping.getOrDefault(name, inhabitantMapping.get("ILLAGER"));
 	}
 	
 	
