@@ -304,7 +304,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		}
 
 		String mobType = dungeon.getDungeonMob();
-		if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+		if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, this.pos.getX(), this.pos.getZ()).getName();
 		}
 

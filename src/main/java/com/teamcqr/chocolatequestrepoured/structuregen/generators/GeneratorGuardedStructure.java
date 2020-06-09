@@ -188,7 +188,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	public void postProcess() {
 		if (this.toGenerate != null && !this.toGenerate.isEmpty()) {
 			String mobType = this.dungeon.getDungeonMob();
-			if (mobType == DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT) {
+			if (mobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 				mobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(this.world, this.pos.getX(), this.pos.getZ()).getName();
 			}
 
