@@ -226,4 +226,19 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
         return ModSounds.GUN_SHOOT;
     }
 
+	@Override
+	public double getRange() {
+		return 16.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 240;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 10;
+	}
+
 }

@@ -74,7 +74,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.5D);
-			//spell.setVelocity(v.x, v.y, v.z);
+			// spell.setVelocity(v.x, v.y, v.z);
 			spell.motionX = v.x;
 			spell.motionY = v.y;
 			spell.motionZ = v.z;
@@ -86,6 +86,21 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 	@Override
 	public SoundEvent getShootSound() {
 		return SoundEvents.ENTITY_ENDERPEARL_THROW;
+	}
+
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 40;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 40;
 	}
 
 }
