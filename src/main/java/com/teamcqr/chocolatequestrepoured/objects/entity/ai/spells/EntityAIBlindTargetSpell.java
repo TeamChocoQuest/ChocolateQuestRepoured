@@ -15,8 +15,9 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 
 	private final int duration;
 
-	public EntityAIBlindTargetSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks, int duration) {
-		super(entity, true, true, cooldown, chargeUpTicks, 1);
+	public EntityAIBlindTargetSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks, int duration) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, true);
 		this.duration = duration;
 	}
 

@@ -13,7 +13,8 @@ import net.minecraft.util.math.BlockPos;
 public class EntityAISpellWalker extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAISpellWalker(AbstractEntityCQR entity) {
-		super(entity, true, true, 600, 100, 1);
+		super(entity, 600, 100, 1);
+		this.setup(true, true, true, true);
 	}
 
 	@Override

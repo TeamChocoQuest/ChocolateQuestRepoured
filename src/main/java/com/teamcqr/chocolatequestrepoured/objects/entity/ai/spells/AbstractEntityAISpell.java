@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 
@@ -14,19 +15,19 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 	protected final Random random = new Random();
 	protected final T entity;
 	protected final World world;
-	protected final boolean needsTargetToStart;
-	protected final boolean needsTargetToContinue;
+	protected boolean needsTargetToStart;
+	protected boolean needsSightToStart;
+	protected boolean needsTargetToContinue;
+	protected boolean needsSightToContinue;
 	protected final int cooldown;
 	protected final int chargingTicks;
 	protected final int castingTicks;
 	protected int prevTimeCasted;
 	protected int tick;
 
-	public AbstractEntityAISpell(T entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
+	public AbstractEntityAISpell(T entity, int cooldown, int chargingTicks, int castingTicks) {
 		this.entity = entity;
 		this.world = entity.world;
-		this.needsTargetToStart = needsTargetToStart;
-		this.needsTargetToContinue = needsTargetToContinue;
 		this.cooldown = cooldown;
 		this.chargingTicks = Math.max(chargingTicks, 0);
 		this.castingTicks = Math.max(castingTicks, 1);
@@ -38,8 +39,14 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
-		if (this.needsTargetToStart && this.entity.getAttackTarget() == null) {
-			return false;
+		if (this.needsTargetToStart) {
+			EntityLivingBase attackTarget = this.entity.getAttackTarget();
+			if (attackTarget == null) {
+				return false;
+			}
+			if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+				return false;
+			}
 		}
 		return this.entity.ticksExisted > this.prevTimeCasted + this.cooldown;
 	}
@@ -49,8 +56,14 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
-		if (this.needsTargetToContinue && this.entity.getAttackTarget() == null) {
-			return false;
+		if (this.needsTargetToStart) {
+			EntityLivingBase attackTarget = this.entity.getAttackTarget();
+			if (attackTarget == null) {
+				return false;
+			}
+			if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+				return false;
+			}
 		}
 		return this.tick < this.chargingTicks + this.castingTicks;
 	}
@@ -129,6 +142,13 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 	@Nullable
 	protected SoundEvent getStartCastingSound() {
 		return null;
+	}
+
+	protected void setup(boolean needsTargetToStart, boolean needsSightToStart, boolean needsTargetToContinue, boolean needsSightToContinue) {
+		this.needsTargetToStart = needsTargetToStart;
+		this.needsSightToStart = needsSightToStart;
+		this.needsTargetToContinue = needsTargetToContinue;
+		this.needsSightToContinue = needsSightToContinue;
 	}
 
 }
