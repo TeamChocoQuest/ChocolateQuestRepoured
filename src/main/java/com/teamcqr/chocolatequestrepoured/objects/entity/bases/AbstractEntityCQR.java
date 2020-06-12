@@ -37,6 +37,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISpell
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
+import com.teamcqr.chocolatequestrepoured.objects.entity.pathfinding.PathNavigateGroundCQR;
 import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
@@ -188,7 +189,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	@Override
 	protected PathNavigate createNavigator(World worldIn) {
-		PathNavigate navigator = new PathNavigateGround(this, worldIn) {
+		PathNavigate navigator = new PathNavigateGroundCQR(this, worldIn) {
 			@Override
 			public float getPathSearchRange() {
 				return 256.0F;
