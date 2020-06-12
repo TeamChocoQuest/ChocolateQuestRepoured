@@ -30,8 +30,7 @@ public class RoomGridCell {
         }
     }
 
-    private RoomGridPosition gridPosition;
-    private BlockPos originOffset; //offset of northmost/westmost/lowest z block
+    private final RoomGridPosition gridPosition;
     private CellState state = CellState.UNUSED;
     private boolean reachable = false;
     private boolean floorHasLanding = false;
@@ -43,20 +42,18 @@ public class RoomGridCell {
     private HashMap<EnumFacing, RoomGridCell> adjacentCells = new HashMap<>();
     private HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 
-    public RoomGridCell(int floor, int x, int z, int roomWidth, int floorHeight) {
+    public RoomGridCell(int floor, int x, int z) {
         this.gridPosition = new RoomGridPosition(floor, x, z);
         this.connectedCells = new HashSet<>();
         this.pathableCells = new HashSet<>();
-
-        int xOffset = 1 + (x * (roomWidth + 1));
-        int zOffset = 1 + (z * (roomWidth + 1));
-        int yOffset = 1 + (floor * floorHeight);
-        this.originOffset = new BlockPos(xOffset, yOffset, zOffset);
     }
 
-    public BlockPos getOriginOffset()
+    public BlockPos getOriginOffset(int roomWidth, int floorHeight)
     {
-        return originOffset;
+        int xOffset = 1 + (gridPosition.getX() * (roomWidth + 1));
+        int zOffset = 1 + (gridPosition.getZ()  * (roomWidth + 1));
+        int yOffset = 1 + (gridPosition.getFloor() * floorHeight);
+        return new BlockPos(xOffset, yOffset, zOffset);
     }
 
     public void registerAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {

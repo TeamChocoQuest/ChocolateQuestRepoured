@@ -8,15 +8,14 @@ import java.util.HashMap;
 import java.util.Optional;
 
 public class CastleMainStructWall {
-     public enum WallOrientation {
-         HORIZONTAL,
-         VERTICAL
+    public enum WallOrientation {
+        HORIZONTAL,
+        VERTICAL
     }
 
     private BlockPos origin;
     private WallOrientation orientation;
     private HashMap<EnumFacing, RoomGridCell> adjacentCells = new HashMap<>();
-    private HashMap<EnumFacing, CastleCellCornerPillar> neighborPillars = new HashMap<>();
 
     public CastleMainStructWall(BlockPos origin, WallOrientation orientation) {
         this.origin = origin;
@@ -30,18 +29,6 @@ public class CastleMainStructWall {
     public Optional<RoomGridCell> getAdjacentCell(EnumFacing direction) {
         if (adjacentCells.containsKey(direction)) {
             return Optional.of(adjacentCells.get(direction));
-        } else {
-            return Optional.empty();
-        }
-    }
-
-    public void registerAdjacentPillar(CastleCellCornerPillar pillar, EnumFacing directionOfPillar) {
-        neighborPillars.put(directionOfPillar, pillar);
-    }
-
-    public Optional<CastleCellCornerPillar> getAdjacentPillar(EnumFacing direction) {
-        if (neighborPillars.containsKey(direction)) {
-            return Optional.of(neighborPillars.get(direction));
         } else {
             return Optional.empty();
         }

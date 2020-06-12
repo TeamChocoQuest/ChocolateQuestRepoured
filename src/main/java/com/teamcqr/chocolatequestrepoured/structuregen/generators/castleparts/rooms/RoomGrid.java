@@ -267,7 +267,6 @@ public class RoomGrid {
 	private int floors;
 	private int roomsX;
 	private int roomsZ;
-	private Random random;
 	private RoomGridCell[][][] cellArray;
 	private List<RoomGridCell> cellList;
 	private List<CastleMainStructWall> wallList;
@@ -277,7 +276,6 @@ public class RoomGrid {
 		this.floors = floors;
 		this.roomsX = roomsX;
 		this.roomsZ = roomsZ;
-		this.random = random;
 		this.cellArray = new RoomGridCell[floors][roomsX][roomsZ];
 		this.cellList = new ArrayList<>();
 		this.wallList = new ArrayList<>();
@@ -286,7 +284,7 @@ public class RoomGrid {
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ; z++) {
-					RoomGridCell cell = new RoomGridCell(floor, x, z, roomWidth, floorHeight);
+					RoomGridCell cell = new RoomGridCell(floor, x, z);
 					this.cellArray[floor][x][z] = cell;
 					this.cellList.add(cell);
 				}
