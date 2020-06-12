@@ -98,7 +98,7 @@ public class CastleRoomSelector {
 		int gridSizeZ = dungeon.getMaxSize() / this.roomSize;
 
 		// Add padding floors so that we can build walkable roofs on top of the highest rooms
-		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, gridSizeX, gridSizeZ, random);
+		this.grid = new RoomGrid(this.maxFloors + PADDING_FLOORS, gridSizeX, gridSizeZ, roomSize, floorHeight, random);
 	}
 
 	public void randomizeCastle() {

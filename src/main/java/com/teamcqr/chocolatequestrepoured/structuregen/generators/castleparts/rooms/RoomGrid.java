@@ -270,6 +270,7 @@ public class RoomGrid {
 	private Random random;
 	private RoomGridCell[][][] cellArray;
 	private List<RoomGridCell> cellList;
+	private List<CastleMainStructWall> wallList;
 	private Area2D bossArea = null;
 
 	public RoomGrid(int floors, int roomsX, int roomsZ, int roomWidth, int floorHeight, Random random) {
@@ -279,6 +280,7 @@ public class RoomGrid {
 		this.random = random;
 		this.cellArray = new RoomGridCell[floors][roomsX][roomsZ];
 		this.cellList = new ArrayList<>();
+		this.wallList = new ArrayList<>();
 
 		// initialize the room grid
 		for (int floor = 0; floor < floors; floor++) {
@@ -290,6 +292,9 @@ public class RoomGrid {
 				}
 			}
 		}
+
+		initializeCellLinks(roomWidth, floorHeight);
+		initializeWalls(roomWidth, floorHeight);
 	}
 
 	private void initializeCellLinks(int roomWidth, int floorHeight)
@@ -305,7 +310,7 @@ public class RoomGrid {
 						if (adjacent != null)
 						{
 							cell.registerAdjacentCell(adjacent, direction);
-							adjacent.registerAdjacentCell(adjacent, direction);
+							adjacent.registerAdjacentCell(cell, direction.getOpposite());
 						}
 					}
 				}
@@ -315,15 +320,58 @@ public class RoomGrid {
 
 	private void initializeWalls(int roomWidth, int floorHeight)
 	{
+		//vertical walls
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX + 1; x++) {
 				for (int z = 0; z < roomsZ; z++) {
 					int xOffset = x * (roomWidth + 1);
 					int yOffset = floor * floorHeight;
-					int zOffset = 1 + (z * (roomWidth + 1));
+					int zOffset = z * (roomWidth + 1);
 					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
 					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL);
-					
+					wallList.add(wall);
+
+					RoomGridCell westCell = getCellAt(floor, x - 1, z);
+					if (westCell != null)
+					{
+						wall.registerAdjacentCell(westCell, EnumFacing.WEST);
+						westCell.registerAdjacentWall(wall, EnumFacing.EAST);
+					}
+
+					RoomGridCell eastCell = getCellAt(floor, x, z);
+					if (eastCell != null)
+					{
+						wall.registerAdjacentCell(eastCell, EnumFacing.EAST);
+						eastCell.registerAdjacentWall(wall, EnumFacing.WEST);
+					}
+				}
+			}
+		}
+
+		//horizontal walls
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX; x++) {
+				for (int z = 0; z < roomsZ + 1; z++) {
+					int xOffset = x * (roomWidth + 1);
+					int yOffset = floor * floorHeight;
+					int zOffset = z * (roomWidth + 1);
+					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.HORIZONTAL);
+					wallList.add(wall);
+
+					RoomGridCell northCell = getCellAt(floor, x, z - 1);
+					if (northCell != null)
+					{
+						wall.registerAdjacentCell(northCell, EnumFacing.NORTH);
+						northCell.registerAdjacentWall(wall, EnumFacing.SOUTH);
+					}
+
+					RoomGridCell southCell = getCellAt(floor, x, z);
+					if (southCell != null)
+					{
+						wall.registerAdjacentCell(southCell, EnumFacing.SOUTH);
+						southCell.registerAdjacentWall(wall, EnumFacing.NORTH);
+					}
 				}
 			}
 		}
@@ -781,36 +829,10 @@ public class RoomGrid {
 
 	@Nullable
 	public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction) {
-		RoomGridPosition startPosition = startCell.getGridPosition();
-		int floor = startPosition.getFloor();
-		int x = startPosition.getX();
-		int z = startPosition.getZ();
+		RoomGridPosition position = startCell.getGridPosition().move(direction);
 
-		switch (direction) {
-		case UP:
-			floor += 1;
-			break;
-		case DOWN:
-			floor -= 1;
-			break;
-		case NORTH:
-			z -= 1;
-			break;
-		case SOUTH:
-			z += 1;
-			break;
-		case WEST:
-			x -= 1;
-			break;
-		case EAST:
-			x += 1;
-			break;
-		default:
-			break;
-		}
-
-		if (this.withinGridBounds(floor, x, z)) {
-			return this.cellArray[floor][x][z];
+		if (this.withinGridBounds(position)) {
+			return this.cellArray[position.getFloor()][position.getX()][position.getZ()];
 		} else {
 			return null;
 		}
