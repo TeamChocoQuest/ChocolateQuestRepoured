@@ -72,7 +72,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 		super.initEntityAI();
 		
 		this.spellHandler.addSpell(1, new BossAIPirateSummonParrot(this, 0, 20, 20));
-		this.spellHandler.addSpell(0, new BossAIPirateFleeSpell(this, true, true, 60, 30, 30));
+		this.spellHandler.addSpell(0, new BossAIPirateFleeSpell(this, 60, 30, 30));
 		
 		this.tasks.addTask(2, new BossAIPirateTurnInvisible(this));
 		this.tasks.addTask(1, new BossAIPirateTeleportBehindEnemy(this));

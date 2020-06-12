@@ -10,8 +10,9 @@ import net.minecraft.util.math.BlockPos;
 
 public class EntityAIArmorSpell extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIArmorSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, false, cooldown, chargeUpTicks, 1);
+	public EntityAIArmorSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, true);
 	}
 
 	@Override

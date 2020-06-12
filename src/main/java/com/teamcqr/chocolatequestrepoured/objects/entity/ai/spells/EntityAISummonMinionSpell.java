@@ -31,8 +31,9 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 	protected ResourceLocation minionOverride = null;
 	protected ECircleTexture circleTextureOverride = null;
 
-	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, false, cooldown, chargeUpTicks, 1);
+	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, true);
 		if (entity instanceof ISummoner) {
 			this.summoner = (ISummoner) entity;
 		}

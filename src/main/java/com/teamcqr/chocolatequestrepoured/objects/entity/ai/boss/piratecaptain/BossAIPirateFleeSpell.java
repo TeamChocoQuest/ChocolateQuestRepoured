@@ -28,8 +28,9 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		return BossAIPirateFleeSpell.this.isSuitableAlly(input);
 	};
 	
-	public BossAIPirateFleeSpell(EntityCQRPirateCaptain entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
-		super(entity, needsTargetToStart, needsTargetToContinue, cooldown, chargingTicks, castingTicks);
+	public BossAIPirateFleeSpell(EntityCQRPirateCaptain entity, int cooldown, int chargingTicks, int castingTicks) {
+		super(entity, cooldown, chargingTicks, castingTicks);
+		this.setup(true, true, true, true);
 	}
 
 	@Override
