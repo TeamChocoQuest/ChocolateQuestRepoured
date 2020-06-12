@@ -47,7 +47,9 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	
 	private boolean hasNearbyAllies() {
 		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
-		AxisAlignedBB aabb = new AxisAlignedBB(entity.getPositionVector().add(vec), entity.getPositionVector().subtract(vec));
+		Vec3d v1 = entity.getPositionVector().add(vec);
+		Vec3d v2 = entity.getPositionVector().subtract(vec);
+		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 		
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
 		return !allies.isEmpty();
@@ -55,7 +57,9 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	
 	private int getNearbyAllies(EntityLiving o1) {
 		Vec3d vec = new Vec3d(4,2,4);
-		AxisAlignedBB aabb = new AxisAlignedBB(o1.getPositionVector().add(vec), o1.getPositionVector().subtract(vec));
+		Vec3d v1 = o1.getPositionVector().add(vec);
+		Vec3d v2 = o1.getPositionVector().subtract(vec);
+		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 		return o1.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly).size();
 	}
 
@@ -64,7 +68,9 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 		super.castSpell();
 		
 		Vec3d vec = new Vec3d(CQRConfig.bosses.pirateCaptainFleeCheckRadius, 0.5 * CQRConfig.bosses.pirateCaptainFleeCheckRadius, CQRConfig.bosses.pirateCaptainFleeCheckRadius);
-		AxisAlignedBB aabb = new AxisAlignedBB(entity.getPositionVector().add(vec), entity.getPositionVector().subtract(vec));
+		Vec3d v1 = entity.getPositionVector().add(vec);
+		Vec3d v2 = entity.getPositionVector().subtract(vec);
+		AxisAlignedBB aabb = new AxisAlignedBB(v1.x, v1.y, v1.z, v2.x, v2.y, v2.z);
 		
 		List<EntityLiving> allies = this.entity.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this.predicateAlly);
 		allies.sort(new Comparator<EntityLiving>() {
