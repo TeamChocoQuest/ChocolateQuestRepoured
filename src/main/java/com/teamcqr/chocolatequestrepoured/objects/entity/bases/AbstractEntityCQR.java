@@ -185,6 +185,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getBaseHealth());
+		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_SPEED);
 	}
 
 	@Override
