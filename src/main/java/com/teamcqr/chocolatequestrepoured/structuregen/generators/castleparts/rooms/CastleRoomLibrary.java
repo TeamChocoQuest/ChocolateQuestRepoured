@@ -37,27 +37,12 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         //allow 1 space from the wall to start
         shelfStart = this.getDecorationStartPos().south().east();
         shelfXLen = this.getDecorationLengthX() - 2;
         shelfZLen = this.getDecorationLengthZ() - 2;
         shelfHeight = this.getDecorationLengthY() - 2; //leave some room to the ceiling
-
-        if (this.hasDoorOnSide(EnumFacing.WEST)) {
-            shelfStart = shelfStart.east();
-            --shelfXLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.EAST)) {
-            --shelfXLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.NORTH)) {
-            shelfStart = shelfStart.south();
-            --shelfZLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.SOUTH)) {
-            --shelfZLen;
-        }
 
         switch (pattern) {
             case LONG_VERTICAL:

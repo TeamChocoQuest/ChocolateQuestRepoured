@@ -35,7 +35,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
         int halfX = endX / 2;

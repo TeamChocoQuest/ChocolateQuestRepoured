@@ -12,10 +12,6 @@ public class CastleRoomRoofBossEmpty extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-	}
-
-	@Override
-	protected void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 	}
 }

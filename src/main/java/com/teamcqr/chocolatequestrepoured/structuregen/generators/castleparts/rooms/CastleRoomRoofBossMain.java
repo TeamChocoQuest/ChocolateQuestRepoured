@@ -53,11 +53,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	protected void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
-	}
-
-	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos nwCorner = this.getBossRoomBuildStartPosition();
 		BlockPos pos;
 		IBlockState blockToBuild;

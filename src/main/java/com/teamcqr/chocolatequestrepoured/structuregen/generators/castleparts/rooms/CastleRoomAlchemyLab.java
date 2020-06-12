@@ -23,7 +23,7 @@ public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		super.generateRoom(genArray, dungeon);
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		super.generateRoom(castleOrigin, genArray, dungeon);
 	}
 }

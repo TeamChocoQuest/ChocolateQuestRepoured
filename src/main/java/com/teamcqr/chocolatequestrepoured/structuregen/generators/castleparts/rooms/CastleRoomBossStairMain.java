@@ -94,7 +94,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
@@ -231,13 +231,6 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	@Override
 	boolean shouldAddChests() {
 		return false;
-	}
-
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST)) {
-			super.addInnerWall(side);
-		}
 	}
 
 	@Override

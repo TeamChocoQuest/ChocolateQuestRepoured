@@ -73,13 +73,6 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (this.alignment.canHaveInteriorWall(side)) {
-			super.addInnerWall(side);
-		}
-	}
-
-	@Override
 	public void copyPropertiesOf(CastleRoomBase room) {
 		if (room instanceof CastleRoomHallway) {
 			this.patternStartFacing = ((CastleRoomHallway) room).patternStartFacing;

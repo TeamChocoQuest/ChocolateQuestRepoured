@@ -27,7 +27,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
         Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));

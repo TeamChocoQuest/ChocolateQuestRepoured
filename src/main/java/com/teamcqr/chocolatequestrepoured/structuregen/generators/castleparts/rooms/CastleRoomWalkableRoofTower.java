@@ -14,15 +14,11 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 		this.offsetZ = tower.getOffsetZ();
 		this.buildLengthX = tower.getBuildLengthX();
 		this.buildLengthZ = tower.getBuildLengthZ();
-
-		for (EnumFacing side : EnumFacing.HORIZONTALS) {
-			this.walls.addOuter(side);
-		}
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		super.generateRoom(genArray, dungeon);
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		super.generateRoom(castleOrigin, genArray, dungeon);
 	}
 
 	@Override

@@ -26,7 +26,7 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild;
 
 		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially

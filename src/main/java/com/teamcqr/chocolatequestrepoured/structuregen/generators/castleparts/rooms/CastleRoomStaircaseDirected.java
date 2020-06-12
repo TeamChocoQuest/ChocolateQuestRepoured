@@ -43,7 +43,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially
 		//generating a room facing south and then rotating it
 		int lenX = this.doorSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthX : this.buildLengthZ;
@@ -143,11 +143,5 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 	@Override
 	public boolean reachableFromSide(EnumFacing side) {
 		return (side == this.doorSide);
-	}
-
-	//Only centered doors look good, as the stairs are centered in the room
-	@Override
-	public DoorPlacement addDoorOnSideRandom(Random random, EnumFacing side) {
-		return super.addDoorOnSideCentered(side);
 	}
 }

@@ -48,15 +48,11 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			this.stairYOffset = 1; // account for 1 layer of floor
 		}
 
-		for (EnumFacing side : EnumFacing.HORIZONTALS) {
-			this.walls.addOuter(side);
-		}
-
 		this.pillarStart = this.getNonWallStartPos().add((this.buildLengthX / 2), this.stairYOffset, (this.buildLengthZ / 2));
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
 
 		BlockPos pos;

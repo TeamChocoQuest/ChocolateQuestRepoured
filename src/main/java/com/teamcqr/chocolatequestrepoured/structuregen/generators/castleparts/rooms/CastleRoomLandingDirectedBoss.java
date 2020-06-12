@@ -11,8 +11,8 @@ public class CastleRoomLandingDirectedBoss extends CastleRoomLandingDirected {
     }
 
     @Override
-    public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
-        super.generate(genArray, dungeon);
+    public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+        super.generate(castleOrigin, genArray, dungeon);
     }
 
     @Override

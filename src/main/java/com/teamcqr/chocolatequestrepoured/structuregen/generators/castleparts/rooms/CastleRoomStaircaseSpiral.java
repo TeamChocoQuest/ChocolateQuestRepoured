@@ -23,7 +23,7 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.recalcPillarStart();
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 

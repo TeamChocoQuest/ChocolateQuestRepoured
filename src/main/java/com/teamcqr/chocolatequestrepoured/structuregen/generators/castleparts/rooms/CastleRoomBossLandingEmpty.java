@@ -17,14 +17,7 @@ public class CastleRoomBossLandingEmpty extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-	}
-
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST) && !(side == this.doorSide)) {
-			super.addInnerWall(side);
-		}
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 	}
 
 	@Override
