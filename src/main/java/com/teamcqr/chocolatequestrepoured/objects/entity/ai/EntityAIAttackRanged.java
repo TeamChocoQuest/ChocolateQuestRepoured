@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.IRangedWeapon;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -13,98 +14,192 @@ import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.world.EnumDifficulty;
 
-public class EntityAIAttackRanged extends EntityAIAttack {
+public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR> {
+
+	protected int prevTimeAttacked;
+	private boolean strafingClockwise;
+	private boolean strafingBackwards;
+	private int strafingTime = -1;
 
 	public EntityAIAttackRanged(AbstractEntityCQR entity) {
 		super(entity);
+		this.setMutexBits(3);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		return this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem()) && super.shouldExecute();
+		if (!this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem())) {
+			return false;
+		}
+		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		if (attackTarget == null) {
+			return false;
+		}
+		return this.entity.getEntitySenses().canSee(attackTarget);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem()) && super.shouldContinueExecuting();
+		if (!this.isRangedWeapon(this.entity.getHeldItemMainhand().getItem())) {
+			return false;
+		}
+		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		if (attackTarget == null) {
+			return false;
+		}
+		return this.entity.getLastTimeSeenAttackTarget() + 100 >= this.entity.ticksExisted;
 	}
 
 	@Override
 	public void startExecuting() {
-		EntityLivingBase attackTarget = this.entity.getAttackTarget();
-
-		if (this.entity.getDistance(attackTarget) < 28.0D) {
-			this.entity.setActiveHand(EnumHand.MAIN_HAND);
-			this.entity.isSwingInProgress = true;
-		} else {
-			this.updatePath(attackTarget);
-		}
+		this.entity.getNavigator().clearPath();
 	}
 
 	@Override
 	public void resetTask() {
-		super.resetTask();
+		this.entity.getNavigator().clearPath();
+		this.entity.resetActiveHand();
 		this.entity.isSwingInProgress = false;
 	}
 
 	@Override
 	public void updateTask() {
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		double distance = this.entity.getDistance(attackTarget);
 
-		if (attackTarget != null) {
-			this.entity.getLookHelper().setLookPositionWithEntity(attackTarget, 12.0F, 12.0F);
+		if (this.entity.getEntitySenses().canSee(attackTarget) && (distance < this.getAttackRange() * 0.9D || (distance < this.getAttackRange() && !this.entity.hasPath()))) {
+			this.entity.faceEntity(attackTarget, 30.0F, 30.0F);
+			this.checkAndPerformAttack(attackTarget);
+			this.entity.getNavigator().clearPath();
+			this.strafingTime++;
+		} else {
+			this.entity.getNavigator().tryMoveToEntityLiving(attackTarget, 1.0D);
+			this.strafingTime = -1;
+			// this.entity.resetActiveHand();
+			// this.entity.isSwingInProgress = false;
+		}
 
-			double distance = this.entity.getDistance(attackTarget);
-			if (distance < 28.0D || (!this.entity.hasPath() && distance < 32.0D)) {
-				this.checkAndPerformAttack(this.entity.getAttackTarget());
-				this.entity.getNavigator().clearPath();
-				this.entity.setActiveHand(EnumHand.MAIN_HAND);
-				this.entity.isSwingInProgress = true;
-			} else {
-				this.updatePath(attackTarget);
-				this.entity.resetActiveHand();
-				this.entity.isSwingInProgress = false;
+		if (this.strafingTime >= 20) {
+			if (this.entity.getRNG().nextDouble() < 0.3D) {
+				this.strafingClockwise = !this.strafingClockwise;
 			}
+
+			if (this.entity.getRNG().nextDouble() < 0.3D) {
+				this.strafingBackwards = !this.strafingBackwards;
+			}
+
+			this.strafingTime = 0;
+		}
+
+		if (CQRConfig.mobs.enableEntityStrafing && this.strafingTime > -1) {
+			if (distance > this.getAttackRange() * 0.75D) {
+				this.strafingBackwards = false;
+			} else if (distance < this.getAttackRange() * 0.25D) {
+				this.strafingBackwards = true;
+			}
+
+			float f = (float) CQRConfig.mobs.entityStrafingSpeed;
+			this.entity.getMoveHelper().strafe(this.strafingBackwards ? -f : f, this.strafingClockwise ? f : -f);
 		}
 	}
 
-	@Override
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
-		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 32.0D) {
-			ItemStack stack = this.entity.getHeldItemMainhand();
-			if (stack.getItem() instanceof ItemBow) {
-				this.attackTick = 60;
-				ItemStack arrowItem = this.entity.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
-				if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
-					arrowItem = new ItemStack(Items.ARROW, 1);
-				}
-				EntityArrow arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.entity.world, arrowItem, this.entity);
-				arrowItem.shrink(1);
+		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
+			this.entity.setActiveHand(EnumHand.MAIN_HAND);
+			this.entity.isSwingInProgress = true;
 
-				double x = attackTarget.posX - this.entity.posX;
-				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
-				double z = attackTarget.posZ - this.entity.posZ;
-				double distance = Math.sqrt(x * x + z * z);
-				arrow.shoot(x, y + distance * 0.06D, z, 3.0F, 0.0F);
-				arrow.motionX += this.entity.motionX;
-				arrow.motionZ += this.entity.motionZ;
-				if (!this.entity.onGround) {
-					arrow.motionY += this.entity.motionY;
+			if (this.entity.getItemInUseMaxCount() >= this.getAttackChargeTicks()) {
+				ItemStack stack = this.entity.getHeldItemMainhand();
+				Item item = stack.getItem();
+
+				if (item instanceof ItemBow) {
+					ItemStack arrowItem = this.entity.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
+					if (arrowItem.isEmpty() || !(arrowItem.getItem() instanceof ItemArrow)) {
+						arrowItem = new ItemStack(Items.ARROW);
+					}
+					EntityArrow arrow = ((ItemArrow) arrowItem.getItem()).createArrow(this.world, arrowItem, this.entity);
+					// arrowItem.shrink(1);
+
+					double x = attackTarget.posX - this.entity.posX;
+					double y = attackTarget.posY + (double) attackTarget.height * 0.5D - arrow.posY;
+					double z = attackTarget.posZ - this.entity.posZ;
+					double distance = Math.sqrt(x * x + z * z);
+					float inaccuracy = 4.0F;
+					if (this.world.getDifficulty() == EnumDifficulty.HARD) {
+						inaccuracy = 2.0F;
+					} else if (this.world.getDifficulty() == EnumDifficulty.NORMAL) {
+						inaccuracy = 1.0F;
+					}
+					arrow.shoot(x, y + distance * 0.06D, z, 3.0F, inaccuracy);
+					arrow.motionX += this.entity.motionX;
+					arrow.motionZ += this.entity.motionZ;
+					if (!this.entity.onGround) {
+						arrow.motionY += this.entity.motionY;
+					}
+					this.world.spawnEntity(arrow);
+					this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+				} else if (item instanceof IRangedWeapon) {
+					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
 				}
-				this.entity.world.spawnEntity(arrow);
-				this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
-			} else if (stack.getItem() instanceof IRangedWeapon) {
-				IRangedWeapon weapon = (IRangedWeapon) stack.getItem();
-				this.attackTick = weapon.getCooldown();
-				weapon.shoot(this.entity.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
-				this.entity.playSound(weapon.getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 			}
+
+			this.prevTimeAttacked = this.entity.ticksExisted;
+			this.entity.resetActiveHand();
+			this.entity.isSwingInProgress = false;
+
 		}
 	}
 
 	protected boolean isRangedWeapon(Item item) {
 		return item instanceof ItemBow || item instanceof IRangedWeapon;
+	}
+
+	protected double getAttackRange() {
+		ItemStack stack = this.entity.getHeldItemMainhand();
+		Item item = stack.getItem();
+
+		if (item instanceof ItemBow) {
+			return 32.0D;
+		} else if (item instanceof IRangedWeapon) {
+			return ((IRangedWeapon) item).getRange();
+		}
+
+		return 32.0D;
+	}
+
+	protected int getAttackCooldown() {
+		ItemStack stack = this.entity.getHeldItemMainhand();
+		Item item = stack.getItem();
+
+		if (item instanceof ItemBow) {
+			switch (this.world.getDifficulty()) {
+			case HARD:
+				return 20;
+			case NORMAL:
+				return 30;
+			default:
+				return 40;
+			}
+		} else if (item instanceof IRangedWeapon) {
+			return ((IRangedWeapon) item).getCooldown();
+		}
+
+		return 40;
+	}
+
+	protected int getAttackChargeTicks() {
+		ItemStack stack = this.entity.getHeldItemMainhand();
+		Item item = stack.getItem();
+
+		if (item instanceof ItemBow) {
+			return 20;
+		} else if (item instanceof IRangedWeapon) {
+			return ((IRangedWeapon) item).getChargeTicks();
+		}
+
+		return 40;
 	}
 
 }
