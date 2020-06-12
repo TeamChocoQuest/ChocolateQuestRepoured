@@ -24,7 +24,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
-		this.damage = 4F;
+		this.damage = 2.0F;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class ProjectileSpiderBall extends ProjectileBase {
 						return;
 					}
 
-					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 1));
+					entity.addPotionEffect(new PotionEffect(MobEffects.POISON, 100, 0));
 					entity.attackEntityFrom(DamageSource.MAGIC, this.damage);
 					this.setDead();
 				}
