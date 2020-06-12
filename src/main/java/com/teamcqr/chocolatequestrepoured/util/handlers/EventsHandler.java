@@ -172,6 +172,9 @@ public class EventsHandler {
 	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
+		if (!e.getWorld().isRemote) {
+			DungeonDataManager.handleWorldUnload(e.getWorld());
+		}
 	}
 
 	@SubscribeEvent
