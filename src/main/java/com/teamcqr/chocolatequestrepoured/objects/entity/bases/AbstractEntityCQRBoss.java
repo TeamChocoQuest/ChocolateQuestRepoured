@@ -20,6 +20,9 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 
 	protected final BossInfoServer bossInfoServer = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_10);
 
+	public int deathTicks = 0;
+	public static final int MAX_DEATH_TICKS = 200;
+
 	public AbstractEntityCQRBoss(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 50;
