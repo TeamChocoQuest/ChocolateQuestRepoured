@@ -116,8 +116,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	private boolean prevSneaking;
 	private boolean prevSitting;
 	protected float sizeScaling = 1.0F;
-	protected int lastTimeSeenAttackTarget;
-	protected Vec3d lastPosAttackTarget;
+	protected int lastTimeSeenAttackTarget = Integer.MIN_VALUE;
+	protected Vec3d lastPosAttackTarget = Vec3d.ZERO;
 	protected EntityAISpellHandler spellHandler;
 
 	private CQRFaction factionInstance;
@@ -507,7 +507,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			if (this.isInSightRange(attackTarget) && this.getEntitySenses().canSee(attackTarget)) {
 				this.lastTimeSeenAttackTarget = this.ticksExisted;
 			}
-			this.lastPosAttackTarget = attackTarget.getPositionVector();
+			if (this.lastTimeSeenAttackTarget + 100 >= this.ticksExisted) {
+				this.lastPosAttackTarget = attackTarget.getPositionVector();
+			}
 		}
 
 		super.onUpdate();
@@ -584,10 +586,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	public void onLivingUpdate() {
 		this.updateArmSwingProgress();
 		super.onLivingUpdate();
-		
-		if(!world.isRemote) {
-			this.dataManager.set(HAS_TARGET, getAttackTarget() != null);
-		}
 	}
 
 	@Override
@@ -1218,6 +1216,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
 		return this.dataManager.get(HAS_TARGET);
+	}
+
+	@Override
+	public void setAttackTarget(EntityLivingBase entitylivingbaseIn) {
+		super.setAttackTarget(entitylivingbaseIn);
+		EntityLivingBase attackTarget = this.getAttackTarget();
+		if (attackTarget == null) {
+			this.dataManager.set(HAS_TARGET, false);
+			this.lastTimeSeenAttackTarget = Integer.MIN_VALUE;
+			this.lastPosAttackTarget = this.getPositionVector();
+		} else {
+			this.dataManager.set(HAS_TARGET, true);
+			this.lastTimeSeenAttackTarget = this.ticksExisted;
+			this.lastPosAttackTarget = attackTarget.getPositionVector();
+		}
 	}
 
 	// Shoulder entity stuff

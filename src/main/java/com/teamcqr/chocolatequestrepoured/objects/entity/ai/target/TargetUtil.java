@@ -77,8 +77,7 @@ public class TargetUtil {
 		if (!list.isEmpty()) {
 			T nearestEntity = list.get(0);
 			double min = entity.getDistanceSq(nearestEntity);
-			int size = list.size();
-			for (int i = 0; i < size; i++) {
+			for (int i = 1; i < list.size(); i++) {
 				T otherEntity = list.get(i);
 				double distance = entity.getDistanceSq(otherEntity);
 				if (distance < min) {
