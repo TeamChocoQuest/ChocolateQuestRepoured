@@ -18,7 +18,7 @@ public class ProjectilePoisonSpell extends ProjectileSpiderBall {
 		super(worldIn, shooter);
 		this.shooter = shooter;
 		this.isImmuneToFire = false;
-		this.damage = 5.0F;
+		this.damage = 1.0F;
 	}
 
 	@Override
