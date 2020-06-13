@@ -22,9 +22,11 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 	private boolean strafingClockwise;
 	private boolean strafingBackwards;
 	private int strafingTime = -1;
+	private boolean enableStrafing;
 
-	public EntityAIAttackRanged(AbstractEntityCQR entity) {
+	public EntityAIAttackRanged(AbstractEntityCQR entity, boolean enableStrafing) {
 		super(entity);
+		this.enableStrafing = enableStrafing;
 		this.setMutexBits(3);
 	}
 
@@ -93,7 +95,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 			this.strafingTime = 0;
 		}
 
-		if (CQRConfig.mobs.enableEntityStrafing && this.strafingTime > -1) {
+		if (CQRConfig.mobs.enableEntityStrafing && this.enableStrafing && this.strafingTime > -1) {
 			if (distance > this.getAttackRange() * 0.75D) {
 				this.strafingBackwards = false;
 			} else if (distance < this.getAttackRange() * 0.25D) {
