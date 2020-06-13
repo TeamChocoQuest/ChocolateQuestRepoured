@@ -280,6 +280,7 @@ item.great_sword_iron.name=Iron Greatsword
 #Spears
 item.spear_diamond.name=Diamond Spear
 item.spear_iron.name=Iron Spear
+attribute.name.generic.attackRange=Attack Range
 
 #Staves
 item.staff.name=Staff

@@ -42,6 +42,7 @@ import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemBadge;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemPotionHealing;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemShieldDummy;
+import com.teamcqr.chocolatequestrepoured.objects.items.spears.ItemSpearBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffHealing;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -1021,7 +1022,12 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public double getAttackReach(EntityLivingBase target) {
-		return this.width + target.width + 0.25D;
+		double reach = this.width + target.width + 0.25D;
+		ItemStack stack = this.getHeldItemMainhand();
+		if (stack.getItem() instanceof ItemSpearBase) {
+			reach += ((ItemSpearBase) stack.getItem()).getReach() * 0.75D;
+		}
+		return reach;
 	}
 
 	public boolean isInAttackReach(EntityLivingBase target) {
