@@ -11,7 +11,6 @@ import org.lwjgl.input.Keyboard;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toServer.ExtendedReachAttackPacket;
@@ -41,7 +40,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.common.animation.ITimeValue;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -55,34 +53,36 @@ import net.minecraftforge.fml.relauncher.SideOnly;
  */
 public class ItemSpearBase extends ItemSword {
 
-	private final float SPECIAL_REACH_MULTIPLIER = 1.5F;
-	private float reach;
-	private float attackSpeed;
+	public static final UUID ATTACK_RANGE_MODIFIER = new UUID(0x0, 0x1);
+	public static final float BASE_ATTACK_RANGE = 4.0F;
+	private static final float SPECIAL_REACH_MULTIPLIER = 1.5F;
+	private double reach;
+	private double attackSpeed;
 
-	public ItemSpearBase(ToolMaterial material, float reach, float attackSpeed) {
+	public ItemSpearBase(ToolMaterial material, double reach, double attackSpeed) {
 		super(material);
-		this.reach = reach;
+		this.reach = Math.max(reach, -3.5F);
 		this.attackSpeed = attackSpeed;
 	}
 
-	public float getReach() {
+	public double getReach() {
 		return this.reach;
 	}
 
-	public float getReachExtended() {
-		return this.reach * this.SPECIAL_REACH_MULTIPLIER;
-	}
-
-	@Override
-	public ImmutableMap<String, ITimeValue> getAnimationParameters(ItemStack stack, World world, EntityLivingBase entity) {
-		return super.getAnimationParameters(stack, world, entity);
+	public double getReachExtended() {
+		return this.reach * SPECIAL_REACH_MULTIPLIER;
 	}
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		Multimap<String, AttributeModifier> modifiers = super.getAttributeModifiers(slot, stack);
-		this.replaceModifier(modifiers, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
-		return modifiers;
+		Multimap<String, AttributeModifier> multimap = super.getAttributeModifiers(slot, stack);
+
+		if (slot == EntityEquipmentSlot.MAINHAND) {
+			this.replaceModifier(multimap, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
+			multimap.put("generic.attackRange", new AttributeModifier(ATTACK_RANGE_MODIFIER, "Weapon modifier", this.reach, 0));
+		}
+
+		return multimap;
 	}
 
 	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
@@ -107,7 +107,7 @@ public class ItemSpearBase extends ItemSword {
 		ItemStack stack = playerIn.getHeldItem(handIn);
 		playerIn.getCooldownTracker().setCooldown(stack.getItem(), 20 * 5); // 20 ticks per sec * 5 seconds
 		playerIn.setActiveHand(handIn);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+		return new ActionResult<>(EnumActionResult.SUCCESS, stack);
 	}
 
 	@Override
@@ -122,12 +122,12 @@ public class ItemSpearBase extends ItemSword {
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entityLiving;
 			int timeCharged = this.getMaxItemUseDuration(stack) - timeLeft;
+
 			if (!player.isSneaking() && timeCharged > SPECIAL_CHARGE_TIME_TICKS) {
-				RayTraceResult result = getMouseOverExtended(this.reach * this.SPECIAL_REACH_MULTIPLIER);
-				if (result != null && result.entityHit != null) {
-					if (result.entityHit != player && result.entityHit.hurtResistantTime == 0) {
-						CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), true));
-					}
+				RayTraceResult result = getMouseOverExtended(BASE_ATTACK_RANGE + this.reach * SPECIAL_REACH_MULTIPLIER);
+
+				if (result != null && result.entityHit != null && result.entityHit != player) {
+					CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), true));
 				} else {
 					player.swingArm(EnumHand.MAIN_HAND);
 				}
@@ -135,6 +135,11 @@ public class ItemSpearBase extends ItemSword {
 				player.getCooldownTracker().setCooldown(stack.getItem(), 20 * 2); // 20 ticks per sec * 2 seconds
 			}
 		}
+	}
+
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+		return true;
 	}
 
 	@Mod.EventBusSubscriber(modid = Reference.MODID)
@@ -151,13 +156,11 @@ public class ItemSpearBase extends ItemSword {
 
 					if (!itemStack.isEmpty() && itemStack.getItem() instanceof ItemSpearBase) {
 						spear = (ItemSpearBase) itemStack.getItem();
-						float reach = spear.getReach();
+						double reach = spear.getReach();
 
-						RayTraceResult result = getMouseOverExtended(reach);
-						if (result != null && result.entityHit != null) {
-							if (result.entityHit != clickingPlayer && result.entityHit.hurtResistantTime == 0) {
-								CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), false));
-							}
+						RayTraceResult result = getMouseOverExtended(BASE_ATTACK_RANGE + reach);
+						if (result != null && result.entityHit != null && result.entityHit != clickingPlayer) {
+							CQRMain.NETWORK.sendToServer(new ExtendedReachAttackPacket(result.entityHit.getEntityId(), false));
 						}
 					}
 				}
@@ -167,7 +170,7 @@ public class ItemSpearBase extends ItemSword {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public static RayTraceResult getMouseOverExtended(float distance) {
+	public static RayTraceResult getMouseOverExtended(double distance) {
 		// Most of this is copied from EntityRenderer#getMouseOver(). Some variable names changed for readability
 
 		Entity pointedEntity = null;
@@ -189,13 +192,14 @@ public class ItemSpearBase extends ItemSword {
 
 			Vec3d vec3d3 = null;
 
-			List<Entity> list = mc.world.getEntitiesInAABBexcluding(renderViewEntity, renderViewEntity.getEntityBoundingBox().expand(vec3d1.x * d0, vec3d1.y * d0, vec3d1.z * d0).grow(1.0D, 1.0D, 1.0D),
-					Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
-						@Override
-						public boolean apply(@Nullable Entity p_apply_1_) {
-							return p_apply_1_ != null && p_apply_1_.canBeCollidedWith();
-						}
-					}));
+			AxisAlignedBB aabb = renderViewEntity.getEntityBoundingBox().expand(vec3d1.x * d0, vec3d1.y * d0, vec3d1.z * d0).grow(1.0D, 1.0D, 1.0D);
+			Predicate<Entity> predicate = Predicates.and(EntitySelectors.NOT_SPECTATING, new Predicate<Entity>() {
+				@Override
+				public boolean apply(@Nullable Entity input) {
+					return input != null && input.canBeCollidedWith();
+				}
+			});
+			List<Entity> list = mc.world.getEntitiesInAABBexcluding(renderViewEntity, aabb, predicate);
 
 			double d2 = d1;
 

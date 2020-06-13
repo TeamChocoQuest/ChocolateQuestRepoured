@@ -173,4 +173,12 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 		return ModLoottables.CHESTS_FOOD;
 	}
 
+	public ResourceLocation getLootTable() {
+		return this.lootTable;
+	}
+
+	public EnumFacing getFacing() {
+		return this.facing;
+	}
+
 }
