@@ -289,7 +289,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.tasks.addTask(10, new EntityAIHealingPotion(this));
 		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(12, new EntityAIAttackRanged(this, false));
+		this.tasks.addTask(12, new EntityAIAttackRanged(this));
 		this.tasks.addTask(12, new EntityAIPotionThrower(this));
 		this.tasks.addTask(13, new EntityAIBackstab(this));
 		this.tasks.addTask(14, new EntityAIAttack(this));
@@ -307,10 +307,6 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
-	}
-	
-	protected boolean canStrafe() {
-		return CQRConfig.mobs.enableEntityStrafing;
 	}
 
 	@Override
@@ -1035,6 +1031,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		Vec3d vec2 = new Vec3d(target.posX, MathHelper.clamp(this.posY, target.posY, target.posY + target.height), target.posZ);
 		double d = this.getAttackReach(target);
 		return vec1.squareDistanceTo(vec2) <= d * d;
+	}
+
+	public boolean canStrafe() {
+		return false;
 	}
 
 	public boolean canOpenDoors() {
