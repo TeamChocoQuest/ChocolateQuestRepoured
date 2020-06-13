@@ -21,15 +21,14 @@ public class ExtendedReachAttackPacketHandler implements IMessageHandler<Extende
 				World world = CQRMain.proxy.getPlayer(ctx).world;
 				Entity attackTarget = world.getEntityByID(message.getEntityId());
 
-				if (attackTarget != null && attackingPlayer.getHeldItemMainhand().getItem() instanceof ItemSpearBase) {
-					ItemSpearBase spear = (ItemSpearBase) attackingPlayer.getHeldItemMainhand().getItem();
-					double distSq = attackingPlayer.getDistanceSq(attackTarget);
-					double reach = message.getIsExtended() ? spear.getReachExtended() : spear.getReach();
-					double reachSq = Math.pow(reach, 2.0);
-
-					if (reachSq >= distSq) {
-						attackingPlayer.attackTargetEntityWithCurrentItem(attackTarget);
-					}
+				if (attackTarget == null) {
+					return;
+				}
+				if (!(attackingPlayer.getHeldItemMainhand().getItem() instanceof ItemSpearBase)) {
+					return;
+				}
+				if (attackingPlayer.getDistanceSq(attackTarget) < 144.0D) {
+					attackingPlayer.attackTargetEntityWithCurrentItem(attackTarget);
 				}
 			}
 		});
