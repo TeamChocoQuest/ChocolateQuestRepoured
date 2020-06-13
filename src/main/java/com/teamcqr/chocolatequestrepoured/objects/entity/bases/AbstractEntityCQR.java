@@ -307,6 +307,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
+	
+	protected boolean canStrafe() {
+		return CQRConfig.mobs.enableEntityStrafing;
+	}
 
 	@Override
 	@Nullable
