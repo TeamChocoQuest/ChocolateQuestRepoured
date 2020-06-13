@@ -79,7 +79,7 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
-	protected boolean canStrafe() {
+	public boolean canStrafe() {
 		return true;
 	}
 	
