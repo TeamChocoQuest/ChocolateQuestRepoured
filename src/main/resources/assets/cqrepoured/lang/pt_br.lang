@@ -1,15 +1,15 @@
-The Portuguese BR language file for Chocolate Quest Repoured Mod!
+The Portuguese Brazil language file for Chocolate Quest Repoured Mod!
 This translation was made possible by Atum262, Luker, Guilherme and sallomma
 
 
-//CreativeTabs
+#CreativeTabs
 itemGroup.ChocolateQuestRepouredBlocksTab=Chocolate Quest Repoured Blocos
 itemGroup.ChocolateQuestRepouredItemsTab=Chocolate Quest Repoured Itens
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR Geradores de Masmorra
 itemGroup.ChocolateQuestRepouredBannerTab=Estandartes
 itemGroup.ChocolateQuestRepouredExporterChests=Baús Exportadores
 
-//Banners
+#Banners
 item.banner.cqrepoured_cq_blank.white=CQR-marcador de estandarte
 item.banner.cqrepoured_cq_blank.orange=CQR-marcador de estandarte
 item.banner.cqrepoured_cq_blank.magenta=CQR-marcador de estandarte
@@ -183,7 +183,7 @@ item.banner.cqrepoured_walker_skull.red=Face de andarilho vermelha
 item.banner.cqrepoured_walker_skull.black=Face de andarilho preta
 
 
-//Gui
+#Gui
 gui.repu.name=Reputação
 gui.repu.faction=Facção
 gui.repu.reputation=Sua reputação
@@ -197,7 +197,7 @@ description.gui_exporter_part_mode.name=Divide a estrutura em cubos 16x16x16 par
 description.gui_exporter_relative_mode.name=Usa coordenadas relativas ao bloco exportador. O item Auxiliar de Seleção toma conta se isso está marcado ou não.
 description.gui_exporter_ignore_entities.name=Ignora todas as entidades que não estão listadas em cqrepoured.cfg -> advanced -> specialEntities. Recomenda-se manter checado.
 
-//Other
+#Other
 item.super_tool.name=Super Ferramenta (Somente Criativo)
 item.potion_healing.name=Poção de Cura
 item.teleport_stone.name=Pedra de Teleporte
@@ -211,24 +211,25 @@ item.alchemy_bag.name=Bolsa de Alquimia
 item.structure_selector.name=Auxiliar do Seletor de Seleção
 item.path_tool.name=Ferramenta de Caminho
 item.cursed_bone.name=Osso Amaldiçoado
+item.dummy_shield.name=Escudo do Manequim
 
-//Dragon Items
+#Dragon Items
 item.helmet_dragon.name=Elmo de Dragão
 
-//Daggers
+#Daggers
 item.dagger_iron.name=Adaga de Ferro
 item.dagger_diamond.name=Adaga de Diamante
 item.dagger_monking.name=Adaga de MacacoRei
 item.dagger_ninja.name=Adaga Ninja
 
-//Swords
+#Swords
 item.sword_turtle.name=Espada de Tartaruga
 item.sword_spider.name=Espada de Aranha
 item.battle_axe_bull.name=Machado de Batalha de Touro
 item.sword_moonlight.name=Luar
 item.sword_sunshine.name=Solar
 
-//Shields
+#Shields
 item.cqr_shield_r01.name=Escudo do Homem-porco Zumbi
 item.cqr_shield_r02.name=Escudo dos Piratas
 item.cqr_shield_r03.name=Escudo do Espectro
@@ -239,11 +240,11 @@ item.cqr_shield_r07.name=Escudo Enferrujado
 item.cqr_shield_r08.name=Escudo de Tartaruga
 item.cqr_shield_r09.name=Escudo do Tritão
 
-//Walker set
+#Walker set
 item.sword_walker.name=Espada do Andarilho
 item.shield_walker_king.name=Escudo do Andarilho Rei
 
-//Shields
+#Shields
 item.shield_bull.name=Escudo de Touro de Gelo
 item.shield_carl.name=Carl
 item.shield_dragonslayer.name=Escudo de Dragão
@@ -262,7 +263,7 @@ item.shield_skeleton_friends.name=Escudo do Esqueleto
 item.shield_specter.name=Escudo do Espectro
 item.shield_spider.name=Escudo de Aranha
 item.shield_sun.name=Escudo Solar
-item.shield_tomb.name=Escudo do Túmulo
+item.shield_tomb.name=Escudo da Tumba
 item.shield_triton.name=Escudo do Tritão
 item.shield_turtle.name=Escudo de Infantaria de Tartaruga
 item.shield_warped.name=Escudo Deforme
@@ -270,17 +271,17 @@ item.shield_walker.name=Escudo do Andarilho
 item.shield_walker_normal.name=Escudo do Andarilho
 item.shield_zombie.name=Escudo do Zumbi
 
-//Great Swords
+#Great Swords
 item.great_sword_monking.name=Grande espada de MacacoRei
 item.great_sword_bull.name=Grande espada de Touro
 item.great_sword_diamond.name=Grande espada de Diamante
 item.great_sword_iron.name=Grande espada de Ferro
 
-//Spears
+#Spears
 item.spear_diamond.name=Lança de Diamante
 item.spear_iron.name=Lança de Ferro
 
-//Staves
+#Staves
 item.staff.name=Cajado
 item.staff_fire.name=Cajado do Fogo
 item.staff_vampiric.name=Cajado Vampírico
@@ -291,7 +292,7 @@ item.staff_gun.name=Cajado da Arma
 item.staff_healing.name=Cajado de Cura
 item.staff_thunder.name=Cajado do Trovão
 
-//Guns
+#Guns
 item.revolver.name=Revólver
 item.captain_revolver.name=Revólver do Capitão
 item.musket.name=Mosquete
@@ -307,24 +308,27 @@ item.flamethrower.name=Lança-chamas
 item.bubble_pistol.name=Arma de Bolhas
 item.bubble_rifle.name=Arma de Bolhas Avançada
 
-//Hookshots
+#Hookshots
 item.hookshot.name=Lança-gancho
 item.longshot.name=Longo-gancho
 
-//Cloud Items
+#Cloud Items
 item.boots_cloud.name=Botas da Nuvem
 item.feather_golden.name=Pena Dourada
 
-//Monking Items
+#Monking Items
 item.bone_monking.name=Osso do MacacoRei
 
-//Inquisition Armor
+#King Armor
+item.king_crown.name=Coroa do Rei
+
+#Inquisition Armor
 item.helmet_inquisition.name=Elmo da Inquisição
 item.chestplate_inquisition.name=Peitoral da Inquisição
 item.leggings_inquisition.name=Calças da Inquisição
 item.boots_inquisition.name=Botas da Inquisição
 
-//Bull Armor
+#Bull Armor
 item.helmet_bull.name=Capacete de Touro
 item.chestplate_bull.name=Peitoral de Touro
 item.leggings_bull.name=Calças de Touro
@@ -332,21 +336,21 @@ item.boots_bull.name=Botas de Touro
 item.leather_bull.name=Couro de Touro
 item.horn_bull.name=Chifre de Touro
 
-//Turtle Armor
+#Turtle Armor
 item.helmet_turtle.name=Capacete de Tartaruga
 item.chestplate_turtle.name=Peitoral de Tartaruga
 item.leggings_turtle.name=Calças de Tartaruga
 item.boots_turtle.name=Botas de Tartaruga
 item.scale_turtle.name=Escama de Tartaruga
 
-//Slime Armor
+#Slime Armor
 item.helmet_slime.name=Capacete de Slime
 item.chestplate_slime.name=Peitoral de Slime
 item.leggings_slime.name=Calças de Slime
 item.boots_slime.name=Botas de Slime
 item.ball_slime.name=Bola de Slime Regenerante
 
-//Spider Armor
+#Spider Armor
 item.helmet_spider.name=Capacete de Aranha
 item.chestplate_spider.name=Peitoral de Aranha
 item.leggings_spider.name=Calças de Aranha
@@ -354,31 +358,31 @@ item.boots_spider.name=Botas de Aranha
 item.leather_spider.name=Couro de Aranha
 item.giant_spider_poison.name=Veneno de Aranha Gigante
 
-//Heavy Diamond Armor
+#Heavy Diamond Armor
 item.helmet_heavy_diamond.name=Capacete de Diamante Pesado
 item.chestplate_heavy_diamond.name=Peitoral de Diamante Pesado
 item.leggings_heavy_diamond.name=Calças de Diamante Pesado
 item.boots_heavy_diamond.name=Botas de Diamante Pesado
 
-//Heavy Iron Armor
+#Heavy Iron Armor
 item.helmet_heavy_iron.name=Capacete de Ferro Pesado
 item.chestplate_heavy_iron.name=Peitoral de Ferro Pesado
 item.leggings_heavy_iron.name=Calças de Ferro Pesado
 item.boots_heavy_iron.name=Botas de Ferro Pesado
 
-//Dyable Iron Armor
+#Dyable Iron Armor
 item.helmet_iron_dyable.name=Capacete de Ferro Tingível
 item.chestplate_iron_dyable.name=Peitoral de Ferro Tingível
 item.leggings_iron_dyable.name=Calças de Ferro Tingível
 item.boots_iron_dyable.name=Botas de Ferro Tingível
 
-//Dyable Diamond Armor
+#Dyable Diamond Armor
 item.helmet_diamond_dyable.name=Capacete de Diamante Tingível
 item.chestplate_diamond_dyable.name=Peitoral de Diamante Tingível
 item.leggings_diamond_dyable.name=Calças de Diamante Tingível
 item.boots_diamond_dyable.name=Botas de Diamante Tingível
 
-//Blocks
+#Blocks
 tile.exporter.name=Bloco Exportador
 tile.spawner.name=Gerador
 tile.null_block.name=Bloco Nulo
@@ -392,7 +396,7 @@ tile.table_dark.name=Mesa de Carvalho Escuro
 tile.boss_block.name=Bloco do Chefão
 tile.force_field_nexus.name=Nexo do Campo de Força (Ainda Não Implementado)
 
-//Andesite blocks
+#Andesite blocks
 tile.andesite_carved.name=Andesito Esculpido
 tile.andesite_pillar.name=Pilar de Andesito
 tile.andesite_cube.name=Cubo de Andesito
@@ -401,7 +405,7 @@ tile.andesite_square.name=Quadrado de Andesito
 tile.andesite_small.name=Tijolo Pequeno de Andesito
 tile.andesite_large.name=Tijolo Grande de Andesito
 
-//Diorite blocks
+#Diorite blocks
 tile.diorite_carved.name=Diorito Esculpido
 tile.diorite_pillar.name=Pilar de Diorito
 tile.diorite_cube.name=Cubo de Diorito 
@@ -410,7 +414,7 @@ tile.diorite_square.name=Quadrado de Diorito
 tile.diorite_small.name=Tijolo Pequeno de Diorito
 tile.diorite_large.name=Tijolo Grande de Diorito
 
-//Diorite blocks
+#Diorite blocks
 tile.granite_carved.name=Granito Esculpido
 tile.granite_pillar.name=Pilar de Granito
 tile.granite_cube.name=Cubo de Granito
@@ -419,7 +423,7 @@ tile.granite_square.name=Quadrado de Granito
 tile.granite_small.name=Tijolo Pequeno de Granito
 tile.granite_large.name=Tijolo Grande de Granito
 
-//Prismarine blocks
+#Prismarine blocks
 tile.prismarine_carved.name=Prismarinho Esculpido
 tile.prismarine_pillar.name=Pilar de Prismarinho
 tile.prismarine_cube.name=Cubo de Prismarinho
@@ -427,7 +431,7 @@ tile.prismarine_square.name=Quadrado de Prismarinho
 tile.prismarine_small.name=Tijolo Pequeno de Prismarinho
 tile.prismarine_large.name=Tijolo Grande de Prismarinho
 
-//Endstone blocks
+#Endstone blocks
 tile.endstone_carved.name=Pedra do Fim Esculpida
 tile.endstone_pillar.name=Pilar de Pedra do Fim
 tile.endstone_cube.name=Cubo de Pedra do Fim
@@ -435,14 +439,14 @@ tile.endstone_scale.name=Escama de Pedra do Fim
 tile.endstone_square.name=Quadrado de Pedra do Fim
 tile.endstone_small.name=Tijolo Pequeno de Pedra do Fim 
 
-//Purpur blocks
+#Purpur blocks
 tile.purpur_carved.name=Púrpura Esculpida
 tile.purpur_cube.name=Cubo de Púrpura
 tile.purpur_scale.name=Escama de Púrpura
 tile.purpur_small.name=Tijolo Pequeno de Púrpura
 tile.purpur_large.name=Tijolo Grande de Púrpura
 
-//Red Netherbrick blocks
+#Red Netherbrick blocks
 tile.red_netherbrick_carved.name=Tijolo Vermelho do Nether Esculpido 
 tile.red_netherbrick_pillar.name=Pilar de Tijolo Vermelho do Nether
 tile.red_netherbrick_cube.name=Cubo de Tijolo Vermelho do Nether
@@ -450,14 +454,14 @@ tile.red_netherbrick_scale.name=Escama de Tijolo Vermelho do Nether
 tile.red_netherbrick_square.name=Quadrado de Tijolo Vermelho do Nether
 tile.red_netherbrick_large.name=Tijolo Vermelho do Nether Grande
 
-//Stone blocks
+#Stone blocks
 tile.stone_pillar.name=Pilar de Pedra
 tile.stone_cube.name=Cubo de Pedra
 tile.stone_scale.name=Escama de Pedra
 tile.stone_square.name=Quadrado de Pedra
 tile.stone_small.name=Tijolo Pequeno de Pedra
 
-//Exporter chests
+#Exporter chests
 tile.exporter_chest_valuable.name=Baú Exportador Tesouro
 tile.exporter_chest_food.name=Baú Exportador Comida
 tile.exporter_chest_equipment.name=Baú Exportador Equipamento
@@ -491,10 +495,10 @@ tile.exporter_chest_custom_12.name=Baú Exportador - Personalizado 12
 tile.exporter_chest_custom_13.name=Baú Exportador - Personalizado 13
 tile.exporter_chest_custom_14.name=Baú Exportador - Personalizado 14
 
-//technical
+#technical
 tile.phylactery.name=Talismã do Lich
 
-//Descriptions
+#Descriptions
 description.spider_armor.name=Vista a aranha para se tornar a aranha. A armadura completa permite subir paredes e pular muito mais alto.
 description.spider_sword.name=Fluindo das presas que fizeram desta simples espada a lâmina de um herói, o veneno de Shelob não pode ser retirado uma vez que seu inimgo for apunhalado com esta lâmina.
 description.bull_armor.name=Vista o touro para se tornar o touro. A armadura completa permite que você avance em alta velocidade, e destrua qualquer coisa em seu caminho.
@@ -502,7 +506,7 @@ description.great_sword.name=Segure o botão direito para dar dano em área.
 description.turtle_armor.name=O poder da tartaruga, se você vestir a armadura completa de seu casco, permitirá recuperar a vida muito mais rápido. O casco protege de danos traseiros também.
 description.slime_armor.name=Com a armadura completa de slime regenerador tocando sua pele, você pode sentir sua vida máxima transbordando, e quando sofrer dano, um pequeno slime pode aparecer o qual irá restaurar sua vida, se você alcançá-lo.
 description.cloud_boots.name=Aqueles que seguem a canção dos anjos os profetas dizem que não podem fazer nada de errado. Um simples salto se torna um voo, uma caminhada rápida quebra a velocidade do som, nenhuma queda pode parar os poucos escolhidos, e com essas botas, isso inclui você.
-//description.dragon_helmet.name=Você pode sentir o poder do dragão correndo em suas veias. Ataques que antes eram uma ameaça para você parecem insignificantes agora, mas seus ataques são duas vezes mais fortes!
+#description.dragon_helmet.name=Você pode sentir o poder do dragão correndo em suas veias. Ataques que antes eram uma ameaça para você parecem insignificantes agora, mas seus ataques são duas vezes mais fortes!
 description.dagger.name=Clique com o botão direito enquanto anda para saltar para frente
 description.ninja_dagger.name=Clique com o botão direito enquanto anda para saltar para frente. Dizem que o portador desta adaga pode, quando desejar, sumir sem deixar rastros. Você pode imitar este comportamento com um clique direito enquanto se agacha, mas quando você sumir de vista, não irá longe.
 description.bull_battle_axe.name=Grux clique direito no chão. Faz terremoto. Viaja para frente. Esmaga inimigos legal. Grux gosta.
@@ -530,12 +534,12 @@ description.flamethrower.name=Protótipo Rústico Fyrebird mk7 22mm com unidade 
 description.badge.name=Item somente criativo. Clique direito com ele para abrir o GUI(menu), itens colocados nesse menu podem ser acessados posteriormente clicando com o botão esquerdo em qualquer criatura com essa medalha novamente, e será dropada quando a criatura associada for morta.
 description.backpack.name=Clique direito para abrir.
 description.alchemy_bag.name=Clique direito para abrir. Apenas armazena poções.
-//description.woodshot.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco de madeira, você será puxado para ele.
+#description.woodshot.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco de madeira, você será puxado para ele.
 description.hookshot.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você será puxado para ele.
 description.longshot.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você será puxado para ele.
-//description.manualhook.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
-//description.spidershot.name=Clique direito para atirar teia. Uma vez que a teia acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
-//description.hooksword.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
+#description.manualhook.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
+#description.spidershot.name=Clique direito para atirar teia. Uma vez que a teia acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
+#description.hooksword.name=Clique direito para atirar um gancho. Uma vez que o gancho acertar um bloco, você pode segurar o botão direito para se mover para perto dele, e agachar enquanto realiza a ação para se mover para longe dele.
 description.moonlight.name=A inscrição na lâmina diz "Meu poder só pode ser despertado à luz da lua"
 description.sunshine.name=A inscrição na lâmina diz "Meu poder só pode ser despertado à luz do sol"
 description.attack_damage_at_night.name=Dano de Ataque durante a Noite
@@ -547,11 +551,12 @@ description.staff.name=Faltando #TODO
 description.staff_thunder.name=Faltando #TODO
 description.spear_diamond.name=Uma arma bem feita com alcance maior que espadas. Clique com o botão direito para carregar um impulso estendido.
 description.cursed_bone.name=Criatura a ser invocada:
+description.dummy_shield.name=Uma aproximação grosseira de como um escudo deve se parecer. Não irá te proteger de ataques. Um manequim exportado que estiver segurando isso estará na verdade segurando o escudo comum para seu tipo de criatura quando uma masmorra for gerada.
 
-//Enchantments
+#Enchantments
 enchantment.lightning_protection=Proteção Contra Raios
 
-// Mobs
+#Mobs
 entity.cqr_boarman.name=Javalomem
 entity.cqr_dummy.name=Manequim
 entity.cqr_dwarf.name=Anão
@@ -573,21 +578,55 @@ entity.cqr_triton.name=Tritão
 entity.cqr_walker.name=Andarilho do Abismo
 entity.cqr_zombie.name=Zumbi
 
-//Mounts
+#Mounts
 entity.cqr_giant_endermite.name=Endermite Gigante
 entity.cqr_giant_silverfish.name=Traça Gigante
 entity.cqr_giant_silverfish1.name=Traça da Lava Gigante
 entity.cqr_giant_silverfish2.name=Traça do Pântano Gigante
 
-// Bosses
+#Bosses
 entity.cqr_nether_dragon.name=Dragão do Nether 
 entity.cqr_giant_tortoise.name=Tartaruga Gigante
 entity.cqr_lich.name=Lich
 entity.cqr_necromancer.name=Necromante
 entity.cqr_boar_mage.name=Javamago
 entity.cqr_walker_king.name=Andarilho Rei
+entity.cqr_pirate_captain.name=Capitão Pirata
 
-//Misc Entities
+#Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>invocando pentagrama
 entity.cqr_illusion_walker_king.name=Andarilho Rei
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Andarilho Tornado
+entity.cqr_pirate_parrot.name=Papagaio Traidor
+
+#Advancements
+advancements.cqrepoured.root.title=Chocolate Quest Repoured
+advancements.cqrepoured.root.description=Bem-vindo ao Chocolate Quest Repoured!
+advancements.cqrepoured.ha_got_you.title=Ha! Peguei Você!
+advancements.cqrepoured.ha_got_you.description=Foi morto por uma criatura do CQR
+advancements.cqrepoured.not_so_strong.title=Oponente Indigno
+advancements.cqrepoured.not_so_strong.description=Perdeu para um chefão do CQR
+advancements.cqrepoured.not_so_friendly.title=Não tão amigável...
+advancements.cqrepoured.not_so_friendly.description=Encontre os andarilhos
+advancements.cqrepoured.challenger.title=Desafiante do Chocolate
+advancements.cqrepoured.challenger.description=Derrote um chefão do CQR
+advancements.cqrepoured.champion.title=Campeão do Chocolate
+advancements.cqrepoured.champion.description=Derrote todos os chefões do CQR ao menos uma vez
+advancements.cqrepoured.wear_the_turtle.title=Vista a tartaruga!
+advancements.cqrepoured.wear_the_turtle.description=Agora eu sou um tanque! Obtenha um conjunto completo da armadura de tartaruga
+advancements.cqrepoured.kill_boar_mage.title=Esta garota está em chamas
+advancements.cqrepoured.kill_boar_mage.description=Derrote um javamago
+advancements.cqrepoured.kill_lich.title=Já chega dessa magia!
+advancements.cqrepoured.kill_lich.description=Derrote um lich
+advancements.cqrepoured.kill_walker_king.title=Um oponente digno
+advancements.cqrepoured.kill_walker_king.description=Derrote um andarilho rei
+advancements.cqrepoured.kill_necromancer.title=Ressuscite e morra
+advancements.cqrepoured.kill_necromancer.description=Derrote um necromante
+advancements.cqrepoured.kill_nether_dragon.title=Não era um godzilla
+advancements.cqrepoured.kill_nether_dragon.description=Derrote um dragão do nether
+advancements.cqrepoured.kill_giant_tortoise.title=Você me faz girar...
+advancements.cqrepoured.kill_giant_tortoise.description=Derrote uma tartaruga gigante
+advancements.cqrepoured.kill_pirate_captain.title=Arrr!
+advancements.cqrepoured.kill_pirate_captain.description=Derrote o capitão pirata
+advancements.cqrepoured.new_captain.title=Quem é o capitão agora?
+advancements.cqrepoured.new_captain.description=Adquira as armas do capitão pirata
