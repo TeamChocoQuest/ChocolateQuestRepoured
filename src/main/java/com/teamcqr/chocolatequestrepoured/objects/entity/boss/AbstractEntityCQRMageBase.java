@@ -31,6 +31,11 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 
 		this.dataManager.register(IDENTITY_HIDDEN, true);
 	}
+	
+	@Override
+	protected boolean canStrafe() {
+		return true;
+	}
 
 	public void revealIdentity() {
 		this.dataManager.set(IDENTITY_HIDDEN, false);

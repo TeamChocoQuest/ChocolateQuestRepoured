@@ -79,6 +79,11 @@ public class EntityCQRPirateCaptain extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
+	protected boolean canStrafe() {
+		return true;
+	}
+	
+	@Override
 	public void setSitting(boolean sitting) {
 		super.setSitting(false);
 	}
