@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
@@ -119,6 +120,7 @@ public class ModEntities {
 	public static final EntityEntry NECROMANCER = Null();
 	public static final EntityEntry WALKER_KING = Null();
 	public static final EntityEntry PIRATE_CAPTAIN = Null();
+	public static final EntityEntry GIANT_SPIDER = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -183,6 +185,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),

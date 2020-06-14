@@ -593,6 +593,7 @@ entity.cqr_necromancer.name=Necromancer
 entity.cqr_boar_mage.name=Boarmage
 entity.cqr_walker_king.name=Abyss Walker King
 entity.cqr_pirate_captain.name=Pirate Captain
+entity.cqr_giant_spider.name=Shelob
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram

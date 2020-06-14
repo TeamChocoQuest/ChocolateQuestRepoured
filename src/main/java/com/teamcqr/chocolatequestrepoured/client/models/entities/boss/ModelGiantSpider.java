@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
  * SpiderBoss - TheFunnyFace
  * Created using Tabula 7.0.1
  */
-public class ModelSpiderBoss extends ModelBase {
+public class ModelGiantSpider extends ModelBase {
 	public ModelRenderer BodyMiddle;
 	public ModelRenderer back;
 	public ModelRenderer head;
@@ -35,15 +35,15 @@ public class ModelSpiderBoss extends ModelBase {
 	public ModelRenderer legright31;
 	public ModelRenderer legright41;
 
-	public ModelSpiderBoss() {
+	public ModelGiantSpider() {
 		this(0F);
 	}
 
-	public ModelSpiderBoss(float modelSize) {
+	public ModelGiantSpider(float modelSize) {
 		this(modelSize, 0F, 64, 64);
 	}
 
-	public ModelSpiderBoss(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
+	public ModelGiantSpider(float modelSize, float p_i1149_2_, int textureWidthIn, int textureHeightIn) {
 		this.textureWidth = textureWidthIn;
 		this.textureHeight = textureHeightIn;
 		this.legright1 = new ModelRenderer(this, 3, 0);
