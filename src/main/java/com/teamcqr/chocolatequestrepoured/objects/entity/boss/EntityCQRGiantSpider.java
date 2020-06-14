@@ -61,7 +61,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss {
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(1, new BossAISpiderLeapAttack(this, 12));
+		this.tasks.addTask(1, new BossAISpiderLeapAttack(this, 0.6F));
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));

@@ -32,11 +32,11 @@ public class BossAISpiderLeapAttack extends EntityAIBase
 		} else {
 			double d0 = this.leaper.getDistanceSq(this.leapTarget);
 
-			if (d0 >= 2.0D && d0 <= 32.0D) {
+			if (d0 >= 2.0D && d0 <= 100) {
 				if (!this.leaper.onGround) {
 					return false;
 				} else {
-					return this.leaper.getRNG().nextInt(2) == 0;
+					return this.leaper.getRNG().nextInt(5) == 0;
 				}
 			} else {
 				return false;
