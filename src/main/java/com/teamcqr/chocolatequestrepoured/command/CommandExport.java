@@ -3,8 +3,10 @@ package com.teamcqr.chocolatequestrepoured.command;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntityExporter;
@@ -46,14 +48,23 @@ public class CommandExport extends CommandBase {
 		}
 
 		sender.sendMessage(new TextComponentString("Trying to export " + exporterList.size() + " structures..."));
+
+		Set<String> fileNames = new HashSet<>();
+		for (int i = 0; i < exporterList.size(); i++) {
+			TileEntityExporter exporter = exporterList.get(i);
+			if (!fileNames.add(exporter.structureName)) {
+				exporterList.remove(i--);
+				sender.sendMessage(new TextComponentString("Couldn't export structure " + exporter.structureName + " because there is another exporter which wants to write to that file."));
+			}
+		}
+
 		for (TileEntityExporter exporter : exporterList) {
 			File file = new File(CQRMain.CQ_EXPORT_FILES_FOLDER, exporter.structureName + ".nbt");
 
 			if (!file.exists() || (args.length >= 1 && args[0].equals("true"))) {
 				exporter.saveStructure(sender.getEntityWorld(), exporter.getMinPos(), exporter.getMaxPos(), (EntityPlayer) sender);
 			} else {
-				String msg = "Couldn't export structure " + exporter.structureName + " because a file with that name already exists and file overriding is disabled.";
-				sender.sendMessage(new TextComponentString(msg));
+				sender.sendMessage(new TextComponentString("Couldn't export structure " + exporter.structureName + " because a file with that name already exists and file overriding is disabled."));
 			}
 		}
 	}
