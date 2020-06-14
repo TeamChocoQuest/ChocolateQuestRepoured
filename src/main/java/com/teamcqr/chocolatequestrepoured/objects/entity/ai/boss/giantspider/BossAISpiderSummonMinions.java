@@ -61,7 +61,7 @@ public class BossAISpiderSummonMinions extends AbstractCQREntityAI<EntityCQRGian
 		if (this.summoner == null || this.entity == null) {
 			return;
 		}
-		int minionCount = Math.max(MAX_MINIONS_AT_A_TIME, MAX_MINIONS - getAliveMinionCount());
+		int minionCount = Math.min(MAX_MINIONS_AT_A_TIME, MAX_MINIONS - getAliveMinionCount());
 		double angle = 360 / minionCount;
 		Vec3d v = new Vec3d(2,0,0);
 		for(int i = 0; i < minionCount; i++) {
