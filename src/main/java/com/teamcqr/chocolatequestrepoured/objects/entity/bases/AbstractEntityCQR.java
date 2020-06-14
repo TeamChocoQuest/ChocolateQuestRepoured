@@ -1288,13 +1288,15 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	public void onPutInSpawner() {
-		//Recalculate the path positions to my new home
-		BlockPos homeNew = this.getPosition();
-		BlockPos v = homeNew.subtract(getHomePositionCQR());
-		for(int i = 0; i < this.pathPoints.length; i++) {
-			pathPoints[i] = pathPoints[i].subtract(v);
+		if(hasHomePositionCQR() && getHomePositionCQR() != null) {
+			//Recalculate the path positions to my new home
+			BlockPos homeNew = this.getPosition();
+			BlockPos v = homeNew.subtract(getHomePositionCQR());
+			for(int i = 0; i < this.pathPoints.length; i++) {
+				pathPoints[i] = pathPoints[i].subtract(v);
+			}
+			setHomePositionCQR(homeNew);
 		}
-		setHomePositionCQR(homeNew);
 	}
 
 }
