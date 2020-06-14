@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIAttackRanged;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIBackstab;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireFighter;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFireball;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIHealingPotion;
@@ -291,6 +292,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.tasks.addTask(11, this.spellHandler);
 		this.tasks.addTask(12, new EntityAIAttackRanged(this));
 		this.tasks.addTask(12, new EntityAIPotionThrower(this));
+		this.tasks.addTask(12, new EntityAIFireball(this));
 		this.tasks.addTask(13, new EntityAIBackstab(this));
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
