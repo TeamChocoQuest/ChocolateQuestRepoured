@@ -48,6 +48,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProject
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.client.render.projectile.RenderProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterChestRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExporterRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
@@ -99,6 +100,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileH
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
@@ -141,6 +143,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, renderManager -> new RenderProjectileHookShotHook(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, renderManager -> new RenderProjectileBubble(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, renderManager -> new RenderProjectileHotFireball(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, renderManager -> new RenderProjectileWeb(renderManager));
 
 		// Miscs
 		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, renderManager -> new RenderSummoningCircle(renderManager));

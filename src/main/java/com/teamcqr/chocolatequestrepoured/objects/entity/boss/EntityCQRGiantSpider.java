@@ -14,6 +14,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderLeapAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderSummonMinions;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderWebshot;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
@@ -69,6 +70,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
+		this.tasks.addTask(2, new BossAISpiderWebshot(this));
 		this.tasks.addTask(11, this.spellHandler);
 		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 0.6F));
 		this.tasks.addTask(14, new EntityAIAttack(this));
