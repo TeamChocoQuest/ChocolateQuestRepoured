@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
+import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantSpider;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNecromancer;
@@ -24,6 +25,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderPirateParrot;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderWalkerTornado;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantSpider;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRGiantTortoisePart;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRMage;
@@ -51,6 +53,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityExp
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityForceFieldNexusRenderer;
 import com.teamcqr.chocolatequestrepoured.client.render.tileentity.TileEntityTableRenderer;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
@@ -222,6 +225,9 @@ public class ModEntityRenderers {
 		
 		// Pirate Captain
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateCaptain.class, renderManager -> new RenderCQRPirateCaptain(renderManager, "boss/pirate_captain"));
+		
+		// Shelob
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, renderManager -> new RenderCQRGiantSpider(renderManager, new ModelGiantSpider(), 2.0F));
 	}
 
 }
