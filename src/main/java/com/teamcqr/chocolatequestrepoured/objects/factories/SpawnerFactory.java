@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 
 import net.minecraft.entity.Entity;
@@ -250,6 +251,9 @@ public abstract class SpawnerFactory {
 
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity) {
 		NBTTagCompound entityCompound = new NBTTagCompound();
+		if(entity instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR)entity).onPutInSpawner();
+		}
 		entity.writeToNBTOptional(entityCompound);
 		entityCompound.removeTag("UUIDLeast");
 		entityCompound.removeTag("UUIDMost");
