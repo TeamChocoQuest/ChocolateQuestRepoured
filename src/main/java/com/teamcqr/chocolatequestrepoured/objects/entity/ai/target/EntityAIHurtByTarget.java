@@ -2,7 +2,6 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 
 import java.util.List;
 
-import com.google.common.base.Predicate;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
