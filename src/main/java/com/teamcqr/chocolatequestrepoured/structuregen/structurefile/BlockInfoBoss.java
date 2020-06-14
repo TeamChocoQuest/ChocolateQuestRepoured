@@ -81,7 +81,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 					}
 					((EntityLiving) indicator).onInitialSpawn(world.getDifficultyForLocation(transformedPos), (IEntityLivingData) null);
 
-					((EntityLiving) indicator).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1024);
+					((EntityLiving) indicator).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100);
 					((EntityLiving) indicator).setHealth(((EntityLiving) indicator).getMaxHealth());
 
 					// Some gear
