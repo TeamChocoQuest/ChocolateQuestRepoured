@@ -414,7 +414,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (compound.hasKey("pathingAI", Constants.NBT.TAG_COMPOUND)) {
 			NBTTagCompound pathTag = compound.getCompoundTag("pathingAI");
 			this.pathIsLoop = pathTag.getBoolean("isLoop");
-			this.currentTargetPoint = pathTag.getInteger("currentPathPoint") - 1;
+			this.currentTargetPoint = pathTag.getInteger("currentPathPoint");
 			NBTTagList nbtTagList = pathTag.getTagList("pathPoints", Constants.NBT.TAG_COMPOUND);
 			this.pathPoints = new BlockPos[nbtTagList.tagCount()];
 			for (int i = 0; i < nbtTagList.tagCount(); i++) {

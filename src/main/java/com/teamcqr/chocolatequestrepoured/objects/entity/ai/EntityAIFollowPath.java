@@ -15,10 +15,17 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldExecute() {
-		if (this.entity.getGuardPathPoints().length == 0) {
+		if (this.entity.getGuardPathPoints().length <= 1) {
 			return false;
 		}
 		return this.entity.hasHomePositionCQR();
+	}
+
+	@Override
+	public void startExecuting() {
+		int index = this.entity.getCurrentGuardPathTargetPoint();
+		BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
+		this.entity.getNavigator().tryMoveToXYZ(pos.getX(), pos.getY(), pos.getZ(), 0.75D);
 	}
 
 	@Override
@@ -28,7 +35,11 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public void updateTask() {
-		if (!this.entity.hasPath() && entity.hasHomePositionCQR() && entity.getGuardPathPoints() != null) {
+		if (this.entity.hasPath()) {
+			int index = this.entity.getCurrentGuardPathTargetPoint();
+			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
+			this.entity.getLookHelper().setLookPosition(pos.getX(), pos.getY() + entity.getEyeHeight(), pos.getZ(), 30, 30);
+		} else {
 			int index = this.getNextPathIndex();
 			this.entity.setCurrentGuardPathTargetPoint(index);
 			BlockPos pos = this.entity.getHomePositionCQR().add(this.entity.getGuardPathPoints()[index]);
@@ -46,14 +57,10 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 		} else if (index >= pathPoints.length - 1) {
 			this.isReversingPath = true;
+			index = pathPoints.length - 2;
 		} else if (index <= 0) {
 			this.isReversingPath = false;
-		}
-		if(index >= pathPoints.length) {
-			index -= 2;
-		}
-		if(index < 0) {
-			index += 2;
+			index = 1;
 		}
 		return index;
 	}
