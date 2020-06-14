@@ -1,5 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
@@ -9,9 +13,11 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIFollowPath;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToHome;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAIMoveToLeader;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderLeapAttack;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.giantspider.BossAISpiderSummonMinions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAICQRNearestAttackTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.EntityAIHurtByTarget;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -33,9 +39,11 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntityCQRGiantSpider extends AbstractEntityCQRBoss {
+public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
 	
 	private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityCQRGiantSpider.class, DataSerializers.BYTE);
+	
+	protected List<Entity> summonedMinions = new ArrayList<>();
 
 	public EntityCQRGiantSpider(World worldIn) {
 		super(worldIn);
@@ -60,8 +68,9 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss {
 	protected void initEntityAI() {
 		this.spellHandler = this.createSpellHandler();
 		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
 		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(1, new BossAISpiderLeapAttack(this, 0.6F));
+		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 0.6F));
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));
@@ -89,6 +98,20 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss {
             this.setBesideClimbableBlock(this.collidedHorizontally);
         }
     }
+	
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		List<Entity> tmp = new ArrayList<>();
+		for (Entity ent : this.summonedMinions) {
+			if (ent == null || ent.isDead) {
+				tmp.add(ent);
+			}
+		}
+		for (Entity e : tmp) {
+			this.summonedMinions.remove(e);
+		}
+	}
 	
 	/**
      * Returns new PathNavigateGround instance
@@ -200,5 +223,25 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss {
         }	
         return super.isPotionApplicable(potioneffectIn);
     }
+    
+    @Override
+	public CQRFaction getSummonerFaction() {
+		return this.getFaction();
+	}
+
+	@Override
+	public List<Entity> getSummonedEntities() {
+		return this.summonedMinions;
+	}
+
+	@Override
+	public EntityLivingBase getSummoner() {
+		return this;
+	}
+
+	@Override
+	public void addSummonedEntityToList(Entity summoned) {
+		this.summonedMinions.add(summoned);
+	}
 
 }

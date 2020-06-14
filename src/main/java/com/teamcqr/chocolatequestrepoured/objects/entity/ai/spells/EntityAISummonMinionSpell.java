@@ -149,9 +149,9 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 							this.summoner.addSummonedEntityToList(summoned);
 						}
 
-						this.entity.world.spawnEntity(summoned);
+						/*this.entity.world.spawnEntity(summoned);
 						this.summoner.addSummonedEntityToList(summoned);
-						this.activeCircles.add(summoned);
+						this.activeCircles.add(summoned);*/
 					}
 				}
 			}
