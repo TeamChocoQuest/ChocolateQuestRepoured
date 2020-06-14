@@ -139,7 +139,6 @@ public class TileEntityExporter extends TileEntity {
 		if (!world.isRemote) {
 			CQRMain.logger.info("Server is saving structure...");
 			CQStructure structure = CQStructure.createFromWorld(world, startPos, endPos, ignoreEntities, author.getName());
-			structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
 			new Thread(() -> {
 				structure.writeToFile(new File(CQRMain.CQ_EXPORT_FILES_FOLDER, this.structureName + ".nbt"));
 				author.sendMessage(new TextComponentString("Successfully exported structure: " + this.structureName));
