@@ -169,11 +169,11 @@ public class CQRMain {
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeons", CQ_DUNGEON_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/lootconfigs", CQ_CHEST_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/structures", CQ_STRUCTURE_FILES_FOLDER);
-			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/exporter_output", CQ_EXPORT_FILES_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/factions", CQ_FACTION_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeon_inhabitants", CQ_INHABITANT_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/items", CQ_ITEM_FOLDER);
 		}
+		CQ_EXPORT_FILES_FOLDER.mkdir();
 	}
 
 	private void checkAndCopyConfig(String source, File target) {
