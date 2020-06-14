@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.models.entities.boss;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * SpiderBoss - TheFunnyFace
@@ -183,4 +184,35 @@ public class ModelGiantSpider extends ModelBase {
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
 	}
+	
+	/**
+     * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
+     * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
+     * "far" arms and legs can swing at most.
+     */
+    public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn)
+    {
+        this.head.rotateAngleY = netHeadYaw * 0.017453292F;
+        this.head.rotateAngleX = headPitch * 0.017453292F;
+        this.legright4.rotateAngleY = ((float)Math.PI / 4F);
+        this.legleft4.rotateAngleY = -((float)Math.PI / 4F);
+        this.legright3.rotateAngleY = 0.3926991F;
+        this.legleft3.rotateAngleY = -0.3926991F;
+        this.legright2.rotateAngleY = -0.3926991F;
+        this.legleft2.rotateAngleY = 0.3926991F;
+        this.legright1.rotateAngleY = -((float)Math.PI / 4F);
+        this.legleft1.rotateAngleY = ((float)Math.PI / 4F);
+        float f3 = -(MathHelper.cos(limbSwing * 0.6662F * 2.0F + 0.0F) * 0.4F) * limbSwingAmount;
+        float f4 = -(MathHelper.cos(limbSwing * 0.6662F * 2.0F + (float)Math.PI) * 0.4F) * limbSwingAmount;
+        float f5 = -(MathHelper.cos(limbSwing * 0.6662F * 2.0F + ((float)Math.PI / 2F)) * 0.4F) * limbSwingAmount;
+        float f6 = -(MathHelper.cos(limbSwing * 0.6662F * 2.0F + ((float)Math.PI * 3F / 2F)) * 0.4F) * limbSwingAmount;
+        this.legright4.rotateAngleY += f3;
+        this.legleft4.rotateAngleY += -f3;
+        this.legright3.rotateAngleY += f4;
+        this.legleft3.rotateAngleY += -f4;
+        this.legright2.rotateAngleY += f5;
+        this.legleft2.rotateAngleY += -f5;
+        this.legright1.rotateAngleY += f6;
+        this.legleft1.rotateAngleY += -f6;
+    }
 }
