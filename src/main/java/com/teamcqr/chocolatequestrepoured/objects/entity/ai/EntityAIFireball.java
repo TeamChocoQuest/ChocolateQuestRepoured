@@ -28,7 +28,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private boolean hasFireball() {
 		ItemStack item = entity.getHeldItemOffhand();
-		if(!item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
+		if(item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
 			return false;
 		}
 		return true;
