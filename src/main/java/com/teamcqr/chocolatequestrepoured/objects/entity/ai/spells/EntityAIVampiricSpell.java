@@ -16,7 +16,7 @@ public class EntityAIVampiricSpell extends AbstractEntityAISpell<AbstractEntityC
 
 	public EntityAIVampiricSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 	}
 
 	@Override

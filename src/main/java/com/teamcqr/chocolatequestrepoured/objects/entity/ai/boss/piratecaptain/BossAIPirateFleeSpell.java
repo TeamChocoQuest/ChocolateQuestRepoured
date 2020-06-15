@@ -30,7 +30,7 @@ public class BossAIPirateFleeSpell extends AbstractEntityAISpell<EntityCQRPirate
 	
 	public BossAIPirateFleeSpell(EntityCQRPirateCaptain entity, int cooldown, int chargingTicks, int castingTicks) {
 		super(entity, cooldown, chargingTicks, castingTicks);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 	}
 
 	@Override

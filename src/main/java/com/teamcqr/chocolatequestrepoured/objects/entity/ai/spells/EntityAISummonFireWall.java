@@ -14,7 +14,7 @@ public class EntityAISummonFireWall extends AbstractEntityAISpell<AbstractEntity
 
 	public EntityAISummonFireWall(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 	}
 
 	@Override
