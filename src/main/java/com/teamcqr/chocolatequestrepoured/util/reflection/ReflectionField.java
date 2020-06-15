@@ -27,7 +27,7 @@ public class ReflectionField<C, T> {
 	public void set(C obj, T value) {
 		try {
 			this.field.set(obj, value);
-		} catch (IllegalArgumentException | IllegalAccessException | NullPointerException e ) {
+		} catch (IllegalArgumentException | IllegalAccessException e) {
 			CQRMain.logger.error("Failed to set field " + this.field.getName() + " for object " + obj + " with value " + value, e);
 		}
 	}
