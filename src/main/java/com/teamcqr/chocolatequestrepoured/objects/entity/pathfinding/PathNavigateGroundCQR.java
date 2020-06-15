@@ -28,6 +28,9 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		super(entitylivingIn, worldIn);
 	}
 
+	/**
+	 * Copied from {@link PathNavigateGround#getPathToPos(BlockPos)} and replaced super.getPathToPos(BlockPos) with this.getPathToPosCQR(BlockPos)
+	 */
 	@Override
 	public Path getPathToPos(BlockPos pos) {
 		if (this.world.getBlockState(pos).getMaterial() == Material.AIR) {
@@ -38,7 +41,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 
 			if (blockpos.getY() > 0) {
-				return this.getPathToPos2(blockpos.up());
+				return this.getPathToPosCQR(blockpos.up());
 			}
 
 			while (blockpos.getY() < this.world.getHeight() && this.world.getBlockState(blockpos).getMaterial() == Material.AIR) {
@@ -49,7 +52,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		}
 
 		if (!this.world.getBlockState(pos).getMaterial().isSolid()) {
-			return this.getPathToPos2(pos);
+			return this.getPathToPosCQR(pos);
 		} else {
 			BlockPos blockpos1;
 
@@ -57,17 +60,17 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				;
 			}
 
-			return this.getPathToPos2(blockpos1);
+			return this.getPathToPosCQR(blockpos1);
 		}
 	}
 
-	private static final ReflectionField<PathNavigate, Integer> fieldTicksAtLastPos = new ReflectionField(PathNavigate.class, "abc", "ticksAtLastPos");
-	private static final ReflectionField<PathNavigate, Vec3d> fieldLastPosCheck = new ReflectionField(PathNavigate.class, "abc", "lastPosCheck");
-	private static final ReflectionField<PathNavigate, BlockPos> fieldTargetPos = new ReflectionField(PathNavigate.class, "abc", "targetPos");
-	private static final ReflectionField<PathNavigate, PathFinder> fieldPathFinder = new ReflectionField(PathNavigate.class, "abc", "pathFinder");
+	private static final ReflectionField<PathNavigate, Integer> fieldTicksAtLastPos = new ReflectionField(PathNavigate.class, "field_75520_h", "ticksAtLastPos");
+	private static final ReflectionField<PathNavigate, Vec3d> fieldLastPosCheck = new ReflectionField(PathNavigate.class, "field_75521_i", "lastPosCheck");
+	private static final ReflectionField<PathNavigate, BlockPos> fieldTargetPos = new ReflectionField(PathNavigate.class, "field_188564_r", "targetPos");
+	private static final ReflectionField<PathNavigate, PathFinder> fieldPathFinder = new ReflectionField(PathNavigate.class, "field_179681_j", "pathFinder");
 
 	@Nullable
-	private Path getPathToPos2(BlockPos pos) {
+	private Path getPathToPosCQR(BlockPos pos) {
 		if (!this.canNavigate()) {
 			return null;
 		//} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
@@ -121,6 +124,11 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				return true;
 			}
 		}
+	}
+
+	@Override
+	public float getPathSearchRange() {
+		return 64.0F;
 	}
 
 }

@@ -71,7 +71,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			}
 			return this.entity.getEntitySenses().canSee(possibleTarget);
 		} else {
-			if (!this.entity.getFaction().isEnemy(possibleTarget)) {
+			if (!faction.isEnemy(possibleTarget)) {
 				return false;
 			}
 			if (possibleTarget == this.entity.getLeader()) {
