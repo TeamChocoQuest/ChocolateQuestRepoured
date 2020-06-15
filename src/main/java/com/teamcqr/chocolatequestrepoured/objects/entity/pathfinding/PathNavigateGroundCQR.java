@@ -91,6 +91,12 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	}
 
 	@Override
+	public void clearPath() {
+		this.currentPath = null;
+		fieldTargetPos.set(this, null);
+	}
+
+	@Override
 	public boolean setPath(Path pathentityIn, double speedIn) {
 		if (pathentityIn == null) {
 			this.currentPath = null;
@@ -103,8 +109,6 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 
 			this.currentPath = pathentityIn;
-			PathPoint finalPathPoint = pathentityIn.getFinalPathPoint();
-			fieldTargetPos.set(this, new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z));
 			//this.targetPos = new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z);
 
 			this.removeSunnyPath();
@@ -115,6 +119,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				//this.targetPos = null;
 				return false;
 			} else {
+				PathPoint finalPathPoint = pathentityIn.getFinalPathPoint();
+				fieldTargetPos.set(this, new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z));
 				this.speed = speedIn;
 				Vec3d vec3d = this.getEntityPosition();
 				fieldTicksAtLastPos.set(this, this.totalTicks);
@@ -128,7 +134,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 
 	@Override
 	public float getPathSearchRange() {
-		return 64.0F;
+		return 256.0F;
 	}
 
 }
