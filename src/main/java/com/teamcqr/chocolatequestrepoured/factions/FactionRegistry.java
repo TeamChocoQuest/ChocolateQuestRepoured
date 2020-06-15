@@ -220,16 +220,16 @@ public class FactionRegistry {
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
 		} 
-		
-		if (entity instanceof AbstractEntityCQR) {
-			return ((AbstractEntityCQR) entity).getFaction();
-		}
-		
+			
 		//Faction overriding
 		if(EntityList.getKey(entity) != null && entityFactionMap.containsKey(EntityList.getKey(entity))) {
 			return entityFactionMap.get(EntityList.getKey(entity));
 		}
 		//Overriding end
+		
+		if (entity instanceof AbstractEntityCQR) {
+			return ((AbstractEntityCQR) entity).getFaction();
+		}
 		
 		if (entity instanceof EntityArmorStand) {
 			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
