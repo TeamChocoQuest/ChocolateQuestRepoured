@@ -17,7 +17,7 @@ public class EntityAIBlindTargetSpell extends AbstractEntityAISpell<AbstractEnti
 
 	public EntityAIBlindTargetSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks, int duration) {
 		super(entity, cooldown, chargingTicks, 1);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 		this.duration = duration;
 	}
 

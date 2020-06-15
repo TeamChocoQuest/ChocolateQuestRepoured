@@ -33,7 +33,7 @@ public class EntityAISummonMinionSpell extends AbstractEntityAISpell<AbstractEnt
 
 	public EntityAISummonMinionSpell(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 		if (entity instanceof ISummoner) {
 			this.summoner = (ISummoner) entity;
 		}

@@ -14,7 +14,7 @@ public class EntityAISpellWalker extends AbstractEntityAISpell<AbstractEntityCQR
 
 	public EntityAISpellWalker(AbstractEntityCQR entity) {
 		super(entity, 600, 100, 1);
-		this.setup(true, true, true, true);
+		this.setup(true, true, true, false);
 	}
 
 	@Override
