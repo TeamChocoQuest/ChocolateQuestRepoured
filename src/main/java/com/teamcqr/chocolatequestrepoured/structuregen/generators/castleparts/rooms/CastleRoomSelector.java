@@ -838,6 +838,19 @@ public class CastleRoomSelector {
 					}
 				} else {
 					CQRMain.logger.info("{} had no pathable rooms!", srcRoom);
+
+					//Add doors where we can to make sure the player can get to the room in some way
+					for (EnumFacing side : EnumFacing.HORIZONTALS)
+					{
+						if (srcRoom.getRoom().canBuildDoorOnSide(side))
+						{
+							srcRoom.getRoom().addDoorOnSideCentered(side);
+						}
+					}
+
+					//Move it to the reachable list (but don't mark it as reachable so other cells don't path here)
+					unreachable.remove(srcRoom);
+					reachable.add(srcRoom);
 				}
 			}
 		}
