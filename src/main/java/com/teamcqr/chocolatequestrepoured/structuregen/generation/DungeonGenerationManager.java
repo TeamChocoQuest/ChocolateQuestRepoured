@@ -64,7 +64,7 @@ public class DungeonGenerationManager {
 				CQRMain.logger.info("Saved {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonGeneratorList.size());
 			}
 			catch (NullPointerException e) {
-				CQRMain.logger.	warn("Something is playing around with CQR internal memory! This can lead to unforeseen consequences");
+				CQRMain.logger.warn("Something is playing around with CQR internal memory! This can lead to unforeseen consequences");
 			}
 			finally {
 				DungeonGenerationManager.deleteInstance(world);
