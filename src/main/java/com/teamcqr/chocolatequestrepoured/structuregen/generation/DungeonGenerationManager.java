@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.NullPointerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,8 +60,15 @@ public class DungeonGenerationManager {
 
 	public static void handleWorldUnload(World world) {
 		if (world != null && !world.isRemote) {
-			CQRMain.logger.info("Saved {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonGeneratorList.size());
-			DungeonGenerationManager.deleteInstance(world);
+			try {
+				CQRMain.logger.info("Saved {} parts to generate", DungeonGenerationManager.getInstance(world).dungeonGeneratorList.size());
+			}
+			catch (NullPointerException e) {
+				CQRMain.logger.	warn("Something is playing around with CQR internal memory! This can lead to unforeseen consequences");
+			}
+			finally {
+				DungeonGenerationManager.deleteInstance(world);
+			}
 		}
 	}
 
