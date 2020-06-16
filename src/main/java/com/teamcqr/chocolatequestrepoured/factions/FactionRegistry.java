@@ -70,13 +70,13 @@ public class FactionRegistry {
 	public void loadFactions() {
 		this.loadFactionsInConfigFolder();
 		this.loadDefaultFactions();
-		
+
 		this.loadEntityFactionRelations();
 	}
 
 	private void loadEntityFactionRelations() {
 		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "entityFactionRelation.properties");
-		if(file.exists()) {
+		if (file.exists()) {
 			Properties prop = new Properties();
 			boolean flag = true;
 			try (InputStream inputStream = new FileInputStream(file)) {
@@ -86,19 +86,19 @@ public class FactionRegistry {
 				CQRMain.logger.error("Failed to load file" + file.getName(), e);
 				flag = false;
 			}
-			if(flag) {
-				for(String key : prop.stringPropertyNames()) {
-					if(key.startsWith("#")) {
+			if (flag) {
+				for (String key : prop.stringPropertyNames()) {
+					if (key.startsWith("#")) {
 						continue;
 					}
 					String rlkey = key.replace('.', ':');
 					ResourceLocation resLoc = new ResourceLocation(rlkey);
-					//if(EntityList.isRegistered(resLoc)) {
-						String faction = prop.getProperty(key, null);
-						if(faction != null && factions.containsKey(faction)) {
-							entityFactionMap.put(resLoc, factions.get(faction));
-						}
-					//}
+					// if(EntityList.isRegistered(resLoc)) {
+					String faction = prop.getProperty(key, null);
+					if (faction != null && factions.containsKey(faction)) {
+						entityFactionMap.put(resLoc, factions.get(faction));
+					}
+					// }
 				}
 			}
 		}
@@ -106,10 +106,10 @@ public class FactionRegistry {
 
 	private void loadFactionsInConfigFolder() {
 		// DONE: Load factions from files
-		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_FACTION_FOLDER, new String[] {"cfg", "prop", "properties"}, true));
+		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_FACTION_FOLDER, new String[] { "cfg", "prop", "properties" }, true));
 		int fileCount = files.size();
 		if (fileCount > 0) {
-			ArrayList<String> fIDs = new ArrayList<>(fileCount +1);
+			ArrayList<String> fIDs = new ArrayList<>(fileCount + 1);
 			ArrayList<List<String>> allyTmp = new ArrayList<>();
 			ArrayList<List<String>> enemyTmp = new ArrayList<>();
 			boolean flag = true;
@@ -135,10 +135,10 @@ public class FactionRegistry {
 					EReputationState defRepu = EReputationState.valueOf(prop.getProperty(ConfigKeys.FACTION_REPU_DEFAULT, EReputationState.NEUTRAL.toString()));
 					boolean staticRepu = PropertyFileHelper.getBooleanProperty(prop, ConfigKeys.FACTION_STATIC_REPUTATION_KEY, false);
 					// Reputation lists
-					for(String ally : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ALLIES_KEY, new String[] {})) {
+					for (String ally : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ALLIES_KEY, new String[] {})) {
 						fAlly.add(ally);
 					}
-					for(String enemy : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ENEMIES_KEY, new String[] {})) {
+					for (String enemy : PropertyFileHelper.getStringArrayProperty(prop, ConfigKeys.FACTION_ENEMIES_KEY, new String[] {})) {
 						fEnemy.add(enemy);
 					}
 					fIDs.add(fName);
@@ -203,39 +203,40 @@ public class FactionRegistry {
 
 	@Nullable
 	public CQRFaction getFactionOf(Entity entity) {
-		if(entity == null) {
+		if (entity == null) {
 			return null;
 		}
-		
-		if(entity instanceof EntityPlayer) {
+
+		if (entity instanceof EntityPlayer) {
 			return this.factions.get(EDefaultFaction.PLAYERS.name());
 		}
-		
-		if (entity instanceof MultiPartEntityPart) {
-			return this.getFactionOf((Entity) ((MultiPartEntityPart)entity).parent);
+
+		if (entity instanceof MultiPartEntityPart && ((MultiPartEntityPart) entity).parent instanceof Entity) {
+			return this.getFactionOf((Entity) ((MultiPartEntityPart) entity).parent);
 		}
 		if (entity.getControllingPassenger() != null) {
 			return this.getFactionOf(entity.getControllingPassenger());
 		}
 		if (entity instanceof EntityTameable && ((EntityTameable) entity).getOwner() != null) {
 			return this.getFactionOf(((EntityTameable) entity).getOwner());
-		} 
-		
+		}
+
 		if (entity instanceof AbstractEntityCQR) {
 			return ((AbstractEntityCQR) entity).getFaction();
 		}
-		
-		//Faction overriding
-		if(EntityList.getKey(entity) != null && entityFactionMap.containsKey(EntityList.getKey(entity))) {
-			return entityFactionMap.get(EntityList.getKey(entity));
+
+		// Faction overriding
+		ResourceLocation registryName = EntityList.getKey(entity);
+		if (registryName != null && entityFactionMap.containsKey(registryName)) {
+			return entityFactionMap.get(registryName);
 		}
-		//Overriding end
-		
+		// Overriding end
+
 		if (entity instanceof EntityArmorStand) {
 			return this.factions.get(EDefaultFaction.ALL_ALLY.name());
 		}
 
-		if (entity instanceof EntityVillager || entity instanceof EntityGolem || entity instanceof EntityCQRNPC) {
+		if (entity instanceof EntityVillager || entity instanceof EntityGolem) {
 			return this.factions.get(EDefaultFaction.VILLAGERS.name());
 		}
 
@@ -279,7 +280,7 @@ public class FactionRegistry {
 	public EReputationStateRough getReputationOf(UUID playerID, CQRFaction faction) {
 		return EReputationStateRough.getByRepuScore(getExactReputationOf(playerID, faction));
 	}
-	
+
 	public int getExactReputationOf(UUID playerID, CQRFaction faction) {
 		if (faction.isRepuStatic()) {
 			return faction.getDefaultReputation().getValue();
@@ -367,8 +368,8 @@ public class FactionRegistry {
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
 					if (!repuDataList.hasNoTags()) {
-						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
-							//Wait until the uuid isnt active	
+						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+							// Wait until the uuid isnt active
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {
@@ -409,8 +410,8 @@ public class FactionRegistry {
 					String path = FileIOUtil.getAbsoluteWorldPath() + "/data/CQR/reputation/";
 					File f = FileIOUtil.getOrCreateFile(path, uuid + ".nbt");
 					if (f != null) {
-						while(FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
-							//Wait until the uuid isnt active	
+						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
+							// Wait until the uuid isnt active
 						}
 						FactionRegistry.this.uuidsBeingLoaded.add(uuid);
 						try {

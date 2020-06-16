@@ -150,8 +150,6 @@ public class CQRMain {
 	}
 
 	private void initConfigFolder(FMLPreInitializationEvent event) {
-		boolean installCQ = false;
-
 		CQ_CONFIG_FOLDER = new File(event.getModConfigurationDirectory(), "CQR");
 		CQ_DUNGEON_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeons");
 		CQ_CHEST_FOLDER = new File(CQ_CONFIG_FOLDER, "lootconfigs");
@@ -161,44 +159,27 @@ public class CQRMain {
 		CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants");
 		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
 
-		if (!CQ_CONFIG_FOLDER.exists()) {
-			CQ_CONFIG_FOLDER.mkdir();
-
-			installCQ = true;
-		} else if (CQRConfig.general.reinstallDefaultConfigs) {
-			installCQ = true;
-		}
-		if (!CQ_DUNGEON_FOLDER.exists()) {
-			CQ_DUNGEON_FOLDER.mkdir();
-			installCQ = true;
-		}
-		if (!CQ_CHEST_FOLDER.exists()) {
-			CQ_CHEST_FOLDER.mkdir();
-			installCQ = true;
-		}
-		if (!CQ_STRUCTURE_FILES_FOLDER.exists()) {
-			CQ_STRUCTURE_FILES_FOLDER.mkdir();
-			installCQ = true;
-		}
-		if (!CQ_EXPORT_FILES_FOLDER.exists()) {
-			CQ_EXPORT_FILES_FOLDER.mkdir();
-		}
-		if (!CQ_FACTION_FOLDER.exists()) {
-			CQ_FACTION_FOLDER.mkdir();
-			installCQ = true;
-		}
-		if (!CQ_INHABITANT_FOLDER.exists()) {
-			CQ_INHABITANT_FOLDER.mkdir();
-			installCQ = true;
-		}
-		if (!CQ_ITEM_FOLDER.exists()) {
-			CQ_ITEM_FOLDER.mkdir();
-			installCQ = true;
-		}
-
-		if (installCQ) {
+		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			try {
 				CopyHelper.copyFromJar("/assets/cqrepoured/defaultConfigs", CQ_CONFIG_FOLDER.toPath());
+			} catch (URISyntaxException | IOException e) {
+				logger.error("Failed to copy config files", e);
+			}
+		} else {
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeons", CQ_DUNGEON_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/lootconfigs", CQ_CHEST_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/structures", CQ_STRUCTURE_FILES_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/factions", CQ_FACTION_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeon_inhabitants", CQ_INHABITANT_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/items", CQ_ITEM_FOLDER);
+		}
+		CQ_EXPORT_FILES_FOLDER.mkdir();
+	}
+
+	private void checkAndCopyConfig(String source, File target) {
+		if (!target.exists()) {
+			try {
+				CopyHelper.copyFromJar(source, target.toPath());
 			} catch (URISyntaxException | IOException e) {
 				logger.error("Failed to copy config files", e);
 			}

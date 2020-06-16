@@ -50,25 +50,27 @@ public class ItemPotionHealing extends Item {
 
 	@Override
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		if (entityLiving instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) entityLiving;
-			player.heal(4.0F);
-			if (!player.isCreative()) {
-				ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+		stack.shrink(1);
 
-				stack.shrink(1);
-				if (stack.isEmpty()) {
-					return bottle;
-				} else if (!player.addItemStackToInventory(bottle)) {
-					if (!worldIn.isRemote) {
+		if (!worldIn.isRemote) {
+			if (entityLiving instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) entityLiving;
+				player.heal(4.0F);
+
+				if (!player.isCreative()) {
+					ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+
+					if (stack.isEmpty()) {
+						return bottle;
+					} else if (!player.addItemStackToInventory(bottle)) {
 						worldIn.spawnEntity(new EntityItem(worldIn, player.posX, player.posY, player.posZ, bottle));
 					}
 				}
+			} else {
+				entityLiving.heal(entityLiving.getMaxHealth() * 0.5F);
 			}
-		} else {
-			entityLiving.heal(20.0F);
-			stack.shrink(1);
 		}
+
 		return stack;
 	}
 

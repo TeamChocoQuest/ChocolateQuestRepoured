@@ -280,6 +280,7 @@ item.great_sword_iron.name=Iron Greatsword
 #Spears
 item.spear_diamond.name=Diamond Spear
 item.spear_iron.name=Iron Spear
+attribute.name.generic.attackRange=Attack Range
 
 #Staves
 item.staff.name=Staff
@@ -592,6 +593,7 @@ entity.cqr_necromancer.name=Necromancer
 entity.cqr_boar_mage.name=Boarmage
 entity.cqr_walker_king.name=Abyss Walker King
 entity.cqr_pirate_captain.name=Pirate Captain
+entity.cqr_giant_spider.name=Shelob
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
@@ -630,3 +632,5 @@ advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=Defeat the pirate captain
 advancements.cqrepoured.new_captain.title=Who's the captain now?
 advancements.cqrepoured.new_captain.description=Acquire the pirate captain's weapons
+advancements.cqrepoured.kill_giant_spider.title=The only good spider...
+advancements.cqrepoured.kill_giant_spider.description=...is a dead spider! Defeat a giant spider

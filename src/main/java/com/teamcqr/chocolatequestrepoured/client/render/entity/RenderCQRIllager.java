@@ -41,11 +41,6 @@ public class RenderCQRIllager extends RenderCQREntity<EntityCQRIllager> {
 					super.doRenderLayer(entity, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale);
 				}
 			}
-
-			@Override
-			protected void translateToHand(EnumHandSide hand) {
-				((ModelCQRIllager) this.livingEntityRenderer.getMainModel()).getArm(hand).postRender(0.0625F);
-			}
 		});
 
 		/*

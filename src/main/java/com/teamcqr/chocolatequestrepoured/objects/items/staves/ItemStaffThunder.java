@@ -57,7 +57,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 			Vec3d start = player.getPositionEyes(1.0F);
 			Vec3d end = start.add(player.getLookVec().scale(20.0D));
 			RayTraceResult result = worldIn.rayTraceBlocks(start, end);
-	
+
 			if (result != null) {
 				EntityColoredLightningBolt entity = new EntityColoredLightningBolt(worldIn, result.hitVec.x, result.hitVec.y, result.hitVec.z, true, false);
 				worldIn.spawnEntity(entity);
@@ -99,6 +99,21 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	@Override
 	public SoundEvent getShootSound() {
 		return ModSounds.MAGIC;
+	}
+
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 40;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 40;
 	}
 
 }

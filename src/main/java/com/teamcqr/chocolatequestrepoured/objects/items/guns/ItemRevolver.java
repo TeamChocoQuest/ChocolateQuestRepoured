@@ -18,6 +18,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -176,10 +177,10 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		if (!worldIn.isRemote) {
 			ItemStack bulletStack = new ItemStack(ModItems.BULLET_IRON, 1);
-			if(shooter instanceof AbstractEntityCQR) {
+			if (shooter instanceof AbstractEntityCQR) {
 				AbstractEntityCQR cqrEnt = (AbstractEntityCQR) shooter;
 				ItemStack bullet = cqrEnt.getItemStackFromExtraSlot(EntityEquipmentExtraSlot.ARROW);
-				if(bullet != null && !bullet.isEmpty() && (bullet.getItem() instanceof ItemBullet)) {
+				if (bullet != null && !bullet.isEmpty() && (bullet.getItem() instanceof ItemBullet)) {
 					bulletStack = bullet;
 					bullet.shrink(1);
 				}
@@ -188,7 +189,7 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
-			//bulletE.setVelocity(v.x, v.y, v.z);
+			// bulletE.setVelocity(v.x, v.y, v.z);
 			bulletE.motionX = v.x;
 			bulletE.motionY = v.y;
 			bulletE.motionZ = v.z;
@@ -200,6 +201,21 @@ public class ItemRevolver extends Item implements IRangedWeapon {
 	@Override
 	public SoundEvent getShootSound() {
 		return ModSounds.GUN_SHOOT;
+	}
+
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 40;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 40;
 	}
 
 }

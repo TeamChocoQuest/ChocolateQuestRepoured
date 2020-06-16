@@ -57,10 +57,18 @@
 			}
 		},
 		"pirate_captain": {
-			"trigger": "minecraft:player_killed_entity",
+			"trigger": "minecraft:entity_killed_player",
 			"conditions": {
 				"entity": {
 					"type": "cqrepoured:pirate_captain"
+				}
+			}
+		},
+		"giant_spider": {
+			"trigger": "minecraft:entity_killed_player",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:giant_spider"
 				}
 			}
 		}
@@ -72,7 +80,8 @@
 			"lich",
 			"necromancer",
 			"walker_king",
-			"pirate_captain"
+			"pirate_captain",
+			"giant_spider"
 		]
 	]
 }

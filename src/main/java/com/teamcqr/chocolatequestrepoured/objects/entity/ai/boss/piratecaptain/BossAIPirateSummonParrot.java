@@ -13,7 +13,8 @@ import net.minecraft.util.math.Vec3d;
 public class BossAIPirateSummonParrot extends AbstractEntityAISpell<EntityCQRPirateCaptain> implements IEntityAISpellAnimatedVanilla {
 
 	public BossAIPirateSummonParrot(EntityCQRPirateCaptain entity, int cooldown, int chargingTicks, int castingTicks) {
-		super(entity, false, false, cooldown, chargingTicks, castingTicks);
+		super(entity, cooldown, chargingTicks, castingTicks);
+		this.setup(true, true, true, false);
 	}
 	
 	@Override

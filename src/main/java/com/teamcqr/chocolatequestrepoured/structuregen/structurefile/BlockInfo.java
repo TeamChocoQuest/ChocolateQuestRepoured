@@ -87,4 +87,12 @@ public class BlockInfo extends AbstractBlockInfo {
 		}
 	}
 
+	public IBlockState getBlockstate() {
+		return this.blockstate;
+	}
+
+	public NBTTagCompound getTileentityData() {
+		return this.tileentityData;
+	}
+
 }
