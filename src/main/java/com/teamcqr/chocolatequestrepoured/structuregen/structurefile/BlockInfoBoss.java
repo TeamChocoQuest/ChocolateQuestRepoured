@@ -50,7 +50,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 				entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 				if (entity instanceof AbstractEntityCQRBoss) {
 					((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
-					((AbstractEntityCQRBoss) entity).setHealingPotions(3);
+					((AbstractEntityCQRBoss) entity).setHealingPotions(1);
 					if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
 						((AbstractEntityCQRBoss) entity).setFaction(inha.getFactionOverride());
 					}
@@ -73,7 +73,7 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 				if (indicator instanceof EntityLiving) {
 					if (indicator instanceof AbstractEntityCQR) {
 						((AbstractEntityCQR) indicator).onSpawnFromCQRSpawnerInDungeon(settings, inha);
-						((AbstractEntityCQR) indicator).setHealingPotions(3);
+						((AbstractEntityCQR) indicator).setHealingPotions(1);
 						((AbstractEntityCQR) indicator).resize(1.5F, 1.5F);
 						if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
 							((AbstractEntityCQR) indicator).setFaction(inha.getFactionOverride());

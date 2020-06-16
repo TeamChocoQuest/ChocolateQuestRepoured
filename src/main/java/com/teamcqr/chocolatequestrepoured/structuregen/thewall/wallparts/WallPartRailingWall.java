@@ -89,13 +89,7 @@ public class WallPartRailingWall implements IWallPart {
 			this.equipArmorBasedOnDifficulty((EntityLivingBase) spawnerEnt, difficulty);
 
 			if (spawnerEnt instanceof AbstractEntityCQR) {
-				if (difficulty == EnumDifficulty.HARD) {
-					((AbstractEntityCQR) spawnerEnt).setHealingPotions(3);
-				} else if (difficulty == EnumDifficulty.NORMAL) {
-					((AbstractEntityCQR) spawnerEnt).setHealingPotions(2);
-				} else {
-					((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
-				}
+				((AbstractEntityCQR) spawnerEnt).setHealingPotions(1);
 			}
 
 			IBlockState state2 = ModBlocks.SPAWNER.getDefaultState();
