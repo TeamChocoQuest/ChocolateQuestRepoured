@@ -61,7 +61,7 @@ public class EntityCQRGremlin extends AbstractEntityCQR {
 
 	@Override
 	public float getDefaultWidth() {
-		return 1.0F;
+		return 0.9F;
 	}
 
 	@Override
