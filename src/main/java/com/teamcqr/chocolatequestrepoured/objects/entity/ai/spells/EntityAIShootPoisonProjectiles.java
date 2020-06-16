@@ -15,8 +15,9 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 	protected static final int MIN_PROJECTILES = 4;
 	protected static final double SPEED_MULTIPLIER = 0.18;
 
-	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, true, cooldown, chargeUpTicks, 1);
+	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, false);
 	}
 
 	@Override

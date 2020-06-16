@@ -1,6 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.objects.items.swords;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +18,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -32,12 +36,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemDagger extends ItemSword {
 
 	private int cooldown;
+	private float attackSpeed;
 	private AttributeModifier movementSpeed;
 
-	public ItemDagger(ToolMaterial material, int cooldown) {
+	public ItemDagger(ToolMaterial material, int cooldown, float attackSpeed) {
 		super(material);
 
 		this.cooldown = cooldown;
+		this.attackSpeed = attackSpeed;
 		this.movementSpeed = new AttributeModifier("DaggerSpeedModifier", 0.05D, 2);
 	}
 
@@ -47,9 +53,21 @@ public class ItemDagger extends ItemSword {
 
 		if (slot == EntityEquipmentSlot.MAINHAND) {
 			multimap.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), this.movementSpeed);
+			this.replaceModifier(multimap, SharedMonsterAttributes.ATTACK_SPEED, ATTACK_SPEED_MODIFIER, this.attackSpeed);
 		}
 
 		return multimap;
+	}
+
+	protected void replaceModifier(Multimap<String, AttributeModifier> modifierMultimap, IAttribute attribute, UUID id, double value) {
+		Collection<AttributeModifier> modifiers = modifierMultimap.get(attribute.getName());
+		Optional<AttributeModifier> modifierOptional = modifiers.stream().filter(attributeModifier -> attributeModifier.getID().equals(id)).findFirst();
+
+		if (modifierOptional.isPresent()) {
+			AttributeModifier modifier = modifierOptional.get();
+			modifiers.remove(modifier);
+			modifiers.add(new AttributeModifier(modifier.getID(), modifier.getName(), modifier.getAmount() + value, modifier.getOperation()));
+		}
 	}
 
 	@Override

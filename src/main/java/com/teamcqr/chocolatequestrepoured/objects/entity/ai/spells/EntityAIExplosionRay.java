@@ -9,8 +9,9 @@ import net.minecraft.util.math.Vec3d;
 
 public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAIExplosionRay(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, true, cooldown, chargeUpTicks, 1);
+	public EntityAIExplosionRay(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, false);
 	}
 
 	@Override

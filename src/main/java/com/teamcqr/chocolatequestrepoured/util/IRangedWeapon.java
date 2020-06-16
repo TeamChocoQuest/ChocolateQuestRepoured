@@ -8,12 +8,14 @@ import net.minecraft.world.World;
 
 public interface IRangedWeapon {
 
-	public default int getCooldown() {
-		return 60;
-	}
+	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand);
 
 	public SoundEvent getShootSound();
 
-	public void shoot(World world, EntityLivingBase shooter, Entity target, EnumHand hand);
+	public double getRange();
+
+	public int getCooldown();
+
+	public int getChargeTicks();
 
 }

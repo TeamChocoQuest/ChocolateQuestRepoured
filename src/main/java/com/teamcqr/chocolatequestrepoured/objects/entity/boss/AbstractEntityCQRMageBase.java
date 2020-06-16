@@ -70,6 +70,11 @@ public abstract class AbstractEntityCQRMageBase extends AbstractEntityCQRBoss {
 	}
 
 	@Override
+	public boolean canStrafe() {
+		return true;
+	}
+
+	@Override
 	public boolean canIgniteTorch() {
 		return false;
 	}

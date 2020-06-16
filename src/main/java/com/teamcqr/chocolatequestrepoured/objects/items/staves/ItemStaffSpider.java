@@ -74,7 +74,7 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(0.5D);
-			//ball.setVelocity(v.x, v.y, v.z);
+			// ball.setVelocity(v.x, v.y, v.z);
 			ball.motionX = v.x;
 			ball.motionY = v.y;
 			ball.motionZ = v.z;
@@ -86,6 +86,21 @@ public class ItemStaffSpider extends Item implements IRangedWeapon {
 	@Override
 	public SoundEvent getShootSound() {
 		return SoundEvents.ENTITY_SLIME_SQUISH;
+	}
+
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 40;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 40;
 	}
 
 }
