@@ -26,8 +26,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemDaggerNinja extends ItemDagger {
 
-	public ItemDaggerNinja(ToolMaterial material, int cooldown) {
-		super(material, cooldown);
+	public ItemDaggerNinja(ToolMaterial material, int cooldown, float attackSpeed) {
+		super(material, cooldown, attackSpeed);
 	}
 
 	@Override

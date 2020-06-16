@@ -279,10 +279,10 @@ public class ModItems {
 		@SubscribeEvent
 		public static void registerItems(RegistryEvent.Register<Item> event) {
 			final Item[] items = {
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25), "dagger_iron"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20), "dagger_diamond"),
-					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15), "dagger_ninja"),
-					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10), "dagger_monking"),
+					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_IRON_DAGGER, 25, 0.4F), "dagger_iron"),
+					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_DIAMOND_DAGGER, 20, 0.4F), "dagger_diamond"),
+					setItemName(new ItemDaggerNinja(ModMaterials.ToolMaterials.TOOL_NINJA_DAGGER, 15, 0.4F), "dagger_ninja"),
+					setItemName(new ItemDagger(ModMaterials.ToolMaterials.TOOL_MONKING_DAGGER, 10, 0.4F), "dagger_monking"),
 
 					setItemName(new ItemSwordTurtle(ModMaterials.ToolMaterials.TOOL_TURTLE_SWORD), "sword_turtle"),
 					setItemName(new ItemSwordSpider(ModMaterials.ToolMaterials.TOOL_SPIDER_SWORD), "sword_spider"),
@@ -294,13 +294,13 @@ public class ModItems {
 					setItemName(new ItemSwordWalker(ModMaterials.ToolMaterials.TOOL_WALKER_SWORD), "sword_walker"),
 					setItemName(new ItemShieldWalkerKing(), "shield_walker_king"),
 
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.8F), "great_sword_iron"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.7F), "great_sword_diamond"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.6F), "great_sword_bull"),
-					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.6F), "great_sword_monking"),
+					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_IRON_GREAT_SWORD, 0.8F, 30, -0.4F), "great_sword_iron"),
+					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_DIAMOND_GREAT_SWORD, 0.9F, 25, -0.4F), "great_sword_diamond"),
+					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_BULL_GREAT_SWORD, 1F, 20, -0.4F), "great_sword_bull"),
+					setItemName(new ItemGreatSword(ModMaterials.ToolMaterials.TOOL_MONKING_GREAT_SWORD, 2F, 20, -0.4F), "great_sword_monking"),
 
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 2.0D, -0.4D), "spear_diamond"),
-					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 2.0D, -0.4D), "spear_iron"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_DIAMOND_SPEAR, 2.0D, -0.35D), "spear_diamond"),
+					setItemName(new ItemSpearBase(ModMaterials.ToolMaterials.TOOL_IRON_SPEAR, 2.0D, -0.35D), "spear_iron"),
 
 					setItemName(new ItemStaff(), "staff"),
 					setItemName(new ItemStaffFire(), "staff_fire"),
