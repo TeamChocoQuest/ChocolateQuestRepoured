@@ -30,8 +30,8 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected DecorationSelector decoSelector;
     protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
-    CastleRoomDecoratedBase(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    CastleRoomDecoratedBase(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.decoSelector = new DecorationSelector(this.random);
         this.possibleChestLocs = new HashMap<>();
     }

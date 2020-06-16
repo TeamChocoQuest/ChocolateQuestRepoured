@@ -6,8 +6,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
-	public CastleRoomWalkableRoofTower(BlockPos startOffset, int sideLength, int height, CastleRoomTowerSquare tower, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomWalkableRoofTower(int sideLength, int height, CastleRoomTowerSquare tower, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.WALKABLE_TOWER_ROOF;
 		this.pathable = false;
 		this.offsetX = tower.getOffsetX();

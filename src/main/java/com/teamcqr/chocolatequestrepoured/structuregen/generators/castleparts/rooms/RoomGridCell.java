@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
@@ -31,6 +33,7 @@ public class RoomGridCell {
     }
 
     private final RoomGridPosition gridPosition;
+    private final BlockPos originOffset;
     private CellState state = CellState.UNUSED;
     private boolean reachable = false;
     private boolean floorHasLanding = false;
@@ -42,18 +45,30 @@ public class RoomGridCell {
     private HashMap<EnumFacing, RoomGridCell> adjacentCells = new HashMap<>();
     private HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 
-    public RoomGridCell(int floor, int x, int z) {
+    public RoomGridCell(int floor, int x, int z, int roomWidth, int floorHeight) {
         this.gridPosition = new RoomGridPosition(floor, x, z);
+        this.originOffset = calculateOriginOffset(roomWidth, floorHeight);
         this.connectedCells = new HashSet<>();
         this.pathableCells = new HashSet<>();
     }
 
-    public BlockPos getOriginOffset(int roomWidth, int floorHeight)
+    private BlockPos calculateOriginOffset(int roomWidth, int floorHeight)
     {
         int xOffset = 1 + (gridPosition.getX() * (roomWidth + 1));
         int zOffset = 1 + (gridPosition.getZ()  * (roomWidth + 1));
         int yOffset = 1 + (gridPosition.getFloor() * floorHeight);
         return new BlockPos(xOffset, yOffset, zOffset);
+    }
+
+    public BlockPos getOriginOffset() {
+        return originOffset;
+    }
+
+    public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+        if (this.isPopulated() && this.room != null) {
+            room.setRootPositionOffset(getOriginOffset());
+            room.generate(castleOrigin, genArray, dungeon);
+        }
     }
 
     public void registerAdjacentCell(RoomGridCell cell, EnumFacing directionOfCell) {

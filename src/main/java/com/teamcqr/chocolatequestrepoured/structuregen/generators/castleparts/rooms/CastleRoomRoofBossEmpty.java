@@ -5,8 +5,8 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomRoofBossEmpty extends CastleRoomBase {
-	public CastleRoomRoofBossEmpty(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomRoofBossEmpty(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_EMPTY;
 		this.pathable = false;
 	}

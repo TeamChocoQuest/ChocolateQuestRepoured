@@ -3,9 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWallBuilder;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.RoomWalls;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -20,7 +17,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public abstract class CastleRoomBase {
-	protected BlockPos origin;
+	protected BlockPos originOffset;
 	protected BlockPos buildStartPos;
 	protected int height;
 	protected int sideLength;
@@ -50,9 +47,7 @@ public abstract class CastleRoomBase {
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
-	public CastleRoomBase(BlockPos startOffset, int sideLength, int height, int floor) {
-		this.origin = new BlockPos(startOffset);
-		this.buildStartPos = new BlockPos(startOffset);
+	public CastleRoomBase(int sideLength, int height, int floor) {
 		this.sideLength = sideLength;
 		this.offsetX = 0;
 		this.offsetZ = 0;
@@ -62,6 +57,10 @@ public abstract class CastleRoomBase {
 		this.floor = floor;
 		this.usedDecoPositions = new HashSet<>();
 		this.possibleDecoPositions = new HashSet<>();
+	}
+
+	public void setRootPositionOffset(BlockPos offset) {
+		this.originOffset = offset;
 	}
 
 	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
@@ -153,19 +152,19 @@ public abstract class CastleRoomBase {
 	protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation) {
 		switch (rotation) {
 		case EAST:
-			return this.origin.add(z, y, this.sideLength - 2 - x);
+			return this.originOffset.add(z, y, this.sideLength - 2 - x);
 		case WEST:
-			return this.origin.add(this.sideLength - 2 - z, y, x);
+			return this.originOffset.add(this.sideLength - 2 - z, y, x);
 		case NORTH:
-			return this.origin.add(this.sideLength - 2 - x, y, this.sideLength - 2 - z);
+			return this.originOffset.add(this.sideLength - 2 - x, y, this.sideLength - 2 - z);
 		case SOUTH:
 		default:
-			return this.origin.add(x, y, z);
+			return this.originOffset.add(x, y, z);
 		}
 	}
 
 	protected BlockPos getInteriorBuildStart() {
-		return this.origin.add(this.offsetX, 0, this.offsetZ);
+		return this.originOffset.add(this.offsetX, 0, this.offsetZ);
 	}
 
 	protected BlockPos getExteriorBuildStart() {
@@ -197,7 +196,7 @@ public abstract class CastleRoomBase {
 				final int yEnd = yStart + placement.getHeight() - 1;
 
 				if (side.getAxis() == EnumFacing.Axis.Z) {
-					doorStart = this.origin.getX() + placement.getOffset();
+					doorStart = this.originOffset.getX() + placement.getOffset();
 					doorEnd = doorStart + placement.getWidth() - 1;
 
 					int z;
@@ -214,7 +213,7 @@ public abstract class CastleRoomBase {
 						}
 					}
 				} else {
-					doorStart = this.origin.getZ() + placement.getOffset();
+					doorStart = this.originOffset.getZ() + placement.getOffset();
 					doorEnd = doorStart + placement.getWidth() - 1;
 
 					int x;
@@ -341,7 +340,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected BlockPos getNonWallStartPos() {
-		return this.origin.add(this.offsetX, 0, this.offsetZ);
+		return this.originOffset.add(this.offsetX, 0, this.offsetZ);
 	}
 
 	protected int getDecorationLengthX() {

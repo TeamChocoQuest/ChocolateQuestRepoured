@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomKitchen extends CastleRoomGenericBase {
-	public CastleRoomKitchen(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomKitchen(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.KITCHEN;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

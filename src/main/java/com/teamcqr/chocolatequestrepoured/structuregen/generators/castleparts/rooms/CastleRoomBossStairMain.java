@@ -53,8 +53,8 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	private int mainLandingMaxHeightIdx;
 	private int lowerLandingMaxHeightIdx;
 
-	public CastleRoomBossStairMain(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBossStairMain(int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_BOSS;
 
 		this.doorSide = doorSide;
@@ -103,10 +103,10 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.addBlockState(this.origin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.originOffset.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
-						this.usedDecoPositions.add(this.origin.add(offset));
+						this.usedDecoPositions.add(this.originOffset.add(offset));
 					}
 				}
 			}

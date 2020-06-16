@@ -15,8 +15,8 @@ import java.util.List;
 public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroomFancy(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBedroomFancy(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.BEDROOM_FANCY;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;

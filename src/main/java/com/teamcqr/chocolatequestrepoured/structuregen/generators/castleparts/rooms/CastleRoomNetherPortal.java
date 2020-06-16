@@ -25,8 +25,8 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
     private Alignment portalAlignment;
 
-    public CastleRoomNetherPortal(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomNetherPortal(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.PORTAL;
         this.maxSlotsUsed = 1;
         this.defaultCeiling = true;

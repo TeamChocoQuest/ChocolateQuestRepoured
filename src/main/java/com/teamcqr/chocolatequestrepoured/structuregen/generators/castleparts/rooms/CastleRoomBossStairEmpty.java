@@ -8,8 +8,8 @@ import net.minecraft.util.math.BlockPos;
 public class CastleRoomBossStairEmpty extends CastleRoomDecoratedBase {
 	private EnumFacing doorSide;
 
-	public CastleRoomBossStairEmpty(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBossStairEmpty(int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_BOSS;
 		this.pathable = true;
 		this.doorSide = doorSide;

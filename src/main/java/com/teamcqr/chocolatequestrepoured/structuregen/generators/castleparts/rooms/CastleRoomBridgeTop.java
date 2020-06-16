@@ -21,8 +21,8 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		}
 	}
 
-	public CastleRoomBridgeTop(BlockPos startOffset, int sideLength, int height, EnumFacing direction, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBridgeTop(int sideLength, int height, EnumFacing direction, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.BRIDGE_TOP;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;

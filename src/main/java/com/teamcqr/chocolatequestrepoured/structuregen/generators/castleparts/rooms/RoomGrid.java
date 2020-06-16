@@ -284,18 +284,18 @@ public class RoomGrid {
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ; z++) {
-					RoomGridCell cell = new RoomGridCell(floor, x, z);
+					RoomGridCell cell = new RoomGridCell(floor, x, z, roomWidth, floorHeight);
 					this.cellArray[floor][x][z] = cell;
 					this.cellList.add(cell);
 				}
 			}
 		}
 
-		initializeCellLinks(roomWidth, floorHeight);
+		initializeCellLinks();
 		initializeWalls(roomWidth, floorHeight);
 	}
 
-	private void initializeCellLinks(int roomWidth, int floorHeight)
+	private void initializeCellLinks()
 	{
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {

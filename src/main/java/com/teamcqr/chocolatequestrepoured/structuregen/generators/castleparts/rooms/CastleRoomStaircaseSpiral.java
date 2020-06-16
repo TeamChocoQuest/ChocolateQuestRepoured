@@ -12,8 +12,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private EnumFacing firstStairSide;
 	private BlockPos pillarStart;
 
-	public CastleRoomStaircaseSpiral(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomStaircaseSpiral(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_SPIRAL;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;

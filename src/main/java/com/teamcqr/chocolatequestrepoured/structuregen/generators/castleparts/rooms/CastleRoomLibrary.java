@@ -22,8 +22,8 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     private int shelfZLen = 0;
     private int shelfHeight = 0;
 
-    public CastleRoomLibrary(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomLibrary(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.LIBRARY;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;

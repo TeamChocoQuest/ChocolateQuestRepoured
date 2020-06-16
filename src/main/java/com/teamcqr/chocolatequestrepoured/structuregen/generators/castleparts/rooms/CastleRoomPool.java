@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 
 public class CastleRoomPool extends CastleRoomDecoratedBase
 {
-    public CastleRoomPool(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomPool(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.POOL;
         this.maxSlotsUsed = 1;
         this.defaultCeiling = true;

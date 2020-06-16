@@ -15,8 +15,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	protected int stairZ;
 	protected EnumFacing stairStartSide;
 
-	public CastleRoomLandingDirected(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomLandingDirected(int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_DIRECTED;
 		this.openingWidth = stairsBelow.getUpperStairWidth();
 		this.stairZ = stairsBelow.getUpperStairEndZ() + 1;

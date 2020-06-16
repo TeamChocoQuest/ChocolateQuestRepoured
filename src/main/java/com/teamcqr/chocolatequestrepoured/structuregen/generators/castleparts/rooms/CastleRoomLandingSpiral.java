@@ -11,8 +11,8 @@ import net.minecraft.util.math.BlockPos;
 public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
-	public CastleRoomLandingSpiral(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomLandingSpiral(int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_SPIRAL;
 		this.stairsBelow = stairsBelow;
 		this.defaultCeiling = true;
@@ -22,7 +22,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
-		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.origin.getY(), this.stairsBelow.getCenterZ());
+		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.originOffset.getY(), this.stairsBelow.getCenterZ());
 		EnumFacing firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
 
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());

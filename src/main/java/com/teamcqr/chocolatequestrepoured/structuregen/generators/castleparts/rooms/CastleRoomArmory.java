@@ -9,8 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomArmory extends CastleRoomGenericBase {
-	public CastleRoomArmory(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomArmory(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.ARMORY;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
