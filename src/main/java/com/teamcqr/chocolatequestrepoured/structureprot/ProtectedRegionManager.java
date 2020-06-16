@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structureprot;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,8 +26,8 @@ import net.minecraft.world.World;
 
 public class ProtectedRegionManager {
 
-	private static ProtectedRegionManager clientInstance = new ProtectedRegionManager(null);
-	private static final Map<World, ProtectedRegionManager> instances = new HashMap<>();
+	private static final ProtectedRegionManager CLIENT_INSTANCE = new ProtectedRegionManager(null);
+	private static final Map<World, ProtectedRegionManager> INSTANCES = new HashMap<>();
 	private final Map<UUID, ProtectedRegion> protectedRegions = new HashMap<>();
 	private final World world;
 	private final File folder;
@@ -45,43 +46,30 @@ public class ProtectedRegionManager {
 		}
 	}
 
+	@Nullable
+	public static ProtectedRegionManager getInstance(World world) {
+		if (!world.isRemote) {
+			return ProtectedRegionManager.INSTANCES.get(world);
+		}
+		return ProtectedRegionManager.CLIENT_INSTANCE;
+	}
+
 	public static void handleWorldLoad(World world) {
-		if (!world.isRemote && ProtectedRegionManager.getInstance(world) == null) {
-			ProtectedRegionManager.createInstance(world);
-			ProtectedRegionManager.getInstance(world).loadData();
+		if (!world.isRemote && !INSTANCES.containsKey(world)) {
+			INSTANCES.put(world, new ProtectedRegionManager(world));
+			INSTANCES.get(world).loadData();
 		}
 	}
 
 	public static void handleWorldSave(World world) {
-		if (!world.isRemote) {
-			ProtectedRegionManager.getInstance(world).saveData();
+		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			INSTANCES.get(world).saveData();
 		}
 	}
 
 	public static void handleWorldUnload(World world) {
-		if (!world.isRemote) {
-			ProtectedRegionManager.deleteInstance(world);
-		}
-	}
-
-	@Nullable
-	public static ProtectedRegionManager getInstance(World world) {
-		if (!world.isRemote) {
-			return ProtectedRegionManager.instances.get(world);
-		} else {
-			return ProtectedRegionManager.clientInstance;
-		}
-	}
-
-	public static void createInstance(World world) {
-		if (!world.isRemote) {
-			ProtectedRegionManager.instances.putIfAbsent(world, new ProtectedRegionManager(world));
-		}
-	}
-
-	public static void deleteInstance(World world) {
-		if (!world.isRemote) {
-			ProtectedRegionManager.instances.remove(world);
+		if (!world.isRemote && INSTANCES.containsKey(world)) {
+			INSTANCES.remove(world);
 		}
 	}
 
@@ -91,15 +79,16 @@ public class ProtectedRegionManager {
 	}
 
 	public void addProtectedRegion(ProtectedRegion protectedRegion) {
-		if (protectedRegion != null && this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-			CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
-		}
-		if (protectedRegion != null && !this.protectedRegions.containsKey(protectedRegion.getUuid())) {
-			this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
+		if (protectedRegion != null) {
+			if (this.protectedRegions.containsKey(protectedRegion.getUuid())) {
+				CQRMain.logger.warn("Protected region with uuid {} already exists.", protectedRegion.getUuid());
+			} else {
+				this.protectedRegions.put(protectedRegion.getUuid(), protectedRegion);
 
-			if (this.world != null && !this.world.isRemote) {
-				// TODO Only send changes to clients
-				CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(this.getProtectedRegions()), this.world.provider.getDimension());
+				if (this.world != null && !this.world.isRemote) {
+					// TODO Only send changes to clients
+					CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(this.getProtectedRegions()), this.world.provider.getDimension());
+				}
 			}
 		}
 	}
@@ -127,14 +116,6 @@ public class ProtectedRegionManager {
 		this.protectedRegions.clear();
 	}
 
-	public void deleteInvalidModules() {
-		for (ProtectedRegion protectedRegion : this.getProtectedRegions()) {
-			if (!protectedRegion.isValid()) {
-				this.protectedRegions.remove(protectedRegion.getUuid());
-			}
-		}
-	}
-
 	private void saveData() {
 		if (!this.world.isRemote) {
 			if (!this.folder.exists()) {
@@ -143,7 +124,6 @@ public class ProtectedRegionManager {
 			for (File file : FileUtils.listFiles(this.folder, new String[] { "nbt" }, false)) {
 				file.delete();
 			}
-			this.deleteInvalidModules();
 			for (ProtectedRegion protectedRegion : this.protectedRegions.values()) {
 				this.createFileFromProtectedRegion(this.folder, protectedRegion);
 			}
@@ -153,8 +133,8 @@ public class ProtectedRegionManager {
 	private void createFileFromProtectedRegion(File folder, ProtectedRegion protectedRegion) {
 		File file = new File(folder, protectedRegion.getUuid().toString() + ".nbt");
 		try {
-			if (!file.exists()) {
-				file.createNewFile();
+			if (!file.exists() && !file.createNewFile()) {
+				throw new FileNotFoundException();
 			}
 			try (OutputStream outputStream = new FileOutputStream(file)) {
 				CompressedStreamTools.writeCompressed(protectedRegion.writeToNBT(), outputStream);
