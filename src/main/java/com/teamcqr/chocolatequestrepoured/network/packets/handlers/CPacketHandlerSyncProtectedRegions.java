@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncPr
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
 
-import net.minecraft.nbt.NBTTagCompound;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -23,8 +23,11 @@ public class CPacketHandlerSyncProtectedRegions implements IMessageHandler<SPack
 
 				if (protectedRegionManager != null) {
 					protectedRegionManager.clearProtectedRegions();
-					for (NBTTagCompound compound : message.getProtectedRegions()) {
-						protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, compound));
+
+					ByteBuf buf = message.getProtectedRegions();
+					int protectedRegionsCount = buf.readShort();
+					for (int i = 0; i < protectedRegionsCount; i++) {
+						protectedRegionManager.addProtectedRegion(new ProtectedRegion(world, buf));
 					}
 				}
 			}

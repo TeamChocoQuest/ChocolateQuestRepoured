@@ -8,8 +8,10 @@ import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.SPacketSyncProtectedRegions;
+import com.teamcqr.chocolatequestrepoured.util.ByteBufUtil;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTUtil;
@@ -44,6 +46,33 @@ public class ProtectedRegion {
 	public ProtectedRegion(World world, NBTTagCompound compound) {
 		this.world = world;
 		this.readFromNBT(compound);
+	}
+
+	public ProtectedRegion(World world, ByteBuf buf) {
+		this.world = world;
+		this.uuid = ByteBufUtil.readUuid(buf);
+		this.startPos = ByteBufUtil.readBlockPos(buf);
+		this.endPos = ByteBufUtil.readBlockPos(buf);
+
+		byte flags = buf.readByte();
+		this.preventBlockBreaking = (flags & 1) == 1;
+		this.preventBlockPlacing = ((flags >> 1) & 1) == 1;
+		this.preventExplosionsTNT = ((flags >> 2) & 1) == 1;
+		this.preventExplosionsOther = ((flags >> 3) & 1) == 1;
+		this.preventFireSpreading = ((flags >> 4) & 1) == 1;
+		this.preventEntitySpawning = ((flags >> 5) & 1) == 1;
+		this.ignoreNoBossOrNexus = ((flags >> 6) & 1) == 1;
+		this.isGenerating = ((flags >> 7) & 1) == 1;
+
+		short entityDependenciesCount = buf.readShort();
+		for (int i = 0; i < entityDependenciesCount; i++) {
+			this.entityDependencies.add(ByteBufUtil.readUuid(buf));
+		}
+
+		short blockDependenciesCount = buf.readShort();
+		for (int i = 0; i < blockDependenciesCount; i++) {
+			this.blockDependencies.add(ByteBufUtil.readBlockPos(buf));
+		}
 	}
 
 	public NBTTagCompound writeToNBT() {
@@ -227,6 +256,10 @@ public class ProtectedRegion {
 		return this.entityDependencies.contains(uuid);
 	}
 
+	public Set<UUID> getEntityDependencies() {
+		return this.entityDependencies;
+	}
+
 	public void addBlockDependency(BlockPos pos) {
 		this.blockDependencies.add(pos);
 	}
@@ -248,6 +281,10 @@ public class ProtectedRegion {
 
 	public boolean isBlockDependency(BlockPos pos) {
 		return this.blockDependencies.contains(pos);
+	}
+
+	public Set<BlockPos> getBlockDependencies() {
+		return this.blockDependencies;
 	}
 
 	public void setGenerating(boolean isGenerating) {
