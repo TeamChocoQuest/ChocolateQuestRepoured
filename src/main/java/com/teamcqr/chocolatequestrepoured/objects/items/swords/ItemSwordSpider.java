@@ -9,6 +9,7 @@ import org.lwjgl.input.Keyboard;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.potion.Potion;
@@ -28,7 +29,7 @@ public class ItemSwordSpider extends ItemSword {
 	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 		stack.damageItem(1, attacker);
 		if (target instanceof EntityLivingBase) {
-			target.addPotionEffect(new PotionEffect(Potion.getPotionById(19), 100));
+			target.addPotionEffect(new PotionEffect(MobEffects.POISON, 100));
 		}
 		return true;
 	}
