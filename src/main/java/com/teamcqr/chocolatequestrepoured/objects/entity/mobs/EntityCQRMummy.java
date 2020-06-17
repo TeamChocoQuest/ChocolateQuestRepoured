@@ -45,7 +45,7 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_HUSK_HURT;
 	}
 

@@ -654,7 +654,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return ModSounds.NETHER_DRAGON_HURT;
 	}
 

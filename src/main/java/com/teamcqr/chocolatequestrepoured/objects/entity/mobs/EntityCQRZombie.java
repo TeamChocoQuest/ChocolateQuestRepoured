@@ -29,7 +29,7 @@ public class EntityCQRZombie extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_ZOMBIE_HURT;
 	}
 

@@ -385,7 +385,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_WITHER_HURT;
 	}
 	

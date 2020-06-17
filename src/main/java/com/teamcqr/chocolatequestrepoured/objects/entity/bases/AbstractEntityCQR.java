@@ -598,7 +598,11 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected final SoundEvent getHurtSound(DamageSource damageSourceIn) {
+		return this.canBlockDamageSource(damageSourceIn) ? SoundEvents.ITEM_SHIELD_BLOCK : this.getDefaultHurtSound(damageSourceIn);
+	}
+
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_HOSTILE_HURT;
 	}
 

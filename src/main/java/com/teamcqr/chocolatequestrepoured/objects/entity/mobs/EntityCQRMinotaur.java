@@ -51,7 +51,7 @@ public class EntityCQRMinotaur extends AbstractEntityCQR {
 	}
 	
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_COW_HURT;
 	}
 
