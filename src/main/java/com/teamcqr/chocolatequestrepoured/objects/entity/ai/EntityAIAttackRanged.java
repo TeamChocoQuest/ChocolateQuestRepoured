@@ -114,8 +114,10 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		if (this.entity.ticksExisted > this.prevTimeAttacked + this.getAttackCooldown()) {
-			this.entity.setActiveHand(EnumHand.MAIN_HAND);
-			this.entity.isSwingInProgress = true;
+			if (this.getAttackChargeTicks() > 0) {
+				this.entity.setActiveHand(EnumHand.MAIN_HAND);
+				this.entity.isSwingInProgress = true;
+			}
 
 			if (this.entity.getItemInUseMaxCount() >= this.getAttackChargeTicks()) {
 				ItemStack stack = this.entity.getHeldItemMainhand();
@@ -152,8 +154,12 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 				}
 
 				this.prevTimeAttacked = this.entity.ticksExisted;
-				this.entity.resetActiveHand();
-				this.entity.isSwingInProgress = false;
+				if (this.getAttackChargeTicks() > 0) {
+					this.entity.resetActiveHand();
+					this.entity.isSwingInProgress = false;
+				} else {
+					this.entity.swingArm(EnumHand.MAIN_HAND);
+				}
 			}
 		}
 	}

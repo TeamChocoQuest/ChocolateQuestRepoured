@@ -233,12 +233,12 @@ public abstract class ItemHookshotBase extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 240;
+		return 300;
 	}
 
 	@Override
 	public int getChargeTicks() {
-		return 10;
+		return 0;
 	}
 
 }
