@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -39,6 +40,12 @@ public class EntityAITameAndLeashPet extends AbstractCQREntityAI<AbstractEntityC
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<EntityTameable> possiblePets = this.entity.world.getEntitiesWithinAABB(EntityTameable.class, aabb, TargetUtil.PREDICATE_PETS);
 			if (!possiblePets.isEmpty()) {
+				possiblePets.removeIf(new Predicate<EntityTameable>() {
+
+					@Override
+					public boolean test(EntityTameable arg0) {
+						return !entity.getEntitySenses().canSee(arg0) || entity.getNavigator().getPathToPos(arg0.getPosition()) == null; 
+					}});
 				this.entityToTame = TargetUtil.getNearestEntity(this.entity, possiblePets);
 				return true;
 			}
