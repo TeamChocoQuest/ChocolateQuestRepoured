@@ -80,7 +80,7 @@ public class TargetUtil {
 			for (int i = 1; i < list.size(); i++) {
 				T otherEntity = list.get(i);
 				double distance = entity.getDistanceSq(otherEntity);
-				if (entity.getEntitySenses().canSee(otherEntity) && entity.getNavigator().getPathToPos(otherEntity.getPosition()) != null && distance < min) {
+				if (distance < min) {
 					nearestEntity = otherEntity;
 					min = distance;
 				}

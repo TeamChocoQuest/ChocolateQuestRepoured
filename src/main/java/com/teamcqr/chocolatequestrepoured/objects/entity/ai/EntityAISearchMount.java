@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -41,6 +42,12 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<EntityAnimal> possibleMounts = this.entity.world.getEntitiesWithinAABB(EntityAnimal.class, aabb, TargetUtil.PREDICATE_MOUNTS);
 			if (!possibleMounts.isEmpty()) {
+				possibleMounts.removeIf(new Predicate<EntityAnimal>() {
+
+					@Override
+					public boolean test(EntityAnimal arg0) {
+						return !entity.getEntitySenses().canSee(arg0) || entity.getNavigator().getPathToPos(arg0.getPosition()) == null; 
+					}});
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
 			}
