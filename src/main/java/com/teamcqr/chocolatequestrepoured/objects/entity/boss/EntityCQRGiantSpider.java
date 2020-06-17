@@ -196,7 +196,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
         return SoundEvents.ENTITY_SPIDER_AMBIENT;
     }
 
-    protected SoundEvent getHurtSound(DamageSource damageSourceIn)
+    protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn)
     {
         return SoundEvents.ENTITY_SPIDER_HURT;
     }
