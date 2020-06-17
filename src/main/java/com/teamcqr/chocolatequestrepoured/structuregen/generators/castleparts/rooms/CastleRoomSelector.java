@@ -132,7 +132,7 @@ public class CastleRoomSelector {
 		// Generate everything except walkable roofs. Walkable roofs should be done at the very end
 		// because they have the lowest block priority (all other parts should overwrite)
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && !(c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.getRoom().generate(startPos, genArray, dungeon);
+			cell.generateRoom(startPos, genArray, dungeon);
 		}
 
 	}

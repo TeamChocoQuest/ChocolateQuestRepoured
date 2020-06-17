@@ -66,7 +66,7 @@ public class RoomGridCell {
 
     public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         if (this.isPopulated() && this.room != null) {
-            room.setRootPositionOffset(getOriginOffset());
+            room.setRoomOrigin(getOriginOffset());
             room.generate(castleOrigin, genArray, dungeon);
         }
     }

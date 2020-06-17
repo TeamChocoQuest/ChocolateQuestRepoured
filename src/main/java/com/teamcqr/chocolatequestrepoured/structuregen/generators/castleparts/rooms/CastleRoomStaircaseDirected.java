@@ -83,7 +83,7 @@ public class CastleRoomStaircaseDirected extends CastleRoomBase {
 
 	private void buildFloorBlock(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild = dungeon.getFloorBlockState();
-		genArray.addBlockState(this.originOffset.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+		genArray.addBlockState(this.roomOrigin.add(x, 0, z), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 	}
 
 	private void buildUpperStair(int x, int z, BlockStateGenArray genArray, DungeonCastle dungeon) {

@@ -17,7 +17,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public abstract class CastleRoomBase {
-	protected BlockPos originOffset;
+	protected BlockPos roomOrigin;
 	protected BlockPos buildStartPos;
 	protected int height;
 	protected int sideLength;
@@ -59,8 +59,8 @@ public abstract class CastleRoomBase {
 		this.possibleDecoPositions = new HashSet<>();
 	}
 
-	public void setRootPositionOffset(BlockPos offset) {
-		this.originOffset = offset;
+	public void setRoomOrigin(BlockPos offset) {
+		this.roomOrigin = offset;
 	}
 
 	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
@@ -152,19 +152,19 @@ public abstract class CastleRoomBase {
 	protected BlockPos getRotatedPlacement(int x, int y, int z, EnumFacing rotation) {
 		switch (rotation) {
 		case EAST:
-			return this.originOffset.add(z, y, this.sideLength - 2 - x);
+			return this.roomOrigin.add(z, y, this.sideLength - 2 - x);
 		case WEST:
-			return this.originOffset.add(this.sideLength - 2 - z, y, x);
+			return this.roomOrigin.add(this.sideLength - 2 - z, y, x);
 		case NORTH:
-			return this.originOffset.add(this.sideLength - 2 - x, y, this.sideLength - 2 - z);
+			return this.roomOrigin.add(this.sideLength - 2 - x, y, this.sideLength - 2 - z);
 		case SOUTH:
 		default:
-			return this.originOffset.add(x, y, z);
+			return this.roomOrigin.add(x, y, z);
 		}
 	}
 
 	protected BlockPos getInteriorBuildStart() {
-		return this.originOffset.add(this.offsetX, 0, this.offsetZ);
+		return this.roomOrigin.add(this.offsetX, 0, this.offsetZ);
 	}
 
 	protected BlockPos getExteriorBuildStart() {
@@ -196,7 +196,7 @@ public abstract class CastleRoomBase {
 				final int yEnd = yStart + placement.getHeight() - 1;
 
 				if (side.getAxis() == EnumFacing.Axis.Z) {
-					doorStart = this.originOffset.getX() + placement.getOffset();
+					doorStart = this.roomOrigin.getX() + placement.getOffset();
 					doorEnd = doorStart + placement.getWidth() - 1;
 
 					int z;
@@ -213,7 +213,7 @@ public abstract class CastleRoomBase {
 						}
 					}
 				} else {
-					doorStart = this.originOffset.getZ() + placement.getOffset();
+					doorStart = this.roomOrigin.getZ() + placement.getOffset();
 					doorEnd = doorStart + placement.getWidth() - 1;
 
 					int x;
@@ -340,7 +340,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected BlockPos getNonWallStartPos() {
-		return this.originOffset.add(this.offsetX, 0, this.offsetZ);
+		return this.roomOrigin.add(this.offsetX, 0, this.offsetZ);
 	}
 
 	protected int getDecorationLengthX() {

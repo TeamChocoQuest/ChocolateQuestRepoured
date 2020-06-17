@@ -73,10 +73,10 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.addBlockState(this.originOffset.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
-						this.usedDecoPositions.add(this.originOffset.add(offset));
+						this.usedDecoPositions.add(this.roomOrigin.add(offset));
 					}
 				}
 			}

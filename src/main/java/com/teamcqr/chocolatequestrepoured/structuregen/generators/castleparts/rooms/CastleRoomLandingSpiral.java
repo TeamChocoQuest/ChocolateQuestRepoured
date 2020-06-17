@@ -22,7 +22,7 @@ public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
-		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.originOffset.getY(), this.stairsBelow.getCenterZ());
+		BlockPos pillarStart = new BlockPos(this.stairsBelow.getStairCenterOffsetX(), this.roomOrigin.getY(), this.stairsBelow.getStairCenterOffsetZ());
 		EnumFacing firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
 
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());

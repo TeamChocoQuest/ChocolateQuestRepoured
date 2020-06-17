@@ -7,12 +7,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 public class CastleRoomTowerSquare extends CastleRoomBase {
 	private static final int MIN_SIZE = 5;
 	private EnumFacing connectedSide;
 	private int stairYOffset;
-	private BlockPos pillarStart;
+	private Vec3i pillarOffset;
 	private EnumFacing firstStairSide;
 
 	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide,
@@ -48,12 +49,13 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			this.stairYOffset = 1; // account for 1 layer of floor
 		}
 
-		this.pillarStart = this.getNonWallStartPos().add((this.buildLengthX / 2), this.stairYOffset, (this.buildLengthZ / 2));
+		this.pillarOffset = new Vec3i((this.buildLengthX / 2), this.stairYOffset, (this.buildLengthZ / 2));
 	}
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
+		BlockPos stairCenter = roomOrigin.add(this.pillarOffset);
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;

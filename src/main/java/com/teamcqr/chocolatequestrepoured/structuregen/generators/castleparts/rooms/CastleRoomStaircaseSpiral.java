@@ -7,10 +7,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 	private EnumFacing firstStairSide;
-	private BlockPos pillarStart;
+	private Vec3i pillarOffset;
 
 	public CastleRoomStaircaseSpiral(int sideLength, int height, int floor) {
 		super(sideLength, height, floor);
@@ -19,13 +20,14 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		this.defaultFloor = false;
 
 		this.firstStairSide = EnumFacing.NORTH;
-		this.recalcPillarStart();
+		this.recalcPillarOffset();
 	}
 
 	@Override
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		this.recalcPillarStart();
-		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(this.pillarStart, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
+		this.recalcPillarOffset();
+		BlockPos stairCenter = roomOrigin.add(this.pillarOffset);
+		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(stairCenter, this.firstStairSide, dungeon.getMainBlockState(), dungeon.getStairBlockState());
 
 		BlockPos pos;
 		IBlockState blockToBuild;
@@ -84,18 +86,18 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		return result;
 	}
 
-	public int getCenterX() {
-		return this.pillarStart.getX();
+	public int getStairCenterOffsetX() {
+		return this.pillarOffset.getX();
 	}
 
-	public int getCenterZ() {
-		return this.pillarStart.getZ();
+	public int getStairCenterOffsetZ() {
+		return this.pillarOffset.getZ();
 	}
 
 
-	private void recalcPillarStart() {
+	private void recalcPillarOffset() {
 		int centerX = (this.buildLengthX - 1) / 2;
 		int centerZ = (this.buildLengthZ - 1) / 2;
-		this.pillarStart = this.getInteriorBuildStart().add(centerX, 0, centerZ);
+		this.pillarOffset = new Vec3i(centerX, 0, centerZ);
 	}
 }
