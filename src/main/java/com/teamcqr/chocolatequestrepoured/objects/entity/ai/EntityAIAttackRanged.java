@@ -93,16 +93,23 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 			this.strafingTime = 0;
 		}
 
-		if ((CQRConfig.mobs.enableEntityStrafing || this.entity.canStrafe()) && this.strafingTime > -1) {
+		if (this.canStrafe() && this.strafingTime > -1) {
 			if (distance > this.getAttackRange() * 0.75D) {
 				this.strafingBackwards = false;
 			} else if (distance < this.getAttackRange() * 0.25D) {
 				this.strafingBackwards = true;
 			}
 
-			float f = (float) CQRConfig.mobs.entityStrafingSpeed;
+			float f = (float) (this.entity.isNonBoss() ? CQRConfig.mobs.entityStrafingSpeed : CQRConfig.mobs.entityStrafingSpeedBoss);
 			this.entity.getMoveHelper().strafe(this.strafingBackwards ? -f : f, this.strafingClockwise ? f : -f);
 		}
+	}
+
+	private boolean canStrafe() {
+		if (!this.entity.canStrafe()) {
+			return false;
+		}
+		return this.entity.isNonBoss() ? CQRConfig.mobs.enableEntityStrafing : CQRConfig.mobs.enableEntityStrafingBoss;
 	}
 
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
