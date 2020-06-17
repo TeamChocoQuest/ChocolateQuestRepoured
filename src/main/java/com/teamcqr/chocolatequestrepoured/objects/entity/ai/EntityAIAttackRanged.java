@@ -93,7 +93,7 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 			this.strafingTime = 0;
 		}
 
-		if (CQRConfig.mobs.enableEntityStrafing && this.entity.canStrafe() && this.strafingTime > -1) {
+		if ((CQRConfig.mobs.enableEntityStrafing || this.entity.canStrafe()) && this.strafingTime > -1) {
 			if (distance > this.getAttackRange() * 0.75D) {
 				this.strafingBackwards = false;
 			} else if (distance < this.getAttackRange() * 0.25D) {
