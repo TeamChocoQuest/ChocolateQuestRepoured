@@ -57,10 +57,14 @@ public class EntityAIFollowPath extends AbstractCQREntityAI<AbstractEntityCQR> {
 			}
 		} else if (index >= pathPoints.length - 1) {
 			this.isReversingPath = true;
-			index = pathPoints.length - 2;
+			if (index > pathPoints.length - 1) {
+				index = pathPoints.length - 2;
+			}
 		} else if (index <= 0) {
 			this.isReversingPath = false;
-			index = 1;
+			if (index < 0) {
+				index = 1;
+			}
 		}
 		return index;
 	}
