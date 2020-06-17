@@ -150,12 +150,11 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 				} else if (item instanceof IRangedWeapon) {
 					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
 				}
+
+				this.prevTimeAttacked = this.entity.ticksExisted;
+				this.entity.resetActiveHand();
+				this.entity.isSwingInProgress = false;
 			}
-
-			this.prevTimeAttacked = this.entity.ticksExisted;
-			this.entity.resetActiveHand();
-			this.entity.isSwingInProgress = false;
-
 		}
 	}
 
