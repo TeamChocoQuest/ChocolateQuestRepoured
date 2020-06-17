@@ -1035,7 +1035,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	public boolean canStrafe() {
-		return false;
+		return true;
 	}
 
 	public boolean canOpenDoors() {

@@ -149,9 +149,12 @@ public class CQRConfig {
 		public double dropDurabilityMinimum = 0.1D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityMaximum = 0.5D;
-		public boolean enableEntityStrafing = true;
+		public boolean enableEntityStrafing = false;
+		public boolean enableEntityStrafingBoss = true;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double entityStrafingSpeed = 0.5D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double entityStrafingSpeedBoss = 0.5D;
 		
 	}
 	
