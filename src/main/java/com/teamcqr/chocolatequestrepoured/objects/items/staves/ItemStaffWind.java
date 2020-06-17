@@ -35,12 +35,12 @@ public class ItemStaffWind extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 40;
+		return 80;
 	}
 
 	@Override
 	public int getChargeTicks() {
-		return 40;
+		return 0;
 	}
 
 }
