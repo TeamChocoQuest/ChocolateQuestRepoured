@@ -1225,9 +1225,13 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.lastTimeHitByAxeWhileBlocking;
 	}
 
-	@SideOnly(Side.CLIENT)
+	//@SideOnly(Side.CLIENT)
 	public boolean hasAttackTarget() {
-		return this.dataManager.get(HAS_TARGET);
+		if (world.isRemote) {
+			return this.dataManager.get(HAS_TARGET);
+		} else {
+			return this.getAttackTarget() != null && !this.getAttackTarget().isDead;
+		}
 	}
 
 	@Override
