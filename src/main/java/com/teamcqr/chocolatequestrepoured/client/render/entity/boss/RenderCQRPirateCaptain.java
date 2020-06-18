@@ -34,17 +34,6 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 			GlStateManager.alphaFunc(516, 0.1F);
 			GlStateManager.disableAlpha();
 			GlStateManager.depthFunc(514);
-
-			// entity.turnInvisibleTime += entity.isDisintegrating() ? 1 : -1;
-			// System.out.println("invi timer: " + entity.turnInvisibleTime);
-			/*
-			 * if(f >= 1 && !entity.getIsInvisible()) {
-			 * entity.setIsInvisible(true);
-			 * }
-			 * else if(entity.turnInvisibleTime <= 1 && entity.getIsInvisible()) {
-			 * entity.setIsInvisible(false);
-			 * }
-			 */
 		}
 		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		GlStateManager.depthFunc(515);
