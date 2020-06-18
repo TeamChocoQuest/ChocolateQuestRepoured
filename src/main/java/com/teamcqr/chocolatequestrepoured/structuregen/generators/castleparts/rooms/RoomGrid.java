@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -318,6 +320,8 @@ public class RoomGrid {
 
 	private void initializeWalls(int roomWidth, int floorHeight)
 	{
+		final int wallWidth = roomWidth + 2; //extends 1 block past each edge of the room
+
 		//vertical walls
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX + 1; x++) {
@@ -326,7 +330,7 @@ public class RoomGrid {
 					int yOffset = floor * floorHeight;
 					int zOffset = z * (roomWidth + 1);
 					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
-					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL, wallWidth, floorHeight);
 					wallList.add(wall);
 
 					RoomGridCell westCell = getCellAt(floor, x - 1, z);
@@ -354,7 +358,7 @@ public class RoomGrid {
 					int yOffset = floor * floorHeight;
 					int zOffset = z * (roomWidth + 1);
 					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
-					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.HORIZONTAL);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.HORIZONTAL, wallWidth, floorHeight);
 					wallList.add(wall);
 
 					RoomGridCell northCell = getCellAt(floor, x, z - 1);
@@ -842,6 +846,12 @@ public class RoomGrid {
 			if (this.withinGridBounds(gridPos)) {
 				this.getCellAt(gridPos).setAsBossArea();
 			}
+		}
+	}
+
+	public void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
+		for (CastleMainStructWall wall : this.wallList) {
+
 		}
 	}
 

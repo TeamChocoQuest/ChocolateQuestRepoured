@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -123,10 +124,6 @@ public class RoomGridCell {
 
     public boolean isReachable() {
         return this.reachable;
-    }
-
-    public void setAsMainStruct() {
-        this.partOfMainStruct = true;
     }
 
     public boolean isMainStruct() {
@@ -265,6 +262,46 @@ public class RoomGridCell {
         for (RoomGridCell cell : this.pathableCells) {
             cell.setHasLanding();
         }
+    }
+
+    public boolean hasWallOnSide(EnumFacing side)
+    {
+        if (walls.containsKey(side)) {
+            return walls.get(side).isEnabled();
+        }
+        else {
+            return false;
+        }
+    }
+
+    public void addDoorOnSideCentered(EnumFacing side, EnumCastleDoorType type, Random random) {
+        if (walls.containsKey(side)) {
+            walls.get(side).addDoorCentered(type, random);
+        }
+    }
+
+    public void addDoorOnSideRandom(Random random, EnumCastleDoorType type, EnumFacing side) {
+        if (walls.containsKey(side)) {
+            walls.get(side).addDoorRandom(type, random);
+        }
+    }
+
+    public void addOuterWall(EnumFacing side) {
+        if (walls.containsKey(side)) {
+            walls.get(side).enable();
+            walls.get(side).setAsOuterWall();
+        }
+    }
+
+    public void addInnerWall(EnumFacing side) {
+        if (walls.containsKey(side)) {
+            walls.get(side).enable();
+            walls.get(side).setAsInnerWall();
+        }
+    }
+
+    public void removeWall(EnumFacing side) {
+        this.walls.remove(side);
     }
 
     public void copyRoomPropertiesToConnectedCells() {
