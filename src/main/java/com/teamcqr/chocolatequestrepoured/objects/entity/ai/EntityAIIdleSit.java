@@ -115,7 +115,10 @@ public class EntityAIIdleSit extends AbstractCQREntityAI<AbstractEntityCQR> {
 		if(this.entity.getFaction() == null) {
 			return false;
 		}
-		return this.entity.getFaction().isAlly(possibleAlly);
+		if (!this.entity.getFaction().isAlly(possibleAlly)) {
+			return false;
+		}
+		return this.entity.getEntitySenses().canSee(possibleAlly);
 	}
 
 	private boolean isEntityMoving(Entity entity) {
