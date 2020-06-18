@@ -25,8 +25,8 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 		if((entity.isDisintegrating() || entity.isReintegrating()) /*&& entity.turnInvisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME*/) {
 			GlStateManager.pushMatrix();
 			float ticks = (float)entity.getInvisibleTicks();
-			ticks = Math.min(ticks, 1);
-			ticks = Math.max(ticks, EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME);
+			ticks = Math.max(ticks, 1);
+			ticks = Math.min(ticks, EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME);
 			float f = ticks / EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
             GlStateManager.depthFunc(515);
             GlStateManager.enableAlpha();
