@@ -849,10 +849,8 @@ public class RoomGrid {
 		}
 	}
 
-	public void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (CastleMainStructWall wall : this.wallList) {
-
-		}
+	public List<CastleMainStructWall> getWallListCopy() {
+		return new ArrayList<>(wallList);
 	}
 
 	@Nullable

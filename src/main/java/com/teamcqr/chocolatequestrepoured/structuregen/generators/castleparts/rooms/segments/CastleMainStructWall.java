@@ -53,6 +53,11 @@ public class CastleMainStructWall {
         }
     }
 
+    public BlockPos getOrigin() {
+        return this.origin;
+    }
+
+
     public void enable()
     {
         this.enabled = true;
@@ -356,7 +361,7 @@ public class CastleMainStructWall {
         this.doorStartOffset = (length - type.getWidth()) / 2;
     }
 
-    public void addDoorRandom(EnumCastleDoorType type, Random random) {
+    public void addDoorRandomOffset(EnumCastleDoorType type, Random random) {
         if (type == EnumCastleDoorType.RANDOM) {
             type = EnumCastleDoorType.getRandomRegularType(random);
         }

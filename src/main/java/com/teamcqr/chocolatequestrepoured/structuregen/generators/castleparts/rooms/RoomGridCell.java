@@ -280,9 +280,9 @@ public class RoomGridCell {
         }
     }
 
-    public void addDoorOnSideRandom(Random random, EnumCastleDoorType type, EnumFacing side) {
+    public void addDoorOnSideRandomOffset(EnumFacing side, EnumCastleDoorType type, Random random) {
         if (walls.containsKey(side)) {
-            walls.get(side).addDoorRandom(type, random);
+            walls.get(side).addDoorRandomOffset(type, random);
         }
     }
 
