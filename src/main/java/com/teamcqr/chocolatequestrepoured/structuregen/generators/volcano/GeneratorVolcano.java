@@ -157,7 +157,7 @@ public class GeneratorVolcano extends AbstractDungeonGenerator<DungeonVolcano> {
 		// int yMax = ((y + this.maxHeight) < 256 ? this.maxHeight : (255 - y));
 		int yMax = ((this.minY + this.maxHeight) < 256 ? this.maxHeight : (255 - this.minY));
 
-		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + 2 * r, this.minY + 1, this.pos.getZ() + 2 * r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
+		this.dungeonGenerator.add(new DungeonPartPlateau(world, dungeonGenerator, this.pos.getX() - r, this.pos.getZ() - r, this.pos.getX() + r, this.minY + 1, this.pos.getZ() + r, this.dungeon.getSupportBlock(), this.dungeon.getSupportTopBlock(), 8));
 
 		// Upper volcano part
 		for (int iY = 0; iY < yMax; iY++) {
