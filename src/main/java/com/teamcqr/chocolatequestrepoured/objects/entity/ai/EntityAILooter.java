@@ -73,6 +73,13 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	@Override
 	public void updateTask() {
 		super.updateTask();
+		
+		if(entity.getNavigator().getPathToPos(currentTarget) == null) {
+			this.visitedChests.add(currentTarget);
+			currentTarget = null;
+			return;
+		}
+		
 		if(isInLootingRange()) {
 			entity.getNavigator().clearPath();
 			TileEntityChest tile = (TileEntityChest) world.getTileEntity(currentTarget);
