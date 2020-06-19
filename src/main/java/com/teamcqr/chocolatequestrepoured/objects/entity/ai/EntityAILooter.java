@@ -67,7 +67,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && isChestStillThere();
+		return super.shouldContinueExecuting() && isChestStillThere() && hasBackpack(entity) && hasBackpackSpace();
 	}
 	
 	@Override
