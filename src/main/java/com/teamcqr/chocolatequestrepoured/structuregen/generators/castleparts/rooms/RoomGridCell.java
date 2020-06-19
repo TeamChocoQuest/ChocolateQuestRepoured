@@ -68,6 +68,7 @@ public class RoomGridCell {
     public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         if (this.isPopulated() && this.room != null) {
             room.setRoomOrigin(getOriginOffset());
+            room.registerWalls(this.walls);
             room.generate(castleOrigin, genArray, dungeon);
         }
     }
@@ -301,7 +302,9 @@ public class RoomGridCell {
     }
 
     public void removeWall(EnumFacing side) {
-        this.walls.remove(side);
+        if (walls.containsKey(side)) {
+            walls.get(side).disable(); //don't actually delete the wall just don't build it
+        }
     }
 
     public void copyRoomPropertiesToConnectedCells() {

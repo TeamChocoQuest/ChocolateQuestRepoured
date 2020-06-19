@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
@@ -11,10 +12,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Random;
+import java.util.*;
 
 public abstract class CastleRoomBase {
 	protected BlockPos roomOrigin;
@@ -45,6 +43,7 @@ public abstract class CastleRoomBase {
 
 	protected HashSet<BlockPos> possibleDecoPositions; // set of possible decoration positions
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
+	protected HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
 	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
 	public CastleRoomBase(int sideLength, int height, int floor) {
@@ -344,11 +343,23 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthX() {
-		return this.buildLengthX;
+		int length = buildLengthX;
+		if (walls.containsKey(EnumFacing.EAST)) {
+			if (!walls.get(EnumFacing.EAST).isEnabled()) {
+				++length; //No wall there so this room should extend into that block
+			}
+		}
+		return length;
 	}
 
 	protected int getDecorationLengthZ() {
-		return this.buildLengthZ;
+		int length = buildLengthZ;
+		if (walls.containsKey(EnumFacing.SOUTH)) {
+			if (!walls.get(EnumFacing.SOUTH).isEnabled()) {
+				++length; //No wall there so this room should extend into that block
+			}
+		}
+		return length;
 	}
 
 	public int getDecorationLengthY() {
@@ -408,5 +419,7 @@ public abstract class CastleRoomBase {
 
 	public void copyPropertiesOf(CastleRoomBase room) { ; }
 
-
+	public void registerWalls(HashMap<EnumFacing, CastleMainStructWall> walls) {
+		this.walls = walls;
+	}
 }

@@ -264,8 +264,6 @@ public class RoomGrid {
 		}
 	}
 
-	private static final int MAX_lAYERS = 5;
-
 	private int floors;
 	private int roomsX;
 	private int roomsZ;
