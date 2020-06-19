@@ -57,7 +57,7 @@ public class RoomGridCell {
     {
         int xOffset = 1 + (gridPosition.getX() * (roomWidth + 1));
         int zOffset = 1 + (gridPosition.getZ()  * (roomWidth + 1));
-        int yOffset = 1 + (gridPosition.getFloor() * floorHeight);
+        int yOffset = gridPosition.getFloor() * floorHeight;
         return new BlockPos(xOffset, yOffset, zOffset);
     }
 
