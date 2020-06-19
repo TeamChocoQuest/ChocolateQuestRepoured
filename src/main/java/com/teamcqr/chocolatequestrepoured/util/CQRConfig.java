@@ -155,8 +155,8 @@ public class CQRConfig {
 		public double entityStrafingSpeed = 0.5D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double entityStrafingSpeedBoss = 0.5D;
-		@Config.RangeDouble(min=2D, max=64D)
-		public double looterAIChestSearchRange = 16;
+		@Config.RangeInt(min=2, max=64)
+		public int looterAIChestSearchRange = 16;
 		public int looterAIStealableItems = 4;
 		
 	}
