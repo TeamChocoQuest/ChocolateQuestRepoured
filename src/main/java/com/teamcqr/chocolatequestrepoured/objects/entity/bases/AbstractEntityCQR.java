@@ -335,7 +335,20 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			double d0 = (double) this.getDropChance(entityequipmentslot);
 			boolean flag = d0 > 1.0D;
 
-			if (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0) {
+			boolean backpackflag = false;
+			if(itemstack.getItem() instanceof ItemBackpack) {
+				IItemHandler inv = itemstack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+				if(inv != null) {
+					for(int i = 0; i < inv.getSlots(); i++) {
+						if(!inv.getStackInSlot(i).isEmpty()) {
+							backpackflag = true;
+							break;
+						}
+					}
+				}
+			}
+			
+			if ( backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0)) {
 				if (!flag && itemstack.isItemStackDamageable()) {
 					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
 					itemstack.setItemDamage((int) ((double) itemstack.getMaxDamage() * (1.0D - durability)));
