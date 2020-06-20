@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 
 import net.minecraft.client.model.ModelBiped;
@@ -26,7 +27,7 @@ public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 		}
 		Item itemMain = entitylivingbaseIn.getHeldItemMainhand().getItem();
 		Item itemOff = entitylivingbaseIn.getHeldItemOffhand().getItem();
-		if (itemMain instanceof ItemRevolver) {
+		if (itemMain instanceof ItemRevolver || itemMain instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
 			if (entitylivingbaseIn.getPrimaryHand() == EnumHandSide.LEFT) {
 				((ModelBiped) this.livingEntityRenderer.getMainModel()).bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
@@ -37,7 +38,7 @@ public class LayerRevolver implements LayerRenderer<EntityLivingBase> {
 			}
 			GlStateManager.popMatrix();
 		}
-		if (itemOff instanceof ItemRevolver) {
+		if (itemOff instanceof ItemRevolver || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
 			if (!(entitylivingbaseIn.getPrimaryHand() == EnumHandSide.LEFT)) {
 				((ModelBiped) this.livingEntityRenderer.getMainModel()).bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90));
