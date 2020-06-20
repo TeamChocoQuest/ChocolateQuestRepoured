@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.client.models.entities;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
 
@@ -96,14 +97,14 @@ public class ModelCQRBiped extends ModelBiped {
 				this.renderSpellAnimation(cqrEnt, ageInTicks);
 			} else {
 				boolean flagSide = cqrEnt.getPrimaryHand() == EnumHandSide.LEFT;
-				if (cqrEnt.hasAttackTarget() && cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemMainhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemMainhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemMainhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedLeftArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					}
 				}
-				if (cqrEnt.hasAttackTarget() && cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
+				if (cqrEnt.hasAttackTarget() && (cqrEnt.getHeldItemOffhand().getItem() instanceof ItemRevolver || cqrEnt.getHeldItemOffhand().getItem() instanceof ItemHookshotBase) && !(cqrEnt.getHeldItemOffhand().getItem() instanceof ItemMusket)) {
 					if (flagSide) {
 						this.bipedRightArm.rotateAngleX -= new Float(Math.toRadians(90F));
 					} else {

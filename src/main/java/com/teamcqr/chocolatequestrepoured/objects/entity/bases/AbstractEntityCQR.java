@@ -147,6 +147,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	protected static final DataParameter<Integer> TEXTURE_INDEX = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
 	protected static final DataParameter<Boolean> MAGIC_ARMOR_ACTIVE = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> SPELL_INFORMATION = EntityDataManager.<Integer>createKey(AbstractEntityCQR.class, DataSerializers.VARINT);
+	protected static final DataParameter<Boolean> SPIN_TO_WIN = EntityDataManager.<Boolean>createKey(AbstractEntityCQR.class, DataSerializers.BOOLEAN);
 	// Shoulder entity stuff
 	protected static final DataParameter<NBTTagCompound> SHOULDER_ENTITY = EntityDataManager.<NBTTagCompound>createKey(AbstractEntityCQR.class, DataSerializers.COMPOUND_TAG);
 
@@ -174,6 +175,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
+		this.dataManager.register(SPIN_TO_WIN, false);
 
 		// Shoulder entity stuff
 		this.dataManager.register(SHOULDER_ENTITY, new NBTTagCompound());
@@ -1319,6 +1321,19 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 			setHomePositionCQR(homeNew);
 		}
+	}
+	
+	public boolean canUseSpinToWinAttack() {
+		return true;
+	}
+
+	public boolean isSpinToWinActive() {
+		return canUseSpinToWinAttack() && dataManager.get(SPIN_TO_WIN);
+	}
+	
+	@SideOnly(Side.SERVER)
+	public void setSpinToWin(boolean value) {
+		this.dataManager.set(SPIN_TO_WIN, value);
 	}
 
 }
