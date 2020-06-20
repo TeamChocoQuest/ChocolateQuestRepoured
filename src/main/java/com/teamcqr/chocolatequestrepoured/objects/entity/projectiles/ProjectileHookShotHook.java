@@ -1,10 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import java.util.UUID;
+
+import javax.annotation.Nullable;
+
 import com.google.common.base.Optional;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -22,9 +27,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import javax.annotation.Nullable;
-import java.util.UUID;
 
 /**
  * Copyright (c) 15 Feb 2019
@@ -286,7 +288,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private void latchedPullShooterState() {
-	    if (this.getThrower() instanceof EntityPlayerMP) {
+	    if (this.getThrower() instanceof EntityLivingBase) {
             checkForShooterBlockedPath();
 
             Vec3d playerPos = this.getThrower().getPositionVector();
@@ -347,7 +349,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	private double getDistanceToHook() {
 	    double result = 0;
 	    if (this.getThrower() != null) {
-            EntityPlayerMP shootingPlayer = (EntityPlayerMP) this.getThrower();
+            EntityLivingBase shootingPlayer = this.getThrower();
             Vec3d playerPos = shootingPlayer.getPositionVector();
             result = playerPos.distanceTo(this.getPositionVector());
         }
