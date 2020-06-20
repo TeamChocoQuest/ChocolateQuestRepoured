@@ -349,7 +349,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			}
 			
 			if ( backpackflag || (!itemstack.isEmpty() && !EnchantmentHelper.hasVanishingCurse(itemstack) && (wasRecentlyHit || flag) && (double) (this.rand.nextFloat() - (float) lootingModifier * 0.01F) < d0)) {
-				if (!flag && itemstack.isItemStackDamageable()) {
+				if (!flag && itemstack.isItemStackDamageable() && !backpackflag) {
 					double durability = modalValue + MathHelper.clamp(this.rand.nextGaussian() * standardDeviation, min - modalValue, max - modalValue);
 					itemstack.setItemDamage((int) ((double) itemstack.getMaxDamage() * (1.0D - durability)));
 				}
