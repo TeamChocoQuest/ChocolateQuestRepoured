@@ -24,7 +24,7 @@ public class RenderEventHandler {
 		Item itemMain = event.getEntityPlayer().getHeldItemMainhand().getItem();
 		Item itemOff = event.getEntityPlayer().getHeldItemOffhand().getItem();
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.pushMatrix();
 		}
 
@@ -95,7 +95,7 @@ public class RenderEventHandler {
 			}
 		}
 
-		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife) {
+		if (itemMain instanceof ItemRevolver || itemOff instanceof ItemRevolver || itemOff instanceof ItemMusketKnife || itemMain instanceof ItemMusketKnife || itemMain instanceof ItemHookshotBase || itemOff instanceof ItemHookshotBase) {
 			GlStateManager.popMatrix();
 		}
 	}
