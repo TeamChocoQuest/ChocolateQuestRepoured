@@ -172,7 +172,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		this.dataManager.register(HAS_TARGET, false);
 		this.dataManager.register(ARM_POSE, ECQREntityArmPoses.NONE.toString());
 		this.dataManager.register(TALKING, false);
-		this.dataManager.register(TEXTURE_INDEX, this.getRNG().nextInt(this.getTextureCount()));
+		this.dataManager.register(TEXTURE_INDEX, getTextureVariant());
 		this.dataManager.register(MAGIC_ARMOR_ACTIVE, false);
 		this.dataManager.register(SPELL_INFORMATION, 0);
 		this.dataManager.register(SPIN_TO_WIN, false);
@@ -184,6 +184,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	@Override
 	protected boolean canDespawn() {
 		return !CQRConfig.general.mobsFromCQSpawnerDontDespawn;
+	}
+	
+	protected int getTextureVariant() {
+		return this.getRNG().nextInt(this.getTextureCount());
 	}
 
 	@Override
