@@ -248,6 +248,9 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 	}
 	
 	protected boolean isChestStillThere() {
+		if(currentTarget == null) {
+			return false
+		}
 		if(visitedChests.contains(currentTarget)) {
 			return false;
 		}
