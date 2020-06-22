@@ -39,10 +39,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 public class ProtectedRegionEventHandler {
 
 	/*
-	 * Possible other events to use (do not delete):
-	 * PlayerInteractEvent.LeftClickBlock
-	 * PlayerInteractEvent.RightClickBlock
-	 * PlayerEvent.BreakSpeed
+	 * Possible other events to use (do not delete): PlayerInteractEvent.LeftClickBlock PlayerInteractEvent.RightClickBlock PlayerEvent.BreakSpeed
 	 */
 
 	public static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
@@ -88,86 +85,98 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onPlayerLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		if (event.isCanceled()) {
-			return;
-		}
+		if (CQRConfig.advanced.protectionSystemFeatureEnabled) {
 
-		World world = event.getWorld();
-		EntityPlayer player = event.getEntityPlayer();
-		BlockPos pos = event.getPos();
-		IBlockState state = world.getBlockState(pos);
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+			if (event.isCanceled()) {
+				return;
+			}
 
-		if (player.isCreative() || BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
-			return;
-		}
+			World world = event.getWorld();
+			EntityPlayer player = event.getEntityPlayer();
+			BlockPos pos = event.getPos();
+			IBlockState state = world.getBlockState(pos);
+			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.isBlockDependency(pos)) {
-					return;
+			if (player.isCreative() || BREAKABLE_BLOCK_WHITELIST.contains(state.getBlock())) {
+				return;
+			}
+
+			if (manager != null) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if (protectedRegion.isBlockDependency(pos)) {
+						return;
+					}
+				}
+
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					// System.out.println(protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos));
+					if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
+						event.setCanceled(true);
+						return;
+					}
 				}
 			}
 
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				//System.out.println(protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos));
-				if (protectedRegion.preventBlockBreaking() && protectedRegion.isInsideProtectedRegion(pos)) {
-					event.setCanceled(true);
-					return;
-				}
-			}
 		}
 	}
 
 	@SubscribeEvent
 	public static void onPlayerRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
-		if (event.isCanceled()) {
-			return;
-		}
+		if (CQRConfig.advanced.protectionSystemFeatureEnabled) {
 
-		World world = event.getWorld();
-		EntityPlayer player = event.getEntityPlayer();
-		BlockPos pos = event.getPos();
-		ItemStack stack = event.getItemStack();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+			if (event.isCanceled()) {
+				return;
+			}
 
-		if (player.isCreative() || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock) || PLACEABLE_BLOCK_WHITELIST.contains(((ItemBlock) stack.getItem()).getBlock())) {
-			return;
-		}
+			World world = event.getWorld();
+			EntityPlayer player = event.getEntityPlayer();
+			BlockPos pos = event.getPos();
+			ItemStack stack = event.getItemStack();
+			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
-					event.setCanceled(true);
-					return;
+			if (player.isCreative() || stack.isEmpty() || !(stack.getItem() instanceof ItemBlock) || PLACEABLE_BLOCK_WHITELIST.contains(((ItemBlock) stack.getItem()).getBlock())) {
+				return;
+			}
+
+			if (manager != null) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if (protectedRegion.preventBlockPlacing() && protectedRegion.isInsideProtectedRegion(pos)) {
+						event.setCanceled(true);
+						return;
+					}
 				}
 			}
+
 		}
 	}
 
 	@SubscribeEvent
 	public static void onExplosionEventDetonate(ExplosionEvent.Detonate event) {
-		if (event.isCanceled()) {
-			return;
-		}
+		if (CQRConfig.advanced.protectionSystemFeatureEnabled) {
 
-		World world = event.getWorld();
-		Explosion explosion = event.getExplosion();
-		boolean isTNT = ProtectedRegionEventHandler.getExploder(explosion) instanceof EntityTNTPrimed;
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+			if (event.isCanceled()) {
+				return;
+			}
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if ((isTNT && protectedRegion.preventExplosionsTNT()) || (!isTNT && protectedRegion.preventExplosionsOther())) {
-					List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
+			World world = event.getWorld();
+			Explosion explosion = event.getExplosion();
+			boolean isTNT = ProtectedRegionEventHandler.getExploder(explosion) instanceof EntityTNTPrimed;
+			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
 
-					for (int i = 0; i < affectedBlockPositions.size(); i++) {
-						if (protectedRegion.isInsideProtectedRegion(affectedBlockPositions.get(i))) {
-							affectedBlockPositions.remove(i--);
+			if (manager != null) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if ((isTNT && protectedRegion.preventExplosionsTNT()) || (!isTNT && protectedRegion.preventExplosionsOther())) {
+						List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
+
+						for (int i = 0; i < affectedBlockPositions.size(); i++) {
+							if (protectedRegion.isInsideProtectedRegion(affectedBlockPositions.get(i))) {
+								affectedBlockPositions.remove(i--);
+							}
 						}
 					}
 				}
 			}
+
 		}
 	}
 
@@ -192,40 +201,48 @@ public class ProtectedRegionEventHandler {
 
 	@SubscribeEvent
 	public static void onWorldEventPotentialSpawns(WorldEvent.PotentialSpawns event) {
-		if (event.isCanceled() || event.getList().isEmpty()) {
-			return;
-		}
+		if (CQRConfig.advanced.protectionSystemFeatureEnabled) {
 
-		World world = event.getWorld();
-		BlockPos pos = event.getPos();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+			if (event.isCanceled() || event.getList().isEmpty()) {
+				return;
+			}
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
-					event.setCanceled(true);
-					return;
+			World world = event.getWorld();
+			BlockPos pos = event.getPos();
+			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+			if (manager != null) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if (protectedRegion.preventEntitySpawning() && protectedRegion.isInsideProtectedRegion(pos)) {
+						event.setCanceled(true);
+						return;
+					}
 				}
 			}
+
 		}
 	}
 
 	@SubscribeEvent
 	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
-		if (event.isCanceled()) {
-			return;
-		}
+		if (CQRConfig.advanced.protectionSystemFeatureEnabled) {
 
-		World world = event.getWorld();
-		BlockPos pos = event.getPos();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+			if (event.isCanceled()) {
+				return;
+			}
 
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.isBlockDependency(pos)) {
-					protectedRegion.removeBlockDependency(pos);
+			World world = event.getWorld();
+			BlockPos pos = event.getPos();
+			ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+
+			if (manager != null) {
+				for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+					if (protectedRegion.isBlockDependency(pos)) {
+						protectedRegion.removeBlockDependency(pos);
+					}
 				}
 			}
+
 		}
 	}
 
