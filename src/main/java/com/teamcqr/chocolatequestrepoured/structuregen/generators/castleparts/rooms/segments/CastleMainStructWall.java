@@ -27,7 +27,8 @@ public class CastleMainStructWall {
     }
 
     private boolean enabled = false;
-    private boolean isOuterWall;
+    private boolean isOuterWall = false;
+    private boolean isRoofEdge = false;
     private int doorStartOffset = 0;
     private EnumCastleDoorType doorType = EnumCastleDoorType.NONE;
     private BlockPos origin;
@@ -76,6 +77,10 @@ public class CastleMainStructWall {
         this.isOuterWall = false;
     }
 
+    public void setAsRoofEdge() { this.isRoofEdge = true; }
+
+    public void setAsNormalWall() { this.isRoofEdge = false; }
+
     public boolean hasDoor() {
         return (this.doorType != EnumCastleDoorType.NONE);
     }
@@ -107,12 +112,26 @@ public class CastleMainStructWall {
     }
 
     protected IBlockState getBlockToBuild(BlockPos pos, DungeonCastle dungeon) {
-        if (this.isOuterWall) {
+        if (this.isRoofEdge) {
+            return this.getRoofEdgeBlock(pos, dungeon);
+        } else if (this.isOuterWall) {
             return this.getWindowBlock(pos, dungeon);
         } else if (this.hasDoor()) {
             return this.getDoorBlock(pos, dungeon);
         } else {
             return dungeon.getMainBlockState();
+        }
+    }
+
+    private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonCastle dungeon) {
+        IBlockState blockToBuild = dungeon.getMainBlockState();
+        int y = pos.getY() - this.origin.getY();
+        int dist = this.getLengthPoint(pos);
+
+        if ((y == 0) || ((y == 1) && ((dist == this.length - 1) || (dist % 2 == 0)))) {
+            return dungeon.getMainBlockState();
+        } else {
+            return Blocks.AIR.getDefaultState();
         }
     }
 

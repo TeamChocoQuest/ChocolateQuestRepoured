@@ -24,6 +24,11 @@ public class RoomGridCell {
             this.text = text;
         }
 
+        @Override
+        public String toString() {
+            return text;
+        }
+
         private boolean isAtLeast(CellState state) {
             return this.value >= state.value;
         }
@@ -291,6 +296,14 @@ public class RoomGridCell {
         if (walls.containsKey(side)) {
             walls.get(side).enable();
             walls.get(side).setAsOuterWall();
+        }
+    }
+
+    public void addRoofEdgeWall(EnumFacing side) {
+        if (walls.containsKey(side)) {
+            walls.get(side).enable();
+            walls.get(side).setAsOuterWall();
+            walls.get(side).setAsRoofEdge();
         }
     }
 

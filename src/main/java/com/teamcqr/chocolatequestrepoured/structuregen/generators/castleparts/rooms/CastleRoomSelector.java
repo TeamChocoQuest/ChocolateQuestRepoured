@@ -950,7 +950,7 @@ public class CastleRoomSelector {
 	private void determineWalkableRoofWalls(RoomGridCell cell) {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			if (!this.grid.adjacentCellIsPopulated(cell, side)) {
-				//cell.getRoom().addOuterWall(side);
+				cell.addRoofEdgeWall(side);
 			}
 		}
 	}
