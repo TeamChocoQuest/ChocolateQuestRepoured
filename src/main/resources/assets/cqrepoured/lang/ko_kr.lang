@@ -8,7 +8,7 @@ itemGroup.ChocolateQuestRepouredItemsTab=CQR 아이템
 itemGroup.ChocolateQuestRepouredDungeonPlacers=CQR 던전 생성기
 itemGroup.ChocolateQuestRepouredBannerTab=CQR 배너
 itemGroup.ChocolateQuestRepouredExporterChests=CQR 상자
-itemGroup.CQRSpawnEggs=CQR 스폰알
+itemGroup.CQR Spawn Eggs=CQR 스폰알
 #Banners
 item.banner.cqrepoured_cq_blank.white=CQR-배너 마커
 item.banner.cqrepoured_cq_blank.orange=CQR-배너 마커
@@ -271,7 +271,7 @@ item.shield_walker.name=워커 방패
 item.shield_walker_normal.name=워커 방패
 item.shield_zombie.name=좀비 방패
 
-//Great Swords
+#Great Swords
 item.great_sword_monking.name=몽킹 대검 
 item.great_sword_bull.name=황소 대검 
 item.great_sword_diamond.name=다이아몬드 대검 
@@ -280,6 +280,7 @@ item.great_sword_iron.name=철 대검
 #Spears
 item.spear_diamond.name=다이아몬드 창
 item.spear_iron.name=철 창
+attribute.name.generic.attackRange=공격 거리
 
 #Staves
 item.staff.name=지팡이
@@ -594,6 +595,7 @@ entity.cqr_necromancer.name=네크로맨서
 entity.cqr_boar_mage.name=보어메이지
 entity.cqr_walker_king.name=어비스 워커킹
 entity.cqr_pirate_captain.name=해적 선장
+entity.cqr_giant_spider.name=셸롭
 
 #Misc Entities
 entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>소환진
@@ -632,3 +634,5 @@ advancements.cqrepoured.kill_pirate_captain.title=Arrr!
 advancements.cqrepoured.kill_pirate_captain.description=해적 선장을 처치하라
 advancements.cqrepoured.new_captain.title=이제 누가 선장이지?
 advancements.cqrepoured.new_captain.description=해적 선장의 무기를 모두 획득하라.
+advancements.cqrepoured.kill_giant_spider.title=유일하게 좋은 거미였어 ...
+advancements.cqrepoured.kill_giant_spider.description=... 죽은 거미! 거대 거미를처치하라
