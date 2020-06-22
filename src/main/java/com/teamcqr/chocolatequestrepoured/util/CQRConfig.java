@@ -89,6 +89,9 @@ public class CQRConfig {
 		@Config.RangeInt(min = 100, max = 100000)
 		public int generationLimit = 20000;
 		public boolean instantLightUpdates = false;
+		
+		@Config.Comment("This enables the protection system, it enables it to be used. Set to false to disable it globally")
+		public boolean protectionSystemFeatureEnabled = true;
 	}
 
 	public static class General {
