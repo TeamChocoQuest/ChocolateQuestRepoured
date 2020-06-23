@@ -95,7 +95,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 80;
+		return 20;
 	}
 
 	@Override
