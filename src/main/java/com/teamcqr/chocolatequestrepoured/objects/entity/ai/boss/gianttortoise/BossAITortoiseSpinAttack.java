@@ -22,6 +22,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 	private final int BUBBLE_SHOOT_DURATION = 20;
 	
 	static final int MAX_DISTANCE_TO_BEGIN_SPIN = 16; 
+	static final int MAX_DISTANCE_TO_TARGET = 20;
 
 	public BossAITortoiseSpinAttack(EntityCQRGiantTortoise entity) {
 		super(entity);
@@ -108,17 +109,19 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 			this.getBoss().setStunned(true);
 		}
 		else if(getBoss().getAnimationTick() > BUBBLE_SHOOT_DURATION && getAnimation().getDuration() - getBoss().getAnimationTick() > AFTER_IDLE_TIME) {
-			if(getBoss().collidedHorizontally || movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= 20 || previousBlocks != getBoss().getSpinsBlocked()) {
+			if(movementVector == null || getBoss().getDistance(getBoss().getAttackTarget()) >= MAX_DISTANCE_TO_TARGET || previousBlocks != getBoss().getSpinsBlocked()) {
 				calculateVelocity();
 				float damage = 1F;
 				if(previousBlocks != getBoss().getSpinsBlocked()) {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
-				}
-				damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());
-				if(getBoss().collidedHorizontally) {
+					damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());
 					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
 				}
+				/*damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());
+				if(getBoss().collidedHorizontally) {
+					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
+				}*/
 			}
 			this.getBoss().setSpinning(true);
 			this.getBoss().setCanBeStunned(false);
