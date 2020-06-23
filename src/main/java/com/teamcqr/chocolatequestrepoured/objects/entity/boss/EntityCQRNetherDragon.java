@@ -435,37 +435,39 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	public void shootFireballFromBody() {
-		int indx = getRNG().nextInt(this.dragonBodyParts.length);
-		while(this.dragonBodyParts[indx] == null) {
-			indx = getRNG().nextInt(this.dragonBodyParts.length);
-		}
-		Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
-		Vec3d v = this.dragonBodyParts[indx].getPositionVector();
-		if(hasAttackTarget() && getRNG().nextDouble() > 0.6) {
-			v = getAttackTarget().getPositionVector().subtract(v).addVector(0,0.5,0);
-		} else {
-			v = pre.getPositionVector().subtract(v);
-			v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
-			if(getRNG().nextBoolean()) {
-				v = VectorUtil.rotateVectorAroundY(v, 45);
-				int angle = getRNG().nextInt(61);
-				v = VectorUtil.rotateVectorAroundY(v, angle);
-			} else {
-				v = VectorUtil.rotateVectorAroundY(v, -45);
-				int angle = -getRNG().nextInt(61);
-				v = VectorUtil.rotateVectorAroundY(v, angle);
+		if(this.dragonBodyParts != null && this.dragonBodyParts.length > 0) {
+			int indx = getRNG().nextInt(this.dragonBodyParts.length);
+			while(this.dragonBodyParts[indx] == null) {
+				indx = getRNG().nextInt(this.dragonBodyParts.length);
 			}
+			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
+			Vec3d v = this.dragonBodyParts[indx].getPositionVector();
+			if(hasAttackTarget() && getRNG().nextDouble() > 0.6) {
+				v = getAttackTarget().getPositionVector().subtract(v).addVector(0,0.5,0);
+			} else {
+				v = pre.getPositionVector().subtract(v);
+				v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
+				if(getRNG().nextBoolean()) {
+					v = VectorUtil.rotateVectorAroundY(v, 45);
+					int angle = getRNG().nextInt(61);
+					v = VectorUtil.rotateVectorAroundY(v, angle);
+				} else {
+					v = VectorUtil.rotateVectorAroundY(v, -45);
+					int angle = -getRNG().nextInt(61);
+					v = VectorUtil.rotateVectorAroundY(v, angle);
+				}
+			}
+			
+			
+			v = v.normalize();
+			ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
+			v = v.scale(1.5);
+			proj.motionX = v.x;
+			proj.motionY = v.y;
+			proj.motionZ = v.z;
+			proj.velocityChanged = true;
+			world.spawnEntity(proj);
 		}
-		
-		
-		v = v.normalize();
-		ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
-		v = v.scale(1.5);
-		proj.motionX = v.x;
-		proj.motionY = v.y;
-		proj.motionZ = v.z;
-		proj.velocityChanged = true;
-		world.spawnEntity(proj);
 	}
 
 	public void breatheFire() {
