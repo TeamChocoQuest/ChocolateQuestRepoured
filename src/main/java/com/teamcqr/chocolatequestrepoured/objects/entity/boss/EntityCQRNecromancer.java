@@ -36,11 +36,11 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 400, 40, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 2, 2, new Vec3d(0, 0, 0)));
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 400, 40, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
-		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 400, 40, 40));
-		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 400, 40));
-		this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 400, 40));
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 200, 10, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)));
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 400, 10, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
+		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 400, 10, 100));
+		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 400, 10));
+		this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 400, 10));
 	}
 
 	@Override

@@ -314,7 +314,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.mouthTimer = 10;
 			
 			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
-			velocity = velocity.normalize().scale(0.25);
+			velocity = velocity.normalize().scale(1.5);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, posX + velocity.x, posY + velocity.y, posZ + velocity.z);
 			//proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.motionX = velocity.x;
@@ -409,7 +409,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		this.fireballTimer--;
 		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
-			this.fireballTimer = 240;
+			this.fireballTimer = 80;
 			handleSpitFireBall();
 		}
 		
@@ -444,7 +444,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 		v = v.normalize();
 		ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
-		v = v.scale(0.75);
+		v = v.scale(1.5);
 		proj.motionX = v.x;
 		proj.motionY = v.y;
 		proj.motionZ = v.z;
@@ -461,7 +461,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		flameStartPos = flameStartPos.addVector(0,this.height /2, 0);
 		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
-		double MAX_LENGTH = 12;
+		double MAX_LENGTH = 24;
 		double angle = ANGLE_MAX / MAX_LENGTH;
 		double dY = -0.05;
 		v = VectorUtil.rotateVectorAroundY(v, -(ANGLE_MAX/2));
@@ -773,17 +773,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		} 
 	}
 	
-	private void dropExperience(int p_184668_1_, double x, double y, double z)
-    {
-        while (p_184668_1_ > 0)
-        {
-            int i = EntityXPOrb.getXPSplit(p_184668_1_);
-            p_184668_1_ -= i;
-            EntityXPOrb xp = new EntityXPOrb(this.world, x, y, z, i);
-            xp.setEntityInvulnerable(true);
-            this.world.spawnEntity(xp);
-        }
-    }
+	private void dropExperience(int p_184668_1_, double x, double y, double z) {
+		while (p_184668_1_ > 0)
+		{
+		    int i = EntityXPOrb.getXPSplit(p_184668_1_);
+		    p_184668_1_ -= i;
+		    EntityXPOrb xp = new EntityXPOrb(this.world, x, y, z, i);
+		    xp.setEntityInvulnerable(true);
+		    this.world.spawnEntity(xp);
+		}
+	    }
 
 	public int getSegmentCount() {
 		return this.segmentCount;
