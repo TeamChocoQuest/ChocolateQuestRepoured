@@ -67,6 +67,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 			}
 		} 
 		this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, true);
+		setDead();
 	}
 
 }
