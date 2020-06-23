@@ -43,9 +43,9 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 		this.defaultCeiling = true;
 
-		this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endX = ROOMS_LONG * sideLength; //1 wall space in between them
 		this.lenX = this.endX + 1;
-		this.endZ = ROOMS_SHORT * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endZ = ROOMS_SHORT * sideLength - 1;
 		this.lenZ = this.endZ + 1;
 
 		this.stairOpeningXStartIdx = sideLength - 2;

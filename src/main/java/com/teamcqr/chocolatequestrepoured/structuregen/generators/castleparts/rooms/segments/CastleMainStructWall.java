@@ -123,15 +123,20 @@ public class CastleMainStructWall {
 
         Optional<RoomGridCell> neighbor1 = getAdjacentCell(checkSide1);
         Optional<RoomGridCell> neighbor2 = getAdjacentCell(checkSide2);
+
         boolean neighbor1Populated = false;
         boolean neighbor1IsRoof = false;
+        boolean neighbor1IsBoss = false;
+
         boolean neighbor2Populated = false;
         boolean neighbor2IsRoof = false;
+        boolean neighbor2IsBoss = false;
 
         if (neighbor1.isPresent()) {
             neighbor1Populated = neighbor1.get().isPopulated();
             if (neighbor1Populated) {
                 neighbor1IsRoof = neighbor1.get().getRoom().isWalkableRoof();
+                neighbor1IsBoss = neighbor1.get().isBossArea();
             }
         }
 
@@ -139,10 +144,13 @@ public class CastleMainStructWall {
             neighbor2Populated = neighbor2.get().isPopulated();
             if (neighbor2Populated) {
                 neighbor2IsRoof = neighbor2.get().getRoom().isWalkableRoof();
+                neighbor2IsBoss = neighbor2.get().isBossArea();
             }
         }
 
-        if (neighbor1Populated && neighbor2Populated) {
+        if (neighbor1IsBoss || neighbor2IsBoss) {
+            this.disable();
+        } else if (neighbor1Populated && neighbor2Populated) {
             if (neighbor1.get().isConnectedToCell(neighbor2.get())) {
                 //if rooms are connected then there should be no wall between them
                 this.disable();

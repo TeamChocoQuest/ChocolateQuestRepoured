@@ -340,6 +340,7 @@ public class CastleRoomSelector {
 			} else {
 				tower = new CastleRoomTowerSquare(this.roomSize, this.floorHeight, alignment, roomSize, tower, cell.getFloor());
 				cell.setRoom(tower);
+				/*
 				for (EnumFacing side : EnumFacing.HORIZONTALS) {
 					if (grid.adjacentCellIsPopulated(cell, side)) {
 						cell.addInnerWall(side);
@@ -347,7 +348,7 @@ public class CastleRoomSelector {
 					else {
 						cell.addOuterWall(side);
 					}
-				}
+				} */
 			}
 		}
 
@@ -355,9 +356,6 @@ public class CastleRoomSelector {
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
 			cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
-			for (EnumFacing side : EnumFacing.HORIZONTALS) {
-					cell.addRoofEdgeWall(side);
-			}
 		}
 	}
 
@@ -531,7 +529,7 @@ public class CastleRoomSelector {
 						RoomGridCell roofCell = this.grid.getCellAt(emptyRoomPos);
 						CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(this.roomSize, this.floorHeight, emptyRoomPos.getFloor());
 						roofCell.setRoom(emptyRoom);
-						bossCell.setBossRoomCell();
+						roofCell.setBossRoomCell();
 					}
 				}
 
