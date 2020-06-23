@@ -409,7 +409,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		this.fireballTimer--;
 		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
-			this.fireballTimer = 80;
+			this.fireballTimer = 15;
 			handleSpitFireBall();
 		}
 		
@@ -431,7 +431,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 		Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
 		Vec3d v = pre.getPositionVector().subtract(this.dragonBodyParts[indx].getPositionVector());
-		v = v.add(new Vec3d(0, 0.125 - (0.25 * getRNG().nextDouble()), 0));
+		v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
 		
 		if(getRNG().nextBoolean()) {
 			v = VectorUtil.rotateVectorAroundY(v, 45);
@@ -857,9 +857,9 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
     public void travel(float strafe, float vertical, float forward)
     {
-        if (this.isInWater())
+        /*if (this.isInWater())
         {
-            this.moveRelative(strafe, vertical, forward, 0.02F);
+            this.moveRelative(strafe, vertical, forward, 0);
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.800000011920929D;
             this.motionY *= 0.800000011920929D;
@@ -867,7 +867,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
         }
         else if (this.isInLava())
         {
-            this.moveRelative(strafe, vertical, forward, 0.02F);
+            this.moveRelative(strafe, vertical, forward, 0);
             this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
             this.motionX *= 0.5D;
             this.motionY *= 0.5D;
@@ -885,7 +885,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
             }
 
             float f1 = 0.16277136F / (f * f * f);
-            this.moveRelative(strafe, vertical, forward, this.onGround ? 0.1F * f1 : 0.02F);
+            this.moveRelative(strafe, vertical, forward, this.onGround ? 0.1F * f1 : 0);
             f = 0.91F;
 
             if (this.onGround)
@@ -899,7 +899,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
             this.motionX *= (double)f;
             this.motionY *= (double)f;
             this.motionZ *= (double)f;
-        }
+        }*/
+		
+		 this.moveRelative(strafe, vertical, forward, 0.02F);
+		 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+         this.motionX *= 0.9;
+         this.motionY *= 0.9;
+         this.motionZ *= 0.9;
 
         this.prevLimbSwingAmount = this.limbSwingAmount;
         double d1 = this.posX - this.prevPosX;
