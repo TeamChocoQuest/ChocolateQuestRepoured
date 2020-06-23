@@ -23,6 +23,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.subparts.EntityCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileHotFireball;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import io.netty.buffer.ByteBuf;
@@ -901,7 +902,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
             this.motionZ *= (double)f;
         }*/
 		
-		 this.moveRelative(strafe, vertical, forward, 0.02F);
+		 /*this.moveRelative(strafe, vertical, forward, 0.02F);
 		 this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
          this.motionX *= 0.9;
          this.motionY *= 0.9;
@@ -918,7 +919,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
         }
 
         this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
-        this.limbSwing += this.limbSwingAmount;
+        this.limbSwing += this.limbSwingAmount;*/
+		EntityUtil.move3D(this, strafe, vertical, forward, getMoveHelper().getSpeed(), rotationYaw, rotationPitch);
+		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
+        this.motionX *= 0.9;
+        this.motionY *= 0.9;
+        this.motionZ *= 0.9;
+		velocityChanged = true;
     }
 
     /**

@@ -15,7 +15,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	@Override
 	protected double getMovementSpeed() {
-		return 4;
+		return 0.3;
 	}
 	
 	@Override

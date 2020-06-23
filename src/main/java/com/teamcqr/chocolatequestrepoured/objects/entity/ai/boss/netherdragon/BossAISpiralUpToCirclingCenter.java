@@ -40,7 +40,7 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 		this.entity.setFlyingUp(true);
 		this.center = new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ());
 		this.targetPos = center.add(v);
-		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, 1.5);
+		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, getSpeed());
 	}
 	
 	@Override
@@ -52,7 +52,11 @@ public class BossAISpiralUpToCirclingCenter extends AbstractCQREntityAI<EntityCQ
 			this.targetPos = center.add(v);
 			//System.out.println("Center: " + center.toString());
 		}
-		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, 1.5);
+		this.entity.getNavigator().tryMoveToXYZ(targetPos.x, targetPos.y, targetPos.z, getSpeed());
+	}
+	
+	private static double getSpeed() {
+		return 0.15;
 	}
 	
 	@Override
