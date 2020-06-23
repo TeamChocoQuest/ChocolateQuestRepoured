@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 
@@ -26,6 +27,8 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 		if ((entity.isDisintegrating() || entity.isReintegrating()) /* && entity.turnInvisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME */) {
 			int ticks = MathHelper.clamp(entity.getInvisibleTicks(), 1, EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME);
 			float f = (float) ticks / (float) EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
+			GlStateManager.pushMatrix();
+			
 			GlStateManager.depthFunc(515);
 			GlStateManager.enableAlpha();
 			GlStateManager.alphaFunc(516, f);
@@ -34,14 +37,24 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 			GlStateManager.alphaFunc(516, 0.1F);
 			GlStateManager.disableAlpha();
 			GlStateManager.depthFunc(514);
+			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			GlStateManager.depthFunc(515);
+			
+			GlStateManager.popMatrix();
+		} else {
+			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		}
-		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-		GlStateManager.depthFunc(515);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRPirateCaptain entity) {
 		return TEXTURES;
+	}
+	
+	@Override
+	public void doRenderShadowAndFire(Entity entityIn, double x, double y, double z, float yaw, float partialTicks) {
+		// TODO Auto-generated method stub
+		super.doRenderShadowAndFire(entityIn, x, y, z, yaw, partialTicks);
 	}
 
 }
