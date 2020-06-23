@@ -431,18 +431,24 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			indx = getRNG().nextInt(this.dragonBodyParts.length);
 		}
 		Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
-		Vec3d v = pre.getPositionVector().subtract(this.dragonBodyParts[indx].getPositionVector());
-		v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
-		
-		if(getRNG().nextBoolean()) {
-			v = VectorUtil.rotateVectorAroundY(v, 45);
-			int angle = getRNG().nextInt(61);
-			v = VectorUtil.rotateVectorAroundY(v, angle);
+		Vec3d v = this.dragonBodyParts[indx].getPositionVector();
+		if(hasAttackTarget() && getRNG().nextDouble() > 0.6) {
+			v = getAttackTarget().getPositionVector().subtract(v).addVector(0,0.5,0);
 		} else {
-			v = VectorUtil.rotateVectorAroundY(v, -45);
-			int angle = -getRNG().nextInt(61);
-			v = VectorUtil.rotateVectorAroundY(v, angle);
+			v = pre.getPositionVector().subtract(v);
+			v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
+			if(getRNG().nextBoolean()) {
+				v = VectorUtil.rotateVectorAroundY(v, 45);
+				int angle = getRNG().nextInt(61);
+				v = VectorUtil.rotateVectorAroundY(v, angle);
+			} else {
+				v = VectorUtil.rotateVectorAroundY(v, -45);
+				int angle = -getRNG().nextInt(61);
+				v = VectorUtil.rotateVectorAroundY(v, angle);
+			}
 		}
+		
+		
 		v = v.normalize();
 		ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
 		v = v.scale(1.5);
