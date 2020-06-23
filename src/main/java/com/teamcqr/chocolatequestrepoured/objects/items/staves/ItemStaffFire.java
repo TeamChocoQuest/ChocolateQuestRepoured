@@ -158,7 +158,7 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 20;
+		return 60;
 	}
 
 	@Override
