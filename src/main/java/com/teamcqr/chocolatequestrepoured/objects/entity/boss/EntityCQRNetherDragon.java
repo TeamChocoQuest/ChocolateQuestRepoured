@@ -411,11 +411,11 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.fireballTimer--;
 		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
 			this.fireballTimer = 15;
-			handleSpitFireBall();
+			shootFireballFromBody();
 		}
 		
 		if(this.dataManager.get(SPIT_FIRE)) {
-			handleFireBreath();
+			breatheFire();
 		}
 
 	}
@@ -425,7 +425,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		return super.getAttackReach(target) * INITIAL_SEGMENT_COUNT;
 	}
 
-	private void handleSpitFireBall() {
+	public void shootFireballFromBody() {
 		int indx = getRNG().nextInt(this.dragonBodyParts.length);
 		while(this.dragonBodyParts[indx] == null) {
 			indx = getRNG().nextInt(this.dragonBodyParts.length);
@@ -459,7 +459,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		world.spawnEntity(proj);
 	}
 
-	private void handleFireBreath() {
+	public void breatheFire() {
 		double motionX, motionZ;
 		Vec3d look = this.getLookVec();
 		motionX = look.x;
