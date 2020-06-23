@@ -108,7 +108,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 100;
+		return 40;
 	}
 
 	@Override
