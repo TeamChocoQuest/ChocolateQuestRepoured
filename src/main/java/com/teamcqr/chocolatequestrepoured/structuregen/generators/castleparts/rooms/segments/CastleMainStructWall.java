@@ -12,6 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
+import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
@@ -58,7 +59,6 @@ public class CastleMainStructWall {
         return this.origin;
     }
 
-
     public void enable()
     {
         this.enabled = true;
@@ -87,6 +87,62 @@ public class CastleMainStructWall {
 
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public void determineIfEnabled() {
+        EnumFacing checkSide1;
+        EnumFacing checkSide2;
+
+        if (this.orientation == WallOrientation.HORIZONTAL) {
+            checkSide1 = EnumFacing.NORTH;
+            checkSide2 = EnumFacing.SOUTH;
+        } else {
+            checkSide1 = EnumFacing.WEST;
+            checkSide2 = EnumFacing.EAST;
+        }
+
+        Optional<RoomGridCell> neighbor1 = getAdjacentCell(checkSide1);
+        Optional<RoomGridCell> neighbor2 = getAdjacentCell(checkSide2);
+        boolean neighbor1Populated = false;
+        boolean neighbor1IsRoof = false;
+        boolean neighbor2Populated = false;
+        boolean neighbor2IsRoof = false;
+
+        if (neighbor1.isPresent()) {
+            neighbor1Populated = neighbor1.get().isPopulated();
+            if (neighbor1Populated) {
+                neighbor1IsRoof = neighbor1.get().getRoom().isWalkableRoof();
+            }
+        }
+
+        if (neighbor2.isPresent()) {
+            neighbor2Populated = neighbor2.get().isPopulated();
+            if (neighbor2Populated) {
+                neighbor2IsRoof = neighbor2.get().getRoom().isWalkableRoof();
+            }
+        }
+
+        if (neighbor1Populated && neighbor2Populated) {
+            if (neighbor1.get().isConnectedToCell(neighbor2.get())) {
+                //if rooms are connected then there should be no wall between them
+                this.disable();
+            }
+            else if (neighbor1IsRoof && neighbor2IsRoof) {
+                //no walls between roof tiles either
+                this.disable();
+            } else {
+                this.enable();
+                this.setAsInnerWall();
+            }
+        } else if (neighbor1Populated || neighbor2Populated) {
+            this.enable();
+            this.setAsOuterWall();
+            if (neighbor1IsRoof || neighbor2IsRoof) {
+                this.setAsRoofEdge();
+            }
+        } else {
+            this.disable();
+        }
     }
 
     public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {

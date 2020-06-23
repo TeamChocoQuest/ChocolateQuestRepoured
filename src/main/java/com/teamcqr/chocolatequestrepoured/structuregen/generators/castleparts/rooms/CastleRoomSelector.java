@@ -945,6 +945,7 @@ public class CastleRoomSelector {
 	}
 
 	private void determineWalls() {
+		/*
 		ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.isBossArea());
 		for (RoomGridCell cell : cells) {
 			if (cell.getRoom() instanceof CastleRoomWalkableRoof) {
@@ -952,6 +953,10 @@ public class CastleRoomSelector {
 			} else {
 				this.determineNormalRoomWalls(cell);
 			}
+		}
+		 */
+		for (CastleMainStructWall wall : this.grid.getWallListCopy()) {
+			wall.determineIfEnabled();
 		}
 	}
 
