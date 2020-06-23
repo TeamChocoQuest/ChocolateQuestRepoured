@@ -59,15 +59,6 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
     }
 
     @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
-    }
-
-    @Override
     boolean shouldBuildEdgeDecoration() {
         return false;
     }

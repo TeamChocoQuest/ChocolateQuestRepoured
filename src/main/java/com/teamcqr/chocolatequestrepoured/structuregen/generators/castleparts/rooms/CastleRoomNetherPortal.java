@@ -84,14 +84,6 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
         return dungeon.getMainBlockState();
     }
 
-    @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
-    }
 
     @Override
     boolean shouldBuildEdgeDecoration() {

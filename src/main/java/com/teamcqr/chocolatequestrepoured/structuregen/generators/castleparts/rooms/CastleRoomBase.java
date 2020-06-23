@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.DoorPlacement;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -63,7 +62,7 @@ public abstract class CastleRoomBase {
 	}
 
 	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		this.setupDecoration(genArray);
+		this.setupDecoration(genArray, dungeon);
 		this.generateRoom(castleOrigin, genArray, dungeon);
 		//this.generateWalls(genArray, dungeon);
 
@@ -171,65 +170,61 @@ public abstract class CastleRoomBase {
 	}
 
 
-	protected void setupDecoration(BlockStateGenArray genArray) {
+	protected void setupDecoration(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.possibleDecoPositions = new HashSet<>(this.getDecorationArea());
-		this.setDoorAreasToAir(genArray);
+		this.setDoorAndWindowAreasToAir(genArray, dungeon);
 	}
 
-	protected void setDoorAreasToAir(BlockStateGenArray genArray) {
-		BlockPos toAdd;
-		BlockPos topLeft = this.getDecorationStartPos();
-		int xStart = topLeft.getX();
-		int zStart = topLeft.getZ();
-		int xEnd = xStart + (this.getDecorationLengthX() - 1);
-		int zEnd = zStart + (this.getDecorationLengthZ() - 1);
-		int yStart = topLeft.getY();
+	protected void setDoorAndWindowAreasToAir(BlockStateGenArray genArray, DungeonCastle dungeon) {
+		BlockPos northStart = this.getDecorationStartPos();
+		BlockPos westStart = this.getDecorationStartPos();
+		BlockPos eastStart = this.getDecorationStartPos().add((this.getDecorationLengthX() - 1), 0, 0);
+		BlockPos southStart = this.getDecorationStartPos().add(0, 0, (this.getDecorationLengthZ() - 1));
 
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
-			DoorPlacement placement = null;
+			CastleMainStructWall wall = this.walls.get(side);
 
-			//TODO: Always null for now while I refactor, but should eventually pull from wall map
-			if (placement != null) {
-				final int doorStart;
-				final int doorEnd;
-				final int yEnd = yStart + placement.getHeight() - 1;
-
+			if (wall != null)
+			{
+				BlockPos decoPos;
 				if (side.getAxis() == EnumFacing.Axis.Z) {
-					doorStart = this.roomOrigin.getX() + placement.getOffset();
-					doorEnd = doorStart + placement.getWidth() - 1;
-
-					int z;
-					if (side == EnumFacing.NORTH) {
-						z = zStart;
-					} else // SOUTH
-					{
-						z = zEnd;
-					}
-					for (int x = doorStart; x <= doorEnd; x++) {
-						for (int y = yStart; y < yEnd; y++) {
-							toAdd = new BlockPos(x, y, z);
-							this.usedDecoPositions.add(toAdd);
+					for (int x = 0; x < this.getDecorationLengthX(); x++) {
+						for (int y = 0; y < this.getDecorationLengthY(); y++)
+						{
+							final int offsetAlongWall = x + 1;
+							final int offsetUpWall = (this.hasFloor()) ? y + 1 : y;
+							if (wall.offsetIsDoorOrWindow(offsetAlongWall, offsetUpWall, dungeon)) {
+								if (side == EnumFacing.NORTH) {
+									decoPos = northStart.add(x, y, 0);
+								} else {
+									decoPos = southStart.add(x, y, 0);
+								}
+								this.usedDecoPositions.add(decoPos);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+							}
 						}
 					}
-				} else {
-					doorStart = this.roomOrigin.getZ() + placement.getOffset();
-					doorEnd = doorStart + placement.getWidth() - 1;
-
-					int x;
-					if (side == EnumFacing.WEST) {
-						x = xStart;
-					} else // SOUTH
-					{
-						x = xEnd;
-					}
-					for (int z = doorStart; z <= doorEnd; z++) {
-						for (int y = yStart; y < yEnd; y++) {
-							toAdd = new BlockPos(x, y, z);
-							this.usedDecoPositions.add(toAdd);
+				}
+				else {
+					for (int z = 0; z < this.getDecorationLengthZ(); z++) {
+						for (int y = 0; y < this.getDecorationLengthY(); y++)
+						{
+							final int offsetAlongWall = z + 1;
+							final int offsetUpWall = (this.hasFloor()) ? y + 1 : y;
+							if (wall.offsetIsDoorOrWindow(offsetAlongWall, offsetUpWall, dungeon)) {
+								if (side == EnumFacing.WEST) {
+									decoPos = westStart.add(0, y, z);
+								} else {
+									decoPos = eastStart.add(0, y, z);
+								}
+								this.usedDecoPositions.add(decoPos);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+							}
 						}
 					}
 				}
 			}
+
 		}
 	}
 

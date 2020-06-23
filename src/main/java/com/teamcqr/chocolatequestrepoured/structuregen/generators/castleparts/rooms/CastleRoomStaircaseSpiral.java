@@ -32,8 +32,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
-		for (int x = 0; x < this.buildLengthX - 1; x++) {
-			for (int z = 0; z < this.buildLengthZ - 1; z++) {
+		for (int x = 0; x < getDecorationLengthX(); x++) {
+			for (int z = 0; z < getDecorationLengthZ(); z++) {
 				for (int y = 0; y < this.height; y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getInteriorBuildStart().add(x, y, z);

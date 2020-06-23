@@ -45,8 +45,8 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 		BlockPos pos;
 		IBlockState blockToBuild;
 
-		for (int x = 0; x < this.buildLengthX - 1; x++) {
-			for (int z = 0; z < this.buildLengthX - 1; z++) {
+		for (int x = 0; x < getDecorationLengthX(); x++) {
+			for (int z = 0; z < getDecorationLengthZ(); z++) {
 				for (int y = 0; y < this.height; y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getNonWallStartPos().add(x, y, z);

@@ -19,15 +19,14 @@ import java.util.Optional;
 import java.util.Random;
 
 public class CastleMainStructWall {
-    private final int length;
-    private final int height;
-    private RandomCastleConfigOptions.WindowType windowType = RandomCastleConfigOptions.WindowType.BASIC_GLASS;
-
     public enum WallOrientation {
         HORIZONTAL,
         VERTICAL
     }
 
+    private final int length;
+    private final int height;
+    private RandomCastleConfigOptions.WindowType windowType = RandomCastleConfigOptions.WindowType.BASIC_GLASS;
     private boolean enabled = false;
     private boolean isOuterWall = false;
     private boolean isRoofEdge = false;
@@ -89,6 +88,10 @@ public class CastleMainStructWall {
     public boolean isEnabled() {
         return enabled;
     }
+
+    public boolean isVertical() { return this.orientation == WallOrientation.VERTICAL; }
+
+    public boolean isHorizontal() { return this.orientation == WallOrientation.HORIZONTAL; }
 
     public int getGenerationPriority() {
         if (this.enabled) {
@@ -194,6 +197,16 @@ public class CastleMainStructWall {
         } else {
             return dungeon.getMainBlockState();
         }
+    }
+
+    public boolean offsetIsDoorOrWindow(int distAlongWall, int heightOnWall, DungeonCastle dungeon) {
+        //Determine the relative offset within the wall given the distance and height
+        int xDist = (this.orientation == WallOrientation.HORIZONTAL) ? distAlongWall : 0;
+        int zDist = (this.orientation == WallOrientation.VERTICAL) ? distAlongWall : 0;
+        BlockPos wallPosition = this.origin.add(xDist, heightOnWall, zDist);
+
+        //Consider this a door/window block if it is anything other then a regular castle block
+        return (getBlockToBuild(wallPosition, dungeon)) != dungeon.getMainBlockState();
     }
 
     private IBlockState getRoofEdgeBlock(BlockPos pos, DungeonCastle dungeon) {

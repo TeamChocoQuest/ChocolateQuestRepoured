@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -54,15 +53,6 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
             default:
                 break;
         }
-    }
-
-    @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
     }
 
     @Override

@@ -38,8 +38,6 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
 
     @Override
     public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
-        this.setupDecoration(genArray);
-
         if (this.shouldBuildEdgeDecoration()) {
             this.addEdgeDecoration(world, genArray, dungeon);
         }
