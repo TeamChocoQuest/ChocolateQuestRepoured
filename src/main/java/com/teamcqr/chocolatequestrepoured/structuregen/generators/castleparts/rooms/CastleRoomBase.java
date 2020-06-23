@@ -325,9 +325,6 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-	//TODO: fill out method stub
-	protected boolean hasWallOnSide(EnumFacing side) { return true; }
-
 	protected boolean hasFloor() {
 		return true;
 	}
@@ -391,6 +388,14 @@ public abstract class CastleRoomBase {
 
 	public boolean isWalkableRoof() {
 		return (this.roomType == EnumRoomType.WALKABLE_ROOF || this.roomType == EnumRoomType.WALKABLE_TOWER_ROOF);
+	}
+
+	public boolean isReplacedRoof() {
+		return this.roomType == EnumRoomType.REPLACED_ROOF;
+	}
+
+	public boolean isBossLanding() {
+		return (this.roomType == EnumRoomType.LANDING_BOSS);
 	}
 
 	public void setRoomsInBlock(ArrayList<CastleRoomBase> rooms) {

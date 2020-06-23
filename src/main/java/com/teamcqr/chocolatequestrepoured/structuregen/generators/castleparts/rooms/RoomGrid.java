@@ -805,7 +805,6 @@ public class RoomGrid {
 		RoomGridCell adjacent = this.getAdjacentCell(cell, side);
 
 		return (!cell.getRoom().isTower() &&
-				//!cell.getRoom().hasDoorOnSide(side) &&
 				adjacent != null && !(adjacent.isPopulated() &&
 				!cell.getRoom().isStairsOrLanding()));
 	}

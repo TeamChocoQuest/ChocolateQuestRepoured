@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.RoomGridCell;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockDoor;
@@ -13,7 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import scala.Int;
 
-import javax.swing.text.html.Option;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Random;
@@ -125,37 +125,66 @@ public class CastleMainStructWall {
         Optional<RoomGridCell> neighbor2 = getAdjacentCell(checkSide2);
 
         boolean neighbor1Populated = false;
-        boolean neighbor1IsRoof = false;
+        boolean neighbor1IsWalkableRoof = false;
+        boolean neighbor1IsNormalRoof = false;
+        boolean neighbor1IsPreBoss = false;
         boolean neighbor1IsBoss = false;
 
         boolean neighbor2Populated = false;
-        boolean neighbor2IsRoof = false;
+        boolean neighbor2IsWalkableRoof = false;
+        boolean neighbor2IsNormalRoof = false;
+        boolean neighbor2IsPreBoss = false;
         boolean neighbor2IsBoss = false;
 
         if (neighbor1.isPresent()) {
             neighbor1Populated = neighbor1.get().isPopulated();
             if (neighbor1Populated) {
-                neighbor1IsRoof = neighbor1.get().getRoom().isWalkableRoof();
+                neighbor1IsWalkableRoof = neighbor1.get().getRoom().isWalkableRoof();
+                neighbor1IsNormalRoof = neighbor1.get().getRoom().isReplacedRoof();
                 neighbor1IsBoss = neighbor1.get().isBossArea();
+                neighbor1IsPreBoss = neighbor1.get().getRoom().isBossLanding();
             }
         }
 
         if (neighbor2.isPresent()) {
             neighbor2Populated = neighbor2.get().isPopulated();
             if (neighbor2Populated) {
-                neighbor2IsRoof = neighbor2.get().getRoom().isWalkableRoof();
+                neighbor2IsWalkableRoof = neighbor2.get().getRoom().isWalkableRoof();
+                neighbor2IsNormalRoof = neighbor2.get().getRoom().isReplacedRoof();
                 neighbor2IsBoss = neighbor2.get().isBossArea();
+                neighbor2IsPreBoss = neighbor2.get().getRoom().isBossLanding();
             }
         }
 
-        if (neighbor1IsBoss || neighbor2IsBoss) {
+        if (neighbor1IsNormalRoof || neighbor2IsNormalRoof) {
             this.disable();
+        } else if (neighbor1IsBoss || neighbor2IsBoss) {
+            if (neighbor1IsBoss && neighbor2IsPreBoss) {
+                this.enable();
+                this.setAsInnerWall();
+                if (neighbor2.get().getRoom() instanceof CastleRoomBossLandingMain) {
+                    this.addDoorCentered(EnumCastleDoorType.BOSS_HALF_1, new Random());
+                } else {
+                    this.addDoorCentered(EnumCastleDoorType.BOSS_HALF_2, new Random());
+                }
+            } else if (neighbor2IsBoss && neighbor1IsPreBoss) {
+                this.enable();
+                this.setAsInnerWall();
+                if (neighbor1.get().getRoom() instanceof CastleRoomBossLandingMain) {
+                    this.addDoorCentered(EnumCastleDoorType.BOSS_HALF_1, new Random());
+                } else {
+                    this.addDoorCentered(EnumCastleDoorType.BOSS_HALF_2, new Random());
+                }
+            }
+            else {
+                this.disable();
+            }
         } else if (neighbor1Populated && neighbor2Populated) {
             if (neighbor1.get().isConnectedToCell(neighbor2.get())) {
                 //if rooms are connected then there should be no wall between them
                 this.disable();
             }
-            else if (neighbor1IsRoof && neighbor2IsRoof) {
+            else if (neighbor1IsWalkableRoof && neighbor2IsWalkableRoof) {
                 //no walls between roof tiles either
                 this.disable();
             } else {
@@ -165,7 +194,7 @@ public class CastleMainStructWall {
         } else if (neighbor1Populated || neighbor2Populated) {
             this.enable();
             this.setAsOuterWall();
-            if (neighbor1IsRoof || neighbor2IsRoof) {
+            if (neighbor1IsWalkableRoof || neighbor2IsWalkableRoof) {
                 this.setAsRoofEdge();
             }
         } else {
@@ -198,11 +227,11 @@ public class CastleMainStructWall {
     protected IBlockState getBlockToBuild(BlockPos pos, DungeonCastle dungeon) {
         if (this.isRoofEdge) {
             return this.getRoofEdgeBlock(pos, dungeon);
-        } else if (this.isOuterWall) {
-            return this.getWindowBlock(pos, dungeon);
         } else if (this.hasDoor()) {
             return this.getDoorBlock(pos, dungeon);
-        } else {
+        } else if (this.isOuterWall) {
+            return this.getWindowBlock(pos, dungeon);
+        }  else {
             return dungeon.getMainBlockState();
         }
     }
@@ -229,10 +258,48 @@ public class CastleMainStructWall {
         }
     }
 
+    private IBlockState getBlockDoorBossHalf1(BlockPos pos, DungeonCastle dungeon) {
+        IBlockState blockToBuild = dungeon.getMainBlockState();
+        int y = pos.getY() - this.origin.getY();
+        int dist = this.getLengthPoint(pos);
+
+        if (dist > 2) {
+            if (y == 0) {
+                blockToBuild = dungeon.getMainBlockState();
+            } else if (y < this.height - 1) {
+                blockToBuild = Blocks.AIR.getDefaultState();
+            }
+        }
+
+        return blockToBuild;
+    }
+
+    private IBlockState getBlockDoorBossHalf2(BlockPos pos, DungeonCastle dungeon) {
+        IBlockState blockToBuild = dungeon.getMainBlockState();
+        int y = pos.getY() - this.origin.getY();
+        int dist = this.getLengthPoint(pos);
+
+        if (dist < (length - 3)) {
+            if (y == 0) {
+                blockToBuild = dungeon.getMainBlockState();
+            } else if (y < this.height - 1) {
+                blockToBuild = Blocks.AIR.getDefaultState();
+            }
+        }
+
+        return blockToBuild;
+    }
+
     protected IBlockState getDoorBlock(BlockPos pos, DungeonCastle dungeon) {
         switch (this.doorType) {
             case AIR:
                 return this.getBlockDoorAir(pos, dungeon);
+
+            case BOSS_HALF_1:
+                return this.getBlockDoorBossHalf1(pos, dungeon);
+
+            case BOSS_HALF_2:
+                return this.getBlockDoorBossHalf2(pos, dungeon);
 
             case STANDARD:
                 return this.getBlockDoorStandard(pos, dungeon);

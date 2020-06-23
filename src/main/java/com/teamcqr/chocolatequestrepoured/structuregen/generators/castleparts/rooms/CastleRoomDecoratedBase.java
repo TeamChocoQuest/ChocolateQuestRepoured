@@ -68,7 +68,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected void addEdgeDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
         if (this.decoSelector.edgeDecorRegistered()) {
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
-                if (this.hasWallOnSide(side)) {
+                if (this.walls.containsKey(side)) {
                     ArrayList<BlockPos> edge = this.getDecorationEdge(side);
                     for (BlockPos pos : edge) {
                         if (this.usedDecoPositions.contains(pos)) {
@@ -164,7 +164,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         int torchPercent = LIGHT_LEVEL * 3;
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (this.hasWallOnSide(side)) {
+            if (this.walls.containsKey(side)) {
                 ArrayList<BlockPos> edge = this.getWallDecorationEdge(side);
                 for (BlockPos pos : edge) {
                     if (this.usedDecoPositions.contains(pos)) {

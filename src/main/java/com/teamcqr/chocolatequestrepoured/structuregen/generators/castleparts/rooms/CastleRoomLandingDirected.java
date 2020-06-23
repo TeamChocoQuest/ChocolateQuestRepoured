@@ -31,8 +31,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 
 		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially
 		//generating a room facing south and then rotating it
-		int lenX = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthX : this.buildLengthZ;
-		int lenZ = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthZ : this.buildLengthX;
+		int lenX = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthX() : this.getDecorationLengthZ();
+		int lenZ = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthZ() : this.getDecorationLengthX();
 
 		for (int x = 0; x < lenX - 1; x++) {
 			for (int z = 0; z < lenZ - 1; z++) {

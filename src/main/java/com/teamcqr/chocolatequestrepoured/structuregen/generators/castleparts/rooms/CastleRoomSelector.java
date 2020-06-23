@@ -165,12 +165,12 @@ public class CastleRoomSelector {
 	}
 
 	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (CastleAddonRoof roof : this.castleRoofs) {
-			roof.generate(genArray, dungeon);
-		}
-
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
 			cell.generateRoom(startPos, genArray, dungeon);
+		}
+
+		for (CastleAddonRoof roof : this.castleRoofs) {
+			roof.generate(genArray, dungeon);
 		}
 	}
 
@@ -340,15 +340,6 @@ public class CastleRoomSelector {
 			} else {
 				tower = new CastleRoomTowerSquare(this.roomSize, this.floorHeight, alignment, roomSize, tower, cell.getFloor());
 				cell.setRoom(tower);
-				/*
-				for (EnumFacing side : EnumFacing.HORIZONTALS) {
-					if (grid.adjacentCellIsPopulated(cell, side)) {
-						cell.addInnerWall(side);
-					}
-					else {
-						cell.addOuterWall(side);
-					}
-				} */
 			}
 		}
 
@@ -539,7 +530,7 @@ public class CastleRoomSelector {
 				if (snapToSide == EnumFacing.NORTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
 					int x = distFromEdge / 2;
-					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
+					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 1));
 				} else if (snapToSide == EnumFacing.WEST) {
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
 					int z = distFromEdge / 2;
@@ -632,11 +623,11 @@ public class CastleRoomSelector {
 
 	private void placeOuterDoors() {
 		// Start at first floor since ground floor gets the grand entrance
-		for (int floor = 1; floor < this.usedFloors; floor += this.floorsPerLayer) {
+		for (int floor = 0; floor < this.usedFloors; floor += this.floorsPerLayer) {
 			HashSet<EnumFacing> doorDirections = new HashSet<>(); // Sides of this floor that already have exits
 
 			final int f = floor;
-			ArrayList<RoomGridCell> floorRooms = this.grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated() && !(r.getRoom() instanceof CastleRoomWalkableRoof) && !r.getRoom().isTower());
+			ArrayList<RoomGridCell> floorRooms = this.grid.getAllCellsWhere(r -> r.getFloor() == f && r.isPopulated() && !r.getRoom().isTower() && !r.getRoom().isWalkableRoof());
 			Collections.shuffle(floorRooms);
 
 			for (RoomGridCell cell : floorRooms) {
@@ -652,7 +643,11 @@ public class CastleRoomSelector {
 
 						if (buildExit) {
 							doorDirections.add(side);
-							cell.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
+							if (floor == 0) {
+								cell.addDoorOnSideCentered(side, EnumCastleDoorType.GRAND_ENTRY, this.random);
+							} else {
+								cell.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
+							}
 							break;
 						}
 					}
@@ -678,17 +673,6 @@ public class CastleRoomSelector {
 						hallwayCell.setRoom(new CastleRoomHallway(this.roomSize, this.floorHeight, CastleRoomHallway.Alignment.HORIZONTAL, hallwayCell.getFloor()));
 					}
 
-					if (floor == 0) {
-						if (this.random.nextBoolean()) {
-							hallwayCells.get(0).addOuterWall(EnumFacing.WEST);
-							hallwayCells.get(0).addDoorOnSideCentered(EnumFacing.WEST, EnumCastleDoorType.GRAND_ENTRY, random);
-							hallwayCells.get(0).setReachable();
-						} else {
-							hallwayCells.get(hallwayCells.size() - 1).addOuterWall(EnumFacing.EAST);
-							hallwayCells.get(hallwayCells.size() - 1).addDoorOnSideCentered(EnumFacing.EAST, EnumCastleDoorType.GRAND_ENTRY, random);
-							hallwayCells.get(hallwayCells.size() - 1).setReachable();
-						}
-					}
 				} else {
 					int xIndex = DungeonGenUtils.randomBetweenGaussian(this.random, hallwayArea.getStartX(), hallwayArea.getEndX());
 
@@ -1014,6 +998,7 @@ public class CastleRoomSelector {
 				this.addRoofFromRoofArea(roofArea);
 				for (RoomGridPosition areaPos : roofArea.getPositionList()) {
 					roofCells.remove(this.grid.getCellAt(areaPos));
+					this.grid.getCellAt(areaPos).setRoom(new CastleRoomReplacedRoof(this.roomSize, this.floorHeight, areaPos.getFloor()));
 				}
 			}
 		}

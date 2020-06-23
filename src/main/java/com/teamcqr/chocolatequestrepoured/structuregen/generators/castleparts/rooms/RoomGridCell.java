@@ -270,16 +270,6 @@ public class RoomGridCell {
         }
     }
 
-    public boolean hasWallOnSide(EnumFacing side)
-    {
-        if (walls.containsKey(side)) {
-            return walls.get(side).isEnabled();
-        }
-        else {
-            return false;
-        }
-    }
-
     public void addDoorOnSideCentered(EnumFacing side, EnumCastleDoorType type, Random random) {
         if (walls.containsKey(side)) {
             walls.get(side).addDoorCentered(type, random);

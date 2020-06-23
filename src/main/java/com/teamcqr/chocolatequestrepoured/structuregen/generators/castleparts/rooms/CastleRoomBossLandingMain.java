@@ -69,7 +69,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 
 		for (int x = 0; x <= this.endX; x++) {
 			for (int y = 0; y < this.height; y++) {
-				for (int z = -1; z <= this.endZ; z++) {
+				for (int z = 0; z <= this.endZ; z++) {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
@@ -86,7 +86,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private IBlockState getBlockToBuild(DungeonCastle dungeon, int x, int y, int z) {
 		IBlockState blockToBuild = Blocks.AIR.getDefaultState();
 
-		if (z == -1) {
+		if (z == 0) {
 			if (x < this.connectingWallLength || x > this.endX - this.connectingWallLength || y == this.height - 1) {
 				blockToBuild = dungeon.getMainBlockState();
 			} else if (y == 0) {
