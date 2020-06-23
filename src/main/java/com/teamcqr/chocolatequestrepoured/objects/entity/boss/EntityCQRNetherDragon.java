@@ -330,6 +330,15 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		}
 	}
 	
+	public void setBreathingFireFlag(boolean value) {
+		if(value) {
+			this.mouthTimer = 100;
+		} else {
+			this.mouthTimer = 10;
+		}
+		this.dataManager.set(SPIT_FIRE, value);
+	}
+	
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		if(super.attackEntityAsMob(entityIn)) {

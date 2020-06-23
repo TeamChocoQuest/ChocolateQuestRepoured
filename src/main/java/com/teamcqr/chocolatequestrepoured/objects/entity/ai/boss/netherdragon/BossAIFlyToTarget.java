@@ -46,6 +46,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 			}
 		} else {
 			((EntityCQRNetherDragon)entity).breatheFire();
+			((EntityCQRNetherDragon)entity).setBreathingFireFlag(true);
 		}
 	}
 	
@@ -60,6 +61,9 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	public void resetTask() {
 		super.resetTask();
 		this.aiCooldown = 150;
+		if(breathFire) {
+			((EntityCQRNetherDragon)entity).setBreathingFireFlag(false);
+		}
 		this.breathFire = false;
 		this.entity.setTargetLocation(new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ()));
 	}
