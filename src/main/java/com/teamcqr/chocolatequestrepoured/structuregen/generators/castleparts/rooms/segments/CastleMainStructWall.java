@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import scala.Int;
 
 import javax.swing.text.html.Option;
 import java.util.HashMap;
@@ -89,6 +90,22 @@ public class CastleMainStructWall {
         return enabled;
     }
 
+    public int getGenerationPriority() {
+        if (this.enabled) {
+            if (this.isRoofEdge) {
+                //Roof edges have low priority so they don't replace regular walls with air
+                return 3;
+            } else if (this.isOuterWall) {
+                //Outer walls should go first since we want them all to be uniform
+                return 1;
+            } else {
+                //Everything else (inner walls)
+                return 2;
+            }
+        }
+        return Int.MaxValue();
+    }
+
     public void determineIfEnabled() {
         EnumFacing checkSide1;
         EnumFacing checkSide2;
@@ -162,7 +179,7 @@ public class CastleMainStructWall {
             for (int y = 0; y < this.height; y++) {
                 pos = this.origin.offset(iterDirection, i).offset(EnumFacing.UP, y);
                 blockToBuild = this.getBlockToBuild(pos, dungeon);
-                genArray.forceAddBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+                genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
             }
         }
     }

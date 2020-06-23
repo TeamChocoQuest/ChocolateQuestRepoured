@@ -141,7 +141,9 @@ public class CastleRoomSelector {
 
 	private void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon)
 	{
-		for (CastleMainStructWall wall : this.grid.getWallListCopy()) {
+		List<CastleMainStructWall> genList = this.grid.getWallListCopy();
+		genList.sort(Comparator.comparingInt(CastleMainStructWall::getGenerationPriority));
+		for (CastleMainStructWall wall :genList) {
 			if (wall.isEnabled()) {
 				wall.generate(genArray, dungeon);
 			}
