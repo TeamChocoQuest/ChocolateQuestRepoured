@@ -111,11 +111,11 @@ public class CastleRoomSelector {
 		this.linkCells();
 
 		this.determineRoofs();
-		this.determineWalls();
-
-		this.placeOuterDoors();
 		this.placeTowers();
+
 		//this.placeBridges();
+		this.determineWalls();
+		this.placeOuterDoors();
 
 		this.pathBetweenRooms();
 
@@ -326,10 +326,7 @@ public class CastleRoomSelector {
 		int z = position.getZ();
 		int startFloor = position.getFloor();
 
-		// Randomize the size somewhere between the min tower size and the room size
-		int towerSize = MIN_TOWER_SIZE + this.random.nextInt(this.roomSize - Math.min(MIN_TOWER_SIZE, this.roomSize));
-
-		CQRMain.logger.info("Placing tower at {},{} on floor {} facing {}, size = {}", x, z, startFloor, alignment, towerSize);
+		CQRMain.logger.info("Placing tower at {},{} on floor {} facing {}, size = {}", x, z, startFloor, alignment, roomSize);
 
 		CastleRoomTowerSquare tower = null;
 		RoomGridCell cell = null;
@@ -337,12 +334,18 @@ public class CastleRoomSelector {
 		for (int floor = startFloor; floor < startFloor + height; floor++) {
 			cell = this.grid.getCellAt(floor, x, z);
 			if (cell == null) {
-				CQRMain.logger.info("Tried to place a tower @ null");
+				CQRMain.logger.info("Tried to place a tower @ null cell");
 			} else {
-				tower = new CastleRoomTowerSquare(this.roomSize, this.floorHeight, alignment, towerSize, tower, cell.getFloor());
+				tower = new CastleRoomTowerSquare(this.roomSize, this.floorHeight, alignment, roomSize, tower, cell.getFloor());
 				cell.setRoom(tower);
-				// cell.setAllLinkedReachable();
-
+				for (EnumFacing side : EnumFacing.HORIZONTALS) {
+					if (grid.adjacentCellIsPopulated(cell, side)) {
+						cell.addInnerWall(side);
+					}
+					else {
+						cell.addOuterWall(side);
+					}
+				}
 			}
 		}
 
@@ -350,6 +353,9 @@ public class CastleRoomSelector {
 		if (tower != null && this.grid.withinGridBounds(startFloor + height, x, z)) {
 			cell = this.grid.getCellAt(startFloor + height, x, z);
 			cell.setRoom(new CastleRoomWalkableRoofTower(this.roomSize, this.floorHeight, tower, cell.getFloor()));
+			for (EnumFacing side : EnumFacing.HORIZONTALS) {
+					cell.addRoofEdgeWall(side);
+			}
 		}
 	}
 
@@ -509,6 +515,7 @@ public class CastleRoomSelector {
 				RoomGridCell bossCell = this.grid.getCellAt(rootPos);
 				rootRoom = new CastleRoomRoofBossMain(this.roomSize, this.floorHeight, rootPos.getFloor());
 				bossCell.setRoom(rootRoom);
+				bossCell.setBossRoomCell();
 
 				//Add the empty rooms
 				for (int x = 0; x < this.minRoomsForBoss; x++) {
@@ -522,6 +529,7 @@ public class CastleRoomSelector {
 						RoomGridCell roofCell = this.grid.getCellAt(emptyRoomPos);
 						CastleRoomRoofBossEmpty emptyRoom = new CastleRoomRoofBossEmpty(this.roomSize, this.floorHeight, emptyRoomPos.getFloor());
 						roofCell.setRoom(emptyRoom);
+						bossCell.setBossRoomCell();
 					}
 				}
 
@@ -937,7 +945,7 @@ public class CastleRoomSelector {
 	}
 
 	private void determineWalls() {
-		ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.getRoom().isTower());
+		ArrayList<RoomGridCell> cells = this.grid.getAllCellsWhere(c -> c.isPopulated() && !c.isBossArea());
 		for (RoomGridCell cell : cells) {
 			if (cell.getRoom() instanceof CastleRoomWalkableRoof) {
 				this.determineWalkableRoofWalls(cell);
@@ -1013,14 +1021,11 @@ public class CastleRoomSelector {
 	private void addRoofFromRoofArea(RoomGrid.Area2D roofArea) {
 		RoomGridCell roofStartCell = this.grid.getCellAt(roofArea.start);
 		BlockPos roofStart = roofStartCell.getOriginOffset();
-		if (roofStartCell.getAdjacentWall(EnumFacing.NORTH).isPresent()) {
-			roofStart = roofStartCell.getAdjacentWall(EnumFacing.NORTH).get().getOrigin();
-		}
 
-		// Account for extra wall on N and W sides
+		// Corner should be over the wall so move northwest
 		roofStart = roofStart.north().west();
-		final int sizeX = (roofArea.sizeX * this.roomSize) + 1;
-		final int sizeZ = (roofArea.sizeZ * this.roomSize) + 1;
+		final int sizeX = (roofArea.sizeX * (this.roomSize + 1)) + 1;
+		final int sizeZ = (roofArea.sizeZ * (this.roomSize + 1)) + 1;
 
 		this.castleRoofs.add(new CastleAddonRoof(roofStart, sizeX, sizeZ));
 	}

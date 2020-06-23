@@ -840,11 +840,6 @@ public class RoomGrid {
 
 	public void setBossArea(Area2D area) {
 		this.bossArea = new Area2D(area);
-		for (RoomGridPosition gridPos : area.getPositionList()) {
-			if (this.withinGridBounds(gridPos)) {
-				this.getCellAt(gridPos).setAsBossArea();
-			}
-		}
 	}
 
 	public List<CastleMainStructWall> getWallListCopy() {

@@ -21,25 +21,10 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;
-		this.buildLengthX = towerSize;
-		this.buildLengthZ = towerSize;
 		this.defaultFloor = false;
 		this.defaultCeiling = false;
 		this.pathable = false;
 		this.isTower = true;
-
-		if (connectedSide == EnumFacing.NORTH || connectedSide == EnumFacing.SOUTH) {
-			this.offsetX += (sideLength - this.buildLengthX) / 2;
-			if (connectedSide == EnumFacing.SOUTH) {
-				this.offsetZ += sideLength - this.buildLengthZ;
-			}
-		}
-		if (connectedSide == EnumFacing.WEST || connectedSide == EnumFacing.EAST) {
-			this.offsetZ += (sideLength - this.buildLengthZ) / 2;
-			if (connectedSide == EnumFacing.EAST) {
-				this.offsetX += sideLength - this.buildLengthX;
-			}
-		}
 
 		if (towerBelow != null) {
 			this.firstStairSide = towerBelow.getLastStairSide().rotateY();
@@ -90,16 +75,6 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			result = result.rotateY();
 		}
 		return result;
-	}
-
-	@Override
-	public boolean reachableFromSide(EnumFacing side) {
-		return side == this.connectedSide;
-	}
-
-	@Override
-	public boolean canBuildDoorOnSide(EnumFacing side) {
-		return side == this.connectedSide;
 	}
 
 	@Override

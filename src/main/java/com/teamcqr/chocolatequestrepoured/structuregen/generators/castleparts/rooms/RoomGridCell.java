@@ -220,7 +220,7 @@ public class RoomGridCell {
         return this.gridPosition.getZ();
     }
 
-    public void setAsBossArea() {
+    public void setBossRoomCell() {
         this.isBossArea = true;
     }
 

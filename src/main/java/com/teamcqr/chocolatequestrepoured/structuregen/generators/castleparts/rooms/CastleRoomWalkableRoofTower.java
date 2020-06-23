@@ -26,11 +26,4 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 	{
 		return false;
 	}
-
-	@Override
-	protected BlockPos getNonWallStartPos() {
-		//Normal rooms start their decoration area at (offsetX, 0, offsety)
-		//But towers always have north/west walls, so adjust 1 square for those
-		return super.getNonWallStartPos().add(1, 0, 1);
-	}
 }
