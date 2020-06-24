@@ -844,7 +844,7 @@ public class CastleRoomSelector {
 					{
 						if (srcRoom.getRoom().canBuildDoorOnSide(side))
 						{
-							srcRoom.getRoom().addDoorOnSideCentered(side);
+							srcRoom.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, random);
 						}
 					}
 
