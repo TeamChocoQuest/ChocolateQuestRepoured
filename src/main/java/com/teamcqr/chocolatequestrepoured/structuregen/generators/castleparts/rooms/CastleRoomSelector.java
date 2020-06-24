@@ -529,21 +529,21 @@ public class CastleRoomSelector {
 				EnumFacing snapToSide = stairDoorSide.getOpposite(); //Direction we are moving the room
 				if (snapToSide == EnumFacing.NORTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
-					int x = distFromEdge / 2;
-					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 1));
+					int x = (distFromEdge / 2) + 1;
+					rootRoom.setBossBuildOffset(new Vec3i(x, 0, 0));
 				} else if (snapToSide == EnumFacing.WEST) {
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
-					int z = distFromEdge / 2;
+					int z = (distFromEdge / 2) + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(0, 0, z));
 				} else if (snapToSide == EnumFacing.SOUTH) {
 					int distFromEdge = (bossArea.sizeX * this.roomSize) - rootRoom.getStaticSize();
-					int x = distFromEdge / 2;
-					int z = distFromEdge;
+					int x = (distFromEdge / 2) + 1;
+					int z = distFromEdge + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
 				} else { //east
 					int distFromEdge = (bossArea.sizeZ * this.roomSize) - rootRoom.getStaticSize();
-					int z = distFromEdge / 2;
-					int x = distFromEdge;
+					int z = (distFromEdge / 2) + 1;
+					int x = distFromEdge + 1;
 					rootRoom.setBossBuildOffset(new Vec3i(x, 0, z));
 				}
 			}

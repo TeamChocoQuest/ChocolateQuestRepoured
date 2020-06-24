@@ -156,7 +156,9 @@ public class CastleMainStructWall {
             }
         }
 
-        if (neighbor1IsNormalRoof || neighbor2IsNormalRoof) {
+        if (neighbor1IsNormalRoof && (neighbor2IsWalkableRoof || neighbor2IsBoss || !neighbor2Populated || neighbor2IsNormalRoof)) {
+            this.disable();
+        } else if (neighbor2IsNormalRoof && (neighbor1IsWalkableRoof || neighbor1IsBoss || !neighbor1Populated || neighbor1IsNormalRoof)) {
             this.disable();
         } else if (neighbor1IsBoss || neighbor2IsBoss) {
             if (neighbor1IsBoss && neighbor2IsPreBoss) {
