@@ -89,6 +89,9 @@ public class CQRConfig {
 		@Config.RangeInt(min = 100, max = 100000)
 		public int generationLimit = 20000;
 		public boolean instantLightUpdates = false;
+		
+		@Config.Comment("This enables the protection system, it enables it to be used. Set to false to disable it globally")
+		public boolean protectionSystemFeatureEnabled = true;
 	}
 
 	public static class General {
@@ -149,6 +152,15 @@ public class CQRConfig {
 		public double dropDurabilityMinimum = 0.1D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double dropDurabilityMaximum = 0.5D;
+		public boolean enableEntityStrafing = false;
+		public boolean enableEntityStrafingBoss = true;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double entityStrafingSpeed = 0.5D;
+		@Config.RangeDouble(min = 0.0D, max = 1.0D)
+		public double entityStrafingSpeedBoss = 0.5D;
+		@Config.RangeInt(min=2, max=64)
+		public int looterAIChestSearchRange = 16;
+		public int looterAIStealableItems = 4;
 		
 	}
 	

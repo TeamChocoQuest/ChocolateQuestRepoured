@@ -65,7 +65,9 @@ public class EntityCQRPirateParrot extends EntityParrot {
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		world.createExplosion(this, posX, posY, posZ, 2, true);
+		if(!world.isRemote) {
+			world.createExplosion(this, posX, posY, posZ, 2, true);
+		}
 	}
 	
 	@Override

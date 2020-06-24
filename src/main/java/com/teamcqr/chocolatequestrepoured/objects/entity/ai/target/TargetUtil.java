@@ -73,12 +73,11 @@ public class TargetUtil {
 		return input -> !faction.isAlly(input);
 	}
 
-	public static final <T extends Entity> T getNearestEntity(Entity entity, List<T> list) {
+	public static final <T extends Entity> T getNearestEntity(EntityLiving entity, List<T> list) {
 		if (!list.isEmpty()) {
 			T nearestEntity = list.get(0);
 			double min = entity.getDistanceSq(nearestEntity);
-			int size = list.size();
-			for (int i = 0; i < size; i++) {
+			for (int i = 1; i < list.size(); i++) {
 				T otherEntity = list.get(i);
 				double distance = entity.getDistanceSq(otherEntity);
 				if (distance < min) {

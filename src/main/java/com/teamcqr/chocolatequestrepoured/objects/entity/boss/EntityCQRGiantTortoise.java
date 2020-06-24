@@ -325,7 +325,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		if(isInShell()) {
 			return SoundEvents.ENTITY_BLAZE_HURT;
 		}

@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.init;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileBubble;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemSoulBottle;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemBubblePistol;
 
 import net.minecraft.block.BlockDispenser;
@@ -11,6 +12,7 @@ import net.minecraft.dispenser.IBlockSource;
 import net.minecraft.dispenser.IPosition;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
@@ -82,6 +84,60 @@ public class ModDispenseBehaviors {
 		//Bubble Gun
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_PISTOL, DISPENSE_BEHAVIOR_BUBBLE_GUN);
 		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.BUBBLE_RIFLE, DISPENSE_BEHAVIOR_BUBBLE_GUN);
+		
+		//Soul bottle
+		BlockDispenser.DISPENSE_BEHAVIOR_REGISTRY.putObject(ModItems.SOUL_BOTTLE, DISPENSE_BEHAVIOR_SOUL_BOTTLE);
 	}
+	
+	public static final IBehaviorDispenseItem DISPENSE_BEHAVIOR_SOUL_BOTTLE = new IBehaviorDispenseItem() {
+
+		@Override
+		public ItemStack dispense(IBlockSource source, ItemStack stack) {
+			Vec3d velocity = new Vec3d(0,0,0);
+			switch((EnumFacing)source.getBlockState().getValue(BlockDispenser.FACING)) {
+			case DOWN:
+				velocity = new Vec3d(0,-1,0);
+				break;
+			case EAST:
+				velocity = new Vec3d(1,0,0);
+				break;
+			case NORTH:
+				velocity = new Vec3d(0,0,-1);
+				break;
+			case SOUTH:
+				velocity = new Vec3d(0,0,1);
+				break;
+			case UP:
+				velocity = new Vec3d(0,2,0);
+				break;
+			case WEST:
+				velocity = new Vec3d(-1,0,0);
+				break;
+			default:
+				break;
+			
+			}
+			IPosition disPos = BlockDispenser.getDispensePosition(source);
+			Vec3d pos = new Vec3d(disPos.getX(), disPos.getY(), disPos.getZ()).add(velocity);
+			
+			if (stack.hasTagCompound()) {
+				NBTTagCompound bottle = stack.getTagCompound();
+
+				if (bottle.hasKey(ItemSoulBottle.ENTITY_IN_TAG)) {
+					if (!source.getWorld().isRemote) {
+						NBTTagCompound entityTag = (NBTTagCompound) bottle.getTag(ItemSoulBottle.ENTITY_IN_TAG);
+						((ItemSoulBottle)stack.getItem()).createEntityFromNBT(entityTag, source.getWorld(), pos.x, pos.y, pos.z);
+					}
+				}
+			}
+			
+			stack.shrink(1);
+			if(stack.isEmpty()) {
+				stack = ItemStack.EMPTY;
+			}
+			return stack;
+		}
+		
+	};
 
 }

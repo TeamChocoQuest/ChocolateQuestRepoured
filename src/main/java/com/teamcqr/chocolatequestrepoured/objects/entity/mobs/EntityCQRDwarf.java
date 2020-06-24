@@ -29,7 +29,7 @@ public class EntityCQRDwarf extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return ModSounds.CLASSIC_HURT;
 	}
 

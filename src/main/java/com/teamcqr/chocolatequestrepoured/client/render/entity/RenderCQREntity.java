@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLe
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerShoulderEntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusketKnife;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemRevolver;
@@ -117,7 +118,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				if (itemMainHand.getItem() instanceof ItemMusket || itemMainHand.getItem() instanceof ItemMusketKnife) {
 					armPoseMain = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderOffItem = true;
-				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
+				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemMainHand.getItem() instanceof ItemHookshotBase) {
 					flagMain = true;
 				} else if (entity.getItemInUseCount() > 0) {
 					EnumAction action = itemMainHand.getItemUseAction();
@@ -146,7 +147,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 				if (itemOffHand.getItem() instanceof ItemMusket || itemOffHand.getItem() instanceof ItemMusketKnife) {
 					armPoseOff = ModelBiped.ArmPose.BOW_AND_ARROW;
 					dontRenderMainItem = true;
-				} else if (itemMainHand.getItem() instanceof ItemRevolver) {
+				} else if (itemMainHand.getItem() instanceof ItemRevolver || itemOffHand.getItem() instanceof ItemHookshotBase) {
 					flagOff = true;
 				} else if (entity.getItemInUseCount() > 0) {
 					EnumAction action = itemOffHand.getItemUseAction();

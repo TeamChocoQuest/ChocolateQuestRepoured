@@ -105,7 +105,7 @@ public class ItemSoulBottle extends Item {
 		return EnumActionResult.FAIL;
 	}
 
-	private Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, float x, float y, float z) {
+	public Entity createEntityFromNBT(NBTTagCompound tag, World worldIn, double x, double y, double z) {
 		if (!worldIn.isRemote) {
 			{
 				// needed because in earlier versions the uuid and pos were not removed when using a soul bottle/mob to spawner on an entity

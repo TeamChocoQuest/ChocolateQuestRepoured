@@ -28,4 +28,19 @@ public class ItemStaffWind extends Item implements IRangedWeapon {
 		return ModSounds.MAGIC;
 	}
 
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 80;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 0;
+	}
+
 }

@@ -33,7 +33,7 @@ public class EntityCQRGolem extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_IRONGOLEM_HURT;
 	}
 

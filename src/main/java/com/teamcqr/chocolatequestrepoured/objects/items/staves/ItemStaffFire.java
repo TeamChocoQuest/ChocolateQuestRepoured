@@ -151,4 +151,19 @@ public class ItemStaffFire extends Item implements IRangedWeapon {
 		return SoundEvents.ENTITY_GHAST_SHOOT;
 	}
 
+	@Override
+	public double getRange() {
+		return 14.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 60;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 0;
+	}
+
 }

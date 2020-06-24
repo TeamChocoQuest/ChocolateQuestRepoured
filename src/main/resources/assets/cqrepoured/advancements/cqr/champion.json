@@ -71,6 +71,14 @@
 					"type": "cqrepoured:pirate_captain"
 				}
 			}
+		},
+		"giant_spider": {
+			"trigger": "minecraft:player_killed_entity",
+			"conditions": {
+				"entity": {
+					"type": "cqrepoured:giant_spider"
+				}
+			}
 		}
 	},
 	"requirements": [
@@ -80,6 +88,7 @@
 		["necromancer"],
 		["walker_king"],
 		["boar_mage"],
-		["pirate_captain"]
+		["pirate_captain"],
+		["giant_spider"]
 	]
 }

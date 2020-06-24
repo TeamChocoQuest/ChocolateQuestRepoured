@@ -8,8 +8,8 @@ import net.ilexiconn.llibrary.server.animation.IAnimatedEntity;
 
 public abstract class AbstractEntityAISpellAnimatedLLibrary<T extends AbstractEntityCQR & IAnimatedEntity> extends AbstractEntityAISpell<T> {
 
-	public AbstractEntityAISpellAnimatedLLibrary(T entity, boolean needsTargetToStart, boolean needsTargetToContinue, int cooldown, int chargingTicks, int castingTicks) {
-		super(entity, needsTargetToStart, needsTargetToContinue, cooldown, chargingTicks, castingTicks);
+	public AbstractEntityAISpellAnimatedLLibrary(T entity, int cooldown, int chargingTicks, int castingTicks) {
+		super(entity, cooldown, chargingTicks, castingTicks);
 	}
 
 	@Override

@@ -145,11 +145,7 @@ public class GearedMobFactory {
 		entity.setItemStackToSlot(EntityEquipmentSlot.FEET, feet);
 		
 		if(entity instanceof AbstractEntityCQR) {
-			int potionCount = floor > 3 ? 3 : floor;
-			if(potionCount < 0) {
-				potionCount = Math.abs(potionCount);
-			}
-			((AbstractEntityCQR)entity).setHealingPotions(potionCount);
+			((AbstractEntityCQR)entity).setHealingPotions(1);
 		}
 		
 		return entity;

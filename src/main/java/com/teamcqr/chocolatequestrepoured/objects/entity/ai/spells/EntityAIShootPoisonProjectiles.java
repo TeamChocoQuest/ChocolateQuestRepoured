@@ -13,10 +13,11 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 
 	protected static final int MAX_PROJECTILES = 10;
 	protected static final int MIN_PROJECTILES = 4;
-	protected static final double SPEED_MULTIPLIER = 0.18;
+	protected static final double SPEED_MULTIPLIER = 1.5;
 
-	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity, int cooldown, int chargeUpTicks) {
-		super(entity, true, true, cooldown, chargeUpTicks, 1);
+	public EntityAIShootPoisonProjectiles(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
+		super(entity, cooldown, chargingTicks, 1);
+		this.setup(true, true, true, false);
 	}
 
 	@Override
@@ -24,7 +25,6 @@ public class EntityAIShootPoisonProjectiles extends AbstractEntityAISpell<Abstra
 		int projectiles = DungeonGenUtils.getIntBetweenBorders(MIN_PROJECTILES, MAX_PROJECTILES, this.entity.getRNG());
 
 		Vec3d vector = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition())).normalize();
-		vector = vector.add(vector).add(vector).add(vector);
 		double angle = 180D / (double) projectiles;
 		vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle / 2));
 		Vec3d[] velocities = new Vec3d[projectiles];

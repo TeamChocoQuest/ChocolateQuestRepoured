@@ -24,6 +24,7 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 	
 	private static final DataParameter<Integer> PART_INDEX = EntityDataManager.<Integer>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.VARINT);
 	private static final DataParameter<Boolean> IS_SKELETAL = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> IS_REMOVED = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragonSegment.class, DataSerializers.BOOLEAN);
 	
 	public EntityCQRNetherDragonSegment(EntityCQRNetherDragon dragon, int partID, boolean skeletal) {
 		super((IEntityMultiPart) dragon, "dragonPart" + partID, 0.5F, 0.5F);
@@ -39,11 +40,16 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		this.setInvisible(false);
 	}
 	
+	public void onRemovedFromBody() {
+		this.dataManager.set(IS_REMOVED, true);
+	}
+	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(PART_INDEX, this.partIndex);
 		this.dataManager.register(IS_SKELETAL, false);
+		this.dataManager.register(IS_REMOVED, false);
 	}
 	
 	public int getPartIndex() {
@@ -77,6 +83,10 @@ public class EntityCQRNetherDragonSegment extends MultiPartEntityPart {
 		super.onUpdate();
 
 		++this.ticksExisted;
+		
+		if(this.dataManager.get(IS_REMOVED)) {
+			world.removeEntityDangerously(this);
+		}
 		
 	}
 

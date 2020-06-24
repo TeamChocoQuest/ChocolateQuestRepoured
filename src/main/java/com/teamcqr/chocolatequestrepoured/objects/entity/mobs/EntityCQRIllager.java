@@ -106,7 +106,7 @@ public class EntityCQRIllager extends AbstractEntityCQR {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
 		return SoundEvents.ENTITY_VINDICATION_ILLAGER_HURT;
 	}
 

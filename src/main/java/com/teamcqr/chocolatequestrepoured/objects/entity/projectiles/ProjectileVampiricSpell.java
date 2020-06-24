@@ -29,7 +29,7 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 			if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit instanceof EntityLivingBase) {
 					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
-					float damage = 4F;
+					float damage = 6F;
 
 					if (result.entityHit == this.shooter) {
 						return;
@@ -38,7 +38,7 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 					entity.attackEntityFrom(DamageSource.MAGIC, damage);
 
 					if (this.shooter != null && this.shooter.getHealth() < this.shooter.getMaxHealth()) {
-						this.shooter.heal(1.0F);
+						this.shooter.heal(damage * 2);
 					}
 
 					this.setDead();

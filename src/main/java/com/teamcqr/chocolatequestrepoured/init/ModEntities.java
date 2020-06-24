@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.EntitySlimePart;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRBoarmage;
+import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantSpider;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRLich;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNecromancer;
@@ -49,6 +50,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileH
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectilePoisonSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileSpiderBall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileVampiricSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileWeb;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishGreen;
 import com.teamcqr.chocolatequestrepoured.objects.mounts.EntityGiantSilverfishNormal;
@@ -85,6 +87,7 @@ public class ModEntities {
 	public static final EntityEntry PROJECTILE_BUBBLE = Null();
 	public static final EntityEntry PROJECTILE_LARGE_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_HOT_FIREBALL = Null();
+	public static final EntityEntry PROJECTILE_WEB = Null();
 
 	public static final EntityEntry DUMMY = Null();
 	public static final EntityEntry DWARF = Null();
@@ -119,6 +122,7 @@ public class ModEntities {
 	public static final EntityEntry NECROMANCER = Null();
 	public static final EntityEntry WALKER_KING = Null();
 	public static final EntityEntry PIRATE_CAPTAIN = Null();
+	public static final EntityEntry GIANT_SPIDER = Null();
 
 	// Misc Entities
 	public static final EntityEntry SUMMONING_CIRCLE = Null();
@@ -147,6 +151,7 @@ public class ModEntities {
 					createEntityEntryWithoutEgg(ProjectileHookShotHook.class, "projectile_hookshot_hook", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileBubble.class, "projectile_bubble", 64, 1, true),
 					createEntityEntryWithoutEgg(ProjectileHotFireball.class, "projectile_hot_fireball", 64, 1, true),
+					createEntityEntryWithoutEgg(ProjectileWeb.class, "projectile_web", 64, 1, true),
 
 					createEntityEntry(EntityCQRDummy.class, "dummy", 64, 1, true, 0xC29D62, 0x67502C),
 					createEntityEntry(EntityCQRDwarf.class, "dwarf", 64, 1, true, 0x333333, 0x582800),
@@ -183,6 +188,7 @@ public class ModEntities {
 					createEntityEntry(EntityCQRNecromancer.class, "necromancer", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRWalkerKing.class, "walker_king", 64, 1, true, 3289650, 000000),
 					createEntityEntry(EntityCQRPirateCaptain.class, "pirate_captain", 64, 1, true, 3289650, 000000),
+					createEntityEntry(EntityCQRGiantSpider.class, "giant_spider", 64, 1, true, 3289650, 000000),
 
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),

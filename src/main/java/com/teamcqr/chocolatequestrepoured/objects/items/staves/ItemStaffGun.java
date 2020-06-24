@@ -15,6 +15,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -71,7 +72,7 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
 			v = v.scale(3.5D);
-			//ball.setVelocity(v.x, v.y, v.z);
+			// ball.setVelocity(v.x, v.y, v.z);
 			ball.motionX = v.x;
 			ball.motionY = v.y;
 			ball.motionZ = v.z;
@@ -83,6 +84,21 @@ public class ItemStaffGun extends Item implements IRangedWeapon {
 	@Override
 	public SoundEvent getShootSound() {
 		return ModSounds.GUN_SHOOT;
+	}
+
+	@Override
+	public double getRange() {
+		return 32.0D;
+	}
+
+	@Override
+	public int getCooldown() {
+		return 50;
+	}
+
+	@Override
+	public int getChargeTicks() {
+		return 0;
 	}
 
 }

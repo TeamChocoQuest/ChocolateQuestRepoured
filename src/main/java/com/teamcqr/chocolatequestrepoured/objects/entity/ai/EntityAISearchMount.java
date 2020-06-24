@@ -39,7 +39,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 			Vec3d vec1 = this.entity.getPositionVector().addVector(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(MOUNT_SEARCH_RADIUS, MOUNT_SEARCH_RADIUS * 0.5D, MOUNT_SEARCH_RADIUS);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
-			List<EntityAnimal> possibleMounts = this.entity.world.getEntitiesWithinAABB(EntityAnimal.class, aabb, TargetUtil.PREDICATE_MOUNTS);
+			List<EntityAnimal> possibleMounts = this.world.getEntitiesWithinAABB(EntityAnimal.class, aabb, input -> TargetUtil.PREDICATE_MOUNTS.apply(input) && this.entity.getEntitySenses().canSee(input));
 			if (!possibleMounts.isEmpty()) {
 				this.entityToMount = TargetUtil.getNearestEntity(this.entity, possibleMounts);
 				return true;
@@ -87,7 +87,7 @@ public class EntityAISearchMount extends AbstractCQREntityAI<AbstractEntityCQR> 
 				AbstractHorse horse = (AbstractHorse) this.entityToMount;
 				horse.setOwnerUniqueId(this.entity.getPersistentID());
 
-				this.entity.world.setEntityState(horse, (byte) 7);
+				this.world.setEntityState(horse, (byte) 7);
 				horse.setHorseTamed(true);
 				horse.setHorseSaddled(true);
 				// Should that stay? -> Arlo says yes.
