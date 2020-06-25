@@ -22,4 +22,24 @@ public class Square {
 		return vec.subtract(this.vec1).dotProduct(this.normal) >= 0.0D;
 	}
 
+	public Vec3d getVec1() {
+		return this.vec1;
+	}
+
+	public Vec3d getVec2() {
+		return this.vec2;
+	}
+
+	public Vec3d getVec3() {
+		return this.vec3;
+	}
+
+	public Vec3d getVec4() {
+		return this.vec4;
+	}
+
+	public Vec3d getNormal() {
+		return this.normal;
+	}
+
 }

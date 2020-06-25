@@ -12,4 +12,12 @@ public class Line {
 		this.vec2 = vec2;
 	}
 
+	public Vec3d getVec1() {
+		return this.vec1;
+	}
+
+	public Vec3d getVec2() {
+		return this.vec2;
+	}
+
 }

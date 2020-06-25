@@ -10,12 +10,12 @@ import net.minecraft.world.World;
 
 public class BoundingBoxHelper {
 
-	public static <T extends Entity> List<T> getEntitiesInsideBB(World world, @Nullable T toIgnore, Class<? extends T> entityClass, BoundingBox bb1) {
+	public static <T extends Entity> List<T> getEntitiesInsideBB(World world, @Nullable T toIgnore, Class<T> entityClass, BoundingBox bb1) {
 		return world.getEntitiesWithinAABB(entityClass, bb1.getAabb(), input -> {
 			if (input == toIgnore) {
 				return false;
 			}
-			BoundingBox bb2 = new BoundingBox(input.getEntityBoundingBox());
+			BoundingBox bb2 = new BoundingBox(input.getEntityBoundingBox(), 0.0D, 0.0D, Vec3d.ZERO);
 			for (Vec3d vertice : bb2.getVertices()) {
 				if (bb1.isVecInside(vertice)) {
 					return true;

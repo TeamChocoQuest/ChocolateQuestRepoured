@@ -19,12 +19,13 @@ public class BoundingBox {
 	public BoundingBox(Vec3d[] vertices, int[][] edges, int[][] planes) {
 		this.vertices = vertices;
 		this.minX = vertices[0].x;
-		this.minY =	vertices[0].y;
+		this.minY = vertices[0].y;
 		this.minZ = vertices[0].z;
 		this.maxX = vertices[0].x;
 		this.maxY = vertices[0].y;
 		this.maxZ = vertices[0].z;
-		for (Vec3d vec : vertices) {
+		for (int i = 1; i < vertices.length; i++) {
+			Vec3d vec = vertices[i];
 			this.minX = Math.min(this.minX, vec.x);
 			this.minY = Math.min(this.minY, vec.y);
 			this.minZ = Math.min(this.minZ, vec.z);
@@ -43,23 +44,29 @@ public class BoundingBox {
 		}
 	}
 
-	/**
-	 * Example for a 1x1x1 cube: { (0,0,0), (1,0,0), (0,0,1), (1,0,1), (0,1,0), (1,1,0), (0,1,1), (1,1,1) }
-	 */
 	public BoundingBox(Vec3d[] vertices) {
-		this(vertices, new int[][] { { 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 }, { 0, 4 }, { 1, 5 }, { 3, 7 }, { 2, 6 }, { 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 } }, new int[][] { { 0, 2, 1, 3 }, { 0, 1, 4, 5 }, { 1, 3, 5, 7 }, { 3, 2, 7, 6 }, { 2, 0, 6, 4 }, { 4, 5, 6, 7 } });
+		this(vertices, new int[][] { { 0, 1 }, { 1, 3 }, { 3, 2 }, { 2, 0 }, { 0, 4 }, { 1, 5 }, { 3, 7 }, { 2, 6 }, { 4, 5 }, { 5, 7 }, { 7, 6 }, { 6, 4 } }, new int[][] { { 2, 3, 0, 1 }, { 0, 1, 4, 5 }, { 1, 3, 5, 7 }, { 3, 2, 7, 6 }, { 2, 0, 6, 4 }, { 4, 5, 6, 7 } });
 	}
 
-	public BoundingBox(AxisAlignedBB aabb) {
+	/**
+	 * x = right<br>
+	 * y = up<br>
+	 * z = forward
+	 */
+	public BoundingBox(Vec3d start, Vec3d end, double yaw, double pitch, Vec3d origin) {
 		this(new Vec3d[] {
-				new Vec3d(aabb.minX, aabb.minY, aabb.minZ),
-				new Vec3d(aabb.maxX, aabb.minY, aabb.minZ),
-				new Vec3d(aabb.minX, aabb.minY, aabb.maxZ),
-				new Vec3d(aabb.maxX, aabb.minY, aabb.maxZ),
-				new Vec3d(aabb.minX, aabb.maxY, aabb.minZ),
-				new Vec3d(aabb.maxX, aabb.maxY, aabb.minZ),
-				new Vec3d(aabb.minX, aabb.maxY, aabb.maxZ),
-				new Vec3d(aabb.maxX, aabb.maxY, aabb.maxZ) });
+				new Vec3d(start.x, start.y, start.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(end.x, start.y, start.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(start.x, start.y, end.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(end.x, start.y, end.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(start.x, end.y, start.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(end.x, end.y, start.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(start.x, end.y, end.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin),
+				new Vec3d(end.x, end.y, end.z).rotatePitch((float) pitch).rotateYaw((float) -yaw).add(origin) });
+	}
+
+	public BoundingBox(AxisAlignedBB aabb, double yaw, double pitch, Vec3d origin) {
+		this(new Vec3d(aabb.minX, aabb.minY, aabb.minZ), new Vec3d(aabb.maxX, aabb.maxY, aabb.maxZ), yaw, pitch, origin);
 	}
 
 	public boolean isVecInside(Vec3d vec) {
