@@ -172,6 +172,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount, boolean sentFromPart) {
+		if (source.canHarmInCreative()) {
+			return super.attackEntityFrom(source, amount, sentFromPart);
+		}
+
 		if(source.isExplosion() && isInShell() && canBeStunned && !stunned) {
 			stunned = true;
 			canBeStunned = false;
@@ -188,9 +192,6 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			this.setRevengeTarget((EntityLivingBase) source.getTrueSource());
 		}
 		
-		if (source.isUnblockable()) {
-			return super.attackEntityFrom(source, amount, sentFromPart);
-		}
 		if(!sentFromPart) {
 			amount = 0;
 			world.playSound(posX, posY, posZ, getHurtSound(source), SoundCategory.HOSTILE, 1.0F, 1.0F, true);
