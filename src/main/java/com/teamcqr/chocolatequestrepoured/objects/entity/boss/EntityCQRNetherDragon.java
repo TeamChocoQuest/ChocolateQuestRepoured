@@ -262,6 +262,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (source.canHarmInCreative()) {
+			return super.attackEntityFrom(source, amount);
+		}
+
 		if (source.isFireDamage() || source.isExplosion()) {
 			return false;
 		}
