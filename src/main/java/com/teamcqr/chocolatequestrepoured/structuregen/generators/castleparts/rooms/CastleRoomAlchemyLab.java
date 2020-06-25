@@ -6,8 +6,8 @@ import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
-	public CastleRoomAlchemyLab(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomAlchemyLab(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.ALCHEMY_LAB;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
@@ -23,7 +23,7 @@ public class CastleRoomAlchemyLab extends CastleRoomGenericBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
-		super.generateRoom(genArray, dungeon);
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		super.generateRoom(castleOrigin, genArray, dungeon);
 	}
 }

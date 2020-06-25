@@ -36,16 +36,16 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private int stairOpeningZStartIdx;
 	private int stairOpeningZEndIdx;
 
-	public CastleRoomBossLandingMain(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBossLandingMain(int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_BOSS;
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 		this.defaultCeiling = true;
 
-		this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endX = ROOMS_LONG * sideLength; //1 wall space in between them
 		this.lenX = this.endX + 1;
-		this.endZ = ROOMS_SHORT * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endZ = ROOMS_SHORT * sideLength - 1;
 		this.lenZ = this.endZ + 1;
 
 		this.stairOpeningXStartIdx = sideLength - 2;
@@ -64,19 +64,19 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
 			for (int y = 0; y < this.height; y++) {
-				for (int z = -1; z <= this.endZ; z++) {
+				for (int z = 0; z <= this.endZ; z++) {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.addBlockState(this.origin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
-						this.usedDecoPositions.add(this.origin.add(offset));
+						this.usedDecoPositions.add(this.roomOrigin.add(offset));
 					}
 				}
 			}
@@ -86,7 +86,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	private IBlockState getBlockToBuild(DungeonCastle dungeon, int x, int y, int z) {
 		IBlockState blockToBuild = Blocks.AIR.getDefaultState();
 
-		if (z == -1) {
+		if (z == 0) {
 			if (x < this.connectingWallLength || x > this.endX - this.connectingWallLength || y == this.height - 1) {
 				blockToBuild = dungeon.getMainBlockState();
 			} else if (y == 0) {
@@ -142,13 +142,6 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 	@Override
 	boolean shouldAddChests() {
 		return false;
-	}
-
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST) && !(side == this.doorSide)) {
-			super.addInnerWall(side);
-		}
 	}
 
 	@Override

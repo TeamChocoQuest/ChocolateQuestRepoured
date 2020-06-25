@@ -2,17 +2,11 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
-import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
 public class CastleRoomBridgeTop extends CastleRoomBase {
@@ -27,8 +21,8 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		}
 	}
 
-	public CastleRoomBridgeTop(BlockPos startOffset, int sideLength, int height, EnumFacing direction, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBridgeTop(int sideLength, int height, EnumFacing direction, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.BRIDGE_TOP;
 		this.defaultCeiling = false;
 		this.defaultFloor = false;
@@ -36,7 +30,7 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		final int startX = 1;
 		final int startZ = 1;
 		final int endX = getDecorationLengthX() - 3;

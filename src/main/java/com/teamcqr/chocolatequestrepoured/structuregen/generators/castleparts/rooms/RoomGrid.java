@@ -1,13 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
+import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import javax.swing.text.html.Option;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -262,30 +264,114 @@ public class RoomGrid {
 		}
 	}
 
-	private static final int MAX_lAYERS = 5;
-
 	private int floors;
 	private int roomsX;
 	private int roomsZ;
-	private Random random;
 	private RoomGridCell[][][] cellArray;
 	private List<RoomGridCell> cellList;
+	private List<CastleMainStructWall> wallList;
 	private Area2D bossArea = null;
 
-	public RoomGrid(int floors, int roomsX, int roomsZ, Random random) {
+	public RoomGrid(int floors, int roomsX, int roomsZ, int roomWidth, int floorHeight, Random random) {
 		this.floors = floors;
 		this.roomsX = roomsX;
 		this.roomsZ = roomsZ;
-		this.random = random;
 		this.cellArray = new RoomGridCell[floors][roomsX][roomsZ];
 		this.cellList = new ArrayList<>();
+		this.wallList = new ArrayList<>();
 
 		// initialize the room grid
 		for (int floor = 0; floor < floors; floor++) {
 			for (int x = 0; x < roomsX; x++) {
 				for (int z = 0; z < roomsZ; z++) {
-					this.cellArray[floor][x][z] = new RoomGridCell(floor, x, z, null);
-					this.cellList.add(this.cellArray[floor][x][z]);
+					RoomGridCell cell = new RoomGridCell(floor, x, z, roomWidth, floorHeight);
+					this.cellArray[floor][x][z] = cell;
+					this.cellList.add(cell);
+				}
+			}
+		}
+
+		initializeCellLinks();
+		initializeWalls(roomWidth, floorHeight);
+	}
+
+	private void initializeCellLinks()
+	{
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX; x++) {
+				for (int z = 0; z < roomsZ; z++) {
+					RoomGridCell cell = getCellAt(floor, x, z);
+
+					for (EnumFacing direction : EnumFacing.VALUES)
+					{
+						RoomGridCell adjacent = getAdjacentCell(cell, direction);
+						if (adjacent != null)
+						{
+							cell.registerAdjacentCell(adjacent, direction);
+							adjacent.registerAdjacentCell(cell, direction.getOpposite());
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void initializeWalls(int roomWidth, int floorHeight)
+	{
+		final int wallWidth = roomWidth + 2; //extends 1 block past each edge of the room
+
+		//vertical walls
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX + 1; x++) {
+				for (int z = 0; z < roomsZ; z++) {
+					int xOffset = x * (roomWidth + 1);
+					int yOffset = floor * floorHeight;
+					int zOffset = z * (roomWidth + 1);
+					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.VERTICAL, wallWidth, floorHeight);
+					wallList.add(wall);
+
+					RoomGridCell westCell = getCellAt(floor, x - 1, z);
+					if (westCell != null)
+					{
+						wall.registerAdjacentCell(westCell, EnumFacing.WEST);
+						westCell.registerAdjacentWall(wall, EnumFacing.EAST);
+					}
+
+					RoomGridCell eastCell = getCellAt(floor, x, z);
+					if (eastCell != null)
+					{
+						wall.registerAdjacentCell(eastCell, EnumFacing.EAST);
+						eastCell.registerAdjacentWall(wall, EnumFacing.WEST);
+					}
+				}
+			}
+		}
+
+		//horizontal walls
+		for (int floor = 0; floor < floors; floor++) {
+			for (int x = 0; x < roomsX; x++) {
+				for (int z = 0; z < roomsZ + 1; z++) {
+					int xOffset = x * (roomWidth + 1);
+					int yOffset = floor * floorHeight;
+					int zOffset = z * (roomWidth + 1);
+					BlockPos wallOrigin = new BlockPos(xOffset, yOffset, zOffset);
+					CastleMainStructWall wall = new CastleMainStructWall(wallOrigin, CastleMainStructWall.WallOrientation.HORIZONTAL, wallWidth, floorHeight);
+					wallList.add(wall);
+
+					RoomGridCell northCell = getCellAt(floor, x, z - 1);
+					if (northCell != null)
+					{
+						wall.registerAdjacentCell(northCell, EnumFacing.NORTH);
+						northCell.registerAdjacentWall(wall, EnumFacing.SOUTH);
+					}
+
+					RoomGridCell southCell = getCellAt(floor, x, z);
+					if (southCell != null)
+					{
+						wall.registerAdjacentCell(southCell, EnumFacing.SOUTH);
+						southCell.registerAdjacentWall(wall, EnumFacing.NORTH);
+					}
 				}
 			}
 		}
@@ -719,7 +805,6 @@ public class RoomGrid {
 		RoomGridCell adjacent = this.getAdjacentCell(cell, side);
 
 		return (!cell.getRoom().isTower() &&
-				!cell.getRoom().hasDoorOnSide(side) &&
 				adjacent != null && !(adjacent.isPopulated() &&
 				!cell.getRoom().isStairsOrLanding()));
 	}
@@ -743,36 +828,10 @@ public class RoomGrid {
 
 	@Nullable
 	public RoomGridCell getAdjacentCell(RoomGridCell startCell, EnumFacing direction) {
-		RoomGridPosition startPosition = startCell.getGridPosition();
-		int floor = startPosition.getFloor();
-		int x = startPosition.getX();
-		int z = startPosition.getZ();
+		RoomGridPosition position = startCell.getGridPosition().move(direction);
 
-		switch (direction) {
-		case UP:
-			floor += 1;
-			break;
-		case DOWN:
-			floor -= 1;
-			break;
-		case NORTH:
-			z -= 1;
-			break;
-		case SOUTH:
-			z += 1;
-			break;
-		case WEST:
-			x -= 1;
-			break;
-		case EAST:
-			x += 1;
-			break;
-		default:
-			break;
-		}
-
-		if (this.withinGridBounds(floor, x, z)) {
-			return this.cellArray[floor][x][z];
+		if (this.withinGridBounds(position)) {
+			return this.cellArray[position.getFloor()][position.getX()][position.getZ()];
 		} else {
 			return null;
 		}
@@ -780,11 +839,10 @@ public class RoomGrid {
 
 	public void setBossArea(Area2D area) {
 		this.bossArea = new Area2D(area);
-		for (RoomGridPosition gridPos : area.getPositionList()) {
-			if (this.withinGridBounds(gridPos)) {
-				this.getCellAt(gridPos).setAsBossArea();
-			}
-		}
+	}
+
+	public List<CastleMainStructWall> getWallListCopy() {
+		return new ArrayList<>(wallList);
 	}
 
 	@Nullable

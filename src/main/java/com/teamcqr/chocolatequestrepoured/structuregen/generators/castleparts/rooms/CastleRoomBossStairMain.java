@@ -53,16 +53,16 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	private int mainLandingMaxHeightIdx;
 	private int lowerLandingMaxHeightIdx;
 
-	public CastleRoomBossStairMain(BlockPos startOffset, int sideLength, int height, EnumFacing doorSide, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBossStairMain(int sideLength, int height, EnumFacing doorSide, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.STAIRCASE_BOSS;
 
 		this.doorSide = doorSide;
 		this.numRotations = DungeonGenUtils.getCWRotationsBetween(EnumFacing.NORTH, this.doorSide);
 
-		this.endX = ROOMS_LONG * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endX = ROOMS_LONG * sideLength; //1 wall space in between them
 		this.lenX = this.endX + 1;
-		this.endZ = ROOMS_SHORT * sideLength - 2; // minus 1 for the wall and 1 so it's at the last index
+		this.endZ = ROOMS_SHORT * sideLength - 1;
 		this.lenZ = this.endZ + 1;
 		this.maxHeightIdx = height - 1;
 
@@ -94,7 +94,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		Vec3i offset;
 
 		for (int x = 0; x <= this.endX; x++) {
@@ -103,10 +103,10 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 					IBlockState blockToBuild = this.getBlockToBuild(dungeon, x, y, z);
 
 					offset = DungeonGenUtils.rotateMatrixOffsetCW(new Vec3i(x, y, z), this.lenX, this.lenZ, this.numRotations);
-					genArray.addBlockState(this.origin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(this.roomOrigin.add(offset), blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
 
 					if (blockToBuild.getBlock() != Blocks.AIR) {
-						this.usedDecoPositions.add(this.origin.add(offset));
+						this.usedDecoPositions.add(this.roomOrigin.add(offset));
 					}
 				}
 			}
@@ -231,13 +231,6 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 	@Override
 	boolean shouldAddChests() {
 		return false;
-	}
-
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (!(this.doorSide.getAxis() == EnumFacing.Axis.X && side == EnumFacing.SOUTH) && !(this.doorSide.getAxis() == EnumFacing.Axis.Z && side == EnumFacing.EAST)) {
-			super.addInnerWall(side);
-		}
 	}
 
 	@Override

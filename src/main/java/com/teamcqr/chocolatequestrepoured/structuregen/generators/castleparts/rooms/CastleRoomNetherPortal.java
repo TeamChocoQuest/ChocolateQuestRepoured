@@ -25,8 +25,8 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
     private Alignment portalAlignment;
 
-    public CastleRoomNetherPortal(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomNetherPortal(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.PORTAL;
         this.maxSlotsUsed = 1;
         this.defaultCeiling = true;
@@ -35,7 +35,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
         int halfX = endX / 2;
@@ -84,14 +84,6 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
         return dungeon.getMainBlockState();
     }
 
-    @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
-    }
 
     @Override
     boolean shouldBuildEdgeDecoration() {

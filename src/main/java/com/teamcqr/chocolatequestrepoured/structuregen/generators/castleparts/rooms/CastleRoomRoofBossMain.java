@@ -38,8 +38,8 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	private static final int BOSS_ROOM_STATIC_SIZE = 17;
 	private DungeonCastle dungeon;
 
-	public CastleRoomRoofBossMain(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomRoofBossMain(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.ROOF_BOSS_MAIN;
 		this.pathable = false;
 	}
@@ -53,11 +53,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 	}
 
 	@Override
-	protected void generateWalls(BlockStateGenArray genArray, DungeonCastle dungeon) {
-	}
-
-	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos nwCorner = this.getBossRoomBuildStartPosition();
 		BlockPos pos;
 		IBlockState blockToBuild;

@@ -5,7 +5,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -22,8 +21,8 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     private int shelfZLen = 0;
     private int shelfHeight = 0;
 
-    public CastleRoomLibrary(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomLibrary(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.LIBRARY;
         this.maxSlotsUsed = 2;
         this.defaultCeiling = true;
@@ -37,27 +36,12 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         //allow 1 space from the wall to start
         shelfStart = this.getDecorationStartPos().south().east();
         shelfXLen = this.getDecorationLengthX() - 2;
         shelfZLen = this.getDecorationLengthZ() - 2;
         shelfHeight = this.getDecorationLengthY() - 2; //leave some room to the ceiling
-
-        if (this.hasDoorOnSide(EnumFacing.WEST)) {
-            shelfStart = shelfStart.east();
-            --shelfXLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.EAST)) {
-            --shelfXLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.NORTH)) {
-            shelfStart = shelfStart.south();
-            --shelfZLen;
-        }
-        if (this.hasDoorOnSide(EnumFacing.SOUTH)) {
-            --shelfZLen;
-        }
 
         switch (pattern) {
             case LONG_VERTICAL:
@@ -69,15 +53,6 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
             default:
                 break;
         }
-    }
-
-    @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
     }
 
     @Override

@@ -73,7 +73,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 			ProjectileVampiricSpell spell = new ProjectileVampiricSpell(worldIn, shooter);
 			Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 			v = v.normalize();
-			v = v.scale(0.5D);
+			v = v.scale(0.75D);
 			// spell.setVelocity(v.x, v.y, v.z);
 			spell.motionX = v.x;
 			spell.motionY = v.y;
@@ -95,7 +95,7 @@ public class ItemStaffVampiric extends Item implements IRangedWeapon {
 
 	@Override
 	public int getCooldown() {
-		return 20;
+		return 40;
 	}
 
 	@Override

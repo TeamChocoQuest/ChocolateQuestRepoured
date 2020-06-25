@@ -8,6 +8,8 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	private int attackCooldown = 10;
 	private int aiCooldown = 20;
+	
+	private boolean breathFire = false;
 
 	public BossAIFlyToTarget(EntityCQRNetherDragon entity) {
 		super(entity);
@@ -15,7 +17,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	@Override
 	protected double getMovementSpeed() {
-		return 4;
+		return 0.3;
 	}
 	
 	@Override
@@ -36,17 +38,33 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 			resetTask();
 		}
 		super.updateTask();
-		attackCooldown--;
-		if(attackCooldown <= 0) {
-			attackCooldown = 30 + entity.getRNG().nextInt(41);
-			entity.attackEntityWithRangedAttack(entity.getAttackTarget(), entity.getDistance(entity.getAttackTarget()));
+		if(!breathFire) {
+			attackCooldown--;
+			if(attackCooldown <= 0) {
+				attackCooldown = 20 + entity.getRNG().nextInt(41);
+				entity.attackEntityWithRangedAttack(entity.getAttackTarget(), entity.getDistance(entity.getAttackTarget()));
+			}
+		} else {
+			((EntityCQRNetherDragon)entity).breatheFire();
+			((EntityCQRNetherDragon)entity).setBreathingFireFlag(true);
 		}
+	}
+	
+	@Override
+	public void startExecuting() {
+		super.startExecuting();
+		
+		this.breathFire = entity.getRNG().nextDouble() >= 0.75;
 	}
 	
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		this.aiCooldown = 300;
+		this.aiCooldown = 150;
+		if(breathFire) {
+			((EntityCQRNetherDragon)entity).setBreathingFireFlag(false);
+		}
+		this.breathFire = false;
 		this.entity.setTargetLocation(new Vec3d(entity.getCirclingCenter().getX(), entity.getCirclingCenter().getY(), entity.getCirclingCenter().getZ()));
 	}
 	

@@ -15,8 +15,8 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	protected int stairZ;
 	protected EnumFacing stairStartSide;
 
-	public CastleRoomLandingDirected(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomLandingDirected(int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_DIRECTED;
 		this.openingWidth = stairsBelow.getUpperStairWidth();
 		this.stairZ = stairsBelow.getUpperStairEndZ() + 1;
@@ -26,13 +26,13 @@ public class CastleRoomLandingDirected extends CastleRoomBase {
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		IBlockState blockToBuild;
 
 		//If stairs are facing to the east or west, need to flip the build lengths since we are essentially
 		//generating a room facing south and then rotating it
-		int lenX = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthX : this.buildLengthZ;
-		int lenZ = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.buildLengthZ : this.buildLengthX;
+		int lenX = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthX() : this.getDecorationLengthZ();
+		int lenZ = this.stairStartSide.getAxis() == EnumFacing.Axis.Z ? this.getDecorationLengthZ() : this.getDecorationLengthX();
 
 		for (int x = 0; x < lenX - 1; x++) {
 			for (int z = 0; z < lenZ - 1; z++) {

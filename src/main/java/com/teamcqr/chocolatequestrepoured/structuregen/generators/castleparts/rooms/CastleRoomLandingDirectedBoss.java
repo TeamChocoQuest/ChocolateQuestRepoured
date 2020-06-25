@@ -6,13 +6,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomLandingDirectedBoss extends CastleRoomLandingDirected {
-    public CastleRoomLandingDirectedBoss(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
-        super(startOffset, sideLength, height, stairsBelow, floor);
+    public CastleRoomLandingDirectedBoss(int sideLength, int height, CastleRoomStaircaseDirected stairsBelow, int floor) {
+        super(sideLength, height, stairsBelow, floor);
     }
 
     @Override
-    public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
-        super.generate(genArray, dungeon);
+    public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
+        super.generate(castleOrigin, genArray, dungeon);
     }
 
     @Override

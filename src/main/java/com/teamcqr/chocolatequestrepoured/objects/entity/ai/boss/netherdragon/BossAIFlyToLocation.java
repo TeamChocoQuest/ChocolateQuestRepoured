@@ -41,7 +41,7 @@ public class BossAIFlyToLocation extends AbstractCQREntityAI<EntityCQRNetherDrag
 	}
 	
 	protected double getMovementSpeed() {
-		return 2;
+		return 0.15;
 	}
 	
 	@Override

@@ -25,8 +25,8 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	private Alignment alignment;
 	EnumFacing patternStartFacing;
 
-	public CastleRoomHallway(BlockPos startOffset, int sideLength, int height, Alignment alignment, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomHallway(int sideLength, int height, Alignment alignment, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.HALLWAY;
 		this.alignment = alignment;
 		this.defaultFloor = true;
@@ -70,13 +70,6 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 	@Override
 	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
 		return Blocks.GRAY_GLAZED_TERRACOTTA.getDefaultState();
-	}
-
-	@Override
-	public void addInnerWall(EnumFacing side) {
-		if (this.alignment.canHaveInteriorWall(side)) {
-			super.addInnerWall(side);
-		}
 	}
 
 	@Override

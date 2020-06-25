@@ -57,7 +57,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	
 	@Override
 	public float getDefaultWidth() {
-		return 3.5F;
+		return 2.3F;
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.tasks.addTask(1, new BossAISpiderSummonMinions(this));
 		this.tasks.addTask(2, new BossAISpiderWebshot(this));
 		this.tasks.addTask(11, this.spellHandler);
-		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 0.6F));
+		this.tasks.addTask(12, new BossAISpiderLeapAttack(this, 1.2F));
 		this.tasks.addTask(14, new EntityAIAttack(this));
 
 		this.tasks.addTask(20, new EntityAIFollowAttackTarget(this));

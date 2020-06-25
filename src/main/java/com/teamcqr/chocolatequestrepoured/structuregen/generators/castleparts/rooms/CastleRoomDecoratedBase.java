@@ -30,15 +30,15 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected DecorationSelector decoSelector;
     protected HashMap<BlockPos, EnumFacing> possibleChestLocs;
 
-    CastleRoomDecoratedBase(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    CastleRoomDecoratedBase(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.decoSelector = new DecorationSelector(this.random);
         this.possibleChestLocs = new HashMap<>();
     }
 
     @Override
     public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory) {
-        this.setupDecoration(genArray);
+        this.setupDecoration(genArray, dungeon);
 
         if (this.shouldBuildEdgeDecoration()) {
             this.addEdgeDecoration(world, genArray, dungeon);
@@ -68,7 +68,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected void addEdgeDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
         if (this.decoSelector.edgeDecorRegistered()) {
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
-                if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
+                if (this.walls.containsKey(side)) {
                     ArrayList<BlockPos> edge = this.getDecorationEdge(side);
                     for (BlockPos pos : edge) {
                         if (this.usedDecoPositions.contains(pos)) {
@@ -164,7 +164,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         int torchPercent = LIGHT_LEVEL * 3;
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (this.hasWallOnSide(side) || this.adjacentRoomHasWall(side)) {
+            if (this.walls.containsKey(side)) {
                 ArrayList<BlockPos> edge = this.getWallDecorationEdge(side);
                 for (BlockPos pos : edge) {
                     if (this.usedDecoPositions.contains(pos)) {

@@ -11,24 +11,24 @@ import net.minecraft.util.math.BlockPos;
 public class CastleRoomLandingSpiral extends CastleRoomDecoratedBase {
 	private CastleRoomStaircaseSpiral stairsBelow;
 
-	public CastleRoomLandingSpiral(BlockPos startOffset, int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomLandingSpiral(int sideLength, int height, CastleRoomStaircaseSpiral stairsBelow, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.LANDING_SPIRAL;
 		this.stairsBelow = stairsBelow;
 		this.defaultCeiling = true;
 	}
 
 	@Override
-	public void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		BlockPos pos;
 		IBlockState blockToBuild;
-		BlockPos pillarStart = new BlockPos(this.stairsBelow.getCenterX(), this.origin.getY(), this.stairsBelow.getCenterZ());
+		BlockPos pillarStart = new BlockPos(this.stairsBelow.getStairCenterOffsetX(), this.roomOrigin.getY(), this.stairsBelow.getStairCenterOffsetZ());
 		EnumFacing firstStairSide = this.stairsBelow.getLastStairSide().rotateY();
 
 		SpiralStaircaseBuilder stairs = new SpiralStaircaseBuilder(pillarStart, firstStairSide, dungeon.getMainBlockState(), dungeon.getWoodStairBlockState());
 
-		for (int x = 0; x < this.buildLengthX - 1; x++) {
-			for (int z = 0; z < this.buildLengthZ - 1; z++) {
+		for (int x = 0; x < getDecorationLengthX(); x++) {
+			for (int z = 0; z < getDecorationLengthZ(); z++) {
 				for (int y = 0; y < this.getDecorationLengthY(); y++) {
 					blockToBuild = Blocks.AIR.getDefaultState();
 					pos = this.getInteriorBuildStart().add(x, y, z);

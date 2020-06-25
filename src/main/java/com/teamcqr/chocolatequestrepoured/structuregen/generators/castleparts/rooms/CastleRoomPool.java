@@ -18,8 +18,8 @@ import java.util.function.Predicate;
 
 public class CastleRoomPool extends CastleRoomDecoratedBase
 {
-    public CastleRoomPool(BlockPos startOffset, int sideLength, int height, int floor) {
-        super(startOffset, sideLength, height, floor);
+    public CastleRoomPool(int sideLength, int height, int floor) {
+        super(sideLength, height, floor);
         this.roomType = EnumRoomType.POOL;
         this.maxSlotsUsed = 1;
         this.defaultCeiling = true;
@@ -27,7 +27,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
     }
 
     @Override
-    protected void generateRoom(BlockStateGenArray genArray, DungeonCastle dungeon) {
+    protected void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
         int endX = getDecorationLengthX() - 1;
         int endZ = getDecorationLengthZ() - 1;
         Predicate<Vec3i> northRow = (v -> ((v.getY() == 0) && (v.getZ() == 1) && ((v.getX() >= 1) && (v.getX() <= endX - 1))));
@@ -56,15 +56,6 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
     @Override
     protected IBlockState getFloorBlock(DungeonCastle dungeon) {
         return dungeon.getMainBlockState();
-    }
-
-    @Override
-    public void decorate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, GearedMobFactory mobFactory)
-    {
-        setupDecoration(genArray);
-        addWallDecoration(world, genArray, dungeon);
-        addSpawners(world, genArray, dungeon, mobFactory);
-        fillEmptySpaceWithAir(genArray);
     }
 
     @Override

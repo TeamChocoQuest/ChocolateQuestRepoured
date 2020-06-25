@@ -30,7 +30,7 @@ public class GeneratorCastle extends AbstractDungeonGenerator<DungeonCastle> {
 
 	@Override
 	public void preProcess() {
-		this.roomHelper = new CastleRoomSelector(this.pos, this.dungeon);
+		this.roomHelper = new CastleRoomSelector(this.dungeon);
 		this.roomHelper.randomizeCastle();
 
 		if (this.dungeon.doBuildSupportPlatform()) {

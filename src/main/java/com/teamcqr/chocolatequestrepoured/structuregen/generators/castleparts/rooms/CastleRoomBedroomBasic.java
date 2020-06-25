@@ -9,8 +9,8 @@ import net.minecraft.util.math.BlockPos;
 public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
 
-	public CastleRoomBedroomBasic(BlockPos startOffset, int sideLength, int height, int floor) {
-		super(startOffset, sideLength, height, floor);
+	public CastleRoomBedroomBasic(int sideLength, int height, int floor) {
+		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.BEDROOM_BASIC;
 		this.maxSlotsUsed = 2;
 		this.defaultCeiling = true;
