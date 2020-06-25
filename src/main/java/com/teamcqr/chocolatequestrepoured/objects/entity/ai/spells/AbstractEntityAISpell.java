@@ -44,7 +44,7 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 			if (attackTarget == null) {
 				return false;
 			}
-			if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+			if (this.needsSightToStart && !this.entity.getEntitySenses().canSee(attackTarget)) {
 				return false;
 			}
 		}
@@ -56,12 +56,12 @@ public abstract class AbstractEntityAISpell<T extends AbstractEntityCQR> impleme
 		if (!this.entity.isEntityAlive()) {
 			return false;
 		}
-		if (this.needsTargetToStart) {
+		if (this.needsTargetToContinue) {
 			EntityLivingBase attackTarget = this.entity.getAttackTarget();
 			if (attackTarget == null) {
 				return false;
 			}
-			if (!this.entity.getEntitySenses().canSee(attackTarget)) {
+			if (this.needsSightToContinue && !this.entity.getEntitySenses().canSee(attackTarget)) {
 				return false;
 			}
 		}

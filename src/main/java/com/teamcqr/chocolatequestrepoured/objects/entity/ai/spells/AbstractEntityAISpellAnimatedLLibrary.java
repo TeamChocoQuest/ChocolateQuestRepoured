@@ -14,10 +14,10 @@ public abstract class AbstractEntityAISpellAnimatedLLibrary<T extends AbstractEn
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		if (!super.shouldExecute()) {
+		if (!super.shouldContinueExecuting()) {
 			return false;
 		}
-		return this.entity.getAnimationTick() < this.getAnimation().getDuration();
+		return true;//this.entity.getAnimationTick() < this.getAnimation().getDuration();
 	}
 
 	@Override
