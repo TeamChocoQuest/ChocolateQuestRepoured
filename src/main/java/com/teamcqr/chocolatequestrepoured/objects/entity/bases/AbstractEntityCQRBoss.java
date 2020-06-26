@@ -73,6 +73,7 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
+		this.bossInfoServer.setName(getDisplayName());
 		this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 	}
 
