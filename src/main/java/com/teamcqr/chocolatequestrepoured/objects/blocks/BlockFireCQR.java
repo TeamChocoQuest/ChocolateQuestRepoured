@@ -22,7 +22,7 @@ public class BlockFireCQR extends BlockFire {
 		this.setHardness(0.0F);
 		this.setLightLevel(1.0F);
 		this.setSoundType(SoundType.CLOTH);
-		this.setUnlocalizedName("fire");
+		this.setTranslationKey("fire");
 		this.disableStats();
 	}
 
@@ -96,7 +96,7 @@ public class BlockFireCQR extends BlockFire {
 								int k1 = this.getNeighborEncouragement(worldIn, blockpos);
 
 								if (k1 > 0) {
-									int l1 = (k1 + 40 + worldIn.getDifficulty().getDifficultyId() * 7) / (i + 30);
+									int l1 = (k1 + 40 + worldIn.getDifficulty().getId() * 7) / (i + 30);
 
 									if (flag1) {
 										l1 /= 2;
@@ -142,7 +142,7 @@ public class BlockFireCQR extends BlockFire {
 			}
 
 			if (iblockstate.getBlock() == Blocks.TNT) {
-				Blocks.TNT.onBlockDestroyedByPlayer(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
+				Blocks.TNT.onPlayerDestroy(worldIn, pos, iblockstate.withProperty(BlockTNT.EXPLODE, Boolean.valueOf(true)));
 			}
 		}
 	}

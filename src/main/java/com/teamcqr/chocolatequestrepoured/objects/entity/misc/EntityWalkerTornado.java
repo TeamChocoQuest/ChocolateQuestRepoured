@@ -129,7 +129,7 @@ public class EntityWalkerTornado extends Entity {
 	protected void collideWithEntity(Entity entityIn) {
 		if (this.isEntityAffected(entityIn)) {
 			Vec3d vAway = entityIn.getPositionVector().subtract(this.getPositionVector()).normalize().scale(1.25D);
-			vAway = vAway.addVector(0, vAway.y * 0.1D, 0);
+			vAway = vAway.add(0, vAway.y * 0.1D, 0);
 			entityIn.motionX = vAway.x * 0.75;
 			entityIn.motionY = Math.max(Math.abs(vAway.y), 0.6D);
 			entityIn.motionZ = vAway.z * 0.75;

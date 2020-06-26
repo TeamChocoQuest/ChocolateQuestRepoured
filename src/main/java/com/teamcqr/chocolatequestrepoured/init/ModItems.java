@@ -459,7 +459,7 @@ public class ModItems {
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
-			return item.setUnlocalizedName(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
+			return item.setTranslationKey(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
 		}
 	}
 

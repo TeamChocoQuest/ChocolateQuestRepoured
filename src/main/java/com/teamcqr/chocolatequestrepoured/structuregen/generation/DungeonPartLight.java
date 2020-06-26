@@ -69,7 +69,7 @@ public class DungeonPartLight extends AbstractDungeonPart {
 	@Override
 	public void generateNext() {
 		if (this.chunkX <= this.maxPos.getX() >> 4) {
-			this.world.getChunkFromChunkCoords(this.chunkX, this.chunkZ).generateSkylightMap();
+			this.world.getChunk(this.chunkX, this.chunkZ).generateSkylightMap();
 
 			this.chunkZ++;
 			if (this.chunkZ > this.maxPos.getZ() >> 4) {

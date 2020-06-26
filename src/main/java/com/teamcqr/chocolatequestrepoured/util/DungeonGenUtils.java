@@ -122,7 +122,7 @@ public class DungeonGenUtils {
 	}
 
 	public static boolean isFarAwayEnoughFromSpawn(World world, int chunkX, int chunkZ) {
-		Chunk spawnChunk = world.getChunkFromBlockCoords(world.getSpawnPoint());
+		Chunk spawnChunk = world.getChunk(world.getSpawnPoint());
 		int x = chunkX - spawnChunk.x;
 		int z = chunkZ - spawnChunk.z;
 		return Math.sqrt(x * x + z * z) >= CQRConfig.general.dungeonSpawnDistance;
@@ -144,7 +144,7 @@ public class DungeonGenUtils {
 		Set<DungeonBase> dungeons = new HashSet<DungeonBase>();
 
 		for (DungeonBase dungeon : DungeonRegistry.getInstance().getCoordinateSpecificDungeons()) {
-			Chunk chunk = world.getChunkFromBlockCoords(dungeon.getLockedPos());
+			Chunk chunk = world.getChunk(dungeon.getLockedPos());
 			if (chunk.x == chunkX && chunk.z == chunkZ && dungeon.isDimensionAllowed(world.provider.getDimension())) {
 				dungeons.add(dungeon);
 			}

@@ -460,7 +460,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
 			Vec3d v = this.dragonBodyParts[indx].getPositionVector();
 			if(hasAttackTarget() && getRNG().nextDouble() > 0.6) {
-				v = getAttackTarget().getPositionVector().subtract(v).addVector(0,0.5,0);
+				v = getAttackTarget().getPositionVector().subtract(v).add(0,0.5,0);
 			} else {
 				v = pre.getPositionVector().subtract(v);
 				v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
@@ -493,7 +493,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		motionX = look.x;
 		motionZ = look.z;
 		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width /2) - 0.25).subtract(0, 0.2, 0)));
-		flameStartPos = flameStartPos.addVector(0,this.height /2, 0);
+		flameStartPos = flameStartPos.add(0,this.height /2, 0);
 		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
 		double MAX_LENGTH = 24;

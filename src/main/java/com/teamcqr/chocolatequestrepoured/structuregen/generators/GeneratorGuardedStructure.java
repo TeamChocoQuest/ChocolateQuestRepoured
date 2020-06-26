@@ -87,7 +87,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 
 				newPos = this.pos.add(v);
 			}
-			int yNew = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(newPos), newPos.getX(), newPos.getZ(), true);
+			int yNew = DungeonGenUtils.getHighestYAt(world.getChunk(newPos), newPos.getX(), newPos.getZ(), true);
 
 			BlockPos calculatedPos = new BlockPos(newPos.getX(), yNew, newPos.getZ());
 			if (!this.structurePosList.contains(calculatedPos)) {
@@ -260,7 +260,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathX(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.world.getChunkFromBlockCoords(start);
+		Chunk currChunk = this.world.getChunk(start);
 		int vX = end.getX() < start.getX() ? -1 : 1;
 		if (end.getX() == start.getX()) {
 			vX = 0;
@@ -272,7 +272,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			y = DungeonGenUtils.getHighestYAt(currChunk, currX, z, true);
 			this.buildPathSegmentX(new BlockPos(currX, y, z));
 			currX += vX;
-			currChunk = this.world.getChunkFromBlockCoords(new BlockPos(currX, y, z));
+			currChunk = this.world.getChunk(new BlockPos(currX, y, z));
 		} while (currX != end.getX());
 		/*
 		 * if(start.getZ() != end.getZ()) {
@@ -283,7 +283,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 	}
 
 	private void buildPathZ(BlockPos start, BlockPos end) {
-		Chunk currChunk = this.world.getChunkFromBlockCoords(start);
+		Chunk currChunk = this.world.getChunk(start);
 		int vZ = end.getZ() < start.getZ() ? -1 : 1;
 		if (end.getZ() == start.getZ()) {
 			vZ = 0;
@@ -295,7 +295,7 @@ public class GeneratorGuardedStructure extends AbstractDungeonGenerator<DungeonG
 			y = DungeonGenUtils.getHighestYAt(currChunk, x, currZ, true);
 			this.buildPathSegmentZ(new BlockPos(x, y, currZ));
 			currZ += vZ;
-			currChunk = this.world.getChunkFromBlockCoords(new BlockPos(x, y, currZ));
+			currChunk = this.world.getChunk(new BlockPos(x, y, currZ));
 		} while (currZ != end.getZ());
 		/*
 		 * if(start.getX() != end.getX()) {

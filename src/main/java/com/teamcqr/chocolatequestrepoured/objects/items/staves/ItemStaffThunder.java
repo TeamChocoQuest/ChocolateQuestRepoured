@@ -87,7 +87,7 @@ public class ItemStaffThunder extends Item implements IRangedWeapon {
 	public void shoot(World worldIn, EntityLivingBase shooter, Entity target, EnumHand handIn) {
 		Vec3d v = target.getPositionVector().subtract(shooter.getPositionVector());
 		Vec3d pos = target.getPositionVector();
-		if (v.lengthVector() > 20) {
+		if (v.length() > 20) {
 			v = v.normalize();
 			v = v.scale(20D);
 			pos = shooter.getPositionVector().add(v);

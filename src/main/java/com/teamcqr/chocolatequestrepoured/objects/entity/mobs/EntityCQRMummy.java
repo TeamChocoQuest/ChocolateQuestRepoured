@@ -27,7 +27,7 @@ public class EntityCQRMummy extends AbstractEntityCQR {
 		boolean flag = super.attackEntityAsMob(entityIn);
 
 		if (flag && this.getHeldItemMainhand().isEmpty() && entityIn instanceof EntityLivingBase) {
-			int i = this.world.getDifficulty().getDifficultyId();
+			int i = this.world.getDifficulty().getId();
 			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.HUNGER, 140 * i));
 		}
 

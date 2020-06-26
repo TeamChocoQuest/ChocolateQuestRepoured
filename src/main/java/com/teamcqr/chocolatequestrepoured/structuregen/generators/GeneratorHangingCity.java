@@ -182,7 +182,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 		 */
 		int deltaYPerChainSegment = 5;
 
-		int maxY = DungeonGenUtils.getHighestYAt(world.getChunkFromBlockCoords(pos), pos.getX(), pos.getZ(), true);
+		int maxY = DungeonGenUtils.getHighestYAt(world.getChunk(pos), pos.getX(), pos.getZ(), true);
 		maxY = maxY >= 255 ? 255 : maxY;
 		int chainCount = (maxY - pos.getY()) / deltaYPerChainSegment;
 		for (int i = 0; i < chainCount; i++) {

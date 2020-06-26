@@ -95,8 +95,8 @@ public class LootTableLoader {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
-		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".json");
-		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getResourcePath() + ".prop");
+		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getNamespace() + ".json");
+		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getNamespace() + ".prop");
 
 		if (jsonFile.exists()) {
 			// Load json loot table
@@ -136,7 +136,7 @@ public class LootTableLoader {
 					}
 
 					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(
-							CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getResourceDomain() + "_pool"));
+							CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getPath() + "_pool"));
 				} else {
 					for (int i = 0; i < items.size(); i++) {
 						lootTable.addPool(items.get(i).getAsSingleLootPool(i));

@@ -115,10 +115,10 @@ public class ItemPathTool extends Item {
 						particle = EnumParticleTypes.FLAME;
 					}
 					Vec3d pos = new Vec3d(path[i]);
-					pos = pos.addVector(0.5, 0.5, 0.5);
+					pos = pos.add(0.5, 0.5, 0.5);
 					if (i > 0) {
 						Vec3d v = new Vec3d(path[i]).subtract(new Vec3d(path[i - 1]));
-						double dist = v.lengthVector();
+						double dist = v.length();
 						v = v.normalize();
 						// Draw connection lines
 						for (double j = 0.25; j < dist; j += 0.5) {

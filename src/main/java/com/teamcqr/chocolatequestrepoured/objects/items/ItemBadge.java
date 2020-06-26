@@ -57,7 +57,7 @@ public class ItemBadge extends Item {
 						stack1.writeToNBT(slotTag);
 						itemList.appendTag(slotTag);
 					}
-					if (!itemList.hasNoTags()) {
+					if (!itemList.isEmpty()) {
 						entity.getEntityData().setTag("Items", itemList);
 						((WorldServer) player.world).spawnParticle((EntityPlayerMP) player, EnumParticleTypes.SPELL_WITCH, false, entity.posX, entity.posY + 0.5D, entity.posZ, 8, 0.5D, 0.5D, 0.5D, 0.1D);
 					}

@@ -115,7 +115,7 @@ public class BossAITortoiseSpinAttack extends AnimationAI<EntityCQRGiantTortoise
 				if(previousBlocks != getBoss().getSpinsBlocked()) {
 					previousBlocks = getBoss().getSpinsBlocked();
 					damage *= 1.5F;
-					damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());
+					damage /= Math.max(1, getBoss().getWorld().getDifficulty().getId());
 					getBoss().attackEntityFrom(DamageSource.IN_WALL, damage, true);
 				}
 				/*damage /= Math.max(1, getBoss().getWorld().getDifficulty().getDifficultyId());

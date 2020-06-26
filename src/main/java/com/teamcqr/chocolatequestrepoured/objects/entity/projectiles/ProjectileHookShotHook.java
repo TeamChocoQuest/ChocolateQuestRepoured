@@ -524,7 +524,7 @@ public class ProjectileHookShotHook extends ProjectileBase {
 	}
 
 	private Vec3d calcShooterBodyPosition() {
-		return this.thrower.getPositionVector().addVector(0, thrower.getEyeHeight() * 0.6, 0);
+		return this.thrower.getPositionVector().add(0, thrower.getEyeHeight() * 0.6, 0);
 	}
 
 	private void setShooterPosition(Vec3d shooterPos)

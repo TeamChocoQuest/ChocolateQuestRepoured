@@ -50,7 +50,7 @@ public class ItemShieldCQR extends ItemShield {
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		return I18n.translateToLocal(this.getUnlocalizedName() + ".name");
+		return I18n.translateToLocal(this.getTranslationKey() + ".name");
 	}
 
 	@Override

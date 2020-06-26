@@ -44,8 +44,8 @@ public class BlockPhylactery extends Block {
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-		super.onBlockDestroyedByPlayer(worldIn, pos, state);
+	public void onPlayerDestroy(World worldIn, BlockPos pos, IBlockState state) {
+		super.onPlayerDestroy(worldIn, pos, state);
 		worldIn.createExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 1.5F, true);
 	}
 
@@ -76,7 +76,7 @@ public class BlockPhylactery extends Block {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
 	

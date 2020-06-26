@@ -173,7 +173,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 		Chunk chunk = null;
 		ExtendedBlockStorage extendedBlockStorage = Chunk.NULL_BLOCK_STORAGE;
 		if (isLoaded) {
-			chunk = world.getChunkFromChunkCoords(oldChunkX, oldChunkZ);
+			chunk = world.getChunk(oldChunkX, oldChunkZ);
 			extendedBlockStorage = chunk.getBlockStorageArray()[oldChunkY];
 		}
 		for (int x3 = x1; x3 <= x2; x3++) {
@@ -185,7 +185,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 				oldChunkZ = z1 >> 4;
 				isLoaded = world.isBlockLoaded(pos2.setPos(x3, 0, z1));
 				if (isLoaded) {
-					chunk = world.getChunkFromChunkCoords(chunkX, z1 >> 4);
+					chunk = world.getChunk(chunkX, z1 >> 4);
 					extendedBlockStorage = chunk.getBlockStorageArray()[y1 >> 4];
 				}
 			}
@@ -199,7 +199,7 @@ public class EntityAILooter extends AbstractCQREntityAI<AbstractEntityCQR> {
 					oldChunkZ = chunkZ;
 					isLoaded = world.isBlockLoaded(pos2.setPos(x3, 0, z3));
 					if (isLoaded) {
-						chunk = world.getChunkFromChunkCoords(chunkX, chunkZ);
+						chunk = world.getChunk(chunkX, chunkZ);
 						extendedBlockStorage = chunk.getBlockStorageArray()[y1 >> 4];
 					}
 				}

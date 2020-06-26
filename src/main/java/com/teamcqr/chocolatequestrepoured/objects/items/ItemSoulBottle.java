@@ -124,7 +124,7 @@ public class ItemSoulBottle extends Item {
 			worldIn.spawnEntity(entity);
 
 			NBTTagList list = tag.getTagList("Passengers", 10);
-			if (!list.hasNoTags()) {
+			if (!list.isEmpty()) {
 				Entity rider = this.createEntityFromNBT(list.getCompoundTagAt(0), worldIn, x, y, z);
 				rider.startRiding(entity);
 			}

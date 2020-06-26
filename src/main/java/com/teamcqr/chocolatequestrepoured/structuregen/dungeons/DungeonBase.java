@@ -135,7 +135,7 @@ public abstract class DungeonBase {
 	public abstract AbstractDungeonGenerator<? extends DungeonBase> createDungeonGenerator(World world, int x, int y, int z);
 
 	public void generate(World world, int x, int z) {
-		Chunk chunk = world.getChunkFromChunkCoords(x >> 4, z >> 4);
+		Chunk chunk = world.getChunk(x >> 4, z >> 4);
 		int y = 0;
 		for (int ix = 0; ix < 16; ix++) {
 			for (int iz = 0; iz < 16; iz++) {

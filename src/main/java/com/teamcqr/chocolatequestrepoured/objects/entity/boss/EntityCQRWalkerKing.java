@@ -259,14 +259,14 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
 			if(resLoc != null) {
 				// Start IceAndFire compatibility
-				boolean flag = resLoc.getResourceDomain().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
+				boolean flag = resLoc.getNamespace().equalsIgnoreCase("iceandfire") && CQRConfig.advanced.enableSpecialFeatures;
 				if (flag) {
 					amount /= 2;
 				}
 				// End IceAndFire compatibility
 				
 				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && (resLoc.getResourcePath().contains("dragon") || resLoc.getResourcePath().contains("wyrm") || resLoc.getResourcePath().contains("wyvern") || flag)) {
+				if(dragonAttackCooldown <= 0 && (resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
 					dragonAttackCooldown = 80;
 					handleAttackedByDragon(source.getTrueSource());
 				}

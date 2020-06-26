@@ -49,7 +49,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onLootTableLoad(LootTableLoadEvent event) {
-		if (event.getName().getResourceDomain().equals(Reference.MODID)) {
+		if (event.getName().getNamespace().equals(Reference.MODID)) {
 			try {
 				event.setTable(LootTableLoader.fillLootTable(event.getName(), event.getTable()));
 			} catch (Exception e) {

@@ -71,7 +71,7 @@ public class RenderProjectileHookShotHook extends Render<ProjectileHookShotHook>
         GlStateManager.disableTexture2D();
 
 		Vec3d v = entity.getPositionVector().subtract(entity.getShooterPosition());//.add(new Vec3d(0,1.7,0));
-		int iterations = (int) Math.ceil(v.lengthVector());
+		int iterations = (int) Math.ceil(v.length());
 		v = v.normalize();
 		Vec3d loc = entity.getShooterPosition().add(v);
 

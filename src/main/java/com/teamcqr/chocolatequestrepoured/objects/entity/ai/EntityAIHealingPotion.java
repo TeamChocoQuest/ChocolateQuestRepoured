@@ -65,7 +65,7 @@ public class EntityAIHealingPotion extends AbstractCQREntityAI<AbstractEntityCQR
 		boolean flag = true;
 		if (attackTarget != null) {
 			int alertRadius = CQRConfig.mobs.alertRadius;
-			Vec3d vec1 = this.entity.getPositionVector().addVector(alertRadius, alertRadius * 0.5D, alertRadius);
+			Vec3d vec1 = this.entity.getPositionVector().add(alertRadius, alertRadius * 0.5D, alertRadius);
 			Vec3d vec2 = this.entity.getPositionVector().subtract(alertRadius, alertRadius * 0.5D, alertRadius);
 			AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 			List<Entity> possibleEnts = this.entity.world.getEntitiesInAABBexcluding(this.entity, aabb, TargetUtil.createPredicateAlly(this.entity.getFaction()));
