@@ -86,7 +86,6 @@ public class ModEntities {
 	public static final EntityEntry PROJECTILE_VAMPIRIC_SPELL = Null();
 	public static final EntityEntry PROJECTILE_FIREWALL_PART = Null();
 	public static final EntityEntry PROJECTILE_BUBBLE = Null();
-	public static final EntityEntry PROJECTILE_LARGE_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_HOT_FIREBALL = Null();
 	public static final EntityEntry PROJECTILE_WEB = Null();
 
@@ -195,7 +194,7 @@ public class ModEntities {
 					// Misc Entities
 					createEntityEntryWithoutEgg(EntitySummoningCircle.class, "summoning_circle", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityFlyingSkullMinion.class, "flying_skull", 64, 1, true),
-					createEntityEntryWithoutEgg(EntityBubble.class, "bubbles", 64, 1, true),
+					createEntityEntryWithoutEgg(EntityBubble.class, "bubble_entity", 64, 1, true),
 					createEntityEntryWithoutEgg(EntityWalkerKingIllusion.class, "illusion_walker_king", 64, 1, true),
 					createEntityEntry(EntityCQRWasp.class, "wasp", 64, 1, true, 0xC29D62, 0xEA9393),
 					createEntityEntryWithoutEgg(EntityColoredLightningBolt.class, "colored_lightning_bolt", 512, 1, true),
