@@ -22,6 +22,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRWasp;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderIceSpike;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderPirateParrot;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderSummoningCircle;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderWalkerTornado;
@@ -68,6 +69,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityBubble;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityIceSpike;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerKingIllusion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityWalkerTornado;
@@ -153,6 +155,7 @@ public class ModEntityRenderers {
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, renderManager -> new RenderCQRWasp(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, renderManager -> new RenderWalkerTornado(renderManager));
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, renderManager -> new RenderPirateParrot(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, renderManager -> new RenderIceSpike(renderManager));
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
