@@ -42,7 +42,7 @@ public class LayerShoulderEntity extends AbstractLayerCQR {
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             NBTTagCompound nbttagcompound = entitylivingbaseIn.getLeftShoulderEntity();
 
-            if (!nbttagcompound.hasNoTags())
+            if (!nbttagcompound.isEmpty())
             {
             	LayerShoulderEntity.DataHolder layerentityonshoulder$dataholder = this.renderEntityOnShoulder(entitylivingbaseIn, this.leftUniqueId, nbttagcompound, this.leftRenderer, this.leftModel, this.leftResource, this.leftEntityClass, limbSwing, limbSwingAmount, partialTicks, ageInTicks, netHeadYaw, headPitch, scale, true);
                 this.leftUniqueId = layerentityonshoulder$dataholder.entityId;

@@ -86,7 +86,7 @@ public class BlockPlacingHelper {
 			return false;
 		}
 
-		Chunk chunk = world.getChunkFromBlockCoords(pos);
+		Chunk chunk = world.getChunk(pos);
 		IBlockState oldState = chunk.getBlockState(pos);
 		int oldLight = oldState.getLightValue(world, pos);
 		int oldOpacity = oldState.getLightOpacity(world, pos);

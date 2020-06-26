@@ -62,8 +62,8 @@ public class WorldWallGenerator implements IWorldGenerator {
 				railingPart = new WallPartRailingWall();
 			}
 
-			wallPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), dungeonGenerator);
-			railingPart.generateWall(chunkX, chunkZ, world, world.getChunkFromChunkCoords(chunkX, chunkZ), dungeonGenerator);
+			wallPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
+			railingPart.generateWall(chunkX, chunkZ, world, world.getChunk(chunkX, chunkZ), dungeonGenerator);
 
 			DungeonGenerationManager.addStructure(world, dungeonGenerator, null);
 		}

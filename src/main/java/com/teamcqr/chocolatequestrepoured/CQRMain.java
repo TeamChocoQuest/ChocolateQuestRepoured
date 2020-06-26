@@ -76,19 +76,19 @@ public class CQRMain {
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(ModItems.BOOTS_CLOUD);
 		}
 	};
 	public static final CreativeTabs CQR_BLOCKS_TAB = new CreativeTabs("ChocolateQuestRepouredBlocksTab") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(ModBlocks.TABLE_OAK);
 		}
 	};
 	public static final CreativeTabs CQR_BANNERS_TAB = new CreativeTabs("ChocolateQuestRepouredBannerTab") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(Items.BANNER);
 		}
 
@@ -103,19 +103,19 @@ public class CQRMain {
 	};
 	public static final CreativeTabs CQR_DUNGEON_PLACER_TAB = new CreativeTabs("ChocolateQuestRepouredDungeonPlacers") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(Blocks.STONEBRICK);
 		}
 	};
 	public static final CreativeTabs CQR_EXPORTER_CHEST_TAB = new CreativeTabs("ChocolateQuestRepouredExporterChests") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(Blocks.CHEST);
 		}
 	};
 	public static final CreativeTabs CQR_SPAWN_EGG_TAB = new CreativeTabs("CQR Spawn Eggs") {
 		@Override
-		public ItemStack getTabIconItem() {
+		public ItemStack createIcon() {
 			return new ItemStack(Items.SPAWN_EGG);
 		}
 	};

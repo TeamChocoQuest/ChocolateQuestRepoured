@@ -81,7 +81,7 @@ public class BlockInfoLootChest extends AbstractBlockInfo {
 	public void readFromNBT(NBTTagIntArray nbtTagIntArray, BlockStatePalette blockStatePalette, NBTTagList compoundTagList) {
 		int[] ints = nbtTagIntArray.getIntArray();
 		this.lootTable = this.getLootTableFromId(ints[1]);
-		this.facing = EnumFacing.getHorizontal(ints[2]);
+		this.facing = EnumFacing.byHorizontalIndex(ints[2]);
 	}
 
 	private int getIdFromLootTable(ResourceLocation lootTable) {

@@ -122,8 +122,8 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		compound.setFloat("cqrdata.timeMultiplier", this.timeMultiplierForSummon);
-		compound.setString("cqrdata.entityToSpawn.Domain", this.entityToSpawn.getResourceDomain());
-		compound.setString("cqrdata.entityToSpawn.Path", this.entityToSpawn.getResourcePath());
+		compound.setString("cqrdata.entityToSpawn.Domain", this.entityToSpawn.getNamespace());
+		compound.setString("cqrdata.entityToSpawn.Path", this.entityToSpawn.getPath());
 		compound.setInteger("ticksExisted", this.ticksExisted);
 	}
 

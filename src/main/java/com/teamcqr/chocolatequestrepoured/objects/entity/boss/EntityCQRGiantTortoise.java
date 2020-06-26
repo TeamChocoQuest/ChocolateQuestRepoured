@@ -351,7 +351,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 			}
 			
 			if(!blocked) {
-				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F * (Math.max(1, world.getDifficulty().getDifficultyId()) *1.5F));
+				entityIn.attackEntityFrom(DamageSource.causeThornsDamage(this), 4F * (Math.max(1, world.getDifficulty().getId()) *1.5F));
 			}
 			Vec3d v = entityIn.getPositionVector().subtract(getPositionVector());
 			v = v.normalize();

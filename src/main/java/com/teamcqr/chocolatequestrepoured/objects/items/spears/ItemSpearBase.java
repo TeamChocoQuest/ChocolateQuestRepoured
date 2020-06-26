@@ -188,7 +188,7 @@ public class ItemSpearBase extends ItemSword {
 			}
 
 			Vec3d vec3d1 = renderViewEntity.getLook(1.0F);
-			Vec3d vec3d2 = eyeVec.addVector(vec3d1.x * d0, vec3d1.y * d0, vec3d1.z * d0);
+			Vec3d vec3d2 = eyeVec.add(vec3d1.x * d0, vec3d1.y * d0, vec3d1.z * d0);
 
 			Vec3d vec3d3 = null;
 

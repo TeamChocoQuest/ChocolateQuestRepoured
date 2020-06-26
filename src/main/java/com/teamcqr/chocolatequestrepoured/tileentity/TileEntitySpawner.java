@@ -171,7 +171,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			Random rand = new Random();
 			Vec3d pos = new Vec3d(this.pos.getX() + 0.5D, this.pos.getY(), this.pos.getZ() + 0.5D);
 			double offset = entity.width < 0.96F ? 0.5D - entity.width * 0.5D : 0.02D;
-			pos = pos.addVector(rand.nextDouble() * offset * 2.0D - offset, 0.0D, rand.nextDouble() * offset * 2.0D - offset);
+			pos = pos.add(rand.nextDouble() * offset * 2.0D - offset, 0.0D, rand.nextDouble() * offset * 2.0D - offset);
 			entity.setPosition(pos.x, pos.y, pos.z);
 
 			if (entity instanceof EntityLiving) {
@@ -187,7 +187,7 @@ public class TileEntitySpawner extends TileEntitySyncClient implements ITickable
 			this.world.spawnEntity(entity);
 
 			NBTTagList list = nbt.getTagList("Passengers", 10);
-			if (!list.hasNoTags()) {
+			if (!list.isEmpty()) {
 				Entity rider = this.spawnEntityFromNBT(list.getCompoundTagAt(0));
 				rider.startRiding(entity);
 			}

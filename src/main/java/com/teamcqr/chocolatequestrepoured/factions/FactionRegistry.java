@@ -367,7 +367,7 @@ public class FactionRegistry {
 					final UUID uuid = event.player.getPersistentID();
 					NBTTagCompound root = FileIOUtil.getRootNBTTagOfFile(f);
 					NBTTagList repuDataList = FileIOUtil.getOrCreateTagList(root, "reputationdata", Constants.NBT.TAG_COMPOUND);
-					if (!repuDataList.hasNoTags()) {
+					if (!repuDataList.isEmpty()) {
 						while (FactionRegistry.this.uuidsBeingLoaded.contains(uuid)) {
 							// Wait until the uuid isnt active
 						}

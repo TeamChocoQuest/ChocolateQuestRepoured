@@ -68,7 +68,7 @@ public class BoundingBoxHelper {
 	public static double getAreaOfTriangle(Vec3d vec1, Vec3d vec2, Vec3d vec3) {
 		Vec3d v1 = vec2.subtract(vec1);
 		Vec3d v2 = vec3.subtract(vec1);
-		return 0.5D * v1.crossProduct(v2).lengthVector();
+		return 0.5D * v1.crossProduct(v2).length();
 	}
 
 }

@@ -313,7 +313,7 @@ public class ModBlocks {
 		}
 
 		private static Block setBlockNameAndTab(Block block, String name, @Nullable CreativeTabs tab) {
-			return block.setUnlocalizedName(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
+			return block.setTranslationKey(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
 		}
 
 		@SubscribeEvent
@@ -328,7 +328,7 @@ public class ModBlocks {
 		}
 
 		private static ItemBlock createItemBlock(Block block) {
-			return (ItemBlock) new ItemBlock(block).setUnlocalizedName(block.getLocalizedName()).setRegistryName(block.getRegistryName());
+			return (ItemBlock) new ItemBlock(block).setTranslationKey(block.getLocalizedName()).setRegistryName(block.getRegistryName());
 		}
 
 	}

@@ -73,7 +73,7 @@ public class EntityAIHurtByTarget extends AbstractCQREntityAI<AbstractEntityCQR>
 		double radius = CQRConfig.mobs.alertRadius;
 		Vec3d eyeVec = this.entity.getPositionEyes(1.0F);
 		Vec3d vec1 = eyeVec.subtract(radius, radius * 0.5D, radius);
-		Vec3d vec2 = eyeVec.addVector(radius, radius * 0.5D, radius);
+		Vec3d vec2 = eyeVec.add(radius, radius * 0.5D, radius);
 		AxisAlignedBB aabb = new AxisAlignedBB(vec1.x, vec1.y, vec1.z, vec2.x, vec2.y, vec2.z);
 		List<EntityLiving> allies = this.world.getEntitiesWithinAABB(EntityLiving.class, aabb, this::isSuitableAlly);
 		for (EntityLiving ally : allies) {

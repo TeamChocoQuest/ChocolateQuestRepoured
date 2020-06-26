@@ -63,7 +63,7 @@ public class EntityInfo implements IGeneratable {
 				float transformedYaw = entity.rotationYaw + entity.getMirroredYaw(settings.getMirror()) - entity.getRotatedYaw(settings.getRotation());
 				entity.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), transformedYaw, entity.rotationPitch);
 			} else {
-				Vec3d vec = DungeonGenUtils.transformedVec3d(DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE)), settings).addVector(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
+				Vec3d vec = DungeonGenUtils.transformedVec3d(DungeonGenUtils.readVecFromList(this.entityData.getTagList("Pos", Constants.NBT.TAG_DOUBLE)), settings).add(dungeonPartPos.getX(), dungeonPartPos.getY(), dungeonPartPos.getZ());
 				float transformedYaw = this.getTransformedYaw(entity.rotationYaw, settings.getMirror(), settings.getRotation());
 				entity.setLocationAndAngles(vec.x, vec.y, vec.z, transformedYaw, entity.rotationPitch);
 				entity.setRenderYawOffset(transformedYaw);
