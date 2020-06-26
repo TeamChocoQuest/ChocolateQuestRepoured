@@ -395,7 +395,7 @@ tile.table_jungle.name=Jungle Table
 tile.table_acacia.name=Acacia Table
 tile.table_dark.name=Dark Oak Table
 tile.boss_block.name=Boss Block
-tile.force_field_nexus.name=Force Field Nexus (NYI)
+tile.force_field_nexus.name=Force Field Nexus
 
 #Andesite blocks
 tile.andesite_carved.name=Carved Andesite
@@ -601,7 +601,9 @@ entity.cqr_illusion_walker_king.name=Walker King
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
 entity.cqr_pirate_parrot.name=Traitor Parrot
 entity.cqr_flying_skull.name=Flying Skull
-entity.cqr_ice_spike=Ice Spike 'o' Death
+entity.cqr_ice_spike.name=Ice Spike 'o' Death
+entity.cqr_wasp.name=Wasp (WIP)
+entity.cqr_pollo.name=Abomination (WIP)
 
 #Advancements
 advancements.cqrepoured.root.title=Chocolate Quest Repoured
