@@ -600,6 +600,8 @@ entity.cqr_summoning_circle.name=<TECHNICAL_ENTITY>summoning pentagram
 entity.cqr_illusion_walker_king.name=Walker King
 entity.cqr_walker_tornado.name=<TECHNICAL_ENTITY>Walker Tornado
 entity.cqr_pirate_parrot.name=Traitor Parrot
+entity.cqr_flying_skull.name=Flying Skull
+entity.cqr_ice_spike=Ice Spike 'o' Death
 
 #Advancements
 advancements.cqrepoured.root.title=Chocolate Quest Repoured
