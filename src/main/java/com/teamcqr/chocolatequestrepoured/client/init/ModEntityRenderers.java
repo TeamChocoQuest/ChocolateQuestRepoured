@@ -174,7 +174,7 @@ public class ModEntityRenderers {
 		// Illager
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRIllager.class, renderManager -> new RenderCQRIllager(renderManager));
 		// Inquisiton
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, renderManager -> new RenderCQREntity<EntityCQRNPC>(renderManager, "entity_mob_cqrinquisitor"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, renderManager -> new RenderCQREntity<EntityCQRNPC>(renderManager, "entity_cqr_lunk"));
 		// Minotaur
 		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, renderManager -> new RenderCQRMinotaur(renderManager));
 		// Mandril
