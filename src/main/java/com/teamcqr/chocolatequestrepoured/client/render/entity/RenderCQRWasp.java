@@ -5,6 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityCQRWasp;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -23,7 +24,11 @@ public class RenderCQRWasp extends RenderLiving<EntityCQRWasp> {
 	
 	@Override
 	protected void renderModel(EntityCQRWasp entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
+		GlStateManager.pushMatrix();
+		GlStateManager.enableAlpha();
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+		GlStateManager.disableAlpha();
+		GlStateManager.popMatrix();
 	}
 
 	@Override
