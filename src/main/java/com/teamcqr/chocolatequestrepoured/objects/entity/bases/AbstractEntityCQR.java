@@ -207,7 +207,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// Start IceAndFire compatibility
 		if (CQRConfig.advanced.enableSpecialFeatures && source.getTrueSource() != null) {
 			ResourceLocation resLoc = EntityList.getKey(source.getTrueSource());
-			if (resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			if (resLoc != null && resLoc.getNamespace().equalsIgnoreCase("iceandfire")) {
 				amount *= 0.5F;
 			}
 		}
@@ -374,7 +374,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		}
 
 		// Shoulder entity stuff
-		if (!this.getLeftShoulderEntity().hasNoTags()) {
+		if (!this.getLeftShoulderEntity().isEmpty()) {
 			compound.setTag("ShoulderEntityLeft", this.getLeftShoulderEntity());
 		}
 
@@ -643,7 +643,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		// Start IceAndFire compatibility
 		if (CQRConfig.advanced.enableSpecialFeatures) {
 			ResourceLocation resLoc = EntityList.getKey(entityIn);
-			if (resLoc != null && resLoc.getResourceDomain().equalsIgnoreCase("iceandfire")) {
+			if (resLoc != null && resLoc.getNamespace().equalsIgnoreCase("iceandfire")) {
 				f *= 2.0F;
 			}
 		}
@@ -1253,7 +1253,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 
 	public boolean addShoulderEntity(NBTTagCompound p_192027_1_) {
 		if (!this.isRiding() && this.onGround && !this.isInWater()) {
-			if (this.getLeftShoulderEntity().hasNoTags()) {
+			if (this.getLeftShoulderEntity().isEmpty()) {
 				this.setLeftShoulderEntity(p_192027_1_);
 				return true;
 			} else {
@@ -1270,7 +1270,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 
 	private void spawnShoulderEntity(@Nullable NBTTagCompound p_192026_1_) {
-		if (!this.world.isRemote && !p_192026_1_.hasNoTags()) {
+		if (!this.world.isRemote && !p_192026_1_.isEmpty()) {
 			Entity entity = EntityList.createEntityFromNBT(p_192026_1_, this.world);
 
 			if (entity instanceof EntityTameable) {
