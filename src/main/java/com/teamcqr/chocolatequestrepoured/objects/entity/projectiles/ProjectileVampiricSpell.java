@@ -38,7 +38,7 @@ public class ProjectileVampiricSpell extends ProjectileBase {
 					entity.attackEntityFrom(DamageSource.MAGIC, damage);
 
 					if (this.shooter != null && this.shooter.getHealth() < this.shooter.getMaxHealth()) {
-						this.shooter.heal(damage * 2);
+						this.shooter.heal(damage / 2);
 					}
 
 					this.setDead();
