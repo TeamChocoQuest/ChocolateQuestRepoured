@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -21,6 +18,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionConstructor;
+import com.teamcqr.chocolatequestrepoured.util.reflection.ReflectionField;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootEntry;
@@ -35,6 +34,10 @@ import net.minecraftforge.common.ForgeHooks;
  * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class LootTableLoader {
+
+	private static final ReflectionField<ForgeHooks, ThreadLocal<Deque<?>>> LOOT_CONTEXT = new ReflectionField<>(ForgeHooks.class, "lootContext", "lootContext");
+	private static final ReflectionConstructor<?> LOOT_TABLE_CONTEXT = new ReflectionConstructor<>("net.minecraftforge.common.ForgeHooks$LootTableContext", ResourceLocation.class);
+	private static final ReflectionField<LootTableManager, Gson> GSON_INSTANCE = new ReflectionField<>(LootTableManager.class, "field_186526_b", "GSON_INSTANCE");
 
 	private static List<WeightedItemStack> getItemList(Properties propFile) {
 		List<WeightedItemStack> items = new ArrayList<WeightedItemStack>();
@@ -79,7 +82,7 @@ public class LootTableLoader {
 				max_lvl = Integer.parseInt(((String) tokenizer.nextElement()).trim());
 				if (tokenCount >= 9) {
 					treasure = Boolean.parseBoolean(((String) tokenizer.nextElement()).trim());
-					if(tokenCount >= 10) {
+					if (tokenCount >= 10) {
 						enchChance = Integer.parseInt(((String) tokenizer.nextElement()).trim());
 					}
 				}
@@ -103,22 +106,21 @@ public class LootTableLoader {
 			try (InputStream inputStream = new FileInputStream(jsonFile)) {
 				String s = Files.toString(jsonFile, StandardCharsets.UTF_8);
 
-				ThreadLocal<Deque> lootContext = getLootContext();
+				ThreadLocal<Deque<?>> lootContext = LOOT_CONTEXT.get(null);
 				Deque que = lootContext.get();
 				if (que == null) {
 					que = Queues.newArrayDeque();
 					lootContext.set(que);
 				}
 
-				que.push(createLootTableContext(name));
-				lootTable = getGsonInstance().fromJson(s, LootTable.class);
+				que.push(LOOT_TABLE_CONTEXT.newInstance(name));
+				lootTable = GSON_INSTANCE.get(null).fromJson(s, LootTable.class);
 				que.pop();
 
 				if (lootTable != null) {
 					lootTable.freeze();
 				}
-			} catch (IOException | JsonSyntaxException | NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InstantiationException
-					| InvocationTargetException e) {
+			} catch (IOException | JsonSyntaxException e) {
 				CQRMain.logger.error("Failed to read json loot table " + jsonFile.getName(), e);
 			}
 		} else if (propFile.exists()) {
@@ -135,8 +137,8 @@ public class LootTableLoader {
 						entries[i] = items.get(i).getAsLootEntry(i);
 					}
 
-					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), Math.min(Math.max(
-							CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getPath() + "_pool"));
+					lootTable.addPool(new LootPool(entries, new LootCondition[] {}, new RandomValueRange(Math.min(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest),
+							Math.min(Math.max(CQRConfig.general.minItemsPerLootChest, CQRConfig.general.maxItemsPerLootChest), items.size())), new RandomValueRange(0), name.getPath() + "_pool"));
 				} else {
 					for (int i = 0; i < items.size(); i++) {
 						lootTable.addPool(items.get(i).getAsSingleLootPool(i));
@@ -149,26 +151,6 @@ public class LootTableLoader {
 
 		return lootTable;
 
-	}
-
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static ThreadLocal<Deque> getLootContext() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field f = ForgeHooks.class.getDeclaredField("lootContext");
-		f.setAccessible(true);
-		return (ThreadLocal<Deque>) f.get(null);
-	}
-
-	private static Object createLootTableContext(ResourceLocation name) throws ClassNotFoundException, NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-		@SuppressWarnings("rawtypes")
-		Constructor c = Class.forName("net.minecraftforge.common.ForgeHooks$LootTableContext").getDeclaredConstructor(ResourceLocation.class, Boolean.TYPE);
-		c.setAccessible(true);
-		return c.newInstance(name, true);
-	}
-
-	private static Gson getGsonInstance() throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException {
-		Field f = LootTableManager.class.getDeclaredField("GSON_INSTANCE");
-		f.setAccessible(true);
-		return (Gson) f.get(null);
 	}
 
 }
