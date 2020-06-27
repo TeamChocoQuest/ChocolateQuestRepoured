@@ -8,7 +8,7 @@ public class ReflectionField<C, T> {
 
 	private final Field field;
 
-	public ReflectionField(Class<? extends C> clazz, String obfuscatedName, String deobfuscatedName) {
+	public ReflectionField(Class<C> clazz, String obfuscatedName, String deobfuscatedName) {
 		Field f = null;
 		try {
 			try {
@@ -24,6 +24,23 @@ public class ReflectionField<C, T> {
 		this.field = f;
 	}
 
+	public ReflectionField(String className, String obfuscatedName, String deobfuscatedName) {
+		Field f = null;
+		try {
+			Class<C> clazz = (Class<C>) Class.forName(className);
+			try {
+				f = clazz.getDeclaredField(obfuscatedName);
+				f.setAccessible(true);
+			} catch (NoSuchFieldException e) {
+				f = clazz.getDeclaredField(deobfuscatedName);
+				f.setAccessible(true);
+			}
+		} catch (ClassNotFoundException | ClassCastException | NoSuchFieldException | SecurityException e) {
+			CQRMain.logger.error("Failed to get field from class " + className + " for name " + deobfuscatedName, e);
+		}
+		this.field = f;
+	}
+
 	public void set(C obj, T value) {
 		try {
 			this.field.set(obj, value);
@@ -35,7 +52,7 @@ public class ReflectionField<C, T> {
 	public T get(C obj) {
 		try {
 			return (T) this.field.get(obj);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
+		} catch (IllegalArgumentException | IllegalAccessException | ClassCastException e) {
 			CQRMain.logger.error("Failed to get field " + this.field.getName() + " for object " + obj, e);
 		}
 		return null;
