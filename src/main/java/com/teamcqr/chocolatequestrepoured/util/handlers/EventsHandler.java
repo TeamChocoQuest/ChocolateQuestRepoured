@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
+import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -10,17 +11,20 @@ import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +32,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,6 +43,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -169,7 +175,6 @@ public class EventsHandler {
 		event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
 	}
 
-	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
@@ -204,6 +209,22 @@ public class EventsHandler {
 
 				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) == 1.0F) {
 					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void sayNoToCowardlyPlacingLavaAgainstABoss(PlayerInteractEvent.RightClickBlock event) {
+		if(CQRConfig.bosses.antiCowardMode) {
+			if(event.getItemStack().getItem() instanceof ItemBucket && event.getItemStack().getMaxStackSize() == 1) {
+				//Now check if a boss is nearby...
+				List<EntityLivingBase> bosses = event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(
+						event.getPos().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius), 
+						event.getPos().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)));
+				if(bosses != null && !bosses.isEmpty()) {
+					event.setCanceled(true);
+					//TODO: Set the bucket to an empty bucket and play the extinguish sound as well as some smoke particles
 				}
 			}
 		}
