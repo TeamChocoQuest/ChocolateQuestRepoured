@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.entity.particle.EntityParticle;
+import com.teamcqr.chocolatequestrepoured.objects.entity.particle.ParticleWalkerTornado;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
@@ -43,7 +44,7 @@ public class EntityWalkerTornado extends Entity {
 
 	@Override
 	protected void entityInit() {
-		this.dataManager.register(COLOR, 12);
+		this.dataManager.register(COLOR, 4980889);
 		this.dataManager.register(OWNER_ID, "");
 	}
 
@@ -82,10 +83,10 @@ public class EntityWalkerTornado extends Entity {
 			final double d2 = (float) this.posY + this.height + 0.125f;
 			final double d3 = (float) this.posZ + this.rand.nextFloat() * 0.25f;
 			final float f = this.rand.nextFloat() * 360.0f;
-			final EntityParticle particle = new EntityParticle(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
+			final EntityParticle particle = new ParticleWalkerTornado(this.world, -Math.sin(0.01745329f * f) * 0.75, d2 - 0.25, Math.cos(0.01745329f * f) * 0.75, d1, 0.125, d3);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect((Particle) particle);
 			this.particles.add(particle);
-			particle.setRBGColorF((color >> 16 & 0xFF) / 255.0f, (color >> 8 & 0xFF) / 255.0f, (color & 0xFF) / 255.0f);
+			particle.setRBGColorF(((color >> 16) & 0xFF) / 255.0f, ((color >> 8) & 0xFF) / 255.0f, (color & 0xFF) / 255.0f);
 			particle.setPosition(this.posX, this.posY, this.posZ);
 		}
 
