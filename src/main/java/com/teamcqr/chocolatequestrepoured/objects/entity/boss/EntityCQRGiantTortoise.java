@@ -139,6 +139,7 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 
 		this.noClip = false;
 		this.setNoGravity(false);
+		this.isImmuneToFire = true;
 		this.experienceValue = 100;
 
 		this.ignoreFrustumCheck = true;
@@ -377,6 +378,10 @@ public class EntityCQRGiantTortoise extends AbstractEntityCQRBoss implements IEn
 		} else {
 			super.collideWithEntity(entityIn);
 		}
+	}
+	
+	@Override
+	public void setFire(int seconds) {
 	}
 	
 	@Override

@@ -16,6 +16,8 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 	public EntityCQRGiantTortoisePart(EntityCQRGiantTortoise parent, String partName, float width, float height, boolean isHead) {
 		super(parent, partName, width, height);
 
+		this.isImmuneToFire = true;
+		
 		this.setSize(width, height);
 
 		// setInvisible(true);
@@ -31,6 +33,10 @@ public class EntityCQRGiantTortoisePart extends MultiPartEntityPart {
 			amount *= 1.5F;
 		}
 		return this.getParent().attackEntityFromPart(this, source, amount);
+	}
+	
+	@Override
+	public void setFire(int seconds) {
 	}
 
 	@Override
