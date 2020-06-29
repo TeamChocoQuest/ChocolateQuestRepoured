@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.util.handlers;
 
-import java.util.List;
 import java.util.Random;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -18,10 +17,10 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemBucket;
@@ -215,17 +214,59 @@ public class EventsHandler {
 	}
 	
 	@SubscribeEvent
-	public static void sayNoToCowardlyPlacingLavaAgainstABoss(PlayerInteractEvent.RightClickBlock event) {
-		if(CQRConfig.bosses.antiCowardMode) {
-			if(event.getItemStack().getItem() instanceof ItemBucket && event.getItemStack().getMaxStackSize() == 1) {
+	public static void sayNoToCowardlyPlacingLavaAgainstBosses(PlayerInteractEvent.RightClickBlock event) {
+		if(CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
+			//System.out.println("Checking for bucket...");
+			if(event.getItemStack().getItem() instanceof ItemBucket /*&& event.getItemStack().getMaxStackSize() == 1*/) {
 				//Now check if a boss is nearby...
-				List<EntityLivingBase> bosses = event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(
-						event.getPos().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius), 
-						event.getPos().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)));
-				if(bosses != null && !bosses.isEmpty()) {
-					event.setCanceled(true);
-					//TODO: Set the bucket to an empty bucket and play the extinguish sound as well as some smoke particles
+				//System.out.println("Found bucket!");
+				BlockPos pos = event.getPos();
+				switch(event.getFace()) {
+				case DOWN:
+					pos = pos.down();
+					break;
+				case EAST:
+					pos = pos.east();
+					break;
+				case NORTH:
+					pos = pos.north();
+					break;
+				case SOUTH:
+					pos = pos.south();
+					break;
+				case UP:
+					pos = pos.up();
+					break;
+				case WEST:
+					pos = pos.west();
+					break;
+				default:
+					break;
+				
 				}
+				/*IBlockState placedLiquid = event.getWorld().getBlockState(pos);
+				boolean liquidFlag = (placedLiquid.getMaterial() == Material.LAVA || placedLiquid.getMaterial() == Material.WATER || placedLiquid.getMaterial() instanceof MaterialLiquid);*/
+				event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, 
+						new AxisAlignedBB(
+								event.getPos().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
+								event.getPos().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)
+						)
+					).isEmpty()
+				);
+				if(event.isCanceled()) {
+					if(!event.getWorld().isRemote) {
+						//event.getWorld().scheduleUpdate(pos, event.getWorld().getBlockState(pos).getBlock(), 2);
+						event.getWorld().scheduleUpdate(pos, Blocks.AIR, 20);
+						//event.getWorld().setBlockState(pos, event.getWorld().getBlockState(pos));
+						//event.getWorld().scheduleUpdate(event.getPos(), event.getWorld().getBlockState(event.getPos()).getBlock(), 2);
+						event.getWorld().scheduleUpdate(event.getPos(), Blocks.AIR, 20);
+						//event.getWorld().setBlockState(event.getPos(), event.getWorld().getBlockState(event.getPos()));
+						event.getWorld().playSound(null, event.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.AMBIENT, 1, 1);
+					} else {
+						event.getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), 0, 0, 0);
+					}
+				}
+				//System.out.println("Canceled event: " + event.isCanceled());
 			}
 		}
 	}
