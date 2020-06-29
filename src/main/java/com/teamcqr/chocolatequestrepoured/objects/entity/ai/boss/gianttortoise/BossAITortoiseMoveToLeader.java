@@ -22,7 +22,7 @@ public class BossAITortoiseMoveToLeader extends EntityAIMoveToLeader {
 	}
 	
 	private boolean checkTurtleSpecific() {
-		if(!(getBoss().isStunned() || getBoss().isSpinning() || getBoss().isHealing())) {
+		if(!getBoss().hasAttackTarget() && !(getBoss().isStunned() || getBoss().isSpinning() || getBoss().isHealing())) {
 			if(getBoss().isInShell()) {
 				getBoss().targetNewState(EntityCQRGiantTortoise.TARGET_MOVE_OUT);
 			}

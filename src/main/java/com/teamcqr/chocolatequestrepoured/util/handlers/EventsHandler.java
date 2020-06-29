@@ -10,6 +10,7 @@ import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
@@ -19,8 +20,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -28,6 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,6 +42,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -169,7 +174,6 @@ public class EventsHandler {
 		event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
 	}
 
-	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e) {
 		if (!e.getWorld().isRemote) {
@@ -205,6 +209,64 @@ public class EventsHandler {
 				if (targetCQR.canBlockDamageSource(DamageSource.causePlayerDamage(player)) && player.getHeldItemMainhand().getItem() instanceof ItemAxe && player.getCooledAttackStrength(0) == 1.0F) {
 					targetCQR.setLastTimeHitByAxeWhileBlocking(targetCQR.ticksExisted);
 				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
+	public static void sayNoToCowardlyPlacingLavaAgainstBosses(PlayerInteractEvent.RightClickBlock event) {
+		if(CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
+			//System.out.println("Checking for bucket...");
+			if(event.getItemStack().getItem() instanceof ItemBucket /*&& event.getItemStack().getMaxStackSize() == 1*/) {
+				//Now check if a boss is nearby...
+				//System.out.println("Found bucket!");
+				BlockPos pos = event.getPos();
+				switch(event.getFace()) {
+				case DOWN:
+					pos = pos.down();
+					break;
+				case EAST:
+					pos = pos.east();
+					break;
+				case NORTH:
+					pos = pos.north();
+					break;
+				case SOUTH:
+					pos = pos.south();
+					break;
+				case UP:
+					pos = pos.up();
+					break;
+				case WEST:
+					pos = pos.west();
+					break;
+				default:
+					break;
+				
+				}
+				/*IBlockState placedLiquid = event.getWorld().getBlockState(pos);
+				boolean liquidFlag = (placedLiquid.getMaterial() == Material.LAVA || placedLiquid.getMaterial() == Material.WATER || placedLiquid.getMaterial() instanceof MaterialLiquid);*/
+				event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, 
+						new AxisAlignedBB(
+								event.getPos().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
+								event.getPos().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)
+						)
+					).isEmpty()
+				);
+				if(event.isCanceled()) {
+					if(!event.getWorld().isRemote) {
+						//event.getWorld().scheduleUpdate(pos, event.getWorld().getBlockState(pos).getBlock(), 2);
+						event.getWorld().scheduleUpdate(pos, Blocks.AIR, 20);
+						//event.getWorld().setBlockState(pos, event.getWorld().getBlockState(pos));
+						//event.getWorld().scheduleUpdate(event.getPos(), event.getWorld().getBlockState(event.getPos()).getBlock(), 2);
+						event.getWorld().scheduleUpdate(event.getPos(), Blocks.AIR, 20);
+						//event.getWorld().setBlockState(event.getPos(), event.getWorld().getBlockState(event.getPos()));
+						event.getWorld().playSound(null, event.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.AMBIENT, 1, 1);
+					} else {
+						event.getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), 0, 0, 0);
+					}
+				}
+				//System.out.println("Canceled event: " + event.isCanceled());
 			}
 		}
 	}
