@@ -23,6 +23,8 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public int deathTicks = 0;
 	public static final int MAX_DEATH_TICKS = 200;
 
+	private int lastTickWithAttackTarget;
+
 	public AbstractEntityCQRBoss(World worldIn) {
 		super(worldIn);
 		this.experienceValue = 50;
@@ -72,6 +74,12 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
+
+		if (this.getAttackTarget() != null) {
+			this.lastTickWithAttackTarget = this.ticksExisted;
+		} else if (this.lastTickWithAttackTarget + 100 < this.ticksExisted && this.ticksExisted % 5 == 0) {
+			this.heal(this.getMaxHealth() * 0.005F);
+		}
 
 		this.bossInfoServer.setPercent(this.getHealth() / this.getMaxHealth());
 	}
