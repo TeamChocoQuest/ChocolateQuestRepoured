@@ -74,20 +74,16 @@ public class TargetUtil {
 	}
 
 	public static final <T extends Entity> T getNearestEntity(EntityLiving entity, List<T> list) {
-		if (!list.isEmpty()) {
-			T nearestEntity = list.get(0);
-			double min = entity.getDistanceSq(nearestEntity);
-			for (int i = 1; i < list.size(); i++) {
-				T otherEntity = list.get(i);
-				double distance = entity.getDistanceSq(otherEntity);
-				if (distance < min) {
-					nearestEntity = otherEntity;
-					min = distance;
-				}
+		T nearestEntity = null;
+		double min = Double.MAX_VALUE;
+		for (T otherEntity : list) {
+			double distance = entity.getDistanceSq(otherEntity);
+			if (distance < min) {
+				nearestEntity = otherEntity;
+				min = distance;
 			}
-			return nearestEntity;
 		}
-		return null;
+		return nearestEntity;
 	}
 
 	public static class Sorter implements Comparator<Entity> {

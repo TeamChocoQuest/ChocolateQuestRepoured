@@ -275,6 +275,10 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		if (this.isHoldingPotion()) {
 			this.swapWeaponAndPotionSlotItemStacks();
 		}
+		Item item = this.getHeldItemMainhand().getItem();
+		if (item instanceof IFakeWeapon<?>) {
+			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+		}
 
 		super.onDeath(cause);
 

@@ -1,13 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.target;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
-import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.AbstractCQREntityAI;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
+import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.util.EntitySelectors;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.EnumDifficulty;
@@ -28,7 +31,7 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		this.entity.setAttackTarget(null);
-		return true;
+		return this.entity.hasFaction();
 	}
 
 	@Override
@@ -39,55 +42,79 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 	@Override
 	public void startExecuting() {
 		AxisAlignedBB aabb = this.entity.getEntityBoundingBox().grow(32.0D);
-		List<EntityLivingBase> possibleTargets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb, this::isSuitableTarget);
-		if (!possibleTargets.isEmpty()) {
-			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargets));
+		List<EntityLivingBase> possibleTargets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+		List<EntityLivingBase> possibleTargetsAlly = new LinkedList<>();
+		List<EntityLivingBase> possibleTargetsEnemy = new LinkedList<>();
+		this.fillLists(possibleTargets, possibleTargetsAlly, possibleTargetsEnemy);
+		if (!possibleTargetsAlly.isEmpty()) {
+			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsAlly));
+		} else if (!possibleTargetsEnemy.isEmpty()) {
+			this.entity.setAttackTarget(TargetUtil.getNearestEntity(this.entity, possibleTargetsEnemy));
 		}
 	}
 
-	private boolean isSuitableTarget(EntityLivingBase possibleTarget) {
-		if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
-			return false;
+	private void fillLists(List<EntityLivingBase> list, List<EntityLivingBase> allies, List<EntityLivingBase> enemies) {
+		for (EntityLivingBase possibleTarget : list) {
+			if (!TargetUtil.PREDICATE_ATTACK_TARGET.apply(possibleTarget)) {
+				continue;
+			}
+			if (!EntitySelectors.IS_ALIVE.apply(possibleTarget)) {
+				continue;
+			}
+			if (possibleTarget == this.entity) {
+				continue;
+			}
+			if (this.canTargetAlly() && this.isSuitableTargetAlly(possibleTarget)) {
+				allies.add(possibleTarget);
+			} else if (this.isSuitableTargetEnemy(possibleTarget)) {
+				enemies.add(possibleTarget);
+			}
 		}
-		if (!EntitySelectors.IS_ALIVE.apply(possibleTarget)) {
-			return false;
-		}
-		if (possibleTarget == this.entity) {
-			return false;
-		}
+	}
+
+	private boolean canTargetAlly() {
+		Item item = this.entity.getHeldItemMainhand().getItem();
+		return item instanceof ISupportWeapon<?> || item instanceof IFakeWeapon<?>;
+	}
+
+	private boolean isSuitableTargetAlly(EntityLivingBase possibleTarget) {
 		CQRFaction faction = this.entity.getFaction();
 		if (faction == null) {
 			return false;
 		}
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
-			if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
-				return false;
-			}
-			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
-				return false;
-			}
-			if (!this.entity.isInSightRange(possibleTarget)) {
-				return false;
-			}
-			return this.entity.getEntitySenses().canSee(possibleTarget);
-		} else {
-			if (!faction.isEnemy(possibleTarget)) {
-				return false;
-			}
-			if (possibleTarget == this.entity.getLeader()) {
-				return false;
-			}
-			if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
-				return false;
-			}
-			if (this.entity.isInAttackReach(possibleTarget)) {
-				return true;
-			}
-			if (this.entity.isEntityInFieldOfView(possibleTarget)) {
-				return this.entity.isInSightRange(possibleTarget);
-			}
-			return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 12.0D;
+		if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
+			return false;
 		}
+		if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
+			return false;
+		}
+		if (!this.entity.isInSightRange(possibleTarget)) {
+			return false;
+		}
+		return this.entity.getEntitySenses().canSee(possibleTarget);
+	}
+
+	private boolean isSuitableTargetEnemy(EntityLivingBase possibleTarget) {
+		CQRFaction faction = this.entity.getFaction();
+		if (faction == null) {
+			return false;
+		}
+		if (!faction.isEnemy(possibleTarget)) {
+			return false;
+		}
+		if (possibleTarget == this.entity.getLeader()) {
+			return false;
+		}
+		if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
+			return false;
+		}
+		if (this.entity.isInAttackReach(possibleTarget)) {
+			return true;
+		}
+		if (this.entity.isEntityInFieldOfView(possibleTarget)) {
+			return this.entity.isInSightRange(possibleTarget);
+		}
+		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 12.0D;
 	}
 
 	private boolean isStillSuitableTarget(EntityLivingBase possibleTarget) {
@@ -104,11 +131,8 @@ public class EntityAICQRNearestAttackTarget extends AbstractCQREntityAI<Abstract
 			return false;
 		}
 		CQRFaction faction = this.entity.getFaction();
-		if (this.entity.getHeldItemMainhand().getItem() == ModItems.STAFF_HEALING) {
-			if (faction == null) {
-				return false;
-			}
-			if (!faction.isAlly(possibleTarget) && possibleTarget != this.entity.getLeader()) {
+		if (this.canTargetAlly()) {
+			if ((faction == null || !faction.isAlly(possibleTarget)) && possibleTarget != this.entity.getLeader()) {
 				return false;
 			}
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {

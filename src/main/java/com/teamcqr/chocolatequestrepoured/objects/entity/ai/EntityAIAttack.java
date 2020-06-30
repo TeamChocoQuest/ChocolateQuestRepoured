@@ -1,16 +1,20 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
 
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.objects.items.IFakeWeapon;
+import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 
 public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	protected int attackTick;
-	protected int shieldTick;
 
 	public EntityAIAttack(AbstractEntityCQR entity) {
 		super(entity);
@@ -19,24 +23,34 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldExecute() {
-		this.shieldTick = Math.max(this.shieldTick - 3, 0);
-		this.attackTick = Math.max(this.attackTick - 3, 0);
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		this.shieldTick = Math.max(this.shieldTick - 1, 0);
-		this.attackTick = Math.max(this.attackTick - 1, 0);
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
 		return attackTarget != null && this.entity.getEntitySenses().canSee(attackTarget);
 	}
 
 	@Override
 	public void startExecuting() {
-		this.updatePath(this.entity.getAttackTarget());
+		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		this.updatePath(attackTarget);
 		this.checkAndPerformBlock();
+		CQRFaction faction = this.entity.getFaction();
+		if (faction != null) {
+			Item item = this.entity.getHeldItemMainhand().getItem();
+			if (faction.isEnemy(attackTarget)) {
+				if (item instanceof ISupportWeapon) {
+					this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((ISupportWeapon<?>) item).getFakeSword()));
+				}
+			} else if (faction.isAlly(attackTarget)) {
+				if (item instanceof IFakeWeapon<?>) {
+					this.entity.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(((IFakeWeapon<?>) item).getOriginalItem()));
+				}
+			}
+		}
 	}
 
 	@Override
@@ -66,7 +80,7 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.resetActiveHand();
 			}
-		} else if (this.shieldTick <= 0 && !this.entity.isActiveItemStackBlocking()) {
+		} else if (this.attackTick + this.getBlockCooldownPeriod() <= this.entity.ticksExisted && !this.entity.isActiveItemStackBlocking()) {
 			ItemStack offhand = this.entity.getHeldItemOffhand();
 			if (offhand.getItem().isShield(offhand, this.entity)) {
 				this.entity.setActiveHand(EnumHand.OFF_HAND);
@@ -74,23 +88,25 @@ public class EntityAIAttack extends AbstractCQREntityAI<AbstractEntityCQR> {
 		}
 	}
 
-	public float getCooldownPeriod() {
-		return (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D);
-	}
-
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
-		if (this.attackTick <= 0 && this.entity.isInAttackReach(attackTarget)) {
-			int cooldown = (int) this.getCooldownPeriod();
+		if (this.attackTick + this.getAttackCooldownPeriod() <= this.entity.ticksExisted && this.entity.isInAttackReach(attackTarget)) {
 			if (this.entity.isActiveItemStackBlocking()) {
 				this.entity.resetActiveHand();
-				this.attackTick = cooldown + 20;
-				this.shieldTick = 20;
-			} else {
-				this.attackTick = cooldown;
 			}
+			this.attackTick = this.entity.ticksExisted;
 			this.entity.swingArm(EnumHand.MAIN_HAND);
 			this.entity.attackEntityAsMob(attackTarget);
 		}
+	}
+
+	public float getAttackCooldownPeriod() {
+		float f = (float) (1.0D / this.entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_SPEED).getAttributeValue() * 20.0D);
+		ItemStack stack = this.entity.getHeldItemOffhand();
+		return stack.getItem().isShield(stack, this.entity) ? f + 20.0F : f;
+	}
+
+	public int getBlockCooldownPeriod() {
+		return 20;
 	}
 
 }

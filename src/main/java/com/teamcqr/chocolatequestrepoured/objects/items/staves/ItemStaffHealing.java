@@ -7,7 +7,10 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import com.google.common.collect.Multimap;
+import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModSounds;
+import com.teamcqr.chocolatequestrepoured.objects.items.ISupportWeapon;
+import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemFakeSwordHealingStaff;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,7 +30,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemStaffHealing extends Item {
+public class ItemStaffHealing extends Item implements ISupportWeapon<ItemFakeSwordHealingStaff> {
 
 	public static final float HEAL_AMOUNT_ENTITIES = 4.0F;
 
@@ -68,6 +71,11 @@ public class ItemStaffHealing extends Item {
 		} else {
 			tooltip.add(TextFormatting.BLUE + I18n.format("description.click_shift.name"));
 		}
+	}
+
+	@Override
+	public ItemFakeSwordHealingStaff getFakeSword() {
+		return ModItems.DIAMOND_SWORD_FAKE_HEALING_STAFF;
 	}
 
 }

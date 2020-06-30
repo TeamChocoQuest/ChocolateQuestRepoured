@@ -80,6 +80,7 @@ import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffVampiric
 import com.teamcqr.chocolatequestrepoured.objects.items.staves.ItemStaffWind;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDagger;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemDaggerNinja;
+import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemFakeSwordHealingStaff;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemGreatSword;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordMoonlight;
 import com.teamcqr.chocolatequestrepoured.objects.items.swords.ItemSwordSpider;
@@ -92,6 +93,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.Item.ToolMaterial;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -162,7 +164,8 @@ public class ModItems {
 	public static final Item STAFF_VAMPIRIC = Null(); // #TODO DESCRIPTION
 	public static final Item STAFF_WIND = Null(); // #TODO DESCRIPTION
 	public static final Item STAFF_POISON = Null(); // #TODO DESCRIPTION
-	public static final Item STAFF_HEALING = Null();
+	public static final ItemStaffHealing STAFF_HEALING = Null();
+	public static final ItemFakeSwordHealingStaff DIAMOND_SWORD_FAKE_HEALING_STAFF = Null();
 	public static final Item STAFF_THUNDER = Null();
 	public static final Item STAFF_SPIDER = Null();
 	public static final Item STAFF_GUN = Null(); // #TODO TEXTURES
@@ -262,14 +265,14 @@ public class ModItems {
 	public static final Item BADGE = Null();
 	public static final Item ALCHEMY_BAG = Null();
 	public static final Item CURSED_BONE = Null();
-	
+
 	// Dungeon tools
 	public static final Item MOB_TO_SPAWNER_TOOL = Null();
 	public static final Item SPAWNER_CONVERTER = Null();
 	public static final Item STRUCTURE_SELECTOR = Null();
 	public static final Item PATH_TOOL = Null();
 	public static final Item DUMMY_SHIELD = Null();
-	
+
 	@EventBusSubscriber(modid = Reference.MODID)
 	public static class ItemRegistrationHandler {
 
@@ -308,6 +311,7 @@ public class ModItems {
 					setItemName(new ItemStaffWind(), "staff_wind"),
 					setItemName(new ItemStaffPoison(), "staff_poison"),
 					setItemName(new ItemStaffHealing(), "staff_healing"),
+					setItemNameAndTab(new ItemFakeSwordHealingStaff(ToolMaterial.DIAMOND), "diamond_sword_fake_healing_staff", null),
 					setItemName(new ItemStaffThunder(), "staff_thunder"),
 					setItemName(new ItemStaffSpider(), "staff_spider"),
 					setItemName(new ItemStaffGun(), "staff_gun"),
@@ -459,7 +463,7 @@ public class ModItems {
 		}
 
 		private static Item setItemNameAndTab(Item item, String name, @Nullable CreativeTabs tab) {
-			return item.setTranslationKey(name).setRegistryName(Reference.MODID, name).setCreativeTab(tab);
+			return item.setRegistryName(Reference.MODID, name).setTranslationKey(name).setCreativeTab(tab);
 		}
 	}
 
