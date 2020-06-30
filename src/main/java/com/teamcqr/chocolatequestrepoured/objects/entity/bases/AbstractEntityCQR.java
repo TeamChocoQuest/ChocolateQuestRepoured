@@ -750,12 +750,21 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 				this.leader = null;
 				this.leaderUUID = null;
 			} else {
-				for (Entity entity : this.world.loadedEntityList) {
+				if(this.world instanceof WorldServer) {
+					Entity leader = ((WorldServer)this.world).getEntityFromUuid(leaderUUID);
+					if(leader instanceof EntityLivingBase) {
+						this.leader = (EntityLivingBase) leader;
+						return (EntityLivingBase) leader;
+					}
+					return null;
+				}
+				
+				/*for (Entity entity : this.world.loadedEntityList) {
 					if (entity instanceof EntityLivingBase && this.leaderUUID.equals(entity.getPersistentID()) && entity.isEntityAlive()) {
 						this.leader = (EntityLivingBase) entity;
 						return (EntityLivingBase) entity;
 					}
-				}
+				}*/
 			}
 		} else {
 			this.leader = null;
