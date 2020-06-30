@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.r
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.RoomGridCell;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RoomGridCell;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;

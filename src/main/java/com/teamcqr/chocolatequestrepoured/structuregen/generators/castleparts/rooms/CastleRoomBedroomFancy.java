@@ -6,7 +6,6 @@ import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.math.BlockPos;
 
 import java.util.Arrays;
 import java.util.Collections;

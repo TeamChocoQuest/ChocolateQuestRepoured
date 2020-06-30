@@ -1,6 +1,7 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBase;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.EnumCastleDoorType;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;

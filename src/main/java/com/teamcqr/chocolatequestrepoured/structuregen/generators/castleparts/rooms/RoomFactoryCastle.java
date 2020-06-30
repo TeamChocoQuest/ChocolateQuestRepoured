@@ -1,7 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
-import net.minecraft.util.math.BlockPos;
-
 public class RoomFactoryCastle {
 	public static CastleRoomDecoratedBase CreateGenericRoom(EnumRoomType type, int sideLength, int height, int floor) {
 		switch (type) {

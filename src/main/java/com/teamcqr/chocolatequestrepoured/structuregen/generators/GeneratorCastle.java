@@ -7,7 +7,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartBlock;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartEntity;
 import com.teamcqr.chocolatequestrepoured.structuregen.generation.DungeonPartPlateau;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomSelector;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.CastleRoomSelector;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 

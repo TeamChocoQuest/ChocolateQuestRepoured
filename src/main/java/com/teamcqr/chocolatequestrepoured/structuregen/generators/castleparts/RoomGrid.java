@@ -1,14 +1,13 @@
-package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
+package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
-import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoof;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
-import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 import javax.annotation.Nullable;
-import javax.swing.text.html.Option;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;

@@ -4,7 +4,6 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.util.math.BlockPos;
 
 public class CastleRoomBedroomBasic extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;
