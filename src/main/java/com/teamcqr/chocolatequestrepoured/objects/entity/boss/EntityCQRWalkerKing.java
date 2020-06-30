@@ -13,6 +13,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.Enti
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
+import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityIceSpike;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
@@ -27,7 +28,6 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.projectile.EntityEvokerFangs;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Enchantments;
@@ -332,6 +332,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 			float f2 = f + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
 			this.spawnFangs(this.posX + (double) MathHelper.cos(f2) * 2.5D, this.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 		}
+		
+		for (int k = 0; k < 11; ++k) {
+			float f2 = f + (float) k * (float) Math.PI * 2.0F / 11.0F + ((float) Math.PI * 2F / 5F);
+			this.spawnFangs(this.posX + (double) MathHelper.cos(f2) * 3.5D, this.posZ + (double) MathHelper.sin(f2) * 4.5D, d0, d1, f2, 6);
+		}
 	}
 	
 	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
@@ -362,7 +367,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 		}
 
 		if (flag) {
-			EntityEvokerFangs entityevokerfangs = new EntityEvokerFangs(this.world, x, (double) blockpos.getY() + d0, z, rotationYawRadians, warmupDelayTicks, this);
+			EntityIceSpike entityevokerfangs = new EntityIceSpike(this.world, x, (double) blockpos.getY() + d0 -0.5, z, rotationYawRadians, warmupDelayTicks, this);
 			this.world.spawnEntity(entityevokerfangs);
 		}
 	}
