@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.boss;
 
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.Capes;
@@ -278,8 +280,11 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				}
 				// End IceAndFire compatibility
 				
+				CQRFaction fac = FactionRegistry.instance().getFactionOf(source.getTrueSource());
+				boolean dragonFactionFlag = fac != null && (fac.getName().equalsIgnoreCase("DRAGON") || fac.getName().equalsIgnoreCase("DRAGONS"));
+				
 				//If we are attacked by a dragon: KILL IT
-				if(dragonAttackCooldown <= 0 && (resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
+				if(dragonAttackCooldown <= 0 && (dragonFactionFlag || resLoc.getPath().contains("dragon") || resLoc.getPath().contains("wyrm") || resLoc.getPath().contains("wyvern") || flag)) {
 					dragonAttackCooldown = 80;
 					handleAttackedByDragon(source.getTrueSource());
 				}
