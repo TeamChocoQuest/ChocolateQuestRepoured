@@ -57,6 +57,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	private boolean active = false;
 	private int activationCooldown = 80;
 	private int dragonAttackCooldown = 0;
+	private int lavaCounterAttackCooldown = 0;
 	
 	public EntityCQRWalkerKing(World worldIn) {
 		super(worldIn);
@@ -143,6 +144,16 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 				EntityColoredLightningBolt entitybolt = new EntityColoredLightningBolt(world, posX +x, posY +y, posZ +z, true, false, 0.34F, 0.08F, 0.43F, 0.4F);
 				world.spawnEntity(entitybolt);
 			}
+			
+			if(this.isInLava() && hasAttackTarget() && lavaCounterAttackCooldown <= 0) {
+				teleportBehindEntity(getAttackTarget());
+				attackEntityAsMob(getAttackTarget());
+				lavaCounterAttackCooldown = 20;
+			}
+			if(lavaCounterAttackCooldown > 0) {
+				lavaCounterAttackCooldown--;
+			}
+			
 		} else if(world.isRemote) {
 			active = false;
 		}
@@ -168,7 +179,7 @@ public class EntityCQRWalkerKing extends AbstractEntityCQRBoss {
 	}
 	
 	private boolean teleportBehindEntity(Entity entity) {
-		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(4 + (entity.width * 0.5)));
+		Vec3d p = entity.getPositionVector().subtract(entity.getLookVec().scale(2 + (entity.width * 0.5)));
 		if(getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
 			for(int ix = -1; ix <= 1; ix++) {
 				for(int iz = -1; iz <= 1; iz++) {
