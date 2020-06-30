@@ -173,7 +173,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	public boolean hasCape() {
 		return true;
 	}
-
+	
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);

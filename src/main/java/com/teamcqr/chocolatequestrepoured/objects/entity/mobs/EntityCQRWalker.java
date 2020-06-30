@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -63,4 +64,9 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 		this.spellHandler.addSpell(0, new EntityAIAntiAirSpellWalker(this));
 	}
 
+	@Override
+	public void onStruckByLightning(EntityLightningBolt lightningBolt) {
+		this.heal(new Float(this.getMaxHealth() * 0.025));
+	}
+	
 }
