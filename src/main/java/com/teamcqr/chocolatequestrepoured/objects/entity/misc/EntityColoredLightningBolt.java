@@ -2,6 +2,9 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import java.util.List;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -10,6 +13,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -117,6 +121,9 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 
 				for (Entity entity : list) {
 					if (!ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
+						if(CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
+							entity.attackEntityFrom(DamageSource.MAGIC, new Float(CQRConfig.advanced.flyingCowardPenaltyDamage));
+						}
 						entity.onStruckByLightning(this);
 					}
 				}

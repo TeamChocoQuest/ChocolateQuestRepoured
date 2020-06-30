@@ -92,6 +92,10 @@ public class CQRConfig {
 		
 		@Config.Comment("This enables the protection system, it enables it to be used. Set to false to disable it globally")
 		public boolean protectionSystemFeatureEnabled = true;
+
+		public boolean flyingCowardPenaltyEnabled = true;
+		@Config.RangeDouble(min = 1)
+		public double flyingCowardPenaltyDamage = 10.0;
 	}
 
 	public static class General {
