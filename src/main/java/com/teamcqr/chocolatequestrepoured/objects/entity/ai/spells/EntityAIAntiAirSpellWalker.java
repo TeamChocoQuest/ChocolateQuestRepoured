@@ -1,7 +1,5 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
@@ -9,9 +7,9 @@ import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 
-public class EntityAISpellWalker extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
+public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
-	public EntityAISpellWalker(AbstractEntityCQR entity) {
+	public EntityAIAntiAirSpellWalker(AbstractEntityCQR entity) {
 		super(entity, 600, 100, 1);
 		this.setup(true, true, true, false);
 	}

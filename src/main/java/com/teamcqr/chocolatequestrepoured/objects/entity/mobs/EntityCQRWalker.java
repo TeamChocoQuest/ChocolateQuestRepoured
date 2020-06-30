@@ -3,7 +3,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.mobs;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.EntityAISpellWalker;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIAntiAirSpellWalker;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 
 import net.minecraft.entity.projectile.EntitySpectralArrow;
@@ -60,7 +60,7 @@ public class EntityCQRWalker extends AbstractEntityCQR {
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISpellWalker(this));
+		this.spellHandler.addSpell(0, new EntityAIAntiAirSpellWalker(this));
 	}
 
 }
