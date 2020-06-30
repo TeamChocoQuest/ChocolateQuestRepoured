@@ -99,7 +99,7 @@ public class BlockPosUtil {
 		List<BlockPos> list = new ArrayList<>();
 		forEach(world, x1, y1, z1, x2, y2, z2, skipUnloadedChunks, skipAirBlocks, (mutablePos, state) -> {
 			if ((toCheck == null || state.getBlock() == toCheck) && (predicate == null || predicate.test(mutablePos, state))) {
-				list.add(mutablePos);
+				list.add(mutablePos.toImmutable());
 			}
 		});
 		return list;
