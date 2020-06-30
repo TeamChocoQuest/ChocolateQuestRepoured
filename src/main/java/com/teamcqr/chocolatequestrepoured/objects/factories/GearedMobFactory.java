@@ -133,7 +133,7 @@ public class GearedMobFactory {
 				}
 				break;
 			}
-			if (mainHand.getItem().getClass() == ItemSword.class && this.random.nextDouble() < 0.25D) {
+			if (mainHand.getItem().getClass() == ItemSword.class && this.random.nextDouble() < 0.3D) {
 				offHand = new ItemStack(Items.SHIELD);
 			}
 			break;
@@ -204,7 +204,7 @@ public class GearedMobFactory {
 	}
 
 	private boolean enchantGear(int floor) {
-		double chance = 0.15D + 0.15D * (double) floor / (double) this.floorCount;
+		double chance = 0.1D + 0.2D * (double) floor / (double) this.floorCount;
 		return this.random.nextDouble() <= chance;
 	}
 
@@ -214,9 +214,6 @@ public class GearedMobFactory {
 	}
 
 	private EWeaponType getHandEquipment() {
-		if (this.random.nextBoolean()) {
-			return EWeaponType.BOW;
-		}
 		List<EWeaponType> weaponTypes = new LinkedList<>();
 		int maxWeight = 0;
 		for (EWeaponType weaponType : EWeaponType.values()) {
@@ -236,7 +233,7 @@ public class GearedMobFactory {
 	}
 
 	public enum EWeaponType {
-		MELEE(50), MAGIC_STAFF(10), HEALING_STAFF(10), BOW(10);
+		MELEE(40), MAGIC_STAFF(10), HEALING_STAFF(10), BOW(10);
 
 		private int weight;
 
