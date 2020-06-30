@@ -10,7 +10,7 @@ import net.minecraft.entity.EntityLivingBase;
 public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	public EntityAIAntiAirSpellWalker(AbstractEntityCQR entity) {
-		super(entity, 600, 100, 1);
+		super(entity, 300, 20, 1);
 		this.setup(true, true, true, false);
 	}
 
