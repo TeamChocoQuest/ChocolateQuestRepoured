@@ -1,7 +1,9 @@
-package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
+package com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking;
 
 import java.util.function.Consumer;
 
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.AbstractEntityAISpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.IEntityAISpellAnimatedVanilla;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRWalkerKing;

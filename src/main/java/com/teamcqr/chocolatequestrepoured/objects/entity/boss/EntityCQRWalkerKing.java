@@ -9,7 +9,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EntityEquipmentExtraSlo
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningCircles;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerLightningSpiral;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.BossAIWalkerTornadoAttack;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIWalkerIllusions;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.walkerking.EntityAIWalkerIllusions;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.objects.items.armor.ItemArmorDyable;
