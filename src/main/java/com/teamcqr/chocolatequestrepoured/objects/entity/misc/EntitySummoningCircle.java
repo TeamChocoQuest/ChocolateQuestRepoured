@@ -2,6 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 
 import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 
@@ -9,9 +10,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
@@ -100,6 +104,16 @@ public class EntitySummoningCircle extends Entity implements IEntityAdditionalSp
 			if (this.ticksExisted >= EntitySummoningCircle.BORDER_WHEN_TO_SPAWN_IN_TICKS * this.timeMultiplierForSummon * 0.8F) {
 				for (int i = 0; i < 4; i++) {
 					this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, this.rand.nextDouble(), this.rand.nextDouble(), this.rand.nextDouble());
+				}
+				
+				if(!this.world.isRemote) {
+					CQRFaction faction = this.summoner != null ?  this.summoner.getSummonerFaction() : null;
+					for(Entity ent : this.world.getEntitiesInAABBexcluding(this, new AxisAlignedBB(getPosition().add(this.width / 2, 0, this.width / 2), getPosition().add(-this.width / 2, 3, -this.width / 2)), 
+							faction != null ? TargetUtil.createPredicateNonAlly(faction) : TargetUtil.PREDICATE_LIVING)) {
+								if(ent != null && ent.isEntityAlive() && ent instanceof EntityLivingBase) {
+									((EntityLivingBase)ent).addPotionEffect(new PotionEffect(MobEffects.WITHER, 80, 0));
+								}
+							}
 				}
 				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 1.0F, 0.0F, 0.0F, 20);
 				//this.world.spawnParticle(EnumParticleTypes.SPELL_WITCH, this.posX, this.posY + 0.02D, this.posZ, 0.5F, 0.0F, 0.5F, 1);
