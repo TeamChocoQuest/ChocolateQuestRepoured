@@ -84,7 +84,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
                 for (int z = 0; z < shelfZLen; z++) {
                     if ((x % 2 == 0) && (z != (shelfZLen / 2))) {
                         BlockPos pos = shelfStart.add(x, y, z);
-                        genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                        genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
                         this.usedDecoPositions.add(pos);
                     }
                 }
@@ -98,7 +98,7 @@ public class CastleRoomLibrary extends CastleRoomDecoratedBase
                 for (int z = 0; z < shelfZLen; z++) {
                     if ((z % 2 == 0) && (x != (shelfXLen / 2))) {
                         BlockPos pos = shelfStart.add(x, y, z);
-                        genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                        genArray.addBlockState(pos, Blocks.BOOKSHELF.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
                         this.usedDecoPositions.add(pos);
                     }
                 }

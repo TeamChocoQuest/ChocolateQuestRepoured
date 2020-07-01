@@ -42,7 +42,7 @@ public class CastleRoomPool extends CastleRoomDecoratedBase
         poolRoomTemplate.addRule(water, Blocks.WATER.getDefaultState());
 
         HashMap<BlockPos, IBlockState> genMap = poolRoomTemplate.GetGenerationMap(getDecorationStartPos(), true);
-        genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN);
+        genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
         for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
             if (entry.getValue().getBlock() != Blocks.AIR) {
                 usedDecoPositions.add(entry.getKey());

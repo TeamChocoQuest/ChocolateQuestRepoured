@@ -166,12 +166,12 @@ public class CastleRoomSelector {
 	}
 
 	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
-		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
-			cell.generateRoom(startPos, genArray, dungeon);
-		}
-
 		for (CastleAddonRoof roof : this.castleRoofs) {
 			roof.generate(genArray, dungeon);
+		}
+
+		for (RoomGridCell cell : this.grid.getAllCellsWhere(c -> (c.isPopulated()) && (c.getRoom() instanceof CastleRoomWalkableRoof))) {
+			cell.generateRoom(startPos, genArray, dungeon);
 		}
 	}
 

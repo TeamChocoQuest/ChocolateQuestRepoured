@@ -45,7 +45,7 @@ public abstract class RoomDecorBlocksBase implements IRoomDecor {
 
 		for (DecoBlockBase placement : rotated) {
 			BlockPos pos = start.add(placement.offset);
-			genArray.addBlockState(pos, placement.getState(side), placement.getGenPhase());
+			genArray.addBlockState(pos, placement.getState(side), placement.getGenPhase(), BlockStateGenArray.EnumPriority.MEDIUM);
 
 			if (placement.getState(side).getBlock() != Blocks.AIR) {
 				decoMap.add(pos);

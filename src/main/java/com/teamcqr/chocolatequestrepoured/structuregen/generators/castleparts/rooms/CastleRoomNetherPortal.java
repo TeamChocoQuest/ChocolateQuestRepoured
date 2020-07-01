@@ -68,7 +68,7 @@ public class CastleRoomNetherPortal extends CastleRoomDecoratedBase
 
 
         HashMap<BlockPos, IBlockState> genMap = portalRoomTemplate.GetGenerationMap(getDecorationStartPos(), true);
-        genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN);
+        genArray.addBlockStateMap(genMap, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
         for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
             if (entry.getValue().getBlock() != Blocks.AIR) {
                 usedDecoPositions.add(entry.getKey());

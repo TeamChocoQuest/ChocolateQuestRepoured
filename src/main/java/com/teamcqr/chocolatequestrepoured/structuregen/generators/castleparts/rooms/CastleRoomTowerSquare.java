@@ -63,7 +63,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 						this.usedDecoPositions.add(pos);
 					}
 
-					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 		}

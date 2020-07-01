@@ -45,7 +45,7 @@ public class RoomDecorChest extends RoomDecorBlocksBase {
 					chest.setLootTable(resLoc, seed);
 				}
 				NBTTagCompound nbt = chest.writeToNBT(new NBTTagCompound());
-				genArray.forceAddBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(start, state, nbt, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.HIGH);
 				decoMap.add(start);
 			}
 		} else {

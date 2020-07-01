@@ -65,7 +65,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 					blockToBuild = this.getBlockToBuild(x, y, z);
 					pos = nwCorner.add(x, y, z);
 
-					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN);
+					genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
 			}
 		}
@@ -110,7 +110,7 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 			if (spawner != null) {
 				spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
 				NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
-				genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST);
+				genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
 
 				bossUuids.add(mobEntity.getUniqueID().toString());
 			}
@@ -119,14 +119,14 @@ public class CastleRoomRoofBossMain extends CastleRoomBase {
 
 	private void placeTorches(BlockPos nwCorner, BlockStateGenArray genArray) {
 		IBlockState torchBase = Blocks.TORCH.getDefaultState();
-		genArray.addBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
-		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST);
+		genArray.addBlockState(nwCorner.add(10, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(6, 3, 2), torchBase.withProperty(BlockTorch.FACING, EnumFacing.SOUTH), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(6, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(10, 3, 14), torchBase.withProperty(BlockTorch.FACING, EnumFacing.NORTH), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(2, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(2, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.EAST), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(14, 3, 6), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
+		genArray.addBlockState(nwCorner.add(14, 3, 10), torchBase.withProperty(BlockTorch.FACING, EnumFacing.WEST), BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
 	}
 
 	private void placeChests(World world, BlockPos nwCorner, BlockStateGenArray genArray) {

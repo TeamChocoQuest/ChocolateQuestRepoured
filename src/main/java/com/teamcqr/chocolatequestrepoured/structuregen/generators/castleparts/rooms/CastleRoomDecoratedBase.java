@@ -93,7 +93,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                             ++attempts;
                         }
                         if (attempts >= MAX_DECO_ATTEMPTS) {
-                            genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                            genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
                             this.usedDecoPositions.add(pos);
                             this.possibleChestLocs.put(pos, side);
                         }
@@ -125,7 +125,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                     ++attempts;
                 }
                 if (attempts >= MAX_DECO_ATTEMPTS) {
-                    genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+                    genArray.addBlockState(pos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
                     this.usedDecoPositions.add(pos);
                 }
             }
@@ -152,7 +152,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
                 spawner.inventory.setStackInSlot(0, SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
 
                 NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
-                genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST);
+                genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.MEDIUM);
 
                 this.usedDecoPositions.add(pos);
                 spawnPositions.remove(pos);

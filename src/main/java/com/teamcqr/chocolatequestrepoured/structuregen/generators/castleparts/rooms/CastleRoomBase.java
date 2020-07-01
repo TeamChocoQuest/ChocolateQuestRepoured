@@ -114,7 +114,7 @@ public abstract class CastleRoomBase {
 	protected void generateDefaultCeiling(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(this.getInteriorBuildStart().add(x, (this.height - 1), z), dungeon.getMainBlockState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -124,7 +124,7 @@ public abstract class CastleRoomBase {
 
 		for (int z = 0; z < this.getDecorationLengthZ(); z++) {
 			for (int x = 0; x < this.getDecorationLengthX(); x++) {
-				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(pos.add(x, 0, z), this.getFloorBlock(dungeon), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
@@ -134,7 +134,7 @@ public abstract class CastleRoomBase {
         emptySpaces.removeAll(this.usedDecoPositions);
 
         for (BlockPos emptyPos : emptySpaces) {
-            genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+            genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
         }
     }
 
@@ -199,7 +199,7 @@ public abstract class CastleRoomBase {
 									decoPos = southStart.add(x, y, 0);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}
@@ -217,7 +217,7 @@ public abstract class CastleRoomBase {
 									decoPos = eastStart.add(0, y, z);
 								}
 								this.usedDecoPositions.add(decoPos);
-								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN);
+								genArray.addBlockState(decoPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 							}
 						}
 					}

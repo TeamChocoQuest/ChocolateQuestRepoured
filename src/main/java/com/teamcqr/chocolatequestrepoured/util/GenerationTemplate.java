@@ -68,7 +68,7 @@ public class GenerationTemplate {
     public void AddToGenArray(BlockPos origin, BlockStateGenArray genArray, BlockStateGenArray.GenerationPhase phase, @Nullable  HashSet<BlockPos> positionsFilled)
     {
         HashMap<BlockPos, IBlockState> genMap = this.GetGenerationMap(origin, fillUnusedBlockWithAir);
-        genArray.addBlockStateMap(genMap, phase);
+        genArray.addBlockStateMap(genMap, phase, BlockStateGenArray.EnumPriority.MEDIUM);
         if (positionsFilled != null)
         {
             for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {

@@ -62,7 +62,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 					}
 				}
 				tcBlock = tcBlock.withProperty(BlockGlazedTerracotta.FACING, tcFacing);
-				genArray.addBlockState(pos, tcBlock, BlockStateGenArray.GenerationPhase.MAIN);
+				genArray.addBlockState(pos, tcBlock, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
 	}
