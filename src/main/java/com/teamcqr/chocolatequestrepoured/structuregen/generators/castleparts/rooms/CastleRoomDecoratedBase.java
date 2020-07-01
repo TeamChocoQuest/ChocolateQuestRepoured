@@ -68,7 +68,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
     protected void addEdgeDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
         if (this.decoSelector.edgeDecorRegistered()) {
             for (EnumFacing side : EnumFacing.HORIZONTALS) {
-                if (this.walls.containsKey(side)) {
+                if (this.walls.containsKey(side) && this.walls.get(side).isEnabled()) {
                     ArrayList<BlockPos> edge = this.getDecorationEdge(side);
                     for (BlockPos pos : edge) {
                         if (this.usedDecoPositions.contains(pos)) {

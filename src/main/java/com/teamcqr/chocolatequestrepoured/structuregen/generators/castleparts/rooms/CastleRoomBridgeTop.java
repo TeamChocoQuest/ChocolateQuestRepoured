@@ -37,7 +37,7 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 		//Don't use decoration length since we don't care if there are walls
 		final int endX = getRoomLengthX() - 3;
 		final int endZ = getRoomLengthZ() - 3;
-		
+
 		Predicate<Vec3i> bottom;
 		Predicate<Vec3i> edges;
 
