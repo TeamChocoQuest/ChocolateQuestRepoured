@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts;
 
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomReplacedRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomWalkableRoof;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.EnumRoomType;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments.CastleMainStructWall;
@@ -715,52 +716,32 @@ public class RoomGrid {
 		return true;
 	}
 
-	public ArrayList<EnumFacing> getPotentialBridgeDirections(RoomGridCell cell) {
-		ArrayList<EnumFacing> result = new ArrayList<>();
-
-		if (cell.isPopulated()) {
-			for (EnumFacing side : EnumFacing.HORIZONTALS) {
-				if (cellIsValidForBridge(getAdjacentCell(cell, side))) {
-					result.add(side);
-				}
-			}
-		}
-
-		return result;
-	}
-
 	public ArrayList<RoomGridCell> getBridgeCells(RoomGridCell cell, EnumFacing direction) {
 		ArrayList<RoomGridCell> result = new ArrayList<>();
 
-		RoomGridCell next = getAdjacentCell(cell, direction);
-		while (cellIsValidForBridge(next)) {
-			result.add(next);
-			next = getAdjacentCell(next, direction);
+		Optional<RoomGridCell> next = cell.getAdjacentCell(direction);
+		while (next.isPresent() && next.get().isValidForBridge()) {
+			result.add(next.get());
+			next = next.get().getAdjacentCell(direction);
 		}
 
-		if (next == null) {
-			//If we hit a null that means we hit the edge of the castle grid
+		if (!next.isPresent()) {
+			//If we hit a null cell that means we hit the edge of the castle grid
 			result.clear(); //Clear the bridge cell array - can't build a bridge here
-		} else if (!next.isPopulated()) {
+		} else if (!next.get().isPopulated()) {
 			//Have to end on a populated room, otherwise it's a bridge to nowhere
 			result.clear();
 		}
-		else if (next.isPopulated() && !next.reachableFromSide(direction.getOpposite())) {
+		else if (next.get().isPopulated() && !next.get().reachableFromSide(direction.getOpposite())) {
 			//If we hit another room, make sure that room can exit to the bridge
+			result.clear();
+		}
+		else if (next.get().isPopulated() && next.get().getRoom() instanceof CastleRoomReplacedRoof) {
+			//Don't want to path to replaced roofs either
 			result.clear();
 		}
 
 		return result;
-	}
-
-	private boolean cellIsValidForBridge(@Nullable RoomGridCell cell) {
-		if (cell != null && cell.isNotSelected()) {
-			RoomGridCell below = getAdjacentCell(cell, EnumFacing.DOWN);
-			//Cell below it has to satisfy the same
-			return (below != null && below.isNotSelected());
-		}
-
-		return false;
 	}
 
 	public ArrayList<RoomGridCell> getAdjacentSelectedCellsInRow(RoomGridPosition position) {

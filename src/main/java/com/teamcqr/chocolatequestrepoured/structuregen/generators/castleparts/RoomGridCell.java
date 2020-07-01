@@ -319,6 +319,32 @@ public class RoomGridCell {
         }
     }
 
+    public ArrayList<EnumFacing> getPotentialBridgeDirections()
+    {
+        ArrayList<EnumFacing> result = new ArrayList<>();
+
+        if (isPopulated()) {
+            for (EnumFacing side : EnumFacing.HORIZONTALS) {
+                Optional<RoomGridCell> adjacent = getAdjacentCell(side);
+                if (adjacent.isPresent() && adjacent.get().isValidForBridge()) {
+                    result.add(side);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public boolean isValidForBridge() {
+        if (isNotSelected()) {
+            Optional<RoomGridCell> below = getAdjacentCell(EnumFacing.DOWN);
+            //Cell below it has to satisfy the same
+            return (below.isPresent() && below.get().isNotSelected());
+        }
+
+        return false;
+    }
+
     @Override
     public String toString() {
         String roomStr = (this.getRoom() == null) ? "null" : this.getRoom().toString();
