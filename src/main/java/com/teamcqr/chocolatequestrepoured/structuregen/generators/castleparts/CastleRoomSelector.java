@@ -365,12 +365,12 @@ public class CastleRoomSelector {
 
 				for (EnumFacing direction : possibleDirections) {
 					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, direction);
-					if (bridgeCells.size() > 1 && bridgeCells.size() < 5) {
+					if (bridgeCells.size() >= dungeon.getMinBridgeLength() && bridgeCells.size() <= dungeon.getMaxBridgeLength()) {
 						validDirections.add(direction);
 					}
 				}
 
-				if (!validDirections.isEmpty() && DungeonGenUtils.PercentageRandom(25, random)) {
+				if (!validDirections.isEmpty() && DungeonGenUtils.PercentageRandom(dungeon.getBridgeChance(), random)) {
 					Collections.shuffle(validDirections, random);
 					final EnumFacing selectedDirection = validDirections.get(0);
 

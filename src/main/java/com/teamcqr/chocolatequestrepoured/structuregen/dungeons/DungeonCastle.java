@@ -49,6 +49,10 @@ public class DungeonCastle extends DungeonBase {
 	private int maxSpawnerRolls;
 	private int spawnerRollChance;
 
+	private int minBridgeLength;
+	private int maxBridgeLength;
+	private int bridgeChance;
+
 	private int paintingChance;
 
 	public DungeonCastle(String name, Properties prop) {
@@ -109,6 +113,10 @@ public class DungeonCastle extends DungeonBase {
 		this.minSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "minSpawnerRolls", 1);
 		this.maxSpawnerRolls = PropertyFileHelper.getIntProperty(prop, "maxSpawnerRolls", 3);
 		this.spawnerRollChance = PropertyFileHelper.getIntProperty(prop, "spawnerRollChance", 100);
+
+		this.minBridgeLength = PropertyFileHelper.getIntProperty(prop, "minBridgeLength", 2);
+		this.maxBridgeLength = PropertyFileHelper.getIntProperty(prop, "maxBridgeLength", 4);
+		this.bridgeChance = PropertyFileHelper.getIntProperty(prop, "bridgeChance", 25);
 
 		this.paintingChance = PropertyFileHelper.getIntProperty(prop, "paintingChance", 0);
 	}
@@ -188,6 +196,18 @@ public class DungeonCastle extends DungeonBase {
 
 	public RandomCastleConfigOptions.WindowType getRandomWindowType() {
 		return this.windowTypeRandomizer.next();
+	}
+
+	public int getMinBridgeLength() {
+		return minBridgeLength;
+	}
+
+	public int getMaxBridgeLength() {
+		return maxBridgeLength;
+	}
+
+	public int getBridgeChance() {
+		return bridgeChance;
 	}
 
 	public int getPaintingChance() {

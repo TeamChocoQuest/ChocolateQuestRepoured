@@ -221,7 +221,13 @@ public class CastleMainStructWall {
             for (int y = 0; y < this.height; y++) {
                 pos = this.origin.offset(iterDirection, i).offset(EnumFacing.UP, y);
                 blockToBuild = this.getBlockToBuild(pos, dungeon);
-                genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+                BlockStateGenArray.EnumPriority priority = BlockStateGenArray.EnumPriority.MEDIUM;
+
+                if (blockToBuild.getBlock() == Blocks.AIR)
+                {
+                    priority = BlockStateGenArray.EnumPriority.LOWEST;
+                }
+                genArray.addBlockState(pos, blockToBuild, BlockStateGenArray.GenerationPhase.MAIN, priority);
             }
         }
     }
