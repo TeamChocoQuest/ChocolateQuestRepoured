@@ -22,8 +22,8 @@ public abstract class CastleRoomBase {
 	// The following variables are used for rooms that build blocks in a smaller area than the
 	// actual room occupies (such as towers). For most room types they will be not be changed from
 	// the values set in the default constructor.
-	protected int buildLengthX; // actual length of constructed part of room
-	protected int buildLengthZ; // actual length of constructed part of room
+	protected int roomLengthX; // actual length of blocks that the room occupies (not counting walls)
+	protected int roomLengthZ; // actual length of blocks that the room occupies (not counting walls)
 	protected int offsetX; // x offset from origin that actual room starts
 	protected int offsetZ; // z offset from origin that actual room starts
 	protected int floor;
@@ -49,8 +49,8 @@ public abstract class CastleRoomBase {
 		this.sideLength = sideLength;
 		this.offsetX = 0;
 		this.offsetZ = 0;
-		this.buildLengthX = this.sideLength;
-		this.buildLengthZ = this.sideLength;
+		this.roomLengthX = this.sideLength;
+		this.roomLengthZ = this.sideLength;
 		this.height = height;
 		this.floor = floor;
 		this.usedDecoPositions = new HashSet<>();
@@ -334,7 +334,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthX() {
-		int length = buildLengthX;
+		int length = roomLengthX;
 		if (walls.containsKey(EnumFacing.EAST)) {
 			if (!walls.get(EnumFacing.EAST).isEnabled()) {
 				++length; //No wall there so this room should extend into that block
@@ -344,7 +344,7 @@ public abstract class CastleRoomBase {
 	}
 
 	protected int getDecorationLengthZ() {
-		int length = buildLengthZ;
+		int length = roomLengthZ;
 		if (walls.containsKey(EnumFacing.SOUTH)) {
 			if (!walls.get(EnumFacing.SOUTH).isEnabled()) {
 				++length; //No wall there so this room should extend into that block
@@ -378,12 +378,12 @@ public abstract class CastleRoomBase {
 		return this.offsetZ;
 	}
 
-	public int getBuildLengthX() {
-		return this.buildLengthX;
+	public int getRoomLengthX() {
+		return this.roomLengthX;
 	}
 
-	public int getBuildLengthZ() {
-		return this.buildLengthZ;
+	public int getRoomLengthZ() {
+		return this.roomLengthZ;
 	}
 
 	public boolean isWalkableRoof() {

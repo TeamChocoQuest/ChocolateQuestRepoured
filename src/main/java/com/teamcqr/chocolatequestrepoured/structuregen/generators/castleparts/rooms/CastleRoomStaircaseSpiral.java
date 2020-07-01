@@ -96,8 +96,8 @@ public class CastleRoomStaircaseSpiral extends CastleRoomDecoratedBase {
 
 
 	private void recalcPillarOffset() {
-		int centerX = (this.buildLengthX - 1) / 2;
-		int centerZ = (this.buildLengthZ - 1) / 2;
+		int centerX = (this.roomLengthX - 1) / 2;
+		int centerZ = (this.roomLengthZ - 1) / 2;
 		this.pillarOffset = new Vec3i(centerX, 0, centerZ);
 	}
 }

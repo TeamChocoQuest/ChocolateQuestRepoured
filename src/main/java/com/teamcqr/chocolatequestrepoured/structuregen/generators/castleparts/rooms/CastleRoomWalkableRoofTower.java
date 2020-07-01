@@ -11,8 +11,8 @@ public class CastleRoomWalkableRoofTower extends CastleRoomWalkableRoof {
 		this.pathable = false;
 		this.offsetX = tower.getOffsetX();
 		this.offsetZ = tower.getOffsetZ();
-		this.buildLengthX = tower.getBuildLengthX();
-		this.buildLengthZ = tower.getBuildLengthZ();
+		this.roomLengthX = tower.getRoomLengthX();
+		this.roomLengthZ = tower.getRoomLengthZ();
 	}
 
 	@Override

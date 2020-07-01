@@ -352,46 +352,50 @@ public class CastleRoomSelector {
 	}
 
 	private void placeBridges() {
-		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0);
+		ArrayList<RoomGridCell> populated = this.grid.getAllCellsWhere(c -> c.isPopulated() && c.getFloor() > 0 && !(c.getRoom() instanceof CastleRoomReplacedRoof));
 		for (RoomGridCell cell : populated) {
-			ArrayList<EnumFacing> bridgeDirections = cell.getPotentialBridgeDirections();
-			if (!bridgeDirections.isEmpty())
-			{
-				EnumFacing bestDirection = null;
-				int longestBridge = MIN_BRIDGE_LENGTH - 1; //subtract one since we are checking for greater than this
 
-				for (EnumFacing direction : bridgeDirections) {
+			//Get all directions from the room that could potentially be the start of a bridge
+			ArrayList<EnumFacing> possibleDirections = cell.getPotentialBridgeDirections();
+			if (!possibleDirections.isEmpty())
+			{
+
+				//Filter the directions from this cell that meet min and max length requirements
+				ArrayList<EnumFacing> validDirections = new ArrayList<>();
+
+				for (EnumFacing direction : possibleDirections) {
 					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, direction);
-					if (bridgeCells.size() > longestBridge) {
-						longestBridge = bridgeCells.size();
-						bestDirection = direction;
+					if (bridgeCells.size() > 1 && bridgeCells.size() < 5) {
+						validDirections.add(direction);
 					}
 				}
 
-				if (bestDirection != null && DungeonGenUtils.PercentageRandom(25, random)) {
-					cell.addDoorOnSideCentered(bestDirection, EnumCastleDoorType.RANDOM, random);
-					if (cell.getRoom() instanceof CastleRoomWalkableRoof)
-					{
-						cell.removeWall(bestDirection);
+				if (!validDirections.isEmpty() && DungeonGenUtils.PercentageRandom(25, random)) {
+					Collections.shuffle(validDirections, random);
+					final EnumFacing selectedDirection = validDirections.get(0);
+
+					cell.addDoorOnSideCentered(selectedDirection, EnumCastleDoorType.RANDOM, random);
+					if (cell.getRoom() instanceof CastleRoomWalkableRoof) {
+						cell.removeWall(selectedDirection);
 					}
 
-					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, bestDirection);
+					ArrayList<RoomGridCell> bridgeCells = grid.getBridgeCells(cell, selectedDirection);
 
 					for (RoomGridCell bridgeCell : bridgeCells)
 					{
 						if (!bridgeCell.isPopulated())
 						{
-							CastleRoomBridgeTop bridgeRoom = new CastleRoomBridgeTop(this.roomSize, this.floorHeight, bestDirection, bridgeCell.getFloor());
+							CastleRoomBridgeTop bridgeRoom = new CastleRoomBridgeTop(this.roomSize, this.floorHeight, selectedDirection, bridgeCell.getFloor());
 							bridgeCell.setRoom(bridgeRoom);
 						}
 					}
 
-					RoomGridCell endCell = grid.getAdjacentCell(bridgeCells.get(bridgeCells.size() - 1), bestDirection);
+					RoomGridCell endCell = grid.getAdjacentCell(bridgeCells.get(bridgeCells.size() - 1), selectedDirection);
 					if (endCell != null && endCell.isPopulated()) {
-						endCell.addDoorOnSideCentered(bestDirection.getOpposite(), EnumCastleDoorType.RANDOM, random);
+						endCell.addDoorOnSideCentered(selectedDirection.getOpposite(), EnumCastleDoorType.RANDOM, random);
 						if (endCell.getRoom() instanceof CastleRoomWalkableRoof)
 						{
-							endCell.removeWall(bestDirection.getOpposite());
+							endCell.removeWall(selectedDirection.getOpposite());
 						}
 					}
 				}

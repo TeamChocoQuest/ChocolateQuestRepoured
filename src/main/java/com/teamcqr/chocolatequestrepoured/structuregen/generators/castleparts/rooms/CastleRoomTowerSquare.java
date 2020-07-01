@@ -34,7 +34,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 			this.stairYOffset = 1; // account for 1 layer of floor
 		}
 
-		this.pillarOffset = new Vec3i((this.buildLengthX / 2), this.stairYOffset, (this.buildLengthZ / 2));
+		this.pillarOffset = new Vec3i((this.roomLengthX / 2), this.stairYOffset, (this.roomLengthZ / 2));
 	}
 
 	@Override

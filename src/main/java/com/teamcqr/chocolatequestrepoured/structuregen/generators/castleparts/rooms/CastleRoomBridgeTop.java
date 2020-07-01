@@ -33,8 +33,11 @@ public class CastleRoomBridgeTop extends CastleRoomBase {
 	public void generateRoom(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		final int startX = 1;
 		final int startZ = 1;
-		final int endX = getDecorationLengthX() - 3;
-		final int endZ = getDecorationLengthZ() - 3;
+
+		//Don't use decoration length since we don't care if there are walls
+		final int endX = getRoomLengthX() - 3;
+		final int endZ = getRoomLengthZ() - 3;
+		
 		Predicate<Vec3i> bottom;
 		Predicate<Vec3i> edges;
 
