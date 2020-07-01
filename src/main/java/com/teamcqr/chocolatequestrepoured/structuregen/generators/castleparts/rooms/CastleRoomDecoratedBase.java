@@ -164,7 +164,7 @@ public abstract class CastleRoomDecoratedBase extends CastleRoomBase {
         int torchPercent = LIGHT_LEVEL * 3;
 
         for (EnumFacing side : EnumFacing.HORIZONTALS) {
-            if (this.walls.containsKey(side)) {
+            if (this.walls.containsKey(side) && this.walls.get(side).isEnabled()) {
                 ArrayList<BlockPos> edge = this.getWallDecorationEdge(side);
                 for (BlockPos pos : edge) {
                     if (this.usedDecoPositions.contains(pos)) {
