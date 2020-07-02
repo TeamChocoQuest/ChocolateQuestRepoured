@@ -122,7 +122,7 @@ public class CastleRoomBossStairMain extends CastleRoomDecoratedBase {
 			if (x >= this.upperStairXStartIdx && x <= this.upperStairXEndIdx) {
 				if (z == TOP_LANDING_BUFFER_Z) {
 					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
-					return Blocks.STONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairs.FACING, stairFacing);
+					return dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 				} else if (z < TOP_LANDING_BUFFER_Z) {
 					return dungeon.getMainBlockState();
 				}
