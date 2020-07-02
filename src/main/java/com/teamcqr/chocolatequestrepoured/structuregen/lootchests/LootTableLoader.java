@@ -98,8 +98,8 @@ public class LootTableLoader {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static LootTable fillLootTable(ResourceLocation name, LootTable lootTable) {
-		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getNamespace() + ".json");
-		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getNamespace() + ".prop");
+		File jsonFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".json");
+		File propFile = new File(CQRMain.CQ_CHEST_FOLDER, name.getPath() + ".prop");
 
 		if (jsonFile.exists()) {
 			// Load json loot table

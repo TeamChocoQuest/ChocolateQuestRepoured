@@ -13,6 +13,7 @@ public class ReflectionConstructor<C> {
 		Constructor<C> c = null;
 		try {
 			c = clazz.getDeclaredConstructor(parameterTypes);
+			c.setAccessible(true);
 		} catch (NoSuchMethodException | SecurityException e) {
 			CQRMain.logger.error("Failed to get constructor from class " + clazz, e);
 		}
@@ -24,6 +25,7 @@ public class ReflectionConstructor<C> {
 		try {
 			Class<C> clazz = (Class<C>) Class.forName(className);
 			c = clazz.getDeclaredConstructor(parameterTypes);
+			c.setAccessible(true);
 		} catch (ClassNotFoundException | ClassCastException | NoSuchMethodException | SecurityException e) {
 			CQRMain.logger.error("Failed to get constructor from class " + className, e);
 		}
