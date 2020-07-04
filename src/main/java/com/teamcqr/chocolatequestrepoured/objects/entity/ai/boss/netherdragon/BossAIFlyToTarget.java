@@ -60,7 +60,7 @@ public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		this.aiCooldown = 150;
+		this.aiCooldown = 40;
 		if(breathFire) {
 			((EntityCQRNetherDragon)entity).setBreathingFireFlag(false);
 		}
