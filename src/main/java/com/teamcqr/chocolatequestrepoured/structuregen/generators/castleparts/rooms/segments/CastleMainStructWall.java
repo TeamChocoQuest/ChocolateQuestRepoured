@@ -363,7 +363,7 @@ public class CastleMainStructWall {
                 if (this.orientation == WallOrientation.HORIZONTAL) {
                     stairFacing = (dist == halfPoint - 2) ? EnumFacing.WEST : EnumFacing.EAST;
                 } else {
-                    stairFacing = (dist == halfPoint - 2) ? EnumFacing.SOUTH : EnumFacing.NORTH;
+                    stairFacing = (dist == halfPoint - 2) ? EnumFacing.NORTH : EnumFacing.SOUTH;
                 }
 
                 IBlockState stairBase = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
@@ -416,7 +416,13 @@ public class CastleMainStructWall {
             } else if ((dist == halfPoint || dist == halfPoint - 1)) {
                 if (y == 1 || y == 2) {
                     BlockDoor.EnumDoorHalf half = (y == 1) ? BlockDoor.EnumDoorHalf.LOWER : BlockDoor.EnumDoorHalf.UPPER;
-                    BlockDoor.EnumHingePosition hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
+
+                    BlockDoor.EnumHingePosition hinge;
+                    if (orientation == WallOrientation.HORIZONTAL) {
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.RIGHT : BlockDoor.EnumHingePosition.LEFT;
+                    } else {
+                        hinge = (dist == halfPoint) ? BlockDoor.EnumHingePosition.LEFT : BlockDoor.EnumHingePosition.RIGHT;
+                    }
                     EnumFacing facing = (orientation == WallOrientation.HORIZONTAL) ? EnumFacing.NORTH : EnumFacing.WEST;
 
                     blockToBuild = dungeon.getDoorBlockState().withProperty(BlockDoor.HALF, half).withProperty(BlockDoor.FACING, facing).withProperty(BlockDoor.HINGE, hinge);

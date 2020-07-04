@@ -98,7 +98,7 @@ public class CastleRoomBossLandingMain extends CastleRoomDecoratedBase {
 					blockToBuild = Blocks.QUARTZ_BLOCK.getDefaultState();
 				} else if (z == this.stairsDownZIdx) {
 					EnumFacing stairFacing = DungeonGenUtils.rotateFacingNTimesAboutY(EnumFacing.NORTH, this.numRotations);
-					blockToBuild = dungeon.getWoodStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
+					blockToBuild = dungeon.getStairBlockState().withProperty(BlockStairs.FACING, stairFacing);
 				} else {
 					return Blocks.AIR.getDefaultState();
 				}

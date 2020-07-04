@@ -635,6 +635,8 @@ public class CastleRoomSelector {
 	}
 
 	private void placeOuterDoors() {
+		ArrayList<RoomGridCell> mainEntranceCells = new ArrayList<>();
+
 		// Start at first floor since ground floor gets the grand entrance
 		for (int floor = 0; floor < this.usedFloors; floor += this.floorsPerLayer) {
 			HashSet<EnumFacing> doorDirections = new HashSet<>(); // Sides of this floor that already have exits
@@ -658,6 +660,7 @@ public class CastleRoomSelector {
 							doorDirections.add(side);
 							if (floor == 0) {
 								cell.addDoorOnSideCentered(side, EnumCastleDoorType.GRAND_ENTRY, this.random);
+								mainEntranceCells.add(cell);
 							} else {
 								cell.addDoorOnSideCentered(side, EnumCastleDoorType.RANDOM, this.random);
 							}
@@ -667,6 +670,13 @@ public class CastleRoomSelector {
 				}
 			}
 		}
+
+		//Set the first reachable cell on the ground floor to kick off the pathing
+		if (!mainEntranceCells.isEmpty()) {
+			Collections.shuffle(mainEntranceCells, random);
+			mainEntranceCells.get(0).setReachable();
+		}
+
 	}
 
 	private void addHallways() {
