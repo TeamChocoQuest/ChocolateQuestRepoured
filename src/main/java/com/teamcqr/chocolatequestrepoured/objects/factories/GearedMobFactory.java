@@ -159,16 +159,30 @@ public class GearedMobFactory {
 			feet = new ItemStack(Items.CHAINMAIL_BOOTS);
 			break;
 		case IRON:
-			head = new ItemStack(Items.IRON_HELMET);
-			chest = new ItemStack(Items.IRON_CHESTPLATE);
-			legs = new ItemStack(Items.IRON_LEGGINGS);
-			feet = new ItemStack(Items.IRON_BOOTS);
+			if (this.random.nextDouble() < 0.1D) {
+				head = new ItemStack(ModItems.HELMET_HEAVY_IRON);
+				chest = new ItemStack(ModItems.CHESTPLATE_HEAVY_IRON);
+				legs = new ItemStack(ModItems.LEGGINGS_HEAVY_IRON);
+				feet = new ItemStack(ModItems.BOOTS_HEAVY_IRON);
+			} else {
+				head = new ItemStack(Items.IRON_HELMET);
+				chest = new ItemStack(Items.IRON_CHESTPLATE);
+				legs = new ItemStack(Items.IRON_LEGGINGS);
+				feet = new ItemStack(Items.IRON_BOOTS);
+			}
 			break;
 		case DIAMOND:
-			head = new ItemStack(Items.DIAMOND_HELMET);
-			chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
-			legs = new ItemStack(Items.DIAMOND_LEGGINGS);
-			feet = new ItemStack(Items.DIAMOND_BOOTS);
+			if (this.random.nextDouble() < 0.1D) {
+				head = new ItemStack(ModItems.HELMET_HEAVY_DIAMOND);
+				chest = new ItemStack(ModItems.CHESTPLATE_HEAVY_DIAMOND);
+				legs = new ItemStack(ModItems.LEGGINGS_HEAVY_DIAMOND);
+				feet = new ItemStack(ModItems.BOOTS_HEAVY_DIAMOND);
+			} else {
+				head = new ItemStack(Items.DIAMOND_HELMET);
+				chest = new ItemStack(Items.DIAMOND_CHESTPLATE);
+				legs = new ItemStack(Items.DIAMOND_LEGGINGS);
+				feet = new ItemStack(Items.DIAMOND_BOOTS);
+			}
 			break;
 		}
 
