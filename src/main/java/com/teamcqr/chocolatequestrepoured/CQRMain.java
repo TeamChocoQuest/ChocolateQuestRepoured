@@ -26,7 +26,7 @@ import com.teamcqr.chocolatequestrepoured.structuregen.DungeonRegistry;
 import com.teamcqr.chocolatequestrepoured.structuregen.WorldDungeonGenerator;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
 import com.teamcqr.chocolatequestrepoured.structuregen.thewall.WorldWallGenerator;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import com.teamcqr.chocolatequestrepoured.util.CopyHelper;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -204,8 +204,8 @@ public class CQRMain {
 		CQStructure.cacheFiles();
 		CQStructure.updateSpecialBlocks();
 		CQStructure.updateSpecialEntities();
-		ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
-		ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
+		ProtectedRegionHelper.updateBreakableBlockWhitelist();
+		ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 		ModDispenseBehaviors.registerDispenseBehaviors();
 		EntityCQRNetherDragon.reloadBreakableBlocks();
 	}
