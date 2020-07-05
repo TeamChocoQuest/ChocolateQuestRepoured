@@ -3,7 +3,6 @@ package com.teamcqr.chocolatequestrepoured.structuregen.structurefile;
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
-import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQRBoss;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
 import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitantManager;
 import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
@@ -13,7 +12,6 @@ import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -44,63 +42,75 @@ public class BlockInfoBoss extends AbstractBlockInfo {
 
 			DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(dungeonMob);
 
-			if (inha != null && inha.getBossID() != null) {
-				Entity entity = EntityList.createEntityByIDFromName(inha.getBossID(), world);
+			if (inha != null) {
+				if (inha.getBossID() != null) {
+					Entity entity = EntityList.createEntityByIDFromName(inha.getBossID(), world);
 
-				entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
-				if (entity instanceof AbstractEntityCQRBoss) {
-					((AbstractEntityCQRBoss) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
-					((AbstractEntityCQRBoss) entity).setHealingPotions(1);
-					if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
-						((AbstractEntityCQRBoss) entity).setFaction(inha.getFactionOverride());
-					}
-				}
-				if (entity instanceof EntityLiving) {
-					((EntityLiving) entity).enablePersistence();
-					((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(transformedPos), (IEntityLivingData) null);
-				}
-				world.spawnEntity(entity);
+					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
 
-				if (protectedRegion != null) {
-					protectedRegion.addEntityDependency(entity.getPersistentID());
-				}
-			} else {
-				/*
-				 * EntityArmorStand indicator = new EntityArmorStand(world); indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!"); indicator.setPosition(transformedPos.getX() + 0.5D,
-				 * transformedPos.getY(), transformedPos.getZ() + 0.5D); indicator.setEntityInvulnerable(true); indicator.setInvisible(true); indicator.setAlwaysRenderNameTag(true); indicator.setSilent(true); indicator.setNoGravity(true);
-				 */
-				Entity indicator = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
-				if (indicator instanceof EntityLiving) {
-					if (indicator instanceof AbstractEntityCQR) {
-						((AbstractEntityCQR) indicator).onSpawnFromCQRSpawnerInDungeon(settings, inha);
-						((AbstractEntityCQR) indicator).setHealingPotions(1);
-						((AbstractEntityCQR) indicator).resize(1.5F, 1.5F);
-						if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
-							((AbstractEntityCQR) indicator).setFaction(inha.getFactionOverride());
+					if (entity instanceof EntityLiving) {
+						((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(transformedPos), null);
+						((EntityLiving) entity).enablePersistence();
+
+						if (entity instanceof AbstractEntityCQR) {
+							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
+							if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
+								((AbstractEntityCQR) entity).setFaction(inha.getFactionOverride());
+							}
 						}
 					}
-					((EntityLiving) indicator).onInitialSpawn(world.getDifficultyForLocation(transformedPos), (IEntityLivingData) null);
 
-					((EntityLiving) indicator).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100);
-					((EntityLiving) indicator).setHealth(((EntityLiving) indicator).getMaxHealth());
+					world.spawnEntity(entity);
 
-					// Some gear
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_DIAMOND, 1));
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(inha.getShieldReplacement(), 1));
+					if (protectedRegion != null) {
+						protectedRegion.addEntityDependency(entity.getPersistentID());
+					}
+				} else if (inha.getEntityID() != null) {
+					/*
+					 * EntityArmorStand indicator = new EntityArmorStand(world);
+					 * indicator.setCustomNameTag("Oops! We haven't added this boss yet! Treat yourself to some free loot!");
+					 * indicator.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
+					 * indicator.setEntityInvulnerable(true);
+					 * indicator.setInvisible(true);
+					 * indicator.setAlwaysRenderNameTag(true);
+					 * indicator.setSilent(true); indicator.setNoGravity(true);
+					 */
+					Entity entity = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
 
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.HELMET_HEAVY_DIAMOND, 1));
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.CHESTPLATE_HEAVY_DIAMOND, 1));
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.LEGGINGS_HEAVY_DIAMOND, 1));
-					((EntityLiving) indicator).setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.BOOTS_HEAVY_DIAMOND, 1));
+					entity.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
+					entity.setCustomNameTag("Temporary Boss");
 
-					indicator.setPosition(transformedPos.getX() + 0.5D, transformedPos.getY(), transformedPos.getZ() + 0.5D);
-					((EntityLiving) indicator).enablePersistence();
-					indicator.setCustomNameTag("Temporary Boss");
-				}
+					if (entity instanceof EntityLiving) {
+						((EntityLiving) entity).onInitialSpawn(world.getDifficultyForLocation(transformedPos), null);
+						((EntityLiving) entity).enablePersistence();
 
-				world.spawnEntity(indicator);
-				if (protectedRegion != null) {
-					protectedRegion.addEntityDependency(indicator.getPersistentID());
+						if (entity instanceof AbstractEntityCQR) {
+							((AbstractEntityCQR) entity).onSpawnFromCQRSpawnerInDungeon(settings, inha);
+							((AbstractEntityCQR) entity).setSizeVariation(1.1F);
+							if (inha.getFactionOverride() != null && !inha.getFactionOverride().isEmpty()) {
+								((AbstractEntityCQR) entity).setFaction(inha.getFactionOverride());
+							}
+						}
+
+						((EntityLiving) entity).getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100);
+						((EntityLiving) entity).setHealth(((EntityLiving) entity).getMaxHealth());
+
+						// Some gear
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.GREAT_SWORD_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.OFFHAND, new ItemStack(inha.getShieldReplacement()));
+
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.HELMET_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.CHESTPLATE_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.LEGGINGS_HEAVY_DIAMOND));
+						((EntityLiving) entity).setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.BOOTS_HEAVY_DIAMOND));
+					}
+
+					world.spawnEntity(entity);
+
+					if (protectedRegion != null) {
+						protectedRegion.addEntityDependency(entity.getPersistentID());
+						CQRMain.logger.info("{} {}", protectedRegion.getUuid(), protectedRegion.getEntityDependencies(), protectedRegion.getBlockDependencies());
+					}
 				}
 			}
 		} else {
