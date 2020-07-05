@@ -2,7 +2,7 @@ package com.teamcqr.chocolatequestrepoured.util;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRNetherDragon;
 import com.teamcqr.chocolatequestrepoured.structuregen.structurefile.CQStructure;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionEventHandler;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
 
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
@@ -210,8 +210,8 @@ public class CQRConfig {
 				ConfigManager.sync(Reference.MODID, Config.Type.INSTANCE);
 				CQStructure.updateSpecialBlocks();
 				CQStructure.updateSpecialEntities();
-				ProtectedRegionEventHandler.updateBreakableBlockWhitelist();
-				ProtectedRegionEventHandler.updatePlaceableBlockWhitelist();
+				ProtectedRegionHelper.updateBreakableBlockWhitelist();
+				ProtectedRegionHelper.updatePlaceableBlockWhitelist();
 				EntityCQRNetherDragon.reloadBreakableBlocks();
 			}
 		}
