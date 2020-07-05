@@ -29,6 +29,11 @@ public class LayerCQRSpeechbubble extends AbstractLayerCQR {
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(netHeadYaw, 0.0F, 1.0F, 0.0F);
 			// DONE : This does not really line up with scaling mob size
+			if (this.entityRenderer.heightScale != 1.0D || this.entityRenderer.widthScale != 1.0D) {
+				GlStateManager.translate(0.0D, 1.5D, 0.0D);
+				GlStateManager.scale(1.0D / this.entityRenderer.widthScale, 1.0D / this.entityRenderer.heightScale, 1.0D / this.entityRenderer.widthScale);
+				GlStateManager.translate(0.0D, -1.5D, 0.0D);
+			}
 			GlStateManager.translate(-0.5D, (-1.15D * (double) entity.height) / entity.getSizeVariation(), 0.0D);
 
 			minecraft.getTextureManager().bindTexture(entity.getCurrentSpeechBubble().getResourceLocation());
