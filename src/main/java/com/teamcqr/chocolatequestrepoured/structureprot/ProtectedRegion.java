@@ -238,17 +238,17 @@ public class ProtectedRegion {
 	}
 
 	public void removeEntityDependency(UUID uuid) {
-		this.entityDependencies.remove(uuid);
+		boolean flag = this.entityDependencies.remove(uuid);
 
-		if (this.world != null && !this.world.isRemote) {
-			// TODO Only send changes to clients
-			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
-			List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
-			CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
-		}
-
-		if (!this.isValid()) {
-			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+		if (flag && this.world != null && !this.world.isRemote) {
+			if (!this.isValid()) {
+				ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+			} else {
+				// TODO Only send changes to clients
+				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+				List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+				CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
+			}
 		}
 	}
 
@@ -265,17 +265,17 @@ public class ProtectedRegion {
 	}
 
 	public void removeBlockDependency(BlockPos pos) {
-		this.blockDependencies.remove(pos);
+		boolean flag = this.blockDependencies.remove(pos);
 
-		if (this.world != null && !this.world.isRemote) {
-			// TODO Only send changes to clients
-			ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
-			List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
-			CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
-		}
-
-		if (!this.isValid()) {
-			ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+		if (flag && this.world != null && !this.world.isRemote) {
+			if (!this.isValid()) {
+				ProtectedRegionManager.getInstance(this.world).removeProtectedRegion(this);
+			} else {
+				// TODO Only send changes to clients
+				ProtectedRegionManager protectedRegionManager = ProtectedRegionManager.getInstance(this.world);
+				List<ProtectedRegion> protectedRegions = protectedRegionManager != null ? protectedRegionManager.getProtectedRegions() : Collections.emptyList();
+				CQRMain.NETWORK.sendToDimension(new SPacketSyncProtectedRegions(protectedRegions), this.world.provider.getDimension());
+			}
 		}
 	}
 
