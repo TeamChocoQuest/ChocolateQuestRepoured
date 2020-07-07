@@ -10,7 +10,6 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIBlindTargetSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIFangAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMinionSpell;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIVampiricSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityFlyingSkullMinion;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntitySummoningCircle.ECircleTexture;
@@ -36,11 +35,16 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 200, 10, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)));
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 400, 10, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 4, 2, new Vec3d(0, 2.5, 0)));
-		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 400, 10, 100));
-		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 400, 10));
-		this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 400, 10));
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)));
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 15, 10, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vec3d(0, 2.5, 0)));
+		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 45, 10, 100));
+		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 40, 10, 1, 12) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
+		//this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 30, 10));
 	}
 
 	@Override
@@ -48,21 +52,21 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 		super.onLivingUpdate();
 		this.filterSummonLists();
 
-		if (this.summonedSkulls.size() >= 1) {
+		if (this.summonedSkulls.size() >= 1 && !hasAttackTarget()) {
 			this.summonedSkulls.get(0).setSide(false);
 			if (this.summonedSkulls.size() >= 2) {
 				this.summonedSkulls.get(1).setSide(true);
 			}
 		}
 
-		if (this.getAttackTarget() != null && !this.getAttackTarget().isDead && this.summonedSkulls.size() >= 3) {
-			for (int i = 2; i < this.summonedSkulls.size(); i++) {
+		if (this.getAttackTarget() != null && !this.getAttackTarget().isDead && this.summonedSkulls.size() >= 1) {
+			for (int i = 0; i < this.summonedSkulls.size(); i++) {
 				EntityFlyingSkullMinion skull = this.summonedSkulls.get(i);
 				if (!skull.hasTarget()) {
 					skull.setTarget(this.getAttackTarget());
 				}
 			}
-			for (int i = 2; i < this.summonedSkulls.size(); i++) {
+			for (int i = 0; i < this.summonedSkulls.size(); i++) {
 				EntityFlyingSkullMinion skull = this.summonedSkulls.get(i);
 				if (!skull.isAttacking()) {
 					skull.startAttacking();

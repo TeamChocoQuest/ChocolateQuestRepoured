@@ -3,11 +3,13 @@ package com.teamcqr.chocolatequestrepoured.objects.entity.misc;
 import java.util.UUID;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.target.TargetUtil;
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.projectile.EntitySpectralArrow;
 import net.minecraft.nbt.NBTTagCompound;
@@ -46,8 +48,8 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
 			this.target = summonerTmp;
-			this.explode(10F);
-			this.setDead();
+			//this.explode(10F);
+			//this.setDead();
 			return true;
 		}
 		if (this.getRNG().nextInt(10) == 9) {
@@ -119,6 +121,14 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 	protected void collideWithEntity(Entity entityIn) {
 		if (entityIn != this.summoner) {
 			super.collideWithEntity(entityIn);
+			
+			if(EntityUtil.isEntityFlying(entityIn)) {
+				if(this.summoner instanceof EntityLivingBase && entityIn instanceof EntityLivingBase) {
+					((EntityLivingBase)summoner).heal(((EntityLivingBase)entityIn).getHealth() / 2);
+					((EntityLivingBase)entityIn).motionY *= -2;
+					((EntityLivingBase)entityIn).velocityChanged = true;
+				}
+			}
 			this.explode(0.75F);
 		}
 	}

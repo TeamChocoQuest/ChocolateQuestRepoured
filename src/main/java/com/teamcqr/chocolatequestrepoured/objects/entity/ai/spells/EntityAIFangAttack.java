@@ -1,6 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
+import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -10,15 +12,25 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * This code is adapted minecraft vanilla code, so it is made by Mojang
  */
 public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
+	
+	private int minRows = 1;
+	private int maxRows = 1;
 
 	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
 		this.setup(true, true, true, false);
+	}
+	
+	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargingTicks, int minRows, int maxRows) {
+		this(entity, cooldown, chargingTicks);
+		this.minRows = minRows;
+		this.maxRows = maxRows;
 	}
 
 	@Override
@@ -39,10 +51,22 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f2) * 2.5D, this.entity.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
 		} else {
-			for (int l = 0; l < 16; ++l) {
-				double d2 = 1.25D * (double) (l + 1);
-				int j = 1 * l;
-				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f) * d2, this.entity.posZ + (double) MathHelper.sin(f) * d2, d0, d1, f, j);
+			Vec3d v = new Vec3d((double) MathHelper.cos(f), 0, (double) MathHelper.sin(f));
+			v = v.normalize().scale(1.25D);
+			int rows = DungeonGenUtils.getIntBetweenBorders(minRows, maxRows, entity.getRNG());
+			double angle = rows > 0 ? 120 / rows : 0;
+			if (angle != 0) {
+				v = VectorUtil.rotateVectorAroundY(v, -60);
+			}
+			for(int rowCount = 0; rowCount < rows; rowCount++) {
+				for (int fangcount = 0; fangcount < 16; ++fangcount) {
+					double d2 = 1.25D * (double) (fangcount + 1);
+					v = v.scale(d2);
+					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, f, fangcount);
+				}
+				if(angle != 0) {
+					v = VectorUtil.rotateVectorAroundY(v, angle);
+				}
 			}
 		}
 	}
