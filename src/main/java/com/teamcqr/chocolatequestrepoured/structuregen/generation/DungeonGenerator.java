@@ -117,6 +117,9 @@ public class DungeonGenerator {
 					this.dungeonPartLight.generateNext();
 				} else {
 					this.state = EnumDungeonGeneratorState.POST_GENERATION;
+					if (this.protectedRegion != null) {
+						this.protectedRegion.setGenerating(true);
+					}
 				}
 
 				i++;
