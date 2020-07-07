@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
@@ -43,22 +45,22 @@ public class ProjectileBullet extends ProjectileBase implements IEntityAdditiona
 					EntityLivingBase entity = (EntityLivingBase) result.entityHit;
 
 					float damage = 5.0F;
-
 					if (this.type == 1) {
 						damage += 2.5F;
-						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), damage);
 					} else if (this.type == 2) {
 						damage += 3.75F;
-						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), damage);
 					} else if (this.type == 3) {
 						damage += 5.0F;
-						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), damage);
 					} else if (this.type == 4) {
 						damage += 5.0F;
 						entity.setFire(3);
-						entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), damage);
 						entity.attackEntityFrom(new EntityDamageSourceIndirect("onFire", this, this.thrower).setFireDamage(), damage /2);
 					}
+					if(EntityUtil.isEntityFlying(entity)) {
+						damage *= 2;
+					}
+					
+					entity.attackEntityFrom(DamageSource.causeIndirectDamage(this, this.thrower), damage);
 					this.setDead();
 				}
 			}
