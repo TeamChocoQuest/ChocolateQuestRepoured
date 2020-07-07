@@ -38,20 +38,20 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
 		double d0 = Math.min(entitylivingbase.posY, this.entity.posY);
 		double d1 = Math.max(entitylivingbase.posY, this.entity.posY) + 1.0D;
-		float f = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
+		float entityAngle = (float) MathHelper.atan2(entitylivingbase.posZ - this.entity.posZ, entitylivingbase.posX - this.entity.posX);
 
-		/*if (this.entity.getDistanceSq(entitylivingbase) < 9.0D) {
+		if (this.entity.getDistanceSq(entitylivingbase) < 9.0D) {
 			for (int i = 0; i < 5; ++i) {
-				float f1 = f + (float) i * (float) Math.PI * 0.4F;
+				float f1 = entityAngle + (float) i * (float) Math.PI * 0.4F;
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f1) * 1.5D, this.entity.posZ + (double) MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 
 			for (int k = 0; k < 8; ++k) {
-				float f2 = f + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
+				float f2 = entityAngle + (float) k * (float) Math.PI * 2.0F / 8.0F + ((float) Math.PI * 2F / 5F);
 				this.spawnFangs(this.entity.posX + (double) MathHelper.cos(f2) * 2.5D, this.entity.posZ + (double) MathHelper.sin(f2) * 2.5D, d0, d1, f2, 3);
 			}
-		} else {*/
-			Vec3d v = new Vec3d((double) MathHelper.cos(f), 0, (double) MathHelper.sin(f));
+		} else {
+			Vec3d v = new Vec3d((double) MathHelper.cos(entityAngle), 0, (double) MathHelper.sin(entityAngle));
 			v = v.normalize().scale(1.25D);
 			int rows = DungeonGenUtils.getIntBetweenBorders(minRows, maxRows, entity.getRNG());
 			double angle = rows > 0 ? 120 / rows : 0;
@@ -63,14 +63,14 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 					double d2 = 1.25D * (double) (fangcount + 1);
 					v = v.normalize();
 					v = v.scale(d2);
-					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, f, fangcount);
+					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, entityAngle, fangcount);
 				}
 				if(angle != 0) {
 					v = v.normalize();
 					v = VectorUtil.rotateVectorAroundY(v, angle);
 				}
 			}
-		//}
+		}
 	}
 
 	private void spawnFangs(double x, double z, double minY, double maxY, float rotationYawRadians, int warmupDelayTicks) {
