@@ -190,7 +190,12 @@ public class CQRConfig {
 				"minecraft:double_plant", 
 				"minecraft:coal_ore", 
 				"minecraft:iron_ore", 
-				"minecraft:gold_ore"
+				"minecraft:gold_ore",
+				"minecraft:water",
+				"minecraft:lava",
+				"minecraft:magma",
+				"minecraft:glowstone",
+				"cqrepoured:phylactery"
 			};
 		
 		public double pirateCaptainFleeCheckRadius = 32;
