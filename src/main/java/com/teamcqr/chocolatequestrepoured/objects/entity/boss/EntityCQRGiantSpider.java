@@ -155,7 +155,8 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5);
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(4);
 	}
 	
 	@Override
@@ -244,6 +245,11 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	@Override
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
+	}
+	
+	@Override
+	public boolean canBePushed() {
+		return false;
 	}
 
 }
