@@ -272,13 +272,13 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		//Phase change
 		if(this.phase == 0 && amount >= this.getHealth()) {
-			this.phase++;
 			if(!world.isRemote) {
+				this.phase++;
 				this.dataManager.set(PHASE, this.phase);
+				this.setHealth(this.getMaxHealth() -1);
 			}
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			//DONE: Init phase 2!!
-			this.setHealth(this.getMaxHealth() -1);
 			amount = 0;
 			return false;
 		} else if (phase != 0 && amount > 0) {

@@ -7,7 +7,7 @@ import net.minecraft.util.math.Vec3d;
 public class BossAIFlyToTarget extends BossAIFlyToLocation {
 	
 	private int attackCooldown = 10;
-	private int aiCooldown = 20;
+	private int aiCooldown = 60;
 	
 	private boolean breathFire = false;
 
