@@ -904,9 +904,9 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return this.holdingPotion;
 	}
 
-	public abstract EDefaultFaction getDefaultFaction();
+	protected abstract EDefaultFaction getDefaultFaction();
 
-	public CQRFaction getDefaultFactionInstance() {
+	protected CQRFaction getDefaultFactionInstance() {
 		if (this.defaultFactionInstance == null) {
 			this.defaultFactionInstance = FactionRegistry.instance().getFactionInstance(this.getDefaultFaction().name());
 		}
