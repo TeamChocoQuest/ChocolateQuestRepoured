@@ -34,7 +34,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 	
 	@Override
 	public void onUpdate() {
-		if (this.ticksExisted > 800) {
+		if (this.ticksExisted > 400) {
 			this.world.createExplosion(this.thrower, posX, posY, posZ, 1.5F, true);
 			this.setDead();
 		}
