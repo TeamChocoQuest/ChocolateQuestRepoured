@@ -18,16 +18,17 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 	public void startCastingSpell() {
 		Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 		int explosionCount = (int) v.length() >> 1;
-		v = v.normalize();
+		v = v.normalize().scale(2);
+		explosionCount /= 2;
 		BlockPos start = this.entity.getPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
 		for (int i = 1; i <= explosionCount; i++) {
-			BlockPos p = start.add(v.x * i + 4 * Math.sin((i - 1) * 2), v.y * i, v.z * i + 4 * Math.sin((i - 1) * 2));
+			BlockPos p = start.add(v.x * i , v.y * i, v.z * i );
 			positions[i - 1] = p;
 		}
 
 		for (BlockPos p : positions) {
-			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 0.5F, this.entity.getRNG().nextBoolean(), true);
+			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(), true);
 		}
 	}
 
