@@ -8,7 +8,6 @@ import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
-import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.ISummoner;
@@ -70,10 +69,9 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISummonMeteors(this, 400, 40));
-		this.spellHandler.addSpell(1, new EntityAIExplosionRay(this, 400, 40));
-		this.spellHandler.addSpell(2, new EntityAIExplosionSpell(this, 400, 40));
-		this.spellHandler.addSpell(3, new EntityAISummonFireWall(this, 400, 40));
+		this.spellHandler.addSpell(0, new EntityAISummonMeteors(this, 40, 20));
+		this.spellHandler.addSpell(1, new EntityAIExplosionRay(this, 65, 10));
+		this.spellHandler.addSpell(3, new EntityAISummonFireWall(this, 60, 25));
 	}
 
 	@Override
@@ -85,6 +83,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public float getBaseHealth() {
 		return EBaseHealths.BOAR_MAGE.getValue();
 	}
+	
 
 	@Override
 	public EDefaultFaction getDefaultFaction() {
