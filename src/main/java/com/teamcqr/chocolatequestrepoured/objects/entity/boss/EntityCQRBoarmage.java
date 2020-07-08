@@ -7,6 +7,7 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.boarmage.BossAIBoarmageTeleportSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
@@ -46,6 +47,10 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		for (Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
+		
+		if((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
+			this.heal(1);
+		}
 	}
 
 	@Override
@@ -69,6 +74,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
+		this.tasks.addTask(10, new BossAIBoarmageTeleportSpell(this));
 		this.spellHandler.addSpell(0, new EntityAISummonMeteors(this, 40, 20));
 		this.spellHandler.addSpell(2, new EntityAIExplosionRay(this, 65, 10));
 		this.spellHandler.addSpell(1, new EntityAISummonFireWall(this, 60, 25));
