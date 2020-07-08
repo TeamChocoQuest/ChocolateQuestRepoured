@@ -15,7 +15,7 @@ import net.minecraft.util.math.Vec3d;
 public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
 
 	protected static final int MIN_FIREBALLS_PER_CAST = 3;
-	protected static final int MAX_FIREBALLS_PER_CAST = 8;
+	protected static final int MAX_FIREBALLS_PER_CAST = 12;
 
 	public EntityAISummonMeteors(AbstractEntityCQR entity, int cooldown, int chargingTicks) {
 		super(entity, cooldown, chargingTicks, 1);
@@ -33,12 +33,10 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			double angle = 360D / (double) ballCount;
 			// vector = VectorUtil.rotateVectorAroundY(vector, 270 + (angle /2));
 			BlockPos[] spawnPositions = new BlockPos[ballCount];
-			BlockPos centeredPos = this.entity.getPosition();
-			{
-				Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-				v = v.normalize().scale(ballCount / 2);
-				centeredPos = centeredPos.add(v.x, v.y, v.z);
-			}
+			BlockPos centeredPos = this.entity.getAttackTarget().getPosition();
+			Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
+			v = v.normalize().scale(ballCount / 3);
+			centeredPos = centeredPos.add(v.x, v.y, v.z);
 			for (int i = 0; i < ballCount; i++) {
 				spawnPositions[i] = centeredPos.add(new BlockPos(VectorUtil.rotateVectorAroundY(vector, angle * i)));
 			}
