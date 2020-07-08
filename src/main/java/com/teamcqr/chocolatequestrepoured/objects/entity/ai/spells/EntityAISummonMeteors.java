@@ -36,7 +36,7 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			BlockPos centeredPos = this.entity.getPosition();
 			{
 				Vec3d v = this.entity.getAttackTarget().getPositionVector().subtract(this.entity.getPositionVector());
-				v = new Vec3d(v.x / 2, v.y / 2, v.z / 2);
+				v = v.normalize().scale(ballCount / 2);
 				centeredPos = centeredPos.add(v.x, v.y, v.z);
 			}
 			for (int i = 0; i < ballCount; i++) {
@@ -45,12 +45,9 @@ public class EntityAISummonMeteors extends AbstractEntityAISpell<AbstractEntityC
 			for (BlockPos p : spawnPositions) {
 				if (this.entity.getNavigator().getPathToPos(p) != null) {
 					// System.out.println("Pos: " + p.toString());
-					ResourceLocation summon = new ResourceLocation("minecraft", "fireball");
+					ResourceLocation summon = new ResourceLocation("cqrepoured", "projectile_hot_fireball");
 					ECircleTexture texture = ECircleTexture.METEOR;
-					if (this.entity.getRNG().nextInt(4) == 3) {
-						summon = new ResourceLocation("minecraft", "small_fireball");
-					}
-					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 1.1F, texture, null);
+					EntitySummoningCircle circle = new EntitySummoningCircle(this.entity.world, summon, 0.1F, texture, null);
 					circle.setSummon(summon);
 					circle.setPosition(p.getX(), p.getY() + 10, p.getZ());
 					circle.setVelocityForSummon(new Vec3d(0D, -1D, 0D));
