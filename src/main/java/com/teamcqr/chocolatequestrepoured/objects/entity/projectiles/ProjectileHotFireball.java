@@ -1,5 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.projectiles;
 
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -66,7 +68,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 				}
 			}
 		} 
-		this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, true);
+		this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, CQRConfig.bosses.hotFireballsDestroyTerrain);
 		setDead();
 	}
 

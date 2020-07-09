@@ -1,6 +1,7 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundEvent;
@@ -28,7 +29,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 		}
 
 		for (BlockPos p : positions) {
-			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(), true);
+			this.entity.world.newExplosion(this.entity, p.getX(), p.getY(), p.getZ(), 1.5F, this.entity.getRNG().nextBoolean(), CQRConfig.bosses.boarmageExplosionRayDestroysTerrain);
 		}
 	}
 

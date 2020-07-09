@@ -172,6 +172,8 @@ public class CQRConfig {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
 		
+		public boolean hotFireballsDestroyTerrain = true;
+		
 		public boolean harderWalkerKing = true;
 		public boolean armorForTheWalkerKing = false; 
 		
@@ -199,6 +201,8 @@ public class CQRConfig {
 			};
 		
 		public double pirateCaptainFleeCheckRadius = 32;
+		
+		public boolean boarmageExplosionRayDestroysTerrain = false;
 	}
 
 	public static class Wall {
