@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.projectiles.ProjectileF
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 
@@ -14,13 +15,13 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	private int cooldown = 10;
 	private int wallCounter = 0;
 	private int wallsMax = 0;
-	private static final int MIN_WALLS = 2;
+	private static final int MIN_WALLS = 1;
 	private static final int MAX_WALLS = 5;
 	private static final int MIN_WALL_LENGTH = 6;
 	private static final int MAX_WALL_LENGTH = 12;
 	private static final double MIN_DISTANCE = 3;
-	private static final double MAX_DISTANCE = 12;
-	private static final long PREPARE_TIME = 10;
+	private static final double MAX_DISTANCE = 16;
+	private static final long PREPARE_TIME = 40;
 	
 	private long ticksAtTeleport = 0;
 	
@@ -30,6 +31,9 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 
 	@Override
 	public boolean shouldExecute() {
+		if(ticksAtTeleport != 0) {
+			return false;
+		}
 		if(cooldown > 0) {
 			cooldown--;
 			return false;
@@ -41,14 +45,14 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	public void startExecuting() {
 		super.startExecuting();
 		this.wallsMax = DungeonGenUtils.getIntBetweenBorders(MIN_WALLS, MAX_WALLS, entity.getRNG());
-		this.wallCounter = 1;
+		this.wallCounter = 0;
 		world.newExplosion(entity, entity.posX, entity.posY, entity.posZ, 2, true, false);
 		Vec3d v = entity.getPositionVector().subtract(entity.getAttackTarget().getPositionVector());
 		v = v.normalize().scale(5);
-		Vec3d p = entity.getAttackTarget().getPositionVector().add(v);
+		Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v);
 		if(entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
 			if(entity.attemptTeleport(p.x, p.y, p.z)) {
-				ticksAtTeleport = entity.ticksExisted;
+				ticksAtTeleport = new Long(entity.ticksExisted);
 				return;
 			}
 		} 
@@ -57,13 +61,18 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	
 	@Override
 	public boolean shouldContinueExecuting() {
-		return super.shouldContinueExecuting() && ticksAtTeleport != 0 && wallCounter <= wallsMax;
+		return ticksAtTeleport != 0 && wallCounter <= wallsMax && entity.hasAttackTarget();
+	}
+	
+	@Override
+	public boolean isInterruptible() {
+		return false;
 	}
 	
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if(entity.ticksExisted - ticksAtTeleport > PREPARE_TIME) {
+		if(Math.abs(entity.ticksExisted - ticksAtTeleport) > PREPARE_TIME) {
 			ticksAtTeleport = entity.ticksExisted;
 			//Summon fire wall here
 			int wallLength = MIN_WALL_LENGTH + wallCounter * ((MAX_WALL_LENGTH - MIN_WALL_LENGTH) / (wallsMax));
@@ -85,6 +94,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 				positions[arrayIndex] = startPos.add(new Vec3d(i * vL.x, 0, i * vL.z));
 				arrayIndex++;
 			}
+			entity.swingArm(EnumHand.MAIN_HAND);
 
 			for (Vec3d p : positions) {
 				if (p != null) {
@@ -95,7 +105,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 					wallPart.motionY = 0;
 					wallPart.motionZ = v.z / 2D;
 					wallPart.velocityChanged = true;
-					this.entity.world.spawnEntity(wallPart);
+					this.world.spawnEntity(wallPart);
 				}
 			}
 			//END OF WALL CODE
@@ -107,7 +117,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	@Override
 	public void resetTask() {
 		super.resetTask();
-		cooldown = 40;
+		cooldown = 60;
 		ticksAtTeleport = 0;
 	}
 
