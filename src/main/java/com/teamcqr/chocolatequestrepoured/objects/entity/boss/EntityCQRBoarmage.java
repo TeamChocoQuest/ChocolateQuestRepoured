@@ -7,7 +7,9 @@ import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.factions.EDefaultFaction;
 import com.teamcqr.chocolatequestrepoured.init.ModLoottables;
 import com.teamcqr.chocolatequestrepoured.objects.entity.EBaseHealths;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.boarmage.BossAIBoarmageExplodeAreaAttack;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.boss.boarmage.BossAIBoarmageTeleportSpell;
+import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplodeAreaStartSpell;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAIExplosionRay;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonFireWall;
 import com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells.EntityAISummonMeteors;
@@ -23,6 +25,8 @@ import net.minecraft.world.World;
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
+	
+	protected boolean startedExplodeAreaAttack = false;
 
 	public EntityCQRBoarmage(World worldIn) {
 		super(worldIn);
@@ -33,6 +37,18 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	@Override
 	public boolean isImmuneToExplosions() {
 		return true;
+	}
+	
+	public void startExplodeAreaAttack() {
+		this.startedExplodeAreaAttack = true;
+	}
+	
+	public boolean isExecutingExplodeAreaAttack() {
+		return this.startedExplodeAreaAttack;
+	}
+	
+	public void stopExplodeAreaAttack() {
+		this.startedExplodeAreaAttack = false;
 	}
 
 	@Override
@@ -49,7 +65,7 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		}
 		
 		if((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
-			this.heal(1);
+			this.heal(2);
 		}
 	}
 
@@ -75,9 +91,11 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(10, new BossAIBoarmageTeleportSpell(this));
+		this.tasks.addTask(8, new BossAIBoarmageExplodeAreaAttack(this));
 		this.spellHandler.addSpell(0, new EntityAISummonMeteors(this, 75, 20));
-		this.spellHandler.addSpell(2, new EntityAIExplosionRay(this, 100, 10));
-		this.spellHandler.addSpell(1, new EntityAISummonFireWall(this, 50, 25));
+		this.spellHandler.addSpell(3, new EntityAIExplosionRay(this, 100, 10));
+		this.spellHandler.addSpell(2, new EntityAISummonFireWall(this, 50, 25));
+		this.spellHandler.addSpell(1, new EntityAIExplodeAreaStartSpell(this, 200, 20, 5));
 	}
 
 	@Override

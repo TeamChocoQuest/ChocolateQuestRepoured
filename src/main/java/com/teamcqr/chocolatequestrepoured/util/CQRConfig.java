@@ -203,6 +203,7 @@ public class CQRConfig {
 		public double pirateCaptainFleeCheckRadius = 32;
 		
 		public boolean boarmageExplosionRayDestroysTerrain = false;
+		public boolean boarmageExplosionAreaDestroysTerrain = false;
 	}
 
 	public static class Wall {
