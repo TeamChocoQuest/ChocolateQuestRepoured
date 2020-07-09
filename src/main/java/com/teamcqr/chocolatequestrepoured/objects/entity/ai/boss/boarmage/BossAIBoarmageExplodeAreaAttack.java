@@ -62,11 +62,13 @@ public class BossAIBoarmageExplodeAreaAttack extends AbstractCQREntityAI<EntityC
 	public void updateTask() {
 		super.updateTask();
 		//Particles on positions
-		for(BlockPos p : explosions) {
-			world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, -0.125, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, 0.125, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, -0.125, 1);
-			world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, 0.125, 1);
+		if(entity.ticksExisted % 5 == 0) {
+			for(BlockPos p : explosions) {
+				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, -0.125, 1);
+				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), -0.125, 0.125, 0.125, 1);
+				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, -0.125, 1);
+				world.spawnParticle(EnumParticleTypes.FLAME, p.getX(), p.getY(), p.getZ(), 0.125, 0.125, 0.125, 1);
+			}
 		}
 		
 		if(explosions.size() >= explosionCount) {
