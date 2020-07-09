@@ -19,7 +19,7 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	private static final int MIN_WALL_LENGTH = 6;
 	private static final int MAX_WALL_LENGTH = 12;
 	private static final double MIN_DISTANCE = 3;
-	private static final double MAX_DISTANCE = 18;
+	private static final double MAX_DISTANCE = 12;
 	private static final long PREPARE_TIME = 10;
 	
 	private long ticksAtTeleport = 0;
