@@ -10,10 +10,15 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBucket;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
@@ -69,16 +74,56 @@ public class ProtectedRegionEventHandler {
 	}
 
 	@SubscribeEvent
-	public static void onPlayerLeftClickBlockEvent(PlayerInteractEvent.LeftClickBlock event) {
-		if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), event.getPos(), event.getEntityPlayer())) {
+	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
+		CQRMain.logger.info("break");
+		World world = event.getWorld();
+		BlockPos pos = event.getPos();
+		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
+		boolean isBlockDependency = false;
+
+		if (manager != null) {
+			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
+				if (protectedRegion.isBlockDependency(pos)) {
+					protectedRegion.removeBlockDependency(pos);
+					isBlockDependency = true;
+				}
+			}
+		}
+
+		if (!isBlockDependency && ProtectedRegionHelper.isBlockBreakingPrevented(world, pos, event.getPlayer())) {
 			event.setCanceled(true);
 		}
 	}
 
 	@SubscribeEvent
-	public static void onPlayerRightClickBlockEvent(PlayerInteractEvent.RightClickBlock event) {
-		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntityPlayer(), event.getItemStack())) {
+	public static void onBlockPlaceEvent(BlockEvent.EntityPlaceEvent event) {
+		CQRMain.logger.info("place");
+		if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), event.getPos(), event.getEntity(), event.getPlacedBlock().getBlock())) {
 			event.setCanceled(true);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onBucketUseEvent(FillBucketEvent event) {
+		RayTraceResult result = event.getTarget();
+		if (result == null) {
+			return;
+		}
+		ItemStack stack = event.getEmptyBucket();
+		Item item = stack.getItem();
+		if (!(item instanceof ItemBucket)) {
+			return;
+		}
+		if (item == Items.BUCKET) {
+			CQRMain.logger.info("bucket break");
+			if (ProtectedRegionHelper.isBlockBreakingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer())) {
+				event.setCanceled(true);
+			}
+		} else {
+			CQRMain.logger.info("bucket place");
+			if (ProtectedRegionHelper.isBlockPlacingPrevented(event.getWorld(), result.getBlockPos(), event.getEntityPlayer(), stack)) {
+				event.setCanceled(true);
+			}
 		}
 	}
 
@@ -95,21 +140,6 @@ public class ProtectedRegionEventHandler {
 
 		if (ProtectedRegionHelper.isEntitySpawningPrevented(event.getWorld(), event.getPos())) {
 			event.setCanceled(true);
-		}
-	}
-
-	@SubscribeEvent
-	public static void onBlockBreakEvent(BlockEvent.BreakEvent event) {
-		World world = event.getWorld();
-		BlockPos pos = event.getPos();
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.isBlockDependency(pos)) {
-					protectedRegion.removeBlockDependency(pos);
-				}
-			}
 		}
 	}
 
