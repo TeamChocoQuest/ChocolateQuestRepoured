@@ -27,6 +27,9 @@ public class RoomFactoryCastle {
 			case PORTAL:
 				return new CastleRoomNetherPortal(sideLength, height, floor);
 
+			case JAIL:
+				return new CastleRoomJailCell(sideLength, height, floor);
+
 			default:
 				return null;
 		}

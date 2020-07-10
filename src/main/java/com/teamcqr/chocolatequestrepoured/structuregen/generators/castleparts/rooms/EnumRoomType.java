@@ -9,6 +9,7 @@ public enum EnumRoomType {
 	BEDROOM_BASIC(false, false, true, false, new Vec3i(3, 1, 3)),
 	BEDROOM_FANCY(false, false, true, false, new Vec3i(2, 1, 2)),
 	ARMORY(false, false, true, false, new Vec3i(3, 1, 3)),
+	JAIL(false, false, true, false, new Vec3i(1, 1, 1)),
 	ALCHEMY_LAB(false, false, true, false, new Vec3i(2, 1, 2)),
 
 	LIBRARY(false, false, true, false, new Vec3i(1, 1, 1)),

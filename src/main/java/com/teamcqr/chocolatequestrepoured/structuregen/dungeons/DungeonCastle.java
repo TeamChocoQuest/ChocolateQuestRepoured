@@ -93,6 +93,8 @@ public class DungeonCastle extends DungeonBase {
 		this.roomRandomizer.add(EnumRoomType.POOL, weight);
 		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightPortal", 1);
 		this.roomRandomizer.add(EnumRoomType.PORTAL, weight);
+		weight = PropertyFileHelper.getIntProperty(prop, "roomWeightJailCell", 1);
+		this.roomRandomizer.add(EnumRoomType.JAIL, weight);
 
 		this.roofTypeRandomizer = new CQRWeightedRandom<>(this.random);
 		weight = PropertyFileHelper.getIntProperty(prop, "roofWeightTwoSided", 1);
