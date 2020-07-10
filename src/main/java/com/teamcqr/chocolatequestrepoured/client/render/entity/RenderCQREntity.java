@@ -11,7 +11,6 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHe
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerShoulderEntity;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerTest;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
@@ -80,7 +79,6 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
 			this.addLayer(new LayerShoulderEntity(this));
 		}
-		this.addLayer(new LayerTest(this));
 	}
 
 	@Override
