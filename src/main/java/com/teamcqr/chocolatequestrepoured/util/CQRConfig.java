@@ -181,6 +181,8 @@ public class CQRConfig {
 		public boolean armorForTheWalkerKing = false; 
 		
 		public boolean netherDragonDestroysBlocks = true;
+		public int netherDragonStageTwoFireballInterval = 40;
+		public int netherDragonStageTwoSegmentHP = 50;
 		public String[] netherDragonBreakableBlocks = {
 				"minecraft:stone", 
 				"minecraft:netherrack", 

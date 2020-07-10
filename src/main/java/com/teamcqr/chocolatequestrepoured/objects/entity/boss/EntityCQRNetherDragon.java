@@ -84,7 +84,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	 */
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
-	private float damageTmpPhaseTwo = 40;
+	private float damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
 	private int fireballTimer = 240;
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
@@ -223,7 +223,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if(this.phase == 2) {
 			damageTmpPhaseTwo -= damage;
 			if(damageTmpPhaseTwo <= 0) {
-				damageTmpPhaseTwo = 40;
+				damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
 				//DONE: Remove last segment
 				damage = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -SEGMENT_COUNT_ON_DEATH);
 				this.setHealth(getHealth() - damage);
@@ -436,7 +436,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		
 		this.fireballTimer--;
 		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
-			this.fireballTimer = 15;
+			this.fireballTimer = CQRConfig.bosses.netherDragonStageTwoFireballInterval;
 			shootFireballFromBody();
 		}
 		
