@@ -1,13 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.IRoomDecor;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.objects.RoomDecorPillar;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import net.minecraft.block.BlockGlazedTerracotta;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class CastleRoomHallway extends CastleRoomGenericBase {
 	public enum Alignment {
@@ -31,11 +34,7 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 		this.alignment = alignment;
 		this.defaultFloor = true;
 		this.defaultCeiling = true;
-		this. patternStartFacing = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
-
-		this.decoSelector.registerMidDecor(RoomDecorTypes.NONE, 25);
-		this.decoSelector.registerMidDecor(RoomDecorTypes.PILLAR, 1);
-
+		this.patternStartFacing = EnumFacing.HORIZONTALS[random.nextInt(EnumFacing.HORIZONTALS.length)];
 	}
 
 	@Override
@@ -65,6 +64,20 @@ public class CastleRoomHallway extends CastleRoomGenericBase {
 				genArray.addBlockState(pos, tcBlock, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 			}
 		}
+	}
+
+	@Override
+	protected void addMidDecoration(World world, BlockStateGenArray genArray, DungeonCastle dungeon) {
+		IRoomDecor pillar = RoomDecorTypes.PILLAR;
+		int halfX = this.getDecorationLengthX() / 2;
+		int halfZ = this.getDecorationLengthZ() / 2;
+
+		//Offset by 1 since the pillar is 3x3
+		--halfX;
+		--halfZ;
+
+		BlockPos pillarStart = this.roomOrigin.add(halfX, 1, halfZ);
+		pillar.build(world, genArray, this, dungeon, pillarStart, EnumFacing.NORTH, this.usedDecoPositions);
 	}
 
 	@Override
