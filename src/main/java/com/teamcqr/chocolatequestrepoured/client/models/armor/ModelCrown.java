@@ -6,6 +6,7 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREn
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
@@ -68,7 +69,7 @@ public class ModelCrown extends ModelCustomArmorBase {
 
 	@Override
 	public void render(Entity entityIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
-		float f = 1.2F;
+		float f = 1.3F;
 		float f1 = f - 1.0F;
 
 		this.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entityIn);
@@ -77,60 +78,43 @@ public class ModelCrown extends ModelCustomArmorBase {
 		if (this.isChild) {
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
-
-			GlStateManager.translate(-bipedHead.rotationPointX * 0.0625F * f1, -bipedHead.rotationPointY * 0.0625F * f1, -bipedHead.rotationPointZ * 0.0625F * f1);
-			GlStateManager.scale(f, f, f);
-			this.bipedHead.render(scale);
-		} else {
-			if (entityIn.isSneaking()) {
-				GlStateManager.translate(0.0F, 0.2F, 0.0F);
-			}
-
-			GlStateManager.translate(-bipedHead.rotationPointX * 0.0625F * f1, -bipedHead.rotationPointY * 0.0625F * f1, -bipedHead.rotationPointZ * 0.0625F * f1);
-			GlStateManager.scale(f, f, f);
-			this.bipedHead.render(scale);
+		} else if (entityIn.isSneaking()) {
+			GlStateManager.translate(0.0F, 0.2F, 0.0F);
 		}
+		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1, -this.bipedHead.rotationPointZ * 0.0625F * f1);
+		GlStateManager.scale(f, f, f);
+		this.bipedHead.render(scale);
 
 		GlStateManager.popMatrix();
 	}
 
 	@Override
 	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
-		float f = 1.2F;
+		this.render(entityIn, scale, renderer, model);
+	}
+
+	public void render(Entity entityIn, float scale, Render<?> renderer, ModelBiped model) {
+		float f = 1.3F;
 		float f1 = f - 1.0F;
 
-		this.applyRotations(model);
+		this.applyRotations(this.bipedHead, model.bipedHead);
 		GlStateManager.pushMatrix();
 
 		if (this.isChild) {
 			GlStateManager.scale(0.75F, 0.75F, 0.75F);
 			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
-
-			GlStateManager.pushMatrix();
-			renderer.setupHeadOffsets(this.bipedHead, slot);
-
-			GlStateManager.translate(-bipedHead.rotationPointX * 0.0625F * f1, -bipedHead.rotationPointY * 0.0625F * f1, -bipedHead.rotationPointZ * 0.0625F * f1);
-			GlStateManager.scale(f, f, f);
-			bipedHead.render(scale);
-
-			GlStateManager.popMatrix();
-		} else {
-			if (entityIn.isSneaking()) {
-				GlStateManager.translate(0.0F, 0.2F, 0.0F);
-			}
-
-			GlStateManager.pushMatrix();
-			renderer.setupHeadOffsets(this.bipedHead, slot);
-
-			GlStateManager.translate(-bipedHead.rotationPointX * 0.0625F * f1, -bipedHead.rotationPointY * 0.0625F * f1, -bipedHead.rotationPointZ * 0.0625F * f1);
-			GlStateManager.scale(f, f, f);
-			bipedHead.render(scale);
-
-			GlStateManager.popMatrix();
+		} else if (entityIn.isSneaking()) {
+			GlStateManager.translate(0.0F, 0.2F, 0.0F);
 		}
+		if (renderer instanceof RenderCQREntity) {
+			((RenderCQREntity<?>) renderer).setupHeadOffsets(this.bipedHead, EntityEquipmentSlot.HEAD);
+		}
+		GlStateManager.translate(-this.bipedHead.rotationPointX * 0.0625F * f1, -this.bipedHead.rotationPointY * 0.0625F * f1, -this.bipedHead.rotationPointZ * 0.0625F * f1);
+		GlStateManager.scale(f, f, f);
+		this.bipedHead.render(scale);
 
 		GlStateManager.popMatrix();
-		this.resetRotations();
+		this.resetRotations(this.bipedHead);
 	}
 
 }
