@@ -9,6 +9,7 @@ import net.minecraft.client.model.ModelRenderer;
  * Created using Tabula 7.0.1
  */
 public class ModelLich extends ModelCQRBiped {
+
 	public ModelRenderer Leg_Cape;
 	public ModelRenderer Buckle;
 	public ModelRenderer Hood_Rear;
@@ -20,12 +21,8 @@ public class ModelLich extends ModelCQRBiped {
 	public ModelRenderer Arm_Left_Bone;
 	public ModelRenderer Arm_Right_Bone;
 
-	public ModelLich(float modelSize) {
-		this(modelSize, 0F, 128, 64);
-	}
-
-	public ModelLich(float size, float p_i1149_2_, int width, int height) {
-		super(size, p_i1149_2_, width, height, false);
+	public ModelLich() {
+		super(128, 64, false);
 
 		// arms
 		this.bipedRightArm = new ModelRenderer(this, 32, 34);
@@ -99,12 +96,4 @@ public class ModelLich extends ModelCQRBiped {
 		this.bipedHeadwear.showModel = false;
 	}
 
-	/**
-	 * This is a helper function from Tabula to set the rotation of model parts
-	 */
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
 }

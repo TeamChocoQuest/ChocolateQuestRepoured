@@ -9,6 +9,7 @@ import net.minecraft.client.model.ModelRenderer;
  * Created using Tabula 7.0.1
  */
 public class ModelNecromancer extends ModelCQRBiped {
+
 	public ModelRenderer Leg_Cape;
 	public ModelRenderer Buckle;
 	public ModelRenderer Nose;
@@ -19,12 +20,8 @@ public class ModelNecromancer extends ModelCQRBiped {
 	public ModelRenderer Hood_Right;
 	public ModelRenderer Hood_Front;
 
-	public ModelNecromancer(float modelSize) {
-		this(modelSize, 0F, 128, 64);
-	}
-
-	public ModelNecromancer(float size, float p_i1149_2_, int width, int height) {
-		super(size, p_i1149_2_, width, height, false);
+	public ModelNecromancer() {
+		super(128, 64, false);
 
 		this.bipedRightArm = new ModelRenderer(this, 16, 34);
 		this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
@@ -90,12 +87,4 @@ public class ModelNecromancer extends ModelCQRBiped {
 		this.bipedHeadwear.showModel = false;
 	}
 
-	/**
-	 * This is a helper function from Tabula to set the rotation of model parts
-	 */
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
 }

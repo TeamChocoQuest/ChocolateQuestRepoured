@@ -1,6 +1,5 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.boss;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPirateCaptain;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRPirateCaptain;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
@@ -13,10 +12,9 @@ import net.minecraft.util.math.MathHelper;
 public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCaptain> {
 
 	private static final ResourceLocation DISINTEGRATION_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/pirate_captain_disintegrating.png");
-	private static final ResourceLocation TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/boss/pirate_captain.png");
 
-	public RenderCQRPirateCaptain(RenderManager rendermanagerIn, String textureName) {
-		super(rendermanagerIn, new ModelPirateCaptain(0, true), 0.5F, textureName, 1D, 1D);
+	public RenderCQRPirateCaptain(RenderManager rendermanagerIn) {
+		super(rendermanagerIn, "boss/pirate_captain", true);
 	}
 
 	// DONE: Fix bug that the hud disappears whilst the captain is disintegrating
@@ -26,22 +24,17 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 		if ((entity.isDisintegrating() || entity.isReintegrating()) /* && entity.turnInvisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME */) {
 			int ticks = MathHelper.clamp(entity.getInvisibleTicks(), 1, EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME);
 			float f = (float) ticks / (float) EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
-			GlStateManager.depthFunc(515);
-			GlStateManager.enableAlpha();
+
 			GlStateManager.alphaFunc(516, f);
 			this.bindTexture(DISINTEGRATION_TEXTURES);
 			this.mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(516, 0.1F);
-			GlStateManager.disableAlpha();
 			GlStateManager.depthFunc(514);
+			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			GlStateManager.depthFunc(515);
+		} else {
+			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		}
-		super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-		GlStateManager.depthFunc(515);
-	}
-
-	@Override
-	protected ResourceLocation getEntityTexture(EntityCQRPirateCaptain entity) {
-		return TEXTURES;
 	}
 
 }

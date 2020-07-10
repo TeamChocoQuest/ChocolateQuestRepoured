@@ -5,9 +5,11 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import net.minecraft.client.model.ModelRenderer;
 
 /**
- * Necromancer - Arlo The Epic Created using Tabula 7.0.1
+ * Necromancer - Arlo The Epic
+ * Created using Tabula 7.0.1
  */
 public class ModelPigMage extends ModelCQRBiped {
+	
 	public ModelRenderer Leg_Cape;
 	public ModelRenderer Hood_Rear;
 	public ModelRenderer Buckle;
@@ -19,12 +21,8 @@ public class ModelPigMage extends ModelCQRBiped {
 	public ModelRenderer Arm_Left_Bone;
 	public ModelRenderer Arm_Right_Bone;
 
-	public ModelPigMage(float modelSize) {
-		this(modelSize, 0F, 128, 64);
-	}
-
-	public ModelPigMage(float size, float p_i1149_2_, int width, int height) {
-		super(size, p_i1149_2_, width, height, false);
+	public ModelPigMage() {
+		super(128, 64, false);
 
 		this.bipedRightArm = new ModelRenderer(this, 32, 34);
 		this.bipedRightArm.setRotationPoint(-4.0F, 2.0F, 0.0F);
@@ -96,12 +94,4 @@ public class ModelPigMage extends ModelCQRBiped {
 		this.bipedHeadwear.showModel = false;
 	}
 
-	/**
-	 * This is a helper function from Tabula to set the rotation of model parts
-	 */
-	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
-		modelRenderer.rotateAngleX = x;
-		modelRenderer.rotateAngleY = y;
-		modelRenderer.rotateAngleZ = z;
-	}
 }

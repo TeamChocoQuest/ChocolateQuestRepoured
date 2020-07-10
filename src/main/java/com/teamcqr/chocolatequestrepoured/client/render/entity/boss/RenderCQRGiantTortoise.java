@@ -12,19 +12,13 @@ public class RenderCQRGiantTortoise extends RenderLiving<EntityCQRGiantTortoise>
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/boss/giant_tortoise.png");
 
-	public RenderCQRGiantTortoise(RenderManager rendermanagerIn, ModelGiantTortoise modelbaseIn, float shadowsizeIn) {
-		super(rendermanagerIn, modelbaseIn, shadowsizeIn);
+	public RenderCQRGiantTortoise(RenderManager rendermanagerIn) {
+		super(rendermanagerIn, new ModelGiantTortoise(), 1.5F);
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRGiantTortoise entity) {
 		return TEXTURE;
-	}
-
-	@Override
-	public void doRender(EntityCQRGiantTortoise entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		// DONE: Rotate move around z axis when the mouth is open
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 }

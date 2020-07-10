@@ -1,24 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.client.init;
 
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantSpider;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelGiantTortoise;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelLich;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelNecromancer;
 import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelPigMage;
-import com.teamcqr.chocolatequestrepoured.client.models.entities.boss.ModelWalkerKing;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderBubble;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRBoarman;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREnderman;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGolem;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRGremlin;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRIllager;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMandril;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRMinotaur;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQROgre;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSkeleton;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRSpectre;
-import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRTriton;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQRWasp;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderFlyingSkull;
@@ -33,6 +19,25 @@ import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNet
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRNetherDragonSegment;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRPirateCaptain;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.boss.RenderCQRWalkerKing;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRBoarman;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRDummy;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRDwarf;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQREnderman;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGolem;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRGremlin;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRIllager;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRMandril;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRMinotaur;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRMummy;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRNPC;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQROgre;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQROrc;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRPirate;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRSkeleton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRSpectre;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRTriton;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRWalker;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.mobs.RenderCQRZombie;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantEndermite;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfish;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.mounts.RenderGiantSilverfishGreen;
@@ -116,6 +121,10 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 
 public class ModEntityRenderers {
 
+	private ModEntityRenderers() {
+
+	}
+
 	public static void registerRenderers() {
 		registerTileRenderers();
 		registerProjectileAndMiscRenderers();
@@ -132,105 +141,87 @@ public class ModEntityRenderers {
 
 	protected static void registerProjectileAndMiscRenderers() {
 		// Projectiles
-
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileBullet.class, renderManager -> new RenderProjectileBullet(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, renderManager -> new RenderProjectileCannonBall(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, renderManager -> new RenderProjectileEarthQuake(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, renderManager -> new RenderProjectilePoisonSpell(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderBall.class, renderManager -> new RenderProjectileSpiderBall(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, renderManager -> new RenderProjectileVampiricSpell(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, renderManager -> new RenderProjectileFirewallPart(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, renderManager -> new RenderProjectileHookShotHook(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, renderManager -> new RenderProjectileBubble(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, renderManager -> new RenderProjectileHotFireball(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, renderManager -> new RenderProjectileWeb(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileBullet.class, RenderProjectileBullet::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileCannonBall.class, RenderProjectileCannonBall::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileEarthQuake.class, RenderProjectileEarthQuake::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectilePoisonSpell.class, RenderProjectilePoisonSpell::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileSpiderBall.class, RenderProjectileSpiderBall::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileVampiricSpell.class, RenderProjectileVampiricSpell::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileFireWallPart.class, RenderProjectileFirewallPart::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHookShotHook.class, RenderProjectileHookShotHook::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileBubble.class, RenderProjectileBubble::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileHotFireball.class, RenderProjectileHotFireball::new);
+		RenderingRegistry.registerEntityRenderingHandler(ProjectileWeb.class, RenderProjectileWeb::new);
 
 		// Miscs
-		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, renderManager -> new RenderSummoningCircle(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, renderManager -> new RenderFlyingSkull(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, renderManager -> new RenderBubble(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<EntityWalkerKingIllusion>(renderManager, new ModelWalkerKing(0F), 0F, "boss/walker_king", 1, 1));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, renderManager -> new RenderCQRWasp(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, renderManager -> new RenderWalkerTornado(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, renderManager -> new RenderPirateParrot(renderManager));
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntitySummoningCircle.class, RenderSummoningCircle::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFlyingSkullMinion.class, RenderFlyingSkull::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBubble.class, RenderBubble::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerKingIllusion.class, renderManager -> new RenderCQREntity<>(renderManager, "boss/walker_king", true));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWasp.class, RenderCQRWasp::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityWalkerTornado.class, RenderWalkerTornado::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateParrot.class, RenderPirateParrot::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityIceSpike.class, RenderIceSpike::new);
+
 		RenderingRegistry.registerEntityRenderingHandler(EntityColoredLightningBolt.class, RenderColoredLightningBolt::new);
 	}
 
 	protected static void registerEntityRenderers() {
-		// Dummy
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, renderManager -> new RenderCQREntity<EntityCQRDummy>(renderManager, "entity_mob_cqrdummy"));
-		// Dwarf
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, renderManager -> new RenderCQREntity<EntityCQRDwarf>(renderManager, "entity_mob_cqrdwarf", 0.9D, 0.65D));
-		// Enderman
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, renderManager -> new RenderCQREnderman(renderManager));
-		// Goblin
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGremlin.class, renderManager -> new RenderCQRGremlin(renderManager));
-		// Golem
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, renderManager -> new RenderCQRGolem(renderManager));
-		// Illager
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRIllager.class, renderManager -> new RenderCQRIllager(renderManager));
-		// Inquisiton
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, renderManager -> new RenderCQREntity<EntityCQRNPC>(renderManager, "entity_mob_cqrinquisitor"));
-		// Minotaur
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, renderManager -> new RenderCQRMinotaur(renderManager));
-		// Mandril
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, renderManager -> new RenderCQRMandril(renderManager));
-		// Mummy
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMummy.class, renderManager -> new RenderCQREntity<EntityCQRMummy>(renderManager, "entity_mob_cqrmummy"));
-		// Ogre
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQROgre.class, renderManager -> new RenderCQROgre(renderManager));
-		// Orc
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class, renderManager -> new RenderCQREntity<EntityCQROrc>(renderManager, "entity_mob_cqrorc", false));
-		// Boarman
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, renderManager -> new RenderCQRBoarman(renderManager, "entity_mob_cqrboarman"));
-		// Pirate
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class, renderManager -> new RenderCQREntity<EntityCQRPirate>(renderManager, "entity_mob_cqrpirate"));
-		// Skeleton
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class, renderManager -> new RenderCQRSkeleton(renderManager));
-		// Spectre
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectre.class, renderManager -> new RenderCQRSpectre(renderManager));
-		// Triton
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class, renderManager -> new RenderCQRTriton(renderManager));
-		// Walker
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, renderManager -> new RenderCQREntity<EntityCQRWalker>(renderManager, "entity_mob_cqrwalker"));
-		// Zombie
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, renderManager -> new RenderCQREntity<EntityCQRZombie>(renderManager, "entity_mob_cqrzombie"));
+		// Mobs
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarman.class, RenderCQRBoarman::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDummy.class, RenderCQRDummy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRDwarf.class, RenderCQRDwarf::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQREnderman.class, RenderCQREnderman::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGolem.class, RenderCQRGolem::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGremlin.class, RenderCQRGremlin::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRIllager.class, RenderCQRIllager::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMandril.class, RenderCQRMandril::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMinotaur.class, RenderCQRMinotaur::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRMummy.class, RenderCQRMummy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNPC.class, RenderCQRNPC::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQROgre.class, RenderCQROgre::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQROrc.class, RenderCQROrc::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirate.class, RenderCQRPirate::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSkeleton.class, RenderCQRSkeleton::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRSpectre.class, RenderCQRSpectre::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRTriton.class, RenderCQRTriton::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalker.class, RenderCQRWalker::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRZombie.class, RenderCQRZombie::new);
 
 		// Mounts
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, renderManager -> new RenderGiantEndermite(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, renderManager -> new RenderGiantSilverfish(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishGreen.class, renderManager -> new RenderGiantSilverfishGreen(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishRed.class, renderManager -> new RenderGiantSilverfishRed(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityPollo.class, renderManager -> new RenderPollo(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantEndermite.class, RenderGiantEndermite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishNormal.class, RenderGiantSilverfish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishGreen.class, RenderGiantSilverfishGreen::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantSilverfishRed.class, RenderGiantSilverfishRed::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPollo.class, RenderPollo::new);
 	}
 
 	protected static void registerBossRenderers() {
 		// Nether Dragon
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, renderManager -> new RenderCQRNetherDragon(renderManager));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, renderManager -> new RenderCQRNetherDragonSegment(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragon.class, RenderCQRNetherDragon::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNetherDragonSegment.class, RenderCQRNetherDragonSegment::new);
 
 		// Giant Tortoise
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, renderManager -> new RenderCQRGiantTortoise(renderManager, new ModelGiantTortoise(), 1.5F));
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, renderManager -> new RenderCQRGiantTortoisePart(renderManager));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoise.class, RenderCQRGiantTortoise::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantTortoisePart.class, RenderCQRGiantTortoisePart::new);
 
 		// Lich
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage(renderManager, new ModelLich(0F), "entity_cqr_lich"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRLich.class, renderManager -> new RenderCQRMage(renderManager, new ModelLich(), "boss/lich"));
 
 		// Boar Mage
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage(renderManager, new ModelPigMage(0F), "entity_cqr_boar_mage"));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRBoarmage.class, renderManager -> new RenderCQRMage(renderManager, new ModelPigMage(), "boss/pig_mage"));
 
 		// Necromancer
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRMage(renderManager, new ModelNecromancer(0F), "entity_cqr_necromancer"));
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRNecromancer.class, renderManager -> new RenderCQRMage(renderManager, new ModelNecromancer(), "boss/necromancer"));
+
 		// Walker King
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, renderManager -> new RenderCQRWalkerKing(renderManager, new ModelWalkerKing(0F), "boss/walker_king"));
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRWalkerKing.class, RenderCQRWalkerKing::new);
+
 		// Pirate Captain
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateCaptain.class, renderManager -> new RenderCQRPirateCaptain(renderManager, "boss/pirate_captain"));
-		
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRPirateCaptain.class, RenderCQRPirateCaptain::new);
+
 		// Shelob
-		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, renderManager -> new RenderCQRGiantSpider(renderManager, new ModelGiantSpider(), 2.0F));
+		RenderingRegistry.registerEntityRenderingHandler(EntityCQRGiantSpider.class, RenderCQRGiantSpider::new);
 	}
 
 }

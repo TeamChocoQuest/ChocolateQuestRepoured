@@ -28,33 +28,30 @@ public class LayerCQREntityPotion extends AbstractLayerCQR {
 			ModelBiped model = (ModelBiped) this.entityRenderer.getMainModel();
 			ModelRenderer body = model.bipedBody;
 
-			if (body.cubeList.size() > 0) {
+			if (!body.cubeList.isEmpty()) {
 				ModelBox box = body.cubeList.get(0);
 
 				if (box != null) {
 					ItemStack stack = new ItemStack(ModItems.POTION_HEALING);
-					float x = 0.0625F * (body.rotationPointX + box.posX1);
-					float y = 0.0625F * (body.rotationPointY + box.posY2 - box.posY1);
-					float z = 0.0625F * (body.rotationPointZ + box.posZ1);
-					GlStateManager.pushMatrix();
-					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleX), 1.0F, 0.0F, 0.0F);
-					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleY), 0.0F, 1.0F, 0.0F);
-					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleZ), 0.0F, 0.0F, 1.0F);
-					GlStateManager.translate(x, y, z);
 
+					GlStateManager.pushMatrix();
 					if (entity.isSneaking()) {
 						GlStateManager.translate(0.0F, 0.2F, 0.0F);
 					}
-
+					GlStateManager.translate(body.offsetX + body.rotationPointX * 0.0625F, body.offsetY + body.rotationPointY * 0.0625F, body.offsetZ + body.rotationPointZ * 0.0625F);
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleX), 1.0F, 0.0F, 0.0F);
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleY), 0.0F, 1.0F, 0.0F);
+					GlStateManager.rotate((float) Math.toDegrees(body.rotateAngleZ), 0.0F, 0.0F, 1.0F);
+					GlStateManager.translate(box.posX1 * 0.0625F, box.posY1 * 0.0625F, box.posZ1 * 0.0625F);
 					float f = 0.0F;
 					if (!entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST).isEmpty()) {
-						f = 1.0F;
+						f = -1.0F;
 					} else if (!entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS).isEmpty()) {
-						f = 0.5F;
+						f = -0.5F;
 					}
-					GlStateManager.translate(-0.0625F * (f + 0.2F), 0.0F, 0.5F * 0.0625F * (box.posZ2 - box.posZ1));
-					float f1 = 0.4F;
-					GlStateManager.scale(f1, f1, f1);
+					GlStateManager.translate(f * 0.0625F - 0.0125F, (box.posY2 - box.posY1) * 0.0625F, (box.posZ2 - box.posZ1) * 0.0625F * 0.5F);
+					this.entityRenderer.setupPotionOffsets(null);
+					GlStateManager.scale(0.4F, 0.4F, 0.4F);
 					GlStateManager.rotate(90.0F, 0.0F, 1.0F, 0.0F);
 					GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 					Minecraft.getMinecraft().getItemRenderer().renderItem(entity, stack, ItemCameraTransforms.TransformType.NONE);

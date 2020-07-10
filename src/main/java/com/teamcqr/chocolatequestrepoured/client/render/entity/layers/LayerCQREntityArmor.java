@@ -1,9 +1,9 @@
 package com.teamcqr.chocolatequestrepoured.client.render.entity.layers;
 
 import com.teamcqr.chocolatequestrepoured.client.models.armor.ModelCustomArmorBase;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
@@ -63,7 +63,7 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 						float f2 = (float) (i & 255) / 255.0F;
 						GlStateManager.color(this.colorR * f, this.colorG * f1, this.colorB * f2, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}
@@ -72,7 +72,7 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 					{ // Non-colored
 						GlStateManager.color(this.colorR, this.colorG, this.colorB, this.alpha);
 						if (model instanceof ModelCustomArmorBase && this.renderer.getMainModel() instanceof ModelBiped) {
-							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
+							((ModelCustomArmorBase) model).render(entityLivingBaseIn, scale, (RenderCQREntity<?>) this.renderer, this, (ModelBiped) this.renderer.getMainModel(), slotIn);
 						} else {
 							model.render(entityLivingBaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						}
@@ -82,48 +82,6 @@ public class LayerCQREntityArmor extends LayerBipedArmor {
 					}
 				}
 			}
-		}
-	}
-
-	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupRightLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
-
-	}
-
-	protected void rotate(ModelRenderer modelRenderer, boolean reset) {
-		if (reset) {
-			float f = -1.0F;
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), f, 0.0F, 0.0F);
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, f, 0.0F);
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, f);
-		} else {
-			float f = 1.0F;
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, f);
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, f, 0.0F);
-			GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), f, 0.0F, 0.0F);
 		}
 	}
 
