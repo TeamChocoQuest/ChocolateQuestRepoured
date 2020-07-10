@@ -44,6 +44,9 @@ public class EntityFlyingSkullMinion extends EntityFlying {
 		if(source.isExplosion()) {
 			return false;
 		}
+		if(source.getTrueSource() != null && EntityUtil.isEntityFlying(source.getTrueSource())) {
+			return false;
+		}
 		if (source.getImmediateSource() instanceof EntitySpectralArrow) {
 			Entity summonerTmp = this.summoner;
 			this.summoner = source.getTrueSource();
