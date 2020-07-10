@@ -166,8 +166,8 @@ public class CQRConfig {
 		public int looterAIChestSearchRange = 16;
 		public int looterAIStealableItems = 4;
 		
-		public boolean offhandPotionsAreSingleUse = false;
-		public boolean potionsInBagAreSingleUse = false;
+		public boolean offhandPotionsAreSingleUse = true;
+		public boolean potionsInBagAreSingleUse = true;
 		
 	}
 	
