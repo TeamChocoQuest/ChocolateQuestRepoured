@@ -83,7 +83,7 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 			ItemStack stack = this.entity.getHeldItemOffhand();
 			if(stack.getItem() instanceof ItemSplashPotion || stack.getItem() instanceof ItemLingeringPotion) {
 				this.attackTick = 60;
-				EntityPotion proj = new EntityPotion(world, entity, stack);
+				EntityPotion proj = new EntityPotion(world, entity, stack.copy());
 				double x = attackTarget.posX - this.entity.posX;
 				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
 				double z = attackTarget.posZ - this.entity.posZ;
