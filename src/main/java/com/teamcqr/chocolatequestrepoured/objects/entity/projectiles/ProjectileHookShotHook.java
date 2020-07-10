@@ -5,6 +5,8 @@ import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.init.ModSerializers;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.HookShotPlayerStopPacket;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -217,7 +219,18 @@ public class ProjectileHookShotHook extends ProjectileBase {
 				}
 			} else if (result.typeOfHit == RayTraceResult.Type.ENTITY) {
 				if (result.entityHit != this.thrower && result.entityHit instanceof EntityLivingBase) {
-					triggerEntityPull(result.entityHit);
+					if(CQRConfig.general.hookOnlyPullsSmallerEntities) {
+						double sizeOwner = this.thrower.width * this.thrower.height;
+						sizeOwner *= 1.25;
+						double sizeHit = result.entityHit.width * result.entityHit.height;
+						if(sizeOwner >= sizeHit) {
+							triggerEntityPull(result.entityHit);
+						} else {
+							triggerLatch();
+						}
+					} else {
+						triggerEntityPull(result.entityHit);
+					}
 				}
 			}
 		}

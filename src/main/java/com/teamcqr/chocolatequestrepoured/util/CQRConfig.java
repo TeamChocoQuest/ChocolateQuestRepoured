@@ -182,6 +182,7 @@ public class CQRConfig {
 		@Config.RangeInt(min = 1, max = 10)
 		public int densityBehindWallFactor = 2;
 		public boolean enableSpeechBubbles = true;
+		public boolean hookOnlyPullsSmallerEntities = true;
 	}
 
 	public static class Mobs {
