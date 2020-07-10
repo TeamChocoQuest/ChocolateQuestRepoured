@@ -1,5 +1,6 @@
 package com.teamcqr.chocolatequestrepoured.objects.entity.ai.spells;
 
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.entity.misc.EntityColoredLightningBolt;
 import com.teamcqr.chocolatequestrepoured.util.EntityUtil;
@@ -16,10 +17,17 @@ public class EntityAIAntiAirSpellWalker extends AbstractEntityAISpell<AbstractEn
 
 	@Override
 	public boolean shouldExecute() {
+		if (this.random.nextBoolean()) {
+			return false;
+		}
 		if (!super.shouldExecute()) {
 			return false;
 		}
 		EntityLivingBase attackTarget = this.entity.getAttackTarget();
+		CQRFaction faction = this.entity.getFaction();
+		if ((faction != null && faction.isAlly(attackTarget)) || this.entity.getLeader() == attackTarget) {
+			return false;
+		}
 		if (attackTarget.isRiding()) {
 			Entity entity = attackTarget.getLowestRidingEntity();
 			if (entity instanceof EntityLivingBase) {
