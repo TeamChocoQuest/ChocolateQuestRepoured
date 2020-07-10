@@ -24,20 +24,14 @@ public class RenderCQRPirateCaptain extends RenderCQREntity<EntityCQRPirateCapta
 		if ((entity.isDisintegrating() || entity.isReintegrating()) /* && entity.turnInvisibleTime <= EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME */) {
 			int ticks = MathHelper.clamp(entity.getInvisibleTicks(), 1, EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME);
 			float f = (float) ticks / (float) EntityCQRPirateCaptain.TURN_INVISIBLE_ANIMATION_TIME;
-			GlStateManager.pushMatrix();
 
-			GlStateManager.depthFunc(515);
-			GlStateManager.enableAlpha();
 			GlStateManager.alphaFunc(516, f);
 			this.bindTexture(DISINTEGRATION_TEXTURES);
 			this.mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(516, 0.1F);
-			GlStateManager.disableAlpha();
 			GlStateManager.depthFunc(514);
 			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.depthFunc(515);
-
-			GlStateManager.popMatrix();
 		} else {
 			super.renderModel(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		}

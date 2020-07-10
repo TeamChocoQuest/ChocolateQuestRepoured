@@ -24,16 +24,17 @@ public class RenderCQRWalkerKing extends RenderCQREntity<EntityCQRWalkerKing> {
 	protected void renderModel(EntityCQRWalkerKing entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
 		if (entitylivingbaseIn.deathTicks > 0) {
 			float f = (float) entitylivingbaseIn.deathTicks / AbstractEntityCQRBoss.MAX_DEATH_TICKS;
-			GlStateManager.depthFunc(515);
-			GlStateManager.enableAlpha();
+
 			GlStateManager.alphaFunc(516, f);
 			this.bindTexture(WALKER_KING_EXPLODING);
 			this.mainModel.render(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 			GlStateManager.alphaFunc(516, 0.1F);
 			GlStateManager.depthFunc(514);
+			super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
+			GlStateManager.depthFunc(515);
+		} else {
+			super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
 		}
-		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-		GlStateManager.depthFunc(515);
 	}
 
 }
