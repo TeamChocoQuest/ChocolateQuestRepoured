@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemAlchemyBag;
+import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityPotion;
@@ -25,12 +26,16 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 
 	@Override
 	public boolean shouldExecute() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag) && super.shouldExecute();
+		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || 
+				this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion ||
+				this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldExecute();
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag) && super.shouldContinueExecuting();
+		return (this.entity.getHeldItemOffhand().getItem() instanceof ItemAlchemyBag || 
+				this.entity.getHeldItemOffhand().getItem() instanceof ItemSplashPotion ||
+				this.entity.getHeldItemOffhand().getItem() instanceof ItemLingeringPotion) && super.shouldContinueExecuting();
 	}
 
 	@Override
@@ -76,7 +81,28 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 	protected void checkAndPerformAttack(EntityLivingBase attackTarget) {
 		if (this.attackTick <= 0 && this.entity.getDistance(attackTarget) <= 16.0D) {
 			ItemStack stack = this.entity.getHeldItemOffhand();
-			if (stack.getItem() instanceof ItemAlchemyBag) {
+			if(stack.getItem() instanceof ItemSplashPotion || stack.getItem() instanceof ItemLingeringPotion) {
+				this.attackTick = 60;
+				EntityPotion proj = new EntityPotion(world, entity, stack);
+				double x = attackTarget.posX - this.entity.posX;
+				double y = attackTarget.posY + (double) attackTarget.height * 0.5D - proj.posY;
+				double z = attackTarget.posZ - this.entity.posZ;
+				double distance = Math.sqrt(x * x + z * z);
+				proj.shoot(x,y + distance * 0.06D, z, 1.F,entity.getRNG().nextFloat() * 0.25F);
+				proj.motionX += this.entity.motionX;
+				proj.motionZ += this.entity.motionZ;
+				if (!this.entity.onGround) {
+					proj.motionY += this.entity.motionY;
+				}
+				this.entity.world.spawnEntity(proj);
+				this.entity.playSound(SoundEvents.ENTITY_SPLASH_POTION_THROW, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+				
+				if(CQRConfig.mobs.offhandPotionsAreSingleUse) {
+					stack.shrink(1);
+				}
+				
+			}
+			else if (stack.getItem() instanceof ItemAlchemyBag) {
 				this.attackTick = 60;
 				IItemHandler inventory = stack.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
 				int indx = entity.getRNG().nextInt(inventory.getSlots());
@@ -90,7 +116,9 @@ public class EntityAIPotionThrower extends EntityAIAttack {
 				boolean removeBag = false;
 				if(st != null && !st.isEmpty()) {
 					ItemStack potion = st.copy();
-					st.shrink(1);
+					if(CQRConfig.mobs.potionsInBagAreSingleUse) {
+						st.shrink(1);
+					}
 					
 					//Now throw it
 					if(potion.getItem() instanceof ItemSplashPotion || potion.getItem() instanceof ItemLingeringPotion) {

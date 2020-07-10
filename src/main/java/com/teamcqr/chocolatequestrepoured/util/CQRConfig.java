@@ -159,6 +159,9 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double entityStrafingSpeedBoss = 0.5D;
 		
+		public boolean offhandPotionsAreSingleUse = false;
+		public boolean potionsInBagAreSingleUse = false;
+		
 	}
 	
 	public static class Bosses {
