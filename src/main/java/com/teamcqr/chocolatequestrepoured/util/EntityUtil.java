@@ -49,7 +49,7 @@ public class EntityUtil {
 			entity.motionZ += forward * d2 * d4 + strafe * d1;
 		}
 	}
-	
+
 	public static boolean isEntityFlying(Entity entity) {
 		if (entity.onGround) {
 			return false;
@@ -63,16 +63,17 @@ public class EntityUtil {
 		BlockPos pos = new BlockPos(entity);
 		int y = 0;
 		int count = 0;
+		BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
 		for (int i = -1; i <= 1; i++) {
 			for (int j = -1; j <= 1; j++) {
-				BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos(pos.getX() + i, 255, pos.getZ() + j);
+				mutablePos.setPos(pos.getX() + i, pos.getY(), pos.getZ() + j);
 				if (!entity.getEntityWorld().isBlockLoaded(mutablePos)) {
 					continue;
 				}
 				while (mutablePos.getY() > 0 && entity.getEntityWorld().getBlockState(mutablePos).getCollisionBoundingBox(entity.getEntityWorld(), mutablePos) == Block.NULL_AABB) {
 					mutablePos.setY(mutablePos.getY() - 1);
 				}
-				y += mutablePos.getY();
+				y += mutablePos.getY() + 1;
 				count++;
 			}
 		}
