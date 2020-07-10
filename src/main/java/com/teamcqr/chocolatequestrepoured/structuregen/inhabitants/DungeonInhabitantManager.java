@@ -1,7 +1,10 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.inhabitants;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -74,22 +77,19 @@ public class DungeonInhabitantManager {
 	private void loadDistantMapping() {
 		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "defaultInhabitantConfig.properties");
 		if(file.exists()) {
-			Properties prop = new Properties();
-			boolean flag = true;
-			try (InputStream inputStream = new FileInputStream(file)) {
-				prop.load(inputStream);
-				flag = true;
-			} catch (IOException e) {
-				CQRMain.logger.error("Failed to load file" + file.getName(), e);
-				flag = false;
-			}
-			if(flag) {
-				for(String key : prop.stringPropertyNames()) {
-					if(key.startsWith("#")) {
+			FileReader reader;
+			try {
+				reader = new FileReader(file);
+				BufferedReader br = new BufferedReader(reader);
+				String currentLine;
+				
+				while((currentLine = br.readLine()) != null) {
+					if(currentLine.startsWith("#")) {
 						continue;
 					}
-					String[] entries = key.split(",");
+					String[] entries = currentLine.split(",");
 					List<String> tmpList = new ArrayList<>();
+					System.out.println(tmpList.toString());
 					for(String s : entries) {
 						s = s.trim();
 						if(inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
@@ -100,7 +100,21 @@ public class DungeonInhabitantManager {
 						distantMapping.add(tmpList);
 					}
 				}
-			}
+				reader.close();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} 
+			
+			//System.out.println(distantMapping.toString());
+			//System.out.println("LOADED!");
+		}
+	}
+	
+	public static void init() {
+		if(INSTANCE == null) {
+			INSTANCE = new DungeonInhabitantManager();
 		}
 	}
 	
