@@ -19,10 +19,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemCrown extends ItemArmor {
+
+	public static final String NBT_KEY_CROWN = "CQR Crown";
 
 	public ItemCrown(ArmorMaterial materialIn, int renderIndexIn) {
 		super(materialIn, renderIndexIn, EntityEquipmentSlot.HEAD);
@@ -75,5 +78,9 @@ public class ItemCrown extends ItemArmor {
 	
 	//TODO: Tooltip that shows the attachment
 	//TODO: Stats are affected by attachment
+
+	public static boolean hasCrown(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().hasKey(NBT_KEY_CROWN, Constants.NBT.TAG_COMPOUND);
+	}
 
 }
