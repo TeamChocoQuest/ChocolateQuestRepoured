@@ -35,8 +35,18 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 30, 10, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)));
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 10, 10, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vec3d(0, 2.5, 0)));
+		this.spellHandler.addSpell(0, new EntityAISummonMinionSpell(this, 20, 10, new ResourceLocation(Reference.MODID, "skeleton"), ECircleTexture.SKELETON, true, 25, 5, new Vec3d(0, 0, 0)) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 20, 10, new ResourceLocation(Reference.MODID, "flying_skull"), ECircleTexture.FLYING_SKULL, false, 8, 4, new Vec3d(0, 2.5, 0)) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
 		this.spellHandler.addSpell(2, new EntityAIBlindTargetSpell(this, 45, 10, 100));
 		this.spellHandler.addSpell(3, new EntityAIFangAttack(this, 40, 10, 1, 8) {
 			@Override

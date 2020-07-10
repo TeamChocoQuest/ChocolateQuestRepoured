@@ -67,10 +67,30 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
-		this.spellHandler.addSpell(0, new EntityAIArmorSpell(this, 100, 30));
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 50, 20, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 3, new Vec3d(0,0,0)));
-		this.spellHandler.addSpell(2, new EntityAIFangAttack(this, 80, 20, 1, 12));
-		this.spellHandler.addSpell(3, new EntityAIShootPoisonProjectiles(this, 80, 20));
+		this.spellHandler.addSpell(0, new EntityAIArmorSpell(this, 100, 30) {
+			@Override
+			public boolean isInterruptible() {
+				return true;
+			}
+		});
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 50, 20, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 3, new Vec3d(0,0,0)) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
+		this.spellHandler.addSpell(2, new EntityAIFangAttack(this, 40, 20, 1, 12) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
+		this.spellHandler.addSpell(3, new EntityAIShootPoisonProjectiles(this, 40, 20) {
+			@Override
+			public boolean isInterruptible() {
+				return false;
+			}
+		});
 	}
 
 	@Override
