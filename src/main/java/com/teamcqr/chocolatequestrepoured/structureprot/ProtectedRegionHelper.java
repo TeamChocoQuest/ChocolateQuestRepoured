@@ -13,7 +13,9 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -25,6 +27,7 @@ public class ProtectedRegionHelper {
 
 	private static final Set<Block> BREAKABLE_BLOCK_WHITELIST = new HashSet<>();
 	private static final Set<Block> PLACEABLE_BLOCK_WHITELIST = new HashSet<>();
+	private static final ReflectionField<ItemBucket, Block> CONTAINED_BLOCK_FIELD = new ReflectionField<>(ItemBucket.class, "field_77876_a", "containedBlock");
 	private static final ReflectionField<Explosion, Entity> EXPLODER_FIELD = new ReflectionField<>(Explosion.class, "field_77283_e", "exploder");
 
 	private ProtectedRegionHelper() {
@@ -51,12 +54,12 @@ public class ProtectedRegionHelper {
 		}
 	}
 
-	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable EntityPlayer player) {
+	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity) {
 		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
 			return false;
 		}
 
-		if (player != null && player.isCreative()) {
+		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
 			return false;
 		}
 
@@ -85,12 +88,12 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable EntityPlayer player, Block block) {
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block) {
 		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
 			return false;
 		}
 
-		if (player != null && player.isCreative()) {
+		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
 			return false;
 		}
 
@@ -113,12 +116,25 @@ public class ProtectedRegionHelper {
 		return false;
 	}
 
-	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable EntityPlayer player, ItemStack stack) {
-		if (stack.isEmpty() || !(stack.getItem() instanceof ItemBlock)) {
+	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, ItemStack stack) {
+		if (stack.isEmpty()) {
 			return false;
 		}
+		Block block = getBlockFromItem(stack.getItem());
+		if (block == null) {
+			return false;
+		}
+		return isBlockPlacingPrevented(world, pos, entity, block);
+	}
 
-		return isBlockPlacingPrevented(world, pos, player, ((ItemBlock) stack.getItem()).getBlock());
+	private static Block getBlockFromItem(Item item) {
+		if (item instanceof ItemBlock) {
+			return ((ItemBlock) item).getBlock();
+		}
+		if (item instanceof ItemBucket) {
+			return CONTAINED_BLOCK_FIELD.get((ItemBucket) item);
+		}
+		return null;
 	}
 
 	public static boolean isExplosionTNTPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
