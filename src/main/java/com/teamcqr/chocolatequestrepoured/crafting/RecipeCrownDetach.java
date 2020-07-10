@@ -8,7 +8,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 
@@ -42,6 +42,8 @@ public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 			if (!stack.isEmpty()) {
 				if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && ItemCrown.hasCrown(stack)) {
 					helmet = stack;
+				} else {
+					return ItemStack.EMPTY;
 				}
 			}
 		}
@@ -49,14 +51,24 @@ public class RecipeCrownDetach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 			return ItemStack.EMPTY;
 		}
 
-		ItemStack copy = helmet.copy();
-		NBTTagCompound nbt = copy.getTagCompound();
-		if (nbt == null) {
-			nbt = new NBTTagCompound();
-			copy.setTagCompound(nbt);
+		return new ItemStack(helmet.getTagCompound().getCompoundTag(ItemCrown.NBT_KEY_CROWN));
+	}
+
+	@Override
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> ret = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+		for (int i = 0; i < inv.getSizeInventory(); i++) {
+			ItemStack stack = inv.getStackInSlot(i);
+			if (!stack.isEmpty() && stack.hasTagCompound()) {
+				ItemStack copy = stack.copy();
+				copy.getTagCompound().removeTag(ItemCrown.NBT_KEY_CROWN);
+				if (copy.getTagCompound().isEmpty()) {
+					copy.setTagCompound(null);
+				}
+				ret.set(i, copy);
+			}
 		}
-		nbt.removeTag(ItemCrown.NBT_KEY_CROWN);
-		return copy;
+		return ret;
 	}
 
 	@Override

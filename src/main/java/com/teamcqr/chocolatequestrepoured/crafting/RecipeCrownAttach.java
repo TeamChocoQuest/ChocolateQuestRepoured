@@ -26,10 +26,14 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && stack.getItem() != ModItems.KING_CROWN && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				if (stack.getItem() == ModItems.KING_CROWN) {
+					if (crown == ItemStack.EMPTY) {
+						crown = stack;
+					} else {
+						return false;
+					}
+				} else if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
-				} else if (crown == ItemStack.EMPTY && stack.getItem() instanceof ItemCrown) {
-					crown = stack;
 				} else {
 					return false;
 				}
@@ -45,10 +49,16 @@ public class RecipeCrownAttach extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if (!stack.isEmpty()) {
-				if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
+				if (stack.getItem() == ModItems.KING_CROWN) {
+					if (crown == ItemStack.EMPTY) {
+						crown = stack;
+					} else {
+						return ItemStack.EMPTY;
+					}
+				} else if (helmet == ItemStack.EMPTY && EntityLiving.getSlotForItemStack(stack) == EntityEquipmentSlot.HEAD && !ItemCrown.hasCrown(stack)) {
 					helmet = stack;
-				} else if (crown == ItemStack.EMPTY && stack.getItem() instanceof ItemCrown) {
-					crown = stack;
+				} else {
+					return ItemStack.EMPTY;
 				}
 			}
 		}
