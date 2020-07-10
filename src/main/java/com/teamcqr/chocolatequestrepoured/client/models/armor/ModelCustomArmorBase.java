@@ -3,6 +3,7 @@ package com.teamcqr.chocolatequestrepoured.client.models.armor;
 import java.util.Deque;
 import java.util.LinkedList;
 
+import com.teamcqr.chocolatequestrepoured.client.render.entity.RenderCQREntity;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 
 import net.minecraft.client.model.ModelBiped;
@@ -60,7 +61,7 @@ public class ModelCustomArmorBase extends ModelBiped {
 
 	private Deque<Float> rotations = new LinkedList<>();
 
-	public void render(Entity entityIn, float scale, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
+	public void render(Entity entityIn, float scale, RenderCQREntity<?> renderer, LayerCQREntityArmor layer, ModelBiped model, EntityEquipmentSlot slot) {
 		this.applyRotations(model);
 
 		GlStateManager.pushMatrix();
@@ -70,7 +71,7 @@ public class ModelCustomArmorBase extends ModelBiped {
 			GlStateManager.translate(0.0F, 16.0F * scale, 0.0F);
 
 			GlStateManager.pushMatrix();
-			layer.setupHeadOffsets(this.bipedHead, slot);
+			renderer.setupHeadOffsets(this.bipedHead, slot);
 			this.bipedHead.render(scale);
 			GlStateManager.popMatrix();
 
@@ -80,32 +81,32 @@ public class ModelCustomArmorBase extends ModelBiped {
 			GlStateManager.translate(0.0F, 24.0F * scale, 0.0F);
 
 			GlStateManager.pushMatrix();
-			layer.setupBodyOffsets(this.bipedBody, slot);
+			renderer.setupBodyOffsets(this.bipedBody, slot);
 			this.bipedBody.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupRightArmOffsets(this.bipedRightArm, slot);
+			renderer.setupRightArmOffsets(this.bipedRightArm, slot);
 			this.bipedRightArm.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupLeftArmOffsets(this.bipedLeftArm, slot);
+			renderer.setupLeftArmOffsets(this.bipedLeftArm, slot);
 			this.bipedLeftArm.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupRightLegOffsets(this.bipedRightLeg, slot);
+			renderer.setupRightLegOffsets(this.bipedRightLeg, slot);
 			this.bipedRightLeg.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
+			renderer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
 			this.bipedLeftLeg.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupHeadwearOffsets(this.bipedHeadwear, slot);
+			renderer.setupHeadwearOffsets(this.bipedHeadwear, slot);
 			this.bipedHeadwear.render(scale);
 			GlStateManager.popMatrix();
 		} else {
@@ -114,37 +115,37 @@ public class ModelCustomArmorBase extends ModelBiped {
 			}
 
 			GlStateManager.pushMatrix();
-			layer.setupHeadOffsets(this.bipedHead, slot);
+			renderer.setupHeadOffsets(this.bipedHead, slot);
 			this.bipedHead.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupBodyOffsets(this.bipedBody, slot);
+			renderer.setupBodyOffsets(this.bipedBody, slot);
 			this.bipedBody.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupRightArmOffsets(this.bipedRightArm, slot);
+			renderer.setupRightArmOffsets(this.bipedRightArm, slot);
 			this.bipedRightArm.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupLeftArmOffsets(this.bipedLeftArm, slot);
+			renderer.setupLeftArmOffsets(this.bipedLeftArm, slot);
 			this.bipedLeftArm.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupRightLegOffsets(this.bipedRightLeg, slot);
+			renderer.setupRightLegOffsets(this.bipedRightLeg, slot);
 			this.bipedRightLeg.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
+			renderer.setupLeftLegOffsets(this.bipedLeftLeg, slot);
 			this.bipedLeftLeg.render(scale);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
-			layer.setupHeadwearOffsets(this.bipedHeadwear, slot);
+			renderer.setupHeadwearOffsets(this.bipedHeadwear, slot);
 			this.bipedHeadwear.render(scale);
 			GlStateManager.popMatrix();
 		}

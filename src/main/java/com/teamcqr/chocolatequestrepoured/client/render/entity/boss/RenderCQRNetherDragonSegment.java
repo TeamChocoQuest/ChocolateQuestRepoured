@@ -16,8 +16,8 @@ import net.minecraft.util.ResourceLocation;
 
 public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSegment> {
 
-	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon.png"));
-	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation((Reference.MODID + ":textures/entity/boss/nether_dragon_skeletal.png")); 
+	public static final ResourceLocation TEXTURES_NORMAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon.png");
+	public static final ResourceLocation TEXTURES_SKELETAL = new ResourceLocation(Reference.MODID, "textures/entity/boss/nether_dragon_skeletal.png");
 
 	private final ModelBase modelNormal;
 	private final ModelBase modelSkeletal;
@@ -38,15 +38,15 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.translate((float) x, (float) y, (float) z);
 
 		ModelBase model = null;
-		if(entity.isSkeletal()) {
+		if (entity.isSkeletal()) {
 			model = this.modelSkeletal;
-			
-			if(entity.ticksExisted % 5 == 0) {
-				//Flames
+
+			if (entity.ticksExisted % 5 == 0) {
+				// Flames
 				WorldClient world = Minecraft.getMinecraft().world;
-				double dx = entity.posX + (-0.25 + (0.5*world.rand.nextDouble()));
-				double dy = 0.5 + entity.posY + (-0.25 + (0.5*world.rand.nextDouble()));
-				double dz = entity.posZ + (-0.25 + (0.5*world.rand.nextDouble()));
+				double dx = entity.posX + (-0.25 + (0.5 * world.rand.nextDouble()));
+				double dy = 0.5 + entity.posY + (-0.25 + (0.5 * world.rand.nextDouble()));
+				double dz = entity.posZ + (-0.25 + (0.5 * world.rand.nextDouble()));
 				world.spawnParticle(EnumParticleTypes.FLAME, dx, dy, dz, 0, 0, 0);
 			}
 		} else {
@@ -73,33 +73,37 @@ public class RenderCQRNetherDragonSegment extends Render<EntityCQRNetherDragonSe
 		GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 		this.bindTexture(this.getEntityTexture(entity));
-		
-		/*if(entity.getParent() != null) {
-			if(entity.getParent().deathTicks > 600) {
-				GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
-			}
-		}*/
-		/*if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
-			GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
-		}*/
-		if(entity.getParent() != null && entity.getParent().deathTicks > 0 && entity.getParent().deathTicks % 5 == 0) {
+
+		/*
+		 * if(entity.getParent() != null) {
+		 * if(entity.getParent().deathTicks > 600) {
+		 * GlStateManager.color(new Float(0.3F * (0.25 * Math.sin(0.75 * entity.ticksExisted) + 0.5)),0,0, 1F);
+		 * }
+		 * }
+		 */
+		/*
+		 * if(entity.isSkeletal() && entity.getHealthPercentage() > 0) {
+		 * GlStateManager.color(entity.getHealthPercentage(), 0F, 0F, 0.5F);
+		 * }
+		 */
+		if (entity.getParent() != null && entity.getParent().deathTicks > 0 && entity.getParent().deathTicks % 5 == 0) {
 			float f = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
 			float f1 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 4.0F;
 			float f2 = (entity.getParent().getRNG().nextFloat() - 0.5F) * 8.0F;
 			Minecraft.getMinecraft().world.spawnParticle(entity.getParent().getDeathAnimParticles(), entity.posX + (double) f, entity.posY + 2.0D + (double) f1, entity.posZ + (double) f2, 0.0D, 0.0D, 0.0D);
 		}
-		
-		if(!entity.isInvisible()) {
+
+		if (!entity.isInvisible()) {
 			model.render(entity, 0.0F, 0.0F, -0.1F, 0.0F, 0.0F, 0.0625F);
 		}
 		GlStateManager.popMatrix();
 	}
-	
+
 	@Override
 	public boolean shouldRender(EntityCQRNetherDragonSegment livingEntity, ICamera camera, double camX, double camY, double camZ) {
 		return super.shouldRender(livingEntity, camera, camX, camY, camZ) && !livingEntity.isDead;
 	}
-	
+
 	@Override
 	protected ResourceLocation getEntityTexture(EntityCQRNetherDragonSegment entity) {
 		return entity.isSkeletal() ? TEXTURES_SKELETAL : TEXTURES_NORMAL;

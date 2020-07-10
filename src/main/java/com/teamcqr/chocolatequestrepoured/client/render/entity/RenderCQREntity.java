@@ -4,11 +4,14 @@ import org.lwjgl.opengl.GL11;
 
 import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import com.teamcqr.chocolatequestrepoured.client.render.EntityRenderManager;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityArmor;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityCape;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQREntityPotion;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRHeldItem;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRLeaderFeather;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerCQRSpeechbubble;
 import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerShoulderEntity;
+import com.teamcqr.chocolatequestrepoured.client.render.entity.layers.LayerTest;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
 import com.teamcqr.chocolatequestrepoured.objects.items.ItemHookshotBase;
 import com.teamcqr.chocolatequestrepoured.objects.items.guns.ItemMusket;
@@ -19,15 +22,15 @@ import com.teamcqr.chocolatequestrepoured.util.Reference;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.layers.LayerArrow;
-import net.minecraft.client.renderer.entity.layers.LayerBipedArmor;
 import net.minecraft.client.renderer.entity.layers.LayerCustomHead;
 import net.minecraft.client.renderer.entity.layers.LayerElytra;
-import net.minecraft.client.renderer.entity.layers.LayerHeldItem;
 import net.minecraft.entity.Entity;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
@@ -42,7 +45,7 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	private final String entityName;
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName) {
-		this(rendermanagerIn, textureName, 1.0D, 1.0D, true);
+		this(rendermanagerIn, textureName, 1.0D, 1.0D, false);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, boolean hasExtraLayer) {
@@ -50,22 +53,21 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale) {
-		this(rendermanagerIn, textureName, widthScale, heightScale, true);
+		this(rendermanagerIn, textureName, widthScale, heightScale, false);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, String textureName, double widthScale, double heightScale, boolean hasExtraLayer) {
-		this(rendermanagerIn, new ModelCQRBiped(0.0F, hasExtraLayer), 0.5F, textureName, widthScale, heightScale);
+		this(rendermanagerIn, new ModelCQRBiped(64, 64, hasExtraLayer), 0.5F, textureName, widthScale, heightScale);
 	}
 
 	public RenderCQREntity(RenderManager rendermanagerIn, ModelBase model, float shadowSize, String textureName, double widthScale, double heightScale) {
 		super(rendermanagerIn, model, shadowSize);
 		this.entityName = textureName;
 		this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + ".png");
-		// Random rand = new Random();
-		this.widthScale = widthScale;// + (0.5D * (-0.25D +(rand.nextDouble() *0.5D)));
-		this.heightScale = heightScale;// + (-0.25D +(rand.nextDouble() *0.5D));;
-		this.addLayer(new LayerBipedArmor(this));
-		this.addLayer(new LayerHeldItem(this));
+		this.widthScale = widthScale;
+		this.heightScale = heightScale;
+		this.addLayer(new LayerCQREntityArmor(this));
+		this.addLayer(new LayerCQRHeldItem(this));
 		// this.addLayer(new LayerRevolver(this));
 		this.addLayer(new LayerArrow(this));
 		this.addLayer(new LayerElytra(this));
@@ -78,13 +80,11 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			this.addLayer(new LayerCustomHead(((ModelCQRBiped) model).bipedHead));
 			this.addLayer(new LayerShoulderEntity(this));
 		}
+		this.addLayer(new LayerTest(this));
 	}
 
 	@Override
 	protected void preRenderCallback(T entitylivingbaseIn, float partialTickTime) {
-		if (entitylivingbaseIn.getTextureCount() > 1) {
-			this.texture = new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entitylivingbaseIn.getTextureIndex() + ".png");
-		}
 		double width = this.widthScale * entitylivingbaseIn.getSizeVariation();
 		double height = this.heightScale * entitylivingbaseIn.getSizeVariation();
 		GL11.glScaled(width, height, width);
@@ -191,12 +191,9 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 			if (dontRenderOffItem) {
 				model.leftArmPose = ArmPose.EMPTY;
 			}
-
 		}
 
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-
-		this.mainModel.isRiding = entity.isSitting() || this.mainModel.isRiding;
 
 		if (this.mainModel instanceof ModelBiped) {
 			GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
@@ -205,19 +202,16 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 
 	@Override
 	protected void renderModel(T entitylivingbaseIn, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor) {
-
 		if (this.mainModel.isRiding) {
 			GL11.glTranslatef(0, 0.6F, 0);
 		}
 
 		super.renderModel(entitylivingbaseIn, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scaleFactor);
-
-		this.mainModel.isRiding = entitylivingbaseIn.isSitting() || entitylivingbaseIn.isRiding();
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(T entity) {
-		return this.texture;
+		return entity.getTextureCount() > 1 ? new ResourceLocation(Reference.MODID, "textures/entity/" + this.entityName + "_" + entity.getTextureIndex() + ".png") : this.texture;
 	}
 
 	@Override
@@ -225,6 +219,60 @@ public class RenderCQREntity<T extends AbstractEntityCQR> extends RenderLiving<T
 		this.shadowSize *= ((AbstractEntityCQR) entityIn).getSizeVariation();
 		super.doRenderShadowAndFire(entityIn, x, y, z, yaw, partialTicks);
 		this.shadowSize /= ((AbstractEntityCQR) entityIn).getSizeVariation();
+	}
+
+	public void setupHeadOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupBodyOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupRightArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupLeftArmOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupRightLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupLeftLegOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupHeadwearOffsets(ModelRenderer modelRenderer, EntityEquipmentSlot slot) {
+
+	}
+
+	public void setupPotionOffsets(ModelRenderer modelRenderer) {
+
+	}
+
+	protected void applyTranslations(ModelRenderer modelRenderer) {
+		GlStateManager.translate(modelRenderer.offsetX, modelRenderer.offsetY, modelRenderer.offsetZ);
+		GlStateManager.translate(modelRenderer.rotationPointX * 0.0625F, modelRenderer.rotationPointY * 0.0625F, modelRenderer.rotationPointZ * 0.0625F);
+	}
+
+	protected void resetTranslations(ModelRenderer modelRenderer) {
+		GlStateManager.translate(-modelRenderer.rotationPointX * 0.0625F, -modelRenderer.rotationPointY * 0.0625F, -modelRenderer.rotationPointZ * 0.0625F);
+		GlStateManager.translate(-modelRenderer.offsetX, -modelRenderer.offsetY, -modelRenderer.offsetZ);
+	}
+
+	protected void applyRotations(ModelRenderer modelRenderer) {
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), 1.0F, 0.0F, 0.0F);
+	}
+
+	protected void resetRotations(ModelRenderer modelRenderer) {
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleX), -1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleY), 0.0F, -1.0F, 0.0F);
+		GlStateManager.rotate((float) Math.toDegrees(modelRenderer.rotateAngleZ), 0.0F, 0.0F, -1.0F);
 	}
 
 }
