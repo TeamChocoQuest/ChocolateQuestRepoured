@@ -2,8 +2,7 @@ package com.teamcqr.chocolatequestrepoured.objects.blocks;
 
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegion;
-import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionManager;
+import com.teamcqr.chocolatequestrepoured.structureprot.ProtectedRegionHelper;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
@@ -29,9 +28,8 @@ public class BlockFireCQR extends BlockFire {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (worldIn.getGameRules().getBoolean("doFireTick")) {
-			if (!worldIn.isAreaLoaded(pos, 2)) {
+			if (!worldIn.isAreaLoaded(pos, 2))
 				return; // Forge: prevent loading unloaded chunks when spreading fire
-			}
 			if (!this.canPlaceBlockAt(worldIn, pos)) {
 				worldIn.setBlockToAir(pos);
 			}
@@ -73,7 +71,7 @@ public class BlockFireCQR extends BlockFire {
 					j = -50;
 				}
 
-				if (!this.isPosProtected(worldIn, pos)) {
+				if (!ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
 					this.tryCatchFire(worldIn, pos.east(), 300 + j, rand, i, EnumFacing.WEST);
 					this.tryCatchFire(worldIn, pos.west(), 300 + j, rand, i, EnumFacing.EAST);
 					this.tryCatchFire(worldIn, pos.down(), 250 + j, rand, i, EnumFacing.UP);
@@ -121,7 +119,7 @@ public class BlockFireCQR extends BlockFire {
 	}
 
 	private void tryCatchFire(World worldIn, BlockPos pos, int chance, Random random, int age, EnumFacing face) {
-		if (this.isPosProtected(worldIn, pos)) {
+		if (!ProtectedRegionHelper.isFireSpreadingPrevented(worldIn, pos, null, false)) {
 			return;
 		}
 		int i = worldIn.getBlockState(pos).getBlock().getFlammability(worldIn, pos, face);
@@ -169,18 +167,6 @@ public class BlockFireCQR extends BlockFire {
 
 			return i;
 		}
-	}
-
-	public boolean isPosProtected(World world, BlockPos pos) {
-		ProtectedRegionManager manager = ProtectedRegionManager.getInstance(world);
-		if (manager != null) {
-			for (ProtectedRegion protectedRegion : manager.getProtectedRegions()) {
-				if (protectedRegion.preventFireSpreading() && protectedRegion.isInsideProtectedRegion(pos)) {
-					return true;
-				}
-			}
-		}
-		return false;
 	}
 
 }
