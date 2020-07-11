@@ -36,7 +36,7 @@ public class ProtectedRegionHelper {
 
 	public static void updateBreakableBlockWhitelist() {
 		BREAKABLE_BLOCK_WHITELIST.clear();
-		for (String s : CQRConfig.advanced.protectionSystemBreakableBlockWhitelist) {
+		for (String s : CQRConfig.dungeonProtection.protectionSystemBreakableBlockWhitelist) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				BREAKABLE_BLOCK_WHITELIST.add(b);
@@ -46,7 +46,7 @@ public class ProtectedRegionHelper {
 
 	public static void updatePlaceableBlockWhitelist() {
 		PLACEABLE_BLOCK_WHITELIST.clear();
-		for (String s : CQRConfig.advanced.protectionSystemPlaceableBlockWhitelist) {
+		for (String s : CQRConfig.dungeonProtection.protectionSystemPlaceableBlockWhitelist) {
 			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(s));
 			if (b != null) {
 				PLACEABLE_BLOCK_WHITELIST.add(b);
@@ -55,7 +55,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockBreakingPrevented(World world, BlockPos pos, @Nullable Entity entity) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockBreaking) {
 			return false;
 		}
 
@@ -89,7 +89,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isBlockPlacingPrevented(World world, BlockPos pos, @Nullable Entity entity, Block block) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventBlockPlacing) {
 			return false;
 		}
 
@@ -138,7 +138,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionTNTPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventExplosionTNT) {
 			return false;
 		}
 
@@ -158,7 +158,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isExplosionOtherPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventExplosionOther) {
 			return false;
 		}
 
@@ -178,7 +178,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static void removeExplosionPreventedPositions(World world, Explosion explosion, boolean checkForOrigin) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled) {
 			return;
 		}
 
@@ -190,6 +190,9 @@ public class ProtectedRegionHelper {
 
 		Entity exploder = EXPLODER_FIELD.get(explosion);
 		boolean flag = exploder instanceof EntityTNTPrimed;
+		if ((flag && !CQRConfig.dungeonProtection.preventExplosionTNT) || (!flag && !CQRConfig.dungeonProtection.preventExplosionOther)) {
+			return;
+		}
 		List<BlockPos> affectedBlockPositions = explosion.getAffectedBlockPositions();
 		BlockPos pos = new BlockPos(explosion.getPosition());
 
@@ -214,7 +217,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isFireSpreadingPrevented(World world, BlockPos pos, @Nullable BlockPos origin, boolean checkForOrigin) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventFireSpreading) {
 			return false;
 		}
 
@@ -234,7 +237,7 @@ public class ProtectedRegionHelper {
 	}
 
 	public static boolean isEntitySpawningPrevented(World world, BlockPos pos) {
-		if (!CQRConfig.advanced.protectionSystemFeatureEnabled) {
+		if (!CQRConfig.dungeonProtection.protectionSystemEnabled || !CQRConfig.dungeonProtection.preventEntitySpawning) {
 			return false;
 		}
 
