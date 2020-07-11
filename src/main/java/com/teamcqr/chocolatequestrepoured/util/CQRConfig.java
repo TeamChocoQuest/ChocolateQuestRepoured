@@ -14,10 +14,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class CQRConfig {
 
 	public static Advanced advanced = new Advanced();
+	public static Bosses bosses = new Bosses();
+	public static DungeonProtection dungeonProtection = new DungeonProtection();
 	public static General general = new General();
 	public static Mobs mobs = new Mobs();
 	public static Wall wall = new Wall();
-	public static Bosses bosses = new Bosses();
 
 	public static class Advanced {
 		@Config.Comment("Blocks which will be saved in an extra part when exporting a structure which otherwise might not be placed correctly.")
@@ -45,22 +46,6 @@ public class CQRConfig {
 				"minecraft:tnt_minecart",
 				"minecraft:hopper_minecart",
 				"minecraft:boat" };
-
-		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = {
-				"minecraft:mob_spawner",
-				"minecraft:torch",
-				"minecraft:fire",
-				"minecraft:cobweb",
-				"cqrepoured:unlit_torch",
-				"cqrepoured:phylactery",
-				"cqrepoured:force_field_nexus" };
-	
-		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
-		public String[] protectionSystemPlaceableBlockWhitelist = {
-				"minecraft:torch",
-				"minecraft:fire",
-				"cqrepoured:unlit_torch" };
 
 		public boolean enableSpecialFeatures = true;
 
@@ -92,6 +77,77 @@ public class CQRConfig {
 		
 		@Config.Comment("This enables the protection system, it enables it to be used. Set to false to disable it globally")
 		public boolean protectionSystemFeatureEnabled = true;
+		
+		public boolean flyingCowardPenaltyEnabled = true;
+		@Config.RangeDouble(min = 1)
+		public double flyingCowardPenaltyDamage = 10.0;
+	}
+	
+	public static class Bosses {
+		public boolean antiCowardMode = true;
+		public int antiCowardRadius = 16;
+		
+		public boolean hotFireballsDestroyTerrain = true;
+		
+		public boolean harderWalkerKing = true;
+		public boolean armorForTheWalkerKing = false; 
+		
+		public boolean netherDragonDestroysBlocks = true;
+		public int netherDragonStageTwoFireballInterval = 40;
+		public int netherDragonStageTwoSegmentHP = 50;
+		public String[] netherDragonBreakableBlocks = {
+				"minecraft:stone", 
+				"minecraft:netherrack", 
+				"minecraft:grass", 
+				"minecraft:dirt", 
+				"minecraft:quartz_ore", 
+				"minecraft:gravel", 
+				"minecraft:soul_sand", 
+				"minecraft:sand", 
+				"minecraft:leaves", 
+				"minecraft:tall_grass", 
+				"minecraft:double_plant", 
+				"minecraft:coal_ore", 
+				"minecraft:iron_ore", 
+				"minecraft:gold_ore",
+				"minecraft:water",
+				"minecraft:lava",
+				"minecraft:magma",
+				"minecraft:glowstone",
+				"cqrepoured:phylactery"
+			};
+		
+		public double pirateCaptainFleeCheckRadius = 32;
+		
+		public boolean boarmageExplosionRayDestroysTerrain = false;
+		public boolean boarmageExplosionAreaDestroysTerrain = false;
+	}
+
+	public static class DungeonProtection {
+		public boolean preventBlockBreaking = true;
+		public boolean preventBlockPlacing = true;
+		public boolean preventEntitySpawning = true;
+		public boolean preventExplosionOther = true;
+		public boolean preventExplosionTNT = true;
+		public boolean preventFireSpreading = true;
+		@Config.Comment("This enables the protection system. Set to false to disable it globally. Disabling this does not delete Protected Regions and instead just does not prevent the player from for example placing blocks.")
+		public boolean protectionSystemEnabled = true;
+
+		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
+		public String[] protectionSystemBreakableBlockWhitelist = {
+				"minecraft:mob_spawner",
+				"minecraft:torch",
+				"minecraft:fire",
+				"minecraft:cobweb",
+				"cqrepoured:unlit_torch",
+				"cqrepoured:phylactery",
+				"cqrepoured:force_field_nexus" };
+	
+		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
+		public String[] protectionSystemPlaceableBlockWhitelist = {
+				"minecraft:torch",
+				"minecraft:fire",
+				"cqrepoured:unlit_torch" };
 	}
 
 	public static class General {
@@ -162,31 +218,6 @@ public class CQRConfig {
 		public boolean offhandPotionsAreSingleUse = false;
 		public boolean potionsInBagAreSingleUse = false;
 		
-	}
-	
-	public static class Bosses {
-		public boolean harderWalkerKing = true;
-		public boolean armorForTheWalkerKing = false; 
-		
-		public boolean netherDragonDestroysBlocks = true;
-		public String[] netherDragonBreakableBlocks = {
-				"minecraft:stone", 
-				"minecraft:netherrack", 
-				"minecraft:grass", 
-				"minecraft:dirt", 
-				"minecraft:quartz_ore", 
-				"minecraft:gravel", 
-				"minecraft:soul_sand", 
-				"minecraft:sand", 
-				"minecraft:leaves", 
-				"minecraft:tall_grass", 
-				"minecraft:double_plant", 
-				"minecraft:coal_ore", 
-				"minecraft:iron_ore", 
-				"minecraft:gold_ore"
-			};
-		
-		public double pirateCaptainFleeCheckRadius = 32;
 	}
 
 	public static class Wall {
