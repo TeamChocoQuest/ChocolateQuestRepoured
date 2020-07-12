@@ -7,7 +7,7 @@ public enum EDefaultFaction {
 	WALKERS(new String[] { "UNDEAD", "BEASTS", "PIRATE", "DWARVES_AND_GOLEMS", "GOBLINS", "ENDERMEN", "PLAYERS", "OGRES_AND_GREMLINS", "INQUISITION", "ILLAGERS", "VILLAGERS", "NPC" }, new String[] {}, EReputationState.ARCH_ENEMY, false),
 	DWARVES_AND_GOLEMS(new String[] { "WALKERS", "ENDERMEN", "ILLAGERS", "UNDEAD" }, new String[] { "VILLAGERS", "NPC", "INQUISITION" }, EReputationState.ACCEPTED),
 	GOBLINS(new String[] { "OGRES_AND_GREMLINS", "WALKERS", "VILLAGERS", "INQUISITION", "PLAYERS" }, new String[] { "ENDERMEN", "ILLAGERS" }, EReputationState.ENEMY),
-	ENDERMEN(new String[] { "WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE", "TRITONS" }, new String[] { "ILLAGERS", "UNDEAD" }, EReputationState.NEUTRAL),
+	ENDERMEN(new String[] { "WALKERS", "PLAYERS", "DWARVES_AND_GOLEMS", "VILLAGERS", "NPCS", "PIRATE", "TRITONS" }, new String[] { "ILLAGERS", "UNDEAD" }, EReputationState.ENEMY),
 	// OGRES_AND_GREMLINS(new String[] {}, new String[] {}, EReputationState.NEUTRAL),
 	INQUISITION(new String[] { "WALKERS", "ILLAGERS", "UNDEAD", "GOBLINS" }, new String[] { "DWARVES_AND_GOLEMS", "NPC", "VILLAGERS" }, EReputationState.NEUTRAL),
 	BEASTS(new String[] { "WALKERS", "PLAYERS", "VILLAGERS", "NPC", "TRITONS", "UNDEAD" }, new String[] { "ENDERMEN", "PIRATE" }, EReputationState.ENEMY),
