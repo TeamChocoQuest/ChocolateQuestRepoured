@@ -73,6 +73,9 @@ public class CQRMain {
 	public static File CQ_FACTION_FOLDER = null;
 	public static File CQ_INHABITANT_FOLDER = null;
 	public static File CQ_ITEM_FOLDER = null;
+	public static File CQ_CUSTOM_TEXTURES_FOLDER_SETS = null;
+	public static File CQ_CUSTOM_TEXTURES_FOLDER_ROOT = null;
+	public static File CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = null;
 
 	public static final CreativeTabs CQR_ITEMS_TAB = new CreativeTabs("ChocolateQuestRepouredItemsTab") {
 		@Override
@@ -159,6 +162,9 @@ public class CQRMain {
 		CQ_FACTION_FOLDER = new File(CQ_CONFIG_FOLDER, "factions");
 		CQ_INHABITANT_FOLDER = new File(CQ_CONFIG_FOLDER, "dungeon_inhabitants");
 		CQ_ITEM_FOLDER = new File(CQ_CONFIG_FOLDER, "items");
+		CQ_CUSTOM_TEXTURES_FOLDER_ROOT = new File(CQ_CONFIG_FOLDER, "textures");
+		CQ_CUSTOM_TEXTURES_FOLDER_SETS = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "texture_sets");
+		CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES = new File(CQ_CUSTOM_TEXTURES_FOLDER_ROOT, "textures");
 
 		if (!CQ_CONFIG_FOLDER.exists() || CQRConfig.general.reinstallDefaultConfigs) {
 			try {
@@ -173,6 +179,9 @@ public class CQRMain {
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/factions", CQ_FACTION_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/dungeon_inhabitants", CQ_INHABITANT_FOLDER);
 			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/items", CQ_ITEM_FOLDER);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures", CQ_CUSTOM_TEXTURES_FOLDER_ROOT);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures/texture_sets", CQ_CUSTOM_TEXTURES_FOLDER_SETS);
+			this.checkAndCopyConfig("/assets/cqrepoured/defaultConfigs/textures/textures", CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES);
 		}
 		CQ_EXPORT_FILES_FOLDER.mkdir();
 	}
