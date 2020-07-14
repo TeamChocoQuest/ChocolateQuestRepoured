@@ -172,7 +172,7 @@ public class EventsHandler {
 		event.getRegistry().register(new RecipeArmorDyableBreathing());
 		event.getRegistry().register(new RecipeCrownAttach());
 		event.getRegistry().register(new RecipeCrownDetach());
-		//event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
+		// event.getRegistry().register(new RecipeDynamicCrown().setRegistryName(Reference.MODID, "dynamic_king_crown"));
 	}
 
 	@SubscribeEvent
@@ -213,63 +213,13 @@ public class EventsHandler {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
-		if(CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
-			//System.out.println("Checking for bucket...");
-			//if(event.getItemStack().getItem() instanceof ItemBucket /*&& event.getItemStack().getMaxStackSize() == 1*/) {
-				//Now check if a boss is nearby...
-				//System.out.println("Found bucket!");
-				/*BlockPos pos = event.getPos();
-				switch(event.getFace()) {
-				case DOWN:
-					pos = pos.down();
-					break;
-				case EAST:
-					pos = pos.east();
-					break;
-				case NORTH:
-					pos = pos.north();
-					break;
-				case SOUTH:
-					pos = pos.south();
-					break;
-				case UP:
-					pos = pos.up();
-					break;
-				case WEST:
-					pos = pos.west();
-					break;
-				default:
-					break;
-				
-				}*/
-				/*IBlockState placedLiquid = event.getWorld().getBlockState(pos);
-				boolean liquidFlag = (placedLiquid.getMaterial() == Material.LAVA || placedLiquid.getMaterial() == Material.WATER || placedLiquid.getMaterial() instanceof MaterialLiquid);*/
-				event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, 
-						new AxisAlignedBB(
-								event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
-								event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)
-						)
-					).isEmpty()
-				);
-				/*if(event.isCanceled()) {
-					if(!event.getWorld().isRemote) {
-						//event.getWorld().scheduleUpdate(pos, event.getWorld().getBlockState(pos).getBlock(), 2);
-						event.getWorld().scheduleUpdate(pos, Blocks.AIR, 20);
-						//event.getWorld().setBlockState(pos, event.getWorld().getBlockState(pos));
-						//event.getWorld().scheduleUpdate(event.getPos(), event.getWorld().getBlockState(event.getPos()).getBlock(), 2);
-						event.getWorld().scheduleUpdate(event.getPosition(), Blocks.AIR, 20);
-						//event.getWorld().setBlockState(event.getPos(), event.getWorld().getBlockState(event.getPos()));
-						event.getWorld().playSound(null, event.getPosition(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.AMBIENT, 1, 1);
-					} else {
-						event.getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, event.getPosition().getX(), event.getPosition().getY(), event.getPosition().getZ(), 0, 0, 0);
-					}
-				}*/
-				//System.out.println("Canceled event: " + event.isCanceled());
-			}
-		//}
+		if (CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
+			event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, new AxisAlignedBB(event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2,
+					CQRConfig.bosses.antiCowardRadius), event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius))).isEmpty());
+		}
 	}
 
 }
