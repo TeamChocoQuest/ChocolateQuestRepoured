@@ -40,11 +40,11 @@ public class TextureSet {
 				//This strings represent the FILE PATHS, not the actual resource locations
 				for(String texture : texturesString.split(",")) {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath() + texture + ".png");
-					if(tf.exists()) {
+					if(tf != null && tf.exists()) {
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + name, texture);
-						if(TextureSetManager.loadTexture(tf, rs)) {
+						//if(TextureSetManager.loadTexture(tf, rs)) {
 							entityTextureMap.getOrDefault(resLoc, new HashSet<ResourceLocation>()).add(rs);
-						}
+						//}
 					}
 				}
 			}
