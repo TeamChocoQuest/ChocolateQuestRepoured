@@ -7,7 +7,6 @@ import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableBreathing;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableRainbow;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeCrownAttach;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeCrownDetach;
-import com.teamcqr.chocolatequestrepoured.crafting.RecipeDynamicCrown;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
@@ -22,10 +21,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemAxe;
-import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,7 +41,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -218,13 +215,13 @@ public class EventsHandler {
 	}
 	
 	@SubscribeEvent
-	public static void sayNoToCowardlyPlacingLavaAgainstBosses(PlayerInteractEvent.RightClickBlock event) {
+	public static void sayNoToCowardlyPlacingLavaAgainstBosses(FillBucketEvent event) {
 		if(CQRConfig.bosses.antiCowardMode && !event.getEntityPlayer().isCreative()) {
 			//System.out.println("Checking for bucket...");
-			if(event.getItemStack().getItem() instanceof ItemBucket /*&& event.getItemStack().getMaxStackSize() == 1*/) {
+			//if(event.getItemStack().getItem() instanceof ItemBucket /*&& event.getItemStack().getMaxStackSize() == 1*/) {
 				//Now check if a boss is nearby...
 				//System.out.println("Found bucket!");
-				BlockPos pos = event.getPos();
+				/*BlockPos pos = event.getPos();
 				switch(event.getFace()) {
 				case DOWN:
 					pos = pos.down();
@@ -247,32 +244,32 @@ public class EventsHandler {
 				default:
 					break;
 				
-				}
+				}*/
 				/*IBlockState placedLiquid = event.getWorld().getBlockState(pos);
 				boolean liquidFlag = (placedLiquid.getMaterial() == Material.LAVA || placedLiquid.getMaterial() == Material.WATER || placedLiquid.getMaterial() instanceof MaterialLiquid);*/
 				event.setCanceled(!event.getWorld().getEntitiesWithinAABB(AbstractEntityCQRBoss.class, 
 						new AxisAlignedBB(
-								event.getPos().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
-								event.getPos().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)
+								event.getEntityPlayer().getPosition().add(CQRConfig.bosses.antiCowardRadius, CQRConfig.bosses.antiCowardRadius / 2, CQRConfig.bosses.antiCowardRadius),
+								event.getEntityPlayer().getPosition().add(-CQRConfig.bosses.antiCowardRadius, -CQRConfig.bosses.antiCowardRadius / 2, -CQRConfig.bosses.antiCowardRadius)
 						)
 					).isEmpty()
 				);
-				if(event.isCanceled()) {
+				/*if(event.isCanceled()) {
 					if(!event.getWorld().isRemote) {
 						//event.getWorld().scheduleUpdate(pos, event.getWorld().getBlockState(pos).getBlock(), 2);
 						event.getWorld().scheduleUpdate(pos, Blocks.AIR, 20);
 						//event.getWorld().setBlockState(pos, event.getWorld().getBlockState(pos));
 						//event.getWorld().scheduleUpdate(event.getPos(), event.getWorld().getBlockState(event.getPos()).getBlock(), 2);
-						event.getWorld().scheduleUpdate(event.getPos(), Blocks.AIR, 20);
+						event.getWorld().scheduleUpdate(event.getPosition(), Blocks.AIR, 20);
 						//event.getWorld().setBlockState(event.getPos(), event.getWorld().getBlockState(event.getPos()));
-						event.getWorld().playSound(null, event.getPos(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.AMBIENT, 1, 1);
+						event.getWorld().playSound(null, event.getPosition(), SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.AMBIENT, 1, 1);
 					} else {
-						event.getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), 0, 0, 0);
+						event.getWorld().spawnParticle(EnumParticleTypes.SMOKE_LARGE, event.getPosition().getX(), event.getPosition().getY(), event.getPosition().getZ(), 0, 0, 0);
 					}
-				}
+				}*/
 				//System.out.println("Canceled event: " + event.isCanceled());
 			}
-		}
+		//}
 	}
 
 }
