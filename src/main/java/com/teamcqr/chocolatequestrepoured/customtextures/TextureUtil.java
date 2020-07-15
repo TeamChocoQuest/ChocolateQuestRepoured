@@ -11,9 +11,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class TextureUtil {
 	
+	@SideOnly(Side.CLIENT)
 	public static boolean loadTextureInternal(File textureFile, ResourceLocation resLoc) {
 		if(textureFile != null && textureFile.exists() && resLoc != null) {
 			//This code basically loads a new texture or reloads an existing one
@@ -30,6 +30,7 @@ public class TextureUtil {
 		return false;
 	}
 	
+	@SideOnly(Side.CLIENT)
 	public static boolean unloadTexture(ResourceLocation texture) {
 		try {
 			TextureManager tm = Minecraft.getMinecraft().getTextureManager();

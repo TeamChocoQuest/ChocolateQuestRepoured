@@ -8,6 +8,7 @@ import com.teamcqr.chocolatequestrepoured.crafting.RecipeArmorDyableRainbow;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeCrownAttach;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipeCrownDetach;
 import com.teamcqr.chocolatequestrepoured.crafting.RecipesArmorDyes;
+import com.teamcqr.chocolatequestrepoured.customtextures.TextureSetManager;
 import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.init.ModItems;
 import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR;
@@ -188,6 +189,13 @@ public class EventsHandler {
 			return;
 		}
 		FactionRegistry.instance().handlePlayerLogin(event);
+		
+		if(event.player.world.isRemote) {
+			TextureSetManager.unloadTextures();
+		} else {
+			//Send packets with ct's to player
+		}
+		
 	}
 
 	@SubscribeEvent
