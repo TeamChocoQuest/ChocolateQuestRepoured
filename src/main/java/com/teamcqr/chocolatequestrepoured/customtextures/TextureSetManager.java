@@ -4,16 +4,14 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ImageBufferDownload;
-import net.minecraft.client.renderer.ThreadDownloadImageData;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.TextureManager;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-@SideOnly(Side.CLIENT)
 public class TextureSetManager {
 	
 	private Map<String, TextureSet> textureSets = new HashMap<>();
@@ -33,37 +31,61 @@ public class TextureSetManager {
 		return getInstance().loadTextureSetImpl(name);
 	}
 	
-	public static boolean loadTexture(File textureFile, ResourceLocation resLoc) {
-		return getInstance().loadTextureInternal(textureFile, resLoc);
-	}
-	
 	public static void registerTextureSet(TextureSet set) {
 		getInstance().registerTextureSetImpl(set);
 	}
 	
+	public static void unloadTextures() {
+		try {
+			getInstance().unloadTexturesImpl();
+		} catch(NoSuchMethodError ex) {
+			//Ignore
+		}
+	}
+	
+	public static void sendTextureSetsToClient(EntityPlayerMP joiningPlayer) {
+		try {
+			getInstance().sendTextureSetsToClientImpl(joiningPlayer);
+		} catch(NoSuchMethodError ex) {
+			//Ignore
+		}
+	}
+	
+	@SideOnly(Side.SERVER)
+	private void sendTextureSetsToClientImpl(EntityPlayerMP joiningPlayer) {
+		//First things first: we gotta send over all loaded textures
+		CustomTexturesPacket packet = new CustomTexturesPacket();
+		for(File texture : TextureSet.getLoadedTextures()) {
+			String base64 = CompressionUtil.encodeFileToBase64(texture);
+			String path = texture.getAbsolutePath().replaceFirst(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath(), "");
+			
+			packet.addPair(base64, path);
+		}
+		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
+	}
+
 	private void registerTextureSetImpl(TextureSet set) {
 		this.textureSets.put(set.getName(), set);
 	}
 
-	private boolean loadTextureInternal(File textureFile, ResourceLocation resLoc) {
-		if(textureFile != null && textureFile.exists() && resLoc != null) {
-			//This code basically loads a new texture or reloads an existing one
-			try {
-				TextureManager tm = Minecraft.getMinecraft().getTextureManager();
-				tm.deleteTexture(resLoc);
-				ITextureObject tex = new ThreadDownloadImageData(textureFile, null, resLoc, new ImageBufferDownload());
-				tm.loadTexture(resLoc, tex);
-				return true;
-			} catch(Exception ex) {
-				//Ignore
-			}
-		}
-		return false;
-	}
-	
 	private boolean loadTextureSetImpl(String name) {
 		
 		return false;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	private void unloadTexturesImpl() {
+		for(TextureSet set : textureSets.values()) {
+			for(ResourceLocation rs : set.getTextures()) {
+				try {
+					TextureUtil.unloadTexture(rs);
+				} catch(Exception ex) {
+					//Ignore
+				}
+			}
+			set.clearTextureCache();
+		}
+		this.textureSets.clear();
 	}
 
 }
