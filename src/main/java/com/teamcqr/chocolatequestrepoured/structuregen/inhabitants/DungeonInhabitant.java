@@ -61,7 +61,7 @@ public class DungeonInhabitant {
 	}
 	
 	public ResourceLocation getEntityID() {
-		return entityIDs.length <= 0 ? EMPTY_RES_LOC : entityIDs[random.nextInt(entityIDs.length)];
+		return (entityIDs == null || entityIDs.length <= 0) ? EMPTY_RES_LOC : entityIDs[random.nextInt(entityIDs.length)];
 	}
 	
 	public ResourceLocation getBossID() {

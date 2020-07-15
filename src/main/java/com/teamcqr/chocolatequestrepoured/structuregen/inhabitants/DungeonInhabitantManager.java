@@ -14,6 +14,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
@@ -168,7 +172,37 @@ public class DungeonInhabitantManager {
 		}
 		return inhabitantMapping.getOrDefault(name, inhabitantMapping.get("ILLAGER"));
 	}
-	
-	
+
+	public static List<DungeonInhabitant> getAllInhabitantsFromFaction(CQRFaction faction, World world) {
+		if(INSTANCE == null) {
+			INSTANCE = new DungeonInhabitantManager();
+		}
+
+		return INSTANCE.getListOfFactionInhabitants(faction, world);
+	}
+
+	private List<DungeonInhabitant> getListOfFactionInhabitants(CQRFaction faction, World world) {
+		ArrayList<DungeonInhabitant> result = new ArrayList<>();
+
+		for (DungeonInhabitant inha : this.inhabitantMapping.values()) {
+			if (!inha.getName().equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
+				if (inha.getFactionOverride() != null) {
+					if (FactionRegistry.instance().getFactionInstance(inha.getFactionOverride()).equals(faction)) {
+						result.add(inha);
+					}
+				} else {
+					Entity entity = EntityList.createEntityByIDFromName(inha.getEntityID(), world);
+					if (entity != null) {
+						if (FactionRegistry.instance().getFactionOf(entity).equals(faction)) {
+							result.add(inha);
+						}
+
+					}
+				}
+			}
+		}
+
+		return result;
+	}
 
 }

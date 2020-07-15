@@ -1,18 +1,29 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import com.teamcqr.chocolatequestrepoured.init.ModBlocks;
+import com.teamcqr.chocolatequestrepoured.objects.factories.SpawnerFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
+import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabitant;
+import com.teamcqr.chocolatequestrepoured.tileentity.TileEntitySpawner;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -20,6 +31,7 @@ import java.util.stream.Collectors;
 
 public class CastleRoomJailCell extends CastleRoomDecoratedBase {
     private EnumFacing doorSide;
+    private ArrayList<BlockPos> prisonerSpawnerPositions = new ArrayList<>();
 
     public CastleRoomJailCell(int sideLength, int height, int floor) {
         super(sideLength, height, floor);
@@ -180,6 +192,39 @@ public class CastleRoomJailCell extends CastleRoomDecoratedBase {
         for (Map.Entry<BlockPos, IBlockState> entry : genMap.entrySet()) {
             if (entry.getValue().getBlock() != Blocks.AIR) {
                 usedDecoPositions.add(entry.getKey());
+            }
+        }
+
+        //Add all spaces inside the cell to the list os possible prisoner spawn locations
+        for (int x = 2; x < getDecorationLengthX() - 2; x++) {
+            for (int z = 2; z < getDecorationLengthZ() - 2; z++) {
+                prisonerSpawnerPositions.add(this.roomOrigin.add(x, 1, z));
+            }
+        }
+    }
+
+    public void addPrisonerSpawners(DungeonInhabitant jailInhabitant, BlockStateGenArray genArray, World world) {
+        Collections.shuffle(this.prisonerSpawnerPositions, random);
+
+        int spawnerCount = DungeonGenUtils.randomBetween(random, 2, 5);
+
+        for (int i = 0; (i < spawnerCount && !prisonerSpawnerPositions.isEmpty()); i++) {
+            BlockPos pos = prisonerSpawnerPositions.get(i);
+
+            Entity mobEntity = EntityList.createEntityByIDFromName(jailInhabitant.getEntityID(), world);
+
+            Block spawnerBlock = ModBlocks.SPAWNER;
+            IBlockState state = spawnerBlock.getDefaultState();
+            TileEntitySpawner spawner = (TileEntitySpawner)spawnerBlock.createTileEntity(world, state);
+
+            if (spawner != null)
+            {
+                spawner.inventory.setStackInSlot(0,  SpawnerFactory.getSoulBottleItemStackForEntity(mobEntity));
+
+                NBTTagCompound spawnerCompound = spawner.writeToNBT(new NBTTagCompound());
+                genArray.addBlockState(pos, state, spawnerCompound, BlockStateGenArray.GenerationPhase.POST, BlockStateGenArray.EnumPriority.HIGH);
+
+                this.usedDecoPositions.add(pos);
             }
         }
     }

@@ -6,11 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.*;
 
 import javax.annotation.Nonnull;
 
@@ -74,6 +70,14 @@ public class CQRFaction {
 
 	public EReputationState getDefaultReputation() {
 		return this.defaultRelation;
+	}
+
+	public List<CQRFaction> getEnemies() {
+		return enemies;
+	}
+
+	public List<CQRFaction> getAllies() {
+		return allies;
 	}
 
 	public void addAlly(CQRFaction ally) {
@@ -216,4 +220,16 @@ public class CQRFaction {
 		}
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CQRFaction that = (CQRFaction) o;
+		return name.equals(that.name);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
+	}
 }

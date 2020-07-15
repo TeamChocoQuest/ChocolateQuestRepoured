@@ -14,6 +14,8 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.objects.factories.GearedMobFactory;
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.addons.CastleAddonRoof;
@@ -25,6 +27,8 @@ import com.teamcqr.chocolatequestrepoured.structuregen.inhabitants.DungeonInhabi
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.DungeonGenUtils;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -122,11 +126,12 @@ public class CastleRoomSelector {
 
 	}
 
-	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobType) {
+	public void generate(World world, BlockStateGenArray genArray, DungeonCastle dungeon, BlockPos startPos, ArrayList<String> bossUuids, String mobName) {
 		this.generateRooms(startPos, dungeon, genArray, bossUuids);
 		this.generateWalls(genArray, dungeon);
 
-		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobType);
+		DungeonInhabitant inha = DungeonInhabitantManager.getInhabitantByName(mobName);
+
 		this.addDecoration(world, startPos, dungeon, genArray, bossUuids, inha);
 
 		this.generateRoofs(startPos, genArray, dungeon);
@@ -162,7 +167,44 @@ public class CastleRoomSelector {
 		for (RoomGridCell cell : this.grid.getAllCellsWhere(RoomGridCell::isPopulated)) {
 			cell.getRoom().decorate(world, genArray, dungeon, mobFactory);
 			cell.getRoom().placeBoss(world, genArray, dungeon, bossResLoc, bossUuids);
+
+			if (cell.getRoom() instanceof CastleRoomJailCell) {
+				DungeonInhabitant jailInhabitant = selectJailInhabitant(world, mobType);
+				if (jailInhabitant != null) {
+					((CastleRoomJailCell) cell.getRoom()).addPrisonerSpawners(jailInhabitant, genArray, world);
+				}
+			}
 		}
+	}
+
+	private DungeonInhabitant selectJailInhabitant(World world, DungeonInhabitant mainInhabitant) {
+		CQRFaction inhaFaction;
+		DungeonInhabitant jailed = null;
+
+		String factionOverride = mainInhabitant.getFactionOverride();
+		if (factionOverride != null) {
+			inhaFaction = FactionRegistry.instance().getFactionInstance(factionOverride);
+		}
+		else {
+			Entity entity = EntityList.createEntityByIDFromName(mainInhabitant.getEntityID(), world);
+
+			//It is possible for entity to be null here but getFactionOf handles that case with a default value
+			inhaFaction = FactionRegistry.instance().getFactionOf(entity);
+
+		}
+		List<CQRFaction> enemies = inhaFaction.getEnemies();
+		Collections.shuffle(enemies, random);
+
+		//Keep trying until we find a faction with potential enemies
+		for (CQRFaction enemyFaction : enemies) {
+			List<DungeonInhabitant> possibleJailed = DungeonInhabitantManager.getAllInhabitantsFromFaction(enemyFaction, world);
+			if (!possibleJailed.isEmpty()) {
+				jailed = possibleJailed.get(random.nextInt(possibleJailed.size()));
+				break;
+			}
+		}
+
+		return jailed;
 	}
 
 	private void generateRoofs(BlockPos startPos, BlockStateGenArray genArray, DungeonCastle dungeon) {
