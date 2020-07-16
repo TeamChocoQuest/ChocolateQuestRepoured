@@ -1,15 +1,16 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration.RoomDecorTypes;
+
 import net.minecraft.block.BlockColored;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumDyeColor;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 public class CastleRoomBedroomFancy extends CastleRoomGenericBase {
 	private EnumDyeColor carpetColor;

@@ -1,12 +1,12 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockWoodSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-
-import javax.annotation.Nullable;
 
 public enum EnumMCWoodType {
     OAK(BlockPlanks.EnumType.OAK, Blocks.OAK_STAIRS, Blocks.OAK_FENCE, Blocks.OAK_DOOR),

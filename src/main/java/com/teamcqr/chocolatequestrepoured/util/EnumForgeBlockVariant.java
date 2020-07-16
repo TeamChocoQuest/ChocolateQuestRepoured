@@ -1,10 +1,14 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import net.minecraft.block.*;
+import javax.annotation.Nullable;
+
+import net.minecraft.block.BlockPrismarine;
+import net.minecraft.block.BlockRedSandstone;
+import net.minecraft.block.BlockSandStone;
+import net.minecraft.block.BlockStoneBrick;
+import net.minecraft.block.BlockStoneSlab;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-
-import javax.annotation.Nullable;
 
 /**
  *  Copyright (c) 20.04.2020

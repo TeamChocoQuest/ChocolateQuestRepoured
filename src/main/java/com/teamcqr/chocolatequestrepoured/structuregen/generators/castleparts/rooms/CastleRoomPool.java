@@ -1,18 +1,19 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
 import com.teamcqr.chocolatequestrepoured.util.GenerationTemplate;
+
 import net.minecraft.block.BlockStairs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Predicate;
 
 public class CastleRoomPool extends CastleRoomDecoratedBase
 {

@@ -1,10 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.segments;
 
+import java.util.HashMap;
+import java.util.Optional;
+import java.util.Random;
+
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonCastle;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RandomCastleConfigOptions;
-import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
 import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.RoomGridCell;
+import com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.CastleRoomBossLandingMain;
 import com.teamcqr.chocolatequestrepoured.util.BlockStateGenArray;
+
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.BlockStairs;
@@ -13,10 +18,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import scala.Int;
-
-import java.util.HashMap;
-import java.util.Optional;
-import java.util.Random;
 
 public class CastleMainStructWall {
     public enum WallOrientation {

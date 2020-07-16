@@ -1,14 +1,15 @@
 package com.teamcqr.chocolatequestrepoured.util;
 
-import com.teamcqr.chocolatequestrepoured.CQRMain;
-import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.ResourceLocation;
+import java.io.File;
+import java.util.Properties;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.File;
-import java.util.Properties;
+import com.teamcqr.chocolatequestrepoured.CQRMain;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 
 /**
  * Copyright (c) 29.04.2019

@@ -1,8 +1,8 @@
 package com.teamcqr.chocolatequestrepoured.structuregen.generators.castleparts.rooms.decoration;
 
-import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
-
 import java.util.Random;
+
+import com.teamcqr.chocolatequestrepoured.util.CQRWeightedRandom;
 
 public class DecorationSelector {
 	private CQRWeightedRandom<IRoomDecor> edgeDecor;

@@ -14,15 +14,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
 
-import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
-import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
 import org.apache.commons.io.FileUtils;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
+import com.teamcqr.chocolatequestrepoured.factions.CQRFaction;
+import com.teamcqr.chocolatequestrepoured.factions.FactionRegistry;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
