@@ -36,6 +36,7 @@ public class TileEntityExporter extends TileEntity {
 	private BlockPos minPos = new BlockPos(0, 0, 0);
 	private BlockPos maxPos = new BlockPos(0, 0, 0);
 
+	@SuppressWarnings("unused")
 	private EntityPlayer user = null;
 
 	public NBTTagCompound getExporterData(NBTTagCompound compound) {
