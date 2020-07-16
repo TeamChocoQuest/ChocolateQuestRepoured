@@ -216,7 +216,6 @@ public class EventsHandler {
 			for(ItemStack item : attacker.getEquipmentAndArmor()) {
 				if(ItemUtil.isCheaterItem(item)) {
 					//Punishment
-					event.setCanceled(true);
 					if(attacker instanceof EntityPlayerMP) {
 						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
 						if(item.isItemStackDamageable()) {
