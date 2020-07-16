@@ -197,7 +197,7 @@ public class EventsHandler {
 			TextureSetManager.unloadTextures();
 		} else if(event.player instanceof EntityPlayerMP) {
 			// Send packets with ct's to player
-			TextureSetManager.sendTextureSetsToClient((EntityPlayerMP) event.player);
+			TextureSetManager.sendTexturesToClient((EntityPlayerMP) event.player);
 		}
 
 	}

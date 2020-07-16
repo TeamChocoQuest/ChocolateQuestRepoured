@@ -6,6 +6,7 @@ import java.util.Map;
 
 import com.teamcqr.chocolatequestrepoured.CQRMain;
 import com.teamcqr.chocolatequestrepoured.network.packets.toClient.CustomTexturesPacket;
+import com.teamcqr.chocolatequestrepoured.network.packets.toClient.TextureSetPacket;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
@@ -43,16 +44,24 @@ public class TextureSetManager {
 		}
 	}
 
-	public static void sendTextureSetsToClient(EntityPlayerMP joiningPlayer) {
+	public static void sendTexturesToClient(EntityPlayerMP joiningPlayer) {
 		try {
-			getInstance().sendTextureSetsToClientImpl(joiningPlayer);
+			getInstance().sendTexturesToClientImpl(joiningPlayer);
+		} catch (NoSuchMethodError ex) {
+			// Ignore
+		}
+	}
+	
+	public static void sendTextureSetsToClient(EntityPlayerMP player) {
+		try {
+			getInstance().sendTextureSetsToClientImpl(player);
 		} catch (NoSuchMethodError ex) {
 			// Ignore
 		}
 	}
 
 	@SideOnly(Side.SERVER)
-	private void sendTextureSetsToClientImpl(EntityPlayerMP joiningPlayer) {
+	private void sendTexturesToClientImpl(EntityPlayerMP joiningPlayer) {
 		// First things first: we gotta send over all loaded textures
 		CustomTexturesPacket packet = new CustomTexturesPacket();
 		for (File texture : TextureSet.getLoadedTextures()) {
@@ -66,6 +75,14 @@ public class TextureSetManager {
 		//now we send the texture sets themselves...
 		// -> NO, we wait for the request from client
 		
+	}
+	
+	@SideOnly(Side.SERVER)
+	private void sendTextureSetsToClientImpl(EntityPlayerMP client) {
+		for(TextureSet ts : this.textureSets.values()) {
+			TextureSetPacket packet = new TextureSetPacket(ts.getName(), ts.getMappings());
+			CQRMain.NETWORK.sendTo(packet, client);
+		}
 	}
 
 	private void registerTextureSetImpl(TextureSet set) {

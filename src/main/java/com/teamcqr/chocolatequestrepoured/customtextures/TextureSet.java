@@ -100,5 +100,8 @@ public class TextureSet {
 	public static Set<File> getLoadedTextures() {
 		return new HashSet<File>(TextureSet.textures);
 	}
-
+	
+	public Map<ResourceLocation, Set<ResourceLocation>> getMappings() {
+		return new HashMap<ResourceLocation, Set<ResourceLocation>>(this.entityTextureMap);
+	}
 }
