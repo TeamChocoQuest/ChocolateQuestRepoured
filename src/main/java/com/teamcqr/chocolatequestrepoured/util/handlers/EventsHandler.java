@@ -16,9 +16,12 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.bases.AbstractEntityCQR
 import com.teamcqr.chocolatequestrepoured.structuregen.DungeonDataManager;
 import com.teamcqr.chocolatequestrepoured.structuregen.lootchests.LootTableLoader;
 import com.teamcqr.chocolatequestrepoured.util.CQRConfig;
+import com.teamcqr.chocolatequestrepoured.util.ItemUtil;
 import com.teamcqr.chocolatequestrepoured.util.Reference;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -208,6 +211,20 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
+		if(event.getEntityPlayer() != null) {
+			EntityPlayer attacker = event.getEntityPlayer();
+			for(ItemStack item : attacker.getEquipmentAndArmor()) {
+				if(ItemUtil.isCheaterItem(item)) {
+					//Punishment
+					event.setCanceled(true);
+					if(attacker instanceof EntityPlayerMP) {
+						item.attemptDamageItem((new Float(EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED))).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
+					}
+
+				}
+			}
+		}
+		
 		if (CQRConfig.mobs.blockCancelledByAxe) {
 			EntityPlayer player = event.getEntityPlayer();
 			World world = player.world;
