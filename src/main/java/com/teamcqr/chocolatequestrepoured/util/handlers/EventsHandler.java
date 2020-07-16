@@ -218,7 +218,12 @@ public class EventsHandler {
 					//Punishment
 					event.setCanceled(true);
 					if(attacker instanceof EntityPlayerMP) {
-						item.attemptDamageItem((new Float(EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED))).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
+						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
+						if(item.isItemStackDamageable()) {
+							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
+						} else {
+							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * (attacker.getRNG().nextFloat() * 2 + 1));
+						}
 					}
 
 				}
