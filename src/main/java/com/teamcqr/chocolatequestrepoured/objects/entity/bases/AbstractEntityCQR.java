@@ -242,6 +242,8 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 			this.lastTimeHitByAxeWhileBlocking = this.ticksExisted;
 		}
 
+		amount = new Float(Math.min(Math.max(10, getMaxHealth() * 0.6), amount));
+		
 		if (super.attackEntityFrom(source, amount)) {
 			if (CQRConfig.mobs.armorShattersOnMobs) {
 				this.handleArmorBreaking();
