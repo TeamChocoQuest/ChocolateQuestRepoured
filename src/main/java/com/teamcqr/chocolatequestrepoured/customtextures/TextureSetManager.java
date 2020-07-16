@@ -62,6 +62,10 @@ public class TextureSetManager {
 			packet.addPair(base64, path);
 		}
 		CQRMain.NETWORK.sendTo(packet, joiningPlayer);
+		
+		//now we send the texture sets themselves...
+		// -> NO, we wait for the request from client
+		
 	}
 
 	private void registerTextureSetImpl(TextureSet set) {

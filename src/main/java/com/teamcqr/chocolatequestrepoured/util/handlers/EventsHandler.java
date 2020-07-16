@@ -195,8 +195,9 @@ public class EventsHandler {
 
 		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
-		} else {
+		} else if(event.player instanceof EntityPlayerMP) {
 			// Send packets with ct's to player
+			TextureSetManager.sendTextureSetsToClient((EntityPlayerMP) event.player);
 		}
 
 	}
