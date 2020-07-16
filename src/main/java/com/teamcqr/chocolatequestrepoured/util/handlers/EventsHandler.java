@@ -221,9 +221,9 @@ public class EventsHandler {
 						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
 						if (item.isItemStackDamageable()) {
 							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
-						} else {
+						} /*else {
 							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * 0.5F);
-						}
+						}*/
 					}
 
 				}
