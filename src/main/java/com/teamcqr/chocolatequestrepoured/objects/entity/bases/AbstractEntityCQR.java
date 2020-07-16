@@ -268,7 +268,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 	}
 	
 	private float handleDamageCap(float originalAmount) {
-		if(damageCapEnabled()) {
+		if(CQRConfig.advanced.enableMaxDamageCaps && damageCapEnabled()) {
 			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
 		}
 		return originalAmount;
