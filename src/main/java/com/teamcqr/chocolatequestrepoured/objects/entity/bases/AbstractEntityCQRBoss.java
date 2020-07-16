@@ -169,5 +169,16 @@ public abstract class AbstractEntityCQRBoss extends AbstractEntityCQR {
 	public boolean canMountEntity() {
 		return false;
 	}
+	
+	//Damage cap stuff
+	@Override
+	protected boolean damageCapEnabled() {
+		return true;
+	}
+	
+	@Override
+	protected float maxDamageInPercentOfMaxHP() {
+		return 0.5F;
+	}
 
 }

@@ -267,7 +267,7 @@ public abstract class AbstractEntityCQR extends EntityCreature implements IMob, 
 		return 10F;
 	}
 	
-	protected float handleDamageCap(float originalAmount) {
+	private float handleDamageCap(float originalAmount) {
 		if(damageCapEnabled()) {
 			return new Float(Math.min(Math.max(maxUncappedDamage(), getMaxHealth() * maxDamageInPercentOfMaxHP()), originalAmount));
 		}
