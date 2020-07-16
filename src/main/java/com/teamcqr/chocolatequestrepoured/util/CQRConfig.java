@@ -78,6 +78,8 @@ public class CQRConfig {
 		public boolean flyingCowardPenaltyEnabled = true;
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
+
+		public boolean punishHackedItemUsers = false;
 	}
 
 	public static class Bosses {

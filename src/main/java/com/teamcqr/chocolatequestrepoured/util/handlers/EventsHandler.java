@@ -211,7 +211,7 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
-		if (event.getEntityPlayer() != null) {
+		if (CQRConfig.advanced.punishHackedItemUsers && event.getEntityPlayer() != null && event.getEntity() != null && event.getEntity() instanceof AbstractEntityCQR) {
 			EntityPlayer attacker = event.getEntityPlayer();
 			for (ItemStack item : attacker.getEquipmentAndArmor()) {
 				if (ItemUtil.isCheaterItem(item)) {
@@ -221,7 +221,7 @@ public class EventsHandler {
 						if (item.isItemStackDamageable()) {
 							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
 						} else {
-							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * (attacker.getRNG().nextFloat() * 2 + 1));
+							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * 0.5F);
 						}
 					}
 
