@@ -29,7 +29,7 @@ public class SyncEntityPacketHandler implements IMessageHandler<SyncEntityPacket
 					cqrentity.setDropChance(EntityEquipmentSlot.FEET, (float) message.getDropChanceFeet() / 100.0F);
 					cqrentity.setDropChance(EntityEquipmentSlot.MAINHAND, (float) message.getDropChanceMainhand() / 100.0F);
 					cqrentity.setDropChance(EntityEquipmentSlot.OFFHAND, (float) message.getDropChanceOffhand() / 100.0F);
-					cqrentity.setSizeVariation((float) message.getSizeScaling() / 100.0F); 
+					cqrentity.setSizeVariation((float) message.getSizeScaling() / 100.0F);
 				}
 			}
 		});

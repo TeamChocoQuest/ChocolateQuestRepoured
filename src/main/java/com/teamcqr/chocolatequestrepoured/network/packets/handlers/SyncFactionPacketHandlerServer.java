@@ -15,16 +15,16 @@ public class SyncFactionPacketHandlerServer implements IMessageHandler<SyncFacti
 
 	@Override
 	public SyncFactionDataReply onMessage(SyncFactionDataRequest message, MessageContext ctx) {
-		if(ctx.side.isServer()) {
+		if (ctx.side.isServer()) {
 			UUID playerID = message.getPlayerUUID();
-			if(playerID != null) {
+			if (playerID != null) {
 				SyncFactionDataReply reply = new SyncFactionDataReply(playerID);
 				return reply;
 			}
 		}
 		return null;
 	}
-	
-	//TODO: Request will be sent when the faction GUI is opened
+
+	// TODO: Request will be sent when the faction GUI is opened
 
 }

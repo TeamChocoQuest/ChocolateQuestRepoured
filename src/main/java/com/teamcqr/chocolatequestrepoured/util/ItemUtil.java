@@ -34,18 +34,18 @@ public class ItemUtil {
 
 		return diff < maxDiff;
 	}
-	
+
 	public static boolean isCheaterItem(ItemStack item) {
-		if(!item.isItemEnchanted()) {
+		if (!item.isItemEnchanted()) {
 			return false;
 		}
 		Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(item);
-		for(Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
-			if(entry.getValue() > entry.getKey().getMaxLevel() * 2) {
+		for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+			if (entry.getValue() > entry.getKey().getMaxLevel() * 2) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

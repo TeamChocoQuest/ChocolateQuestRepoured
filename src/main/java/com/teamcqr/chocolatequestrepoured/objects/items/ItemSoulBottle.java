@@ -93,8 +93,8 @@ public class ItemSoulBottle extends Item {
 						if (player.isSneaking()) {
 							bottle.removeTag(ENTITY_IN_TAG);
 						}
-						
-						if(!player.isCreative()) {
+
+						if (!player.isCreative()) {
 							stack.shrink(1);
 						}
 					}
@@ -142,7 +142,7 @@ public class ItemSoulBottle extends Item {
 			world.playSound(null, x, y, z, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 1.0F, 0.6F + itemRand.nextFloat() * 0.2F);
 		}
 	}
-	
+
 	@Override
 	public boolean hasEffect(ItemStack stack) {
 		if (stack.hasTagCompound()) {

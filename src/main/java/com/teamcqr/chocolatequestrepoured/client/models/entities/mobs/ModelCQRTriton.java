@@ -6,8 +6,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * ModelTriton - DerToaster98
- * Created using Tabula 7.0.1
+ * ModelTriton - DerToaster98 Created using Tabula 7.0.1
  */
 public class ModelCQRTriton extends ModelCQRBiped {
 

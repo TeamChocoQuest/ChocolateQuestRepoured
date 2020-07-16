@@ -7,8 +7,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 /**
- * ModelMonkey - Created by DerToaster
- * Created using Tabula 7.0.1
+ * ModelMonkey - Created by DerToaster Created using Tabula 7.0.1
  */
 public class ModelCQRMandril extends ModelCQRBiped {
 

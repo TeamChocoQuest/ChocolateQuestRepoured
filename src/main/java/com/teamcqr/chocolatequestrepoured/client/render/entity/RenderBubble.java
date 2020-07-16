@@ -33,7 +33,7 @@ public class RenderBubble extends Render<EntityBubble> {
 			GlStateManager.pushAttrib();
 			GlStateManager.enableAlpha();
 			GlStateManager.enableBlend();
-	        GlStateManager.disableCull();
+			GlStateManager.disableCull();
 			GlStateManager.pushMatrix();
 
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);

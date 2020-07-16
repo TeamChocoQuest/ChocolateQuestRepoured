@@ -121,7 +121,7 @@ public class EntityColoredLightningBolt extends EntityLightningBolt implements I
 
 				for (Entity entity : list) {
 					if (!ForgeEventFactory.onEntityStruckByLightning(entity, this)) {
-						if(CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
+						if (CQRConfig.advanced.flyingCowardPenaltyEnabled && (EntityUtil.isEntityFlying(entity) || EntityUtil.isEntityFlying(entity.getLowestRidingEntity()))) {
 							entity.attackEntityFrom(DamageSource.MAGIC, new Float(CQRConfig.advanced.flyingCowardPenaltyDamage));
 						}
 						entity.onStruckByLightning(this);

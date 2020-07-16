@@ -73,7 +73,7 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 				return true;
 			}
 		});
-		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 50, 20, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 3, new Vec3d(0,0,0)) {
+		this.spellHandler.addSpell(1, new EntityAISummonMinionSpell(this, 50, 20, new ResourceLocation(Reference.MODID, "zombie"), ECircleTexture.ZOMBIE, true, 12, 3, new Vec3d(0, 0, 0)) {
 			@Override
 			public boolean isInterruptible() {
 				return false;
@@ -170,10 +170,9 @@ public class EntityCQRLich extends AbstractEntityCQRMageBase implements ISummone
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.UNDEAD;
 	}
-	
+
 	public boolean hasPhylactery() {
-		return (this.currentPhylacteryPosition != null &&
-			(this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY)); 
+		return (this.currentPhylacteryPosition != null && (this.world.getBlockState(this.currentPhylacteryPosition).getBlock() == ModBlocks.PHYLACTERY));
 	}
 
 }

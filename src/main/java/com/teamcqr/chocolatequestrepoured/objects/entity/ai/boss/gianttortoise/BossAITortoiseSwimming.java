@@ -5,7 +5,7 @@ import com.teamcqr.chocolatequestrepoured.objects.entity.boss.EntityCQRGiantTort
 import net.minecraft.entity.ai.EntityAISwimming;
 
 public class BossAITortoiseSwimming extends EntityAISwimming {
-	
+
 	private EntityCQRGiantTortoise boss;
 
 	public BossAITortoiseSwimming(EntityCQRGiantTortoise entityIn) {
@@ -13,7 +13,7 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 		this.boss = entityIn;
 		setMutexBits(0);
 	}
-	
+
 	@Override
 	public boolean shouldExecute() {
 		if (super.shouldExecute()) {
@@ -21,7 +21,7 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		if (super.shouldContinueExecuting()) {
@@ -29,14 +29,13 @@ public class BossAITortoiseSwimming extends EntityAISwimming {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if(boss.getAttackTarget() != null) {
+		if (boss.getAttackTarget() != null) {
 			boss.getNavigator().tryMoveToEntityLiving(boss.getAttackTarget(), 3);
 		}
 	}
-	
 
 }

@@ -21,24 +21,24 @@ public class TileEntityForceFieldNexusRenderer extends TileEntitySpecialRenderer
 
 	private final ModelBase crystal = new ModelNexusCrystal();
 	private static final ResourceLocation CRYSTAL_TEXTURES = new ResourceLocation(Reference.MODID, "textures/entity/nexus_crystal.png");
-	
+
 	@Override
 	public void render(TileEntityForceFieldNexus te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		super.render(te, x, y, z, partialTicks, destroyStage, alpha);
-		//Crystal code
+		// Crystal code
 		float f = partialTicks;
-        GlStateManager.pushMatrix();
-        GlStateManager.disableLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.translate((float)x +0.5F, (float)y + 0.7F, (float)z +0.5F);
-        this.bindTexture(CRYSTAL_TEXTURES);
-        float f1 = MathHelper.sin(f * 0.02F) / 2.0F + 0.5F;
-        f1 = f1 * f1 + f1;
+		GlStateManager.pushMatrix();
+		GlStateManager.disableLighting();
+		GlStateManager.enableAlpha();
+		GlStateManager.translate((float) x + 0.5F, (float) y + 0.7F, (float) z + 0.5F);
+		this.bindTexture(CRYSTAL_TEXTURES);
+		float f1 = MathHelper.sin(f * 0.02F) / 2.0F + 0.5F;
+		f1 = f1 * f1 + f1;
 
-        this.crystal.render(null, 0.0F, f, f1 *0.1F, 0.0F, 0.0F, 0.025F);
-        GlStateManager.enableLighting();
-        GlStateManager.disableAlpha();
-        GlStateManager.popMatrix();
+		this.crystal.render(null, 0.0F, f, f1 * 0.1F, 0.0F, 0.0F, 0.025F);
+		GlStateManager.enableLighting();
+		GlStateManager.disableAlpha();
+		GlStateManager.popMatrix();
 	}
-	
+
 }

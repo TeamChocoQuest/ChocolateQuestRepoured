@@ -27,31 +27,31 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class DungeonInhabitantManager {
-	
+
 	private Map<String, DungeonInhabitant> inhabitantMapping = new HashMap<>();
-	//ATTENTION: the entry "default" (or similar) is NEVER allowed to be put in the distant mapping!!
+	// ATTENTION: the entry "default" (or similar) is NEVER allowed to be put in the distant mapping!!
 	private List<List<String>> distantMapping = new ArrayList<>();
 	private Random random = new Random();
 
-	private static DungeonInhabitantManager INSTANCE;	
-	
+	private static DungeonInhabitantManager INSTANCE;
+
 	public static final String DEFAULT_INHABITANT_IDENT = "DEFAULT";
-	
+
 	private DungeonInhabitantManager() {
 		loadDefaultInhabitants();
 		loadInhabitantConfigs();
 		loadDistantMapping();
 	}
-	
+
 	private void loadDefaultInhabitants() {
-		for(EDefaultInhabitants defInha : EDefaultInhabitants.values()) {
+		for (EDefaultInhabitants defInha : EDefaultInhabitants.values()) {
 			DungeonInhabitant inha = new DungeonInhabitant(defInha);
 			this.inhabitantMapping.put(inha.getName().toUpperCase(), inha);
 		}
 	}
 
 	private void loadInhabitantConfigs() {
-		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_INHABITANT_FOLDER, new String[] {"cfg", "prop", "properties"}, true));
+		List<File> files = new ArrayList<>(FileUtils.listFiles(CQRMain.CQ_INHABITANT_FOLDER, new String[] { "cfg", "prop", "properties" }, true));
 		int fileCount = files.size();
 		if (fileCount > 0) {
 			boolean flag = true;
@@ -70,37 +70,37 @@ public class DungeonInhabitantManager {
 					try {
 						DungeonInhabitant inha = new DungeonInhabitant(prop);
 						this.inhabitantMapping.put(inha.getName().toUpperCase(), inha);
-					} catch(Exception ex) {
+					} catch (Exception ex) {
 						CQRMain.logger.warn("Failed to create DungeonInhabitant object from file: " + file.getName());
 					}
 				}
 			}
 		}
 	}
-	
+
 	private void loadDistantMapping() {
 		File file = new File(CQRMain.CQ_CONFIG_FOLDER, "defaultInhabitantConfig.properties");
-		if(file.exists()) {
+		if (file.exists()) {
 			FileReader reader;
 			try {
 				reader = new FileReader(file);
 				BufferedReader br = new BufferedReader(reader);
 				String currentLine;
-				
-				while((currentLine = br.readLine()) != null) {
-					if(currentLine.startsWith("#")) {
+
+				while ((currentLine = br.readLine()) != null) {
+					if (currentLine.startsWith("#")) {
 						continue;
 					}
 					String[] entries = currentLine.split(",");
 					List<String> tmpList = new ArrayList<>();
 					System.out.println(tmpList.toString());
-					for(String s : entries) {
+					for (String s : entries) {
 						s = s.trim();
-						if(inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
+						if (inhabitantMapping.containsKey(s) && !s.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT)) {
 							tmpList.add(s);
 						}
 					}
-					if(!tmpList.isEmpty()) {
+					if (!tmpList.isEmpty()) {
 						distantMapping.add(tmpList);
 					}
 				}
@@ -109,21 +109,21 @@ public class DungeonInhabitantManager {
 				e1.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-			} 
-			
-			//System.out.println(distantMapping.toString());
-			//System.out.println("LOADED!");
+			}
+
+			// System.out.println(distantMapping.toString());
+			// System.out.println("LOADED!");
 		}
 	}
-	
+
 	public static void init() {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new DungeonInhabitantManager();
 		}
 	}
-	
+
 	public static boolean isValidInhabitant(String name) {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new DungeonInhabitantManager();
 		}
 		return INSTANCE.isValid(name);
@@ -134,21 +134,21 @@ public class DungeonInhabitantManager {
 	}
 
 	public static DungeonInhabitant getInhabitantByName(String name) {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new DungeonInhabitantManager();
 		}
 		return INSTANCE.getInhabitant(name);
 	}
-	
+
 	public static DungeonInhabitant getInhabitantDependingOnDistance(World world, int blockX, int blockZ) {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new DungeonInhabitantManager();
 		}
 		return INSTANCE.getInhabitantByDistance(world, blockX, blockZ);
 	}
-	
+
 	private DungeonInhabitant getInhabitantByDistance(World world, int blockX, int blockZ) {
-		if(this.distantMapping.isEmpty()) {
+		if (this.distantMapping.isEmpty()) {
 			return (DungeonInhabitant) this.inhabitantMapping.values().toArray()[random.nextInt(inhabitantMapping.values().size())];
 		}
 		BlockPos spawnPoint = world.getSpawnPoint();
@@ -162,11 +162,11 @@ public class DungeonInhabitantManager {
 		}
 		List<String> tmpList = distantMapping.get(index);
 		return getInhabitant(tmpList.get(random.nextInt(tmpList.size())));
-		
+
 	}
 
 	public DungeonInhabitant getInhabitant(String name) {
-		if(name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || !inhabitantMapping.containsKey(name)) {
+		if (name.equalsIgnoreCase(DEFAULT_INHABITANT_IDENT) || !inhabitantMapping.containsKey(name)) {
 			List<String> tmpList = distantMapping.get(random.nextInt(distantMapping.size()));
 			return getInhabitant(tmpList.get(random.nextInt(tmpList.size())));
 		}
@@ -174,7 +174,7 @@ public class DungeonInhabitantManager {
 	}
 
 	public static List<DungeonInhabitant> getAllInhabitantsFromFaction(CQRFaction faction, World world) {
-		if(INSTANCE == null) {
+		if (INSTANCE == null) {
 			INSTANCE = new DungeonInhabitantManager();
 		}
 

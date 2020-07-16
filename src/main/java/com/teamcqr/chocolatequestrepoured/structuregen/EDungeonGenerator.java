@@ -16,25 +16,13 @@ import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVegetated
 import com.teamcqr.chocolatequestrepoured.structuregen.dungeons.DungeonVolcano;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public enum EDungeonGenerator {
 
-	CAVERNS(DungeonCavern::new),
-	ABANDONED((name, prop) -> null),
-	RUIN((name, prop) -> null),
-	NETHER_CITY(DungeonNetherCity::new),
-	FLOATING_NETHER_CITY(DungeonHangingCity::new),
-	TEMPLATE_SURFACE(DungeonSurface::new),
-	TEMPLATE_OCEAN_FLOOR(DungeonOceanFloor::new),
-	STRONGHOLD(DungeonStrongholdOpen::new),
-	CLASSIC_STRONGHOLD(DungeonStrongholdLinear::new),
-	GREEN_CAVE(DungeonVegetatedCave::new),
-	GUARDED_CASTLE(DungeonGuardedCastle::new),
-	CASTLE(DungeonCastle::new),
-	VOLCANO(DungeonVolcano::new);
+	CAVERNS(DungeonCavern::new), ABANDONED((name, prop) -> null), RUIN((name, prop) -> null), NETHER_CITY(DungeonNetherCity::new), FLOATING_NETHER_CITY(DungeonHangingCity::new), TEMPLATE_SURFACE(DungeonSurface::new), TEMPLATE_OCEAN_FLOOR(
+			DungeonOceanFloor::new), STRONGHOLD(DungeonStrongholdOpen::new), CLASSIC_STRONGHOLD(DungeonStrongholdLinear::new), GREEN_CAVE(DungeonVegetatedCave::new), GUARDED_CASTLE(DungeonGuardedCastle::new), CASTLE(DungeonCastle::new), VOLCANO(
+					DungeonVolcano::new);
 
 	private IDungeonGenerator generator;
 

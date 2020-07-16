@@ -92,15 +92,14 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		for (int iX = -rowsX; iX <= rowsX; iX++) {
 			for (int iZ = -rowsZ; iZ <= rowsZ; iZ++) {
 
-				/*boolean noAddFlag = false;
-				if (this.dungeon.centralBuildingIsSpecial() && iX == 0 && iZ == 0) {
-					noAddFlag = true;
-				}*/
+				/*
+				 * boolean noAddFlag = false; if (this.dungeon.centralBuildingIsSpecial() && iX == 0 && iZ == 0) { noAddFlag = true; }
+				 */
 
 				BlockPos p = this.pos.add((iX * this.distanceBetweenBuildings), 0, (iZ * this.distanceBetweenBuildings));
-				//if (!noAddFlag) {
-					this.gridPositions[iX + rowsX][iZ + rowsZ] = p;
-				//}
+				// if (!noAddFlag) {
+				this.gridPositions[iX + rowsX][iZ + rowsZ] = p;
+				// }
 				// Bridge starter positions, in total there will be rowsX +rowsZ -1 bridges
 				if (iX == 0) {
 					this.bridgeBuilderStartPositionsZ.add(p);
@@ -117,15 +116,10 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		// Dig out the big air pocket or the small ones
 		if (this.dungeon.makeSpaceForBuildings()) {
 			/*
-			 * if(dungeon.useSingleAirPocketsForHouses()) {
-			 * for(BlockPos pocketCenter : gridPositions) {
-			 * BlockPos cLower = new BlockPos(pocketCenter.getX() - dungeon.getLongestSide() /2, y +1, pocketCenter.getZ() - dungeon.getLongestSide());
-			 * BlockPos cUpper = new BlockPos(pocketCenter.getX() + dungeon.getLongestSide() /2, y +dungeon.getCaveHeight(), pocketCenter.getZ() + dungeon.getLongestSide());
+			 * if(dungeon.useSingleAirPocketsForHouses()) { for(BlockPos pocketCenter : gridPositions) { BlockPos cLower = new BlockPos(pocketCenter.getX() - dungeon.getLongestSide() /2, y +1, pocketCenter.getZ() - dungeon.getLongestSide()); BlockPos
+			 * cUpper = new BlockPos(pocketCenter.getX() + dungeon.getLongestSide() /2, y +dungeon.getCaveHeight(), pocketCenter.getZ() + dungeon.getLongestSide());
 			 * 
-			 * PlateauBuilder pB = new PlateauBuilder();
-			 * pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world);
-			 * }
-			 * } else {
+			 * PlateauBuilder pB = new PlateauBuilder(); pB.makeRandomBlob(new Random(), dungeon.getAirPocketBlock(), cLower, cUpper, WorldDungeonGenerator.getSeed(world, pocketCenter.getX(), pocketCenter.getZ()), world); } } else {
 			 */
 			BlockPos cLower = new BlockPos(this.minX, this.pos.getY() + 1, this.minZ).add(-this.distanceBetweenBuildings, 0, -this.distanceBetweenBuildings);
 			BlockPos cUpper = new BlockPos(this.maxX, this.pos.getY() + this.dungeon.getCaveHeight(), this.maxZ).add(this.distanceBetweenBuildings * 0.1, 0, this.distanceBetweenBuildings * 0.05);
@@ -135,7 +129,8 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 		}
 
 		// Build the roads / bridges and the floors
-		for (BlockPos lavaPos : BlockPos.getAllInBox(this.minX - this.distanceBetweenBuildings, this.pos.getY(), this.minZ - this.distanceBetweenBuildings, this.maxX + this.distanceBetweenBuildings, this.pos.getY(), this.maxZ + this.distanceBetweenBuildings)) {
+		for (BlockPos lavaPos : BlockPos.getAllInBox(this.minX - this.distanceBetweenBuildings, this.pos.getY(), this.minZ - this.distanceBetweenBuildings, this.maxX + this.distanceBetweenBuildings, this.pos.getY(), this.maxZ
+				+ this.distanceBetweenBuildings)) {
 			this.lavaBlocks.add(lavaPos);
 		}
 		// Bridges from south to north
@@ -150,13 +145,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 
 				// Tunnels if not big air pocket
 				/*
-				 * if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-				 * for(int n = 1; n <= tunnelHeight; n++) {
-				 * world.setBlockToAir(pC.up(n));
-				 * world.setBlockToAir(pCE.up(n));
-				 * world.setBlockToAir(pCW.up(n));
-				 * }
-				 * }
+				 * if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) { for(int n = 1; n <= tunnelHeight; n++) { world.setBlockToAir(pC.up(n)); world.setBlockToAir(pCE.up(n)); world.setBlockToAir(pCW.up(n)); } }
 				 */
 			}
 		}
@@ -172,13 +161,7 @@ public class GeneratorGridCity extends AbstractDungeonGenerator<DungeonNetherCit
 
 				// Tunnels if not big air pocket
 				/*
-				 * if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) {
-				 * for(int n = 1; n <= tunnelHeight; n++) {
-				 * world.setBlockToAir(pC.up(n));
-				 * world.setBlockToAir(pCN.up(n));
-				 * world.setBlockToAir(pCS.up(n));
-				 * }
-				 * }
+				 * if(dungeon.makeSpaceForBuildings() && dungeon.useSingleAirPocketsForHouses()) { for(int n = 1; n <= tunnelHeight; n++) { world.setBlockToAir(pC.up(n)); world.setBlockToAir(pCN.up(n)); world.setBlockToAir(pCS.up(n)); } }
 				 */
 			}
 		}

@@ -17,8 +17,7 @@ public class CastleRoomTowerSquare extends CastleRoomBase {
 	private Vec3i pillarOffset;
 	private EnumFacing firstStairSide;
 
-	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide,
-								 int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
+	public CastleRoomTowerSquare(int sideLength, int height, EnumFacing connectedSide, int towerSize, CastleRoomTowerSquare towerBelow, int floor) {
 		super(sideLength, height, floor);
 		this.roomType = EnumRoomType.TOWER_SQUARE;
 		this.connectedSide = connectedSide;

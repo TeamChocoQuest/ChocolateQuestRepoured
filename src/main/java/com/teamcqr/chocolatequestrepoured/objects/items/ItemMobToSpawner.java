@@ -24,11 +24,9 @@ public class ItemMobToSpawner extends Item {
 		this.setMaxStackSize(1);
 	}
 
-	/*@Override
-	public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
-		Block block = world.getBlockState(pos).getBlock();
-		return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER;
-	}*/
+	/*
+	 * @Override public boolean canDestroyBlockInCreative(World world, BlockPos pos, ItemStack stack, EntityPlayer player) { Block block = world.getBlockState(pos).getBlock(); return block != ModBlocks.SPAWNER && block != Blocks.MOB_SPAWNER; }
+	 */
 
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
@@ -45,10 +43,10 @@ public class ItemMobToSpawner extends Item {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean onBlockDestroyed(ItemStack stack, World worldIn, IBlockState state, BlockPos pos, EntityLivingBase entityLiving) {
-		if(state.getBlock() == ModBlocks.SPAWNER && !worldIn.isRemote) {
+		if (state.getBlock() == ModBlocks.SPAWNER && !worldIn.isRemote) {
 			TileEntitySpawner spawner = (TileEntitySpawner) worldIn.getTileEntity(pos);
 			spawner.forceTurnBackIntoEntity();
 		}

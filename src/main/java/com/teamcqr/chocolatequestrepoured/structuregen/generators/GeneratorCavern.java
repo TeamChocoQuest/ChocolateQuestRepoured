@@ -26,9 +26,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 
@@ -156,9 +154,7 @@ public class GeneratorCavern extends AbstractDungeonGenerator<DungeonCavern> {
 			this.generateTunnel(true, start, target, world, stateMap);
 		}
 		/*
-		 * else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) {
-		 * generateTunnel(!xFirst, start, target, world);
-		 * }
+		 * else if(DungeonGenUtils.PercentageRandom(25, world.getSeed()) && !(start.getX() == target.getX() || start.getZ() == target.getZ())) { generateTunnel(!xFirst, start, target, world); }
 		 */
 		else {
 			int v = 0;

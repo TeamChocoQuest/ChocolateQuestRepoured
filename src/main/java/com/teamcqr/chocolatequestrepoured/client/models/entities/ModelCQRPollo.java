@@ -6,8 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 
 /**
- * ModelChicken - DerToaster98
- * Created using Tabula 7.0.1
+ * ModelChicken - DerToaster98 Created using Tabula 7.0.1
  */
 public class ModelCQRPollo extends ModelChicken {
 
@@ -67,9 +66,8 @@ public class ModelCQRPollo extends ModelChicken {
 	}
 
 	/**
-	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms
-	 * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
-	 * "far" arms and legs can swing at most.
+	 * Sets the model's various rotation angles. For bipeds, par1 and par2 are used for animating the movement of arms and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how "far" arms and legs
+	 * can swing at most.
 	 */
 	@Override
 	public void setRotationAngles(float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, float scaleFactor, Entity entityIn) {

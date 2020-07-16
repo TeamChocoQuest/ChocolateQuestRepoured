@@ -13,9 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.Event;
 
 /**
- * Copyright (c) 29.04.2019
- * Developed by DerToaster98
- * GitHub: https://github.com/DerToaster98
+ * Copyright (c) 29.04.2019 Developed by DerToaster98 GitHub: https://github.com/DerToaster98
  */
 public class CQDungeonStructureGenerateEvent extends Event {
 
@@ -36,7 +34,7 @@ public class CQDungeonStructureGenerateEvent extends Event {
 		this.uuid = uuid;
 		bossUUIDs.addAll(uuids);
 	}
-	
+
 	public ArrayList<String> getBossIDs() {
 		return bossUUIDs;
 	}

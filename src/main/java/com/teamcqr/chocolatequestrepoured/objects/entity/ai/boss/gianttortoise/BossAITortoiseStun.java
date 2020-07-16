@@ -11,7 +11,7 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 	public BossAITortoiseStun(EntityCQRGiantTortoise entity) {
 		super(entity);
 	}
-	
+
 	private EntityCQRGiantTortoise getBoss() {
 		return (EntityCQRGiantTortoise) this.entity;
 	}
@@ -28,12 +28,12 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 
 	@Override
 	public boolean shouldExecute() {
-		if(getBoss() != null && !getBoss().isDead && getBoss().isStunned()) {
+		if (getBoss() != null && !getBoss().isDead && getBoss().isStunned()) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
@@ -45,20 +45,20 @@ public class BossAITortoiseStun extends AnimationAI<EntityCQRGiantTortoise> {
 		getBoss().currentAnim = this;
 		getBoss().setAnimationTick(0);
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
 		getBoss().setStunned(true);
 		getBoss().setCanBeStunned(false);
-		
-		if(getBoss().getAnimationTick() >= 10 && getBoss().getAnimationTick() <= getAnimation().getDuration() -10) {
+
+		if (getBoss().getAnimationTick() >= 10 && getBoss().getAnimationTick() <= getAnimation().getDuration() - 10) {
 			getBoss().setInShell(false);
 		} else {
 			getBoss().setInShell(true);
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		super.resetTask();

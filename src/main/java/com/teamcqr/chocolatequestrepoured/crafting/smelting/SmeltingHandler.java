@@ -13,9 +13,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 /**
- * Copyright (c) 30.06.2019
- * Developed by MrMarnic
- * GitHub: https://github.com/MrMarnic
+ * Copyright (c) 30.06.2019 Developed by MrMarnic GitHub: https://github.com/MrMarnic
  */
 public class SmeltingHandler {
 	public static void init() {

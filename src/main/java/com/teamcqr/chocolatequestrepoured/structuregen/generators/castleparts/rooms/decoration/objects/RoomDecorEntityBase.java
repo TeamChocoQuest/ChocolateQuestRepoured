@@ -49,7 +49,6 @@ public abstract class RoomDecorEntityBase implements IRoomDecor {
 
 	protected abstract void createEntityDecoration(World world, BlockPos pos, BlockStateGenArray genArray, EnumFacing side);
 
-
 	protected ArrayList<Vec3i> alignFootprint(List<Vec3i> unrotated, EnumFacing side) {
 		ArrayList<Vec3i> result = new ArrayList<>();
 

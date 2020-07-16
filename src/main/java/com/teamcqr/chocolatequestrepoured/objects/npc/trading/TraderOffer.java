@@ -13,14 +13,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 public class TraderOffer {
-	
+
 	protected Set<Trade> trades = new HashSet<>();
 	protected AbstractEntityCQR trader;
 
 	public TraderOffer(AbstractEntityCQR trader) {
-		
+
 	}
-	
+
 	public void readFromNBT(NBTTagCompound nbt) {
 		NBTTagList tradesNBT = nbt.getTagList("trades", Constants.NBT.TAG_COMPOUND);
 		tradesNBT.forEach(new Consumer<NBTBase>() {
@@ -31,18 +31,18 @@ public class TraderOffer {
 				trade.readFromNBT((NBTTagCompound) tradeNBT);
 				trades.add(trade);
 			}
-			
+
 		});
 	}
-	
+
 	public void writeToNBT(NBTTagCompound nbt) {
 		NBTTagList tradesNBT = new NBTTagList();
-		for(Trade trade : this.trades) {
+		for (Trade trade : this.trades) {
 			tradesNBT.appendTag(trade.writeToNBT());
 		}
 		nbt.setTag("trades", tradesNBT);
 	}
-	
+
 	public CQRFaction getTraderFaction() {
 		return trader.getFaction();
 	}

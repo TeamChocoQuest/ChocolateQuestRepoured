@@ -20,10 +20,8 @@ public class CastleRoomWalkableRoof extends CastleRoomBase {
 		}
 	}
 
-
 	@Override
-	protected boolean hasFloor()
-	{
+	protected boolean hasFloor() {
 		return false;
 	}
 }

@@ -7,9 +7,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 /**
- * Copyright (c) 15 Feb 2019
- * Developed by KalgogSmash
- * GitHub: https://github.com/KalgogSmash
+ * Copyright (c) 15 Feb 2019 Developed by KalgogSmash GitHub: https://github.com/KalgogSmash
  */
 public class SpiralStaircaseBuilder {
 	private static final int STAIR_WIDTH = 2;

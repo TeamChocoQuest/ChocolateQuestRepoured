@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 
 public class DungeonVegetatedCave extends DungeonBase {
-	
+
 	private Block vineBlock;
 	private Block vineLatchBlock;
 	private Block airBlock;
@@ -43,28 +43,18 @@ public class DungeonVegetatedCave extends DungeonBase {
 	private boolean placeBuilding;
 	private boolean skipCeilingFiltering = false;
 	private File buildingFolder;
-	
+
 	public DungeonVegetatedCave(String name, Properties prop) {
 		super(name, prop);
 		this.vineBlock = PropertyFileHelper.getBlockProperty(prop, "vineBlock", Blocks.VINE);
-		//DONE: Add a non-cross-shape vine thing
+		// DONE: Add a non-cross-shape vine thing
 		this.crossVine = (this.vineBlock instanceof BlockVine);
 		this.airBlock = PropertyFileHelper.getBlockProperty(prop, "airBlock", Blocks.AIR);
 		this.pumpkinBlock = PropertyFileHelper.getBlockProperty(prop, "lanternBlock", Blocks.LIT_PUMPKIN);
-		this.flowerBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "flowerBlocks", new Block[] {
-			Blocks.RED_FLOWER,
-			Blocks.YELLOW_FLOWER
-		});
-		this.mushrooms = PropertyFileHelper.getBlockArrayProperty(prop, "mushroomBlocks", new Block[] {
-			Blocks.BROWN_MUSHROOM,
-			Blocks.RED_MUSHROOM
-		});
-		this.floorBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "floorBlocks", new Block[] {
-			Blocks.GRASS,
-		});
-		this.grassBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "grassBlocks", new Block[] {
-			Blocks.AIR,
-		});
+		this.flowerBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "flowerBlocks", new Block[] { Blocks.RED_FLOWER, Blocks.YELLOW_FLOWER });
+		this.mushrooms = PropertyFileHelper.getBlockArrayProperty(prop, "mushroomBlocks", new Block[] { Blocks.BROWN_MUSHROOM, Blocks.RED_MUSHROOM });
+		this.floorBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "floorBlocks", new Block[] { Blocks.GRASS, });
+		this.grassBlocks = PropertyFileHelper.getBlockArrayProperty(prop, "grassBlocks", new Block[] { Blocks.AIR, });
 		this.vineLengthModifier = Math.max(1, PropertyFileHelper.getDoubleProperty(prop, "vineLengthModifier", 2));
 		this.vineChance = PropertyFileHelper.getIntProperty(prop, "vineChance", 20);
 		this.placeVines = PropertyFileHelper.getBooleanProperty(prop, "placeVines", true);
@@ -78,11 +68,7 @@ public class DungeonVegetatedCave extends DungeonBase {
 		this.caveSegmentCount = PropertyFileHelper.getIntProperty(prop, "caveSegmentCount", 8);
 		this.vineLatchBlock = PropertyFileHelper.getBlockProperty(prop, "vineLatchBlock", Blocks.COBBLESTONE);
 		this.tunnelStartSize = PropertyFileHelper.getIntProperty(prop, "tunnelStartSize", 10);
-		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] {
-				LootTableList.CHESTS_ABANDONED_MINESHAFT,
-				LootTableList.CHESTS_NETHER_BRIDGE,
-				ModLoottables.CHESTS_FOOD
-		});
+		this.chestIDs = PropertyFileHelper.getResourceLocationArrayProperty(prop, "chestIDs", new ResourceLocation[] { LootTableList.CHESTS_ABANDONED_MINESHAFT, LootTableList.CHESTS_NETHER_BRIDGE, ModLoottables.CHESTS_FOOD });
 		this.skipCeilingFiltering = PropertyFileHelper.getBooleanProperty(prop, "skipCeilingFiltering", false);
 	}
 
@@ -90,52 +76,52 @@ public class DungeonVegetatedCave extends DungeonBase {
 	public AbstractDungeonGenerator<DungeonVegetatedCave> createDungeonGenerator(World world, int x, int y, int z) {
 		return new GeneratorVegetatedCave(world, new BlockPos(x, y, z), this);
 	}
-	
+
 	@Override
 	public void generate(World world, int x, int z) {
 		this.generate(world, x, this.posY, z);
 	}
-	
+
 	public File getRandomCentralBuilding() {
 		return getStructureFileFromDirectory(buildingFolder);
 	}
-	
+
 	public Block getVineBlock() {
 		return vineBlock;
 	}
-	
+
 	public Block getFlowerBlock(Random rdm) {
 		return flowerBlocks[rdm.nextInt(flowerBlocks.length)];
 	}
-	
+
 	public Block getMushroomBlock(Random rdm) {
 		return mushrooms[rdm.nextInt(mushrooms.length)];
 	}
-	
+
 	public Block getFloorBlock(Random rdm) {
 		return floorBlocks[rdm.nextInt(floorBlocks.length)];
 	}
-	
+
 	public Block getGrassBlock(Random rdm) {
 		return grassBlocks[rdm.nextInt(grassBlocks.length)];
 	}
-	
+
 	public boolean placeVegetation() {
 		return placeVegetation;
 	}
-	
+
 	public boolean placeBuilding() {
 		return placeBuilding;
 	}
-	
+
 	public boolean isVineShapeCross() {
 		return this.crossVine;
 	}
-	
+
 	public boolean placeVines() {
 		return placeVines;
 	}
-	
+
 	public boolean skipCeilingFiltering() {
 		return this.skipCeilingFiltering;
 	}
@@ -147,31 +133,31 @@ public class DungeonVegetatedCave extends DungeonBase {
 	public Block getPumpkinBlock() {
 		return pumpkinBlock;
 	}
-	
+
 	public Block getVineLatchBlock() {
 		return vineLatchBlock;
 	}
-	
+
 	public int getCentralCaveSize() {
 		return this.centralCaveSize;
 	}
-	
+
 	public int getTunnelCount(Random random) {
 		return DungeonGenUtils.getIntBetweenBorders(tunnelCountMin, tunnelCountMax, random);
 	}
-	
+
 	public int getCaveSegmentCount() {
 		return this.caveSegmentCount;
 	}
-	
+
 	public ResourceLocation[] getChestIDs() {
 		return this.chestIDs;
 	}
-	
+
 	public int getTunnelStartSize() {
 		return this.tunnelStartSize;
 	}
-	
+
 	public double getVineLengthModifier() {
 		return this.vineLengthModifier;
 	}

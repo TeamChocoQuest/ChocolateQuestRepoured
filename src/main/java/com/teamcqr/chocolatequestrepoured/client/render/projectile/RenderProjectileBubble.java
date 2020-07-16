@@ -14,11 +14,11 @@ import net.minecraft.util.ResourceLocation;
 public class RenderProjectileBubble extends Render<ProjectileBubble> {
 
 	public static final ResourceLocation TEXTURE = new ResourceLocation(Reference.MODID, "textures/entity/bubble.png");
-	
+
 	public RenderProjectileBubble(RenderManager renderManager) {
 		super(renderManager);
 	}
-	
+
 	@Override
 	public void doRender(ProjectileBubble entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();

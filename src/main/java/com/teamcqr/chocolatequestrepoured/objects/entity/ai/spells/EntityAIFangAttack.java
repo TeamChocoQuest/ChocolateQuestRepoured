@@ -18,7 +18,7 @@ import net.minecraft.util.math.Vec3d;
  * This code is adapted minecraft vanilla code, so it is made by Mojang
  */
 public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR> implements IEntityAISpellAnimatedVanilla {
-	
+
 	private int minRows = 1;
 	private int maxRows = 1;
 
@@ -26,7 +26,7 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 		super(entity, cooldown, chargingTicks, 1);
 		this.setup(true, true, true, false);
 	}
-	
+
 	public EntityAIFangAttack(AbstractEntityCQR entity, int cooldown, int chargingTicks, int minRows, int maxRows) {
 		this(entity, cooldown, chargingTicks);
 		this.minRows = minRows;
@@ -58,14 +58,14 @@ public class EntityAIFangAttack extends AbstractEntityAISpell<AbstractEntityCQR>
 			if (angle != 0) {
 				v = VectorUtil.rotateVectorAroundY(v, -60);
 			}
-			for(int rowCount = 0; rowCount < rows; rowCount++) {
+			for (int rowCount = 0; rowCount < rows; rowCount++) {
 				for (int fangcount = 0; fangcount < 24; ++fangcount) {
 					double d2 = 1.25D * (double) (fangcount + 1);
 					v = v.normalize();
 					v = v.scale(d2);
 					this.spawnFangs(this.entity.posX + v.x, this.entity.posZ + v.z, d0, d1, entityAngle, fangcount);
 				}
-				if(angle != 0) {
+				if (angle != 0) {
 					v = v.normalize();
 					v = VectorUtil.rotateVectorAroundY(v, angle);
 				}

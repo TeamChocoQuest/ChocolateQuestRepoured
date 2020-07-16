@@ -18,7 +18,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.util.ResourceLocation;
 
 public class TextureSet {
-	
+
 	private static final Random random = new Random();
 	private String name;
 	private Map<ResourceLocation, Set<ResourceLocation>> entityTextureMap = new HashMap<>();
@@ -27,76 +27,76 @@ public class TextureSet {
 	public TextureSet(Properties config, String name) {
 		this.name = name;
 		try {
-			for(String entry : config.stringPropertyNames()) {
+			for (String entry : config.stringPropertyNames()) {
 				if (entry.startsWith("#")) {
 					continue;
 				}
 				String rlkey = entry.replace('.', ':');
 				ResourceLocation resLoc = new ResourceLocation(rlkey);
 				String texturesString = config.getProperty(entry, "");
-				if(texturesString.isEmpty()) {
+				if (texturesString.isEmpty()) {
 					continue;
 				}
 				texturesString.replaceAll(" ", "");
-				//This strings represent the FILE PATHS, not the actual resource locations
-				for(String texture : texturesString.split(",")) {
+				// This strings represent the FILE PATHS, not the actual resource locations
+				for (String texture : texturesString.split(",")) {
 					File tf = new File(CQRMain.CQ_CUSTOM_TEXTURES_FOLDER_TEXTURES.getAbsolutePath() + texture + ".png");
-					if(tf != null && tf.exists()) {
+					if (tf != null && tf.exists()) {
 						textures.add(tf);
 						ResourceLocation rs = new ResourceLocation(Reference.MODID + "_ctts_" + name, texture);
-						//if(TextureSetManager.loadTexture(tf, rs)) {
-							entityTextureMap.getOrDefault(resLoc, new HashSet<ResourceLocation>()).add(rs);
-						//}
+						// if(TextureSetManager.loadTexture(tf, rs)) {
+						entityTextureMap.getOrDefault(resLoc, new HashSet<ResourceLocation>()).add(rs);
+						// }
 					}
 				}
 			}
-			if(!entityTextureMap.isEmpty()) {
+			if (!entityTextureMap.isEmpty()) {
 				TextureSetManager.registerTextureSet(this);
 			}
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			entityTextureMap.clear();
 		}
 	}
-	
+
 	@Nullable
 	public ResourceLocation getRandomTextureFor(Entity ent) {
 		ResourceLocation ers = EntityList.getKey(ent);
-		if(entityTextureMap.containsKey(ers)) {
+		if (entityTextureMap.containsKey(ers)) {
 			Object[] textures = entityTextureMap.get(ers).toArray();
 			int indx = random.nextInt(textures.length);
 			return (ResourceLocation) textures[indx];
 		}
 		return null;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public Set<ResourceLocation> getTextures() {
 		Set<ResourceLocation> ret = new HashSet<>();
-		for(Set<ResourceLocation> st : this.entityTextureMap.values()) {
+		for (Set<ResourceLocation> st : this.entityTextureMap.values()) {
 			try {
 				ret.addAll(st);
-			} catch(Exception ex) {
-				
+			} catch (Exception ex) {
+
 			}
 		}
 		return ret;
 	}
-	
+
 	public void clearTextureCache() {
-		for(Set<ResourceLocation> st : this.entityTextureMap.values()) {
+		for (Set<ResourceLocation> st : this.entityTextureMap.values()) {
 			try {
 				st.clear();
-			} catch(Exception ex) {
-				
+			} catch (Exception ex) {
+
 			}
 		}
 		this.entityTextureMap.clear();
 		TextureSet.textures.clear();
 	}
-	
+
 	public static Set<File> getLoadedTextures() {
 		return new HashSet<File>(TextureSet.textures);
 	}

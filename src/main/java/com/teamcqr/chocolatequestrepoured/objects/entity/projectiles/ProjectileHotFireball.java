@@ -11,7 +11,6 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
 public class ProjectileHotFireball extends EntityThrowable {
-	
 
 	public ProjectileHotFireball(World worldIn) {
 		super(worldIn);
@@ -28,12 +27,12 @@ public class ProjectileHotFireball extends EntityThrowable {
 		super(worldIn, shooter);
 		setSize(0.5F, 0.5F);
 	}
-	
+
 	@Override
 	public boolean hasNoGravity() {
 		return true;
 	}
-	
+
 	@Override
 	public void onUpdate() {
 		if (this.ticksExisted > 400) {
@@ -43,23 +42,23 @@ public class ProjectileHotFireball extends EntityThrowable {
 
 		super.onUpdate();
 	}
-	
+
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			return;
 		}
-		if(result.typeOfHit == Type.ENTITY) {
-			if(result.entityHit == this.thrower) {
+		if (result.typeOfHit == Type.ENTITY) {
+			if (result.entityHit == this.thrower) {
 				return;
 			}
-			
-			if(result.entityHit instanceof MultiPartEntityPart && ((MultiPartEntityPart)result.entityHit).parent == this.thrower) {
+
+			if (result.entityHit instanceof MultiPartEntityPart && ((MultiPartEntityPart) result.entityHit).parent == this.thrower) {
 				return;
 			}
-			
-			if(result.entityHit instanceof EntityLivingBase) {
-				if(((EntityLivingBase)result.entityHit).isActiveItemStackBlocking() && ((EntityLivingBase)result.entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
+
+			if (result.entityHit instanceof EntityLivingBase) {
+				if (((EntityLivingBase) result.entityHit).isActiveItemStackBlocking() && ((EntityLivingBase) result.entityHit).getActiveItemStack().getItem() instanceof ItemShield) {
 					this.motionX = -this.motionX;
 					this.motionY = -this.motionY;
 					this.motionZ = -this.motionZ;
@@ -67,7 +66,7 @@ public class ProjectileHotFireball extends EntityThrowable {
 					return;
 				}
 			}
-		} 
+		}
 		this.world.createExplosion(this.thrower, posX, posY, posZ, 3.0F, CQRConfig.bosses.hotFireballsDestroyTerrain);
 		setDead();
 	}

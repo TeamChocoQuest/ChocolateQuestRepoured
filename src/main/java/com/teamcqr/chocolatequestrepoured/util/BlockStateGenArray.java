@@ -27,11 +27,7 @@ public class BlockStateGenArray {
 	}
 
 	public enum EnumPriority {
-		LOWEST(0),
-		LOW(1),
-		MEDIUM(2),
-		HIGH(3),
-		HIGHEST(4);
+		LOWEST(0), LOW(1), MEDIUM(2), HIGH(3), HIGHEST(4);
 
 		private final int value;
 
@@ -39,7 +35,9 @@ public class BlockStateGenArray {
 			this.value = valueIn;
 		}
 
-		public int getValue() { return value; }
+		public int getValue() {
+			return value;
+		}
 	}
 
 	private class PriorityBlockInfo {

@@ -5,8 +5,7 @@ import com.teamcqr.chocolatequestrepoured.client.models.entities.ModelCQRBiped;
 import net.minecraft.client.model.ModelRenderer;
 
 /**
- * ModelOgre - Sir Squidly
- * Created using Tabula 7.0.1
+ * ModelOgre - Sir Squidly Created using Tabula 7.0.1
  */
 public class ModelCQROgre extends ModelCQRBiped {
 

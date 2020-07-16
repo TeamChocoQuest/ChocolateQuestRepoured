@@ -158,8 +158,7 @@ public class DungeonGenUtils {
 	}
 
 	/*
-	 * Rotate a vec3i to align with the given side.
-	 * Assumes that the vec3i is default +x right, +z down coordinate system
+	 * Rotate a vec3i to align with the given side. Assumes that the vec3i is default +x right, +z down coordinate system
 	 */
 	public static Vec3i rotateVec3i(Vec3i vec, EnumFacing side) {
 		if (side == EnumFacing.SOUTH) {

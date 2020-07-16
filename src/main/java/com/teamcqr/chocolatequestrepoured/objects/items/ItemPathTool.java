@@ -33,8 +33,7 @@ public class ItemPathTool extends Item {
 	@Override
 	public boolean onLeftClickEntity(ItemStack stack, EntityPlayer player, Entity entity) {
 		/*
-		 * shift Left click -> apply path points and overwrite the existing ones
-		 * left click -> get existing path points
+		 * shift Left click -> apply path points and overwrite the existing ones left click -> get existing path points
 		 */
 		if (!player.world.isRemote && entity instanceof AbstractEntityCQR) {
 			if (player.isSneaking()) {
@@ -67,8 +66,7 @@ public class ItemPathTool extends Item {
 	@Override
 	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
 		/*
-		 * Shift right click with no target block -> erase positions
-		 * right click -> add position
+		 * Shift right click with no target block -> erase positions right click -> add position
 		 */
 		if (!world.isRemote) {
 			ItemStack stack = player.getHeldItem(hand);

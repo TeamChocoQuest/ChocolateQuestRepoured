@@ -17,7 +17,7 @@ public abstract class AbstractEntityAISpellAnimatedLLibrary<T extends AbstractEn
 		if (!super.shouldContinueExecuting()) {
 			return false;
 		}
-		return true;//this.entity.getAnimationTick() < this.getAnimation().getDuration();
+		return true;// this.entity.getAnimationTick() < this.getAnimation().getDuration();
 	}
 
 	@Override

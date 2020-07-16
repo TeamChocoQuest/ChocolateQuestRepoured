@@ -68,24 +68,24 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
-			/*if (!this.entity.isInSightRange(possibleTarget)) {
-				return false;
-			}*/
-			//return this.entity.getEntitySenses().canSee(possibleTarget);
+			/*
+			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
+			 */
+			// return this.entity.getEntitySenses().canSee(possibleTarget);
 			return isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
-		/*if (!this.entity.getEntitySenses().canSee(possibleTarget)) {
-			return false;
-		}*/
+		/*
+		 * if (!this.entity.getEntitySenses().canSee(possibleTarget)) { return false; }
+		 */
 		if (this.entity.isInAttackReach(possibleTarget)) {
 			return true;
 		}
-		/*if (this.entity.isEntityInFieldOfView(possibleTarget)) {
-			return this.entity.isInSightRange(possibleTarget);
-		}*/
+		/*
+		 * if (this.entity.isEntityInFieldOfView(possibleTarget)) { return this.entity.isInSightRange(possibleTarget); }
+		 */
 		return !possibleTarget.isSneaking() && this.entity.getDistance(possibleTarget) < 32.0D;
 	}
 
@@ -107,19 +107,18 @@ public class EntityAINetherDragonNearestAttackTarget extends AbstractCQREntityAI
 			if (possibleTarget.getHealth() >= possibleTarget.getMaxHealth()) {
 				return false;
 			}
-			/*if (!this.entity.isInSightRange(possibleTarget)) {
-				return false;
-			}*/
-			//return this.entity.getEntitySenses().canSee(possibleTarget);
+			/*
+			 * if (!this.entity.isInSightRange(possibleTarget)) { return false; }
+			 */
+			// return this.entity.getEntitySenses().canSee(possibleTarget);
 			return isInHomeZone(possibleTarget);
 		}
 		if (faction == null || !this.entity.getFaction().isEnemy(possibleTarget) || this.entity.getLeader() == possibleTarget) {
 			return false;
 		}
-		/*if (!this.entity.isInSightRange(possibleTarget)) {
-			return false;
-		}
-		return this.entity.getEntitySenses().canSee(possibleTarget);*/
+		/*
+		 * if (!this.entity.isInSightRange(possibleTarget)) { return false; } return this.entity.getEntitySenses().canSee(possibleTarget);
+		 */
 		return isInHomeZone(possibleTarget);
 	}
 

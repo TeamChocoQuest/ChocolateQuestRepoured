@@ -5,18 +5,18 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class HookShotPlayerStopPacket implements IMessage {
 
-    public HookShotPlayerStopPacket() {
+	public HookShotPlayerStopPacket() {
 
-    }
+	}
 
-    @Override
-    public void fromBytes(ByteBuf buf) {
+	@Override
+	public void fromBytes(ByteBuf buf) {
 
-    }
+	}
 
-    @Override
-    public void toBytes(ByteBuf buf) {
+	@Override
+	public void toBytes(ByteBuf buf) {
 
-    }
+	}
 
 }

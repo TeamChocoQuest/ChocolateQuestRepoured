@@ -125,7 +125,7 @@ public class ItemDungeonPlacer extends Item {
 						dungeon.generateWithOffsets(worldIn, pos.getX(), pos.getY(), pos.getZ());
 
 						playerIn.getCooldownTracker().setCooldown(stack.getItem(), 30);
-						if(!(playerIn.isCreative() || playerIn.isSpectator())) {
+						if (!(playerIn.isCreative() || playerIn.isSpectator())) {
 							stack.shrink(1);
 						}
 					}

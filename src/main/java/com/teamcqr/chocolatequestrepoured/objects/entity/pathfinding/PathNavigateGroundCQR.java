@@ -67,7 +67,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 	private Path getPathToPosCQR(BlockPos pos) {
 		if (!this.canNavigate()) {
 			return null;
-		//} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
+			// } else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(this.targetPos)) {
 		} else if (this.currentPath != null && !this.currentPath.isFinished() && pos.equals(fieldTargetPos.get(this))) {
 			return this.currentPath;
 		} else {
@@ -77,7 +77,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			BlockPos blockpos = new BlockPos(this.entity);
 			int i = (int) (f + 8.0F);
 			ChunkCache chunkcache = new ChunkCache(this.world, blockpos.add(-i, -i, -i), blockpos.add(i, i, i), 0);
-			//Path path = this.pathFinder.findPath(chunkcache, this.entity, this.targetPos, f);
+			// Path path = this.pathFinder.findPath(chunkcache, this.entity, this.targetPos, f);
 			Path path = fieldPathFinder.get(this).findPath(chunkcache, this.entity, pos, f);
 			this.world.profiler.endSection();
 			return path;
@@ -95,7 +95,7 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 		if (pathentityIn == null) {
 			this.currentPath = null;
 			fieldTargetPos.set(this, null);
-			//this.targetPos = null;
+			// this.targetPos = null;
 			return false;
 		} else {
 			if (pathentityIn.isSamePath(this.currentPath)) {
@@ -103,14 +103,14 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 			}
 
 			this.currentPath = pathentityIn;
-			//this.targetPos = new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z);
+			// this.targetPos = new BlockPos(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z);
 
 			this.removeSunnyPath();
 
 			if (this.currentPath.getCurrentPathLength() <= 0) {
 				this.currentPath = null;
 				fieldTargetPos.set(this, null);
-				//this.targetPos = null;
+				// this.targetPos = null;
 				return false;
 			} else {
 				PathPoint finalPathPoint = pathentityIn.getFinalPathPoint();
@@ -119,8 +119,8 @@ public class PathNavigateGroundCQR extends PathNavigateGround {
 				Vec3d vec3d = this.getEntityPosition();
 				fieldTicksAtLastPos.set(this, this.totalTicks);
 				fieldLastPosCheck.set(this, vec3d);
-				//this.ticksAtLastPos = this.totalTicks;
-				//this.lastPosCheck = vec3d;
+				// this.ticksAtLastPos = this.totalTicks;
+				// this.lastPosCheck = vec3d;
 				return true;
 			}
 		}

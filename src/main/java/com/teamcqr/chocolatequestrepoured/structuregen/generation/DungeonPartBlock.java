@@ -45,11 +45,11 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		}
 		this.settings = settings;
 		this.dungeonMobType = dungeonMobType;
-		/*if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) {
-			this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
-			CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos);
-		}*/
-		if(this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
+		/*
+		 * if (this.dungeonMobType == EDefaultInhabitants.DEFAULT) { this.dungeonMobType = EDefaultInhabitants.getMobTypeDependingOnDistance(world, partPos.getX(), partPos.getZ());
+		 * CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos); }
+		 */
+		if (this.dungeonMobType.equalsIgnoreCase(DungeonInhabitantManager.DEFAULT_INHABITANT_IDENT)) {
 			this.dungeonMobType = DungeonInhabitantManager.getInhabitantDependingOnDistance(world, partPos.getX(), partPos.getZ()).getName();
 			CQRMain.logger.warn("Created dungeon part block with mob type default at {}", partPos);
 		}
@@ -61,7 +61,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 
 		compound.setInteger("mirror", this.settings.getMirror().ordinal());
 		compound.setInteger("rotation", this.settings.getRotation().ordinal());
-		//compound.setInteger("mob", this.dungeonMobType.ordinal());
+		// compound.setInteger("mob", this.dungeonMobType.ordinal());
 		compound.setString("mob", this.dungeonMobType);
 
 		BlockPos offset = this.getMinPos(this.blockInfoList);
@@ -105,7 +105,7 @@ public class DungeonPartBlock extends AbstractDungeonPart {
 		this.settings = new PlacementSettings();
 		this.settings.setMirror(Mirror.values()[compound.getInteger("mirror")]);
 		this.settings.setRotation(Rotation.values()[compound.getInteger("rotation")]);
-		//this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
+		// this.dungeonMobType = EDefaultInhabitants.values()[compound.getInteger("mob")];
 		this.dungeonMobType = compound.getString("mob");
 
 		BlockPos offset = DungeonGenUtils.readPosFromList(compound.getTagList("offset", Constants.NBT.TAG_INT));

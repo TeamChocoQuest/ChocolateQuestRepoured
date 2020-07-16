@@ -10,8 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumParticleTypes;
 
 /**
- * Skullo - ArloTheEpic
- * Created using Tabula 7.0.1
+ * Skullo - ArloTheEpic Created using Tabula 7.0.1
  */
 public class ModelFlyingSkull extends ModelBase {
 

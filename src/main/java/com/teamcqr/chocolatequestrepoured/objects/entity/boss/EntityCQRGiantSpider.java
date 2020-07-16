@@ -41,30 +41,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISummoner {
-	
+
 	private static final DataParameter<Byte> CLIMBING = EntityDataManager.<Byte>createKey(EntityCQRGiantSpider.class, DataSerializers.BYTE);
-	
+
 	protected List<Entity> summonedMinions = new ArrayList<>();
 
 	public EntityCQRGiantSpider(World worldIn) {
 		super(worldIn);
 	}
-	
+
 	@Override
 	public float getDefaultHeight() {
 		return 1F;
 	}
-	
+
 	@Override
 	public float getDefaultWidth() {
 		return 2.3F;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return false;
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.spellHandler = this.createSpellHandler();
@@ -84,23 +84,20 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 		this.targetTasks.addTask(0, new EntityAICQRNearestAttackTarget(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this));
 	}
-	
-	protected void entityInit()
-    {
-        super.entityInit();
-        this.dataManager.register(CLIMBING, Byte.valueOf((byte)0));
-    }
-	
-	public void onUpdate()
-    {
-        super.onUpdate();
 
-        if (!this.world.isRemote)
-        {
-            this.setBesideClimbableBlock(this.collidedHorizontally);
-        }
-    }
-	
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(CLIMBING, Byte.valueOf((byte) 0));
+	}
+
+	public void onUpdate() {
+		super.onUpdate();
+
+		if (!this.world.isRemote) {
+			this.setBesideClimbableBlock(this.collidedHorizontally);
+		}
+	}
+
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
@@ -114,60 +111,52 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 			this.summonedMinions.remove(e);
 		}
 	}
-	
+
 	/**
-     * Returns new PathNavigateGround instance
-     */
-    protected PathNavigate createNavigator(World worldIn)
-    {
-        return new PathNavigateClimber(this, worldIn);
-    }
-	
+	 * Returns new PathNavigateGround instance
+	 */
+	protected PathNavigate createNavigator(World worldIn) {
+		return new PathNavigateClimber(this, worldIn);
+	}
+
 	/**
-     * Returns true if the WatchableObject (Byte) is 0x01 otherwise returns false. The WatchableObject is updated using
-     * setBesideClimableBlock.
-     */
-    public boolean isBesideClimbableBlock()
-    {
-        return (((Byte)this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
-    }
+	 * Returns true if the WatchableObject (Byte) is 0x01 otherwise returns false. The WatchableObject is updated using setBesideClimableBlock.
+	 */
+	public boolean isBesideClimbableBlock() {
+		return (((Byte) this.dataManager.get(CLIMBING)).byteValue() & 1) != 0;
+	}
 
-    /**
-     * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is
-     * false.
-     */
-    public void setBesideClimbableBlock(boolean climbing)
-    {
-        byte b0 = ((Byte)this.dataManager.get(CLIMBING)).byteValue();
+	/**
+	 * Updates the WatchableObject (Byte) created in entityInit(), setting it to 0x01 if par1 is true or 0x00 if it is false.
+	 */
+	public void setBesideClimbableBlock(boolean climbing) {
+		byte b0 = ((Byte) this.dataManager.get(CLIMBING)).byteValue();
 
-        if (climbing)
-        {
-            b0 = (byte)(b0 | 1);
-        }
-        else
-        {
-            b0 = (byte)(b0 & -2);
-        }
+		if (climbing) {
+			b0 = (byte) (b0 | 1);
+		} else {
+			b0 = (byte) (b0 & -2);
+		}
 
-        this.dataManager.set(CLIMBING, Byte.valueOf(b0));
-    }
-	
+		this.dataManager.set(CLIMBING, Byte.valueOf(b0));
+	}
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(4);
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
 		boolean result = super.attackEntityAsMob(entityIn);
 		if (result) {
 			int effectlvl = 1;
-			if(getRNG().nextDouble() > 0.7) {
+			if (getRNG().nextDouble() > 0.7) {
 				effectlvl = 2;
 			}
-			((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
+			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.POISON, 20 + entityIn.world.getDifficulty().ordinal() * 40, effectlvl));
 		}
 		return result;
 	}
@@ -186,48 +175,41 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	public EDefaultFaction getDefaultFaction() {
 		return EDefaultFaction.BEASTS;
 	}
-	
+
 	@Override
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ARTHROPOD;
 	}
-	
-	protected SoundEvent getAmbientSound()
-    {
-        return SoundEvents.ENTITY_SPIDER_AMBIENT;
-    }
 
-    protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn)
-    {
-        return SoundEvents.ENTITY_SPIDER_HURT;
-    }
+	protected SoundEvent getAmbientSound() {
+		return SoundEvents.ENTITY_SPIDER_AMBIENT;
+	}
 
-    protected SoundEvent getDeathSound()
-    {
-        return SoundEvents.ENTITY_SPIDER_DEATH;
-    }
+	protected SoundEvent getDefaultHurtSound(DamageSource damageSourceIn) {
+		return SoundEvents.ENTITY_SPIDER_HURT;
+	}
 
-    protected void playStepSound(BlockPos pos, Block blockIn)
-    {
-        this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
-    }
-    
-    public void setInWeb()
-    {
-    }
-    
-    public boolean isPotionApplicable(PotionEffect potioneffectIn)
-    {
-        if(potioneffectIn.getPotion() == MobEffects.POISON)
-        {
-        	net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
-        	net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
-        	return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
-        }	
-        return super.isPotionApplicable(potioneffectIn);
-    }
-    
-    @Override
+	protected SoundEvent getDeathSound() {
+		return SoundEvents.ENTITY_SPIDER_DEATH;
+	}
+
+	protected void playStepSound(BlockPos pos, Block blockIn) {
+		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+	}
+
+	public void setInWeb() {
+	}
+
+	public boolean isPotionApplicable(PotionEffect potioneffectIn) {
+		if (potioneffectIn.getPotion() == MobEffects.POISON) {
+			net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent event = new net.minecraftforge.event.entity.living.PotionEvent.PotionApplicableEvent(this, potioneffectIn);
+			net.minecraftforge.common.MinecraftForge.EVENT_BUS.post(event);
+			return event.getResult() == net.minecraftforge.fml.common.eventhandler.Event.Result.ALLOW;
+		}
+		return super.isPotionApplicable(potioneffectIn);
+	}
+
+	@Override
 	public CQRFaction getSummonerFaction() {
 		return this.getFaction();
 	}
@@ -246,7 +228,7 @@ public class EntityCQRGiantSpider extends AbstractEntityCQRBoss implements ISumm
 	public void addSummonedEntityToList(Entity summoned) {
 		this.summonedMinions.add(summoned);
 	}
-	
+
 	@Override
 	public boolean canBePushed() {
 		return false;

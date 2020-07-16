@@ -40,8 +40,7 @@ public abstract class SpawnerFactory {
 	 */
 
 	/**
-	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined
-	 * dynamically based upon the requested capabilities.
+	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically based upon the requested capabilities.
 	 * 
 	 * @param entities                 Entities for spawner to spawn
 	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
@@ -53,7 +52,7 @@ public abstract class SpawnerFactory {
 		NBTTagCompound[] entCompounds = new NBTTagCompound[entities.length];
 		for (int i = 0; i < entities.length; i++) {
 			Entity ent = entities[i];
-			if(ent == null) {
+			if (ent == null) {
 				continue;
 			}
 			entCompounds[i] = createSpawnerNBTFromEntity(ent);
@@ -62,8 +61,7 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined
-	 * dynamically based upon the requested capabilities.
+	 * Places a spawner in the provided world at the provided position. Spawner type (CQR/vanilla) is determined dynamically based upon the requested capabilities.
 	 * 
 	 * @param entities                 Entities as NBT Tag (From Entity.writeToNBTOptional(COMPOUND) for spawner to spawn
 	 * @param multiUseSpawner          Determines spawner type. Vanilla = true; CQR = false.
@@ -132,8 +130,7 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for
-	 * the entity that it should spawn.
+	 * Places a vanilla spawner in the provided world at the provided position using the provided ResourceLocation for the entity that it should spawn.
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, ResourceLocation entityResLoc) {
 		world.setBlockState(pos, Blocks.MOB_SPAWNER.getDefaultState());
@@ -144,7 +141,7 @@ public abstract class SpawnerFactory {
 		spawner.updateContainingBlockInfo();
 		spawner.update();
 	}
-	
+
 	public static TileEntityMobSpawner getSpawnerTile(World world, ResourceLocation entity, BlockPos pos) {
 		TileEntityMobSpawner spawner = (TileEntityMobSpawner) world.getTileEntity(pos);
 		spawner.getSpawnerBaseLogic().setEntityId(entity);
@@ -152,8 +149,7 @@ public abstract class SpawnerFactory {
 	}
 
 	/**
-	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a
-	 * resource location in its parameter
+	 * Overloaded variant of normal createSimpleMultiUseSpawner method that accepts an Entity object rather than a resource location in its parameter
 	 */
 	public static void createSimpleMultiUseSpawner(World world, BlockPos pos, Entity entity) {
 		createSimpleMultiUseSpawner(world, pos, EntityList.getKey(entity));
@@ -221,8 +217,7 @@ public abstract class SpawnerFactory {
 				int entriesRead = 0;
 				while (entriesRead < 9 && iterator.hasNext()) {
 					/*
-					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world);
-					 * entities[entriesRead] = entity;
+					 * Entity entity = createEntityFromNBTWithoutSpawningIt(iterator.next().getNbt(), world); entities[entriesRead] = entity;
 					 */
 					entityCompound[entriesRead] = iterator.next().getNbt();
 					entriesRead++;
@@ -251,8 +246,8 @@ public abstract class SpawnerFactory {
 
 	public static NBTTagCompound createSpawnerNBTFromEntity(Entity entity) {
 		NBTTagCompound entityCompound = new NBTTagCompound();
-		if(entity instanceof AbstractEntityCQR) {
-			((AbstractEntityCQR)entity).onPutInSpawner();
+		if (entity instanceof AbstractEntityCQR) {
+			((AbstractEntityCQR) entity).onPutInSpawner();
 		}
 		entity.writeToNBTOptional(entityCompound);
 		entityCompound.removeTag("UUIDLeast");

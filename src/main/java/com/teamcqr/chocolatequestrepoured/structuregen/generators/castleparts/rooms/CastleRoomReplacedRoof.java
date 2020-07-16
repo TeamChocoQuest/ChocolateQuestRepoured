@@ -17,10 +17,8 @@ public class CastleRoomReplacedRoof extends CastleRoomBase {
 		;
 	}
 
-
 	@Override
-	protected boolean hasFloor()
-	{
+	protected boolean hasFloor() {
 		return false;
 	}
 }

@@ -25,14 +25,14 @@ public class CastleAddonRoof implements ICastleAddon {
 	public void generate(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		RandomCastleConfigOptions.RoofType type = dungeon.getRandomRoofType();
 		switch (type) {
-			case TWO_SIDED: {
-				this.generateTwoSided(genArray, dungeon);
-				break;
-			}
-			case FOUR_SIDED:
-			default: {
-				this.generateFourSided(genArray, dungeon);
-			}
+		case TWO_SIDED: {
+			this.generateTwoSided(genArray, dungeon);
+			break;
+		}
+		case FOUR_SIDED:
+		default: {
+			this.generateFourSided(genArray, dungeon);
+		}
 		}
 	}
 
@@ -51,19 +51,16 @@ public class CastleAddonRoof implements ICastleAddon {
 
 		if (sizeX > sizeZ) {
 			xIsLongSide = true;
-		}
-		else if (sizeX < sizeZ) {
+		} else if (sizeX < sizeZ) {
 			xIsLongSide = false;
-		}
-		else {
+		} else {
 			xIsLongSide = dungeon.getRandom().nextBoolean();
 		}
 
 		do {
 			// Add the foundation under the roof
 			IBlockState state = dungeon.getMainBlockState();
-			if (underLenX > 0 && underLenZ > 0)
-			{
+			if (underLenX > 0 && underLenZ > 0) {
 				for (int i = 0; i < underLenX; i++) {
 					genArray.addBlockState(new BlockPos(x + i, y, z), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 					genArray.addBlockState(new BlockPos(x + i, y, z + underLenZ - 1), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
@@ -90,8 +87,7 @@ public class CastleAddonRoof implements ICastleAddon {
 
 				z++;
 				underLenZ -= 2;
-			}
-			else {
+			} else {
 				roofX = x - 1;
 				roofZ = z - 1;
 				roofLenX = underLenX + 2;
@@ -127,15 +123,12 @@ public class CastleAddonRoof implements ICastleAddon {
 		do {
 			// Add the foundation under the roof
 			IBlockState state = dungeon.getMainBlockState();
-			if (underLenX > 0 && underLenZ > 0)
-			{
-				for (int i = 0; i < underLenX; i++)
-				{
+			if (underLenX > 0 && underLenZ > 0) {
+				for (int i = 0; i < underLenX; i++) {
 					genArray.addBlockState(new BlockPos(x + i, y, z), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 					genArray.addBlockState(new BlockPos(x + i, y, z + underLenZ - 1), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}
-				for (int j = 0; j < underLenZ; j++)
-				{
+				for (int j = 0; j < underLenZ; j++) {
 					genArray.addBlockState(new BlockPos(x, y, z + j), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 					genArray.addBlockState(new BlockPos(x + underLenX - 1, y, z + j), state, BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
 				}

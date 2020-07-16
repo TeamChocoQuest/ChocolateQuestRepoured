@@ -37,8 +37,7 @@ public class CQRFaction {
 	private int repuChangeOnAllyKill = 2;
 	private int repuChangeOnEnemyKill = 1;
 
-	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill,
-			Optional<Integer> repuChangeOnEnemyKill) {
+	public CQRFaction(@Nonnull String name, @Nonnull EReputationState defaultReputationState, boolean canRepuChange, Optional<Integer> repuChangeOnMemberKill, Optional<Integer> repuChangeOnAllyKill, Optional<Integer> repuChangeOnEnemyKill) {
 		this(name, defaultReputationState, true, canRepuChange, repuChangeOnMemberKill, repuChangeOnAllyKill, repuChangeOnEnemyKill);
 	}
 
@@ -195,7 +194,7 @@ public class CQRFaction {
 					prop.setProperty(ConfigKeys.FACTION_REPU_CHANGE_KILL_ENEMY, Integer.toString(CQRFaction.this.getRepuEnemyKill()));
 					String allies = "";
 					for (CQRFaction af : CQRFaction.this.allies) {
-						if(!allies.isEmpty()) {
+						if (!allies.isEmpty()) {
 							allies += ", ";
 						}
 						allies += af.getName();
@@ -203,18 +202,18 @@ public class CQRFaction {
 					prop.setProperty(ConfigKeys.FACTION_ALLIES_KEY, allies);
 					String enemies = "";
 					for (CQRFaction ef : CQRFaction.this.enemies) {
-						if(!enemies.isEmpty()) {
+						if (!enemies.isEmpty()) {
 							enemies += ", ";
 						}
 						enemies += ef.getName();
 					}
 					prop.setProperty(ConfigKeys.FACTION_ENEMIES_KEY, enemies);
-					
-					//Save file
+
+					// Save file
 					try {
 						OutputStream out = new FileOutputStream(file);
 						prop.store(out, "saved faction data");
-					} catch(IOException ex) {
+					} catch (IOException ex) {
 						CQRMain.logger.error("Failed to write to file" + file.getName(), ex);
 						return;
 					}
@@ -227,8 +226,10 @@ public class CQRFaction {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 		CQRFaction that = (CQRFaction) o;
 		return name.equals(that.name);
 	}

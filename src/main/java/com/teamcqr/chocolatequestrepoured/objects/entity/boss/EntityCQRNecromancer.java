@@ -54,7 +54,7 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 				return false;
 			}
 		});
-		//this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 30, 10));
+		// this.spellHandler.addSpell(4, new EntityAIVampiricSpell(this, 30, 10));
 	}
 
 	@Override
@@ -169,5 +169,5 @@ public class EntityCQRNecromancer extends AbstractEntityCQRMageBase implements I
 	public EnumCreatureAttribute getCreatureAttribute() {
 		return EnumCreatureAttribute.ILLAGER;
 	}
-	
+
 }

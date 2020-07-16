@@ -114,11 +114,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	// Constructs an Island in this shape:
 	/*
-	 * Dec Rad
-	 * # # # # # # # # # # # # # # # # # # # # 0 10
-	 * # # # # # # # # # # # # # # # # # # 1 9
-	 * # # # # # # # # # # # # # # 2 7
-	 * # # # # # # # # 3 4
+	 * Dec Rad # # # # # # # # # # # # # # # # # # # # 0 10 # # # # # # # # # # # # # # # # # # 1 9 # # # # # # # # # # # # # # 2 7 # # # # # # # # 3 4
 	 * 
 	 */
 	private void buildBuilding(BlockPos centeredPos, CQStructure structure, String mobType) {
@@ -169,16 +165,7 @@ public class GeneratorHangingCity extends AbstractDungeonGenerator<DungeonHangin
 
 	private void buildChain(BlockPos pos, int iOffset, Map<BlockPos, IBlockState> stateMap) {
 		/*
-		 * Chain from side:
-		 * #
-		 * # # #
-		 * # # #
-		 * # #
-		 * # #
-		 * # #
-		 * # # #
-		 * # # #
-		 * #
+		 * Chain from side: # # # # # # # # # # # # # # # # # # # #
 		 */
 		int deltaYPerChainSegment = 5;
 

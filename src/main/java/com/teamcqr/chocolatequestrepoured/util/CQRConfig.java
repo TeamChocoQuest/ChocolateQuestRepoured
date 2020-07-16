@@ -79,43 +79,42 @@ public class CQRConfig {
 		@Config.RangeDouble(min = 1)
 		public double flyingCowardPenaltyDamage = 10.0;
 	}
-	
+
 	public static class Bosses {
 		public boolean antiCowardMode = true;
 		public int antiCowardRadius = 16;
-		
+
 		public boolean hotFireballsDestroyTerrain = true;
-		
+
 		public boolean harderWalkerKing = true;
-		public boolean armorForTheWalkerKing = false; 
-		
+		public boolean armorForTheWalkerKing = false;
+
 		public boolean netherDragonDestroysBlocks = true;
 		public int netherDragonStageTwoFireballInterval = 40;
 		public int netherDragonStageTwoSegmentHP = 50;
 		public String[] netherDragonBreakableBlocks = {
-				"minecraft:stone", 
-				"minecraft:netherrack", 
-				"minecraft:grass", 
-				"minecraft:dirt", 
-				"minecraft:quartz_ore", 
-				"minecraft:gravel", 
-				"minecraft:soul_sand", 
-				"minecraft:sand", 
-				"minecraft:leaves", 
-				"minecraft:tall_grass", 
-				"minecraft:double_plant", 
-				"minecraft:coal_ore", 
-				"minecraft:iron_ore", 
+				"minecraft:stone",
+				"minecraft:netherrack",
+				"minecraft:grass",
+				"minecraft:dirt",
+				"minecraft:quartz_ore",
+				"minecraft:gravel",
+				"minecraft:soul_sand",
+				"minecraft:sand",
+				"minecraft:leaves",
+				"minecraft:tall_grass",
+				"minecraft:double_plant",
+				"minecraft:coal_ore",
+				"minecraft:iron_ore",
 				"minecraft:gold_ore",
 				"minecraft:water",
 				"minecraft:lava",
 				"minecraft:magma",
 				"minecraft:glowstone",
-				"cqrepoured:phylactery"
-			};
-		
+				"cqrepoured:phylactery" };
+
 		public double pirateCaptainFleeCheckRadius = 32;
-		
+
 		public boolean boarmageExplosionRayDestroysTerrain = false;
 		public boolean boarmageExplosionAreaDestroysTerrain = false;
 	}
@@ -131,20 +130,10 @@ public class CQRConfig {
 		public boolean protectionSystemEnabled = true;
 
 		@Config.Comment("Blocks which will be breakable despite being protected by the protection system.")
-		public String[] protectionSystemBreakableBlockWhitelist = {
-				"minecraft:mob_spawner",
-				"minecraft:torch",
-				"minecraft:fire",
-				"minecraft:cobweb",
-				"cqrepoured:unlit_torch",
-				"cqrepoured:phylactery",
-				"cqrepoured:force_field_nexus" };
-	
+		public String[] protectionSystemBreakableBlockWhitelist = { "minecraft:mob_spawner", "minecraft:torch", "minecraft:fire", "minecraft:cobweb", "cqrepoured:unlit_torch", "cqrepoured:phylactery", "cqrepoured:force_field_nexus" };
+
 		@Config.Comment("Blocks which will be placeable despite being protected by the protection system.")
-		public String[] protectionSystemPlaceableBlockWhitelist = {
-				"minecraft:torch",
-				"minecraft:fire",
-				"cqrepoured:unlit_torch" };
+		public String[] protectionSystemPlaceableBlockWhitelist = { "minecraft:torch", "minecraft:fire", "cqrepoured:unlit_torch" };
 	}
 
 	public static class General {
@@ -183,7 +172,7 @@ public class CQRConfig {
 	}
 
 	public static class Mobs {
-		
+
 		@Config.Comment("Enables the axe & shield mechanic from vanilla for CQR mobs with a shield")
 		public boolean blockCancelledByAxe = true;
 		public boolean armorShattersOnMobs = true;
@@ -212,13 +201,13 @@ public class CQRConfig {
 		public double entityStrafingSpeed = 0.5D;
 		@Config.RangeDouble(min = 0.0D, max = 1.0D)
 		public double entityStrafingSpeedBoss = 0.5D;
-		@Config.RangeInt(min=2, max=64)
+		@Config.RangeInt(min = 2, max = 64)
 		public int looterAIChestSearchRange = 16;
 		public int looterAIStealableItems = 4;
-		
+
 		public boolean offhandPotionsAreSingleUse = true;
 		public boolean potionsInBagAreSingleUse = true;
-		
+
 	}
 
 	public static class Wall {

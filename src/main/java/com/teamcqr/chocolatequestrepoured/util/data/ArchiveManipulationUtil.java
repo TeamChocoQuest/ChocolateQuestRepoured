@@ -10,11 +10,9 @@ import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
- * Designed to assist with the creation and extraction of zip archives
- * Intended for use with FileIOUtil or equivalent for reading from/writing to disk
+ * Designed to assist with the creation and extraction of zip archives Intended for use with FileIOUtil or equivalent for reading from/writing to disk
  *
- * @author jdawg3636
- *         GitHub: https://github.com/jdawg3636
+ * @author jdawg3636 GitHub: https://github.com/jdawg3636
  *
  * @version 05.09.19
  */
@@ -23,8 +21,7 @@ public class ArchiveManipulationUtil {
 	/* Zipping */
 
 	/**
-	 * Takes in a map of relative file path+names and their corresponding
-	 * data as a byte[] a single zip file containing all files provided (represented as a byte[])
+	 * Takes in a map of relative file path+names and their corresponding data as a byte[] a single zip file containing all files provided (represented as a byte[])
 	 */
 	public static byte[] zip(HashMap<String, byte[]> inputFiles) {
 		// Vars
@@ -56,8 +53,7 @@ public class ArchiveManipulationUtil {
 	}
 
 	/**
-	 * Unzips the provided archive into a HashMap
-	 * Intended for entries in output to be passed to FileIOUtil.saveToFile() in a for loop
+	 * Unzips the provided archive into a HashMap Intended for entries in output to be passed to FileIOUtil.saveToFile() in a for loop
 	 *
 	 * @param namePrefix                used internally for handling directories.
 	 * @param zippedFileAsPrimByteArray

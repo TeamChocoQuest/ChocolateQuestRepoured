@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISummoner {
 
 	protected List<Entity> summonedMinions = new ArrayList<>();
-	
+
 	protected boolean startedExplodeAreaAttack = false;
 
 	public EntityCQRBoarmage(World worldIn) {
@@ -38,15 +38,15 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public boolean isImmuneToExplosions() {
 		return true;
 	}
-	
+
 	public void startExplodeAreaAttack() {
 		this.startedExplodeAreaAttack = true;
 	}
-	
+
 	public boolean isExecutingExplodeAreaAttack() {
 		return this.startedExplodeAreaAttack;
 	}
-	
+
 	public void stopExplodeAreaAttack() {
 		this.startedExplodeAreaAttack = false;
 	}
@@ -63,8 +63,8 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 		for (Entity e : tmp) {
 			this.summonedMinions.remove(e);
 		}
-		
-		if((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
+
+		if ((this.isInLava() || this.isBurning()) && this.ticksExisted % 5 == 0) {
 			this.heal(2);
 		}
 	}
@@ -107,7 +107,6 @@ public class EntityCQRBoarmage extends AbstractEntityCQRMageBase implements ISum
 	public float getBaseHealth() {
 		return EBaseHealths.BOAR_MAGE.getValue();
 	}
-	
 
 	@Override
 	public EDefaultFaction getDefaultFaction() {

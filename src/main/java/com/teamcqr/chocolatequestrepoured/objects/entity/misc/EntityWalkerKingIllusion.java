@@ -100,9 +100,9 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	@Override
 	public void setDead() {
-		if(world.isRemote) {
+		if (world.isRemote) {
 			playDeathEffect();
-		} 
+		}
 		super.setDead();
 	}
 
@@ -121,7 +121,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 
 	@Override
 	public void onEntityUpdate() {
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			if (ttl < 0) {
 				setDead();
 				return;
@@ -173,7 +173,7 @@ public class EntityWalkerKingIllusion extends EntityCQRWalker {
 	public boolean hasCape() {
 		return true;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);

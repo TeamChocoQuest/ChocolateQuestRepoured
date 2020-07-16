@@ -63,24 +63,18 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEntityMultiPart, IRangedAttackMob {
 
-
 	/**
-	 * AI:
-	 * Circle around about 30 blocks above your home location in a radius of ~30 blocks
+	 * AI: Circle around about 30 blocks above your home location in a radius of ~30 blocks
 	 * 
-	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up
-	 * Then begin spiraling up to your "strafing y", there you fly 0.5 - 3 rounds on your circle and attack again
-	 * While you are circling, you may change to a higher, thinner circler, about 10 blocks above the normal.
-	 * You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs
+	 * If you see a player: Charge at it, bite it, fly in a 22.5° angle upwards until you flew 5 blocks up Then begin spiraling up to your "strafing y", there you fly 0.5 - 3 rounds on your circle and attack again While you are circling, you may
+	 * change to a higher, thinner circler, about 10 blocks above the normal. You fly up to it by spiraling up or down, whilst charging at the player you may spit fire or shoot fireballs
 	 */
 
 	public final int INITIAL_SEGMENT_COUNT = 18;
 	public final int SEGMENT_COUNT_ON_DEATH = 4;
 	public int segmentCount = INITIAL_SEGMENT_COUNT;
 	/*
-	 * 0: Normal mode
-	 * 1: Transition to phase 2
-	 * 2: skeletal phase
+	 * 0: Normal mode 1: Transition to phase 2 2: skeletal phase
 	 */
 	private int phase = 0;
 	private int phaseChangeTimer = 0;
@@ -89,8 +83,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private int mouthTimer = 0;
 	boolean deathPhaseEnd = false;
 
-
-	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[0]; 
+	private EntityCQRNetherDragonSegment[] dragonBodyParts = new EntityCQRNetherDragonSegment[0];
 
 	// private boolean mouthOpen = false;
 	private static final DataParameter<Boolean> MOUTH_OPEN = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
@@ -99,17 +92,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	private static final DataParameter<Boolean> SPIT_FIRE = EntityDataManager.<Boolean>createKey(EntityCQRNetherDragon.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> SERVER_PART_LENGTH = EntityDataManager.<Integer>createKey(EntityCQRNetherDragon.class, DataSerializers.VARINT);
 
-	//AI stuff
+	// AI stuff
 	private Vec3d targetLocation = null;
 	private boolean flyingUp = false;
-	
+
 	private static ArrayList<ResourceLocation> breakableBlocks = new ArrayList<>();
 
 	/*
 	 * Notes: This dragon is meant to "swim" through the skies, it moves like a snake, so the model needs animation, also the parts are meant to move like the parts from Twilight Forests Naga
 	 * 
-	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them on fire
-	 * It will also break obsidian blocks, but not command blocks or structure blocks or bedrock
+	 * Also the nether dragon destroys all blocks in its hitbox, if these are not lava, also if the block it moved through are leaves or burnable, it will set them on fire It will also break obsidian blocks, but not command blocks or structure blocks
+	 * or bedrock
 	 */
 
 	public EntityCQRNetherDragon(World worldIn) {
@@ -118,48 +111,48 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.noClip = true;
 
 		this.ignoreFrustumCheck = true;
-		
+
 		// Init the body parts
 		initBody();
-		
+
 		this.moveHelper = new MoveHelperDirectFlight(this);
 		moveParts();
 	}
-	
+
 	public static void reloadBreakableBlocks() {
 		breakableBlocks.clear();
-		for(String s : CQRConfig.bosses.netherDragonBreakableBlocks) {
+		for (String s : CQRConfig.bosses.netherDragonBreakableBlocks) {
 			ResourceLocation rs = new ResourceLocation(s);
 			breakableBlocks.add(rs);
 		}
 	}
-	
+
 	public void setFlyingUp(boolean value) {
 		this.flyingUp = value;
 	}
-	
+
 	public boolean isFlyingUp() {
 		return this.flyingUp;
 	}
-	
+
 	private void initBody() {
-		if(this.segmentCount < 0) {
+		if (this.segmentCount < 0) {
 			this.segmentCount = INITIAL_SEGMENT_COUNT;
 		}
-		
-		if(this.dragonBodyParts.length > 0) {
-			for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+
+		if (this.dragonBodyParts.length > 0) {
+			for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
 				segment.onRemovedFromBody();
 			}
 		}
-		
+
 		this.dragonBodyParts = new EntityCQRNetherDragonSegment[this.segmentCount];
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
 			this.dragonBodyParts[i] = new EntityCQRNetherDragonSegment(this, i + 1, false);
 			world.spawnEntity(this.dragonBodyParts[i]);
 		}
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -169,12 +162,12 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8);
 	}
-	
+
 	@Override
 	public boolean canBePushed() {
 		return false;
 	}
-	
+
 	@Override
 	public float getDefaultWidth() {
 		return 2.0F;
@@ -184,7 +177,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public float getDefaultHeight() {
 		return 2.0F;
 	}
-	
+
 	@Override
 	protected boolean usesEnderDragonDeath() {
 		return false;
@@ -200,53 +193,53 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		this.dataManager.register(SPIT_FIRE, false);
 		this.dataManager.register(SERVER_PART_LENGTH, this.segmentCount);
 	}
-	
+
 	@Override
 	public boolean attackEntityFromPart(MultiPartEntityPart dragonPart, DamageSource source, float damage) {
-		if(this.phase == 0) {
+		if (this.phase == 0) {
 			damage = damage / 4.0F + Math.min(damage, 1.0F);
-			if(damage >= this.getHealth()) {
+			if (damage >= this.getHealth()) {
 				this.phase++;
-				if(!world.isRemote) {
+				if (!world.isRemote) {
 					this.dataManager.set(PHASE, this.phase);
 				}
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-				this.setHealth(this.getMaxHealth() -1);
+				this.setHealth(this.getMaxHealth() - 1);
 				damage = 0;
 				return false;
 			}
 		}
-		if(this.phase == 1) {
+		if (this.phase == 1) {
 			return false;
 		}
-		
-		if(this.phase == 2) {
+
+		if (this.phase == 2) {
 			damageTmpPhaseTwo -= damage;
-			if(damageTmpPhaseTwo <= 0) {
+			if (damageTmpPhaseTwo <= 0) {
 				damageTmpPhaseTwo = CQRConfig.bosses.netherDragonStageTwoSegmentHP;
-				//DONE: Remove last segment
-				damage = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -SEGMENT_COUNT_ON_DEATH);
+				// DONE: Remove last segment
+				damage = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT - SEGMENT_COUNT_ON_DEATH);
 				this.setHealth(getHealth() - damage);
-				if(damage >= this.getHealth()) {
-					super.attackEntityFrom(source, damage +1, true);
+				if (damage >= this.getHealth()) {
+					super.attackEntityFrom(source, damage + 1, true);
 				}
 			}
 			updateSegmentCount();
 			return super.attackEntityFrom(source, 0, true);
 		}
-		if(this.phase == 0) {
+		if (this.phase == 0) {
 			return attackEntityFrom(source, damage, true);
 		}
 
 		return super.attackEntityFrom(source, damage, true);
 	}
-	
+
 	private void removeLastSegment() {
-		int indx = Math.max(0, this.dragonBodyParts.length -1);
+		int indx = Math.max(0, this.dragonBodyParts.length - 1);
 		EntityCQRNetherDragonSegment segment = this.dragonBodyParts[indx];
-		if(indx > 0) {
-			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[this.dragonBodyParts.length -1];
-			for(int i = 0; i < partsTmp.length; i++) {
+		if (indx > 0) {
+			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[this.dragonBodyParts.length - 1];
+			for (int i = 0; i < partsTmp.length; i++) {
 				partsTmp[i] = this.dragonBodyParts[i];
 			}
 			this.dragonBodyParts = partsTmp;
@@ -254,10 +247,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dragonBodyParts = new EntityCQRNetherDragonSegment[0];
 		}
 		segment.die();
-		if(!world.isRemote) {
+		if (!world.isRemote) {
 			segment.onRemovedFromBody();
 		}
-		//world.removeEntityDangerously(segment);
+		// world.removeEntityDangerously(segment);
 	}
 
 	@Override
@@ -269,27 +262,27 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		if (source.isFireDamage() || source.isExplosion()) {
 			return false;
 		}
-		
-		//Phase change
-		if(this.phase == 0 && amount >= this.getHealth()) {
-			if(!world.isRemote) {
+
+		// Phase change
+		if (this.phase == 0 && amount >= this.getHealth()) {
+			if (!world.isRemote) {
 				this.phase++;
 				this.dataManager.set(PHASE, this.phase);
-				this.setHealth(this.getMaxHealth() -1);
+				this.setHealth(this.getMaxHealth() - 1);
 			}
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
-			//DONE: Init phase 2!!
+			// DONE: Init phase 2!!
 			amount = 0;
 			return false;
 		} else if (phase != 0 && amount > 0) {
-			//Play blaze sound
+			// Play blaze sound
 			playSound(SoundEvents.ENTITY_BLAZE_HURT, 2F, 1.5F);
 			return false;
 		}
 
 		return super.attackEntityFrom(source, amount, false);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(5, new BossAIFlyToTarget(this));
@@ -324,17 +317,17 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-		if(this.mouthTimer > 0 || world.isRemote) {
+		if (this.mouthTimer > 0 || world.isRemote) {
 			return;
 		}
 		if (getRNG().nextDouble() < 0.4) {
 			// Shoot fireball
 			this.mouthTimer = 10;
-			
+
 			Vec3d velocity = target.getPositionVector().subtract(this.getPositionVector());
 			velocity = velocity.normalize().scale(1.5);
 			ProjectileHotFireball proj = new ProjectileHotFireball(this.world, this, posX + velocity.x, posY + velocity.y, posZ + velocity.z);
-			//proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
+			// proj.setPosition(this.posX + velocity.x, this.posY + velocity.y, this.posZ + velocity.z);
 			proj.motionX = velocity.x;
 			proj.motionY = velocity.y;
 			proj.motionZ = velocity.z;
@@ -346,23 +339,23 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			this.dataManager.set(SPIT_FIRE, true);
 		}
 	}
-	
+
 	public void setBreathingFireFlag(boolean value) {
-		if(value) {
+		if (value) {
 			this.mouthTimer = 100;
 		} else {
 			this.mouthTimer = 10;
 		}
 		this.dataManager.set(SPIT_FIRE, value);
 	}
-	
+
 	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		if(super.attackEntityAsMob(entityIn)) {
-			if(this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
-				((EntityLivingBase)entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
+		if (super.attackEntityAsMob(entityIn)) {
+			if (this.phase > 1 && (entityIn instanceof EntityLivingBase)) {
+				((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.WITHER, 100 + entityIn.world.getDifficulty().ordinal() * 40, 3));
 			}
-			if(!this.world.isRemote) {
+			if (!this.world.isRemote) {
 				this.mouthTimer = 5;
 			}
 			return true;
@@ -374,16 +367,16 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public void setSwingingArms(boolean swingingArms) {
 		// Unused?
 	}
-	
+
 	// This code is not entirely made by me, it is oriented from this:
 	// https://github.com/TeamTwilight/twilightforest/blob/1.12.x/src/main/java/twilightforest/entity/boss/EntityTFNaga.java
 	protected void moveParts() {
 		for (int i = 0; i < this.dragonBodyParts.length; i++) {
-			if(dragonBodyParts[i] == null) {
+			if (dragonBodyParts[i] == null) {
 				continue;
 			}
 			Entity leader = i == 0 ? this : this.dragonBodyParts[i - 1];
-			if(leader == null) {
+			if (leader == null) {
 				continue;
 			}
 
@@ -426,45 +419,45 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		
+
 		this.destroyBlocksInAABB(this.getEntityBoundingBox().grow(1.25).offset(new Vec3d(motionX, motionY, motionZ).scale(1.5)));
-		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
-			if(segment != null) {
+		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+			if (segment != null) {
 				destroyBlocksInAABB(segment.getEntityBoundingBox());
 			}
 		}
-		
+
 		this.fireballTimer--;
-		if(!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
+		if (!this.world.isRemote && this.phase > 1 && this.fireballTimer <= 0) {
 			this.fireballTimer = CQRConfig.bosses.netherDragonStageTwoFireballInterval;
 			shootFireballFromBody();
 		}
-		
-		if(this.dataManager.get(SPIT_FIRE)) {
+
+		if (this.dataManager.get(SPIT_FIRE)) {
 			breatheFire();
 		}
 
 	}
-	
+
 	@Override
 	public double getAttackReach(EntityLivingBase target) {
 		return super.getAttackReach(target) * INITIAL_SEGMENT_COUNT;
 	}
 
 	public void shootFireballFromBody() {
-		if(this.dragonBodyParts != null && this.dragonBodyParts.length > 0) {
+		if (this.dragonBodyParts != null && this.dragonBodyParts.length > 0) {
 			int indx = getRNG().nextInt(this.dragonBodyParts.length);
-			while(this.dragonBodyParts[indx] == null) {
+			while (this.dragonBodyParts[indx] == null) {
 				indx = getRNG().nextInt(this.dragonBodyParts.length);
 			}
-			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx -1];
+			Entity pre = indx == 0 ? this : this.dragonBodyParts[indx - 1];
 			Vec3d v = this.dragonBodyParts[indx].getPositionVector();
-			if(hasAttackTarget() && getRNG().nextDouble() > 0.6) {
-				v = getAttackTarget().getPositionVector().subtract(v).add(0,0.5,0);
+			if (hasAttackTarget() && getRNG().nextDouble() > 0.6) {
+				v = getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
 			} else {
 				v = pre.getPositionVector().subtract(v);
 				v = v.add(new Vec3d(0, 1 - (2 * getRNG().nextDouble()), 0));
-				if(getRNG().nextBoolean()) {
+				if (getRNG().nextBoolean()) {
 					v = VectorUtil.rotateVectorAroundY(v, 45);
 					int angle = getRNG().nextInt(61);
 					v = VectorUtil.rotateVectorAroundY(v, angle);
@@ -474,8 +467,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 					v = VectorUtil.rotateVectorAroundY(v, angle);
 				}
 			}
-			
-			
+
 			v = v.normalize();
 			ProjectileHotFireball proj = new ProjectileHotFireball(world, this, this.dragonBodyParts[indx].posX + v.x, this.dragonBodyParts[indx].posY + v.y, this.dragonBodyParts[indx].posZ + v.z);
 			v = v.scale(1.5);
@@ -492,23 +484,23 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		Vec3d look = this.getLookVec();
 		motionX = look.x;
 		motionZ = look.z;
-		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width /2) - 0.25).subtract(0, 0.2, 0)));
-		flameStartPos = flameStartPos.add(0,this.height /2, 0);
+		Vec3d flameStartPos = this.getPositionVector().add((new Vec3d(motionX, 0, motionZ).scale((this.width / 2) - 0.25).subtract(0, 0.2, 0)));
+		flameStartPos = flameStartPos.add(0, this.height / 2, 0);
 		Vec3d v = new Vec3d(motionX, 0, motionZ).scale(0.75);
 		double ANGLE_MAX = 22.5;
 		double MAX_LENGTH = 24;
 		double angle = ANGLE_MAX / MAX_LENGTH;
 		double dY = -0.05;
-		v = VectorUtil.rotateVectorAroundY(v, -(ANGLE_MAX/2));
-		if(world.isRemote) { 
-			for(int i = 0; i <= MAX_LENGTH; i++) {
-				for(int iY = 0; iY <= 10; iY++) {
+		v = VectorUtil.rotateVectorAroundY(v, -(ANGLE_MAX / 2));
+		if (world.isRemote) {
+			for (int i = 0; i <= MAX_LENGTH; i++) {
+				for (int iY = 0; iY <= 10; iY++) {
 					Vec3d vOrig = v;
 					v = new Vec3d(v.x, -0.15 + iY * dY, v.z).scale(1.5);
-					
+
 					world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x * 0.5, v.y * 0.5, v.z * 0.5);
 					world.spawnParticle(EnumParticleTypes.FLAME, true, flameStartPos.x, flameStartPos.y, flameStartPos.z, v.x, v.y, v.z);
-					
+
 					v = vOrig;
 				}
 				v = VectorUtil.rotateVectorAroundY(v, angle);
@@ -520,22 +512,22 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 			int count = 9;
 			double currentLength = MAX_LENGTH / count;
 			double lengthIncr = currentLength;
-			for(int i = 0; i < count; i++) {
+			for (int i = 0; i < count; i++) {
 				double r = angleTan * currentLength;
-				//System.out.println("R=" + r);
+				// System.out.println("R=" + r);
 				Vec3d v2 = new Vec3d(v.x, -0.15 + (5 * -0.05), v.z).scale(currentLength - r);
 				Vec3d pCenter = flameStartPos.add(v2);
 				AxisAlignedBB aabb = new AxisAlignedBB(pCenter.x - r, pCenter.y - r, pCenter.z - r, pCenter.x + r, pCenter.y + r, pCenter.z + r).shrink(0.25);
-				for(Entity ent : this.world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.createPredicateNonAlly(getFaction()))) {
+				for (Entity ent : this.world.getEntitiesInAABBexcluding(this, aabb, TargetUtil.createPredicateNonAlly(getFaction()))) {
 					ent.setFire(8);
 					ent.attackEntityFrom(DamageSource.ON_FIRE, 5);
 				}
 
-				//DEBUG TO SEE THE "ZONE"
-				/*for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX,  (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){
-					world.setBlockState(p, Blocks.GLASS.getDefaultState());
-				}*/
-				
+				// DEBUG TO SEE THE "ZONE"
+				/*
+				 * for(BlockPos p : BlockPos.getAllInBox((int)aabb.minX, (int)aabb.minY, (int)aabb.minZ, (int)aabb.maxX, (int)aabb.maxY, (int)aabb.maxZ)){ world.setBlockState(p, Blocks.GLASS.getDefaultState()); }
+				 */
+
 				currentLength += lengthIncr;
 			}
 		}
@@ -570,20 +562,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 						}
 						// Check if the entity can destroy the blocks -> Event that can be cancelled by e.g. anti griefing mods or the protection system
 						else if (net.minecraftforge.event.ForgeEventFactory.onEntityDestroyBlock(this, blockpos, iblockstate)) {
-							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world,iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
-							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && 
-									block != Blocks.BEDROCK && 
-									block != Blocks.STRUCTURE_BLOCK &&
-									block != Blocks.COMMAND_BLOCK && 
-									block != Blocks.REPEATING_COMMAND_BLOCK && 
-									block != Blocks.CHAIN_COMMAND_BLOCK && 
-									block != Blocks.END_GATEWAY &&
-									block != Blocks.END_PORTAL &&
-									block != Blocks.PORTAL &&
-									block != ModBlocks.PHYLACTERY &&
-									block != ModBlocks.FORCE_FIELD_NEXUS &&
-									block != ModBlocks.EXPORTER
-									) {
+							boolean container = block.hasTileEntity(iblockstate) && block.createTileEntity(world, iblockstate).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, EnumFacing.UP);
+							if (breakableBlocks.contains(block.getRegistryName()) && !container && block.isCollidable() && block != Blocks.BEDROCK && block != Blocks.STRUCTURE_BLOCK && block != Blocks.COMMAND_BLOCK
+									&& block != Blocks.REPEATING_COMMAND_BLOCK && block != Blocks.CHAIN_COMMAND_BLOCK && block != Blocks.END_GATEWAY && block != Blocks.END_PORTAL && block != Blocks.PORTAL && block != ModBlocks.PHYLACTERY
+									&& block != ModBlocks.FORCE_FIELD_NEXUS && block != ModBlocks.EXPORTER) {
 								blockDestroyed = this.world.setBlockToAir(blockpos) || blockDestroyed;
 							} else {
 								cancelled = true;
@@ -609,15 +591,15 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 
 	@Override
 	public void onUpdate() {
-		if(this.phase == 1 && !world.isRemote) {
+		if (this.phase == 1 && !world.isRemote) {
 			this.phaseChangeTimer--;
-			if(this.phaseChangeTimer <= 0) {
+			if (this.phaseChangeTimer <= 0) {
 				this.phaseChangeTimer = 2;
-				for(int i = 0; i < this.dragonBodyParts.length; i++) {
-					if(!this.dragonBodyParts[i].isSkeletal()) {
+				for (int i = 0; i < this.dragonBodyParts.length; i++) {
+					if (!this.dragonBodyParts[i].isSkeletal()) {
 						this.dragonBodyParts[i].switchToSkeletalState();
-						if(!world.isRemote) {
-							if(i == 0) {
+						if (!world.isRemote) {
+							if (i == 0) {
 								this.dataManager.set(SKELE_COUNT, 1);
 							} else {
 								this.dataManager.set(SKELE_COUNT, i);
@@ -627,68 +609,68 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 					}
 				}
 			}
-			
-			if(this.dragonBodyParts[this.dragonBodyParts.length -1].isSkeletal()) {
-				this.dataManager.set(SKELE_COUNT, this.dragonBodyParts.length +1);
+
+			if (this.dragonBodyParts[this.dragonBodyParts.length - 1].isSkeletal()) {
+				this.dataManager.set(SKELE_COUNT, this.dragonBodyParts.length + 1);
 				this.phase++;
-				if(!world.isRemote) {
+				if (!world.isRemote) {
 					this.dataManager.set(PHASE, this.phase);
 				}
 			}
 		}
-		
-		if(world.isRemote && this.dataManager.get(PHASE) > this.phase) {
+
+		if (world.isRemote && this.dataManager.get(PHASE) > this.phase) {
 			this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 			this.phase++;
 		}
-		
-		if(!world.isRemote && mouthTimer > 0) {
+
+		if (!world.isRemote && mouthTimer > 0) {
 			mouthTimer--;
 			this.dataManager.set(MOUTH_OPEN, mouthTimer > 0);
-			if(mouthTimer <= 0 && this.dataManager.get(SPIT_FIRE)) {
+			if (mouthTimer <= 0 && this.dataManager.get(SPIT_FIRE)) {
 				this.dataManager.set(SPIT_FIRE, false);
 			}
-		} 
-		
-		if(world.isRemote && firstUpdate && this.dragonBodyParts.length > this.getSegmentCount()) {
+		}
+
+		if (world.isRemote && firstUpdate && this.dragonBodyParts.length > this.getSegmentCount()) {
 			updateSegmentCount();
 		}
 
-		if(world.isRemote) {
+		if (world.isRemote) {
 			lengthSyncClient();
 		} else {
-			if(this.phase > 1) {
+			if (this.phase > 1) {
 				updateSegmentCount();
 			}
 			lengthSyncServer();
 		}
-		
+
 		super.onUpdate();
-		
+
 		// update bodySegments parts
 		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
-			if(segment != null) {
+			if (segment != null) {
 				this.world.updateEntityWithOptionalForce(segment, true);
-				if(this.phase == 2 && !segment.isSkeletal() && !world.isRemote) {
+				if (this.phase == 2 && !segment.isSkeletal() && !world.isRemote) {
 					segment.switchToSkeletalState();
 				}
 			}
 		}
 
- 		this.moveParts();
-			
+		this.moveParts();
+
 	}
-	
+
 	private void lengthSyncServer() {
 		this.dataManager.set(SERVER_PART_LENGTH, dragonBodyParts.length);
 	}
 
 	private void lengthSyncClient() {
 		int serverLength = this.dataManager.get(SERVER_PART_LENGTH);
-		if(serverLength > 0 && serverLength < this.dragonBodyParts.length) {
+		if (serverLength > 0 && serverLength < this.dragonBodyParts.length) {
 			EntityCQRNetherDragonSegment[] partsTmp = new EntityCQRNetherDragonSegment[serverLength];
-			for(int i = 0; i < dragonBodyParts.length; i++) {
-				if(i < partsTmp.length) {
+			for (int i = 0; i < dragonBodyParts.length; i++) {
+				if (i < partsTmp.length) {
 					partsTmp[i] = dragonBodyParts[i];
 				} else {
 					world.removeEntity(dragonBodyParts[i]);
@@ -699,10 +681,10 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	}
 
 	private void updateSegmentCount() {
-		if(!world.isRemote) {
-			double divisor = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT -SEGMENT_COUNT_ON_DEATH);
-			int actualSegmentCount = (int) Math.floor(getHealth() / divisor) +SEGMENT_COUNT_ON_DEATH; 
-			if(actualSegmentCount < (this.dragonBodyParts.length -1)) {
+		if (!world.isRemote) {
+			double divisor = this.getMaxHealth() / (INITIAL_SEGMENT_COUNT - SEGMENT_COUNT_ON_DEATH);
+			int actualSegmentCount = (int) Math.floor(getHealth() / divisor) + SEGMENT_COUNT_ON_DEATH;
+			if (actualSegmentCount < (this.dragonBodyParts.length - 1)) {
 				removeLastSegment();
 			}
 			this.segmentCount = this.dragonBodyParts.length;
@@ -734,7 +716,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 		for (EntityCQRNetherDragonSegment dragonPart : this.dragonBodyParts) {
 			// must use this instead of setDead
 			// since multiparts are not added to the world tick list which is what checks isDead
-			if(dragonPart != null) {
+			if (dragonPart != null) {
 				this.world.removeEntityDangerously(dragonPart);
 			}
 		}
@@ -796,7 +778,7 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	protected ResourceLocation getLootTable() {
 		return ModLoottables.ENTITIES_DRAGON_NETHER;
 	}
-	
+
 	@Override
 	public boolean canOpenDoors() {
 		return false;
@@ -811,147 +793,137 @@ public class EntityCQRNetherDragon extends AbstractEntityCQRBoss implements IEnt
 	public boolean canIgniteTorch() {
 		return false;
 	}
-	
+
 	@Override
 	protected void onDeathUpdate() {
 		++this.deathTicks;
-		
-		if(deathTicks % 5 == 0) {
-			if(this.dragonBodyParts.length > 0) {
-				EntityCQRNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length -1];
-				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
-		        {
-		            this.dropExperience(MathHelper.floor((float)120), segment.posX, segment.posY, segment.posZ);
-		            world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
-		            removeLastSegment();
-		        }
+
+		if (deathTicks % 5 == 0) {
+			if (this.dragonBodyParts.length > 0) {
+				EntityCQRNetherDragonSegment segment = this.dragonBodyParts[this.dragonBodyParts.length - 1];
+				if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+					this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
+					world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
+					removeLastSegment();
+				}
 			} else {
 				this.world.playSound(this.posX, this.posY, this.posZ, this.getFinalDeathSound(), SoundCategory.MASTER, 1, 1, false);
 				onFinalDeath();
 				setDead();
 			}
-		} 
-	}
-	
-	private void dropExperience(int p_184668_1_, double x, double y, double z) {
-		while (p_184668_1_ > 0)
-		{
-		    int i = EntityXPOrb.getXPSplit(p_184668_1_);
-		    p_184668_1_ -= i;
-		    EntityXPOrb xp = new EntityXPOrb(this.world, x, y, z, i);
-		    xp.setEntityInvulnerable(true);
-		    this.world.spawnEntity(xp);
 		}
-	    }
+	}
+
+	private void dropExperience(int p_184668_1_, double x, double y, double z) {
+		while (p_184668_1_ > 0) {
+			int i = EntityXPOrb.getXPSplit(p_184668_1_);
+			p_184668_1_ -= i;
+			EntityXPOrb xp = new EntityXPOrb(this.world, x, y, z, i);
+			xp.setEntityInvulnerable(true);
+			this.world.spawnEntity(xp);
+		}
+	}
 
 	public int getSegmentCount() {
 		return this.segmentCount;
 	}
-	
+
 	@Override
 	public void writeEntityToNBT(NBTTagCompound compound) {
 		super.writeEntityToNBT(compound);
 		compound.setInteger("segmentCount", this.segmentCount);
 		compound.setInteger("phase", this.phase);
 		compound.setInteger("skeleCount", this.getSkeleProgress());
-		
-		//AI stuff
-		if(targetLocation != null) {
+
+		// AI stuff
+		if (targetLocation != null) {
 			compound.setTag("targetLocation", VectorUtil.createVectorNBTTag(targetLocation));
 		}
 	}
-	
+
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		if(compound.hasKey("segmentCount")) {
+		if (compound.hasKey("segmentCount")) {
 			this.segmentCount = compound.getInteger("segmentCount");
 			this.dataManager.set(SERVER_PART_LENGTH, segmentCount);
 		}
-		if(compound.hasKey("skeleCount")) {
+		if (compound.hasKey("skeleCount")) {
 			this.dataManager.set(SKELE_COUNT, compound.getInteger("skeleCount"));
 		}
-		if(compound.hasKey("phase")) {
+		if (compound.hasKey("phase")) {
 			this.phase = compound.getInteger("phase");
-			
+
 			this.dataManager.set(PHASE, phase);
 		}
-		
-		
-		//AI stuff
-		if(compound.hasKey("targetLocation")) {
+
+		// AI stuff
+		if (compound.hasKey("targetLocation")) {
 			this.targetLocation = VectorUtil.getVectorFromTag(compound.getCompoundTag("targetLocation"));
 		}
 	}
 
 	@Override
 	protected void onFinalDeath() {
-		for(EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
-			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
-	        {
-	            this.dropExperience(MathHelper.floor((float)120), segment.posX, segment.posY, segment.posZ);
-	        }
+		for (EntityCQRNetherDragonSegment segment : this.dragonBodyParts) {
+			if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+				this.dropExperience(MathHelper.floor((float) 120), segment.posX, segment.posY, segment.posZ);
+			}
 			world.createExplosion(segment, segment.posX, segment.posY, segment.posZ, 1, false);
 			world.removeEntityDangerously(segment);
 		}
-		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot"))
-        {
-            this.dropExperience(MathHelper.floor((float)800), posX, posY, posZ);
-        }
+		if (!this.world.isRemote && this.world.getGameRules().getBoolean("doMobLoot")) {
+			this.dropExperience(MathHelper.floor((float) 800), posX, posY, posZ);
+		}
 		world.createExplosion(this, this.posX, this.posY, this.posZ, 1, false);
 	}
-	
+
 	@Override
 	public EnumParticleTypes getDeathAnimParticles() {
 		return EnumParticleTypes.LAVA;
 	}
-	
+
 	public BlockPos getCirclingCenter() {
-		if(this.getHomePositionCQR() == null) {
+		if (this.getHomePositionCQR() == null) {
 			this.setHomePositionCQR(getPosition());
 		}
 		return this.getHomePositionCQR();
 	}
-	
-	//Methods from entity flying
+
+	// Methods from entity flying
 	@Override
-	public void fall(float distance, float damageMultiplier)
-    {
-    }
-	
+	public void fall(float distance, float damageMultiplier) {
+	}
+
 	@Override
-    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos)
-    {
-    }
-	
+	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	}
+
 	@Override
-    public void travel(float strafe, float vertical, float forward)
-    {
+	public void travel(float strafe, float vertical, float forward) {
 		EntityUtil.move3D(this, strafe, vertical, forward, getMoveHelper().getSpeed(), rotationYaw, rotationPitch);
 		this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-        this.motionX *= 0.9;
-        this.motionY *= 0.9;
-        this.motionZ *= 0.9;
+		this.motionX *= 0.9;
+		this.motionY *= 0.9;
+		this.motionZ *= 0.9;
 		velocityChanged = true;
-    }
+	}
 
-    /**
-     * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or
-     * for AI reasons)
-     */
-    public boolean isOnLadder()
-    {
-        return false;
-    }
-    
-    //AI stuff
-    @Nullable
-    public Vec3d getTargetLocation() {
-    	return this.targetLocation;
-    }
+	/**
+	 * Returns true if this entity should move as if it were on a ladder (either because it's actually on a ladder, or for AI reasons)
+	 */
+	public boolean isOnLadder() {
+		return false;
+	}
+
+	// AI stuff
+	@Nullable
+	public Vec3d getTargetLocation() {
+		return this.targetLocation;
+	}
 
 	public void setTargetLocation(Vec3d newTarget) {
 		this.targetLocation = newTarget;
 	}
-	
+
 }

@@ -9,36 +9,37 @@ import com.teamcqr.chocolatequestrepoured.util.VectorUtil;
 import net.minecraft.util.math.Vec3d;
 
 public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWalkerKing> {
-	
+
 	private static final int MIN_COOLDOWN = 120;
 	private static final int MAX_COOLDOWN = 240;
 	private static final int ANGLE_INCREMENT = 40;
 	private static final int RADIUS_INCREMENT = 1;
 	private static final int MAX_LIGHTNINGS = 18;
-	
+
 	private int cooldown = 100;
 	private int cooldown_circle = 5;
 	private int r = 2;
 	private int lightningCount = 0;
 	private int angle = 0;
-	
+
 	public BossAIWalkerLightningSpiral(EntityCQRWalkerKing entity) {
 		super(entity);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if(!entity.world.isRemote && entity != null && !entity.isDead && entity.getAttackTarget() != null && lightningCount < MAX_LIGHTNINGS) {
+		if (!entity.world.isRemote && entity != null && !entity.isDead && entity.getAttackTarget() != null && lightningCount < MAX_LIGHTNINGS) {
 			cooldown--;
 			return cooldown <= 0;
 		}
 		return false;
 	}
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return shouldExecute() && lightningCount < MAX_LIGHTNINGS;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
@@ -47,12 +48,12 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 		angle = 0;
 		r = 2;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
 		cooldown_circle--;
-		if(cooldown_circle <= 0) {
+		if (cooldown_circle <= 0) {
 			spawnLightning();
 			lightningCount++;
 			cooldown_circle = 5;
@@ -67,11 +68,11 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 		entity.world.spawnEntity(lightning);
 		r += RADIUS_INCREMENT;
 		angle += ANGLE_INCREMENT;
-		if(angle >= 360) {
+		if (angle >= 360) {
 			angle -= 360;
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		this.r = 2;
@@ -80,7 +81,7 @@ public class BossAIWalkerLightningSpiral extends AbstractCQREntityAI<EntityCQRWa
 		this.cooldown = DungeonGenUtils.getIntBetweenBorders(MIN_COOLDOWN, MAX_COOLDOWN, entity.getRNG());
 		super.resetTask();
 	}
-	
+
 	@Override
 	public boolean isInterruptible() {
 		return false;

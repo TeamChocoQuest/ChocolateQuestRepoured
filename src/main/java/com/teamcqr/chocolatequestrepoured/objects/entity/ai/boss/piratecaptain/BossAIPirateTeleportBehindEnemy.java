@@ -12,11 +12,11 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 
 	private static final double MIN_ATTACK_DISTANCE = 8;
 	private static final int MAX_COOLDOWN = 60;
-	
+
 	private int cooldown = MAX_COOLDOWN / 2;
-	
+
 	private int timer = 0;
-	
+
 	public BossAIPirateTeleportBehindEnemy(EntityCQRPirateCaptain entity) {
 		super(entity);
 	}
@@ -24,35 +24,33 @@ public class BossAIPirateTeleportBehindEnemy extends AbstractCQREntityAI<EntityC
 	@Override
 	public boolean shouldExecute() {
 		cooldown--;
-		return cooldown <= 0 && entity.getAttackTarget() != null && entity.getDistance(entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE 
-				&& !(entity.isInvisible() || entity.isReintegrating() || entity.isDisintegrating()
-				); 
+		return cooldown <= 0 && entity.getAttackTarget() != null && entity.getDistance(entity.getAttackTarget()) >= MIN_ATTACK_DISTANCE && !(entity.isInvisible() || entity.isReintegrating() || entity.isDisintegrating());
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return timer < 120 && entity.getAttackTarget() != null;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		timer++;
 		super.updateTask();
-		if(timer == 10) {
+		if (timer == 10) {
 			entity.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.DAGGER_NINJA, 1));
 		}
-		
-		if(timer == 100) {
+
+		if (timer == 100) {
 			Vec3d v = entity.getAttackTarget().getLookVec().normalize().scale(2);
-			Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v).add(0,0.5,0);
+			Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v).add(0, 0.5, 0);
 			entity.attemptTeleport(p.x, p.y, p.z);
 			entity.getLookHelper().setLookPositionWithEntity(entity.getAttackTarget(), 30, 30);
 			entity.attackEntityAsMob(entity.getAttackTarget());
-			
+
 			cooldown = MAX_COOLDOWN;
 		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		super.resetTask();

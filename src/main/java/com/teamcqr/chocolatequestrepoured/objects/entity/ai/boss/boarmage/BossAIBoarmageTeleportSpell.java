@@ -22,25 +22,25 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 	private static final double MIN_DISTANCE = 3;
 	private static final double MAX_DISTANCE = 16;
 	private static final long PREPARE_TIME = 40;
-	
+
 	private long ticksAtTeleport = 0;
-	
+
 	public BossAIBoarmageTeleportSpell(EntityCQRBoarmage entity) {
 		super(entity);
 	}
 
 	@Override
 	public boolean shouldExecute() {
-		if(ticksAtTeleport != 0) {
+		if (ticksAtTeleport != 0) {
 			return false;
 		}
-		if(cooldown > 0) {
+		if (cooldown > 0) {
 			cooldown--;
 			return false;
 		}
 		return entity.hasAttackTarget() && (entity.getDistance(entity.getAttackTarget()) <= MIN_DISTANCE || entity.getDistance(entity.getAttackTarget()) >= MAX_DISTANCE);
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();
@@ -50,34 +50,34 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 		Vec3d v = entity.getPositionVector().subtract(entity.getAttackTarget().getPositionVector());
 		v = v.normalize().scale(5);
 		Vec3d p = entity.getAttackTarget().getPositionVector().subtract(v);
-		if(entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x,p.y,p.z))) {
-			if(entity.attemptTeleport(p.x, p.y, p.z)) {
+		if (entity.getNavigator().canEntityStandOnPos(new BlockPos(p.x, p.y, p.z))) {
+			if (entity.attemptTeleport(p.x, p.y, p.z)) {
 				ticksAtTeleport = new Long(entity.ticksExisted);
 				return;
 			}
-		} 
+		}
 		resetTask();
 	}
-	
+
 	@Override
 	public boolean shouldContinueExecuting() {
 		return ticksAtTeleport != 0 && wallCounter <= wallsMax && entity.hasAttackTarget();
 	}
-	
+
 	@Override
 	public boolean isInterruptible() {
 		return false;
 	}
-	
+
 	@Override
 	public void updateTask() {
 		super.updateTask();
-		if(Math.abs(entity.ticksExisted - ticksAtTeleport) > PREPARE_TIME) {
+		if (Math.abs(entity.ticksExisted - ticksAtTeleport) > PREPARE_TIME) {
 			ticksAtTeleport = entity.ticksExisted;
-			//Summon fire wall here
+			// Summon fire wall here
 			int wallLength = MIN_WALL_LENGTH + wallCounter * ((MAX_WALL_LENGTH - MIN_WALL_LENGTH) / (wallsMax));
-			
-			//WALL CODE
+
+			// WALL CODE
 			Vec3d v = new Vec3d(this.entity.getAttackTarget().getPosition().subtract(this.entity.getPosition()));
 			v = new Vec3d(v.x, 0, v.z);
 			v = v.normalize();
@@ -108,12 +108,12 @@ public class BossAIBoarmageTeleportSpell extends AbstractCQREntityAI<EntityCQRBo
 					this.world.spawnEntity(wallPart);
 				}
 			}
-			//END OF WALL CODE
-					
+			// END OF WALL CODE
+
 			wallCounter++;
-		} 
+		}
 	}
-	
+
 	@Override
 	public void resetTask() {
 		super.resetTask();

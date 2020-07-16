@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 
 public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
-	
+
 	private int cooldown = 100;
 
 	public EntityAIFireball(AbstractEntityCQR entity) {
@@ -19,7 +19,7 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	@Override
 	public boolean shouldExecute() {
-		if(cooldown > 0) {
+		if (cooldown > 0) {
 			cooldown--;
 			return false;
 		}
@@ -28,12 +28,12 @@ public class EntityAIFireball extends AbstractCQREntityAI<AbstractEntityCQR> {
 
 	private boolean hasFireball() {
 		ItemStack item = entity.getHeldItemOffhand();
-		if(item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
+		if (item.isEmpty() || item.getItem() != Items.FIRE_CHARGE) {
 			return false;
 		}
 		return true;
 	}
-	
+
 	@Override
 	public void startExecuting() {
 		super.startExecuting();

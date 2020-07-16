@@ -151,8 +151,8 @@ public class EntityAIAttackRanged extends AbstractCQREntityAI<AbstractEntityCQR>
 					this.entity.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 				} else if (item instanceof IRangedWeapon) {
 					((IRangedWeapon) item).shoot(this.world, this.entity, attackTarget, EnumHand.MAIN_HAND);
-					if(((IRangedWeapon)item).getShootSound() != null) {
-						this.entity.playSound(((IRangedWeapon)item).getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
+					if (((IRangedWeapon) item).getShootSound() != null) {
+						this.entity.playSound(((IRangedWeapon) item).getShootSound(), 1.0F, 0.8F + this.random.nextFloat() * 0.4F);
 					}
 				}
 

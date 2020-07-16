@@ -38,12 +38,9 @@ public class DungeonRegistry {
 	private Map<BiomeDictionary.Type, Set<DungeonBase>> biomeTypeDungeonMap = new HashMap<>();
 	private Set<DungeonBase> coordinateSpecificDungeons = new HashSet<>();
 
-	
-	//TODO: Initialize this on world load
-	/* 
-	 * First key: Dimension
-	 * Second key: Dungeon name
-	 * Third value: where this dungeon did spawn
+	// TODO: Initialize this on world load
+	/*
+	 * First key: Dimension Second key: Dungeon name Third value: where this dungeon did spawn
 	 */
 
 	public static DungeonRegistry getInstance() {
@@ -296,22 +293,22 @@ public class DungeonRegistry {
 	public boolean isDungeonMissingDungeonDependencies(World world, DungeonBase dungeon) {
 		if (dungeon.dependsOnOtherStructures()) {
 			Set<String> spawnedTypes = DungeonDataManager.getSpawnedDungeonNames(world);
-			if(spawnedTypes.isEmpty()) {
+			if (spawnedTypes.isEmpty()) {
 				return true;
 			}
 			for (String s : dungeon.getDungeonDependencies()) {
-				if(!spawnedTypes.contains(s)) {
+				if (!spawnedTypes.contains(s)) {
 					return true;
 				}
 				Set<BlockPos> spawnedLocs = DungeonDataManager.getLocationsOfDungeon(world, s);
-				if(spawnedLocs.isEmpty()) {
+				if (spawnedLocs.isEmpty()) {
 					return true;
 				}
 			}
 		}
 		return false;
 	}
-	
+
 	public boolean canDungeonSpawnAgain(World world, DungeonBase dungeon) {
 		return (dungeon.getSpawnLimit() < 0) || !DungeonDataManager.getInstance(world).isDungeonSpawnLimitMet(dungeon);
 	}

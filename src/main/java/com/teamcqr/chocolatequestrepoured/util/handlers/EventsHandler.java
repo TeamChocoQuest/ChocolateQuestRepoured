@@ -192,13 +192,13 @@ public class EventsHandler {
 			return;
 		}
 		FactionRegistry.instance().handlePlayerLogin(event);
-		
-		if(event.player.world.isRemote) {
+
+		if (event.player.world.isRemote) {
 			TextureSetManager.unloadTextures();
 		} else {
-			//Send packets with ct's to player
+			// Send packets with ct's to player
 		}
-		
+
 	}
 
 	@SubscribeEvent
@@ -211,14 +211,14 @@ public class EventsHandler {
 
 	@SubscribeEvent
 	public static void onAttackEntityEvent(AttackEntityEvent event) {
-		if(event.getEntityPlayer() != null) {
+		if (event.getEntityPlayer() != null) {
 			EntityPlayer attacker = event.getEntityPlayer();
-			for(ItemStack item : attacker.getEquipmentAndArmor()) {
-				if(ItemUtil.isCheaterItem(item)) {
-					//Punishment
-					if(attacker instanceof EntityPlayerMP) {
+			for (ItemStack item : attacker.getEquipmentAndArmor()) {
+				if (ItemUtil.isCheaterItem(item)) {
+					// Punishment
+					if (attacker instanceof EntityPlayerMP) {
 						float damage = EnchantmentHelper.getModifierForCreature(item, EnumCreatureAttribute.UNDEFINED);
-						if(item.isItemStackDamageable()) {
+						if (item.isItemStackDamageable()) {
 							item.attemptDamageItem((new Float(damage)).intValue(), attacker.getRNG(), (EntityPlayerMP) attacker);
 						} else {
 							attacker.attackEntityFrom(DamageSource.LIGHTNING_BOLT, damage * (attacker.getRNG().nextFloat() * 2 + 1));
@@ -228,7 +228,7 @@ public class EventsHandler {
 				}
 			}
 		}
-		
+
 		if (CQRConfig.mobs.blockCancelledByAxe) {
 			EntityPlayer player = event.getEntityPlayer();
 			World world = player.world;

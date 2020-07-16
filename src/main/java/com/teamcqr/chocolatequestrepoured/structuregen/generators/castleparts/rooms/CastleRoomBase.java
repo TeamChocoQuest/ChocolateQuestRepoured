@@ -48,7 +48,7 @@ public abstract class CastleRoomBase {
 	protected HashSet<BlockPos> possibleDecoPositions; // set of possible decoration positions
 	protected HashSet<BlockPos> usedDecoPositions; // set of decoration positions that have been added (subset of possible)
 	protected HashMap<EnumFacing, CastleMainStructWall> walls = new HashMap<>();
-	//protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
+	// protected HashSet<BlockPos> decoEdge; // set of all positions that are along the edge of the room (subset of possible)
 
 	public CastleRoomBase(int sideLength, int height, int floor) {
 		this.sideLength = sideLength;
@@ -68,7 +68,7 @@ public abstract class CastleRoomBase {
 
 	public void generate(BlockPos castleOrigin, BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.generateRoom(castleOrigin, genArray, dungeon);
-		//this.generateWalls(genArray, dungeon);
+		// this.generateWalls(genArray, dungeon);
 
 		if (this.defaultFloor) {
 			this.generateDefaultFloor(genArray, dungeon);
@@ -134,14 +134,14 @@ public abstract class CastleRoomBase {
 		}
 	}
 
-    protected void fillEmptySpaceWithAir(BlockStateGenArray genArray) {
-        HashSet<BlockPos> emptySpaces = new HashSet<>(this.possibleDecoPositions);
-        emptySpaces.removeAll(this.usedDecoPositions);
+	protected void fillEmptySpaceWithAir(BlockStateGenArray genArray) {
+		HashSet<BlockPos> emptySpaces = new HashSet<>(this.possibleDecoPositions);
+		emptySpaces.removeAll(this.usedDecoPositions);
 
-        for (BlockPos emptyPos : emptySpaces) {
-            genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
-        }
-    }
+		for (BlockPos emptyPos : emptySpaces) {
+			genArray.addBlockState(emptyPos, Blocks.AIR.getDefaultState(), BlockStateGenArray.GenerationPhase.MAIN, BlockStateGenArray.EnumPriority.MEDIUM);
+		}
+	}
 
 	protected IBlockState getFloorBlock(DungeonCastle dungeon) {
 		return dungeon.getFloorBlockState();
@@ -173,7 +173,6 @@ public abstract class CastleRoomBase {
 		return this.buildStartPos.add(this.offsetX, 0, this.offsetZ);
 	}
 
-
 	protected void setupDecoration(BlockStateGenArray genArray, DungeonCastle dungeon) {
 		this.possibleDecoPositions = new HashSet<>(this.getDecorationArea());
 		this.setDoorAndWindowAreasToAir(genArray, dungeon);
@@ -188,13 +187,11 @@ public abstract class CastleRoomBase {
 		for (EnumFacing side : EnumFacing.HORIZONTALS) {
 			CastleMainStructWall wall = this.walls.get(side);
 
-			if (wall != null)
-			{
+			if (wall != null) {
 				BlockPos decoPos;
 				if (side.getAxis() == EnumFacing.Axis.Z) {
 					for (int x = 0; x < this.getDecorationLengthX(); x++) {
-						for (int y = 0; y < this.getDecorationLengthY(); y++)
-						{
+						for (int y = 0; y < this.getDecorationLengthY(); y++) {
 							final int offsetAlongWall = x + 1;
 							final int offsetUpWall = (this.hasFloor()) ? y + 1 : y;
 							if (wall.offsetIsDoorOrWindow(offsetAlongWall, offsetUpWall, dungeon)) {
@@ -208,11 +205,9 @@ public abstract class CastleRoomBase {
 							}
 						}
 					}
-				}
-				else {
+				} else {
 					for (int z = 0; z < this.getDecorationLengthZ(); z++) {
-						for (int y = 0; y < this.getDecorationLengthY(); y++)
-						{
+						for (int y = 0; y < this.getDecorationLengthY(); y++) {
 							final int offsetAlongWall = z + 1;
 							final int offsetUpWall = (this.hasFloor()) ? y + 1 : y;
 							if (wall.offsetIsDoorOrWindow(offsetAlongWall, offsetUpWall, dungeon)) {
@@ -233,8 +228,7 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a list of blocks that make up the decoratable edge of the room.
-	 * Decoratable edge positions are adjacent to a wall but not in front of a door.
+	 * Get a list of blocks that make up the decoratable edge of the room. Decoratable edge positions are adjacent to a wall but not in front of a door.
 	 */
 	protected ArrayList<BlockPos> getDecorationEdge(EnumFacing side) {
 		// First get all blocks that are not occupied by walls
@@ -291,9 +285,7 @@ public abstract class CastleRoomBase {
 	}
 
 	/*
-	 * Get a 1-height square of block positions that represents the lowest y position
-	 * of a room that can be decorated. In other words, the layer just above the floor
-	 * that is not already occupied by walls.
+	 * Get a 1-height square of block positions that represents the lowest y position of a room that can be decorated. In other words, the layer just above the floor that is not already occupied by walls.
 	 */
 	protected ArrayList<BlockPos> getDecorationLayer(int layer) {
 		ArrayList<BlockPos> result = this.getDecorationArea();
@@ -342,7 +334,7 @@ public abstract class CastleRoomBase {
 		int length = roomLengthX;
 		if (walls.containsKey(EnumFacing.EAST)) {
 			if (!walls.get(EnumFacing.EAST).isEnabled()) {
-				++length; //No wall there so this room should extend into that block
+				++length; // No wall there so this room should extend into that block
 			}
 		}
 		return length;
@@ -352,7 +344,7 @@ public abstract class CastleRoomBase {
 		int length = roomLengthZ;
 		if (walls.containsKey(EnumFacing.SOUTH)) {
 			if (!walls.get(EnumFacing.SOUTH).isEnabled()) {
-				++length; //No wall there so this room should extend into that block
+				++length; // No wall there so this room should extend into that block
 			}
 		}
 		return length;
@@ -421,7 +413,9 @@ public abstract class CastleRoomBase {
 		return this.roomType.toString();
 	}
 
-	public void copyPropertiesOf(CastleRoomBase room) { ; }
+	public void copyPropertiesOf(CastleRoomBase room) {
+		;
+	}
 
 	public void registerWalls(HashMap<EnumFacing, CastleMainStructWall> walls) {
 		this.walls = walls;

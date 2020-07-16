@@ -24,7 +24,7 @@ public class EntityAIExplosionRay extends AbstractEntityAISpell<AbstractEntityCQ
 		BlockPos start = this.entity.getPosition();
 		BlockPos[] positions = new BlockPos[explosionCount];
 		for (int i = 1; i <= explosionCount; i++) {
-			BlockPos p = start.add(v.x * i , v.y * i, v.z * i );
+			BlockPos p = start.add(v.x * i, v.y * i, v.z * i);
 			positions[i - 1] = p;
 		}
 
